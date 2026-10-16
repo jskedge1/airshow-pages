@@ -2,7 +2,7 @@
 
 The live HTML pages for The Big Guide to UK Airshows (ukairshowguide.co.uk).
 Each Wix HTML embed is set to "Website address" and points at one of these pages,
-so a change pushed here shows on the Wix site within a minute or two.
+so a change saved here shows on the Wix site within a minute or two.
 
 | Page | Address for Wix |
 |---|---|
