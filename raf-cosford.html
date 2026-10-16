@@ -4060,6 +4060,103 @@ section.fold{min-width:0;max-width:100%}.fold-body,.fold-in{min-width:0}
 @media(max-width:640px){.suits{margin:0 -16px;padding:var(--gap) 16px}.tablist{margin:0 -16px;padding:0 16px}}
 </style>
 <script src="https://jskedge1.github.io/airshow-pages/links.js" defer></script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
 </body>
 </html>
 
