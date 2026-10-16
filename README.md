@@ -15,6 +15,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | Southport Air Show | https://jskedge1.github.io/airshow-pages/southport.html |
 | Little Gransden Air & Car Show | https://jskedge1.github.io/airshow-pages/little-gransden.html |
 | New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
+| Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
