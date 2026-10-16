@@ -4062,6 +4062,65 @@ section.fold{min-width:0;max-width:100%}.fold-body,.fold-in{min-width:0}
 @media(max-width:640px){.suits{margin:0 -16px;padding:var(--gap) 16px}.tablist{margin:0 -16px;padding:0 16px}}
 </style>
 <script src="https://jskedge1.github.io/airshow-pages/links.js" defer></script>
+<!-- cover-header: home page style header (photo full width behind a navy gradient, frosted glass Key details box). Same block in every page. -->
+<style id="cover-header">
+header.cov{position:relative!important;isolation:isolate;overflow:hidden;background:#13293C!important}
+header.cov::before{display:none!important}
+header.cov .cov-bg{position:absolute!important;inset:0!important;height:auto!important;min-height:0!important;max-height:none!important;z-index:0!important;padding:0!important;margin:0!important;background-image:none!important;background-color:#13293C!important;display:block!important}
+header.cov .cov-bg>img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:cover;object-position:60% 55%;transform-origin:60% 40%;animation:covDrift 26s ease-in-out infinite alternate;-webkit-mask-image:none!important;mask-image:none!important}
+header.cov .cov-bg::after{content:""!important;position:absolute!important;inset:0!important;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(19,41,60,.95) 0%,rgba(19,41,60,.78) 38%,rgba(19,41,60,.18) 100%)!important;display:block!important}
+header.cov .cov-bg .credit{display:none!important}
+header.cov .cov-body{position:relative!important;z-index:2;margin-top:0!important;background:transparent!important;padding-top:clamp(80px,12vh,120px)!important;padding-bottom:96px!important}
+header.cov .cov-body.cov-grid{min-height:560px;align-items:end!important}
+header.cov .cov-main{background:transparent!important;border-top:0!important}
+header.cov .cov-main>*{animation:covRise .9s cubic-bezier(.2,.7,.2,1) both}
+header.cov .cov-main>*:nth-child(2){animation-delay:.12s}header.cov .cov-main>*:nth-child(3){animation-delay:.24s}header.cov .cov-main>*:nth-child(4){animation-delay:.36s}header.cov .cov-main>*:nth-child(5){animation-delay:.48s}
+header.cov .cov-box{background:rgba(14,33,49,.62)!important;border-top:4px solid #32B4AF!important;box-shadow:0 22px 50px rgba(0,0,0,.35)!important;-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);align-self:end!important;margin-top:0!important;animation:covRise .9s .5s cubic-bezier(.2,.7,.2,1) both}
+header.cov .cov-box h2,header.cov .cov-box .keybox-top{background-color:rgba(50,180,175,.86)!important}
+header.cov .cov-box dl>div:not(.hl):not(.hot),header.cov .cov-box .row:not(.hot){background:transparent!important}
+.cov-trail{position:absolute;left:0;right:0;bottom:56px;height:2px;z-index:2;pointer-events:none;overflow:hidden}
+.cov-trail i{position:absolute;top:0;left:-30%;width:30%;height:100%;background:linear-gradient(90deg,transparent,rgba(50,180,175,.9),transparent);animation:covFly 7s ease-in-out infinite}
+@media(min-width:901px){header.cov .cov-main h1{overflow-wrap:normal!important;word-break:normal!important;hyphens:none;font-size:clamp(40px,5.2vw,78px)!important}}
+@keyframes covDrift{from{transform:scale(1.04) translate(0,0)}to{transform:scale(1.12) translate(-2%,-1.5%)}}
+@keyframes covRise{from{opacity:.001;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes covFly{0%{left:-30%}60%,100%{left:110%}}
+@media(max-width:900px){
+  header.cov .cov-bg::after{background:linear-gradient(180deg,rgba(19,41,60,.35) 0%,rgba(19,41,60,.85) 38%,rgba(19,41,60,.95) 100%)!important}
+  header.cov .cov-body{padding-top:180px!important;padding-bottom:72px!important}
+  header.cov .cov-body.cov-grid{min-height:0}
+  header.cov .cov-bg>img{object-position:50% 0%}
+  .cov-trail{bottom:28px}
+}
+@media(prefers-reduced-motion:reduce){header.cov .cov-bg>img,header.cov .cov-main>*,header.cov .cov-box,.cov-trail i{animation:none!important}}
+</style>
+<script id="cover-header-js">
+(function(){
+  function setup(){
+    var h=document.querySelector('header.hero2')||(function(){var b=document.querySelector('header > .banner');return b&&b.parentNode;})();
+    if(!h) return false;
+    var bg=h.querySelector('.hero2-banner')||h.querySelector(':scope > .banner');
+    var body=h.querySelector('.hero2-body')||h.querySelector(':scope > .head');
+    var main=h.querySelector('.hero2-main')||h.querySelector('.head-copy');
+    var box=h.querySelector('.hero2-side')||h.querySelector('.keybox');
+    if(!bg||!body) return false;
+    if(!bg.querySelector('img')){
+      var u=getComputedStyle(bg).backgroundImage, m=u&&u.match(/url\(["']?(.*?)["']?\)/);
+      if(!m) return false;                       /* photo not set yet: try again shortly */
+      var im=document.createElement('img'); im.src=m[1]; im.alt=bg.getAttribute('aria-label')||''; im.decoding='async';
+      bg.insertBefore(im,bg.firstChild); bg.removeAttribute('role');
+    }
+    h.classList.add('cov'); bg.classList.add('cov-bg'); body.classList.add('cov-body');
+    if(h.classList.contains('hero2')) body.classList.add('cov-grid');
+    if(main) main.classList.add('cov-main'); if(box) box.classList.add('cov-box');
+    if(!h.querySelector('.cov-trail')){var t=document.createElement('div');t.className='cov-trail';t.setAttribute('aria-hidden','true');t.innerHTML='<i></i>';h.appendChild(t);}
+    return true;
+  }
+  var tries=0;
+  function go(){ if(!setup() && ++tries<40) setTimeout(go,150); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+})();
+</script>
+<!-- /cover-header -->
 <!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
 <style id="mobile-fit">
   img,video,iframe,canvas{max-width:100%}
