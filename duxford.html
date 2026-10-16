@@ -1416,7 +1416,7 @@ h3{font-weight:700}
 .photo-btn{all:unset;box-sizing:border-box;display:block;width:100%;height:100%;cursor:zoom-in;position:relative}
 .photo-btn:focus-visible{outline:3px solid var(--teal);outline-offset:-3px}
 .lu-row{display:flex;gap:14px;align-items:center}
-.lu-thumb{all:unset;box-sizing:border-box;flex:0 0 96px;width:96px;height:56px;cursor:zoom-in;overflow:hidden;background:var(--navy-deep)}
+.lu-thumb{all:unset;box-sizing:border-box;flex:0 0 96px;width:96px;height:56px;cursor:default;pointer-events:none;overflow:hidden;background:var(--navy-deep)}
 .lu-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
 .lu-thumb:hover img{transform:scale(1.06)}
 .lu-thumb:focus-visible{outline:3px solid var(--teal)}
@@ -2640,10 +2640,10 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
 <!-- Aerial view -->
 <div class="sg-sec">
 <div class="row"><h3>Aerial view of the airfield</h3><div class="note" id="selLabel">Selected: 12:00, into the sun</div></div>
-<svg class="view" viewBox="90 70 680 430" role="img" aria-label="Plan of IWM Duxford redrawn as a guide, not to scale, showing runway 06/24, the crowd line along the north side, the display line beyond the runway, the museum buildings, the A505 to the north and the M11 just beyond the 24 end, the direction of the sun from the crowd line through the day, and a flypast of the B-17, A400M, four Typhoons and the Red Arrows along the display line">
+<svg class="view" viewBox="90 70 680 430" role="img" aria-label="Aerial plan of IWM Duxford traced from OpenStreetMap, showing the tarmac runway 06/24 and the grass runway beside it, the crowd line along the north side facing south south east, the display line beyond the runway, the hangars and the American Air Museum, the A505 to the north, the M11 and junction 10 beyond the 24 end, Duxford village to the east, the direction of the sun from the crowd line through the day, and a flypast of the B-17, A400M, four Typhoons and the Red Arrows along the display line">
 <defs>
 <clipPath id="planClip"><rect x="90" y="70" width="680" height="430"/></clipPath>
-<pattern id="mow" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(-32.3)"><rect width="18" height="18" fill="#C9DEAA"/><rect width="9" height="18" fill="#C2D9A2"/></pattern>
+<pattern id="mow" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(-32.1)"><rect width="18" height="18" fill="#C9DEAA"/><rect width="9" height="18" fill="#C2D9A2"/></pattern>
 <pattern id="houses" width="16" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(-12)"><rect width="16" height="14" fill="#E2DCCF"/><rect x="2" y="2" width="7" height="5" fill="#C9BFAE"/><rect x="10" y="7" width="5" height="5" fill="#C9BFAE"/></pattern>
 <pattern id="glass" width="6" height="40" patternUnits="userSpaceOnUse"><rect width="6" height="40" fill="#C7D6E2"/><rect width="1" height="40" fill="#A9BCCB"/></pattern>
 <radialGradient id="glowPlan"><stop offset="0" stop-color="#FFD25A" stop-opacity="0.9"/><stop offset="1" stop-color="#FFD25A" stop-opacity="0"/></radialGradient>
@@ -2654,43 +2654,35 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
 <g id="hawkTop"><image href="data:image/webp;base64,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" x="-10.0" y="-12.0" width="20" height="24" transform="rotate(90)" preserveAspectRatio="xMidYMid meet"/></g>
 </defs>
 <g clip-path="url(#planClip)">
-<!-- countryside -->
+<!-- countryside, traced from OpenStreetMap data for IWM Duxford -->
 <rect x="90" y="70" width="680" height="430" fill="#E2E9D0"/>
-<path d="M90 392 Q200 430 300 500 L90 500 Z" fill="#DCD3B4"/>
-<path d="M330 460 Q430 440 560 418 L590 500 L345 500 Z" fill="#D6DDB9"/>
-<!-- Duxford village, north east beyond the A505 -->
-<path d="M560 70 L700 70 L690 110 L600 122 Z" fill="url(#houses)"/>
-<!-- A505 to the north, M11 beyond the 24 end -->
-<g fill="none" stroke-linecap="round">
-<path d="M90 222 L640 52" stroke="#CFC6B3" stroke-width="8"/><path d="M90 222 L640 52" stroke="#F8F4EA" stroke-width="5"/>
-<path d="M640 70 L700 500" stroke="#B9B3A6" stroke-width="14"/><path d="M640 70 L700 500" stroke="#F1EEE6" stroke-width="9"/>
-</g>
-<!-- airfield grass inside the perimeter track -->
-<path d="M210 255 L216 240 L250 215 L300 190 L400 180 L520 182 L545 195 L548 215 L545 260 L540 295 L470 300 L440 330 L430 370 L420 410 L380 440 L330 450 L310 420 L300 400 L250 380 L215 340 L205 290 Z" fill="url(#mow)"/>
-<path d="M210 255 L216 240 L250 215 L300 190 L400 180 L520 182 L545 195 L548 215 L545 260 L540 295 L470 300 L440 330 L430 370 L420 410 L380 440 L330 450 L310 420 L300 400 L250 380 L215 340 L205 290 Z" fill="none" stroke="#BDB6A6" stroke-width="4" stroke-linejoin="round"/>
-<!-- apron and old grass strip -->
-<rect x="385" y="193" width="48" height="22" fill="#BAB7AF" transform="rotate(-8 409 204)"/>
-<rect x="337" y="196" width="13" height="36" fill="#D6E6C0" transform="rotate(-12 343 214)"/>
-<!-- runway 06/24 -->
-<path d="M293.2 365.1 L538.2 210.1 L531.8 199.9 L286.8 354.9 Z" fill="#4C5762"/>
-<line x1="300" y1="355.6" x2="525" y2="213.4" stroke="#FFFFFF" stroke-width="1.2" stroke-dasharray="9 7"/>
-<!-- threshold numbers: 06 at the south west end (read heading 058), 24 at the north east end (read heading 238) -->
-<text transform="translate(301 356) rotate(-32.3)" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle">06</text>
-<text transform="translate(523 216) rotate(147.7)" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle">24</text>
-<!-- museum buildings along the north side of the runway -->
-<g fill="#AEB6BE" stroke="#8B949E" stroke-width="0.8" transform="translate(-12 -26)">
-<rect x="218" y="240" width="36" height="20" transform="rotate(-32 236 250)"/>
-<rect x="262" y="214" width="40" height="22" transform="rotate(-32 282 225)"/>
-<rect x="312" y="186" width="26" height="16" transform="rotate(-32 325 194)"/>
-<rect x="346" y="166" width="26" height="16" transform="rotate(-32 359 174)"/>
-<rect x="380" y="146" width="26" height="16" transform="rotate(-32 393 154)"/>
-<rect x="418" y="124" width="36" height="20" transform="rotate(-32 436 134)"/>
-</g>
+<path d="M90 70 L300 70 L262 118 L150 140 L90 132 Z" fill="#DAD7B9"/>
+<path d="M430 500 Q520 440 640 452 L700 500 Z" fill="#D6DDB9"/>
+<path d="M90 400 Q170 410 230 500 L90 500 Z" fill="#DCD3B4"/>
+<g fill="#A5C08C"><path d="M236.9 97.1 L255.9 94.8 L257.3 134.6 L242.3 143.5 Z"/><path d="M247.8 196.6 L262.7 185.5 L250.5 147.9 L243.7 145.7 L246.4 167.8 L243.7 187.7 Z"/><path d="M231.4 231.9 L239.6 225.3 L254.6 247.4 L268.2 267.3 L261.4 273.9 L247.8 258.5 Z"/><path d="M77.8 247.4 L91.4 258.5 L145.8 227.5 L149.8 229.7 L143.0 236.4 L90.0 267.3 Z"/><path d="M484.4 86.0 L493.9 103.7 L504.8 105.9 L533.4 86.0 L530.6 74.9 L500.7 101.5 L496.6 101.5 Z"/><path d="M782.2 260.7 L813.5 249.6 L813.5 227.5 L840.7 209.8 L829.8 207.6 L817.6 220.9 L820.3 201.0 L805.4 231.9 L782.2 238.6 Z"/><path d="M853.0 189.9 L858.4 203.2 L832.6 225.3 L813.5 249.6 L810.8 243.0 L821.7 220.9 L842.1 207.6 L848.9 187.7 Z"/><path d="M581.0 528.2 L665.3 470.7 L668.0 475.2 L583.7 532.6 Z"/><path d="M416.4 499.5 L547.0 707.3 L553.8 702.9 L423.2 497.3 Z"/><path d="M778.2 86.0 L802.6 72.7 L846.2 50.6 L805.4 77.2 L806.7 105.9 L801.3 117.0 L794.5 86.0 Z"/><path d="M833.9 439.8 L823.0 444.2 L794.5 391.1 L798.6 388.9 Z"/><path d="M828.5 448.6 L848.9 472.9 L839.4 477.4 Z"/></g>
+<g fill="#B7D3E3" stroke="#9EC1D6" stroke-width="0.8"><path d="M238.2 66.1 L242.3 92.6 L254.6 92.6 L250.5 63.9 Z"/></g>
+<!-- Duxford village, the old RAF married quarters and business parks -->
+<g fill="url(#houses)" stroke="#C9BFAE" stroke-width="0.6"><path d="M359.3 105.9 L366.1 103.7 L383.8 152.3 L405.5 141.3 L417.8 165.6 L400.1 174.4 L396.0 163.4 L387.8 167.8 L381.0 156.8 L375.6 156.8 Z"/><path d="M370.2 139.1 L362.0 143.5 L370.2 165.6 L381.0 161.2 L374.2 156.8 Z"/><path d="M778.2 267.3 L775.4 243.0 L782.2 212.0 L779.5 194.3 L763.2 201.0 L742.8 207.6 L746.9 216.5 L748.2 234.1 L751.0 251.8 L700.6 276.2 L717.0 302.7 Z"/><path d="M787.7 269.5 L770.0 271.7 L723.8 302.7 L722.4 309.3 L761.8 349.1 L824.4 309.3 L806.7 285.0 L793.1 285.0 Z"/><path d="M824.4 307.1 L844.8 289.4 L825.8 278.4 L812.2 262.9 L790.4 269.5 L809.4 282.8 Z"/><path d="M677.5 298.3 L670.7 318.2 L676.2 324.8 L714.2 300.5 L697.9 276.2 L673.4 291.6 Z"/><path d="M744.2 218.7 L733.3 214.2 L703.4 225.3 L718.3 234.1 L722.4 243.0 L745.5 231.9 Z"/><path d="M776.8 194.3 L760.5 136.9 L719.7 152.3 L727.8 174.4 L710.2 181.1 L692.5 203.2 L700.6 225.3 L749.6 205.4 L736.0 174.4 L742.8 172.2 L755.0 203.2 Z"/><path d="M779.5 194.3 L798.6 187.7 L789.0 150.1 L767.3 150.1 L775.4 170.0 Z"/><path d="M779.5 194.3 L779.5 212.0 L795.8 207.6 L789.0 192.1 Z"/><path d="M776.8 247.4 L793.1 236.4 L797.2 214.2 L780.9 212.0 L775.4 231.9 Z"/><path d="M729.2 369.0 L746.9 369.0 L731.9 355.8 Z"/><path d="M744.2 362.4 L760.5 355.8 L723.8 331.4 L721.0 340.3 Z"/><path d="M722.4 331.4 L727.8 322.6 L719.7 311.5 L711.5 320.4 Z"/><path d="M719.7 311.5 L691.1 318.2 L704.7 333.6 L717.0 316.0 Z"/><path d="M288.6 176.7 L298.1 174.4 L294.0 189.9 L303.5 198.8 L299.4 203.2 L287.2 192.1 Z"/><path d="M319.8 214.2 L303.5 236.4 L295.4 231.9 L299.4 223.1 Z"/></g>
+<g fill="#D9D4CA" stroke="#C3BCAE" stroke-width="0.6"><path d="M867.9 331.4 L832.6 320.4 L824.4 309.3 L765.9 346.9 L780.9 375.7 L813.5 426.5 L847.5 415.5 L877.4 397.8 L903.3 371.2 L888.3 333.6 Z"/><path d="M661.2 271.7 L673.4 289.4 L697.9 276.2 L685.7 256.3 Z"/><path d="M498.0 101.5 L529.3 77.2 L515.7 52.8 L474.9 79.4 L492.6 101.5 Z"/><path d="M285.8 254.0 L277.7 245.2 L291.3 234.1 L299.4 240.8 Z"/><path d="M268.2 304.9 L264.1 307.1 L265.4 327.0 L273.6 329.2 L285.8 318.2 L291.3 307.1 L275.0 313.7 Z"/><path d="M124.0 391.1 L136.2 377.9 L125.4 364.6 L110.4 375.7 Z"/></g>
+<!-- lanes -->
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#F4EFE3" stroke-width="2.6"><path d="M574.2 72.7 L674.8 236.4 L715.6 302.7 L779.5 267.3 L791.8 276.2 L836.6 318.2 L866.6 302.7"/><path d="M719.7 309.3 L776.8 373.4 L828.5 453.0"/><path d="M715.6 302.7 L628.6 358.0 L141.7 678.6"/><path d="M780.9 260.7 L774.1 240.8 L775.4 227.5 L780.9 205.4 L772.7 170.0 L760.5 136.9 L757.8 114.7 L763.2 99.3 L783.6 81.6 L787.7 26.3"/><path d="M515.7 48.4 L504.8 -93.1"/></g>
+<!-- A505 along the north side, M11 and junction 10 beyond the 24 end -->
+<g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M110.4 428.7 L126.7 400.0 L137.6 382.3 L179.8 340.3 L227.4 309.3 L268.2 271.7 L291.3 249.6 L314.4 229.7 L351.1 203.2 L408.2 172.2 L435.4 156.8 L464.0 141.3 L483.0 136.9 L502.1 130.2 L508.9 119.2 L533.4 90.4 L566.0 66.1 L594.6 52.8 L657.1 32.9 L684.3 30.7 L765.9 41.8 L862.5 26.3" stroke="#CFC6B3" stroke-width="7"/><path d="M110.4 428.7 L126.7 400.0 L137.6 382.3 L179.8 340.3 L227.4 309.3 L268.2 271.7 L291.3 249.6 L314.4 229.7 L351.1 203.2 L408.2 172.2 L435.4 156.8 L464.0 141.3 L483.0 136.9 L502.1 130.2 L508.9 119.2 L533.4 90.4 L566.0 66.1 L594.6 52.8 L657.1 32.9 L684.3 30.7 L765.9 41.8 L862.5 26.3" stroke="#F8F4EA" stroke-width="4.5"/><path d="M526.6 187.7 L500.7 154.5 L491.2 141.3" stroke="#CFC6B3" stroke-width="4.5"/><path d="M526.6 187.7 L500.7 154.5 L491.2 141.3" stroke="#F8F4EA" stroke-width="2.6"/><path d="M508.9 128.0 L540.2 207.6" stroke="#CFC6B3" stroke-width="4.5"/><path d="M508.9 128.0 L540.2 207.6" stroke="#F8F4EA" stroke-width="2.6"/><path d="M469.4 99.3 L443.6 39.6" stroke="#CFC6B3" stroke-width="4.5"/><path d="M469.4 99.3 L443.6 39.6" stroke="#F8F4EA" stroke-width="2.6"/><path d="M474.9 125.8 L483.0 136.9 L493.9 134.6 L502.1 130.2 L508.9 119.2 L504.8 108.1 L489.8 110.3 L477.6 117.0 L474.9 125.8 Z" stroke="#CFC6B3" stroke-width="6"/><path d="M474.9 125.8 L483.0 136.9 L493.9 134.6 L502.1 130.2 L508.9 119.2 L504.8 108.1 L489.8 110.3 L477.6 117.0 L474.9 125.8 Z" stroke="#F8F4EA" stroke-width="3.6"/><path d="M391.9 -57.7 L454.5 52.8 L582.3 285.0 L595.9 307.1 L662.6 393.3 L721.0 488.4 L756.4 550.3 L857.0 749.3" stroke="#B9B3A6" stroke-width="13"/><path d="M391.9 -57.7 L454.5 52.8 L582.3 285.0 L595.9 307.1 L662.6 393.3 L721.0 488.4 L756.4 550.3 L857.0 749.3" stroke="#F1EEE6" stroke-width="8.5"/><path d="M391.9 -57.7 L454.5 52.8 L582.3 285.0 L595.9 307.1 L662.6 393.3 L721.0 488.4 L756.4 550.3 L857.0 749.3" stroke="#D3CCBD" stroke-width="0.8" stroke-dasharray="6 6"/></g>
+<!-- airfield grass, indicative boundary -->
+<path d="M246.4 300.5 L253.2 382.3 L280.4 417.7 L341.6 400.0 L436.8 342.5 L532.0 285.0 L556.5 256.3 L540.2 214.2 L523.8 194.3 L488.5 185.5 L432.7 214.2 L382.4 240.8 L330.7 269.5 L298.1 289.4 L266.8 280.6 Z" fill="url(#mow)" stroke="#BDB6A6" stroke-width="3" stroke-linejoin="round"/>
+<!-- grass runway 06L/24R, used by many of the warbirds -->
+<g transform="translate(377.6 280.6) rotate(-32.07)"><rect x="-87.5" y="-5.0" width="174.9" height="9.9" fill="#D6E6C0"/></g>
+<!-- aprons, taxiway and hangars -->
+<g fill="#BAB7AF"><path d="M387.8 231.9 L391.9 240.8 L347.0 265.1 L341.6 265.1 L332.1 265.1 L340.2 247.4 L366.1 236.4 L389.2 225.3 Z"/><path d="M391.9 240.8 L432.7 218.7 L431.4 214.2 L421.8 214.2 L408.2 229.7 L394.6 227.5 Z"/><path d="M476.2 196.6 L479.0 207.6 L432.7 218.7 L431.4 205.4 L474.9 194.3 Z"/><path d="M485.8 187.7 L408.2 207.6 L417.8 207.6 L421.8 214.2 L431.4 205.4 L474.9 194.3 L481.7 194.3 Z"/><path d="M479.0 207.6 L487.1 203.2 L485.8 194.3 L488.5 187.7 L481.7 194.3 L476.2 198.8 Z"/><path d="M313.0 340.3 L326.6 342.5 L283.1 371.2 L277.7 358.0 Z"/></g>
+<g fill="none" stroke="#A9A69E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M292.6 369.0 L279.0 371.2 L273.6 358.0 L275.0 351.3 L319.8 280.6 L391.9 240.8 L431.4 216.5 L484.4 205.4 L506.2 223.1 L507.5 234.1"/><path d="M488.5 189.9 L513.0 183.3"/></g>
+<g fill="#AEB6BE" stroke="#8B949E" stroke-width="0.8"><path d="M349.8 220.9 L356.6 231.9 L347.0 236.4 L341.6 225.3 Z"/><path d="M431.4 176.7 L416.4 178.9 L420.5 194.3 L434.1 189.9 Z"/><path d="M466.7 150.1 L487.1 156.8 L479.0 178.9 L459.9 172.2 Z"/><path d="M397.4 194.3 L387.8 198.8 L394.6 209.8 L404.2 205.4 Z"/><path d="M356.6 216.5 L366.1 212.0 L372.9 223.1 L363.4 229.7 Z"/><path d="M510.2 178.9 L502.1 181.1 L500.7 170.0 L506.2 165.6 Z"/><path d="M517.0 185.5 L518.4 189.9 L513.0 192.1 L511.6 185.5 Z"/><path d="M322.6 247.4 L315.8 251.8 L317.1 258.5 L322.6 265.1 L325.3 265.1 L334.8 249.6 Z"/><path d="M294.0 291.6 L298.1 298.3 L275.0 313.7 L270.9 307.1 Z"/><path d="M284.5 251.8 L294.0 240.8 L289.9 236.4 L281.8 247.4 Z"/><path d="M268.2 223.1 L277.7 234.1 L285.8 218.7 L280.4 212.0 Z"/><path d="M371.5 205.4 L359.3 212.0 L357.9 209.8 L370.2 203.2 Z"/><path d="M492.6 176.7 L499.4 174.4 L502.1 183.3 L493.9 183.3 Z"/><path d="M455.8 174.4 L459.9 176.7 L457.2 183.3 L451.8 178.9 Z"/><path d="M360.6 183.3 L368.8 178.9 L364.7 172.2 L357.9 178.9 Z"/><path d="M325.3 187.7 L332.1 183.3 L328.0 178.9 L321.2 183.3 Z"/><path d="M340.2 172.2 L348.4 170.0 L345.7 172.2 L338.9 172.2 Z"/></g>
+<!-- runway 06/24, 1,503 m tarmac: 06 painted at the south west end, 24 at the north east end by the M11 -->
+<g transform="translate(402.8 299.4) rotate(-32.07)"><rect x="-144.2" y="-4.6" width="288.5" height="9.1" fill="#4C5762"/><line x1="-128.2" y1="0" x2="128.2" y2="0" stroke="#FFFFFF" stroke-width="1" stroke-dasharray="9 7"/><text x="-137.2" y="3" font-size="8.5" font-weight="800" fill="#FFFFFF" text-anchor="middle" transform="rotate(90 -137.2 0)">06</text><text x="137.2" y="3" font-size="8.5" font-weight="800" fill="#FFFFFF" text-anchor="middle" transform="rotate(-90 137.2 0)">24</text></g>
 <!-- display line and crowd line -->
-<line x1="331" y1="397" x2="551" y2="258" stroke="#D74949" stroke-width="2.2" stroke-dasharray="8 6"/>
-<line x1="279" y1="284" x2="459" y2="170" stroke="#32B4AF" stroke-width="6" stroke-linecap="square"/>
+<line x1="339.2" y1="371.8" x2="520.3" y2="258.9" stroke="#D74949" stroke-width="2.2" stroke-dasharray="8 6"/>
+<line x1="315.5" y1="306.6" x2="457.8" y2="217.4" stroke="#32B4AF" stroke-width="6" stroke-linecap="square"/>
 <!-- flypast along the display line -->
-<g transform="translate(441 328) rotate(-32.3)">
+<g transform="translate(470 290) rotate(-32.1)">
 <g class="fly train-plan">
 <!-- B-17 leads, then the A400M, four Typhoons in a box, the Red Arrows Diamond Nine last -->
 <use href="#b17Top"/>
@@ -2704,29 +2696,31 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
 </g>
 <!-- labels -->
 <g font-size="11.5" font-weight="600" fill="#13293C">
-<text x="196" y="252" text-anchor="middle">American Air Museum</text>
-<text x="470" y="96" text-anchor="middle">Visitor Centre</text>
-<text x="640" y="96" text-anchor="middle">Duxford village</text>
-<text transform="translate(692 300) rotate(82)" text-anchor="middle">M11</text>
-<text transform="translate(300 150) rotate(-17)" text-anchor="middle" font-size="10.5" font-weight="500">A505</text>
+<text x="318" y="288" text-anchor="end" class="plan-small">American Air Museum</text>
+<text x="262" y="330" text-anchor="middle" class="plan-small">Land Warfare</text>
+<text x="478" y="150" text-anchor="middle">Hangar 1 and entrance</text>
+<text x="380" y="176" text-anchor="middle" class="plan-small">Hangars</text>
+<text x="760" y="262" text-anchor="end">Duxford village</text>
+<text x="545" y="112" text-anchor="middle" class="plan-small">M11 junction 10</text>
+<text transform="translate(640 372) rotate(-52)" text-anchor="middle">M11</text>
+<text transform="translate(212 222) rotate(-30)" text-anchor="middle" class="plan-small">A505</text>
 </g>
-<text transform="translate(395 288) rotate(-32.3)" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle" opacity="0">Runway</text>
-<text transform="translate(452 286) rotate(-32.3)" font-size="11" font-weight="600" fill="#13293C" text-anchor="middle">Runway 06/24</text>
-<text transform="translate(470 324) rotate(-32.3)" font-size="11" font-weight="700" fill="#D74949" text-anchor="middle">Display line</text>
-<text transform="translate(318 242) rotate(-32.3)" font-size="11" font-weight="700" fill="#0E5F5B" text-anchor="middle">Crowd line</text>
+<text transform="translate(452 290) rotate(-32.1)" font-size="11" font-weight="600" fill="#13293C" text-anchor="middle">Runway 06/24</text>
+<text transform="translate(470 326) rotate(-32.1)" font-size="11" font-weight="700" fill="#D74949" text-anchor="middle">Display line</text>
+<text transform="translate(352 271) rotate(-32.1)" font-size="11" font-weight="700" fill="#0E5F5B" text-anchor="middle">Crowd line</text>
 <!-- sun path from the crowd line -->
 <polyline id="planPath" fill="none" stroke="#E39A1F" stroke-width="2" stroke-dasharray="4 4" points=""/>
 <g id="planDots" fill="#E39A1F"></g>
 <g id="planHours" font-size="11" font-weight="600" fill="#9A5A00"></g>
-<line id="planRay" x1="375" y1="223" x2="375" y2="73" stroke="#E39A1F" stroke-width="2"/>
-<circle id="planGlow" cx="375" cy="73" r="24" fill="url(#glowPlan)"/>
-<circle id="planSun" cx="375" cy="73" r="9" fill="#FFC23A" stroke="#C47A00" stroke-width="1.5"/>
+<line id="planRay" x1="390" y1="260" x2="390" y2="150" stroke="#E39A1F" stroke-width="2"/>
+<circle id="planGlow" cx="390" cy="150" r="24" fill="url(#glowPlan)"/>
+<circle id="planSun" cx="390" cy="150" r="9" fill="#FFC23A" stroke="#C47A00" stroke-width="1.5"/>
 <!-- facing wedge and you -->
-<circle cx="375" cy="223" r="7" fill="#6950A1" stroke="#FFFFFF" stroke-width="2"/>
-<text x="362" y="212" font-size="12" font-weight="700" fill="#6950A1" text-anchor="end">You</text>
+<circle cx="390" cy="260" r="7" fill="#6950A1" stroke="#FFFFFF" stroke-width="2"/>
+<text x="384" y="240" font-size="12" font-weight="700" fill="#6950A1" text-anchor="end">You</text>
 <!-- compass and scale -->
 <g transform="translate(742 98)"><circle r="18" fill="#FFFFFF" stroke="#13293C" stroke-width="1.2"/><path d="M0 -14 L5 3 L0 -1 L-5 3 Z" fill="#D74949"/><path d="M0 14 L5 -3 L0 1 L-5 -3 Z" fill="#13293C" opacity="0.35"/><text y="-22" text-anchor="middle" font-size="12" font-weight="700" fill="#D74949">N</text></g>
-<g transform="translate(612 488)"><rect width="130" height="5" fill="#13293C"/><rect width="65" height="5" fill="#FFFFFF" stroke="#13293C" stroke-width="1"/><text y="-5" font-size="11" font-weight="600" fill="#13293C">0</text><text x="130" y="-5" font-size="11" font-weight="600" fill="#13293C" text-anchor="end">500 m</text></g>
+<g transform="translate(650 488)"><rect width="99.4" height="5" fill="#13293C"/><rect width="49.7" height="5" fill="#FFFFFF" stroke="#13293C" stroke-width="1"/><text y="-5" font-size="11" font-weight="600" fill="#13293C">0</text><text x="99.4" y="-5" font-size="11" font-weight="600" fill="#13293C" text-anchor="end">500 m</text></g>
 </g>
 </svg>
 <div class="sg-legend"><span><i style="background:#32B4AF"></i>Crowd line</span><span><i style="background:repeating-linear-gradient(90deg,#D74949 0 6px,transparent 6px 10px)"></i>Display line</span><span><i style="background:#E39A1F"></i>Direction of the sun from the crowd line</span></div>
@@ -2817,7 +2811,7 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
 </div>
 </div>
 
-<div class="sg-foot">Sun positions worked out for the Duxford crowd line on 19 June 2027. Other events shift the times a little, so check the sun table below for your show. Cloud and haze will soften everything shown here. The airfield is redrawn as a guide and is not to scale, so treat distances as approximate.</div>
+<div class="sg-foot">Sun positions worked out for the Duxford crowd line on 19 June 2027. Other events shift the times a little, so check the sun table below for your show. Cloud and haze will soften everything shown here. The airfield is traced from OpenStreetMap and redrawn as a guide, and the crowd line position is indicative, so treat distances as approximate.</div>
 </div>
 
 <script>
@@ -2825,8 +2819,8 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
   "use strict";
   /* Settings */
   var SHOW_DATE = {y:2027, m:6, d:19};
-  var LAT = 52.0906, LON = 0.1319, FACING = 152;
-  var YOU = {x:375, y:223}, PLAN_R = 150;          // aerial view: crowd line position and sun ring radius
+  var LAT = 52.0923, LON = 0.1305, FACING = 148;
+  var YOU = {x:390, y:260}, PLAN_R = 110;          // aerial view: crowd line position and sun ring radius
   var POV = {cx:360, horizon:200, xPerDeg:4.5, yPerDeg:2.8}; // crowd's eye view projection
   var HOURS = [9,10,11,12,13,14,15,16,17,18];
 
@@ -2866,7 +2860,7 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
     return {az:azD, alt:deg(alt), rel:((azD-FACING+540)%360)-180};
   }
   function verdict(rel){var a=Math.abs(rel);if(a<45)return{t:'Into the sun',bar:'#D74949',fg:'#FFFFFF'};if(a<=100)return{t:'Side light',bar:'#6950A1',fg:'#FFFFFF'};return{t:'Sun behind you',bar:'#32B4AF',fg:'#13293C'};}
-  function best(rel){if(rel<-15)return'Passes to your right, towards the American Air Museum end';if(rel<=15)return'High topside passes; flat passes go dark underneath';if(rel<=100)return'Passes to your left, towards the Visitor Centre end';return'Most of the display line';}
+  function best(rel){if(Math.abs(rel)>100)return'Most of the display line';if(rel<-15)return'Passes to your right, towards the American Air Museum end';if(rel<=15)return'High topside passes; flat passes go dark underneath';return'Passes to your left, towards the M11 and Hangar 1 end';}
   function planPt(az){return {x:YOU.x+PLAN_R*Math.sin(rad(az)), y:YOU.y-PLAN_R*Math.cos(rad(az))};}
   function povPt(s){return {x:POV.cx+s.rel*POV.xPerDeg, y:POV.horizon-Math.max(0,s.alt)*POV.yPerDeg};}
 
@@ -2882,7 +2876,7 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
     var plan=[],pov=[],dots=$('planDots'),hrs=$('planHours'),phr=$('povHours'),NS='http://www.w3.org/2000/svg';
     for(var m=7*60;m<=20*60;m+=15){
       var s=sunAt(m),p=planPt(s.az);plan.push(p.x.toFixed(1)+','+p.y.toFixed(1));
-      if(Math.abs(s.rel)<=82&&s.alt>0){var q=povPt(s);pov.push(q.x.toFixed(1)+','+q.y.toFixed(1));}
+      if(m>=9*60&&m<=18*60&&Math.abs(s.rel)<=82&&s.alt>0){var q=povPt(s);pov.push(q.x.toFixed(1)+','+q.y.toFixed(1));}
     }
     $('planPath').setAttribute('points',plan.join(' '));
     $('povPath').setAttribute('points',pov.join(' '));
@@ -3326,8 +3320,21 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
     }
     function matches(i,f){
       var cx=isCx(i);
-      switch(f){case "military":return cat(i)==="military"&&!cx;case "civilian":return cat(i)==="civilian"&&!cx;case "new":return i.isNew&&!cx;case "cancelled":return cx;default:return true;}
+      switch(f){case "military":return cat(i)==="military"&&!cx;case "civilian":return cat(i)==="civilian"&&!cx;case "flying":return i.flying&&!cx;
+        case "static":return i.staticDisplay&&!cx;case "new":return newNow(i)&&!cx;case "cancelled":return cx;default:return true;}
     }
+    /* thumbnail from Jack's own photos where the type matches (not clickable) */
+    function luPhoto(i){
+      if(isCx(i))return "";
+      var t=[i.aircraftName,i.variant].join(" ").toLowerCase();
+      var M=[[/buch[oó]n|bf ?109|messerschmitt/,"buchon_pan"],[/spitfire/,"spitfire"],[/p-?40|warhawk|kittyhawk/,"p40"],[/wildcat/,"wildcat_side"],[/chipmunk/,"chipmunk"],[/tornado/,"tornado"]];
+      for(var n=0;n<M.length;n++){ if(M[n][0].test(t)&&document.querySelector('img[data-pic="'+M[n][1]+'"]:not([data-dup])')) return M[n][1]; }
+      return "";
+    }
+    /* New: shows until the next official update, or one week after newSince, whichever comes first */
+    function newNow(i){return !!i.isNew&&(!i.newSince||(Date.now()-new Date(i.newSince).getTime())/864e5<=7);}
+    /* Updated: tag with the date, only when something has actually changed */
+    function updTag(i){if(!i.updated)return "";var d=new Date(i.updated).toLocaleDateString("en-GB",{day:"numeric",month:"short"});return '<a class="lu-upd" href="'+E(i.updatedLink||"#lineup")+'"'+(i.updatedNote?' title="'+E(i.updatedNote)+'"':'')+'>Updated '+d+'</a>';}
     function code(i){return i.flying&&i.staticDisplay?"F/S":i.flying?"F":i.staticDisplay?"S":"?";}
     function displayText(i){return i.flying&&i.staticDisplay?"Flying & static":i.flying?"Flying":i.staticDisplay?"Static":"To be confirmed";}
     function unit(i){return cat(i)==="military"?(i.squadron||""):(i.squadron||i.operator||"");}
@@ -3351,7 +3358,7 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       $("luOfficial").href=s.url; $("luOfficial").textContent="Official "+s.short+" page";
       var c=counts(st.items);
       [["luTotal",c.total],["luFly",c.flying],["luSta",c.statics],["luMil",c.military],["luCiv",c.civilian]].forEach(function(p){$(p[0]).textContent=p[1];});
-      var shown=st.items.filter(function(i){return matches(i,st.f);}), groups=group(shown);
+      var shown=st.items.filter(function(i){return matches(i,st.f);}), groups=group(shown), hasDays=s.days>1&&st.items.some(function(i){return i.days;});
       var jumpEl=$("luJump");
       jumpEl.innerHTML='<span>Jump to</span>'+groups.map(function(g,n){
         return '<a href="#lug'+n+'"'+(g.meta.kind==="cxl"?' class="cx"':'')+'>'+E(g.meta.title)+'<sup>'+g.items.length+'</sup></a>';
@@ -3362,16 +3369,17 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
         var k=g.meta.kind, uHead=k==="civ"?"Owner / operator":k==="cxl"?"Unit / air arm":"Squadron / unit";
         var rows=g.items.map(function(i){
           var codeCls=i.flying&&i.staticDisplay?"fs":i.flying?"f":"";
-          var tag=isCx(i)?"":i.isNew?'<span class="lu-new">New</span>':isTbc(i)?'<span class="lu-tbc">TBC</span>':"";
+          var tag=(isCx(i)?"":newNow(i)?'<span class="lu-new">New</span>':isTbc(i)?'<span class="lu-tbc">TBC</span>':"")+updTag(i);
           var u=unit(i);
           if(k==="cxl")u=[i.squadron,i.airArm||i.operator].filter(Boolean).join(", ");
-          return '<tr><td class="a"><div class="lu-ac">'+E(i.aircraftName)+(i.variant?' <span class="mk">'+E(i.variant)+'</span>':'')+(i.count>1?' <span class="lu-x">&times;'+(+i.count)+'</span>':'')+'</div>'+(i.notes?'<div class="lu-note">'+E(i.notes)+'</div>':'')+'</td>'
+          var pk=luPhoto(i), th=pk?'<span class="lu-thumb">'+window.photoImg(pk)+'</span>':'';
+          return '<tr><td class="a"><div class="lu-row">'+th+'<div><div class="lu-ac">'+E(i.aircraftName)+(i.variant?' <span class="mk">'+E(i.variant)+'</span>':'')+(i.count>1?' <span class="lu-x">&times;'+(+i.count)+'</span>':'')+'</div>'+(i.notes?'<div class="lu-note">'+E(i.notes)+'</div>':'')+'</div></div></td>'
             +'<td class="u">'+E(u||"To be confirmed")+'</td>'
             +'<td class="d"><span class="lu-code '+codeCls+'">'+code(i)+'</span>'+displayText(i)+'</td>'
-            +'<td class="y">'+E(s.days>1?(i.days||""):"")+'</td><td class="n">'+tag+'</td></tr>';
+            +(hasDays?'<td class="y">'+E(i.days||"")+'</td>':'')+'<td class="n">'+tag+'</td></tr>';
         }).join("");
         return '<section class="lu-group '+k+'" id="lug'+n+'"><h3>'+E(g.meta.title)+' <small>'+g.items.length+' aircraft</small></h3>'
-          +'<table><colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col></colgroup><thead><tr><th>Aircraft</th><th>'+uHead+'</th><th>Display</th><th>Days</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></section>';
+          +'<table><colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col></colgroup><thead><tr><th>Aircraft</th><th>'+uHead+'</th><th>Display</th>'+(hasDays?'<th>Days</th>':'')+'<th></th></tr></thead><tbody>'+rows+'</tbody></table></section>';
       }).join("");
       document.querySelectorAll("#luGroups tbody tr").forEach(function(el,n){setTimeout(function(){el.classList.add("in");},30*Math.min(n,16));});
       var none=shown.length===0;
@@ -3870,7 +3878,7 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
 
   /* ===== sun at each show ===== */
   (function(){
-    var LAT=52.0906, LON=0.1319, FACING=152;
+    var LAT=52.0923, LON=0.1305, FACING=148;
     function rad(d){return d*Math.PI/180;} function deg(r){return r*180/Math.PI;}
     function sunAt(iso,minutes){
       var p=iso.split('-'), ms=Date.UTC(+p[0],+p[1]-1,+p[2],0,0)+(minutes-60)*60000;
@@ -4172,19 +4180,19 @@ var KIT={
   /* ===== where to watch: filterable photo cards ===== */
   (function(){
     var SPOTS=[
-      {id:'centre',name:'Crowd line centre',badge:['Best all round',''],f:['families','photo'],near:0,img:'formation',
+      {id:'centre',name:'Crowd line centre',badge:['Best all round',''],f:['families','photo'],near:0,photos:['formation','spitfire'],cap:'Warbirds over show centre',
         text:'<b>Opposite show centre.</b> The best view of the main display line and the commentary. <b>Arrive early</b> and save your pitch on the crowd line once the gates open, then go and explore.',
         rows:[['Position','Show centre'],['Ground','Grass'],['Facilities','Hangars and the 19 Squadron Restaurant nearby']],more:'This stretch fills first on the big Air Show days. Bring chairs and a blanket, and claim your spot before the flightline walk.'},
-      {id:'west',name:'West end, by the Land Warfare area',badge:['Quieter, close taxi shots','teal'],f:['quiet','photo'],near:2,img:'wildcat_side',
+      {id:'west',name:'West end, by the Land Warfare area',badge:['Quieter, close taxi shots','teal'],f:['quiet','photo'],near:2,photos:['wildcat_side','wildcat_front'],cap:'Taxiing close at the west end',
         text:'<b>Generally quieter.</b> The west end of the airfield, closer to where the Land Warfare hall was, is perfect for taxi shots, <b>as the aircraft will be very close to you.</b>',
         rows:[['Position','West of show centre'],['Ground','Grass'],['Nearby','American Air Museum and its café']],more:'Displays are seen more at an angle from here, but the taxiing aircraft more than make up for it. Great for photographers who don’t need to be at show centre.'},
-      {id:'east',name:'East end, near the Visitor Centre',badge:['Close to everything','teal'],f:['families'],near:1,img:'chipmunk',
+      {id:'east',name:'East end, near the Visitor Centre',badge:['Close to everything','teal'],f:['families'],near:1,photos:['chipmunk','tornado'],cap:'Near the hangars and Visitor Centre',
         text:'<b>Close to the Visitor Centre,</b> Hangar 1, the Spitfire Café and toilets. <b>Handy with young children.</b>',
         rows:[['Position','East of show centre'],['Ground','Grass'],['Watch out','Busiest area, near the entrance']],more:'Everyone comes in at this end, so it’s busier, but you’re never far from food, toilets and shelter in the hangars.'},
-      {id:'access',name:'Accessible viewing',badge:['Accessible','teal'],f:['stepfree','quiet'],near:2,img:'buchon_pan',
+      {id:'access',name:'Accessible viewing',badge:['Accessible','teal'],f:['stepfree','quiet'],near:2,photos:['buchon_pan'],cap:'Calmer viewing away from the crowds',
         text:'<b>A wheelchair viewing area</b> with accessible toilets nearby, and <b>an accessible quiet zone</b> between the American Air Museum and the Land Warfare area.',
         rows:[['Parking','Main car park, proof needed'],['Look for','Hurricane on a pole at the main gate'],['Shuttle','Accessible bus to the showground']],more:'At the big Air Shows, book an accessible parking permit with your ticket and bring your Blue Badge. Scooters and wheelchairs can be booked in advance through Event Mobility.'},
-      {id:'flightline',name:'Flightline walk',badge:['Mornings at the Air Shows','warn'],f:['families','photo'],near:1,img:'buchon_front',
+      {id:'flightline',name:'Flightline walk',badge:['Mornings at the Air Shows','warn'],f:['families','photo'],near:1,photos:['buchon_front','p40'],cap:'Up close on the flightline walk',
         text:'<b>Get right up to the display aircraft</b> on the tarmac. <b>Open from 09:15 to about 12:00</b> at the big Air Shows.',
         rows:[['Times','09:15 to about 12:00'],['Ground','Level tarmac']],more:'The best chance to speak to pilots and ground crew, and to photograph the aircraft before they fly. It closes ready for the flying display.'}
     ];
@@ -4197,13 +4205,14 @@ var KIT={
       if(st.sort==='za') list=list.slice().sort(function(a,b){return b.name.localeCompare(a.name);});
       if(st.sort==='near') list=list.slice().sort(function(a,b){return a.near-b.near;});
       box.innerHTML=list.length?list.map(function(x){
-        var src=document.querySelector('img[data-pic="'+x.img+'"]');
         return '<article class="rcard"><div class="rcard-head"><h3>'+esc(x.name)+'</h3><span class="ricon">'+window.RICON.eye+'</span></div>'
-          +'<div class="card-img">'+(src?'<img class="photo" src="'+src.getAttribute('src')+'" alt="">':'')+'</div>'
+          +(x.photos?'<div class="gal" data-i="0">'+x.photos.map(function(k,n){return '<div class="slide'+(n?'':' on')+'">'+window.photoImg(k)+'</div>';}).join('')
+            +'<span class="gal-cap">'+esc(x.cap)+'</span>'+(x.photos.length>1?'<span class="gal-count">1 of '+x.photos.length+'</span><div class="gal-nav"><button type="button" data-g="-1" aria-label="Previous photo">&lt;</button><button type="button" data-g="1" aria-label="Next photo">&gt;</button></div>':'')+'</div>':'')
           +'<div class="rrows"><div class="rrow hl"><span>Good for</span><b>'+esc(x.badge[0])+'</b></div>'+x.rows.map(function(r){return '<div class="rrow"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>';}).join('')+'</div>'
           +'<div class="rwhat"><h4>What you get</h4><p>'+x.text+'</p><p class="card-more" hidden>'+esc(x.more)+'</p>'
           +'<div class="rwhat-foot"><button type="button" class="more-link" data-more><span class="m">More</span> information<span class="chev">&gt;</span></button>'+(x.id==='pods'?'':'<button type="button" class="btn small" data-plan="'+x.id+'">Plan my day here</button>')+'</div></div></article>';
       }).join(''):'<p class="cards-empty">Nothing matches that filter.</p>';
+      box.querySelectorAll('.gal [data-g]').forEach(function(b){ b.onclick=function(){ var g=b.closest('.gal'), sl=g.querySelectorAll('.slide'), i=(+g.dataset.i+(+b.dataset.g)+sl.length)%sl.length; g.dataset.i=i; sl.forEach(function(x,n){x.classList.toggle('on',n===i);}); g.querySelector('.gal-count').textContent=(i+1)+' of '+sl.length; }; });
       box.querySelectorAll('[data-more]').forEach(function(b){ b.onclick=function(){ var m=b.closest('.rcard').querySelector('.card-more'); m.hidden=!m.hidden; b.innerHTML=m.hidden?'<span class="m">More</span> information<span class="chev">&gt;</span>':'<span class="m">Less</span> information<span class="chev">&lt;</span>'; }; });
       box.querySelectorAll('[data-plan]').forEach(function(b){ b.onclick=function(){ if(window.plannerSet) window.plannerSet('spot',b.dataset.plan); var t=document.getElementById('timeline'); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); }; });
     }
@@ -4575,6 +4584,22 @@ h1,h2,h3,h4,h5,h6,.sg h2,.sg h3,.stay-group h3,.panel-head h2,.panel-head h2 *,l
 </body>
 </html>
 
+<style>/* header image style and glass Key details box (design updates, 16 Oct 2026) */
+.hero2-banner{height:clamp(240px,46vh,460px)!important}
+.hero2-banner::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(11,26,39,0) 34%,rgba(11,26,39,.5) 68%,#0B1A27 100%)}
+.hero2-banner img.photo{object-position:center 46%;animation:hdrIn 2.8s cubic-bezier(.2,.7,.2,1) both}
+@keyframes hdrIn{from{transform:scale(1.08)}to{transform:scale(1)}}
+.hero2-body{margin-top:-110px!important}
+.hero2-side{background:rgba(14,33,49,.92)!important;border-top:4px solid var(--teal);box-shadow:0 18px 44px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.hero2-main>*{animation:hdrUp .8s cubic-bezier(.2,.7,.2,1) both}
+.hero2-main>*:nth-child(2){animation-delay:.1s}.hero2-main>*:nth-child(3){animation-delay:.2s}.hero2-main>*:nth-child(4){animation-delay:.3s}.hero2-main>*:nth-child(5){animation-delay:.4s}
+.hero2-side{animation:hdrUp .9s .25s cubic-bezier(.2,.7,.2,1) both}
+@keyframes hdrUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+header.hero2::after{display:block!important;content:"";position:absolute;left:0;right:0;top:auto;bottom:0;width:auto;height:2px;clip-path:none;z-index:3;background:linear-gradient(90deg,rgba(50,180,175,0),#32B4AF,rgba(50,180,175,0)) no-repeat;background-size:40% 100%;animation:hdrLine 7s linear infinite}
+@keyframes hdrLine{from{background-position:-70% 0}to{background-position:170% 0}}
+@media(max-width:900px){.hero2-banner{height:clamp(260px,62vw,420px)!important}.hero2-body{margin-top:-64px!important}}
+@media(prefers-reduced-motion:reduce){.hero2-banner img.photo,.hero2-main>*,.hero2-side,header.hero2::after{animation:none!important}}
+</style>
 <style>/* phone width fix: no sideways scroll when sections are open */
 section.fold{min-width:0;max-width:100%}.fold-body,.fold-in{min-width:0}
 @media(max-width:640px){.suits{margin:0 -16px;padding:var(--gap) 16px}.tablist{margin:0 -16px;padding:0 16px}}
