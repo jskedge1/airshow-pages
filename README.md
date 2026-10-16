@@ -21,6 +21,10 @@ so a change saved here shows on the Wix site within a minute or two.
 Rules for every page: one self-contained HTML file, Barlow, hidden scrollbar,
 collapsible sections, no dashes in copy, no photo credits, images not clickable.
 
+Every page ends with the `mobile-fit` block (between the `<!-- mobile-fit` comments, just before `</body>`).
+It keeps the page inside the screen down to 320px wide, which is the width Wix gives an HTML box on phones.
+Keep it when copying a template to make a new show page.
+
 ## Links between pages
 
 `links.js` is loaded by every page. It holds the list of show pages and their addresses on
@@ -31,14 +35,14 @@ Set `live:false` on a page until its Wix page exists.
 | Show | Wix page address |
 |---|---|
 | Royal International Air Tattoo | /riat |
-| RAF Cosford Air Show | /raf-cosford-air-show |
-| Duxford Air Shows | /duxford-air-shows |
-| Shuttleworth Air Shows | /shuttleworth-air-shows |
-| Little Gransden Air and Car Show | /little-gransden-air-show |
-| Eastbourne Airshow | /eastbourne-airshow |
-| Clacton Air Show | /clacton-air-show |
-| Wales Air Show | /wales-air-show |
-| Hampshire Air Festival | /hampshire-air-festival |
+| RAF Cosford Air Show | /copy-of-template-page-1 |
+| Duxford Air Shows | /copy-of-template-page |
+| Shuttleworth Air Shows | /copy-of-template-page-5 |
+| Little Gransden Air and Car Show | /copy-of-template-page-7 |
+| Eastbourne Airshow | /copy-of-template-page-2 |
+| Clacton Air Show | /copy-of-template-page-3 |
+| Wales Air Show | /copy-of-template-page-4 |
+| Hampshire Air Festival | /copy-of-template-page-6 |
 | Blackpool Air Show | /blackpool-air-show (page to create) |
 | Southport Air Show | /southport-air-show (page to create) |
 | New to Aviation Photography | /new-to-aviation-photography (page to create) |
