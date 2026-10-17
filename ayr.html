@@ -4450,3 +4450,46 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
   window.addEventListener('load',function(){setTimeout(trim,300);});
 })();
 </script>
+
+<!-- ONE-SECTION-AT-A-TIME ADD-ON (16 October 2026)
+     Opening a section closes the one that was open, so the page only ever
+     grows by one section and fits its Wix box. Removes "Open all sections".
+     Lets the page hand scrolling back to the main Wix page smoothly. -->
+<style>
+html,body{overscroll-behavior:auto}
+#openAll{display:none!important}
+</style>
+<script>
+(function(){
+  function folds(){return [].slice.call(document.querySelectorAll('section.fold'));}
+  var busy=false;
+  function onlyOne(keep){
+    if(busy) return; busy=true;
+    folds().forEach(function(f){
+      if(f!==keep && f.classList.contains('open')){
+        var b=f.querySelector('.fold-btn'); if(b) b.click();
+      }
+    });
+    busy=false;
+  }
+  function watch(){
+    var list=folds(); if(!list.length) return false;
+    var mo=new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        var f=m.target;
+        if(f.classList.contains('open') && (m.oldValue||'').indexOf('open')<0) onlyOne(f);
+      });
+    });
+    list.forEach(function(f){mo.observe(f,{attributes:true,attributeFilter:['class'],attributeOldValue:true});});
+    var c=document.getElementById('foldCount');
+    if(c){
+      var fix=function(){c.innerHTML='<b>One section open at a time.</b> Pick a section to open it.';};
+      fix(); new MutationObserver(function(){ if(c.textContent.indexOf('One section')<0) fix(); }).observe(c,{childList:true});
+    }
+    return true;
+  }
+  function start(){ if(!watch()) setTimeout(start,300); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();
+</script>
+<!-- /one-section-at-a-time -->
