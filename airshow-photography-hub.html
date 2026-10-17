@@ -2464,6 +2464,18 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
     $$('.acc').forEach(function(d){var tags=(d.dataset.tags||'').split(' ');d.hidden=!(f==='all'||tags.indexOf(f)>=0);});
   });});
 
+
+  /* only one section stays open, so the one above may close while we jump: settle on the target once it has */
+  document.addEventListener('click',function(e){
+    if(!e.target.closest) return;
+    var o=e.target.closest('[data-open],[data-jump]'); if(!o) return;
+    var id=o.getAttribute('data-open')||o.getAttribute('data-jump'), t=o.getAttribute('data-chapter');
+    setTimeout(function(){
+      var el=(t&&document.getElementById(t))||document.getElementById(id); if(!el) return;
+      var y=el.getBoundingClientRect().top+window.pageYOffset-(t?16:0);
+      if(Math.abs(el.getBoundingClientRect().top-(t?16:0))>40) window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+    },900);
+  });
   /* ---------- lens reach simulator ---------- */
   var CROP={ff:1,apsc:1.5,canon:1.6,m43:2};
   var AC={
