@@ -4058,6 +4058,167 @@ h1,h2,h3,h4,h5,h6,.sg h2,.sg h3,.stay-group h3,.panel-head h2,.panel-head h2 *,l
 @media(max-width:820px){.checker{grid-template-columns:1fr}.checker .result{min-height:0;padding:26px 18px}}
 @media(prefers-reduced-motion:reduce){.checker .result.swap{animation:none}.checker .checker-list button,.read-list a,.read-list a b{transition:none!important}}
 </style>
+<style>/* phone width fix: no sideways scroll when sections are open */
+section.fold{min-width:0;max-width:100%}.fold-body,.fold-in{min-width:0}
+@media(max-width:640px){.suits{margin:0 -16px;padding:var(--gap) 16px}.tablist{margin:0 -16px;padding:0 16px}}
+</style>
+<script src="https://jskedge1.github.io/airshow-pages/links.js" defer></script>
+<!-- cover-header: home page style header (photo full width behind a navy gradient, frosted glass Key details box). Same block in every page. -->
+<style id="cover-header">
+header.cov{position:relative!important;isolation:isolate;overflow:hidden;background:#13293C!important}
+header.cov::before{display:none!important}
+header.cov .cov-bg{position:absolute!important;inset:0!important;height:auto!important;min-height:0!important;max-height:none!important;z-index:0!important;padding:0!important;margin:0!important;background-image:none!important;background-color:#13293C!important;display:block!important}
+header.cov .cov-bg>img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:cover;object-position:60% 55%;transform-origin:60% 40%;animation:covDrift 26s ease-in-out infinite alternate;-webkit-mask-image:none!important;mask-image:none!important}
+header.cov .cov-bg::after{content:""!important;position:absolute!important;inset:0!important;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(19,41,60,.95) 0%,rgba(19,41,60,.78) 38%,rgba(19,41,60,.18) 100%)!important;display:block!important}
+header.cov .cov-bg .credit{display:none!important}
+header.cov .cov-body{position:relative!important;z-index:2;margin-top:0!important;background:transparent!important;padding-top:clamp(80px,12vh,120px)!important;padding-bottom:96px!important}
+header.cov .cov-body.cov-grid{min-height:560px;align-items:end!important}
+header.cov .cov-main{background:transparent!important;border-top:0!important}
+header.cov .cov-main>*{animation:covRise .9s cubic-bezier(.2,.7,.2,1) both}
+header.cov .cov-main>*:nth-child(2){animation-delay:.12s}header.cov .cov-main>*:nth-child(3){animation-delay:.24s}header.cov .cov-main>*:nth-child(4){animation-delay:.36s}header.cov .cov-main>*:nth-child(5){animation-delay:.48s}
+header.cov .cov-box{background:rgba(14,33,49,.62)!important;border-top:4px solid #32B4AF!important;box-shadow:0 22px 50px rgba(0,0,0,.35)!important;-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);align-self:end!important;margin-top:0!important;animation:covRise .9s .5s cubic-bezier(.2,.7,.2,1) both}
+header.cov .cov-box h2,header.cov .cov-box .keybox-top{background-color:rgba(50,180,175,.86)!important}
+header.cov .cov-box dl>div:not(.hl):not(.hot),header.cov .cov-box .row:not(.hot){background:transparent!important}
+.cov-trail{position:absolute;left:0;right:0;bottom:56px;height:2px;z-index:2;pointer-events:none;overflow:hidden}
+.cov-trail i{position:absolute;top:0;left:-30%;width:30%;height:100%;background:linear-gradient(90deg,transparent,rgba(50,180,175,.9),transparent);animation:covFly 7s ease-in-out infinite}
+@media(min-width:901px){header.cov .cov-main h1{overflow-wrap:normal!important;word-break:normal!important;hyphens:none;font-size:clamp(40px,5.2vw,78px)!important}}
+@keyframes covDrift{from{transform:scale(1.04) translate(0,0)}to{transform:scale(1.12) translate(-2%,-1.5%)}}
+@keyframes covRise{from{opacity:.001;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes covFly{0%{left:-30%}60%,100%{left:110%}}
+@media(max-width:900px){
+  header.cov .cov-bg::after{background:linear-gradient(180deg,rgba(19,41,60,.35) 0%,rgba(19,41,60,.85) 38%,rgba(19,41,60,.95) 100%)!important}
+  header.cov .cov-body{padding-top:180px!important;padding-bottom:72px!important}
+  header.cov .cov-body.cov-grid{min-height:0}
+  header.cov .cov-bg>img{object-position:50% 0%}
+  .cov-trail{bottom:28px}
+}
+@media(prefers-reduced-motion:reduce){header.cov .cov-bg>img,header.cov .cov-main>*,header.cov .cov-box,.cov-trail i{animation:none!important}}
+</style>
+<script id="cover-header-js">
+(function(){
+  function setup(){
+    var h=document.querySelector('header.hero2')||(function(){var b=document.querySelector('header > .banner');return b&&b.parentNode;})();
+    if(!h) return false;
+    var bg=h.querySelector('.hero2-banner')||h.querySelector(':scope > .banner');
+    var body=h.querySelector('.hero2-body')||h.querySelector(':scope > .head');
+    var main=h.querySelector('.hero2-main')||h.querySelector('.head-copy');
+    var box=h.querySelector('.hero2-side')||h.querySelector('.keybox');
+    if(!bg||!body) return false;
+    if(!bg.querySelector('img')){
+      var u=getComputedStyle(bg).backgroundImage, m=u&&u.match(/url\(["']?(.*?)["']?\)/);
+      if(!m) return false;                       /* photo not set yet: try again shortly */
+      var im=document.createElement('img'); im.src=m[1]; im.alt=bg.getAttribute('aria-label')||''; im.decoding='async';
+      bg.insertBefore(im,bg.firstChild); bg.removeAttribute('role');
+    }
+    h.classList.add('cov'); bg.classList.add('cov-bg'); body.classList.add('cov-body');
+    if(h.classList.contains('hero2')) body.classList.add('cov-grid');
+    if(main) main.classList.add('cov-main'); if(box) box.classList.add('cov-box');
+    if(!h.querySelector('.cov-trail')){var t=document.createElement('div');t.className='cov-trail';t.setAttribute('aria-hidden','true');t.innerHTML='<i></i>';h.appendChild(t);}
+    return true;
+  }
+  var tries=0;
+  function go(){ if(!setup() && ++tries<40) setTimeout(go,150); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+})();
+</script>
+<!-- /cover-header -->
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
 </body>
 </html>
 

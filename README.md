@@ -13,6 +13,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | Shuttleworth Air Shows | https://jskedge1.github.io/airshow-pages/shuttleworth.html |
 | Blackpool Air Show | https://jskedge1.github.io/airshow-pages/blackpool.html |
 | Southport Air Show | https://jskedge1.github.io/airshow-pages/southport.html |
+| International Ayr Show | https://jskedge1.github.io/airshow-pages/ayr.html |
 | Little Gransden Air & Car Show | https://jskedge1.github.io/airshow-pages/little-gransden.html |
 | New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
@@ -46,5 +47,6 @@ Set `live:false` on a page until its Wix page exists.
 | Hampshire Air Festival | /copy-of-template-page-6 |
 | Blackpool Air Show | /blackpool-air-show (page to create) |
 | Southport Air Show | /southport-air-show (page to create) |
+| International Ayr Show | /international-ayr-show |
 | New to Aviation Photography | /new-to-aviation-photography (page to create) |
 | Find your Air Show | /air-shows-guides |

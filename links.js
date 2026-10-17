@@ -16,7 +16,8 @@
     {key:'wales',           name:'Wales Air Show',                 where:'Swansea Bay',                   slug:'copy-of-template-page-4',  live:true},
     {key:'hampshire',       name:'Hampshire Air Festival',         where:'Hampshire',                     slug:'copy-of-template-page-6',  live:true},
     {key:'blackpool',       name:'Blackpool Air Show',             where:'Lancashire seafront',           slug:'blackpool-air-show',      live:false},
-    {key:'southport',       name:'Southport Air Show',             where:'Merseyside',                    slug:'southport-air-show',      live:false}
+    {key:'southport',       name:'Southport Air Show',             where:'Merseyside',                    slug:'southport-air-show',      live:false},
+    {key:'ayr',             name:'International Ayr Show',         where:'Ayr seafront, South Ayrshire',  slug:'international-ayr-show',  live:true}
   ];
   var GUIDES=[
     {key:'find',        name:'Find your Air Show',          where:'Every show we cover',            slug:FIND,                          live:true},
