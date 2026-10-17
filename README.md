@@ -15,6 +15,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | Southport Air Show | https://jskedge1.github.io/airshow-pages/southport.html |
 | International Ayr Show | https://jskedge1.github.io/airshow-pages/ayr.html |
 | Little Gransden Air & Car Show | https://jskedge1.github.io/airshow-pages/little-gransden.html |
+| Airshow Photography Hub | https://jskedge1.github.io/airshow-pages/airshow-photography-hub.html |
 | New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
@@ -48,5 +49,6 @@ Set `live:false` on a page until its Wix page exists.
 | Blackpool Air Show | /blackpool-air-show (page to create) |
 | Southport Air Show | /southport-air-show (page to create) |
 | International Ayr Show | /international-ayr-show |
+| Airshow Photography Hub | /airshow-photography-hub |
 | New to Aviation Photography | /new-to-aviation-photography (page to create) |
 | Find your Air Show | /air-shows-guides |

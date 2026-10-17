@@ -21,6 +21,7 @@
   ];
   var GUIDES=[
     {key:'find',        name:'Find your Air Show',          where:'Every show we cover',            slug:FIND,                          live:true},
+    {key:'airshow-photography-hub', name:'Airshow Photography Hub', where:'Beginner guide, kit and photo tools', slug:'airshow-photography-hub', live:true},
     {key:'new-to-aviation-photography', name:'New to Aviation Photography', where:'Settings, kit and planning', slug:'new-to-aviation-photography', live:false},
     {key:'first',       name:'Planning your first air show', where:'Start here if you are new',     slug:'general-6',                   live:true},
     {key:'camping',     name:'Camping at Air Shows',         where:'Campsites and what to pack',    slug:'general-6-1',                 live:true}
