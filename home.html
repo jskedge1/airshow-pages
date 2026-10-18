@@ -1,0 +1,993 @@
+<title>The Big Guide to UK Airshows</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout concept: camping hub design on the home page. Rotating photo header with a jet flying through, glass planner bar, white and pale teal sections with red line titles, forest green band, navy organiser section. */
+:root{
+  --navy:#13293C; --deep:#0E2131; --teal:#32B4AF; --pale:#E6F4F3; --purple:#6950A1; --red:#D74949; --forest:#1E3A34;
+  --paper:#FFFFFF; --ink:#0B1722; --line:#CBD5DD; --mute:#33475A;
+  --font:'Barlow','Helvetica Neue',Arial,sans-serif; --cond:'Barlow Condensed','Barlow',Arial,sans-serif; --hand:'Caveat','Comic Sans MS',cursive;
+  --ease:cubic-bezier(.22,1,.36,1);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--font)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--deep);z-index:30}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+a{color:inherit}
+img{display:block;max-width:100%}
+.in{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+.nopic{pointer-events:none;user-select:none;-webkit-user-drag:none}
+
+/* reveal: only elements below the first screen get the pre state, set by script */
+.rv{transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rv.pre{opacity:0;transform:translateY(26px)}
+
+/* hero */
+.hero{position:relative;background:var(--navy);min-height:clamp(440px,74vh,660px);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;padding-block:70px 130px;overflow:hidden;isolation:isolate}
+.slides{position:absolute;inset:0;z-index:-2}
+.slide{position:absolute;inset:-2%;background-size:cover;background-position:center;opacity:0;transition:opacity 1.8s ease}
+.slide.on{opacity:1;animation:drift 9s linear both}
+@keyframes drift{from{transform:scale(1.12) translateX(1.5%)}to{transform:scale(1.02) translateX(-1%)}}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(14,33,49,.55),rgba(14,33,49,.2) 40%,rgba(14,33,49,.9)),radial-gradient(ellipse at center,rgba(14,33,49,.35),transparent 70%)}
+.jet{position:absolute;top:22%;left:0;width:100%;height:60px;z-index:-1;pointer-events:none;overflow:hidden}
+.jet .fly{position:absolute;top:0;left:0;display:flex;align-items:center;transform:translateX(-120%);animation:fly 16s linear 1.5s infinite}
+.jet .smoke{width:min(60vw,640px);height:16px;display:grid;grid-template-rows:repeat(3,1fr);gap:2px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 70%);mask-image:linear-gradient(90deg,transparent,#000 70%)}
+.jet .smoke i:nth-child(1){background:var(--red)}.jet .smoke i:nth-child(2){background:#fff}.jet .smoke i:nth-child(3){background:#2D5DA8}
+.jet .smoke i{filter:blur(2px);border-radius:8px}
+.jet svg{width:64px;height:auto;margin-left:-4px}
+@keyframes fly{0%{transform:translate(-110%,24px)}55%{transform:translate(105vw,-18px)}100%{transform:translate(105vw,-18px)}}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:16px;padding:5px 12px}
+.hero h1{font:800 clamp(50px,10.5vw,128px)/.88 var(--cond);text-transform:capitalize;margin-top:16px;max-width:13ch}
+.hero h1 span{display:block;overflow:hidden}
+.hero h1 span b{display:block;font-weight:inherit;animation:rise 1.1s var(--ease) both}
+.hero h1 span:nth-child(2) b{animation-delay:.12s;color:var(--teal)}
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+.hero .lead{margin-top:16px;max-width:46ch;font-size:19px;color:#E8F0F6;animation:fadeup 1s var(--ease) .35s both}
+@keyframes fadeup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.ac{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:96px;display:flex;align-items:center;gap:12px;font-weight:600}
+.ac .name{background:rgba(14,33,49,.7);padding:6px 12px;border-left:4px solid var(--teal);transition:opacity .4s}
+.dots{display:flex;gap:6px}
+.dots button{width:30px;height:4px;border:0;padding:0;background:rgba(255,255,255,.35);cursor:pointer;position:relative;overflow:hidden}
+.dots button.on::after{content:"";position:absolute;inset:0;background:var(--teal);transform-origin:left;animation:bar 6s linear both}
+@keyframes bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero .shine{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,var(--teal),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:shine 5s ease-in-out infinite}
+@keyframes shine{from{background-position:-40% 0}to{background-position:140% 0}}
+
+/* glass planner */
+.planwrap{position:relative;z-index:5;margin-top:-78px}
+.glass{background:rgba(14,33,49,.92);border-top:4px solid var(--teal);box-shadow:0 16px 44px rgba(0,0,0,.35);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);padding:20px;color:#fff;display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr)) auto;gap:12px;align-items:end;animation:fadeup .9s var(--ease) .3s both}
+.glass h2{font:800 28px/1 var(--cond);color:var(--teal);text-transform:capitalize;align-self:center;padding-right:8px}
+.glass label{display:block;font-weight:500;color:#8FDCD8;font-size:16px;margin-bottom:4px}
+.glass select{width:100%;font:500 17px var(--font);padding:12px 10px;border:0;background:#fff;color:var(--ink)}
+.btn{font:600 17px/1 var(--font);padding:15px 22px;border:2px solid var(--red);background:var(--red);color:#fff;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .3s var(--ease),background .3s,color .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn.teal{background:var(--teal);border-color:var(--teal)}
+.btn.ghost{background:transparent;border-color:#fff}
+.btn.ghost:hover{background:#fff;color:var(--navy)}
+.result{grid-column:1/-1;background:rgba(255,255,255,.07);padding:12px 14px;font-weight:500}
+.result b{color:var(--teal)}
+
+/* nav */
+.nav{background:var(--deep);position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin-top:28px}
+.nav .in{display:flex;overflow-x:auto;scrollbar-width:none}
+.nav .in::-webkit-scrollbar{display:none}
+.nav a{flex:none;font:600 16px/1 var(--font);color:#fff;text-decoration:none;padding:19px 15px;white-space:nowrap;transition:padding .4s ease,background .4s ease}
+.nav a:hover,.nav a:focus-visible,.nav a.on{background:var(--teal)}
+.nav a:hover,.nav a:focus-visible{padding-left:26px;padding-right:26px}
+
+/* shared */
+.stitle{font:800 clamp(34px,5vw,56px)/.95 var(--cond);text-transform:capitalize;color:var(--red);border-left:6px solid var(--red);padding-left:14px;margin-bottom:12px}
+.sintro{color:var(--mute);max-width:62ch;padding-left:20px}
+.band{padding-block:72px}
+.band.pale{background:var(--pale)}
+.contour{position:relative;overflow:clip}
+.contour::before{content:"";position:absolute;right:-120px;top:-120px;width:520px;height:520px;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 38px,rgba(50,180,175,.16) 39px 40px);pointer-events:none}
+.contour>*{position:relative}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);background:#fff;margin-top:30px}
+.stat{padding:22px 20px;border-left:1px solid var(--line)}
+.stat:first-child{border-left:0}
+.stat b{display:block;font:800 clamp(40px,5vw,60px)/1 var(--cond);color:var(--navy);font-variant-numeric:tabular-nums}
+.stat span{display:block;margin-top:4px;color:var(--mute);font-weight:500}
+
+/* new to airshows */
+.newto{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:center;padding-block:72px 30px}
+.newto .ph{aspect-ratio:4/3;max-width:100%;background:url(https://static.wixstatic.com/media/a0546b_a3d52d78537444b4876b348a1047c682~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/bbmf.jpg) center/cover;overflow:hidden}
+.card{background:#fff;border:1px solid var(--line);box-shadow:0 14px 36px rgba(19,41,60,.16);padding:34px 34px 30px;margin-left:-70px;position:relative}
+.badge{position:absolute;top:-24px;right:28px;width:52px;height:52px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center}
+.badge svg{width:26px;height:26px}
+.card h2{font:800 clamp(30px,4vw,44px)/.95 var(--cond);color:var(--navy);text-transform:capitalize}
+.card p{margin-top:12px}
+.sign{font:700 40px/1 var(--hand);color:var(--navy);margin-top:14px}
+.card .btn{margin-top:16px}
+
+/* season */
+.season{margin-top:30px;background:#fff;border:1px solid var(--line);padding:24px 22px 26px;overflow-x:auto}
+.track{min-width:760px;position:relative}
+.months{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:2px solid var(--navy)}
+.months div{font:800 24px/1 var(--cond);color:var(--navy);padding:0 0 10px 8px;border-left:1px dashed var(--line)}
+.rows{display:grid;gap:8px;margin-top:16px}
+.row{position:relative;height:34px}
+.row::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--line)}
+.pill{position:absolute;top:0;font-weight:600;font-size:16px;line-height:20px;color:#fff;background:var(--teal);padding:7px 10px;white-space:nowrap;transform-origin:left;transition:transform .9s var(--ease),filter .3s}
+.pill.p{background:var(--purple)}.pill.n{background:var(--navy)}.pill.r{background:var(--red)}
+.pill:hover{filter:brightness(1.12)}
+.season.pre .pill{transform:scaleX(0)}
+.plane{position:absolute;top:-2px;left:0;width:30px;color:var(--red);transition:left .2s linear}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-weight:500;color:var(--mute);font-size:16px}
+.legend i{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px}
+
+/* tiles */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;padding-left:20px}
+.fbtn{font:600 16px/1 var(--font);padding:11px 15px;background:#fff;border:1px solid var(--line);color:var(--navy);cursor:pointer;transition:background .3s,color .3s,padding .3s}
+.fbtn:hover{padding-left:21px;padding-right:21px}
+.fbtn.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;margin-top:22px}
+.tile{position:relative;display:block;background:#fff;border:1px solid var(--line);min-height:280px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .45s var(--ease),box-shadow .45s,opacity .4s;grid-column:span 4}
+.tile.big{grid-column:span 6;min-height:340px}
+.tile.dim{opacity:.25;transform:scale(.98)}
+.tile:hover,.tile:focus-visible{transform:translateY(-5px);box-shadow:0 14px 30px rgba(19,41,60,.22)}
+.tile::before{content:"";position:absolute;left:0;top:0;height:4px;width:0;background:var(--teal);transition:width .5s var(--ease);z-index:3}
+.tile:hover::before,.tile:focus-visible::before{width:100%}
+.tile .p{position:absolute;inset:0 0 30% 0;background-size:cover;background-position:center;pointer-events:none;transition:transform 1s var(--ease),filter .5s;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.tile:hover .p{transform:scale(1.06);filter:brightness(1.08)}
+.tile .t{position:absolute;left:0;right:0;bottom:0;padding:14px 18px 16px}
+.tile .when{display:inline-block;background:var(--navy);color:#fff;font-weight:600;font-size:15px;padding:3px 9px;margin-bottom:8px}
+.tile b{display:block;font:800 27px/1 var(--cond);color:var(--navy);text-transform:capitalize}
+.tile span.s{display:block;color:var(--mute);font-size:16px;margin-top:3px}
+.tile i{font-style:normal;color:var(--red);font-weight:700;display:inline-block;margin-top:6px}
+.tile i::after{content:" \2192";display:inline-block;transition:transform .3s}
+.tile:hover i::after{transform:translateX(5px)}
+.wide{grid-column:span 12;background:var(--purple);border-color:var(--purple);min-height:0;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 30px;flex-wrap:wrap}
+.wide b,.wide span.s{color:#fff}
+.wide b{font-size:34px}
+
+/* match */
+.match{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:0;margin-top:30px;border:1px solid var(--line)}
+.q{background:#fff;padding:24px}
+.q h3{font:800 24px/1 var(--cond);color:var(--navy);text-transform:capitalize;margin-top:18px}
+.q h3:first-child{margin-top:0}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.opt{font:600 16px/1.2 var(--font);padding:11px 14px;background:var(--navy);color:#fff;border:0;border-left:4px solid transparent;cursor:pointer;transition:background .3s,border-color .3s,color .3s}
+.opt:hover{border-left-color:var(--teal)}
+.opt.on{background:#fff;color:var(--navy);border:1px solid var(--line);border-left:4px solid var(--teal)}
+.ans{background:var(--navy);color:#fff;padding:26px;position:relative;overflow:hidden}
+.ans .ph{height:180px;background-size:cover;background-position:center;margin:-26px -26px 18px;transition:opacity .5s}
+.ans h3{font:800 clamp(30px,3.6vw,42px)/.95 var(--cond);text-transform:capitalize}
+.ans h3 em{font-style:normal;color:var(--teal)}
+.ans p{margin-top:10px;color:#DCE6EE}
+.ans .tipbox{margin-top:14px;background:rgba(105,80,161,.25);border-left:4px solid var(--purple);padding:12px 14px;color:#fff}
+.ans .btn{margin-top:16px}
+.ans.swap .body{animation:fadeup .6s var(--ease) both}
+
+/* day timeline */
+.dayhead{margin-bottom:26px}
+.day{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:44px;align-items:start}
+.day .stick{position:sticky;top:74px}
+.scene{position:relative;background:var(--navy);overflow:hidden;box-shadow:0 18px 40px rgba(19,41,60,.25)}
+.scene svg{display:block;width:100%;height:auto}
+.scene stop{transition:stop-color 1.2s ease}
+.sun{transition:transform 1.2s var(--ease)}
+.sun circle.glow{animation:glow 4s ease-in-out infinite}
+@keyframes glow{50%{opacity:.35}}
+.cloud{animation:cloud linear infinite}
+@keyframes cloud{from{transform:translateX(-120px)}to{transform:translateX(460px)}}
+.car{transition:opacity .6s,transform .9s var(--ease)}
+.car.off{opacity:0;transform:translateX(30px)}
+.ppl{transition:opacity .6s}
+.ppl.off{opacity:0}
+.flyby{opacity:0;transition:opacity .6s}
+.flyby.on{opacity:1}
+.flyby .fm{animation:fm 7s linear infinite}
+@keyframes fm{from{transform:translate(-160px,40px)}to{transform:translate(470px,-20px)}}
+.hud{position:absolute;left:14px;top:12px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.45)}
+.hud .clk{font:800 clamp(40px,5vw,58px)/1 var(--cond);font-variant-numeric:tabular-nums}
+.hud .ph{display:inline-block;margin-top:6px;background:var(--purple);font:600 15px/1 var(--font);padding:5px 10px;text-shadow:none}
+.scap{background:#fff;border:1px solid var(--line);border-top:0;padding:12px 16px;font-weight:600;color:var(--navy);min-height:48px}
+.glance{display:grid;grid-template-columns:1fr 1.5fr 3.5fr 5.5fr 1.5fr;margin-top:6px;position:relative;font:600 15px/1.1 var(--font);color:#fff}
+.glance button{all:unset;cursor:pointer;padding:12px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:filter .3s}
+.glance button:hover,.glance button:focus-visible{filter:brightness(1.15)}
+.glance button:focus-visible{outline:3px solid var(--purple)}
+.glance .g1{background:#2A4459}.glance .g2{background:var(--purple)}.glance .g3{background:var(--tealink)}.glance .g4{background:var(--red)}.glance .g5{background:var(--navy)}
+.gscale{position:relative;height:18px;font-size:14px;color:var(--mute);margin-top:4px;font-variant-numeric:tabular-nums}
+.gmark{position:absolute;top:-8px;width:3px;height:calc(100% + 16px);background:var(--ink);left:0;transition:left .8s var(--ease);pointer-events:none}
+.gmark::before{content:"";position:absolute;top:-6px;left:-5px;border:6.5px solid transparent;border-top-color:var(--ink)}
+.tipsw{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.xt{margin-top:8px;padding:9px 12px;font-size:16px;border-left:4px solid var(--purple);background:#fff;max-width:58ch}
+.xt.pho{border-left-color:var(--teal)}
+.st .xt b{display:inline;font:700 16px/1.4 var(--font);color:var(--navy);text-transform:none}
+.hide-fam .xt.fam,.hide-pho .xt.pho{display:none}
+.st .tag2{display:inline-block;margin-top:8px;font-size:14px;font-weight:600;padding:3px 8px;background:var(--navy);color:#fff}
+.pin{position:relative;background:#fff;border:1px solid var(--line);padding:30px 26px 22px;transform:rotate(-1.4deg);box-shadow:0 10px 24px rgba(19,41,60,.14);margin-top:26px}
+.pin::before{content:"";position:absolute;top:-12px;left:50%;width:96px;height:26px;background:rgba(105,80,161,.75);transform:translateX(-50%) rotate(2deg)}
+.pin h3{font:700 34px/1 var(--hand);color:var(--purple)}
+.pin p{margin-top:8px}
+.tl{position:relative;padding-left:64px}
+.tl::before{content:"";position:absolute;left:23px;top:8px;bottom:8px;width:3px;background:#D8E0E6}
+.tl .fill{position:absolute;left:23px;top:8px;width:3px;height:0;background:var(--teal);transition:height .15s linear}
+.tl .jetdot{position:absolute;left:11px;top:0;width:28px;color:var(--red);transition:top .15s linear}
+.st{position:relative;padding:4px 0 26px}
+.st .tm{position:absolute;left:-64px;top:2px;width:48px;height:48px;border-radius:50%;background:#fff;border:3px solid #D8E0E6;display:grid;place-items:center;font:800 15px/1 var(--cond);color:var(--navy);transition:background .4s,border-color .4s,color .4s}
+.st.lit .tm{background:var(--teal);border-color:var(--teal);color:#fff}
+.st b{display:block;font:800 26px/1.05 var(--cond);color:var(--navy);text-transform:capitalize}
+.st p{margin-top:6px;max-width:58ch}
+
+/* forest band */
+.forest{background:var(--forest);color:#fff;padding-block:72px}
+.forest .stitle{color:#fff}
+.forest .sintro{color:#D5E3DD}
+.fcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
+.fc{background:#fff;color:var(--ink);transition:transform .45s var(--ease)}
+.fc:nth-child(2){transform:translateY(28px)}
+.fc:hover{transform:translateY(-6px)}
+.fc:nth-child(2):hover{transform:translateY(20px)}
+.fc .ph{aspect-ratio:3/2;background-size:cover;background-position:center;overflow:hidden}
+.fc .tx{padding:18px 20px 22px}
+.fc h3{font:800 28px/1 var(--cond);color:var(--navy);text-transform:capitalize}
+.fc p{margin-top:8px;color:var(--mute)}
+.fc .btn{margin-top:14px}
+
+/* aircraft strip */
+.strip{overflow:hidden;margin-top:30px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.rail{display:flex;gap:14px;width:max-content;animation:slide 60s linear infinite}
+.strip:hover .rail{animation-play-state:paused}
+@keyframes slide{to{transform:translateX(-50%)}}
+.ac-card{width:300px;flex:none;background:#fff;border:1px solid var(--line)}
+.ac-card .ph{height:180px;background-size:cover;background-position:center}
+.ac-card div.t{padding:10px 14px 12px}
+.ac-card b{display:block;font:800 22px/1 var(--cond);color:var(--navy)}
+.ac-card span{font-size:16px;color:var(--mute)}
+
+/* organisers */
+.org{background:var(--navy);color:#fff;padding-block:80px;position:relative;overflow:hidden}
+.org::before{content:"";position:absolute;inset:auto -10% -40% auto;width:720px;height:720px;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 46px,rgba(50,180,175,.12) 47px 48px);pointer-events:none}
+.org .in{position:relative}
+.org .stitle{color:#fff}
+.org .sintro{color:#DCE6EE}
+.org-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;align-items:center}
+.org-ph{position:relative;aspect-ratio:16/10;max-width:100%}
+.org-ph .a{position:absolute;inset:0 18% 18% 0;background:url(https://static.wixstatic.com/media/a0546b_0b3c08b99b20462ebc479fea2b44e898~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/chinook-static.jpg) center/cover;border-top:4px solid var(--teal)}
+.org-ph .b{position:absolute;inset:44% 0 0 38%;background:url(https://static.wixstatic.com/media/a0546b_be58de4798c048f4ba7f45336202286b~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/apache-static.jpg) center/cover;box-shadow:0 18px 40px rgba(0,0,0,.45);border-top:4px solid var(--purple)}
+.offer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:42px}
+.of{background:var(--deep);border-top:4px solid var(--teal);padding:22px;transition:transform .45s var(--ease),border-color .3s}
+.of:nth-child(3n+2){border-top-color:var(--purple)}
+.of:hover{transform:translateY(-5px);border-top-color:var(--red)}
+.of .ic{width:46px;height:46px;border-radius:50%;background:#fff;color:var(--navy);display:grid;place-items:center}
+.of .ic svg{width:24px;height:24px}
+.of h3{font:800 26px/1 var(--cond);color:var(--teal);text-transform:capitalize;margin-top:14px}
+.of p{margin-top:8px;color:#DCE6EE}
+.how{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:44px;position:relative}
+.how::before{content:"";position:absolute;left:24px;right:24px;top:23px;height:3px;background:rgba(255,255,255,.15)}
+.how .line{position:absolute;left:24px;top:23px;height:3px;width:0;background:var(--teal);transition:width 1.6s var(--ease)}
+.hw{position:relative;padding-right:18px}
+.hw .n{width:48px;height:48px;border-radius:50%;background:var(--teal);color:#fff;font:800 22px/1 var(--cond);display:grid;place-items:center;position:relative}
+.hw b{display:block;font:800 22px/1.05 var(--cond);margin-top:14px;text-transform:capitalize}
+.hw p{margin-top:6px;color:#DCE6EE;font-size:16px}
+.org-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:0;margin-top:50px;background:#fff;color:var(--ink)}
+.org-form .side{background:var(--purple);color:#fff;padding:28px}
+.org-form .side h3{font:800 34px/.95 var(--cond);text-transform:capitalize}
+.org-form .side p{margin-top:10px}
+.mail{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px;background:rgba(0,0,0,.2);padding:10px 12px}
+.mail span{font-weight:700;user-select:all;word-break:break-all}
+.mail button{font:600 15px/1 var(--font);background:#fff;color:var(--purple);border:0;padding:8px 12px;cursor:pointer}
+.motto{font:700 30px/1.05 var(--hand);margin-top:20px;color:#fff}
+form.of2{padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+form.of2 label{display:block;font-weight:500;color:var(--navy);margin-bottom:4px}
+form.of2 input,form.of2 select,form.of2 textarea{width:100%;font:400 17px var(--font);padding:11px 12px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+form.of2 textarea{min-height:110px;resize:vertical}
+form.of2 .full{grid-column:1/-1}
+.sent{grid-column:1/-1;background:var(--pale);border-left:4px solid var(--teal);padding:12px 14px;font-weight:500}
+
+/* community */
+.comm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:28px}
+.cm{background:#fff;border:1px solid var(--line);padding:26px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;transition:transform .45s var(--ease),box-shadow .45s}
+.cm:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(19,41,60,.16)}
+.cm .ic{width:52px;height:52px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center}
+.cm:nth-child(2) .ic{background:var(--teal)}
+.cm .ic svg{width:26px;height:26px}
+.cm h3{font:800 28px/1 var(--cond);color:var(--navy);text-transform:capitalize}
+.cm p{margin-top:6px;color:var(--mute)}
+.cm .btn{margin-top:14px}
+
+footer{background:var(--deep);color:#C9D6E0;padding-block:40px;font-size:16px}
+footer .fg{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px}
+footer b{color:#fff;display:block;font:800 22px/1 var(--cond);margin-bottom:8px;text-transform:capitalize}
+footer a{display:block;text-decoration:none;padding:2px 0;transition:color .3s,transform .3s}
+footer a:hover{color:var(--teal);transform:translateX(4px)}
+
+
+/* pre flight loader */
+#preflight{position:fixed;inset:0;z-index:2147483000;background:var(--deep);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:24px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));transition:opacity .5s ease,visibility .5s}
+#preflight.gone{opacity:0;visibility:hidden}
+#preflight[hidden]{display:none}
+.pf-cv{display:block;width:100vw;height:clamp(220px,38vh,340px);flex:none}
+#preflight{overflow:hidden}
+.pf-list{display:grid;gap:8px;min-width:260px}
+.pf-list div{display:flex;align-items:center;gap:12px;font:700 22px/1 var(--cond);color:#7E93A6;transition:color .3s}
+.pf-list div i{width:22px;height:22px;border:2px solid #3B5870;display:grid;place-items:center;transition:background .3s,border-color .3s}
+.pf-list div.ok{color:#fff}.pf-list div.ok i{background:var(--teal);border-color:var(--teal)}
+.pf-list div.ok i::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.pf-list div.last.ok{color:var(--teal)}
+.pf-head{font:800 clamp(30px,6vw,44px)/1 var(--cond);text-transform:capitalize}
+.pf-skip{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));font:600 16px/1 var(--font);background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);padding:10px 16px;cursor:pointer}
+.pf-skip:hover{background:#fff;color:var(--navy)}
+
+/* departures board */
+.board{background:#0A1824;color:#fff;margin-top:30px;border-top:4px solid var(--teal);box-shadow:0 18px 40px rgba(19,41,60,.25)}
+.bhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;padding:18px 22px;border-bottom:1px solid #1F3346}
+.bhead h3{font:800 30px/1 var(--cond);text-transform:capitalize;display:flex;align-items:center;gap:12px}
+.bhead h3 svg{width:28px;height:28px;color:var(--teal)}
+.clock{font:600 22px/1 var(--cond);color:#8FDCD8;font-variant-numeric:tabular-nums}
+.next{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:18px 22px;background:#0E2131;border-bottom:1px solid #1F3346}
+.next p{font-weight:500;color:#DCE6EE}
+.next p b{color:#fff}
+.cd{display:flex;gap:8px;margin-left:auto}
+.cd div{text-align:center}
+.cd b{display:block;min-width:58px;background:#13293C;border:1px solid #24405A;font:800 32px/1 var(--cond);padding:8px 6px;font-variant-numeric:tabular-nums;position:relative}
+.cd b::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px solid #0A1824}
+.cd span{font-size:14px;font-weight:500;color:#8FA6B9}
+.btable{overflow-x:auto}
+.brow{display:grid;grid-template-columns:110px minmax(0,1.6fr) minmax(0,1fr) 140px;gap:12px;align-items:center;padding:10px 22px;border-bottom:1px solid #16293A;min-width:640px;transition:background .3s}
+.brow:hover{background:#10263A}
+.brow.th{color:#8FA6B9;font-weight:500;font-size:15px;padding-block:10px}
+.fl{font:700 19px/1 'Barlow Condensed','Barlow',monospace;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fl.d{color:#FFD873}
+.bst{font:600 15px/1 var(--font);padding:6px 10px;text-align:center;white-space:nowrap}
+.bst.c{background:var(--teal)}.bst.e{background:var(--purple)}.bst.t{background:#2A4459;color:#C9D6E0}
+.bnote{padding:14px 22px;color:#8FA6B9;font-size:16px}
+
+/* radar */
+.near{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;margin-top:30px;border:1px solid var(--line)}
+.radar{background:var(--deep);position:relative;padding:16px;display:grid;place-items:center}
+.radar>svg{width:100%;max-width:440px;height:auto;display:block}
+.snd{position:absolute;top:12px;right:12px;z-index:2;display:inline-flex;align-items:center;gap:8px;font:600 15px/1 var(--font);background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.3);padding:9px 12px;cursor:pointer;transition:background .3s}
+.snd:hover{background:rgba(255,255,255,.18)}
+.snd svg{width:20px;height:20px}
+.snd .w{display:none}.snd.on .w{display:inline}.snd.on .x{display:none}
+.snd.on{background:var(--teal);border-color:var(--teal)}
+.sweep{transform-origin:var(--cx) var(--cy);animation:sweep 4s linear infinite}
+@keyframes sweep{to{transform:rotate(360deg)}}
+
+.blip .ping{fill:none;stroke:var(--red);stroke-width:1.5;opacity:0;transform-box:fill-box;transform-origin:center;animation:ping 4s linear infinite}
+@keyframes ping{0%{opacity:.9;transform:scale(.4)}25%{opacity:0;transform:scale(2.6)}100%{opacity:0}}
+.blip text{font:600 11px var(--font);fill:#fff;opacity:0;transition:opacity .3s}
+.blip.hl text,.blip:hover text{opacity:1}
+.blip.hl circle.dot{stroke:#fff;stroke-width:2.5}
+.you circle{fill:#fff}
+.ring{fill:none;stroke:rgba(50,180,175,.35);stroke-dasharray:3 4}
+.ringl{font:500 10px var(--font);fill:#8FDCD8}
+.nside{background:#fff;padding:24px;display:flex;flex-direction:column;min-width:0}
+.nform{display:flex;gap:8px;flex-wrap:wrap}
+.nform input{flex:1 1 180px;min-width:0;font:500 17px var(--font);padding:12px;border:1px solid var(--line);color:var(--ink);background:#fff}
+.nsum{margin-top:14px;font-weight:500}
+.nsum b{color:var(--red)}
+.nlist{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:6px}
+.nlist button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 12px;background:var(--pale);cursor:pointer;border-left:4px solid transparent;transition:border-color .3s,padding .3s}
+.nlist button:hover,.nlist button.on{border-left-color:var(--teal);padding-left:16px}
+.nlist button:focus-visible{outline:3px solid var(--purple)}
+.nlist .rk{font-size:20px;line-height:1;width:20px}
+.ftag{font-style:normal;font-size:13px;font-weight:600;background:var(--red);color:#fff;padding:2px 6px;margin-left:4px;vertical-align:2px;white-space:nowrap}
+.nlegend{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.lg{font:600 15px/1 var(--font);display:inline-flex;align-items:center;gap:7px;padding:8px 10px;background:#fff;border:1px solid var(--line);color:var(--navy);cursor:pointer;opacity:.45;transition:opacity .3s,border-color .3s}
+.lg.on{opacity:1;border-color:var(--navy)}
+.lg i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.lg span{color:var(--mute);font-weight:500}
+.nlist b{display:block;color:var(--navy);font-weight:700;line-height:1.2}
+.nlist small{color:var(--mute);font-size:15px}
+.nlist .mi{font:800 22px/1 var(--cond);color:var(--navy);white-space:nowrap;font-variant-numeric:tabular-nums}
+.nnote{margin-top:12px;color:var(--mute);font-size:16px}
+@media(max-width:900px){.near{grid-template-columns:1fr}.cd{margin-left:0}}
+
+@media(max-width:900px){
+  .glass{grid-template-columns:1fr}
+  .newto,.match,.day,.org-top,.org-form{grid-template-columns:1fr}
+  .card{margin:-40px 12px 0}
+  .tile,.tile.big{grid-column:span 12;min-height:280px}
+  .fcards,.offer{grid-template-columns:1fr}
+  .fc:nth-child(2),.fc:nth-child(2):hover{transform:none}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat:nth-child(3){border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .how{grid-template-columns:1fr 1fr;row-gap:28px}
+  .how::before,.how .line{display:none}
+  .comm{grid-template-columns:1fr}
+  form.of2{grid-template-columns:1fr}
+  .day .stick{position:sticky;top:54px;z-index:5}
+  .day .pin{display:none}
+  .scap{display:none}
+  .hud .clk{font-size:34px}
+  .glance{font-size:13px}
+  .glance button{padding:10px 4px}
+  .ac{bottom:100px;left:max(16px,env(safe-area-inset-left,0px));right:auto}
+  footer .fg{grid-template-columns:1fr}
+}
+@media(max-width:520px){.how{grid-template-columns:1fr}.filters{padding-left:0}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .slide.on{transform:none}.rv.pre{opacity:1;transform:none}.season.pre .pill{transform:none}
+  .jet{display:none}
+  #preflight{display:none}
+}
+</style>
+
+<div id="preflight" aria-hidden="true" hidden>
+  <div class="pf-head">Pre Flight Checks</div>
+  <canvas class="pf-cv" id="pfcv"></canvas>
+  <div class="pf-list" id="pflist"><div><i></i>Weather Checked</div><div><i></i>Line Up Confirmed</div><div><i></i>Parking Planned</div><div class="last"><i></i>Red Arrows Cleared For Takeoff</div></div>
+  <button class="pf-skip" type="button" id="pfskip">Skip</button>
+</div>
+
+<header class="hero" id="top">
+  <div class="slides" aria-hidden="true">
+    <div class="slide on nopic" style="background-image:url(https://static.wixstatic.com/media/a0546b_59400d30305b4df49133d0d95bd3f88b~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_80,enc_jpg/redarrows.jpg)"></div>
+    <div class="slide nopic" style="background-image:url(https://static.wixstatic.com/media/a0546b_135c4e895a0443a9acc0e129eab2be3f~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_80,enc_jpg/rafale.jpg)"></div>
+    <div class="slide nopic" style="background-image:url(https://static.wixstatic.com/media/a0546b_a3d52d78537444b4876b348a1047c682~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_80,enc_jpg/bbmf.jpg)"></div>
+    <div class="slide nopic" style="background-image:url(https://static.wixstatic.com/media/a0546b_b5d9599a2c074757899004ee048c3d0f~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_80,enc_jpg/b17.jpg)"></div>
+    <div class="slide nopic" style="background-image:url(https://static.wixstatic.com/media/a0546b_ee0c8ea214a94e34820ced48cf472742~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_80,enc_jpg/apache.jpg)"></div>
+  </div>
+  <div class="jet" aria-hidden="true">
+    <div class="fly">
+      <div class="smoke"><i></i><i></i><i></i></div>
+      <svg viewBox="0 0 64 24"><path fill="#fff" d="M2 12 L14 9 L30 9 L40 1 L45 1 L41 9 L56 10 Q63 12 56 14 L41 15 L45 23 L40 23 L30 15 L14 15 Z"/><path fill="#D74949" d="M2 12 L8 10.5 L8 13.5 Z"/></svg>
+    </div>
+  </div>
+  <span class="tag">Planning For The 2027 Season</span>
+  <h1><span><b>Plan Your</b></span><span><b>Best Airshow Day</b></span></h1>
+  <p class="lead">Honest advice from someone who has been going to airshows since 2006 and has made every planning mistake going. Pick a show and I will help you get the most out of it.</p>
+  <div class="ac" aria-live="polite">
+    <span class="name" id="acname">Red Arrows</span>
+    <div class="dots" id="dots"></div>
+  </div>
+  <div class="shine" aria-hidden="true"></div>
+</header>
+
+<div class="in planwrap">
+  <form class="glass" id="planner" aria-label="Find my guide">
+    <h2>Find My Guide</h2>
+    <div><label for="p-show">Which show</label>
+      <select id="p-show"><option>Royal International Air Tattoo</option><option>RAF Cosford Air Show</option><option>Midlands Air Festival</option><option>Airbourne Eastbourne</option><option>Clacton Airshow</option><option>Wales Airshow</option><option>IWM Duxford Air Shows</option><option>Shuttleworth Air Shows</option><option>Little Gransden Air And Car Show</option><option>Southport Air Show</option><option>Blackpool Air Show</option><option>The International Ayr Show</option></select></div>
+    <div><label for="p-who">Who is coming</label>
+      <select id="p-who"><option>Just me</option><option>Family with young children</option><option>Friends</option><option>I am bringing a camera</option><option>Someone with access needs</option></select></div>
+    <div><label for="p-how">Getting there</label>
+      <select id="p-how"><option>Car</option><option>Train and bus</option><option>Camping nearby</option></select></div>
+    <button class="btn" type="submit">Show My Guide</button>
+    <div class="result" id="result" aria-live="polite">Choose your show and I will point you to the pages that matter most for your trip.</div>
+  </form>
+</div>
+
+<nav class="nav" aria-label="Main">
+  <div class="in" id="navin">
+    <a href="#top" class="on">Home</a><a href="#board">Next Shows</a><a href="#season">Show Calendar</a><a href="#shows">Find Your Airshow</a><a href="#near">Near Me</a><a href="#match">Which Show Suits Me</a><a href="#day">Your Day</a><a href="#how">Camping And Photography</a><a href="#organisers">For Organisers</a><a href="#community">Community</a>
+  </div>
+</nav>
+
+<section class="in newto">
+  <div class="ph nopic" role="img" aria-label="Avro Lancaster flying overhead"></div>
+  <div class="card rv">
+    <div class="badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.2-2.5 3.9"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg></div>
+    <h2>New To Airshows?</h2>
+    <p>Start here. I wrote these pages after getting my own planning wrong, so I know where first timers trip up. Parking, timings, what to bring and how long a day it really is.</p>
+    <p>I would advise thinking about how into aviation you are, and who is coming with you. That decides which show will suit you best.</p>
+    <div class="sign">Jack</div>
+    <a class="btn" href="#match">Help Me Choose</a>
+  </div>
+</section>
+
+<section class="in rv" aria-label="The guide in numbers">
+  <div class="stats">
+    <div class="stat"><b data-count="12">12</b><span>Featured shows covered in depth</span></div>
+    <div class="stat"><b data-count="20">20</b><span>Years of my own airshow trips</span></div>
+    <div class="stat"><b data-count="8">8</b><span>Planning sections on every show page</span></div>
+    <div class="stat"><b data-count="0" data-prefix="£">£0</b><span>To use the guide, always</span></div>
+  </div>
+</section>
+
+<section class="band pale contour" id="board">
+  <div class="in">
+    <h2 class="stitle rv">Next Departures</h2>
+    <p class="sintro rv">The 2027 shows in date order, with a countdown to the next one. I update this as soon as organisers confirm their dates.</p>
+    <div class="board rv">
+      <div class="bhead"><h3><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>2027 Airshow Departures</h3><span class="clock" id="bclock">UK time</span></div>
+      <div class="next"><p>Next departure: <b id="nextname">IWM Duxford Flying Day</b></p>
+        <div class="cd" aria-live="off"><div><b id="cdd">000</b><span>Days</span></div><div><b id="cdh">00</b><span>Hours</span></div><div><b id="cdm">00</b><span>Minutes</span></div></div></div>
+      <div class="btable"><div class="brow th"><span>Date</span><span>Show</span><span>Where</span><span>Status</span></div><div id="brows"></div></div>
+      <p class="bnote">Confirmed means the organiser has announced it. Expected means the date is listed but I am still waiting for the organiser to confirm it. Please check the official website before you book anything.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band contour" id="season">
+  <div class="in">
+    <h2 class="stitle rv">When The Shows Usually Run</h2>
+    <p class="sintro rv">The UK season runs from late spring to early autumn. These are the months each featured show usually falls in. I confirm the exact dates on each show page as soon as organisers announce them.</p>
+    <div class="season pre" id="seasonbox">
+      <div class="track">
+        <svg class="plane" id="splane" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" transform="rotate(90 12 12)"/></svg>
+        <div class="months"><div>May</div><div>June</div><div>July</div><div>August</div><div>September</div><div>October</div></div>
+        <div class="rows">
+          <div class="row"><span class="pill n" style="left:0%;width:83%;transition-delay:0.00s">IWM Duxford Air Shows, several shows through the season</span></div>
+          <div class="row"><span class="pill n" style="left:0%;width:100%;transition-delay:0.05s">Shuttleworth Air Shows at Old Warden, shows most months</span></div>
+          <div class="row"><span class="pill " style="left:9%;transition-delay:0.10s">Midlands Air Festival</span></div>
+          <div class="row"><span class="pill " style="left:22%;transition-delay:0.15s">RAF Cosford</span></div>
+          <div class="row"><span class="pill p" style="left:40%;transition-delay:0.20s">RIAT, Fairford</span></div>
+          <div class="row"><span class="pill r" style="left:46%;transition-delay:0.25s">Wales Airshow</span></div>
+          <div class="row"><span class="pill r" style="left:52%;transition-delay:0.30s">Blackpool</span></div>
+          <div class="row"><span class="pill r" style="left:57%;transition-delay:0.35s">Eastbourne</span></div>
+          <div class="row"><span class="pill r" style="left:61%;transition-delay:0.40s">Clacton</span></div>
+          <div class="row"><span class="pill r" style="left:63%;transition-delay:0.45s">Southport</span></div>
+          <div class="row"><span class="pill " style="left:64%;transition-delay:0.50s">Little Gransden</span></div>
+          <div class="row"><span class="pill r" style="left:67.5%;transition-delay:0.55s">International Ayr Show</span></div>
+        </div>
+      </div>
+      <div class="legend"><span><i style="background:var(--red)"></i>Seafront shows, free to watch from the prom</span><span><i style="background:var(--teal)"></i>Airfield and estate shows</span><span><i style="background:var(--purple)"></i>The biggest military show</span><span><i style="background:var(--navy)"></i>Historic airfields with a full season</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band pale contour" id="shows">
+  <div class="in">
+    <h2 class="stitle rv">Find Your Airshow</h2>
+    <p class="sintro rv">Every featured show has the same planning pages: is it right for you, getting there and parking, the aircraft line up, where to watch, the sun guide and what to pack.</p>
+    <div class="filters" role="group" aria-label="Filter shows">
+      <button class="fbtn on" data-f="all">All Shows</button>
+      <button class="fbtn" data-f="free">Free To Watch</button>
+      <button class="fbtn" data-f="family">Great For Families</button>
+      <button class="fbtn" data-f="military">Modern Military</button>
+      <button class="fbtn" data-f="historic">Historic Aircraft</button>
+      <button class="fbtn" data-f="camp">Camping On Site</button>
+    </div>
+    <div class="grid" id="tiles">
+      <a class="tile big rv" href="#" data-t="military camp"><div class="p" style="background-image:url(https://static.wixstatic.com/media/a0546b_135c4e895a0443a9acc0e129eab2be3f~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/rafale.jpg)"></div><div class="t"><span class="when">July</span><b>Royal International Air Tattoo</b><span class="s">RAF Fairford. The biggest military show, with air forces from around the world.</span><i>Open Guide</i></div></a>
+      <a class="tile big rv" href="#" data-t="military family"><div class="p" style="background-image:url(https://static.wixstatic.com/media/a0546b_0b3c08b99b20462ebc479fea2b44e898~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/chinook-static.jpg)"></div><div class="t"><span class="when">June</span><b>RAF Cosford Air Show</b><span class="s">A busy RAF station show with the museum hangars next door.</span><i>Open Guide</i></div></a>
+      <a class="tile rv" href="#" data-t="historic"><div class="p" style="background-image:url(https://static.wixstatic.com/media/a0546b_b5d9599a2c074757899004ee048c3d0f~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/b17.jpg)"></div><div class="t"><span class="when">May to September</span><b>IWM Duxford</b><span class="s">Warbirds over a historic fighter station.</span><i>Open Guide</i></div></a>
+      <a class="tile rv" href="#" data-t="free family"><div class="p" style="background-image:url(https://static.wixstatic.com/media/a0546b_a3d52d78537444b4876b348a1047c682~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/bbmf.jpg)"></div><div class="t"><span class="when">August</span><b>Airbourne Eastbourne</b><span class="s">Four days on the seafront, free to watch.</span><i>Open Guide</i></div></a>
+      <a class="tile rv" href="#" data-t="historic"><div class="p" style="background-image:url(https://static.wixstatic.com/media/a0546b_3289b1124ca845859e3d6b5ad33dd7d5~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/swordfish.jpg)"></div><div class="t"><span class="when">May to October</span><b>Shuttleworth, Old Warden</b><span class="s">Vintage flying on a small grass airfield.</span><i>Open Guide</i></div></a>
+      <a class="tile rv" href="#" data-t="family camp"><div class="p" style="background-image:url(https://static.wixstatic.com/media/a0546b_c91131d5a8a540be80233102e0c65f5b~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/pitts.jpg)"></div><div class="t"><span class="when">Late May or June</span><b>Midlands Air Festival</b><span class="s">Flying displays and hot air balloons at Ragley Hall.</span><i>Open Guide</i></div></a>
+      <a class="tile rv" href="#" data-t="free family"><div class="p" style="background-image:url(https://static.wixstatic.com/media/a0546b_c91131d5a8a540be80233102e0c65f5b~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/spitfire.jpg)"></div><div class="t"><span class="when">Late August</span><b>Southport Air Show</b><span class="s">Two days over the beach and pier.</span><i>Open Guide</i></div></a>
+      <a class="tile rv" href="#" data-t="historic camp"><div class="p" style="background-image:url(https://static.wixstatic.com/media/a0546b_2b53500c98aa44b8acbe1b798f722359~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/thunderbolt.jpg)"></div><div class="t"><span class="when">August Bank Holiday</span><b>Little Gransden</b><span class="s">A friendly air and car show on a grass strip.</span><i>Open Guide</i></div></a>
+      <a class="tile rv" href="#" data-t="free"><div class="p" style="background-image:url(https://static.wixstatic.com/media/a0546b_e19add6cdb0b4398aa7cc431777a7485~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/c17.jpg)"></div><div class="t"><span class="when">Late July</span><b>Wales Airshow</b><span class="s">Swansea Bay, with the beach as your grandstand.</span><i>Open Guide</i></div></a>
+      <a class="tile wide rv" href="#" data-t="free family"><div><b>All 12 Featured Shows</b><span class="s">Plus Clacton, Blackpool and The International Ayr Show, all free to watch from the seafront.</span></div><span class="btn teal">See Every Show</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="near">
+  <div class="in">
+    <h2 class="stitle rv">Shows Near Me</h2>
+    <p class="sintro rv">Every UK airshow I know of, colour coded by type, with my featured shows in red. Type your town and the radar finds the closest. Tap a colour to hide or show that type, and turn the sound on to hear each show ping as the sweep passes.</p>
+    <div class="near rv">
+      <div class="radar"><button type="button" class="snd" id="snd" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path class="w" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="x" d="M16 9l5 6M21 9l-5 6"/></svg><span>Sound Off</span></button><svg id="rsvg" viewBox="0 0 400 645" role="img" aria-label="Map of the UK with airshows marked by type"></svg></div>
+      <div class="nside">
+        <form class="nform" id="nform"><label for="ntown" class="sr" style="position:absolute;left:-9999px">Your town</label><input id="ntown" list="towns" placeholder="Your town, for example Birmingham" autocomplete="off"><button class="btn" type="submit">Scan</button></form>
+        <datalist id="towns"></datalist>
+        <div class="nlegend" id="nlegend" role="group" aria-label="Show types"></div>
+        <p class="nsum" id="nsum"></p>
+        <ol class="nlist" id="nlist"></ol>
+        <p class="nnote">Distances are straight line miles, so the drive will be a bit further. Each show page has the roads, trains and buses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="match">
+  <div class="in">
+    <h2 class="stitle rv">Which Show Suits Me?</h2>
+    <p class="sintro rv">Answer three quick questions. This is my own view from going to these shows, so please read the full page before you book anything.</p>
+    <div class="match rv">
+      <div class="q">
+        <h3>Who Is Coming?</h3>
+        <div class="opts" data-q="who"><button class="opt on" data-v="family">Family with little ones</button><button class="opt" data-v="first">First time, just curious</button><button class="opt" data-v="enth">Aviation enthusiast</button></div>
+        <h3>What Do You Want To See?</h3>
+        <div class="opts" data-q="see"><button class="opt on" data-v="jets">Fast jets and noise</button><button class="opt" data-v="old">Warbirds and history</button><button class="opt" data-v="mix">A bit of everything</button></div>
+        <h3>What Is Your Budget?</h3>
+        <div class="opts" data-q="cost"><button class="opt" data-v="free">Free if possible</button><button class="opt on" data-v="ticket">Happy to buy a ticket</button></div>
+      </div>
+      <div class="ans" id="ans">
+        <div class="ph nopic" id="ansph"></div>
+        <div class="body">
+          <span class="tag" id="anstag">My Suggestion</span>
+          <h3 id="anst" style="margin-top:12px"></h3>
+          <p id="ansp"></p>
+          <div class="tipbox" id="anstip"></div>
+          <a class="btn" href="#shows">Open This Guide</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band pale contour" id="day">
+  <div class="in">
+    <div class="dayhead">
+      <h2 class="stitle">Your Day, Hour By Hour</h2>
+      <p class="sintro">How I would plan a typical show day, from packing the car to backing up your photos. Times change from show to show, so check the timeline on each show page. Scroll down and watch the airfield change through the day.</p>
+      <div style="padding-left:20px;margin-top:20px">
+        <div class="glance" id="glance"><span class="gmark" id="gmark"></span><button class="g1" data-go="0">Before</button><button class="g2" data-go="1">Arrive</button><button class="g3" data-go="4">Explore</button><button class="g4" data-go="8">Flying Display</button><button class="g5" data-go="13">Home</button></div>
+        <div class="gscale"><span style="position:absolute;left:0.0%;transform:translateX(-0%)">06:00</span><span style="position:absolute;left:22.2%;transform:translateX(-50%)">09:00</span><span style="position:absolute;left:44.4%;transform:translateX(-50%)">12:00</span><span style="position:absolute;left:66.7%;transform:translateX(-50%)">15:00</span><span style="position:absolute;left:88.9%;transform:translateX(-50%)">18:00</span></div>
+        <div class="tipsw" role="group" aria-label="Extra tips"><button class="fbtn on" id="tfam" aria-pressed="true">Family Tips</button><button class="fbtn on" id="tpho" aria-pressed="true">Photography Tips</button></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="stick">
+        <div class="scene"><svg viewBox="0 0 400 260" aria-hidden="true">
+          <defs><linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop id="sk1" offset="0" stop-color="#2B3F6B"/><stop id="sk2" offset="1" stop-color="#F2A574"/></linearGradient>
+          <linearGradient id="smk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".8"/></linearGradient></defs>
+          <rect width="400" height="260" fill="url(#skyg)"/>
+          <g class="sun" id="sun"><circle class="glow" r="22" fill="#FFE7A3" opacity=".55"/><circle r="12" fill="#FFF3CF"/></g>
+          <g fill="#fff" opacity=".8"><g class="cloud" style="animation-duration:46s"><ellipse cx="40" cy="50" rx="26" ry="8"/><ellipse cx="56" cy="44" rx="16" ry="8"/></g><g class="cloud" style="animation-duration:70s;animation-delay:-30s"><ellipse cx="40" cy="86" rx="34" ry="9"/><ellipse cx="60" cy="80" rx="18" ry="9"/></g></g>
+          <g class="flyby" id="flyby"><g class="fm"><rect x="-140" y="60" width="140" height="4" fill="url(#smk)" transform="rotate(-5 0 62)"/><rect x="-150" y="72" width="140" height="4" fill="url(#smk)" opacity=".9" transform="rotate(-5 0 74)"/><g fill="#D74949"><g transform="translate(0,52) scale(.45) rotate(-5)"><path d="M2 13 L10 11.5 L42 10.5 Q55 10.5 62 13.5 Q55 16 42 16 L10 16 Z M4 12 L1 2 L7 2 L15 11.5 Z M24 15 L36 15 L29 21 L22 21 Z"/></g><g transform="translate(-14,64) scale(.45) rotate(-5)"><path d="M2 13 L10 11.5 L42 10.5 Q55 10.5 62 13.5 Q55 16 42 16 L10 16 Z M4 12 L1 2 L7 2 L15 11.5 Z M24 15 L36 15 L29 21 L22 21 Z"/></g><g transform="translate(-14,40) scale(.45) rotate(-5)"><path d="M2 13 L10 11.5 L42 10.5 Q55 10.5 62 13.5 Q55 16 42 16 L10 16 Z M4 12 L1 2 L7 2 L15 11.5 Z M24 15 L36 15 L29 21 L22 21 Z"/></g></g></g></g>
+          <path d="M0 170 Q80 150 170 166 T400 158 V260 H0Z" fill="#2E5B4A"/>
+          <path d="M0 182 Q120 172 240 182 T400 178 V260 H0Z" fill="#1E3A34"/>
+          <rect x="0" y="196" width="400" height="16" fill="#33475A"/>
+          <g fill="#C9D6E0"><rect x="10" y="203" width="16" height="2"/><rect x="40" y="203" width="16" height="2"/><rect x="70" y="203" width="16" height="2"/><rect x="100" y="203" width="16" height="2"/><rect x="130" y="203" width="16" height="2"/><rect x="160" y="203" width="16" height="2"/><rect x="190" y="203" width="16" height="2"/><rect x="220" y="203" width="16" height="2"/><rect x="250" y="203" width="16" height="2"/><rect x="280" y="203" width="16" height="2"/><rect x="310" y="203" width="16" height="2"/><rect x="340" y="203" width="16" height="2"/><rect x="370" y="203" width="16" height="2"/><rect x="400" y="203" width="16" height="2"/></g>
+          <path d="M20 182 V160 Q55 140 90 160 V182Z" fill="#13293C"/><rect x="40" y="168" width="30" height="14" fill="#0E2131"/>
+          <g fill="#C9D6E0" transform="translate(140,170) scale(.75)"><path d="M2 13 L10 11.5 L42 10.5 Q55 10.5 62 13.5 Q55 16 42 16 L10 16 Z M4 12 L1 2 L7 2 L15 11.5 Z M24 15 L36 15 L29 21 L22 21 Z"/></g>
+          <g fill="#8FA6B9" transform="translate(200,174) scale(.55)"><path d="M2 13 L10 11.5 L42 10.5 Q55 10.5 62 13.5 Q55 16 42 16 L10 16 Z M4 12 L1 2 L7 2 L15 11.5 Z M24 15 L36 15 L29 21 L22 21 Z"/></g>
+          <g></g>
+          <g><g class="car off" data-i="0"><rect x="300" y="150" width="14" height="7" rx="2" fill="#D74949"/></g><g class="car off" data-i="1"><rect x="319" y="150" width="14" height="7" rx="2" fill="#fff"/></g><g class="car off" data-i="2"><rect x="338" y="150" width="14" height="7" rx="2" fill="#32B4AF"/></g><g class="car off" data-i="3"><rect x="357" y="150" width="14" height="7" rx="2" fill="#F2C14E"/></g><g class="car off" data-i="4"><rect x="376" y="150" width="14" height="7" rx="2" fill="#B9A3EE"/></g><g class="car off" data-i="5"><rect x="300" y="162" width="14" height="7" rx="2" fill="#8FA6B9"/></g><g class="car off" data-i="6"><rect x="319" y="162" width="14" height="7" rx="2" fill="#D74949"/></g><g class="car off" data-i="7"><rect x="338" y="162" width="14" height="7" rx="2" fill="#fff"/></g><g class="car off" data-i="8"><rect x="357" y="162" width="14" height="7" rx="2" fill="#32B4AF"/></g><g class="car off" data-i="9"><rect x="376" y="162" width="14" height="7" rx="2" fill="#F2C14E"/></g><g class="car off" data-i="10"><rect x="300" y="174" width="14" height="7" rx="2" fill="#B9A3EE"/></g><g class="car off" data-i="11"><rect x="319" y="174" width="14" height="7" rx="2" fill="#8FA6B9"/></g><g class="car off" data-i="12"><rect x="338" y="174" width="14" height="7" rx="2" fill="#D74949"/></g><g class="car off" data-i="13"><rect x="357" y="174" width="14" height="7" rx="2" fill="#fff"/></g><g class="car off" data-i="14"><rect x="376" y="174" width="14" height="7" rx="2" fill="#32B4AF"/></g></g>
+          <rect x="0" y="216" width="400" height="44" fill="#173027"/>
+          <line x1="0" y1="218" x2="400" y2="218" stroke="#F2C14E" stroke-width="2" stroke-dasharray="8 6"/>
+          <g class="ppl" id="ppl"><circle cx="20" cy="226" r="3.2" fill="#F2C14E"/><rect x="17" y="229" width="6" height="8" fill="#F2C14E" opacity=".8"/><circle cx="32" cy="229" r="3.2" fill="#fff"/><rect x="29" y="232" width="6" height="8" fill="#fff" opacity=".8"/><circle cx="44" cy="226" r="3.2" fill="#D74949"/><rect x="41" y="229" width="6" height="8" fill="#D74949" opacity=".8"/><circle cx="56" cy="229" r="3.2" fill="#32B4AF"/><rect x="53" y="232" width="6" height="8" fill="#32B4AF" opacity=".8"/><circle cx="68" cy="226" r="3.2" fill="#B9A3EE"/><rect x="65" y="229" width="6" height="8" fill="#B9A3EE" opacity=".8"/><circle cx="80" cy="229" r="3.2" fill="#F2C14E"/><rect x="77" y="232" width="6" height="8" fill="#F2C14E" opacity=".8"/><circle cx="92" cy="226" r="3.2" fill="#fff"/><rect x="89" y="229" width="6" height="8" fill="#fff" opacity=".8"/><circle cx="104" cy="229" r="3.2" fill="#D74949"/><rect x="101" y="232" width="6" height="8" fill="#D74949" opacity=".8"/><circle cx="116" cy="226" r="3.2" fill="#32B4AF"/><rect x="113" y="229" width="6" height="8" fill="#32B4AF" opacity=".8"/><circle cx="128" cy="229" r="3.2" fill="#B9A3EE"/><rect x="125" y="232" width="6" height="8" fill="#B9A3EE" opacity=".8"/><circle cx="140" cy="226" r="3.2" fill="#F2C14E"/><rect x="137" y="229" width="6" height="8" fill="#F2C14E" opacity=".8"/><circle cx="152" cy="229" r="3.2" fill="#fff"/><rect x="149" y="232" width="6" height="8" fill="#fff" opacity=".8"/><circle cx="164" cy="226" r="3.2" fill="#D74949"/><rect x="161" y="229" width="6" height="8" fill="#D74949" opacity=".8"/><circle cx="176" cy="229" r="3.2" fill="#32B4AF"/><rect x="173" y="232" width="6" height="8" fill="#32B4AF" opacity=".8"/><circle cx="188" cy="226" r="3.2" fill="#B9A3EE"/><rect x="185" y="229" width="6" height="8" fill="#B9A3EE" opacity=".8"/><circle cx="200" cy="229" r="3.2" fill="#F2C14E"/><rect x="197" y="232" width="6" height="8" fill="#F2C14E" opacity=".8"/><circle cx="212" cy="226" r="3.2" fill="#fff"/><rect x="209" y="229" width="6" height="8" fill="#fff" opacity=".8"/><circle cx="224" cy="229" r="3.2" fill="#D74949"/><rect x="221" y="232" width="6" height="8" fill="#D74949" opacity=".8"/><circle cx="236" cy="226" r="3.2" fill="#32B4AF"/><rect x="233" y="229" width="6" height="8" fill="#32B4AF" opacity=".8"/><circle cx="248" cy="229" r="3.2" fill="#B9A3EE"/><rect x="245" y="232" width="6" height="8" fill="#B9A3EE" opacity=".8"/><circle cx="260" cy="226" r="3.2" fill="#F2C14E"/><rect x="257" y="229" width="6" height="8" fill="#F2C14E" opacity=".8"/><circle cx="272" cy="229" r="3.2" fill="#fff"/><rect x="269" y="232" width="6" height="8" fill="#fff" opacity=".8"/><circle cx="284" cy="226" r="3.2" fill="#D74949"/><rect x="281" y="229" width="6" height="8" fill="#D74949" opacity=".8"/><circle cx="296" cy="229" r="3.2" fill="#32B4AF"/><rect x="293" y="232" width="6" height="8" fill="#32B4AF" opacity=".8"/><circle cx="308" cy="226" r="3.2" fill="#B9A3EE"/><rect x="305" y="229" width="6" height="8" fill="#B9A3EE" opacity=".8"/><circle cx="320" cy="229" r="3.2" fill="#F2C14E"/><rect x="317" y="232" width="6" height="8" fill="#F2C14E" opacity=".8"/><circle cx="332" cy="226" r="3.2" fill="#fff"/><rect x="329" y="229" width="6" height="8" fill="#fff" opacity=".8"/><circle cx="344" cy="229" r="3.2" fill="#D74949"/><rect x="341" y="232" width="6" height="8" fill="#D74949" opacity=".8"/><circle cx="356" cy="226" r="3.2" fill="#32B4AF"/><rect x="353" y="229" width="6" height="8" fill="#32B4AF" opacity=".8"/><circle cx="368" cy="229" r="3.2" fill="#B9A3EE"/><rect x="365" y="232" width="6" height="8" fill="#B9A3EE" opacity=".8"/></g>
+          <g><rect x="16" y="238" width="44" height="22" fill="#fff"/><path d="M12 240 L38 226 L64 240Z" fill="#fff" opacity=".9"/><rect x="82" y="238" width="44" height="22" fill="#D74949"/><path d="M78 240 L104 226 L130 240Z" fill="#D74949" opacity=".9"/><rect x="148" y="238" width="44" height="22" fill="#32B4AF"/><path d="M144 240 L170 226 L196 240Z" fill="#32B4AF" opacity=".9"/><rect x="214" y="238" width="44" height="22" fill="#F2C14E"/><path d="M210 240 L236 226 L262 240Z" fill="#F2C14E" opacity=".9"/><rect x="280" y="238" width="44" height="22" fill="#B9A3EE"/><path d="M276 240 L302 226 L328 240Z" fill="#B9A3EE" opacity=".9"/><rect x="346" y="238" width="44" height="22" fill="#fff"/><path d="M342 240 L368 226 L394 240Z" fill="#fff" opacity=".9"/></g>
+        </svg>
+        <div class="hud"><div class="clk" id="clk">06:00</div><span class="ph" id="phase">Before You Go</span></div></div>
+        <div class="scap" id="scap">Final Checks Before You Leave</div>
+        <div class="pin">
+          <h3>My Arrival Tip</h3>
+          <p>If you want a front row seat, head there first and save your pitch. Then look around. When I last checked, the toilet queues were shortest just before the flying started.</p>
+        </div>
+      </div>
+      <div class="tl" id="tl">
+      <div class="fill" id="tlfill"></div>
+      <svg class="jetdot" id="tljet" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" transform="rotate(180 12 12)"/></svg>
+      <div class="st" data-h="6"><span class="tm">06:00</span><b>Final Checks Before You Leave</b><p>Check the official website and social pages for last minute changes, and look at the forecast. I pack the car the night before so the morning is calm.</p><span class="tag2">Before</span><div class="xt fam"><b>Families:</b> Pack snacks, ear defenders for little ones and a change of clothes.</div><div class="xt pho"><b>Photographers:</b> Charge every battery, clear your cards and set your camera before you leave.</div></div>
+      <div class="st" data-h="7"><span class="tm">07:00</span><b>Arrive Before The Car Parks Open</b><p>I would suggest getting there about an hour before the car parks open. The roads in are the slowest part of the whole day.</p><span class="tag2">Busiest roads of the day</span><div class="xt fam"><b>Families:</b> Toilet stop on the way. Queues at the gate do not move fast.</div></div>
+      <div class="st" data-h="8"><span class="tm">08:00</span><b>Gates Open</b><p>Have your tickets ready on your phone with the brightness turned up. Check what you can bring in before you go, as some shows have rules on gazebos and chairs at the front.</p><div class="xt pho"><b>Photographers:</b> Expect a bag check. Keep lenses in one easy to open bag.</div></div>
+      <div class="st" data-h="8.5"><span class="tm">08:30</span><b>Save Your Spot On The Crowd Line</b><p>Head to the crowd line first if you want the front row. Put down your chairs and blanket, then you can relax.</p><div class="xt fam"><b>Families:</b> Pick a spot near the toilets and food if you have young children.</div><div class="xt pho"><b>Photographers:</b> Check the sun guide on the show page. I like the sun behind me for photos.</div></div>
+      <div class="st" data-h="9"><span class="tm">09:00</span><b>Static Aircraft And Pilots</b><p>Walk the static show while it is quiet. This is when you can speak to pilots and ground crew.</p><div class="xt fam"><b>Families:</b> Kids can often climb into cockpits and collect stickers here.</div><div class="xt pho"><b>Photographers:</b> Best time for clean static shots before the crowds arrive.</div></div>
+      <div class="st" data-h="10"><span class="tm">10:00</span><b>RAF Village And Activities</b><p>Most bigger shows have an RAF Village with simulators, displays and the chance to meet display team pilots.</p><span class="tag2">Great for kids</span><div class="xt fam"><b>Families:</b> Queues for photos with pilots build quickly after 11:00.</div></div>
+      <div class="st" data-h="11"><span class="tm">11:00</span><b>Stalls, Food And Toilets</b><p>Check the trade stalls and food options early. Food queues are longest around lunchtime, so I eat early or late.</p></div>
+      <div class="st" data-h="11.75"><span class="tm">11:45</span><b>Back To Your Spot</b><p>Settle in before the flying starts. Visit the toilet now, before the flying display begins.</p><div class="xt fam"><b>Families:</b> Hand out the ear defenders now, before the first jet.</div><div class="xt pho"><b>Photographers:</b> Do a few test shots on passing birds or the commentary tower to check your settings.</div></div>
+      <div class="st" data-h="12"><span class="tm">12:00</span><b>Flying Display Begins</b><p>If you are not waiting to see a particular display, use it as your toilet or food break. I see others do this and it works well.</p><span class="tag2">Display time</span><div class="xt pho"><b>Photographers:</b> Jets need fast shutter speeds; props need slow ones for blurred blades. My photography pages explain both.</div></div>
+      <div class="st" data-h="13.5"><span class="tm">13:30</span><b>Lunch Break Your Way</b><p>Take lunch during a display you are less keen on. Keep watching from your spot if you can, as you can eat and watch.</p></div>
+      <div class="st" data-h="15"><span class="tm">15:00</span><b>Headline Acts</b><p>Big names such as the Red Arrows often fly in the afternoon, but every show is different, so check the timetable on the day.</p><span class="tag2">Do not miss</span><div class="xt pho"><b>Photographers:</b> Two camera bodies help here: one long lens for passes, one wider for formations and smoke.</div></div>
+      <div class="st" data-h="16.5"><span class="tm">16:30</span><b>Stay Warm, Stay Covered</b><p>Airfields are open and windy. Reapply sun cream, or put a layer on as the breeze picks up.</p><div class="xt fam"><b>Families:</b> Small children tire around now. A blanket and a snack go a long way.</div></div>
+      <div class="st" data-h="17"><span class="tm">17:00</span><b>Final Displays</b><p>The last displays are often some of the best. Some people start leaving now to beat the traffic.</p><div class="xt pho"><b>Photographers:</b> The evening light can be lovely if the show runs late.</div></div>
+      <div class="st" data-h="17.5"><span class="tm">17:30</span><b>Plan Your Way Home</b><p>Leaving early or waiting an hour both beat sitting in the main queue. Each show page has the last trains and buses.</p><span class="tag2">Traffic peak</span></div>
+      <div class="st" data-h="19"><span class="tm">19:00</span><b>Home And Sorted</b><p>Kettle on. If you took photos, back them up the same night and share your favourites in the community forum.</p><div class="xt pho"><b>Photographers:</b> Back up the same night, before you format any cards.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="forest" id="how">
+  <div class="in">
+    <h2 class="stitle rv">How To Get It Right</h2>
+    <p class="sintro rv">Guides for the parts of the trip that go wrong most often.</p>
+    <div class="fcards">
+      <div class="fc rv"><div class="ph nopic" style="background-image:url(https://static.wixstatic.com/media/a0546b_2c76345e206e42548daf20ac1178ffa5~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/tent-night.jpg)"></div><div class="tx"><h3>Camping At Airshows</h3><p>Shows with camping on site, local campsites, what to pack and what it costs.</p><a class="btn" href="#">Read The Guide</a></div></div>
+      <div class="fc rv"><div class="ph nopic" style="background-image:url(https://static.wixstatic.com/media/a0546b_667a385f7da1441798979d489b8b2d6a~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/kit-laid-out.jpg)"></div><div class="tx"><h3>What To Pack</h3><p>A simple list for adults and kids, with budget friendly picks.</p><a class="btn" href="#">See The List</a></div></div>
+      <div class="fc rv"><div class="ph nopic" style="background-image:url(https://static.wixstatic.com/media/a0546b_0b3c08b99b20462ebc479fea2b44e898~mv2.jpg/v1/fill/w_1400,h_900,al_c,q_80,enc_jpg/typhoon-static.jpg)"></div><div class="tx"><h3>Airshow Photography</h3><p>Settings, kit and where to stand, from your first show to a two body setup.</p><a class="btn" href="#">Open The Hub</a></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" aria-label="Aircraft you could see">
+  <div class="in">
+    <h2 class="stitle rv">Aircraft You Could See</h2>
+    <p class="sintro rv">All taken by me at UK shows. Every show page lists what is confirmed, checked against the official line up.</p>
+  </div>
+  <div class="strip">
+    <div class="rail" id="rail"></div>
+  </div>
+</section>
+
+<section class="org" id="organisers">
+  <div class="in">
+    <div class="org-top">
+      <div>
+        <span class="tag">For Airshow Organisers</span>
+        <h2 class="stitle" style="margin-top:16px">Working With Airshow Organisers</h2>
+        <p class="sintro">We want to work with you. The Big Guide to UK Airshows sends well prepared visitors to your show: people who know where to park, what time to arrive and what to bring. That means calmer gates and happier crowds.</p>
+        <p class="sintro" style="margin-top:12px">Everything we offer is free, and we only use your logos, photos and videos with your permission.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;padding-left:20px"><a class="btn" href="#orgform">Get In Touch</a><a class="btn ghost" href="#orgoffer">What We Offer</a></div>
+      </div>
+      <div class="org-ph rv" aria-hidden="true"><div class="a nopic"></div><div class="b nopic"></div></div>
+    </div>
+
+    <div class="offer" id="orgoffer">
+      <div class="of rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 11l14-6v14L3 13z"/><path d="M7 13v5h3"/><path d="M20 9v4"/></svg></div><h3>Free Promotion</h3><p>Your show featured on our site and across our YouTube, Facebook and Instagram, at no cost.</p></div>
+      <div class="of rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg></div><h3>Accurate Visitor Info</h3><p>Parking, transport, accessibility and timings checked against your official site, and updated when you change something.</p></div>
+      <div class="of rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h20"/><path d="M12 2l3 10-3 10-3-10z"/></svg></div><h3>Line Up Updates</h3><p>When you confirm aircraft, we add them to your show page with a clear updated tag so visitors see what changed.</p></div>
+      <div class="of rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="7" width="18" height="13"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8 7l2-3h4l2 3"/></svg></div><h3>Photo And Video Coverage</h3><p>Our volunteer photographers and videographers can cover your show, and you keep full use of the results with credit.</p></div>
+      <div class="of rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-7h6v7"/></svg></div><h3>Local Businesses</h3><p>We point visitors to nearby food, campsites and places to stay, so the whole area benefits from your show.</p></div>
+      <div class="of rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><h3>Fewer Repeat Questions</h3><p>Visitors who have planned properly ask your team less on the day, from car park postcodes to what they can bring in.</p></div>
+    </div>
+
+    <div class="how" id="orghow">
+      <div class="line" id="howline"></div>
+      <div class="hw"><span class="n">1</span><b>Get In Touch</b><p>Send us a message with your show and the best contact.</p></div>
+      <div class="hw"><span class="n">2</span><b>We Check The Details</b><p>We go through your visitor information with you so nothing is wrong.</p></div>
+      <div class="hw"><span class="n">3</span><b>Your Page Goes Live</b><p>A full planning page for your show, in our design, with your approved images.</p></div>
+      <div class="hw"><span class="n">4</span><b>We Keep It Updated</b><p>New aircraft, timings and travel news added through the season.</p></div>
+    </div>
+
+    <div class="org-form rv" id="orgform">
+      <div class="side">
+        <h3>Talk To Us About Your Show</h3>
+        <p>Big or small, military or vintage, we would love to hear from you. You can also email us directly.</p>
+        <div class="mail"><span id="mailaddr">contactus@ukairshowguide.co.uk</span><button type="button" id="copymail">Copy</button></div>
+        <p class="motto">Contribute when you can. Cover what you know.</p>
+      </div>
+      <form class="of2" id="orgf">
+        <div><label for="o-show">Show name</label><input id="o-show" required placeholder="For example, Clacton Airshow"></div>
+        <div><label for="o-name">Your name</label><input id="o-name" required></div>
+        <div><label for="o-role">Your role</label><select id="o-role"><option>Show organiser</option><option>Marketing or media</option><option>Council or events team</option><option>Display team or operator</option><option>Other</option></select></div>
+        <div><label for="o-email">Email</label><input id="o-email" type="email" required></div>
+        <div class="full"><label for="o-help">How can we help?</label><textarea id="o-help" placeholder="Tell us about your show and what you would like from the guide"></textarea></div>
+        <div class="full"><button class="btn" type="submit">Send Message</button></div>
+        <div class="sent" id="orgsent" hidden></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="band pale" id="community">
+  <div class="in">
+    <h2 class="stitle rv">Join The Community</h2>
+    <p class="sintro rv">A free member account gives you two things.</p>
+    <div class="comm">
+      <div class="cm rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5h16v11H9l-5 4z"/></svg></div><div><h3>Members Forum</h3><p>Ask questions, share photos and swap tips with other visitors, in groups for each show.</p><a class="btn teal" href="#">Visit The Forum</a></div></div>
+      <div class="cm rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7l2 2 3-3"/><path d="M12 8h8"/><path d="M4 15l2 2 3-3"/><path d="M12 16h8"/></svg></div><div><h3>My Show Checklist</h3><p>Keep your tickets, travel plans and packing in one place for any UK show, then save it as a PDF.</p><a class="btn" href="#">Start A Checklist</a></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="in fg">
+    <div><b>The Big Guide To UK Airshows</b><p>An unofficial visitor guide. Details change, so please check each show's official website before you travel.</p></div>
+    <div><b>Plan</b><a href="#shows">Find Your Airshow</a><a href="#match">Which Show Suits Me</a><a href="#day">Your Day</a></div>
+    <div><b>About</b><a href="#organisers">For Organisers</a><a href="#community">Community</a><a href="#orgform">Contact Us</a></div>
+  </div>
+</footer>
+
+<script>
+var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d30305b4df49133d0d95bd3f88b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/blenheim-smoke.jpg", "rafale": "https://static.wixstatic.com/media/a0546b_135c4e895a0443a9acc0e129eab2be3f~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/rafale.jpg", "bbmf": "https://static.wixstatic.com/media/a0546b_a3d52d78537444b4876b348a1047c682~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/bbmf.jpg", "swordfish": "https://static.wixstatic.com/media/a0546b_3289b1124ca845859e3d6b5ad33dd7d5~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/swordfish.jpg", "chinook": "https://static.wixstatic.com/media/a0546b_ee0c8ea214a94e34820ced48cf472742~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/chinook.jpg", "chinook-static": "https://static.wixstatic.com/media/a0546b_0b3c08b99b20462ebc479fea2b44e898~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/chinook-static.jpg", "typhoon-static": "https://static.wixstatic.com/media/a0546b_0b3c08b99b20462ebc479fea2b44e898~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/typhoon-static.jpg", "apache": "https://static.wixstatic.com/media/a0546b_ee0c8ea214a94e34820ced48cf472742~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/apache.jpg", "apache-static": "https://static.wixstatic.com/media/a0546b_be58de4798c048f4ba7f45336202286b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/apache-static.jpg", "b17": "https://static.wixstatic.com/media/a0546b_b5d9599a2c074757899004ee048c3d0f~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/b17.jpg", "thunderbolt": "https://static.wixstatic.com/media/a0546b_2b53500c98aa44b8acbe1b798f722359~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/thunderbolt.jpg", "spitfire": "https://static.wixstatic.com/media/a0546b_c91131d5a8a540be80233102e0c65f5b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/spitfire.jpg", "pitts": "https://static.wixstatic.com/media/a0546b_c91131d5a8a540be80233102e0c65f5b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/pitts.jpg", "c17": "https://static.wixstatic.com/media/a0546b_e19add6cdb0b4398aa7cc431777a7485~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/c17.jpg", "tent-night": "https://static.wixstatic.com/media/a0546b_2c76345e206e42548daf20ac1178ffa5~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/tent-night.jpg", "kit-laid-out": "https://static.wixstatic.com/media/a0546b_667a385f7da1441798979d489b8b2d6a~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/kit-laid-out.jpg", "crowd": "https://static.wixstatic.com/media/a0546b_667a385f7da1441798979d489b8b2d6a~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/crowd.jpg", "redarrows": "https://static.wixstatic.com/media/a0546b_59400d30305b4df49133d0d95bd3f88b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/redarrows.jpg"};
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+
+  /* pre flight loader: Red Arrows take off with smoke, once per visit */
+  (function(){var pf=document.getElementById('preflight'),seen=false;
+    try{seen=sessionStorage.getItem('pf')==='1';sessionStorage.setItem('pf','1')}catch(e){}
+    if(reduce||seen)return;pf.hidden=false;document.documentElement.style.overflow='hidden';
+    var items=pf.querySelectorAll('.pf-list div'),ts=[],running=true;
+    function done(){running=false;ts.forEach(clearTimeout);pf.classList.add('gone');document.documentElement.style.overflow='';setTimeout(function(){pf.hidden=true},600)}
+    [].forEach.call(items,function(it,i){ts.push(setTimeout(function(){it.classList.add('ok')},200+i*300))});
+    ts.push(setTimeout(done,4300));
+    document.getElementById('pfskip').onclick=done;
+    var cv=document.getElementById('pfcv'),ctx=cv.getContext('2d'),img=new Image();img.src='data:image/webp;base64,UklGRkYrAABXRUJQVlA4WAoAAAAQAAAAjwEAcwAAQUxQSG8NAAAB/yckSPD/eGtEpO4TDtpIcqSu3b70P/wJbx4EEf2fAClA2Qvcdjps5yqA7UxqsL1CtADbsN1j5y5sTi6VzmlPIGqSGwZRk4wjak0WEWSXNCi9/44IbQIkaU1bV5SCwaBtI0kxf9i7e88sgYiYgIqmu8MNhrX4DD5Ttk9UCV8p+tqrmS6oMK6QmDTVmvN/UC299kKl0FQP+9YXtm3HG///d5zXkzRqmjLFTPmybb1t27Ztrdm2P7Zt623b5kxfapv7XHjSNu0nT+ZZjIgJsGNr2xpJ0vP93T3M7M4uxiWPFzGLmCXwjM8mW8xTzMnMnFHJgYJf+qXXCEVGhlSQZkRMAHuXyY/VlYo8p9IhcXvfOmtlbWWxEThEvbS7u3xwInDS7Zy40199+2b6Zgzram/mydP1EqcyTsRHbGzT18ABxcGdP99vEyrfEC/s7URI/QAhHMTPf/9nCJVuwa1+abNvIYemn7EIUbaJ+Y/b2hcgmfm/HtEkVK5BvN0MWOp563cvhSjXgjsfd7qZymzi+5/ZKtfExpe4OZGifex/QaVa/feZpHDsLOMSDfGCiQCOhQ25RAtu23OaiMzkYhWVZmJpl8mAqE7VKdFilonLMVMvzQieyyYFZqpVos2cmyYGtOtlmVhfpwYyzVZJhjovqGlrvCQLnmROtaAxDirF5veph2i0cQkm9uao7ViTMtzyp1hdqDZLMV60TXWhUpNLL7G8TH1QLcovu3pGnaOalV0Yz3Kn+jirg8otWDigxoJ6nXJb7C2g+gAxUSm5zD/DamUa1VIL48XAVCegUSm1xMoadaNWKbNA7/ROzUxtrMwKHrJt1UtQr5VaZ37D1L8ao472oH0JveGIxh+6rB+VejFE6LAop10MaQ/eF2AGAr2hEDw3uQbQ6OACAHRAQmBIOe+SzyKrjlWqlaiMVSsyMIr8nXeyuN0OVJuB0JvIVT831U+Md5CGm2jf/5mraE/qI2kXJ0zfrF5vNWuNZqPRbLZbrfFGozomACeDAZTBvZOnnb3j41brot2OqTRDbxhi9t9pAFAbw8MtOOP7/vWatBckhdjr+GyzuzbX7Iy3GxVMSjs75hCWvU77/PB4f/f4tMuwIjQ6IL25IWQNPNRE86/T9sOJvTTpOzXXXZv+/E+WVtZOrpPMPm3vTfvRkKNSvdPW1u7mTuscQCGNCMED8nfUCGqdGGpEetbr+dwdvqeEEKTH3e8vPti+8Ny1jYVuO/vFjVMN8gZVWAXi4AUGIYD88mh7aX7tOAYc0hvBaUc0hEorhty5fzvHK1+U2QaIP7nTzf8xc2qNvAU2CERTDQIHkBytz72YPyrAIb3uRH22MWTNDA0ticpv3Cv97A4fh1prauX0i+7clSCBQAbEMBSSMyDZnnn4dDsGMxUbwVO5hsjq1BnCQmADD/g14p/+mc7S3NJ8W0BCYhiL0hyUx7OPHy+1IULF9qRjagYQ42NDRSBs8tXpM8667l6ZRX9bYqhLmMHl0oP/TACh4hIrqzTHTI0PB4GwyVcm5leW19dOOXkKIAEWEgUoSmdw9TfPOScDhQoKtR/TXMFkE6xJAmGTj9b80ZX1jZOXO20BdlC8Es7+5gfuPguEiin0OHFqCpjxT6NmCIRNPhpzSxsbK2ur050MwAaJglYv2df/6wvOCwgVEvOHNAiYWZWlQyUQNnk1uksrpy0vr0xPV8gnQKLgSxwc/u1v/dsmYReOOJym0WL2ggWSDocQ2OTVmFlaPmVj9ejMVJV8AoQYDSUcx/7jd//gZ0Th4PIHpTUJaFx+RYXkpEkIgU1e7e7SkfWN5YX56Sr5BAgxYpbOSP/6xj8kVDTw/MzKRilx7t0vARzSeEJg07fW6XRXTzp5ZWG+E+QTIMSIakubH3gTRMGI9UUaLmjd7sG/nU7BDKEKIbDpOz41fWRt7ZSFqblORj4BQoy6KfjMo8dRFIsNHjUNlFi4uP/XB3uBYcOEyWtyZn7j6MpGd3amQd8ECDEi27HzB9eAVCAYTwdODUNKjmJrZm56r9fNGK53OvPrGxvLi92JjLxtCcSInewfv+5UiAIRSzs0DiSZQe/07OXVeT/9yBeOLs7OjFfI25YQI3rq2V981iyoMOCHH2c42g6xz2QhxIgvOe79EKSCcPT+xxoKeRsjYSyBOEEscb3bLJNUDMDHfyoPixPX0k1ce0UFqxDMF79M6YESZ97udCwVgX71z5SggsYtbzsNMfwkqwwB9Vi/65UiNNwUTuffrRxBsi5+2waEhpfCqfqQXz/TUYpAGH/mKR2I0FCSEo1rb7OBKU9lzfG1b2NwCL1KJJupWz7pnjXKVRlNNqa0fwVghjTCmiUlWL3zfS+bIKlcAazWeZdtryws7Z94wAwhwBqkgMoF97zrWSJJlK7CBKh3sDW/uNbqAJh7x9HoyevufdsFbIlSViDMAH+yvbywcnDu+cpvvmiuMVMP+9srGySC8laAJHNA0T3aWPr6z/UTcE6HT1nM/M6OSRJlsBAOIIqLq+9+HFDoEAkJWP+GtzNRIksySUrufO9LE4BCh0HIBmbOunj6Z65QOsuQwfninUcLl2AmTSpfWbrw6pN3KK8lHLRXHj6YPgEzaSL1I6dcesnZa5TdEg6itbv/et4Fh3IGbBy3HnWnTvOGX/58e+umG7budbZLK0DCQXfuX/9ezLimxqG3Xt28cfPGHfJ3uqzUAiQctB7+68XRsVRJPcCcOWfvvL9arzQy6Ss3sbuUjrcpvyUc5eHBD2/u6Cc3ZVv4yHc76eDGG44dv35zcwzJfaze9FHK8RIzgO/92tbm9yJPoXdCKYJ9yvEsOyvFQIgUL3wN+xV4lCg3EkSJLu70nU9lBpwzYPa+1zVxq5auu+XrjssM/OCE23b56l98fmDifAvdtqFa9TiDtmQf47bd/GSHAcvCYWa6ZTPO/qai3mBgc2Di9tzYCmWf/A/EgDePuCU3GAkg/eyv/hSlgcidD9wrRbklkAwcw/lVa3/9kRfXEQMV8arn9EJgVDYJNGRGdehdnuxtre6enGWAGJAf+9YKEnmVPgI0yoyRRdTuXJ20Tg6OL846ArAIMdhIV//BLHmbSFJpogqNYRjXVhpHg37n9OXL07OLq05cUmmGEAO3L7l9Im1t33QDN9/7ASSQSgNVqSr2UIJZxfghTdI06rf7/d6g0273et1+7EuqDQMhJmv2vP6q6+aBBNIJk0ZoDAcCqxppKydwQF4WIQ/BJ7FPkySOom5UJLnv9qO4m/iiENc0AwSipsqpT6qdd+3lZy23gGQJnVAY8N6MEDZifBmEUkUIoQih0HbtJHb/5x0/iPLcp1maDNK8GGZsw4YEiObKUFs857ILTl9oAiQL6QTBYrAuQyiKopCKsiwyn6YhSzv6zqf50/8U5yHz3mdZFsqt+qPv1alWHOKXD37W4gYNG6EK8WqUSEDryJlnnH7K2lQdwEpWjH7kPstDmpVSGYo0SuIoSgaxT9PY55kv7YSJSlWVms5/fPWmO7L/lbnWmJP2+QXuOt7FDG0hG6hMHjnlnFMXFhYmexlYu1kYNGpZ6z886Udpmmu4DHkeAhO8LXx8PrKIiCqBErubrlOQEiSAanv8zPN/0p099zZJytlhB/gg3E+jRYo7XysZ27Cx3C+7BF6H2LfUR+L1LIRN/4X33oVkWcFmM355bLHqwRnhnPt5XwIVkLX95cN3QUKjxE1HWp1k87bE/kZCISNISy96wAzAT37jD5+4/uLv3O0VeGD0LARCfUZF87PvnwOYSVWTPPW4/72FRpLdZV11x/PaW5/+vX9nofYtqh/UoKw//1gWmRRZRFaJqFYhpAiBRG/r5hsfeJFVPBBmny5t7LZycOXELoLfJBhtZag3t49DJEK9U75Mz4Mwv7j7v3Lg7yFlRSSD9vHG3INniWky5ms//fg0GnGQbJASwsL/FplSSgmhvaT4zYcl7+bByDdS0CVmQOf+T++ZJvTbH8wYiQWm2nTpK86eq9M35STA2rwTwUH7+0UFSCT7+3dHB9JXI9F+myevra0ur8x1Jqo5bEiVv2xJB8b3HYUFOG35b2vogCRGbxmg2u52uyurSyvdyY6A9BCCg//6rzpWgfW2/bHKgY3mEtj0HWt3jyyvryzO/vNL0SFoNdSTUCGp7Nn/cCbiRFUIsMlnzbFj2xy8mfziSeNAQqg4BAIz/KWXziNOdIXABnQofu8OF15x6VnzFSAhNHS8myoEhhnD5enis08BcYIswIcAej/8c9rr51947qndKpAsof8P3k0VBoQQA1Xwg/PjrYWZDZAoHSUfByaXz73wrNMW6gC2JdBgNMqAAYFAu42bek753KdxkqZp2o8GUbd72brq9oEQ5aSEDUwsnX72aScdnW3Q1xjvwcAAGzWmyuEiy3yW+TTLUh/FqY+jJMky7/PgE+/zPA8hZ7SEKTMlbCBm5046bX29OztbDwaqsiiKLMvyLPNJFCdJFKVZ8HGa+synWZbnIc9DCIGbNmzImBJUwibfmuwsLkxMdSbaY1mQQhZClvrEZ2kSx2nmfR7ykHmfFdy8AXYtVYhbVyGw2VVZCBcFN2+AjaEq8TYIAFZQOCCwHQAAUG8AnQEqkAF0AD5hLJJGJCKhoSe2C+CADAlkbumRTDmvbdnH6V+m//6L+6ekrZn8p+P/kA/X9iX0P+q8z/oX/tesL/meo39M/9f3A/1c/X724/8v1lf2f/k+o3+gf4L9o/e7/1nqx/xfqAfzz/Rf//1z/YT/br2AP129Nb9yPhE/rH/E/bb4Fv2R/+nsAegB6AHY4f2j0V+Lf5H8g/P/zafBtvTBHQX8/+knfX+S/tPoF/jXgpw2+R/1voI+wf1v/nenl9Z54/x3+L9gL9ZvHJ8Cn0n2AP6R/cf+t7M39v/9P8v6MP0L/S/+3/WfAZ/Lv7J/0ewz+1PsV/r6Zk/oWIdJOibUbS0FOZfKvsTMVt2VbYH8VH1wni6aj64TxdNQSDXko3e745b/3Ocir8eHa5qBdTI/Bb2OvB7CkTx9cJ4umo+uE8XOnuhyvWoh5OBGSfiA1I4Gr1JYhbTsZzhJpyQDtNCTs3aB0Vg9ur+Npb/ZvR4ES1oMcXtogAjfn7Uyz7vLinc05b1lAgqWw4gs8uDuxI/coKmIVwtcjO8uXQkeOLpp5LIaLxWItskV7gd2fCbnx8YVaerB9Jo5zg4J9aCkNwZDUzjS4VQG4NNb0DnwkmdkHWcKf2wR/cx0WpZ4F6Qcnj8V56hZdpuoSTJbkiaq6GwBRcPxDoxpY5vqk0Xi1X7vOTgot5GKc/aX6X1cQhS1O+OIPFTJRBppVTMuUsboQZ7bYpUUm5LsjZixG3QPvMZ0UlJS64c+pAS4Ps6eH8E9/leMSK/MXuUep9dVWx14CjQyxpvYb4EegFfh5dCKDNlOeAMqlixAmAHo2biso1A0bn28Ly7Rz56AxZqcv5eCvm+iJ8WcrfgLkblmH3tnCAat1GS+tpzdtblzpj2DcSCFN/eFavAkpO0Hmc3Tl4YSaPS0vJvEp4XO+ThKsUwpVjq6tEqaTLt8dppWw3NyX5vxaMy2d5s3C8J0ycMYxjUtXSC1akeaWlUpHpo9FVU1c+b149BsWnvA9upzlWxkbvrXmOrnw3+14qxGxl/IZy9LDVUoX0HZWBxuAw+92ODsG18gQxTbQ30orY8ZRz+hgTgQ2MR3TZ7A1njSeec6nwU5Sg1srfyx8P04GcMowiKJHT1uB0z1XF7U3k0ope+7CPDJzmucyE+LCQ/iK07qjYLGOQjaJj/UbzWb8dw1/dAE4sAA/u0Eh8NsQ4jZL2eD+6TJPE6MNUr2Ck/eeuPRq0vk1oPrWx/1ySvQJ2/vIBChZxJRukMEjtb7F/bu/ls9hPYpNr65LhOst/ViaKqh1cv3X+baeBy6T5HSuLrELimh0fDlmXpo8zby73RaE6AH93k7nLw8k3a0FRwfPi704noAzh6zup4sN0JgKpZk8CWqrxtCgzRH0xU1I+ItC5MbO+UHnU7VnOSNxusAspfDYzSHub44m+da6tyFGg1zmv06JN4Q/PASvdMcYonFFDwREUV7f9YdoUuakYEqJwdumz9yTYbBQiSMbPwAYGicAlQ2gyvP89bbp8jt5YiGHVgffpsRv/IqkZ/CuBTj1LHUGgVdmIFMALOwEudcI1SfWGB8mMv9DIyalANmBp3xE2d+ScMHlcq6/3VAAAF0O5NYRauH2PthJVTXmGDGuA0+UHRT3p93ujwfYXe6AWmltW4eczUt0joWe7IXXleEXLRSJE9WCORckpQYP1J49PMCLJfR8jmzTGDYc/Qt36rXy1GaDzXRDK/UO+wL/i4xH0Q+5eEroLtluxHmUeruShLvbTYvNUdrDCCgI9wJXT6RcNQU4TIkiajfnXuVzlgtdwbeglH73xrcwh3uOpUQiZfwlR4AvTe4RHsnkxWoeAr9DU2Uaa+uS/V/c+xAdcmdIOzH3Bm9kbhGL4+pM0narZsq0QtgfIQ1BcsoFnVBui+XvGzEGB0afL3kGwonz2uzCHu8qi/MlGiWJgtlRl05wjQAAMZDr08JV1jqf2bZPbrAMXDRrm6yiZaneKiEyHERivwkqFbtZcahdlBPm094uFmJaqNs+Y31VuF1Lgh3/C2xb9HQakVEZw9avObO77ClEK7cvpSVvl0PzAGz2s5ZPFd6ixJSx1L/KGiY5V03sOWm57iJaS5f+A3Tw5jfZY4gUOmt0tRR7RBuyYoAkpwxGrwoBIdNsrHu27C29zZiZo3zT03nOqirjENVwk99lUAe8cHz4e6R8djyfLfkv4WJWZOoFttMINmMmwfbHPoVuR84/G2g8UhZoUjZ1T+VEyg+9iO+bgDEbD1Udhxbs+69LWNZjAcnOOf5+fI3J8JjT51bL9IevbuoyEp7O2F+9YmhX3QKH9iXyjmE3OVQuZL8TS7XtufvtWty5tAanObYFThzpWqQHxe5j83yM8uFGaUsjKjuIfRt2lCSs1f8PJjyHT9A2wET/D2mfxWh0xCTGpzz/bZ8XqiL88oeHCuxt7rVL4B9wGwJQap6z1TDo60GU14NOWZk6/wwrReAJusA0iry+FXpSRfqyRJ/sNUrT34ADmAv1qRHUTQ2PwQqRLdo7dfHITJv1Lcry9NysPw6FfHZdPbLrvOIopSZB2YTIngz41LAOLcz68ckSfZwndjs/xmDmYs7ZVUmy0wdqazs0Qof+Kf8/v4k5Q9j6ojxjI/6az3WWpOPGRt6KbQ0zIMJL+WuvujPpURNukvZXDflO4jv6+y0mYFEv2cv4zZTOgz9P+7W8yp4ITE5P50ipo487U7Z6eDmbD4pmI9CmjIzFFIWVv+3Drku0yDPROYsQGBljn06Oko2LFlXlEkcJE8jmaB7mgYCCdZa50AOtoPkp7WK9hsAnu+cErSISdlnMiIu+jO76+Pnw+abA5phRwOFG2Bqfe/MesEV/jubv0MnLAPj8tMlDzg3pv5b50i3pxRc978eDkR9Ln5Ha2HVM2X5gQh3GbVaBRcCfvT3iDFVLd6yNXiYUxztofbV7mlRDLfXS5dC6QYMs8ZOrr72cdSo0Lzmc4DueYNXmv2JDI3fvC6vbaTpz4aPUtbuuUHP2aKBb8759NTSN/h3v/hTA7ABhTInZl9VyKbDBjC/EMGprOTacp6kkJ5j5txEPeW2hjtwWVeDPfhjf9gZSgP/0nHDF4ptqtB3LrIOr2mOxwHSgR7XyP7WbNpok6iwFaLdhmUZ8JJVd/6gWd3BVfMz6fIfPfA6I7XDO8YHRxcDht4JWmLjRhdQaPZUUdfTqsNuddwolCFLIrJJRKUsFRFb9gvXdhevmP4th3msL06QGinwcEE8DYPn13H8tG+Brrzd4Bo6Bj1ZZEkmWtVv48opwzZlwRDrJWQE4V9Wp5OXaTPeQZUUG1Lnj4vI3YSkGlIbyf3lLf68tr2XTjaYG9hdqLNbO1SlLlSIl6dTGsPCC003JesFqe7Q64p7zvecciY3cCWEtaU5o2SExZGdosmRhYzqfzzj1f3WqRs3xuwKIOOTvKgGfp2YHc5NfrKF5Bij1PXCbHGNY4+vvH2AUcQC5OQdCaBTjiDXwNF7w4puZdaEgOOqiYpb4/B2tIo+n77w47be4Qyu0Qn791kXSMBs4Kun9NZrFLnZurZ6YGWHKYKUp4DxfCeqxnCEwAnH+9BmuZyeq86+X4X0KoUVSwvkZpTAXBnpXMjPUfB9qmZW36YKotwU6wb2VmA8uCVFA/G7pG2KS5Nhufv/75S9rPIYAQNB50nIxuFjCL3rbe6dP+mPtjYUh+EZ7/NxlfoCPTIXqIlVqYQ0/hebyN6Dxdodxng558KqElC/CaYEaSSmjiGyMGPAYH7YYJG6be8BQBYK7nnUT0tLBlSZ0haAD8zaTuK1OzJ6Gtys5CSANK8nEqHV98JFY9adyCaJ2lGxapHtn191ExfyRaSQc7wa2Pm9HO+3YgA1a2I3g621t9AaIHDuaoF3DAPGGxmhjMe4MDhsQF4dx8t9HvvnLHZ5K2oxvRVVmDJuGK8xY/A3BQoqgAIDWBBvUthbsh+hh+Jz+D8iGB860AwkMUg9aWqJrQQ0vktH+KtwlF2JlF8fajmc5Z6ODx1kWKukI85w57L3R3tdUcGPmgDbaJ3v47HxBTMP2MDqP8duEJV+3+OUzH69vPQ1ZfIPwv0A5QRIzxDFgpgS4DuVnC534TqXTItq5d/CzsOY8ya2W4GNUS0RzhW9zY/lOulEC2t8e4LWtTnZDs2xmg3PZL2NesCpBH4z+92gtxzUHVPPEhwTYbmWoazeX3R5zWc+wMFlxDGUBAV/FSb57C9s2mJMdHqbg81aBuSj93TOrrrjMXwn0sUU7A43c7eeLZ6/QrjpAN4RQQTPMwFKCFiLH7QLc6qBPcPFOKeNZxf10+4i999Pgep8lU/6bjcAfmebB4Q6awPfbwEHfpiv3BVZUbJKi9BqCBdtU57hjM7LUuhfWyueewufBQWXCsBvdQBKrGP+Pa9R1cNA75wv7dF1r9FjutqDlUbqSVvU8PPmTpkw5/ynCoRdHx7HmY3ZlVHvN9YLU9YL8auV6tiM5S8CjXnbPmG8K/cYb364F1zHrLh51viLpbdFiJS0q9fxq+6hCpMo8NATkgPVSAZjDOd9IHW76rLlUs4DnStJihr6n55x7jhKu8/aPw6mD7xMY5iND3FN11ZK5peyPUB7TPX0UBIGyVZ/+Esap9M7oU/Jh5AUQZreWIXyGPbz+OjDSsgr/BAFFN0NqZRTPrCaNAVT6+348f49MUgQyYAhwAVHVvOGWRADWMQg4x/lVWseIcCGAk/uYq5ApmQJNEowgqI32OInsPPuXw7U25xotgB21qkqlHoZEiDdjV/L0U/Tm/NBR4dTlTeSuK/OMN9HyZMwlU6uGOTau170yoS5Nb2XSDhoGnD6JIRo2pNItJjIrqsQetf2t9wBH/EiaV/qwvhPftpeQ4xGc3v1Z6Aqg1UMg/XayMQHUvJP92ME1EmWcoM/NSpZ1ROC6Vwsp5ZXcBX7lN/xCkiFz3GqA+8OWJL9wQxw3z/GgZe5WjjjasdrB17EqhhUPKt9LZFS/5lais7PbH8ppZNmIi7r8eGV/cAe595WiUDLpdWvyHmDc4suMNyrJSuqA8HtfNBMn+2ICk+szV0v6RW3Ml/7VHYUNl2tNnOn8DiJmxx2PFvDNCtkTIdq8dekEGIP7m4p50y4VStnBylQAnl2jd00b0vkByCE37Pli5sw5jVr0M5/QsCMvc/CJddczLXFD1+0Lt7c7phpaXGUd6SBQ/rKj8KR6/MRII/oCVVT5sdnhQ8pkiN9ZuQpN4r8UsNiCttAgZ1GulqiUObiK3LOGnPZiG4/8LaBz0uDahcz5G1PuaYVfuuVkPCVWfvSKbCLHC9VbUjzec25hxHX1Cta5qlR7TNClzSR7VykExxcbS51yWWPz8RdlS6f8bf2UWBKM610RmcvlP8z0AHoJRGn20PRGcSqFpu0vUquH2n5hX/ItxTYzt0oYKL/Az6mCuVwqZ5xa9iiX4iUmQ2/AJJLilBfn1OxulkAYh/T4m8Rp8FQwuYXX17Tb0vtbUSg508jLEvQ2q1d4BKgDTENwgUY8KFUJD7gmpWyODCZqLjcSgNfv/YrHRibQYgM6OSb49r3Ht1UionfB0o9TdvzYoM7KAW6tk+Oy3tSzEi+F0pwyf9apZDRYcpEBWPqHbV9FMaGQ71xPgQAuz9Hz1IG8Mpe9mO8LGQ2nK2sU75+RmxU63OBCcVER6hZcpemqj37HHIWYmJ+lRPWVVvq82aBkUnI/B3ItraZ9JeoAixVLTOTlV5Sx2yfc96kbwgsw1cDtpY8E8iGxGQWUoqkJTQeYOh/Vxzk2Fn8Lr/mEhFWxQ/fvgtHJ085LLYLVkB2c1yx6kutbtyPhA0ykT4cD2DiJZzS6lq0RKPtMrdkAuBPA5EiQztpW45qKCcujeIFT2uiLa7r1Y0psbNzq7ZJe9URDGQ5I6zMJeYJVyAlehJWHU/EjMWho6pDs/0NP9ATlKbhXMtBQr1aA4GwbpavO6P5aJDCgBpdlWRqFlOCuBUFcIarmE7d7xnuHbCDl3Gy/xFcuzFE+4K02ccj+c9DXu7Vcc1dsioU+5uPq9JkYNpSNpkE5VJjZQ/t3X+MsTyg9QEDAi2TbcJ2pxpT98uQ5d1objHsu1PCYjwqm7vjRlrwQubDZBp4iYLeVuCkE5+8Y8+KueBbNpMMT0WEJBR5GNuUooItea2S6N3q7KuvcZEj3szgUYz1rYvgeqSm8gMVGA76+zzspmKLC7fasRvk6wiRcr8B1vBY+MJxMxSRwQ82nZVmxOyuSMblhT4yxL4OxoBeOzTuOHnzduqMax+tsQTO/DxJ1SebnOjP5DNjYMK2FDPI7oOUFkO6ZN9UgMHz878ZF0Jk+sJFkHR35tugwBkROfCJSOr/ehqonG1Q34NEN94jQ5hPo05EvG6L5GVAMnhs/0X2MmNsLh1cPz5SfTyKbNd8VgfxpuK+gu455vbfDeD5FVohCIJYHVRrBbCanLc1TS0+lbD0rwUAAZWD0FKuVS2PoAt1uC12qZmqC3cUiX1twZWuANs/9BdSchXtWYLpVOTxgIJSryn3vcyaPuUhqRE6jO5oTXQninijrfTLv/1cSi4hN5bnmuJhMpsz81Gl7hBOVpyob06kKpbE1Xjj03P8wFr7NjKaL/bz/SkbriPUf334FLk0GM8f9cxzuivQwFAPezXpZq2j2sJ0oevquxsVyb5+QoQfHzsvwFhSMVd/Lg/eWx6bD/M/RofeAaj6ngUvMn001eBh3sHU3sy1/3c5/huGT22ebt/+aPM/IY2W3AE+Ymy8gGiblQ8XVrf4RgE2Mz7Hkq0/MD+g+y81evEPb9nQbRTx6aRnb+KAldMLLMtdwpswI+wOkt79WdD+4i7lkAymjye+ZO/j1WTiC+xUO6jbYA6/d9VXBGWVJQnHNWsqbH+evau0M9WKDnQjeUiPOkS551/cscUYGBqdnm9RCcPTqhxONvtlz666qd72k3ydwOjeMf/MB29rElmr7sv6wEgE556v/4n7NXJapxHwoZILtCNXUyuKpCPCJeDCctqDSTiGOwyEjpc5T38E4dy4BtHqQt52zAPwJgEfPdRtz2FQ9P11kyKMx4OA/bcQQkoxxG4oLWcB8yuMlSPeq82unNBKJOaVp5lULLO43iAVEg6WXtrWUM3rle/P8GMiTZgfu2K/OXiCrzc2RzS9kfHMP7L/n4o0rE8SXcKqroUBfF9cBn5JnpuN0xgCfGY8O7zgzJ9RmBeoCrZJjbj/zPu0t3D5nZecqPRchmfApx3KYcOqcVqczzYF39NYfBG/Riy18doamUw0ZOMMoc+IVoMR0ppIxcw4DGxX5CJTo7nccisY8K1EJYK1ucqZLoSKbjqbXTdzt4JBy/fJwJGGGux9nEdwwVX9SlXCAD7yEm+n+TQ60OmIMiCQ9yL4+Uu8mDUu6Ooyz180QJ2nRfdPF1i18dJHRKg7GXM2/QqVmusUvWg3VIW+tLxeGSjQ8sB8lUxrA1Jps44Stmgfxa9hrqPbLtKk57SUVRtjE3Lmg1+M7LvrYgRRzgtXc7mQAL/ADkpBX0GcYcHgoKItvpoajBRDTEXLD2wnNwUAEtp5SG+AqfLFm/CpBYiz3J5bQq0nqhxyIc/6WkCKwVi/ypyn5XZRAX1LboHJ3QrXeF1CoAaGbezyzGb5Y0q3Lao3/Rk33WYmnKfFuEKlCAU/Qa828LGlKZHWByIXjLzBRJYqPiPPGFnkPio9EheNE2kfNe55TlinhyIHuULsgK8PtALaEzf0m95lgmK1/nRVl902FtI7crO31WITlxCL13YxIZPSUp1AGpy6EYU7OXunVAgGQGuBl0nVfeO6LdNpPScOR9EOY8u5XrgQvfDKgqUq9tulUF55WcrzbutnXXZnUBs9sMCCA0f6sljT7TBcoynt7cI5IIkUZ2kOb0gZEh+kUHQofOuqtulJWfvZpOJuhw9hSYBOowDI3QXwgZTXbRz+TW7RiDzGGPbDzbcxH8oUM3UCjYQaDfAQ18PAi9LPvIn6zeQ2QD4cyK+Bk93pjPQZ0UWCFdx4Q6Rny6v3cACYRK5yT2qaGJy9b95uuWKcbH6gOMjJ+9rVhnX9mLZ3i0J0V/OefR6LvIlcD7Ov2hhiC6dKdVmvXjtzcPr+/hvF+F8eHew2dhkXHqER/SYpKuZTUrFtYaVke/5KgQ4U2YpyUySOSA4WVqV7x2aPG1tR6RjSa1m+huYKkqHiRReK8r+sY13smmqKtZJfbcm8mbONtIui7JNuTG5jzOMOlyjHoa4/XeM9PGx2jgXWcmASZWHNY/FJIpODXHzOI+IbE2iB0rHE4YLm3rV+n6IwusMlTu3H9NxT7vPKuvyWCM/K/rX3nY98Z6soMb/+qXdaz4G1vugaVcItwljmDKWublx+lCL6fHDRoit2aKJ6g0q3ByAfujMn4S8n974qsPM7zem7vLezT4IWup/7jfGb+D4Df/XQ+QcH//6X2Ro5r/OFTBD3UmY2efXpllrAiB0qtha9TBV4JehK0ZzYiTlGn6sIBsyvBfZZ1XH3D1NCsU5pRMI9AgbqzoQu5KH770VwhSe5P/li6AuK1nyJgVtqjaQCrJglIM6nNv4Lpv3caeSc5Gtn9HtdINXNUQ3FEK2PTPyyH0ac98so4ccQiyEkF2klA8bNkM86lx42qfGsx2Md42bHsVI9+INg+dMc6Zk7dK/aIhyzGfsCziL439taGp9gq6wptlpxbmEq0PVSCD21KI+dep4lDKQuKxZm9DbRNY02mIyTdPmolEilqd5KSbygCep9TtgthipEtdn13x6K3y7WBVIfHVF8LwB9mQ8NrFWoFdTRRBua4WXBn0rR++phGpJtOcwcZ2f6LC2dt3aPuQQqsUsOrC5texlWf5Sm+xDBoHQ5QMeH6bZEvNioeGDK60nJoWwEM/1MyuISaOK1/MvgN+0D6qeyZnJQsjteFMfQTtP8K8m7n3qTQoh4h65Z4sRQOgM1Zm8naJQhRArkSQW1Zby27NYf4QzF5tMGUBpXKuoKhHKHQTbS9QwqDzdjETo6ybxyhieEEmnxrswt7swKUIf8LHb55emNu71eyh+Dgo/EfCYu9ocR5BfOCuCTkHgo2GLx7hT5kqx4oCdzVeGQWBYVqvIvpU3jIddqzNaO9S1TKFJ6iXFs9VvNpck5130a4f2/LORuxdBIaY53dkYZkv3lanS029fSNa3TwHEW3FKNuAy1YfhnyQ79LFL5aTVTXqLQCeGJSp2fj7uCx3h9JiPWyIi9oJCdVPwiDNUDN/UgPSbZ2s/1a5xMxVt2Iz31gf48v4WB6kFS7txA5bZangH0Us0Ylj+/jDhzYUrfH7JKrlLcCIuhn1hQAOOO16x0prT9l7raBriQoTp09Hqh0dgjoNrZEDWzyHkQISRzpXxD6rTuXEl6aeqZyEBZ0tx64XpPAul3lGEW1JGq3dq33MOt6n75wfm2Mu3UCZG6trCzWwxMMUdqNoFHWhY9jQW2aCAptrWI6qt0PCMkNiDNVxfm0A6/0W+pOeM2m+XXaHqshBuXixgDRSX7poRzX62MZPiKxgZDNL9lDR2LT1qGe93ut4NZ8avQbk4iEvhk4mWl3WDZtqNNtTwfxw3LuBCkiRuuf5CwBWyqgc2pxPLBggq/VrqQhps33Idb3B53jwTA9MRthrdsLv8lfHwAFiZU8XtrQCs4ErH1998W0afd2UYG1Nq+npi4s/mcmxfiJAABD+wAAAAAAAKX6Qf+IgGvWDHSdDR+CzvjbE92quTg9KfmVaOZ5QjvIIw6weAgy9UEUsVlMZGlLegU8f8iUYbFlecSGOFu6ZOM8v3EPjoHzYQTypCVQbG+9mtW841m7UFQKxl1B1vcb21404MHC5kJI3qvNqog4GGW89R7uQRoNR/mpfngdp2FkVa8IblLqCkHpAzbsVZNamX76IOKnYYn3mIvd6Z+uPx4Fc9gjrUsRGaTJZ8+j8ShtGD/6t7cKWVioaSNNgRkHNIkEp1VZD+HRywFr5WliZe8U9ougTauxfDAGNnmcNrWVislZvPLrPtLD97BpkmXu+ft8OheqBiRoBbkBCCooFSW0i6SAM7lOKtkBDg12uk1eLaqlHADEpUoDctiYskVKXO6x+ShDaTFT+6WxuBSuGcKAAAAAAAAAA==';
+    var DPR=Math.min(2,window.devicePixelRatio||1),W=cv.clientWidth,H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+    var S=Math.max(.5,Math.min(1,W/1150)),JW=180*S,JH=JW*116/400,G=H-30;
+    /* far to near: red, white, blue smoke */
+    var jets=[{lag:.18,sc:.7,gy:G-46,col:[214,38,44]},{lag:.09,sc:.84,gy:G-24,col:[246,246,246]},{lag:0,sc:1,gy:G,col:[40,96,214]}];
+    var parts=[],T0=performance.now(),GO=1.35,last=T0;
+    function pos(j,t){var u=Math.max(0,t-j.lag),a=W*.42,x=W*.1-(1-j.sc)*W*.12+.5*a*u*u,tl=.95,alt=u>tl?(u-tl)*(u-tl)*W*.3*j.sc:0;return[x,j.gy-alt]}
+    function frame(now){if(!running)return;var dt=Math.min(.05,(now-last)/1000);last=now;var t=(now-T0)/1000-GO;
+      ctx.clearRect(0,0,W,H);
+      /* runway */
+      ctx.fillStyle='#0A1824';ctx.fillRect(0,G-58,W,H-G+58);
+      ctx.fillStyle='rgba(255,255,255,.08)';ctx.fillRect(0,G-58,W,2);
+      for(var x=((-t*0)%80);x<W;x+=80){ctx.fillStyle='rgba(255,255,255,.35)';ctx.fillRect(x,G+16,40,3)}
+      for(var x2=10;x2<W;x2+=46){ctx.fillStyle='rgba(50,180,175,.8)';ctx.fillRect(x2,G-56,3,3);ctx.fillStyle='rgba(255,216,115,.7)';ctx.fillRect(x2+20,G+26,3,3)}
+      /* jets and smoke */
+      jets.forEach(function(j){var tt=Math.max(0,t),p=pos(j,tt),q=pos(j,tt+.02),ang=tt>0?Math.atan2(q[1]-p[1],q[0]-p[0]):0,spd=Math.hypot(q[0]-p[0],q[1]-p[1])/.02;
+        j.p=p;j.ang=ang;
+        if(t-j.lag>.9&&p[0]<W+200){var tx=p[0]-Math.cos(ang)*JW*j.sc*.47,ty=p[1]-Math.sin(ang)*JW*j.sc*.47+JH*j.sc*.08;
+          for(var k=0;k<7;k++){var f=Math.random();parts.push({x:tx-Math.cos(ang)*spd*dt*f,y:ty-Math.sin(ang)*spd*dt*f,vx:-Math.cos(ang)*spd*.06+(Math.random()-.5)*30,vy:(Math.random()-.5)*16,r:2.5*j.sc,g:(46+Math.random()*34)*j.sc,l:0,m:1.4+Math.random()*1.1,c:j.col})}}});
+      for(var i=parts.length-1;i>=0;i--){var P=parts[i];P.l+=dt;if(P.l>P.m){parts.splice(i,1);continue}
+        P.r+=P.g*dt;P.g*=.975;P.x+=P.vx*dt;P.y+=(P.vy-8)*dt;P.vx*=.97;
+        var a=.3*Math.pow(1-P.l/P.m,1.5)*Math.min(1,P.l*10),gr=ctx.createRadialGradient(P.x,P.y,0,P.x,P.y,P.r);
+        gr.addColorStop(0,'rgba('+P.c+','+a+')');gr.addColorStop(.55,'rgba('+P.c+','+(a*.55)+')');gr.addColorStop(1,'rgba('+P.c+',0)');
+        ctx.fillStyle=gr;ctx.beginPath();ctx.arc(P.x,P.y,P.r,0,6.283);ctx.fill()}
+      if(img.complete&&img.naturalWidth)jets.forEach(function(j){ctx.save();ctx.translate(j.p[0],j.p[1]-JH*j.sc*.5);ctx.rotate(j.ang);ctx.drawImage(img,-JW*j.sc/2,-JH*j.sc/2,JW*j.sc,JH*j.sc);ctx.restore()});
+      requestAnimationFrame(frame)}
+    requestAnimationFrame(frame);})();
+
+  /* departures board */
+  var SHOWS=[
+    ['2027-05-08','IWM Duxford Flying Day','Cambridgeshire','e'],
+    ['2027-05-09','Shuttleworth Season Premiere','Bedfordshire','e'],
+    ['2027-06-04','Midlands Air Festival','Warwickshire','e'],
+    ['2027-06-13','RAF Cosford Air Show','Shropshire','e'],
+    ['2027-06-19','Duxford Summer Air Show','Cambridgeshire','e'],
+    ['2027-07-16','Royal International Air Tattoo','Gloucestershire','c'],
+    ['2027-08-12','Airbourne Eastbourne','East Sussex','e'],
+    ['2027-08-26','Clacton Airshow','Essex','e'],
+    ['','Little Gransden Air And Car Show','Cambridgeshire','t'],
+    ['','Southport Air Show','Merseyside','t'],
+    ['','Blackpool Air Show','Lancashire','t'],
+    ['','Wales Airshow','Swansea','t'],
+    ['','The International Ayr Show','Ayrshire','t']];
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var ST={c:'Confirmed',e:'Expected',t:'Date TBC'};
+  var brows=document.getElementById('brows');
+  brows.innerHTML=SHOWS.map(function(r){var d=r[0]?r[0].slice(8)+' '+MON[+r[0].slice(5,7)-1]:'TBC';
+    return '<div class="brow"><span class="fl d" data-t="'+d+'">'+d+'</span><span class="fl" data-t="'+r[1]+'">'+r[1]+'</span><span class="fl" data-t="'+r[2]+'" style="color:#C9D6E0">'+r[2]+'</span><span class="bst '+r[3]+'">'+ST[r[3]]+'</span></div>'}).join('');
+  var CH='ABCDEFGHIJKLMNOPRSTUVWXYZ0123456789';
+  function flap(el,delay){var t=el.dataset.t,n=0,max=8+Math.floor(Math.random()*6);
+    setTimeout(function tick(){n++;if(n>=max){el.textContent=t;return}
+      el.textContent=t.split('').map(function(c,i){return c===' '||i<t.length*n/max-2?c:CH[Math.random()*CH.length|0]}).join('');setTimeout(tick,55)},delay)}
+  var bdone=false,bobs=new IntersectionObserver(function(es){if(es[0].isIntersecting&&!bdone){bdone=true;bobs.disconnect();if(reduce)return;
+    [].forEach.call(brows.querySelectorAll('.fl'),function(el,i){flap(el,Math.floor(i/3)*90+(i%3)*40)})}},{threshold:.2});
+  bobs.observe(brows);
+  function nextShow(){var now=Date.now();for(var i=0;i<SHOWS.length;i++){if(SHOWS[i][0]&&new Date(SHOWS[i][0]+'T09:00:00').getTime()>now)return SHOWS[i]}return null}
+  function tickBoard(){var now=new Date();
+    try{document.getElementById('bclock').textContent='UK time '+now.toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit'})}catch(e){}
+    var n=nextShow();if(!n)return;document.getElementById('nextname').textContent=n[1];
+    var ms=new Date(n[0]+'T09:00:00').getTime()-now.getTime(),m=Math.floor(ms/60000);
+    document.getElementById('cdd').textContent=Math.floor(m/1440);document.getElementById('cdh').textContent=('0'+Math.floor(m%1440/60)).slice(-2);document.getElementById('cdm').textContent=('0'+m%60).slice(-2)}
+  tickBoard();setInterval(tickBoard,20000);
+
+  /* shows near me radar */
+  var GEO={"uk":"M225.4 474.7L222.8 477.4L213.9 480.1L210.1 482.9L203.4 489.1L202.2 489.7L192.1 488.1L184.5 480.1L179.8 476.7L177.8 476.3L175.8 477.3L171.3 478.3L166.9 478.2L169.2 474.4L172.3 472.3L165.4 470.8L163.4 469.7L161.2 467.1L155.9 466.7L153.3 467.4L148.9 470.8L142.0 474.5L133.7 469.4L132.0 467.1L132.0 462.8L130.8 459.3L128.5 458.2L131.5 453.7L135.0 450.7L142.8 447.7L154.8 440.8L161.4 437.8L167.6 432.6L170.1 429.5L172.0 425.1L173.8 419.9L176.5 415.5L173.9 414.5L172.7 411.3L173.1 408.0L174.2 405.1L173.2 401.5L171.3 397.7L171.5 394.7L171.9 391.5L167.2 391.7L162.3 392.7L158.0 395.0L153.8 398.0L150.2 398.5L150.2 396.1L151.8 393.1L156.0 388.8L160.6 385.3L162.2 382.5L163.4 379.3L165.7 376.8L171.6 372.0L182.8 366.6L184.5 366.3L189.0 366.9L193.3 366.2L197.0 364.1L200.9 363.7L209.4 369.4L206.9 360.7L210.6 358.7L216.2 366.5L218.2 367.3L222.5 366.2L220.7 364.8L218.8 364.7L216.3 363.6L214.3 361.0L210.6 353.1L210.9 348.4L213.2 343.5L215.9 338.9L213.7 338.0L211.8 336.3L211.4 331.7L212.1 327.8L216.8 324.3L218.2 318.9L218.8 313.0L218.0 310.3L213.3 310.7L211.0 311.9L209.0 313.6L206.9 313.5L201.1 306.9L197.7 302.0L191.8 291.6L191.0 285.4L195.7 272.0L203.1 263.4L211.7 260.4L210.1 259.8L196.9 259.7L192.5 260.8L188.4 264.3L186.1 265.4L183.9 265.7L181.6 267.5L179.5 270.0L177.3 271.5L172.8 271.1L170.7 271.6L169.2 270.2L168.0 267.8L166.2 267.3L164.3 268.0L160.4 271.1L156.4 273.0L151.6 271.0L145.1 267.3L143.9 268.6L142.4 272.1L141.6 277.3L137.2 272.8L133.3 266.5L131.9 262.7L131.9 258.4L133.9 256.6L136.2 258.1L139.6 247.7L146.3 234.2L148.7 230.3L150.3 225.2L150.1 221.7L148.6 218.9L142.4 212.4L142.4 207.1L143.1 201.2L144.8 197.6L145.5 196.9L153.8 197.0L150.6 195.1L144.2 189.8L144.3 187.9L145.8 182.8L145.1 183.4L143.8 185.6L141.1 191.2L139.4 192.6L134.9 193.9L134.1 196.6L133.3 197.4L131.0 197.6L130.3 200.2L129.8 200.4L129.1 197.6L129.1 193.0L130.0 188.8L131.8 185.5L138.4 178.0L135.1 180.4L127.7 187.3L124.0 191.8L123.0 193.3L122.6 194.7L122.6 196.1L124.4 204.2L123.8 207.9L117.5 232.3L116.3 234.8L115.2 236.0L114.1 236.3L111.0 235.9L109.6 234.0L109.6 232.0L110.2 228.9L112.8 217.2L114.0 214.0L115.8 211.0L119.4 205.7L119.4 205.4L116.8 206.4L115.8 206.1L115.1 205.1L115.5 189.5L117.5 184.4L118.3 176.9L120.1 170.5L122.1 165.9L123.7 159.9L126.0 157.3L126.7 153.2L129.2 148.9L131.2 144.3L130.2 144.7L117.2 156.6L113.9 158.8L109.4 158.3L105.9 156.9L103.2 154.0L102.0 148.7L98.8 148.5L96.0 147.5L96.0 146.9L99.6 143.9L105.5 142.8L111.0 138.2L106.1 134.9L106.5 133.9L110.8 131.2L116.2 122.1L117.4 113.7L114.7 109.8L113.7 107.2L108.6 104.3L107.7 100.6L108.4 98.6L110.0 96.6L112.5 95.0L116.6 93.5L112.9 91.9L111.6 90.0L110.5 87.3L110.5 85.7L112.4 78.6L113.5 75.7L115.6 72.0L125.3 72.2L126.4 70.6L127.5 70.5L132.4 72.0L131.6 70.3L123.6 61.5L122.9 59.8L125.2 55.2L125.3 53.0L125.0 50.7L125.7 49.0L128.3 48.1L136.1 48.2L138.0 47.4L137.2 45.1L135.3 42.1L135.0 39.6L135.4 37.4L135.5 32.8L135.8 30.9L137.7 27.9L139.2 27.0L141.2 26.4L145.5 27.5L147.1 28.7L149.0 31.6L150.3 31.2L155.7 28.2L157.3 27.8L159.5 31.4L168.6 28.5L180.9 27.2L188.3 25.3L196.1 24.7L203.4 22.5L211.0 23.5L211.3 24.8L210.9 26.4L209.0 31.1L209.3 36.4L208.9 38.1L207.9 40.0L205.1 43.6L197.7 48.9L184.1 61.0L176.1 67.0L175.0 69.9L174.4 73.9L179.1 74.7L181.0 76.0L180.0 78.1L172.8 85.1L170.7 91.6L176.2 91.3L180.6 90.1L189.6 86.1L198.0 83.1L202.0 83.0L210.0 85.3L211.7 85.4L215.1 84.3L218.4 84.2L241.3 84.9L247.6 83.5L252.0 85.2L255.5 89.3L258.8 96.9L258.7 98.2L256.7 101.6L252.9 106.0L249.7 112.0L248.7 115.3L248.2 118.8L247.1 122.1L240.8 137.5L234.5 146.0L231.8 152.1L228.3 156.9L225.0 159.9L221.5 161.9L211.3 164.2L208.5 165.6L205.1 168.3L201.5 169.7L205.7 169.4L209.8 168.0L217.4 167.4L226.1 172.6L225.3 176.7L221.8 180.0L213.9 180.6L206.5 187.9L203.1 190.1L199.6 191.2L195.2 190.9L187.1 189.0L183.6 187.0L186.8 190.2L190.3 192.0L211.3 196.1L212.5 195.7L219.1 191.3L228.0 191.3L245.0 199.3L249.8 205.4L256.8 214.1L260.6 217.6L263.4 220.7L265.0 225.3L268.4 240.7L272.0 255.7L277.0 272.0L279.1 276.4L282.1 279.6L296.9 286.9L300.1 289.3L305.9 296.3L311.4 303.8L316.6 309.5L322.1 314.1L319.4 316.6L317.5 320.4L319.0 325.5L321.1 330.4L325.6 338.3L329.6 346.9L328.1 345.6L326.6 344.9L324.5 345.0L322.5 344.7L318.7 342.0L315.1 338.7L307.9 340.0L304.0 339.5L300.5 339.5L307.1 341.4L314.3 341.6L330.0 356.0L335.4 364.5L338.5 375.8L336.3 380.9L333.0 384.1L329.9 387.9L326.9 392.2L335.7 398.4L337.5 398.2L339.6 397.3L341.3 395.2L344.5 390.1L346.2 388.3L351.5 387.6L356.1 387.9L360.7 389.1L364.7 388.7L372.8 390.9L376.8 393.0L387.2 401.9L389.4 406.8L390.4 413.2L390.6 420.2L388.8 426.7L386.8 432.5L385.6 440.0L384.8 442.8L383.6 444.8L378.1 450.8L374.4 453.2L372.9 452.2L371.3 452.3L371.2 453.7L372.8 456.7L372.9 460.4L369.7 463.1L366.3 464.2L361.0 462.8L353.3 467.8L358.8 470.4L359.9 473.2L358.5 478.0L355.2 480.2L351.3 481.1L347.4 481.3L344.1 482.6L341.0 484.8L344.9 483.6L347.6 484.7L349.4 488.7L350.9 489.9L358.5 491.6L363.1 491.6L372.3 490.6L376.6 490.7L378.2 491.4L378.2 494.7L377.5 503.1L376.3 504.8L364.3 511.7L361.8 516.6L361.1 519.5L354.1 519.1L350.9 522.1L345.1 524.2L340.8 526.5L336.5 529.2L332.8 530.0L317.6 526.7L308.3 527.0L295.8 529.9L292.6 529.4L287.9 526.7L282.9 524.8L277.3 524.0L272.3 521.4L275.4 526.3L268.5 531.0L265.4 531.9L262.2 531.8L255.5 533.2L249.3 532.5L250.2 535.8L251.8 538.7L250.6 540.0L249.1 540.3L237.4 538.1L235.7 538.5L234.3 540.5L230.0 539.5L225.8 536.1L221.4 533.7L216.8 532.6L213.1 533.0L198.0 538.4L194.9 543.9L193.4 551.6L191.3 558.4L187.6 563.7L183.5 564.4L179.4 560.7L171.9 556.7L169.2 553.9L168.4 553.8L167.6 554.8L164.6 556.1L161.5 556.1L156.8 557.2L148.5 560.4L145.1 562.6L138.0 568.8L136.5 570.5L133.9 576.6L129.9 577.7L126.3 573.8L122.1 572.4L117.8 573.8L115.1 575.8L113.9 574.2L113.7 570.7L117.0 566.4L125.6 563.3L133.0 555.0L136.8 550.0L138.1 547.2L140.0 545.4L142.3 544.8L143.5 541.6L153.8 529.1L154.8 526.3L155.3 521.2L156.1 516.3L164.6 513.0L168.6 502.7L169.7 501.9L181.6 500.0L190.3 500.1L199.1 502.1L203.5 502.3L207.9 501.5L211.4 498.7L217.5 488.7L220.9 484.2L224.8 480.2L228.4 475.6L234.3 467.1L230.3 470.0L225.4 474.7ZM168.4 365.4L169.9 366.6L173.9 366.4L172.6 369.1L168.2 372.1L165.3 375.0L161.8 377.4L160.0 374.6L158.0 374.8L155.1 369.3L154.5 361.2L158.4 359.1L163.9 359.2L168.4 365.4ZM206.9 13.3L204.7 14.0L202.7 14.0L199.3 10.4L198.1 7.6L198.4 5.8L199.7 5.2L203.0 6.1L204.6 9.2L204.7 11.3L205.1 12.0L207.1 12.8L206.9 13.3ZM215.8 16.6L215.3 16.8L214.0 15.6L211.7 11.4L215.3 10.6L217.0 11.1L216.3 12.9L215.8 16.6ZM210.9 -1.9L210.5 -0.4L213.3 -0.4L217.4 1.0L219.9 1.2L221.9 2.9L220.9 6.0L219.5 6.9L218.2 7.0L213.3 3.9L206.9 5.2L205.5 4.8L204.7 4.0L204.4 2.9L204.4 0.6L204.0 -0.0L201.8 2.1L200.7 1.9L200.1 0.9L199.9 -1.3L200.1 -4.2L201.5 -8.4L203.8 -9.3L207.3 -8.7L211.2 -6.4L212.4 -4.9L212.4 -3.7L210.9 -1.9ZM223.2 -12.0L219.9 -10.4L218.6 -11.8L218.3 -15.9L214.4 -17.7L212.5 -18.8L211.2 -20.8L211.4 -21.5L214.0 -22.4L218.3 -18.6L220.1 -15.4L223.2 -14.6L223.6 -14.1L223.2 -12.0ZM78.2 155.4L76.1 155.8L75.9 154.8L79.7 150.4L82.0 149.8L82.8 150.2L81.2 152.7L78.2 155.4ZM134.3 228.5L129.6 228.5L128.0 228.0L126.0 226.4L123.7 217.6L124.5 214.5L125.4 213.0L126.4 211.8L128.9 211.2L131.4 212.9L132.3 214.5L134.3 220.5L134.7 225.6L134.3 228.5ZM109.3 170.9L94.4 174.5L89.2 174.1L88.7 172.3L89.8 171.2L94.0 170.1L95.7 161.5L89.4 157.5L89.0 156.4L89.5 154.5L90.2 153.7L94.1 151.7L95.7 151.2L97.1 151.4L99.9 153.8L103.0 158.6L107.0 159.4L109.8 161.5L109.3 170.9ZM96.1 197.5L97.5 205.7L98.8 210.9L98.8 212.7L97.6 215.1L91.5 218.4L89.5 218.4L89.5 217.6L90.9 214.2L89.6 210.5L90.2 207.6L89.6 207.2L88.4 207.5L84.0 212.1L82.5 212.6L82.4 211.7L83.5 207.9L83.6 205.4L84.3 203.8L85.5 202.4L87.0 201.3L88.0 201.2L89.2 202.3L92.9 199.1L96.1 197.5ZM102.0 205.0L101.2 205.6L99.3 205.5L98.7 204.4L98.3 202.8L98.3 199.9L99.3 197.8L104.2 194.7L102.0 193.6L101.9 192.8L103.2 190.1L108.5 186.1L109.8 185.3L111.2 185.4L108.5 192.7L102.0 205.0ZM93.6 41.0L88.7 52.1L87.0 52.5L85.2 55.3L80.2 58.4L84.7 58.4L85.9 59.5L85.9 61.6L85.1 63.0L79.3 68.1L75.4 70.1L71.2 75.5L69.1 75.5L66.9 78.9L65.2 80.4L64.2 80.4L63.0 79.7L60.4 76.4L65.2 73.0L65.7 71.2L68.9 69.2L68.7 68.7L63.4 66.0L61.4 64.1L61.7 63.2L64.1 61.1L62.9 60.9L62.1 59.7L60.7 59.3L60.2 58.2L60.0 55.5L60.3 52.6L61.9 51.4L62.5 50.0L63.1 49.7L65.4 50.4L67.8 52.6L70.5 51.7L73.8 52.1L73.9 51.6L71.5 46.1L71.9 45.0L73.2 43.6L80.6 39.7L89.8 33.0L92.1 32.0L92.7 32.9L93.7 36.4L93.6 41.0ZM90.5 131.0L89.4 131.8L88.0 131.7L86.6 130.6L84.8 127.5L88.8 125.4L90.6 126.6L91.1 128.1L91.1 129.7L90.5 131.0ZM95.6 96.2L95.4 99.1L94.8 102.4L95.7 106.0L95.8 108.4L97.5 109.3L98.4 110.5L105.4 111.8L112.0 111.3L113.2 112.5L113.3 114.1L112.3 115.9L108.6 119.3L104.2 124.6L102.8 125.8L101.4 125.9L100.4 125.3L99.6 115.7L94.9 116.9L91.0 116.8L88.8 115.7L87.4 113.5L84.4 107.7L75.7 105.3L73.2 102.2L72.4 100.2L72.8 99.2L74.6 96.8L76.9 97.6L78.3 97.2L79.2 96.0L79.2 95.1L77.9 93.1L77.9 92.5L86.8 89.9L87.5 85.8L89.5 85.4L91.7 86.8L94.8 91.0L95.6 96.2ZM55.9 84.8L60.0 88.3L56.7 94.4L51.6 94.4L44.3 90.0L44.3 89.1L44.8 87.8L45.9 86.7L47.1 86.4L48.9 87.2L51.4 86.0L53.4 86.4L55.9 84.8ZM54.3 121.3L52.6 121.6L50.6 121.3L49.3 120.3L48.1 116.4L47.8 113.9L48.3 109.4L48.2 104.2L52.5 104.0L53.6 104.8L54.3 120.6L54.3 121.3ZM47.9 130.9L44.7 131.8L43.5 131.3L43.2 130.4L44.0 128.2L46.6 127.4L48.3 128.7L48.6 129.8L47.9 130.9ZM92.7 316.0L89.6 315.7L87.4 316.8L85.9 317.8L84.5 317.7L80.5 318.0L76.6 318.0L76.1 316.3L76.7 311.2L75.9 309.8L72.3 309.2L70.9 308.0L68.8 304.5L68.4 302.8L68.1 300.6L66.0 297.7L63.3 295.6L61.7 295.4L58.6 298.9L56.0 302.4L56.9 304.0L57.8 306.3L56.3 308.0L52.1 311.7L51.4 313.2L50.2 314.0L48.2 312.9L43.2 313.1L40.9 312.5L38.2 309.7L31.6 307.8L30.4 303.5L29.2 302.7L21.7 295.1L20.7 292.5L21.7 291.1L24.5 288.7L33.9 284.9L35.4 283.5L35.7 282.1L32.9 280.6L30.4 278.9L29.6 277.8L29.5 276.8L31.0 275.6L33.8 275.4L36.0 276.0L37.7 274.9L40.9 273.8L43.0 272.3L44.8 268.6L46.7 265.3L46.9 263.5L48.6 257.1L49.4 255.6L55.3 251.4L56.8 253.8L59.8 254.3L62.5 252.2L65.6 245.6L67.7 245.3L70.1 245.7L74.8 244.9L83.2 241.9L87.0 241.8L92.2 243.4L96.1 243.4L99.6 248.1L101.5 255.4L105.8 262.8L111.6 269.2L111.7 273.0L109.7 275.1L105.4 277.7L105.5 280.5L108.2 279.0L110.6 278.5L116.6 279.0L118.6 281.9L119.9 286.1L120.7 289.5L120.2 293.3L118.7 292.1L117.1 288.7L115.4 287.2L113.2 286.4L114.1 291.0L113.7 297.2L114.7 297.8L117.5 297.9L115.6 304.2L111.9 305.9L107.4 306.6L106.3 308.8L105.5 311.7L103.2 316.0L100.3 318.5L96.5 318.0L92.7 316.0ZM285.5 534.7L282.2 537.0L281.3 539.5L280.5 540.5L278.5 541.2L276.4 541.3L268.6 536.1L266.8 536.3L268.5 533.8L273.5 531.9L276.2 529.4L282.5 531.8L285.5 534.7Z","ie":"M-46.7 327.3L-46.8 329.2L-49.6 326.8L-51.0 324.4L-58.5 323.1L-55.4 320.7L-53.8 321.4L-48.4 321.5L-46.9 322.6L-46.7 327.3ZM55.3 251.4L49.4 255.6L48.6 257.1L46.9 263.5L46.7 265.3L44.8 268.6L43.0 272.3L40.9 273.8L37.7 274.9L36.0 276.0L33.8 275.4L31.0 275.6L29.5 276.8L29.6 277.8L30.4 278.9L32.9 280.6L35.7 282.1L35.4 283.5L33.9 284.9L24.5 288.7L21.7 291.1L20.7 292.5L21.7 295.1L29.2 302.7L30.4 303.5L31.6 307.8L38.2 309.7L40.9 312.5L43.2 313.1L48.2 312.9L50.2 314.0L51.4 313.2L52.1 311.7L56.3 308.0L57.8 306.3L56.9 304.0L56.0 302.4L58.6 298.9L61.7 295.4L63.3 295.6L66.0 297.7L68.1 300.6L68.4 302.8L68.8 304.5L70.9 308.0L72.3 309.2L75.9 309.8L76.7 311.2L76.1 316.3L76.6 318.0L80.5 318.0L84.5 317.7L85.9 317.8L87.4 316.8L89.6 315.7L92.7 316.0L94.4 318.3L95.0 320.7L92.3 321.5L89.4 321.0L88.0 322.6L87.9 325.5L89.0 329.3L90.9 332.0L92.3 338.1L93.7 344.8L95.6 348.9L96.0 354.0L95.7 356.4L96.1 360.9L95.3 362.5L95.8 366.7L98.3 375.4L99.2 380.2L99.9 390.7L98.3 394.7L96.1 398.4L94.6 402.9L93.6 407.7L92.9 415.5L88.0 424.6L86.0 426.8L83.6 428.3L88.8 434.5L84.5 437.4L80.0 438.3L74.8 436.8L71.8 436.9L68.8 439.0L67.7 440.2L66.8 439.5L64.9 434.4L63.4 439.8L60.4 441.4L55.5 441.1L47.1 442.6L43.9 444.1L42.5 446.5L41.5 449.3L40.1 450.8L38.6 451.7L32.2 453.7L31.0 454.6L27.9 459.1L24.0 461.7L20.7 462.4L17.9 459.9L16.7 458.3L15.4 457.4L10.9 457.6L12.3 458.4L13.2 460.2L13.6 463.8L13.1 467.2L10.9 468.9L8.4 469.3L4.2 472.8L-1.3 473.8L-4.3 477.2L-22.3 482.8L-23.3 482.8L-25.8 481.3L-28.5 480.8L-31.2 481.2L-38.7 484.3L-42.5 483.7L-37.8 476.0L-31.5 472.0L-30.8 470.9L-33.0 470.5L-44.8 473.2L-49.0 475.5L-53.1 476.2L-51.3 472.6L-45.9 467.8L-43.0 465.5L-41.2 464.6L-39.3 461.8L-33.6 458.5L-51.8 465.1L-56.5 464.3L-57.6 462.6L-61.3 463.3L-62.7 458.9L-57.3 452.1L-54.1 449.1L-50.2 447.6L-46.5 445.4L-45.2 442.6L-46.9 441.7L-58.0 442.3L-63.2 441.8L-63.0 439.5L-61.9 437.1L-56.5 433.0L-53.5 432.3L-50.9 432.7L-48.3 433.7L-46.3 435.2L-40.1 434.3L-42.6 431.7L-43.0 426.2L-45.1 424.5L-42.5 422.0L-39.7 420.4L-34.8 415.2L-33.1 414.4L-23.5 413.2L-13.3 410.5L-3.1 406.7L-8.3 404.6L-10.9 401.8L-14.9 407.5L-17.7 409.6L-26.0 410.7L-28.5 410.1L-32.1 408.4L-33.4 409.0L-34.4 410.4L-39.8 413.1L-45.5 413.7L-38.9 408.7L-30.5 400.2L-28.6 397.4L-26.0 392.7L-26.8 390.7L-28.5 389.5L-22.5 379.8L-20.3 378.1L-16.4 377.8L-13.4 376.2L-12.2 376.2L-11.2 375.6L-8.6 372.7L-12.5 371.0L-16.4 369.9L-28.8 371.0L-30.4 370.7L-32.0 369.8L-33.0 368.6L-33.8 365.3L-34.6 364.6L-37.4 364.6L-40.1 365.6L-42.1 365.5L-44.0 364.0L-40.9 360.7L-44.8 359.9L-48.7 360.6L-52.1 359.6L-52.1 357.4L-50.6 355.3L-52.6 353.3L-53.0 350.7L-50.9 349.5L-48.7 350.0L-44.0 348.1L-38.2 347.2L-43.2 345.4L-45.2 343.8L-45.3 341.4L-44.9 339.3L-39.0 335.8L-32.8 334.3L-33.4 332.0L-32.8 329.5L-39.1 328.7L-45.3 330.5L-44.7 325.7L-43.2 321.5L-42.9 318.7L-43.2 315.7L-46.1 316.9L-46.5 312.6L-47.8 309.7L-52.1 311.7L-51.9 307.8L-50.7 305.2L-48.4 303.9L-46.1 304.5L-42.1 304.5L-38.1 302.4L-32.3 301.9L-23.0 302.5L-16.7 308.3L-15.1 307.3L-12.5 303.6L-11.3 303.3L-1.7 304.8L4.2 306.8L5.8 306.2L4.9 302.3L2.8 299.5L5.4 295.8L8.5 293.3L10.7 292.1L15.5 290.5L17.5 289.1L19.0 284.4L21.1 280.5L9.0 282.5L-2.4 277.9L-0.5 274.7L1.9 272.8L6.1 271.3L6.5 269.6L8.5 268.2L12.0 264.5L10.8 259.7L11.5 256.1L14.0 253.8L14.8 250.4L15.9 248.0L21.0 247.1L26.0 244.8L27.7 245.1L33.5 244.5L35.5 245.4L35.0 241.4L38.6 240.9L40.0 241.7L40.7 244.5L42.3 246.4L42.7 249.5L41.6 252.0L39.9 253.9L41.5 255.8L38.9 259.2L41.7 257.8L45.6 254.3L45.5 251.5L44.8 248.1L43.6 244.9L44.2 241.5L46.4 239.3L52.2 238.1L49.8 234.2L52.0 233.9L54.4 234.7L57.8 237.8L61.3 240.1L65.0 242.0L61.4 246.0L57.1 248.5L55.3 251.4Z","towns":[["York",53.958,-1.083],["Yeovil",50.942,-2.632],["Yeadon",53.864,-1.687],["Yate",51.541,-2.418],["Yarm",54.504,-1.358],["Wrexham",53.047,-2.991],["Worthing",50.818,-0.375],["Worksop",53.302,-1.124],["Workington",54.642,-3.544],["Worcester Park",51.38,-0.244],["Worcester",52.189,-2.22],["Woodford Green",51.609,0.023],["Wombwell",53.522,-1.397],["Wombourn",52.533,-2.183],["Wolverhampton",52.585,-2.123],["Wokingham",51.411,-0.836],["Woking",51.319,-0.559],["Witney",51.784,-1.485],["Witham",51.8,0.64],["Wishaw",55.767,-3.917],["Wisbech",52.666,0.159],["Winsford",53.191,-2.524],["Windsor",51.483,-0.6],["Winchester",51.065,-1.319],["Wimborne Minster",50.783,-1.983],["Wilmslow",53.328,-2.231],["Willenhall",52.585,-2.059],["Wigston Magna",52.581,-1.092],["Wigan",53.543,-2.637],["Widnes",53.362,-2.734],["Wickford",51.611,0.523],["Whittlesey",52.558,-0.13],["Whitstable",51.361,1.026],["Whitley Bay",55.04,-1.447],["Whitehaven",54.549,-3.584],["Whitefield",53.55,-2.3],["Whitby",54.488,-0.615],["Whickham",54.946,-1.676],["Weymouth",50.614,-2.46],["Weybridge",51.372,-0.46],["Wetherby",53.928,-1.387],["West Wickham",51.367,-0.017],["Weston-super-Mare",51.346,-2.977],["West Molesey",51.4,-0.38],["City of Westminster",51.498,-0.136],["Westhoughton",53.549,-2.525],["West Drayton",51.5,-0.467],["Westbury",51.26,-2.188],["West Bromwich",52.519,-1.994],["West Bridgford",52.93,-1.125],["Wembley",51.552,-0.297],["Welwyn Garden City",51.802,-0.207],["Wellington",52.7,-2.517],["Wellingborough",52.303,-0.694],["Welling",51.462,0.108],["Wednesfield",52.596,-2.085],["Wednesbury",52.551,-2.024],["Wath upon Dearne",53.503,-1.346],["Watford",51.655,-0.396],["Waterlooville",50.881,-1.03],["Washington",54.9,-1.517],["Warwick",52.283,-1.583],["Warrington",53.393,-2.58],["Warminster",51.204,-2.179],["Ware",51.811,-0.029],["Wantage",51.588,-1.426],["Walton-on-Thames",51.387,-0.413],["Walton-on-the-Naze",51.848,1.267],["Waltham Abbey",51.687,-0.004],["Walsall",52.585,-1.984],["Wallsend",54.991,-1.534],["Wallasey",53.423,-3.065],["Walkden",53.517,-2.4],["Wakefield",53.683,-1.498],["Verwood",50.876,-1.87],["Uttoxeter",52.898,-1.865],["Urmston",53.449,-2.354],["Uckfield",50.969,0.096],["Tynemouth",55.018,-1.426],["Tyldesley",53.514,-2.468],["Truro",50.265,-5.054],["Trowbridge",51.319,-2.209],["Troon",55.544,-4.663],["Treharris",51.665,-3.307],["Tredegar",51.773,-3.247],["Totton",50.919,-1.49],["Torquay",50.462,-3.525],["Tonbridge",51.195,0.274],["Tiverton",50.902,-3.492],["Tipton",52.53,-2.068],["Thornton Heath",51.399,-0.099],["Thorne",53.611,-0.963],["Thornaby-on-Tees",54.533,-1.3],["Thetford",52.417,0.75],["Thatcham",51.404,-1.26],["Tewkesbury",51.992,-2.16],["Teignmouth",50.546,-3.497],["Tavistock",50.549,-4.144],["Taunton",51.015,-3.103],["Tamworth",52.634,-1.696],["Tadley",51.35,-1.129],["Swinton",53.5,-2.35],["Swindon",51.558,-1.781],["Swansea",51.621,-3.943],["Swanscombe",51.447,0.31],["Swanley",51.397,0.173],["Swadlincote",52.774,-1.557],["Sutton in Ashfield",53.125,-1.261],["Sutton Coldfield",52.567,-1.817],["Sutton",51.35,-0.2],["Sunderland",54.905,-1.382],["Sunbury-on-Thames",51.404,-0.418],["Sudbury",52.039,0.731],["Stroud",51.75,-2.2],["Strood",51.393,0.477],["Stretford",53.45,-2.317],["Streetly",52.583,-1.883],["Street",51.125,-2.74],["Stratford-upon-Avon",52.192,-1.707],["Strabane",54.824,-7.469],["Stowmarket",52.189,0.998],["Stourport-on-Severn",52.34,-2.28],["Stourbridge",52.456,-2.143],["Stone",52.906,-2.154],["Stoke-on-Trent",53.004,-2.185],["Stoke Gifford",51.517,-2.541],["Stockton-on-Tees",54.568,-1.319],["Stocksbridge",53.482,-1.594],["Stockport",53.41,-2.158],["Stirling",56.119,-3.937],["Stevenage",51.902,-0.203],["Staveley",53.267,-1.35],["Stanford-le-Hope",51.523,0.434],["Stamford",52.65,-0.483],["Stalybridge",53.484,-2.059],["Staines",51.431,-0.506],["Stafford",52.805,-2.116],["Spennymoor",54.699,-1.602],["Spalding",52.787,-0.151],["South Shields",54.999,-1.432],["Southsea",50.792,-1.086],["Southport",53.646,-3.01],["South Ockendon",51.508,0.283],["South Hayling",50.788,-0.977],["Southend-on-Sea",51.538,0.714],["South Elmsall",53.597,-1.28],["South Benfleet",51.553,0.56],["Southampton",50.904,-1.404],["Southall",51.509,-0.371],["Solihull",52.414,-1.781],["Smethwick",52.493,-1.967],["Slough",51.509,-0.595],["Sleaford",52.998,-0.409],["Skipton",53.961,-2.017],["Skelmersdale",53.55,-2.773],["Skegness",53.144,0.336],["Sittingbourne",51.341,0.733],["Sidmouth",50.691,-3.24],["Shrewsbury",52.71,-2.752],["Shoreham-by-Sea",50.834,-0.274],["Shipley",53.833,-1.767],["Shepshed",52.766,-1.29],["Sheffield",53.383,-1.466],["Sevenoaks",51.273,0.189],["Selby",53.783,-1.067],["Seaham",54.839,-1.346],["Seaford",50.771,0.103],["Scunthorpe",53.579,-0.654],["Scarborough",54.28,-0.404],["Sandown",50.652,-1.161],["Sandbach",53.145,-2.363],["Saltcoats",55.636,-4.786],["Saltash",50.41,-4.225],["Salisbury",51.069,-1.796],["Salford",53.488,-2.29],["Sale",53.425,-2.324],["Saint Peters",51.367,1.417],["Saint Neots",52.217,-0.267],["St Helens",53.45,-2.733],["St Austell",50.343,-4.774],["Saint Andrews",56.339,-2.799],["St Albans",51.75,-0.333],["Saffron Walden",52.023,0.242],["Ryton",52.617,-2.35],["Ryhope",54.871,-1.37],["Ryde",50.73,-1.162],["Rutherglen",55.829,-4.214],["Rustington",50.81,-0.507],["Rushden",52.289,-0.602],["Runcorn",53.342,-2.731],["Ruislip",51.573,-0.423],["Rugeley",52.759,-1.937],["Rugby",52.371,-1.264],["Royton",53.565,-2.123],["Royston",52.048,-0.024],["Royal Tunbridge Wells",51.133,0.263],["Rottingdean",50.81,-0.059],["Rotherham",53.43,-1.357],["Rosyth",56.037,-3.438],["Romsey",50.989,-1.5],["Romford",51.575,0.186],["Rochford",51.582,0.707],["Rochester",51.388,0.505],["Rochdale",53.618,-2.155],["Risca",51.608,-3.101],["Ripon",54.136,-1.528],["Ripley",53.033,-1.4],["Ringwood",50.845,-1.789],["Rickmansworth",51.639,-0.477],["Rhyl",53.319,-3.492],["Rhosllanerchrugog",53.01,-3.058],["Rhondda",51.659,-3.449],["Renfrew",55.872,-4.393],["Reigate",51.237,-0.206],["Redruth",50.233,-5.224],["Redhill",51.24,-0.17],["Redditch",52.306,-1.946],["Redcar",54.617,-1.06],["Reading",51.456,-0.971],["Rayleigh",51.586,0.605],["Rawtenstall",53.701,-2.284],["Rawmarsh",53.461,-1.344],["Ramsgate",51.336,1.418],["Ramsbottom",53.648,-2.317],["Pyle",51.517,-3.7],["Purley",51.337,-0.112],["Purfleet",51.484,0.242],["Pudsey",53.795,-1.661],["Prudhoe",54.962,-1.852],["Prestwick",55.483,-4.617],["Prestwich",53.533,-2.283],["Preston",53.763,-2.705],["Prestatyn",53.337,-3.408],["Prescot",53.429,-2.8],["Poynton",53.35,-2.117],["Poulton-le-Fylde",53.833,-2.983],["Potters Bar",51.694,-0.178],["Portsmouth",50.799,-1.091],["Portslade",50.843,-0.216],["Portishead",51.482,-2.77],["Porthcawl",51.479,-3.704],["Port Glasgow",55.935,-4.689],["Portadown",54.423,-6.444],["Poole",50.714,-1.985],["Pontypridd",51.602,-3.342],["Pontypool",51.701,-3.044],["Pontefract",53.691,-1.313],["Plymstock",50.36,-4.09],["Plymouth",50.372,-4.143],["Pitsea",51.564,0.509],["Pinxton",53.091,-1.318],["Pinner",51.594,-0.382],["Petersfield",51.005,-0.934],["Peterlee",54.76,-1.336],["Peterhead",57.505,-1.784],["Peterborough",52.574,-0.248],["Perth",56.395,-3.431],["Penzance",50.119,-5.537],["Penrith",54.666,-2.758],["Penicuik",55.831,-3.226],["Penarth",51.439,-3.173],["Paisley",55.832,-4.433],["Paignton",50.436,-3.568],["Oxted",51.257,-0.006],["Oxford",51.752,-1.256],["Otley",53.906,-1.694],["Oswestry",52.862,-3.055],["Ossett",53.68,-1.58],["Orpington",51.375,0.098],["Ormskirk",53.567,-2.882],["Omagh",54.6,-7.3],["Oldham",53.541,-2.118],["Oadby",52.606,-1.084],["Nuneaton",52.523,-1.465],["Nottingham",52.954,-1.15],["Norwich",52.628,1.298],["Northwich",53.259,-2.52],["North Walsham",52.821,1.387],["North Shields",55.016,-1.449],["Northolt",51.549,-0.368],["Lancing",50.829,-0.322],["Northampton",52.25,-0.883],["Northallerton",54.339,-1.432],["Newtownards",54.592,-5.691],["Newtownabbey",54.66,-5.909],["Newton Mearns",55.773,-4.333],["Newton-le-Willows",53.45,-2.6],["Newton Aycliffe",54.618,-1.572],["Newton Abbot",50.529,-3.612],["Newry",54.178,-6.337],["Newquay",50.416,-5.073],["Newport Pagnell",52.087,-0.722],["Newport",52.767,-2.377],["New Milton",50.756,-1.666],["New Mills",53.366,-2],["Newmarket",52.245,0.404],["New Malden",51.401,-0.262],["Newhaven",50.797,0.055],["Newcastle upon Tyne",54.973,-1.614],["Newcastle under Lyme",53,-2.233],["Newbury",51.401,-1.325],["Newburn",54.988,-1.744],["Newark on Trent",53.067,-0.817],["Neston",53.283,-3.05],["Nelson",53.833,-2.2],["Neath",51.663,-3.804],["Nantwich",53.069,-2.521],["Nailsea",51.432,-2.758],["Musselburgh",55.942,-3.05],["Mountsorrel",52.717,-1.15],["Motherwell",55.789,-3.992],["Morpeth",55.169,-1.689],["Morley",53.74,-1.599],["Moreton",53.4,-3.117],["Morecambe",54.068,-2.861],["Morden",51.398,-0.198],["Mitcham",51.403,-0.168],["Mirfield",53.673,-1.696],["Milton Keynes",52.042,-0.756],["Milnrow",53.611,-2.113],["Milngavie",55.941,-4.323],["Milford Haven",51.713,-5.034],["Mildenhall",52.344,0.511],["Middlewich",53.193,-2.444],["Middleton",53.55,-2.2],["Middlesbrough",54.576,-1.235],["Mexborough",53.494,-1.292],["Merthyr Tydfil",51.748,-3.378],["Melton Mowbray",52.766,-0.887],["Melksham",51.373,-2.14],["Matlock",53.138,-1.556],["Marple",53.395,-2.063],["Marlow",51.569,-0.774],["Market Harborough",52.478,-0.921],["Market Deeping",52.677,-0.316],["Margate",51.381,1.386],["March",52.551,0.088],["Mansfield Woodhouse",53.165,-1.194],["Mansfield",53.133,-1.2],["Mangotsfield",51.488,-2.504],["Manchester",53.481,-2.237],["Maltby",53.417,-1.2],["Maldon",51.731,0.675],["Maidstone",51.267,0.517],["Maidenhead",51.523,-0.72],["Maghull",53.516,-2.941],["Maesteg",51.609,-3.658],["Macclesfield",53.26,-2.126],["Mablethorpe",53.341,0.261],["Lymington",50.758,-1.544],["Luton",51.88,-0.417],["Lowestoft",52.475,1.752],["Louth",53.367,-0.004],["Loughborough",52.767,-1.2],["Longton",52.983,-2.133],["Longfield",51.397,0.302],["Long Eaton",52.899,-1.271],["Londonderry County Borough",54.997,-7.309],["Derry",54.998,-7.309],["London",51.509,-0.126],["Lofthouse",53.729,-1.497],["Llantwit Major",51.411,-3.486],["Llantrisant",51.54,-3.374],["Llanelli",51.682,-4.162],["Llandudno",53.325,-3.831],["Livingston",55.903,-3.523],["Liverpool",53.411,-2.978],["Littlehampton",50.811,-0.541],["Littleborough",53.644,-2.096],["Litherland",53.47,-2.998],["Lisburn",54.523,-6.035],["Linlithgow",55.976,-3.604],["Lincoln",53.227,-0.538],["Limavady",55.05,-6.951],["Lichfield",52.682,-1.825],["Leyland",53.698,-2.688],["Lewes",50.874,0.009],["Leighton Buzzard",51.917,-0.658],["Leigh",53.496,-2.52],["Leicester",52.639,-1.132],["Leek",53.104,-2.022],["Leeds",53.796,-1.548],["Leatherhead",51.297,-0.334],["Royal Leamington Spa",52.285,-1.52],["Larne",54.85,-5.817],["Larkhall",55.733,-3.967],["Lancaster",54.046,-2.8],["Knutsford",53.303,-2.375],["Knottingley",53.708,-1.256],["Knaresborough",54.009,-1.469],["Kirk Sandall",53.562,-1.069],["Kirkintilloch",55.939,-4.153],["Kirkcaldy",56.117,-3.16],["Kirkby in Ashfield",53.1,-1.244],["Kirkby",53.481,-2.892],["Kippax",53.767,-1.371],["Kingswood",51.453,-2.508],["Kingswinford",52.498,-2.169],["Kingston upon Hull",53.745,-0.335],["King's Lynn",52.752,0.395],["Kilwinning",55.653,-4.707],["Kilmarnock",55.612,-4.496],["Kidsgrove",53.087,-2.238],["Kidlington",51.822,-1.289],["Kidderminster",52.388,-2.25],["Keynsham",51.414,-2.498],["Kettering",52.398,-0.726],["Kenilworth",52.35,-1.583],["Kendal",54.327,-2.748],["Kempston",52.116,-0.5],["Keighley",53.868,-1.907],["Johnstone",55.829,-4.516],["Jarrow",54.98,-1.484],["Islington",51.536,-0.103],["Isleworth",51.475,-0.342],["Irvine",55.619,-4.655],["Irlam",53.443,-2.423],["Ipswich",52.059,1.155],["Inverurie",57.284,-2.377],["Inverness",57.479,-4.224],["Ingleby Greenhow",54.45,-1.107],["Ilkley",53.924,-1.823],["Ilkeston",52.971,-1.31],["Hythe",51.072,1.084],["Hyde",53.451,-2.079],["Huyton",53.411,-2.839],["Hurstpierpoint",50.934,-0.18],["Huntingdon",52.33,-0.187],["Huddersfield",53.649,-1.784],["Hucknall",53.033,-1.2],["Hoyland Nether",53.5,-1.45],["Hove",50.831,-0.167],["Hounslow",51.468,-0.361],["Houghton-Le-Spring",54.84,-1.464],["Horwich",53.601,-2.55],["Horsham",51.063,-0.328],["Horsforth",53.843,-1.638],["Horley",51.174,-0.159],["Hook",51.368,-0.306],["Holywood",54.639,-5.825],["Hoddesdon",51.761,-0.011],["Hockley",52.5,-1.917],["Hitchin",51.949,-0.285],["Hindley",53.533,-2.583],["Hinckley",52.539,-1.376],["High Wycombe",51.629,-0.749],["High Blantyre",55.784,-4.1],["Heysham",54.044,-2.893],["Hetton-Le-Hole",54.817,-1.45],["Heswall",53.327,-3.096],["Hertford",51.796,-0.079],["Herne Bay",51.373,1.129],["Hereford",52.057,-2.715],["Henlow",52.03,-0.286],["Hemel Hempstead",51.754,-0.45],["Helston",50.103,-5.27],["Helensburgh",56.006,-4.726],["Hebburn",54.973,-1.515],["Heanor",53.014,-1.354],["Hazel Grove",53.383,-2.117],["Haywards Heath",50.998,-0.103],["Hayes",51.516,-0.423],["Haydock",53.467,-2.682],["Hawick",55.423,-2.787],["Hawarden",53.185,-3.026],["Haverhill",52.082,0.439],["Haverfordwest",51.802,-4.969],["Havant",50.857,-0.986],["Hatfield",51.763,-0.224],["Hastings",50.855,0.573],["Haslingden",53.703,-2.324],["Haslemere",51.09,-0.708],["Harwich",51.942,1.284],["Hartshill",52.548,-1.522],["Hartley",51.387,0.304],["Hartlepool",54.686,-1.21],["Harrogate",53.991,-1.537],["Harpenden",51.817,-0.357],["Harlow",51.777,0.112],["Hampton",51.413,-0.367],["Hamilton",55.767,-4.033],["Halifax",53.717,-1.85],["Halesowen",52.449,-2.049],["Hale",51.229,-0.789],["Hailsham",50.862,0.258],["Hadley",52.7,-2.483],["Hadleigh",51.553,0.61],["Guiseley",53.876,-1.712],["Guisborough",54.535,-1.056],["Guildford",51.235,-0.574],["Grove",51.61,-1.422],["Grimsby",53.565,-0.076],["Greenock",55.948,-4.761],["Greenford",51.529,-0.355],["Great Yarmouth",52.608,1.731],["Great Wyrley",52.663,-2.011],["Great Sankey",53.392,-2.64],["Great Malvern",52.112,-2.325],["Driffield",54.006,-0.445],["Grays",51.476,0.325],["Gravesend",51.442,0.371],["Grantham",52.911,-0.642],["Grangemouth",56.011,-3.722],["Gosport",50.795,-1.129],["Gosforth",55,-1.617],["Gorseinon",51.669,-4.042],["Goole",53.703,-0.877],["Golborne",53.477,-2.597],["Godalming",51.186,-0.615],["Gloucester",51.866,-2.243],["Glossop",53.443,-1.949],["Glenrothes",56.195,-3.173],["Glasgow",55.865,-4.258],["Gillingham",51.389,0.549],["Giffnock",55.804,-4.295],["Gelligaer",51.664,-3.256],["Gateshead",54.962,-1.602],["Garforth",53.792,-1.381],["Galashiels",55.615,-2.807],["Gainsborough",53.383,-0.767],["Fylde",53.833,-2.917],["Frome",51.228,-2.322],["Frinton-on-Sea",51.831,1.244],["Frimley",51.317,-0.745],["Fraserburgh",57.687,-2.018],["Formby",53.558,-3.07],["Forfar",56.644,-2.89],["Folkestone",51.082,1.167],["Flitwick",52.003,-0.495],["Flint",53.245,-3.132],["Fleetwood",53.925,-3.011],["Fleet",51.283,-0.833],["Feltham",51.446,-0.414],["Felling",54.953,-1.572],["Felixstowe",51.964,1.351],["Faversham",51.315,0.889],["Farnworth",53.55,-2.4],["Farnham",51.214,-0.801],["Farnborough",51.294,-0.756],["Fareham",50.852,-1.179],["Falmouth",50.154,-5.071],["Falkirk",56.002,-3.785],["Exmouth",50.617,-3.402],["Exeter",50.724,-3.528],["Evesham",52.092,-1.949],["Esher",51.37,-0.367],["Epsom",51.331,-0.27],["Enniskillen",54.346,-7.641],["Enfield Town",51.651,-0.085],["Emsworth",50.848,-0.937],["Ely",52.4,0.262],["Ellesmere Port",53.279,-2.901],["Elland",53.685,-1.839],["Elgin",57.649,-3.318],["Egham",51.432,-0.552],["Edinburgh",55.952,-3.196],["Eccles",53.483,-2.333],["Ebbw Vale",51.777,-3.208],["Eaton Socon",52.218,-0.289],["Eastwood",53,-1.3],["Retford",53.322,-0.943],["East Molesey",51.399,-0.349],["Eastleigh",50.967,-1.35],["East Kilbride",55.764,-4.177],["East Grinstead",51.124,-0.006],["East Dereham",52.683,0.933],["Eastbourne",50.769,0.285],["Dursley",51.681,-2.353],["Durham",54.777,-1.576],["Dunstable",51.886,-0.523],["Dunfermline",56.072,-3.459],["Dundonald",54.592,-5.798],["Dundee",56.469,-2.975],["Dumfries",55.07,-3.611],["Dumbarton",55.944,-4.571],["Dukinfield",53.475,-2.088],["Dudley",52.5,-2.083],["Droylsden",53.48,-2.145],["Dronfield",53.302,-1.475],["Droitwich",52.267,-2.15],["Dover",51.126,1.313],["Dorking",51.232,-0.334],["Dorchester",50.717,-2.433],["Doncaster",53.523,-1.131],["Dinnington",53.367,-1.2],["Didcot",51.609,-1.242],["Dewsbury",53.691,-1.629],["Devizes",51.351,-1.994],["Derby",52.923,-1.477],["Denton",53.457,-2.118],["Deal",51.223,1.404],["Daventry",52.257,-1.161],["Darwen",53.698,-2.465],["Darton",53.587,-1.527],["Dartford",51.447,0.214],["Darlington",54.524,-1.55],["Dalserf",55.733,-3.917],["Dalkeith",55.893,-3.068],["Dagenham",51.55,0.167],["Cwmbran",51.654,-3.023],["Cumbernauld",55.947,-3.991],["Croydon",51.383,-0.1],["Crowthorne",51.37,-0.792],["Crowborough",51.061,0.163],["Crewe",53.098,-2.442],["Crawley",51.113,-0.183],["Cramlington",55.087,-1.586],["Cowley",51.732,-1.206],["Cowes",50.763,-1.298],["Coventry",52.407,-1.512],["Coulsdon",51.32,-0.141],["Corsham",51.434,-2.184],["Corby",52.496,-0.689],["Consett",54.854,-1.832],["Conisbrough",53.482,-1.232],["Congleton",53.163,-2.213],["Colwyn Bay",53.295,-3.727],["Colne",53.857,-2.169],["Coleraine",55.133,-6.667],["Colchester",51.889,0.904],["Coity",51.522,-3.555],["Cobham",51.33,-0.411],["Coatbridge",55.862,-4.025],["Coalville",52.722,-1.37],["Clydebank",55.901,-4.406],["Clydach",51.683,-3.9],["Clitheroe",53.867,-2.4],["Cleveleys",53.877,-3.04],["Clevedon",51.442,-2.858],["Cleethorpes",53.56,-0.032],["Cleckheaton",53.724,-1.713],["Clacton-on-Sea",51.79,1.156],["Cirencester",51.719,-1.971],["Cinderford",51.824,-2.499],["Churchdown",51.877,-2.171],["Christchurch",50.736,-1.781],["Chorley",53.65,-2.617],["Chislehurst",51.417,0.069],["Chipping Sodbury",51.538,-2.394],["Chippenham",51.46,-2.125],["Chichester",50.837,-0.78],["Chester-le-Street",54.859,-1.574],["Chesterfield",53.25,-1.417],["Chester",53.191,-2.892],["Chessington",51.362,-0.304],["Cheshunt",51.7,-0.03],["Chesham",51.7,-0.6],["Chepstow",51.641,-2.677],["Cheltenham",51.9,-2.08],["Chelsea",51.488,-0.169],["Chelmsford",51.736,0.47],["Cheadle Hulme",53.376,-2.19],["Chatham",51.379,0.528],["Chard",50.873,-2.966],["Chapeltown",53.465,-1.472],["Chalfont Saint Peter",51.609,-0.556],["Caterham",51.282,-0.079],["Castlereagh",54.574,-5.885],["Castleford",53.726,-1.363],["Carterton",51.759,-1.594],["Carshalton",51.368,-0.168],["Carrickfergus",54.716,-5.806],["Carmarthen",51.856,-4.305],["Carluke",55.736,-3.83],["Carlisle",54.895,-2.938],["Cardiff",51.48,-3.18],["Canterbury",51.279,1.08],["Cannock",52.69,-2.031],["Cambuslang",55.81,-4.161],["Cambridge",52.2,0.117],["Camborne",50.213,-5.297],["Camberley",51.337,-0.743],["Calne",51.439,-2.006],["Caerphilly",51.575,-3.218],["Buxton",53.257,-1.91],["Bushey",51.643,-0.361],["Bury St Edmunds",52.246,0.711],["Bury",53.6,-2.3],["Burton upon Trent",52.807,-1.643],["Burntwood",52.681,-1.928],["Burnley",53.8,-2.233],["Burnham-on-Sea",51.239,-2.998],["Burgess Hill",50.958,-0.133],["Buckley",53.167,-3.083],["Buckingham",52,-0.988],["Brynmawr",51.8,-3.183],["Brymbo",53.067,-3.067],["Broxburn",55.934,-3.471],["Broxbourne",51.747,-0.019],["Brownhills",52.633,-1.933],["Brough",53.729,-0.572],["Bromsgrove",52.336,-2.06],["Bromborough",53.349,-2.979],["Broadstairs",51.359,1.439],["Brixham",50.394,-3.516],["Briton Ferry",51.631,-3.819],["Bristol",51.455,-2.597],["Brighton",50.828,-0.139],["Brighouse",53.703,-1.784],["Brierley Hill",52.482,-2.121],["Bridport",50.734,-2.758],["Bridlington",54.083,-0.192],["Bridgwater",51.128,-3.004],["Bridgnorth",52.537,-2.42],["Bridgend",51.506,-3.577],["Brentwood",51.621,0.306],["Brent",51.553,-0.302],["Bredbury",53.417,-2.117],["Bramhall",53.358,-2.165],["Braintree",51.878,0.553],["Bradford",53.794,-1.752],["Bracknell",51.414,-0.751],["Brackley",52.033,-1.15],["Bournemouth",50.72,-1.879],["Bourne",52.767,-0.383],["Boston",52.976,-0.027],["Borehamwood",51.655,-0.278],["Bootle",53.467,-3.017],["Bonnyrigg",55.873,-3.105],["Bo\u2019ness",56.017,-3.617],["Bolton upon Dearne",53.517,-1.317],["Bolton",53.583,-2.433],["The Boldons",54.943,-1.453],["Bognor Regis",50.782,-0.68],["Bodmin",50.472,-4.724],["Blyth",55.127,-1.509],["Bloxwich",52.618,-2.004],["Bletchley",51.993,-0.735],["Blaydon-on-Tyne",54.965,-1.714],["Blackpool",53.817,-3.05],["Blackburn",53.75,-2.483],["Bishopstoke",50.966,-1.328],["Bishops Stortford",51.871,0.159],["Bishops Cleeve",51.947,-2.063],["Bishopbriggs",55.907,-4.219],["Bishop Auckland",54.656,-1.677],["Birmingham",52.481,-1.9],["Birkenhead",53.393,-3.015],["Bingley",53.849,-1.839],["Billingham",54.589,-1.29],["Billericay",51.629,0.42],["Biggleswade",52.087,-0.265],["Biggin Hill",51.313,0.034],["Bideford",51.017,-4.208],["Biddulph",53.117,-2.176],["Bicester",51.9,-1.154],["Bexley",51.442,0.149],["Bexhill-on-Sea",50.85,0.471],["Beverley",53.846,-0.423],["Berwick-Upon-Tweed",55.769,-2.005],["Berkhamsted",51.76,-0.565],["Bentley",53.533,-1.15],["Belper",53.023,-1.481],["Bellshill",55.817,-4.017],["Belfast",54.597,-5.925],["Bedworth",52.479,-1.469],["Bedlington",55.131,-1.593],["Bedford",52.135,-0.466],["Beckenham",51.409,-0.025],["Beccles",52.459,1.565],["Bebington",53.35,-3.017],["Bearsden",55.915,-4.333],["Beaconsfield",51.612,-0.647],["Batley",53.703,-1.634],["Bathgate",55.902,-3.644],["Bath",51.375,-2.362],["Basingstoke",51.262,-1.087],["Basildon",51.568,0.458],["Basford",52.967,-1.183],["Barry",51.4,-3.284],["Barrow in Furness",54.111,-3.228],["Barrhead",55.799,-4.393],["Barnstaple",51.08,-4.058],["Barnsley",53.55,-1.483],["Barnet",51.65,-0.2],["Barking",51.533,0.083],["Bargoed",51.683,-3.233],["Banstead",51.322,-0.207],["Bangor",54.653,-5.669],["Banbury",52.063,-1.342],["Banbridge",54.35,-6.283],["Ballymena",54.864,-6.276],["Baildon",53.847,-1.788],["Bacup",53.703,-2.201],["Ayr",55.463,-4.634],["Aylesbury",51.817,-0.815],["Atherton",53.524,-2.494],["Aston",52.5,-1.883],["Ashton-under-Lyne",53.489,-2.099],["Ashton in Makerfield",53.483,-2.65],["Ashtead",51.309,-0.3],["Ashington",55.177,-1.564],["Ashford",51.432,-0.458],["Ashby-de-la-Zouch",52.746,-1.473],["Ascot",51.411,-0.675],["Arnold",53,-1.133],["Armthorpe",53.535,-1.053],["Armagh",54.35,-6.667],["Arbroath",56.563,-2.587],["Antrim",54.7,-6.2],["Andover",51.211,-1.494],["Ampthill",52.027,-0.496],["Ammanford",51.793,-3.988],["Amersham",51.667,-0.617],["Altrincham",53.388,-2.348],["Alton",51.149,-0.975],["Alsager",53.096,-2.306],["Alloa",56.116,-3.79],["Alfreton",53.098,-1.384],["Aldridge",52.605,-1.917],["Aldershot",51.248,-0.764],["Airdrie",55.866,-3.98],["Adwick le Street",53.571,-1.185],["Addlestone",51.371,-0.494],["Acton",51.509,-0.276],["Acocks Green",52.45,-1.817],["Accrington",53.754,-2.359],["Abingdon",51.671,-1.283],["Aberystwyth",52.415,-4.083],["Abergele",53.284,-3.582],["Abergavenny",51.821,-3.017],["Aberdeen",57.144,-2.098],["Aberdare",51.714,-3.449],["Crosby",53.478,-3.033],["Tonypandy",51.622,-3.455],["Blackwood",51.668,-3.208],["Camden Town",51.541,-0.143],["Telford",52.677,-2.449],["Craigavon",54.447,-6.387],["Bayswater",51.511,-0.184],["Yateley",51.343,-0.83],["Didsbury",53.417,-2.231],["Bowthorpe",52.639,1.219],["Hedge End",50.912,-1.301],["Gerrards Cross",51.586,-0.555],["Broadfield",51.097,-0.207],["Erskine",55.901,-4.45],["Amersham on the Hill",51.675,-0.607],["Battersea",51.475,-0.155],["Grange Hill",51.612,0.086],["Elm Park",51.55,0.201],["Chafford Hundred",51.489,0.294],["South Croydon",51.362,-0.094],["Hornchurch",51.557,0.217],["Surbiton",51.391,-0.298],["Ewell",51.349,-0.249],["Harold Wood",51.595,0.233],["Becontree",51.553,0.129],["Brixton",51.466,-0.107],["Bethnal Green",51.527,-0.061],["Cheetham Hill",53.499,-2.238],["Failsworth",53.505,-2.166],["Radcliffe",53.562,-2.325],["Heywood",53.592,-2.219],["Burnage",53.433,-2.2],["Fallowfield",53.44,-2.216],["Longsight",53.458,-2.201],["Heavitree",50.72,-3.496],["Ferndown",50.807,-1.9],["Clayton-le-Woods",53.697,-2.668],["Portland",50.567,-2.445],["Canary Wharf",51.505,-0.021],["Brixton Hill",51.452,-0.123],["Featherstone",52.645,-2.093],["Earl Shilton",52.577,-1.315],["Bordon",51.114,-0.862],["Lytham St Annes",53.743,-2.997],["Hadley Wood",51.667,-0.17],["Prenton",53.368,-3.055],["Chapel Allerton",53.829,-1.538],["Darras Hall",55.036,-1.764],["Blacon",53.208,-2.925],["Chelmsley Wood",52.478,-1.738],["Canford Heath",50.751,-1.969],["Blackheath",51.465,0.008],["Kempston Hardwick",52.09,-0.499],["Mendip",51.237,-2.627],["Lower Earley",51.427,-0.92],["Bartley Green",52.435,-1.997],["Abbey Wood",51.487,0.107],["Canvey Island",51.522,0.581],["Earlsfield",51.444,-0.185],["Peacehaven",50.793,-0.007],["Letchworth Garden City",51.979,-0.227],["Peckham",51.474,-0.07],["Shirley",52.411,-1.82],["Stanley",54.868,-1.698],["Rossendale",53.685,-2.277],["Thornton-Cleveleys",53.874,-3.022],["Deeside",53.201,-3.038],["High Peak",53.368,-1.845],["Hayling Island",50.784,-0.969],["Isle of Lewis",58.219,-6.388],["Orkney",58.985,-2.96],["Holloway",51.552,-0.125],["Harringay",51.582,-0.1],["Blantyre",55.796,-4.095],["Vale of Leven",55.971,-4.579],["Mayfield",55.872,-3.039],["Viewpark",55.827,-4.057],["Burngreave",53.393,-1.458],["Archway",51.567,-0.134],["Sinfin",52.882,-1.487],["Washwood Heath",52.501,-1.827]]};
+  var K=Math.cos(54.5*Math.PI/180),L0=-8.7,T=59,GW=10.7*K,GH=9.2;
+  function proj(la,lo){return[(lo-L0)*K/GW*400,(T-la)/GH*592]}
+  var TYPES={feat:['Featured shows','#D74949'],mil:['Military and armed forces','#32B4AF'],hist:['Historic and vintage','#B9A3EE'],sea:['Seafront','#00A6E2'],gen:['Airfield and family','#F2C14E']};
+  var FEAT=[['Royal International Air Tattoo','RAF Fairford',51.682,-1.790,'feat'],['RAF Cosford Air Show','Shropshire',52.640,-2.306,'feat'],['Midlands Air Festival','Ragley Hall',52.198,-1.900,'feat'],['Airbourne Eastbourne','Eastbourne seafront',50.766,0.287,'feat'],['Clacton Airshow','Clacton seafront',51.787,1.155,'feat'],['Wales Airshow','Swansea Bay',51.615,-3.955,'feat'],['IWM Duxford','Cambridgeshire',52.091,0.132,'feat'],['Shuttleworth, Old Warden','Bedfordshire',52.087,-0.322,'feat'],['Little Gransden','Cambridgeshire',52.165,-0.150,'feat'],['Southport Air Show','Southport beach',53.648,-3.007,'feat'],['Blackpool Air Show','Blackpool seafront',53.817,-3.055,'feat'],['The International Ayr Show','Ayr seafront',55.462,-4.635,'feat'],
+    ['Manston Airshow','Manston, Kent',51.342,1.346,'gen'],['Headcorn International Airshow','Headcorn, Kent',51.157,0.643,'gen'],['Abingdon Air And Country Show','Abingdon, Oxfordshire',51.690,-1.317,'gen'],['SleapKosh','Sleap, Shropshire',52.833,-2.771,'gen'],['Old Buckenham Air Show','Old Buckenham, Norfolk',52.497,1.052,'gen'],['Hampshire Air Festival','Thruxton, Hampshire',51.210,-1.600,'gen'],
+    ['East Kirkby Air Show','East Kirkby, Lincolnshire',53.142,-0.005,'hist'],['Stow Maries Air Show','Stow Maries, Essex',51.668,0.636,'hist'],['Aero Legends Battle Of Britain Airshow','Woodchurch, Kent',51.070,0.770,'hist'],['The Victory Show','Cosby, Leicestershire',52.545,-1.190,'hist'],['Sywell Classic Pistons And Props','Sywell, Northamptonshire',52.305,-0.793,'hist'],['Goodwood Revival','Goodwood, West Sussex',50.860,-0.759,'hist'],
+    ['Wallop Wheels And Wings','Middle Wallop, Hampshire',51.141,-1.568,'mil'],['Armed Forces Weekend','Cleethorpes seafront',53.560,-0.025,'mil'],['Armed Forces Day','Scarborough seafront',54.283,-0.397,'mil'],
+    ['English Riviera Airshow','Paignton, Devon',50.435,-3.560,'sea'],['Whitby Regatta','Whitby, North Yorkshire',54.486,-0.613,'sea'],['Guernsey Air Display','St Peter Port, Guernsey',49.456,-2.535,'sea'],['Jersey International Air Display','St Aubin\'s Bay, Jersey',49.195,-2.135,'sea']];
+  var hidden={},sweepT0=performance.now(),BT=[],ACX=null,sndOn=false,lastTurn=0,radarVis=false;
+  function ping(feat,dist){if(!ACX)return;var t=ACX.currentTime,o=ACX.createOscillator(),g=ACX.createGain(),vol=Math.max(.05,.35-dist/900);
+    o.type='sine';o.frequency.setValueAtTime(feat?1320:880,t);o.frequency.exponentialRampToValueAtTime(feat?1180:780,t+.25);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+.6);
+    o.connect(g);g.connect(ACX.destination);o.start(t);o.stop(t+.65)}
+  function sndLoop(){if(!sndOn)return;var turn=((performance.now()-sweepT0)/4000)%1;
+    if(radarVis)BT.forEach(function(b){var a=b[0];if(lastTurn<=turn?(a>lastTurn&&a<=turn):(a>lastTurn||a<=turn))ping(b[1],b[2])});
+    lastTurn=turn;requestAnimationFrame(sndLoop)}
+  new IntersectionObserver(function(es){radarVis=es[0].isIntersecting},{threshold:.3}).observe(document.getElementById('rsvg'));
+  document.getElementById('snd').onclick=function(){var b=this;sndOn=!sndOn;b.classList.toggle('on',sndOn);b.setAttribute('aria-pressed',String(sndOn));b.querySelector('span').textContent=sndOn?'Sound On':'Sound Off';
+    if(sndOn){try{ACX=ACX||new (window.AudioContext||window.webkitAudioContext)();ACX.resume()}catch(e){}lastTurn=((performance.now()-sweepT0)/4000)%1;requestAnimationFrame(sndLoop)}};
+  function miles(a,b,c,d){var R=3958.8,r=Math.PI/180,x=Math.sin((c-a)*r/2),y=Math.sin((d-b)*r/2),h=x*x+Math.cos(a*r)*Math.cos(c*r)*y*y;return 2*R*Math.asin(Math.sqrt(h))}
+'http://www.w3.org/2000/svg',rs=document.getElementById('rsvg');
+  var dl=document.getElementById('towns');dl.innerHTML=GEO.towns.map(function(t){return '<option value="'+t[0]+'">'}).join('');
+  var MPU=592/GH/69.0;
+  function drawRadar(me){var c=proj(me[1],me[2]),cx=c[0].toFixed(1),cy=c[1].toFixed(1);
+    var h='<defs><linearGradient id="sw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#32B4AF" stop-opacity="0"/><stop offset="1" stop-color="#32B4AF" stop-opacity=".45"/></linearGradient></defs>';
+    h+='<path d="'+GEO.ie+'" fill="#152C40"/><path d="'+GEO.uk+'" fill="#1F3D57" stroke="#32B4AF" stroke-opacity=".35" stroke-width=".8"/>';
+    [50,100,150].forEach(function(m){var r=m*MPU;h+='<circle class="ring" cx="'+cx+'" cy="'+cy+'" r="'+r.toFixed(1)+'"/><text class="ringl" x="'+(+cx+r*0.71+3).toFixed(1)+'" y="'+(+cy-r*0.71).toFixed(1)+'">'+m+' mi</text>'});
+    var R=170*MPU;
+    h+='<g class="sweep" style="--cx:'+cx+'px;--cy:'+cy+'px"><path d="M'+cx+' '+cy+' L'+(+cx+R)+' '+cy+' A'+R+' '+R+' 0 0 0 '+(+cx+R*Math.cos(0.7)).toFixed(1)+' '+(+cy-R*Math.sin(0.7)).toFixed(1)+' Z" fill="url(#sw)"/><line x1="'+cx+'" y1="'+cy+'" x2="'+(+cx+R)+'" y2="'+cy+'" stroke="#32B4AF" stroke-width="1.5"/></g>';
+    FEAT.forEach(function(f,i){if(hidden[f[4]])return;var p=proj(f[2],f[3]),ang=Math.atan2(p[1]-cy,p[0]-cx);var turn=((ang/(2*Math.PI))+1)%1,col=TYPES[f[4]][1],big=f[4]==='feat';
+      var lx=p[0]>300?p[0]-8:p[0]+8,anc=p[0]>300?'end':'start';
+      h+='<g class="blip" id="blip'+i+'"><circle class="ping" style="stroke:'+col+';animation-delay:'+(turn*4-4).toFixed(2)+'s" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="5"/><circle class="dot" style="fill:'+col+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(big?4.6:3.4)+'"'+(big?' stroke="#fff" stroke-width="1.2"':'')+'/><text x="'+lx.toFixed(1)+'" y="'+(p[1]+4).toFixed(1)+'" text-anchor="'+anc+'" paint-order="stroke" stroke="#0E2131" stroke-width="3">'+f[0]+'</text></g>'});
+    h+='<g class="you"><circle cx="'+cx+'" cy="'+cy+'" r="5"/><text x="'+cx+'" y="'+(+cy-11)+'" text-anchor="middle" style="font:700 12px Barlow,sans-serif;fill:#fff" paint-order="stroke" stroke="#0E2131" stroke-width="3">'+me[0]+'</text></g>';
+    rs.innerHTML=h;sweepT0=performance.now();BT=[];FEAT.forEach(function(f,i){if(hidden[f[4]])return;var p=proj(f[2],f[3]);BT.push([((Math.atan2(p[1]-cy,p[0]-cx)/(2*Math.PI))+1)%1,f[4]==='feat',miles(me[1],me[2],f[2],f[3])])});
+    var list=FEAT.map(function(f,i){return[i,miles(me[1],me[2],f[2],f[3])]}).filter(function(x){return !hidden[FEAT[x[0]][4]]}).sort(function(a,b){return a[1]-b[1]});
+    var within=list.filter(function(x){return x[1]<=100}),wf=within.filter(function(x){return FEAT[x[0]][4]==='feat'}).length;
+    document.getElementById('nsum').innerHTML=!list.length?'Turn on at least one type of show to see results.':'From <b>'+me[0]+'</b>: '+(within.length?'<b>'+within.length+'</b> '+(within.length>1?'shows are':'show is')+' within 100 miles'+(wf?', <b>'+wf+'</b> of them featured.':'.'):'the nearest show is <b>'+Math.round(list[0][1])+' miles</b> away.');
+    var ol=document.getElementById('nlist');
+    ol.innerHTML=list.slice(0,8).map(function(x,k){var f=FEAT[x[0]],col=TYPES[f[4]][1];return '<li><button type="button" data-i="'+x[0]+'"><span class="rk" style="color:'+col+'">●</span><span><b>'+f[0]+(f[4]==='feat'?' <em class="ftag">Featured</em>':'')+'</b><small>'+f[1]+(f[4]==='feat'?'':' · '+TYPES[f[4]][0])+'</small></span><span class="mi">'+Math.round(x[1])+' mi</span></button></li>'}).join('');
+    [].forEach.call(ol.querySelectorAll('button'),function(b){b.onmouseenter=b.onfocus=b.onclick=function(){[].forEach.call(ol.querySelectorAll('button'),function(x){x.classList.toggle('on',x===b)});
+      [].forEach.call(rs.querySelectorAll('.blip'),function(g){g.classList.remove('hl')});var g=document.getElementById('blip'+b.dataset.i);if(g)g.classList.add('hl')}});
+    var f0=ol.querySelector('button');if(f0){f0.classList.add('on');document.getElementById('blip'+f0.dataset.i).classList.add('hl')}
+  }
+  var cur=null,leg=document.getElementById('nlegend');
+  leg.innerHTML=Object.keys(TYPES).map(function(k){var n=FEAT.filter(function(f){return f[4]===k}).length;return '<button type="button" class="lg on" data-k="'+k+'" aria-pressed="true"><i style="background:'+TYPES[k][1]+'"></i>'+TYPES[k][0]+' <span>'+n+'</span></button>'}).join('');
+  [].forEach.call(leg.querySelectorAll('button'),function(b){b.onclick=function(){var k=b.dataset.k;hidden[k]=!hidden[k];b.classList.toggle('on',!hidden[k]);b.setAttribute('aria-pressed',String(!hidden[k]));drawRadar(cur)}});
+  function findTown(q){q=q.trim().toLowerCase();if(!q)return null;var ex=null,pre=null;
+    for(var i=0;i<GEO.towns.length;i++){var n=GEO.towns[i][0].toLowerCase();if(n===q){ex=GEO.towns[i];break}if(!pre&&n.indexOf(q)===0)pre=GEO.towns[i]}return ex||pre}
+  var start=findTown('Birmingham')||['Birmingham',52.48,-1.9];cur=start;drawRadar(start);
+  document.getElementById('nform').addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('ntown').value,t=findTown(v);
+    if(t){cur=t;drawRadar(t)}else document.getElementById('nsum').innerHTML='I could not find <b>'+v.replace(/</g,'')+'</b>. Try the nearest large town, or pick one from the list as you type.'});
+
+  /* jump links work inside the Wix page */
+  document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1),t=id&&document.getElementById(id);if(!t)return;e.preventDefault();scrollTo({top:t.getBoundingClientRect().top+scrollY-(id==='top'?200:70),behavior:reduce?'auto':'smooth'})});
+  /* hero slideshow */
+  var names=['Red Arrows','Dassault Rafale','Avro Lancaster','Boeing B-17 Flying Fortress','AH-64 Apache'];
+  var slides=[].slice.call(document.querySelectorAll('.slide')),dots=document.getElementById('dots'),nm=document.getElementById('acname'),cur=0,timer;
+  names.forEach(function(n,i){var b=document.createElement('button');b.setAttribute('aria-label','Show '+n);if(!i)b.className='on';b.onclick=function(){go(i);restart()};dots.appendChild(b)});
+  function go(i){slides[cur].classList.remove('on');dots.children[cur].classList.remove('on');cur=i;
+    var s=slides[cur];s.classList.remove('on');void s.offsetWidth;s.classList.add('on');
+    var d=dots.children[cur];d.classList.remove('on');void d.offsetWidth;d.classList.add('on');
+    nm.style.opacity=0;setTimeout(function(){nm.textContent=names[cur];nm.style.opacity=1},300)}
+  function restart(){clearInterval(timer);if(!reduce)timer=setInterval(function(){go((cur+1)%slides.length)},6000)}
+  restart();
+
+  /* planner */
+  document.getElementById('planner').addEventListener('submit',function(e){e.preventDefault();
+    var g=function(i){return document.getElementById(i).value};var s=g('p-show'),w=g('p-who').toLowerCase(),h=g('p-how').toLowerCase();
+    var tip={'car':'Getting there and parking','train and bus':'Trains and buses','camping nearby':'Camping and places to stay'}[h];
+    document.getElementById('result').innerHTML='Your guide: <b>'+s+'</b>. Start with <b>'+tip+'</b>, then <b>'+(w.indexOf('camera')>-1?'Photography':w.indexOf('access')>-1?'Accessibility':w.indexOf('family')>-1?'Is it right for you':'Plan your day')+'</b>. On the live site this button opens those sections.'});
+
+  /* reveal: only things below the first screen start hidden */
+  var vh=innerHeight,io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}})},{threshold:.12});
+  if(!reduce)document.querySelectorAll('.rv').forEach(function(el,i){if(el.getBoundingClientRect().top>vh){el.classList.add('pre');el.style.transitionDelay=((i%3)*.08)+'s';io.observe(el)}});
+
+  /* count up */
+  var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;cio.unobserve(e.target);var el=e.target,to=+el.dataset.count,p=el.dataset.prefix||'';if(reduce||!to)return;var t0=performance.now();
+    (function f(t){var k=Math.min(1,(t-t0)/1400),v=Math.round(to*(1-Math.pow(1-k,3)));el.textContent=p+v;if(k<1)requestAnimationFrame(f)})(t0)})},{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el)});
+
+  /* season bars grow */
+  var sb=document.getElementById('seasonbox');
+  new IntersectionObserver(function(es,o){if(es[0].isIntersecting){sb.classList.remove('pre');o.disconnect()}},{threshold:.25}).observe(sb);
+  if(sb.getBoundingClientRect().top<vh)sb.classList.remove('pre');
+
+  /* filters */
+  var tiles=[].slice.call(document.querySelectorAll('#tiles .tile'));
+  document.querySelectorAll('.fbtn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fbtn').forEach(function(x){x.classList.toggle('on',x===b)});var f=b.dataset.f;
+    tiles.forEach(function(t){t.classList.toggle('dim',f!=='all'&&(' '+t.dataset.t+' ').indexOf(' '+f+' ')<0)})}});
+
+  /* match checker */
+  var R={
+    family_jets:['RAF Cosford Air Show','RAF <em>Cosford</em>','chinook-static','Plenty of noise, a museum for breaks and room for little ones to run about.','I would suggest bringing ear defenders for small children. The jets are loud close up.'],
+    family_old:['IWM Duxford','IWM <em>Duxford</em>','b17','Warbirds, hangars full of history and space to picnic between displays.','I would advise a quick look at the museum map before you go so nobody gets tired out early.'],
+    family_mix:['Midlands Air Festival','Midlands <em>Air Festival</em>','pitts','Flying displays and hot air balloons, with a relaxed estate setting.','This will work well when you want a day out that is not only about aircraft.'],
+    first_jets:['Airbourne Eastbourne','Airbourne <em>Eastbourne</em>','bbmf','Free to watch, with jets, display teams and the seafront to wander.','This may work for you as a first show. You can come and go without a ticket.'],
+    first_old:['Shuttleworth, Old Warden','Shuttleworth <em>Old Warden</em>','swordfish','Gentle, friendly and full of character. A lovely introduction.','I would suggest a seat near the crowd line. The aircraft fly close and slow.'],
+    first_mix:['Southport Air Show','Southport <em>Air Show</em>','spitfire','A free beach show with a good mix of old and new.','Please see the parking advice first, as the roads in get busy.'],
+    enth_jets:['Royal International Air Tattoo','RIAT <em>Fairford</em>','rafale','The biggest military show in the world, with air forces you rarely see in the UK.','I would advise booking early and thinking about camping. It is a long weekend.'],
+    enth_old:['IWM Duxford','IWM <em>Duxford</em>','b17','Formation warbirds and rare types, often in great evening light.','Check the sun guide on the show page if you are taking photos.'],
+    enth_mix:['RAF Cosford Air Show','RAF <em>Cosford</em>','apache','A strong mix of current RAF aircraft, helicopters and historic types.','I would suggest arriving early for the static park before it gets busy.']
+  };
+  var FREE={jets:['Airbourne Eastbourne','Airbourne <em>Eastbourne</em>','bbmf','Four days of free flying on the seafront.','I would advise picking a spot near the bandstand area and staying put.'],old:['Southport Air Show','Southport <em>Air Show</em>','spitfire','A free beach show, with warbirds over the pier.','Please see the rules on beach access before you go.'],mix:['Wales Airshow','Wales <em>Airshow</em>','c17','Free to watch over Swansea Bay, with the whole beach as a grandstand.','This will work well for families who want space to spread out.']};
+  var sel={who:'family',see:'jets',cost:'ticket'},ans=document.getElementById('ans');
+  function showAns(){var r=sel.cost==='free'?FREE[sel.see]:R[sel.who+'_'+sel.see];
+    ans.classList.remove('swap');void ans.offsetWidth;ans.classList.add('swap');
+    document.getElementById('ansph').style.backgroundImage='url('+IMGU[r[2]]+')';
+    document.getElementById('anst').innerHTML=r[1];document.getElementById('ansp').textContent=r[3];document.getElementById('anstip').textContent=r[4];}
+  document.querySelectorAll('.opts').forEach(function(g){g.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){g.querySelectorAll('.opt').forEach(function(x){x.classList.toggle('on',x===b)});sel[g.dataset.q]=b.dataset.v;showAns()}})});
+  showAns();
+
+  /* aircraft strip */
+  var AC=[['redarrows','Red Arrows','RAF Aerobatic Team'],['typhoon-static','Eurofighter Typhoon','On the static line'],['apache','AH-64 Apache','Army Air Corps'],['bbmf','Avro Lancaster','Battle of Britain Memorial Flight'],['thunderbolt','P-47 Thunderbolt','American warbird'],['b17','B-17 Flying Fortress','Sally B'],['rafale','Dassault Rafale','French Air and Space Force']];
+  var html=AC.map(function(a){return '<div class="ac-card"><div class="ph nopic" style="background-image:url('+IMGU[a[0]]+')"></div><div class="t"><b>'+a[1]+'</b><span>'+a[2]+'</span></div></div>'}).join('');
+  var rail=document.getElementById('rail');rail.innerHTML=html+html.replace(/class="ac-card"/g,'class="ac-card" aria-hidden="true"');
+
+  /* scroll linked: season plane, day timeline, organiser line, nav highlight */
+  var tl=document.getElementById('tl'),fill=document.getElementById('tlfill'),jet=document.getElementById('tljet'),sts=[].slice.call(tl.querySelectorAll('.st')),splane=document.getElementById('splane'),howline=document.getElementById('howline'),orghow=document.getElementById('orghow');
+  var links=[].slice.call(document.querySelectorAll('#navin a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  var SKY=[[6,'#2B3F6B','#F2A574'],[8,'#5A9BD8','#F4D7B0'],[12,'#3D8FD9','#A9D8F5'],[16,'#4C8CCB','#F2D4A6'],[18,'#5B6FA8','#F09A6A'],[19.5,'#2B3557','#C9705A']];
+  function mix(a,b,k){var x=parseInt(a.slice(1),16),y=parseInt(b.slice(1),16),r=function(sh){return Math.round(((x>>sh)&255)*(1-k)+((y>>sh)&255)*k)};return 'rgb('+r(16)+','+r(8)+','+r(0)+')'}
+  var lastScene=-1,PH=[[7,'Before You Go'],[8.4,'Arriving'],[11.9,'Exploring'],[17.4,'Flying Display'],[99,'Heading Home']];
+  function scene(i){if(i===lastScene)return;lastScene=i;var st=sts[i],hr=+st.dataset.h;
+    for(var k=0;k<SKY.length-1&&hr>SKY[k+1][0];k++);var A=SKY[k],B=SKY[Math.min(k+1,SKY.length-1)],f=B[0]===A[0]?0:Math.max(0,Math.min(1,(hr-A[0])/(B[0]-A[0])));
+    document.getElementById('sk1').setAttribute('stop-color',mix(A[1],B[1],f));document.getElementById('sk2').setAttribute('stop-color',mix(A[2],B[2],f));
+    var u=(hr-5)/16;document.getElementById('sun').style.transform='translate('+(30+u*340)+'px,'+(190-Math.sin(Math.PI*u)*160)+'px)';
+    document.getElementById('clk').textContent=st.querySelector('.tm').textContent;document.getElementById('scap').textContent=st.querySelector('b').textContent;
+    for(var p=0;hr>PH[p][0];p++);document.getElementById('phase').textContent=PH[p][1];
+    var ncars=hr<7?0:hr<9?Math.round((hr-7)/2*15):hr<17?15:hr<18?8:hr<19?3:0;
+    [].forEach.call(document.querySelectorAll('.car'),function(c,j){c.classList.toggle('off',j>=ncars)});
+    document.getElementById('ppl').classList.toggle('off',hr<8.4||hr>18.5);
+    document.getElementById('flyby').classList.toggle('on',hr>=12&&hr<=17.2);
+    document.getElementById('gmark').style.left='calc('+(Math.max(0,Math.min(1,(hr-6)/13.5))*100)+'% - 1px)';}
+  [].forEach.call(document.querySelectorAll('#glance button'),function(b){b.onclick=function(){var t=sts[+b.dataset.go];scrollTo({top:t.getBoundingClientRect().top+scrollY-innerHeight*.45,behavior:reduce?'auto':'smooth'})}});
+  function sw(btn,cls){btn.onclick=function(){var on=btn.classList.toggle('on');btn.setAttribute('aria-pressed',String(on));tl.classList.toggle(cls,!on)}}
+  sw(document.getElementById('tfam'),'hide-fam');sw(document.getElementById('tpho'),'hide-pho');
+  function onScroll(){var h=innerHeight;
+    var r=tl.getBoundingClientRect(),k=Math.max(0,Math.min(1,(h*.6-r.top)/r.height)),px=k*(r.height-16);
+    fill.style.height=px+'px';jet.style.top=Math.max(0,px-10)+'px';
+    var cur=0;sts.forEach(function(s,i){var on=s.getBoundingClientRect().top<h*.6;s.classList.toggle('lit',on);if(on)cur=i});scene(cur);
+    var sr=sb.getBoundingClientRect(),sk=Math.max(0,Math.min(1,(h-sr.top)/(h+sr.height)));splane.style.left='calc('+(sk*100)+'% - '+(sk*30)+'px)';
+    if(orghow.getBoundingClientRect().top<h*.8)howline.style.width='calc(100% - 48px)';
+    var on=0;secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<140)on=i});links.forEach(function(a,i){a.classList.toggle('on',i===on)});
+  }
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  /* organiser contact */
+  document.getElementById('copymail').onclick=function(){var b=this,t=document.getElementById('mailaddr').textContent;
+    try{navigator.clipboard.writeText(t).then(function(){b.textContent='Copied'},function(){sel2()})}catch(e){sel2()}
+    function sel2(){var r=document.createRange();r.selectNodeContents(document.getElementById('mailaddr'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected'}};
+  document.getElementById('orgf').addEventListener('submit',function(e){e.preventDefault();var m=document.getElementById('orgsent');m.hidden=false;
+    m.textContent='Thank you. This preview does not send messages yet. On the live site this form will reach us at contactus@ukairshowguide.co.uk.'});
+})();
+</script>
