@@ -766,7 +766,8 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
   /* pre flight loader: Red Arrows take off with smoke, once per visit */
   (function(){var pf=document.getElementById('preflight'),seen=false;
     try{seen=sessionStorage.getItem('pf')==='1';sessionStorage.setItem('pf','1')}catch(e){}
-    if(reduce||seen)return;pf.hidden=false;document.documentElement.style.overflow='hidden';
+    /* skip inside a tall fixed HTML box (Wix preview), where a full screen overlay cannot be seen */
+    if(reduce||seen||innerHeight>2000)return;pf.hidden=false;document.documentElement.style.overflow='hidden';
     var items=pf.querySelectorAll('.pf-list div'),ts=[],running=true;
     function done(){running=false;ts.forEach(clearTimeout);pf.classList.add('gone');document.documentElement.style.overflow='';setTimeout(function(){pf.hidden=true},600)}
     [].forEach.call(items,function(it,i){ts.push(setTimeout(function(){it.classList.add('ok')},200+i*300))});
