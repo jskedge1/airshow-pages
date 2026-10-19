@@ -332,8 +332,8 @@ body{background:#fff;color:var(--ink);font:400 17px/1.55 'Barlow',Arial,sans-ser
     'duxfordairshows':                  {k:'dux',   lat:52.09, lon:0.13,  stn:'Whittlesford Parkway', mo:'June',      img:'b17.jpg'},
     'shuttleworthairshows':             {k:'shut',  lat:52.09, lon:-0.32, stn:'Biggleswade',          mo:'May',       img:'swordfish.jpg'},
     'little-gransden-air-and-car-show': {k:'gran',  lat:52.17, lon:-0.14, stn:'St Neots',             mo:'August',    img:'spitfire.jpg'},
-    'southport-air-show':               {k:'sport', lat:53.65, lon:-3.01, stn:'Southport',            mo:'September', img:'apache.jpg'},
-    'blackpool-air-show':               {k:'bpool', lat:53.81, lon:-3.05, stn:'Blackpool North',      mo:'August',    img:'jaguar.jpg'},
+    'southport-air-show':               {k:'sport', lat:53.65, lon:-3.01, stn:'Southport',            mo:'September', img:'https://static.wixstatic.com/media/a0546b_eca2a0e42f7a4b93bb8fd2e5bb4b471b~mv2.jpg'},
+    'blackpool-air-show':               {k:'bpool', lat:53.81, lon:-3.05, stn:'Blackpool North',      mo:'August',    img:'https://static.wixstatic.com/media/a0546b_a7b4f37f7bba44838efc5d671948ae61~mv2.jpg'},
     'international-ayr-show':           {k:'ayr',   lat:55.46, lon:-4.63, stn:'Ayr',                  mo:'September', img:'c17.jpg'}
   };
 
@@ -386,6 +386,7 @@ body{background:#fff;color:var(--ink);font:400 17px/1.55 'Barlow',Arial,sans-ser
     else if (/^https?:/.test(v)) { var m2 = /static\.wixstatic\.com\/media\/([^\/?#]+)/.exec(v); if (!m2) return v; id = m2[1]; }
     return 'https://static.wixstatic.com/media/' + id + '/v1/fill/w_' + w + ',h_' + h + ',al_c,q_80/' + id;
   }
+  function spare(f){ return /^https?:/.test(f) ? f : IMG + f; }
   function today(){ var d = new Date(); d.setHours(0,0,0,0); return d; }
   /* Reads dates written like "Fri 16 to Sun 18 July", "19 to 20 June, 11 to 12 Sept" or "Seven shows, 9 May to 25 Sept".
      Returns each run of days with its start and end, in the coming year when that date has already passed. */
@@ -417,7 +418,7 @@ body{background:#fff;color:var(--ink);font:400 17px/1.55 'Barlow',Arial,sans-ser
         return {
           slug:slug, key:meta.k, n:x.title, short:x.shortName || x.title, p:x.location, type:x.showType || '', entry:x.entry || '',
           what:x.whatYouGet || '', url:x.pageLink, filters:filters, lat:meta.lat, lon:meta.lon, stn:meta.stn,
-          img: imgUrl(x.image, 480, 420) || (IMG + meta.img), thumb: imgUrl(x.image, 120, 84) || (IMG + meta.img),
+          img: imgUrl(x.image, 480, 420) || spare(meta.img), thumb: imgUrl(x.image, 120, 84) || spare(meta.img),
           datesTxt:x.dates || '', next:next, days:days, mo: next ? MONTHS[next.start.getMonth()] : meta.mo,
           soon:!!x.comingSoon, isNew:!!(x.newTag || x.isNew), updated: x.updatedOn ? String(x.updatedOn) : '',
           news: [].concat(x.lineupNews || []).filter(Boolean), gate: GATES[i % GATES.length]
@@ -552,7 +553,7 @@ body{background:#fff;color:var(--ink);font:400 17px/1.55 'Barlow',Arial,sans-ser
   $('home').addEventListener('change', function(e){ S.home = e.target.value; try { localStorage.setItem('fya-home', S.home); } catch (err) {} render(); });
 
   /* formation of five Red Arrows */
-  var HAWK = IMG + 'red-hawk.webp';
+  var HAWK = 'https://static.wixstatic.com/media/a0546b_8c7af18769714dbbb95d5cbc05011e28~mv2.webp';
   $('formation').innerHTML = [[400,110,'r'],[322,62,'w'],[322,158,'b'],[244,14,'r'],[244,206,'b']].map(function(j){
     return '<div class="jet" style="left:' + j[0] + 'px;top:' + j[1] + 'px"><div class="smoke s-' + j[2] + '"></div><img src="' + HAWK + '" alt=""></div>';
   }).join('');
