@@ -1065,7 +1065,7 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
     if(reduce||seen)return;
     w.hidden=false;hero.classList.add('hd-shut');
     var pf=document.getElementById('preflight');
-    function open(){[].forEach.call(hero.querySelectorAll('h1 b,.lead'),function(el){el.style.animation='none';void el.offsetWidth;el.style.animation=''});
+    function open(){var parts=hero.querySelectorAll('h1 b,.lead');[].forEach.call(parts,function(el){el.style.animation='none'});setTimeout(function(){[].forEach.call(parts,function(el){void el.offsetWidth;el.style.animation=''})},1750);
       hero.classList.add('hd-open');hero.classList.remove('hd-shut');setTimeout(function(){w.hidden=true;hero.classList.remove('hd-open')},4200)}
     (function wait(n){if(pf&&!pf.hidden&&!pf.classList.contains('gone')&&n<80){setTimeout(function(){wait(n+1)},100);return}setTimeout(open,n?350:600)})(0);
   })();
