@@ -39,17 +39,23 @@ Set `live:false` on a page until its Wix page exists.
 | Show | Wix page address |
 |---|---|
 | Royal International Air Tattoo | /riat |
-| RAF Cosford Air Show | /copy-of-template-page-1 |
-| Duxford Air Shows | /copy-of-template-page |
-| Shuttleworth Air Shows | /copy-of-template-page-5 |
-| Little Gransden Air and Car Show | /copy-of-template-page-7 |
-| Eastbourne Airshow | /copy-of-template-page-2 |
-| Clacton Air Show | /copy-of-template-page-3 |
-| Wales Air Show | /copy-of-template-page-4 |
-| Hampshire Air Festival | /copy-of-template-page-6 |
-| Blackpool Air Show | /blackpool-air-show (page to create) |
-| Southport Air Show | /southport-air-show (page to create) |
+| RAF Cosford Air Show | /cosfordairshow |
+| Duxford Air Shows | /duxfordairshows |
+| Shuttleworth Air Shows | /shuttleworthairshows |
+| Little Gransden Air and Car Show | /little-gransden-air-and-car-show |
+| Eastbourne Airshow | /eastbourneairshow |
+| Clacton Air Show | /clactonairshow |
+| Wales Air Show | /walesairshow |
+| Midlands Air Festival | /midlandsairfestival |
+| Blackpool Air Show | /blackpool-air-show |
+| Southport Air Show | /southport-air-show |
 | International Ayr Show | /international-ayr-show |
+| Hampshire Air Festival | /copy-of-template-page-6 (kept off the More air shows band) |
 | Airshow Photography Hub | /airshow-photography-hub |
-| New to Aviation Photography | /new-to-aviation-photography (page to create) |
+| UK Airshow Map | /airshow-map |
+| Airshow News | /airshow-news |
 | Find your Air Show | /air-shows-guides |
+| Planning your first airshow | /planning-your-first-airshow |
+| Camping at Airshows | /camping-at-airshows |
+
+Addresses checked against the live site on 19 Oct 2026.

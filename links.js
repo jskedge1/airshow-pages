@@ -1,30 +1,31 @@
 /* Site links for The Big Guide to UK Airshows.
    One file, loaded by every page, so the links between pages are kept in one place.
    To add a page: add a row to PAGES. Set live:false until the Wix page exists, so nobody lands on a 404.
-   slug is the page's current address on Wix (checked live 16 Oct 2026). If a page's URL is renamed in Wix, change it here. */
+   slug is the page's current address on Wix (checked live 19 Oct 2026). If a page's URL is renamed in Wix, change it here. */
 (function(){
   var SITE='https://www.ukairshowguide.co.uk/';
   var FIND='air-shows-guides';
   var PAGES=[
     {key:'riat',            name:'Royal International Air Tattoo', where:'RAF Fairford, Gloucestershire', slug:'riat',                    live:true},
-    {key:'raf-cosford',     name:'RAF Cosford Air Show',           where:'Shropshire',                    slug:'copy-of-template-page-1',  live:true},
-    {key:'duxford',         name:'Duxford Air Shows',              where:'IWM Duxford, Cambridgeshire',   slug:'copy-of-template-page',    live:true},
-    {key:'shuttleworth',    name:'Shuttleworth Air Shows',         where:'Old Warden, Bedfordshire',      slug:'copy-of-template-page-5',  live:true},
-    {key:'little-gransden', name:'Little Gransden Air and Car Show', where:'Cambridgeshire',              slug:'copy-of-template-page-7',live:true},
-    {key:'eastbourne',      name:'Eastbourne Airshow',             where:'East Sussex seafront',          slug:'copy-of-template-page-2',  live:true},
-    {key:'clacton',         name:'Clacton Air Show',               where:'Essex seafront',                slug:'copy-of-template-page-3',  live:true},
-    {key:'wales',           name:'Wales Air Show',                 where:'Swansea Bay',                   slug:'copy-of-template-page-4',  live:true},
-    {key:'hampshire',       name:'Hampshire Air Festival',         where:'Hampshire',                     slug:'copy-of-template-page-6',  live:true},
-    {key:'blackpool',       name:'Blackpool Air Show',             where:'Lancashire seafront',           slug:'blackpool-air-show',      live:false},
-    {key:'southport',       name:'Southport Air Show',             where:'Merseyside',                    slug:'southport-air-show',      live:false},
+    {key:'raf-cosford',     name:'RAF Cosford Air Show',           where:'Shropshire',                    slug:'cosfordairshow',           live:true},
+    {key:'duxford',         name:'Duxford Air Shows',              where:'IWM Duxford, Cambridgeshire',   slug:'duxfordairshows',          live:true},
+    {key:'shuttleworth',    name:'Shuttleworth Air Shows',         where:'Old Warden, Bedfordshire',      slug:'shuttleworthairshows',     live:true},
+    {key:'little-gransden', name:'Little Gransden Air and Car Show', where:'Cambridgeshire',              slug:'little-gransden-air-and-car-show',live:true},
+    {key:'eastbourne',      name:'Eastbourne Airshow',             where:'East Sussex seafront',          slug:'eastbourneairshow',        live:true},
+    {key:'clacton',         name:'Clacton Air Show',               where:'Essex seafront',                slug:'clactonairshow',           live:true},
+    {key:'wales',           name:'Wales Air Show',                 where:'Swansea Bay',                   slug:'walesairshow',             live:true},
+    {key:'midlands',        name:'Midlands Air Festival',          where:'Ragley Estate, Warwickshire',   slug:'midlandsairfestival',     live:true},
+    {key:'hampshire',       name:'Hampshire Air Festival',         where:'Hampshire',                     slug:'copy-of-template-page-6',  live:false},
+    {key:'blackpool',       name:'Blackpool Air Show',             where:'Lancashire seafront',           slug:'blackpool-air-show',      live:true},
+    {key:'southport',       name:'Southport Air Show',             where:'Merseyside',                    slug:'southport-air-show',      live:true},
     {key:'ayr',             name:'International Ayr Show',         where:'Ayr seafront, South Ayrshire',  slug:'international-ayr-show',  live:true}
   ];
   var GUIDES=[
     {key:'find',        name:'Find your Air Show',          where:'Every show we cover',            slug:FIND,                          live:true},
     {key:'airshow-photography-hub', name:'Airshow Photography Hub', where:'Beginner guide, kit and photo tools', slug:'airshow-photography-hub', live:true},
     {key:'new-to-aviation-photography', name:'New to Aviation Photography', where:'Settings, kit and planning', slug:'new-to-aviation-photography', live:false},
-    {key:'first',       name:'Planning your first air show', where:'Start here if you are new',     slug:'general-6',                   live:true},
-    {key:'camping',     name:'Camping at Air Shows',         where:'Campsites and what to pack',    slug:'general-6-1',                 live:true}
+    {key:'first',       name:'Planning your first air show', where:'Start here if you are new',     slug:'planning-your-first-airshow', live:true},
+    {key:'camping',     name:'Camping at Air Shows',         where:'Campsites and what to pack',    slug:'camping-at-airshows',         live:true}
   ];
   window.AIRSHOW_LINKS={site:SITE,find:SITE+FIND,pages:PAGES,guides:GUIDES};
 
