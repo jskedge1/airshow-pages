@@ -20,6 +20,11 @@ html,body{overflow-x:clip}
 }
 """
 
+# tablets: Wix Classic shows the 980px desktop page shrunk to the screen, so on a
+# touch screen wider than a phone the small labels and controls get a lift
+TAB = "@media (hover:none) and (pointer:coarse) and (min-width:761px){\n  %s\n}\n"
+TAB_COMMON = TAB % "select{min-height:44px}\n  .flinks a{display:inline-flex;align-items:center;min-height:44px}"
+
 SHOW_TAP = """.cg-cal button,.cg-cal a,.lu-filters button,.lu-jump a,.pl-chips button,.sf-demo-btns button,.pp-opts button,.gal-nav button,.sg-play,.fbar-group .clear,.rwhat-foot .more-link,.r-links a,.mo-t a{min-height:44px}
   .cg-cal a,.rwhat-foot .more-link,.r-links a{display:inline-flex;align-items:center;justify-content:center}
   #cgShow,#nfSort{min-height:44px}"""
@@ -99,14 +104,18 @@ HUBS = """
 }
 """
 
+TAB_HOME = TAB % ".ftag{font-size:14px}\n  .lg{min-height:44px}"
+TAB_MAP = TAB % ".ftag{font-size:14px}"
+TAB_FIND = TAB % ".tag,.bname,.cdl,.ringlbl{font-size:14px}\n  small{font-size:14px!important}\n  .blip::after{content:\"\";position:absolute;inset:-7px}"
+
 PAGES = {
-    'home.html': COMMON + HOME,
+    'home.html': COMMON + HOME + TAB_COMMON + TAB_HOME,
     'uk-airshow-calendar.html': COMMON,
     'airshow-news.html': COMMON + NEWS,
-    'airshow-map.html': COMMON + MAP,
-    'find-your-airshow.html': COMMON + FIND,
-    'camping-hub.html': COMMON + HUBS,
-    'photography-hub.html': COMMON + HUBS,
+    'airshow-map.html': COMMON + MAP + TAB_COMMON + TAB_MAP,
+    'find-your-airshow.html': COMMON + FIND + TAB_COMMON + TAB_FIND,
+    'camping-hub.html': COMMON + HUBS + TAB_COMMON,
+    'photography-hub.html': COMMON + HUBS + TAB_COMMON,
     'my-airshow-hub.html': COMMON,
     'new-to-aviation-photography.html': COMMON,
 }

@@ -535,7 +535,16 @@ section{position:relative}
   .gscale span:nth-child(even){display:none}
   .ftag{font-size:14px}
 }
+@media (hover:none) and (pointer:coarse) and (min-width:761px){
+  select{min-height:44px}
+  .flinks a{display:inline-flex;align-items:center;min-height:44px}
+}
+@media (hover:none) and (pointer:coarse) and (min-width:761px){
+  .ftag{font-size:14px}
+  .lg{min-height:44px}
+}
 </style>
+
 
 
 
@@ -617,7 +626,7 @@ section{position:relative}
     <p class="sintro rv">The 2027 shows in date order, with a countdown to the next one. I update this as soon as organisers confirm their dates.</p>
     <div class="board rv">
       <div class="bhead"><h3><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>2027 Airshow Departures</h3><span class="clock" id="bclock">UK time</span></div>
-      <div class="next"><p>Next departure: <b id="nextname">IWM Duxford Flying Day</b></p>
+      <div class="next"><p>Next departure: <b id="nextname">Duxford Flying Day: VE Day</b></p>
         <div class="cd" aria-live="off"><div><b id="cdd">000</b><span>Days</span></div><div><b id="cdh">00</b><span>Hours</span></div><div><b id="cdm">00</b><span>Minutes</span></div></div></div>
       <div class="btable"><div class="brow th"><span>Date</span><span>Show</span><span>Where</span><span>Status</span></div><div id="brows"></div></div>
       <p class="bnote">Confirmed means the organiser has announced it. Expected means the date is listed but I am still waiting for the organiser to confirm it. Please check the official website before you book anything.</p>
@@ -938,19 +947,19 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
 
   /* departures board */
   var SHOWS=[
-    ['2027-05-08','IWM Duxford Flying Day','Cambridgeshire','e'],
-    ['2027-05-09','Shuttleworth Season Premiere','Bedfordshire','e'],
-    ['2027-06-04','Midlands Air Festival','Warwickshire','e'],
-    ['2027-06-13','RAF Cosford Air Show','Shropshire','e'],
-    ['2027-06-19','Duxford Summer Air Show','Cambridgeshire','e'],
+    ['2027-05-08','Duxford Flying Day: VE Day','Cambridgeshire','c'],
+    ['2027-05-09','Shuttleworth Season Premiere','Bedfordshire','c'],
+    ['2027-06-04','Midlands Air Festival','Warwickshire','c'],
+    ['2027-06-13','RAF Cosford Air Show','Shropshire','c'],
+    ['2027-06-19','Duxford Summer Air Show','Cambridgeshire','c'],
     ['2027-07-16','Royal International Air Tattoo','Gloucestershire','c'],
-    ['2027-08-12','Airbourne Eastbourne','East Sussex','e'],
-    ['2027-08-26','Clacton Airshow','Essex','e'],
+    ['2027-08-12','Airbourne Eastbourne','East Sussex','c'],
+    ['2027-08-26','Clacton Airshow','Essex','c'],
+    ['2027-09-03','The International Ayr Show','Ayrshire','e'],
     ['','Little Gransden Air And Car Show','Cambridgeshire','t'],
     ['','Southport Air Show','Merseyside','t'],
     ['','Blackpool Air Show','Lancashire','t'],
-    ['','Wales Airshow','Swansea','t'],
-    ['','The International Ayr Show','Ayrshire','t']];
+    ['','Wales Airshow','Swansea','t']];
   var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var ST={c:'Confirmed',e:'Expected',t:'Date TBC'};
   var brows=document.getElementById('brows');
@@ -1164,5 +1173,60 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
     function sel2(){var r=document.createRange();r.selectNodeContents(document.getElementById('mailaddr'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected'}};
   document.getElementById('orgf').addEventListener('submit',function(e){e.preventDefault();var m=document.getElementById('orgsent');m.hidden=false;
     m.textContent='Thank you. This preview does not send messages yet. On the live site this form will reach us at contactus@ukairshowguide.co.uk.'});
+})();
+</script>
+
+<style id="phone-fold">
+.pf-more{display:none}
+@media (max-width:760px){
+  .nav .in{-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent);scroll-padding-inline:16px}
+  .pf{position:relative;overflow:hidden;transition:max-height .7s cubic-bezier(.22,.7,.2,1)}
+  .pf:not(.pf-open){max-height:var(--pf-h)}
+  .pf::after{content:"";position:absolute;left:0;right:0;bottom:0;height:180px;background:linear-gradient(180deg,var(--pf-bg0),var(--pf-bg) 78%);pointer-events:none;transition:opacity .4s ease}
+  .pf.pf-open::after{opacity:0}
+  .pf-more{display:block;background:var(--pf-bg);padding:4px 16px 40px;margin:0}
+  .pf-more button{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;border:0;border-radius:0;background:var(--deep);color:#fff;font:500 17px/1.2 var(--font);letter-spacing:.01em;cursor:pointer;transition:background .3s ease}
+  .pf-more button:active{background:var(--teal)}
+  .pf-more svg{width:14px;height:14px;transition:transform .45s cubic-bezier(.22,.7,.2,1)}
+  .pf-more button[aria-expanded="true"] svg{transform:rotate(180deg)}
+  .pf-light .pf-more button,.pf-more.pf-light button{background:#fff;color:var(--navy)}
+}
+</style>
+<script id="phone-fold-js">
+(function(){
+  var mq=window.matchMedia('(max-width:760px)');
+  var FOLD=[['shows',1150,'Show all the featured shows'],['near',1250,'Show more shows near you'],['day',1100,'Show the rest of the day'],['organisers',950,'Read the rest for organisers']];
+  var made=[];
+  function rgba(c,a){var m=c.match(/\d+(\.\d+)?/g);return m?'rgba('+m[0]+','+m[1]+','+m[2]+','+a+')':'rgba(255,255,255,'+a+')'}
+  function bgOf(el){for(var n=el;n&&n.nodeType===1;n=n.parentElement){var c=getComputedStyle(n).backgroundColor;if(c&&!/rgba\(0, 0, 0, 0\)|transparent/.test(c))return c}return 'rgb(255,255,255)'}
+  function dark(c){var m=c.match(/\d+/g);return m&&(0.299*m[0]+0.587*m[1]+0.114*m[2])<110}
+  function build(){
+    FOLD.forEach(function(f){
+      var s=document.getElementById(f[0]);if(!s||s.scrollHeight<f[1]+400)return;
+      var bg=bgOf(s);s.classList.add('pf');s.style.setProperty('--pf-h',f[1]+'px');s.style.setProperty('--pf-bg',bg);s.style.setProperty('--pf-bg0',rgba(bg,0));
+      var w=document.createElement('div');w.className='pf-more'+(dark(bg)?' pf-light':'');w.style.setProperty('--pf-bg',bg);
+      var b=document.createElement('button');b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls',f[0]);
+      b.innerHTML='<span>'+f[2]+'</span><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
+      w.appendChild(b);s.parentNode.insertBefore(w,s.nextSibling);
+      s.addEventListener('focusin',function(e){if(!s.classList.contains('pf-open')&&/^(INPUT|SELECT|TEXTAREA|BUTTON)$/.test(e.target.tagName))b.click()});
+      b.addEventListener('click',function(){
+        var open=!s.classList.contains('pf-open');
+        if(open){s.style.maxHeight=f[1]+'px';s.classList.add('pf-open');requestAnimationFrame(function(){s.style.maxHeight=s.scrollHeight+'px'});
+          setTimeout(function(){if(s.classList.contains('pf-open'))s.style.maxHeight='none'},750)}
+        else{s.style.maxHeight=s.scrollHeight+'px';requestAnimationFrame(function(){s.classList.remove('pf-open');s.style.maxHeight='';
+          var top=s.getBoundingClientRect().top+window.pageYOffset-70;window.scrollTo({top:top,behavior:'smooth'})})}
+        b.setAttribute('aria-expanded',open?'true':'false');b.firstChild.textContent=open?'Show less':f[2];
+        window.dispatchEvent(new Event('resize'));
+      });
+      made.push([s,w]);
+    });
+  }
+  function clear(){made.forEach(function(m){m[0].classList.remove('pf','pf-open');m[0].style.maxHeight='';m[1].remove()});made=[]}
+  function apply(){clear();if(mq.matches)build()}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else setTimeout(apply,0);
+  (mq.addEventListener?mq.addEventListener('change',apply):mq.addListener(apply));
+  /* keep the jump menu's current tab in view on a phone */
+  var navin=document.getElementById('navin');
+  if(navin&&window.MutationObserver){new MutationObserver(function(){if(!mq.matches)return;var a=navin.querySelector('a.on');if(a)navin.scrollTo({left:Math.max(0,a.offsetLeft-16),behavior:'smooth'})}).observe(navin,{subtree:true,attributes:true,attributeFilter:['class']})}
 })();
 </script>
