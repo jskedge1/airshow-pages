@@ -489,6 +489,24 @@ section{position:relative}
   .slide.on{transform:none}.rv.pre{opacity:1;transform:none}.season.pre .pill{transform:none}
   #preflight{display:none}
 }
+
+/* hangar doors on the header, once per visit */
+.hdwrap{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+.hdwrap .hd{position:absolute;top:0;bottom:0;width:50.5%;display:flex;align-items:center;background:repeating-linear-gradient(90deg,#1B3850 0 2px,#16314A 2px 54px,#122B41 54px 56px);transition:transform 1.7s var(--ease)}
+.hdwrap .hd.l{left:0;justify-content:flex-end;box-shadow:inset -8px 0 14px rgba(0,0,0,.4)}
+.hdwrap .hd.r{right:0;justify-content:flex-start;box-shadow:inset 8px 0 14px rgba(0,0,0,.4)}
+.hdwrap .hd b{font:800 clamp(44px,9vw,140px)/1 var(--cond);color:rgba(255,255,255,.09);padding:0 .25em;letter-spacing:.03em;white-space:nowrap}
+.hdwrap .hd::before{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:repeating-linear-gradient(45deg,#E8B92E 0 14px,#13293C 14px 28px);opacity:.85}
+.hdwrap .hd::after{content:"";position:absolute;top:50%;width:10px;height:70px;margin-top:-35px;border-radius:3px;background:#0B1F30;box-shadow:inset 0 0 0 2px #2A4A64}
+.hdwrap .hd.l::after{right:20px}.hdwrap .hd.r::after{left:20px}
+.hdwrap .seam{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:linear-gradient(transparent,#FFF6D8,transparent);opacity:0}
+.hero.hd-open .hdwrap .seam{animation:hdseam 1.2s ease-out both}
+@keyframes hdseam{0%{opacity:0;width:2px}25%{opacity:1;width:6px;margin-left:-3px}100%{opacity:0;width:60px;margin-left:-30px}}
+.hero.hd-open .hdwrap .hd.l{transform:translateX(-101%)}
+.hero.hd-open .hdwrap .hd.r{transform:translateX(101%)}
+.hero .tag,.hero h1,.hero .lead,.hero .ac,.hero .todlbl{transition:opacity .8s var(--ease)}
+.hero.hd-shut .tag,.hero.hd-shut h1,.hero.hd-shut .lead,.hero.hd-shut .ac,.hero.hd-shut .todlbl{opacity:0}
+.hero.hd-open .tag{transition-delay:.6s}.hero.hd-open h1{transition-delay:.7s}.hero.hd-open .lead,.hero.hd-open .ac,.hero.hd-open .todlbl{transition-delay:.9s}
 </style>
 <style id="mobile-comfort">html,body{overflow-x:clip}
 @media (max-width:760px){
@@ -548,6 +566,7 @@ section{position:relative}
     <span class="name" id="acname">Avro Anson</span>
     <div class="dots" id="dots"></div>
   </div>
+  <div class="hdwrap" id="hdwrap" aria-hidden="true" hidden><div class="seam"></div><div class="hd l"><b>UK AIR</b></div><div class="hd r"><b>SHOWS</b></div></div>
   <div class="shine" aria-hidden="true"></div>
 </header>
 
@@ -1040,6 +1059,16 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
     var strips=el.querySelectorAll('.dg>span');function roll(){v.split('').forEach(function(d,i){strips[i].style.transitionDelay=(i*.15)+'s';strips[i].style.transform='translateY(-'+(10+(+d))+'em)'})}
     if(reduce){v.split('').forEach(function(d,i){strips[i].style.transition='none';strips[i].style.transform='translateY(-'+(+d)+'em)'})}else{var o=new IntersectionObserver(function(es){if(es[0].isIntersecting){roll();o.disconnect()}},{threshold:.6});o.observe(el)}});
 
+  /* hangar doors open once per visit, after the pre flight loader */
+  (function(){var hero=document.getElementById('top'),w=document.getElementById('hdwrap'),seen=false;if(!hero||!w)return;
+    try{seen=sessionStorage.getItem('hd')==='1';sessionStorage.setItem('hd','1')}catch(e){}
+    if(reduce||seen)return;
+    w.hidden=false;hero.classList.add('hd-shut');
+    var pf=document.getElementById('preflight');
+    function open(){[].forEach.call(hero.querySelectorAll('h1 b,.lead'),function(el){el.style.animation='none';void el.offsetWidth;el.style.animation=''});
+      hero.classList.add('hd-open');hero.classList.remove('hd-shut');setTimeout(function(){w.hidden=true;hero.classList.remove('hd-open')},2200)}
+    (function wait(n){if(pf&&!pf.hidden&&!pf.classList.contains('gone')&&n<80){setTimeout(function(){wait(n+1)},100);return}setTimeout(open,n?350:600)})(0);
+  })();
   /* hero slideshow */
   var names=['Avro Anson','Dassault Rafale','Avro Lancaster','Boeing B-17 Flying Fortress','AH-64 Apache'];
   var slides=[].slice.call(document.querySelectorAll('.slide')),dots=document.getElementById('dots'),nm=document.getElementById('acname'),cur=0,timer;
