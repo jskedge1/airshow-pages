@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Find Your Airshow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap">
+<style>
+/* Find your Air Show: the season runway with the Red Arrows overhead, ticket style boarding passes and a small radar.
+   Live show data comes from the Featured Air Shows collection through the page code ({type:'fas-data'}). */
+:root{
+  --navy:#13293C; --deep:#0E2131; --teal:#32B4AF; --tealink:#0E5F5B; --purple:#6950A1; --red:#D74949;
+  --pale:#E9EEF5; --ink:#0B1722; --mute:#33475A; --line:#CBD5DD; --mist:#DCE6EE; --tealpale:#8FDCD8;
+}
+html,body{margin:0;padding:0;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:#fff;color:var(--ink);font:400 17px/1.55 'Barlow',Arial,sans-serif}
+.fya *{box-sizing:border-box}
+.fya{overflow-x:clip}
+.fya a{color:var(--tealink)}
+.fya img{max-width:100%}
+.fya button{font-family:'Barlow',Arial,sans-serif}
+.fya :focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+.in{max-width:1240px;margin:0 auto;padding:0 20px}
+.cond{font-family:'Barlow Condensed','Barlow',sans-serif}
+
+/* header sky, formation and runway */
+.sky{position:relative;overflow:hidden;color:#fff;background:linear-gradient(180deg,#0b1d2b 0%,#13293C 52%,#1d3e57 100%)}
+.cloud{position:absolute;border-radius:50%;background:rgba(255,255,255,.05);filter:blur(30px)}
+.c1{width:420px;height:160px;left:6%;top:40px}.c2{width:560px;height:210px;right:3%;top:160px}
+.soundbtn{position:absolute;top:22px;right:20px;z-index:4;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:#fff;background:rgba(14,33,49,.7);border:1px solid rgba(255,255,255,.25);padding:9px 14px;cursor:pointer;transition:background .3s,border-color .3s}
+.soundbtn:hover{border-color:var(--teal)}
+.soundbtn.on{background:var(--teal);color:var(--navy);border-color:var(--teal)}
+.head-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:40px;align-items:end;padding:80px 20px 30px;z-index:2}
+.banner{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:16px;padding:6px 12px}
+.h1{margin:16px 0 0;font-family:'Barlow Condensed','Barlow',sans-serif;font-size:clamp(56px,9vw,110px);line-height:.88;font-weight:800}
+.tealsub{margin:14px 0 0;color:var(--teal);font-weight:700;font-size:20px;letter-spacing:.04em;text-transform:uppercase}
+.lead{margin:12px 0 0;max-width:56ch;color:var(--mist);font-size:18px;line-height:1.55}
+.glass{background:rgba(14,33,49,.92);border-top:4px solid var(--teal);box-shadow:0 18px 44px rgba(0,0,0,.35);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+.glass .gt{color:var(--teal);font-weight:800;font-size:21px}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:10px 12px;background:rgba(255,255,255,.06);margin-top:4px}
+.kv span:first-child{color:var(--tealpale);font-weight:500}.kv span:last-child{font-weight:700;text-align:right}
+.kv.hot{background:var(--purple)}.kv.hot span:first-child{color:#fff}
+.airfield{position:relative;padding:10px 20px 0}
+.flags{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;align-items:end;min-height:230px;position:relative;z-index:2}
+.mslot{display:flex;flex-direction:column-reverse;gap:8px;min-width:0}
+.flag{position:relative;display:flex;align-items:center;gap:8px;background:var(--deep);border:1px solid rgba(255,255,255,.14);border-left:4px solid var(--teal);padding:6px 8px 6px 6px;color:#fff;font-weight:600;font-size:14px;line-height:1.15;cursor:pointer;text-align:left;transition:transform .3s,background .3s,box-shadow .3s;animation:pop .6s cubic-bezier(.22,1,.36,1) both;min-width:0}
+.flag img{width:46px;height:32px;object-fit:cover;flex:none;pointer-events:none}
+.flag small{display:block;font-weight:500;font-size:12px;color:var(--tealpale)}
+.flag.free{border-left-color:var(--red)}
+.flag.dated{box-shadow:0 0 0 1px var(--teal),0 0 16px rgba(50,180,175,.45)}
+.flag:hover{transform:translateY(-3px);background:#1b3a54}
+.flag.on{background:var(--purple);border-color:var(--purple)}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.formation{position:absolute;left:0;bottom:120px;width:520px;height:250px;z-index:3;pointer-events:none;animation:flyover 15s linear infinite}
+@keyframes flyover{0%{transform:translateX(-600px)}100%{transform:translateX(calc(100vw + 100px))}}
+.jet{position:absolute;width:104px}
+.jet img{width:104px;display:block}
+.smoke{position:absolute;right:92px;top:14px;width:360px;height:12px;filter:blur(4px);opacity:.78}
+.s-r{background:linear-gradient(90deg,transparent,#D74949)}
+.s-w{background:linear-gradient(90deg,transparent,#ffffff)}
+.s-b{background:linear-gradient(90deg,transparent,#2f5fd0)}
+.runway{position:relative;height:96px;margin-top:16px;background:#23313d;border-top:3px solid #fff;border-bottom:3px solid #fff}
+.runway::before{content:"";position:absolute;left:70px;right:70px;top:50%;height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,#fff 0 40px,transparent 40px 70px)}
+.runway::after,.thr{content:"";position:absolute;top:12px;bottom:12px;width:44px;background:repeating-linear-gradient(180deg,#fff 0 6px,transparent 6px 12px)}
+.runway::after{left:12px}.thr{right:12px}
+.rmonths{position:absolute;inset:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+.rmonths span{display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--teal);border-left:2px solid rgba(255,255,255,.22)}
+.rmonths span:first-child{border-left:0}
+
+/* line up news strip */
+.arrivals{display:flex;align-items:stretch;background:var(--deep);border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);overflow:hidden;margin-top:26px}
+.arr-lbl{flex:none;display:flex;align-items:center;gap:8px;background:var(--purple);color:#fff;font-weight:700;font-size:16px;padding:12px 18px;z-index:2}
+.arr-track{flex:1;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.arr-move{display:flex;gap:36px;width:max-content;padding:12px 0;animation:ticker 40s linear infinite}
+.arr-track:hover .arr-move{animation-play-state:paused}
+@keyframes ticker{to{transform:translateX(-50%)}}
+.fya .arr-item{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:600;font-size:15px;white-space:nowrap}
+.fya .arr-item:hover{color:var(--teal)}
+.arr-item b{color:var(--teal)}
+.arr-dot{width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.arr-dot.down{background:var(--red)}
+.arr-empty{padding:12px 18px;color:var(--mist);font-size:15px}
+
+/* menu tabs: navy bar, teal fill, HUD brackets */
+.tabs{background:var(--navy);position:sticky;top:0;z-index:10;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+.tabrow{display:flex;gap:16px;overflow-x:auto;scrollbar-width:none;padding:12px 12px}
+.tabrow::-webkit-scrollbar{display:none}
+.tk{position:relative;flex:none;display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px;line-height:1;color:#fff;background:transparent;border:0;padding:16px 15px;margin:0 6px;cursor:pointer;white-space:nowrap;transition:padding .4s ease,background .4s ease}
+.tk:hover,.tk:focus-visible{padding-left:28px;padding-right:28px;background:var(--teal)}
+.tk.on{background:var(--teal)}
+.tk .ct{display:inline-block;background:rgba(255,255,255,.16);font-size:13px;font-weight:700;padding:3px 7px}
+.tk:hover .ct,.tk.on .ct{background:var(--navy);color:#fff}
+.tk::before,.tk::after{content:"";position:absolute;top:-6px;bottom:-6px;width:12px;border:2px solid #fff;opacity:0;transition:opacity .3s,transform .4s cubic-bezier(.22,1,.36,1)}
+.tk::before{left:-7px;border-right:0;transform:translateX(-10px)}
+.tk::after{right:-7px;border-left:0;transform:translateX(10px)}
+.tk:hover::before,.tk:hover::after{opacity:.6;transform:none}
+.tk.on::before,.tk.on::after{opacity:1;transform:none}
+.ladder{position:absolute;left:50%;bottom:-8px;width:0;height:2px;background:#fff;transform:translateX(-50%);transition:width .4s}
+.tk.on .ladder{width:46%}
+
+/* section titles */
+.stitle{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:800;font-size:44px;line-height:1;color:var(--red);border-left:6px solid var(--red);padding-left:14px;margin:0}
+.sintro{color:var(--mute);max-width:62ch;margin:10px 0 0;font-size:18px;line-height:1.55}
+
+/* weekend pairs */
+.pairs{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.pair{flex:1 1 360px;display:grid;grid-template-columns:72px minmax(0,1fr) 72px;gap:12px;align-items:center;background:var(--navy);color:#fff;padding:12px;border-top:4px solid var(--purple)}
+.pair img{width:72px;height:54px;object-fit:cover;display:block;pointer-events:none}
+.pair b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:22px;line-height:1.05}
+.pair small{display:block;color:var(--tealpale);font-size:14px;margin-top:3px}
+.note{background:#fff;border-left:5px solid var(--purple);padding:14px 18px;margin-top:22px;max-width:76ch;font-size:17px;line-height:1.55;box-shadow:0 8px 22px rgba(19,41,60,.08)}
+.note b{color:var(--navy)}
+
+/* boarding passes */
+.band{background-color:var(--pale);background-image:repeating-radial-gradient(circle at 12% 20%,transparent 0 40px,rgba(19,41,60,.06) 40px 41.5px),repeating-radial-gradient(circle at 92% 70%,transparent 0 52px,rgba(19,41,60,.05) 52px 53.5px)}
+.split{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:30px;align-items:start;margin-top:28px}
+.passes{display:grid;gap:16px;min-width:0}
+.pass{position:relative;display:grid;grid-template-columns:170px minmax(0,1fr) 140px;background:#fff;box-shadow:0 14px 34px rgba(19,41,60,.13);transition:box-shadow .35s;animation:pop .6s cubic-bezier(.22,1,.36,1) both}
+.pass:nth-child(2n){margin-left:40px}
+.pass:hover{box-shadow:0 20px 40px rgba(19,41,60,.22)}
+.pass.on{outline:4px solid var(--purple)}
+.pphoto{position:relative;overflow:hidden;background:var(--navy)}
+.pphoto img{width:170px;height:100%;min-height:210px;object-fit:cover;display:block;pointer-events:none}
+.stamp{position:absolute;left:50%;top:50%;width:120px;height:120px;margin:-60px 0 0 -60px;border:4px solid var(--red);border-radius:50%;display:grid;place-items:center;text-align:center;color:var(--red);background:rgba(255,255,255,.82);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;line-height:.95;transform:rotate(-14deg);animation:stampin .45s cubic-bezier(.22,1,.36,1) both;pointer-events:none}
+.stamp::before{content:"";position:absolute;inset:5px;border:2px dashed var(--red);border-radius:50%}
+@keyframes stampin{from{transform:rotate(-14deg) scale(1.8);opacity:0}to{transform:rotate(-14deg) scale(1);opacity:1}}
+.pbody{padding:16px 18px;min-width:0}
+.ptop{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.nm{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:27px;line-height:1;color:var(--navy)}
+.what{margin:8px 0 0;font-size:16px;line-height:1.5;color:var(--mute);max-width:60ch}
+.route{display:grid;grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);gap:6px;align-items:center;margin-top:12px}
+.route small{display:block;color:var(--tealink);font-weight:600;font-size:13px}
+.route strong{display:block;font-size:15px;color:var(--ink);line-height:1.2}
+.pmeta{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tag{display:inline-block;font-weight:600;font-size:13px;padding:4px 8px;color:#fff}
+.t-type,.t-new{background:var(--purple)}.t-free,.t-upd{background:var(--tealink)}.t-m{background:var(--navy)}.t-mi{background:var(--teal);color:var(--navy)}.t-soon{background:var(--red)}
+.pacts{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+.save{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:15px;color:var(--navy);background:#fff;border:2px solid var(--navy);padding:8px 12px;cursor:pointer;transition:background .3s,color .3s}
+.save:hover{background:var(--navy);color:#fff}
+.save.done{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.linkbtn{font-weight:600;font-size:14px;background:none;border:0;padding:8px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:var(--tealink)}
+.linkbtn.red{color:var(--red)}
+.join{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:var(--navy);color:#fff;padding:14px 18px;border-top:4px solid var(--purple);animation:pop .4s ease both}
+.fya .join a{display:inline-block;font-weight:700;font-size:15px;padding:10px 14px;text-decoration:none}
+.fya .j1{background:var(--teal);color:var(--navy)}.fya .j1:hover{background:#fff;color:var(--navy)}
+.fya .pstub{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;background:var(--navy);color:#fff;text-decoration:none;padding:14px 10px;text-align:center;border-left:2px dashed #fff;transition:background .3s}
+.fya .pstub:hover{background:var(--red);color:#fff}
+.cd{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:44px;line-height:.9;color:var(--teal)}
+.pstub:hover .cd{color:#fff}
+.cdl{font-size:13px;color:var(--mist);line-height:1.2}
+.tba{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:19px;line-height:1.05;color:var(--tealpale)}
+.gl{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;line-height:1;margin-top:8px}
+.pstub small{font-size:13px;color:var(--mist)}
+.empty{background:#fff;padding:24px;font-size:18px}
+
+/* radar */
+.radarbox{position:sticky;top:110px;background:var(--deep);color:#fff;border-top:4px solid var(--teal);padding:18px}
+.radarbox label{display:block;margin-top:12px;color:var(--tealpale);font-weight:600;font-size:15px}
+.homesel{width:100%;font:700 17px 'Barlow',sans-serif;color:#fff;background:var(--navy);border:0;border-bottom:3px solid var(--purple);padding:10px 12px;margin-top:6px}
+.homesel option{color:var(--ink)}
+.mode{display:grid;grid-template-columns:1fr 1fr;margin-top:10px;border:1px solid rgba(255,255,255,.18)}
+.mbtn{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;color:#fff;background:transparent;border:0;padding:10px;cursor:pointer;transition:background .3s}
+.mbtn.on{background:var(--teal);color:var(--navy)}
+.scope{position:relative;width:100%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#13293C 0%,#0b1d2b 70%,#08161f 100%);border:2px solid var(--teal);overflow:hidden;margin-top:14px}
+.ring{position:absolute;left:50%;top:50%;border:1px solid rgba(50,180,175,.28);border-radius:50%;transform:translate(-50%,-50%)}
+.r1{width:24%;height:24%}.r2{width:48%;height:48%}.r3{width:72%;height:72%}.r4{width:96%;height:96%}
+.ringlbl{position:absolute;left:50%;transform:translateX(4px);color:var(--tealpale);font-size:11px;font-weight:600}
+.axis{position:absolute;background:rgba(50,180,175,.2)}
+.ax1{left:50%;top:0;bottom:0;width:1px}.ax2{top:50%;left:0;right:0;height:1px}
+.sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(50,180,175,.45),rgba(50,180,175,0) 60deg,transparent 360deg);animation:spin 5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.home{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;background:var(--purple);border:2px solid #fff;border-radius:50%}
+.blip{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;display:grid;place-items:center;background:transparent;border:0;cursor:pointer;padding:0}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);transition:transform .3s}
+.dot.free{background:var(--red);box-shadow:0 0 10px var(--red)}
+.blip:hover .dot{transform:scale(1.5)}
+.blip.on .dot{background:#fff;box-shadow:0 0 0 3px var(--purple),0 0 14px #fff}
+.wx{position:absolute;left:16px;top:-8px;width:18px;height:18px;pointer-events:none}
+.bname{position:absolute;left:22px;top:12px;white-space:nowrap;color:#fff;font-weight:700;font-size:12px;background:rgba(14,33,49,.9);padding:2px 6px;pointer-events:none;opacity:0;transition:opacity .25s}
+.blip:hover .bname,.blip.on .bname{opacity:1}
+.rnote{margin:10px 0 0;color:var(--mist);font-size:14px;line-height:1.45}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:30;background:var(--navy);color:#fff;border-top:4px solid var(--teal);padding:12px 18px;font-weight:600;box-shadow:0 14px 34px rgba(0,0,0,.3);animation:pop .35s ease both;max-width:calc(100% - 32px)}
+
+/* next steps */
+.next{background:var(--navy);color:#fff;padding:44px 0 50px}
+.next-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:28px 48px;align-items:start}
+.next h2{margin:0;font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:800;font-size:40px;line-height:1;color:#fff;text-transform:uppercase}
+.next h2 span{color:var(--teal)}
+.next p{margin:12px 0 0;color:var(--mist);max-width:36ch}
+.next ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));border-top:1px solid #2C4A63}
+.next li{border-bottom:1px solid #2C4A63}
+.fya .next li a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 4px;color:#fff;text-decoration:none;transition:background .25s,padding .25s}
+.fya .next li a:hover{background:#1B3A52;padding-left:12px}
+.next li b{display:block;font-size:17px;font-weight:600;line-height:1.25}
+.next li small{display:block;font-size:14px;color:#9FB4C4;margin-top:2px}
+.next li i{font-style:normal;color:var(--teal);font-weight:700}
+
+@media (prefers-reduced-motion:reduce){.formation{animation:none;transform:translateX(560px)}.sweep,.flag,.pass,.arr-move,.stamp{animation:none}}
+@media (max-width:900px){
+ .head-grid{grid-template-columns:minmax(0,1fr);padding-top:70px}
+ .flags,.rmonths{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .split{grid-template-columns:minmax(0,1fr)}
+ .radarbox{position:static;order:-1}
+ .pass{grid-template-columns:100px minmax(0,1fr)}
+ .pass:nth-child(2n){margin-left:0}
+ .pphoto img{width:100px}
+ .stamp{width:84px;height:84px;margin:-42px 0 0 -42px;font-size:16px}
+ .fya .pstub{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;gap:12px;border-left:0;border-top:2px dashed #fff}
+ .gl{margin-top:0}
+ .stitle{font-size:34px}
+ .next-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+ .in,.airfield{padding-left:16px;padding-right:16px}
+ .tealsub{font-size:16px}
+ .soundbtn{top:14px;right:14px;padding:7px 10px}
+ .flags,.rmonths{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .runway{height:132px}
+ .formation{transform-origin:left;bottom:150px}
+ .jet,.jet img{width:72px}
+ .pass{grid-template-columns:minmax(0,1fr)}
+ .pphoto img{width:100%;height:170px;min-height:0}
+ .route{grid-template-columns:minmax(0,1fr)}
+ .route svg{display:none}
+ .arr-lbl{padding:12px}
+}
+</style>
+</head>
+<body>
+<div class="fya" id="fya">
+
+<header class="sky">
+<div class="cloud c1"></div><div class="cloud c2"></div>
+<button type="button" class="soundbtn" id="soundbtn" aria-pressed="false"></button>
+<div class="in head-grid">
+<div>
+<span class="banner">Twelve Featured Shows For 2027</span>
+<h1 class="h1">Find Your Airshow</h1>
+<p class="tealsub">Your boarding pass to the whole season</p>
+<p class="lead">Pick a tab to filter the shows, follow the runway from May to October, and see how far each one is from home. Then tear off the stub to open that show's guide.</p>
+</div>
+<div class="glass" style="padding:22px">
+<div class="gt">Key Details</div>
+<div class="kv" style="margin-top:12px"><span>Featured Shows</span><span id="kd-count">12</span></div>
+<div class="kv"><span>Free Seaside Shows</span><span id="kd-free">6</span></div>
+<div class="kv"><span>Next Show</span><span id="kd-next">Dates to come</span></div>
+<div class="kv hot"><span>Dates Confirmed</span><span id="kd-dated">0 of 12</span></div>
+</div>
+</div>
+<div class="airfield">
+<div class="formation" aria-hidden="true" id="formation"></div>
+<div class="flags" id="flags"></div>
+<div class="runway"><div class="thr"></div><div class="rmonths"><span>May</span><span>June</span><span>July</span><span>August</span><span>September</span><span>October</span></div></div>
+</div>
+<div class="arrivals">
+<div class="arr-lbl"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20h20M5 17l-2-6 2-.5 3 4 9-2.5c1.4-.4 2.6.3 2.8 1.2.2.8-.5 1.6-1.6 1.9z"/></svg>Line Up News</div>
+<div class="arr-track" id="arrivals"></div>
+</div>
+</header>
+
+<nav class="tabs" aria-label="Show types"><div class="in tabrow" id="tabs"></div></nav>
+
+<section style="background:#fff;padding:50px 0 46px">
+<div class="in">
+<h2 class="stitle">Make It A Weekend</h2>
+<p class="sintro">Shows that fall within a few days and a short drive of each other. This may work for you if you are camping or making a trip of it.</p>
+<div id="pairs"></div>
+</div>
+</section>
+
+<section class="band" style="padding:46px 0 90px">
+<div class="in">
+<h2 class="stitle" id="pass-title">Your Boarding Passes</h2>
+<p class="sintro">Dates are shown once each show confirms them. Please see the official website before you book trains or rooms, as dates and line ups can change.</p>
+<div class="split">
+<div class="passes" id="passes"></div>
+<aside class="radarbox" aria-label="Shows in range">
+<div class="cond" style="font-size:28px;font-weight:800;line-height:1">Shows In Range</div>
+<label>Home city<select class="homesel" id="home"></select></label>
+<div class="mode" role="group" aria-label="How you are travelling">
+<button type="button" class="mbtn on" data-mode="car" aria-pressed="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16v-4l2-5h14l2 5v4zM3 16v2h3v-2M18 16v2h3v-2M7 13h.01M17 13h.01"/></svg>By car</button>
+<button type="button" class="mbtn" data-mode="train" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12a2 2 0 0 1 2 2v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V5a2 2 0 0 1 2-2zM4 11h16M8 21l2-3M16 21l-2-3M8 15h.01M16 15h.01"/></svg>By train</button>
+</div>
+<div class="scope" role="img" aria-label="Small radar showing featured airshows around your home city" id="scope"></div>
+<div class="kv" style="margin-top:14px"><span>Selected</span><span id="rs-sel"></span></div>
+<div class="kv"><span id="rs-legl"></span><span id="rs-legv"></span></div>
+<div class="kv"><span>Show Day Weather</span><span id="rs-wx"></span></div>
+<div class="kv"><span>Closest Show</span><span id="rs-close"></span></div>
+<p class="rnote" id="rs-note"></p>
+</aside>
+</div>
+</div>
+</section>
+
+<section class="next" aria-label="More guides">
+<div class="in next-grid">
+<div><h2>Before You <span>Go</span></h2><p>New to airshows, camping, or bringing a camera? These guides cover the bits that work for every show.</p></div>
+<ul>
+<li><a href="https://www.ukairshowguide.co.uk/planning-your-first-airshow" target="_top"><span><b>Planning your first airshow</b><small>Start here if you are new</small></span><i aria-hidden="true">&rarr;</i></a></li>
+<li><a href="https://www.ukairshowguide.co.uk/uk-airshow-calendar" target="_top"><span><b>UK Airshow Calendar</b><small>Every show by date</small></span><i aria-hidden="true">&rarr;</i></a></li>
+<li><a href="https://www.ukairshowguide.co.uk/airshow-map" target="_top"><span><b>UK Airshow Map</b><small>Shows, railways and motorways</small></span><i aria-hidden="true">&rarr;</i></a></li>
+<li><a href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top"><span><b>Camping at Airshows</b><small>Campsites and what to pack</small></span><i aria-hidden="true">&rarr;</i></a></li>
+<li><a href="https://www.ukairshowguide.co.uk/airshow-photography-hub" target="_top"><span><b>Airshow Photography Hub</b><small>Settings, kit and where to stand</small></span><i aria-hidden="true">&rarr;</i></a></li>
+<li><a href="https://www.ukairshowguide.co.uk/airshow-news" target="_top"><span><b>Airshow News</b><small>The latest from every show</small></span><i aria-hidden="true">&rarr;</i></a></li>
+<li><a href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top"><span><b>My Airshow Hub</b><small>Your saved shows and trip plans</small></span><i aria-hidden="true">&rarr;</i></a></li>
+</ul>
+</div>
+</section>
+
+<div id="toast"></div>
+</div>
+
+<script>
+(function(){
+  var SITE = 'https://www.ukairshowguide.co.uk/';
+  var IMG = 'https://jskedge1.github.io/airshow-pages/find-img/';
+  var HUB = SITE + 'my-airshow-hub';
+  var $ = function(id){ return document.getElementById(id); };
+  function esc(t){ return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  /* Facts this page needs that the collection does not hold, keyed by the show page address. */
+  var META = {
+    'riat':                             {k:'riat',  lat:51.68, lon:-1.79, stn:'Swindon',              mo:'July',      img:'rafale.jpg'},
+    'cosfordairshow':                   {k:'cosf',  lat:52.64, lon:-2.31, stn:'Cosford',              mo:'June',      img:'typhoon-static.jpg'},
+    'midlandsairfestival':              {k:'midl',  lat:52.19, lon:-1.92, stn:'Redditch',             mo:'June',      img:'thunderbolt.jpg'},
+    'eastbourneairshow':                {k:'eastb', lat:50.76, lon:0.29,  stn:'Eastbourne',           mo:'August',    img:'blenheim-smoke.jpg'},
+    'clactonairshow':                   {k:'clac',  lat:51.79, lon:1.15,  stn:'Clacton on Sea',       mo:'August',    img:'pitts.jpg'},
+    'walesairshow':                     {k:'wales', lat:51.61, lon:-3.95, stn:'Swansea',              mo:'July',      img:'chinook.jpg'},
+    'duxfordairshows':                  {k:'dux',   lat:52.09, lon:0.13,  stn:'Whittlesford Parkway', mo:'June',      img:'b17.jpg'},
+    'shuttleworthairshows':             {k:'shut',  lat:52.09, lon:-0.32, stn:'Biggleswade',          mo:'May',       img:'swordfish.jpg'},
+    'little-gransden-air-and-car-show': {k:'gran',  lat:52.17, lon:-0.14, stn:'St Neots',             mo:'August',    img:'spitfire.jpg'},
+    'southport-air-show':               {k:'sport', lat:53.65, lon:-3.01, stn:'Southport',            mo:'September', img:'apache.jpg'},
+    'blackpool-air-show':               {k:'bpool', lat:53.81, lon:-3.05, stn:'Blackpool North',      mo:'August',    img:'jaguar.jpg'},
+    'international-ayr-show':           {k:'ayr',   lat:55.46, lon:-4.63, stn:'Ayr',                  mo:'September', img:'c17.jpg'}
+  };
+
+  /* Used until the live data arrives, and if it never does. Matches the Featured Air Shows collection on 19 Oct 2026. */
+  var FALLBACK = [
+    {title:'Royal International Air Tattoo',shortName:'RIAT',location:'RAF Fairford, Gloucestershire',showType:'Military',entry:'Ticketed',dates:'Fri 16 to Sun 18 July',whatYouGet:'The world’s largest military air show, with campsite advice, Park and Ride and the best spots along the crowd line.',pageLink:SITE+'riat',image:'wix:image://v1/a0546b_f066bbdfb4e945309bb65984d4646f2a~mv2.jpg/x.jpg',filters:['military','camping'],sortOrder:10},
+    {title:'RAF Cosford Air Show',shortName:'RAF Cosford',location:'RAF Cosford, Shropshire',showType:'Military',entry:'Ticketed',dates:'Sun 13 June',whatYouGet:'Parking and arrival, where to watch, the aircraft line-up and a full plan for the day.',pageLink:SITE+'cosfordairshow',image:'wix:image://v1/a0546b_7c722558e8c74885bab4e5e84fa659d2~mv2.jpg/x.jpg',filters:['military'],sortOrder:20},
+    {title:'Midlands Air Festival',shortName:'Midlands',location:'Ragley Hall, Warwickshire',showType:'Festival',entry:'Ticketed',dates:'',whatYouGet:'Hot air balloon launches, flying displays and evening entertainment in the grounds of Ragley Hall.',pageLink:SITE+'midlandsairfestival',image:'wix:image://v1/a0546b_b140dd891805436b8190aa91a39ae43b~mv2.jpg/x.jpg',filters:['festival','camping'],sortOrder:30},
+    {title:'Airbourne: Eastbourne International Airshow',shortName:'Eastbourne',location:'Eastbourne seafront, East Sussex',showType:'Seafront',entry:'Free to watch',dates:'',whatYouGet:'',pageLink:SITE+'eastbourneairshow',image:'wix:image://v1/a0546b_0d0b8922d0ee4abf87c76dd33134af95~mv2.jpg/x.jpg',filters:['seafront','free'],sortOrder:40},
+    {title:'Clacton Airshow',shortName:'Clacton',location:'Clacton seafront, Essex',showType:'Seafront',entry:'Free to watch',dates:'Thu 26 to Fri 27 August',whatYouGet:'',pageLink:SITE+'clactonairshow',image:'wix:image://v1/a0546b_a255a2c3bc3e43a38b0aa514273df67c~mv2.jpg/x.jpg',filters:['seafront','free'],sortOrder:50},
+    {title:'Wales Airshow',shortName:'Wales',location:'Swansea Bay',showType:'Seafront',entry:'Free to watch',dates:'',whatYouGet:'',pageLink:SITE+'walesairshow',image:'wix:image://v1/a0546b_7abe0153f88d447b9df867504593d644~mv2.jpg/x.jpg',filters:['seafront','free'],sortOrder:60},
+    {title:'IWM Duxford Air Shows',shortName:'Duxford',location:'IWM Duxford, Cambridgeshire',showType:'Historic',entry:'Ticketed',dates:'19 to 20 June, 11 to 12 Sept',whatYouGet:'',pageLink:SITE+'duxfordairshows',image:'wix:image://v1/a0546b_cd80790df442456195e8eacac9c458c8~mv2.jpg/x.jpg',filters:['historic'],sortOrder:70},
+    {title:'Shuttleworth Air Shows (Old Warden)',shortName:'Shuttleworth',location:'Old Warden, Bedfordshire',showType:'Historic',entry:'Ticketed',dates:'Seven shows, 9 May to 25 Sept',whatYouGet:'',pageLink:SITE+'shuttleworthairshows',image:'wix:image://v1/a0546b_927a8c5ccba741f88fa74f4429ee5f3b~mv2.jpg/x.jpg',filters:['historic','camping'],sortOrder:80},
+    {title:'Little Gransden Air & Car Show',shortName:'Little Gransden',location:'Little Gransden, Cambridgeshire',showType:'Airfield',entry:'Ticketed',dates:'',whatYouGet:'',pageLink:SITE+'little-gransden-air-and-car-show',image:'wix:image://v1/a0546b_c7b82e5525184f67a785626bd5a43e7a~mv2.jpg/x.jpg',filters:['historic'],sortOrder:90},
+    {title:'Southport Air Show',shortName:'Southport',location:'Southport seafront, Merseyside',showType:'Seafront',entry:'Free to watch',dates:'',whatYouGet:'',pageLink:SITE+'southport-air-show',image:'',filters:['seafront','free'],sortOrder:100},
+    {title:'Blackpool Air Show',shortName:'Blackpool',location:'Blackpool seafront, Lancashire',showType:'Seafront',entry:'Free to watch',dates:'',whatYouGet:'',pageLink:SITE+'blackpool-air-show',image:'',filters:['seafront','free'],sortOrder:110},
+    {title:'The International Ayr Show, Festival of Flight',shortName:'Ayr',location:'Ayr seafront, South Ayrshire',showType:'Seafront',entry:'Free to watch',dates:'Fri 3 to Sat 4 September',whatYouGet:'',pageLink:SITE+'international-ayr-show',image:'wix:image://v1/a0546b_9b800493d216466eb44f0e6a16df4b99~mv2.jpg/x.jpg',filters:['seafront','free'],sortOrder:120}
+  ];
+
+  var CITIES = [
+    {id:'london',n:'London',lat:51.507,lon:-0.128},{id:'birmingham',n:'Birmingham',lat:52.486,lon:-1.890},{id:'manchester',n:'Manchester',lat:53.480,lon:-2.242},
+    {id:'bristol',n:'Bristol',lat:51.455,lon:-2.588},{id:'leeds',n:'Leeds',lat:53.800,lon:-1.549},{id:'newcastle',n:'Newcastle',lat:54.978,lon:-1.618},
+    {id:'glasgow',n:'Glasgow',lat:55.864,lon:-4.252},{id:'cardiff',n:'Cardiff',lat:51.481,lon:-3.179},{id:'norwich',n:'Norwich',lat:52.630,lon:1.297},
+    {id:'southampton',n:'Southampton',lat:50.909,lon:-1.404},{id:'chelmsford',n:'Chelmsford',lat:51.736,lon:0.469},{id:'nottingham',n:'Nottingham',lat:52.954,lon:-1.158},
+    {id:'liverpool',n:'Liverpool',lat:53.408,lon:-2.991},{id:'edinburgh',n:'Edinburgh',lat:55.953,lon:-3.188},{id:'exeter',n:'Exeter',lat:50.718,lon:-3.534}
+  ];
+  var TABS = [
+    {id:'all',label:'All Shows'},
+    {id:'military',label:'Military'},
+    {id:'seafront',label:'Seaside And Free'},
+    {id:'historic',label:'Historic'},
+    {id:'festival',label:'Festivals And Small Fields'},
+    {id:'camping',label:'Camping On Site'}
+  ];
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var SEASON = ['May','June','July','August','September','October'];
+  var WXT = {sun:'Sunny', cloud:'Cloudy', rain:'Showers'};
+  var GATES = ['A1','A2','B4','B6','C3','C7','D2','D5','E1','E8','F3','F6','G2','G4','H1','H5'];
+
+  var S = {tab:'all', sel:'', home:'london', mode:'car', member:{loggedIn:false, saved:{}, been:{}}, join:'', sound:false, wx:{}};
+  try { var h = localStorage.getItem('fya-home'); if (h) S.home = h; } catch (e) {}
+  var shows = [];
+
+  function slugOf(link){ return String(link || '').replace(/^https?:\/\/(www\.)?ukairshowguide\.co\.uk\//, '').replace(/[\/?#].*$/, ''); }
+  function imgUrl(v, w, h){
+    if (!v) return '';
+    if (typeof v === 'object') v = v.src || v.url || '';
+    var id = v, m = /^wix:image:\/\/v1\/([^\/#]+)/.exec(v);
+    if (m) id = m[1];
+    else if (/^https?:/.test(v)) { var m2 = /static\.wixstatic\.com\/media\/([^\/?#]+)/.exec(v); if (!m2) return v; id = m2[1]; }
+    return 'https://static.wixstatic.com/media/' + id + '/v1/fill/w_' + w + ',h_' + h + ',al_c,q_80/' + id;
+  }
+  function today(){ var d = new Date(); d.setHours(0,0,0,0); return d; }
+  /* Reads dates written like "Fri 16 to Sun 18 July", "19 to 20 June, 11 to 12 Sept" or "Seven shows, 9 May to 25 Sept".
+     Returns each run of days with its start and end, in the coming year when that date has already passed. */
+  function parseDates(txt){
+    var out = [], re = /(\d{1,2})(?:st|nd|rd|th)?(?:\s+to\s+(?:[A-Za-z]{3}\s+)?(\d{1,2})(?:st|nd|rd|th)?)?\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*/g, m, t = today();
+    while ((m = re.exec(String(txt || '')))) {
+      var mi = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].indexOf(m[3]);
+      var a = +m[1], b = m[2] ? +m[2] : a, y = t.getFullYear();
+      var end = new Date(y, mi, b); if (end < t) y++;
+      out.push({start:new Date(y, mi, a), end:new Date(y, mi, b)});
+    }
+    return out;
+  }
+  function fmt(d){ return d.getDate() + ' ' + MONTHS[d.getMonth()]; }
+  function dist(a, b){ var r = Math.PI/180, dl = (b.lat-a.lat)*r, dn = (b.lon-a.lon)*r; var x = Math.sin(dl/2)*Math.sin(dl/2) + Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dn/2)*Math.sin(dn/2); return Math.round(2*3959*Math.asin(Math.sqrt(x))); }
+  function isFree(s){ return /free/i.test(s.entry) || s.filters.indexOf('free') > -1; }
+
+  function build(items){
+    var t = today();
+    shows = items.filter(function(x){ return x && x.showOnSite !== false && META[slugOf(x.pageLink)]; })
+      .sort(function(a, b){ return (a.sortOrder || 0) - (b.sortOrder || 0); })
+      .map(function(x, i){
+        var slug = slugOf(x.pageLink), meta = META[slug];
+        var runs = parseDates(x.dates).sort(function(a, b){ return a.start - b.start; });
+        var next = null; runs.forEach(function(r){ if (!next && r.end >= t) next = r; });
+        var days = next ? Math.max(0, Math.round((next.start - t) / 86400000)) : null;
+        var filters = (x.filters || []).map(function(f){ return String(f).toLowerCase(); });
+        if (/airfield/i.test(x.showType) && filters.indexOf('festival') < 0) filters.push('festival');
+        return {
+          slug:slug, key:meta.k, n:x.title, short:x.shortName || x.title, p:x.location, type:x.showType || '', entry:x.entry || '',
+          what:x.whatYouGet || '', url:x.pageLink, filters:filters, lat:meta.lat, lon:meta.lon, stn:meta.stn,
+          img: imgUrl(x.image, 480, 420) || (IMG + meta.img), thumb: imgUrl(x.image, 120, 84) || (IMG + meta.img),
+          datesTxt:x.dates || '', next:next, days:days, mo: next ? MONTHS[next.start.getMonth()] : meta.mo,
+          soon:!!x.comingSoon, isNew:!!(x.newTag || x.isNew), updated: x.updatedOn ? String(x.updatedOn) : '',
+          news: [].concat(x.lineupNews || []).filter(Boolean), gate: GATES[i % GATES.length]
+        };
+      });
+    if (!shows.length) return;
+    if (!S.sel || !shows.some(function(s){ return s.slug === S.sel; })) S.sel = shows[0].slug;
+    fetchWeather();
+    render();
+  }
+
+  function home(){ for (var i = 0; i < CITIES.length; i++) if (CITIES[i].id === S.home) return CITIES[i]; return CITIES[0]; }
+  function visible(){ return shows.filter(function(s){ return S.tab === 'all' || s.filters.indexOf(S.tab) > -1; }); }
+  function wxIcon(w){
+    if (w === 'sun') return '<svg class="wx" viewBox="0 0 24 24" fill="none" stroke="#F4C542" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>';
+    if (w === 'cloud') return '<svg class="wx" viewBox="0 0 24 24" fill="none" stroke="#DCE6EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 2A3 3 0 0 0 7 18z"/></svg>';
+    if (w === 'rain') return '<svg class="wx" viewBox="0 0 24 24" fill="none" stroke="#8FB8FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 2A3 3 0 0 0 7 15zM8 19l-1 2M12 19l-1 2M16 19l-1 2"/></svg>';
+    return '';
+  }
+
+  function render(){
+    var H = home(), list = visible();
+    shows.forEach(function(s){ s.mi = dist(H, s); });
+
+    /* key details */
+    var dated = shows.filter(function(s){ return s.days !== null; }).sort(function(a, b){ return a.days - b.days; });
+    $('kd-count').textContent = shows.length;
+    $('kd-free').textContent = shows.filter(isFree).length;
+    $('kd-next').textContent = dated.length ? dated[0].short + ', ' + (dated[0].days === 0 ? 'today' : dated[0].days + ' days') : 'Dates to come';
+    $('kd-dated').textContent = dated.length + ' of ' + shows.length;
+
+    /* tabs */
+    $('tabs').innerHTML = TABS.map(function(t){
+      var n = t.id === 'all' ? shows.length : shows.filter(function(s){ return s.filters.indexOf(t.id) > -1; }).length;
+      if (!n) return '';
+      return '<button type="button" class="tk' + (S.tab === t.id ? ' on' : '') + '" data-tab="' + t.id + '" aria-pressed="' + (S.tab === t.id) + '">' + esc(t.label) + '<span class="ct">' + n + '</span><span class="ladder"></span></button>';
+    }).join('');
+
+    /* flags on the runway */
+    $('flags').innerHTML = SEASON.map(function(mo){
+      return '<div class="mslot">' + list.filter(function(s){ return s.mo === mo; }).map(function(s){
+        return '<button type="button" class="flag' + (isFree(s) ? ' free' : '') + (s.next ? ' dated' : '') + (s.slug === S.sel ? ' on' : '') + '" data-pick="' + s.slug + '"><img src="' + esc(s.thumb) + '" alt=""><span>' + esc(s.short) + '<small>' + (s.next ? fmt(s.next.start) : 'Date to come') + '</small></span></button>';
+      }).join('') + '</div>';
+    }).join('');
+
+    /* line up news */
+    var news = [];
+    shows.forEach(function(s){ s.news.forEach(function(t){ news.push({t:t, s:s}); }); });
+    $('arrivals').innerHTML = news.length
+      ? '<div class="arr-move">' + news.concat(news).map(function(a){ var down = /withdrawn|cancel/i.test(a.t); return '<a class="arr-item" href="' + esc(a.s.url) + '" target="_top"><span class="arr-dot' + (down ? ' down' : '') + '"></span>' + esc(a.t) + ' <b>' + esc(a.s.short) + '</b></a>'; }).join('') + '</div>'
+      : '<div class="arr-empty">Aircraft will scroll through here as each show confirms its 2027 line up.</div>';
+
+    /* weekend pairs */
+    var pairs = [];
+    for (var i = 0; i < dated.length; i++) for (var j = i + 1; j < dated.length; j++) {
+      var a = dated[i], b = dated[j], gapDays = Math.abs(a.days - b.days), gap = dist(a, b);
+      if (gapDays <= 3 && gap <= 120) pairs.push({a:a, b:b, gap:gap});
+    }
+    $('pairs').innerHTML = pairs.length
+      ? '<div class="pairs">' + pairs.map(function(p){ return '<div class="pair"><img src="' + esc(p.a.thumb) + '" alt=""><span><b>' + esc(p.a.short) + ' and ' + esc(p.b.short) + '</b><small>' + fmt(p.a.next.start) + ' and ' + fmt(p.b.next.start) + '. About ' + p.gap + ' miles apart</small></span><img src="' + esc(p.b.thumb) + '" alt=""></div>'; }).join('') + '</div>'
+      : '<div class="note"><b>When I last checked,</b> no two nearby shows fell on the same weekend. I will add pairs here as more 2027 dates are announced.</div>';
+
+    /* boarding passes */
+    var label = TABS.filter(function(t){ return t.id === S.tab; })[0] || TABS[0];
+    $('pass-title').textContent = S.tab === 'all' ? 'Your Boarding Passes' : label.label + ' Boarding Passes';
+    var ordered = list.filter(function(s){ return s.slug === S.sel; }).concat(list.filter(function(s){ return s.slug !== S.sel; }));
+    var M = S.member;
+    $('passes').innerHTML = ordered.length ? ordered.map(function(s){
+      var saved = M.loggedIn && M.saved[s.slug], been = M.loggedIn && M.been[s.slug];
+      var tags = (s.isNew ? '<span class="tag t-new">New</span>' : '') + (s.updated ? '<span class="tag t-upd">Updated ' + esc(s.updated) + '</span>' : '') + (s.soon ? '<span class="tag t-soon">Guide coming soon</span>' : '');
+      return '<div class="pass' + (s.slug === S.sel ? ' on' : '') + '">'
+        + '<div class="pphoto"><img src="' + esc(s.img) + '" alt="' + esc(s.n) + '" loading="lazy">' + (been ? '<span class="stamp">Been<br>There</span>' : '') + '</div>'
+        + '<div class="pbody">' + (tags ? '<div class="ptop">' + tags + '</div>' : '')
+        + '<b class="nm">' + esc(s.n) + '</b>'
+        + (s.what ? '<p class="what">' + esc(s.what) + '</p>' : '')
+        + '<div class="route"><span><small>From</small><strong>' + esc(H.n) + '</strong></span><svg width="30" height="20" viewBox="0 0 30 20" fill="none" stroke="#32B4AF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 10h22M18 4l7 6-7 6"/></svg><span><small>' + (S.mode === 'train' ? 'Nearest station' : 'To') + '</small><strong>' + esc(S.mode === 'train' ? s.stn : s.p) + '</strong></span></div>'
+        + '<div class="pmeta"><span class="tag t-m">' + esc(s.datesTxt || 'Dates to come') + '</span><span class="tag t-type">' + esc(s.type) + '</span>' + (isFree(s) ? '<span class="tag t-free">Free Entry</span>' : '') + '<span class="tag t-mi">About ' + s.mi + ' miles</span></div>'
+        + '<div class="pacts"><button type="button" class="save' + (saved ? ' done' : '') + '" data-save="' + s.slug + '">'
+        + (saved ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Saved to my hub' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Save to my hub') + '</button>'
+        + (M.loggedIn ? '<button type="button" class="linkbtn red" data-been="' + s.slug + '">' + (been ? 'Remove my stamp' : 'I have been to this show') + '</button>' : '')
+        + '<button type="button" class="linkbtn" data-pick="' + s.slug + '">Show on the radar</button></div></div>'
+        + '<a class="pstub" href="' + esc(s.url) + '" target="_top">'
+        + (s.days !== null ? '<span class="cd">' + s.days + '</span><span class="cdl">' + (s.days === 1 ? 'day to go' : 'days to go') + '</span>' : '<span class="tba">Dates to be announced</span>')
+        + '<span class="gl">Open Guide</span><small>Gate ' + s.gate + '</small></a>'
+        + (!M.loggedIn && S.join === s.slug ? '<div class="join"><span><b>Log in or join to save shows to your hub.</b> It is free, and you will get line up alerts for every show you save.</span><a class="j1" href="' + HUB + '" target="_top">Open My Airshow Hub</a></div>' : '')
+        + '</div>';
+    }).join('') : '<div class="empty">No featured shows in this group yet.</div>';
+
+    /* radar */
+    var sweepRings = '<div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="ring r4"></div>'
+      + '<span class="ringlbl" style="top:38%">50</span><span class="ringlbl" style="top:26%">100</span><span class="ringlbl" style="top:14%">150</span><span class="ringlbl" style="top:2.5%">200 miles</span>'
+      + '<div class="axis ax1"></div><div class="axis ax2"></div><div class="sweep"></div><div class="home"></div>';
+    var r = Math.PI/180;
+    $('scope').innerHTML = sweepRings + list.map(function(s){
+      var x = (s.lon - H.lon) * Math.cos(H.lat*r) * 69, y = (s.lat - H.lat) * 69, d = Math.sqrt(x*x + y*y), k = d > 200 ? 200/d : 1;
+      var w = S.wx[s.slug];
+      return '<button type="button" class="blip' + (s.slug === S.sel ? ' on' : '') + '" style="left:' + (50 + x*k/200*48).toFixed(1) + '%;top:' + (50 - y*k/200*48).toFixed(1) + '%" data-pick="' + s.slug + '" aria-label="' + esc(s.n) + '"><span class="dot' + (isFree(s) ? ' free' : '') + '"></span>' + (w ? wxIcon(w.k) : '') + '<span class="bname">' + esc(s.short) + (w ? ', ' + WXT[w.k] + ' ' + w.t + '°C' : '') + '</span></button>';
+    }).join('');
+    var sel = shows.filter(function(s){ return s.slug === S.sel; })[0] || shows[0];
+    var sw = S.wx[sel.slug];
+    $('rs-sel').textContent = sel.short;
+    $('rs-legl').textContent = S.mode === 'train' ? 'Nearest Station' : 'From ' + H.n;
+    $('rs-legv').textContent = S.mode === 'train' ? sel.stn : 'About ' + sel.mi + ' miles';
+    $('rs-wx').textContent = sw ? WXT[sw.k] + ', ' + sw.t + '°C' : 'Shows a week before';
+    var near = (list.length ? list : shows).slice().sort(function(a, b){ return a.mi - b.mi; })[0];
+    $('rs-close').textContent = near.short + ', ' + near.mi + ' mi';
+    $('rs-note').textContent = S.mode === 'train'
+      ? 'Nearest station to each show. Many shows run shuttle buses from the station, so please check the Getting There section of each guide.'
+      : 'Teal blips need tickets, red blips are free. Shows over 200 miles sit on the outer ring.';
+    [].forEach.call(document.querySelectorAll('.mbtn'), function(b){ var on = b.getAttribute('data-mode') === S.mode; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+  }
+
+  /* weather from Open-Meteo, only for shows starting within the next 7 days */
+  function fetchWeather(){
+    var t = today();
+    shows.forEach(function(s){
+      if (s.days === null || s.days > 7 || S.wx[s.slug]) return;
+      var d = s.next.start, iso = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=' + s.lat + '&longitude=' + s.lon + '&daily=weathercode,temperature_2m_max&timezone=Europe%2FLondon&start_date=' + iso + '&end_date=' + iso)
+        .then(function(r){ return r.json(); })
+        .then(function(j){
+          var c = j.daily.weathercode[0], tmax = Math.round(j.daily.temperature_2m_max[0]);
+          S.wx[s.slug] = {k: c <= 1 ? 'sun' : (c >= 51 ? 'rain' : 'cloud'), t: tmax};
+          render();
+        }).catch(function(){});
+    });
+  }
+
+  /* home city list */
+  $('home').innerHTML = CITIES.slice().sort(function(a, b){ return a.n.localeCompare(b.n); }).map(function(c){ return '<option value="' + c.id + '">' + esc(c.n) + '</option>'; }).join('');
+  $('home').value = S.home;
+  $('home').addEventListener('change', function(e){ S.home = e.target.value; try { localStorage.setItem('fya-home', S.home); } catch (err) {} render(); });
+
+  /* formation of five Red Arrows */
+  var HAWK = IMG + 'red-hawk.webp';
+  $('formation').innerHTML = [[400,110,'r'],[322,62,'w'],[322,158,'b'],[244,14,'r'],[244,206,'b']].map(function(j){
+    return '<div class="jet" style="left:' + j[0] + 'px;top:' + j[1] + 'px"><div class="smoke s-' + j[2] + '"></div><img src="' + HAWK + '" alt=""></div>';
+  }).join('');
+
+  /* toast */
+  var toastTimer;
+  function flash(msg){ clearTimeout(toastTimer); $('toast').innerHTML = '<div class="toast" role="status">' + esc(msg) + '</div>'; toastTimer = setTimeout(function(){ $('toast').innerHTML = ''; }, 2800); }
+
+  /* sound: a soft jet flypast each time the formation crosses, off until the visitor turns it on */
+  var ac = null, jetTimer = null;
+  function playJet(){
+    try {
+      if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
+      var t = ac.currentTime, len = ac.sampleRate * 4, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0), last = 0;
+      for (var i = 0; i < len; i++) { last = (last + 0.04 * (Math.random() * 2 - 1)) / 1.04; d[i] = last * 3.2; }
+      var src = ac.createBufferSource(); src.buffer = buf;
+      var f = ac.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 0.7;
+      f.frequency.setValueAtTime(260, t); f.frequency.exponentialRampToValueAtTime(1300, t + 1.7); f.frequency.exponentialRampToValueAtTime(180, t + 4);
+      var g = ac.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.9, t + 1.7); g.gain.exponentialRampToValueAtTime(0.0001, t + 4);
+      src.connect(f); f.connect(g);
+      if (ac.createStereoPanner) { var p = ac.createStereoPanner(); p.pan.setValueAtTime(-1, t); p.pan.linearRampToValueAtTime(1, t + 4); g.connect(p); p.connect(ac.destination); } else g.connect(ac.destination);
+      src.start(t); src.stop(t + 4);
+    } catch (e) {}
+  }
+  function soundBtn(){
+    var b = $('soundbtn');
+    b.classList.toggle('on', S.sound); b.setAttribute('aria-pressed', String(S.sound));
+    b.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/>' + (S.sound ? '<path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/>' : '<path d="M17 9l5 6M22 9l-5 6"/>') + '</svg>' + (S.sound ? 'Sound on' : 'Sound off');
+  }
+  $('soundbtn').addEventListener('click', function(){
+    S.sound = !S.sound; clearInterval(jetTimer);
+    if (S.sound) { playJet(); jetTimer = setInterval(playJet, 15000); }
+    soundBtn();
+  });
+  soundBtn();
+
+  /* clicks */
+  $('fya').addEventListener('click', function(e){
+    var el;
+    if ((el = e.target.closest('[data-tab]'))) { S.tab = el.getAttribute('data-tab'); render(); return; }
+    if ((el = e.target.closest('[data-mode]'))) { S.mode = el.getAttribute('data-mode'); render(); return; }
+    if ((el = e.target.closest('[data-pick]'))) { S.sel = el.getAttribute('data-pick'); render(); return; }
+    if ((el = e.target.closest('[data-save]'))) {
+      var k = el.getAttribute('data-save'), s = shows.filter(function(x){ return x.slug === k; })[0];
+      if (!S.member.loggedIn) { S.join = S.join === k ? '' : k; render(); return; }
+      var on = !S.member.saved[k]; S.member.saved[k] = on;
+      try { window.parent.postMessage({type:'fas-save', show:k, saved:on}, '*'); } catch (err) {}
+      flash(on ? s.short + ' saved. You will get line up alerts for it' : s.short + ' removed from your hub');
+      render(); return;
+    }
+    if ((el = e.target.closest('[data-been]'))) {
+      var b = el.getAttribute('data-been'), was = !!S.member.been[b]; S.member.been[b] = !was;
+      try { window.parent.postMessage({type:'fas-been', show:b, been:!was}, '*'); } catch (err) {}
+      if (!was) flash('Stamped. Added to your past shows log');
+      render(); return;
+    }
+  });
+
+  /* Live data from Wix: the page code sends {type:'fas-data', items:[...]}.
+     Members: the page code can also send {type:'fas-member', loggedIn, saved:[...], been:[...]} using the show page addresses. */
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    if (!d || typeof d !== 'object') return;
+    if (d.type === 'fas-data' && Array.isArray(d.items) && d.items.length) build(d.items);
+    if (d.type === 'fas-member') {
+      var sv = {}, bn = {};
+      (d.saved || []).forEach(function(k){ sv[slugOf(k) || k] = true; });
+      (d.been || []).forEach(function(k){ bn[slugOf(k) || k] = true; });
+      S.member = {loggedIn:!!d.loggedIn, saved:sv, been:bn};
+      if (shows.length) render();
+    }
+  });
+
+  build(FALLBACK.slice());
+  try { window.parent.postMessage({type:'fas-ready'}, '*'); } catch (err) {}
+})();
+</script>
+</body>
+</html>
