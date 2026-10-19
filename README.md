@@ -22,6 +22,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
 | UK Airshow Map (Find your Air Show page) | https://jskedge1.github.io/airshow-pages/airshow-map.html |
+| Find your Air Show (live on Wix since 19 Oct: code pasted into the top HTML embed on /air-shows-guides, photos in find-img/) | https://jskedge1.github.io/airshow-pages/find-your-airshow.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
@@ -62,3 +63,14 @@ Set `live:false` on a page until its Wix page exists.
 | Camping at Airshows | /camping-at-airshows |
 
 Addresses checked against the live site on 19 Oct 2026.
+
+## Find your Air Show page
+
+`find-your-airshow.html` is pasted as code into the first HTML embed on the Find your Air Show page, so the
+Wix page code can send it the live show list from the Featured Air Shows collection (`{type:'fas-data', items}`).
+Dates, images, filters and descriptions come from that collection; anything it does not hold (map position,
+nearest station, usual month, a spare photo) is in `META` at the top of the page script.
+Optional collection fields the page already reads: `newTag` (purple New tag), `updatedOn` (Updated tag text)
+and `lineupNews` (lines for the Line Up News strip). Members: the page code can send
+`{type:'fas-member', loggedIn, saved:[...], been:[...]}` and listen for `fas-save` / `fas-been` messages back.
+After changing the file here, paste it into that embed again in the Wix editor.
