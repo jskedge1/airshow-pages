@@ -15,7 +15,10 @@ so a change saved here shows on the Wix site within a minute or two.
 | Southport Air Show | https://jskedge1.github.io/airshow-pages/southport.html |
 | International Ayr Show | https://jskedge1.github.io/airshow-pages/ayr.html |
 | Little Gransden Air & Car Show | https://jskedge1.github.io/airshow-pages/little-gransden.html |
-| Airshow Photography Hub | https://jskedge1.github.io/airshow-pages/airshow-photography-hub.html |
+| Airshow Photography Hub (live on Wix since 19 Oct, photos in photography-hub-img/) | https://jskedge1.github.io/airshow-pages/photography-hub.html |
+| Airshow Photography Hub (previous version) | https://jskedge1.github.io/airshow-pages/airshow-photography-hub.html |
+| Camping at Airshows hub (live on Wix since 19 Oct, photos in camping-hub-img/) | https://jskedge1.github.io/airshow-pages/camping-hub.html |
+| Show pages, camping style layout (live on Wix since 19 Oct) | https://jskedge1.github.io/airshow-pages/camping-layout/<show>.html |
 | New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
 | UK Airshow Map (Find your Air Show page) | https://jskedge1.github.io/airshow-pages/airshow-map.html |
