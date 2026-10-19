@@ -18,7 +18,8 @@
     {key:'hampshire',       name:'Hampshire Air Festival',         where:'Hampshire',                     slug:'copy-of-template-page-6',  live:false},
     {key:'blackpool',       name:'Blackpool Air Show',             where:'Lancashire seafront',           slug:'blackpool-air-show',      live:true},
     {key:'southport',       name:'Southport Air Show',             where:'Merseyside',                    slug:'southport-air-show',      live:true},
-    {key:'ayr',             name:'International Ayr Show',         where:'Ayr seafront, South Ayrshire',  slug:'international-ayr-show',  live:true}
+    {key:'ayr',             name:'International Ayr Show',         where:'Ayr seafront, South Ayrshire',  slug:'international-ayr-show',  live:true},
+    {key:'headcorn',        name:'Headcorn Airshow',               where:'Headcorn Aerodrome, Kent',      slug:'headcorn-air-show',       live:true}
   ];
   var GUIDES=[
     {key:'find',        name:'Find your Air Show',          where:'Every show we cover',            slug:FIND,                          live:true},
