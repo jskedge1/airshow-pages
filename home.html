@@ -384,6 +384,41 @@ footer a:hover{color:var(--teal);transform:translateX(4px)}
 .nnote{margin-top:12px;color:var(--mute);font-size:16px}
 @media(max-width:900px){.near{grid-template-columns:1fr}.cd{margin-left:0}}
 
+
+/* membership: boarding pass */
+.join{background:var(--navy);padding-block:80px;position:relative;overflow:clip}
+.join::before{content:"";position:absolute;left:-160px;bottom:-200px;width:620px;height:620px;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 44px,rgba(50,180,175,.12) 45px 46px);pointer-events:none}
+.join .in{position:relative}
+.join .stitle{color:#fff}
+.join .sintro{color:#DCE6EE}
+.pass{display:grid;grid-template-columns:minmax(0,1fr) 280px;margin-top:34px;filter:drop-shadow(0 24px 40px rgba(0,0,0,.35))}
+.pass-main{background:#fff;color:var(--ink);padding:30px 32px;position:relative;border-top:6px solid var(--teal)}
+.pass-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;border-bottom:2px dashed var(--line);padding-bottom:16px}
+.pass-top b{font:800 clamp(28px,3.4vw,40px)/.95 var(--cond);color:var(--navy);text-transform:capitalize}
+.pass-top b em{font-style:normal;color:var(--teal)}
+.pass-route{display:flex;align-items:center;gap:10px;font:700 18px/1 var(--cond);color:var(--mute)}
+.pass-route svg{width:26px;color:var(--red)}
+.perks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 26px;margin-top:20px}
+.perk{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start}
+.perk i{width:42px;height:42px;border-radius:50%;background:var(--pale);color:var(--tealink);display:grid;place-items:center;transition:background .3s,color .3s,transform .4s var(--ease)}
+.perk:hover i{background:var(--teal);color:#fff;transform:rotate(-8deg) scale(1.06)}
+.perk i svg{width:22px;height:22px}
+.perk b{display:block;font:800 21px/1.05 var(--cond);color:var(--navy);text-transform:capitalize}
+.perk span{display:block;margin-top:3px;font-size:16px;color:var(--mute)}
+.stamp{position:absolute;right:22px;top:-34px;z-index:2;border:4px solid var(--red);color:var(--red);font:800 44px/1 var(--cond);padding:6px 14px;transform:rotate(-12deg);opacity:.9;letter-spacing:.06em;background:rgba(255,255,255,.85);transition:transform .5s var(--ease)}
+.pass:hover .stamp{transform:rotate(-6deg) scale(1.05)}
+.pass-stub{background:var(--teal);color:#fff;padding:30px 24px;display:flex;flex-direction:column;gap:14px;position:relative;border-left:3px dashed rgba(255,255,255,.7)}
+.pass-stub::before,.pass-stub::after{content:"";position:absolute;left:-15px;width:28px;height:28px;border-radius:50%;background:var(--navy)}
+.pass-stub::before{top:-14px}.pass-stub::after{bottom:-14px}
+.stub-row span{display:block;font-size:15px;font-weight:500;color:#E3F7F6}
+.stub-row b{display:block;font:800 26px/1 var(--cond)}
+.stub-row b.free{font-size:46px}
+.pass-stub .btn{background:var(--red);border-color:var(--red);text-align:center;margin-top:auto}
+.pass-stub small{font-size:15px;color:#E3F7F6}
+.pass-stub small a{color:#fff;font-weight:700}
+.barcode{height:44px;background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 4px,#fff 4px 5px,transparent 5px 9px,#fff 9px 12px,transparent 12px 14px);opacity:.85}
+@media(max-width:900px){.pass{grid-template-columns:1fr}.pass-stub{border-left:0;border-top:3px dashed rgba(255,255,255,.7)}.pass-stub::before,.pass-stub::after{display:none}.perks{grid-template-columns:1fr}.stamp{position:static;display:inline-block;margin-top:18px}}
+
 @media(max-width:900px){
   .glass{grid-template-columns:1fr}
   .newto,.match,.day,.org-top,.org-form{grid-template-columns:1fr}
@@ -463,7 +498,7 @@ footer a:hover{color:var(--teal);transform:translateX(4px)}
 
 <nav class="nav" aria-label="Main">
   <div class="in" id="navin">
-    <a href="#top" class="on">Home</a><a href="#board">Next Shows</a><a href="#season">Show Calendar</a><a href="#shows">Find Your Airshow</a><a href="#near">Near Me</a><a href="#match">Which Show Suits Me</a><a href="#day">Your Day</a><a href="#how">Camping And Photography</a><a href="#organisers">For Organisers</a><a href="#community">Community</a>
+    <a href="#top" class="on">Home</a><a href="#board">Next Shows</a><a href="#season">Show Calendar</a><a href="#shows">Find Your Airshow</a><a href="#near">Near Me</a><a href="#match">Which Show Suits Me</a><a href="#day">Your Day</a><a href="#how">Camping And Photography</a><a href="#organisers">For Organisers</a><a href="#join">Join Free</a>
   </div>
 </nav>
 
@@ -666,6 +701,29 @@ footer a:hover{color:var(--teal);transform:translateX(4px)}
   </div>
 </section>
 
+<section class="join" id="join">
+  <div class="in">
+    <span class="tag rv">Free Membership</span>
+    <h2 class="stitle rv" style="margin-top:16px">Become A Member</h2>
+    <p class="sintro rv">Use the guide as your own airshow planning tool. One free account opens the members forum and your show checklist, with every planning tool in one place.</p>
+    <div class="pass rv">
+      <div class="pass-main">
+        <div class="pass-top"><b>Your Airshow <em>Planning Tool</em></b><span class="pass-route">Your Sofa <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" transform="rotate(90 12 12)"/></svg> The Crowd Line</span></div>
+        <div class="perks"><div class="perk"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></i><div><b>Members Forum</b><span>Groups for every show. Ask questions, start threads and share your photos.</span></div></div><div class="perk"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l2 2 3-3"/><path d="M12 8h8"/><path d="M4 15l2 2 3-3"/><path d="M12 16h8"/></svg></i><div><b>My Show Checklist</b><span>Tickets, travel, buses and packing in one place, saved as a PDF when you need it.</span></div></div><div class="perk"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 12l5-3"/><circle cx="12" cy="12" r="1.5"/></svg></i><div><b>Planning Tools</b><span>Find My Guide, Shows Near Me, countdowns and an hour by hour day plan.</span></div></div><div class="perk"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg></i><div><b>Photo Tools</b><span>Sun guides, a settings calculator and a kit planner for each featured show.</span></div></div><div class="perk"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M12 2l3 10-3 10-3-10z"/></svg></i><div><b>Line Up Updates</b><span>New and Updated tags show what changed, checked against the official sites.</span></div></div><div class="perk"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l8-16 8 16"/><path d="M7 14h10"/></svg></i><div><b>Guides For Every Trip</b><span>Camping, packing and first timer advice, written from my own visits.</span></div></div></div>
+        <div class="stamp" aria-hidden="true">FREE</div>
+      </div>
+      <div class="pass-stub">
+        <div class="stub-row"><span>Passenger</span><b>You</b></div>
+        <div class="stub-row"><span>Fare</span><b class="free">£0</b></div>
+        <div class="stub-row"><span>Class</span><b>Free For Everyone</b></div>
+        <div class="barcode" aria-hidden="true"></div>
+        <a class="btn" href="https://www.ukairshowguide.co.uk/forum" target="_top">Join For Free</a>
+        <small>Already a member? <a href="https://www.ukairshowguide.co.uk/forum" target="_top">Log in</a></small>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="forest" id="how">
   <div class="in">
     <h2 class="stitle rv">How To Get It Right</h2>
@@ -738,22 +796,11 @@ footer a:hover{color:var(--teal);transform:translateX(4px)}
   </div>
 </section>
 
-<section class="band pale" id="community">
-  <div class="in">
-    <h2 class="stitle rv">Join The Community</h2>
-    <p class="sintro rv">A free member account gives you two things.</p>
-    <div class="comm">
-      <div class="cm rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5h16v11H9l-5 4z"/></svg></div><div><h3>Members Forum</h3><p>Ask questions, share photos and swap tips with other visitors, in groups for each show.</p><a class="btn teal" href="#">Visit The Forum</a></div></div>
-      <div class="cm rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7l2 2 3-3"/><path d="M12 8h8"/><path d="M4 15l2 2 3-3"/><path d="M12 16h8"/></svg></div><div><h3>My Show Checklist</h3><p>Keep your tickets, travel plans and packing in one place for any UK show, then save it as a PDF.</p><a class="btn" href="#">Start A Checklist</a></div></div>
-    </div>
-  </div>
-</section>
-
 <footer>
   <div class="in fg">
     <div><b>The Big Guide To UK Airshows</b><p>An unofficial visitor guide. Details change, so please check each show's official website before you travel.</p></div>
     <div><b>Plan</b><a href="#shows">Find Your Airshow</a><a href="#match">Which Show Suits Me</a><a href="#day">Your Day</a></div>
-    <div><b>About</b><a href="#organisers">For Organisers</a><a href="#community">Community</a><a href="#orgform">Contact Us</a></div>
+    <div><b>About</b><a href="#organisers">For Organisers</a><a href="#join">Join Free</a><a href="#orgform">Contact Us</a></div>
   </div>
 </footer>
 
