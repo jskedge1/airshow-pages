@@ -1549,8 +1549,8 @@ h3{font-weight:700}
 </style>
 </head>
 <body>
-<script>window.PHOTO={"bbmf": "https://jskedge1.github.io/airshow-pages/camping-layout/img/230952560f14fe70.webp", "typhoon": "https://jskedge1.github.io/airshow-pages/camping-layout/img/0445f377506ca723.webp", "p47": "https://jskedge1.github.io/airshow-pages/camping-layout/img/40b75c22ef308ba2.webp", "spitfire": "https://jskedge1.github.io/airshow-pages/camping-layout/img/c6a01c9414dffec4.webp", "pitts": "https://jskedge1.github.io/airshow-pages/camping-layout/img/b58aaf7bd033aabe.webp"};
-window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Lancaster, Spitfire and Hurricane in formation", "typhoon": "RAF Eurofighter Typhoon on the ground at an air show", "p47": "P-47 Thunderbolt on a fast pass", "spitfire": "Battle of Britain Memorial Flight Spitfire in invasion stripes overhead", "pitts": "Pitts Special trailing smoke"};
+<script>window.PHOTO={"bbmf": "https://jskedge1.github.io/airshow-pages/camping-layout/img/b30bbc52cb62ae05.webp", "typhoon": "https://jskedge1.github.io/airshow-pages/camping-layout/img/631d94c8d1c1b002.webp", "mig17": "https://jskedge1.github.io/airshow-pages/camping-layout/img/06c54e8d62faef95.webp", "spitfire": "https://jskedge1.github.io/airshow-pages/camping-layout/img/ca43bf7c21d40d50.webp", "pitts": "https://jskedge1.github.io/airshow-pages/camping-layout/img/217e79a0fa7f6267.webp", "wingwalkers": "https://jskedge1.github.io/airshow-pages/camping-layout/img/3e48b45226de3bc5.webp", "raven": "https://jskedge1.github.io/airshow-pages/camping-layout/img/828fe5bd3cefa5dc.webp"};
+window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Dakota, Spitfire and Hurricane over Blackpool", "typhoon": "RAF Typhoon turning hard with its afterburners lit", "mig17": "MiG-17 in Polish markings on a fast pass with its afterburner lit", "spitfire": "Battle of Britain Memorial Flight Spitfire banking over Blackpool", "pitts": "The Jet Pitts trailing smoke", "wingwalkers": "Wing walkers standing on top of their Stearman biplanes", "raven": "Team Raven flying in formation with smoke on"};
 (function(){
   function lb(){var d=document.getElementById('photoLb');if(d)return d;d=document.createElement('div');d.id='photoLb';d.className='lb';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label','Photo');
     d.innerHTML='<button type="button">Close</button><img alt=""><p></p>';document.body.appendChild(d);
@@ -1558,14 +1558,25 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Lancaster, Spitfire
     document.addEventListener('keydown',function(e){if(e.key==='Escape')d.classList.remove('on');});return d;}
   /* photos are not clickable or expandable on show pages */
   window.openPhoto=function(){};
-  window.photoImg=function(k,cls){return '<img'+(cls?' class="'+cls+'"':'')+' src="'+PHOTO[k]+'" alt="'+(PHOTO_ALT[k]||'').replace(/"/g,'&quot;')+'" decoding="async">';};
+  window.photoImg=function(k,cls){return '<img data-k="'+k+'"'+(cls?' class="'+cls+'"':'')+' src="'+PHOTO[k]+'" alt="'+(PHOTO_ALT[k]||'').replace(/"/g,'&quot;')+'" decoding="async">';};
   document.addEventListener('DOMContentLoaded',function(){
     document.querySelectorAll('img[data-k]').forEach(function(im){var k=im.getAttribute('data-k');im.src=PHOTO[k];im.alt=PHOTO_ALT[k];});
+
     var hb=document.querySelector('.hero2-banner');
     if(hb){hb.classList.add('has-photo');hb.style.backgroundImage='url('+PHOTO.bbmf+')';hb.setAttribute('role','img');hb.setAttribute('aria-label',PHOTO_ALT.bbmf);}
-    var SUIT={'Families':'spitfire','Children':'pitts','Teenagers / non-aviation fans':'typhoon','Aviation enthusiasts':'p47','First-time visitors':'bbmf'};
+    /* photographer credit on every photo by Chris Murgatroyd */
+    function credits(){    document.querySelectorAll('img[data-k]').forEach(function(im){
+      if(!PHOTO[im.getAttribute('data-k')]||im.classList.contains('sf-bg'))return;
+      var box=im.parentElement;if(!box||box.querySelector(':scope>.cm-credit'))return;
+      if(getComputedStyle(box).position==='static')box.style.position='relative';
+      var c=document.createElement('span');c.className='cm-credit';c.textContent='\u00A9 Chris Murgatroyd';box.appendChild(c);
+    });
+    }
+    var SUIT={'Families':'spitfire','Children':'wingwalkers','Teenagers / non-aviation fans':'typhoon','Aviation enthusiasts':'mig17','First-time visitors':'bbmf'};
     document.querySelectorAll('.suit').forEach(function(el){var h=el.querySelector('h3'),ph=el.querySelector('.ph');if(!h||!ph)return;var k=SUIT[h.textContent.trim()];if(!k)return;
       ph.classList.add('has-img');ph.innerHTML='<span class="photo-btn">'+photoImg(k)+'</span>';});
+    credits();
+    var cmT;new MutationObserver(function(){clearTimeout(cmT);cmT=setTimeout(credits,60);}).observe(document.body,{childList:true,subtree:true});
   });
 })();
 </script>
@@ -1581,6 +1592,14 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Lancaster, Spitfire
 .sitebar .home:hover{color:#fff}
 @media(prefers-reduced-motion:reduce){.sitebar a .arw{transition:none}}
 @media(max-width:640px){.tablist{margin:0 -16px;padding:0 16px}.suits{margin:0 -16px;padding:var(--gap) 16px}}
+</style>
+<style>
+/* photographer credit: Chris Murgatroyd took every photo on this page */
+.cm-credit{position:absolute;right:8px;bottom:8px;z-index:3;pointer-events:none;font:500 12px/1.2 "Barlow",Arial,sans-serif;letter-spacing:.01em;color:#fff;background:rgba(19,41,60,.72);padding:3px 8px;border-radius:3px;white-space:nowrap}
+.cg-bg .cm-credit{bottom:auto;top:12px;right:12px}
+.lu-thumb{position:relative}
+.lu-thumb .cm-credit{right:2px;bottom:2px;font-size:9px;padding:1px 4px;border-radius:2px}
+@media(max-width:640px){.cm-credit{font-size:11px;padding:2px 6px;right:6px;bottom:6px}.cg-bg .cm-credit{top:8px;right:8px}.lu-thumb .cm-credit{font-size:8px;padding:1px 3px;right:1px;bottom:1px}}
 </style>
 <nav class="sitebar" aria-label="Site">
   <div class="wrap">
@@ -2384,7 +2403,7 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Lancaster, Spitfire
           <button type="button" role="tab" class="sf-tab" id="sft-pitch" aria-controls="sfp-pitch" aria-selected="true" data-sf="pitch"><span class="sf-ph"><img data-k="spitfire" alt=""></span><i class="sf-n">1</i><b>Pick Your Pitch</b><small>Find the right spot for your group</small></button>
           <button type="button" role="tab" class="sf-tab" id="sft-tide" aria-controls="sfp-tide" aria-selected="false" tabindex="-1" data-sf="tide"><span class="sf-ph"><img data-k="pitts" alt=""></span><i class="sf-n">2</i><b>Tides And The Beach</b><small>How much sand you&rsquo;ll get</small></button>
           <button type="button" role="tab" class="sf-tab" id="sft-mist" aria-controls="sfp-mist" aria-selected="false" tabindex="-1" data-sf="mist"><span class="sf-ph"><img data-k="bbmf" alt=""></span><i class="sf-n">3</i><b>Sea Mist And Wind</b><small>Why the weather matters here</small></button>
-          <button type="button" role="tab" class="sf-tab" id="sft-water" aria-controls="sfp-water" aria-selected="false" tabindex="-1" data-sf="water"><span class="sf-ph"><img data-k="p47" alt=""></span><i class="sf-n">4</i><b>From The Piers And Beyond</b><small>Other ways to watch</small></button>
+          <button type="button" role="tab" class="sf-tab" id="sft-water" aria-controls="sfp-water" aria-selected="false" tabindex="-1" data-sf="water"><span class="sf-ph"><img data-k="mig17" alt=""></span><i class="sf-n">4</i><b>From The Piers And Beyond</b><small>Other ways to watch</small></button>
           <button type="button" role="tab" class="sf-tab" id="sft-kit" aria-controls="sfp-kit" aria-selected="false" tabindex="-1" data-sf="kit"><span class="sf-ph"><img data-k="typhoon" alt=""></span><i class="sf-n">5</i><b>Seafront Kit List</b><small>Pack for a day on the prom</small></button>
         </div>
       </div>
@@ -2577,7 +2596,7 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Lancaster, Spitfire
               </div>
             </article>
             <article class="wt-card">
-              <span class="wt-ph"><img class="photo" data-k="pitts" alt=""></span>
+              <span class="wt-ph"><img class="photo" data-k="raven" alt=""></span>
               <div class="wt-tx">
                 <h4>From A Seafront Window</h4>
                 <p>A sea view table in a cafe, bar or hotel along the front is a comfortable way to watch, especially if someone in your group needs a seat. These fill up fast, so book ahead where you can.</p>
@@ -3059,7 +3078,7 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Lancaster, Spitfire
         <p class="note">Blackpool gives you something an airfield can&rsquo;t: the Tower, the piers and the sea. The flip side is the light, as the sun moves in front of you through the afternoon. I would suggest using the sun guide to plan where you stand, and treating the later displays as a chance for silhouettes, smoke and sparkle on the water.</p>
       </div>
       <div class="creative reveal">
-        <figure class="big"><span class="photo-btn"><img data-k="pitts" alt="" decoding="async"></span><figcaption>A Pitts Special trailing smoke</figcaption></figure>
+        <figure class="big"><span class="photo-btn"><img data-k="pitts" alt="" decoding="async"></span><figcaption>The Jet Pitts trailing smoke</figcaption></figure>
         <figure class="small"><span class="photo-btn"><img data-k="spitfire" alt="" decoding="async"></span><figcaption>Battle of Britain Memorial Flight Spitfire</figcaption></figure>
         <div class="tips">
           <h4>Ideas to try</h4>
@@ -3407,7 +3426,7 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Lancaster, Spitfire
     function luPhoto(i){
       if(!window.PHOTO||isCx(i))return "";
       var t=[i.aircraftName,i.variant,i.squadron,i.airArm,i.operator].join(" ").toLowerCase();
-      var M=[[/typhoon/,"typhoon"],[/spitfire.*memorial flight/,"spitfire"],[/hurricane/,"bbmf"],[/p-47/,"p47"]];
+      var M=[[/typhoon/,"typhoon"],[/spitfire.*memorial flight/,"spitfire"],[/hurricane|dakota/,"bbmf"],[/mig-?17/,"mig17"],[/jet pitts/,"pitts"],[/wing ?walk|aerosuperbatics/,"wingwalkers"],[/raven/,"raven"]];
       for(var n=0;n<M.length;n++){ if(M[n][0].test(t)&&window.PHOTO[M[n][1]]) return M[n][1]; }
       return "";
     }

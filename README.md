@@ -27,7 +27,9 @@ so a change saved here shows on the Wix site within a minute or two.
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
 Rules for every page: one self-contained HTML file, Barlow, hidden scrollbar,
-collapsible sections, no dashes in copy, no photo credits, images not clickable.
+collapsible sections, no dashes in copy, images not clickable. No photo credits,
+except where the photographer asks for one: Chris Murgatroyd's photos on the Blackpool page carry a
+"© Chris Murgatroyd" label on every photo (the `cm-credit` code in camping-layout/blackpool.html).
 
 Every page ends with the `mobile-fit` block (between the `<!-- mobile-fit` comments, just before `</body>`).
 It keeps the page inside the screen down to 320px wide, which is the width Wix gives an HTML box on phones.
