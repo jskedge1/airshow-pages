@@ -151,6 +151,26 @@ h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:700;text-transform:up
 @keyframes rot{to{transform:rotate(360deg)}}
 .foot{font-size:13px;color:#8FA6B6;margin:0}
 
+.stack{display:flex;flex-direction:column;gap:20px}
+.row2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px}
+.row2>*{min-width:0}
+.cell{background:var(--panel-2);border:1px solid var(--line-soft)}
+.compass-wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center}
+.compass{position:relative;width:280px;max-width:100%;aspect-ratio:1;flex:0 0 auto}
+.compass svg{position:absolute;inset:0;width:100%;height:100%}
+.rose{transition:transform .5s cubic-bezier(.2,.8,.2,1);transform-origin:150px 150px}
+.radar{position:relative;width:100%;max-width:320px;align-self:center;aspect-ratio:1;border-radius:50%;overflow:hidden;background:radial-gradient(circle,rgba(19,41,60,.9),rgba(6,16,25,.95));border:1px solid rgba(95,227,220,.35)}
+.sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(95,227,220,.45),rgba(95,227,220,0) 70deg,transparent 360deg);animation:rot 4s linear infinite}
+.reports{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.report{padding:16px;display:flex;flex-direction:column;gap:8px;background:var(--panel-2);border:1px solid var(--line-soft);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.report:hover{transform:translateY(-3px)}
+.inline-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:end;margin-top:6px}
+.inline-form label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px;min-width:0}
+.toggle{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px;padding:10px 14px;background:rgba(6,16,25,.5);border:1px solid rgba(255,138,138,.35);cursor:pointer;position:relative}
+.toggle input{width:22px;height:22px;accent-color:var(--red);flex:none}
+details.full summary{cursor:pointer;font-weight:600;color:var(--cyan);min-height:40px;display:flex;align-items:center}
+details.full[open] summary{margin-bottom:6px}
+
 /* single show and hub modes are tighter */
 body.compact .wrap{padding-block:16px 24px;gap:16px}
 body.compact .brand p{display:none}
@@ -160,8 +180,10 @@ body.compact .brand p{display:none}
   .order-row{grid-template-columns:96px minmax(0,1fr)}
   .order-row .acts{grid-column:2;justify-content:flex-start}
   .form{grid-template-columns:minmax(0,1fr)}
+  .row2{grid-template-columns:minmax(0,1fr)}
+  .inline-form{grid-template-columns:minmax(0,1fr)}
 }
-@media (prefers-reduced-motion:reduce){.boot,.alert-glow,.spin{animation:none!important}.bar i,.shows button{transition:none}}
+@media (prefers-reduced-motion:reduce){.boot,.alert-glow,.spin,.sweep{animation:none!important}.rose,.report{transition:none}.bar i,.shows button{transition:none}}
 </style>
 </head>
 <body>
@@ -249,7 +271,7 @@ var params=new URLSearchParams(location.search);
 var MODE=params.get('mode')==='hub'?'hub':(params.get('show')?'single':'full');
 var FIXED=MODE==='single'?norm(params.get('show')):null;
 
-var st={show:FIXED||'riat',dayIdx:{},progs:{},member:null,clock:'test',testSec:46800,playing:false,files:[],sending:false,connected:false,clockChosen:false};
+var st={show:FIXED||'riat',dayIdx:{},progs:{},member:null,clock:'test',testSec:46800,playing:false,files:[],sending:false,connected:false,clockChosen:false,heading:0,alerts:true,reports:[],confirmed:{}};
 var playTimer=null;
 
 function $(s){return document.querySelector(s);}
@@ -340,8 +362,60 @@ function renderClock(){
 }
 
 /* ---------- board ---------- */
+var GEO={
+  riat:{lat:51.682,lon:-1.790,face:0},
+  cosford:{lat:52.640,lon:-2.306,face:null},
+  duxford:{lat:52.090,lon:0.132,face:180},
+  eastbourne:{lat:50.766,lon:0.290,face:165},
+  clacton:{lat:51.788,lon:1.155,face:135},
+  wales:{lat:51.605,lon:-3.960,face:180},
+  midlands:{lat:52.198,lon:-1.888,face:null},
+  shuttleworth:{lat:52.087,lon:-0.318,face:null},
+  'little-gransden':{lat:52.165,lon:-0.153,face:null},
+  southport:{lat:53.653,lon:-3.010,face:285},
+  blackpool:{lat:53.816,lon:-3.056,face:270},
+  ayr:{lat:55.462,lon:-4.636,face:270},
+  headcorn:{lat:51.157,lon:0.646,face:null}
+};
+var PLACES=['Car parks','Entry gates','Toilets','Food and drink','Shuttle bus','Crowd line','Other'];
+var STATUSES=[{v:'Quiet',k:'c'},{v:'Short queue',k:'c'},{v:'Running',k:'c'},{v:'Busy',k:'p'},{v:'Long queue',k:'p'},{v:'Delayed',k:'r'},{v:'Full or closed',k:'r'}];
+function statusKind(s){var f=STATUSES.find(function(x){return x.v===s;});return f?f.k:'p';}
+
 function emptyCard(title,text,btn){
   return '<div class="glass boot empty" style="--d:.2s"><span class="tag ghost">No running order yet</span><h2>'+esc(title)+'</h2><p class="mut" style="margin:0;max-width:600px">'+text+'</p>'+(btn||'')+'</div>';
+}
+function compassPanel(d){
+  return '<div class="glass panel boot" style="--d:'+d+'s"><div class="ph"><h2>Sky Compass</h2><span class="tag ghost">Uses Your Phone\'s Compass</span></div>'+
+    '<p style="margin:0;color:#C9D8E2;font-size:15px">Hold your phone flat and the compass turns with you. It shows where the display is and where the sun sits at this time of day.</p>'+
+    '<div class="compass-wrap"><div class="compass"><svg viewBox="0 0 300 300" role="img" aria-label="Sky compass turned to the way you are facing">'+
+      '<circle cx="150" cy="150" r="146" fill="rgba(6,16,25,.7)" stroke="rgba(95,227,220,.4)"/>'+
+      '<circle cx="150" cy="150" r="134" fill="none" stroke="rgba(95,227,220,.28)" stroke-dasharray="2 7"/>'+
+      '<g class="rose" id="rose"><text x="150" y="34" text-anchor="middle" fill="#5FE3DC" font-family="JetBrains Mono" font-size="16">N</text>'+
+      '<text x="270" y="155" text-anchor="middle" fill="#A9BDCB" font-family="JetBrains Mono" font-size="14">E</text>'+
+      '<text x="150" y="278" text-anchor="middle" fill="#A9BDCB" font-family="JetBrains Mono" font-size="14">S</text>'+
+      '<text x="30" y="155" text-anchor="middle" fill="#A9BDCB" font-family="JetBrains Mono" font-size="14">W</text><g id="rose-dyn"></g></g>'+
+      '<path d="M150 128 L160 160 L150 154 L140 160 Z" fill="#FFFFFF"/><text x="150" y="186" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono" font-size="11">You</text>'+
+    '</svg></div>'+
+    '<div style="flex:1 1 200px;display:flex;flex-direction:column;gap:10px;min-width:0">'+
+      '<div class="cell" style="padding:12px 14px"><div class="mut" style="font-size:14px">You Are Facing</div><div class="mono" style="font-size:30px;color:#fff" id="hdg-val">0°</div></div>'+
+      '<label for="hdg" style="font-weight:600;font-size:15px">Try it: turn to face</label>'+
+      '<input id="hdg" type="range" min="0" max="359" value="'+Math.round(st.heading)+'" style="width:100%;accent-color:#32B4AF;min-height:40px">'+
+      '<div class="cell" style="padding:12px 14px;font-size:15px" id="facing-tip"></div>'+
+      '<button class="btn primary" id="compass-btn">Use My Phone\'s Compass</button>'+
+    '</div></div></div>';
+}
+function radarPanel(d){
+  return '<div class="glass panel boot" style="--d:'+d+'s"><div class="ph"><h2>Live Radar</h2><span class="tag ghost">Standby</span></div>'+
+    '<div class="radar"><svg viewBox="0 0 300 300" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%">'+
+      '<circle cx="150" cy="150" r="50" fill="none" stroke="rgba(95,227,220,.22)"/><circle cx="150" cy="150" r="100" fill="none" stroke="rgba(95,227,220,.22)"/>'+
+      '<circle cx="150" cy="150" r="148" fill="none" stroke="rgba(95,227,220,.3)"/><line x1="150" y1="0" x2="150" y2="300" stroke="rgba(95,227,220,.16)"/>'+
+      '<line x1="0" y1="150" x2="300" y2="150" stroke="rgba(95,227,220,.16)"/><circle cx="150" cy="150" r="5" fill="#FFFFFF"/></svg>'+
+      '<div class="sweep" aria-hidden="true"></div></div>'+
+    '<p class="mut" style="margin:0;font-size:14px">Live aircraft tracking for each show switches on in the days before it, using public flight tracking. Military aircraft do not always show, so treat it as a guide.</p></div>';
+}
+function crowdPanel(d){
+  return '<div class="glass panel boot" style="--d:'+d+'s"><div class="ph"><h2>Crowd Reports</h2><span class="mut" style="font-size:14px">From members on site, last 45 minutes</span></div>'+
+    '<div class="reports" id="reports"></div><div id="report-form"></div></div>';
 }
 function buildBoard(){
   var wrap=$('#board-wrap');
@@ -359,21 +433,28 @@ function buildBoard(){
     wrap.innerHTML=emptyCard('Running orders arrive closer to the shows','Organisers usually publish flying display times in the week of the show or in the programme on the day. As soon as one is in, it appears here.','<a href="#upload" class="btn primary">Send Us A Programme</a>');return;
   }
   var cd=curDay();
+  var top;
   if(!cd){
-    wrap.innerHTML=emptyCard(showById(st.show).name,'Flying display times are usually published in the week of the show or in the programme on the day. As soon as I have them, they appear here.',MODE==='hub'?'':'<a href="#upload" class="btn primary">Send Us The Programme</a>');return;
+    top=emptyCard(showById(st.show).name,'Flying display times are usually published in the week of the show or in the programme on the day. As soon as I have them, they appear here.',MODE==='hub'?'':'<a href="#upload" class="btn primary">Send Us The Programme</a>');
+  }else{
+    top='<div class="board">'+
+      '<div class="glass panel boot" style="--d:.2s"><div class="ph"><h2>Now Flying</h2><span id="now-tag"></span></div><div id="now-body"></div>'+
+        '<h3 style="font-size:18px;color:var(--cyan);margin-top:4px">Next Up</h3><div class="next-list" id="next-body"></div>'+
+        '<details class="full"><summary>Full running order&nbsp;<span class="mut">(<span id="order-count"></span>)</span></summary><div class="order" id="order-body"></div></details></div>'+
+      '<div class="glass panel alert boot" style="--d:.3s" id="alert-panel" data-state="calm"><span class="alert-glow" aria-hidden="true"></span><div class="ph"><h2>Ear Defender Alert</h2>'+
+        '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FF8A8A" stroke-width="1.8" aria-hidden="true"><path d="M7 14v-3a5 5 0 0 1 10 0v3"/><rect x="3" y="13" width="4" height="7"/><rect x="17" y="13" width="4" height="7"/></svg></div>'+
+        '<div id="alert-body" style="display:flex;flex-direction:column;gap:10px"></div>'+
+        '<label class="toggle" for="fam-alerts"><span><span style="display:block;font-weight:600">Family Alerts</span><span class="mut" style="font-size:14px">Warn me ten minutes before loud jets</span></span>'+
+        '<input type="checkbox" id="fam-alerts" '+(st.alerts?'checked':'')+'></label></div>'+
+    '</div>';
   }
-  wrap.innerHTML='<div class="board">'+
-    '<div class="glass panel boot" style="--d:.2s"><div class="ph"><h2>Now Flying</h2><span id="now-tag"></span></div><div id="now-body"></div></div>'+
-    '<div class="glass panel alert boot" style="--d:.3s" id="alert-panel" data-state="calm"><span class="alert-glow" aria-hidden="true"></span><div class="ph"><h2>Ear Defender Alert</h2>'+
-      '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FF8A8A" stroke-width="1.8" aria-hidden="true"><path d="M7 14v-3a5 5 0 0 1 10 0v3"/><rect x="3" y="13" width="4" height="7"/><rect x="17" y="13" width="4" height="7"/></svg></div><div id="alert-body"></div></div>'+
-    '<div class="glass panel boot" style="--d:.4s"><div class="ph"><h2>Next Up</h2></div><div class="next-list" id="next-body"></div></div>'+
-    '<div class="glass panel boot" style="--d:.45s"><div class="ph"><h2>Running Order</h2><span class="tag ghost" id="order-count"></span></div><div class="order" id="order-body"></div></div>'+
-  '</div>';
-  tick();
+  wrap.innerHTML='<div class="stack">'+top+'<div class="row2">'+compassPanel(.45)+radarPanel(.55)+'</div>'+crowdPanel(.65)+'</div>';
+  tick();renderCompass();renderReports();
 }
 function fmtLeft(s){s=Math.max(0,Math.round(s));var h=Math.floor(s/3600),m=Math.floor(s/60)%60,x=s%60;return h?h+'h '+pad(m)+'m':pad(m)+':'+pad(x);}
 function tick(){
   renderClock();
+  renderCompass();
   var cd=curDay();if(!cd||!$('#now-body'))return;
   var items=cd.day.items,sec=nowSec(),t=sec/60;
   var cur=items.find(function(i){return t>=i.start&&t<i.end;});
@@ -399,18 +480,20 @@ function tick(){
 
   var loudNext=up.find(function(i){return i.loud;});
   var state='calm',ah;
-  if(cur&&cur.loud){
+  if(!st.alerts){
+    ah='<p style="margin:0" class="mut">Family alerts are off. Switch them back on below to get a warning before the loud jets.</p>';
+  }else if(cur&&cur.loud){
     state='on';
     ah='<p style="margin:0;font-weight:600">Ear defenders on now</p><div class="big-count mono">'+fmtLeft(cur.end*60-sec)+'</div><div>'+esc(cur.name)+' until <span class="mono">'+hhmm(cur.end)+'</span></div>';
   }else if(loudNext){
     var left=loudNext.start*60-sec;
-    if(left<=600){state='warn';ah='<p style="margin:0;font-weight:600">Loud display coming up. Get ear defenders ready for the little ones.</p><div class="big-count mono">'+fmtLeft(left)+'</div><div>'+esc(loudNext.name)+' at <span class="mono">'+hhmm(loudNext.start)+'</span></div>';}
-    else ah='<p style="margin:0" class="mut">All quiet for now. The next loud display is</p><div style="font-family:var(--f-display);font-weight:700;font-size:30px;text-transform:uppercase;line-height:1">'+esc(loudNext.name)+'</div><div class="mono" style="font-size:20px;color:var(--cyan)">'+hhmm(loudNext.start)+' <span class="mut" style="font-size:15px">in '+fmtLeft(left)+'</span></div><p style="margin:0;font-size:14px" class="mut">This panel turns red ten minutes before it starts.</p>';
+    if(left<=600){state='warn';ah='<p style="margin:0;font-weight:600">Loud fast jet coming up. Ear defenders on for the little ones.</p><div class="big-count mono">'+fmtLeft(left)+'</div><div style="font-weight:600">'+esc(loudNext.name)+' at <span class="mono">'+hhmm(loudNext.start)+'</span></div>';}
+    else ah='<p style="margin:0" class="mut">All quiet for now. The next loud display is</p><div style="font-family:var(--f-display);font-weight:700;font-size:30px;text-transform:uppercase;line-height:1">'+esc(loudNext.name)+'</div><div class="mono big-count" style="font-size:40px">'+fmtLeft(left)+'</div><div class="mono" style="color:var(--cyan)">Starts '+hhmm(loudNext.start)+'</div>';
   }else ah='<p style="margin:0" class="mut">No more loud displays on this running order.</p>';
   var ap=$('#alert-panel');if(ap.dataset.state!==state)ap.dataset.state=state;
   $('#alert-body').innerHTML=ah;
 
-  $('#next-body').innerHTML=up.length?up.slice(0,4).map(function(i){return '<div class="next-item"><span class="mono">'+hhmm(i.start)+'</span><span style="font-weight:600;overflow-wrap:anywhere">'+esc(i.name)+'</span>'+(i.loud?'<span class="tag red">Loud</span>':'<span></span>')+'</div>';}).join(''):'<p class="mut" style="margin:0">Nothing else to come today.</p>';
+  $('#next-body').innerHTML=up.length?up.slice(0,3).map(function(i){return '<div class="next-item"><span class="mono">'+hhmm(i.start)+'</span><span style="font-weight:600;overflow-wrap:anywhere">'+esc(i.name)+'</span>'+(i.loud?'<span class="tag red">Loud</span>':'<span></span>')+'</div>';}).join(''):'<p class="mut" style="margin:0">Nothing else to come today.</p>';
 
   $('#order-count').textContent=items.length+' displays';
   var nextOne=up[0];
@@ -423,6 +506,97 @@ function tick(){
 function jumpToFirst(){
   var cd=curDay();if(!cd||st.clock!=='test')return;
   st.testSec=Math.max(21600,(cd.day.items[0].start-12)*60);
+}
+
+/* ---------- sky compass ---------- */
+function londonOffsetMin(ds){try{var d=new Date(ds+'T12:00:00Z');var h=+new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',hour:'2-digit',hour12:false}).format(d);return (h-12)*60;}catch(e){return 0;}}
+function sunAt(ds,sec,lat,lon){
+  var p=ds.split('-').map(Number),rad=Math.PI/180;
+  var ms=Date.UTC(p[0],p[1]-1,p[2])+sec*1000-londonOffsetMin(ds)*60000;
+  var d=(ms-Date.UTC(2000,0,1,12))/86400000;
+  var g=(357.529+0.98560028*d)*rad,q=280.459+0.98564736*d;
+  var L=(q+1.915*Math.sin(g)+0.020*Math.sin(2*g))*rad,e=(23.439-0.00000036*d)*rad;
+  var ra=Math.atan2(Math.cos(e)*Math.sin(L),Math.cos(L)),dec=Math.asin(Math.sin(e)*Math.sin(L));
+  var gmst=((18.697374558+24.06570982441908*d)%24)*15*rad;
+  var ha=gmst+lon*rad-ra,la=lat*rad;
+  var alt=Math.asin(Math.sin(la)*Math.sin(dec)+Math.cos(la)*Math.cos(dec)*Math.cos(ha));
+  var az=Math.atan2(-Math.sin(ha),Math.tan(dec)*Math.cos(la)-Math.sin(la)*Math.cos(ha));
+  return {az:((az/rad)+360)%360,alt:alt/rad};
+}
+function polar(b,r){var a=b*Math.PI/180;return [150+r*Math.sin(a),150-r*Math.cos(a)];}
+var DIRS=['north','north east','east','south east','south','south west','west','north west'];
+function renderCompass(){
+  var rose=$('#rose');if(!rose)return;
+  var h=((st.heading%360)+360)%360;
+  rose.style.transform='rotate('+(-h)+'deg)';
+  $('#hdg-val').textContent=Math.round(h)+'°';
+  var slider=$('#hdg');if(slider&&document.activeElement!==slider)slider.value=Math.round(h);
+  var geo=GEO[st.show]||null;var dyn='';var tips=[];
+  if(geo&&geo.face!=null){
+    var c=polar(geo.face,72),f=geo.face*Math.PI/180,dx=Math.cos(f)*92,dy=Math.sin(f)*92;
+    var lab=polar(geo.face,96);
+    dyn+='<line x1="'+(c[0]-dx).toFixed(1)+'" y1="'+(c[1]-dy).toFixed(1)+'" x2="'+(c[0]+dx).toFixed(1)+'" y2="'+(c[1]+dy).toFixed(1)+'" stroke="#32B4AF" stroke-width="3" stroke-dasharray="8 6"/>';
+    dyn+='<text x="'+lab[0].toFixed(1)+'" y="'+lab[1].toFixed(1)+'" text-anchor="middle" fill="#32B4AF" font-family="JetBrains Mono" font-size="11">Display</text>';
+    var diff=((h-geo.face+540)%360)-180;
+    tips.push(Math.abs(diff)<30?'The display is right in front of you.':(Math.abs(diff)>150?'The display is behind you, turn round.':'Turn a little to your '+(diff>0?'left':'right')+' to face the display.'));
+  }else tips.push('The display line for this show is still being added. The sun is shown where it sits now.');
+  if(geo){
+    var cd=curDay();var ds=st.clock==='live'?londonToday():((cd&&cd.day.date)||londonToday());
+    var s=sunAt(String(ds).slice(0,10),nowSec(),geo.lat,geo.lon);
+    if(s.alt>0){
+      var sp=polar(s.az,112);
+      dyn+='<circle cx="'+sp[0].toFixed(1)+'" cy="'+sp[1].toFixed(1)+'" r="12" fill="#F5C76B" style="filter:drop-shadow(0 0 10px rgba(245,199,107,.8))"/>';
+      dyn+='<text x="'+sp[0].toFixed(1)+'" y="'+(sp[1]-18).toFixed(1)+'" text-anchor="middle" fill="#F5C76B" font-family="JetBrains Mono" font-size="11">Sun</text>';
+      if(geo.face!=null){var sd=Math.abs(((s.az-geo.face+540)%360)-180);if(sd<45&&s.alt<45)tips.push('The sun is over the display, so expect silhouettes for photos.');else if(sd>135)tips.push('The sun is behind you, good light on the aircraft.');}
+    }else tips.push('The sun is below the horizon at this time.');
+  }
+  $('#rose-dyn').innerHTML=dyn;
+  $('#facing-tip').textContent='You are facing '+DIRS[Math.round(h/45)%8]+'. '+tips.join(' ');
+}
+var gotReading=false;
+function onOri(e){
+  var h=null;
+  if(typeof e.webkitCompassHeading==='number')h=e.webkitCompassHeading;
+  else if((e.absolute||e.type==='deviceorientationabsolute')&&typeof e.alpha==='number')h=(360-e.alpha)%360;
+  if(h==null)return;
+  gotReading=true;st.heading=h;renderCompass();
+}
+function startCompass(){
+  var D=window.DeviceOrientationEvent;
+  var say=function(t){var el=$('#facing-tip');if(el)el.textContent=t;};
+  if(!D){say('This device has no compass. Use the slider instead.');return;}
+  var go=function(){
+    window.addEventListener('deviceorientationabsolute',onOri,true);window.addEventListener('deviceorientation',onOri,true);
+    setTimeout(function(){if(!gotReading)say('No compass reading came through. Some phones block the compass inside websites, so use the slider instead.');},3000);
+  };
+  if(typeof D.requestPermission==='function'){D.requestPermission().then(function(r){if(r==='granted')go();else say('Compass access was not allowed. Use the slider instead.');}).catch(function(){say('Your browser blocked the compass here. Use the slider instead.');});}
+  else go();
+}
+
+/* ---------- crowd reports ---------- */
+function renderReports(){
+  var box=$('#reports');if(!box)return;
+  var list=st.reports||[];
+  box.innerHTML=list.length?list.map(function(r){
+    var k=statusKind(r.status),done=!!st.confirmed[r.id];
+    var mins=Math.max(1,Math.round((Date.now()-new Date(r.at).getTime())/60000));
+    return '<div class="report"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span style="font-weight:600">'+esc(r.place)+'</span><span class="tag '+(k==='r'?'red':k==='c'?'teal':'purple')+'">'+esc(r.status)+'</span></div>'+
+      '<span class="mut" style="font-size:14px">Reported '+mins+' min'+(mins>1?'s':'')+' ago.'+(r.note?' '+esc(r.note):'')+'</span>'+
+      '<button class="btn ghost" style="min-height:40px;margin-top:auto" data-confirm="'+esc(r.id)+'" '+(done||!(st.member&&st.member.loggedIn)?'disabled':'')+'>'+(done?'Thanks · ':'Still true · ')+(r.confirms||0)+'</button></div>';
+  }).join(''):'<p class="mut" style="margin:0">No reports in the last 45 minutes. On show day, members post car park, toilet and queue updates here.</p>';
+  var f=$('#report-form');if(!f)return;
+  if(!(st.member&&st.member.loggedIn)){f.innerHTML='<div class="btns"><button class="btn ghost" data-login="1">Log In To Post A Report</button></div>';return;}
+  if(f.dataset.built)return;
+  f.dataset.built='1';
+  f.innerHTML='<div class="inline-form">'+
+    '<label for="rp-place">Where<select class="field" id="rp-place">'+PLACES.map(function(p){return '<option>'+esc(p)+'</option>';}).join('')+'</select></label>'+
+    '<label for="rp-status">How is it<select class="field" id="rp-status">'+STATUSES.map(function(s){return '<option>'+esc(s.v)+'</option>';}).join('')+'</select></label>'+
+    '<label for="rp-note">Detail<input class="field" id="rp-note" maxlength="80" placeholder="Staff sending cars to C"></label>'+
+    '<button class="btn primary" id="rp-send">Post Report</button></div>';
+}
+function loadReports(){
+  if(!st.connected||MODE==='hub'&&!visibleShows().length)return Promise.resolve();
+  return call('reports',{showId:st.show},10000).then(function(list){st.reports=list||[];renderReports();}).catch(function(){});
 }
 
 /* ---------- upload bay ---------- */
@@ -514,7 +688,8 @@ function send(){
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
   var b=e.target.closest('button');if(!b)return;
-  if(b.dataset.show){st.show=b.dataset.show;jumpToFirst();renderShows();buildBoard();renderUpload();return;}
+  if(b.dataset.show){st.show=b.dataset.show;st.reports=[];jumpToFirst();renderShows();buildBoard();renderUpload();loadReports();return;}
+  if(b.dataset.confirm){var cid=b.dataset.confirm;st.confirmed[cid]=true;renderReports();call('confirm',{id:cid}).then(loadReports).catch(function(){});return;}
   if(b.dataset.day!=null){st.dayIdx[st.show]=+b.dataset.day;jumpToFirst();renderShows();buildBoard();return;}
   if(b.dataset.rm!=null){st.files.splice(+b.dataset.rm,1);renderThumbs();return;}
   if(b.dataset.login||b.id==='login-btn'){call('login').then(load).catch(function(){});return;}
@@ -526,10 +701,18 @@ document.addEventListener('click',function(e){
       if(st.playing)playTimer=setInterval(function(){st.testSec=Math.min(72000,st.testSec+15);if(st.testSec>=72000){st.playing=false;clearInterval(playTimer);}tick();},250);
       renderClock();break;
     case 'send-btn':send();break;
+    case 'compass-btn':startCompass();break;
+    case 'rp-send':
+      b.disabled=true;
+      call('report',{showId:st.show,place:$('#rp-place').value,status:$('#rp-status').value,note:$('#rp-note').value.trim().slice(0,80)})
+        .then(function(){$('#rp-note').value='';return loadReports();})
+        .catch(function(err){var box=$('#reports');if(box)box.insertAdjacentHTML('afterbegin','<p class="status err" style="grid-column:1/-1;margin:0">'+esc((err&&err.message)||'That report did not post. Please try again.')+'</p>');})
+        .then(function(){b.disabled=false;});
+      break;
   }
 });
-document.addEventListener('input',function(e){if(e.target.id==='scrub'){st.testSec=+e.target.value;tick();}});
-document.addEventListener('change',function(e){if(e.target.id==='prog-file'){addFiles(e.target.files);e.target.value='';}});
+document.addEventListener('input',function(e){if(e.target.id==='scrub'){st.testSec=+e.target.value;tick();}if(e.target.id==='hdg'){st.heading=+e.target.value;renderCompass();}});
+document.addEventListener('change',function(e){if(e.target.id==='prog-file'){addFiles(e.target.files);e.target.value='';}if(e.target.id==='fam-alerts'){st.alerts=e.target.checked;tick();}});
 var drop=$('#drop');
 ['dragenter','dragover'].forEach(function(n){drop.addEventListener(n,function(e){e.preventDefault();drop.classList.add('over');});});
 ['dragleave','drop'].forEach(function(n){drop.addEventListener(n,function(e){e.preventDefault();drop.classList.remove('over');});});
@@ -542,7 +725,7 @@ function load(){
     setProgrammes(d&&d.programmes);
     st.member=(d&&d.member)||{loggedIn:false};
     pickToday();jumpToFirst();
-    renderShows();buildBoard();renderUpload();renderClock();
+    renderShows();buildBoard();renderUpload();renderClock();loadReports();
   }).catch(function(){
     buildBoard();
     setStatus('Open this page on ukairshowguide.co.uk to load the running orders and send a programme.');
@@ -552,6 +735,7 @@ if(MODE!=='full')document.body.classList.add('compact');
 renderShows();buildBoard();renderUpload();renderClock();
 load();
 setInterval(function(){if(st.clock==='live')tick();},1000);
+setInterval(loadReports,60000);
 })();
 </script>
 </body>

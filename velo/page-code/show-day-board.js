@@ -5,7 +5,7 @@
 // If the page already has page code (My Airshow Hub does), paste only the part between the two START and END lines
 // inside its existing $w.onReady, and keep the import line at the top of the file.
 
-import { getProgrammes, getShowDayMember, submitProgramme } from 'backend/showday.web';
+import { getProgrammes, getShowDayMember, submitProgramme, getCrowdReports, addCrowdReport, confirmCrowdReport } from 'backend/showday.web';
 import { authentication } from 'wix-members-frontend';
 
 // START Show Day Live
@@ -21,6 +21,12 @@ $w.onReady(function () {
         const p = m.payload || {};
         const [programmes, member] = await Promise.all([getProgrammes(p.show || null), getShowDayMember()]);
         reply.data = { programmes, member };
+      } else if (m.action === 'reports') {
+        reply.data = await getCrowdReports((m.payload || {}).showId);
+      } else if (m.action === 'report') {
+        reply.data = await addCrowdReport(m.payload);
+      } else if (m.action === 'confirm') {
+        reply.data = await confirmCrowdReport((m.payload || {}).id);
       } else if (m.action === 'upload') {
         reply.data = await submitProgramme(m.payload);
       } else if (m.action === 'login') {

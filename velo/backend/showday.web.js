@@ -56,6 +56,46 @@ export const getShowDayMember = webMethod(Permissions.Anyone, async () => {
   return { loggedIn: true, name, saved };
 });
 
+// Crowd reports: what members on site say about car parks, toilets and queues. Only the last 45 minutes show.
+const PLACES = ['Car parks', 'Entry gates', 'Toilets', 'Food and drink', 'Shuttle bus', 'Crowd line', 'Other'];
+const STATUSES = ['Quiet', 'Short queue', 'Running', 'Busy', 'Long queue', 'Delayed', 'Full or closed'];
+
+export const getCrowdReports = webMethod(Permissions.Anyone, async (showId) => {
+  if (!SHOWS[showId]) return [];
+  const since = new Date(Date.now() - 45 * 60 * 1000);
+  const res = await wixData.query('CrowdReports').eq('showId', showId).ge('_createdDate', since)
+    .descending('_createdDate').limit(30).find();
+  return res.items.map((i) => ({ id: i._id, place: i.place, status: i.status, note: i.note || '', confirms: i.confirms || 0, at: i._createdDate }));
+});
+
+export const addCrowdReport = webMethod(Permissions.SiteMember, async (payload) => {
+  const p = payload || {};
+  if (!SHOWS[p.showId]) throw new Error('Please choose a show first.');
+  if (!PLACES.includes(p.place) || !STATUSES.includes(p.status)) throw new Error('Please pick where and how it is.');
+  const member = await currentMember.getMember();
+  const recent = await wixData.query('CrowdReports').eq('memberId', member._id)
+    .ge('_createdDate', new Date(Date.now() - 2 * 60 * 1000)).count({ suppressAuth: true });
+  if (recent >= 3) throw new Error('Thanks, give it a couple of minutes before posting again.');
+  await wixData.insert('CrowdReports', {
+    title: `${SHOWS[p.showId]}: ${p.place}, ${p.status}`,
+    showId: p.showId,
+    place: p.place,
+    status: p.status,
+    note: String(p.note || '').slice(0, 80),
+    confirms: 0,
+    memberId: member._id
+  }, { suppressAuth: true });
+  return { ok: true };
+});
+
+export const confirmCrowdReport = webMethod(Permissions.SiteMember, async (id) => {
+  const item = await wixData.get('CrowdReports', String(id), { suppressAuth: true });
+  if (!item) return { ok: false };
+  item.confirms = (item.confirms || 0) + 1;
+  await wixData.update('CrowdReports', item, { suppressAuth: true });
+  return { ok: true, confirms: item.confirms };
+});
+
 // A member sends photos of the flying programme. They land in ProgrammeUploads with status "Waiting".
 export const submitProgramme = webMethod(Permissions.SiteMember, async (payload) => {
   const p = payload || {};
