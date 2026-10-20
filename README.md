@@ -99,5 +99,8 @@ web module (`velo/backend/showday.web.js`):
 My Airshow Hub has a Show Day tab that loads `show-day.html?mode=hub` and passes its messages through the hub box
 (`velo/page-code/my-airshow-hub-showday.js`). The hub's dark glass look is the `hud-theme` block before `</head>`
 in `my-airshow-hub.html`; delete that block to go back to the white look.
-The hub is pasted as code into the `hubEmbed` box on /my-airshow-hub (not a website address), so after changing
-`my-airshow-hub.html` paste it into that box again (done for the HUD and Show Day tab on 20 Oct 2026).
+Since 21 Oct 2026 the `hubEmbed` box on /my-airshow-hub loads `my-airshow-hub.html` by website address, so changes here go live on their own.
+The hub's photos are files in `hub-img/`. Tabs added on 21 Oct: Overview (inbound radar), Flight Briefing (wind, likely runway, hour by hour
+weather from Open-Meteo, where to stand, must see slots from the Show Day running orders, camera settings), My Hangar (backend
+`velo/backend/hangar.web.js`, collection `MemberHangar`; rarity comes from how many show line ups list the aircraft), My Airshow Year
+(story cards) and Share A Photo in My Posts (reads the camera settings from the file and posts through the forum gallery upload).
