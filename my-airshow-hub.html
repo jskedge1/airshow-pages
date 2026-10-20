@@ -555,6 +555,134 @@ form.add-form,.pollform,.goingme,.fcomments,.tool .k,.poll button,.factions butt
 @keyframes hudGlitch{0%{transform:translate(5px,0);filter:drop-shadow(-4px 0 0 rgba(215,73,73,.85)) drop-shadow(4px 0 0 rgba(95,227,220,.85))}16%{transform:translate(-6px,1px) skewX(5deg);clip-path:inset(14% 0 46% 0)}32%{transform:translate(4px,-2px);clip-path:inset(58% 0 6% 0);filter:drop-shadow(5px 0 0 rgba(105,80,161,.9))}48%{transform:translate(-2px,0);clip-path:inset(-24px);filter:drop-shadow(-3px 0 0 rgba(215,73,73,.7)) drop-shadow(3px 0 0 rgba(95,227,220,.7))}64%{transform:translate(1px,1px) skewX(-2deg);filter:none;opacity:.75}80%{transform:none;opacity:1}100%{transform:none;filter:none;clip-path:inset(-24px);opacity:1}}
 @media (prefers-reduced-motion:reduce){.hud-in{animation:none}}
 
+/* HUD extras: Overview, Flight Briefing, My Hangar, My Airshow Year, Share A Photo */
+.hx-live{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-family:var(--f-mono);font-size:14px;color:var(--hud-cyan)}
+.hx-live i{width:8px;height:8px;border-radius:50%;background:var(--hud-cyan);box-shadow:0 0 0 0 rgba(95,227,220,.6);animation:hxPulse 2.4s ease-out infinite}
+@keyframes hxPulse{0%{box-shadow:0 0 0 0 rgba(95,227,220,.55)}70%{box-shadow:0 0 0 12px rgba(95,227,220,0)}100%{box-shadow:0 0 0 0 rgba(95,227,220,0)}}
+.ov-hello .pbody{padding:26px 28px}
+.ov-greet{margin:0;font-family:var(--f-display);font-weight:800;font-size:clamp(34px,5vw,58px);line-height:.95;text-transform:uppercase;color:#fff;letter-spacing:.005em;text-shadow:0 0 34px rgba(95,227,220,.25)}
+.ov-sum{margin:12px 0 0;max-width:60ch;font-size:17px;line-height:1.5;color:var(--hud-mut)}
+.ov-go{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.hstats b{color:#fff}
+.hstats span{color:var(--hud-mut)}
+.ov-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:20px;align-items:start}
+.ov-show{display:block;font-family:var(--f-display);font-weight:800;font-size:26px;text-transform:uppercase;line-height:1.05;color:#fff}
+.ov-cd{display:flex;align-items:baseline;gap:10px;margin:12px 0 14px;flex-wrap:wrap}
+.ov-cd b{font-family:var(--f-mono);font-weight:500;font-size:56px;line-height:1;color:#fff;text-shadow:0 0 18px rgba(95,227,220,.5)}
+.ov-cd span{font-weight:600;color:var(--hud-mut)}
+.ov-cd code{margin-left:auto;font-family:var(--f-mono);font-size:20px;color:var(--hud-cyan)}
+.ov-radar-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:center}
+.radar{width:100%;max-width:300px;display:block;margin:0 auto}
+.radar .sweep{transform-origin:150px 150px;animation:hxSweep 6s linear infinite}
+@keyframes hxSweep{to{transform:rotate(360deg)}}
+.radar .blip-ring{animation:hxBlip 2.6s ease-out infinite}
+@keyframes hxBlip{0%{opacity:.35}100%{opacity:0}}
+.ov-blips{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.ov-blips li{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--hud-line);background:rgba(6,16,25,.45);cursor:pointer;transition:background .25s ease}
+.ov-blips li:hover{background:rgba(50,180,175,.14)}
+.ov-blips li i{width:10px;height:10px;border-radius:50%}
+.ov-blips li b{font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ov-blips li span{font-family:var(--f-mono);font-size:13px;color:var(--hud-cyan)}
+.ov-must,.bf-slot{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--hud-line)}
+.ov-must:last-child,.bf-slot:last-child{border-bottom:0}
+.ov-must b{font-weight:600}
+.ov-must span{grid-column:1;font-size:14px;color:var(--hud-mut)}
+.ov-must em,.bf-slot em{grid-row:1/3;grid-column:2;font-style:normal;font-weight:700;font-size:13px;padding:3px 8px;background:rgba(50,180,175,.22);color:var(--hud-cyan)}
+.ov-must em.st.w,.bf-slot em.st.w{background:rgba(242,184,75,.16);color:#F2B84B}
+.ov-must em.st.x,.bf-slot em.st.x{background:rgba(215,73,73,.2);color:#FF8A8A}
+.bf-issued .pbody{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;align-items:baseline}
+.bf-issued b{font-family:var(--f-display);font-weight:800;font-size:24px;text-transform:uppercase;color:#fff}
+.bf-issued span{font-family:var(--f-mono);font-size:14px;color:var(--hud-cyan)}
+.bf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.bf-wind{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:center}
+.bf-rose{width:100%;max-width:200px}
+.bf-tip{grid-column:1/-1;margin:10px 0 0;font-size:15px;line-height:1.5;color:var(--hud-mut)}
+.bf-hours,.bf-full{grid-column:1/-1}
+.bf-strip{display:grid;grid-template-columns:repeat(10,minmax(74px,1fr));gap:6px;overflow-x:auto;scrollbar-width:none}
+.bf-strip::-webkit-scrollbar{display:none}
+.bf-hour{border:1px solid var(--hud-line);background:rgba(6,16,25,.5);padding:10px 8px;display:grid;gap:4px;text-align:center}
+.bf-hour b{font-family:var(--f-mono);font-weight:500;font-size:13px;color:var(--hud-cyan)}
+.bf-hour strong{font-family:var(--f-display);font-size:28px;line-height:1;color:#fff}
+.bf-hour span{font-size:13px;font-weight:600}
+.bf-hour em{font-style:normal;font-size:12px;color:var(--hud-mut)}
+.bf-hour em.wet{color:#F2B84B}
+.bf-spot{width:100%;display:block;border:1px solid var(--hud-line)}
+.bf-slot{grid-template-columns:64px minmax(0,1fr) auto}
+.bf-slot code{font-family:var(--f-mono);font-size:18px;color:#fff}
+.bf-slot div{display:grid;gap:2px}
+.bf-slot span{font-size:14px;color:var(--hud-mut)}
+.bf-slot em{grid-row:auto;grid-column:3}
+.bf-cam{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--hud-line)}
+.bf-cam div{display:grid;gap:2px}
+.bf-cam span{font-size:14px;color:var(--hud-mut)}
+.bf-cam code{font-family:var(--f-mono);font-size:14px;color:var(--hud-cyan);white-space:pre}
+.hg-tools{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+.hg-find{max-width:260px}
+.hg-split{display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);gap:20px;align-items:start}
+.hg-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.hg-card{--rc:#5FE3DC;position:relative;text-align:left;display:grid;gap:4px;padding:14px 12px 12px;border:1px solid rgba(95,227,220,.2);background:linear-gradient(160deg,rgba(26,58,82,.5),rgba(6,16,25,.6));color:var(--hud-fg);opacity:.62;transition:opacity .25s ease,box-shadow .25s ease,transform .25s ease}
+.hg-card::before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:var(--rc);opacity:.5}
+.hg-card.r-Rare{--rc:#9C86D8}
+.hg-card.r-Oneoff{--rc:#FF6B6B}
+.hg-card.got{opacity:1;border-color:var(--rc);box-shadow:0 0 22px -6px var(--rc),inset 0 0 18px -10px var(--rc)}
+.hg-card.got::before{opacity:1}
+.hg-card.sel{transform:translateY(-2px);outline:2px solid var(--rc);outline-offset:2px}
+.hg-card:hover{opacity:1}
+.hg-card small{font-weight:600;font-size:13px;color:var(--rc)}
+.hg-card b{font-weight:700;font-size:16px;line-height:1.2}
+.hg-card span{font-size:13px;color:var(--hud-mut)}
+.hg-detail{position:sticky;top:12px}
+.hg-log{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.hg-log li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--hud-line);background:rgba(6,16,25,.45);font-size:14px}
+.hg-log .rm{background:transparent;border:0;color:var(--hud-mut);font-size:20px;line-height:1;padding:0 4px}
+.hg-form{display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:10px;align-items:end;margin-top:14px}
+.hg-form .btn{grid-column:1/-1}
+.hg-own{grid-template-columns:minmax(0,1fr) auto;border-top:1px solid var(--hud-line);padding-top:14px}
+.hg-own .btn{grid-column:auto}
+label.f{color:var(--hud-fg)}
+.yr-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:start}
+.yr-top{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hud-line)}
+.yr-top code{font-family:var(--f-mono);color:var(--hud-cyan)}
+.yr-top b{font-weight:600}
+.yr-top em{font-style:normal;font-family:var(--f-mono);color:#fff}
+.yr-map{width:100%;display:block;background:rgba(6,16,25,.4);border:1px solid var(--hud-line)}
+.yr-best{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;margin-bottom:10px;pointer-events:none}
+.yr-meta{display:block;margin-top:4px;font-family:var(--f-mono);font-size:13px;color:var(--hud-mut)}
+.yr-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:6px}
+.yr-card{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;border:1px solid var(--hud-line);-webkit-touch-callout:default}
+.ps-intro{margin:0 0 14px;color:var(--hud-mut);line-height:1.5}
+.ps-form{display:grid;gap:14px}
+.ps-drop{display:grid;place-items:center;min-height:150px;border:1px dashed var(--hud-cyan);background:rgba(6,16,25,.45);cursor:pointer;text-align:center;padding:12px;transition:background .25s ease}
+.ps-drop:hover{background:rgba(50,180,175,.12)}
+.ps-drop span{display:grid;gap:4px;color:var(--hud-mut);font-size:14px}
+.ps-drop span b{font-size:17px;color:#fff}
+.ps-drop img{max-width:100%;max-height:320px;display:block;pointer-events:none}
+.ps-read{margin:0;font-family:var(--f-mono);font-size:14px;color:var(--hud-cyan)}
+.ps-exif{display:grid;gap:12px}
+.ps-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ps-wide{grid-column:1/-1}
+.ps-own{display:flex;align-items:center;gap:10px;font-weight:600;list-style:none;padding:0;margin:0}
+.ps-own input{width:20px;height:20px;accent-color:#32B4AF}
+@media (max-width:980px){.yr-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.yr-grid>section:last-child{grid-column:1/-1}}
+@media (max-width:860px){
+  .ov-grid,.bf-grid,.hg-split{grid-template-columns:minmax(0,1fr)}
+  .hg-detail{position:static}
+  .ov-radar-body{grid-template-columns:minmax(0,1fr)}
+  .ps-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .ov-hello .pbody{padding:20px 16px}
+  .hstats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bf-wind{grid-template-columns:minmax(0,1fr)}
+  .bf-rose{margin:0 auto}
+  .yr-grid{grid-template-columns:minmax(0,1fr)}
+  .yr-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .hg-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ov-cd b{font-size:44px}
+  .hg-find{max-width:none;width:100%}
+}
+@media (prefers-reduced-motion:reduce){.radar .sweep,.radar .blip-ring,.hx-live i{animation:none}}
+
 /* Show Day tab */
 .sd-frame{display:block;width:100%;height:2250px;border:0;background:transparent}
 @media (max-width:860px){.sd-frame{height:3600px}}
@@ -662,21 +790,211 @@ form.add-form,.pollform,.goingme,.fcomments,.tool .k,.poll button,.factions butt
         <div class="prog"><i id="glassProg" style="width:0"></i></div>
       </aside>
       <nav class="tabs" aria-label="Hub sections">
-        <button class="on" data-p="trips">My Trips</button>
+        <button class="on" data-p="overview">Overview</button>
+        <button data-p="briefing">Flight Briefing</button>
+        <button data-p="trips">My Trips</button>
         <button data-p="showday">Show Day</button>
         <button data-p="updates">Updates <em class="dot" id="unreadDot" hidden>0</em></button>
         <button data-p="community">Community</button>
         <button data-p="kit">Kit And Packing</button>
         <button data-p="group">My Group</button>
+        <button data-p="hangar">My Hangar</button>
         <button data-p="saved">Saved Tools</button>
         <button data-p="history">My Airshow History</button>
+        <button data-p="year">My Airshow Year</button>
         <button data-p="posts">My Posts</button>
       </nav>
     </div>
   </section>
 
+  <!-- OVERVIEW -->
+  <main class="page" id="p-overview">
+    <div class="wrap">
+      <section class="ov-hello panel">
+        <div class="pbody">
+          <p class="hx-live"><i aria-hidden="true"></i>Systems online. Welcome back.</p>
+          <h2 class="ov-greet" id="ovGreet">Good evening</h2>
+          <p class="ov-sum" id="ovSum"></p>
+          <div class="ov-go">
+            <button class="btn small" data-go-p="briefing">Open My Flight Briefing</button>
+            <button class="btn small outline" data-go-p="trips">Plan My Trips</button>
+          </div>
+        </div>
+      </section>
+      <div class="hstats ov-stats" id="ovStats"></div>
+      <div class="ov-grid">
+        <section class="panel ov-next">
+          <header class="t"><h3>Next Departure</h3><small id="ovNextTag">Saved show</small></header>
+          <div class="pbody">
+            <b class="ov-show" id="ovShow">No show saved yet</b>
+            <div class="ov-cd" aria-live="off"><b id="ovDays">0</b><span>Days to go</span><code id="ovClock">00:00:00</code></div>
+            <div class="rows" id="ovRows"></div>
+            <div class="prog"><i id="ovProg" style="width:0"></i></div>
+          </div>
+        </section>
+        <section class="panel ov-radar">
+          <header><h3>Inbound Radar</h3><small>Your saved shows by days to go</small></header>
+          <div class="pbody ov-radar-body">
+            <svg viewBox="0 0 300 300" class="radar" role="img" aria-labelledby="radarTitle">
+              <title id="radarTitle">Radar showing your saved shows, nearest in the middle</title>
+              <defs>
+                <radialGradient id="rgGlow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#5FE3DC" stop-opacity=".18"/><stop offset="1" stop-color="#5FE3DC" stop-opacity="0"/></radialGradient>
+                <linearGradient id="rgSweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5FE3DC" stop-opacity="0"/><stop offset="1" stop-color="#5FE3DC" stop-opacity=".45"/></linearGradient>
+              </defs>
+              <circle cx="150" cy="150" r="140" fill="url(#rgGlow)"/>
+              <g fill="none" stroke="rgba(95,227,220,.28)">
+                <circle cx="150" cy="150" r="140"/><circle cx="150" cy="150" r="105"/><circle cx="150" cy="150" r="70"/><circle cx="150" cy="150" r="35"/>
+                <line x1="10" y1="150" x2="290" y2="150"/><line x1="150" y1="10" x2="150" y2="290"/>
+              </g>
+              <g class="sweep"><path d="M150 150 L290 150 A140 140 0 0 0 249 51 Z" fill="url(#rgSweep)"/></g>
+              <g font-family="JetBrains Mono, monospace" font-size="9" fill="#A9BDCB">
+                <text x="154" y="118">30d</text><text x="154" y="83">90d</text><text x="154" y="48">180d</text><text x="154" y="16">365d</text>
+              </g>
+              <g id="radarBlips"></g>
+            </svg>
+            <ul class="ov-blips" id="ovBlips"></ul>
+          </div>
+        </section>
+        <section class="panel">
+          <header class="p"><h3>Show Updates</h3><small>Live</small></header>
+          <div class="pbody" id="ovUpdates"></div>
+        </section>
+        <section class="panel">
+          <header><h3>My Must See Aircraft</h3><small id="ovMustTag"></small></header>
+          <div class="pbody" id="ovMust"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- FLIGHT BRIEFING -->
+  <main class="page" id="p-briefing" hidden>
+    <div class="wrap">
+      <section>
+        <h2 class="sec-title">Flight Briefing</h2>
+        <p class="sec-sub" id="bfSub">Everything you need for the day on one screen, like a pilot's brief before a sortie.</p>
+        <div class="filters" id="bfTrips"></div>
+      </section>
+      <div id="bfNone" class="empty" hidden>Save a show in My Trips and its briefing builds up here.</div>
+      <div id="bfBody">
+        <div class="bf-issued panel"><div class="pbody"><b id="bfShow"></b><span id="bfIssued"></span></div></div>
+        <div class="bf-grid">
+          <section class="panel">
+            <header class="t"><h3>Wind And Runway</h3><small id="bfWindTag"></small></header>
+            <div class="pbody bf-wind">
+              <svg viewBox="0 0 220 220" class="bf-rose" aria-hidden="true">
+                <circle cx="110" cy="110" r="96" fill="none" stroke="rgba(95,227,220,.3)"/>
+                <circle cx="110" cy="110" r="70" fill="none" stroke="rgba(95,227,220,.14)"/>
+                <g font-family="JetBrains Mono, monospace" font-size="12" fill="#A9BDCB" text-anchor="middle">
+                  <text x="110" y="10">N</text><text x="214" y="114">E</text><text x="110" y="218">S</text><text x="6" y="114">W</text>
+                </g>
+                <g id="bfRunway"></g>
+                <g id="bfArrow"></g>
+              </svg>
+              <div class="rows" id="bfWindRows"></div>
+              <p class="bf-tip" id="bfWindTip"></p>
+            </div>
+          </section>
+          <section class="panel">
+            <header><h3>Your Must See Slots</h3><small id="bfSlotTag"></small></header>
+            <div class="pbody" id="bfSlots"></div>
+          </section>
+          <section class="panel bf-hours">
+            <header><h3>Weather Through The Day</h3><small>Hour by hour</small></header>
+            <div class="pbody"><div class="bf-strip" id="bfHours"></div><p class="bf-tip" id="bfLight"></p></div>
+          </section>
+          <section class="panel">
+            <header class="p"><h3>Where I Would Stand</h3><small>Picked for you</small></header>
+            <div class="pbody">
+              <svg viewBox="0 0 320 196" class="bf-spot" id="bfSpot" aria-hidden="true"></svg>
+              <p class="bf-tip" id="bfSpotTip"></p>
+            </div>
+          </section>
+          <section class="panel">
+            <header class="t"><h3>Camera Settings For The Day</h3><small>Set before the gates</small></header>
+            <div class="pbody" id="bfCam"></div>
+          </section>
+          <section class="panel bf-full">
+            <header><h3>Before You Leave</h3><small id="bfTodoTag"></small></header>
+            <div class="pbody" id="bfTodo"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MY HANGAR -->
+  <main class="page" id="p-hangar" hidden>
+    <div class="wrap">
+      <section>
+        <h2 class="sec-title">My Hangar</h2>
+        <p class="sec-sub">Every aircraft you have seen, collected show by show. Common ones glow teal, rare ones purple and the true one offs red. Tap a card to log where you caught it.</p>
+      </section>
+      <div class="hstats" id="hgStats"></div>
+      <div class="hg-tools">
+        <div class="filters" id="hgFilters"></div>
+        <input class="input hg-find" id="hgFind" type="search" placeholder="Find an aircraft" aria-label="Find an aircraft">
+      </div>
+      <div class="hg-split">
+        <div class="hg-cards" id="hgCards"><div class="empty">Loading your hangar</div></div>
+        <aside class="panel hg-detail" id="hgDetail">
+          <header class="p"><h3 id="hgName">Pick an aircraft</h3><small id="hgRarity"></small></header>
+          <div class="pbody">
+            <div class="rows" id="hgRows"></div>
+            <ul class="hg-log" id="hgLog"></ul>
+            <form class="hg-form" id="hgForm">
+              <label class="f">Where I saw it<input class="input" id="hgShow" list="hgShows" maxlength="80" placeholder="RIAT"></label>
+              <datalist id="hgShows"></datalist>
+              <label class="f">Year<input class="input" id="hgYear" type="number" min="1950" step="1"></label>
+              <button class="btn small" type="submit">I Saw It</button>
+            </form>
+            <form class="hg-form hg-own" id="hgOwnForm">
+              <label class="f">Not on the list?<input class="input" id="hgOwn" maxlength="80" placeholder="Avro Vulcan"></label>
+              <button class="btn small outline" type="submit">Add It</button>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- MY AIRSHOW YEAR -->
+  <main class="page" id="p-year" hidden>
+    <div class="wrap">
+      <section>
+        <p class="hx-live"><i aria-hidden="true"></i>Season recap ready</p>
+        <h2 class="sec-title">My Airshow Year <span id="yrNum"></span></h2>
+        <p class="sec-sub" id="yrLine"></p>
+        <div class="filters" id="yrPick"></div>
+      </section>
+      <div class="hstats" id="yrStats"></div>
+      <div class="yr-grid">
+        <section class="panel">
+          <header class="t"><h3>Most Seen Aircraft</h3><small>From My Hangar</small></header>
+          <div class="pbody" id="yrTop"></div>
+        </section>
+        <section class="panel">
+          <header><h3>My Season Map</h3><small id="yrMapTag"></small></header>
+          <div class="pbody"><svg viewBox="0 0 300 380" class="yr-map" id="yrMap" aria-hidden="true"></svg><p class="bf-tip" id="yrMapTip"></p></div>
+        </section>
+        <section class="panel">
+          <header class="p"><h3>My Best Photo</h3><small>Most liked</small></header>
+          <div class="pbody" id="yrPhoto"></div>
+        </section>
+      </div>
+      <section class="panel yr-share">
+        <header><h3>Share Your Year</h3><small>Story cards for Facebook and Instagram</small></header>
+        <div class="pbody">
+          <p class="sec-sub">Three story cards sized for phone stories. Share the one you like, or save all three. On a phone you can also press and hold a card to save it.</p>
+          <div class="yr-cards" id="yrCards"></div>
+          <div class="ov-go"><button class="btn small" id="yrShare">Share My Year</button><button class="btn small outline" id="yrSave">Save The Images</button></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
   <!-- MY TRIPS -->
-  <main class="page" id="p-trips">
+  <main class="page" id="p-trips" hidden>
     <div class="wrap">
       <section>
         <h2 class="sec-title">My Trips</h2>
@@ -990,6 +1308,38 @@ form.add-form,.pollform,.goingme,.fcomments,.tool .k,.poll button,.factions butt
         </div>
         <button class="btn" data-go="forum">Write a new post</button>
       </div>
+      <section class="panel ps-panel" id="photoShare">
+        <header class="t"><h3>Share A Photo</h3><small>Camera settings read from the file</small></header>
+        <div class="pbody">
+          <p class="ps-intro">Add a photo and I read the shutter speed, aperture, ISO and lens straight from the file, so nobody has to ask what you used. It goes into Photographers' Corner and shows here under My Posts.</p>
+          <form class="ps-form" id="psForm">
+            <label class="ps-drop" id="psDrop">
+              <input type="file" id="psFile" accept="image/jpeg,image/png,image/webp,image/heic" hidden>
+              <img id="psPrev" alt="" hidden>
+              <span id="psDropText"><b>Add A Photo</b>JPG straight from the camera works best</span>
+            </label>
+            <div class="ps-exif" id="psExif" hidden>
+              <p class="ps-read" id="psRead">Reading camera settings</p>
+              <div class="ps-grid">
+                <label class="f">Shutter<input class="input" id="psShutter" maxlength="20"></label>
+                <label class="f">Aperture<input class="input" id="psAperture" maxlength="20"></label>
+                <label class="f">ISO<input class="input" id="psIso" maxlength="12"></label>
+                <label class="f">Focal length<input class="input" id="psFocal" maxlength="20"></label>
+                <label class="f">Camera<input class="input" id="psCamera" maxlength="60"></label>
+                <label class="f">Lens<input class="input" id="psLens" maxlength="80"></label>
+              </div>
+              <div class="ps-grid">
+                <label class="f ps-wide">Title<input class="input" id="psTitle" maxlength="90" placeholder="Typhoon slow pan at RIAT" required></label>
+                <label class="f">Aircraft<input class="input" id="psAircraft" maxlength="80" placeholder="Eurofighter Typhoon"></label>
+                <label class="f">Show<select class="input" id="psShowSel"></select></label>
+                <label class="f">Category<select class="input" id="psCat"></select></label>
+              </div>
+              <label class="check ps-own"><input type="checkbox" id="psOwn"> This is my own photo</label>
+              <div class="ov-go"><button class="btn" type="submit" id="psGo">Post My Photo</button><button class="btn small outline" type="button" id="psReset">Pick Another</button></div>
+            </div>
+          </form>
+        </div>
+      </section>
       <div class="split">
         <div class="col" id="postList"></div>
         <div class="col">
@@ -1080,7 +1430,7 @@ var SHOWPIC={"riat":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0J
   }
 
   /* ---------- state ---------- */
-  var S = { hub: null, tripId: null, page: "trips", join: "", pageUrl: "", upFilter: "all", chatTimer: null };
+  var S = { hub: null, tripId: null, page: "overview", join: "", pageUrl: "", upFilter: "all", chatTimer: null };
   function trip() { return S.hub && S.hub.trips.find(function (t) { return t.id === S.tripId; }); }
 
   /* ---------- load ---------- */
@@ -1104,6 +1454,7 @@ var SHOWPIC={"riat":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0J
   function renderAll() {
     renderHead(); renderTrips(); renderTripDetail(); renderUpdates(); renderKit(); renderGroup(); renderHistory(); renderPosts();
     renderComposer(); renderGoing(); renderPotw(); renderSaved(); if (S.page === "community") loadFeed();
+    renderHudx();
   }
 
   /* ---------- header ---------- */
@@ -1167,7 +1518,8 @@ var SHOWPIC={"riat":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0J
   function showPage(p) {
     S.page = p;
     document.querySelectorAll(".tabs button").forEach(function (x) { x.classList.toggle("on", x.dataset.p === p); });
-    ["trips", "showday", "updates", "community", "kit", "group", "saved", "history", "posts"].forEach(function (k) { $("p-" + k).hidden = k !== p; });
+    ["overview", "briefing", "trips", "showday", "updates", "community", "kit", "group", "hangar", "saved", "history", "year", "posts"].forEach(function (k) { $("p-" + k).hidden = k !== p; });
+    if (S.hub && S.hub.member && /overview|briefing|hangar|year/.test(p)) renderHudx();
     if (p === "community" && !F.loaded) loadFeed();
     if (p === "updates" && S.hub.unread) {
       call("markUpdatesRead").then(function () { S.hub.unread = 0; $("unreadDot").hidden = true; }).catch(function () {});
@@ -1879,6 +2231,566 @@ var SHOWPIC={"riat":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0J
   addToggle($("tlForm"), "Add A Time To My Day", "tl");
   addToggle($("extraForm"), "Add Your Own Item", "extra");
   addToggle($("bringForm"), "Add Something To Bring", "bring");
+
+  /* ================= HUD extras: Overview, Flight Briefing, My Hangar, My Airshow Year, photo sharing ================= */
+  var X = { hangar: null, hangarLoading: false, hgFilter: "all", hgSel: null, bfTrip: null, wx: {}, prog: {}, year: null, photo: null, cards: [] };
+  var RUNWAYS = { riat: 90, cosford: 60, duxford: 60, shuttleworth: 30, "little-gransden": 100, headcorn: 100 };
+  var GEOX = {
+    riat: [51.682, -1.790, 0], cosford: [52.640, -2.306, null], duxford: [52.090, 0.132, 180], eastbourne: [50.766, 0.290, 165],
+    clacton: [51.788, 1.155, 135], wales: [51.605, -3.960, 180], midlands: [52.198, -1.888, null], shuttleworth: [52.087, -0.318, null],
+    "little-gransden": [52.165, -0.153, null], southport: [53.653, -3.010, 285], blackpool: [53.816, -3.056, 270], ayr: [55.462, -4.636, 270],
+    headcorn: [51.157, 0.646, null]
+  };
+  var POINT_NAMES = { riat: "Fairford", cosford: "Cosford", duxford: "Duxford", eastbourne: "Eastbourne", clacton: "Clacton", wales: "Swansea", midlands: "Ragley", shuttleworth: "Old Warden", "little-gransden": "Little Gransden", southport: "Southport", blackpool: "Blackpool", ayr: "Ayr", headcorn: "Headcorn" };
+  var COMPASS = ["north", "north east", "east", "south east", "south", "south west", "west", "north west"];
+  var SHORT = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  var PHOTO_CATS = ["Fast jets", "Display teams", "Warbirds and classics", "Helicopters", "Transport and tankers", "Static and ground", "Night shoots", "Arrivals and spotting"];
+  function svg(tag, attrs) { var e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function slugFor(name) {
+    var n = (name || "").toLowerCase();
+    var s = (S.hub.shows || []).find(function (x) { return x.name.toLowerCase() === n || (x.shortName || "").toLowerCase() === n; });
+    if (s) return s.slug;
+    var words = [["tattoo", "riat"], ["riat", "riat"], ["fairford", "riat"], ["cosford", "cosford"], ["duxford", "duxford"], ["eastbourne", "eastbourne"], ["airbourne", "eastbourne"], ["clacton", "clacton"], ["wales", "wales"], ["swansea", "wales"], ["midlands", "midlands"], ["ragley", "midlands"], ["shuttleworth", "shuttleworth"], ["old warden", "shuttleworth"], ["gransden", "little-gransden"], ["southport", "southport"], ["blackpool", "blackpool"], ["ayr", "ayr"], ["headcorn", "headcorn"]];
+    for (var i = 0; i < words.length; i++) if (n.indexOf(words[i][0]) >= 0) return words[i][1];
+    return "";
+  }
+  function daysTo(iso) { return iso ? Math.ceil((new Date(iso) - new Date()) / 864e5) : null; }
+  function firstName() { return ((S.hub.member && S.hub.member.name) || "").split(" ")[0] || "there"; }
+  function partOfDay() { var h = +new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", hour12: false }).format(new Date()); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
+  function isoDay(iso) { return iso ? new Date(iso).toLocaleDateString("en-CA", { timeZone: "Europe/London" }) : ""; }
+  function sunAt(ds, hour, lat, lon) {
+    var p = ds.split("-").map(Number), rad = Math.PI / 180;
+    var offset = 0; try { offset = (+new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", hour12: false }).format(new Date(ds + "T12:00:00Z")) - 12) * 60; } catch (e) {}
+    var ms = Date.UTC(p[0], p[1] - 1, p[2]) + hour * 36e5 - offset * 6e4;
+    var d = (ms - Date.UTC(2000, 0, 1, 12)) / 864e5;
+    var g = (357.529 + 0.98560028 * d) * rad, q = 280.459 + 0.98564736 * d;
+    var L = (q + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * rad, ec = (23.439 - 0.00000036 * d) * rad;
+    var ra = Math.atan2(Math.cos(ec) * Math.sin(L), Math.cos(L)), dec = Math.asin(Math.sin(ec) * Math.sin(L));
+    var gmst = ((18.697374558 + 24.06570982441908 * d) % 24) * 15 * rad;
+    var ha = gmst + lon * rad - ra, la = lat * rad;
+    var alt = Math.asin(Math.sin(la) * Math.sin(dec) + Math.cos(la) * Math.cos(dec) * Math.cos(ha));
+    var az = Math.atan2(-Math.sin(ha), Math.tan(dec) * Math.cos(la) - Math.sin(la) * Math.cos(ha));
+    return { az: ((az / rad) + 360) % 360, alt: alt / rad };
+  }
+  function angDiff(a, b) { return Math.abs(((a - b + 540) % 360) - 180); }
+  function dirWord(deg) { return COMPASS[Math.round(deg / 45) % 8]; }
+
+  /* Show Day running orders, asked for through the page code (same messages the Show Day board uses) */
+  var sdSeq = 0, sdWait = {};
+  function showDayCall(action, payload) {
+    return new Promise(function (resolve) {
+      var id = "hx" + (++sdSeq);
+      sdWait[id] = resolve;
+      window.parent.postMessage({ source: "ukag-showday", id: id, action: action, payload: payload || {} }, "*");
+      setTimeout(function () { if (sdWait[id]) { delete sdWait[id]; resolve(null); } }, 15000);
+    });
+  }
+  window.addEventListener("message", function (e) {
+    var m = e.data; if (!m || m.source !== "ukag-showday" || !m.id || !sdWait[m.id]) return;
+    var r = sdWait[m.id]; delete sdWait[m.id]; r(m.ok ? m.data : null);
+  });
+
+  function renderHudx() {
+    if (!S.hub || !S.hub.member) return;
+    renderOverview();
+    if (S.page === "briefing") renderBriefing();
+    if (S.page === "hangar" || S.page === "year" || S.page === "overview") loadHangar();
+    if (S.page === "year") renderYear();
+    renderPhotoShare();
+  }
+
+  /* ---------- Overview ---------- */
+  function renderOverview() {
+    var h = S.hub, trips = h.trips || [];
+    $("ovGreet").textContent = partOfDay() + ", " + firstName();
+    var open = 0; trips.forEach(function (t) { open += (t.todo || []).filter(function (x) { return !x.done; }).length; });
+    var lineup = (h.updates || []).filter(function (u) { return u.kind === "lineup" && !u.read; }).length;
+    var bits = [];
+    bits.push(trips.length ? "You have " + (trips.length === 1 ? "one show" : trips.length + " shows") + " on your radar." : "Your radar is clear. Add a show in My Trips and it appears here.");
+    if (open) bits.push((open === 1 ? "One thing" : open + " things") + " on your trip lists still need sorting.");
+    if (lineup) bits.push("The line up changed " + (lineup === 1 ? "once" : lineup + " times") + " while you were away.");
+    $("ovSum").textContent = bits.join(" ");
+    var seenCount = X.hangar ? uniqueSeen().length : "…";
+    var next = trips[0];
+    var st = clear($("ovStats"));
+    [[pad(trips.length), "Shows saved"], [seenCount, "Aircraft in my hangar"], [pad((h.mustSee || []).length), "Must see aircraft"], [next ? "18:00" : "…", next ? "Briefing arrives the night before" : "Briefing waits for a show"]].forEach(function (x) {
+      var d = el("div"); d.appendChild(el("b", "", String(x[0]))); d.appendChild(el("span", "", x[1])); st.appendChild(d);
+    });
+    $("ovShow").textContent = next ? next.showName : "No show saved yet";
+    $("ovNextTag").textContent = next ? dayStr(next.start) : "Saved show";
+    var rows = clear($("ovRows"));
+    function row(k, v, hot) { var r = el("div", "row" + (hot ? " hot" : "")); r.appendChild(el("span", "", k)); r.appendChild(el("b", "", v)); rows.appendChild(r); }
+    if (next) {
+      row("Gates open", next.gatesOpen || "To be confirmed");
+      row("Travel", next.travel || "Not planned yet", !next.travel);
+      var todo = (next.todo || []).find(function (x) { return !x.done; });
+      if (todo) row("Still to do", todo.t, true);
+      $("ovProg").style.width = readiness(next) + "%";
+    }
+    renderRadar(trips);
+    var up = clear($("ovUpdates"));
+    var list = (h.updates || []).slice(0, 3);
+    if (!list.length) up.appendChild(el("div", "empty", "Nothing new yet. I check the official sites every day."));
+    list.forEach(function (u) { up.appendChild(upRow(u)); });
+    var mb = el("button", "link", "All updates"); mb.onclick = function () { showPage("updates"); }; up.appendChild(mb);
+    var mu = clear($("ovMust")); var must = h.mustSee || [];
+    $("ovMustTag").textContent = must.length ? must.filter(function (m) { return /confirm/i.test(m.status); }).length + " confirmed" : "";
+    if (!must.length) mu.appendChild(el("div", "empty", "Tap Add To Must See on any aircraft in My Trips."));
+    must.slice(0, 6).forEach(function (m) {
+      var r = el("div", "ov-must"); r.appendChild(el("b", "", m.name)); r.appendChild(el("span", "", m.showName || ""));
+      r.appendChild(el("em", "st" + statusClass(m.status), m.status || "Waiting")); mu.appendChild(r);
+    });
+    ovTick();
+  }
+  function renderRadar(trips) {
+    var g = $("radarBlips"); while (g.firstChild) g.removeChild(g.firstChild);
+    var ul = clear($("ovBlips"));
+    if (!trips.length) { ul.appendChild(el("li", "", "No shows inbound yet.")); return; }
+    trips.slice(0, 8).forEach(function (t, i) {
+      var d = daysTo(t.start);
+      var r = d === null ? 140 : d <= 30 ? 35 * d / 30 : d <= 90 ? 35 + 35 * (d - 30) / 60 : d <= 180 ? 70 + 35 * (d - 90) / 90 : Math.min(140, 105 + 35 * (d - 180) / 185);
+      r = Math.max(10, r);
+      var a = (i * 137.5 + 20) * Math.PI / 180;
+      var x = 150 + r * Math.cos(a), y = 150 + r * Math.sin(a);
+      var col = i === 0 ? "#D74949" : i % 2 ? "#5FE3DC" : "#9C86D8";
+      g.appendChild(svg("circle", { cx: x.toFixed(1), cy: y.toFixed(1), r: 9, fill: col, opacity: ".18", class: "blip-ring" }));
+      g.appendChild(svg("circle", { cx: x.toFixed(1), cy: y.toFixed(1), r: 4, fill: col }));
+      var tx = svg("text", { x: (x + 8).toFixed(1), y: (y - 6).toFixed(1), fill: "#E8F1F6", "font-size": "10", "font-family": "Barlow, sans-serif", "font-weight": "600" });
+      var sh = (S.hub.shows || []).find(function (z) { return z.slug === t.showSlug; }); tx.textContent = sh ? sh.shortName : (t.showName || "").split(/[ ,]/).slice(0, 2).join(" "); g.appendChild(tx);
+      var li = el("li"); var sw = el("i"); sw.style.background = col; li.appendChild(sw);
+      li.appendChild(el("b", "", t.showName)); li.appendChild(el("span", "", d === null ? "Date to be confirmed" : d <= 0 ? "Today" : d + (d === 1 ? " day" : " days")));
+      li.onclick = function () { S.tripId = t.id; renderAll(); showPage("trips"); };
+      ul.appendChild(li);
+    });
+  }
+  function ovTick() {
+    var t = S.hub && S.hub.trips && S.hub.trips[0]; if (!t || !$("ovDays")) return;
+    var ms = t.start ? Math.max(0, new Date(t.start) - new Date()) : 0;
+    $("ovDays").textContent = Math.floor(ms / 864e5);
+    $("ovClock").textContent = pad(Math.floor(ms % 864e5 / 36e5)) + ":" + pad(Math.floor(ms % 36e5 / 6e4)) + ":" + pad(Math.floor(ms % 6e4 / 1e3));
+  }
+  setInterval(function () { if (S.hub && S.hub.member && S.page === "overview") ovTick(); }, 1000);
+
+  /* ---------- Flight Briefing ---------- */
+  function bfTrip() { var trips = S.hub.trips || []; return trips.find(function (t) { return t.id === X.bfTrip; }) || trips[0]; }
+  function renderBriefing() {
+    var trips = S.hub.trips || [];
+    $("bfNone").hidden = !!trips.length; $("bfBody").hidden = !trips.length;
+    var pick = clear($("bfTrips"));
+    if (!trips.length) return;
+    var t = bfTrip(); X.bfTrip = t.id;
+    trips.forEach(function (x) { var b = el("button", x.id === t.id ? "on" : "", x.showName); b.onclick = function () { X.bfTrip = x.id; renderBriefing(); }; pick.appendChild(b); });
+    var slug = t.showSlug || slugFor(t.showName), geo = GEOX[slug], d = daysTo(t.start), ds = isoDay(t.start);
+    $("bfShow").textContent = t.showName + (t.start ? ", " + dayStr(t.start) : "");
+    $("bfIssued").textContent = d === null ? "The briefing fills in once the date is confirmed." : d > 1 ? "Full briefing issued at 18:00 the night before. " + (d <= 16 ? "This is an early look at the forecast." : "The forecast opens 16 days before.") : d >= 0 ? "Issued for tomorrow. Have a great day." : "This show has finished.";
+    renderBfWind(t, slug, geo, ds, d);
+    renderBfSpot(slug, geo, ds);
+    renderBfSlots(t, slug);
+    var td = clear($("bfTodo")); var left = (t.todo || []).filter(function (x) { return !x.done; });
+    $("bfTodoTag").textContent = left.length ? left.length + " left" : "All done";
+    if (!left.length) td.appendChild(el("div", "empty", "Everything on your list is ticked off. I would advise packing the night before and leaving the bag by the door."));
+    left.slice(0, 6).forEach(function (x) { var r = el("div", "ov-must"); r.appendChild(el("b", "", x.t)); td.appendChild(r); });
+    renderBfCam(t);
+  }
+  function renderBfWind(t, slug, geo, ds, d) {
+    var rw = RUNWAYS[slug];
+    var g = $("bfRunway"); while (g.firstChild) g.removeChild(g.firstChild);
+    var line = rw != null ? rw : (geo && geo[2] != null ? (geo[2] + 90) % 360 : null);
+    if (line != null) {
+      var a = line * Math.PI / 180, dx = Math.sin(a) * 70, dy = -Math.cos(a) * 70;
+      g.appendChild(svg("line", { x1: (110 - dx).toFixed(1), y1: (110 - dy).toFixed(1), x2: (110 + dx).toFixed(1), y2: (110 + dy).toFixed(1), stroke: rw != null ? "#E8F1F6" : "#32B4AF", "stroke-width": rw != null ? 10 : 3, "stroke-dasharray": rw != null ? "" : "8 6", opacity: rw != null ? ".85" : "1" }));
+      if (rw != null) {
+        [[line, -1], [(line + 180) % 360, 1]].forEach(function (e) {
+          var p = e[1] * 54, tx = svg("text", { x: (110 + Math.sin(a) * p).toFixed(1), y: (114 - Math.cos(a) * p).toFixed(1), "text-anchor": "middle", "font-size": "10", "font-family": "JetBrains Mono, monospace", fill: "#061019", "font-weight": "700" });
+          tx.textContent = pad(Math.round(e[0] / 10) || 36); g.appendChild(tx);
+        });
+      }
+    }
+    var rows = clear($("bfWindRows")), tip = $("bfWindTip"), ar = $("bfArrow"); while (ar.firstChild) ar.removeChild(ar.firstChild);
+    function row(k, v) { var r = el("div", "row"); r.appendChild(el("span", "", k)); r.appendChild(el("b", "", v)); rows.appendChild(r); }
+    var hours = clear($("bfHours"));
+    $("bfLight").textContent = "";
+    if (!geo || d === null || d > 16 || d < -1) {
+      $("bfWindTag").textContent = "Opens 16 days before";
+      row(rw != null ? "Runway" : "Display line", rw != null ? pad(Math.round(rw / 10)) + "/" + pad(Math.round(((rw + 180) % 360) / 10)) : line != null ? "Runs " + dirWord(line) + " to " + dirWord((line + 180) % 360) : "Being added");
+      tip.textContent = "The wind decides which way the display aircraft take off. I'll show the likely runway and the hour by hour forecast here once the forecast covers the show day.";
+      hours.appendChild(el("div", "empty", "The hour by hour forecast opens here 16 days before the show."));
+      return;
+    }
+    var key = slug + ds;
+    if (!X.wx[key]) {
+      X.wx[key] = "loading";
+      $("bfWindTag").textContent = "Loading";
+      var url = "https://api.open-meteo.com/v1/forecast?latitude=" + geo[0] + "&longitude=" + geo[1] + "&hourly=temperature_2m,precipitation_probability,cloud_cover_low,wind_speed_10m,wind_direction_10m,weather_code&wind_speed_unit=mph&timezone=Europe%2FLondon&start_date=" + ds + "&end_date=" + ds;
+      fetch(url).then(function (r) { return r.json(); }).then(function (j) { X.wx[key] = j.hourly || "none"; if (S.page === "briefing") renderBriefing(); })
+        .catch(function () { X.wx[key] = "none"; if (S.page === "briefing") renderBriefing(); });
+      return;
+    }
+    var w = X.wx[key];
+    if (w === "loading") return;
+    if (w === "none" || !w.time) { $("bfWindTag").textContent = "Forecast not reachable"; hours.appendChild(el("div", "empty", "The forecast couldn't load just now. Try again in a little while.")); return; }
+    var mid = w.time.findIndex(function (x) { return /T14:/.test(x); }); if (mid < 0) mid = 12;
+    var wdir = w.wind_direction_10m[mid], wspd = Math.round(w.wind_speed_10m[mid]);
+    $("bfWindTag").textContent = wspd + " mph from the " + dirWord(wdir);
+    var wa = wdir * Math.PI / 180, ax = Math.sin(wa), ay = -Math.cos(wa);
+    ar.appendChild(svg("line", { x1: (110 + ax * 100).toFixed(1), y1: (110 + ay * 100).toFixed(1), x2: (110 + ax * 30).toFixed(1), y2: (110 + ay * 30).toFixed(1), stroke: "#D74949", "stroke-width": 4, "stroke-linecap": "round" }));
+    var tipX = 110 + ax * 30, tipY = 110 + ay * 30, px = -ay * 7, py = ax * 7;
+    ar.appendChild(svg("path", { d: "M" + (tipX - ax * 2).toFixed(1) + " " + (tipY - ay * 2).toFixed(1) + " L" + (tipX + ax * 12 + px).toFixed(1) + " " + (tipY + ay * 12 + py).toFixed(1) + " L" + (tipX + ax * 12 - px).toFixed(1) + " " + (tipY + ay * 12 - py).toFixed(1) + " Z", fill: "#D74949" }));
+    row("Wind", wspd + " mph from the " + dirWord(wdir));
+    if (rw != null) {
+      var into = angDiff(wdir, rw) <= angDiff(wdir, (rw + 180) % 360) ? rw : (rw + 180) % 360;
+      row("Likely runway", pad(Math.round(into / 10) || 36));
+      row("Take off towards", "The " + dirWord(into));
+      tip.textContent = wspd < 5 ? "Very light winds, so either runway could be used. Keep an ear on the commentary." : "Aircraft take off into the wind, so I would expect departures towards the " + dirWord(into) + ". If you want take off shots, I would suggest heading to the " + dirWord((into + 180) % 360) + " end of the crowd line early.";
+    } else {
+      row("Display line", line != null ? "Runs " + dirWord(line) + " to " + dirWord((line + 180) % 360) : "Being added");
+      tip.textContent = wspd >= 20 ? "A breezy day on the front. I would advise a windproof layer and holding on to hats near the crowd line." : "Light winds should keep the smoke trails tidy for the display teams.";
+    }
+    row("Low cloud", Math.round(w.cloud_cover_low[mid]) + "%");
+    for (var i = 9; i <= 18; i++) {
+      var idx = w.time.findIndex(function (x) { return x.slice(11, 13) === pad(i); }); if (idx < 0) continue;
+      var c = el("div", "bf-hour"); c.appendChild(el("b", "", pad(i) + ":00"));
+      c.appendChild(el("strong", "", Math.round(w.temperature_2m[idx]) + "°"));
+      c.appendChild(el("span", "", skyWord(w.weather_code[idx], w.cloud_cover_low[idx])));
+      c.appendChild(el("em", w.precipitation_probability[idx] >= 40 ? "wet" : "", w.precipitation_probability[idx] + "% rain"));
+      hours.appendChild(c);
+    }
+    var wet = w.precipitation_probability.slice(9, 19).filter(function (x) { return x >= 50; }).length;
+    $("bfLight").textContent = wet ? "Showers look likely for about " + wet + (wet === 1 ? " hour" : " hours") + " of the flying. I would pack a light waterproof and a cover for the camera." : "Mostly dry through the flying. Sun cream and a hat are worth packing, as there is little shade on a crowd line.";
+  }
+  function skyWord(code, low) { if (code >= 95) return "Thunder"; if (code >= 80) return "Showers"; if (code >= 61) return "Rain"; if (code >= 51) return "Drizzle"; if (code >= 45) return "Fog"; if (low > 70 || code === 3) return "Cloudy"; if (low > 30 || code === 2) return "Some cloud"; return "Sunny"; }
+  function renderBfSpot(slug, geo, ds) {
+    var s = $("bfSpot"); while (s.firstChild) s.removeChild(s.firstChild);
+    var tip = $("bfSpotTip");
+    s.appendChild(svg("rect", { x: 0, y: 0, width: 320, height: 196, fill: "rgba(6,16,25,.4)" }));
+    s.appendChild(svg("line", { x1: 20, y1: 60, x2: 300, y2: 60, stroke: "#32B4AF", "stroke-width": 3, "stroke-dasharray": "10 7" }));
+    s.appendChild(svg("line", { x1: 20, y1: 132, x2: 300, y2: 132, stroke: "#E8F1F6", "stroke-width": 2 }));
+    function lab(x, y, t, c) { var e = svg("text", { x: x, y: y, fill: c || "#A9BDCB", "font-size": 11, "font-family": "Barlow, sans-serif", "font-weight": 600 }); e.textContent = t; s.appendChild(e); }
+    lab(22, 52, "Display line", "#5FE3DC"); lab(22, 126, "Crowd line", "#E8F1F6");
+    if (!geo || geo[2] == null || !ds) {
+      lab(22, 176, "The crowd line for this show is still being mapped");
+      tip.textContent = "Arrive early if you want a front row spot. Save your pitch first, then go and look round the static aircraft and the stalls.";
+      return;
+    }
+    var face = geo[2];
+    var picks = [11, 14, 17].map(function (h) { return { h: h, sun: sunAt(ds, h, geo[0], geo[1]) }; });
+    picks.forEach(function (p, i) {
+      var rel = ((p.sun.az - face + 540) % 360) - 180;
+      var x = 160 + Math.max(-130, Math.min(130, rel * 1.1));
+      var back = Math.abs(rel) > 90, y = back ? 160 : 22;
+      s.appendChild(svg("circle", { cx: x.toFixed(1), cy: y, r: 8, fill: "#F2B84B", opacity: (0.45 + i * 0.25).toFixed(2) }));
+      var near = picks.slice(0, i).filter(function (q) { return q.x != null && Math.abs(q.x - x) < 44 && q.back === back; }).length;
+      p.x = x; p.back = back;
+      lab((x > 250 ? x - 52 : x + 12).toFixed(1), (back ? 164 : 26) + near * 16, pad(p.h) + ":00", "#F2B84B");
+    });
+    s.appendChild(svg("circle", { cx: 160, cy: 142, r: 7, fill: "#D74949" }));
+    lab(170, 146, "You", "#FFFFFF");
+    var afternoon = picks[1].sun, rel = angDiff(afternoon.az, face);
+    tip.textContent = rel < 60 ? "In the afternoon the sun sits over the display line, so you will be looking into it. I would bring sunglasses, and for photos I would suggest the morning or standing further along the line." :
+      rel > 120 ? "The sun is behind you for most of the afternoon, which is ideal for watching and for photos. I would suggest heading to the middle of the crowd line." :
+      "The sun moves across your side through the afternoon. I would suggest standing towards the " + (((afternoon.az - face + 360) % 360) < 180 ? "left" : "right") + " end of the crowd line to keep it more behind you.";
+  }
+  function renderBfSlots(t, slug) {
+    var box = clear($("bfSlots"));
+    var must = (S.hub.mustSee || []).filter(function (m) { return m.showSlug === slug || m.showName === t.showName; });
+    $("bfSlotTag").textContent = must.length ? must.length + " on your list" : "";
+    if (!must.length) { box.appendChild(el("div", "empty", "Add aircraft to your must see list in My Trips and their slots show here.")); return; }
+    var key = slug + "prog";
+    if (X.prog[key] === undefined && slug) {
+      X.prog[key] = null;
+      showDayCall("load", { show: slug }).then(function (r) { X.prog[key] = (r && r.programmes) || []; if (S.page === "briefing") renderBriefing(); });
+    }
+    var acts = [];
+    (X.prog[key] || []).forEach(function (p) { ((p.running && p.running.acts) || []).forEach(function (a) { acts.push({ day: p.dayLabel, start: a.start, name: a.name, loud: a.loud }); }); });
+    must.forEach(function (m) {
+      var words = m.name.toLowerCase().split(/[^a-z0-9]+/).filter(function (w) { return w.length > 2; });
+      var hit = acts.find(function (a) { var n = a.name.toLowerCase(); return words.some(function (w) { return n.indexOf(w) >= 0; }); });
+      var r = el("div", "bf-slot");
+      r.appendChild(el("code", "", hit ? hit.start : "--:--"));
+      var d = el("div"); d.appendChild(el("b", "", m.name)); d.appendChild(el("span", "", hit ? hit.day + (hit.loud ? ". Loud, ear defenders on." : "") : "Time comes from the official programme once it is in.")); r.appendChild(d);
+      r.appendChild(el("em", "st" + statusClass(m.status), m.status || "Waiting"));
+      box.appendChild(r);
+    });
+  }
+  function renderBfCam(t) {
+    var box = clear($("bfCam"));
+    var wx = X.wx[(t.showSlug || slugFor(t.showName)) + isoDay(t.start)];
+    var dull = wx && wx.cloud_cover_low ? wx.cloud_cover_low.slice(11, 17).reduce(function (a, b) { return a + b; }, 0) / 6 > 60 : false;
+    [["Fast jets", "1/1600", "f/8", dull ? "ISO 400" : "ISO 200", "Freeze the action and keep the jet sharp."], ["Propeller aircraft", dull ? "1/160" : "1/200", "f/11", dull ? "ISO 100" : "ISO 64", "Slow enough to show a full blur in the prop."], ["Helicopters", "1/125", "f/11", "ISO 100", "Keeps a little blur in the rotor blades."], ["Display teams", "1/1000", "f/8", dull ? "ISO 400" : "ISO 200", "Leave space in the frame for the smoke."]].forEach(function (c) {
+      var r = el("div", "bf-cam"); var d = el("div"); d.appendChild(el("b", "", c[0])); d.appendChild(el("span", "", c[4])); r.appendChild(d);
+      var v = el("code", "", c[1] + "  " + c[2] + "  " + c[3]); r.appendChild(v); box.appendChild(r);
+    });
+    box.appendChild(el("p", "bf-tip", dull ? "Low cloud is forecast, so I have nudged the ISO up. Check your exposure on the first few shots." : "Bright skies fool the meter, so I would suggest adding a little exposure compensation, about plus two thirds."));
+  }
+
+  /* ---------- My Hangar ---------- */
+  function loadHangar(force) {
+    if ((X.hangar && !force) || X.hangarLoading) { if (X.hangar) { renderHangar(); } return; }
+    X.hangarLoading = true;
+    call("getHangar").then(function (h) { X.hangar = h; X.hangarLoading = false; renderHangar(); renderOverview(); if (S.page === "year") renderYear(); })
+      .catch(function (e) { X.hangarLoading = false; var c = clear($("hgCards")); c.appendChild(el("div", "empty", (e && e.message) || "Your hangar couldn't load.")); });
+  }
+  function rarity(c) { return c.shows >= 3 ? "Common" : c.shows === 2 ? "Rare" : "One off"; }
+  function uniqueSeen() { var s = {}; (X.hangar ? X.hangar.seen : []).forEach(function (x) { s[x.key] = 1; }); return Object.keys(s); }
+  function renderHangar() {
+    if (!X.hangar) return;
+    var h = X.hangar, mine = {}, shows = {};
+    h.seen.forEach(function (x) { (mine[x.key] = mine[x.key] || []).push(x); if (x.showName) shows[x.showName + x.year] = 1; });
+    var cat = h.catalog.slice().sort(function (a, b) { return (mine[b.key] ? 1 : 0) - (mine[a.key] ? 1 : 0) || a.shows - b.shows || a.name.localeCompare(b.name); });
+    var got = cat.filter(function (c) { return mine[c.key]; });
+    var st = clear($("hgStats"));
+    [[got.length + " / " + cat.length, "Aircraft collected"], [got.filter(function (c) { return rarity(c) === "Rare"; }).length, "Rare catches"], [got.filter(function (c) { return rarity(c) === "One off"; }).length, "One offs"], [Math.max(Object.keys(shows).length, S.hub.past.length), "Shows logged"]].forEach(function (x) {
+      var d = el("div"); d.appendChild(el("b", "", String(x[0]))); d.appendChild(el("span", "", x[1])); st.appendChild(d);
+    });
+    var f = clear($("hgFilters"));
+    [["all", "All"], ["mine", "Collected"], ["Rare", "Rare"], ["One off", "One offs"], ["todo", "Still to catch"]].forEach(function (x) {
+      var b = el("button", X.hgFilter === x[0] ? "on" : "", x[1]); b.onclick = function () { X.hgFilter = x[0]; renderHangar(); }; f.appendChild(b);
+    });
+    var q = ($("hgFind").value || "").toLowerCase().trim();
+    var list = cat.filter(function (c) {
+      if (q && c.name.toLowerCase().indexOf(q) < 0) return false;
+      if (X.hgFilter === "mine") return !!mine[c.key];
+      if (X.hgFilter === "todo") return !mine[c.key];
+      if (X.hgFilter === "Rare" || X.hgFilter === "One off") return rarity(c) === X.hgFilter;
+      return true;
+    });
+    var box = clear($("hgCards"));
+    if (!list.length) box.appendChild(el("div", "empty", cat.length ? "Nothing matches that yet." : "The aircraft list fills up as the line ups are announced. You can add one yourself on the right."));
+    list.slice(0, 160).forEach(function (c) {
+      var r = rarity(c), b = el("button", "hg-card r-" + r.replace(" ", "") + (mine[c.key] ? " got" : "") + (X.hgSel === c.key ? " sel" : ""));
+      b.appendChild(el("small", "", r)); b.appendChild(el("b", "", c.name));
+      b.appendChild(el("span", "", mine[c.key] ? "Seen " + mine[c.key].length + (mine[c.key].length === 1 ? " time" : " times") : c.airArm || "Not caught yet"));
+      b.onclick = function () { X.hgSel = c.key; renderHangar(); if (window.innerWidth < 860) $("hgDetail").scrollIntoView({ behavior: "smooth", block: "start" }); };
+      box.appendChild(b);
+    });
+    var dl = clear($("hgShows")); var names = {};
+    S.hub.shows.forEach(function (s) { names[s.name] = 1; }); S.hub.past.forEach(function (p) { names[p.showName] = 1; });
+    Object.keys(names).forEach(function (n) { dl.appendChild(new Option(n)); });
+    if (!$("hgYear").value) $("hgYear").value = new Date().getFullYear();
+    $("hgYear").max = new Date().getFullYear() + 1;
+    var sel = cat.find(function (c) { return c.key === X.hgSel; });
+    $("hgName").textContent = sel ? sel.name : "Pick an aircraft";
+    $("hgRarity").textContent = sel ? rarity(sel) : "";
+    $("hgForm").hidden = !sel;
+    var rows = clear($("hgRows")), log = clear($("hgLog"));
+    if (!sel) { rows.appendChild(el("p", "bf-tip", "Tap any card to log where you saw it. Rare means it is on two show line ups, and a one off is on just one.")); return; }
+    var m = (mine[sel.key] || []).slice().sort(function (a, b) { return (a.year || 0) - (b.year || 0); });
+    function row(k, v) { var r = el("div", "row"); r.appendChild(el("span", "", k)); r.appendChild(el("b", "", v)); rows.appendChild(r); }
+    row("First seen", m.length ? [m[0].showName, m[0].year].filter(Boolean).join(" ") : "Not yet");
+    row("Times seen", String(m.length));
+    row("Members who have it", h.totalMembers ? sel.members + " of " + h.totalMembers : String(sel.members));
+    row("On line ups", sel.shows ? sel.shows + (sel.shows === 1 ? " show" : " shows") : "Added by members");
+    m.forEach(function (x) {
+      var li = el("li"); li.appendChild(el("span", "", [x.showName || "Somewhere special", x.year].filter(Boolean).join(", ")));
+      var rm = el("button", "rm", "×"); rm.setAttribute("aria-label", "Remove this sighting");
+      rm.onclick = function () { call("removeSeen", { id: x.id }).then(function () { h.seen = h.seen.filter(function (y) { return y.id !== x.id; }); renderHangar(); renderOverview(); }).catch(oops); };
+      li.appendChild(rm); log.appendChild(li);
+    });
+  }
+  $("hgFind").addEventListener("input", function () { renderHangar(); });
+  $("hgForm").addEventListener("submit", function (e) {
+    e.preventDefault(); if (!X.hangar) return;
+    var sel = X.hangar.catalog.find(function (c) { return c.key === X.hgSel; }); if (!sel) return;
+    call("addSeen", { name: sel.name, showName: $("hgShow").value, year: $("hgYear").value }).then(function (x) {
+      if (!X.hangar.seen.some(function (y) { return y.id === x.id; })) { X.hangar.seen.push(x); sel.members = Math.max(sel.members, 1); }
+      say(sel.name + " is in your hangar"); renderHangar(); renderOverview();
+    }).catch(oops);
+  });
+  $("hgOwnForm").addEventListener("submit", function (e) {
+    e.preventDefault(); if (!X.hangar) return;
+    var name = $("hgOwn").value.trim(); if (name.length < 2) return;
+    call("addSeen", { name: name, showName: $("hgShow").value, year: $("hgYear").value || new Date().getFullYear() }).then(function (x) {
+      X.hangar.seen.push(x);
+      if (!X.hangar.catalog.some(function (c) { return c.key === x.key; })) X.hangar.catalog.push({ key: x.key, name: x.name, airArm: "", shows: 0, members: 1 });
+      X.hgSel = x.key; $("hgOwn").value = ""; say(x.name + " is in your hangar"); renderHangar(); renderOverview();
+    }).catch(oops);
+  });
+
+  /* ---------- My Airshow Year ---------- */
+  function yearsAvailable() {
+    var ys = {}; S.hub.past.forEach(function (p) { ys[p.year] = 1; });
+    (X.hangar ? X.hangar.seen : []).forEach(function (x) { if (x.year) ys[x.year] = 1; });
+    S.hub.photos.forEach(function (p) { if (p.created) ys[new Date(p.created).getFullYear()] = 1; });
+    var list = Object.keys(ys).map(Number).sort(function (a, b) { return b - a; });
+    return list.length ? list : [new Date().getFullYear()];
+  }
+  function renderYear() {
+    var years = yearsAvailable();
+    if (!X.year || years.indexOf(X.year) < 0) X.year = years[0];
+    var y = X.year, pick = clear($("yrPick"));
+    years.forEach(function (v) { var b = el("button", v === y ? "on" : "", String(v)); b.onclick = function () { X.year = v; renderYear(); }; pick.appendChild(b); });
+    $("yrNum").textContent = y;
+    var shows = S.hub.past.filter(function (p) { return p.year === y; });
+    var seen = (X.hangar ? X.hangar.seen : []).filter(function (x) { return x.year === y; });
+    var photos = S.hub.photos.filter(function (p) { return p.created && new Date(p.created).getFullYear() === y; });
+    var likes = photos.reduce(function (a, p) { return a + (p.likes || 0); }, 0) + S.hub.posts.filter(function (p) { return p.created && new Date(p.created).getFullYear() === y; }).reduce(function (a, p) { return a + (p.likes || 0); }, 0);
+    var types = {}; seen.forEach(function (x) { types[x.key] = types[x.key] || { name: x.name, n: 0 }; types[x.key].n++; });
+    var rare = 0; if (X.hangar) Object.keys(types).forEach(function (k) { var c = X.hangar.catalog.find(function (z) { return z.key === k; }); if (c && rarity(c) !== "Common") rare++; });
+    $("yrLine").textContent = shows.length ? "What a season, " + firstName() + ". Here is everything you saw, everywhere you went, and the shot everyone liked. Share it with your friends before next season starts." : "Log the shows you went to in My Airshow History and the aircraft in My Hangar, and your season recap builds itself here.";
+    var st = clear($("yrStats"));
+    [[shows.length, "Shows"], [Object.keys(types).length, "Aircraft types"], [rare, "Rare catches"], [likes, "Likes on my posts and photos"]].forEach(function (x) { var d = el("div"); d.appendChild(el("b", "", String(x[0]))); d.appendChild(el("span", "", x[1])); st.appendChild(d); });
+    var top = Object.keys(types).map(function (k) { return types[k]; }).sort(function (a, b) { return b.n - a.n; }).slice(0, 5);
+    var tb = clear($("yrTop"));
+    if (!top.length) tb.appendChild(el("div", "empty", "Tap I Saw It on aircraft in My Hangar to fill this in."));
+    top.forEach(function (a, i) { var r = el("div", "yr-top"); r.appendChild(el("code", "", pad(i + 1))); r.appendChild(el("b", "", a.name)); r.appendChild(el("em", "", "×" + a.n)); tb.appendChild(r); });
+    renderYearMap(shows);
+    var best = photos.slice().sort(function (a, b) { return (b.likes || 0) - (a.likes || 0); })[0];
+    X.photo = best || null;
+    var pb = clear($("yrPhoto"));
+    if (!best) pb.appendChild(el("div", "empty", "Share a photo in My Posts and your most liked one shows here."));
+    else {
+      var img = el("img", "yr-best"); img.src = imgSrc(best.image, 900, 600); img.alt = best.title; img.loading = "lazy"; img.onerror = function () { img.onerror = null; img.src = best.image; }; pb.appendChild(img);
+      pb.appendChild(el("b", "", best.title));
+      pb.appendChild(el("span", "yr-meta", [best.likes + " likes", best.comments + " comments", best.shutter, best.aperture].filter(Boolean).join(" · ")));
+    }
+    buildCards(y, shows, types, top, best);
+  }
+  function renderYearMap(shows) {
+    var s = $("yrMap"); while (s.firstChild) s.removeChild(s.firstChild);
+    var pts = [];
+    shows.forEach(function (p) { var sl = slugFor(p.showName), g = GEOX[sl]; if (g && !pts.some(function (q) { return q.sl === sl; })) pts.push({ sl: sl, lat: g[0], lon: g[1], name: POINT_NAMES[sl] || p.showName }); });
+    function xy(lat, lon) { return [(lon + 6) / 8 * 260 + 20, (56.2 - lat) / 6.2 * 330 + 25]; }
+    for (var i = 0; i < 6; i++) { s.appendChild(svg("line", { x1: 20, y1: 25 + i * 66, x2: 280, y2: 25 + i * 66, stroke: "rgba(95,227,220,.12)" })); }
+    for (var j = 0; j < 5; j++) { s.appendChild(svg("line", { x1: 20 + j * 65, y1: 25, x2: 20 + j * 65, y2: 355, stroke: "rgba(95,227,220,.12)" })); }
+    if (pts.length > 1) { var d = pts.map(function (p, k) { var c = xy(p.lat, p.lon); return (k ? "L" : "M") + c[0].toFixed(1) + " " + c[1].toFixed(1); }).join(" "); s.appendChild(svg("path", { d: d, fill: "none", stroke: "#9C86D8", "stroke-width": 2, "stroke-dasharray": "5 5" })); }
+    pts.forEach(function (p) { var c = xy(p.lat, p.lon); s.appendChild(svg("circle", { cx: c[0].toFixed(1), cy: c[1].toFixed(1), r: 6, fill: "#D74949" })); var t = svg("text", { x: (c[0] + 9).toFixed(1), y: (c[1] + 4).toFixed(1), fill: "#E8F1F6", "font-size": 12, "font-family": "Barlow, sans-serif", "font-weight": 600 }); t.textContent = p.name; s.appendChild(t); });
+    if (!pts.length) { var t = svg("text", { x: 150, y: 190, "text-anchor": "middle", fill: "#A9BDCB", "font-size": 13, "font-family": "Barlow, sans-serif" }); t.textContent = "Your shows appear here"; s.appendChild(t); }
+    $("yrMapTag").textContent = pts.length ? pts.length + (pts.length === 1 ? " place" : " places") : "";
+    $("yrMapTip").textContent = pts.length > 1 ? "From " + pts[0].name + " to " + pts[pts.length - 1].name + ". The further north you go, the higher the dot." : "";
+  }
+  function buildCards(y, shows, types, top, best) {
+    var box = clear($("yrCards")); X.cards = [];
+    var specs = [
+      { kicker: "My airshow year", big: String(shows.length), line: shows.length === 1 ? "show in " + y : "shows in " + y, sub: Object.keys(types).length + " aircraft types seen" },
+      { kicker: "Most seen aircraft", big: top[0] ? "×" + top[0].n : "0", line: top[0] ? top[0].name : "Fill in My Hangar", sub: top.slice(1, 3).map(function (a) { return a.name; }).join(" and ") },
+      { kicker: "Where I went", big: String(new Set(shows.map(function (p) { return slugFor(p.showName) || p.showName; })).size), line: "different shows", sub: shows.slice(0, 4).map(function (p) { return p.showName; }).join(", ") }
+    ];
+    specs.forEach(function (c, i) {
+      var cv = document.createElement("canvas"); cv.width = 1080; cv.height = 1920;
+      var g = cv.getContext("2d");
+      var bg = g.createLinearGradient(0, 0, 1080, 1920); bg.addColorStop(0, "#061019"); bg.addColorStop(1, i === 1 ? "#2A1F4A" : "#0C3A3E"); g.fillStyle = bg; g.fillRect(0, 0, 1080, 1920);
+      g.strokeStyle = "rgba(95,227,220,.10)"; g.lineWidth = 2; for (var k = 0; k < 1920; k += 80) { g.beginPath(); g.moveTo(0, k); g.lineTo(1080, k); g.stroke(); } for (var m = 0; m < 1080; m += 80) { g.beginPath(); g.moveTo(m, 0); g.lineTo(m, 1920); g.stroke(); }
+      g.strokeStyle = "#5FE3DC"; g.lineWidth = 8; [[60, 60, 1], [1020, 1860, -1]].forEach(function (q) { g.beginPath(); g.moveTo(q[0], q[1] + 90 * q[2]); g.lineTo(q[0], q[1]); g.lineTo(q[0] + 90 * q[2], q[1]); g.stroke(); });
+      g.fillStyle = "#5FE3DC"; g.font = "600 52px Barlow, Arial, sans-serif"; g.fillText(c.kicker, 100, 260);
+      g.fillStyle = "#FFFFFF"; g.font = "800 360px 'Barlow Condensed', Barlow, Arial, sans-serif"; g.fillText(c.big, 90, 760);
+      g.fillStyle = "#E8F1F6"; g.font = "700 86px Barlow, Arial, sans-serif"; wrapText(g, c.line, 100, 900, 880, 100);
+      g.fillStyle = "#A9BDCB"; g.font = "500 50px Barlow, Arial, sans-serif"; wrapText(g, c.sub || "", 100, 1150, 880, 66);
+      g.fillStyle = "#D74949"; g.fillRect(100, 1660, 120, 10);
+      g.fillStyle = "#FFFFFF"; g.font = "700 50px Barlow, Arial, sans-serif"; g.fillText("UK Airshow Guide", 100, 1760);
+      g.fillStyle = "#A9BDCB"; g.font = "500 40px Barlow, Arial, sans-serif"; g.fillText("ukairshowguide.co.uk  ·  " + y, 100, 1820);
+      var url = cv.toDataURL("image/png"); X.cards.push(url);
+      var im = el("img", "yr-card"); im.src = url; im.alt = c.kicker + ": " + c.big + " " + c.line; box.appendChild(im);
+    });
+  }
+  function wrapText(g, text, x, y, max, lh) {
+    var words = String(text).split(" "), line = "", n = 0;
+    words.forEach(function (w) { var t = line ? line + " " + w : w; if (g.measureText(t).width > max && line) { g.fillText(line, x, y + n * lh); n++; line = w; } else line = t; });
+    if (line && n < 4) g.fillText(line, x, y + n * lh);
+  }
+  function cardFiles() { return X.cards.map(function (u, i) { var b = atob(u.split(",")[1]), a = new Uint8Array(b.length); for (var k = 0; k < b.length; k++) a[k] = b.charCodeAt(k); return new File([a], "my-airshow-year-" + X.year + "-" + (i + 1) + ".png", { type: "image/png" }); }); }
+  $("yrShare").addEventListener("click", function () {
+    var files = cardFiles();
+    if (navigator.canShare && navigator.canShare({ files: files })) navigator.share({ files: files, title: "My Airshow Year " + X.year, text: "My airshow year, from ukairshowguide.co.uk" }).catch(function () {});
+    else say("Sharing isn't available here, so I would suggest Save The Images and posting them from your phone.");
+  });
+  $("yrSave").addEventListener("click", function () {
+    X.cards.forEach(function (u, i) { var a = document.createElement("a"); a.href = u; a.download = "my-airshow-year-" + X.year + "-" + (i + 1) + ".png"; document.body.appendChild(a); a.click(); a.remove(); });
+    say("Saving your three story cards. On a phone you can press and hold a card instead.");
+  });
+
+  /* ---------- Share a photo, with camera settings read from the file ---------- */
+  var PS = { file: null, jpeg: null, w: 0, h: 0 };
+  function renderPhotoShare() {
+    var sel = $("psShowSel"); if (sel.options.length) return;
+    sel.appendChild(new Option("Pick a show", ""));
+    S.hub.shows.forEach(function (x) { sel.appendChild(new Option(x.name, x.name)); });
+    var cat = $("psCat"); cat.appendChild(new Option("Pick a category", ""));
+    PHOTO_CATS.forEach(function (c) { cat.appendChild(new Option(c, c)); });
+  }
+  function readExif(buf) {
+    var v = new DataView(buf), out = {};
+    if (v.getUint16(0) !== 0xFFD8) return out;
+    var o = 2;
+    while (o < v.byteLength - 4) {
+      var mk = v.getUint16(o); if ((mk & 0xFF00) !== 0xFF00) break;
+      var len = v.getUint16(o + 2);
+      if (mk === 0xFFE1 && v.getUint32(o + 4) === 0x45786966) { parseTiff(v, o + 10, out); break; }
+      o += 2 + len;
+    }
+    return out;
+  }
+  function parseTiff(v, t, out) {
+    var le = v.getUint16(t) === 0x4949;
+    function u16(p) { return v.getUint16(p, le); } function u32(p) { return v.getUint32(p, le); }
+    function str(p, n) { var s = ""; for (var i = 0; i < n; i++) { var c = v.getUint8(p + i); if (!c) break; s += String.fromCharCode(c); } return s.trim(); }
+    function val(e) {
+      var type = u16(e + 2), n = u32(e + 4), size = [0, 1, 1, 2, 4, 8, 1, 1, 2, 4, 8][type] * n, p = size > 4 ? t + u32(e + 8) : e + 8;
+      if (type === 2) return str(p, n);
+      if (type === 3) return n === 2 ? [u16(p), u16(p + 2)] : u16(p);
+      if (type === 4) return n === 2 ? [u32(p), u32(p + 4)] : u32(p);
+      if (type === 5 || type === 10) { var a = u32(p), b = u32(p + 4); return b ? [a, b] : null; }
+      return null;
+    }
+    function ifd(p, tags) { var n = u16(p); for (var i = 0; i < n; i++) { var e = p + 2 + i * 12, tag = u16(e); if (tags[tag]) tags[tag](val(e)); } }
+    var exifPtr = 0;
+    ifd(t + u32(t + 4), { 0x010F: function (x) { out.make = x; }, 0x0110: function (x) { out.model = x; }, 0x8769: function (x) { exifPtr = x; } });
+    if (exifPtr) ifd(t + exifPtr, {
+      0x829A: function (x) { if (x) out.shutter = x[0] / x[1] >= 1 ? (x[0] / x[1]).toFixed(1).replace(/\.0$/, "") + "s" : "1/" + Math.round(x[1] / x[0]); },
+      0x829D: function (x) { if (x) out.aperture = "f/" + (Math.round(x[0] / x[1] * 10) / 10); },
+      0x8827: function (x) { if (x) out.iso = String(x); },
+      0x920A: function (x) { if (x) out.focal = Math.round(x[0] / x[1]) + "mm"; },
+      0xA434: function (x) { if (x) out.lens = x; },
+      0x9003: function (x) { if (x) out.taken = x.slice(0, 10).replace(/:/g, "-"); }
+    });
+  }
+  function shrink(file) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image(), url = URL.createObjectURL(file);
+      img.onload = function () {
+        var sc = Math.min(1, 2048 / Math.max(img.naturalWidth, img.naturalHeight)), w = Math.round(img.naturalWidth * sc), h = Math.round(img.naturalHeight * sc);
+        var c = document.createElement("canvas"); c.width = w; c.height = h; c.getContext("2d").drawImage(img, 0, 0, w, h); URL.revokeObjectURL(url);
+        var q = 0.9, d = c.toDataURL("image/jpeg", q); while (d.length * 0.75 > 3300000 && q > 0.5) { q -= 0.1; d = c.toDataURL("image/jpeg", q); }
+        resolve({ data: d, w: w, h: h });
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("That photo couldn't be opened. JPG straight from the camera works best.")); };
+      img.src = url;
+    });
+  }
+  $("psFile").addEventListener("change", function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    PS.file = f; $("psExif").hidden = false; $("psRead").textContent = "Reading camera settings";
+    ["psShutter", "psAperture", "psIso", "psFocal", "psCamera", "psLens"].forEach(function (id) { $(id).value = ""; });
+    f.slice(0, 262144).arrayBuffer().then(function (buf) {
+      var x = {}; try { x = readExif(buf); } catch (e) { x = {}; }
+      $("psShutter").value = x.shutter || ""; $("psAperture").value = x.aperture || ""; $("psIso").value = x.iso || ""; $("psFocal").value = x.focal || "";
+      $("psCamera").value = x.model ? (x.make && x.model.toLowerCase().indexOf(x.make.toLowerCase().split(" ")[0]) < 0 ? x.make + " " : "") + x.model : "";
+      $("psLens").value = x.lens || ""; PS.taken = x.taken || "";
+      var got = [x.shutter, x.aperture, x.iso && "ISO " + x.iso, x.focal].filter(Boolean);
+      $("psRead").textContent = got.length ? "Read from the file: " + got.join(", ") + ". You can change any of them." : "No camera settings in this file, often the case after editing or messaging apps. You can type them in.";
+    });
+    shrink(f).then(function (r) { PS.jpeg = r.data; PS.w = r.w; PS.h = r.h; var p = $("psPrev"); p.src = r.data; p.hidden = false; $("psDropText").hidden = true; }).catch(oops);
+  });
+  $("psReset").addEventListener("click", function () { PS = { file: null, jpeg: null }; $("psForm").reset(); $("psExif").hidden = true; $("psPrev").hidden = true; $("psDropText").hidden = false; });
+  $("psForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!PS.jpeg) return say("Add a photo first.", true);
+    if (!$("psCat").value) return say("Pick a category for your photo.", true);
+    if (!$("psOwn").checked) return say("Please confirm the photo is your own.", true);
+    var b64 = PS.jpeg.split(",")[1], size = 290000, parts = [];
+    for (var i = 0; i < b64.length; i += size) parts.push(b64.slice(i, i + size));
+    var go = $("psGo"); go.disabled = true; go.textContent = "Uploading";
+    var meta = { title: $("psTitle").value, category: $("psCat").value, showName: $("psShowSel").value, aircraft: $("psAircraft").value, camera: $("psCamera").value, lens: $("psLens").value, focal: $("psFocal").value, shutter: $("psShutter").value, aperture: $("psAperture").value, iso: $("psIso").value.replace(/^iso\s*/i, ""), takenOn: PS.taken || "" };
+    call("startGalleryUpload", { total: parts.length }).then(function (r) {
+      var chain = Promise.resolve();
+      parts.forEach(function (p, i) { chain = chain.then(function () { go.textContent = "Uploading " + Math.round(100 * (i + 1) / parts.length) + "%"; return call("sendGalleryPiece", { uploadId: r.uploadId, index: i, data: p }); }); });
+      return chain.then(function () { return call("finishGalleryUpload", { uploadId: r.uploadId, total: parts.length, meta: meta, ownPhoto: true, width: PS.w, height: PS.h }); });
+    }).then(function () {
+      say("Your photo is posted"); $("psReset").click(); return load();
+    }).catch(oops).then(function () { go.disabled = false; go.textContent = "Post My Photo"; });
+  });
+
+  document.querySelectorAll("[data-go-p]").forEach(function (b) { b.addEventListener("click", function () { showPage(b.dataset.goP); }); });
 
   /* ---------- start ---------- */
   // The page code may not be listening yet when this loads, so keep saying hello until it answers.

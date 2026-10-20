@@ -1,0 +1,185 @@
+  <!-- OVERVIEW -->
+  <main class="page" id="p-overview">
+    <div class="wrap">
+      <section class="ov-hello panel">
+        <div class="pbody">
+          <p class="hx-live"><i aria-hidden="true"></i>Systems online. Welcome back.</p>
+          <h2 class="ov-greet" id="ovGreet">Good evening</h2>
+          <p class="ov-sum" id="ovSum"></p>
+          <div class="ov-go">
+            <button class="btn small" data-go-p="briefing">Open My Flight Briefing</button>
+            <button class="btn small outline" data-go-p="trips">Plan My Trips</button>
+          </div>
+        </div>
+      </section>
+      <div class="hstats ov-stats" id="ovStats"></div>
+      <div class="ov-grid">
+        <section class="panel ov-next">
+          <header class="t"><h3>Next Departure</h3><small id="ovNextTag">Saved show</small></header>
+          <div class="pbody">
+            <b class="ov-show" id="ovShow">No show saved yet</b>
+            <div class="ov-cd" aria-live="off"><b id="ovDays">0</b><span>Days to go</span><code id="ovClock">00:00:00</code></div>
+            <div class="rows" id="ovRows"></div>
+            <div class="prog"><i id="ovProg" style="width:0"></i></div>
+          </div>
+        </section>
+        <section class="panel ov-radar">
+          <header><h3>Inbound Radar</h3><small>Your saved shows by days to go</small></header>
+          <div class="pbody ov-radar-body">
+            <svg viewBox="0 0 300 300" class="radar" role="img" aria-labelledby="radarTitle">
+              <title id="radarTitle">Radar showing your saved shows, nearest in the middle</title>
+              <defs>
+                <radialGradient id="rgGlow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#5FE3DC" stop-opacity=".18"/><stop offset="1" stop-color="#5FE3DC" stop-opacity="0"/></radialGradient>
+                <linearGradient id="rgSweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5FE3DC" stop-opacity="0"/><stop offset="1" stop-color="#5FE3DC" stop-opacity=".45"/></linearGradient>
+              </defs>
+              <circle cx="150" cy="150" r="140" fill="url(#rgGlow)"/>
+              <g fill="none" stroke="rgba(95,227,220,.28)">
+                <circle cx="150" cy="150" r="140"/><circle cx="150" cy="150" r="105"/><circle cx="150" cy="150" r="70"/><circle cx="150" cy="150" r="35"/>
+                <line x1="10" y1="150" x2="290" y2="150"/><line x1="150" y1="10" x2="150" y2="290"/>
+              </g>
+              <g class="sweep"><path d="M150 150 L290 150 A140 140 0 0 0 249 51 Z" fill="url(#rgSweep)"/></g>
+              <g font-family="JetBrains Mono, monospace" font-size="9" fill="#A9BDCB">
+                <text x="154" y="118">30d</text><text x="154" y="83">90d</text><text x="154" y="48">180d</text><text x="154" y="16">365d</text>
+              </g>
+              <g id="radarBlips"></g>
+            </svg>
+            <ul class="ov-blips" id="ovBlips"></ul>
+          </div>
+        </section>
+        <section class="panel">
+          <header class="p"><h3>Show Updates</h3><small>Live</small></header>
+          <div class="pbody" id="ovUpdates"></div>
+        </section>
+        <section class="panel">
+          <header><h3>My Must See Aircraft</h3><small id="ovMustTag"></small></header>
+          <div class="pbody" id="ovMust"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- FLIGHT BRIEFING -->
+  <main class="page" id="p-briefing" hidden>
+    <div class="wrap">
+      <section>
+        <h2 class="sec-title">Flight Briefing</h2>
+        <p class="sec-sub" id="bfSub">Everything you need for the day on one screen, like a pilot's brief before a sortie.</p>
+        <div class="filters" id="bfTrips"></div>
+      </section>
+      <div id="bfNone" class="empty" hidden>Save a show in My Trips and its briefing builds up here.</div>
+      <div id="bfBody">
+        <div class="bf-issued panel"><div class="pbody"><b id="bfShow"></b><span id="bfIssued"></span></div></div>
+        <div class="bf-grid">
+          <section class="panel">
+            <header class="t"><h3>Wind And Runway</h3><small id="bfWindTag"></small></header>
+            <div class="pbody bf-wind">
+              <svg viewBox="0 0 220 220" class="bf-rose" aria-hidden="true">
+                <circle cx="110" cy="110" r="96" fill="none" stroke="rgba(95,227,220,.3)"/>
+                <circle cx="110" cy="110" r="70" fill="none" stroke="rgba(95,227,220,.14)"/>
+                <g font-family="JetBrains Mono, monospace" font-size="12" fill="#A9BDCB" text-anchor="middle">
+                  <text x="110" y="10">N</text><text x="214" y="114">E</text><text x="110" y="218">S</text><text x="6" y="114">W</text>
+                </g>
+                <g id="bfRunway"></g>
+                <g id="bfArrow"></g>
+              </svg>
+              <div class="rows" id="bfWindRows"></div>
+              <p class="bf-tip" id="bfWindTip"></p>
+            </div>
+          </section>
+          <section class="panel bf-hours">
+            <header><h3>Weather Through The Day</h3><small>Hour by hour</small></header>
+            <div class="pbody"><div class="bf-strip" id="bfHours"></div><p class="bf-tip" id="bfLight"></p></div>
+          </section>
+          <section class="panel">
+            <header class="p"><h3>Where I Would Stand</h3><small>Picked for you</small></header>
+            <div class="pbody">
+              <svg viewBox="0 0 320 190" class="bf-spot" id="bfSpot" aria-hidden="true"></svg>
+              <p class="bf-tip" id="bfSpotTip"></p>
+            </div>
+          </section>
+          <section class="panel">
+            <header><h3>Your Must See Slots</h3><small id="bfSlotTag"></small></header>
+            <div class="pbody" id="bfSlots"></div>
+          </section>
+          <section class="panel">
+            <header><h3>Before You Leave</h3><small id="bfTodoTag"></small></header>
+            <div class="pbody" id="bfTodo"></div>
+          </section>
+          <section class="panel">
+            <header class="t"><h3>Camera Settings For The Day</h3><small>Set before the gates</small></header>
+            <div class="pbody" id="bfCam"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MY HANGAR -->
+  <main class="page" id="p-hangar" hidden>
+    <div class="wrap">
+      <section>
+        <h2 class="sec-title">My Hangar</h2>
+        <p class="sec-sub">Every aircraft you have seen, collected show by show. Common ones glow teal, rare ones purple and the true one offs red. Tap a card to log where you caught it.</p>
+      </section>
+      <div class="hstats" id="hgStats"></div>
+      <div class="hg-tools">
+        <div class="filters" id="hgFilters"></div>
+        <input class="input hg-find" id="hgFind" type="search" placeholder="Find an aircraft" aria-label="Find an aircraft">
+      </div>
+      <div class="hg-split">
+        <div class="hg-cards" id="hgCards"><div class="empty">Loading your hangar</div></div>
+        <aside class="panel hg-detail" id="hgDetail">
+          <header class="p"><h3 id="hgName">Pick an aircraft</h3><small id="hgRarity"></small></header>
+          <div class="pbody">
+            <div class="rows" id="hgRows"></div>
+            <ul class="hg-log" id="hgLog"></ul>
+            <form class="hg-form" id="hgForm">
+              <label class="f">Where I saw it<input class="input" id="hgShow" list="hgShows" maxlength="80" placeholder="RIAT"></label>
+              <datalist id="hgShows"></datalist>
+              <label class="f">Year<input class="input" id="hgYear" type="number" min="1950" step="1"></label>
+              <button class="btn small" type="submit">I Saw It</button>
+            </form>
+            <form class="hg-form hg-own" id="hgOwnForm">
+              <label class="f">Not on the list?<input class="input" id="hgOwn" maxlength="80" placeholder="Avro Vulcan"></label>
+              <button class="btn small outline" type="submit">Add It</button>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- MY AIRSHOW YEAR -->
+  <main class="page" id="p-year" hidden>
+    <div class="wrap">
+      <section>
+        <p class="hx-live"><i aria-hidden="true"></i>Season recap ready</p>
+        <h2 class="sec-title">My Airshow Year <span id="yrNum"></span></h2>
+        <p class="sec-sub" id="yrLine"></p>
+        <div class="filters" id="yrPick"></div>
+      </section>
+      <div class="hstats" id="yrStats"></div>
+      <div class="yr-grid">
+        <section class="panel">
+          <header class="t"><h3>Most Seen Aircraft</h3><small>From My Hangar</small></header>
+          <div class="pbody" id="yrTop"></div>
+        </section>
+        <section class="panel">
+          <header><h3>My Season Map</h3><small id="yrMapTag"></small></header>
+          <div class="pbody"><svg viewBox="0 0 300 380" class="yr-map" id="yrMap" aria-hidden="true"></svg><p class="bf-tip" id="yrMapTip"></p></div>
+        </section>
+        <section class="panel">
+          <header class="p"><h3>My Best Photo</h3><small>Most liked</small></header>
+          <div class="pbody" id="yrPhoto"></div>
+        </section>
+      </div>
+      <section class="panel yr-share">
+        <header><h3>Share Your Year</h3><small>Story cards for Facebook and Instagram</small></header>
+        <div class="pbody">
+          <p class="sec-sub">Three story cards sized for phone stories. Share the one you like, or save all three. On a phone you can also press and hold a card to save it.</p>
+          <div class="yr-cards" id="yrCards"></div>
+          <div class="ov-go"><button class="btn small" id="yrShare">Share My Year</button><button class="btn small outline" id="yrSave">Save The Images</button></div>
+        </div>
+      </section>
+    </div>
+  </main>
