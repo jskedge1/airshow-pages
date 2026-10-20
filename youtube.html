@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Airshow Guide YouTube</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* YouTube page for The Big Guide to UK Airshows.
+   Videos come from youtube/videos.json, which tools-youtube.py refreshes from the channel every hour. */
+:root{
+  --navy:#13293C; --navy-deep:#0E2131; --teal:#32B4AF; --teal-dark:#0E5F5B; --teal-pale:#E8F6F5;
+  --purple:#6950A1; --red:#D74949; --white:#FFFFFF; --ink:#0B1620; --line:#D6DEE4; --muted:#4A5B69; --grey:#F2F5F7;
+  --board:#081521; --amber:#FFC93C;
+  --f-body:"Barlow",Arial,Helvetica,sans-serif; --f-cond:"Barlow Condensed","Arial Narrow",Arial,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+html,body{margin:0;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:var(--white);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;margin:0}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+button{font-family:inherit}
+
+/* Header */
+.hero{position:relative;background:var(--navy);color:var(--white);overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--navy) 0%,rgba(19,41,60,.86) 38%,rgba(19,41,60,.12) 100%);pointer-events:none}
+.hero .wrap{position:relative;z-index:2;padding-block:64px 56px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:40px;align-items:end}
+.hero-copy>*{animation:up .7s cubic-bezier(.2,.7,.2,1) both}
+.hero-copy>*:nth-child(2){animation-delay:.08s}.hero-copy>*:nth-child(3){animation-delay:.16s}.hero-copy>*:nth-child(4){animation-delay:.24s}.hero-copy>*:nth-child(5){animation-delay:.32s}
+@keyframes up{from{transform:translateY(14px)}to{transform:none}}
+.tag{display:inline-block;background:var(--purple);color:var(--white);font-weight:600;font-size:14px;padding:5px 12px}
+.hero h1{font-family:var(--f-cond);font-weight:800;font-size:clamp(40px,6.4vw,76px);line-height:.95;letter-spacing:.01em;text-transform:uppercase;margin:16px 0 12px}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.sub{color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:17px;margin:0 0 14px}
+.intro{max-width:56ch;color:#DCE6EE;margin:0 0 22px}
+.intro b{color:var(--white)}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;font-weight:600;font-size:16px;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .25s ease,background .25s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn.red{background:var(--red);color:var(--white)}
+.btn.teal{background:var(--teal);color:var(--white)}
+.btn.out{border-color:var(--white);color:var(--white);background:transparent}
+.glass{background:rgba(14,33,49,.92);border-top:4px solid var(--teal);box-shadow:0 18px 40px rgba(0,0,0,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.glass h2{display:flex;align-items:center;gap:10px;background:var(--teal);color:var(--white);font-size:17px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:10px 14px}
+.ico{width:28px;height:28px;border-radius:50%;background:var(--white);display:grid;place-items:center;flex:none}
+.rows{padding:6px 0}
+.row{display:flex;justify-content:space-between;gap:14px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.row:last-child{border-bottom:0}
+.row span{color:#9FDCD9;font-weight:500;flex:none}
+.row strong{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;min-width:0}
+.row.hot strong{background:var(--red);padding:1px 8px}
+.lightline{position:absolute;left:0;bottom:0;height:2px;width:100%;background:linear-gradient(90deg,transparent,var(--teal),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:sweep 6s linear infinite;z-index:3}
+@keyframes sweep{from{background-position:-40% 0}to{background-position:140% 0}}
+
+/* Jump bar, HUD bracket animation */
+.jump{position:sticky;top:0;z-index:20;background:var(--navy-deep)}
+.jump .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.jump .wrap::-webkit-scrollbar{display:none}
+.jump a{position:relative;flex:none;color:var(--white);text-decoration:none;font-weight:600;padding:14px 18px;white-space:nowrap;transition:color .3s ease}
+.jump a::before,.jump a::after{content:"";position:absolute;top:8px;bottom:8px;width:8px;border:2px solid var(--teal);opacity:0;transition:all .35s cubic-bezier(.2,.7,.2,1)}
+.jump a::before{left:14px;border-right:0}
+.jump a::after{right:14px;border-left:0}
+.jump a:hover::before,.jump a:focus-visible::before,.jump a.on::before{left:4px;opacity:1}
+.jump a:hover::after,.jump a:focus-visible::after,.jump a.on::after{right:4px;opacity:1}
+.jump a.on{color:var(--teal)}
+
+/* Sections */
+section{scroll-margin-top:56px}
+.band{padding-block:64px}
+.band.pale{background:var(--teal-pale)}
+.sec-title{font-family:var(--f-cond);font-size:clamp(30px,4vw,44px);font-weight:800;text-transform:uppercase;color:var(--red);border-left:5px solid var(--red);padding-left:14px;line-height:1}
+.sec-intro{max-width:62ch;color:var(--muted);margin:10px 0 28px;font-weight:500}
+
+/* Latest player */
+.latest{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);background:var(--navy);color:var(--white)}
+.screen{position:relative;aspect-ratio:16/9;max-width:100%;overflow:hidden;background:#000}
+.screen img{width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+.screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border-radius:50%;border:0;background:var(--red);display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.4);transition:transform .3s ease;cursor:pointer}
+.play:hover{transform:translate(-50%,-50%) scale(1.07)}
+.latest .meta{padding:28px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.latest h3{font-size:26px;font-weight:800;text-transform:uppercase;line-height:1.1}
+.latest p{color:#DCE6EE;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-block;font-weight:600;font-size:14px;padding:3px 10px;background:var(--teal);color:var(--white)}
+.chip.p{background:var(--purple)}
+.chip.r{background:var(--red)}
+.mutedline{color:#AFC0CD;font-size:15px;font-variant-numeric:tabular-nums}
+
+/* Ticket stubs */
+.tickets{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px 8px;scrollbar-width:none}
+.tickets::-webkit-scrollbar{display:none}
+.ticket{flex:none;position:relative;background:var(--white);border:1px solid var(--line);padding:12px 18px 12px 22px;font-size:15px;font-weight:600;color:var(--navy);cursor:pointer;text-align:left;transition:transform .25s ease,background .25s ease}
+.ticket::before,.ticket::after{content:"";position:absolute;left:-7px;width:12px;height:12px;border-radius:50%;background:var(--teal-pale);border:1px solid var(--line)}
+.ticket::before{top:8px}.ticket::after{bottom:8px}
+.ticket small{display:block;font-family:var(--f-mono);font-size:12px;color:var(--teal-dark);font-weight:500}
+.ticket:hover{transform:translateY(-2px)}
+.ticket[aria-pressed="true"]{background:var(--teal);color:var(--white);border-color:var(--teal)}
+.ticket[aria-pressed="true"] small{color:var(--white)}
+.planning{margin-top:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--navy);color:var(--white);padding:16px 18px;border-left:6px solid var(--purple)}
+.planning p{margin:0;flex:1 1 280px}
+.planning a{color:var(--teal);font-weight:700;text-decoration:none}
+
+/* Topic filters */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 18px}
+.filter{font-size:15px;font-weight:600;padding:9px 14px;background:var(--white);border:1px solid var(--line);color:var(--navy);cursor:pointer}
+.filter[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--white)}
+.count{font-weight:600;color:var(--navy);margin-bottom:14px;font-variant-numeric:tabular-nums}
+
+/* Video tiles */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.tile{position:relative;background:var(--white);border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .35s ease,box-shadow .35s ease;animation:rise .5s ease both;min-width:0}
+.tile::before{content:"";position:absolute;top:-1px;left:0;height:3px;width:0;background:var(--teal);transition:width .45s ease;z-index:2}
+.tile:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(19,41,60,.14)}
+.tile:hover::before{width:100%}
+.thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--navy);pointer-events:none;user-select:none}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease,filter .6s ease}
+.tile:hover .thumb img{transform:scale(1.04);filter:brightness(1.06)}
+.thumb .flag{position:absolute;left:8px;top:8px;background:var(--purple);color:var(--white);font-size:12px;font-weight:700;padding:2px 8px}
+.tbody{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1;min-width:0}
+.tbody h3{font-size:18px;font-weight:700;line-height:1.25;overflow-wrap:break-word}
+.tmeta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tlinks{margin-top:auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 12px;padding-top:8px;font-weight:700;font-size:15px}
+.tlinks a,.tlinks button{text-decoration:none;transition:transform .25s ease;display:inline-block;background:none;border:0;padding:0;font-weight:700;font-size:15px;cursor:pointer}
+.tlinks a:hover,.tlinks button:hover{transform:translateX(3px)}
+.tlinks .here{color:var(--navy)}
+.tlinks .yt{color:var(--red)}
+.tlinks .gd{color:var(--teal-dark)}
+.empty{grid-column:1/-1;background:var(--white);padding:22px;border-left:4px solid var(--purple)}
+.empty p{margin:6px 0 0}
+@keyframes rise{from{transform:translateY(10px)}to{transform:none}}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;flex-wrap:wrap}
+.pager button{padding:10px 16px;font-weight:600;font-size:15px;border:1px solid var(--navy);background:var(--white);color:var(--navy);cursor:pointer}
+.pager button:disabled{opacity:.35;cursor:default}
+.pager span{font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums}
+
+/* Departures board */
+.board-band{background:var(--navy);color:var(--white)}
+.board-band .sec-intro{color:#C7D5DF}
+.board{background:var(--board);border:1px solid #1F3A50}
+.board-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:#0B1C2B;border-bottom:2px solid var(--teal);flex-wrap:wrap}
+.board-head h3{font-family:var(--f-cond);font-size:26px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--amber)}
+.clock{font-family:var(--f-mono);font-size:20px;color:var(--amber);font-variant-numeric:tabular-nums}
+.board-scroll{overflow-x:auto;scrollbar-width:none}
+.board-scroll::-webkit-scrollbar{display:none}
+table{width:100%;border-collapse:collapse;min-width:640px;font-family:var(--f-mono);font-size:15px}
+th{text-align:left;color:#9FDCD9;font-family:var(--f-body);font-weight:600;padding:10px 18px;border-bottom:1px solid #1F3A50}
+td{padding:12px 18px;border-bottom:1px solid #132C40;color:#FFE08A;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.ttl{white-space:normal;color:var(--white);font-family:var(--f-body);font-weight:600;font-size:16px}
+td a{color:var(--board);background:var(--amber);padding:3px 10px;text-decoration:none;font-weight:700}
+td a.boarding{background:var(--teal);color:var(--white)}
+.flip{display:inline-block;animation:flip .6s cubic-bezier(.3,.7,.3,1) both;transform-origin:50% 0}
+@keyframes flip{0%{transform:rotateX(90deg)}100%{transform:none}}
+
+/* Subscribe */
+.sub-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}
+.smoke{height:150px}
+.smoke svg{width:100%;height:100%;display:block}
+.sub-band h2{font-family:var(--f-cond);font-size:clamp(32px,4.4vw,50px);font-weight:800;text-transform:uppercase;line-height:1;color:var(--navy)}
+.sub-band p{max-width:52ch}
+.handle{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0 18px}
+.handle code{font-family:var(--f-mono);background:var(--grey);padding:6px 10px;border:1px solid var(--line);user-select:all;overflow-wrap:anywhere}
+.copy{font-weight:600;padding:6px 12px;border:1px solid var(--navy);background:var(--white);color:var(--navy);cursor:pointer}
+
+footer.small{background:var(--navy-deep);color:#AFC0CD;font-size:14px}
+footer.small .wrap{padding-block:22px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
+
+/* height helper, only when the page is opened on its own */
+#pgh{position:fixed;right:12px;bottom:12px;z-index:50;background:var(--purple);color:var(--white);font:600 13px/1.3 var(--f-body);padding:8px 12px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+
+@media (max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){
+  .hero .wrap,.latest,.sub-grid{grid-template-columns:minmax(0,1fr)}
+  .hero .wrap{padding-block:44px 40px}
+  .band{padding-block:48px}
+}
+@media (max-width:600px){
+  .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .hero h1{font-size:clamp(34px,10.4vw,44px)}
+  .latest .meta{padding:20px}
+  .latest h3{font-size:22px}
+  .smoke{height:90px}
+  .btns .btn{flex:1 1 auto;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hero" id="top">
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="tag">Our YouTube channel</span>
+      <h1>The Big Guide to <em>UK Airshows</em> on YouTube</h1>
+      <p class="sub">Watch before you go</p>
+      <p class="intro">I film the shows I plan for, so you can see the crowd line, the car parks and the campsites before you get there. <b>Every new video I upload lands on this page by itself</b>, sorted by airshow and topic, with a link to the matching guide on this site.</p>
+      <div class="btns">
+        <a class="btn red" href="https://www.youtube.com/@TheBigGuidetoUKAirShows?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
+        <a class="btn teal" href="#latest">Watch the latest</a>
+        <a class="btn out" href="#airshows">Find your airshow</a>
+      </div>
+    </div>
+    <aside class="glass" aria-label="Channel details">
+      <h2><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="#13293C" d="M8 5v14l11-7z"/></svg></span>Channel details</h2>
+      <div class="rows">
+        <div class="row"><span>Channel</span><strong>The Big Guide to UK Airshows</strong></div>
+        <div class="row"><span>Handle</span><strong>@TheBigGuidetoUKAirShows</strong></div>
+        <div class="row"><span>Formerly</span><strong>The Big Guide to RIAT</strong></div>
+        <div class="row"><span>Videos Here</span><strong id="kdCount">Loading</strong></div>
+        <div class="row hot"><span>Newest Upload</span><strong id="kdNewest">Loading</strong></div>
+      </div>
+    </aside>
+  </div>
+  <div class="lightline"></div>
+</header>
+
+<nav class="jump" aria-label="Sections">
+  <div class="wrap">
+    <a href="#latest">Latest Video</a>
+    <a href="#airshows">Watch By Airshow</a>
+    <a href="#departures">Departures Board</a>
+    <a href="#subscribe">Subscribe</a>
+  </div>
+</nav>
+
+<section id="latest" class="band">
+  <div class="wrap">
+    <h2 class="sec-title">Latest Video</h2>
+    <p class="sec-intro">The newest upload always sits here. Press play to watch it right here on the page, or pick any video further down to play it in this spot.</p>
+    <div class="latest">
+      <div class="screen" id="screen">
+        <img id="latestImg" alt="" src="">
+        <button class="play" id="latestPlay" type="button" aria-label="Play the video here"><svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M8 5v14l11-7z"/></svg></button>
+      </div>
+      <div class="meta">
+        <div class="chips" id="latestChips"></div>
+        <h3 id="latestTitle">Loading the newest video</h3>
+        <p id="latestText"></p>
+        <div class="mutedline" id="latestLine"></div>
+        <div class="btns">
+          <a class="btn red" id="latestYt" href="https://www.youtube.com/@TheBigGuidetoUKAirShows/videos" target="_blank" rel="noopener">Watch on YouTube</a>
+          <a class="btn out" id="latestGuide" href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top">Read the guide</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="airshows" class="band pale">
+  <div class="wrap">
+    <h2 class="sec-title">Watch By Airshow</h2>
+    <p class="sec-intro">Pick the show you are thinking of going to. I would suggest watching a video from the crowd line first, as it shows you what the day really looks like.</p>
+    <div class="tickets" id="tickets" role="group" aria-label="Choose an airshow"></div>
+    <div class="planning" id="planning" hidden>
+      <p id="planText"></p>
+      <a id="planLink" href="#" target="_top">Open the show guide →</a>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Choose a topic"></div>
+    <div class="count" id="count" aria-live="polite"></div>
+    <div class="grid" id="grid"></div>
+    <div class="pager" id="pager" hidden>
+      <button type="button" id="prevPg">Newer videos</button>
+      <span id="pgText"></span>
+      <button type="button" id="nextPg">Older videos</button>
+    </div>
+  </div>
+</section>
+
+<section id="departures" class="band board-band">
+  <div class="wrap">
+    <h2 class="sec-title">Departures Board</h2>
+    <p class="sec-intro">The last ten uploads, newest at the top, the way you would see it at the terminal.</p>
+    <div class="board">
+      <div class="board-head"><h3>Now Showing</h3><div class="clock" id="clock">00:00:00</div></div>
+      <div class="board-scroll">
+        <table>
+          <thead><tr><th>Uploaded</th><th>Video</th><th>Airshow</th><th>Views</th><th>Gate</th></tr></thead>
+          <tbody id="boardRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="subscribe" class="band sub-band">
+  <div class="wrap sub-grid">
+    <div class="smoke"><svg viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 40 C150 30 300 70 600 50" stroke="#D74949" stroke-width="16" fill="none" stroke-linecap="round" opacity=".9"/>
+      <path d="M0 75 C150 65 300 105 600 85" stroke="#C9D2D9" stroke-width="16" fill="none" stroke-linecap="round"/>
+      <path d="M0 110 C150 100 300 140 600 120" stroke="#1C3F94" stroke-width="16" fill="none" stroke-linecap="round" opacity=".9"/>
+    </svg></div>
+    <div>
+      <h2>Come Along For The 2027 Season</h2>
+      <p>RIAT is still a big part of the channel, with arrivals and departures, camping at Fairford and photography advice. I am adding more shows from across the UK as I visit them. If you subscribe, you will see the new videos on YouTube too.</p>
+      <div class="handle"><code id="handleText">@TheBigGuidetoUKAirShows</code><button class="copy" id="copyBtn" type="button">Copy handle</button></div>
+      <a class="btn red" href="https://www.youtube.com/@TheBigGuidetoUKAirShows?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
+    </div>
+  </div>
+</section>
+
+<footer class="small"><div class="wrap">
+  <span>Videos play from YouTube. Please check the official airshow website before you go, as details can change.</span>
+  <a href="https://www.ukairshowguide.co.uk" target="_top">The Big Guide to UK Airshows</a>
+</div></footer>
+
+<script src="links.js"></script>
+<script>
+(function(){
+var CH='https://www.youtube.com/@TheBigGuidetoUKAirShows';
+var L=window.AIRSHOW_LINKS||{site:'https://www.ukairshowguide.co.uk/',find:'https://www.ukairshowguide.co.uk/air-shows-guides',pages:[]};
+var SHOWS=[{key:'all',name:'All Airshows',where:'Everything on the channel'}].concat((L.pages||[]).filter(function(p){return p.live;}));
+var TOPICS=[['all','All Topics'],['arrivals','Arrivals And Departures'],['photo','Photography'],['camping','Camping'],['planning','Planning Guides'],['showday','On The Ground']];
+var PER=6;
+var VIDEOS=[], curShow='all', curTopic='all', page=0;
+
+function $(id){return document.getElementById(id);}
+function showOf(k){for(var i=0;i<SHOWS.length;i++)if(SHOWS[i].key===k)return SHOWS[i];return null;}
+function showName(k){var s=showOf(k);return s&&k!=='all'?s.name:'UK Airshows';}
+function topicName(k){for(var i=0;i<TOPICS.length;i++)if(TOPICS[i][0]===k)return TOPICS[i][1];return 'On The Ground';}
+function guideUrl(k){var s=showOf(k);return s&&s.slug?L.site+s.slug:L.find;}
+function yt(v){return 'https://www.youtube.com/watch?v='+v.id;}
+function thumb(v,big){return 'https://i.ytimg.com/vi/'+v.id+'/'+(big?'maxresdefault':'hqdefault')+'.jpg';}
+function fmt(d,short){if(!d)return '';var x=new Date(d+'T12:00:00');return short?x.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}).toUpperCase():x.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function views(n){if(!n)return '';return n>=1000?(n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'K views':n+' views';}
+function txt(el,s){el.textContent=s;return el;}
+
+/* Latest player */
+var current=null;
+function setLatest(v,play){
+  current=v;
+  var sc=$('screen'),fr=sc.querySelector('iframe');if(fr)fr.remove();
+  var img=$('latestImg');img.style.display='';$('latestPlay').style.display='';
+  img.onerror=function(){if(img.src.indexOf('maxres')>-1)img.src=thumb(v,false);};
+  img.src=thumb(v,true);img.alt='';
+  var ch=$('latestChips');ch.innerHTML='';
+  if(v===VIDEOS[0]){var n=document.createElement('span');n.className='chip r';n.textContent='Newest';ch.appendChild(n);}
+  var a=document.createElement('span');a.className='chip p';a.textContent=showName(v.show);ch.appendChild(a);
+  var b=document.createElement('span');b.className='chip';b.textContent=topicName(v.topic);ch.appendChild(b);
+  txt($('latestTitle'),v.title);
+  txt($('latestText'),v.summary||'Press play to watch it here, or open it on YouTube to leave a comment.');
+  txt($('latestLine'),[v.published?'Uploaded '+fmt(v.published):'',views(v.views)].filter(Boolean).join('  ·  '));
+  $('latestYt').href=yt(v);
+  $('latestGuide').href=guideUrl(v.show);
+  txt($('latestGuide'),v.show&&v.show!=='all'?'Read the '+showName(v.show)+' guide':'Find your airshow');
+  if(play)startPlayer();
+}
+function startPlayer(){
+  if(!current)return;
+  var sc=$('screen'),f=document.createElement('iframe');
+  f.src='https://www.youtube-nocookie.com/embed/'+current.id+'?autoplay=1&rel=0&modestbranding=1';
+  f.title=current.title;f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';f.allowFullscreen=true;
+  $('latestImg').style.display='none';$('latestPlay').style.display='none';sc.appendChild(f);
+}
+$('latestPlay').addEventListener('click',startPlayer);
+
+/* Pickers */
+function buildPickers(){
+  var tk=$('tickets');tk.innerHTML='';
+  SHOWS.forEach(function(s){
+    var c=s.key==='all'?VIDEOS.length:VIDEOS.filter(function(v){return v.show===s.key;}).length;
+    var b=document.createElement('button');b.className='ticket';b.type='button';b.id='show-'+s.key;
+    var sm=document.createElement('small');sm.textContent=c+(c===1?' video':' videos');
+    b.appendChild(sm);b.appendChild(document.createTextNode(s.name));
+    b.setAttribute('aria-pressed',String(s.key===curShow));
+    b.onclick=function(){curShow=s.key;page=0;[].forEach.call(tk.children,function(x){x.setAttribute('aria-pressed',String(x===b));});render();};
+    tk.appendChild(b);
+  });
+  var fl=$('filters');fl.innerHTML='';
+  TOPICS.forEach(function(t){
+    var b=document.createElement('button');b.className='filter';b.type='button';b.id='topic-'+t[0];b.textContent=t[1];
+    b.setAttribute('aria-pressed',String(t[0]===curTopic));
+    b.onclick=function(){curTopic=t[0];page=0;[].forEach.call(fl.children,function(x){x.setAttribute('aria-pressed',String(x===b));});render();};
+    fl.appendChild(b);
+  });
+}
+
+function render(){
+  var list=VIDEOS.filter(function(v){return (curShow==='all'||v.show===curShow)&&(curTopic==='all'||v.topic===curTopic);});
+  var g=$('grid');g.innerHTML='';
+  txt($('count'),list.length+(list.length===1?' video':' videos'));
+  var pl=$('planning');
+  if(curShow!=='all'){pl.hidden=false;txt($('planText'),'Planning to go to '+showName(curShow)+'? I would advise reading the guide alongside the videos, as it has the parking, timings and best places to watch.');$('planLink').href=guideUrl(curShow);}
+  else pl.hidden=true;
+  var pages=Math.max(1,Math.ceil(list.length/PER));if(page>=pages)page=pages-1;
+  var pg=$('pager');pg.hidden=pages<2;
+  txt($('pgText'),'Page '+(page+1)+' of '+pages);$('prevPg').disabled=page===0;$('nextPg').disabled=page>=pages-1;
+  if(!list.length){
+    g.innerHTML='<div class="empty"><b>No videos for this one yet.</b><p>I am adding more shows as I visit them, so this may fill up soon. You can try another topic, or have a look on the channel.</p></div>';
+    return;
+  }
+  list.slice(page*PER,page*PER+PER).forEach(function(v,i){
+    var el=document.createElement('article');el.className='tile';el.style.animationDelay=(i*60)+'ms';
+    el.innerHTML='<div class="thumb"><img loading="lazy" alt=""></div><div class="tbody"><div class="tmeta"><span class="chip"></span><span class="sn"></span></div><h3></h3><div class="tmeta dt"></div><div class="tlinks"><button type="button" class="here">Play here ↑</button><a class="yt" target="_blank" rel="noopener">YouTube →</a><a class="gd" target="_top">Show guide →</a></div></div>';
+    var im=el.querySelector('img');im.src=thumb(v,false);
+    if(v.short){var f=document.createElement('span');f.className='flag';f.textContent='Short';el.querySelector('.thumb').appendChild(f);}
+    txt(el.querySelector('.chip'),topicName(v.topic));txt(el.querySelector('.sn'),showName(v.show));
+    txt(el.querySelector('h3'),v.title);
+    txt(el.querySelector('.dt'),[fmt(v.published),views(v.views)].filter(Boolean).join('  ·  '));
+    el.querySelector('.yt').href=yt(v);
+    var gd=el.querySelector('.gd');gd.href=guideUrl(v.show);if(!v.show||v.show==='all')txt(gd,'Find your airshow →');
+    el.querySelector('.here').onclick=function(){setLatest(v,true);document.getElementById('latest').scrollIntoView({behavior:'smooth'});};
+    g.appendChild(el);
+  });
+}
+$('prevPg').onclick=function(){page--;render();$('airshows').scrollIntoView({behavior:'smooth'});};
+$('nextPg').onclick=function(){page++;render();$('airshows').scrollIntoView({behavior:'smooth'});};
+
+/* Departures board */
+function board(){
+  var tb=$('boardRows');tb.innerHTML='';
+  VIDEOS.slice(0,10).forEach(function(v,i){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><span class="flip"></span></td><td class="ttl"></td><td><span class="flip"></span></td><td></td><td><a target="_blank" rel="noopener"></a></td>';
+    var f=tr.querySelectorAll('.flip');f[0].style.animationDelay=(i*90)+'ms';f[1].style.animationDelay=(i*90+40)+'ms';
+    txt(f[0],v.published?fmt(v.published,true):'INTRO');txt(tr.querySelector('.ttl'),v.title);txt(f[1],showName(v.show).toUpperCase());
+    txt(tr.children[3],v.views?String(v.views):'');
+    var a=tr.querySelector('a');a.href=yt(v);txt(a,i===0?'Newest':'Watch');if(i===0)a.className='boarding';
+    tb.appendChild(tr);
+  });
+}
+
+function boot(data){
+  VIDEOS=(data&&data.videos||[]).filter(function(v){return v&&v.id;});
+  if(!VIDEOS.length)VIDEOS=[{id:'vUExf9X3g6Y',title:"The Big Guide to RIAT's Introduction Video",published:'',show:'riat',topic:'planning',views:0}];
+  txt($('kdCount'),VIDEOS.length+(VIDEOS.length===1?' video':' videos'));
+  txt($('kdNewest'),VIDEOS[0].published?fmt(VIDEOS[0].published):'Introduction video');
+  setLatest(VIDEOS[0],false);buildPickers();render();board();sizeNote();
+}
+/* the list refreshes every hour, so ask for a copy no older than that */
+fetch('youtube/videos.json?h='+Math.floor(Date.now()/36e5),{cache:'no-cache'}).then(function(r){return r.json();}).then(boot,function(){boot(null);});
+
+/* UK clock */
+var ck=$('clock');function tick(){try{ck.textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour12:false})+' UK';}catch(e){ck.textContent=new Date().toLocaleTimeString('en-GB');}}
+tick();setInterval(tick,1000);
+
+/* Copy handle */
+$('copyBtn').onclick=function(){var b=this,t=$('handleText');
+  function done(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy handle';},1600);}
+  function sel(){var r=document.createRange();r.selectNodeContents(t);var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Press Ctrl+C';}
+  try{navigator.clipboard.writeText(t.textContent).then(done,sel);}catch(e){sel();}};
+
+/* Jump bar scroll spy */
+var links=[].slice.call(document.querySelectorAll('.jump a'));
+if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id);});});},{rootMargin:'-45% 0px -50% 0px'});
+  [].forEach.call(document.querySelectorAll('section[id]'),function(s){io.observe(s);});
+}
+
+/* Page height helper for sizing the Wix box, only when opened on its own */
+function sizeNote(){
+  if(window.top!==window.self)return;
+  var n=$('pgh')||document.body.appendChild(Object.assign(document.createElement('div'),{id:'pgh'}));
+  n.textContent='Page height '+document.documentElement.scrollHeight+'px at '+innerWidth+'px wide';
+}
+addEventListener('resize',sizeNote);
+
+/* Header sky: Red Arrows formation with red, white and blue smoke */
+var cv=$('sky'),cx=cv.getContext('2d');
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var w,h,t0=performance.now();
+function size(){var dpr=Math.min(2,window.devicePixelRatio||1);w=cv.clientWidth;h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;cx.setTransform(dpr,0,0,dpr,0,0);}
+var JET=new Path2D('M0 0 L-14 -3 L-30 -16 L-36 -16 L-26 -3 L-46 -2 L-54 -9 L-58 -9 L-54 0 L-58 9 L-54 9 L-46 2 L-26 3 L-36 16 L-30 16 L-14 3 Z');
+var FORM=[[0,0],[-1,-1],[-1,1],[-2,-2],[-2,2],[-3,-3],[-3,3],[-4,-1],[-4,1]];
+var SMK=['#D74949','#FFFFFF','#FFFFFF','#1C3F94','#1C3F94','#D74949','#D74949','#FFFFFF','#FFFFFF'];
+function draw(now){
+  var g=cx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#13293C');g.addColorStop(.65,'#2B5873');g.addColorStop(1,'#E3A06A');
+  cx.fillStyle=g;cx.fillRect(0,0,w,h);
+  var span=w+700,lead=reduce?w*0.82:((now-t0)*0.06%span)-300+w*0.35;
+  var gap=Math.max(22,Math.min(44,w/34)),baseY=h*0.42;
+  FORM.forEach(function(f,i){
+    var x=lead+f[0]*gap*1.1,y=baseY+f[1]*gap*0.62+Math.sin((x/w)*3)*10;
+    var tg=cx.createLinearGradient(x-w*0.9,0,x,0);tg.addColorStop(0,'rgba(255,255,255,0)');tg.addColorStop(1,SMK[i]);
+    cx.strokeStyle=tg;cx.globalAlpha=.55;cx.lineWidth=gap*0.42;cx.lineCap='round';cx.beginPath();cx.moveTo(x-w*0.9,y+14);cx.quadraticCurveTo(x-w*0.4,y-8,x-30,y);cx.stroke();cx.globalAlpha=1;
+    cx.save();cx.translate(x,y);cx.scale(gap/70,gap/70);cx.fillStyle='#D74949';cx.fill(JET);cx.restore();
+  });
+  if(!reduce)requestAnimationFrame(draw);
+}
+size();addEventListener('resize',function(){size();if(reduce)draw(0);});requestAnimationFrame(draw);
+})();
+</script>
+
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  .hero .wrap>*,.latest>*,.sub-grid>*,.grid>*{min-width:0}
+  @media (max-width:440px){
+    .row{flex-direction:column;gap:2px}
+    .row strong{text-align:left}
+    .tlinks{font-size:14px}
+  }
+  @media (pointer:coarse){
+    .ticket,.filter,.pager button,.copy,.tlinks a,.tlinks button{min-height:40px}
+    .tlinks a,.tlinks button{display:inline-flex;align-items:center}
+  }
+</style>
+<!-- mobile-fit -->
+</body>
+</html>
