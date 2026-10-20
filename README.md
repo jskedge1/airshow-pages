@@ -81,3 +81,21 @@ Optional collection fields the page already reads: `newTag` (purple New tag), `u
 and `lineupNews` (lines for the Line Up News strip). Members: the page code can send
 `{type:'fas-member', loggedIn, saved:[...], been:[...]}` and listen for `fas-save` / `fas-been` messages back.
 After changing the file here, paste it into that embed again in the Wix editor.
+
+## Show Day Live
+
+`show-day.html` is the show-day board: Now Flying with Next Up, Ear Defender Alert, Sky Compass, Live Radar
+(standby until tracking is added), Crowd Reports, and the member upload bay underneath.
+It reads the Wix collections through the page code (`velo/page-code/show-day-board.js`) and the backend
+web module (`velo/backend/showday.web.js`):
+
+- `FlyingProgrammes`: one item per show day. `showId` (riat, cosford, duxford, eastbourne, clacton, wales, midlands,
+  shuttleworth, little-gransden, southport, blackpool, ayr, headcorn), `dayLabel`, `showDate`, `live`,
+  and `running.acts` as a list of `{start, end, name, loud}`. Untick `live` to hide a day.
+- `ProgrammeUploads`: member photos of the programme, status `Waiting`. Send the photo to Claude to read, then
+  set the status to `Done`.
+- `CrowdReports`: members' car park, toilet and queue reports. Only the last 45 minutes show.
+
+My Airshow Hub has a Show Day tab that loads `show-day.html?mode=hub` and passes its messages through the hub box
+(`velo/page-code/my-airshow-hub-showday.js`). The hub's dark glass look is the `hud-theme` block before `</head>`
+in `my-airshow-hub.html`; delete that block to go back to the white look.

@@ -456,6 +456,146 @@ form.add-form{margin-top:10px;padding:12px;background:#F2F5F7;border-left:4px so
   select,input[type=search],input[type=text],input[type=email],input[type=number]{min-height:44px}
 }
 </style>
+<!-- hud-theme: turns My Airshow Hub into the dark glass HUD look (20 Oct 2026). Everything above it still works the same; delete this block to go back to the white look. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+<style id="hud-theme">
+:root{
+  color-scheme:dark;
+  --hud-bg:#061019;
+  --hud-fg:#E8F1F6;
+  --hud-mut:#A9BDCB;
+  --hud-cyan:#5FE3DC;
+  --hud-glass:rgba(22,52,74,.55);
+  --hud-glass-2:rgba(6,16,25,.55);
+  --hud-line:rgba(95,227,220,.22);
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  /* light tokens become dark ones */
+  --line:rgba(95,227,220,.18);
+  --pale:rgba(95,227,220,.08);
+  --ink:#E8F1F6;
+  --grey:#A9BDCB;
+  --lilac:rgba(105,80,161,.28);
+  --teal-dk:#5FE3DC;
+}
+body{
+  background-color:var(--hud-bg);color:var(--hud-fg);
+  background-image:radial-gradient(1200px 700px at 78% -10%,rgba(50,180,175,.18),transparent 60%),radial-gradient(900px 600px at -10% 45%,rgba(105,80,161,.2),transparent 60%),linear-gradient(rgba(95,227,220,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(95,227,220,.04) 1px,transparent 1px);
+  background-size:auto,auto,48px 48px,48px 48px;background-attachment:fixed;
+}
+.loading{color:var(--hud-mut)}
+.spin{border-color:rgba(95,227,220,.15);border-top-color:var(--hud-cyan)}
+
+/* header: darker photo, HUD readouts */
+.head{background:transparent}
+.sky::after{background:linear-gradient(90deg,#061019 0%,rgba(6,16,25,.92) 36%,rgba(6,16,25,.55) 64%,rgba(6,16,25,.25) 100%),linear-gradient(0deg,#061019 0%,transparent 45%)}
+.me h1{letter-spacing:.01em;text-shadow:0 0 30px rgba(95,227,220,.25)}
+.avatar{border-color:var(--hud-cyan);box-shadow:0 0 0 4px rgba(95,227,220,.15),0 0 26px rgba(95,227,220,.35);border-radius:50%}
+.badge{border-color:var(--hud-line);background:rgba(6,16,25,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.glass{background:linear-gradient(155deg,rgba(26,58,82,.62),rgba(6,16,25,.55));border:1px solid var(--hud-line);border-top:1px solid var(--hud-line);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%)}
+.count div{background:rgba(6,16,25,.6);border:1px solid var(--hud-line)}
+.count b,.trip .days,.hstats b,.kitstat b,.wx b,.price,.btotal b,.code b{font-family:var(--f-mono);font-weight:500;letter-spacing:-.01em}
+.count b{color:#fff;text-shadow:0 0 16px rgba(95,227,220,.5)}
+.tabs{border-top:1px solid var(--hud-line);margin-top:6px}
+.tabs button.on{background:rgba(50,180,175,.3);box-shadow:inset 0 -3px 0 var(--hud-cyan)}
+
+/* glass panels with HUD corner marks */
+.panel,.trip,.tool,.fpost,.compose,.post,.album,.lu,.ycard,.hstats div,.kitstat div,.addcard{
+  background-color:transparent;
+  background-image:
+    linear-gradient(var(--hud-cyan),var(--hud-cyan)),linear-gradient(var(--hud-cyan),var(--hud-cyan)),
+    linear-gradient(var(--hud-cyan),var(--hud-cyan)),linear-gradient(var(--hud-cyan),var(--hud-cyan)),
+    linear-gradient(155deg,var(--hud-glass),rgba(10,26,40,.42));
+  background-size:16px 2px,2px 16px,16px 2px,2px 16px,auto;
+  background-position:0 0,0 0,100% 100%,100% 100%,0 0;
+  background-repeat:no-repeat;
+  border:1px solid var(--hud-line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 44px rgba(0,0,0,.32);
+  backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
+  color:var(--hud-fg);
+}
+.addcard{border-style:dashed}
+.addcard:hover,.add-toggle:hover{background-color:rgba(50,180,175,.12)}
+.addcard b,.tool h4,.hstats b,.wx b,.price,label.f,.factions button,.fbody .chips span{color:var(--hud-fg)}
+.trip:hover,.tool:hover{box-shadow:0 0 0 1px var(--hud-cyan),0 18px 44px rgba(0,0,0,.4)}
+.panel>header,.lu-head{background:rgba(19,41,60,.85);border-bottom:1px solid var(--hud-line)}
+.panel>header.p{background:rgba(105,80,161,.85)}
+.panel>header.t{background:rgba(50,180,175,.85);color:#061019}
+.sec-title{text-shadow:0 0 22px rgba(215,73,73,.35)}
+.sec-sub,.empty{color:var(--hud-mut)}
+.empty{border-color:var(--hud-line)}
+
+/* inputs and buttons */
+.input,select.input,textarea.input,.bline input,.compose textarea,.fcomments .c p{background:rgba(6,16,25,.7);color:var(--hud-fg);border-color:var(--hud-line)}
+.compose textarea:focus{background:rgba(6,16,25,.85)}
+select.input option{background:#0B1D2C;color:var(--hud-fg)}
+.btn.outline{background:transparent;border-color:var(--hud-fg);color:var(--hud-fg)}
+.link{color:var(--hud-cyan)}
+.mustbtn{background:transparent;color:var(--hud-cyan)}
+.filters button,.compose .opts .o{background:rgba(19,41,60,.55);color:var(--hud-fg);border-color:var(--hud-line)}
+.filters button.on{color:#061019}
+.check input[type=checkbox]{background:rgba(6,16,25,.7);border-color:var(--hud-cyan)}
+.check input[type=checkbox]:checked::after{border-color:#061019}
+.sw{background:rgba(255,255,255,.18)}
+
+/* surfaces that used light grey fills */
+form.add-form,.pollform,.goingme,.fcomments,.tool .k,.poll button,.factions button:hover{background:rgba(6,16,25,.5);color:var(--hud-fg)}
+.poll button{border-color:var(--hud-line)}
+.locked{background:repeating-linear-gradient(135deg,rgba(95,227,220,.06) 0 10px,rgba(95,227,220,.02) 10px 20px);color:var(--hud-cyan)}
+.msg{background:rgba(6,16,25,.6);border:1px solid var(--hud-line)}
+.msg.me{background:#13293C;border-color:var(--teal)}
+.tl li::before{background:#061019}
+.up.unread{background:rgba(105,80,161,.18)}
+.ycard{transform:none}
+.toast{background:rgba(6,16,25,.95);backdrop-filter:blur(12px)}
+.note{color:var(--hud-fg)}
+
+/* open from the middle, glitch, then settle */
+.hud-in{animation:hudOpen .7s cubic-bezier(.2,.8,.2,1) var(--d,0s) both,hudGlitch .5s steps(1,end) calc(var(--d,0s) + .7s) 1}
+@keyframes hudOpen{0%{clip-path:inset(50% 50% 50% 50%);opacity:0}12%{opacity:1}40%{clip-path:inset(50% -4px 50% -4px)}100%{clip-path:inset(-24px);opacity:1}}
+@keyframes hudGlitch{0%{transform:translate(5px,0);filter:drop-shadow(-4px 0 0 rgba(215,73,73,.85)) drop-shadow(4px 0 0 rgba(95,227,220,.85))}16%{transform:translate(-6px,1px) skewX(5deg);clip-path:inset(14% 0 46% 0)}32%{transform:translate(4px,-2px);clip-path:inset(58% 0 6% 0);filter:drop-shadow(5px 0 0 rgba(105,80,161,.9))}48%{transform:translate(-2px,0);clip-path:inset(-24px);filter:drop-shadow(-3px 0 0 rgba(215,73,73,.7)) drop-shadow(3px 0 0 rgba(95,227,220,.7))}64%{transform:translate(1px,1px) skewX(-2deg);filter:none;opacity:.75}80%{transform:none;opacity:1}100%{transform:none;filter:none;clip-path:inset(-24px);opacity:1}}
+@media (prefers-reduced-motion:reduce){.hud-in{animation:none}}
+
+/* Show Day tab */
+.sd-frame{display:block;width:100%;height:2250px;border:0;background:transparent}
+@media (max-width:860px){.sd-frame{height:3600px}}
+</style>
+<script id="hud-theme-js">
+(function(){
+  /* every panel on the page being shown opens from the middle, glitches, then settles */
+  var SEL='.panel,.trip,.tool,.fpost,.compose,.post,.album,.lu,.hstats>div,.kitstat>div,.addcard,.sec-title,.glass,.me';
+  function animate(root){
+    var els=[].slice.call(root.querySelectorAll(SEL)).filter(function(el){return el.offsetParent!==null;});
+    els.forEach(function(el,i){
+      el.classList.remove('hud-in');void el.offsetWidth;
+      el.style.setProperty('--d',Math.min(i*0.06,0.9).toFixed(2)+'s');
+      el.classList.add('hud-in');
+    });
+  }
+  function current(){var app=document.getElementById('app');if(app&&!app.hidden){var pg=[].slice.call(app.querySelectorAll('main.page')).find(function(m){return !m.hidden;});return pg;}return null;}
+  var mo=new MutationObserver(function(list){
+    var hit=list.some(function(r){return r.attributeName==='hidden'&&!r.target.hidden;});
+    if(hit){var app=document.getElementById('app');if(app&&!app.hidden){var head=app.querySelector('.head');if(head)animate(head);var pg=current();if(pg)setTimeout(function(){animate(pg);},30);}var g=document.getElementById('guest');if(g&&!g.hidden)animate(g);}
+  });
+  function watch(){
+    ['app','guest'].forEach(function(id){var el=document.getElementById(id);if(el)mo.observe(el,{attributes:true,attributeFilter:['hidden']});});
+    [].forEach.call(document.querySelectorAll('main.page'),function(m){mo.observe(m,{attributes:true,attributeFilter:['hidden']});});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',watch);else watch();
+
+  /* Show Day tab: load the board when the tab first opens, and pass its messages to and from the Wix page code */
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('.tabs button');if(!b||b.dataset.p!=='showday')return;
+    var f=document.getElementById('sdFrame');if(f&&!f.src)f.src=f.dataset.src;
+  });
+  window.addEventListener('message',function(e){
+    var m=e.data;if(!m||m.source!=='ukag-showday')return;
+    var f=document.getElementById('sdFrame');if(!f)return;
+    if(e.source===f.contentWindow)window.parent.postMessage(m,'*');
+    else if(e.source===window.parent&&f.contentWindow)f.contentWindow.postMessage(m,'*');
+  });
+})();
+</script>
+
 </head>
 <body>
 
@@ -523,6 +663,7 @@ form.add-form{margin-top:10px;padding:12px;background:#F2F5F7;border-left:4px so
       </aside>
       <nav class="tabs" aria-label="Hub sections">
         <button class="on" data-p="trips">My Trips</button>
+        <button data-p="showday">Show Day</button>
         <button data-p="updates">Updates <em class="dot" id="unreadDot" hidden>0</em></button>
         <button data-p="community">Community</button>
         <button data-p="kit">Kit And Packing</button>
@@ -828,6 +969,17 @@ form.add-form{margin-top:10px;padding:12px;background:#F2F5F7;border-left:4px so
     </div>
   </main>
 
+  <!-- SHOW DAY -->
+  <main class="page" id="p-showday" hidden>
+    <div class="wrap">
+      <div>
+        <h2 class="sec-title">Show Day</h2>
+        <p class="sec-sub">What is flying now and next at the shows in My Trips, ear defender alerts, the sky compass and crowd reports. On the day, leave this open on your phone.</p>
+      </div>
+      <iframe class="sd-frame" id="sdFrame" title="Show Day board for my saved shows" data-src="https://jskedge1.github.io/airshow-pages/show-day.html?mode=hub" loading="lazy"></iframe>
+    </div>
+  </main>
+
   <!-- POSTS -->
   <main class="page" id="p-posts" hidden>
     <div class="wrap">
@@ -1015,7 +1167,7 @@ var SHOWPIC={"riat":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0J
   function showPage(p) {
     S.page = p;
     document.querySelectorAll(".tabs button").forEach(function (x) { x.classList.toggle("on", x.dataset.p === p); });
-    ["trips", "updates", "community", "kit", "group", "saved", "history", "posts"].forEach(function (k) { $("p-" + k).hidden = k !== p; });
+    ["trips", "showday", "updates", "community", "kit", "group", "saved", "history", "posts"].forEach(function (k) { $("p-" + k).hidden = k !== p; });
     if (p === "community" && !F.loaded) loadFeed();
     if (p === "updates" && S.hub.unread) {
       call("markUpdatesRead").then(function () { S.hub.unread = 0; $("unreadDot").hidden = true; }).catch(function () {});
