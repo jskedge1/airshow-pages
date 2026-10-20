@@ -44,10 +44,13 @@ def main():
     req = urllib.request.Request(FEED, headers={"User-Agent": "airshow-pages/1.0"})
     with urllib.request.urlopen(req, timeout=30) as r:
         root = ET.fromstring(r.read())
-    old = {}
+    old, featured = {}, ""
     if OUT.exists():
         try:
-            old = {v["id"]: v for v in json.loads(OUT.read_text())["videos"]}
+            prev_file = json.loads(OUT.read_text())
+            old = {v["id"]: v for v in prev_file["videos"]}
+            # "featured" is the video chosen to sit in the big player at the top; kept until changed by hand
+            featured = prev_file.get("featured", "")
         except Exception:
             old = {}
     vids = []
@@ -76,7 +79,7 @@ def main():
     vids += [v for v in old.values() if v["id"] not in seen]
     vids.sort(key=lambda v: v["published"], reverse=True)
     OUT.parent.mkdir(exist_ok=True)
-    new = json.dumps({"channel": CHANNEL_ID, "videos": vids}, indent=1, ensure_ascii=False)
+    new = json.dumps({"channel": CHANNEL_ID, "featured": featured, "videos": vids}, indent=1, ensure_ascii=False)
     if not OUT.exists() or OUT.read_text() != new:
         OUT.write_text(new)
         print(f"updated: {len(vids)} videos")

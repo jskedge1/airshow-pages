@@ -226,7 +226,7 @@ footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
       <p class="intro">I film the shows I plan for, so you can see the crowd line, the car parks and the campsites before you get there. <b>Every new video I upload lands on this page by itself</b>, sorted by airshow and topic, with a link to the matching guide on this site.</p>
       <div class="btns">
         <a class="btn red" href="https://www.youtube.com/@TheBigGuidetoUKAirShows?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
-        <a class="btn teal" href="#latest">Watch the latest</a>
+        <a class="btn teal" href="#latest">Watch the featured video</a>
         <a class="btn out" href="#airshows">Find your airshow</a>
       </div>
     </div>
@@ -246,7 +246,7 @@ footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
 
 <nav class="jump" aria-label="Sections">
   <div class="wrap">
-    <a href="#latest">Latest Video</a>
+    <a href="#latest">Featured Video</a>
     <a href="#airshows">Watch By Airshow</a>
     <a href="#departures">Departures Board</a>
     <a href="#subscribe">Subscribe</a>
@@ -255,8 +255,8 @@ footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
 
 <section id="latest" class="band">
   <div class="wrap">
-    <h2 class="sec-title">Latest Video</h2>
-    <p class="sec-intro">The newest upload always sits here. Press play to watch it right here on the page, or pick any video further down to play it in this spot.</p>
+    <h2 class="sec-title">Featured Video</h2>
+    <p class="sec-intro">This is the video I would watch first. Press play to watch it right here on the page, or pick any video further down to play it in this spot. New uploads still appear below by themselves.</p>
     <div class="latest">
       <div class="screen" id="screen">
         <img id="latestImg" alt="" src="">
@@ -452,13 +452,15 @@ function board(){
 
 function boot(data){
   VIDEOS=(data&&data.videos||[]).filter(function(v){return v&&v.id;});
-  if(!VIDEOS.length)VIDEOS=[{id:'vUExf9X3g6Y',title:"The Big Guide to RIAT's Introduction Video",published:'',show:'riat',topic:'planning',views:0}];
+  if(!VIDEOS.length)VIDEOS=[{id:'cXYjBml6jOw',title:'RAF Cosford Air Show 2026',published:'2026-07-31',show:'raf-cosford',topic:'showday',views:0}];
   txt($('kdCount'),VIDEOS.length+(VIDEOS.length===1?' video':' videos'));
   txt($('kdNewest'),VIDEOS[0].published?fmt(VIDEOS[0].published):'Introduction video');
-  setLatest(VIDEOS[0],false);buildPickers();render();board();sizeNote();
+  /* the big player shows the chosen video (featured in videos.json), otherwise the newest */
+  var feat=null;for(var i=0;i<VIDEOS.length;i++)if(data&&VIDEOS[i].id===data.featured)feat=VIDEOS[i];
+  setLatest(feat||VIDEOS[0],false);buildPickers();render();board();sizeNote();
 }
 /* the list refreshes every hour, so ask for a copy no older than that */
-fetch('youtube/videos.json?h='+Math.floor(Date.now()/36e5),{cache:'no-cache'}).then(function(r){return r.json();}).then(boot,function(){boot(null);});
+fetch('youtube/videos.json?t='+Math.floor(Date.now()/6e4),{cache:'no-store'}).then(function(r){return r.json();}).then(boot,function(){boot(null);});
 
 /* UK clock */
 var ck=$('clock');function tick(){try{ck.textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour12:false})+' UK';}catch(e){ck.textContent=new Date().toLocaleTimeString('en-GB');}}
