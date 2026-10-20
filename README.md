@@ -99,3 +99,5 @@ web module (`velo/backend/showday.web.js`):
 My Airshow Hub has a Show Day tab that loads `show-day.html?mode=hub` and passes its messages through the hub box
 (`velo/page-code/my-airshow-hub-showday.js`). The hub's dark glass look is the `hud-theme` block before `</head>`
 in `my-airshow-hub.html`; delete that block to go back to the white look.
+The hub is pasted as code into the `hubEmbed` box on /my-airshow-hub (not a website address), so after changing
+`my-airshow-hub.html` paste it into that box again (done for the HUD and Show Day tab on 20 Oct 2026).
