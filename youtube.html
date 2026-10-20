@@ -218,8 +218,8 @@ footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
       <h2><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="#13293C" d="M8 5v14l11-7z"/></svg></span>Channel details</h2>
       <div class="rows">
         <div class="row"><span>Channel</span><strong>The Big Guide to UK Airshows</strong></div>
-        <div class="row"><span>Handle</span><strong>@TheBigGuidetoUKAirShows</strong></div>
-        <div class="row"><span>Formerly</span><strong>The Big Guide to RIAT</strong></div>
+        <div class="row opt"><span>Handle</span><strong>@TheBigGuidetoUKAirShows</strong></div>
+        <div class="row opt"><span>Formerly</span><strong>The Big Guide to RIAT</strong></div>
         <div class="row"><span>Videos Here</span><strong id="kdCount">Loading</strong></div>
         <div class="row hot"><span>Newest Upload</span><strong id="kdNewest">Loading</strong></div>
       </div>
@@ -283,7 +283,7 @@ footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
 <section id="departures" class="band board-band">
   <div class="wrap">
     <h2 class="sec-title">Departures Board</h2>
-    <p class="sec-intro">The last ten uploads, newest at the top, the way you would see it at the terminal.</p>
+    <p class="sec-intro">The latest uploads, newest at the top, the way you would see it at the terminal.</p>
     <div class="board">
       <div class="board-head"><h3>Now Showing</h3><div class="clock" id="clock">00:00:00</div></div>
       <div class="board-scroll">
@@ -324,7 +324,8 @@ var CH='https://www.youtube.com/@TheBigGuidetoUKAirShows';
 var L=window.AIRSHOW_LINKS||{site:'https://www.ukairshowguide.co.uk/',find:'https://www.ukairshowguide.co.uk/air-shows-guides',pages:[]};
 var SHOWS=[{key:'all',name:'All Airshows',where:'Everything on the channel'}].concat((L.pages||[]).filter(function(p){return p.live;}));
 var TOPICS=[['all','All Topics'],['arrivals','Arrivals And Departures'],['photo','Photography'],['camping','Camping'],['planning','Planning Guides'],['showday','On The Ground']];
-var PER=6;
+var NARROW=matchMedia('(max-width:600px)').matches;
+var PER=NARROW?3:6, BOARD=NARROW?5:10;
 var VIDEOS=[], curShow='all', curTopic='all', page=0;
 
 function $(id){return document.getElementById(id);}
@@ -422,7 +423,7 @@ $('nextPg').onclick=function(){page++;render();$('airshows').scrollIntoView({beh
 /* Departures board */
 function board(){
   var tb=$('boardRows');tb.innerHTML='';
-  VIDEOS.slice(0,10).forEach(function(v,i){
+  VIDEOS.slice(0,BOARD).forEach(function(v,i){
     var tr=document.createElement('tr');
     tr.innerHTML='<td><span class="flip"></span></td><td class="ttl"></td><td><span class="flip"></span></td><td></td><td><a target="_blank" rel="noopener"></a></td>';
     var f=tr.querySelectorAll('.flip');f[0].style.animationDelay=(i*90)+'ms';f[1].style.animationDelay=(i*90+40)+'ms';
@@ -498,6 +499,14 @@ size();addEventListener('resize',function(){size();if(reduce)draw(0);});requestA
   img,video,iframe,canvas{max-width:100%}
   h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
   .hero .wrap>*,.latest>*,.sub-grid>*,.grid>*{min-width:0}
+  @media (max-width:600px){
+    table{min-width:0}
+    th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4){display:none}
+    th,td{padding:10px 10px}
+    td.ttl{font-size:15px}
+    .row.opt{display:none}
+    .hero .wrap{gap:24px}
+  }
   @media (max-width:440px){
     .row{flex-direction:column;gap:2px}
     .row strong{text-align:left}
