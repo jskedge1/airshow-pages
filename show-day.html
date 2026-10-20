@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Show Day Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<!--
+  Show Day Live for The Big Guide to UK Airshows.
+  Lives in a Wix HTML embed (Website address) and talks to the Wix page code with postMessage, source "ukag-showday".
+  Page addresses:
+    show-day.html                    Show Day page: every show with a running order, plus the member upload bay
+    show-day.html?show=eastbourne    One show, for the Show Day section of a feature show page
+    show-day.html?mode=hub           My Airshow Hub: only the member's saved shows
+  Running orders come from the FlyingProgrammes collection. Member uploads go to ProgrammeUploads for Jack to approve.
+-->
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#071420;
+  --panel:rgba(22,52,74,.55);
+  --panel-2:rgba(6,16,25,.55);
+  --line:rgba(95,227,220,.22);
+  --line-soft:rgba(95,227,220,.12);
+  --teal:#32B4AF;
+  --cyan:#5FE3DC;
+  --navy:#13293C;
+  --purple:#6950A1;
+  --lilac:#C9B8F2;
+  --red:#D74949;
+  --pink:#FF8A8A;
+  --fg:#E8F1F6;
+  --mut:#A9BDCB;
+  --ink:#061019;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{
+  background-color:var(--bg);
+  background-image:radial-gradient(1100px 600px at 80% -10%,rgba(50,180,175,.18),transparent 60%),radial-gradient(800px 600px at -10% 50%,rgba(105,80,161,.2),transparent 60%),linear-gradient(rgba(95,227,220,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(95,227,220,.04) 1px,transparent 1px);
+  background-size:auto,auto,48px 48px,48px 48px;
+  color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55;
+}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 40px;display:flex;flex-direction:column;gap:20px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.mut{color:var(--mut)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;text-wrap:balance;line-height:1}
+
+.glass{position:relative;background:linear-gradient(155deg,var(--panel),rgba(10,26,40,.42));border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 18px 44px rgba(0,0,0,.35);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)}
+.glass::before,.glass::after{content:"";position:absolute;width:16px;height:16px;border:0 solid var(--cyan);pointer-events:none}
+.glass::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.glass::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+.boot{animation:hudOpen .7s cubic-bezier(.2,.8,.2,1) var(--d,0s) both,hudGlitch .5s steps(1,end) calc(var(--d,0s) + .7s) 1}
+@keyframes hudOpen{0%{clip-path:inset(50% 50% 50% 50%);opacity:0}12%{opacity:1}40%{clip-path:inset(50% -4px 50% -4px)}100%{clip-path:inset(-4px);opacity:1}}
+@keyframes hudGlitch{0%{transform:translate(5px,0);filter:drop-shadow(-4px 0 0 rgba(215,73,73,.85)) drop-shadow(4px 0 0 rgba(95,227,220,.85))}16%{transform:translate(-6px,1px) skewX(5deg);clip-path:inset(14% 0 46% 0)}32%{transform:translate(4px,-2px);clip-path:inset(58% 0 6% 0);filter:drop-shadow(5px 0 0 rgba(105,80,161,.9))}48%{transform:translate(-2px,0);clip-path:inset(-4px);filter:drop-shadow(-3px 0 0 rgba(215,73,73,.7)) drop-shadow(3px 0 0 rgba(95,227,220,.7))}64%{transform:translate(1px,1px) skewX(-2deg);filter:none;opacity:.75}80%{transform:none;opacity:1}100%{transform:none;filter:none;clip-path:inset(-4px);opacity:1}}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:18px}
+.brand{display:flex;gap:14px;align-items:center;min-width:0}
+.brand h1{font-size:clamp(34px,6vw,56px)}
+.brand h1 span{color:var(--teal)}
+.brand p{margin:6px 0 0;color:var(--mut);max-width:540px}
+.clock{padding:14px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.clock-time{font-size:clamp(30px,5vw,42px);line-height:1;color:#fff;text-shadow:0 0 18px rgba(95,227,220,.45)}
+.seg{display:inline-flex;border:1px solid var(--teal);padding:2px;flex-wrap:wrap}
+.seg button{min-height:38px;padding:0 12px;border:0;background:transparent;font-weight:600;font-size:14px}
+.seg button[aria-pressed="true"]{background:var(--teal);color:var(--ink)}
+.test-row{display:flex;gap:10px;align-items:center}
+.test-row input[type=range]{flex:1;min-width:110px;accent-color:var(--teal)}
+.iconbtn{width:40px;height:40px;display:grid;place-items:center;background:var(--panel-2);border:1px solid var(--line);flex:none}
+
+.shows{display:flex;flex-wrap:wrap;gap:6px}
+.shows button{min-height:44px;padding:0 16px;border:1px solid var(--line);background:rgba(19,41,60,.55);font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;transition:padding .4s ease,background .4s ease}
+.shows button:hover{padding-left:22px;padding-right:22px;background:rgba(50,180,175,.22)}
+.shows button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--ink)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--mut)}
+.dot.on{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.shows button[aria-pressed="true"] .dot{background:var(--ink);box-shadow:none}
+.days{display:flex;flex-wrap:wrap;gap:6px}
+.days button{min-height:40px;padding:0 14px;border:1px solid var(--line);background:transparent;font-weight:600;font-size:14px}
+.days button[aria-pressed="true"]{border-color:var(--cyan);background:rgba(50,180,175,.22)}
+
+/* board */
+.board{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:20px}
+.board > *{min-width:0}
+.panel{padding:22px 24px;display:flex;flex-direction:column;gap:14px}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.ph h2{font-size:22px}
+.tag{display:inline-block;font-size:13px;font-weight:600;padding:2px 9px;white-space:nowrap}
+.tag.teal{background:var(--teal);color:var(--ink)}
+.tag.purple{background:var(--purple);color:#fff}
+.tag.red{background:var(--red);color:#fff;font-weight:700}
+.tag.ghost{border:1px solid var(--line);color:var(--mut)}
+.now-name{font-family:var(--f-display);font-weight:700;font-size:clamp(36px,6vw,60px);line-height:.95;text-transform:uppercase;overflow-wrap:anywhere}
+.bar{height:8px;background:rgba(255,255,255,.08);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal);box-shadow:0 0 12px rgba(50,180,175,.8);transition:width .9s linear}
+.bar-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--mut)}
+.big-count{font-size:clamp(50px,8vw,76px);line-height:1;color:#fff}
+.alert[data-state="warn"],.alert[data-state="on"]{border-color:rgba(215,73,73,.7);background:linear-gradient(155deg,rgba(120,30,40,.55),rgba(10,26,40,.5))}
+.alert[data-state="warn"] .big-count,.alert[data-state="on"] .big-count{text-shadow:0 0 24px rgba(215,73,73,.75)}
+.alert-glow{position:absolute;inset:0;pointer-events:none}
+.alert[data-state="on"] .alert-glow{animation:alarm 1.6s ease-in-out infinite}
+@keyframes alarm{0%,100%{box-shadow:0 0 0 rgba(215,73,73,0)}50%{box-shadow:0 0 36px rgba(215,73,73,.55)}}
+.next-list{display:flex;flex-direction:column;gap:8px}
+.next-item{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 14px;background:var(--panel-2);border:1px solid var(--line-soft)}
+.next-item .mono{color:var(--cyan)}
+.order{display:flex;flex-direction:column}
+.order-row{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+.order-row.done{opacity:.5}
+.order-row.now{background:rgba(50,180,175,.14);margin:0 -12px;padding-left:12px;padding-right:12px;border-left:3px solid var(--teal)}
+.order-row .mono{font-size:14px;color:var(--cyan)}
+.order-row .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.note{padding:12px 14px;border-left:4px solid var(--purple);background:rgba(105,80,161,.18);font-size:15px}
+.empty{padding:28px 24px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.empty h2{font-size:30px}
+
+/* upload bay */
+.upload{padding:24px;display:flex;flex-direction:column;gap:16px}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;min-height:150px;padding:20px;border:2px dashed rgba(95,227,220,.45);background:rgba(50,180,175,.06);transition:background .3s ease,border-color .3s ease}
+.drop.over{background:rgba(50,180,175,.18);border-color:var(--cyan)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop strong{font-family:var(--f-display);font-size:24px;text-transform:uppercase}
+.thumbs{display:flex;flex-wrap:wrap;gap:10px}
+.thumb{position:relative;width:96px;height:124px;border:1px solid var(--line);background:var(--panel-2);overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.thumb button{position:absolute;top:4px;right:4px;width:30px;height:30px;border:0;background:rgba(6,16,25,.85);font-size:18px;line-height:1}
+.form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.form label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px;min-width:0}
+.field{height:44px;padding:0 10px;background:rgba(6,16,25,.7);border:1px solid var(--line);min-width:0;width:100%}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{min-height:46px;padding:0 20px;border:0;font-weight:700;display:inline-grid;place-items:center;text-decoration:none}
+.btn.primary{background:var(--teal);color:var(--ink)}
+.btn.purple{background:var(--purple);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--fg)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.status{min-height:24px;font-size:15px;display:flex;gap:10px;align-items:center}
+.status.err{color:var(--pink)}
+.status.ok{color:var(--cyan)}
+.spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--cyan);border-radius:50%;animation:rot 1s linear infinite;flex:none}
+@keyframes rot{to{transform:rotate(360deg)}}
+.foot{font-size:13px;color:#8FA6B6;margin:0}
+
+/* single show and hub modes are tighter */
+body.compact .wrap{padding-block:16px 24px;gap:16px}
+body.compact .brand p{display:none}
+
+@media (max-width:860px){
+  .board{grid-template-columns:minmax(0,1fr)}
+  .order-row{grid-template-columns:96px minmax(0,1fr)}
+  .order-row .acts{grid-column:2;justify-content:flex-start}
+  .form{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){.boot,.alert-glow,.spin{animation:none!important}.bar i,.shows button{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top boot" style="--d:0s">
+    <div class="brand">
+      <svg width="46" height="46" viewBox="0 0 38 38" aria-hidden="true" style="flex:none"><circle cx="19" cy="19" r="17.5" fill="none" stroke="#32B4AF" stroke-width="1.5"/><path d="M19 6 L21.2 16 L32 20.5 L32 23 L21 20.8 L20.4 27.5 L24 30 L24 31.8 L19 30.6 L14 31.8 L14 30 L17.6 27.5 L17 20.8 L6 23 L6 20.5 L16.8 16 Z" fill="#D74949"/></svg>
+      <div style="min-width:0">
+        <h1 id="title">Show Day <span>Live</span></h1>
+        <p id="intro">What is flying now, what is next and when to cover little ears. Pick your show, and on the day leave this open on your phone.</p>
+      </div>
+    </div>
+    <div class="clock glass">
+      <div class="clock-time mono" id="clock">--:--:--</div>
+      <div class="seg" role="group" aria-label="Clock">
+        <button id="mode-test" aria-pressed="true">Preview The Day</button>
+        <button id="mode-live" aria-pressed="false">Live Clock</button>
+      </div>
+      <div class="test-row" id="test-row">
+        <button class="iconbtn" id="play" aria-label="Play the day">
+          <svg id="play-ico" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2 L13 8 L4 14 Z" fill="currentColor"/></svg>
+        </button>
+        <label for="scrub" class="mut" style="font-size:13px;white-space:nowrap">Drag the day</label>
+        <input id="scrub" type="range" min="21600" max="72000" step="60" value="46800">
+      </div>
+    </div>
+  </header>
+
+  <nav class="shows boot" style="--d:.1s" id="shows" aria-label="Choose a show"></nav>
+  <div class="days" id="days" role="group" aria-label="Choose a day"></div>
+
+  <section id="board-wrap"></section>
+
+  <section class="upload glass boot" style="--d:.5s" id="upload" aria-labelledby="up-title">
+    <div class="ph"><h2 id="up-title">Send Us The Flying Programme</h2><span class="tag purple">Members</span></div>
+    <p style="margin:0;color:#C9D8E2;max-width:760px">Got the programme in your hand? Take a clear photo of the flying display times page and send it here. I check every one, then the running order goes live for everyone heading to that show.</p>
+    <div id="up-guest" hidden>
+      <div class="btns"><button class="btn primary" id="login-btn">Log In To Send A Programme</button><span class="mut">It is free to join.</span></div>
+    </div>
+    <div id="up-member" hidden>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="form">
+          <label for="up-show">Which show<select class="field" id="up-show"></select></label>
+          <label for="up-day">Which day<input class="field" id="up-day" maxlength="40" placeholder="Saturday"></label>
+          <label for="up-note">Anything to add<input class="field" id="up-note" maxlength="140" placeholder="Times changed on the day board"></label>
+        </div>
+        <div class="drop" id="drop">
+          <input id="prog-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple aria-label="Choose programme photos or a PDF">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#5FE3DC" stroke-width="1.6" aria-hidden="true"><rect x="3" y="6" width="18" height="14"/><circle cx="12" cy="13" r="4"/><path d="M8 6l2-3h4l2 3"/></svg>
+          <strong>Drop the programme here</strong>
+          <span class="mut">or tap to take a photo, choose one, or add a PDF. Up to 3 pages.</span>
+        </div>
+        <div class="thumbs" id="thumbs"></div>
+        <div class="btns"><button class="btn primary" id="send-btn" disabled>Send For Checking</button></div>
+      </div>
+    </div>
+    <div class="status" id="status" aria-live="polite"></div>
+  </section>
+
+  <p class="foot" id="foot">Times come from the official programme and can change on the day, so please keep an ear on the commentary.</p>
+</div>
+
+<script>
+(function(){
+"use strict";
+var SHOWS=[
+  {id:'riat',name:'Royal International Air Tattoo',short:'RIAT'},
+  {id:'cosford',name:'RAF Cosford Air Show',short:'RAF Cosford'},
+  {id:'duxford',name:'IWM Duxford Air Shows',short:'Duxford'},
+  {id:'eastbourne',name:'Airbourne, Eastbourne International Airshow',short:'Eastbourne'},
+  {id:'clacton',name:'Clacton Airshow',short:'Clacton'},
+  {id:'wales',name:'Wales Airshow',short:'Wales'},
+  {id:'midlands',name:'Midlands Air Festival',short:'Midlands'},
+  {id:'shuttleworth',name:'Shuttleworth Air Shows',short:'Shuttleworth'},
+  {id:'little-gransden',name:'Little Gransden Air and Car Show',short:'Little Gransden'},
+  {id:'southport',name:'Southport Air Show',short:'Southport'},
+  {id:'blackpool',name:'Blackpool Air Show',short:'Blackpool'},
+  {id:'ayr',name:'The International Ayr Show',short:'Ayr'},
+  {id:'headcorn',name:'Headcorn Air Show',short:'Headcorn'}
+];
+var ALIAS={'raf-cosford':'cosford','cosfordairshow':'cosford','eastbourneairshow':'eastbourne','duxfordairshows':'duxford','shuttleworthairshows':'shuttleworth','clactonairshow':'clacton','walesairshow':'wales','midlandsairfestival':'midlands','blackpool-air-show':'blackpool','southport-air-show':'southport','international-ayr-show':'ayr','little-gransden-air-and-car-show':'little-gransden','headcorn-air-show':'headcorn'};
+var norm=function(k){k=String(k||'').toLowerCase().trim();return ALIAS[k]||k;};
+
+var params=new URLSearchParams(location.search);
+var MODE=params.get('mode')==='hub'?'hub':(params.get('show')?'single':'full');
+var FIXED=MODE==='single'?norm(params.get('show')):null;
+
+var st={show:FIXED||'riat',dayIdx:{},progs:{},member:null,clock:'test',testSec:46800,playing:false,files:[],sending:false,connected:false,clockChosen:false};
+var playTimer=null;
+
+function $(s){return document.querySelector(s);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function toMin(t){var m=/^(\d{1,2})\s*[:.]\s*(\d{2})$/.exec(String(t==null?'':t).trim());if(!m)return null;var h=+m[1],mi=+m[2];if(h>23||mi>59)return null;return h*60+mi;}
+function pad(n){return String(n).padStart(2,'0');}
+function hhmm(m){return pad(Math.floor(m/60)%24)+':'+pad(Math.round(m)%60);}
+function showById(id){return SHOWS.find(function(s){return s.id===id;})||{id:id,name:id,short:id};}
+function londonToday(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());}catch(e){return new Date().toISOString().slice(0,10);}}
+
+/* ---------- talking to the Wix page code ---------- */
+var pending={},seq=0;
+function call(action,payload,wait){
+  return new Promise(function(resolve,reject){
+    var id='s'+(++seq);
+    pending[id]={resolve:resolve,reject:reject};
+    try{window.parent.postMessage({source:'ukag-showday',id:id,action:action,payload:payload||{}},'*');}catch(e){}
+    setTimeout(function(){if(pending[id]){delete pending[id];reject(new Error('timeout'));}},wait||20000);
+  });
+}
+window.addEventListener('message',function(e){
+  var m=e.data;
+  if(!m||m.source!=='ukag-showday')return;
+  if(m.event==='refresh'){load();return;}
+  var p=pending[m.id];if(!p)return;
+  delete pending[m.id];
+  if(m.ok)p.resolve(m.data);else p.reject(new Error(m.error||'Something went wrong.'));
+});
+
+/* ---------- running order data ---------- */
+function cleanActs(acts){
+  var items=(Array.isArray(acts)?acts:[]).map(function(a){return {start:toMin(a.start),end:toMin(a.end),name:String(a.name||'').trim().slice(0,90),loud:!!a.loud};})
+    .filter(function(a){return a.start!=null&&a.name;}).sort(function(a,b){return a.start-b.start;});
+  items.forEach(function(a,j){var nx=items[j+1];if(a.end==null||a.end<=a.start)a.end=nx?Math.min(nx.start,a.start+30):a.start+15;if(a.end<=a.start)a.end=a.start+10;});
+  return items;
+}
+function setProgrammes(list){
+  st.progs={};
+  (list||[]).forEach(function(p){
+    var id=norm(p.showId);var items=cleanActs(p.acts);if(!items.length)return;
+    (st.progs[id]=st.progs[id]||[]).push({day:p.day||'Show day',date:p.date||'',items:items});
+  });
+  Object.keys(st.progs).forEach(function(k){st.progs[k].sort(function(a,b){return String(a.date).localeCompare(String(b.date));});});
+}
+function visibleShows(){
+  if(MODE==='single')return [showById(FIXED)];
+  if(MODE==='hub'){var saved=(st.member&&st.member.saved||[]).map(norm);return SHOWS.filter(function(s){return saved.indexOf(s.id)!==-1;});}
+  var withProg=SHOWS.filter(function(s){return st.progs[s.id];});
+  return withProg.length?withProg.concat(SHOWS.filter(function(s){return !st.progs[s.id];}).slice(0,0)):[];
+}
+function curDay(){
+  var days=st.progs[st.show];if(!days||!days.length)return null;
+  var i=Math.min(st.dayIdx[st.show]||0,days.length-1);
+  return {days:days,i:i,day:days[i]};
+}
+function pickToday(){
+  var today=londonToday();
+  Object.keys(st.progs).forEach(function(k){st.progs[k].forEach(function(d,i){if(d.date&&String(d.date).slice(0,10)===today){st.dayIdx[k]=i;if(k===st.show&&!st.clockChosen)st.clock='live';}});});
+}
+function nowSec(){
+  if(st.clock==='live'){var d=new Date();var parts;try{parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(d).split(':').map(Number);}catch(e){parts=[d.getHours(),d.getMinutes(),d.getSeconds()];}return (parts[0]%24)*3600+parts[1]*60+parts[2];}
+  return st.testSec;
+}
+
+/* ---------- header ---------- */
+function renderShows(){
+  var list=visibleShows();
+  if(MODE!=='single'&&list.length&&!list.some(function(s){return s.id===st.show;}))st.show=list[0].id;
+  $('#shows').hidden=MODE==='single'||list.length<2;
+  $('#shows').innerHTML=list.map(function(s){
+    var has=!!st.progs[s.id];
+    return '<button data-show="'+s.id+'" aria-pressed="'+(s.id===st.show)+'"><span class="dot '+(has?'on':'')+'" aria-hidden="true"></span>'+esc(s.short)+'<span class="sr">'+(has?', running order loaded':', no running order yet')+'</span></button>';
+  }).join('');
+  var cd=curDay();
+  $('#days').innerHTML=cd&&cd.days.length>1?cd.days.map(function(d,i){return '<button data-day="'+i+'" aria-pressed="'+(i===cd.i)+'">'+esc(d.day)+'</button>';}).join(''):'';
+  if(MODE==='single'){$('#title').innerHTML='Show Day <span>'+esc(showById(FIXED).short)+'</span>';}
+  if(MODE==='hub'){$('#title').innerHTML='My Show <span>Day</span>';}
+}
+function renderClock(){
+  var s=nowSec();
+  $('#clock').textContent=pad(Math.floor(s/3600))+':'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
+  $('#mode-test').setAttribute('aria-pressed',st.clock==='test');
+  $('#mode-live').setAttribute('aria-pressed',st.clock==='live');
+  $('#test-row').hidden=st.clock!=='test';
+  $('#scrub').value=st.testSec;
+  $('#play-ico').innerHTML=st.playing?'<rect x="3" y="2" width="4" height="12" fill="currentColor"/><rect x="9" y="2" width="4" height="12" fill="currentColor"/>':'<path d="M4 2 L13 8 L4 14 Z" fill="currentColor"/>';
+  $('#play').setAttribute('aria-label',st.playing?'Pause the day':'Play the day');
+}
+
+/* ---------- board ---------- */
+function emptyCard(title,text,btn){
+  return '<div class="glass boot empty" style="--d:.2s"><span class="tag ghost">No running order yet</span><h2>'+esc(title)+'</h2><p class="mut" style="margin:0;max-width:600px">'+text+'</p>'+(btn||'')+'</div>';
+}
+function buildBoard(){
+  var wrap=$('#board-wrap');
+  if(!st.connected){
+    wrap.innerHTML=emptyCard('Loading the running orders','Connecting to The Big Guide to UK Airshows. If this stays here, open this page on ukairshowguide.co.uk.');
+    return;
+  }
+  if(MODE==='hub'&&!(st.member&&st.member.loggedIn)){
+    wrap.innerHTML=emptyCard('Log in to see your shows','Save a show to your trips and its running order appears here on the day.','<button class="btn primary" data-login="1">Log In</button>');return;
+  }
+  if(MODE==='hub'&&!visibleShows().length){
+    wrap.innerHTML=emptyCard('No saved shows yet','Add a show to My Trips and its flying display running order shows up here once it is published.');return;
+  }
+  if(MODE==='full'&&!visibleShows().length){
+    wrap.innerHTML=emptyCard('Running orders arrive closer to the shows','Organisers usually publish flying display times in the week of the show or in the programme on the day. As soon as one is in, it appears here.','<a href="#upload" class="btn primary">Send Us A Programme</a>');return;
+  }
+  var cd=curDay();
+  if(!cd){
+    wrap.innerHTML=emptyCard(showById(st.show).name,'Flying display times are usually published in the week of the show or in the programme on the day. As soon as I have them, they appear here.',MODE==='hub'?'':'<a href="#upload" class="btn primary">Send Us The Programme</a>');return;
+  }
+  wrap.innerHTML='<div class="board">'+
+    '<div class="glass panel boot" style="--d:.2s"><div class="ph"><h2>Now Flying</h2><span id="now-tag"></span></div><div id="now-body"></div></div>'+
+    '<div class="glass panel alert boot" style="--d:.3s" id="alert-panel" data-state="calm"><span class="alert-glow" aria-hidden="true"></span><div class="ph"><h2>Ear Defender Alert</h2>'+
+      '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FF8A8A" stroke-width="1.8" aria-hidden="true"><path d="M7 14v-3a5 5 0 0 1 10 0v3"/><rect x="3" y="13" width="4" height="7"/><rect x="17" y="13" width="4" height="7"/></svg></div><div id="alert-body"></div></div>'+
+    '<div class="glass panel boot" style="--d:.4s"><div class="ph"><h2>Next Up</h2></div><div class="next-list" id="next-body"></div></div>'+
+    '<div class="glass panel boot" style="--d:.45s"><div class="ph"><h2>Running Order</h2><span class="tag ghost" id="order-count"></span></div><div class="order" id="order-body"></div></div>'+
+  '</div>';
+  tick();
+}
+function fmtLeft(s){s=Math.max(0,Math.round(s));var h=Math.floor(s/3600),m=Math.floor(s/60)%60,x=s%60;return h?h+'h '+pad(m)+'m':pad(m)+':'+pad(x);}
+function tick(){
+  renderClock();
+  var cd=curDay();if(!cd||!$('#now-body'))return;
+  var items=cd.day.items,sec=nowSec(),t=sec/60;
+  var cur=items.find(function(i){return t>=i.start&&t<i.end;});
+  var up=items.filter(function(i){return i.start>t;});
+
+  var nowHtml,nowTag;
+  if(cur){
+    var pct=Math.min(100,Math.max(0,(t-cur.start)/(cur.end-cur.start)*100));
+    nowTag='<span class="tag teal">On Display</span>';
+    nowHtml='<div class="now-name">'+esc(cur.name)+'</div>'+(cur.loud?'<span class="tag red" style="align-self:flex-start">Loud</span>':'')+
+      '<div><div class="bar"><i style="width:'+pct.toFixed(1)+'%"></i></div><div class="bar-row mono"><span>'+hhmm(cur.start)+'</span><span>'+fmtLeft(cur.end*60-sec)+' left</span><span>'+hhmm(cur.end)+'</span></div></div>';
+  }else if(up.length){
+    var before=t<items[0].start;
+    nowTag='<span class="tag ghost">Between Displays</span>';
+    nowHtml='<div class="mut" style="font-weight:600">'+(before?'Flying starts in':'Next display in')+'</div><div class="big-count mono">'+fmtLeft(up[0].start*60-sec)+'</div>'+
+      '<div style="font-weight:600">'+esc(up[0].name)+' at <span class="mono">'+hhmm(up[0].start)+'</span></div>'+
+      '<div class="note">'+(before?'I would advise heading to the crowd line now and saving your pitch, then use the toilet before the flying starts.':'A good moment for a toilet or food break if this next one is not on your list.')+'</div>';
+  }else{
+    nowTag='<span class="tag ghost">Finished</span>';
+    nowHtml='<div class="now-name" style="font-size:40px">Flying has finished</div><div class="mut">That is the last display on the '+esc(cd.day.day)+' running order. Safe journey home.</div>';
+  }
+  $('#now-tag').innerHTML=nowTag;$('#now-body').innerHTML=nowHtml;
+
+  var loudNext=up.find(function(i){return i.loud;});
+  var state='calm',ah;
+  if(cur&&cur.loud){
+    state='on';
+    ah='<p style="margin:0;font-weight:600">Ear defenders on now</p><div class="big-count mono">'+fmtLeft(cur.end*60-sec)+'</div><div>'+esc(cur.name)+' until <span class="mono">'+hhmm(cur.end)+'</span></div>';
+  }else if(loudNext){
+    var left=loudNext.start*60-sec;
+    if(left<=600){state='warn';ah='<p style="margin:0;font-weight:600">Loud display coming up. Get ear defenders ready for the little ones.</p><div class="big-count mono">'+fmtLeft(left)+'</div><div>'+esc(loudNext.name)+' at <span class="mono">'+hhmm(loudNext.start)+'</span></div>';}
+    else ah='<p style="margin:0" class="mut">All quiet for now. The next loud display is</p><div style="font-family:var(--f-display);font-weight:700;font-size:30px;text-transform:uppercase;line-height:1">'+esc(loudNext.name)+'</div><div class="mono" style="font-size:20px;color:var(--cyan)">'+hhmm(loudNext.start)+' <span class="mut" style="font-size:15px">in '+fmtLeft(left)+'</span></div><p style="margin:0;font-size:14px" class="mut">This panel turns red ten minutes before it starts.</p>';
+  }else ah='<p style="margin:0" class="mut">No more loud displays on this running order.</p>';
+  var ap=$('#alert-panel');if(ap.dataset.state!==state)ap.dataset.state=state;
+  $('#alert-body').innerHTML=ah;
+
+  $('#next-body').innerHTML=up.length?up.slice(0,4).map(function(i){return '<div class="next-item"><span class="mono">'+hhmm(i.start)+'</span><span style="font-weight:600;overflow-wrap:anywhere">'+esc(i.name)+'</span>'+(i.loud?'<span class="tag red">Loud</span>':'<span></span>')+'</div>';}).join(''):'<p class="mut" style="margin:0">Nothing else to come today.</p>';
+
+  $('#order-count').textContent=items.length+' displays';
+  var nextOne=up[0];
+  $('#order-body').innerHTML=items.map(function(i){
+    var cls=t>=i.end?'done':(cur===i?'now':'');
+    var status=cur===i?'<span class="tag teal">Flying Now</span>':(i===nextOne?'<span class="tag purple">Next</span>':(t>=i.end?'<span class="tag ghost">Done</span>':''));
+    return '<div class="order-row '+cls+'"><span class="mono">'+hhmm(i.start)+' to '+hhmm(i.end)+'</span><span style="font-weight:600;overflow-wrap:anywhere">'+esc(i.name)+'</span><span class="acts">'+(i.loud?'<span class="tag red">Loud</span>':'')+status+'</span></div>';
+  }).join('');
+}
+function jumpToFirst(){
+  var cd=curDay();if(!cd||st.clock!=='test')return;
+  st.testSec=Math.max(21600,(cd.day.items[0].start-12)*60);
+}
+
+/* ---------- upload bay ---------- */
+function setStatus(html,kind){var s=$('#status');s.className='status'+(kind?' '+kind:'');s.innerHTML=html||'';}
+function renderUpload(){
+  var box=$('#upload');
+  box.hidden=MODE==='hub';
+  var inn=!!(st.member&&st.member.loggedIn);
+  $('#up-guest').hidden=inn||!st.connected;
+  $('#up-member').hidden=!inn;
+  if(MODE==='single'){$('#up-title').textContent='Got The '+showById(FIXED).short+' Programme?';}
+  var sel=$('#up-show');
+  if(!sel.options.length){sel.innerHTML=SHOWS.map(function(s){return '<option value="'+s.id+'">'+esc(s.name)+'</option>';}).join('');}
+  if(document.activeElement!==sel)sel.value=st.show;
+  if(MODE==='single'){sel.value=FIXED;sel.disabled=true;}
+  renderThumbs();
+}
+function renderThumbs(){
+  $('#thumbs').innerHTML=st.files.map(function(f,i){return '<div class="thumb"><img src="'+f.url+'" alt="Programme page '+(i+1)+'">'+(st.sending?'':'<button data-rm="'+i+'" aria-label="Remove page '+(i+1)+'">×</button>')+'</div>';}).join('');
+  $('#send-btn').disabled=!st.files.length||st.sending;
+}
+function shrink(blob){
+  return new Promise(function(resolve,reject){
+    var url=URL.createObjectURL(blob);var img=new Image();
+    img.onload=function(){
+      var max=1800,w=img.naturalWidth,h=img.naturalHeight,k=Math.min(1,max/Math.max(w,h));
+      var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
+      resolve(c.toDataURL('image/jpeg',.85));
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);reject(new Error('image'));};
+    img.src=url;
+  });
+}
+var pdfLib=null;
+function loadPdf(){
+  if(pdfLib)return pdfLib;
+  var base='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+  function add(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=function(){rej(new Error('load'));};document.head.appendChild(s);});}
+  pdfLib=add(base+'pdf.worker.min.js').then(function(){return add(base+'pdf.min.js');}).then(function(){var lib=window.pdfjsLib;lib.GlobalWorkerOptions.workerSrc=base+'pdf.worker.min.js';return lib;});
+  pdfLib.catch(function(){pdfLib=null;});
+  return pdfLib;
+}
+function pdfPages(file,room){
+  return loadPdf().then(function(lib){return file.arrayBuffer().then(function(buf){return lib.getDocument({data:buf,isEvalSupported:false}).promise;});}).then(function(doc){
+    var out=[],p=1;
+    function next(){
+      if(p>doc.numPages||out.length>=room)return Promise.resolve(out);
+      return doc.getPage(p++).then(function(page){
+        var v1=page.getViewport({scale:1});var vp=page.getViewport({scale:Math.min(2.5,1800/v1.width)});
+        var c=document.createElement('canvas');c.width=Math.round(vp.width);c.height=Math.round(vp.height);
+        return page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise.then(function(){out.push(c.toDataURL('image/jpeg',.85));return next();});
+      });
+    }
+    return next();
+  });
+}
+function addFiles(list){
+  var files=Array.prototype.slice.call(list||[]);var chain=Promise.resolve();var skipped=0;
+  files.forEach(function(f){
+    chain=chain.then(function(){
+      var room=3-st.files.length;if(room<=0){skipped++;return;}
+      if(f.type==='application/pdf'||/\.pdf$/i.test(f.name)){
+        setStatus('<span class="spin"></span>Opening the PDF…');
+        return pdfPages(f,room).then(function(urls){urls.forEach(function(u){st.files.push({url:u});});});
+      }
+      if(/^image\/(jpeg|png|webp)$/.test(f.type)){return shrink(f).then(function(u){st.files.push({url:u});});}
+      skipped++;
+    });
+  });
+  chain.then(function(){
+    renderThumbs();
+    setStatus(esc((st.files.length?st.files.length+' page'+(st.files.length>1?'s':'')+' ready to send.':'')+(skipped?' '+skipped+' file'+(skipped>1?'s were':' was')+' skipped. Up to 3 pages, as a photo or PDF.':'')));
+  }).catch(function(){setStatus('That file could not be opened. Try a photo or screenshot of the flying display page instead.','err');});
+}
+function send(){
+  if(!st.files.length||st.sending)return;
+  var showId=MODE==='single'?FIXED:$('#up-show').value;
+  st.sending=true;renderThumbs();setStatus('<span class="spin"></span>Sending the programme…');
+  call('upload',{showId:showId,day:$('#up-day').value.trim().slice(0,40),note:$('#up-note').value.trim().slice(0,140),pages:st.files.map(function(f){return f.url;})},60000)
+    .then(function(){
+      st.files=[];$('#up-day').value='';$('#up-note').value='';
+      setStatus('Thank you. I check every programme by hand and the running order goes live here once it is in.','ok');
+    })
+    .catch(function(e){setStatus(esc(e.message==='timeout'?'That took too long. Please check your signal and try again.':(e.message||'It did not send. Please try again.')),'err');})
+    .then(function(){st.sending=false;renderThumbs();});
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.show){st.show=b.dataset.show;jumpToFirst();renderShows();buildBoard();renderUpload();return;}
+  if(b.dataset.day!=null){st.dayIdx[st.show]=+b.dataset.day;jumpToFirst();renderShows();buildBoard();return;}
+  if(b.dataset.rm!=null){st.files.splice(+b.dataset.rm,1);renderThumbs();return;}
+  if(b.dataset.login||b.id==='login-btn'){call('login').then(load).catch(function(){});return;}
+  switch(b.id){
+    case 'mode-test':st.clock='test';st.clockChosen=true;renderClock();tick();break;
+    case 'mode-live':st.clock='live';st.clockChosen=true;st.playing=false;clearInterval(playTimer);renderClock();tick();break;
+    case 'play':
+      st.playing=!st.playing;clearInterval(playTimer);
+      if(st.playing)playTimer=setInterval(function(){st.testSec=Math.min(72000,st.testSec+15);if(st.testSec>=72000){st.playing=false;clearInterval(playTimer);}tick();},250);
+      renderClock();break;
+    case 'send-btn':send();break;
+  }
+});
+document.addEventListener('input',function(e){if(e.target.id==='scrub'){st.testSec=+e.target.value;tick();}});
+document.addEventListener('change',function(e){if(e.target.id==='prog-file'){addFiles(e.target.files);e.target.value='';}});
+var drop=$('#drop');
+['dragenter','dragover'].forEach(function(n){drop.addEventListener(n,function(e){e.preventDefault();drop.classList.add('over');});});
+['dragleave','drop'].forEach(function(n){drop.addEventListener(n,function(e){e.preventDefault();drop.classList.remove('over');});});
+drop.addEventListener('drop',function(e){if(e.dataTransfer&&e.dataTransfer.files)addFiles(e.dataTransfer.files);});
+
+/* ---------- start ---------- */
+function load(){
+  return call('load',{show:FIXED,mode:MODE},10000).then(function(d){
+    st.connected=true;
+    setProgrammes(d&&d.programmes);
+    st.member=(d&&d.member)||{loggedIn:false};
+    pickToday();jumpToFirst();
+    renderShows();buildBoard();renderUpload();renderClock();
+  }).catch(function(){
+    buildBoard();
+    setStatus('Open this page on ukairshowguide.co.uk to load the running orders and send a programme.');
+  });
+}
+if(MODE!=='full')document.body.classList.add('compact');
+renderShows();buildBoard();renderUpload();renderClock();
+load();
+setInterval(function(){if(st.clock==='live')tick();},1000);
+})();
+</script>
+</body>
+</html>

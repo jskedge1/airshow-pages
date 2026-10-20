@@ -25,6 +25,9 @@ so a change saved here shows on the Wix site within a minute or two.
 | Find your Air Show (live on Wix since 19 Oct: code pasted into the top HTML embed on /air-shows-guides, photos in find-img/) | https://jskedge1.github.io/airshow-pages/find-your-airshow.html |
 | YouTube (Wix page /youtube; videos come from youtube/videos.json, refreshed every hour by .github/workflows/youtube.yml and tools-youtube.py. To move a video to another show or topic, edit it in videos.json and set "fixed": true) | https://jskedge1.github.io/airshow-pages/youtube.html |
 | Site map footer (goes in an HTML embed in the Wix footer, on every page; holds its own page list, so add new pages to it too; replaced the old About footer on 20 Oct 2026, whose pasted code stays at https://073f6961-6a1c-4313-a30e-a850cc8c3512.filesusr.com/html/a0546b_ef8a36c9e66a9c145f110a95db863b8a.html) | https://jskedge1.github.io/airshow-pages/footer.html |
+| Show Day Live (Show Day page, every show with a running order plus the member upload bay) | https://jskedge1.github.io/airshow-pages/show-day.html |
+| Show Day Live, one show (Show Day section of a feature show page, change the show at the end) | https://jskedge1.github.io/airshow-pages/show-day.html?show=eastbourne |
+| Show Day Live, member's saved shows (My Airshow Hub) | https://jskedge1.github.io/airshow-pages/show-day.html?mode=hub |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
