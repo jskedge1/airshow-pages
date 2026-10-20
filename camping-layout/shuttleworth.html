@@ -4429,6 +4429,7 @@ var KIT={
           +'<div class="rwhat"><h4>What you get</h4><p>'+x.text+'</p><p class="card-more" hidden>'+esc(x.more)+'</p>'
           +'<div class="rwhat-foot"><button type="button" class="more-link" data-more><span class="m">More</span> information<span class="chev">&gt;</span></button>'+(x.id==='pods'?'':'<button type="button" class="btn small" data-plan="'+x.id+'">Plan my day here</button>')+'</div></div></article>';
       }).join(''):'<p class="cards-empty">Nothing matches that filter.</p>';
+      if(window.dlRender){ window.dlRender(list,box); }
       box.querySelectorAll('[data-more]').forEach(function(b){ b.onclick=function(){ var m=b.closest('.rcard').querySelector('.card-more'); m.hidden=!m.hidden; b.innerHTML=m.hidden?'<span class="m">More</span> information<span class="chev">&gt;</span>':'<span class="m">Less</span> information<span class="chev">&lt;</span>'; }; });
       box.querySelectorAll('[data-plan]').forEach(function(b){ b.onclick=function(){ if(window.plannerSet) window.plannerSet('spot',b.dataset.plan); var t=document.getElementById('timeline'); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); }; });
     }
@@ -6129,5 +6130,115 @@ body h1.cg-title{text-transform:none!important}
       p.addEventListener('pointermove',function(e){ var r=p.getBoundingClientRect(); p.style.setProperty('--mx',(e.clientX-r.left)+'px'); p.style.setProperty('--my',(e.clientY-r.top)+'px'); });
     });
   }
+})();
+</script>
+
+<!-- display-line: the Pick your spot list drawn as a display line (strips, gauges and aircraft markers). Order and strip codes live in DL_CONF below. -->
+<style id="dl-css">
+#spotCards.dl,.dl-static{display:block!important;position:relative;padding-left:58px;margin-top:6px}
+.dl::before{content:"";position:absolute;left:24px;top:46px;bottom:34px;width:2px;background:repeating-linear-gradient(#32B4AF 0 10px,transparent 10px 18px)}
+.dl .dl-cmp{position:absolute;left:10px;top:0;width:30px;height:30px;border:2px solid #13293C;border-radius:50%;display:grid;place-items:center;font:800 15px/1 "Barlow Condensed","Arial Narrow",sans-serif;color:#13293C;background:#fff;z-index:2}
+.dl .dl-cmp.dl-n::after{content:"";position:absolute;top:-8px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom:7px solid #D74949}
+.dl .dl-cmp.dl-s{top:auto;bottom:0}
+.dl .dl-cols{display:grid;grid-template-columns:66px minmax(0,1.4fr) minmax(0,1fr) 128px 34px;gap:14px;padding:6px 6px 10px;font:600 13px/1.2 "Barlow",sans-serif;color:#4F6272;border-bottom:2px solid #13293C}
+.dl .dl-card{position:relative;border-bottom:1px solid #DCE6EA}
+.dl .dl-pin{position:absolute;left:-54px;top:12px;width:44px;height:44px;display:grid;place-items:center;z-index:2;pointer-events:none}
+.dl .dl-pin img{width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(19,41,60,.28));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.dl .dl-c0 .dl-pin img{width:46px;height:46px}
+.dl .dl-card:hover .dl-pin img{transform:translateY(-6px)}
+.dl .dl-row{all:unset;box-sizing:border-box;cursor:pointer;position:relative;overflow:hidden;display:grid;grid-template-columns:66px minmax(0,1.4fr) minmax(0,1fr) 128px 34px;gap:14px;align-items:center;width:100%;padding:14px 6px;transition:padding .3s}
+.dl .dl-row::before{content:"";position:absolute;inset:0;background:#13293C;transform:scaleX(0);transform-origin:left center;transition:transform .5s cubic-bezier(.2,.8,.2,1);z-index:0}
+.dl .dl-row>*{position:relative;z-index:1}
+.dl .dl-row:hover,.dl .dl-row:focus-visible{padding-left:12px}
+.dl .dl-row:hover::before,.dl .dl-row:focus-visible::before{transform:scaleX(1)}
+.dl .dl-row:focus-visible{outline:3px solid #6950A1;outline-offset:2px}
+.dl .dl-code{font:800 20px/1 "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.06em;color:#fff;background:#13293C;border-left:4px solid #32B4AF;padding:10px 0 9px;text-align:center;transition:background .35s}
+.dl .dl-code.dl-long{font-size:16px;letter-spacing:.02em}
+.dl .dl-c0 .dl-code{background:#D74949;border-left-color:#A83636}
+.dl .dl-row:hover .dl-code{background:#32B4AF;border-left-color:#fff}
+.dl .dl-c0 .dl-row:hover .dl-code{background:#D74949}
+.dl .dl-name{margin:0;font:700 19px/1.25 "Barlow",sans-serif;color:#13293C;transition:color .35s .1s;text-transform:none;letter-spacing:0}
+.dl .dl-tag{font:600 14px/1.3 "Barlow",sans-serif;color:#13293C;transition:color .35s .1s}
+.dl .dl-tag::before{content:"";display:inline-block;width:8px;height:8px;background:#32B4AF;margin-right:7px;vertical-align:1px}
+.dl .dl-c0 .dl-tag{color:#D74949}.dl .dl-c0 .dl-tag::before{background:#D74949}
+.dl .dl-gauge{display:grid;gap:4px}
+.dl .dl-gauge small{font:500 13px/1.2 "Barlow",sans-serif;color:#4F6272;transition:color .35s .1s}
+.dl .dl-ticks{display:flex;gap:3px}
+.dl .dl-ticks i{flex:1;height:7px;background:#E3EAEE}
+.dl .dl-ticks i.on{background:#32B4AF}
+.dl .dl-c0 .dl-ticks i.on{background:#D74949}
+.dl .dl-pm{width:34px;height:34px;display:grid;place-items:center;background:#E8F6F5;color:#13293C;font:700 20px/1 "Barlow",sans-serif;transition:background .3s}
+.dl .dl-pm span{display:block;transition:transform .3s}
+.dl .dl-open .dl-pm{background:#32B4AF;color:#fff}
+.dl .dl-open .dl-pm span{transform:rotate(45deg)}
+.dl .dl-row:hover .dl-name,.dl .dl-row:focus-visible .dl-name{color:#fff}
+.dl .dl-row:hover .dl-tag,.dl .dl-row:focus-visible .dl-tag{color:#fff}
+.dl .dl-row:hover .dl-tag::before{background:#fff}
+.dl .dl-row:hover .dl-gauge small{color:#BFD3DE}
+.dl .dl-row:hover .dl-ticks i:not(.on){background:rgba(255,255,255,.18)}
+.dl .dl-row:hover .dl-pm{background:rgba(255,255,255,.14);color:#fff}
+.dl .dl-body{display:none;padding:2px 6px 22px 86px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px 34px}
+.dl .dl-open .dl-body{display:grid;animation:dlIn .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes dlIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.dl .dl-body p{margin:0 0 10px;color:#33475A;font-size:16px;line-height:1.6}
+.dl .dl-ph{margin:0 0 12px;overflow:hidden;aspect-ratio:16/9;max-width:100%}
+.dl .dl-ph img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.dl .dl-facts{margin:0;background:#13293C;padding:12px 14px;border-top:4px solid #32B4AF;align-self:start}
+.dl .dl-facts div{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:10px;font-size:15px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.dl .dl-facts div:last-child{border-bottom:0}
+.dl .dl-facts span{color:#8FDCD8}
+.dl .dl-facts b{color:#fff;font-weight:600}
+.dl .dl-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:900px){
+  .dl .dl-cols{display:none}
+  .dl .dl-row{grid-template-columns:58px minmax(0,1fr) 34px;row-gap:6px}
+  .dl .dl-row .dl-name{grid-column:2}
+  .dl .dl-row .dl-tag{grid-column:2;grid-row:2}
+  .dl .dl-row .dl-gauge{grid-column:2;grid-row:3}
+  .dl .dl-row .dl-code{grid-row:1/span 3;align-self:start}
+  .dl .dl-row .dl-pm{grid-column:3;grid-row:1}
+  .dl .dl-body{grid-template-columns:minmax(0,1fr);padding-left:6px}
+}
+@media (max-width:520px){#spotCards.dl,.dl-static{padding-left:44px}.dl::before{left:17px}.dl .dl-cmp{left:3px}.dl .dl-pin{left:-46px}.dl .dl-pin img{width:32px;height:32px}.dl .dl-c0 .dl-pin img{width:36px;height:36px}}
+@media (prefers-reduced-motion:reduce){.dl *{transition:none!important;animation:none!important}}
+</style>
+<script id="dl-js">window.DL_CONF={"order": ["hangars", "centre", "access", "pods", "south"], "codes": {"hangars": "N1", "centre": "CTR", "access": "ACC", "pods": "POD", "south": "S1"}, "ends": ["N", "S"]};
+(function(){
+  var C=window.DL_CONF||{}, open={}, IMG={hawk:'img/dl-hawk.webp',typhoon:'img/dl-typhoon.webp'};
+  var DIST=['At the display centre','Close to the centre','A short walk from the centre','Further from the centre','Well away from the centre'];
+  function e(t){return String(t==null?'':t).replace(/&(?![a-z#0-9]+;)/gi,'&amp;').replace(/</g,'&lt;');}
+  function row(x){
+    var near=Math.max(0,Math.min(4,+x.near||0)), c0=near===0&&(C.codes&&C.codes[x.id]==='CTR'), code=(C.codes&&C.codes[x.id])||String(x.id||'').slice(0,4).toUpperCase();
+    var on=[5,4,3,1,0][near], tag=(x.badge&&x.badge[0])||x.tag||'', o=open[x.id]?' dl-open':'';
+    var ph=(x.photos&&x.photos.length&&window.photoImg)?'<div class="dl-ph">'+window.photoImg(x.photos[0])+'</div>':'';
+    var facts=(x.rows||[]).map(function(r){return '<div><span>'+e(r[0])+'</span><b>'+e(r[1])+'</b></div>';}).join('');
+    return '<article class="dl-card'+(c0?' dl-c0':'')+o+'" data-dl="'+e(x.id)+'"><span class="dl-pin" aria-hidden="true"><img src="'+(c0?IMG.hawk:IMG.typhoon)+'" alt=""></span>'
+      +'<button type="button" class="dl-row" aria-expanded="'+(!!open[x.id])+'"><span class="dl-code'+(code.replace(/&amp;/,'&').length>3?' dl-long':'')+'">'+code+'</span><h3 class="dl-name">'+e(x.name)+'</h3><span class="dl-tag">'+e(tag)+'</span>'
+      +'<span class="dl-gauge"><span class="dl-ticks" aria-hidden="true">'+[0,1,2,3,4].map(function(n){return '<i'+(n<on?' class="on"':'')+'></i>';}).join('')+'</span><small>'+(x.dist||DIST[near])+'</small></span><span class="dl-pm" aria-hidden="true"><span>+</span></span></button>'
+      +'<div class="dl-body"><div>'+ph+'<p>'+(x.text||'')+'</p>'+(x.more?'<p>'+x.more+'</p>':'')+'</div>'+(facts?'<div class="dl-facts">'+facts+'</div>':'<div></div>')
+      +'<div class="dl-foot">'+(x.noPlan?'':'<button type="button" class="btn small" data-plan="'+e(x.id)+'">Plan my day here</button>')+'</div></div></article>';
+  }
+  function draw(list,box){
+    var sortSel=document.getElementById('spotSort'), sort=sortSel?sortSel.value:'rec';
+    if((sort==='rec'||!sort)&&C.order){ list=list.slice().sort(function(a,b){var ia=C.order.indexOf(a.id),ib=C.order.indexOf(b.id);return (ia<0?99:ia)-(ib<0?99:ib);}); }
+    box.classList.add('dl'); box.classList.remove('cards','r2');
+    if(!list.length){ box.innerHTML='<p class="cards-empty">Nothing matches that filter.</p>'; return; }
+    var en=C.ends||['',''];
+    box.innerHTML=(en[0]?'<span class="dl-cmp dl-n" aria-hidden="true">'+en[0]+'</span>':'')
+      +'<div class="dl-cols" aria-hidden="true"><span>Strip</span><span>Spot</span><span>Good for</span><span>From the centre</span><span></span></div>'
+      +list.map(row).join('')+(en[1]?'<span class="dl-cmp dl-s" aria-hidden="true">'+en[1]+'</span>':'');
+  }
+  function bind(box){
+    if(box.__dlb) return; box.__dlb=1;
+    box.addEventListener('click',function(ev){
+      var b=ev.target.closest('.dl-row'); if(!b||!box.contains(b)) return;
+      var card=b.closest('.dl-card'), id=card.getAttribute('data-dl'); open[id]=!open[id];
+      card.classList.toggle('dl-open',!!open[id]); b.setAttribute('aria-expanded',String(!!open[id]));
+      if(window.parent&&window.parent!==window){ try{ window.dispatchEvent(new Event('resize')); }catch(e){} }
+    });
+  }
+  window.dlRender=function(list,box){ draw(list,box); bind(box); };
+  window.dlStatic=function(list,box){ box.classList.add('dl'); draw(list,box); bind(box); };
+  var ss=document.getElementById('spotSort'); if(ss&&document.getElementById('spotCards')){ try{ ss.dispatchEvent(new Event('change')); }catch(err){} }
 })();
 </script>
