@@ -7,6 +7,7 @@
 
 import { getProgrammes, getShowDayMember, submitProgramme, getCrowdReports, addCrowdReport, confirmCrowdReport } from 'backend/showday.web';
 import { authentication } from 'wix-members-frontend';
+import wixLocationFrontend from 'wix-location-frontend';
 
 // START Show Day Live
 $w.onReady(function () {
@@ -20,7 +21,9 @@ $w.onReady(function () {
       if (m.action === 'load') {
         const p = m.payload || {};
         const [programmes, member] = await Promise.all([getProgrammes(p.show || null), getShowDayMember()]);
-        reply.data = { programmes, member };
+        // A feature show page links here with ?show=eastbourne so the board opens on that show.
+        const focus = (wixLocationFrontend.query && wixLocationFrontend.query.show) || '';
+        reply.data = { programmes, member, focus };
       } else if (m.action === 'reports') {
         reply.data = await getCrowdReports((m.payload || {}).showId);
       } else if (m.action === 'report') {

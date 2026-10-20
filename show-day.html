@@ -319,7 +319,7 @@ function setProgrammes(list){
 function visibleShows(){
   if(MODE==='single')return [showById(FIXED)];
   if(MODE==='hub'){var saved=(st.member&&st.member.saved||[]).map(norm);return SHOWS.filter(function(s){return saved.indexOf(s.id)!==-1;});}
-  var withProg=SHOWS.filter(function(s){return st.progs[s.id];});
+  var withProg=SHOWS.filter(function(s){return st.progs[s.id]||s.id===st.focus;});
   return withProg.length?withProg.concat(SHOWS.filter(function(s){return !st.progs[s.id];}).slice(0,0)):[];
 }
 function curDay(){
@@ -724,6 +724,7 @@ function load(){
     st.connected=true;
     setProgrammes(d&&d.programmes);
     st.member=(d&&d.member)||{loggedIn:false};
+    if(MODE==='full'&&d&&d.focus){var fid=norm(d.focus);if(SHOWS.some(function(x){return x.id===fid;})){st.show=fid;st.focus=fid;}}
     pickToday();jumpToFirst();
     renderShows();buildBoard();renderUpload();renderClock();loadReports();
   }).catch(function(){
