@@ -30,7 +30,7 @@ TOPICS = [
     ("arrivals", r"arrival|departure|arrive|depart|inbound|spotting"),
     ("camping", r"camp|tent|pitch|campsite"),
     ("photo", r"photo|camera|lens|settings|shutter|nikon|canon|panning|prop blur|propeller"),
-    ("planning", r"guide|plan|tips|parking|ticket|how to|first time|introduction|what to (bring|pack)"),
+    ("planning", r"guide|plan|tips|parking|ticket|how to|first time|introduction|what to (bring|pack)|cancel"),
 ]
 
 def classify(text, table, default):
@@ -57,7 +57,6 @@ def main():
         desc = (e.findtext("media:group/media:description", namespaces=NS) or "").strip()
         stats = e.find("media:group/media:community/media:statistics", NS)
         views = int(stats.get("views", 0)) if stats is not None else 0
-        both = title + " " + desc
         prev = old.get(vid, {})
         vids.append({
             "id": vid,
@@ -66,8 +65,9 @@ def main():
             "summary": desc.split("\n")[0][:220],
             "views": views,
             # a hand-set show or topic in videos.json is kept (set "fixed": true on that video)
-            "show": prev["show"] if prev.get("fixed") else classify(both, SHOWS, "all"),
-            "topic": prev["topic"] if prev.get("fixed") else classify(both, TOPICS, "showday"),
+            # sorted by the title only, as most descriptions mention RIAT and the channel's other videos
+            "show": prev["show"] if prev.get("fixed") else classify(title, SHOWS, "all"),
+            "topic": prev["topic"] if prev.get("fixed") else classify(title, TOPICS, "showday"),
             "fixed": bool(prev.get("fixed")),
             "short": "/shorts/" in (e.find("a:link", NS).get("href", "") if e.find("a:link", NS) is not None else ""),
         })
