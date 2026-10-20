@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Site Map Footer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@700;800&display=swap">
+<style>
+/* Layout: runway end. A runway centreline with threshold bars runs across the top and a small jet taxis along it.
+   Brand and contact sit on the left third; the site map sits on the right, with the show list in a glass panel
+   and the other menu tabs beside it in the same order as the site header. */
+:root{
+  --navy:#13293C; --deep:#0E2131; --panel:rgba(14,33,49,.92); --line:#24445E;
+  --teal:#32B4AF; --red:#D74949; --purple:#6950A1;
+  --ink:#FFFFFF; --soft:#C9D6E0; --mute:#9FB4C4;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Barlow","Segoe UI",Helvetica,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:var(--navy);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+
+/* runway strip */
+.rwy{position:relative;height:34px;background:var(--deep);overflow:hidden}
+.rwy .keys{position:absolute;left:max(16px,env(safe-area-inset-left,0px));top:7px;display:flex;gap:5px}
+.rwy .keys i{display:block;width:5px;height:20px;background:#E9EEF2;opacity:.85}
+.rwy .cl{position:absolute;left:86px;right:0;top:16px;height:2px;background:repeating-linear-gradient(90deg,var(--teal) 0 26px,transparent 26px 46px);opacity:.75}
+.rwy .num{position:absolute;left:58px;top:5px;font:800 18px/24px var(--display);color:#E9EEF2;opacity:.85;letter-spacing:.02em}
+.rwy svg{position:absolute;top:5px;left:calc(100% - 64px);width:24px;height:24px;color:var(--red);transform:rotate(90deg)}
+.rwy.go svg{animation:taxi 6s cubic-bezier(.45,0,.2,1) both}
+@keyframes taxi{from{left:96px}to{left:calc(100% - 64px)}}
+
+.in{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.main{padding-block:44px 36px;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);gap:40px 48px;align-items:start}
+
+/* brand block */
+.brand{display:grid;gap:18px;align-content:start}
+.mark{display:flex;align-items:flex-start;gap:12px;text-decoration:none}
+.mark svg{flex:none;width:34px;height:34px;color:var(--red);margin-top:2px}
+.mark b{font:800 28px/.95 var(--display);text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.mark b span{color:var(--teal)}
+.about{margin:0;color:var(--soft);font-size:16px;line-height:1.55;max-width:36ch}
+.mail{display:grid;gap:2px}
+.mail span{font-size:14px;font-weight:500;color:var(--mute)}
+.mail a{font-weight:600;font-size:16px;text-decoration:none;color:var(--ink);word-break:break-all}
+.mail a:hover{color:var(--teal)}
+.social{display:flex;gap:8px}
+.social a{display:grid;place-items:center;width:42px;height:42px;background:var(--deep);border:1px solid var(--line);transition:background .3s ease,border-color .3s ease,transform .3s ease}
+.social a:hover{background:var(--teal);border-color:var(--teal);transform:translateY(-2px)}
+.social svg{width:19px;height:19px;fill:currentColor}
+.find{justify-self:start;display:inline-flex;align-items:center;gap:10px;background:var(--red);color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:12px 18px;transition:background .3s ease,gap .3s ease}
+.find:hover{background:#B83A3A;gap:16px}
+
+/* site map */
+.map{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px 40px;align-items:start}
+h2{margin:0 0 12px;font:800 20px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;color:var(--teal)}
+h2 a{text-decoration:none}
+h2 a:hover{color:var(--ink)}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+li a{display:inline-block;padding:4px 0;font-size:15px;font-weight:500;line-height:1.35;color:var(--soft);text-decoration:none;transition:color .25s ease,transform .25s ease}
+li a:hover{color:var(--ink);transform:translateX(5px)}
+li a.top{color:var(--ink);font-weight:600}
+
+.shows{background:var(--panel);border-top:4px solid var(--teal);padding:20px 22px 18px;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.shows ul{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}
+.shows .note{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--mute)}
+.shows .note a{color:var(--ink);font-weight:600;text-decoration:none}
+.shows .note a:hover{color:var(--teal)}
+.side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 24px}
+.side .wide{grid-column:1/-1}
+.side .wide ul{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
+
+/* bottom bar */
+.base{background:var(--deep)}
+.base .in{padding-block:16px 18px;display:flex;flex-wrap:wrap;gap:8px 28px;align-items:center;justify-content:space-between;font-size:14px;color:var(--mute)}
+.base p{margin:0}
+.base a{color:var(--soft);font-weight:600;text-decoration:none}
+.base a:hover{color:var(--teal)}
+.base .links{display:flex;flex-wrap:wrap;gap:6px 20px}
+
+@media (max-width:980px){
+  .main{grid-template-columns:minmax(0,1fr);gap:34px}
+  .about{max-width:60ch}
+}
+@media (max-width:720px){
+  .map{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:420px){
+  .main{padding-block:34px 28px}
+  .shows{padding:18px 16px 16px}
+  .shows ul,.side .wide ul{column-gap:14px}
+  .side{gap:24px 14px}
+  li a{font-size:14px}
+  .mark b{font-size:27px}
+}
+@media (prefers-reduced-motion:reduce){
+  .rwy.go svg{animation:none}
+  .social a,.find,li a{transition:none}
+  li a:hover,.social a:hover{transform:none}
+}
+</style>
+</head>
+<body>
+
+<footer aria-label="Site map">
+  <div class="rwy" id="rwy" aria-hidden="true">
+    <div class="keys"><i></i><i></i><i></i><i></i></div>
+    <span class="num">27</span>
+    <div class="cl"></div>
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>
+  </div>
+
+  <div class="in main">
+    <div class="brand">
+      <a class="mark" href="https://www.ukairshowguide.co.uk/" target="_top">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>
+        <b>The Big Guide to <span>UK Airshows</span></b>
+      </a>
+      <p class="about">I started this guide after a few airshow planning mistakes of my own. Everything here is free, so use whatever helps you and your family have a better day out.</p>
+      <div class="mail">
+        <span>Questions, corrections or a show to add</span>
+        <a href="mailto:contactus@ukairshowguide.co.uk" target="_top">contactus@ukairshowguide.co.uk</a>
+      </div>
+      <div class="social">
+        <a href="https://www.facebook.com/share/19Ywfe4EcE/" target="_blank" rel="noopener" aria-label="The Big Guide to UK Airshows on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21z"/></svg></a>
+        <a href="https://www.instagram.com/ukairshowguide/" target="_blank" rel="noopener" aria-label="The Big Guide to UK Airshows on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3zm0 7.7a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm4.9-9a1.1 1.1 0 1 0 1.1 1.1 1.1 1.1 0 0 0-1.1-1.1zM21 7.6a5.3 5.3 0 0 0-1.4-3.8A5.4 5.4 0 0 0 15.8 2.4C14.3 2.3 9.7 2.3 8.2 2.4a5.4 5.4 0 0 0-3.8 1.4A5.3 5.3 0 0 0 3 7.6c-.1 1.5-.1 6.1 0 7.6a5.3 5.3 0 0 0 1.4 3.8 5.4 5.4 0 0 0 3.8 1.4c1.5.1 6.1.1 7.6 0a5.3 5.3 0 0 0 3.8-1.4 5.3 5.3 0 0 0 1.4-3.8c.1-1.5.1-6.1 0-7.6zm-2 9.2a3 3 0 0 1-1.7 1.7c-1.2.5-4 .4-5.3.4s-4.1.1-5.3-.4A3 3 0 0 1 5 16.8c-.5-1.2-.4-4-.4-5.3s-.1-4.1.4-5.3A3 3 0 0 1 6.7 4.5C7.9 4 10.7 4.1 12 4.1s4.1-.1 5.3.4A3 3 0 0 1 19 6.2c.5 1.2.4 4 .4 5.3s.1 4.1-.4 5.3z"/></svg></a>
+        <a href="https://www.ukairshowguide.co.uk/youtube" target="_top" aria-label="The Big Guide to UK Airshows YouTube channel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z"/></svg></a>
+      </div>
+      <a class="find" href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top">Find your airshow <span aria-hidden="true">&rarr;</span></a>
+    </div>
+
+    <nav class="map" aria-label="Every page on the site">
+      <section class="shows" aria-labelledby="h-shows">
+        <h2 id="h-shows"><a href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top">Find Your Airshow</a></h2>
+        <ul>
+          <li><a href="https://www.ukairshowguide.co.uk/riat" target="_top">Royal International Air Tattoo</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/cosfordairshow" target="_top">RAF Cosford Air Show</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/midlandsairfestival" target="_top">Midlands Air Festival</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/eastbourneairshow" target="_top">Eastbourne Air Show</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/clactonairshow" target="_top">Clacton Air Show</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/walesairshow" target="_top">Wales Airshow (Swansea)</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/duxfordairshows" target="_top">Duxford Air Shows</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/shuttleworthairshows" target="_top">Shuttleworth Collection</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/little-gransden-air-and-car-show" target="_top">Little Gransden Air Show</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/southport-air-show" target="_top">Southport Air Show</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/blackpool-air-show" target="_top">Blackpool Air Show</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/international-ayr-show" target="_top">International Ayr Show</a></li>
+          <li><a href="https://www.ukairshowguide.co.uk/headcorn-air-show" target="_top">Headcorn Airshow</a></li>
+        </ul>
+        <p class="note">Not sure which one suits you? <a href="https://www.ukairshowguide.co.uk/uk-airshow-calendar" target="_top">See the airshow calendar</a> or <a href="https://www.ukairshowguide.co.uk/airshow-map" target="_top">the airshow map</a>.</p>
+      </section>
+
+      <div class="side">
+        <section class="wide" aria-labelledby="h-plan">
+          <h2 id="h-plan"><a href="https://www.ukairshowguide.co.uk/visitorplanningguides" target="_top">Planning Guides</a></h2>
+          <ul>
+            <li><a class="top" href="https://www.ukairshowguide.co.uk/planning-your-first-airshow" target="_top">Your First Airshow</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/first-airshow-getting-there" target="_top">Getting There</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/first-airshow-where-to-watch" target="_top">Where To Watch</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/first-airshow-what-to-pack" target="_top">What To Pack</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/uk-airshow-calendar" target="_top">UK Airshow Calendar</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/airshow-map" target="_top">Airshow Map</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/airshow-news" target="_top">Airshow News</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/visitorplanningguides" target="_top">All Planning Guides</a></li>
+          </ul>
+        </section>
+        <section aria-labelledby="h-photo">
+          <h2 id="h-photo"><a href="https://www.ukairshowguide.co.uk/airshow-photography-hub" target="_top">Photography</a></h2>
+          <ul>
+            <li><a class="top" href="https://www.ukairshowguide.co.uk/airshow-photography-hub" target="_top">Photography Hub</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/photography-equipment" target="_top">Photography Equipment</a></li>
+          </ul>
+        </section>
+        <section aria-labelledby="h-camp">
+          <h2 id="h-camp"><a href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top">Camping</a></h2>
+          <ul>
+            <li><a class="top" href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top">Camping At Airshows</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/first-airshow-accommodation" target="_top">Places To Stay</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/foodanddrinkatairshows" target="_top">Food And Drink</a></li>
+          </ul>
+        </section>
+        <section aria-labelledby="h-comm">
+          <h2 id="h-comm"><a href="https://www.ukairshowguide.co.uk/forum" target="_top">Community</a></h2>
+          <ul>
+            <li><a class="top" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">My Airshow Hub</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/forum" target="_top">Members Forum</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/groups" target="_top">Groups</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/youtube" target="_top">YouTube Channel</a></li>
+          </ul>
+        </section>
+        <section aria-labelledby="h-about">
+          <h2 id="h-about"><a href="https://www.ukairshowguide.co.uk/what-is-the-big-guide-to-uk-airshows" target="_top">About</a></h2>
+          <ul>
+            <li><a href="https://www.ukairshowguide.co.uk/what-is-the-big-guide-to-uk-airshows" target="_top">About The Guide</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/meettheteam" target="_top">Meet The Team</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/advertise-with-us" target="_top">Advertise With Us</a></li>
+            <li><a href="https://www.ukairshowguide.co.uk/contact-us" target="_top">Contact Us</a></li>
+          </ul>
+        </section>
+      </div>
+    </nav>
+  </div>
+
+  <div class="base">
+    <div class="in">
+      <p>&copy; 2026 The Big Guide to UK Airshows. Show details can change, so please check the official show website before you travel.</p>
+      <div class="links">
+        <a href="https://www.ukairshowguide.co.uk/policies" target="_top">Privacy, cookies and terms</a>
+        <a href="https://www.ukairshowguide.co.uk/contact-us" target="_top">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* the jet taxis along the centreline once, when the footer first comes into view */
+(function(){
+  var r=document.getElementById('rwy');
+  if(!r||!('IntersectionObserver' in window))return;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){r.classList.add('go');io.disconnect();}});},{threshold:.6});
+  io.observe(r);
+})();
+</script>
+</body>
+</html>

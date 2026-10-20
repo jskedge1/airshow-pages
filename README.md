@@ -23,6 +23,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
 | UK Airshow Map (Find your Air Show page) | https://jskedge1.github.io/airshow-pages/airshow-map.html |
 | Find your Air Show (live on Wix since 19 Oct: code pasted into the top HTML embed on /air-shows-guides, photos in find-img/) | https://jskedge1.github.io/airshow-pages/find-your-airshow.html |
+| Site map footer (goes in an HTML embed in the Wix footer, on every page; holds its own page list, so add new pages to it too) | https://jskedge1.github.io/airshow-pages/footer.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
