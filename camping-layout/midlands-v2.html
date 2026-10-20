@@ -2668,12 +2668,340 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
       <p>Balloons and aircraft need very different approaches, and that&rsquo;s what makes this festival such fun with a camera. The dawn and evening balloons give you the softest light of the day, the afternoon is all about the flying, and on the Friday you&rsquo;ll want a tripod for the Fireglow and the fireworks.</p>
     </div>
     <figure class="pic wide reveal"><img loading="lazy" decoding="async" class="photo" data-pic="pitts" data-dup="1" src="https://jskedge1.github.io/airshow-pages/camping-layout/img/d413809d8164c11f.webp" alt="Team Raven RV-8 on a low pass in front of the trees at Ragley"><figcaption>Aerobatics trailing smoke, a slower shutter keeps the prop moving.</figcaption></figure>
-    <nav class="ph-jump reveal" aria-label="In this section"><a href="#phSun">Sun and light</a><a href="#phCreative">Get creative</a><a href="#phCalc">Settings calculator</a><a href="#phKit">Kit planner</a><a href="#phPack">Packing list</a><a href="#phCheck">Settings checklist</a><a href="#phDl">Print</a></nav>
+    <nav class="ph-jump reveal" aria-label="In this section"><a href="#phGuide">Sun guide</a><a href="#phSun">Sun each day</a><a href="#phCreative">Get creative</a><a href="#phCalc">Settings calculator</a><a href="#phKit">Kit planner</a><a href="#phPack">Packing list</a><a href="#phCheck">Settings checklist</a><a href="#phDl">Print</a></nav>
 
-    <section class="ph-sec" id="phSun" aria-label="Sun and light at Ragley">
+    <div class="sun-embed reveal" id="phGuide">
+<style>
+.sg{max-width:760px;margin:0 auto;font-family:Barlow,system-ui,sans-serif;color:var(--navy);background:#FFFFFF}
+.sg-head{background:var(--navy);padding:28px 24px 22px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.sg-head .eyebrow{font-size:15px;font-weight:500;color:#9FB3C4}
+.sg-head h2.title{margin:6px 0;font-size:38px;line-height:40px;font-weight:800;color:#FFFFFF;letter-spacing:-0.01em}
+.sg-head .sub{font-size:17px;line-height:24px;font-weight:500;color:var(--red)}
+.sg-best{background:var(--teal);color:var(--navy);padding:10px 14px;min-width:132px}
+.sg-best .l{font-size:13px;font-weight:500}.sg-best .v{font-size:22px;line-height:24px;font-weight:800}
+.sg-strip{background:var(--purple);color:#FFFFFF;padding:10px 24px;font-size:14px;line-height:20px;font-weight:500}
+.sg-sec{padding:18px 24px 0}
+.sg-sec .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.sg-sec h3{margin:0;font-size:22px;line-height:26px;font-weight:700;color:var(--red)}
+.sg-sec .note{font-size:14px;font-weight:500}
+.sg svg.view{display:block;width:100%;height:auto}
+.sg-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:13px;font-weight:500}
+.sg-legend i{display:inline-block;width:18px;height:4px;margin-right:6px;vertical-align:3px}
+.sg-times{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.sg-cell{border:0;margin:0;padding:8px 0 0;cursor:pointer;font-family:inherit;background:#EEF2F5;color:var(--navy);display:flex;flex-direction:column;align-items:center;gap:4px;min-height:104px;transition:background-color .25s ease,color .25s ease,transform .2s ease}
+.sg-cell:hover{transform:translateY(-2px)}
+.sg-cell:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+.sg-cell[aria-pressed="true"]{background:var(--navy);color:#FFFFFF}
+.sg-cell .t{font-size:15px;font-weight:700}.sg-cell .s{font-size:12px;font-weight:500}
+.sg-cell svg{width:26px;height:26px}
+.sg-cell .bar{align-self:stretch;height:8px;margin-top:auto}
+.sg-play{border:0;cursor:pointer;font-family:inherit;font-size:14px;font-weight:700;background:var(--red);color:#FFFFFF;padding:7px 14px;display:inline-flex;align-items:center;gap:8px;transition:transform .2s ease,background-color .2s ease}
+.sg-play:hover{transform:translateY(-1px);background:#C53E3E}
+.sg-play:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+.sg-play svg{width:14px;height:14px}
+.sg-key{display:flex;gap:18px;align-items:center;font-size:13px;font-weight:500;flex-wrap:wrap;margin-top:10px}
+.sg-key span.sw{display:inline-block;width:14px;height:14px;margin-right:6px;vertical-align:-2px}
+.sg-key .r{margin-left:auto}
+.sg-panel{margin:16px 24px 0;background:var(--navy);color:#FFFFFF;padding:18px 20px;display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;align-items:start}
+.sg-panel .time{font-size:40px;line-height:40px;font-weight:800;font-variant-numeric:tabular-nums}
+.sg-panel .tag{display:inline-block;margin-top:8px;padding:4px 10px;font-size:14px;line-height:20px;font-weight:700}
+.sg-panel dl{display:grid;grid-template-columns:110px minmax(0,1fr);row-gap:4px;margin:0 0 8px;font-size:15px;line-height:21px;font-weight:500}
+.sg-panel dt{color:var(--teal)}.sg-panel dd{margin:0}
+.sg-panel .tip{font-size:15px;line-height:22px;color:#E3EAF0}
+.sg-foot{padding:14px 24px 24px;font-size:13px;line-height:19px}
+.fly{will-change:transform}
+@media (prefers-reduced-motion: reduce){.fly{animation-duration:90s!important}.sg-cell,.sg-play{transition:none}}
+@media (max-width:620px){
+.sg-head{padding:22px 16px 18px}.sg-head h2.title{font-size:30px;line-height:32px}
+.sg-strip{padding:10px 16px}.sg-sec{padding:16px 16px 0}
+.sg-times{grid-template-columns:repeat(5,minmax(0,1fr))}
+.sg-panel{margin:16px 16px 0;grid-template-columns:1fr;gap:12px}
+.sg-key .r{margin-left:0}.sg-foot{padding:14px 16px 20px}
+.plan-small{display:none}
+.sg svg.view text{font-size:17px}
+.sg svg.view .s-keep{font-size:inherit}
+}
+@keyframes flyPlan{0%{transform:translateX(-300px)}100%{transform:translateX(1000px)}}
+@keyframes flyPov{0%{transform:translate(1100px,118px)}100%{transform:translate(-1000px,128px)}}
+.train-plan{animation:flyPlan 26s linear infinite}
+.train-pov{animation:flyPov 34s linear infinite}
+/* keep the page's heading styles from changing the sun guide */
+.sg h2,.sg h3{text-transform:none;font-family:Barlow,system-ui,sans-serif}
+.sg h2.title{letter-spacing:-0.01em}
+.sg h3{letter-spacing:0}
+.sg-panel .tag{text-transform:none;letter-spacing:0;line-height:20px}
+</style>
+<div class="sg" id="sunGuide">
+<div class="sg-head">
+<div>
+<h2 class="title">Sun path guide for photographers</h2>
+<div class="sub">Where the light sits over the flying field through a festival day</div>
+</div>
+<div class="sg-best"><div class="l">Best light</div><div class="v" id="bestV">From 19:00</div><div class="l">Sun behind you</div></div>
+</div>
+<div class="sg-strip" id="strip">Worked out for Saturday 5 June 2027, looking south across the flying field from the crowd line. The sun table below covers all three festival days. All times BST.</div>
+<div class="sg-sec">
+<div class="row"><h3>Aerial view of the festival site</h3><div class="note" id="selLabel">Selected: 12:00, into the sun</div></div>
+<svg class="view" viewBox="90 70 680 430" role="img" aria-label="Simplified plan of the festival site at Ragley Hall, north at the top: the hall and its round garden in the middle, premium parking and standard parking to the north west, the kids zone and trade camping to the west, the line of trade and food stands curving down to the crowd line, the crowd line along the north edge of the flying field facing south, the display line beyond it, the Cameron Arena and disabled parking to the east, the campsite to the north east, and the direction of the sun from the crowd line through the day">
+<defs>
+<clipPath id="planClip"><rect x="90" y="70" width="680" height="430"/></clipPath>
+<radialGradient id="glowPlan"><stop offset="0" stop-color="#FFD25A" stop-opacity="0.9"/><stop offset="1" stop-color="#FFD25A" stop-opacity="0"/></radialGradient>
+<pattern id="mowR" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="#C9DEAA"/><rect width="9" height="18" fill="#C2D9A2"/></pattern>
+</defs>
+<g clip-path="url(#planClip)">
+<rect x="90" y="70" width="680" height="430" fill="#B9D196"/>
+<!-- woodland and parkland trees -->
+<g fill="#6F9160">
+<path d="M90 70 L150 70 Q170 140 140 230 Q120 300 90 330 Z"/>
+<path d="M520 70 L640 70 Q660 110 610 140 Q570 160 540 130 Q510 110 520 70 Z"/>
+<path d="M560 190 Q620 170 660 210 Q690 250 650 290 Q600 310 570 280 Q540 240 560 190 Z"/>
+<circle cx="500" cy="250" r="30"/><circle cx="455" cy="110" r="22"/>
+</g>
+<!-- flying field -->
+<rect x="90" y="372" width="680" height="128" fill="url(#mowR)"/>
+<!-- Ragley Hall and the round garden -->
+<circle cx="425" cy="205" r="34" fill="#D9CFB8" stroke="#A89878" stroke-width="1.5"/>
+<path d="M425 171 V239 M391 205 H459" stroke="#A89878" stroke-width="1"/>
+<rect x="470" y="160" width="46" height="62" fill="#E8E1D2" stroke="#8C7F66" stroke-width="1.5" transform="rotate(-28 493 191)"/>
+<!-- trade and food row -->
+<g fill="#2E3B47" opacity="0.85">
+<rect x="292" y="232" width="44" height="12" transform="rotate(30 314 238)"/>
+<rect x="334" y="262" width="44" height="12" transform="rotate(55 356 268)"/>
+<rect x="356" y="302" width="40" height="12" transform="rotate(40 376 308)"/>
+<rect x="398" y="330" width="44" height="12" transform="rotate(12 420 336)"/>
+</g>
+<rect x="452" y="336" width="74" height="13" fill="#3E8F57"/>
+<!-- crowd line and display line -->
+<line x1="120" y1="358" x2="600" y2="358" stroke="#32B4AF" stroke-width="5" stroke-linecap="round"/>
+<line x1="600" y1="358" x2="600" y2="330" stroke="#32B4AF" stroke-width="3" stroke-linecap="round"/>
+<line x1="90" y1="410" x2="770" y2="410" stroke="#D74949" stroke-width="2" stroke-dasharray="9 6"/>
+<!-- labels -->
+<g font-size="11.5" font-weight="600" fill="#13293C">
+<text x="425" y="148" text-anchor="middle">Ragley Hall</text>
+<text x="300" y="98" text-anchor="middle">Standard parking, north</text>
+<text x="300" y="150" text-anchor="middle">Premium parking</text>
+<text x="200" y="196" text-anchor="middle">Kids zone</text>
+<text x="200" y="120" text-anchor="middle" class="plan-small">Trade camping</text>
+<text x="300" y="296" text-anchor="middle" class="plan-small">Trade and food</text>
+<text x="652" y="322" text-anchor="middle">Cameron Arena</text>
+<text x="764" y="348" text-anchor="end" class="plan-small">Disabled parking</text>
+<text x="712" y="150" text-anchor="middle">Campsite</text>
+<text x="160" y="330" text-anchor="middle" class="plan-small">Static aircraft</text>
+<text x="660" y="440" text-anchor="middle" class="plan-small">Static aircraft</text>
+<text x="230" y="468" text-anchor="middle">The flying field</text>
+</g>
+<text x="560" y="376" font-size="11" font-weight="700" fill="#0E5F5B" text-anchor="middle">Crowd line</text>
+<text x="640" y="404" font-size="11" font-weight="700" fill="#D74949" text-anchor="middle">Display line</text>
+<!-- sun path from the crowd line -->
+<polyline id="planPath" fill="none" stroke="#E39A1F" stroke-width="2" stroke-dasharray="4 4" points=""/>
+<g id="planDots" fill="#E39A1F"></g>
+<g id="planHours" font-size="11" font-weight="600" fill="#9A5A00"></g>
+<line id="planRay" x1="390" y1="350" x2="390" y2="240" stroke="#E39A1F" stroke-width="2"/>
+<circle id="planGlow" cx="390" cy="240" r="24" fill="url(#glowPlan)"/>
+<circle id="planSun" cx="390" cy="240" r="9" fill="#FFC23A" stroke="#C47A00" stroke-width="1.5"/>
+<circle cx="390" cy="350" r="7" fill="#6950A1" stroke="#FFFFFF" stroke-width="2"/>
+<text x="382" y="336" font-size="12" font-weight="700" fill="#6950A1" text-anchor="end">You</text>
+<g transform="translate(742 98)"><circle r="18" fill="#FFFFFF" stroke="#13293C" stroke-width="1.2"/><path d="M0 -14 L5 3 L0 -1 L-5 3 Z" fill="#D74949"/><path d="M0 14 L5 -3 L0 1 L-5 -3 Z" fill="#13293C"/><text y="-22" font-size="11" font-weight="800" fill="#13293C" text-anchor="middle">N</text></g>
+</g>
+</svg>
+<div class="sg-legend"><span><i style="background:#32B4AF"></i>Crowd line</span><span><i style="background:repeating-linear-gradient(90deg,#D74949 0 6px,transparent 6px 10px)"></i>Display line</span><span><i style="background:#E39A1F"></i>Direction of the sun from the crowd line</span></div>
+</div>
+<div class="sg-sec">
+<div class="row"><h3>Your view from the crowd line</h3><div class="note">Facing the flying field, south</div></div>
+<svg class="view" viewBox="0 0 720 300" role="img" aria-label="View south from the crowd line across the flying field at Ragley, with parkland trees on the horizon, the Cameron Arena end to the left, the static aircraft end to the right, the sun's path across the sky and the Red Arrows running in along the display line">
+<defs>
+<clipPath id="povClip"><rect width="720" height="300"/></clipPath>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop id="skyTop" offset="0" stop-color="#7CC4E4"/><stop id="skyBot" offset="1" stop-color="#E3F2F9"/></linearGradient>
+<radialGradient id="glowPov"><stop offset="0" stop-color="#FFF4C8" stop-opacity="1"/><stop offset="0.35" stop-color="#FFD25A" stop-opacity="0.55"/><stop offset="1" stop-color="#FFD25A" stop-opacity="0"/></radialGradient>
+<linearGradient id="grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9CE98"/><stop offset="1" stop-color="#97B676"/></linearGradient>
+<g id="hawkPov"><image href="https://jskedge1.github.io/airshow-pages/camping-layout/img/362033801daee306.webp" x="-19.0" y="-5.5" width="38" height="11" preserveAspectRatio="xMidYMid meet"/></g>
+</defs>
+<g clip-path="url(#povClip)">
+<rect width="720" height="200" fill="url(#sky)"/>
+<g stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="1"><line x1="0" y1="144" x2="720" y2="144"/><line x1="0" y1="88" x2="720" y2="88"/><line x1="0" y1="32" x2="720" y2="32"/></g>
+<g font-size="10.5" font-weight="500" fill="#13293C" opacity="0.75"><text x="6" y="140">20° up</text><text x="6" y="84">40° up</text><text x="6" y="28">60° up</text></g>
+<!-- horizon: parkland trees around the flying field -->
+<path d="M0 200 L0 176 Q22 160 48 170 Q70 152 98 166 Q124 156 150 172 Q176 162 196 178 Q230 172 262 182 Q300 178 340 184 Q380 180 420 185 Q460 178 500 182 Q530 168 560 174 Q584 156 612 166 Q640 150 668 162 Q694 154 720 168 L720 200 Z" fill="#5E7D53"/>
+<path d="M0 200 L0 186 Q60 180 120 188 Q200 184 280 190 Q360 187 440 190 Q520 185 600 188 Q660 182 720 186 L720 200 Z" fill="#7E9C6E"/>
+<rect x="0" y="200" width="720" height="100" fill="url(#grass)"/>
+<rect x="0" y="200" width="720" height="10" fill="#C3D3A3"/>
+<path d="M0 222 Q360 232 720 222" fill="none" stroke="#D74949" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="560" y="219" font-size="11.5" font-weight="700" fill="#D74949">Display line</text>
+<text x="360" y="252" font-size="11.5" font-weight="600" fill="#13293C" text-anchor="middle">The flying field</text>
+<!-- crowd barrier -->
+<rect x="0" y="282" width="720" height="3" fill="#2E3B47"/>
+<g fill="#2E3B47"><rect x="10" y="282" width="3" height="18"/><rect x="130" y="282" width="3" height="18"/><rect x="250" y="282" width="3" height="18"/><rect x="370" y="282" width="3" height="18"/><rect x="490" y="282" width="3" height="18"/><rect x="610" y="282" width="3" height="18"/></g>
+<polyline id="povPath" fill="none" stroke="#E39A1F" stroke-width="2" stroke-dasharray="4 4" points=""/>
+<g id="povHours" font-size="11" font-weight="600" fill="#9A5A00" text-anchor="middle"></g>
+<ellipse id="povGlare" cx="360" cy="222" rx="46" ry="5" fill="#FFF4C8" opacity="0"/>
+<g class="fly train-pov"><g transform="scale(-1 1)"><g transform="translate(-200 0)">
+<g stroke-width="2" stroke-linecap="round" fill="none" opacity="0.85"><path d="M-400 1 Q-300 2 -156 0" stroke="#FFFFFF"/><path d="M-405 -8 Q-310 -8 -122 -9" stroke="#D74949"/><path d="M-405 10 Q-310 10 -122 9" stroke="#1C3F94"/><path d="M-410 -17 Q-320 -17 -88 -18" stroke="#FFFFFF"/><path d="M-410 19 Q-320 19 -88 18" stroke="#FFFFFF"/></g>
+<use href="#hawkPov" transform="translate(-136 0)"/><use href="#hawkPov" transform="translate(-102 -9)"/><use href="#hawkPov" transform="translate(-102 9)"/><use href="#hawkPov" transform="translate(-68 -18)"/><use href="#hawkPov" transform="translate(-68 18)"/><use href="#hawkPov" transform="translate(-68 0)"/><use href="#hawkPov" transform="translate(-34 -9)"/><use href="#hawkPov" transform="translate(-34 9)"/><use href="#hawkPov"/>
+</g></g></g>
+<circle id="povGlow" cx="360" cy="20" r="34" fill="url(#glowPov)"/>
+<circle id="povSun" cx="360" cy="20" r="10" fill="#FFE07A" stroke="#E39A1F" stroke-width="1.5"/>
+<g id="povBehind" opacity="0">
+<rect id="behindBox" x="470" y="10" width="242" height="30" fill="#13293C"/><path id="behindArrow" d="M694 18 l10 7 l-10 7 Z" fill="#FFC23A"/>
+<text id="behindText" x="482" y="30" font-size="13" font-weight="600" fill="#FFFFFF">Sun behind your right shoulder</text>
+</g>
+<g font-size="12" font-weight="600" fill="#FFFFFF"><text x="8" y="296">Left: east, the Cameron Arena end</text><text x="712" y="296" text-anchor="end">Right: west, the static aircraft end</text></g>
+</g>
+</svg>
+</div>
+<div class="sg-sec">
+<div class="row"><h3>Direction of the sun through the day</h3><button type="button" class="sg-play" id="playBtn"><svg viewBox="0 0 14 14" aria-hidden="true"><path id="playIcon" d="M3 1.5 L12 7 L3 12.5 Z" fill="currentColor"/></svg><span id="playTxt">Play the day</span></button></div>
+<div class="sg-times" id="sgTimes"></div>
+<div class="sg-key">
+<div><span class="sw" style="background:#D74949"></span>Into the sun</div>
+<div><span class="sw" style="background:#6950A1"></span>Side light</div>
+<div><span class="sw" style="background:#32B4AF"></span>Sun behind you</div>
+<div class="r">Arrow points to the sun, with the flying field straight ahead</div>
+</div>
+</div>
+<div class="sg-panel" aria-live="polite">
+<div><div class="time" id="pTime">12:00</div><div class="tag" id="pTag">Into the sun</div></div>
+<div>
+<dl><dt>Sun</dt><dd id="pSun"></dd><dt>Best lit</dt><dd id="pBest"></dd></dl>
+<div class="tip" id="pTip"></div>
+</div>
+</div>
+<div class="sg-foot">Sun positions worked out for the crowd line at Ragley on Saturday 5 June 2027, using the layout of the 2025 festival, with the crowd facing south across the flying field. Friday and Sunday shift the times by a minute or so. The 2027 layout may change, the plan is a simplified drawing and not to scale, and cloud and haze will soften everything shown here. The dawn and evening balloons get the softest light of all, as the sun is low and behind or beside you.</div>
+</div>
+<script>
+(function(){
+  "use strict";
+  /* Settings */
+  var SHOW_DATE = {y:2027, m:6, d:5};
+  var LAT = 52.1955, LON = -1.8990, FACING = 180;
+  var YOU = {x:390, y:350}, PLAN_R = 110;
+  var POV = {cx:360, horizon:200, xPerDeg:4.5, yPerDeg:2.8};
+  var HOURS = [9,10,11,12,13,14,15,16,17,18];
+  var TIPS = {9:"Morning sun low on your left, out over the Cameron Arena end. Anything on the ground or flying out to your right is nicely side lit.", 10:"The sun is climbing ahead and to your left. I would suggest favouring passes out to your right, towards the static aircraft end.", 11:"Sun moving round in front of you. Undersides go dark, so dial in +0.7 to +1 stop of exposure compensation, or lean into smoke and silhouettes.", 12:"Sun high and almost dead ahead over the flying field, the harshest backlight of the day. Topside passes and smoke trails will work well.", 13:"Sun at its highest, straight ahead. The flying usually starts around now, and flat passes will be dark underneath.", 14:"Sun just right of centre. Aircraft towards the Cameron Arena end on your left start to light up.", 15:"The sun swings round to your right. Banking topsides look great, and passes to your left are well lit.", 16:"Side light from your right. Most of the display line is lit now, and the light starts to warm up.", 17:"Lower, warmer side light from your right. A lovely time for the later displays, so I would advise staying put.", 18:"Sun low on your right and starting to drop behind you. Stay for the evening balloons, the light just keeps getting better."};
+  var PTS = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  var WORDS = {N:'north',NNE:'north north east',NE:'north east',ENE:'east north east',E:'east',ESE:'east south east',SE:'south east',SSE:'south south east',S:'south',SSW:'south south west',SW:'south west',WSW:'west south west',W:'west',WNW:'west north west',NW:'north west',NNW:'north north west'};
+
+  function $(id){return document.getElementById(id);}
+  function set(el,a){for(var k in a)el.setAttribute(k,a[k]);}
+  function rad(d){return d*Math.PI/180;} function deg(r){return r*180/Math.PI;}
+  function pad(n){return (n<10?'0':'')+n;}
+  function hhmm(min){var h=Math.floor(min/60),m=Math.round(min%60);if(m===60){h++;m=0;}return pad(h)+':'+pad(m);}
+  function compass(az){return PTS[Math.round(az/22.5)%16];}
+
+  /* NOAA low precision sun position, BST = UTC+1 */
+  function sunAt(min){
+    var ms=Date.UTC(SHOW_DATE.y,SHOW_DATE.m-1,SHOW_DATE.d,0,0)+(min-60)*60000;
+    var n=ms/86400000+2440587.5-2451545.0;
+    var L=(280.460+0.9856474*n)%360, g=rad((357.528+0.9856003*n)%360);
+    var lam=rad(L+1.915*Math.sin(g)+0.020*Math.sin(2*g)), eps=rad(23.439-0.0000004*n);
+    var ra=Math.atan2(Math.cos(eps)*Math.sin(lam),Math.cos(lam)), dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+    var gmst=(280.46061837+360.98564736629*n)%360, ha=rad(gmst+LON-deg(ra)), la=rad(LAT);
+    var alt=Math.asin(Math.sin(la)*Math.sin(dec)+Math.cos(la)*Math.cos(dec)*Math.cos(ha));
+    var az=Math.atan2(-Math.sin(ha),Math.tan(dec)*Math.cos(la)-Math.sin(la)*Math.cos(ha));
+    var azD=(deg(az)+360)%360;
+    return {az:azD, alt:deg(alt), rel:((azD-FACING+540)%360)-180};
+  }
+  function verdict(rel){var a=Math.abs(rel);if(a<45)return{t:'Into the sun',bar:'#D74949',fg:'#FFFFFF'};if(a<=100)return{t:'Side light',bar:'#6950A1',fg:'#FFFFFF'};return{t:'Sun behind you',bar:'#32B4AF',fg:'#13293C'};}
+  function best(rel){if(Math.abs(rel)>100)return'Most of the display line';if(rel<-15)return'Passes to your right, towards the static aircraft end';if(rel<=15)return'High topside passes; flat passes go dark underneath';return'Passes to your left, towards the Cameron Arena end';}
+  function planPt(az){return {x:YOU.x+PLAN_R*Math.sin(rad(az)), y:YOU.y-PLAN_R*Math.cos(rad(az))};}
+  function povPt(s){return {x:POV.cx+s.rel*POV.xPerDeg, y:POV.horizon-Math.max(0,s.alt)*POV.yPerDeg};}
+
+  /* Best light, from the model */
+  (function(){
+    var start=null;
+    for(var m=9*60;m<=21*60;m++){if(Math.abs(sunAt(m).rel)>100){start=m;break;}}
+    $('bestV').textContent=start===null?'Not today':'From '+hhmm(Math.round(start/5)*5);
+  })();
+
+  /* Sun paths in both views */
+  (function(){
+    var plan=[],pov=[],dots=$('planDots'),hrs=$('planHours'),phr=$('povHours'),NS='http://www.w3.org/2000/svg';
+    for(var m=7*60;m<=20*60;m+=15){
+      var s=sunAt(m),p=planPt(s.az);plan.push(p.x.toFixed(1)+','+p.y.toFixed(1));
+      if(m>=9*60&&m<=18*60&&Math.abs(s.rel)<=82&&s.alt>0){var q=povPt(s);pov.push(q.x.toFixed(1)+','+q.y.toFixed(1));}
+    }
+    $('planPath').setAttribute('points',plan.join(' '));
+    $('povPath').setAttribute('points',pov.join(' '));
+    HOURS.forEach(function(h){
+      var s=sunAt(h*60),p=planPt(s.az),c=document.createElementNS(NS,'circle');
+      set(c,{cx:p.x,cy:p.y,r:2.6});dots.appendChild(c);
+      if(h%3===0){var t=document.createElementNS(NS,'text'),lp={x:YOU.x+(PLAN_R+16)*Math.sin(rad(s.az)),y:YOU.y-(PLAN_R+16)*Math.cos(rad(s.az))};
+        set(t,{x:lp.x,y:lp.y+4,'text-anchor':'middle'});t.textContent=pad(h)+':00';hrs.appendChild(t);}
+      if(h%2===0&&Math.abs(s.rel)<=78){var q=povPt(s),u=document.createElementNS(NS,'text');set(u,{x:q.x,y:q.y-12});u.textContent=pad(h)+':00';phr.appendChild(u);}
+    });
+  })();
+
+  /* Time cells */
+  var wrap=$('sgTimes'),buttons={};
+  HOURS.forEach(function(h){
+    var s=sunAt(h*60),v=verdict(s.rel),b=document.createElement('button');
+    b.type='button';b.className='sg-cell';b.setAttribute('aria-pressed','false');
+    b.setAttribute('aria-label',pad(h)+':00, '+v.t);
+    b.innerHTML='<span class="t">'+pad(h)+':00</span><svg viewBox="-12 -12 24 24" aria-hidden="true" style="transform:rotate('+Math.round(s.rel)+'deg)"><path d="M0 -10 L6 4 L0 1 L-6 4 Z" fill="currentColor"/></svg><span class="s">'+compass(s.az)+'</span><span class="s">'+Math.round(s.alt)+'° up</span><span class="bar" style="background:'+v.bar+'"></span>';
+    b.addEventListener('click',function(){stop();tweenTo(h*60);});
+    wrap.appendChild(b);buttons[h]=b;
+  });
+
+  /* Draw one moment */
+  var current=12*60;
+  function render(min){
+    current=min;
+    var s=sunAt(min),v=verdict(s.rel),p=planPt(s.az),hour=Math.min(18,Math.max(9,Math.round(min/60)));
+    set($('planRay'),{x2:p.x,y2:p.y});set($('planGlow'),{cx:p.x,cy:p.y});set($('planSun'),{cx:p.x,cy:p.y});
+    var inView=Math.abs(s.rel)<=80&&s.alt>0,q=povPt(s);
+    set($('povSun'),{cx:inView?q.x:-60,cy:q.y});set($('povGlow'),{cx:inView?q.x:-60,cy:q.y});
+    set($('povGlare'),{cx:q.x,opacity:(inView&&Math.abs(s.rel)<50&&s.alt<30)?0.75:0});
+    var right=s.rel>0;
+    $('povBehind').setAttribute('opacity',inView?0:1);
+    $('behindText').textContent='Sun behind your '+(right?'right':'left')+' shoulder';
+    set($('behindBox'),{x:right?470:8});set($('behindText'),{x:right?482:38});
+    $('behindArrow').setAttribute('d',right?'M694 18 l10 7 l-10 7 Z':'M26 18 l-10 7 l10 7 Z');
+    var lift=Math.min(1,Math.max(0,s.alt)/45);
+    $('skyTop').setAttribute('stop-color',lift>0.6?'#7CC4E4':'#86B6D6');
+    $('skyBot').setAttribute('stop-color',lift>0.6?'#E3F2F9':'#F6D7A8');
+    Object.keys(buttons).forEach(function(k){buttons[k].setAttribute('aria-pressed',(+k===hour)?'true':'false');});
+    $('selLabel').textContent='Selected: '+hhmm(min)+', '+v.t.toLowerCase();
+    $('pTime').textContent=hhmm(min);
+    var tag=$('pTag');tag.textContent=v.t;tag.style.background=v.bar;tag.style.color=v.fg;
+    $('pSun').textContent='Bearing '+Math.round(s.az)+'°, '+WORDS[compass(s.az)]+', '+Math.round(s.alt)+'° above the horizon';
+    $('pBest').textContent=best(s.rel);
+    $('pTip').textContent=TIPS[hour];
+  }
+
+  /* Smooth moves and play */
+  var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches,anim=null,playing=false;
+  function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+  function tweenTo(target){
+    if(anim)cancelAnimationFrame(anim);
+    if(reduced){render(target);return;}
+    var from=current,t0=null,dur=650;
+    (function step(ts){if(t0===null)t0=ts;var t=Math.min(1,(ts-t0)/dur);render(from+(target-from)*ease(t));if(t<1)anim=requestAnimationFrame(step);})(performance.now());
+  }
+  function setPlay(on){playing=on;$('playTxt').textContent=on?'Pause':'Play the day';$('playIcon').setAttribute('d',on?'M3 2 H6 V12 H3 Z M8 2 H11 V12 H8 Z':'M3 1.5 L12 7 L3 12.5 Z');}
+  function stop(){if(playing){setPlay(false);if(anim)cancelAnimationFrame(anim);}}
+  $('playBtn').addEventListener('click',function(){
+    if(playing){stop();return;}
+    if(anim)cancelAnimationFrame(anim);
+    if(current>=18*60)current=9*60;
+    setPlay(true);
+    var last=null;
+    (function step(ts){
+      if(!playing)return;
+      if(last===null)last=ts;var dt=ts-last;last=ts;
+      var next=Math.min(18*60,current+dt/14000*540);render(next);
+      if(next>=18*60){setPlay(false);return;}
+      anim=requestAnimationFrame(step);
+    })(performance.now());
+  });
+
+  window.sgRender=render;
+  render(12*60);
+})();
+</script>
+</div>
+<section class="ph-sec" id="phSun" aria-label="Sun and light at Ragley">
       <div class="sec-head reveal">
         <div><h3>Sun and light <em>each day</em></h3></div>
-        <p class="note">Worked out for Ragley Hall on each 2027 festival day, in BST. I haven&rsquo;t been able to confirm which way the 2027 crowd line faces, so rather than guess at into the sun times, this shows where the sun sits by compass at the moments that matter. Once the site map is out, match it up with the crowd line and the launch field.</p>
+        <p class="note">Worked out for Ragley Hall on each 2027 festival day, in BST, with the crowd facing south across the flying field. The dawn and evening balloons get the gentlest light, while the afternoon flying starts into the sun and swings to side light from your right.</p>
       </div>
       <div class="sun-table reveal" id="sunTable"></div>
       <p class="note">Golden hour here means the sun is less than 6&deg; above the horizon. Cloud and haze will soften everything shown.</p>
