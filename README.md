@@ -100,9 +100,10 @@ web module (`velo/backend/showday.web.js`):
   it is a flying display page (at least 4 display times read on the phone). All four pass: status `Live` and it shows
   on the board as Flying Display From The Crowd for that show, today only. Any fail: status `Held`, never shown, kept
   for Jack. Two member flags, or the sender's own flag, set `Reported` and take it off. The `checks` field records why.
-  Duxford and Shuttleworth have several events a year, so add their show days to `EXTRA_SHOW_DAYS` in
-  `showday.web.js` once announced, or uploads there stay `Held`. Shows with "date to be confirmed" also stay `Held`
-  until Show Info has the date. Test page: `previews/show-day-harness.html` (add `?photo=1` to see the crowd photo).
+  Show days are read live from Show Info (`dateText` and the Duxford and Shuttleworth `events` list) and the
+  featured list `dates`. The daily show details task and the weekly 2027 date checker (which since 21 Oct 2026 adds
+  new dates to `uk-airshow-calendar.html`, FeaturedAirshows and Show Info on its own) keep these filled, so nothing
+  needs adding by hand. `EXTRA_SHOW_DAYS` in `showday.web.js` is only for a one off extra day. Test page: `previews/show-day-harness.html` (add `?photo=1` to see the crowd photo).
 - `CrowdReports`: members' car park, toilet and queue reports. Only the last 45 minutes show.
 
 My Airshow Hub has a Show Day tab that loads `show-day.html?mode=hub` and passes its messages through the hub box
