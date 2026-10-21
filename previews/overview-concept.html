@@ -518,7 +518,7 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
   });
 
   /* radar: blips light up as the sweep passes over them */
-  var BL = [["Cosford", 290, 112, true], ["RIAT", 245, 128, true], ["Duxford", 30, 30, false], ["Shuttleworth", 330, 34, false], ["Eastbourne", 175, 96, false], ["Clacton", 95, 52, false], ["Southport", 318, 170, false], ["Blackpool", 322, 180, false]];
+  var BL = [["Cosford", 300, 130, true, 1, 4], ["RIAT", 272, 112, true, 0, 16], ["Duxford", 318, 46, false, 1, 4], ["Shuttleworth", 298, 66, false, 1, 4], ["Eastbourne", 200, 72, false, 0, 4], ["Clacton", 82, 58, false, 0, 4], ["Southport", 312, 168, false, 1, 10], ["Blackpool", 322, 186, false, 1, -4]];
   var blips = $("blips"), NS = "http://www.w3.org/2000/svg";
   BL.forEach(function (b) {
     var a = (b[1] - 90) * Math.PI / 180, r = b[2] * .95, x = 200 + Math.cos(a) * r, y = 200 + Math.sin(a) * r;
@@ -526,8 +526,8 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
     var col = b[3] ? "#5FE3D6" : "#8C77C9";
     var ring = document.createElementNS(NS, "circle"); ring.setAttribute("class", "ring"); ring.setAttribute("cx", x); ring.setAttribute("cy", y); ring.setAttribute("r", 6); ring.setAttribute("fill", "none"); ring.setAttribute("stroke", col);
     var c = document.createElementNS(NS, "circle"); c.setAttribute("class", "c"); c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", b[3] ? 6 : 4); c.setAttribute("fill", col);
-    var t = document.createElementNS(NS, "text"); t.setAttribute("x", x + 9); t.setAttribute("y", y + 4); t.setAttribute("fill", col); t.textContent = b[0];
-    if (x > 300) { t.setAttribute("x", x - 9); t.setAttribute("text-anchor", "end"); }
+    var t = document.createElementNS(NS, "text"); t.setAttribute("x", b[4] ? x - 9 : x + 9); t.setAttribute("y", y + b[5]); t.setAttribute("fill", col); t.textContent = b[0];
+    if (b[4]) t.setAttribute("text-anchor", "end");
     g.appendChild(ring); g.appendChild(c); g.appendChild(t); blips.appendChild(g);
   });
   var start = performance.now();
