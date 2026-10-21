@@ -1236,10 +1236,10 @@ label.f{color:var(--hud-fg)}
     fx("lock"); ask.hidden = false; document.addEventListener("keydown", askKey, true);
     setTimeout(function () { $("lgAskY").focus(); }, 60);
   }
-  $("lgAskY").addEventListener("click", function () { closeAsk(); window.ukagWB = Date.now(); takeOff("in"); });
+  $("lgAskY").addEventListener("click", function () { closeAsk(); window.ukagWB = Date.now(); window.ukagWBJoin = false; takeOff("in"); });
   $("lgAskN").addEventListener("click", closeAsk);
   ask.addEventListener("click", function (e) { if (e.target === ask) closeAsk(); });
-  cta.addEventListener("click", function () { if (mode === "in") askEnter(); else { window.ukagWB = Date.now(); takeOff(mode); } });
+  cta.addEventListener("click", function () { if (mode === "in") askEnter(); else { window.ukagWB = Date.now(); window.ukagWBJoin = true; takeOff(mode); } });
   $("lgHubTab").addEventListener("click", askEnter);
   $("lgNavLogin").addEventListener("click", askEnter);
   $("lgOutLogin").addEventListener("click", askEnter);
@@ -1906,7 +1906,7 @@ label.f{color:var(--hud-fg)}
 <div id="hubSO" role="status" aria-live="polite" hidden><div><span class="so-tag">My Airshow Hub</span><b>SIGNING OFF</b><p>&gt; CLOSING YOUR SESSION. SEE YOU AT THE NEXT SHOW</p><i></i></div></div>
 
 <!-- Welcome back screen (21 Oct 2026): shows once after a member logs in from the hub, then opens the Overview page. -->
-<div id="hubWB" role="status" aria-live="polite" hidden><div class="wb-in"><span class="wb-tag">Systems online</span><b class="wb-h">WELCOME BACK</b><b class="wb-n" id="hubWBName"></b><p class="wb-l">&gt; TAKING YOU TO YOUR HUB</p><i class="wb-p"></i></div></div>
+<div id="hubWB" role="status" aria-live="polite" hidden><div class="wb-in"><span class="wb-tag">Systems online</span><b class="wb-h" id="hubWBHead">WELCOME BACK</b><b class="wb-n" id="hubWBName"></b><p class="wb-l">&gt; TAKING YOU TO YOUR HUB</p><i class="wb-p"></i></div></div>
 <style>
 #hubWB{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(900px 500px at 50% 40%,rgba(50,180,175,.18),transparent 70%),rgba(5,13,20,.96);color:#fff;font-family:"Barlow",Arial,sans-serif;text-align:center;transition:opacity .6s ease}
 #hubWB.go{opacity:0}
@@ -2038,6 +2038,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
   function welcomeBack(name) {
     var w = $("hubWB"); if (!w) return;
     $("hubWBName").textContent = (name || "").trim().split(/\s+/)[0] || "";
+    $("hubWBHead").textContent = window.ukagWBJoin ? "WELCOME ABOARD" : "WELCOME BACK";
     showPage("overview");
     w.classList.remove("go"); w.hidden = false;
     setTimeout(function () { w.classList.add("go"); setTimeout(function () { w.hidden = true; w.classList.remove("go"); }, 650); }, 3400);
@@ -3395,7 +3396,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       setTimeout(function () { if (!done) { delete pending[id]; resolve(tries > 0 ? hello(tries - 1) : {}); } }, 700);
     });
   }
-  hello(40).then(function (r) { S.join = r.join || ""; S.pageUrl = r.pageUrl || ""; }).then(load);
+  hello(40).then(function (r) { S.join = r.join || ""; S.pageUrl = r.pageUrl || ""; if (r.loggedOut) $("lgOut").hidden = false; }).then(load);
 })();
 </script>
 <!-- typing readout (21 Oct 2026): the forum's terminal text and blinking block show above a box while you type -->

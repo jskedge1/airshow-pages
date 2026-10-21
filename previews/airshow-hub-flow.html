@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Airshow Hub Flow Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap">
+<style>
+/* Working preview of the visitor journey: site header, Airshow Hub tab, hub login page, welcome back, then the hub and forum dashboard.
+   The header copies the live navy header, with the new Airshow Hub tab added. The page underneath is the real home, hub or forum page. */
+:root{--navy:#13293C;--navy2:#0E2131;--teal:#32B4AF;--cyan:#5FE3D6;--purple:#6950A1;--red:#D74949;--ink:#061019}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;scrollbar-width:none;background:#061019;font-family:"Barlow",Arial,sans-serif;color:#fff}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+button{font-family:inherit;cursor:pointer}
+
+/* header, same look as the live site header */
+#hd{position:fixed;top:0;left:0;right:0;z-index:20;height:62px;background:var(--navy)}
+#hd::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--teal);transform:scaleX(0);transform-origin:left;animation:line 1.2s cubic-bezier(.22,.61,.36,1) .2s forwards}
+@keyframes line{to{transform:scaleX(1)}}
+#hd .w{max-width:1360px;margin:0 auto;height:62px;display:flex;align-items:stretch;justify-content:space-between;gap:12px;padding:0 16px}
+#hd .lg{width:min(282px,calc(100vw - 150px));background:url(https://static.wixstatic.com/media/a0546b_b09aeb8c13404eec8f4e6db174cc18a3~mv2.png) left center/contain no-repeat;border:0;padding:0}
+#hd nav{display:flex;align-items:stretch}
+#hd .t{display:flex;align-items:center;gap:6px;height:62px;padding:0 10px;border:0;background:transparent;color:#fff;font:600 14px/1 "Barlow",Arial,sans-serif;white-space:nowrap;transition:padding .4s ease,background-color .4s ease}
+#hd .t:hover,#hd .t:focus-visible{padding:0 20px;background:var(--teal);outline:none}
+#hd .t.cur{background:var(--teal)}
+
+/* the new Airshow Hub tab: a HUD bracket and a live dot so it stands out from the guide tabs */
+#hd .hubt{position:relative;margin:0 4px;color:var(--cyan);font-weight:700;letter-spacing:.02em}
+#hd .hubt::before,#hd .hubt::after{content:"";position:absolute;top:14px;bottom:14px;width:7px;border:2px solid var(--cyan);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+#hd .hubt::before{left:2px;border-right:0}
+#hd .hubt::after{right:2px;border-left:0}
+#hd .hubt i{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 0 rgba(95,227,214,.7);animation:ping 1.8s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px rgba(95,227,214,0)}100%{box-shadow:0 0 0 0 rgba(95,227,214,0)}}
+#hd .hubt:hover,#hd .hubt.cur{color:var(--ink);background:var(--cyan)}
+#hd .hubt:hover::before,#hd .hubt.cur::before{transform:translateX(-5px)}
+#hd .hubt:hover::after,#hd .hubt.cur::after{transform:translateX(5px)}
+#hd .hubt:hover i,#hd .hubt.cur i{background:var(--ink)}
+
+/* log in button, becomes the member's name with a drop down */
+#hd .acct{position:relative;display:flex;align-items:center;margin-left:8px}
+#hd .lb{display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;background:var(--purple);color:#fff;border:0;font:600 14px/1 "Barlow",Arial,sans-serif;white-space:nowrap;transition:background-color .3s ease,padding .4s ease}
+#hd .lb:hover,#hd .lb:focus-visible{background:var(--teal);padding:0 22px;outline:none}
+#hd .lb svg{width:16px;height:16px}
+#hd .dd{position:absolute;top:calc(100% + 11px);right:0;min-width:220px;background:var(--navy2);border-top:4px solid var(--teal);padding:8px 0 10px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .3s ease,transform .3s ease,visibility 0s linear .3s}
+#hd .acct.o .dd{opacity:1;visibility:visible;transform:none;transition:opacity .3s ease,transform .3s ease}
+#hd .dd button{display:block;width:100%;text-align:left;background:transparent;border:0;color:#fff;font-weight:600;font-size:15px;padding:11px 20px;transition:padding .3s,background-color .25s}
+#hd .dd button:hover{padding-left:30px;background:var(--teal)}
+#hd .dd .lo{color:#F3B5B5}
+
+/* phone menu */
+#hd .bg{display:none;align-items:center;gap:8px;background:transparent;border:0;color:#fff;font:600 15px "Barlow",Arial,sans-serif;padding:0 6px}
+#hd .bg svg{width:22px;height:22px}
+#mb{position:fixed;top:62px;left:0;right:0;z-index:19;background:var(--navy2);border-top:4px solid var(--teal);max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.22,.61,.36,1)}
+#mb.o{max-height:calc(100vh - 62px);overflow-y:auto}
+#mb button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;font:600 16px "Barlow",Arial,sans-serif;padding:15px 16px}
+#mb .hubm{color:var(--cyan)}
+#mb .lbm{background:var(--purple)}
+#mb .lom{color:#F3B5B5}
+@media (max-width:1120px){#hd nav,#hd .acct{display:none}#hd .bg{display:flex}}
+
+/* the page under the header */
+#stage{position:fixed;top:62px;left:0;right:0;bottom:0}
+#bar{display:none;align-items:center;justify-content:space-between;gap:10px;height:44px;padding:0 16px;background:#050C11;border-bottom:1px solid #7CFF9E;font-family:"Share Tech Mono",ui-monospace,monospace;font-size:14px;color:#7CFF9E}
+#bar.on{display:flex}
+#bar button{font:700 14px "Barlow",Arial,sans-serif;background:transparent;color:#fff;border:1px solid #7CFF9E;padding:6px 12px;box-shadow:inset 3px 0 0 #7CFF9E}
+#bar button:hover{background:rgba(124,255,158,.12)}
+#view{display:block;width:100%;height:100%;border:0;background:#061019}
+#bar.on+#view{height:calc(100% - 44px)}
+
+/* preview guide, kept small at the bottom */
+#guide{position:fixed;left:16px;bottom:16px;z-index:30;max-width:min(420px,calc(100vw - 32px));background:var(--purple);color:#fff;padding:12px 14px;font-size:15px;line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#guide b{display:block;font-weight:700}
+#guide .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+#guide button{font:700 14px "Barlow",Arial,sans-serif;background:#fff;color:var(--purple);border:0;padding:6px 10px}
+#guide button.x{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6)}
+#guide.min .tx,#guide.min .row .r{display:none}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:40;background:var(--navy);border:1px solid var(--cyan);color:#fff;padding:10px 16px;font-weight:600;max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header id="hd">
+  <div class="w">
+    <button class="lg" type="button" data-go="home" aria-label="UK Airshow Guide home"></button>
+    <nav aria-label="Main menu">
+      <button class="t" type="button" data-go="home">Home</button>
+      <button class="t" type="button" data-soon>Find Your Airshow</button>
+      <button class="t" type="button" data-soon>UK Airshow Calendar</button>
+      <button class="t" type="button" data-soon>Planning Guides</button>
+      <button class="t" type="button" data-soon>Photography</button>
+      <button class="t" type="button" data-soon>Camping</button>
+      <button class="t" type="button" data-soon>Community</button>
+      <button class="t hubt" type="button" data-go="hub"><i aria-hidden="true"></i>Airshow Hub</button>
+    </nav>
+    <div class="acct" id="acct">
+      <button class="lb" type="button" id="lb" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 15c0-3.3 2.7-5 6-5s6 1.7 6 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span id="nm">Log In</span></button>
+      <div class="dd" id="dd"><button type="button" data-go="hub">My Airshow Hub</button><button type="button" data-go="forum">Airshow Forum</button><button type="button" class="lo" data-logout>Log Out</button></div>
+    </div>
+    <button class="bg" type="button" id="bg" aria-expanded="false" aria-controls="mb"><span>Menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+  </div>
+</header>
+<div id="mb">
+  <button type="button" data-go="home">Home</button>
+  <button type="button" data-soon>Find Your Airshow</button>
+  <button type="button" data-soon>UK Airshow Calendar</button>
+  <button type="button" data-soon>Planning Guides</button>
+  <button type="button" data-soon>Photography</button>
+  <button type="button" data-soon>Camping</button>
+  <button type="button" data-soon>Community</button>
+  <button type="button" class="hubm" data-go="hub">Airshow Hub</button>
+  <button type="button" class="lbm" id="lbm">Log In</button>
+  <button type="button" class="lom" id="lom" data-logout hidden>Log Out</button>
+</div>
+
+<main id="stage">
+  <div id="bar"><span>F1 · COMMS · Airshow Forum, inside My Airshow Hub</span><button type="button" data-go="hub">Back to the dashboard</button></div>
+  <iframe id="view" title="Page" src="about:blank"></iframe>
+</main>
+
+<aside id="guide" aria-label="How to try the preview">
+  <b>Working preview</b>
+  <span class="tx">Click Airshow Hub in the menu, log in or join, watch the welcome back screen, then use the Airshow Forum tab. Log Out from the hub or the header to come back here.</span>
+  <div class="row"><button type="button" class="r" id="reset">Start again as a new visitor</button><button type="button" class="x" id="hide">Hide</button></div>
+</aside>
+<div id="toast" role="status" hidden></div>
+
+<script>
+(function () {
+  "use strict";
+  var view = document.getElementById("view"), bar = document.getElementById("bar");
+  var PAGES = { home: "../home.html", hub: "hub-login-demo.html", forum: "../forum.html" };
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function loggedIn() { return get("ukagDemoIn") === "1"; }
+  var tt; function toast(m) { var t = document.getElementById("toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(function () { t.hidden = true; }, 3200); }
+
+  var current = "";
+  function go(page, act) {
+    /* the forum is part of the hub: logged out visitors get the hub login page instead */
+    if (page === "forum" && !loggedIn()) { page = "hub"; act = "login"; }
+    current = page;
+    bar.classList.toggle("on", page === "forum");
+    view.src = PAGES[page] + (page === "hub" && act ? "?act=" + act : "") + (page === "hub" ? (act ? "&" : "?") + "t=" + Date.now() : "");
+    document.querySelectorAll("#hd .t").forEach(function (b) { b.classList.toggle("cur", b.dataset.go === page || (page === "forum" && b.dataset.go === "hub")); });
+    menu(false); acct(false);
+  }
+
+  /* links inside the page: stay inside the preview */
+  view.addEventListener("load", function () {
+    var d; try { d = view.contentDocument; } catch (e) { return; }
+    if (!d || current === "hub") return;
+    d.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
+      var h = a.getAttribute("href") || "";
+      if (!/ukairshowguide\.co\.uk/.test(h)) return;
+      e.preventDefault();
+      if (/my-airshow-hub/.test(h)) go("hub");
+      else if (/community-forum|\/forum/.test(h)) go("forum");
+      else if (/ukairshowguide\.co\.uk\/?$/.test(h)) go("home");
+      else toast("That page is not part of this preview. Try Airshow Hub in the menu.");
+    }, true);
+  });
+  window.addEventListener("message", function (e) { var m = e.data; if (m && m.ukagDemoGo) go(m.ukagDemoGo); });
+
+  /* header buttons */
+  document.addEventListener("click", function (e) {
+    var g = e.target.closest("[data-go]"); if (g) { go(g.dataset.go); return; }
+    if (e.target.closest("[data-soon]")) { toast("That tab works as normal on the live site. This preview is about Airshow Hub."); return; }
+    if (e.target.closest("[data-logout]")) { go("hub", "logout"); return; }
+    if (!e.target.closest("#acct")) acct(false);
+  });
+  function acct(open) { var a = document.getElementById("acct"); a.classList.toggle("o", open); document.getElementById("lb").setAttribute("aria-expanded", String(open)); }
+  document.getElementById("lb").addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (!loggedIn()) { go("hub", "login"); return; }
+    acct(!document.getElementById("acct").classList.contains("o"));
+  });
+  document.getElementById("lbm").addEventListener("click", function () { go("hub", loggedIn() ? "" : "login"); });
+  var mb = document.getElementById("mb"), bgb = document.getElementById("bg");
+  function menu(open) { mb.classList.toggle("o", open); bgb.setAttribute("aria-expanded", String(open)); bgb.firstChild.textContent = open ? "Close" : "Menu"; }
+  bgb.addEventListener("click", function () { menu(!mb.classList.contains("o")); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { acct(false); menu(false); } });
+
+  /* header shows the member's name once logged in, and follows log in and log out inside the hub */
+  var was = null;
+  function sync() {
+    var on = loggedIn();
+    if (on === was) return; was = on;
+    document.getElementById("nm").textContent = on ? "Jack Skedge" : "Log In";
+    document.getElementById("lbm").textContent = on ? "Jack Skedge, open my hub" : "Log In";
+    document.getElementById("lom").hidden = !on;
+    if (!on) acct(false);
+    /* logged out while reading the forum: back to the hub login page */
+    if (!on && current === "forum") go("hub");
+  }
+  setInterval(sync, 400); sync();
+
+  document.getElementById("reset").addEventListener("click", function () { put("ukagDemoIn", "0"); put("ukagDemoOut", "0"); sync(); go("home"); toast("Starting again as a new visitor."); });
+  document.getElementById("hide").addEventListener("click", function () { var g = document.getElementById("guide"); g.classList.toggle("min"); this.textContent = g.classList.contains("min") ? "Show help" : "Hide"; });
+
+  /* every visit to the preview starts as a new visitor on the home page */
+  put("ukagDemoIn", "0"); put("ukagDemoOut", "0"); sync(); go("home");
+})();
+</script>
+</body>
+</html>
