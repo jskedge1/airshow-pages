@@ -100,6 +100,7 @@ My Airshow Hub has a Show Day tab that loads `show-day.html?mode=hub` and passes
 (`velo/page-code/my-airshow-hub-showday.js`). The hub's dark glass look is the `hud-theme` block before `</head>`
 in `my-airshow-hub.html`; delete that block to go back to the white look.
 Since 21 Oct 2026 the `hubEmbed` box on /my-airshow-hub loads `my-airshow-hub.html` by website address, so changes here go live on their own.
+Logged-out visitors see the HUD login page (the `#guest` block, 21 Oct 2026): typing title, blue HUD login card, Pilot note, My Airshow Hub and Airshow Forum tabs, and Inside the hub (Typhoon tools, pop-out screen, phone). Its Log in and Join free buttons play `hub-img/hub-cleared.mp3`, show the tower screen, then click hidden `data-act="login"` / `data-act="signup"` buttons, so the Wix members window opens through the page code as before. The start up sound is `hub-img/hub-start-up.mp3` and the header jet is `hub-img/red-arrows-hawk.webp`. Logged-in members get a green Airshow Forum tab at the end of the hub tab bar.
 The hub's photos are files in `hub-img/`. Tabs added on 21 Oct: Overview (inbound radar), Flight Briefing (wind, likely runway, hour by hour
 weather from Open-Meteo, where to stand, must see slots from the Show Day running orders, camera settings), My Hangar (backend
 `velo/backend/hangar.web.js`, collection `MemberHangar`; rarity comes from how many show line ups list the aircraft), My Airshow Year
