@@ -1,0 +1,1480 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airshow Community Forum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap">
+<style>
+/* The Big Guide to UK Airshows: community forum for a Wix HTML embed.
+   Talks to the page code through messages; Wix handles logins and storage. */
+:root{
+  --navy:#13293C; --navy-deep:#0E2131; --teal:#32B4AF; --teal-dark:#0E5F5B;
+  --purple:#6950A1; --red:#D74949; --grey:#757575; --grey-light:#C6C6C6;
+  --paper:#FFFFFF; --wash:#F2F4F6; --ink:#111417; --pale:#CFE3E6; --muted:#4A535B; --line:#E3E6E9;
+  --f:"Barlow","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:var(--wash);color:var(--ink);font:400 16px/1.55 var(--f)}
+a{color:inherit}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+[hidden]{display:none!important}
+
+/* Preview strip, only when opened outside Wix */
+.demo{background:var(--purple);color:#fff;font-weight:600;font-size:14px}
+.demo .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding-block:8px}
+.demo select{border:0;padding:4px 8px;font-weight:600;color:var(--navy)}
+
+/* Header */
+.head{background:var(--navy);color:#fff}
+.head .wrap{padding-block:30px 0}
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:start}
+.crumb{font-weight:500;font-size:15px;color:var(--pale)}
+.crumb a{color:var(--pale);text-underline-offset:3px}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:4px 12px;margin:14px 0 12px}
+.head h1{font-weight:800;font-size:clamp(32px,5vw,54px);line-height:1.02;text-transform:uppercase;letter-spacing:.01em}
+.head h1 em{font-style:normal;color:var(--teal)}
+.lead{color:var(--pale);max-width:60ch;margin:14px 0 0;font-size:17px}
+.lead b{color:#fff}
+.who-box{background:var(--navy-deep);border-top:4px solid var(--teal);padding:16px 18px;min-width:260px;max-width:320px}
+.who-box h2{color:var(--teal);font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
+.who-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.who-row b{display:block;line-height:1.2}
+.who-row small{color:var(--pale);font-weight:500}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-top:26px}
+.tabs a{color:#fff;text-decoration:none;padding:12px 18px;font-weight:600;font-size:15px;transition:padding .4s ease,background-color .4s ease}
+.tabs a:hover,.tabs a:focus-visible{padding-inline:26px;background:var(--teal)}
+.tabs a.on{background:var(--teal)}
+
+/* Buttons and bits */
+.btn{display:inline-flex;align-items:center;gap:6px;border:2px solid transparent;padding:9px 16px;font-weight:600;font-size:15px;text-decoration:none;transition:transform .2s ease,background-color .2s ease;line-height:1.2}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.55;cursor:default;transform:none}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.out{background:transparent;color:#fff;border-color:#fff}
+.btn.navy{background:var(--navy);color:#fff}
+.btn.purple{background:var(--purple);color:#fff}
+.btn.red{background:var(--red);color:#fff}
+.btn.ghost{background:#fff;border-color:var(--grey-light);color:var(--navy)}
+.btn.sm{padding:5px 10px;font-size:14px}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;color:#fff;flex:none;text-transform:uppercase}
+.av.lg{width:104px;height:104px;font-size:38px;border:4px solid #fff}
+.av{overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-edit{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:14px;background:var(--wash);border:1px solid var(--line)}
+.photo-edit .av.lg{border-color:#fff;box-shadow:0 0 0 1px var(--grey-light)}
+.photo-edit .btns{align-items:center}
+.photo-edit input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.photo-status{font-size:14px;color:var(--muted);font-weight:500;width:100%}
+.photo-status.bad{color:var(--red)}
+.chip{display:inline-block;font-size:13px;font-weight:600;padding:2px 9px;background:#e7ecef;color:var(--navy)}
+.chip.pin,.chip.red{background:var(--red);color:#fff}
+.chip.new,.chip.purple{background:var(--purple);color:#fff}
+.chip.teal{background:var(--teal);color:#fff}
+.chip.mod{background:#e7ecef;color:var(--navy)}
+.note{border-left:4px solid var(--purple);background:#fff;padding:12px 16px;font-size:15px}
+.muted{color:var(--muted)}
+
+/* Main */
+main{padding-block:28px 48px;min-height:420px}
+.sectitle{color:var(--red);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.01em}
+.intro{color:var(--muted);margin:6px 0 18px;max-width:70ch}
+.bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:12px;margin-bottom:16px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.filters button{background:#fff;border:1px solid var(--grey-light);padding:8px 14px;font-weight:600;font-size:14px;color:var(--navy)}
+.filters button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.g{border:1px solid var(--grey-light);background:#fff;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .25s ease}
+.g:hover{transform:translateY(-3px)}
+.g .gh{display:flex;align-items:center;gap:12px;background:var(--navy);color:#fff;padding:12px 14px;min-height:64px}
+.g.feature .gh{background:var(--purple)}
+.ic{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none}
+.ic svg{width:20px;height:20px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.g.feature .ic svg{stroke:var(--purple)}
+.g h3{font-size:16px;font-weight:700;letter-spacing:.02em;line-height:1.2;text-transform:uppercase}
+.g .gb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.g p{margin:0;font-size:15px;color:#2a3138}
+.g .gf{margin-top:auto;display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:600;color:var(--navy)}
+.g .gf span{color:var(--muted);font-weight:500}
+.cols{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px;align-items:start}
+.card{background:#fff;border:1px solid var(--grey-light)}
+.card + .card{margin-top:18px}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--navy);color:#fff;padding:10px 14px}
+.ch.purple{background:var(--purple)}
+.ch.red{background:var(--red)}
+.ch h2{font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+.ch small{font-weight:600;color:var(--pale);font-size:14px}
+.ch.red small,.ch.purple small{color:#fff}
+.cb{padding:14px 16px}
+.cb > p{margin:0 0 10px}
+.cb > p:last-child{margin-bottom:0}
+.rows .row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.rows .row:last-child{border-bottom:0}
+.rows span{color:var(--muted);font-weight:500}
+.rows strong{color:var(--navy);text-align:right}
+
+/* Threads */
+.trow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:14px 16px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;transition:background-color .2s ease}
+.trow:last-child{border-bottom:0}
+.trow:hover{background:#f7f9fa}
+.trow.pinned{background:#f6f3fb}
+.trow h3{font-size:17px;font-weight:700;line-height:1.3}
+.trow p{margin:4px 0 0;font-size:15px;color:#2a3138;overflow-wrap:anywhere}
+.trow .meta{margin-top:6px}
+.stats{text-align:right;font-size:14px;font-weight:600;color:var(--navy);white-space:nowrap;font-variant-numeric:tabular-nums}
+.stats span{display:block;color:var(--muted);font-weight:500}
+.meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:14px;color:var(--muted);font-weight:500}
+.meta b{color:var(--navy);font-weight:600}
+.post{padding:16px 18px}
+.post .who{display:flex;align-items:center;gap:10px}
+.post .who a{font-weight:700;color:var(--navy);text-decoration:none}
+.post .who a:hover{text-decoration:underline}
+.post h1{font-size:clamp(22px,3vw,28px);font-weight:800;margin:14px 0 8px;line-height:1.2}
+.body{font-size:16px;overflow-wrap:anywhere;white-space:normal}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+.like.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px;padding-top:12px;border-top:1px dashed var(--grey-light)}
+.tools .lab{font-size:13px;font-weight:700;color:var(--purple);margin-right:4px}
+.comment{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;padding:14px 18px;border-top:1px solid var(--line)}
+.comment .cm-h{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.comment .cm-h a{font-weight:700;color:var(--navy);text-decoration:none}
+.comment .cm-h small{color:var(--muted)}
+.comment .body{font-size:15px;margin-top:2px}
+.linkbtn{background:none;border:0;padding:0;color:var(--navy);font-weight:600;font-size:14px}
+.linkbtn.red{color:var(--red)}
+.linkbtn:hover{text-decoration:underline}
+.cm-acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+
+/* Forms */
+.form{display:grid;gap:10px}
+.form label{font-weight:600;color:var(--navy)}
+.form .hint{font-size:14px;color:var(--muted);font-weight:500}
+.form input,.form textarea,.form select{width:100%;border:1px solid var(--grey-light);padding:10px 12px;font-size:16px;background:#fff;color:var(--ink)}
+.form textarea{min-height:110px;resize:vertical}
+.form input:focus,.form textarea:focus{border-color:var(--teal);outline:none;box-shadow:0 0 0 2px rgba(50,180,175,.25)}
+.count{font-size:13px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.swatches{display:flex;gap:8px}
+.swatches button{width:32px;height:32px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--grey-light)}
+.swatches button.on{box-shadow:0 0 0 3px var(--navy)}
+.gate{background:var(--navy);color:#fff;padding:16px 18px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.gate p{margin:0;color:var(--pale)}
+.gate b{color:#fff}
+
+/* Profile */
+.pband{background:var(--navy);color:#fff;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:center;padding:22px;margin-bottom:20px;position:relative;overflow:hidden}
+.pband::after{content:"";position:absolute;right:-60px;top:-40px;width:380px;height:240px;background:var(--teal);opacity:.12;transform:skewX(-18deg);pointer-events:none}
+.pband h1{font-size:clamp(26px,4vw,38px);font-weight:800;text-transform:uppercase;line-height:1.05}
+.pband .sub{color:var(--pale);font-weight:500;margin-top:4px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.nums div{background:#fff;padding:12px;text-align:center}
+.nums b{display:block;font-size:24px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.nums small{color:var(--muted);font-weight:500}
+
+/* Admin */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--navy-deep);color:#fff;border-top:4px solid var(--teal);padding:12px 14px}
+.kpi b{display:block;font-size:28px;font-weight:800;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--pale);font-weight:500;font-size:14px}
+.kpi.alert{border-top-color:var(--red)}
+.qi{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.qi:last-child{border-bottom:0}
+.qi h4{font-size:16px;color:var(--navy)}
+.qi p{margin:2px 0 0;font-size:14px;color:var(--muted);overflow-wrap:anywhere}
+.empty{padding:16px;color:var(--muted);font-style:italic}
+
+/* Rules */
+.rules ol{margin:0;padding:0;list-style:none;counter-reset:r;display:grid;gap:10px}
+.rules li{counter-increment:r;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;background:#fff;border:1px solid var(--grey-light);padding:12px 14px;font-size:15px}
+.rules li::before{content:counter(r);width:30px;height:30px;background:var(--teal);color:#fff;font-weight:700;display:grid;place-items:center}
+
+/* States */
+.loading{padding:40px 16px;text-align:center;color:var(--muted);font-weight:600}
+.loading::before{content:"";display:block;width:34px;height:34px;margin:0 auto 12px;border:4px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error{background:#fff;border:1px solid var(--red);border-left-width:4px;padding:14px 16px;color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;border-left:4px solid var(--teal);padding:12px 18px;font-weight:600;opacity:0;transition:opacity .25s ease,transform .25s ease;z-index:50;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.bad{border-left-color:var(--red)}
+.dialog{position:fixed;inset:0;background:rgba(14,33,49,.6);display:grid;place-items:center;padding:16px;z-index:60}
+.dialog .box{background:#fff;max-width:480px;width:100%;border-top:4px solid var(--teal)}
+.dialog .box .cb{display:grid;gap:12px}
+.foot{color:var(--muted);font-size:14px;padding-block:6px 30px}
+
+/* Photographers' Corner */
+.corner-head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:center}
+.corner-title{color:var(--navy);font-weight:800;font-size:clamp(30px,4.6vw,46px);text-transform:uppercase;line-height:1}
+.corner-title em{font-style:normal;color:var(--teal)}
+.info-box{background:var(--navy);color:#fff;padding:16px 18px;border-top:4px solid var(--teal)}
+.info-box h2{font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px}
+.info-box .row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:15px}
+.info-box .row:last-child{border-bottom:0}
+.info-box .row span{color:var(--pale)}
+.info-box .row strong{text-align:right;overflow-wrap:anywhere}
+.info-box .row.hl strong{color:var(--teal)}
+.protect{position:relative;display:block;overflow:hidden;background:var(--navy-deep);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.protect img{display:block;width:100%;height:auto;pointer-events:none}
+.protect::after{content:"";position:absolute;inset:0}
+.potw{position:relative;display:block;text-decoration:none;color:#fff}
+.potw .protect img{aspect-ratio:3/2;object-fit:cover}
+.potw-cap{position:absolute;left:0;right:0;bottom:0;padding:34px 16px 14px;background:linear-gradient(transparent,rgba(14,33,49,.92));display:grid;gap:4px;z-index:1}
+.potw-cap .chip{justify-self:start}
+.potw-cap b{font-size:20px;font-weight:800;text-transform:uppercase;line-height:1.1}
+.potw-cap span{color:var(--pale);font-weight:500}
+.sortl{font-weight:600;color:var(--navy);font-size:14px}
+select.plain{border:1px solid var(--grey-light);padding:6px 10px;font-size:14px;font-weight:600;color:var(--navy);background:#fff}
+.pgrid{columns:3 260px;column-gap:16px}
+.ptile{display:block;break-inside:avoid;margin-bottom:16px;background:#fff;border:1px solid var(--grey-light);text-decoration:none;color:inherit;transition:transform .25s ease}
+.ptile:hover{transform:translateY(-3px)}
+.pmeta{display:grid;gap:8px;padding:10px 12px 12px}
+.pmeta b{font-size:16px;color:var(--navy);line-height:1.25}
+.pby{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--navy)}
+.pby small{display:block;color:var(--muted);font-weight:500}
+.pby .av{width:30px;height:30px;font-size:12px}
+.pstats{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:500}
+.pfull{margin:0 0 18px;background:var(--navy-deep)}
+.pfull .protect img{max-height:78vh;width:auto;max-width:100%;margin:0 auto}
+.pfull figcaption{color:var(--pale);font-size:13px;padding:8px 12px;font-weight:500}
+.pcard{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--navy)}
+.pcard small{display:block;color:var(--muted);font-weight:500}
+.pmini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.pmini a{display:block}
+.pmini .protect img{aspect-ratio:1;object-fit:cover}
+.drop{display:block;border:2px dashed var(--grey-light);background:var(--wash);padding:22px;text-align:center;cursor:pointer;color:var(--navy)}
+.drop.over{border-color:var(--teal);background:#e8f6f5}
+.drop input{position:absolute;width:1px;height:1px;opacity:0}
+.drop span{display:grid;gap:6px;justify-items:center}
+.drop span span{color:var(--muted);font-weight:500;font-size:14px}
+.drop img{max-height:260px;max-width:100%;width:auto}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.two > div,.three > div{display:grid;gap:6px;align-content:start}
+.shotset{border:1px solid var(--grey-light);padding:10px 14px 14px;margin:4px 0;display:grid;gap:8px}
+.shotset legend{font-weight:700;color:var(--navy);padding:0 6px}
+.check{display:flex!important;gap:10px;align-items:flex-start;font-weight:600}
+.check input{width:20px!important;height:20px;flex:none;margin-top:2px;accent-color:var(--teal)}
+.progress{height:8px;background:var(--line)}
+.progress i{display:block;height:100%;width:0;background:var(--teal);transition:width .3s ease}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+
+@media (max-width:960px){
+  .top,.cols{grid-template-columns:minmax(0,1fr)}
+  .who-box{max-width:none}
+  .groups{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .corner-head{grid-template-columns:minmax(0,1fr)}
+  .three{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .groups{grid-template-columns:minmax(0,1fr)}
+  .trow{grid-template-columns:auto minmax(0,1fr)}
+  .trow .stats{grid-column:2;text-align:left}
+  .pband{grid-template-columns:minmax(0,1fr)}
+  .av.lg{width:80px;height:80px;font-size:30px}
+  .qi{grid-template-columns:minmax(0,1fr)}
+  .tabs a{padding:10px 12px}
+  .corner-head,.two,.three{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="demo" id="demo" hidden>
+  <div class="wrap">
+    <span>Preview mode with example data. Nothing here is saved. Once it is on your Wix page, real logins and posts are used.</span>
+    <label for="demoRole">View as</label>
+    <select id="demoRole">
+      <option value="visitor">A visitor (not logged in)</option>
+      <option value="member" selected>A member: Sophie K</option>
+      <option value="admin">You: Jack (Admin)</option>
+    </select>
+  </div>
+</div>
+
+<header class="head">
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="crumb"><a href="https://www.ukairshowguide.co.uk/" target="_top">The Big Guide to UK Airshows</a> &rsaquo; Community</div>
+        <span class="tag">New for the 2027 season</span>
+        <h1>The airshow <em>community</em></h1>
+        <p class="lead">Share show reports, swap photography tips and ask the questions you want answered before the big day. <b>Join free, build your profile and start your own threads in any group.</b></p>
+      </div>
+      <aside class="who-box" id="whoBox" aria-live="polite"></aside>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Community sections"></nav>
+  </div>
+</header>
+
+<main class="wrap" id="view" tabindex="-1"></main>
+
+<div class="wrap foot">The Big Guide to UK Airshows is an independent guide and is not run by any airshow. Always check the official show website before you travel.</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- connection to the Wix page ---------------- */
+  var SOURCE = "ukag-forum";
+  var pending = {};
+  var seq = 0;
+  var connected = false;
+  var demoMode = false;
+  var embedded = window.self !== window.top;
+
+  function call(action, payload){
+    if (demoMode) return Demo.call(action, payload || {});
+    return new Promise(function(resolve){
+      var id = "m" + (++seq) + "_" + Date.now();
+      var timer = setTimeout(function(){
+        delete pending[id];
+        resolve({ ok:false, error:"The community is taking a while to respond. Please check your connection and try again." });
+      }, 20000);
+      pending[id] = function(res){ clearTimeout(timer); resolve(res); };
+      window.parent.postMessage({ source:SOURCE, id:id, action:action, payload:payload || {} }, "*");
+    });
+  }
+
+  window.addEventListener("message", function(e){
+    if (e.source !== window.parent) return;
+    var d = e.data;
+    if (!d || d.source !== SOURCE) return;
+    connected = true;
+    if (d.event === "session") { setSession(d.data && d.data.member); route(); return; }
+    if (d.id && pending[d.id]) { var fn = pending[d.id]; delete pending[d.id]; fn({ ok:!!d.ok, data:d.data, error:d.error }); }
+  });
+
+  /* ---------------- state ---------------- */
+  var state = { me:null, groups:[], filter:"all" };
+
+  function setSession(m){ state.me = m || null; drawWho(); drawTabs(); }
+
+  /* ---------------- helpers ---------------- */
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function text(s){ return esc(s).replace(/\n{3,}/g, "\n\n").replace(/\n/g, "<br>"); }
+  function initials(name){ var p = String(name || "?").trim().split(/\s+/); return ((p[0]||"?")[0] + (p.length > 1 ? p[p.length-1][0] : "")).toUpperCase(); }
+  function safeColour(c){ return /^#[0-9A-Fa-f]{6}$/.test(c || "") ? c : "#32B4AF"; }
+  function safePhoto(url){
+    if (/^https:\/\/static\.wixstatic\.com\/media\/[A-Za-z0-9_~.-]+$/.test(url || "")) return url;
+    if (demoMode && /^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(url || "")) return url;
+    return "";
+  }
+  function photoSrc(url, size){ return /^https:/.test(url) ? url + "/v1/fill/w_" + size + ",h_" + size + ",al_c,q_85/avatar.jpg" : url; }
+  function avatar(name, colour, big, photo){
+    var p = safePhoto(photo);
+    var inner = p ? '<img src="' + esc(photoSrc(p, big ? 240 : 96)) + '" alt="" loading="lazy">' : esc(initials(name));
+    return '<span class="av' + (big ? " lg" : "") + '" style="background:' + safeColour(colour) + '" aria-hidden="true">' + inner + '</span>';
+  }
+  function ago(isoStr){
+    if (!isoStr) return "";
+    var s = (Date.now() - new Date(isoStr).getTime()) / 1000;
+    if (s < 60) return "just now";
+    if (s < 3600) return Math.floor(s/60) + (Math.floor(s/60) === 1 ? " minute ago" : " minutes ago");
+    if (s < 86400) return Math.floor(s/3600) + (Math.floor(s/3600) === 1 ? " hour ago" : " hours ago");
+    if (s < 86400*7) return Math.floor(s/86400) + (Math.floor(s/86400) === 1 ? " day ago" : " days ago");
+    return new Date(isoStr).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" });
+  }
+  function monthYear(isoStr){ return isoStr ? new Date(isoStr).toLocaleDateString("en-GB", { month:"long", year:"numeric" }) : ""; }
+  function plural(n, one, many){ return n + " " + (n === 1 ? one : many); }
+  function groupBySlug(slug){ for (var i=0;i<state.groups.length;i++) if (state.groups[i].slug === slug) return state.groups[i]; return null; }
+  function isAdmin(){ return !!(state.me && state.me.isAdmin); }
+
+  var toastTimer;
+  function toast(msg, bad){
+    var t = $("toast"); t.textContent = msg; t.className = "toast show" + (bad ? " bad" : "");
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.className = "toast" + (bad ? " bad" : ""); }, 3400);
+  }
+  function loading(msg){ $("view").innerHTML = '<div class="loading">' + esc(msg || "Loading the community") + '</div>'; }
+  function showError(msg){ $("view").innerHTML = '<div class="error"><b>Something went wrong.</b> ' + esc(msg) + ' <button class="btn ghost sm" type="button" data-act="retry">Try again</button></div>'; }
+  function top(){ try { window.scrollTo({ top:0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); } catch(e){ window.scrollTo(0,0); } }
+
+  var ICONS = {
+    hello:'<path d="M4 6h16v10H8l-4 4z"/><path d="M8 10h8M8 13h5"/>',
+    family:'<circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.2"/><path d="M3 20c0-3 2.5-5 5-5s5 2 5 5M13.5 20c0-2 1.6-3.6 3.5-3.6S20.5 18 20.5 20"/>',
+    report:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/>',
+    camera:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+    jet:'<path d="M3 13l18-7-5 14-3-6z"/><path d="M13 14l-4 4"/>',
+    car:'<path d="M5 16V11l2-5h10l2 5v5z"/><circle cx="8" cy="16" r="1.6"/><circle cx="16" cy="16" r="1.6"/><path d="M5 11h14"/>',
+    tent:'<path d="M3 20L12 4l9 16z"/><path d="M12 4v16M9 20l3-6 3 6"/>',
+    access:'<circle cx="12" cy="4.5" r="1.8"/><path d="M8 9h8M12 9v6h4l2 5"/><path d="M10.5 13a5 5 0 1 0 4 7"/>',
+    bag:'<path d="M4 8h16v12H4z"/><path d="M9 8V5h6v3M4 13h16"/>',
+    news:'<path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2M8 9h6M8 13h6"/>',
+    museum:'<path d="M3 9l9-5 9 5zM5 9v9M9.5 9v9M14.5 9v9M19 9v9M3 20h18"/>',
+    meet:'<path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>'
+  };
+  function icon(name){ return '<span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24">' + (ICONS[name] || ICONS.hello) + '</svg></span>'; }
+
+  /* ---------------- header ---------------- */
+  function drawWho(){
+    var box = $("whoBox"), me = state.me;
+    if (!me) {
+      box.innerHTML = '<h2>Join the community</h2><p class="muted" style="color:var(--pale);margin:0 0 12px">Reading is open to everyone. Log in or join free to post, reply and like.</p>' +
+        '<div class="btns"><button class="btn teal" type="button" data-act="signup">Join free</button><button class="btn out" type="button" data-act="login">Log in</button></div>';
+      return;
+    }
+    box.innerHTML = '<h2>' + (me.isAdmin ? "Signed in as admin" : "Welcome back") + '</h2>' +
+      '<div class="who-row">' + avatar(me.name, me.colour, false, me.photo) + '<div><b>' + esc(me.name) + '</b><small>' + (me.isOwner ? "Site owner" : me.role === "moderator" ? "Moderator" : "Member") + '</small></div></div>' +
+      '<div class="btns"><a class="btn teal sm" href="#/p/' + encodeURIComponent(me.id) + '">My profile</a>' +
+      (me.isAdmin ? '<a class="btn purple sm" href="#/admin">Admin panel</a>' : '') +
+      '<button class="btn out sm" type="button" data-act="logout">Log out</button></div>';
+  }
+  function drawTabs(){
+    var h = location.hash || "#/";
+    var tabs = [["#/","All Groups"],["#/latest","Latest Threads"],["#/corner","Photographers' Corner"]];
+    var g = (h.match(/^#\/g\/(.+)$/) || [])[1];
+    var inCorner = h.indexOf("#/corner") === 0 || h.indexOf("#/photo/") === 0 || h === "#/share" || (g && /^corner-/.test(decodeURIComponent(g)));
+    if (state.me) tabs.push(["#/p/" + encodeURIComponent(state.me.id), "My Profile"]);
+    if (isAdmin()) tabs.push(["#/admin","Admin Panel"]);
+    tabs.push(["#/rules","House Rules"]);
+    $("tabs").innerHTML = tabs.map(function(t){
+      var on = t[0] === "#/corner" ? inCorner : t[0] === "#/" ? !inCorner && (h === "#/" || h === "" || h.indexOf("#/g/") === 0 || h.indexOf("#/t/") === 0) : h.indexOf(t[0]) === 0;
+      return '<a href="' + t[0] + '" class="' + (on ? "on" : "") + '">' + t[1] + '</a>';
+    }).join("");
+  }
+
+  /* ---------------- views ---------------- */
+  async function viewHome(){
+    loading("Loading the groups");
+    var res = await call("listGroups");
+    if (!res.ok) return showError(res.error);
+    state.groups = res.data || [];
+    var latest = await call("listThreads", {});
+    var f = state.filter;
+    var list = state.groups.filter(function(g){ return g.category !== "corner" && (f === "all" || g.category === f); });
+    $("view").innerHTML =
+      '<div class="bar"><div><h2 class="sectitle">Choose a group</h2>' +
+      '<p class="intro">Each group is a topic. Open one to read the threads or start your own. If you are new to airshows, I would suggest starting in First timers and families, then saying hello in the welcome group.</p></div>' +
+      (state.me ? '<button class="btn navy" type="button" data-act="suggestGroup">Suggest a new group</button>' : '') + '</div>' +
+      '<div class="filters" role="group" aria-label="Filter groups">' +
+        [["all","All"],["plan","Planning your visit"],["photo","Photography and spotting"],["chat","Shows and chat"]].map(function(x){
+          return '<button type="button" data-filter="' + x[0] + '" class="' + (f === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") +
+      '</div>' +
+      '<div class="groups">' + list.map(groupCard).join("") + '</div>' +
+      '<div style="margin-top:30px"><div class="card"><div class="ch"><h2>Latest threads</h2><small>Across all groups</small></div>' +
+        (latest.ok && latest.data.length ? latest.data.slice(0,6).map(function(t){ return threadRow(t, true); }).join("") : '<div class="empty">No threads yet. Be the first to start one.</div>') +
+      '</div></div>';
+  }
+  function groupCard(g){
+    var chip = g.chip ? '<span class="chip ' + esc(g.chipStyle || "") + '" style="align-self:flex-start">' + esc(g.chip) + '</span>' : "";
+    return '<a class="g' + (g.chipStyle === "pin" ? " feature" : "") + '" href="#/g/' + encodeURIComponent(g.slug) + '">' +
+      '<div class="gh">' + icon(g.icon) + '<h3>' + esc(g.title) + '</h3></div>' +
+      '<div class="gb">' + chip + '<p>' + esc(g.description) + '</p>' +
+      '<div class="gf">Open group &rsaquo;<span>' + plural(g.threadCount || 0, "thread", "threads") + '</span></div></div></a>';
+  }
+  function threadRow(t, showGroup){
+    var g = groupBySlug(t.groupSlug);
+    return '<a class="trow' + (t.pinned ? " pinned" : "") + '" href="#/t/' + encodeURIComponent(t.id) + '">' + avatar(t.authorName, t.authorColour, false, t.authorPhoto) +
+      '<div><h3>' + (t.pinned ? '<span class="chip purple">Pinned</span> ' : '') + (t.locked ? '<span class="chip">Comments off</span> ' : '') + esc(t.title) + '</h3>' +
+      '<p>' + esc(t.preview) + (t.preview && t.preview.length >= 180 ? "..." : "") + '</p>' +
+      '<div class="meta"><span>By <b>' + esc(t.authorName) + '</b></span><span>' + esc(ago(t.lastActivity || t.created)) + '</span>' + (showGroup && g ? '<span>in <b>' + esc(g.title) + '</b></span>' : '') + '</div></div>' +
+      '<div class="stats">' + plural(t.commentCount, "reply", "replies") + '<span>' + plural(t.likeCount, "like", "likes") + '</span></div></a>';
+  }
+
+  async function viewLatest(){
+    loading("Loading the latest threads");
+    if (!state.groups.length) { var g = await call("listGroups"); if (g.ok) state.groups = g.data; }
+    var res = await call("listThreads", {});
+    if (!res.ok) return showError(res.error);
+    $("view").innerHTML = '<h2 class="sectitle">Latest threads</h2><p class="intro">The most recent conversations across every group.</p>' +
+      '<div class="card">' + (res.data.length ? res.data.map(function(t){ return threadRow(t, true); }).join("") : '<div class="empty">No threads yet.</div>') + '</div>';
+  }
+
+  async function viewGroup(slug){
+    loading("Loading the group");
+    if (!state.groups.length) { var gr = await call("listGroups"); if (gr.ok) state.groups = gr.data; }
+    var g = groupBySlug(slug);
+    if (!g) return showError("We couldn't find that group. It may have been renamed or removed.");
+    var res = await call("listThreads", { groupSlug: slug });
+    if (!res.ok) return showError(res.error);
+    var composer = state.me
+      ? (state.me.blocked ? '<div class="note">Your account can\'t post at the moment. Contact the guide team if you think this is a mistake.</div>' :
+        '<div class="card"><div class="ch"><h2>Start a thread</h2></div><form class="cb form" id="newThread">' +
+        '<label for="nt-title">Title</label><input id="nt-title" maxlength="120" required placeholder="For example, What should we pack for Clacton?">' +
+        '<label for="nt-body">Your post</label><textarea id="nt-body" maxlength="5000" required placeholder="Add the details. Links are fine, but please keep personal details out."></textarea>' +
+        '<div class="count" id="nt-count">0 / 5000</div>' +
+        '<div class="btns"><button class="btn teal" type="submit">Post thread</button></div></form></div>')
+      : '<div class="gate"><p><b>Want to start a thread?</b> Log in or join free. It only takes a minute.</p><div class="btns"><button class="btn teal" type="button" data-act="signup">Join free</button><button class="btn out" type="button" data-act="login">Log in</button></div></div>';
+    $("view").innerHTML =
+      (g.category === "corner" ? '<p style="margin:0 0 10px"><a href="#/corner" class="linkbtn">&lsaquo; Photographers\' Corner</a></p>' : '<p style="margin:0 0 10px"><a href="#/" class="linkbtn">&lsaquo; All groups</a></p>') +
+      '<div class="cols"><div><h2 class="sectitle">' + esc(g.title) + '</h2><p class="intro">' + esc(g.description) + '</p>' +
+      composer +
+      '<div class="card"><div class="ch"><h2>Threads</h2><small>' + res.data.length + '</small></div>' +
+        (res.data.length ? res.data.map(function(t){ return threadRow(t, false); }).join("") : '<div class="empty">No threads here yet. Start the first one.</div>') + '</div></div>' +
+      '<div><div class="card"><div class="ch purple"><h2>About this group</h2></div><div class="cb"><p>' + esc(g.description) + '</p>' +
+        '<div class="rows"><div class="row"><span>Threads</span><strong>' + (g.threadCount || 0) + '</strong></div><div class="row"><span>Last activity</span><strong>' + esc(ago(g.lastActivity) || "None yet") + '</strong></div><div class="row"><span>Moderated by</span><strong>The Guide Team</strong></div></div></div></div>' +
+        (g.slug === "kit-gear-and-buy-and-sell" ? '<div class="card"><div class="ch red"><h2>Selling rules</h2></div><div class="cb"><p>Start your title with Selling or Wanted, add the price and your area, and agree the sale by private message.</p><p>I would advise meeting somewhere public, checking the item before you pay, and using a payment method with buyer protection.</p></div></div>' : '') +
+        '<div class="card"><div class="ch"><h2>Quick reminder</h2></div><div class="cb"><p>Be kind, keep posts on topic and only share your own photos. Show details can change, so always check the official show website.</p><p><a href="#/rules" class="linkbtn">Read the house rules &rsaquo;</a></p></div></div>' +
+      '</div></div>';
+    var form = $("newThread");
+    if (form) {
+      var bodyEl = $("nt-body");
+      bodyEl.addEventListener("input", function(){ $("nt-count").textContent = bodyEl.value.length + " / 5000"; });
+      form.addEventListener("submit", async function(e){
+        e.preventDefault();
+        var btn = form.querySelector("button[type=submit]"); btn.disabled = true; btn.textContent = "Posting...";
+        var r = await call("createThread", { groupSlug: slug, title: $("nt-title").value, body: bodyEl.value });
+        if (!r.ok) { btn.disabled = false; btn.textContent = "Post thread"; return toast(r.error, true); }
+        toast("Your thread is live.");
+        location.hash = "#/t/" + encodeURIComponent(r.data.id);
+      });
+    }
+  }
+
+  async function viewThread(id){
+    loading("Loading the thread");
+    if (!state.groups.length) { var gr = await call("listGroups"); if (gr.ok) state.groups = gr.data; }
+    var res = await call("getThread", { threadId: id });
+    if (!res.ok) return showError(res.error);
+    var t = res.data.thread, comments = res.data.comments, liked = res.data.liked;
+    var g = groupBySlug(t.groupSlug);
+    state.lastGroup = t.groupSlug;
+    var mine = state.me && state.me.id === t.authorId;
+    var admin = isAdmin();
+    var acts = '<div class="acts">' +
+      '<button class="btn ghost sm like' + (liked ? " on" : "") + '" type="button" data-act="like" data-id="' + esc(t.id) + '" aria-pressed="' + liked + '">' + (liked ? "Liked" : "Like") + ' &middot; <span id="likeN">' + t.likeCount + '</span></button>' +
+      (state.me && !mine && !admin ? '<button class="linkbtn" type="button" data-act="report" data-type="thread" data-id="' + esc(t.id) + '">Report</button>' : '') +
+      (mine || admin ? '<button class="linkbtn" type="button" data-act="editThread" data-id="' + esc(t.id) + '">Edit</button><button class="linkbtn red" type="button" data-act="deleteThread" data-id="' + esc(t.id) + '">Delete</button>' : '') +
+      '</div>';
+    var tools = admin ? '<div class="tools"><span class="lab">Admin</span>' +
+      '<button class="btn ghost sm" type="button" data-admin="' + (t.pinned ? "unpin" : "pin") + '" data-id="' + esc(t.id) + '">' + (t.pinned ? "Unpin" : "Pin to top") + '</button>' +
+      '<button class="btn ghost sm" type="button" data-admin="' + (t.locked ? "unlock" : "lock") + '" data-id="' + esc(t.id) + '">' + (t.locked ? "Turn comments on" : "Turn comments off") + '</button>' +
+      '<button class="btn ghost sm" type="button" data-act="moveThread" data-id="' + esc(t.id) + '">Move to another group</button>' +
+      (t.authorId !== state.me.id ? '<a class="btn ghost sm" href="#/p/' + encodeURIComponent(t.authorId) + '">Member options</a>' : '') +
+      '<button class="btn red sm" type="button" data-admin="removeThread" data-id="' + esc(t.id) + '" data-confirm="Remove this thread for everyone?">Remove thread</button></div>' : '';
+    var replyBox;
+    if (!state.me) replyBox = '<div class="gate"><p><b>Join the conversation.</b> Log in or join free to reply.</p><div class="btns"><button class="btn teal" type="button" data-act="signup">Join free</button><button class="btn out" type="button" data-act="login">Log in</button></div></div>';
+    else if (t.locked && !admin) replyBox = '<div class="note">Comments are turned off on this thread.</div>';
+    else if (state.me.blocked) replyBox = '<div class="note">Your account can\'t post at the moment.</div>';
+    else replyBox = '<form class="cb form" id="replyForm" style="border-top:1px solid var(--line)"><label for="reply">Add a reply</label><textarea id="reply" maxlength="2000" required placeholder="Write your reply"></textarea><div class="btns"><button class="btn teal" type="submit">Post reply</button></div></form>';
+    $("view").innerHTML =
+      '<p style="margin:0 0 10px"><a href="#/g/' + encodeURIComponent(t.groupSlug) + '" class="linkbtn">&lsaquo; ' + esc(g ? g.title : "Back to the group") + '</a></p>' +
+      '<div class="cols"><div><div class="card"><article class="post">' +
+        '<div class="who">' + avatar(t.authorName, t.authorColour, false, t.authorPhoto) + '<div><a href="#/p/' + encodeURIComponent(t.authorId) + '">' + esc(t.authorName) + '</a><div class="muted" style="font-size:14px">' + esc(ago(t.created)) + (g ? ' in ' + esc(g.title) : '') + '</div></div></div>' +
+        '<h1>' + (t.pinned ? '<span class="chip purple">Pinned</span> ' : '') + esc(t.title) + '</h1>' +
+        '<div class="body">' + text(t.body) + '</div>' + acts + tools +
+      '</article>' +
+      '<div class="ch" style="margin-top:0"><h2>Replies</h2><small>' + comments.length + '</small></div>' +
+      (comments.length ? comments.map(commentHtml).join("") : '<div class="empty">No replies yet.</div>') +
+      replyBox + '</div></div>' +
+      '<div><div class="card"><div class="ch purple"><h2>About this thread</h2></div><div class="cb rows">' +
+        '<div class="row"><span>Started by</span><strong>' + esc(t.authorName) + '</strong></div>' +
+        '<div class="row"><span>Group</span><strong>' + esc(g ? g.title : "") + '</strong></div>' +
+        '<div class="row"><span>Replies</span><strong>' + t.commentCount + '</strong></div>' +
+        '<div class="row"><span>Last activity</span><strong>' + esc(ago(t.lastActivity)) + '</strong></div></div></div>' +
+        '<div class="card"><div class="cb"><p class="muted">See something that breaks the house rules? Use Report and the guide team will take a look.</p></div></div></div></div>';
+    var rf = $("replyForm");
+    if (rf) rf.addEventListener("submit", async function(e){
+      e.preventDefault();
+      var btn = rf.querySelector("button"); btn.disabled = true; btn.textContent = "Posting...";
+      var r = await call("addComment", { threadId: t.id, body: $("reply").value });
+      if (!r.ok) { btn.disabled = false; btn.textContent = "Post reply"; return toast(r.error, true); }
+      toast("Reply posted."); viewThread(t.id);
+    });
+  }
+  function commentHtml(c){
+    var mine = state.me && state.me.id === c.authorId;
+    var admin = isAdmin();
+    return '<div class="comment">' + avatar(c.authorName, c.authorColour, false, c.authorPhoto) + '<div>' +
+      '<div class="cm-h"><a href="#/p/' + encodeURIComponent(c.authorId) + '">' + esc(c.authorName) + '</a><small>' + esc(ago(c.created)) + '</small></div>' +
+      '<div class="body">' + text(c.body) + '</div>' +
+      '<div class="cm-acts">' +
+        (state.me && !mine && !admin ? '<button class="linkbtn" type="button" data-act="report" data-type="comment" data-id="' + esc(c.id) + '">Report</button>' : '') +
+        (mine ? '<button class="linkbtn" type="button" data-act="editComment" data-id="' + esc(c.id) + '" data-body="' + esc(c.body) + '">Edit</button>' : '') +
+        (mine || admin ? '<button class="linkbtn red" type="button" data-act="deleteComment" data-id="' + esc(c.id) + '">' + (admin && !mine ? "Remove" : "Delete") + '</button>' : '') +
+      '</div></div></div>';
+  }
+
+  async function viewProfile(memberId){
+    loading("Loading the profile");
+    var res = await call("getProfile", { memberId: memberId });
+    if (!res.ok) return showError(res.error);
+    var p = res.data.profile, threads = res.data.threads, gallery = res.data.gallery || [];
+    var mine = state.me && state.me.id === p.memberId;
+    var admin = isAdmin();
+    var badges = '<span class="chip ' + (p.role === "admin" ? "purple" : p.role === "moderator" ? "teal" : "") + '">' + (p.role === "admin" ? "Site admin" : p.role === "moderator" ? "Moderator" : "Member") + '</span>';
+    var adminTools = "";
+    if (admin && !mine && p.role !== "admin") {
+      adminTools = '<div class="card"><div class="ch purple"><h2>Member options</h2></div><div class="cb btns">' +
+        '<button class="btn red sm" type="button" data-admin="block" data-id="' + esc(p.memberId) + '" data-confirm="Stop ' + esc(p.name) + ' from posting?">Block from posting</button>' +
+        '<button class="btn ghost sm" type="button" data-admin="unblock" data-id="' + esc(p.memberId) + '">Unblock</button>' +
+        (p.photo ? '<button class="btn ghost sm" type="button" data-admin="removePhoto" data-id="' + esc(p.memberId) + '" data-confirm="Remove ' + esc(p.name) + "'s profile picture?" + '">Remove profile picture</button>' : '') +
+        (state.me.isOwner ? (p.role === "moderator"
+          ? '<button class="btn ghost sm" type="button" data-admin="removeModerator" data-id="' + esc(p.memberId) + '">Remove moderator</button>'
+          : '<button class="btn teal sm" type="button" data-admin="makeModerator" data-id="' + esc(p.memberId) + '">Make moderator</button>') : '') +
+        '</div></div>';
+    }
+    var groupNames = (p.groups || []).map(function(s){ var g = groupBySlug(s); return g ? g.title : null; }).filter(Boolean);
+    $("view").innerHTML =
+      '<div class="pband">' + avatar(p.name, p.colour, true, p.photo) +
+        '<div><h1>' + esc(p.name) + '</h1><div class="sub">Member since ' + esc(monthYear(p.joined)) + (p.area ? ' &middot; ' + esc(p.area) : '') + '</div><div class="badges">' + badges + '</div></div>' +
+        (mine ? '<div class="btns"><a class="btn teal" href="#/me">Edit profile</a></div>' : '<div></div>') +
+      '</div>' +
+      '<div class="cols"><div>' +
+        '<div class="card"><div class="ch"><h2>About me</h2></div><div class="cb"><p>' + (p.bio ? text(p.bio) : '<span class="muted">' + (mine ? "Add a few lines about yourself so other members can say hello." : "Nothing here yet.") + '</span>') + '</p></div>' +
+        '<div class="nums"><div><b>' + p.threadCount + '</b><small>Threads</small></div><div><b>' + p.commentCount + '</b><small>Replies</small></div><div><b>' + groupNames.length + '</b><small>Groups</small></div></div></div>' +
+        (gallery.length || mine ? '<div class="card"><div class="ch purple"><h2>My photos</h2><small>' + gallery.length + '</small></div><div class="cb">' +
+          (gallery.length ? '<div class="pmini">' + gallery.map(function(x){ return '<a href="#/photo/' + encodeURIComponent(x.id) + '" title="' + esc(x.title) + '">' + protectedImg(x.image, x.title, 320, 320) + '</a>'; }).join("") + '</div>' : '<span class="muted">No photos yet. <a href="#/share" class="linkbtn">Share your first photo &rsaquo;</a></span>') + '</div></div>' : '') +
+        '<div class="card"><div class="ch"><h2>Recent threads</h2></div>' + (threads.length ? threads.map(function(t){ return threadRow(t, true); }).join("") : '<div class="empty">No threads yet.</div>') + '</div>' +
+      '</div><div>' +
+        '<div class="card"><div class="ch purple"><h2>Shows I am going to</h2></div><div class="cb">' + (p.going.length ? '<div class="btns">' + p.going.map(function(s){ return '<span class="chip teal">' + esc(s) + '</span>'; }).join("") + '</div>' : '<span class="muted">Not added yet.</span>') + '</div></div>' +
+        '<div class="card"><div class="ch"><h2>What I am into</h2></div><div class="cb">' + (p.into.length ? '<div class="btns">' + p.into.map(function(s){ return '<span class="chip">' + esc(s) + '</span>'; }).join("") + '</div>' : '<span class="muted">Not added yet.</span>') + '</div></div>' +
+        '<div class="card"><div class="ch"><h2>Active in</h2></div><div class="cb">' + (groupNames.length ? groupNames.map(function(n){ return '<div>' + esc(n) + '</div>'; }).join("") : '<span class="muted">No posts yet.</span>') + '</div></div>' +
+        adminTools +
+      '</div></div>';
+    protectImages();
+  }
+
+  var SWATCHES = ["#32B4AF","#6950A1","#13293C","#0E5F5B","#D74949","#2F6F9F"];
+  async function viewEditProfile(){
+    if (!state.me) { $("view").innerHTML = '<div class="gate"><p><b>Log in to edit your profile.</b></p><div class="btns"><button class="btn teal" type="button" data-act="login">Log in</button></div></div>'; return; }
+    loading("Loading your profile");
+    var res = await call("getProfile", { memberId: state.me.id });
+    if (!res.ok) return showError(res.error);
+    var p = res.data.profile;
+    var colour = p.colour;
+    $("view").innerHTML = '<h2 class="sectitle">Edit your profile</h2><p class="intro">Everything here is public, so please keep personal details like your phone number and address out.</p>' +
+      '<div class="cols"><div class="card"><div class="ch"><h2>Your details</h2></div><form class="cb form" id="profForm">' +
+        '<span class="hint" style="font-weight:600;color:var(--navy)">Profile picture</span>' +
+        '<div class="photo-edit"><span id="pf-preview">' + avatar(p.name, p.colour, true, p.photo) + '</span>' +
+          '<div class="btns"><label class="btn teal sm" for="pf-photo" tabindex="0" id="pf-pick">' + (p.photo ? "Change photo" : "Add a photo") + '</label>' +
+          '<input type="file" id="pf-photo" accept="image/*">' +
+          '<button class="btn ghost sm" type="button" id="pf-remove"' + (p.photo ? '' : ' hidden') + '>Remove photo</button></div>' +
+          '<span class="photo-status" id="pf-status" aria-live="polite">A clear, square photo of you works best. We crop it to a circle. Please don\'t use photos of other people without asking.</span></div>' +
+        '<label for="pf-name">Display name</label><input id="pf-name" maxlength="40" required value="' + esc(p.name) + '">' +
+        '<label for="pf-area">Area</label><input id="pf-area" maxlength="60" placeholder="For example, Chelmsford, Essex" value="' + esc(p.area) + '">' +
+        '<label for="pf-bio">About me</label><textarea id="pf-bio" maxlength="600" placeholder="How did you get into airshows? What do you love seeing?">' + esc(p.bio) + '</textarea>' +
+        '<label for="pf-going">Shows I am going to</label><input id="pf-going" placeholder="Separate with commas, up to 8" value="' + esc(p.going.join(", ")) + '">' +
+        '<label for="pf-into">What I am into</label><input id="pf-into" placeholder="For example, Fast jets, Warbirds, Photography" value="' + esc(p.into.join(", ")) + '">' +
+        '<span class="hint">Profile colour</span><div class="swatches" role="group" aria-label="Profile colour">' + SWATCHES.map(function(c){ return '<button type="button" aria-label="Colour ' + c + '" data-swatch="' + c + '" class="' + (c === colour ? "on" : "") + '" style="background:' + c + '"></button>'; }).join("") + '</div>' +
+        '<div class="btns" style="margin-top:6px"><button class="btn teal" type="submit">Save profile</button><a class="btn ghost" href="#/p/' + encodeURIComponent(state.me.id) + '">Cancel</a></div>' +
+      '</form></div><div><div class="note">Your profile picture shows next to your threads and replies. Without one, your initials and colour are used instead. Your login email is managed by Wix and is never shown.</div></div></div>';
+    var form = $("profForm");
+    var photo = p.photo;
+    var status = $("pf-status");
+    var setStatus = function(msg, bad){ status.textContent = msg; status.className = "photo-status" + (bad ? " bad" : ""); };
+    var showPhoto = function(url){
+      photo = url;
+      $("pf-preview").innerHTML = avatar($("pf-name").value || p.name, colour, true, url);
+      $("pf-remove").hidden = !url;
+      $("pf-pick").textContent = url ? "Change photo" : "Add a photo";
+      state.me.photo = url; drawWho();
+    };
+    $("pf-pick").addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("pf-photo").click(); } });
+    $("pf-photo").addEventListener("change", async function(){
+      var file = this.files && this.files[0];
+      this.value = "";
+      if (!file) return;
+      if (!/^image\//.test(file.type)) return setStatus("That file isn't a photo. Please choose a JPG, PNG or HEIC image.", true);
+      if (file.size > 20 * 1024 * 1024) return setStatus("That photo is over 20MB. Please choose a smaller one.", true);
+      setStatus("Preparing your photo...");
+      var dataUrl;
+      try { dataUrl = await squarePhoto(file); }
+      catch (err) { return setStatus("We couldn't read that photo. Please try a different one, such as a JPG.", true); }
+      setStatus("Uploading...");
+      var r = await call("uploadMyPhoto", { dataUrl: dataUrl });
+      if (!r.ok) return setStatus(r.error, true);
+      showPhoto(r.data.photo);
+      setStatus("Photo saved. It now shows on your threads and replies.");
+      toast("Profile picture updated.");
+    });
+    $("pf-remove").addEventListener("click", async function(){
+      var r = await call("removeMyPhoto");
+      if (!r.ok) return setStatus(r.error, true);
+      showPhoto("");
+      setStatus("Photo removed. Your initials will show instead.");
+    });
+    form.addEventListener("click", function(e){
+      var s = e.target.closest("[data-swatch]"); if (!s) return;
+      colour = s.getAttribute("data-swatch");
+      form.querySelectorAll("[data-swatch]").forEach(function(b){ b.classList.toggle("on", b === s); });
+      $("pf-preview").innerHTML = avatar($("pf-name").value || p.name, colour, true, photo);
+    });
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
+      var split = function(v){ return v.split(",").map(function(x){ return x.trim(); }).filter(Boolean).slice(0,8); };
+      var btn = form.querySelector("button[type=submit]"); btn.disabled = true; btn.textContent = "Saving...";
+      var r = await call("saveMyProfile", { name: $("pf-name").value, area: $("pf-area").value, bio: $("pf-bio").value, going: split($("pf-going").value), into: split($("pf-into").value), colour: colour });
+      if (!r.ok) { btn.disabled = false; btn.textContent = "Save profile"; return toast(r.error, true); }
+      state.me.name = r.data.name; state.me.colour = r.data.colour; drawWho();
+      toast("Profile saved."); location.hash = "#/p/" + encodeURIComponent(state.me.id);
+    });
+  }
+
+  async function viewAdmin(){
+    if (!isAdmin()) { $("view").innerHTML = '<div class="error">This page is only for the guide team.</div>'; return; }
+    loading("Loading the admin panel");
+    if (!state.groups.length) { var gr = await call("listGroups"); if (gr.ok) state.groups = gr.data; }
+    var res = await call("adminOverview");
+    if (!res.ok) return showError(res.error);
+    var d = res.data;
+    var rPhotos = d.reportedPhotos || [];
+    var waiting = d.pendingGroups.length + d.reportedThreads.length + d.reportedComments.length + rPhotos.length;
+    var none = function(msg){ return '<div class="empty">' + msg + '</div>'; };
+    $("view").innerHTML = '<h2 class="sectitle">Admin panel</h2><p class="intro">Everything that needs your attention. Members never see this page, and every action is checked again on the server.</p>' +
+      '<div class="kpis"><div class="kpi"><b>' + d.counts.members + '</b><span>Members with profiles</span></div><div class="kpi"><b>' + d.counts.groups + '</b><span>Groups</span></div><div class="kpi"><b>' + d.counts.threads + '</b><span>Threads</span></div><div class="kpi"><b>' + (d.counts.photos || 0) + '</b><span>Photos</span></div><div class="kpi' + (waiting ? " alert" : "") + '"><b>' + waiting + '</b><span>Waiting for you</span></div></div>' +
+      '<div class="cols"><div>' +
+        '<div class="card"><div class="ch red"><h2>Reported threads</h2><small>' + d.reportedThreads.length + '</small></div>' +
+          (d.reportedThreads.length ? d.reportedThreads.map(function(t){ return '<div class="qi"><div><h4><a href="#/t/' + encodeURIComponent(t.id) + '">' + esc(t.title) + '</a></h4><p>By ' + esc(t.authorName) + '. Reported ' + plural(t.reportCount, "time", "times") + '. Reasons: ' + esc(t.reportReasons.join("; ")) + '</p></div><div class="btns">' +
+            '<button class="btn red sm" type="button" data-admin="removeThread" data-id="' + esc(t.id) + '" data-confirm="Remove this thread for everyone?">Remove</button><button class="btn ghost sm" type="button" data-admin="clearThreadReports" data-id="' + esc(t.id) + '">Keep it</button></div></div>'; }).join("") : none("No reported threads.")) + '</div>' +
+        '<div class="card"><div class="ch red"><h2>Reported replies</h2><small>' + d.reportedComments.length + '</small></div>' +
+          (d.reportedComments.length ? d.reportedComments.map(function(c){ return '<div class="qi"><div><h4>' + esc(c.authorName) + '</h4><p>' + esc(c.body.slice(0,200)) + '</p><p>Reported ' + plural(c.reportCount, "time", "times") + '. Reasons: ' + esc(c.reportReasons.join("; ")) + ' <a href="' + (c.onPhoto ? '#/photo/' : '#/t/') + encodeURIComponent(c.threadId) + '">' + (c.onPhoto ? 'View photo' : 'View thread') + '</a></p></div><div class="btns">' +
+            '<button class="btn red sm" type="button" data-admin="removeComment" data-id="' + esc(c.id) + '" data-confirm="Remove this reply for everyone?">Remove</button><button class="btn ghost sm" type="button" data-admin="clearCommentReports" data-id="' + esc(c.id) + '">Keep it</button></div></div>'; }).join("") : none("No reported replies.")) + '</div>' +
+        '<div class="card"><div class="ch red"><h2>Reported photos</h2><small>' + rPhotos.length + '</small></div>' +
+          (rPhotos.length ? rPhotos.map(function(x){ return '<div class="qi"><div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:center"><a href="#/photo/' + encodeURIComponent(x.id) + '">' + protectedImg(x.image, x.title, 144, 144) + '</a><div><h4><a href="#/photo/' + encodeURIComponent(x.id) + '">' + esc(x.title) + '</a></h4><p>By ' + esc(x.authorName) + '. Reported ' + plural(x.reportCount, "time", "times") + '. Reasons: ' + esc(x.reportReasons.join("; ")) + '</p></div></div><div class="btns">' +
+            '<button class="btn red sm" type="button" data-admin="removeGalleryPhoto" data-id="' + esc(x.id) + '" data-confirm="Remove this photo for everyone?">Remove</button><button class="btn ghost sm" type="button" data-admin="clearGalleryReports" data-id="' + esc(x.id) + '">Keep it</button></div></div>'; }).join("") : none("No reported photos.")) + '</div>' +
+        '<div class="card"><div class="ch purple"><h2>Group ideas from members</h2><small>' + d.pendingGroups.length + '</small></div>' +
+          (d.pendingGroups.length ? d.pendingGroups.map(function(g){ return '<div class="qi"><div><h4>' + esc(g.title) + '</h4><p>Suggested by ' + esc(g.requestedByName) + '. ' + esc(g.description) + '</p></div><div class="btns">' +
+            '<button class="btn teal sm" type="button" data-admin="approveGroup" data-id="' + esc(g.id) + '">Approve</button><button class="btn ghost sm" type="button" data-admin="rejectGroup" data-id="' + esc(g.id) + '" data-confirm="Reject and delete this group idea?">Reject</button></div></div>'; }).join("") : none("No group ideas waiting.")) + '</div>' +
+      '</div><div>' +
+        '<div class="card"><div class="ch"><h2>Blocked members</h2><small>' + d.blocked.length + '</small></div>' +
+          (d.blocked.length ? d.blocked.map(function(p){ return '<div class="qi"><div><h4><a href="#/p/' + encodeURIComponent(p.memberId) + '">' + esc(p.name) + '</a></h4></div><div><button class="btn ghost sm" type="button" data-admin="unblock" data-id="' + esc(p.memberId) + '">Unblock</button></div></div>'; }).join("") : none("Nobody is blocked.")) + '</div>' +
+        '<div class="card"><div class="ch"><h2>Moderators</h2><small>' + d.moderators.length + '</small></div>' +
+          (d.moderators.length ? d.moderators.map(function(p){ return '<div class="qi"><div><h4><a href="#/p/' + encodeURIComponent(p.memberId) + '">' + esc(p.name) + '</a></h4></div>' + (d.isOwner ? '<div><button class="btn ghost sm" type="button" data-admin="removeModerator" data-id="' + esc(p.memberId) + '">Remove</button></div>' : '<div></div>') + '</div>'; }).join("") : none("No moderators yet. Open a member's profile to make them a moderator.")) + '</div>' +
+        '<div class="note" style="margin-top:18px">Photos go live as soon as they are shared. Members can report any photo, and you can choose a Photo of the week from any photo page.</div>' +
+        '<div class="note" style="margin-top:18px">To change a group\'s name, order or description, edit the Forum Groups collection in your Wix dashboard under CMS. Every post is also there if you ever need it.</div>' +
+      '</div></div>';
+    protectImages();
+  }
+
+  function viewRules(){
+    $("view").innerHTML = '<div class="rules"><h2 class="sectitle">House rules</h2><p class="intro">A friendly place for everyone who loves airshows, from first timers to seasoned spotters.</p>' +
+      '<div class="cols"><ol>' +
+      ["Be kind and helpful. Everyone was a first timer once.","Keep posts in the right group so they are easy to find.","Only share photos and videos you took yourself, or have permission to share.","Do not post personal details, yours or anyone else's.","No selling outside the Kit, gear and buy and sell group, and no advertising without asking first.","Show times, line ups and parking can change. Always check the official show website before you travel.","Report anything that breaks these rules and the guide team will take a look."].map(function(r){ return '<li>' + esc(r) + '</li>'; }).join("") +
+      '</ol><div class="note"><b style="color:var(--purple)">SELLING KIT</b><p>Start your title with Selling or Wanted, add the price and your area, and agree the sale by private message.</p><p>I would advise meeting somewhere public, checking the item before you pay, and using a payment method with buyer protection.</p><p>Posts that break the rules may be removed, and repeat offenders may be blocked from posting.</p><p style="font-weight:600;color:var(--navy)">Jack Skedge, Founder and Managing Editor</p></div></div></div>';
+  }
+
+  /* ---------------- profile photo ---------------- */
+  function loadImage(file){
+    return new Promise(function(resolve, reject){
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function(){ URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error("unreadable")); };
+      img.src = url;
+    });
+  }
+  async function squarePhoto(file){
+    var img = await loadImage(file);
+    var side = Math.min(img.naturalWidth, img.naturalHeight);
+    if (!side) throw new Error("empty");
+    var size = Math.min(480, side);
+    var canvas = document.createElement("canvas");
+    canvas.width = size; canvas.height = size;
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, size, size);
+    ctx.drawImage(img, (img.naturalWidth - side) / 2, (img.naturalHeight - side) / 2, side, side, 0, 0, size, size);
+    var quality = 0.86, out = canvas.toDataURL("image/jpeg", quality);
+    while (out.length > 380000 && quality > 0.4) { quality -= 0.12; out = canvas.toDataURL("image/jpeg", quality); }
+    return out;
+  }
+
+  /* ---------------- dialogs ---------------- */
+  function dialog(title, bodyHtml, okLabel, onOk){
+    var wrap = document.createElement("div");
+    wrap.className = "dialog";
+    wrap.innerHTML = '<div class="box" role="dialog" aria-modal="true" aria-label="' + esc(title) + '"><div class="ch"><h2>' + esc(title) + '</h2></div><form class="cb form">' + bodyHtml +
+      '<div class="btns"><button class="btn teal" type="submit">' + esc(okLabel) + '</button><button class="btn ghost" type="button" data-close>Cancel</button></div></form></div>';
+    document.body.appendChild(wrap);
+    var form = wrap.querySelector("form");
+    var first = form.querySelector("input,textarea,select,button"); if (first) first.focus();
+    var close = function(){ wrap.remove(); };
+    wrap.addEventListener("click", function(e){ if (e.target === wrap || e.target.hasAttribute("data-close")) close(); });
+    wrap.addEventListener("keydown", function(e){ if (e.key === "Escape") close(); });
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
+      var btn = form.querySelector("button[type=submit]"); btn.disabled = true;
+      var keep = await onOk(form);
+      if (keep === true) { btn.disabled = false; return; }
+      close();
+    });
+  }
+
+  /* ---------------- Photographers' Corner ---------------- */
+  var CATEGORIES = ["Fast jets", "Display teams", "Warbirds and classics", "Helicopters", "Transport and tankers", "Static and ground", "Night shoots", "Arrivals and spotting"];
+  var SHOWS = ["Royal International Air Tattoo", "RAF Cosford Air Show", "Midlands Air Festival", "Airbourne: Eastbourne International Airshow", "Clacton Airshow", "Wales Airshow", "IWM Duxford Air Shows", "Shuttleworth Air Shows (Old Warden)", "Little Gransden Air & Car Show", "Southport Air Show", "Blackpool Air Show", "The International Ayr Show, Festival of Flight"];
+  var corner = { category: "", sort: "latest", advice: false, photos: [], skip: 0, more: false };
+
+  function imgSize(url, w, h, mode){
+    var p = safePhoto(url);
+    if (!p) return "";
+    return /^https:/.test(p) ? p + "/v1/" + (mode || "fit") + "/w_" + w + ",h_" + (h || w) + ",al_c,q_82/photo.jpg" : p;
+  }
+  function protectedImg(url, alt, w, h, cls){
+    var src = imgSize(url, w, h);
+    if (!src) return "";
+    return '<span class="protect ' + (cls || "") + '"><img src="' + esc(src) + '" alt="' + esc(alt) + '" draggable="false" loading="lazy"></span>';
+  }
+  function cornerGroups(){ return state.groups.filter(function(g){ return g.category === "corner"; }); }
+
+  function photoTile(x){
+    return '<a class="ptile" href="#/photo/' + encodeURIComponent(x.id) + '">' +
+      protectedImg(x.image, x.title, 640, 640) +
+      '<span class="pmeta"><b>' + esc(x.title) + '</b>' +
+        '<span class="pby">' + avatar(x.authorName, x.authorColour, false, x.authorPhoto) + '<span>' + esc(x.authorName) + (x.showName ? '<small>' + esc(x.showName) + '</small>' : '') + '</span></span>' +
+        '<span class="pstats">' + (x.adviceWanted ? '<span class="chip purple">Advice wanted</span>' : '<span class="chip">' + esc(x.category) + '</span>') + '<span>' + plural(x.likeCount, "like", "likes") + ' &middot; ' + plural(x.commentCount, "comment", "comments") + '</span></span>' +
+      '</span></a>';
+  }
+
+  async function viewCorner(){
+    loading("Loading Photographers' Corner");
+    if (!state.groups.length) { var gr = await call("listGroups"); if (gr.ok) state.groups = gr.data; }
+    var res = await call("listGallery", { category: corner.category, sort: corner.sort, advice: corner.advice, skip: 0 });
+    if (!res.ok) return showError(res.error);
+    corner.photos = res.data.photos; corner.more = res.data.more; corner.skip = res.data.photos.length;
+    var f = res.data.featured;
+    var latestCorner = await call("listThreads", {});
+    var cornerSlugs = cornerGroups().map(function(g){ return g.slug; }).concat(["aviation-photography"]);
+    var talk = latestCorner.ok ? latestCorner.data.filter(function(t){ return cornerSlugs.indexOf(t.groupSlug) > -1; }).slice(0, 4) : [];
+    var hero = f
+      ? '<a class="potw" href="#/photo/' + encodeURIComponent(f.id) + '">' + protectedImg(f.image, f.title, 1200, 800) +
+          '<span class="potw-cap"><span class="chip purple">Photo of the week</span><b>' + esc(f.title) + '</b><span>' + esc(f.authorName) + (f.showName ? ' at ' + esc(f.showName) : '') + '</span></span></a>'
+      : '<aside class="info-box"><h2>How it works</h2>' +
+          '<div class="row"><span>Share</span><strong>Any size photo</strong></div>' +
+          '<div class="row"><span>We resize to</span><strong>2048px long edge</strong></div>' +
+          '<div class="row"><span>Shot details</span><strong>Read from your camera</strong></div>' +
+          '<div class="row hl"><span>Saving images</span><strong>Switched off</strong></div></aside>';
+    $("view").innerHTML =
+      '<section class="corner-head"><div><span class="tag" style="margin:0 0 12px">For photographers</span>' +
+        '<h2 class="corner-title">Photographers\' <em>corner</em></h2>' +
+        '<p class="intro" style="margin-top:8px">Share your best shots from the crowd line, ask for honest feedback and swap the settings that worked. If you are just starting out, I would suggest posting a photo with Advice wanted ticked. Other members will tell you what to try next time.</p>' +
+        '<div class="btns" style="margin-top:14px"><a class="btn teal" href="#/share">Share a photo</a><a class="btn ghost" href="#/g/corner-ask-for-advice">Ask a question</a></div></div>' +
+        '<div>' + hero + '</div></section>' +
+      '<div class="bar" style="margin-top:28px"><div><h2 class="sectitle">The gallery</h2><p class="intro" style="margin-bottom:0">Tap any photo to see the shot details and comments.</p></div>' +
+        '<div class="btns"><label class="sortl" for="c-sort">Sort</label><select id="c-sort" class="plain"><option value="latest"' + (corner.sort === "latest" ? " selected" : "") + '>Newest first</option><option value="liked"' + (corner.sort === "liked" ? " selected" : "") + '>Most liked</option></select>' +
+        '<button type="button" class="btn ' + (corner.advice ? "purple" : "ghost") + ' sm" data-corner-advice aria-pressed="' + corner.advice + '">Advice wanted</button></div></div>' +
+      '<div class="filters" role="group" aria-label="Photo categories"><button type="button" data-corner-cat="" class="' + (corner.category ? "" : "on") + '">All</button>' +
+        CATEGORIES.map(function(c){ return '<button type="button" data-corner-cat="' + esc(c) + '" class="' + (corner.category === c ? "on" : "") + '">' + esc(c) + '</button>'; }).join("") + '</div>' +
+      '<div class="pgrid" id="pgrid">' + (corner.photos.length ? corner.photos.map(photoTile).join("") : '<div class="empty" style="column-span:all">No photos here yet. Be the first to share one.</div>') + '</div>' +
+      (corner.more ? '<div style="text-align:center;margin-top:18px"><button class="btn ghost" type="button" data-corner-more>Show more photos</button></div>' : '') +
+      '<div style="margin-top:34px"><h2 class="sectitle">Talk photography</h2><p class="intro">Questions, tips and editing help, in groups just for photographers.</p>' +
+        '<div class="groups">' + cornerGroups().map(groupCard).join("") + '</div>' +
+        (talk.length ? '<div class="card" style="margin-top:18px"><div class="ch"><h2>Latest from photographers</h2></div>' + talk.map(function(t){ return threadRow(t, true); }).join("") + '</div>' : '') +
+      '</div>';
+    protectImages();
+  }
+
+  async function morePhotos(btn){
+    btn.disabled = true; btn.textContent = "Loading...";
+    var res = await call("listGallery", { category: corner.category, sort: corner.sort, advice: corner.advice, skip: corner.skip });
+    if (!res.ok) { btn.disabled = false; btn.textContent = "Show more photos"; return toast(res.error, true); }
+    corner.skip += res.data.photos.length; corner.more = res.data.more;
+    $("pgrid").insertAdjacentHTML("beforeend", res.data.photos.map(photoTile).join(""));
+    if (corner.more) { btn.disabled = false; btn.textContent = "Show more photos"; } else btn.parentNode.remove();
+    protectImages();
+  }
+
+  function detailRows(x){
+    var rows = [["Camera", x.camera], ["Lens", x.lens], ["Focal length", x.focal], ["Shutter speed", x.shutter], ["Aperture", x.aperture], ["ISO", x.iso], ["Show", x.showName], ["Aircraft", x.aircraft], ["Date taken", x.takenOn ? niceDate(x.takenOn) : ""]];
+    var filled = rows.filter(function(r){ return r[1]; });
+    return filled.length ? filled.map(function(r){ return '<div class="row"><span>' + r[0] + '</span><strong>' + esc(r[1]) + '</strong></div>'; }).join("") : '<p class="muted" style="margin:0;color:var(--pale)">No shot details were added.</p>';
+  }
+  function niceDate(s){ var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ""); return m ? new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString("en-GB", { day:"numeric", month:"long", year:"numeric" }) : s; }
+
+  async function viewPhoto(id){
+    loading("Loading the photo");
+    var res = await call("getGalleryPhoto", { photoId: id });
+    if (!res.ok) return showError(res.error);
+    var x = res.data.photo, comments = res.data.comments, liked = res.data.liked;
+    var mine = state.me && state.me.id === x.authorId, admin = isAdmin();
+    var replyBox;
+    if (!state.me) replyBox = '<div class="gate"><p><b>Want to comment?</b> Log in or join free.</p><div class="btns"><button class="btn teal" type="button" data-act="signup">Join free</button><button class="btn out" type="button" data-act="login">Log in</button></div></div>';
+    else if (state.me.blocked) replyBox = '<div class="note">Your account can\'t post at the moment.</div>';
+    else replyBox = '<form class="cb form" id="pcForm" style="border-top:1px solid var(--line)"><label for="pc">' + (x.adviceWanted ? "Give your advice" : "Add a comment") + '</label><textarea id="pc" maxlength="2000" required placeholder="' + (x.adviceWanted ? "What works well, and what would you try next time?" : "Write a comment") + '"></textarea><div class="btns"><button class="btn teal" type="submit">Post comment</button></div></form>';
+    $("view").innerHTML =
+      '<p style="margin:0 0 10px"><a href="#/corner" class="linkbtn">&lsaquo; Photographers\' Corner</a></p>' +
+      '<div class="cols"><div>' +
+        '<figure class="pfull">' + protectedImg(x.image, x.title, 2048, 2048, "big") +
+          '<figcaption>&copy; ' + esc(x.authorName) + '. Shared on The Big Guide to UK Airshows. Please don\'t reuse without asking the photographer.</figcaption></figure>' +
+        '<div class="card"><article class="post">' +
+          '<div class="btns" style="gap:6px;margin-bottom:6px">' + (x.featured ? '<span class="chip purple">Photo of the week</span>' : '') + '<span class="chip">' + esc(x.category) + '</span>' + (x.adviceWanted ? '<span class="chip purple">Advice wanted</span>' : '') + '</div>' +
+          '<h1 style="margin-top:4px">' + esc(x.title) + '</h1>' +
+          (x.description ? '<div class="body">' + text(x.description) + '</div>' : '') +
+          (x.adviceWanted ? '<div class="note" style="margin-top:12px">' + esc(x.authorName) + ' would like feedback on this photo. Please be kind and specific.</div>' : '') +
+          '<div class="acts"><button class="btn ghost sm like' + (liked ? " on" : "") + '" type="button" data-act="photoLike" data-id="' + esc(x.id) + '" aria-pressed="' + liked + '">' + (liked ? "Liked" : "Like") + ' &middot; <span>' + x.likeCount + '</span></button>' +
+            (state.me && !mine && !admin ? '<button class="linkbtn" type="button" data-act="report" data-type="photo" data-id="' + esc(x.id) + '">Report</button>' : '') +
+            (mine || admin ? '<a class="linkbtn" href="#/photo/' + encodeURIComponent(x.id) + '/edit">Edit details</a><button class="linkbtn red" type="button" data-act="deletePhoto" data-id="' + esc(x.id) + '">Delete</button>' : '') + '</div>' +
+          (admin ? '<div class="tools"><span class="lab">Admin</span>' +
+            '<button class="btn ghost sm" type="button" data-admin="' + (x.featured ? "unfeatureGalleryPhoto" : "featureGalleryPhoto") + '" data-id="' + esc(x.id) + '">' + (x.featured ? "Remove photo of the week" : "Make photo of the week") + '</button>' +
+            (x.authorId !== state.me.id ? '<a class="btn ghost sm" href="#/p/' + encodeURIComponent(x.authorId) + '">Member options</a>' : '') +
+            '<button class="btn red sm" type="button" data-admin="removeGalleryPhoto" data-id="' + esc(x.id) + '" data-confirm="Remove this photo for everyone?">Remove photo</button></div>' : '') +
+        '</article>' +
+        '<div class="ch"><h2>' + (x.adviceWanted ? "Advice and comments" : "Comments") + '</h2><small>' + comments.length + '</small></div>' +
+        (comments.length ? comments.map(commentHtml).join("") : '<div class="empty">No comments yet.</div>') + replyBox + '</div>' +
+      '</div><div>' +
+        '<div class="card"><div class="ch purple"><h2>Photographer</h2></div><div class="cb"><a class="pcard" href="#/p/' + encodeURIComponent(x.authorId) + '">' + avatar(x.authorName, x.authorColour, false, x.authorPhoto) + '<span><b>' + esc(x.authorName) + '</b><small>Shared ' + esc(ago(x.created)) + '</small></span></a></div></div>' +
+        '<aside class="info-box" style="margin-top:18px"><h2>Shot details</h2>' + detailRows(x) + '</aside>' +
+        '<div class="card" style="margin-top:18px"><div class="cb"><p class="muted" style="margin:0">Want to try a shot like this? The settings above are a good starting point. Light, distance and speed all change on the day, so take a few test frames first.</p></div></div>' +
+      '</div></div>';
+    protectImages();
+    var form = $("pcForm");
+    if (form) form.addEventListener("submit", async function(e){
+      e.preventDefault();
+      var btn = form.querySelector("button"); btn.disabled = true; btn.textContent = "Posting...";
+      var r = await call("addGalleryComment", { photoId: x.id, body: $("pc").value });
+      if (!r.ok) { btn.disabled = false; btn.textContent = "Post comment"; return toast(r.error, true); }
+      toast("Comment posted."); viewPhoto(x.id);
+    });
+  }
+
+  function protectImages(){
+    document.querySelectorAll(".protect").forEach(function(p){
+      if (p.dataset.locked) return;
+      p.dataset.locked = "1";
+      p.addEventListener("contextmenu", function(e){ e.preventDefault(); toast("Photos belong to the photographer, so saving is switched off."); });
+      p.addEventListener("dragstart", function(e){ e.preventDefault(); });
+    });
+  }
+
+  /* reading camera details from the original file */
+  function readExif(buffer){
+    var v = new DataView(buffer), out = {};
+    if (v.byteLength < 4 || v.getUint16(0) !== 0xFFD8) return out;
+    var pos = 2;
+    while (pos + 4 < v.byteLength) {
+      var marker = v.getUint16(pos), size = v.getUint16(pos + 2);
+      if (marker === 0xFFE1 && v.getUint32(pos + 4) === 0x45786966) { parseTiff(v, pos + 10, out); break; }
+      if ((marker & 0xFF00) !== 0xFF00 || size < 2) break;
+      pos += 2 + size;
+    }
+    return out;
+  }
+  function parseTiff(v, start, out){
+    if (start + 8 > v.byteLength) return;
+    var le = v.getUint16(start) === 0x4949;
+    var u16 = function(o){ return v.getUint16(o, le); }, u32 = function(o){ return v.getUint32(o, le); };
+    var readIfd = function(off, cb){
+      if (off + 2 > v.byteLength) return;
+      var n = u16(off);
+      for (var i = 0; i < n; i++) {
+        var e = off + 2 + i * 12;
+        if (e + 12 > v.byteLength) return;
+        cb(u16(e), u16(e + 2), u32(e + 4), e + 8);
+      }
+    };
+    var val = function(type, count, at){
+      var p = count * ({ 1:1, 2:1, 3:2, 4:4, 5:8, 7:1, 9:4, 10:8 }[type] || 1) > 4 ? start + u32(at) : at;
+      if (p >= v.byteLength) return null;
+      if (type === 2) { var s = ""; for (var i = 0; i < count - 1 && p + i < v.byteLength; i++) s += String.fromCharCode(v.getUint8(p + i)); return s.trim(); }
+      if (type === 3) return u16(p);
+      if (type === 4) return u32(p);
+      if (type === 5 || type === 10) { var d = u32(p + 4); return d ? u32(p) / d : null; }
+      return null;
+    };
+    var exifPtr = 0;
+    readIfd(start + u32(start + 4), function(tag, type, count, at){
+      if (tag === 0x010F) out.make = val(type, count, at);
+      if (tag === 0x0110) out.model = val(type, count, at);
+      if (tag === 0x8769) exifPtr = u32(at);
+    });
+    if (exifPtr) readIfd(start + exifPtr, function(tag, type, count, at){
+      if (tag === 0x829A) out.exposure = val(type, count, at);
+      if (tag === 0x829D) out.fnumber = val(type, count, at);
+      if (tag === 0x8827) out.iso = val(type, count, at);
+      if (tag === 0x9003) out.date = val(type, count, at);
+      if (tag === 0x920A) out.focal = val(type, count, at);
+      if (tag === 0xA434) out.lens = val(type, count, at);
+    });
+  }
+  function exifToFields(x){
+    var f = {};
+    if (x.model) {
+      var make = (x.make || "").split(" ")[0];
+      f.camera = make && x.model.toUpperCase().indexOf(make.toUpperCase()) !== 0 ? make + " " + x.model : x.model;
+    }
+    if (x.lens) f.lens = x.lens;
+    if (x.focal) f.focal = Math.round(x.focal) + "mm";
+    if (x.exposure) f.shutter = x.exposure < 1 ? "1/" + Math.round(1 / x.exposure) : (Math.round(x.exposure * 10) / 10) + "s";
+    if (x.fnumber) f.aperture = "f/" + (Math.round(x.fnumber * 10) / 10);
+    if (x.iso) f.iso = String(x.iso);
+    var m = /^(\d{4}):(\d{2}):(\d{2})/.exec(x.date || "");
+    if (m) f.takenOn = m[1] + "-" + m[2] + "-" + m[3];
+    return f;
+  }
+  async function prepareGalleryPhoto(file){
+    var img = await loadImage(file);
+    var w = img.naturalWidth, h = img.naturalHeight;
+    if (!w || !h) throw new Error("empty");
+    var scale = Math.min(1, 2048 / Math.max(w, h));
+    var cw = Math.round(w * scale), ch = Math.round(h * scale);
+    var canvas = document.createElement("canvas"); canvas.width = cw; canvas.height = ch;
+    var ctx = canvas.getContext("2d"); ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, cw, ch);
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(img, 0, 0, cw, ch);
+    var quality = 0.9, out = canvas.toDataURL("image/jpeg", quality);
+    while (out.length > 4000000 && quality > 0.5) { quality -= 0.08; out = canvas.toDataURL("image/jpeg", quality); }
+    return { dataUrl: out, width: cw, height: ch, original: w + " x " + h };
+  }
+
+  function photoForm(x, editing){
+    var v = function(k){ return esc((x && x[k]) || ""); };
+    return '<label for="ph-title">Title</label><input id="ph-title" maxlength="90" required value="' + v("title") + '" placeholder="For example, Red Arrows break over the crowd line">' +
+      '<label for="ph-cat">Category</label><select id="ph-cat" required><option value="">Choose a category</option>' + CATEGORIES.map(function(c){ return '<option' + (x && x.category === c ? " selected" : "") + '>' + esc(c) + '</option>'; }).join("") + '</select>' +
+      '<div class="two"><div><label for="ph-show">Show</label><input id="ph-show" list="ph-shows" maxlength="80" value="' + v("showName") + '" placeholder="Choose or type a show"><datalist id="ph-shows">' + SHOWS.map(function(s){ return '<option value="' + esc(s) + '">'; }).join("") + '</datalist></div>' +
+        '<div><label for="ph-aircraft">Aircraft</label><input id="ph-aircraft" maxlength="80" value="' + v("aircraft") + '" placeholder="For example, Typhoon FGR4"></div></div>' +
+      '<fieldset class="shotset"><legend>Shot details</legend><p class="hint" id="ph-exifnote">' + (editing ? "Change anything that isn't right." : "We fill these in from your photo where we can. Check them before sharing.") + '</p>' +
+        '<div class="three"><div><label for="ph-camera">Camera</label><input id="ph-camera" maxlength="60" value="' + v("camera") + '"></div>' +
+        '<div><label for="ph-lens">Lens</label><input id="ph-lens" maxlength="80" value="' + v("lens") + '"></div>' +
+        '<div><label for="ph-focal">Focal length</label><input id="ph-focal" maxlength="20" value="' + v("focal") + '" placeholder="400mm"></div>' +
+        '<div><label for="ph-shutter">Shutter speed</label><input id="ph-shutter" maxlength="20" value="' + v("shutter") + '" placeholder="1/2000"></div>' +
+        '<div><label for="ph-aperture">Aperture</label><input id="ph-aperture" maxlength="20" value="' + v("aperture") + '" placeholder="f/8"></div>' +
+        '<div><label for="ph-iso">ISO</label><input id="ph-iso" maxlength="12" value="' + v("iso") + '" placeholder="400"></div>' +
+        '<div><label for="ph-date">Date taken</label><input id="ph-date" type="date" value="' + v("takenOn") + '"></div></div></fieldset>' +
+      '<label for="ph-desc">About this photo</label><textarea id="ph-desc" maxlength="1500" placeholder="Where you stood, what you were going for, or anything you would do differently.">' + v("description") + '</textarea>' +
+      '<label class="check"><input type="checkbox" id="ph-advice"' + (x && x.adviceWanted ? " checked" : "") + '> I would like advice on this photo</label>';
+  }
+  function readPhotoForm(){
+    return { title: $("ph-title").value, category: $("ph-cat").value, showName: $("ph-show").value, aircraft: $("ph-aircraft").value,
+      camera: $("ph-camera").value, lens: $("ph-lens").value, focal: $("ph-focal").value, shutter: $("ph-shutter").value,
+      aperture: $("ph-aperture").value, iso: $("ph-iso").value, takenOn: $("ph-date").value, description: $("ph-desc").value, adviceWanted: $("ph-advice").checked };
+  }
+
+  function viewShare(){
+    if (!state.me) { $("view").innerHTML = '<p style="margin:0 0 10px"><a href="#/corner" class="linkbtn">&lsaquo; Photographers\' Corner</a></p><div class="gate"><p><b>Share your photos with other airshow photographers.</b> Log in or join free to start.</p><div class="btns"><button class="btn teal" type="button" data-act="signup">Join free</button><button class="btn out" type="button" data-act="login">Log in</button></div></div>'; return; }
+    if (state.me.blocked) { $("view").innerHTML = '<div class="note">Your account can\'t share photos at the moment.</div>'; return; }
+    var prepared = null;
+    $("view").innerHTML = '<p style="margin:0 0 10px"><a href="#/corner" class="linkbtn">&lsaquo; Photographers\' Corner</a></p>' +
+      '<h2 class="sectitle">Share a photo</h2><p class="intro">Choose the full size file straight from your camera or phone. We keep a sharp 2048px copy for the gallery and read the shot details for you.</p>' +
+      '<div class="cols"><div class="card"><div class="ch"><h2>Your photo</h2></div><form class="cb form" id="shareForm">' +
+        '<label class="drop" for="ph-file" id="ph-drop"><input type="file" id="ph-file" accept="image/*"><span id="ph-dropin"><b>Choose a photo</b><span>or drag it here. JPG works best, any size up to 60MB.</span></span></label>' +
+        '<p class="hint" id="ph-status" aria-live="polite"></p>' +
+        photoForm(null, false) +
+        '<label class="check"><input type="checkbox" id="ph-own"> I took this photo and I am happy for it to be shown on The Big Guide to UK Airshows</label>' +
+        '<div class="progress" id="ph-progress" hidden><i id="ph-bar"></i></div>' +
+        '<div class="btns"><button class="btn teal" type="submit" id="ph-send">Share photo</button><a class="btn ghost" href="#/corner">Cancel</a></div>' +
+      '</form></div><div>' +
+        '<aside class="info-box"><h2>Good to know</h2><div class="row"><span>Size we keep</span><strong>2048px long edge</strong></div><div class="row"><span>Saving by others</span><strong>Switched off</strong></div><div class="row"><span>Your credit</span><strong>On every photo</strong></div><div class="row"><span>Edit or delete</span><strong>Any time</strong></div></aside>' +
+        '<div class="note" style="margin-top:18px">Please only share your own photos, and avoid close ups of people in the crowd without asking them first.</div>' +
+      '</div></div>';
+    var status = $("ph-status");
+    var setStatus = function(msg, bad){ status.textContent = msg; status.style.color = bad ? "var(--red)" : ""; };
+    var handle = async function(file){
+      if (!file) return;
+      if (!/^image\//.test(file.type) && !/\.(jpe?g|png|heic|webp)$/i.test(file.name)) return setStatus("That file isn't a photo. Please choose a JPG or PNG.", true);
+      if (file.size > 60 * 1024 * 1024) return setStatus("That file is over 60MB. Please export a smaller JPG.", true);
+      setStatus("Reading your photo...");
+      try {
+        var details = exifToFields(readExif(await file.slice(0, 262144).arrayBuffer()));
+        var filled = 0;
+        Object.keys(details).forEach(function(k){ var el = $({ camera:"ph-camera", lens:"ph-lens", focal:"ph-focal", shutter:"ph-shutter", aperture:"ph-aperture", iso:"ph-iso", takenOn:"ph-date" }[k]); if (el && !el.value) { el.value = details[k]; filled++; } });
+        $("ph-exifnote").textContent = filled ? "We filled in " + filled + " shot details from your photo. Check them before sharing." : "We couldn't find shot details in this file, so add any you know.";
+        prepared = await prepareGalleryPhoto(file);
+        $("ph-dropin").innerHTML = '<img src="' + prepared.dataUrl + '" alt="Your chosen photo"><span>' + esc(file.name) + '. Original ' + prepared.original + ', shared at ' + prepared.width + ' x ' + prepared.height + '. Tap to choose a different photo.</span>';
+        setStatus("");
+      } catch (err) { prepared = null; setStatus("We couldn't read that photo. If it's HEIC from an iPhone, please share it as a JPG.", true); }
+    };
+    $("ph-file").addEventListener("change", function(){ var f = this.files && this.files[0]; handle(f); });
+    var drop = $("ph-drop");
+    ["dragover", "dragenter"].forEach(function(n){ drop.addEventListener(n, function(e){ e.preventDefault(); drop.classList.add("over"); }); });
+    ["dragleave", "drop"].forEach(function(n){ drop.addEventListener(n, function(){ drop.classList.remove("over"); }); });
+    drop.addEventListener("drop", function(e){ e.preventDefault(); handle(e.dataTransfer.files && e.dataTransfer.files[0]); });
+    $("shareForm").addEventListener("submit", async function(e){
+      e.preventDefault();
+      if (!prepared) return setStatus("Choose a photo first.", true);
+      if (!$("ph-own").checked) return setStatus("Please confirm the photo is your own.", true);
+      var meta = readPhotoForm();
+      if (meta.title.trim().length < 3) return setStatus("Give your photo a title.", true);
+      if (!meta.category) return setStatus("Choose a category.", true);
+      var btn = $("ph-send"); btn.disabled = true; btn.textContent = "Sharing...";
+      var bar = $("ph-bar"); $("ph-progress").hidden = false; bar.style.width = "4%";
+      var fail = function(msg){ btn.disabled = false; btn.textContent = "Share photo"; $("ph-progress").hidden = true; setStatus(msg, true); };
+      var b64 = prepared.dataUrl.split(",")[1], size = 290000, pieces = [];
+      for (var i = 0; i < b64.length; i += size) pieces.push(b64.slice(i, i + size));
+      var start = await call("startGalleryUpload", { total: pieces.length });
+      if (!start.ok) return fail(start.error);
+      for (var p = 0; p < pieces.length; p++) {
+        setStatus("Uploading " + (p + 1) + " of " + pieces.length + "...");
+        var sent = await call("sendGalleryPiece", { uploadId: start.data.uploadId, index: p, data: pieces[p] });
+        if (!sent.ok) return fail(sent.error);
+        bar.style.width = Math.round(((p + 1) / (pieces.length + 1)) * 100) + "%";
+      }
+      setStatus("Saving to the gallery...");
+      var done = await call("finishGalleryUpload", { uploadId: start.data.uploadId, total: pieces.length, meta: meta, ownPhoto: true, width: prepared.width, height: prepared.height });
+      if (!done.ok) return fail(done.error);
+      bar.style.width = "100%";
+      toast("Your photo is in the gallery.");
+      location.hash = "#/photo/" + encodeURIComponent(done.data.id);
+    });
+  }
+
+  async function viewEditPhoto(id){
+    loading("Loading the photo");
+    var res = await call("getGalleryPhoto", { photoId: id });
+    if (!res.ok) return showError(res.error);
+    var x = res.data.photo;
+    $("view").innerHTML = '<p style="margin:0 0 10px"><a href="#/photo/' + encodeURIComponent(x.id) + '" class="linkbtn">&lsaquo; Back to the photo</a></p>' +
+      '<h2 class="sectitle">Edit photo details</h2><p class="intro">The photo itself stays the same. To change it, delete this one and share it again.</p>' +
+      '<div class="cols"><div class="card"><div class="ch"><h2>Details</h2></div><form class="cb form" id="editPhotoForm">' + photoForm(x, true) +
+        '<div class="btns"><button class="btn teal" type="submit">Save changes</button><a class="btn ghost" href="#/photo/' + encodeURIComponent(x.id) + '">Cancel</a></div></form></div>' +
+      '<div><figure class="pfull" style="margin:0">' + protectedImg(x.image, x.title, 900, 900) + '</figure></div></div>';
+    protectImages();
+    $("editPhotoForm").addEventListener("submit", async function(e){
+      e.preventDefault();
+      var btn = this.querySelector("button[type=submit]"); btn.disabled = true;
+      var r = await call("editGalleryPhoto", { photoId: x.id, meta: readPhotoForm() });
+      if (!r.ok) { btn.disabled = false; return toast(r.error, true); }
+      toast("Photo details saved."); location.hash = "#/photo/" + encodeURIComponent(x.id);
+    });
+  }
+
+  /* ---------------- clicks ---------------- */
+  document.addEventListener("click", async function(e){
+    var el = e.target.closest("[data-act],[data-admin],[data-filter],[data-corner-cat],[data-corner-advice],[data-corner-more]");
+    if (!el) return;
+    if (el.hasAttribute("data-corner-cat")) { corner.category = el.getAttribute("data-corner-cat"); viewCorner(); return; }
+    if (el.hasAttribute("data-corner-advice")) { corner.advice = !corner.advice; viewCorner(); return; }
+    if (el.hasAttribute("data-corner-more")) { morePhotos(el); return; }
+    var act = el.getAttribute("data-act"), adminAct = el.getAttribute("data-admin"), id = el.getAttribute("data-id");
+
+    if (el.hasAttribute("data-filter")) { state.filter = el.getAttribute("data-filter"); viewHome(); return; }
+
+    if (adminAct) {
+      var go = async function(extra){
+        var r = await call("adminAction", Object.assign({ action: adminAct, id: id }, extra || {}));
+        if (!r.ok) { toast(r.error, true); return true; }
+        toast("Done.");
+        if (adminAct === "removeGalleryPhoto" && location.hash.indexOf("#/photo/") === 0) location.hash = "#/corner"; else route();
+      };
+      var confirmText = el.getAttribute("data-confirm");
+      if (confirmText) dialog("Please confirm", '<p style="margin:0">' + esc(confirmText) + '</p>', "Yes, go ahead", function(){ return go(); });
+      else go();
+      return;
+    }
+
+    if (act === "retry") return route();
+    if (act === "login" || act === "signup") {
+      if (demoMode) { $("demoRole").value = "member"; Demo.setRole("member"); return; }
+      call(act); return;
+    }
+    if (act === "logout") {
+      if (demoMode) { $("demoRole").value = "visitor"; Demo.setRole("visitor"); return; }
+      call("logout"); setSession(null); location.hash = "#/"; route(); return;
+    }
+    if (act === "like") {
+      if (!state.me) return call("login");
+      var r = await call("toggleLike", { threadId: id });
+      if (!r.ok) return toast(r.error, true);
+      el.classList.toggle("on", r.data.liked); el.setAttribute("aria-pressed", r.data.liked);
+      el.innerHTML = (r.data.liked ? "Liked" : "Like") + ' &middot; <span id="likeN">' + r.data.likeCount + '</span>';
+      return;
+    }
+    if (act === "photoLike") {
+      if (!state.me) return call("login");
+      var pl = await call("toggleGalleryLike", { photoId: id });
+      if (!pl.ok) return toast(pl.error, true);
+      el.classList.toggle("on", pl.data.liked); el.setAttribute("aria-pressed", pl.data.liked);
+      el.innerHTML = (pl.data.liked ? "Liked" : "Like") + ' &middot; <span>' + pl.data.likeCount + '</span>';
+      return;
+    }
+    if (act === "deletePhoto") {
+      dialog("Delete this photo?", '<p style="margin:0">The photo and its comments will disappear for everyone.</p>', "Delete", async function(){
+        var r = await call("deleteGalleryPhoto", { photoId: id });
+        if (!r.ok) { toast(r.error, true); return true; }
+        toast("Photo deleted."); location.hash = "#/corner";
+      });
+      return;
+    }
+    if (act === "report") {
+      dialog("Report this post", '<label for="rp">What is the problem?</label><select id="rp"><option>Spam or advertising</option><option>Rude or offensive</option><option>Personal details shared</option><option>Not my photo or video</option><option>Something else</option></select>', "Send report", async function(form){
+        var r = await call("report", { targetType: el.getAttribute("data-type"), targetId: id, reason: form.querySelector("#rp").value });
+        if (!r.ok) { toast(r.error, true); return true; }
+        toast("Thanks. The guide team has been told.");
+      });
+      return;
+    }
+    if (act === "editThread") {
+      var res = await call("getThread", { threadId: id });
+      if (!res.ok) return toast(res.error, true);
+      var t = res.data.thread;
+      dialog("Edit your thread", '<label for="et-t">Title</label><input id="et-t" maxlength="120" value="' + esc(t.title) + '"><label for="et-b">Post</label><textarea id="et-b" maxlength="5000">' + esc(t.body) + '</textarea>', "Save changes", async function(form){
+        var r = await call("editPost", { targetType: "thread", targetId: id, title: form.querySelector("#et-t").value, body: form.querySelector("#et-b").value });
+        if (!r.ok) { toast(r.error, true); return true; }
+        toast("Thread updated."); route();
+      });
+      return;
+    }
+    if (act === "editComment") {
+      dialog("Edit your reply", '<label for="ec-b">Reply</label><textarea id="ec-b" maxlength="2000">' + esc(el.getAttribute("data-body")) + '</textarea>', "Save changes", async function(form){
+        var r = await call("editPost", { targetType: "comment", targetId: id, body: form.querySelector("#ec-b").value });
+        if (!r.ok) { toast(r.error, true); return true; }
+        toast("Reply updated."); route();
+      });
+      return;
+    }
+    if (act === "deleteThread" || act === "deleteComment") {
+      var isThread = act === "deleteThread";
+      dialog(isThread ? "Delete this thread?" : "Delete this reply?", '<p style="margin:0">' + (isThread ? "The thread and its replies will disappear for everyone." : "The reply will disappear for everyone.") + '</p>', "Delete", async function(){
+        var r = await call("deleteOwnPost", { targetType: isThread ? "thread" : "comment", targetId: id });
+        if (!r.ok) { toast(r.error, true); return true; }
+        toast(isThread ? "Thread deleted." : "Reply deleted.");
+        if (isThread) location.hash = "#/g/" + encodeURIComponent(state.lastGroup || ""); else route();
+      });
+      return;
+    }
+    if (act === "moveThread") {
+      dialog("Move this thread", '<label for="mv">Move to</label><select id="mv">' + state.groups.map(function(g){ return '<option value="' + esc(g.slug) + '">' + esc(g.title) + '</option>'; }).join("") + '</select>', "Move thread", async function(form){
+        var r = await call("adminAction", { action: "moveThread", id: id, groupSlug: form.querySelector("#mv").value });
+        if (!r.ok) { toast(r.error, true); return true; }
+        toast("Thread moved."); route();
+      });
+      return;
+    }
+    if (act === "suggestGroup") {
+      dialog("Suggest a new group", '<label for="sg-t">Group name</label><input id="sg-t" maxlength="60" placeholder="For example, Southport Air Show 2027"><label for="sg-d">What is it for?</label><textarea id="sg-d" maxlength="200" placeholder="One or two sentences"></textarea><span class="hint">The guide team checks every idea before it goes live.</span>', "Send idea", async function(form){
+        var r = await call("requestGroup", { title: form.querySelector("#sg-t").value, description: form.querySelector("#sg-d").value });
+        if (!r.ok) { toast(r.error, true); return true; }
+        toast("Thanks. Your idea has been sent to the guide team.");
+      });
+    }
+  });
+
+  document.addEventListener("change", function(e){
+    if (e.target && e.target.id === "c-sort") { corner.sort = e.target.value; viewCorner(); }
+  });
+
+  /* ---------------- routing ---------------- */
+  function route(){
+    drawTabs();
+    var h = location.hash || "#/";
+    var m;
+    if ((m = h.match(/^#\/g\/(.+)$/))) viewGroup(decodeURIComponent(m[1]));
+    else if ((m = h.match(/^#\/t\/(.+)$/))) viewThread(decodeURIComponent(m[1]));
+    else if ((m = h.match(/^#\/p\/(.+)$/))) viewProfile(decodeURIComponent(m[1]));
+    else if (h === "#/me") viewEditProfile();
+    else if (h === "#/admin") viewAdmin();
+    else if (h === "#/latest") viewLatest();
+    else if (h === "#/rules") viewRules();
+    else if (h === "#/corner") viewCorner();
+    else if (h === "#/share") viewShare();
+    else if ((m = h.match(/^#\/photo\/([^\/]+)\/edit$/))) viewEditPhoto(decodeURIComponent(m[1]));
+    else if ((m = h.match(/^#\/photo\/(.+)$/))) viewPhoto(decodeURIComponent(m[1]));
+    else viewHome();
+  }
+  window.addEventListener("hashchange", function(){ route(); top(); });
+
+  /* ---------------- preview data, used only outside Wix ---------------- */
+  var Demo = (function(){
+    var now = Date.now(), H = 3600000, D = 86400000;
+    var people = {
+      jack:{ memberId:"jack", name:"Jack Skedge", colour:"#32B4AF", role:"admin", bio:"Founder of The Big Guide to UK Airshows. Going to RIAT since 2006 and usually found by the crowd line with two camera bodies.", area:"Canvey Island, Essex", going:["Royal International Air Tattoo","RAF Cosford Air Show","IWM Duxford Air Shows"], into:["Aviation photography","Fast jets","Warbirds"], threadCount:2, commentCount:3, joined:new Date(now-140*D).toISOString(), groups:["welcome-and-introductions","airshow-news-and-rumours","first-timers-and-families"], blocked:false },
+      sophie:{ memberId:"sophie", name:"Sophie K", colour:"#6950A1", role:"member", bio:"Mum of two and new to airshows. The kids loved the Red Arrows at Southend, so we are planning a few more shows for 2027.", area:"Chelmsford, Essex", going:["Airbourne: Eastbourne","Clacton Airshow"], into:["Family days out","Display teams"], threadCount:1, commentCount:2, joined:new Date(now-30*D).toISOString(), groups:["first-timers-and-families"], blocked:false },
+      amy:{ memberId:"amy", name:"Amy L", colour:"#0E5F5B", role:"member", bio:"", area:"Cambridge", going:[], into:["Warbirds"], threadCount:1, commentCount:1, joined:new Date(now-60*D).toISOString(), groups:["first-timers-and-families"], blocked:false },
+      deals:{ memberId:"deals", name:"QuickDeals99", colour:"#757575", role:"member", bio:"", area:"", going:[], into:[], threadCount:1, commentCount:0, joined:new Date(now-H).toISOString(), groups:["first-timers-and-families"], blocked:false }
+    };
+    var G = [
+      ["Welcome and introductions","welcome-and-introductions","chat","hello","Say hello, tell us your local airfield and which show you are heading to next.","Start here","pin"],
+      ["First timers and families","first-timers-and-families","plan","family","New to airshows? Ask anything, from what to pack to how early to arrive with children.","Great for newcomers","new"],
+      ["Show reports and reviews","show-reports-and-reviews","chat","report","How was the show? Share highlights, crowd levels, queues and what you would do differently.","",""],
+      ["Aviation photography","aviation-photography","photo","camera","Settings, panning, prop blur, lenses and getting a sharp shot of a Red Arrows break.","",""],
+      ["Plane spotting and line ups","plane-spotting-and-line-ups","photo","jet","Arrivals, departures, serials and who is confirmed for which show.","",""],
+      ["Getting there and parking","getting-there-and-parking","plan","car","Car parks, park and ride, trains, buses and lift shares to the shows.","",""],
+      ["Camping and places to stay","camping-and-places-to-stay","plan","tent","On site camping, local campsites, hotels and what kit to take.","",""],
+      ["Accessibility at airshows","accessibility-at-airshows","plan","access","Wheelchair access, Blue Badge parking, step free routes and quieter areas.","",""],
+      ["Kit, gear and buy and sell","kit-gear-and-buy-and-sell","photo","bag","Cameras, lenses, scanners, chairs and bags. Members can list kit they are selling.","Selling rules apply","mod"],
+      ["Airshow news and rumours","airshow-news-and-rumours","chat","news","Date announcements, display team news and the latest from the organisers.","",""],
+      ["Museums and heritage aviation","museums-and-heritage-aviation","chat","museum","Duxford, Cosford, Shuttleworth and the smaller collections worth a day out.","",""],
+      ["Meet ups and site feedback","meet-ups-and-site-feedback","chat","meet","Arrange to meet at a show, and tell us what you would like to see on the guide.","",""]
+    ].map(function(g,i){ return { id:"g"+i, title:g[0], slug:g[1], category:g[2], icon:g[3], description:g[4], chip:g[5], chipStyle:g[6], threadCount:0, lastActivity:new Date(now-(i+1)*D).toISOString(), status:"active" }; });
+    var T = [
+      { id:"t1", groupSlug:"welcome-and-introductions", title:"House rules: please read before posting", body:"Welcome to the community.\n\nBe kind, keep posts in the right group, only share your own photos, and always check the official show website before you travel.", author:"jack", pinned:true, locked:true, likes:["sophie","amy"], created:now-20*D, reports:[] },
+      { id:"t2", groupSlug:"first-timers-and-families", title:"Ear defenders for a 3 year old?", body:"Taking our little one to Eastbourne next summer. Which ear defenders actually stay on? Ours kept slipping off at Southend.", author:"sophie", pinned:false, locked:false, likes:["amy","jack"], created:now-2*D, reports:[] },
+      { id:"t3", groupSlug:"first-timers-and-families", title:"Best time to arrive at Duxford with a buggy?", body:"Is it worth getting there for gates opening, or is mid morning fine?", author:"amy", pinned:false, locked:false, likes:["sophie"], created:now-4*D, reports:[] },
+      { id:"t4", groupSlug:"first-timers-and-families", title:"Cheap tickets here, message me", body:"Selling tickets for every show, half price, message me now.", author:"deals", pinned:false, locked:false, likes:[], created:now-H, reports:["Spam or advertising","Spam or advertising","Rude or offensive"] },
+      { id:"t5", groupSlug:"airshow-news-and-rumours", title:"2027 dates confirmed so far", body:"I will keep this thread up to date as each show confirms its dates for 2027.", author:"jack", pinned:true, locked:false, likes:["sophie","amy"], created:now-6*D, reports:[] }
+    ].map(function(t){ t.hidden=false; return t; });
+    var CM = [
+      { id:"c1", threadId:"t2", author:"amy", body:"Ours loved the padded kids ones with the adjustable band. Put them on before the Typhoon, not during!", created:now-36*H, reports:[] },
+      { id:"c2", threadId:"t2", author:"jack", body:"Great question. I would advise bringing a spare pair too, they always go missing at some point in the day.", created:now-30*H, reports:[] },
+      { id:"c3", threadId:"t3", author:"jack", body:"I would advise gates opening. Pick your spot on the crowd line first, then explore the hangars while it is quiet.", created:now-3*D, reports:[] },
+      { id:"c4", threadId:"t3", author:"sophie", body:"Thanks Jack, that is really helpful.", created:now-2*D, reports:[] }
+    ].map(function(c){ c.hidden=false; return c; });
+    /* demo photos, drawn on the fly so the preview needs no image files */
+    function demoPhoto(kind, w, h){
+      var c = document.createElement("canvas"); c.width = w; c.height = h;
+      var x = c.getContext("2d");
+      var skies = { jet:["#3d7fc2","#a9d3f0"], arrows:["#2f6fb5","#cfe6f7"], warbird:["#e9a25b","#f7dcb0"], heli:["#7f8c97","#c9d2d8"], night:["#050b18","#1b2c4a"], tanker:["#5b93c9","#e2eef7"], static:["#9fc3e0","#eef4f8"] };
+      var s = skies[kind] || skies.jet;
+      var g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, s[0]); g.addColorStop(1, s[1]); x.fillStyle = g; x.fillRect(0, 0, w, h);
+      function jet(cx, cy, sc, ang, col){
+        x.save(); x.translate(cx, cy); x.rotate(ang || 0); x.scale(sc, sc); x.fillStyle = col || "#1b2530";
+        x.beginPath(); x.moveTo(60, 0); x.lineTo(20, -6); x.lineTo(-10, -40); x.lineTo(-22, -40); x.lineTo(-12, -6); x.lineTo(-44, -5); x.lineTo(-56, -22); x.lineTo(-62, -22); x.lineTo(-58, 0);
+        x.lineTo(-62, 22); x.lineTo(-56, 22); x.lineTo(-44, 5); x.lineTo(-12, 6); x.lineTo(-22, 40); x.lineTo(-10, 40); x.lineTo(20, 6); x.closePath(); x.fill(); x.restore();
+      }
+      function prop(cx, cy, sc, col){
+        x.save(); x.translate(cx, cy); x.scale(sc, sc); x.fillStyle = col || "#2a2018";
+        x.beginPath(); x.ellipse(0, 0, 60, 9, 0, 0, Math.PI * 2); x.fill();
+        x.beginPath(); x.ellipse(-4, 0, 16, 70, 0, 0, Math.PI * 2); x.fill();
+        x.beginPath(); x.moveTo(-50, -4); x.lineTo(-64, -24); x.lineTo(-56, 0); x.lineTo(-64, 24); x.lineTo(-50, 4); x.fill();
+        x.globalAlpha = .35; x.beginPath(); x.ellipse(62, 0, 3, 26, 0, 0, Math.PI * 2); x.fill(); x.restore();
+      }
+      if (kind === "arrows") {
+        var cols = ["#d22","#fff","#1f4fb3","#fff","#d22","#fff","#1f4fb3","#fff","#d22"];
+        for (var i = 0; i < 9; i++) {
+          var ang = -Math.PI / 2 + (i - 4) * 0.22, ox = w * .5 + (i - 4) * 4, oy = h * .82;
+          x.strokeStyle = cols[i]; x.globalAlpha = .75; x.lineWidth = h * .035; x.lineCap = "round";
+          x.beginPath(); x.moveTo(ox, oy); x.quadraticCurveTo(ox + Math.cos(ang) * h * .3, oy + Math.sin(ang) * h * .3, ox + Math.cos(ang) * h * .62, oy + Math.sin(ang) * h * .62); x.stroke();
+          x.globalAlpha = 1; jet(ox + Math.cos(ang) * h * .64, oy + Math.sin(ang) * h * .64, h / 900, ang, "#b3121b");
+        }
+      } else if (kind === "warbird") {
+        x.fillStyle = "rgba(255,255,255,.35)"; x.beginPath(); x.arc(w * .78, h * .62, h * .16, 0, Math.PI * 2); x.fill();
+        prop(w * .45, h * .45, h / 300);
+        x.fillStyle = "#3b3a2a"; x.fillRect(0, h * .86, w, h * .14);
+      } else if (kind === "heli") {
+        x.save(); x.translate(w * .48, h * .5); x.scale(h / 420, h / 420); x.fillStyle = "#26303a";
+        x.beginPath(); x.ellipse(0, 0, 70, 34, 0, 0, Math.PI * 2); x.fill(); x.fillRect(40, -10, 150, 14); x.fillRect(180, -40, 12, 40);
+        x.fillRect(-4, -48, 8, 18); x.globalAlpha = .45; x.fillRect(-170, -52, 340, 5); x.globalAlpha = 1; x.fillRect(-50, 40, 110, 5); x.restore();
+      } else if (kind === "night") {
+        for (var k = 0; k < 70; k++) { x.fillStyle = "rgba(255,255,255," + (Math.random() * .7) + ")"; x.fillRect(Math.random() * w, Math.random() * h * .6, 2, 2); }
+        x.strokeStyle = "#ffb347"; x.lineWidth = h * .01; x.shadowColor = "#ff9b2b"; x.shadowBlur = 20;
+        for (var j = 0; j < 4; j++) { x.beginPath(); x.moveTo(w * .1, h * (.75 - j * .04)); x.bezierCurveTo(w * .4, h * (.2 + j * .05), w * .7, h * (.2 + j * .03), w * .92, h * (.6 - j * .05)); x.stroke(); }
+        x.shadowBlur = 0; x.fillStyle = "#0b0f14"; x.fillRect(0, h * .88, w, h * .12);
+      } else if (kind === "tanker") {
+        jet(w * .52, h * .42, h / 260, -0.05, "#4d5966");
+        jet(w * .3, h * .62, h / 520, -0.05, "#26303a");
+      } else if (kind === "static") {
+        x.fillStyle = "#6f8a5a"; x.fillRect(0, h * .7, w, h * .3);
+        jet(w * .5, h * .62, h / 300, 0, "#55606b");
+        x.fillStyle = "#213040"; for (var q = 0; q < 14; q++) x.fillRect(q * w / 14 + 8, h * .8, w / 30, h * .12);
+      } else {
+        x.strokeStyle = "rgba(255,255,255,.7)"; x.lineWidth = h * .012;
+        x.beginPath(); x.moveTo(w * .05, h * .8); x.quadraticCurveTo(w * .35, h * .55, w * .58, h * .44); x.stroke();
+        jet(w * .62, h * .42, h / 340, -0.32);
+      }
+      return c.toDataURL("image/jpeg", .86);
+    }
+    var cornerG = [
+      ["Ask for advice","corner-ask-for-advice","camera","Post a photo or a question and ask other photographers what would make it better.","Critique welcome","new"],
+      ["Tips and techniques","corner-tips-and-techniques","jet","Share what works for you, from panning and prop blur to tracking fast jets.","",""],
+      ["Editing and processing","corner-editing-and-processing","report","Lightroom, noise reduction, cropping and getting the colours right.","",""],
+      ["Where to shoot","corner-where-to-shoot","meet","The best spots at each show for light, backgrounds and arrivals.","",""]
+    ];
+    cornerG.forEach(function(g, i){ G.push({ id:"cg" + i, title:g[0], slug:g[1], category:"corner", icon:g[2], description:g[3], chip:g[4], chipStyle:g[5], threadCount:0, lastActivity:new Date(now - (i + 2) * D).toISOString(), status:"active" }); });
+    T.push({ id:"t6", groupSlug:"corner-tips-and-techniques", title:"Prop blur at Duxford: what shutter speed do you use?", body:"I keep freezing the props on the Spitfires. What speed do you start at?", author:"amy", pinned:false, locked:false, likes:["jack"], created:now - 9 * H, reports:[], hidden:false });
+    T.push({ id:"t7", groupSlug:"corner-where-to-shoot", title:"Best spot at RIAT for the morning light", body:"The sun is behind the crowd line in the morning. Where do you head first?", author:"jack", pinned:false, locked:false, likes:["sophie"], created:now - 3 * D, reports:[], hidden:false });
+    CM.push({ id:"c5", threadId:"t6", author:"jack", body:"I would advise starting at 1/160 and going down to 1/80 once you are happy with your panning. Take lots of frames.", created:now - 7 * H, reports:[], hidden:false });
+    var PH = [
+      { id:"ph1", kind:"arrows", w:1600, h:1067, author:"jack", title:"Red Arrows bomb burst at Clacton", category:"Display teams", showName:"Clacton Airshow", aircraft:"BAE Hawk T1", camera:"Canon EOS R5", lens:"RF 100-500mm F4.5-7.1 L IS USM", focal:"135mm", shutter:"1/1600", aperture:"f/8", iso:"200", takenOn:"2026-08-21", description:"Shot from the pier end of the seafront. I would advise getting there early for this spot.", advice:false, featured:true, likes:["sophie","amy"], created:now - 2 * D, reports:[] },
+      { id:"ph2", kind:"jet", w:1600, h:1000, author:"sophie", title:"Typhoon pulling vapour", category:"Fast jets", showName:"Airbourne: Eastbourne International Airshow", aircraft:"Typhoon FGR4", camera:"Nikon Z6 II", lens:"NIKKOR Z 100-400mm", focal:"400mm", shutter:"1/2000", aperture:"f/7.1", iso:"400", takenOn:"2026-08-15", description:"My first proper fast jet shot. It looks a bit soft at full size. Any tips?", advice:true, featured:false, likes:["jack"], created:now - 5 * H, reports:[] },
+      { id:"ph3", kind:"warbird", w:1200, h:1500, author:"amy", title:"Spitfire at golden hour", category:"Warbirds and classics", showName:"IWM Duxford Air Shows", aircraft:"Supermarine Spitfire Mk IX", camera:"Sony A7 IV", lens:"FE 200-600mm G OSS", focal:"300mm", shutter:"1/100", aperture:"f/11", iso:"100", takenOn:"2026-09-12", description:"", advice:false, featured:false, likes:["jack","sophie"], created:now - 26 * H, reports:[] },
+      { id:"ph4", kind:"heli", w:1600, h:1067, author:"jack", title:"Chinook display", category:"Helicopters", showName:"RAF Cosford Air Show", aircraft:"Chinook HC6", camera:"Canon EOS R5", lens:"RF 100-500mm", focal:"200mm", shutter:"1/250", aperture:"f/9", iso:"160", takenOn:"2026-06-08", description:"Slow shutter to keep the rotor blur.", advice:false, featured:false, likes:[], created:now - 3 * D, reports:[] },
+      { id:"ph5", kind:"night", w:1600, h:1067, author:"amy", title:"Pyro at the twilight show", category:"Night shoots", showName:"Wales Airshow", aircraft:"", camera:"Sony A7 IV", lens:"FE 24-105mm F4", focal:"35mm", shutter:"2s", aperture:"f/8", iso:"400", takenOn:"2026-07-05", description:"Tripod, two second exposure. The trails crossed more than I hoped. Would you crop this?", advice:true, featured:false, likes:["sophie"], created:now - 4 * D, reports:[] },
+      { id:"ph6", kind:"tanker", w:1600, h:1000, author:"sophie", title:"Voyager with a Typhoon in tow", category:"Transport and tankers", showName:"Royal International Air Tattoo", aircraft:"Voyager KC2", camera:"Nikon Z6 II", lens:"NIKKOR Z 100-400mm", focal:"250mm", shutter:"1/1000", aperture:"f/8", iso:"200", takenOn:"2026-07-18", description:"", advice:false, featured:false, likes:[], created:now - 6 * D, reports:["Not my photo or video"] },
+      { id:"ph7", kind:"static", w:1600, h:1067, author:"jack", title:"Static park first thing", category:"Static and ground", showName:"Royal International Air Tattoo", aircraft:"F-35B Lightning", camera:"Canon EOS R5", lens:"RF 24-105mm F4", focal:"50mm", shutter:"1/640", aperture:"f/8", iso:"100", takenOn:"2026-07-19", description:"Before the crowds arrive.", advice:false, featured:false, likes:["amy"], created:now - 8 * D, reports:[] }
+    ].map(function(p){ p.hidden = false; return p; });
+    PH.forEach(function(p){ p.image = ""; });
+    function phImg(p){ if (!p.image) p.image = demoPhoto(p.kind, p.w, p.h); return p.image; }
+    function shapeP(p, full){ var a = people[p.author]; var cms = CM.filter(function(c){ return c.threadId === p.id && !c.hidden; });
+      var o = { id:p.id, title:p.title, authorId:a.memberId, authorName:a.name, authorColour:a.colour, authorPhoto:a.photo || "", image:phImg(p), width:p.w, height:p.h, category:p.category, showName:p.showName, aircraft:p.aircraft, adviceWanted:p.advice, featured:p.featured, likeCount:p.likes.length, commentCount:cms.length, created:new Date(p.created).toISOString() };
+      if (full) { o.takenOn = p.takenOn; o.camera = p.camera; o.lens = p.lens; o.focal = p.focal; o.shutter = p.shutter; o.aperture = p.aperture; o.iso = p.iso; o.description = p.description; }
+      return o; }
+    CM.push({ id:"c6", threadId:"ph2", onPhoto:true, author:"jack", body:"Great timing on the vapour. I would advise going up to 1/3200 at 400mm and turning on subject tracking. It looks a touch soft because of the long focal length, not your technique.", created:now - 3 * H, reports:[], hidden:false });
+    CM.push({ id:"c7", threadId:"ph1", onPhoto:true, author:"sophie", body:"This is brilliant. The kids want it as a poster!", created:now - 30 * H, reports:[], hidden:false });
+    var uploads = {};
+    function metaOk(m){ if (!m || (m.title || "").trim().length < 3) return "Give your photo a title of at least 3 characters."; if (CATEGORIES.indexOf(m.category) < 0) return "Choose a category for your photo."; return ""; }
+    function applyMeta(p, m){ p.title = m.title.trim(); p.category = m.category; p.showName = m.showName; p.aircraft = m.aircraft; p.camera = m.camera; p.lens = m.lens; p.focal = m.focal; p.shutter = m.shutter; p.aperture = m.aperture; p.iso = m.iso; p.takenOn = m.takenOn; p.description = m.description; p.advice = !!m.adviceWanted; }
+    var pendingGroups = [{ id:"pg1", title:"Southport Air Show 2027", description:"A group for people going to Southport to share plans and meet up.", requestedByName:"Rob H", status:"pending" }];
+    var role = "member";
+    function meKey(){ return role === "admin" ? "jack" : role === "member" ? "sophie" : null; }
+    function session(){ var k = meKey(); if (!k) return null; var p = people[k]; return { id:p.memberId, name:p.name, colour:p.colour, photo:p.photo || "", role:p.role, isAdmin:p.role === "admin" || p.role === "moderator", isOwner:k === "jack", blocked:p.blocked, groups:p.groups }; }
+    function shapeT(t, body){ var p = people[t.author]; var cms = CM.filter(function(c){ return c.threadId === t.id && !c.hidden; }); var last = cms.length ? cms[cms.length-1].created : t.created;
+      var o = { id:t.id, groupSlug:t.groupSlug, title:t.title, authorId:p.memberId, authorName:p.name, authorColour:p.colour, authorPhoto:p.photo || "", pinned:t.pinned, locked:t.locked, likeCount:t.likes.length, commentCount:cms.length, created:new Date(t.created).toISOString(), lastActivity:new Date(last).toISOString(), preview:t.body.slice(0,180) };
+      if (body) o.body = t.body; return o; }
+    function shapeC(c){ var p = people[c.author]; return { id:c.id, threadId:c.threadId, onPhoto:!!c.onPhoto, body:c.body, authorId:p.memberId, authorName:p.name, authorColour:p.colour, authorPhoto:p.photo || "", created:new Date(c.created).toISOString() }; }
+    function find(list, id){ for (var i=0;i<list.length;i++) if (list[i].id === id) return list[i]; return null; }
+    function ok(d){ return Promise.resolve({ ok:true, data:d }); }
+    function bad(m){ return Promise.resolve({ ok:false, error:m }); }
+    function counts(){ G.forEach(function(g){ g.threadCount = T.filter(function(t){ return t.groupSlug === g.slug && !t.hidden; }).length; }); }
+    var api = {
+      listGallery:function(p){ var list = PH.filter(function(x){ return !x.hidden && (!p.category || x.category === p.category) && (!p.advice || x.advice); });
+        list.sort(function(a,b){ return p.sort === "liked" ? (b.likes.length - a.likes.length) || (b.created - a.created) : b.created - a.created; });
+        var f = PH.filter(function(x){ return x.featured && !x.hidden; })[0], skip = p.skip || 0;
+        return ok({ photos:list.slice(skip, skip + 24).map(function(x){ return shapeP(x); }), featured:f ? shapeP(f, true) : null, more:list.length > skip + 24, categories:CATEGORIES }); },
+      getGalleryPhoto:function(p){ var x = find(PH, p.photoId); if (!x || x.hidden) return bad("This photo has been removed or doesn't exist.");
+        return ok({ photo:shapeP(x, true), comments:CM.filter(function(c){ return c.threadId === x.id && !c.hidden; }).map(shapeC), liked:!!(meKey() && x.likes.indexOf(meKey()) > -1) }); },
+      startGalleryUpload:function(p){ if (!meKey()) return bad("Please log in first."); var id = meKey() + "-" + Date.now().toString(36); uploads[id] = []; return ok({ uploadId:id }); },
+      sendGalleryPiece:function(p){ uploads[p.uploadId][p.index] = p.data; return ok({ received:p.index }); },
+      finishGalleryUpload:function(p){ var err = metaOk(p.meta); if (err) return bad(err); if (!p.ownPhoto) return bad("Please confirm the photo is your own.");
+        var x = { id:"ph" + Date.now(), kind:"", w:p.width, h:p.height, author:meKey(), likes:[], reports:[], featured:false, hidden:false, created:Date.now(), image:"data:image/jpeg;base64," + uploads[p.uploadId].join("") };
+        applyMeta(x, p.meta); delete uploads[p.uploadId]; PH.unshift(x); return ok(shapeP(x, true)); },
+      editGalleryPhoto:function(p){ var err = metaOk(p.meta); if (err) return bad(err); var x = find(PH, p.photoId); applyMeta(x, p.meta); return ok(shapeP(x, true)); },
+      deleteGalleryPhoto:function(p){ var x = find(PH, p.photoId); x.hidden = true; x.featured = false; return ok({ removed:true }); },
+      toggleGalleryLike:function(p){ var x = find(PH, p.photoId), k = meKey(); var i = x.likes.indexOf(k); if (i > -1) x.likes.splice(i,1); else x.likes.push(k); return ok({ liked:i === -1, likeCount:x.likes.length }); },
+      addGalleryComment:function(p){ if (!meKey()) return bad("Please log in first."); if (!(p.body||"").trim()) return bad("Write something before you post."); var c = { id:"c"+Date.now(), threadId:p.photoId, onPhoto:true, author:meKey(), body:p.body.trim(), created:Date.now(), reports:[], hidden:false }; CM.push(c); return ok(shapeC(c)); },
+      listGroups:function(){ counts(); return ok(G.slice()); },
+      listThreads:function(p){ var list = T.filter(function(t){ return !t.hidden && (!p.groupSlug || t.groupSlug === p.groupSlug); }).map(function(t){ return shapeT(t); });
+        list.sort(function(a,b){ return (p.groupSlug ? (b.pinned - a.pinned) : 0) || (new Date(b.lastActivity) - new Date(a.lastActivity)); }); return ok(list); },
+      getThread:function(p){ var t = find(T, p.threadId); if (!t || t.hidden) return bad("This thread has been removed or doesn't exist.");
+        return ok({ thread:shapeT(t, true), comments:CM.filter(function(c){ return c.threadId === t.id && !c.hidden; }).map(shapeC), liked:!!(meKey() && t.likes.indexOf(meKey()) > -1) }); },
+      getProfile:function(p){ var k = Object.keys(people).filter(function(x){ return people[x].memberId === p.memberId; })[0]; if (!k) return bad("We couldn't find that member.");
+        return ok({ profile:people[k], threads:T.filter(function(t){ return t.author === k && !t.hidden; }).map(function(t){ return shapeT(t); }), gallery:PH.filter(function(x){ return x.author === k && !x.hidden; }).map(function(x){ return shapeP(x); }) }); },
+      createThread:function(p){ if (!meKey()) return bad("Please log in first."); if ((p.title||"").trim().length < 4) return bad("Give your thread a title of at least 4 characters."); if ((p.body||"").trim().length < 2) return bad("Add a few words to your post.");
+        var t = { id:"t"+Date.now(), groupSlug:p.groupSlug, title:p.title.trim(), body:p.body.trim(), author:meKey(), pinned:false, locked:false, likes:[], created:Date.now(), reports:[], hidden:false }; T.push(t); people[meKey()].threadCount++; return ok(shapeT(t, true)); },
+      addComment:function(p){ if (!meKey()) return bad("Please log in first."); if (!(p.body||"").trim()) return bad("Write something before you reply."); var c = { id:"c"+Date.now(), threadId:p.threadId, author:meKey(), body:p.body.trim(), created:Date.now(), reports:[], hidden:false }; CM.push(c); people[meKey()].commentCount++; return ok(shapeC(c)); },
+      toggleLike:function(p){ var t = find(T, p.threadId), k = meKey(); var i = t.likes.indexOf(k); if (i > -1) t.likes.splice(i,1); else t.likes.push(k); return ok({ liked:i === -1, likeCount:t.likes.length }); },
+      report:function(p){ var x = find(p.targetType === "comment" ? CM : p.targetType === "photo" ? PH : T, p.targetId); if (x) x.reports.push(p.reason); return ok({ reported:true }); },
+      editPost:function(p){ var x = find(p.targetType === "comment" ? CM : T, p.targetId); if (p.title) x.title = p.title; x.body = p.body; return ok({}); },
+      deleteOwnPost:function(p){ var x = find(p.targetType === "comment" ? CM : T, p.targetId); x.hidden = true; return ok({ removed:true }); },
+      uploadMyPhoto:function(p){ people[meKey()].photo = p.dataUrl; return ok({ photo:p.dataUrl }); },
+      removeMyPhoto:function(){ people[meKey()].photo = ""; return ok({ photo:"" }); },
+      saveMyProfile:function(p){ var me = people[meKey()]; me.name = p.name; me.area = p.area; me.bio = p.bio; me.going = p.going; me.into = p.into; me.colour = p.colour; return ok(me); },
+      requestGroup:function(p){ pendingGroups.push({ id:"pg"+Date.now(), title:p.title, description:p.description, requestedByName:people[meKey()].name, status:"pending" }); return ok({ requested:true }); },
+      adminOverview:function(){ counts(); return ok({ isOwner:role === "admin", counts:{ members:Object.keys(people).length, groups:G.length, threads:T.filter(function(t){ return !t.hidden; }).length, photos:PH.filter(function(x){ return !x.hidden; }).length },
+        reportedPhotos:PH.filter(function(x){ return !x.hidden && x.reports.length; }).map(function(x){ var o = shapeP(x); o.reportCount = x.reports.length; o.reportReasons = x.reports; return o; }),
+        pendingGroups:pendingGroups.slice(), reportedThreads:T.filter(function(t){ return !t.hidden && t.reports.length; }).map(function(t){ var o = shapeT(t, true); o.reportCount = t.reports.length; o.reportReasons = t.reports; return o; }),
+        reportedComments:CM.filter(function(c){ return !c.hidden && c.reports.length; }).map(function(c){ var o = shapeC(c); o.reportCount = c.reports.length; o.reportReasons = c.reports; return o; }),
+        blocked:Object.keys(people).filter(function(k){ return people[k].blocked; }).map(function(k){ return people[k]; }), moderators:Object.keys(people).filter(function(k){ return people[k].role === "moderator"; }).map(function(k){ return people[k]; }) }); },
+      adminAction:function(p){ var a = p.action, t = find(T, p.id), c = find(CM, p.id);
+        if (a === "pin") t.pinned = true; if (a === "unpin") t.pinned = false; if (a === "lock") t.locked = true; if (a === "unlock") t.locked = false;
+        if (a === "removeThread") t.hidden = true; if (a === "clearThreadReports") t.reports = []; if (a === "moveThread") t.groupSlug = p.groupSlug;
+        var ph = find(PH, p.id);
+        if (a === "featureGalleryPhoto") { PH.forEach(function(x){ x.featured = false; }); ph.featured = true; } if (a === "unfeatureGalleryPhoto") ph.featured = false;
+        if (a === "removeGalleryPhoto") { ph.hidden = true; ph.featured = false; } if (a === "clearGalleryReports") ph.reports = [];
+        if (a === "removeComment") c.hidden = true; if (a === "clearCommentReports") c.reports = [];
+        if (a === "approveGroup" || a === "rejectGroup") { var pg = find(pendingGroups, p.id); pendingGroups = pendingGroups.filter(function(x){ return x !== pg; });
+          if (a === "approveGroup") G.push({ id:pg.id, title:pg.title, slug:pg.title.toLowerCase().replace(/[^a-z0-9]+/g,"-"), category:"chat", icon:"hello", description:pg.description, chip:"New", chipStyle:"new", threadCount:0, lastActivity:new Date().toISOString(), status:"active" }); }
+        var k = Object.keys(people).filter(function(x){ return people[x].memberId === p.id; })[0];
+        if (k && a === "block") people[k].blocked = true; if (k && a === "unblock") people[k].blocked = false;
+        if (k && a === "removePhoto") people[k].photo = ""; if (k && a === "makeModerator") people[k].role = "moderator"; if (k && a === "removeModerator") people[k].role = "member";
+        return ok({ done:a }); }
+    };
+    return {
+      call:function(action, payload){ return new Promise(function(r){ setTimeout(function(){ r(api[action] ? api[action](payload) : { ok:false, error:"Not available in preview." }); }, 120); }); },
+      setRole:function(r){ role = r; setSession(session()); if (location.hash === "#/admin" && r !== "admin") location.hash = "#/"; route(); },
+      start:function(){ setSession(session()); }
+    };
+  })();
+
+  /* ---------------- start ---------------- */
+  function startDemo(){
+    demoMode = true;
+    $("demo").hidden = false;
+    $("demoRole").addEventListener("change", function(){ Demo.setRole(this.value); });
+    var hr = (location.hash.match(/role=(visitor|member|admin)/) || [])[1];
+    if (hr) { history.replaceState(null, "", location.hash.replace(/[?&]?role=\w+/, "")); $("demoRole").value = hr; Demo.setRole(hr); return; }
+    Demo.start();
+    route();
+  }
+
+  if (!embedded) {
+    startDemo();
+  } else {
+    drawWho(); drawTabs(); loading("Connecting to the community");
+    var probe = setTimeout(function(){ if (!connected) showError("The forum code isn't connected on this page yet. Check that the embed is called forumEmbed and the page code is saved."); }, 6000);
+    call("getSession").then(function(s){ clearTimeout(probe); if (s.ok) setSession(s.data.member); route(); });
+  }
+})();
+</script>
+</body>
+</html>
