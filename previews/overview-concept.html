@@ -253,7 +253,8 @@ body.sd .flaps{display:none}
 #inbound .ac circle{fill:#F2B233}
 
 /* ---------- milestone sonic boom ---------- */
-.boom{position:fixed;inset:0;z-index:70;pointer-events:none;display:grid;place-items:center}
+.boom{position:fixed;inset:0;z-index:70;pointer-events:none;display:grid;place-items:center;animation:boomBg 3s ease forwards}
+@keyframes boomBg{0%{background:rgba(5,13,20,0)}10%,75%{background:rgba(5,13,20,.7)}100%{background:rgba(5,13,20,0)}}
 .boom i{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:3px solid var(--cyan);box-shadow:0 0 30px var(--cyan),inset 0 0 30px rgba(95,227,214,.4);animation:ripple 1.6s cubic-bezier(.15,.6,.3,1) forwards}
 .boom i:nth-child(2){animation-delay:.18s}.boom i:nth-child(3){animation-delay:.36s}
 @keyframes ripple{0%{transform:scale(.2);opacity:1}100%{transform:scale(60);opacity:0}}
@@ -355,6 +356,8 @@ body.shake main,body.shake .sky{animation:shake .5s linear}
 <body>
 
 <div class="example">Overview concept with example data. Everything works, and the purple Try the effects panel plays the rest.</div>
+
+<div class="sdbar" id="sdbar" hidden><span class="dot" aria-hidden="true"></span>SHOW DAY MODE · RAF Cosford Air Show · Gates open 08:00</div>
 
 <header class="sky" id="sky">
   <div class="photo" id="photo"></div>
@@ -549,8 +552,6 @@ body.shake main,body.shake .sky{animation:shake .5s linear}
 
   </div>
 </main>
-
-<div class="sdbar" id="sdbar" hidden><span class="dot" aria-hidden="true"></span>SHOW DAY MODE · RAF Cosford Air Show · Gates open 08:00</div>
 
 <div class="replay" id="replay" role="dialog" aria-modal="true" aria-labelledby="rpT" hidden>
   <div class="rp-in">
