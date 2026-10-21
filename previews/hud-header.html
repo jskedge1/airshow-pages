@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HUD Header Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap">
+<style>
+/* Working preview of the visitor journey: site header with one Airshow Hub tab (log in, name and live badge in one place),
+   hub login page, welcome screens, new member setup, then the hub dashboard with the forum inside it.
+   The pages underneath are the real home page and a preview copy of the hub. */
+:root{--navy:#13293C;--navy2:#0E2131;--teal:#32B4AF;--cyan:#5FE3D6;--purple:#6950A1;--red:#D74949;--ink:#061019}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;scrollbar-width:none;background:#061019;font-family:"Barlow",Arial,sans-serif;color:#fff}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+button{font-family:inherit;cursor:pointer}
+
+/* header, same look as the live site header */
+#hd{position:fixed;top:0;left:0;right:0;z-index:20;height:62px;background:var(--navy)}
+#hd::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--teal);transform:scaleX(0);transform-origin:left;animation:line 1.2s cubic-bezier(.22,.61,.36,1) .2s forwards}
+@keyframes line{to{transform:scaleX(1)}}
+#hd .w{max-width:1360px;margin:0 auto;height:62px;display:flex;align-items:stretch;justify-content:space-between;gap:12px;padding:0 16px}
+#hd .lg{width:min(282px,calc(100vw - 170px));background:url(https://static.wixstatic.com/media/a0546b_b09aeb8c13404eec8f4e6db174cc18a3~mv2.png) left center/contain no-repeat;border:0;padding:0}
+#hd nav{display:flex;align-items:stretch}
+#hd .t{display:flex;align-items:center;gap:6px;height:62px;padding:0 10px;border:0;background:transparent;color:#fff;font:600 14px/1 "Barlow",Arial,sans-serif;white-space:nowrap;transition:padding .4s ease,background-color .4s ease}
+#hd .t:hover,#hd .t:focus-visible{padding:0 20px;background:var(--teal);outline:none}
+#hd .t.cur{background:var(--teal)}
+
+/* one Airshow Hub tab: log in when out, your name and a live badge when in */
+#hub{position:relative;display:flex;align-items:center;margin-left:10px}
+#hubBtn{position:relative;display:flex;align-items:center;gap:10px;height:44px;padding:0 16px 0 14px;border:0;background:#050C11;color:var(--cyan);font:700 14px/1.1 "Barlow",Arial,sans-serif;text-align:left;box-shadow:inset 0 0 0 1px rgba(95,227,214,.45),0 0 18px rgba(95,227,214,.18);transition:box-shadow .3s ease,padding .4s cubic-bezier(.2,.8,.2,1),background .3s}
+#hubBtn::before,#hubBtn::after{content:"";position:absolute;top:6px;bottom:6px;width:6px;border:2px solid var(--cyan);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+#hubBtn::before{left:-4px;border-right:0}
+#hubBtn::after{right:-4px;border-left:0}
+#hubBtn:hover,#hubBtn:focus-visible,#hub.cur #hubBtn{padding:0 22px 0 18px;box-shadow:inset 0 0 0 1px var(--cyan),0 0 26px rgba(95,227,214,.4);outline:none}
+#hubBtn:hover::before,#hub.cur #hubBtn::before{transform:translateX(-4px)}
+#hubBtn:hover::after,#hub.cur #hubBtn::after{transform:translateX(4px)}
+#hubBtn small{display:block;font-family:"Share Tech Mono",ui-monospace,monospace;font-weight:400;font-size:11px;color:#A9F0EA}
+#hubBtn .dot{width:9px;height:9px;border-radius:50%;background:var(--cyan);flex:none;animation:ping 1.8s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(95,227,214,.7)}70%{box-shadow:0 0 0 8px rgba(95,227,214,0)}100%{box-shadow:0 0 0 0 rgba(95,227,214,0)}}
+#hubBtn .av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--teal);color:var(--ink);font-weight:800;font-size:13px;position:relative}
+#hubBtn .av i{position:absolute;top:-3px;right:-3px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--red);color:#fff;font-style:normal;font-size:11px;font-weight:700;line-height:16px;text-align:center;box-shadow:0 0 0 2px #050C11}
+#hubBtn .cd{font-family:"Share Tech Mono",ui-monospace,monospace;font-weight:400;font-size:12px;color:#050C11;background:var(--cyan);padding:3px 6px;margin-left:2px}
+#hubBtn .cv{width:12px;height:12px;transition:transform .35s}
+#hub.o #hubBtn .cv{transform:rotate(180deg)}
+#hub .in-only{display:none}
+#hub.in .in-only{display:inline-flex}
+#hub.in .out-only{display:none}
+#dd{position:absolute;top:calc(100% + 9px);right:0;min-width:240px;background:var(--navy2);border-top:4px solid var(--teal);padding:8px 0 10px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .3s ease,transform .3s ease,visibility 0s linear .3s}
+#hub.o #dd{opacity:1;visibility:visible;transform:none;transition:opacity .3s ease,transform .3s ease}
+#dd button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:transparent;border:0;color:#fff;font-weight:600;font-size:15px;padding:11px 20px;transition:padding .3s,background-color .25s}
+#dd button:hover,#dd button:focus-visible{padding-left:30px;background:var(--teal);outline:none}
+#dd .lo{color:#F3B5B5}
+#dd small{font-family:"Share Tech Mono",ui-monospace,monospace;font-size:12px;color:var(--cyan)}
+
+/* phone menu */
+#hd .bg{display:none;align-items:center;gap:8px;background:transparent;border:0;color:#fff;font:600 15px "Barlow",Arial,sans-serif;padding:0 4px}
+#hd .bg svg{width:22px;height:22px}
+#mb{position:fixed;top:62px;left:0;right:0;z-index:19;background:var(--navy2);border-top:4px solid var(--teal);max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.22,.61,.36,1)}
+#mb.o{max-height:calc(100vh - 62px);overflow-y:auto}
+#mb button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;font:600 16px "Barlow",Arial,sans-serif;padding:15px 16px}
+#mb [hidden]{display:none}
+#mb .hubm{color:var(--cyan);background:#050C11;box-shadow:inset 4px 0 0 var(--cyan)}
+#mb .hubm small{font-family:"Share Tech Mono",ui-monospace,monospace;font-size:12px}
+#mb .lom{color:#F3B5B5}
+@media (max-width:1180px){#hd nav{display:none}#hd .bg{display:flex}}
+@media (max-width:600px){#hubBtn .nm,#hubBtn small,#hubBtn .cv{display:none}#hubBtn{padding:0 10px;gap:8px}#hub{margin-left:0;flex:none}#hd .lg{flex:1;min-width:130px;width:auto}#hd .w{gap:10px}}
+
+/* the page under the header, with a HUD wipe between pages */
+#stage{position:fixed;top:62px;left:0;right:0;bottom:0}
+#view{display:block;width:100%;height:100%;border:0;background:#061019}
+#wipe{position:absolute;inset:0;z-index:5;pointer-events:none;background:#061019;clip-path:inset(0 100% 0 0)}
+#wipe::after{content:"";position:absolute;top:0;bottom:0;right:0;width:3px;background:var(--cyan);box-shadow:0 0 18px var(--cyan)}
+#wipe span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:"Share Tech Mono",ui-monospace,monospace;font-size:15px;color:var(--cyan);white-space:nowrap}
+#wipe.in{clip-path:inset(0 0 0 0);transition:clip-path .28s cubic-bezier(.65,0,.35,1)}
+#wipe.out{clip-path:inset(0 0 0 100%);transition:clip-path .32s cubic-bezier(.65,0,.35,1)}
+
+/* preview guide */
+#guide{position:fixed;left:16px;bottom:16px;z-index:30;max-width:min(430px,calc(100vw - 32px));background:var(--purple);color:#fff;padding:12px 14px;font-size:15px;line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#guide b{display:block;font-weight:700}
+#guide ol{margin:6px 0 0;padding-left:20px}
+#guide .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+#guide button{font:700 14px "Barlow",Arial,sans-serif;background:#fff;color:var(--purple);border:0;padding:6px 10px}
+#guide button.x{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6)}
+#guide.min ol,#guide.min .row .r{display:none}
+@media (max-width:600px){#guide{font-size:14px;padding:8px 10px;left:auto;right:8px;bottom:auto;top:70px}}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:40;background:var(--navy);border:1px solid var(--cyan);color:#fff;padding:10px 16px;font-weight:600;max-width:calc(100% - 32px)}
+
+/* ---------- HUD version of the site header (preview) ---------- */
+#hd{background:linear-gradient(180deg,rgba(4,11,17,.97),rgba(8,20,31,.95))!important;border-bottom:1px solid rgba(95,227,214,.35)}
+#hd::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(95,227,214,.04) 0 1px,transparent 1px 3px),linear-gradient(90deg,rgba(95,227,214,.06) 1px,transparent 1px) 0 0/40px 40px}
+#hd::after{background:linear-gradient(90deg,transparent,#5FE3D6 50%,transparent)!important;background-size:30% 100%!important;background-repeat:no-repeat!important;box-shadow:0 0 12px rgba(95,227,214,.6);animation:line 1.2s cubic-bezier(.22,.61,.36,1) .2s forwards,glint 5s linear 1.4s infinite!important}
+@keyframes glint{from{background-position:-30% 0}to{background-position:130% 0}}
+#hd .w{position:relative}
+#hd .w::before,#hd .w::after{content:"";position:absolute;top:8px;bottom:8px;width:10px;border:2px solid #5FE3D6;pointer-events:none;opacity:.8}
+#hd .w::before{left:4px;border-right:0}#hd .w::after{right:4px;border-left:0}
+#hd .lg{background:none!important;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;color:#fff;text-align:left;padding-left:14px!important;width:auto!important;cursor:pointer}
+#hd .lg .wm{font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:24px;letter-spacing:.04em;line-height:1;text-shadow:0 0 18px rgba(95,227,214,.35)}
+#hd .lg .wm em{font-style:normal;color:#5FE3D6}
+#hd .lg small{font-family:"Share Tech Mono",ui-monospace,monospace;font-size:11px;color:#5FE3D6;letter-spacing:.06em}
+#hd .t{position:relative;letter-spacing:.02em}
+#hd .t::before,#hd .t::after{content:"";position:absolute;top:18px;bottom:18px;width:7px;border:2px solid #5FE3D6;opacity:0;transition:opacity .3s,transform .4s cubic-bezier(.2,.8,.2,1)}
+#hd .t::before{left:4px;border-right:0;transform:translateX(-6px)}#hd .t::after{right:4px;border-left:0;transform:translateX(6px)}
+#hd .t:hover,#hd .t:focus-visible{background:rgba(95,227,214,.08)!important;color:#5FE3D6}
+#hd .t:hover::before,#hd .t:hover::after,#hd .t.cur::before,#hd .t.cur::after{opacity:1;transform:none}
+#hd .t.cur{background:rgba(95,227,214,.12)!important;color:#5FE3D6;box-shadow:inset 0 -2px 0 #5FE3D6}
+#dd{background:rgba(4,11,17,.97)!important;border:1px solid rgba(95,227,214,.35);border-top:2px solid #5FE3D6!important}
+#dd button:hover,#dd button:focus-visible{background:rgba(95,227,214,.1)!important;color:#5FE3D6;box-shadow:inset 3px 0 0 #5FE3D6}
+#mb{background:rgba(4,11,17,.98)!important;border-top:2px solid #5FE3D6!important}
+@media (max-width:600px){#hd .lg .wm{font-size:19px}#hd .lg small{font-size:9px}#hd .w::before,#hd .w::after{display:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header id="hd">
+  <div class="w">
+    <button class="lg" type="button" data-go="home" aria-label="UK Airshow Guide home"><span class="wm">UK AIRSHOW <em>GUIDE</em></span><small>THE BIG GUIDE TO UK AIRSHOWS</small></button>
+    <nav aria-label="Main menu">
+      <button class="t" type="button" data-go="home">Home</button>
+      <button class="t" type="button" data-soon>Find Your Airshow</button>
+      <button class="t" type="button" data-soon>UK Airshow Calendar</button>
+      <button class="t" type="button" data-soon>Planning Guides</button>
+      <button class="t" type="button" data-soon>Photography</button>
+      <button class="t" type="button" data-soon>Camping</button>
+      <button class="t" type="button" data-soon>Community</button>
+    </nav>
+    <div id="hub">
+      <button id="hubBtn" type="button" aria-haspopup="true" aria-expanded="false">
+        <span class="dot out-only" aria-hidden="true"></span>
+        <span class="out-only"><span>Airshow Hub</span><small>Log in or join</small></span>
+        <span class="av in-only" aria-hidden="true">JS<i id="badgeN" hidden></i></span>
+        <span class="in-only nm-wrap"><span><span class="nm">Jack</span><small id="hubSub">Airshow Hub</small></span></span>
+        <span class="cd in-only" id="cd" hidden></span>
+        <svg class="cv in-only" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+      </button>
+      <div id="dd" role="menu">
+        <button type="button" role="menuitem" data-go="hub">My Airshow Hub <small id="ddCd"></small></button>
+        <button type="button" role="menuitem" data-go="forum">Airshow Forum</button>
+        <button type="button" role="menuitem" data-go="updates">Updates <small id="ddUp"></small></button>
+        <button type="button" role="menuitem" class="lo" data-logout>Log Out</button>
+      </div>
+    </div>
+    <button class="bg" type="button" id="bg" aria-expanded="false" aria-controls="mb"><span>Menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+  </div>
+</header>
+<div id="mb">
+  <button type="button" data-go="home">Home</button>
+  <button type="button" data-soon>Find Your Airshow</button>
+  <button type="button" data-soon>UK Airshow Calendar</button>
+  <button type="button" data-soon>Planning Guides</button>
+  <button type="button" data-soon>Photography</button>
+  <button type="button" data-soon>Camping</button>
+  <button type="button" data-soon>Community</button>
+  <button type="button" class="hubm" data-go="hub"><span id="mbHub">Airshow Hub</span><small id="mbSub">Log in or join</small></button>
+  <button type="button" data-go="forum" id="mbForum" hidden>Airshow Forum</button>
+  <button type="button" class="lom" id="lom" data-logout hidden>Log Out</button>
+</div>
+
+<main id="stage">
+  <iframe id="view" title="Page" src="about:blank"></iframe>
+  <div id="wipe" aria-hidden="true"><span id="wipeT">&gt; OPENING</span></div>
+</main>
+
+<aside id="guide" aria-label="How to try the preview">
+  <b>HUD header preview</b>
+  <ol>
+    <li>The site header in HUD style, with the logo as a lettered wordmark instead of the jet image.</li>
+    <li>The My Airshow Hub header with no plane photo: status strip, compass tape, targeting ring round your initials, bracket tabs.</li>
+    <li>The Overview band without the plane photo.</li>
+  </ol>
+  <div class="row"><button type="button" class="r" id="reset">Start again as a new visitor</button><button type="button" class="x" id="hide">Hide</button></div>
+</aside>
+<div id="toast" role="status" hidden></div>
+
+<script>
+(function () {
+  "use strict";
+  var view = document.getElementById("view"), wipe = document.getElementById("wipe");
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function getJ(k, d) { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } }
+  function loggedIn() { return get("ukagDemoIn") === "1"; }
+  var tt; function toast(m) { var t = document.getElementById("toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(function () { t.hidden = true; }, 3200); }
+
+  /* page changes: a quick HUD wipe covers the swap, then reveals the new page once it has loaded */
+  var current = "", busy = false;
+  var LABEL = { home: "> THE BIG GUIDE TO UK AIRSHOWS", hub: "> MY AIRSHOW HUB", forum: "> F1 · COMMS · AIRSHOW FORUM", updates: "> MY AIRSHOW HUB · UPDATES" };
+  function url(page, act) {
+    if (page === "home") return "../home.html";
+    var q = [];
+    if (page === "forum" || page === "updates") {
+      if (!loggedIn()) { q.push("act=login"); if (page === "forum") q.push("next=forum"); }
+      else q.push("p=" + page);
+    }
+    if (act) q.push("act=" + act);
+    q.push("t=" + Date.now());
+    return "hub-hud-demo.html?" + q.join("&");
+  }
+  function go(page, act) {
+    menu(false); acctMenu(false);
+    /* already on the hub and logged in: switch inside the hub without a reload */
+    if (current === "hub" && (page === "forum" || page === "updates") && loggedIn() && view.contentWindow && view.contentWindow.ukagShowPage) { view.contentWindow.ukagShowPage(page); return; }
+    if (current === "hub" && page === "hub" && !act && loggedIn() && view.contentWindow && view.contentWindow.ukagShowPage) { view.contentWindow.ukagShowPage("overview"); return; }
+    var target = url(page, act);
+    current = page === "home" ? "home" : "hub";
+    document.querySelectorAll("#hd .t").forEach(function (b) { b.classList.toggle("cur", b.dataset.go === current); });
+    document.getElementById("hub").classList.toggle("cur", current === "hub");
+    if (reduce) { view.src = target; return; }
+    document.getElementById("wipeT").textContent = LABEL[page] || "> OPENING";
+    wipe.className = ""; void wipe.offsetWidth; wipe.className = "in";
+    setTimeout(function () {
+      var done = false;
+      function reveal() { if (done) return; done = true; setTimeout(function () { wipe.className = "out"; }, 120); }
+      view.addEventListener("load", reveal, { once: true });
+      setTimeout(reveal, 1800);
+      view.src = target;
+    }, 300);
+  }
+
+  /* links inside the home page stay inside the preview */
+  view.addEventListener("load", function () {
+    var d; try { d = view.contentDocument; } catch (e) { return; }
+    if (!d || current !== "home") return;
+    d.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
+      var h = a.getAttribute("href") || "";
+      if (!/ukairshowguide\.co\.uk/.test(h)) return;
+      e.preventDefault();
+      if (/my-airshow-hub/.test(h)) go("hub");
+      else if (/community-forum|\/forum/.test(h)) go("forum");
+      else if (/ukairshowguide\.co\.uk\/?$/.test(h)) go("home");
+      else toast("That page is not part of this preview. Try Airshow Hub in the header.");
+    }, true);
+  });
+  window.addEventListener("message", function (e) { var m = e.data; if (m && m.ukagDemoGo) go(m.ukagDemoGo); });
+
+  /* header */
+  document.addEventListener("click", function (e) {
+    var g = e.target.closest("[data-go]"); if (g) { go(g.dataset.go); return; }
+    if (e.target.closest("[data-soon]")) { toast("That tab works as normal on the live site. This preview is about Airshow Hub."); return; }
+    if (e.target.closest("[data-logout]")) { go("hub", "logout"); return; }
+    if (!e.target.closest("#hub")) acctMenu(false);
+  });
+  var hub = document.getElementById("hub"), hubBtn = document.getElementById("hubBtn");
+  function acctMenu(open) { hub.classList.toggle("o", open); hubBtn.setAttribute("aria-expanded", String(open)); }
+  hubBtn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (!loggedIn()) { go("hub"); return; }
+    acctMenu(!hub.classList.contains("o"));
+  });
+  hub.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse" && loggedIn()) acctMenu(true); });
+  hub.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") acctMenu(false); });
+  var mb = document.getElementById("mb"), bgb = document.getElementById("bg");
+  function menu(open) { mb.classList.toggle("o", open); bgb.setAttribute("aria-expanded", String(open)); bgb.firstChild.textContent = open ? "Close" : "Menu"; }
+  bgb.addEventListener("click", function () { menu(!mb.classList.contains("o")); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { acctMenu(false); menu(false); } });
+
+  /* the tab follows log in and log out inside the hub, and shows the countdown and new updates */
+  var last = "";
+  function sync() {
+    var on = loggedIn();
+    var trips = getJ("ukagDemoTrips", []), ups = getJ("ukagDemoUpdates", []);
+    var now = Date.now();
+    var next = trips.filter(function (t) { return new Date(t.start).getTime() > now; }).sort(function (a, b) { return a.start.localeCompare(b.start); })[0];
+    var unread = ups.filter(function (u) { return !u.read; }).length;
+    var key = [on, next && next.id, unread].join("|");
+    if (key === last) return; last = key;
+    hub.classList.toggle("in", on);
+    var cd = document.getElementById("cd"), n = document.getElementById("badgeN");
+    var days = next ? Math.max(0, Math.ceil((new Date(next.start).getTime() - now) / 86400000)) : 0;
+    var shortName = next ? next.showName.replace(/^Airbourne: /, "").split(" ").filter(function (w) { return !/^(RAF|IWM|The)$/i.test(w); })[0] : "";
+    cd.hidden = !next; cd.textContent = next ? shortName + " " + days + "d" : "";
+    n.hidden = !unread; n.textContent = unread;
+    document.getElementById("hubSub").textContent = unread ? unread + " new update" + (unread > 1 ? "s" : "") : "My Airshow Hub";
+    document.getElementById("ddCd").textContent = next ? next.showName.split(" ").slice(0, 3).join(" ") + " in " + days + " days" : "";
+    document.getElementById("ddUp").textContent = unread ? unread + " new" : "";
+    document.getElementById("mbHub").textContent = on ? "Jack Skedge, My Airshow Hub" : "Airshow Hub";
+    document.getElementById("mbSub").textContent = on ? (next ? shortName + " " + days + "d" : "") + (unread ? (next ? " · " : "") + unread + " new" : "") : "Log in or join";
+    document.getElementById("mbForum").hidden = !on;
+    document.getElementById("lom").hidden = !on;
+    if (!on) acctMenu(false);
+  }
+  setInterval(sync, 400); sync();
+
+  function fresh() {
+    ["ukagDemoIn", "ukagDemoOut", "ukagDemoTrips", "ukagDemoUpdates", "ukagA2HS", "ukagHubSeen", "ukagSound", "ukagStyle", "ukagArea"].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+    try { sessionStorage.removeItem("ukagAsked"); } catch (e) {}
+    put("ukagDemoIn", "0"); last = ""; sync();
+  }
+  document.getElementById("reset").addEventListener("click", function () { fresh(); go("home"); toast("Starting again as a new visitor."); });
+  document.getElementById("hide").addEventListener("click", function () { var g = document.getElementById("guide"); g.classList.toggle("min"); this.textContent = g.classList.contains("min") ? "Show help" : "Hide"; });
+  if (window.innerWidth < 600) { document.getElementById("guide").classList.add("min"); document.getElementById("hide").textContent = "Show help"; }
+
+  /* every visit to the preview starts as a new visitor on the home page */
+  /* this preview opens straight on the hub, logged in, so the HUD header shows first */
+  fresh(); put("ukagDemoIn", "1"); last = ""; sync(); go("hub");
+})();
+</script>
+</body>
+</html>

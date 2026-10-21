@@ -150,3 +150,13 @@ rep('</body>', '<div id="demoBar">Working preview with example data. Try Log Out
 
 open('previews/hub-login-demo.html', 'w', encoding='utf-8').write(s)
 print('ok', len(s))
+
+# ---------------------------------------------------------------------------
+# HUD header preview (21 Oct 2026): the same preview hub with the HUD header and no plane photos
+# ---------------------------------------------------------------------------
+hud_css = open('hub-parts/hud-head.css', encoding='utf-8').read()
+hud_js = open('hub-parts/hud-head.js', encoding='utf-8').read()
+h = s.replace('</head>', '<style id="hud-head">\n' + hud_css + '</style>\n</head>', 1)
+h = h.replace('</body>', '<script>\n' + hud_js + '</script>\n</body>', 1)
+open('previews/hub-hud-demo.html', 'w', encoding='utf-8').write(h)
+print('hud ok', len(h))
