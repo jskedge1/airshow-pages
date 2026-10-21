@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Show Day test</title><style>body{margin:0;background:#040B11;color:#fff;font-family:sans-serif}iframe{width:100%;height:2600px;border:0}#log{position:fixed;bottom:0;left:0;right:0;background:#222;font:12px monospace;padding:6px;max-height:120px;overflow:auto;z-index:9}</style></head>
+<body><div id="log"></div><iframe id="f" src="show-day-test.html?mode=hub"></iframe>
+<script>
+var f=document.getElementById('f'),log=document.getElementById('log');window.lastUpload=null;
+var live=location.search.indexOf('photo')>=0;
+window.addEventListener('message',function(e){var m=e.data;if(!m||m.source!=='ukag-showday'||!m.id)return;
+  var r={source:'ukag-showday',id:m.id,ok:true,data:{}};
+  if(m.action==='load'){r.data={member:{loggedIn:true,name:'Jack',saved:['riat','cosford']},programmes:live?[{showId:'riat',day:'Saturday',date:'2027-07-17',acts:[],photo:{id:'p1',url:'https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp',by:'Jack',at:new Date().toISOString(),place:'about 1 km from the crowd line'}}]:[]};}
+  if(m.action==='upload'){var p=m.payload;window.lastUpload={times:p.scan.times,text:p.scan.text.slice(0,300),taken:p.taken,gps:p.gps,show:p.showId,pages:p.pages.length};
+    r.data={live:p.scan.times>=4,checks:[{key:'airshow',ok:true,detail:'Royal International Air Tattoo is named on the page.'},{key:'date',ok:true,detail:'Royal International Air Tattoo is on today.'},{key:'location',ok:true,detail:'Your phone is at the show, about 1 km from the crowd line.'},{key:'page',ok:p.scan.times>=4,detail:'I can read '+p.scan.times+' display times on the page.'}]};}
+  if(m.action==='reportPhoto')r.data={hidden:true};
+  if(m.action==='reports')r.data=[];
+  log.textContent+=m.action+' ';
+  setTimeout(function(){f.contentWindow.postMessage(r,'*');},m.action==='upload'?1200:200);
+});
+window.dropTest=function(){
+  var c=document.createElement('canvas');c.width=1000;c.height=1300;var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,1000,1300);x.fillStyle='#000';
+  x.font='bold 54px Arial';x.fillText('Royal International Air Tattoo',40,90);x.font='44px Arial';x.fillText('Flying Display  Saturday 17 July',40,160);
+  var rows=[['11:00','Red Arrows'],['11:35','Typhoon'],['12:05','Spitfire'],['12:40','F-35B Lightning'],['13:15','Chinook'],['13:50','Patrouille de France'],['14:30','A400M Atlas'],['15:10','F-16 Viper']];
+  rows.forEach(function(r,i){x.fillText(r[0]+'   '+r[1],60,260+i*110);});
+  c.toBlob(function(b){var file=new File([b],'programme.jpg',{type:'image/jpeg'});var dt=new DataTransfer();dt.items.add(file);
+    var d=f.contentDocument.getElementById('drop');var ev=new f.contentWindow.DragEvent('drop',{dataTransfer:dt,bubbles:true,cancelable:true});d.dispatchEvent(ev);},'image/jpeg',.92);
+};
+</script></body></html>

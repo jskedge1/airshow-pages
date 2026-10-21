@@ -150,6 +150,33 @@ h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:700;text-transform:up
 .spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--cyan);border-radius:50%;animation:rot 1s linear infinite;flex:none}
 @keyframes rot{to{transform:rotate(360deg)}}
 .foot{font-size:13px;color:#8FA6B6;margin:0}
+/* flying display upload: automatic checks and the crowd photo (21 Oct 2026) */
+.up-cta{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;justify-content:space-between;padding:18px 20px}
+.up-cta b{display:block;font-family:var(--f-display);font-size:26px;text-transform:uppercase;line-height:1}
+.up-cta p{margin:6px 0 0;color:#C9D8E2;font-size:15px;max-width:560px}
+.btn.big{min-height:56px;padding:0 26px;font-size:17px;gap:10px;display:inline-flex;align-items:center}
+.btn.big svg{flex:none}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.chk{display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 12px;align-items:start;padding:12px 14px;background:rgba(6,16,25,.6);border:1px solid var(--line);transition:border-color .4s,background .4s}
+.chk i{grid-row:span 2;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);font-style:normal;font-family:"Share Tech Mono",ui-monospace,monospace;font-size:16px;color:#8FA6B6}
+.chk b{font-size:16px}
+.chk span{font-size:14px;color:#C9D8E2;line-height:1.4}
+.chk.run i{border-color:var(--cyan);border-top-color:transparent;border-radius:50%;animation:rot 1s linear infinite;color:transparent}
+.chk.pass{border-color:rgba(124,255,158,.55);background:rgba(124,255,158,.07)}
+.chk.pass i{border-color:#7CFF9E;color:#7CFF9E;box-shadow:0 0 12px rgba(124,255,158,.35)}
+.chk.fail{border-color:rgba(255,138,138,.6);background:rgba(215,73,73,.1)}
+.chk.fail i{border-color:#FF8A8A;color:#FF8A8A}
+.verdict{padding:14px 16px;font-size:16px;line-height:1.45;border-left:4px solid var(--cyan);background:rgba(95,227,220,.08)}
+.verdict.held{border-left-color:#F2B233;background:rgba(242,178,51,.1)}
+.crowd{padding:20px;display:flex;flex-direction:column;gap:14px}
+.crowd-img{position:relative;border:1px solid var(--line);background:#040B11;max-height:78vh;overflow:auto;scrollbar-width:none}
+.crowd-img::-webkit-scrollbar{display:none}
+.crowd-img img{display:block;width:100%;height:auto;pointer-events:none;user-select:none}
+.crowd-meta{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:14px;color:#C9D8E2}
+.crowd-meta .ok{color:#7CFF9E;font-family:"Share Tech Mono",ui-monospace,monospace}
+.crowd-pages{display:flex;gap:8px;flex-wrap:wrap}
+.linkbtn{background:none;border:0;padding:0;color:#8FA6B6;text-decoration:underline;font-size:14px;cursor:pointer}
+@media (max-width:640px){.checks{grid-template-columns:minmax(0,1fr)}.up-cta b{font-size:22px}.btn.big{width:100%;justify-content:center}}
 
 .stack{display:flex;flex-direction:column;gap:20px}
 .row2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px}
@@ -219,7 +246,7 @@ body.compact .brand p{display:none}
 
   <section class="upload glass boot" style="--d:.5s" id="upload" aria-labelledby="up-title">
     <div class="ph"><h2 id="up-title">Send Us The Flying Programme</h2><span class="tag purple">Members</span></div>
-    <p style="margin:0;color:#C9D8E2;max-width:760px">Got the programme in your hand? Take a clear photo of the flying display times page and send it here. I check every one, then the running order goes live for everyone heading to that show.</p>
+    <p style="margin:0;color:#C9D8E2;max-width:760px" id="up-intro">Got the programme in your hand? Take a clear photo of the flying display times page and send it here. Each photo is checked straight away for the airshow, the date and that you are at the show, then it goes live for everyone heading there.</p>
     <div id="up-guest" hidden>
       <div class="btns"><button class="btn primary" id="login-btn">Log In To Send A Programme</button><span class="mut">It is free to join.</span></div>
     </div>
@@ -227,8 +254,7 @@ body.compact .brand p{display:none}
       <div style="display:flex;flex-direction:column;gap:16px">
         <div class="form">
           <label for="up-show">Which show<select class="field" id="up-show"></select></label>
-          <label for="up-day">Which day<input class="field" id="up-day" maxlength="40" placeholder="Saturday"></label>
-          <label for="up-note">Anything to add<input class="field" id="up-note" maxlength="140" placeholder="Times changed on the day board"></label>
+          <label for="up-note" style="grid-column:span 2">Anything to add<input class="field" id="up-note" maxlength="140" placeholder="Times changed on the day board"></label>
         </div>
         <div class="drop" id="drop">
           <input id="prog-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple aria-label="Choose programme photos or a PDF">
@@ -237,7 +263,9 @@ body.compact .brand p{display:none}
           <span class="mut">or tap to take a photo, choose one, or add a PDF. Up to 3 pages.</span>
         </div>
         <div class="thumbs" id="thumbs"></div>
-        <div class="btns"><button class="btn primary" id="send-btn" disabled>Send For Checking</button></div>
+        <div class="btns"><button class="btn primary" id="send-btn" disabled>Check And Send</button><span class="mut" style="font-size:14px">Your phone will ask to share your location. It is only used to check you are at the show and is not kept.</span></div>
+        <div class="checks" id="checks" hidden></div>
+        <div class="verdict" id="verdict" hidden></div>
       </div>
     </div>
     <div class="status" id="status" aria-live="polite"></div>
@@ -271,7 +299,7 @@ var params=new URLSearchParams(location.search);
 var MODE=params.get('mode')==='hub'?'hub':(params.get('show')?'single':'full');
 var FIXED=MODE==='single'?norm(params.get('show')):null;
 
-var st={show:FIXED||'riat',dayIdx:{},progs:{},member:null,clock:'test',testSec:46800,playing:false,files:[],sending:false,connected:false,clockChosen:false,heading:0,alerts:true,reports:[],confirmed:{}};
+var st={show:FIXED||'riat',dayIdx:{},progs:{},member:null,clock:'test',testSec:46800,playing:false,files:[],sending:false,connected:false,clockChosen:false,heading:0,alerts:true,reports:[],confirmed:{},photos:{},photoIdx:{},meta:[]};
 var playTimer=null;
 
 function $(s){return document.querySelector(s);}
@@ -310,8 +338,11 @@ function cleanActs(acts){
 }
 function setProgrammes(list){
   st.progs={};
+  st.photos={};
   (list||[]).forEach(function(p){
-    var id=norm(p.showId);var items=cleanActs(p.acts);if(!items.length)return;
+    var id=norm(p.showId);
+    if(p.photo&&p.photo.url){(st.photos[id]=st.photos[id]||[]).push(p.photo);return;}
+    var items=cleanActs(p.acts);if(!items.length)return;
     (st.progs[id]=st.progs[id]||[]).push({day:p.day||'Show day',date:p.date||'',items:items});
   });
   Object.keys(st.progs).forEach(function(k){st.progs[k].sort(function(a,b){return String(a.date).localeCompare(String(b.date));});});
@@ -381,6 +412,22 @@ var PLACES=['Car parks','Entry gates','Toilets','Food and drink','Shuttle bus','
 var STATUSES=[{v:'Quiet',k:'c'},{v:'Short queue',k:'c'},{v:'Running',k:'c'},{v:'Busy',k:'p'},{v:'Long queue',k:'p'},{v:'Delayed',k:'r'},{v:'Full or closed',k:'r'}];
 function statusKind(s){var f=STATUSES.find(function(x){return x.v===s;});return f?f.k:'p';}
 
+function uploadCta(){
+  if(MODE!=='hub'||!(st.member&&st.member.loggedIn))return '';
+  return '<div class="glass boot up-cta" style="--d:.15s"><div><b>Got the programme?</b><p>Upload the flying display page from your programme. I check the airshow, the date and that you are at the show, then it goes live for everyone heading there.</p></div>'+
+    '<button class="btn primary big" type="button" id="cta-upload"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v5h16v-5"/></svg>Upload The Flying Display</button></div>';
+}
+function crowdPhotoCard(){
+  var list=st.photos[st.show];if(!list||!list.length)return '';
+  var i=Math.min(st.photoIdx[st.show]||0,list.length-1),ph=list[i];
+  var at='';try{at=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit'}).format(new Date(ph.at));}catch(e){}
+  var pages=list.length>1?'<div class="crowd-pages">'+list.map(function(x,j){return '<button class="btn '+(j===i?'primary':'ghost')+'" type="button" data-ph="'+j+'">Photo '+(j+1)+'</button>';}).join('')+'</div>':'';
+  return '<div class="glass boot crowd" style="--d:.2s"><div class="ph"><h2>Flying Display From The Crowd</h2><span class="tag teal">Checked</span></div>'+
+    '<div class="crowd-img"><img src="'+esc(ph.url)+'/v1/fit/w_1600,h_2400,q_85/display.jpg" alt="Flying display page from the '+esc(showById(st.show).name)+' programme, sent by '+esc(ph.by)+'" onerror="this.onerror=null;this.src=\''+esc(ph.url)+'\'"></div>'+pages+
+    '<div class="crowd-meta"><span class="ok">AIRSHOW ✓ DATE ✓ LOCATION ✓</span><span>Sent by '+esc(ph.by)+(at?' at '+at:'')+(ph.place?', '+esc(ph.place):'')+'</span>'+
+    (st.member&&st.member.loggedIn?'<button class="linkbtn" type="button" data-flag="'+esc(ph.id)+'">Something wrong with this photo?</button>':'')+'</div>'+
+    '<p class="mut" style="margin:0;font-size:14px">Times can change on the day, so please keep an ear on the commentary.</p></div>';
+}
 function emptyCard(title,text,btn){
   return '<div class="glass boot empty" style="--d:.2s"><span class="tag ghost">No running order yet</span><h2>'+esc(title)+'</h2><p class="mut" style="margin:0;max-width:600px">'+text+'</p>'+(btn||'')+'</div>';
 }
@@ -434,7 +481,10 @@ function buildBoard(){
   }
   var cd=curDay();
   var top;
-  if(!cd){
+  var photoCard=crowdPhotoCard();
+  if(!cd&&photoCard){
+    top='';
+  }else if(!cd){
     top=emptyCard(showById(st.show).name,'Flying display times are usually published in the week of the show or in the programme on the day. As soon as I have them, they appear here.',MODE==='hub'?'':'<a href="#upload" class="btn primary">Send Us The Programme</a>');
   }else{
     top='<div class="board">'+
@@ -448,7 +498,7 @@ function buildBoard(){
         '<input type="checkbox" id="fam-alerts" '+(st.alerts?'checked':'')+'></label></div>'+
     '</div>';
   }
-  wrap.innerHTML='<div class="stack">'+top+'<div class="row2">'+compassPanel(.45)+radarPanel(.55)+'</div>'+crowdPanel(.65)+'</div>';
+  wrap.innerHTML='<div class="stack">'+uploadCta()+photoCard+top+'<div class="row2">'+compassPanel(.45)+radarPanel(.55)+'</div>'+crowdPanel(.65)+'</div>';
   tick();renderCompass();renderReports();
 }
 function fmtLeft(s){s=Math.max(0,Math.round(s));var h=Math.floor(s/3600),m=Math.floor(s/60)%60,x=s%60;return h?h+'h '+pad(m)+'m':pad(m)+':'+pad(x);}
@@ -603,13 +653,15 @@ function loadReports(){
 function setStatus(html,kind){var s=$('#status');s.className='status'+(kind?' '+kind:'');s.innerHTML=html||'';}
 function renderUpload(){
   var box=$('#upload');
-  box.hidden=MODE==='hub';
   var inn=!!(st.member&&st.member.loggedIn);
+  box.hidden=MODE==='hub'&&!(inn&&visibleShows().length);
+  if(MODE==='hub')$('#up-title').textContent='Upload The Flying Display';
   $('#up-guest').hidden=inn||!st.connected;
   $('#up-member').hidden=!inn;
   if(MODE==='single'){$('#up-title').textContent='Got The '+showById(FIXED).short+' Programme?';}
   var sel=$('#up-show');
-  if(!sel.options.length){sel.innerHTML=SHOWS.map(function(s){return '<option value="'+s.id+'">'+esc(s.name)+'</option>';}).join('');}
+  var opts=MODE==='hub'?visibleShows():SHOWS;
+  if(sel.dataset.n!==String(opts.length)){sel.dataset.n=String(opts.length);sel.innerHTML=opts.map(function(s){return '<option value="'+s.id+'">'+esc(s.name)+'</option>';}).join('');}
   if(document.activeElement!==sel)sel.value=st.show;
   if(MODE==='single'){sel.value=FIXED;sel.disabled=true;}
   renderThumbs();
@@ -663,7 +715,7 @@ function addFiles(list){
         setStatus('<span class="spin"></span>Opening the PDF…');
         return pdfPages(f,room).then(function(urls){urls.forEach(function(u){st.files.push({url:u});});});
       }
-      if(/^image\/(jpeg|png|webp)$/.test(f.type)){return shrink(f).then(function(u){st.files.push({url:u});});}
+      if(/^image\/(jpeg|png|webp)$/.test(f.type)){return readExif(f).then(function(x){if(x)st.meta.push(x);return shrink(f);}).then(function(u){st.files.push({url:u});});}
       skipped++;
     });
   });
@@ -672,17 +724,86 @@ function addFiles(list){
     setStatus(esc((st.files.length?st.files.length+' page'+(st.files.length>1?'s':'')+' ready to send.':'')+(skipped?' '+skipped+' file'+(skipped>1?'s were':' was')+' skipped. Up to 3 pages, as a photo or PDF.':'')));
   }).catch(function(){setStatus('That file could not be opened. Try a photo or screenshot of the flying display page instead.','err');});
 }
+/* Photo details: the date it was taken and, when the phone kept it, where. JPEG only; nothing else is read. */
+function readExif(file){
+  if(!/jpe?g$/i.test(file.type))return Promise.resolve(null);
+  return file.slice(0,262144).arrayBuffer().then(function(buf){
+    var v=new DataView(buf);if(v.getUint16(0)!==0xFFD8)return null;
+    var o=2;
+    while(o+4<v.byteLength){
+      var mk=v.getUint16(o),len=v.getUint16(o+2);
+      if(mk===0xFFE1&&v.getUint32(o+4)===0x45786966)return tiff(v,o+10);
+      if((mk&0xFF00)!==0xFF00)break;o+=2+len;
+    }
+    return null;
+  }).catch(function(){return null;});
+  function tiff(v,t){
+    var le=v.getUint16(t)===0x4949;
+    function u16(p){return v.getUint16(p,le);}function u32(p){return v.getUint32(p,le);}
+    function ifd(p){var out={},n=u16(p);for(var k=0;k<n;k++){var e=p+2+k*12;out[u16(e)]={type:u16(e+2),count:u32(e+4),at:e+8};}return out;}
+    function ascii(e){var p=e.count>4?t+u32(e.at):e.at,str='';for(var k=0;k<e.count-1;k++)str+=String.fromCharCode(v.getUint8(p+k));return str;}
+    function rats(e){var p=t+u32(e.at),a=[];for(var k=0;k<e.count;k++)a.push(u32(p+k*8)/(u32(p+k*8+4)||1));return a;}
+    var res={},i0=ifd(t+u32(t+4));
+    if(i0[0x8769]){var ex=ifd(t+u32(i0[0x8769].at));var dt=ex[0x9003]||ex[0x9004];if(dt){var m=/^(\d{4}):(\d{2}):(\d{2})/.exec(ascii(dt));if(m)res.taken=m[1]+'-'+m[2]+'-'+m[3];}}
+    if(i0[0x8825]){var g=ifd(t+u32(i0[0x8825].at));
+      if(g[2]&&g[4]){var la=rats(g[2]),lo=rats(g[4]);var lat=la[0]+la[1]/60+la[2]/3600,lng=lo[0]+lo[1]/60+lo[2]/3600;
+        if(g[1]&&ascii(g[1])==='S')lat=-lat;if(g[3]&&ascii(g[3])==='W')lng=-lng;if(lat||lng)res.gps={lat:lat,lng:lng};}}
+    return (res.taken||res.gps)?res:null;
+  }
+}
+/* Reading the times on the page, on the phone itself, so the check knows it is a flying display page */
+var ocrLib=null;
+function loadOcr(){
+  if(ocrLib)return ocrLib;
+  ocrLib=new Promise(function(res,rej){var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';sc.onload=function(){res(window.Tesseract);};sc.onerror=function(){rej(new Error('ocr'));};document.head.appendChild(sc);});
+  ocrLib.catch(function(){ocrLib=null;});
+  return ocrLib;
+}
+function scanPages(urls){
+  return loadOcr().then(function(T){
+    return T.createWorker('eng').then(function(w){
+      var text='',chain=Promise.resolve();
+      urls.forEach(function(u){chain=chain.then(function(){return w.recognize(u).then(function(r){text+='\n'+((r&&r.data&&r.data.text)||'');});});});
+      return chain.then(function(){w.terminate();return text;},function(e){w.terminate();throw e;});
+    });
+  }).then(function(text){
+    var seen={},re=/\b([01]?\d|2[0-3])\s?[:.]\s?([0-5]\d)\b|\b(0[89]|1\d|20)([0-5]\d)\b/g,m;
+    while((m=re.exec(text))){var h=+(m[1]||m[3]);if(h>=8&&h<=21)seen[h+':'+(m[2]||m[4])]=1;}
+    return {text:text.slice(0,6000),times:Object.keys(seen).length};
+  });
+}
+var CHECKS=[['airshow','Airshow','Checking the page is for this show'],['date','Date','Checking the show is on today'],['location','Location','Checking you are at the show'],['page','Flying display page','Reading the display times']];
+function renderChecks(stage,result){
+  var box=$('#checks');box.hidden=false;
+  box.innerHTML=CHECKS.map(function(c,k){
+    var r=result&&result.filter(function(x){return x.key===c[0];})[0];
+    var cls=r?(r.ok?'pass':'fail'):(k<=stage?'run':'');
+    return '<div class="chk '+cls+'"><i aria-hidden="true">'+(r?(r.ok?'✓':'✗'):pad(k+1))+'</i><b>'+c[1]+'</b><span>'+esc(r?r.detail:(cls==='run'?c[2]+'…':'Waiting'))+'</span></div>';
+  }).join('');
+}
 function send(){
   if(!st.files.length||st.sending)return;
   var showId=MODE==='single'?FIXED:$('#up-show').value;
-  st.sending=true;renderThumbs();setStatus('<span class="spin"></span>Sending the programme…');
-  call('upload',{showId:showId,day:$('#up-day').value.trim().slice(0,40),note:$('#up-note').value.trim().slice(0,140),pages:st.files.map(function(f){return f.url;})},60000)
-    .then(function(){
-      st.files=[];$('#up-day').value='';$('#up-note').value='';
-      setStatus('Thank you. I check every programme by hand and the running order goes live here once it is in.','ok');
-    })
-    .catch(function(e){setStatus(esc(e.message==='timeout'?'That took too long. Please check your signal and try again.':(e.message||'It did not send. Please try again.')),'err');})
-    .then(function(){st.sending=false;renderThumbs();});
+  var pages=st.files.map(function(f){return f.url;});
+  var taken='',gps=null;st.meta.forEach(function(x){if(x.taken&&!taken)taken=x.taken;if(x.gps&&!gps)gps=x.gps;});
+  st.sending=true;renderThumbs();$('#verdict').hidden=true;setStatus('');
+  renderChecks(3);
+  scanPages(pages).catch(function(){return {text:'',times:0,failed:true};}).then(function(scan){
+    renderChecks(2);
+    return call('upload',{showId:showId,note:$('#up-note').value.trim().slice(0,140),pages:pages,taken:taken,gps:gps,scan:{text:scan.text,times:scan.times}},90000);
+  }).then(function(r){
+    renderChecks(4,(r&&r.checks)||[]);
+    var v=$('#verdict');v.hidden=false;
+    if(r&&r.live){
+      v.className='verdict';v.textContent='All four checks passed. Thank you, your photo is live on the board for everyone at '+showById(showId).name+'.';
+      st.files=[];st.meta=[];$('#up-note').value='';load();
+    }else{
+      v.className='verdict held';v.textContent='This one did not pass every check, so it has not gone live. I have kept it so I can look at it later. If you can fix what is marked, please send it again.';
+    }
+  }).catch(function(e){
+    $('#checks').hidden=true;
+    setStatus(esc(e.message==='timeout'?'That took too long. Please check your signal and try again.':(e.message||'It did not send. Please try again.')),'err');
+  }).then(function(){st.sending=false;renderThumbs();});
 }
 
 /* ---------- events ---------- */
@@ -691,7 +812,10 @@ document.addEventListener('click',function(e){
   if(b.dataset.show){st.show=b.dataset.show;st.reports=[];jumpToFirst();renderShows();buildBoard();renderUpload();loadReports();return;}
   if(b.dataset.confirm){var cid=b.dataset.confirm;st.confirmed[cid]=true;renderReports();call('confirm',{id:cid}).then(loadReports).catch(function(){});return;}
   if(b.dataset.day!=null){st.dayIdx[st.show]=+b.dataset.day;jumpToFirst();renderShows();buildBoard();return;}
-  if(b.dataset.rm!=null){st.files.splice(+b.dataset.rm,1);renderThumbs();return;}
+  if(b.dataset.rm!=null){st.files.splice(+b.dataset.rm,1);if(!st.files.length)st.meta=[];renderThumbs();return;}
+  if(b.dataset.ph!=null){st.photoIdx[st.show]=+b.dataset.ph;buildBoard();return;}
+  if(b.dataset.flag){b.disabled=true;call('reportPhoto',{id:b.dataset.flag}).then(function(r){b.textContent=r&&r.hidden?'Thanks, it is off the board until I check it.':'Thanks, I will take a look.';if(r&&r.hidden)setTimeout(load,1500);}).catch(function(err){b.disabled=false;b.textContent=(err&&err.message)||'That did not send. Please try again.';});return;}
+  if(b.id==='cta-upload'){var up=$('#upload');if(up&&!up.hidden){up.scrollIntoView({behavior:'smooth',block:'start'});var fi=$('#prog-file');if(fi)setTimeout(function(){fi.click();},350);}return;}
   if(b.dataset.login||b.id==='login-btn'){call('login').then(load).catch(function(){});return;}
   switch(b.id){
     case 'mode-test':st.clock='test';st.clockChosen=true;renderClock();tick();break;
