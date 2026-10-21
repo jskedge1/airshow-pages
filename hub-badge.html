@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Hub Badge</title></head>
+<body>
+<script>
+/* Hidden helper for the site header (21 Oct 2026). My Airshow Hub saves a small summary (next show and new updates)
+   in this site's storage; the header loads this page out of sight and gets the summary for its Airshow Hub tab. */
+(function () {
+  function send() {
+    var sum = null;
+    try { sum = JSON.parse(localStorage.getItem("ukagHubSummary")); } catch (e) {}
+    window.parent.postMessage({ ukagBadge: sum || { in: false } }, "*");
+  }
+  window.addEventListener("storage", function (e) { if (e.key === "ukagHubSummary") send(); });
+  window.addEventListener("message", function (e) { if (e.data === "ukagBadge?") send(); });
+  send();
+})();
+</script>
+</body>
+</html>

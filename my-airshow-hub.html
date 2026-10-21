@@ -747,10 +747,285 @@ label.f{color:var(--hud-fg)}
 #hubSO i{display:block;height:6px;background:#13293C;margin-top:18px;position:relative;overflow:hidden}
 #hubSO i::after{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:#D74949;box-shadow:0 0 12px #D74949;animation:wbFill 1.6s cubic-bezier(.4,0,.2,1) forwards}
 </style>
+<style id="hub-overview2">
+/* ---------- Overview, cockpit layout (21 Oct 2026) ---------- */
+.o2{--o2c:#5FE3D6;--o2l:rgba(95,227,214,.22);--o2l2:rgba(95,227,214,.1);--o2m:#A9BDCB;--o2e:cubic-bezier(.2,.8,.2,1);--o2cond:"Barlow Condensed","Barlow",Arial,sans-serif;--o2mono:"Share Tech Mono",ui-monospace,Menlo,Consolas,monospace;padding-top:18px;color:#E8F1F6}
+.o2 [hidden]{display:none!important}
+.o2 button{font-family:inherit;color:inherit;cursor:pointer}
+.o2-sky{position:relative;overflow:hidden;min-height:300px;border:1px solid var(--o2l)}
+.o2-photo{position:absolute;inset:-30px;background:url(https://jskedge1.github.io/airshow-pages/hub-img/c035006943.jpg) 62% 40%/cover;transform:translate3d(var(--px,0),var(--py,0),0) scale(1.06);transition:transform .8s var(--o2e),filter 1.2s}
+.o2-sky::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,#050D14 0%,rgba(5,13,20,.93) 34%,rgba(5,13,20,.55) 62%,rgba(5,13,20,.25) 100%),linear-gradient(0deg,#050D14 0%,transparent 55%)}
+.o2-sky::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.o2-tint{position:absolute;inset:0;z-index:1;mix-blend-mode:soft-light;opacity:.55;background:var(--tod,linear-gradient(180deg,#5FA8D3,#F2B233))}
+.o2-trail{position:absolute;z-index:1;top:22%;left:-30%;width:30%;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75));animation:o2trail 14s linear infinite;opacity:.8}
+.o2-trail::after{content:"";position:absolute;right:-3px;top:-2px;width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff}
+@keyframes o2trail{0%{transform:translateX(0) rotate(-6deg)}55%,100%{transform:translateX(480%) rotate(-6deg)}}
+.o2-wx{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.o2-wx i{position:absolute;opacity:0;transition:opacity 1.2s ease}
+.o2-wx .glow{right:8%;top:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,226,150,.55),rgba(255,200,90,.15) 40%,transparent 70%);animation:o2glow 8s ease-in-out infinite}
+@keyframes o2glow{50%{transform:scale(1.08)}}
+.o2-wx .cl{width:520px;height:120px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(220,230,240,.55),rgba(220,230,240,0) 70%);filter:blur(6px)}
+.o2-wx .c1{top:6%;left:-30%;animation:o2cloud 60s linear infinite}
+.o2-wx .c2{top:30%;left:-50%;width:680px;animation:o2cloud 85s linear infinite -20s}
+.o2-wx .c3{top:52%;left:-40%;animation:o2cloud 70s linear infinite -45s}
+@keyframes o2cloud{to{transform:translateX(220vw)}}
+.o2-wx .rain{inset:-40px;background:repeating-linear-gradient(105deg,transparent 0 14px,rgba(200,220,235,.32) 14px 15px,transparent 15px 28px);background-size:28px 64px;animation:o2rain .45s linear infinite}
+@keyframes o2rain{to{background-position:-12px 64px}}
+.o2-wx.sun .glow{opacity:1}.o2-wx.cloud .cl{opacity:1}.o2-wx.rain .cl{opacity:.8}.o2-wx.rain .rain{opacity:1}
+.o2-sky.dim .o2-photo{filter:saturate(.6) brightness(.75)}
+.o2-skyin{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:20px;align-items:end;padding:34px 26px 76px}
+.o2-sys{font-family:var(--o2mono);font-size:14px;color:var(--o2c);display:flex;gap:10px;align-items:center}
+.o2-sys b{font-weight:400;border:1px solid var(--o2l);padding:2px 8px}
+.o2-h{font-family:var(--o2cond);font-weight:800;text-transform:uppercase;font-size:clamp(40px,6.6vw,86px);line-height:.9;margin:14px 0 0;color:#fff;text-shadow:0 0 34px rgba(95,227,214,.2)}
+.o2-h .t{color:var(--o2c)}
+.o2-h .caret{display:inline-block;width:.42em;height:.78em;background:var(--o2c);vertical-align:-.05em;margin-left:.08em;animation:o2blink 1s steps(2) infinite}
+@keyframes o2blink{50%{opacity:0}}
+.o2-brief{max-width:52ch;margin:14px 0 0;color:#D2DFE8;font-size:17px;line-height:1.5}
+.o2-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.o2-chip{display:flex;align-items:center;gap:10px;background:rgba(10,24,36,.78);border:1px solid var(--o2l);padding:9px 12px;text-align:left;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.o2-chip svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--o2c);stroke-width:1.6}
+.o2-chip b{display:block;font-size:15px;font-weight:700}
+.o2-chip small{display:block;font-family:var(--o2mono);font-size:12px;color:var(--o2c)}
+.o2-chip.snd{font:inherit;transition:border-color .3s,box-shadow .3s}
+.o2-chip.snd:hover,.o2-chip.snd[aria-pressed="true"]{border-color:var(--o2c);box-shadow:0 0 18px rgba(95,227,214,.25)}
+
+.o2-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;margin-top:-52px;position:relative;z-index:3;padding-bottom:30px}
+.o2-p{position:relative;background:linear-gradient(155deg,rgba(18,44,64,.94),rgba(9,24,37,.96));border:1px solid var(--o2l);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 18px 40px rgba(0,0,0,.35);min-width:0;opacity:0}
+.o2-p::before,.o2-p::after{content:"";position:absolute;width:16px;height:16px;border:2px solid var(--o2c);pointer-events:none}
+.o2-p::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.o2-p::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.o2-p.on{animation:o2open .7s var(--o2e) var(--d,0s) both,o2glitch .45s steps(1,end) calc(var(--d,0s) + .7s) 1}
+@keyframes o2open{0%{clip-path:inset(50% 50% 50% 50%);opacity:0}15%{opacity:1}45%{clip-path:inset(50% -4px 50% -4px)}100%{clip-path:inset(-30px);opacity:1}}
+@keyframes o2glitch{0%{transform:translate(5px,0);filter:drop-shadow(-4px 0 0 rgba(215,73,73,.8)) drop-shadow(4px 0 0 rgba(95,227,214,.8))}25%{transform:translate(-5px,1px) skewX(4deg)}50%{transform:translate(2px,-1px);filter:drop-shadow(3px 0 0 rgba(105,80,161,.9))}75%{transform:none;filter:none;opacity:.8}100%{transform:none;filter:none;opacity:1}}
+.o2 .ph{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--o2l)}
+.o2 .ph h3{margin:0;font-family:var(--o2cond);font-weight:800;font-size:20px;letter-spacing:.03em;text-transform:uppercase;color:#fff}
+.o2 .ph small{font-family:var(--o2mono);font-size:13px;color:var(--o2c)}
+.o2 .pb{padding:16px}
+.o2 .c7{grid-column:span 7}.o2 .c5{grid-column:span 5}.o2 .c4{grid-column:span 4}
+.o2-btn{display:inline-block;margin-top:14px;background:#32B4AF;color:#061019!important;border:0;font-weight:700;font-size:15px;padding:10px 16px;transition:transform .3s var(--o2e),box-shadow .3s}
+.o2-btn:hover{transform:translateY(-2px);box-shadow:0 0 22px rgba(95,227,214,.35)}
+.o2-btn.ghost{background:transparent;color:#fff!important;border:1px solid var(--o2c)}
+.o2-link{background:none;border:0;padding:0;margin-top:12px;color:var(--o2c);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.o2-empty p,.o2-today p{margin:14px 0 0;color:#D2DFE8;max-width:52ch}
+
+/* boarding pass */
+.o2-pass{display:grid;grid-template-columns:minmax(0,1fr) 160px;overflow:hidden}
+.o2-pass .main{padding:18px 20px;min-width:0}
+.o2-pass .top{display:flex;justify-content:space-between;gap:10px;font-family:var(--o2mono);font-size:13px;color:var(--o2c)}
+.o2-pass h3{margin:8px 0 0;font-family:var(--o2cond);font-weight:800;font-size:clamp(28px,3.4vw,44px);line-height:.95;text-transform:uppercase;color:#fff}
+.o2 .route{display:flex;align-items:center;gap:12px;margin-top:14px}
+.o2 .route b{font-family:var(--o2cond);font-weight:800;font-size:30px;line-height:1;color:#fff}
+.o2 .route small{display:block;font-family:var(--o2mono);font-size:12px;color:var(--o2m)}
+.o2 .route .line{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--o2l) 0 8px,transparent 8px 14px);position:relative;min-width:60px}
+.o2 .route .line img{position:absolute;top:50%;left:var(--prog,8%);width:30px;transform:translate(-50%,-50%) rotate(90deg);filter:drop-shadow(0 0 6px rgba(215,73,73,.6));transition:left 1.6s var(--o2e)}
+.o2 .flaps{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap;align-items:flex-start}
+.o2 .flaps .sep{font-family:var(--o2cond);font-weight:800;font-size:40px;line-height:62px;color:var(--o2c);opacity:.55;animation:o2sep 1s steps(2) infinite}
+@keyframes o2sep{50%{opacity:.15}}
+.o2 .unit{text-align:center}
+.o2 .unit .d{display:flex;gap:5px}
+.o2 .flap{position:relative;width:46px;height:62px;perspective:300px;font-family:var(--o2cond);font-weight:800;font-size:46px;line-height:62px;text-align:center;color:#fff}
+.o2 .flap span{position:absolute;inset:0;background:linear-gradient(180deg,#132D42 0 49.5%,#0B1C2A 50.5% 100%);border:1px solid rgba(95,227,214,.18);box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+.o2 .flap span::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.6)}
+.o2 .flap.go span{animation:o2flip .5s var(--o2e)}
+@keyframes o2flip{0%{transform:rotateX(0)}45%{transform:rotateX(-90deg);filter:brightness(.6)}55%{transform:rotateX(90deg);filter:brightness(.6)}100%{transform:rotateX(0)}}
+.o2 .unit small{display:block;margin-top:6px;font-size:14px;color:var(--o2m)}
+.o2 .stub{border-left:2px dashed var(--o2l);padding:18px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;background:rgba(5,13,20,.4);position:relative}
+.o2 .srow{font-size:14px}.o2 .srow small{display:block;font-family:var(--o2mono);font-size:12px;color:var(--o2c)}.o2 .srow b{font-size:17px;color:#fff}
+.o2 .bars{height:34px;background:repeating-linear-gradient(90deg,#E8F1F6 0 2px,transparent 2px 4px,#E8F1F6 4px 5px,transparent 5px 8px,#E8F1F6 8px 11px,transparent 11px 12px);opacity:.85}
+.o2 .ear{display:flex;gap:10px;align-items:center;background:#D74949;color:#fff;font-weight:600;padding:10px 12px;margin-top:12px;animation:o2ear 1.6s ease-in-out infinite}
+.o2 .ear span{width:24px;height:24px;border-radius:50%;background:#fff;color:#D74949;display:grid;place-items:center;font-weight:800;flex:none}
+@keyframes o2ear{50%{box-shadow:0 0 0 4px rgba(215,73,73,.35)}}
+
+/* readiness */
+.o2-ready .pb{display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;align-items:center}
+.o2 .adi{width:170px;height:170px}
+.o2 .adi svg{width:100%;height:100%;display:block}
+.o2 .ball{transition:transform 1.2s var(--o2e)}
+.o2 .roll{transform-origin:85px 85px;animation:o2sway 6s ease-in-out infinite}
+@keyframes o2sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.o2 .pct{font-family:var(--o2cond);font-weight:800;font-size:58px;line-height:1;color:#fff}
+.o2 .pct small{font-size:24px;color:var(--o2c)}
+.o2-ready p{margin:6px 0 0;color:#D2DFE8}
+.o2-ready .next{margin-top:10px;font-family:var(--o2mono);font-size:14px;color:var(--o2c)}
+
+/* pre flight switches */
+.o2sw{display:grid;gap:8px}
+.o2tg{display:grid;grid-template-columns:44px minmax(0,1fr) 12px;gap:12px;align-items:center;background:rgba(5,13,20,.45);border:1px solid var(--o2l2);padding:9px 12px;text-align:left;transition:border-color .3s,background .3s}
+.o2tg:hover{border-color:var(--o2l)}
+.o2tg .base{position:relative;width:44px;height:26px;border-radius:13px;background:#0B1C2A;border:1px solid rgba(95,227,214,.3)}
+.o2tg .base::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:linear-gradient(180deg,#E8F1F6,#8FA6B6);box-shadow:0 2px 4px rgba(0,0,0,.5);transition:transform .35s var(--o2e)}
+.o2tg b{font-size:15px;font-weight:600;color:#fff}
+.o2tg small{display:block;font-size:13px;color:var(--o2m)}
+.o2tg .led{width:10px;height:10px;border-radius:50%;background:#2A1A1A;box-shadow:inset 0 0 0 1px rgba(215,73,73,.5)}
+.o2tg[aria-pressed="true"]{border-color:rgba(95,227,214,.45);background:rgba(50,180,175,.1)}
+.o2tg[aria-pressed="true"] .base{background:rgba(50,180,175,.35)}
+.o2tg[aria-pressed="true"] .base::after{transform:translateX(18px)}
+.o2tg[aria-pressed="true"] .led{background:var(--o2c);box-shadow:0 0 10px var(--o2c)}
+
+/* show radio */
+.o2-radio .freq{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#030A10;border:1px solid var(--o2l);padding:10px 12px}
+.o2-radio .freq b{font-family:var(--o2mono);font-weight:400;font-size:24px;color:#F2B233;text-shadow:0 0 10px rgba(242,178,51,.5)}
+.o2-radio .freq small{display:block;font-size:13px;color:var(--o2m)}
+.o2 .wave{display:flex;gap:3px;align-items:center;height:24px}
+.o2 .wave i{width:3px;background:var(--o2c);border-radius:2px;animation:o2wave 1s ease-in-out infinite}
+.o2 .wave i:nth-child(2){animation-delay:.1s}.o2 .wave i:nth-child(3){animation-delay:.2s}.o2 .wave i:nth-child(4){animation-delay:.3s}.o2 .wave i:nth-child(5){animation-delay:.4s}.o2 .wave i:nth-child(6){animation-delay:.5s}
+@keyframes o2wave{0%,100%{height:5px}50%{height:22px}}
+.o2 .wave.quiet i{animation-play-state:paused;height:4px}
+.o2 .msgs{display:grid;gap:8px;margin-top:12px}
+.o2msg{border-left:3px solid #32B4AF;background:rgba(5,13,20,.45);padding:8px 10px;animation:o2in .5s var(--o2e) both}
+.o2msg.p{border-color:#6950A1}
+.o2msg small{display:block;font-family:var(--o2mono);font-size:12px;color:var(--o2c)}
+.o2msg p{margin:2px 0 0;font-size:15px;color:#E8F1F6}
+@keyframes o2in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* must see */
+.o2 .deck{display:grid;gap:10px}
+.o2 .card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;padding:12px 14px;background:linear-gradient(135deg,#132D42,#0B1C2A);border:1px solid var(--o2l);transform:perspective(700px) rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .25s ease-out,box-shadow .3s}
+.o2 .card:hover{box-shadow:0 14px 30px rgba(0,0,0,.4),0 0 0 1px var(--o2c)}
+.o2 .card::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(95,227,214,.16),transparent 60%);opacity:0;transition:opacity .3s}
+.o2 .card:hover::after{opacity:1}
+.o2 .card b{font-family:var(--o2cond);font-weight:800;font-size:21px;text-transform:uppercase;line-height:1;color:#fff}
+.o2 .card small{grid-column:1/-1;font-size:14px;color:var(--o2m)}
+.o2 .stamp{font-family:var(--o2mono);font-size:12px;padding:3px 8px;border:1.5px solid currentColor;transform:rotate(-4deg);text-transform:uppercase}
+.o2 .stamp.ok{color:var(--o2c)}.o2 .stamp.wait{color:#CBB9F5}.o2 .stamp.no{color:#F09A9A}
+
+/* radar */
+.o2-radar .pb{display:grid;place-items:center}
+.o2-radar svg{width:100%;max-width:400px;height:auto;display:block}
+.o2 .sweep{transform-origin:200px 200px;animation:o2spin 6s linear infinite}
+@keyframes o2spin{to{transform:rotate(360deg)}}
+.o2 .blip .ring{transform-box:fill-box;transform-origin:center;opacity:0}
+.o2 .blip.hit .ring{animation:o2ping 1.4s ease-out}
+@keyframes o2ping{0%{transform:scale(.5);opacity:1}100%{transform:scale(3);opacity:0}}
+.o2 .blip text{font-family:var(--o2mono);font-size:12px}
+.o2 .legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:14px;color:var(--o2m)}
+.o2 .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+
+/* season runway */
+.o2 .runway{position:relative;height:172px;margin:6px 4px 0}
+.o2 .strip{position:absolute;left:0;right:0;top:90px;height:46px;background:#0B1C2A;border:1px solid rgba(95,227,214,.25)}
+.o2 .strip::before{content:"";position:absolute;left:12px;right:12px;top:50%;height:2px;background:repeating-linear-gradient(90deg,rgba(232,241,246,.75) 0 22px,transparent 22px 40px);transform:translateY(-50%)}
+.o2 .lights{position:absolute;left:0;right:0;top:84px;height:58px;pointer-events:none;background:radial-gradient(circle,rgba(242,178,51,.9) 1.5px,transparent 2.5px) 0 0/30px 6px repeat-x,radial-gradient(circle,rgba(242,178,51,.9) 1.5px,transparent 2.5px) 0 52px/30px 6px repeat-x;animation:o2chase 2.4s linear infinite}
+@keyframes o2chase{to{background-position:30px 0,30px 52px}}
+.o2 .months{position:absolute;left:0;right:0;top:146px;display:flex;justify-content:space-between;font-family:var(--o2mono);font-size:13px;color:var(--o2m)}
+.o2 .mk{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0}
+.o2 .mk b{font-size:13px;font-weight:700;white-space:nowrap;background:#0E2131;border:1px solid var(--o2l);padding:2px 8px;color:#fff;transition:background .25s,color .25s}
+.o2 .mk i{width:2px;height:var(--h,26px);background:var(--o2c)}
+.o2 .mk em{width:12px;height:12px;border-radius:50%;background:var(--o2c);animation:o2beacon 2s infinite}
+.o2 .mk.mine b{background:#32B4AF;color:#061019;border-color:#32B4AF}
+.o2 .mk.dim em{background:#41586B;animation:none}.o2 .mk.dim i{background:#41586B}.o2 .mk.dim b{color:var(--o2m)}
+.o2 .mk:hover b,.o2 .mk:focus-visible b{background:var(--o2c);color:#061019}
+@keyframes o2beacon{0%{box-shadow:0 0 0 0 rgba(95,227,214,.6)}70%{box-shadow:0 0 0 10px rgba(95,227,214,0)}100%{box-shadow:0 0 0 0 rgba(95,227,214,0)}}
+.o2 .jet{position:absolute;top:90px;left:0;width:38px;transform:translateX(-50%) rotate(90deg);transition:left 2.2s var(--o2e);filter:drop-shadow(0 0 8px rgba(215,73,73,.6))}
+.o2 .rnote{margin:6px 0 0;color:#D2DFE8;font-size:15px}
+.o2 .rnote b{color:var(--o2c)}
+
+/* hangar */
+.o2 .hangar{position:relative;height:250px;background:linear-gradient(180deg,#0B1C2A,#08141F);border:1px solid var(--o2l);overflow:hidden}
+.o2 .doors{position:absolute;inset:0 0 auto 0;height:22px;display:flex}
+.o2 .doors i{flex:1;background:repeating-linear-gradient(90deg,#13293C 0 18px,#0E2131 18px 20px);border-bottom:2px solid rgba(95,227,214,.35)}
+.o2 .taxi{position:absolute;left:0;right:0;bottom:30px;height:2px;background:repeating-linear-gradient(90deg,#F2B233 0 16px,transparent 16px 26px);opacity:.7}
+.o2 .bays{position:absolute;left:12px;right:12px;top:34px;bottom:46px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:8px}
+.o2 .bay{position:relative;border:1px dashed rgba(95,227,214,.25);display:grid;grid-template-columns:40px minmax(0,1fr);gap:4px 10px;align-items:center;padding:6px 10px;min-width:0}
+.o2 .bay img{width:34px;grid-row:span 2;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+.o2 .bay b{font-family:var(--o2cond);font-weight:800;font-size:16px;line-height:1;text-transform:uppercase;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.o2 .bay small{font-size:12px;color:var(--o2m);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.o2 .bay.rare{border-color:#8C77C9;box-shadow:inset 0 0 20px rgba(105,80,161,.35)}
+.o2 .bay.new{animation:o2in .8s var(--o2e) both}
+.o2 .bay.free{display:grid;place-items:center;color:var(--o2m);font-size:13px;grid-template-columns:1fr}
+.o2 .taxijet{position:absolute;bottom:12px;left:110%;width:40px;transform:rotate(-90deg);opacity:0;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+.o2 .taxijet.go{opacity:1;transition:left 2.4s cubic-bezier(.45,.05,.4,1),bottom .9s ease 2.4s,transform .5s ease 2.2s,opacity .3s}
+.o2 .hg-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px}
+.o2 .hg-foot p{margin:8px 0 0;color:#D2DFE8;font-size:15px}
+
+/* quick launch */
+.o2 .mfd{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:stretch}
+.o2 .bez{display:grid;gap:10px;align-content:center}
+.o2 .bz{min-width:140px;padding:12px 14px;background:#0B1C2A;border:1px solid var(--o2l);text-align:left;font-weight:700;font-size:15px;color:#fff;transition:background .3s,padding .4s var(--o2e),box-shadow .3s}
+.o2 .bz small{display:block;font-family:var(--o2mono);font-weight:400;font-size:12px;color:var(--o2c)}
+.o2 .bz:hover,.o2 .bz:focus-visible,.o2 .bz.on{background:#32B4AF;color:#061019;box-shadow:0 0 22px rgba(95,227,214,.35);outline:none}
+.o2 .bz:hover small,.o2 .bz.on small{color:#061019}
+.o2 .bez.l .bz:hover{padding-left:22px}.o2 .bez.r .bz:hover{padding-right:22px}
+.o2 .bz.forum{border-color:rgba(124,255,158,.6);box-shadow:inset 4px 0 0 #7CFF9E}
+.o2 .scr{position:relative;background:#030A10;border:1px solid var(--o2l);padding:20px;min-height:210px;overflow:hidden}
+.o2 .scr::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(95,227,214,.04) 0 1px,transparent 1px 3px);pointer-events:none}
+.o2 .scr small{font-family:var(--o2mono);font-size:13px;color:var(--o2c)}
+.o2 .scr h4{margin:8px 0 0;font-family:var(--o2cond);font-weight:800;font-size:clamp(28px,3.4vw,42px);line-height:.95;text-transform:uppercase;color:#fff}
+.o2 .scr p{margin:10px 0 0;color:#D2DFE8;max-width:56ch}
+.o2 .scr.swap h4,.o2 .scr.swap p{animation:o2in .4s var(--o2e) both}
+
+/* show day mode: the overview turns amber on the day */
+.o2.sd{--o2c:#F2B233;--o2l:rgba(242,178,51,.32);--o2l2:rgba(242,178,51,.12)}
+.o2.sd .flaps{display:none}
+.o2.sd .o2-pass .top span:first-child{background:#F2B233;color:#061019;padding:0 6px}
+
+/* full screen moments: flypast, sonic boom, replay */
+.o2-fly{position:fixed;inset:0;z-index:95;pointer-events:none;overflow:hidden}
+.o2-fly .fm{position:absolute;top:38%;left:-360px;width:340px;height:200px;animation:o2fly 3.6s cubic-bezier(.45,.05,.4,1) forwards}
+.o2-fly .fm img{position:absolute;width:44px;transform:rotate(90deg)}
+.o2-fly .sm{position:absolute;height:9px;width:0;border-radius:5px;filter:blur(3px);animation:o2smoke 3.6s linear forwards}
+@keyframes o2fly{0%{transform:translate(0,40px) rotate(-4deg)}100%{transform:translate(calc(100vw + 420px),-120px) rotate(-8deg)}}
+@keyframes o2smoke{to{width:1400px}}
+.o2-cleared{position:fixed;left:50%;top:22%;z-index:96;transform:translateX(-50%);font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:clamp(34px,6vw,72px);text-transform:uppercase;color:#fff;text-shadow:0 0 30px rgba(95,227,214,.6);pointer-events:none;white-space:nowrap;animation:o2clr 3.8s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes o2clr{0%{opacity:0;transform:translate(-50%,10px)}15%,75%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-10px)}}
+.o2-boom{position:fixed;inset:0;z-index:95;pointer-events:none;display:grid;place-items:center;animation:o2bg 3s ease forwards}
+@keyframes o2bg{0%{background:rgba(5,13,20,0)}10%,75%{background:rgba(5,13,20,.7)}100%{background:rgba(5,13,20,0)}}
+.o2-boom i{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:3px solid #5FE3D6;box-shadow:0 0 30px #5FE3D6,inset 0 0 30px rgba(95,227,214,.4);animation:o2rip 1.6s cubic-bezier(.15,.6,.3,1) forwards}
+.o2-boom i:nth-child(2){animation-delay:.18s}.o2-boom i:nth-child(3){animation-delay:.36s}
+@keyframes o2rip{0%{transform:scale(.2);opacity:1}100%{transform:scale(60);opacity:0}}
+.o2-boom b{position:relative;font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:clamp(46px,10vw,140px);line-height:.9;text-align:center;text-transform:uppercase;color:#fff;text-shadow:0 0 40px rgba(95,227,214,.7);animation:o2bt 3s cubic-bezier(.2,.8,.2,1) forwards}
+.o2-boom b small{display:block;font-family:"Share Tech Mono",monospace;font-weight:400;font-size:clamp(14px,2vw,20px);color:#5FE3D6;margin-top:10px;text-shadow:none}
+@keyframes o2bt{0%{opacity:0;transform:scale(1.4)}12%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:scale(.96)}}
+body.o2-shake #app{animation:o2shake .5s linear}
+@keyframes o2shake{10%,90%{transform:translate(-2px,1px)}20%,80%{transform:translate(4px,-2px)}30%,50%,70%{transform:translate(-5px,2px)}40%,60%{transform:translate(5px,-1px)}}
+.o2-replay{position:fixed;inset:0;z-index:94;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(3,9,14,.96)}
+.o2-replay[hidden]{display:none!important}
+.o2-replay .rp-in{width:min(980px,100%);max-height:calc(100vh - 32px);overflow-y:auto;scrollbar-width:none;color:#fff}
+.o2-replay .rp-top{display:flex;justify-content:space-between;align-items:center}
+.o2-replay .rp-tag{background:#6950A1;font-weight:600;font-size:14px;padding:4px 10px}
+.o2-replay .rp-top button{background:transparent;border:1px solid rgba(95,227,214,.4);color:#fff;padding:6px 12px;font-family:inherit;cursor:pointer}
+.o2-replay h3{font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:clamp(36px,6vw,64px);line-height:.95;margin:14px 0 8px}
+#o2RpMap{width:100%;height:auto;display:block;border:1px solid rgba(95,227,214,.22);background:#050D14}
+.o2-replay .rp-stop{opacity:0;transition:opacity .5s}
+.o2-replay .rp-stop.on{opacity:1}
+.o2-replay .rp-stop text{font-family:"Barlow",sans-serif;font-weight:700;font-size:15px;fill:#fff}
+.o2-replay .rp-stop .dt{font-family:"Share Tech Mono",monospace;font-weight:400;font-size:12px;fill:#5FE3D6}
+.o2-replay .rp-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.o2-replay .rp-stats div{border:1px solid rgba(95,227,214,.22);padding:10px 12px;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
+.o2-replay .rp-stats div.on{opacity:1;transform:none}
+.o2-replay .rp-stats b{display:block;font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:34px;line-height:1}
+.o2-replay .rp-stats small{color:#A9BDCB;font-size:14px}
+
+@media (max-width:1100px){.o2 .c7{grid-column:1/-1}.o2 .c5,.o2 .c4{grid-column:span 6}.o2 .q6,.o2 .o2-radar{grid-column:1/-1}}
+@media (max-width:760px){
+  .o2-skyin{grid-template-columns:1fr;padding:26px 16px 70px}
+  .o2-chips{justify-content:flex-start}
+  .o2-grid{gap:14px}
+  .o2 .c7,.o2 .c5,.o2 .c4{grid-column:1/-1}
+  .o2 .q1{order:1}.o2 .q2{order:2}.o2 .q3{order:3}.o2 .q4{order:4}.o2 .q5{order:6}.o2 .q6{order:5}.o2 .q7{order:7}.o2 .q8{order:8}.o2 .q9{order:9}
+  .o2-pass{grid-template-columns:1fr}
+  .o2 .stub{border-left:0;border-top:2px dashed var(--o2l);flex-direction:row;flex-wrap:wrap}
+  .o2 .bars{flex-basis:100%}
+  .o2-ready .pb{grid-template-columns:120px minmax(0,1fr)}
+  .o2 .adi{width:120px;height:120px}
+  .o2 .flap{width:36px;height:50px;font-size:36px;line-height:50px}
+  .o2 .flaps{gap:10px 12px}
+  .o2 .flaps .sep{font-size:30px;line-height:50px}
+  .o2 .mfd{grid-template-columns:1fr}
+  .o2 .bez{grid-template-columns:1fr 1fr}
+  .o2 .bz{min-width:0}
+  .o2 .mk.dim b{display:none}
+  .o2 .mk b{font-size:12px}
+  .o2-replay .rp-stats{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){.o2 *,.o2 *::before,.o2 *::after,.o2-fly *,.o2-boom *{animation:none!important;transition:none!important}.o2-p{opacity:1}}
+
+.o2-mut{color:#A9BDCB;margin:0;font-size:15px;line-height:1.5}
+</style>
 </head>
 <body>
 
-<div id="loading" class="loading"><div class="spin"></div>Loading your hub</div>
+<div id="loading" class="loading hud-boot" role="status"><div class="hb-ring" aria-hidden="true"><i></i></div><b>MY AIRSHOW HUB</b><p>&gt; CHECKING YOUR PASS<span aria-hidden="true">_</span></p></div>
 
 <!-- Not logged in: HUD login page (21 Oct 2026). Log in and Join free open the Wix login window through the page code (data-act login and signup). -->
 <div id="guest" class="lg" hidden>
@@ -1175,6 +1450,9 @@ label.f{color:var(--hud-fg)}
   var BASE = "https://jskedge1.github.io/airshow-pages/hub-img/";
 
   /* start the typing and open animations each time the guest view is shown */
+  var seen = false; try { seen = localStorage.getItem("ukagHubSeen") === "1"; localStorage.setItem("ukagHubSeen", "1"); } catch (e) {}
+  var savedSound = null; try { savedSound = localStorage.getItem("ukagSound"); } catch (e) {}
+  if (seen) G.classList.add("lg-quick");
   function go() { G.classList.remove("lg-go"); void G.offsetWidth; G.classList.add("lg-go"); tryIntro(); }
   new MutationObserver(function () { if (!G.hidden) go(); }).observe(G, { attributes: true, attributeFilter: ["hidden"] });
   if (!G.hidden) go();
@@ -1184,9 +1462,11 @@ label.f{color:var(--hud-fg)}
   var intro = new Audio(BASE + "hub-start-up.mp3"); intro.preload = "auto"; intro.volume = .9;
   var cleared = new Audio(BASE + "hub-cleared.mp3"); cleared.preload = "auto";
   var snd = $("lgSound");
-  function setSound(on) { soundOn = on; snd.setAttribute("aria-pressed", on ? "true" : "false"); snd.textContent = on ? "Cockpit sounds on" : "Cockpit sounds off"; }
+  function setSound(on, keep) { if (!keep) { try { localStorage.setItem("ukagSound", on ? "on" : "off"); } catch (e) {} } soundOn = on; snd.setAttribute("aria-pressed", on ? "true" : "false"); snd.textContent = on ? "Cockpit sounds on" : "Cockpit sounds off"; }
   function tryIntro() {
     if (introDone) return;
+    if (savedSound === "off") { introDone = true; return; }
+    if (seen) { setTimeout(function () { try { intro.pause(); } catch (e) {} }, 1600); }
     var p; try { intro.currentTime = 0; p = intro.play(); } catch (e) { p = null; }
     if (p && p.then) p.then(function () { introDone = true; setSound(true); }).catch(function () {
       G.addEventListener("pointerdown", function once() { G.removeEventListener("pointerdown", once, true); if (introDone) return; intro.play().then(function () { introDone = true; setSound(true); }).catch(function () {}); }, true);
@@ -1233,10 +1513,12 @@ label.f{color:var(--hud-fg)}
   function closeAsk() { ask.hidden = true; document.removeEventListener("keydown", askKey, true); }
   function askKey(e) { if (e.key === "Escape") closeAsk(); }
   function askEnter() {
+    var asked = false; try { asked = sessionStorage.getItem("ukagAsked") === "1"; } catch (e) {}
+    if (asked) { window.ukagWB = Date.now(); window.ukagWBJoin = false; takeOff("in"); return; }
     fx("lock"); ask.hidden = false; document.addEventListener("keydown", askKey, true);
     setTimeout(function () { $("lgAskY").focus(); }, 60);
   }
-  $("lgAskY").addEventListener("click", function () { closeAsk(); window.ukagWB = Date.now(); window.ukagWBJoin = false; takeOff("in"); });
+  $("lgAskY").addEventListener("click", function () { try { sessionStorage.setItem("ukagAsked", "1"); } catch (e) {} closeAsk(); window.ukagWB = Date.now(); window.ukagWBJoin = false; takeOff("in"); });
   $("lgAskN").addEventListener("click", closeAsk);
   ask.addEventListener("click", function (e) { if (e.target === ask) closeAsk(); });
   cta.addEventListener("click", function () { if (mode === "in") askEnter(); else { window.ukagWB = Date.now(); window.ukagWBJoin = true; takeOff(mode); } });
@@ -1340,68 +1622,184 @@ label.f{color:var(--hud-fg)}
         <button data-p="history">My Airshow History</button>
         <button data-p="year">My Airshow Year</button>
         <button data-p="posts">My Posts</button>
-        <a class="hub-forum" href="https://www.ukairshowguide.co.uk/community-forum" target="_top"><small>F1 · COMMS</small>Airshow Forum <span aria-hidden="true">→</span></a>
+        <a class="hub-forum" href="#forum" id="hubForumTab" role="button"><small>F1 · COMMS</small>Airshow Forum <span aria-hidden="true">→</span></a>
         <a class="hub-logout" id="hubLogout" href="#" role="button"><small>EJECT</small>Log Out</a>
       </nav>
     </div>
   </section>
 
-  <!-- OVERVIEW -->
+  <!-- OVERVIEW (cockpit layout, 21 Oct 2026): boarding pass, readiness horizon, pre flight switches, show radio, must see,
+       show radar, season runway, hangar arrivals, quick launch, plus show day mode, sonic boom milestones, weather sky,
+       Red Arrows flypast, end of season replay and optional cockpit sounds. Filled by renderOverview(). -->
   <main class="page" id="p-overview">
-    <div class="wrap">
-      <section class="ov-hello panel">
-        <div class="pbody">
-          <p class="hx-live"><i aria-hidden="true"></i>Systems online. Welcome back.</p>
-          <h2 class="ov-greet" id="ovGreet">Good evening</h2>
-          <p class="ov-sum" id="ovSum"></p>
-          <div class="ov-go">
-            <button class="btn small" data-go-p="briefing">Open My Flight Briefing</button>
-            <button class="btn small outline" data-go-p="trips">Plan My Trips</button>
+    <div class="wrap o2" id="o2">
+      <section class="o2-sky" id="o2Sky">
+        <div class="o2-photo" id="o2Photo"></div>
+        <div class="o2-tint" id="o2Tint"></div>
+        <span class="o2-trail" aria-hidden="true"></span>
+        <div class="o2-wx" id="o2Wx" aria-hidden="true"><i class="glow"></i><i class="cl c1"></i><i class="cl c2"></i><i class="cl c3"></i><i class="rain"></i></div>
+        <div class="o2-skyin">
+          <div>
+            <div class="o2-sys"><b>SYS 02</b><span id="o2Clock">--:--</span><span>· Overview</span></div>
+            <h2 class="o2-h"><span id="o2Greet">Good afternoon,</span><br><span class="t" id="o2Name"></span><span class="caret" aria-hidden="true"></span></h2>
+            <p class="o2-brief" id="o2Brief"></p>
+          </div>
+          <div class="o2-chips">
+            <div class="o2-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><div><b id="o2Tod">Afternoon light</b><small id="o2TodS">Sun in the south west</small></div></div>
+            <div class="o2-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4 4 0 010-8 6 6 0 0111.3 1.5A3.5 3.5 0 0117.5 18z"/></svg><div><b id="o2WxT">Forecast on its way</b><small id="o2WxS">It arrives the week before your show</small></div></div>
+            <button class="o2-chip snd" type="button" id="o2Snd" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/></svg><div><b id="o2SndT">Cockpit sounds off</b><small>Switch clicks, radio and jets</small></div></button>
           </div>
         </div>
       </section>
-      <div class="hstats ov-stats" id="ovStats"></div>
-      <div class="ov-grid">
-        <section class="panel ov-next">
-          <header class="t"><h3>Next Departure</h3><small id="ovNextTag">Saved show</small></header>
-          <div class="pbody">
-            <b class="ov-show" id="ovShow">No show saved yet</b>
-            <div class="ov-cd" aria-live="off"><b id="ovDays">0</b><span>Days to go</span><code id="ovClock">00:00:00</code></div>
-            <div class="rows" id="ovRows"></div>
-            <div class="prog"><i id="ovProg" style="width:0"></i></div>
+
+      <div class="o2-grid">
+        <section class="o2-p c7 q1" style="--d:.05s" aria-labelledby="o2PassT">
+          <div class="o2-pass">
+            <div class="main">
+              <div class="top"><span id="o2PassK">BOARDING PASS · NEXT SHOW</span><span id="o2Gate"></span></div>
+              <h3 id="o2PassT">No show saved yet</h3>
+              <div class="route" id="o2RouteBox">
+                <div><b>HOME</b><small id="o2Home">Your area</small></div>
+                <div class="line" id="o2Route"><img src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt=""></div>
+                <div><b id="o2Code">---</b><small id="o2Where"></small></div>
+              </div>
+              <div class="flaps" id="o2Flaps"></div>
+              <div class="o2-today" id="o2Today" hidden>
+                <p>Gates are open. Upload the flying display page from your programme and Show Day tells you what is flying now and next.</p>
+                <div class="ear"><span aria-hidden="true">!</span>Loud jets today. Ear defenders on for the little ones.</div>
+                <button class="o2-btn" type="button" data-o2go="showday">Open Show Day</button>
+              </div>
+              <div class="o2-empty" id="o2PassEmpty" hidden>
+                <p>Save the shows you are going to and your boarding pass, countdown and pre flight checks appear here.</p>
+                <button class="o2-btn" type="button" data-o2go="trips">Add your first show</button>
+              </div>
+            </div>
+            <div class="stub" id="o2Stub">
+              <div class="srow"><small>DATE</small><b id="o2Date">To be confirmed</b></div>
+              <div class="srow"><small>GATES</small><b id="o2Gates">To be confirmed</b></div>
+              <div class="srow"><small>TRAVEL</small><b id="o2Travel">To plan</b></div>
+              <div class="bars" aria-hidden="true"></div>
+            </div>
           </div>
         </section>
-        <section class="panel ov-radar">
-          <header><h3>Inbound Radar</h3><small>Your saved shows by days to go</small></header>
-          <div class="pbody ov-radar-body">
-            <svg viewBox="0 0 300 300" class="radar" role="img" aria-labelledby="radarTitle">
-              <title id="radarTitle">Radar showing your saved shows, nearest in the middle</title>
-              <defs>
-                <radialGradient id="rgGlow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#5FE3DC" stop-opacity=".18"/><stop offset="1" stop-color="#5FE3DC" stop-opacity="0"/></radialGradient>
-                <linearGradient id="rgSweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5FE3DC" stop-opacity="0"/><stop offset="1" stop-color="#5FE3DC" stop-opacity=".45"/></linearGradient>
-              </defs>
-              <circle cx="150" cy="150" r="140" fill="url(#rgGlow)"/>
-              <g fill="none" stroke="rgba(95,227,220,.28)">
-                <circle cx="150" cy="150" r="140"/><circle cx="150" cy="150" r="105"/><circle cx="150" cy="150" r="70"/><circle cx="150" cy="150" r="35"/>
-                <line x1="10" y1="150" x2="290" y2="150"/><line x1="150" y1="10" x2="150" y2="290"/>
-              </g>
-              <g class="sweep"><path d="M150 150 L290 150 A140 140 0 0 0 249 51 Z" fill="url(#rgSweep)"/></g>
-              <g font-family="JetBrains Mono, monospace" font-size="9" fill="#A9BDCB">
-                <text x="154" y="118">30d</text><text x="154" y="83">90d</text><text x="154" y="48">180d</text><text x="154" y="16">365d</text>
-              </g>
-              <g id="radarBlips"></g>
+
+        <section class="o2-p c5 q2 o2-ready" style="--d:.15s" aria-labelledby="o2ReadyT">
+          <div class="ph"><h3 id="o2ReadyT">Trip readiness</h3><small>ATTITUDE</small></div>
+          <div class="pb">
+            <div class="adi" aria-hidden="true">
+              <svg viewBox="0 0 170 170">
+                <defs><clipPath id="o2Clip"><circle cx="85" cy="85" r="74"/></clipPath></defs>
+                <g clip-path="url(#o2Clip)"><g class="roll"><g class="ball" id="o2Ball">
+                  <rect x="-60" y="-200" width="290" height="285" fill="#1C5C80"/><rect x="-60" y="85" width="290" height="285" fill="#3A2E24"/><rect x="-60" y="84" width="290" height="2" fill="#E8F1F6"/>
+                  <g stroke="#E8F1F6" stroke-width="1.5" opacity=".75"><path d="M70 65h30M75 45h20M70 105h30M75 125h20"/></g>
+                </g></g></g>
+                <circle cx="85" cy="85" r="74" fill="none" stroke="#5FE3D6" stroke-width="2"/>
+                <circle cx="85" cy="85" r="80" fill="none" stroke="rgba(95,227,214,.25)" stroke-width="6" stroke-dasharray="2 9"/>
+                <path d="M45 85h26l8 8 6-8 6 8 8-8h26" fill="none" stroke="#F2B233" stroke-width="3.5" stroke-linejoin="round"/>
+                <circle cx="85" cy="85" r="3" fill="#F2B233"/>
+              </svg>
+            </div>
+            <div>
+              <div class="pct"><span id="o2Pct">0</span><small>%</small></div>
+              <p id="o2ReadyLine">Flip the pre flight switches as you sort each part of your trip. The horizon levels out as you go.</p>
+              <div class="next" id="o2ReadyNext"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="o2-p c4 q3" style="--d:.25s" aria-labelledby="o2SwT">
+          <div class="ph"><h3 id="o2SwT">Pre flight checks</h3><small id="o2SwCount"></small></div>
+          <div class="pb o2sw" id="o2Switches"></div>
+        </section>
+
+        <section class="o2-p c4 q4 o2-radio" style="--d:.32s" aria-labelledby="o2RadT">
+          <div class="ph"><h3 id="o2RadT">Show radio</h3><small id="o2RadN">LIVE UPDATES</small></div>
+          <div class="pb">
+            <div class="freq"><div><b id="o2Freq">HUB 01</b><small id="o2FreqName">Hub control</small></div><div class="wave quiet" id="o2Wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="msgs" id="o2Msgs" aria-live="polite"></div>
+            <button class="o2-link" type="button" data-o2go="updates">All updates</button>
+          </div>
+        </section>
+
+        <section class="o2-p c4 q6" style="--d:.4s" aria-labelledby="o2MsT">
+          <div class="ph"><h3 id="o2MsT">Must see</h3><small id="o2MsN"></small></div>
+          <div class="pb deck" id="o2Deck"></div>
+        </section>
+
+        <section class="o2-p c5 q5 o2-radar" style="--d:.48s" aria-labelledby="o2RdT">
+          <div class="ph"><h3 id="o2RdT">Show radar</h3><small id="o2Range">RANGE</small></div>
+          <div class="pb">
+            <svg viewBox="0 0 400 400" role="img" aria-label="Radar of the featured shows around your home, your shows in teal">
+              <defs><radialGradient id="o2rg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#0E2A3A"/><stop offset="1" stop-color="#050D14"/></radialGradient>
+                <linearGradient id="o2sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5FE3D6" stop-opacity="0"/><stop offset="1" stop-color="#5FE3D6" stop-opacity=".5"/></linearGradient></defs>
+              <circle cx="200" cy="200" r="190" fill="url(#o2rg)" stroke="#5FE3D6" stroke-opacity=".5"/>
+              <g fill="none" stroke="#5FE3D6" stroke-opacity=".2"><circle cx="200" cy="200" r="63"/><circle cx="200" cy="200" r="126"/><path d="M200 10v380M10 200h380"/></g>
+              <g font-family="Share Tech Mono,monospace" font-size="11" fill="#5FE3D6" fill-opacity=".6"><text x="204" y="134" id="o2R1"></text><text x="204" y="71" id="o2R2"></text><text x="196" y="24" text-anchor="end">N</text></g>
+              <g class="sweep"><path d="M200 200 L390 200 A190 190 0 0 0 334 66 Z" fill="url(#o2sg)"/></g>
+              <g id="o2Blips"></g>
+              <circle cx="200" cy="200" r="5" fill="#F2B233"/><text x="210" y="216" font-family="Share Tech Mono,monospace" font-size="12" fill="#F2B233">YOU</text>
             </svg>
-            <ul class="ov-blips" id="ovBlips"></ul>
+            <div class="legend"><span><i style="background:#5FE3D6"></i>Your shows</span><span><i style="background:#8C77C9"></i>Other featured shows</span></div>
           </div>
         </section>
-        <section class="panel">
-          <header class="p"><h3>Show Updates</h3><small>Live</small></header>
-          <div class="pbody" id="ovUpdates"></div>
+
+        <section class="o2-p c7 q7" style="--d:.55s" aria-labelledby="o2RwT">
+          <div class="ph"><h3 id="o2RwT">Your season runway</h3><small id="o2RwY"></small></div>
+          <div class="pb">
+            <div class="runway" id="o2Runway">
+              <div class="strip"></div><div class="lights"></div>
+              <img class="jet" id="o2Jet" src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt="">
+              <div class="months"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+            </div>
+            <p class="rnote" id="o2Rnote"></p>
+            <button class="o2-btn ghost" type="button" id="o2ReplayBtn" hidden>Replay my season</button>
+          </div>
         </section>
-        <section class="panel">
-          <header><h3>My Must See Aircraft</h3><small id="ovMustTag"></small></header>
-          <div class="pbody" id="ovMust"></div>
+
+        <section class="o2-p c5 q8" style="--d:.6s" aria-labelledby="o2HgT">
+          <div class="ph"><h3 id="o2HgT">My Hangar</h3><small id="o2HgN"></small></div>
+          <div class="pb">
+            <div class="hangar" id="o2Hangar">
+              <div class="doors" aria-hidden="true"><i></i><i></i></div>
+              <div class="taxi" aria-hidden="true"></div>
+              <img class="taxijet" id="o2Taxi" src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt="">
+              <div class="bays" id="o2Bays"></div>
+            </div>
+            <div class="hg-foot"><p id="o2HgLine">Every aircraft you log taxis in and parks here.</p><button class="o2-btn" type="button" data-o2go="hangar">Log a spotted aircraft</button></div>
+          </div>
         </section>
+
+        <section class="o2-p c7 q9" style="--d:.66s" aria-labelledby="o2QlT">
+          <div class="ph"><h3 id="o2QlT">Quick launch</h3><small>MULTI FUNCTION DISPLAY</small></div>
+          <div class="pb mfd">
+            <div class="bez l">
+              <button class="bz on" type="button" data-q="trips"><small>L1</small>My Trips</button>
+              <button class="bz" type="button" data-q="showday"><small>L2</small>Show Day</button>
+              <button class="bz" type="button" data-q="briefing"><small>L3</small>Flight Briefing</button>
+            </div>
+            <div class="scr" id="o2Scr"><small id="o2QK">L1 · PLAN</small><h4 id="o2QT">My Trips</h4><p id="o2QP"></p><button class="o2-btn" type="button" id="o2QGo">Open My Trips</button></div>
+            <div class="bez r">
+              <button class="bz forum" type="button" data-q="forum"><small>F1 · COMMS</small>Airshow Forum</button>
+              <button class="bz" type="button" data-q="hangar"><small>R2</small>My Hangar</button>
+              <button class="bz" type="button" data-q="kit"><small>R3</small>Kit And Packing</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="o2-replay" id="o2Replay" role="dialog" aria-modal="true" aria-labelledby="o2RpT" hidden>
+      <div class="rp-in">
+        <div class="rp-top"><span class="rp-tag">End of season replay</span><button type="button" id="o2RpX">Close</button></div>
+        <h3 id="o2RpT">YOUR SEASON</h3>
+        <svg viewBox="0 0 800 460" id="o2RpMap" aria-hidden="true">
+          <defs><pattern id="o2rpg" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="rgba(95,227,214,.08)"/></pattern></defs>
+          <rect width="800" height="460" fill="url(#o2rpg)"/>
+          <path id="o2RpPath" d="M0 0" fill="none" stroke="#5FE3D6" stroke-width="3" stroke-linecap="round"/>
+          <g id="o2RpStops"></g>
+          <image id="o2RpJet" href="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" width="34" height="41" x="-17" y="-20"/>
+        </svg>
+        <div class="rp-stats" id="o2RpStats"></div>
       </div>
     </div>
   </main>
@@ -1838,6 +2236,12 @@ label.f{color:var(--hud-fg)}
   </main>
 
   <!-- POSTS -->
+  <main class="page" id="p-forum" hidden>
+    <div class="wrap hub-forum-wrap">
+      <iframe id="hubForumFrame" title="Airshow Forum" data-src="https://jskedge1.github.io/airshow-pages/forum.html" loading="lazy"></iframe>
+    </div>
+  </main>
+
   <main class="page" id="p-posts" hidden>
     <div class="wrap">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap">
@@ -1902,8 +2306,132 @@ label.f{color:var(--hud-fg)}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+
+<!-- Interface upgrades (preview, 21 Oct 2026) -->
+<div class="hub-hello" id="hubHello" role="status" hidden><span class="hh-dot" aria-hidden="true"></span><div><b id="hubHelloT">Welcome back</b><p id="hubHelloP"></p></div><button type="button" id="hubHelloX" aria-label="Close">×</button></div>
+
+<div class="hub-setup" id="hubSetup" role="dialog" aria-modal="true" aria-labelledby="suTitle" hidden>
+  <div class="su-box">
+    <div class="su-top"><span class="su-tag">New member setup</span><span id="suStep">Step 1 of 3</span></div>
+    <i class="su-track"><em id="suBar"></em></i>
+    <section id="su1"><h2 id="suTitle">WHICH SHOWS ARE YOU GOING TO?</h2><p>Pick as many as you like. Each one gets a countdown, a trip plan and line up alerts.</p><div class="su-chips" id="suShows"></div></section>
+    <section id="su2" hidden><h2>HOW DO YOU LIKE YOUR AIRSHOW DAYS?</h2><p>I will put the tools that suit you first.</p><div class="su-opts">
+      <button type="button" data-pick="style" data-v="family" aria-pressed="false"><b>Family day out</b><span>Kids, ear defenders, picnic spots and toilets</span></button>
+      <button type="button" data-pick="style" data-v="photo" aria-pressed="false"><b>Photography</b><span>Sun position, camera settings and best spots</span></button>
+      <button type="button" data-pick="style" data-v="fan" aria-pressed="false"><b>Big aviation fan</b><span>Line ups, rare aircraft and arrivals</span></button>
+      <button type="button" data-pick="style" data-v="first" aria-pressed="false"><b>My first airshow</b><span>The basics, step by step</span></button>
+    </div></section>
+    <section id="su3" hidden><h2>WHERE ARE YOU TRAVELLING FROM?</h2><p>So travel times and the nearest shows make sense for you.</p><div class="su-chips">
+      <button type="button" class="su-chip" data-pick="area" data-v="London and the South East" aria-pressed="false">London and the South East</button>
+      <button type="button" class="su-chip" data-pick="area" data-v="East of England" aria-pressed="false">East of England</button>
+      <button type="button" class="su-chip" data-pick="area" data-v="Midlands" aria-pressed="false">Midlands</button>
+      <button type="button" class="su-chip" data-pick="area" data-v="North of England" aria-pressed="false">North of England</button>
+      <button type="button" class="su-chip" data-pick="area" data-v="South West" aria-pressed="false">South West</button>
+      <button type="button" class="su-chip" data-pick="area" data-v="Wales" aria-pressed="false">Wales</button>
+      <button type="button" class="su-chip" data-pick="area" data-v="Scotland" aria-pressed="false">Scotland</button>
+    </div></section>
+    <div class="su-foot"><button type="button" class="su-skip" id="suSkip">Skip for now</button><span></span><button type="button" class="su-back" id="suBack" hidden>Back</button><button type="button" class="su-next" id="suNext">Next</button></div>
+  </div>
+</div>
+
+<div class="a2hs" id="a2hs" role="dialog" aria-labelledby="a2hsT" hidden><img src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt=""><div><b id="a2hsT">Add My Airshow Hub to your home screen</b><p id="a2hsP"></p><div class="a2hs-b"><button type="button" id="a2hsOk">Got it</button><button type="button" id="a2hsNo">Not now</button></div></div></div>
+
+<nav class="hub-dock" id="hubDock" aria-label="Hub">
+  <button type="button" data-dock="overview" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Overview</button>
+  <button type="button" data-dock="trips"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15l7-1 5-9h2l-2 9 5 1-1 2-5-1-4 6H8l2-6-6 1z"/></svg>Trips</button>
+  <button type="button" data-dock="showday"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg>Show Day</button>
+  <button type="button" data-dock="forum"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Forum</button>
+  <button type="button" data-dock="me"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>Me</button>
+</nav>
+<div class="hub-me" id="hubMe" hidden>
+  <button type="button" data-mep="briefing">Flight Briefing</button><button type="button" data-mep="updates">Updates</button><button type="button" data-mep="community">Community</button><button type="button" data-mep="kit">Kit And Packing</button><button type="button" data-mep="group">My Group</button><button type="button" data-mep="hangar">My Hangar</button><button type="button" data-mep="saved">Saved Tools</button><button type="button" data-mep="history">My Airshow History</button><button type="button" data-mep="year">My Airshow Year</button><button type="button" data-mep="posts">My Posts</button>
+  <button type="button" class="me-out" id="hubMeOut">Log Out</button>
+</div>
+
+<style id="hub-upgrades">
+/* quicker repeat visits */
+#guest.lg-quick *{--del:0s!important;--dur:.3s!important;--d:0s!important}
+/* start up panel instead of a spinner */
+.hud-boot{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:"Share Tech Mono",ui-monospace,monospace;color:#5FE3D6;background:#061019}
+.hud-boot b{font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:28px;letter-spacing:.04em;color:#fff}
+.hud-boot p{margin:0;font-size:15px}
+.hud-boot p span{animation:hbBlink 1s steps(2) infinite}
+.hb-ring{position:relative;width:86px;height:86px;border-radius:50%;border:2px solid rgba(95,227,214,.35);overflow:hidden}
+.hb-ring::before{content:"";position:absolute;inset:18px;border-radius:50%;border:1px solid rgba(95,227,214,.25)}
+.hb-ring i{position:absolute;inset:0;background:conic-gradient(from 0deg,rgba(95,227,214,.55),transparent 28%);animation:hbSpin 1.4s linear infinite}
+@keyframes hbSpin{to{transform:rotate(360deg)}}
+@keyframes hbBlink{50%{opacity:0}}
+/* signing off: stay logged in */
+#hubSO button{display:block;margin-top:18px;font:700 16px "Barlow",Arial,sans-serif;background:transparent;color:#fff;border:2px solid #fff;padding:10px 18px;cursor:pointer;transition:background .25s,color .25s}
+#hubSO button:hover,#hubSO button:focus-visible{background:#fff;color:#08141F;outline:none}
+#hubSO i::after{animation-duration:2.2s!important}
+/* forum inside the hub */
+.hub-forum-wrap{padding-top:18px}
+#hubForumFrame{display:block;width:100%;height:calc(100vh - 120px);min-height:560px;border:1px solid rgba(124,255,158,.45);box-shadow:inset 4px 0 0 #7CFF9E;background:#061019}
+/* short hello */
+.hub-hello{position:fixed;top:16px;right:16px;z-index:80;display:flex;align-items:flex-start;gap:12px;width:min(380px,calc(100% - 32px));background:rgba(8,20,31,.94);border:1px solid #5FE3D6;box-shadow:0 0 30px rgba(95,227,214,.18);padding:14px 16px;color:#fff;font-family:"Barlow",Arial,sans-serif;animation:hhIn .6s cubic-bezier(.2,.8,.2,1) both}
+.hub-hello.out{opacity:0;transform:translateY(-8px);transition:opacity .4s,transform .4s}
+.hub-hello b{display:block;font-weight:700;font-size:17px}
+.hub-hello p{margin:3px 0 0;font-size:15px;line-height:1.45;color:#D2DFE8}
+.hh-dot{flex:none;width:10px;height:10px;margin-top:6px;border-radius:50%;background:#5FE3D6;box-shadow:0 0 12px #5FE3D6}
+.hub-hello button{margin-left:auto;background:transparent;border:0;color:#A9BDCB;font-size:22px;line-height:1;cursor:pointer;padding:0 2px}
+@keyframes hhIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+/* new member setup */
+.hub-setup{position:fixed;inset:0;z-index:92;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,13,20,.94);font-family:"Barlow",Arial,sans-serif;color:#fff}
+.su-box{width:min(720px,100%);max-height:calc(100vh - 32px);overflow-y:auto;scrollbar-width:none;background:#08141F;border:1px solid #5FE3D6;box-shadow:0 0 60px rgba(95,227,214,.16);padding:26px 28px;animation:wbOpen .8s cubic-bezier(.2,.8,.2,1) both}
+.su-top{display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:"Share Tech Mono",ui-monospace,monospace;font-size:14px;color:#5FE3D6}
+.su-tag{background:#6950A1;color:#fff;font-family:"Barlow",Arial,sans-serif;font-weight:600;padding:4px 10px}
+.su-track{display:block;height:5px;background:#13293C;margin:16px 0 20px}
+.su-track em{display:block;height:100%;width:33%;background:#5FE3D6;box-shadow:0 0 12px #5FE3D6;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.hub-setup h2{font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1;margin:0}
+.hub-setup section p{color:#D2DFE8;font-size:17px;margin:10px 0 18px}
+.su-chips{display:flex;flex-wrap:wrap;gap:8px}
+.su-chip{font:600 15px "Barlow",Arial,sans-serif;color:#fff;background:rgba(19,41,60,.8);border:1px solid rgba(95,227,214,.3);padding:10px 14px;cursor:pointer;transition:background .25s,border-color .25s,transform .25s}
+.su-chip:hover{border-color:#5FE3D6;transform:translateY(-1px)}
+.su-chip[aria-pressed="true"]{background:#32B4AF;border-color:#32B4AF;color:#061019}
+.su-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.su-opts button{text-align:left;font-family:"Barlow",Arial,sans-serif;color:#fff;background:rgba(19,41,60,.8);border:1px solid rgba(95,227,214,.3);padding:14px 16px;cursor:pointer;transition:background .25s,border-color .25s}
+.su-opts button b{display:block;font-size:17px}
+.su-opts button span{display:block;font-size:14px;color:#A9BDCB;margin-top:4px}
+.su-opts button:hover{border-color:#5FE3D6}
+.su-opts button[aria-pressed="true"]{background:#13293C;border-color:#5FE3D6;box-shadow:inset 4px 0 0 #5FE3D6}
+.su-foot{display:flex;align-items:center;gap:10px;margin-top:24px}
+.su-foot span{flex:1}
+.su-foot button{font:700 16px "Barlow",Arial,sans-serif;padding:11px 18px;cursor:pointer;border:2px solid #32B4AF}
+.su-next{background:#32B4AF;color:#061019}
+.su-next:disabled{opacity:.6;cursor:wait}
+.su-back{background:transparent;color:#fff;border-color:#fff!important}
+.su-skip{background:transparent;color:#A9BDCB;border:0!important;padding-inline:0!important;text-decoration:underline;text-underline-offset:3px}
+/* add to home screen */
+.a2hs{position:fixed;left:16px;right:16px;bottom:16px;z-index:85;margin:0 auto;max-width:520px;display:flex;gap:14px;align-items:flex-start;background:#08141F;border:1px solid #5FE3D6;box-shadow:0 10px 40px rgba(0,0,0,.45);padding:16px;color:#fff;font-family:"Barlow",Arial,sans-serif;animation:hhIn .6s cubic-bezier(.2,.8,.2,1) both}
+.a2hs img{width:52px;height:52px;object-fit:contain;flex:none;background:#13293C;padding:6px}
+.a2hs b{display:block;font-size:17px}
+.a2hs p{margin:4px 0 0;font-size:15px;line-height:1.45;color:#D2DFE8}
+.a2hs-b{display:flex;gap:8px;margin-top:10px}
+.a2hs-b button{font:700 15px "Barlow",Arial,sans-serif;padding:8px 14px;cursor:pointer;border:2px solid #32B4AF;background:#32B4AF;color:#061019}
+.a2hs-b button+button{background:transparent;color:#fff;border-color:#fff}
+/* phone tab bar */
+.hub-dock,.hub-me{display:none}
+@media (max-width:700px){
+  body.is-member .hub-dock{position:fixed;left:0;right:0;bottom:0;z-index:70;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(6,16,25,.96);border-top:1px solid rgba(95,227,214,.35);padding-bottom:env(safe-area-inset-bottom,0px);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .hub-dock button{display:flex;flex-direction:column;align-items:center;gap:3px;min-height:58px;justify-content:center;background:transparent;border:0;color:#A9BDCB;font:600 12px "Barlow",Arial,sans-serif;cursor:pointer;transition:color .25s}
+  .hub-dock svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+  .hub-dock button.on{color:#5FE3D6}
+  .hub-dock button.on svg{filter:drop-shadow(0 0 6px rgba(95,227,214,.6))}
+  body.is-member .hub-me:not([hidden]){position:fixed;left:0;right:0;bottom:58px;z-index:71;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(95,227,214,.2);border-top:1px solid #5FE3D6;animation:hhIn .35s ease both}
+  .hub-me button{background:#08141F;border:0;color:#fff;font:600 15px "Barlow",Arial,sans-serif;padding:14px 16px;text-align:left;cursor:pointer}
+  .hub-me .me-out{grid-column:1/-1;color:#F3B5B5}
+  body.is-member{padding-bottom:70px}
+  body.is-member .tabs{display:none}
+  .su-opts{grid-template-columns:1fr}
+  .a2hs{bottom:76px}
+  #hubForumFrame{height:calc(100vh - 150px)}
+}
+@media (prefers-reduced-motion:reduce){.hub-hello,.su-box,.a2hs,.hub-me,.hb-ring i{animation:none!important}}
+</style>
+
 <!-- Signing off screen (21 Oct 2026): shows while the Log Out tab logs the member out, then the hub login page appears. -->
-<div id="hubSO" role="status" aria-live="polite" hidden><div><span class="so-tag">My Airshow Hub</span><b>SIGNING OFF</b><p>&gt; CLOSING YOUR SESSION. SEE YOU AT THE NEXT SHOW</p><i></i></div></div>
+<div id="hubSO" role="status" aria-live="polite" hidden><div><span class="so-tag">My Airshow Hub</span><b>SIGNING OFF</b><p>&gt; CLOSING YOUR SESSION. SEE YOU AT THE NEXT SHOW</p><i></i><button type="button" id="hubSOStay">Oops, stay logged in</button></div></div>
 
 <!-- Welcome back screen (21 Oct 2026): shows once after a member logs in from the hub, then opens the Overview page. -->
 <div id="hubWB" role="status" aria-live="polite" hidden><div class="wb-in"><span class="wb-tag">Systems online</span><b class="wb-h" id="hubWBHead">WELCOME BACK</b><b class="wb-n" id="hubWBName"></b><p class="wb-l">&gt; TAKING YOU TO YOUR HUB</p><i class="wb-p"></i></div></div>
@@ -1945,6 +2473,7 @@ label.f{color:var(--hud-fg)}
     var m = e.data;
     if (!m || m.source !== "ukag-hub") return;
     if (m.event === "refresh") { load(); return; }
+    if (m.event === "loginCancelled") { say("No problem, the login window was closed. Press Log In when you are ready."); return; }
     var p = pending[m.id];
     if (!p) return;
     delete pending[m.id];
@@ -1999,11 +2528,16 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
     return call("getHub").then(function (hub) {
       S.hub = hub;
       $("loading").hidden = true;
-      if (!hub.member) { $("guest").hidden = false; $("app").hidden = true; return; }
+      if (!hub.member) { hubSummary(); load.helloDone = false; document.body.classList.remove("is-member"); $("guest").hidden = false; $("app").hidden = true; return; }
       $("guest").hidden = true; $("app").hidden = false; $("lgOut").hidden = true;
       if (!trip()) S.tripId = hub.trips[0] ? hub.trips[0].id : null;
       renderAll();
       if (window.ukagWB && Date.now() - window.ukagWB < 600000) { window.ukagWB = 0; welcomeBack(hub.member.name); }
+      else if (!load.helloDone) quickHello();
+      load.helloDone = true;
+      if (S.startPage) { var sp = S.startPage; S.startPage = ""; window.ukagNext = null; if ($("hubWB").hidden && $("p-" + sp)) showPage(sp); }
+      hubSummary();
+      document.body.classList.add("is-member");
       if (S.join) { var c = S.join; S.join = ""; joinGroup(c); }
     }).catch(function (e) {
       $("loading").innerHTML = "";
@@ -2025,23 +2559,152 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
         S.hub = null; $("app").hidden = true; $("guest").hidden = false; so.hidden = true;
         $("lgOut").hidden = false; window.scrollTo(0, 0);
         load();
-      }, 1700);
+      }, 500);
     }
-    call("logout").then(finish, function (err) {
-      so.hidden = true;
-      say((err && err.message) || "You could not be logged out just now. Please try again.", true);
-    });
+    var stay = $("hubSOStay"); stay.hidden = false; stay.focus();
+    var timer = setTimeout(function () {
+      stay.hidden = true;
+      call("logout").then(finish, function (err) {
+        so.hidden = true;
+        say((err && err.message) || "You could not be logged out just now. Please try again.", true);
+      });
+    }, 2200);
+    stay.onclick = function () { clearTimeout(timer); so.hidden = true; say("No problem, you are still logged in."); };
   }
   $("hubLogout").addEventListener("click", logOut);
+
+  /* ---------- interface upgrades (21 Oct 2026) ---------- */
+  /* a small summary for the site header's Airshow Hub tab: next show countdown and new updates */
+  function hubSummary() {
+    var sum = { in: false, t: Date.now() };
+    if (S.hub && S.hub.member) {
+      var nt = (S.hub.trips || []).filter(function (t) { return t.start && new Date(t.start).getTime() > Date.now(); }).sort(function (a, b) { return a.start.localeCompare(b.start); })[0];
+      var sh = nt && (S.hub.shows || []).find(function (z) { return z.slug === nt.showSlug; });
+      sum = { in: true, t: Date.now(), name: S.hub.member.name || "", unread: S.hub.unread || 0, next: nt ? { name: nt.showName, short: sh ? sh.shortName : nt.showName.split(" ")[0], start: nt.start } : null };
+    }
+    try { localStorage.setItem("ukagHubSummary", JSON.stringify(sum)); } catch (e) {}
+  }
+  function openForum() {
+    var f = $("hubForumFrame");
+    if (!f.src) {
+      f.src = f.dataset.src;
+      /* links inside the forum that point back to the hub stay inside the hub */
+      f.addEventListener("load", function () {
+        var d; try { d = f.contentDocument; } catch (e) { return; }
+        if (!d) return;
+        /* inside the hub, the forum's own "Open My Airshow Hub" and "Join or log in" buttons are not needed */
+        var st = d.createElement("style"); st.textContent = '.btns a[href*="my-airshow-hub"]{display:none!important}'; d.head.appendChild(st);
+        d.addEventListener("click", function (e) {
+          var a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
+          if (/my-airshow-hub/.test(a.getAttribute("href") || "")) { e.preventDefault(); showPage("overview"); }
+        }, true);
+      });
+    }
+  }
+  $("hubForumTab").addEventListener("click", function (e) { e.preventDefault(); showPage("forum"); });
+  window.ukagShowPage = function (p) { if (S.hub && S.hub.member) showPage(p); };
+
+  function nextTrip() {
+    var now = Date.now();
+    return (S.hub && S.hub.trips || []).filter(function (t) { return t.start && new Date(t.start).getTime() > now; })
+      .sort(function (a, b) { return a.start.localeCompare(b.start); })[0];
+  }
+  function daysToGo(iso) { return Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000)); }
+
+  /* returning members who are still signed in get a short hello instead of the big screen */
+  function quickHello() {
+    var h = $("hubHello"), t = nextTrip(), first = (S.hub.member.name || "").split(" ")[0];
+    $("hubHelloT").textContent = "Welcome back, " + first;
+    $("hubHelloP").textContent = t ? t.showName + " is " + daysToGo(t.start) + " days away." + (S.hub.unread ? " You have " + S.hub.unread + " new update" + (S.hub.unread > 1 ? "s" : "") + "." : "")
+      : "Add the shows you are going to and your countdowns start here.";
+    h.hidden = false; h.classList.remove("out");
+    clearTimeout(quickHello.t); quickHello.t = setTimeout(function () { h.classList.add("out"); setTimeout(function () { h.hidden = true; }, 500); }, 5200);
+  }
+  $("hubHelloX").addEventListener("click", function () { $("hubHello").hidden = true; });
+
+  function afterWelcome() {
+    if (window.ukagWBJoin) { window.ukagWBJoin = false; setupStart(); return; }
+    homeCard();
+  }
+
+  /* new member setup: three taps so the dashboard is full from the first minute */
+  var SET = { shows: [], style: "", area: "" };
+  function setupStart() {
+    var box = clear($("suShows"));
+    (S.hub.shows || []).forEach(function (sh) {
+      var b = el("button", "su-chip", sh.shortName); b.type = "button"; b.setAttribute("aria-pressed", "false");
+      b.onclick = function () { var on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(on)); var i = SET.shows.indexOf(sh.slug); if (on && i < 0) SET.shows.push(sh.slug); if (!on && i >= 0) SET.shows.splice(i, 1); };
+      box.appendChild(b);
+    });
+    setupStep(1); $("hubSetup").hidden = false;
+  }
+  function setupStep(n) {
+    [1, 2, 3].forEach(function (k) { $("su" + k).hidden = k !== n; });
+    $("suBar").style.width = (n / 3 * 100) + "%"; $("suStep").textContent = "Step " + n + " of 3";
+    $("suBack").hidden = n === 1; $("suNext").textContent = n === 3 ? "Finish my hub" : "Next";
+    $("hubSetup").dataset.step = n;
+  }
+  document.querySelectorAll("#hubSetup [data-pick]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var grp = b.dataset.pick; SET[grp] = b.dataset.v;
+      document.querySelectorAll('#hubSetup [data-pick="' + grp + '"]').forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    });
+  });
+  $("suBack").addEventListener("click", function () { setupStep(+$("hubSetup").dataset.step - 1); });
+  $("suSkip").addEventListener("click", function () { $("hubSetup").hidden = true; homeCard(); });
+  $("suNext").addEventListener("click", function () {
+    var n = +$("hubSetup").dataset.step;
+    if (n < 3) { setupStep(n + 1); return; }
+    var btn = $("suNext"); btn.disabled = true; btn.textContent = "Setting up your hub";
+    try { localStorage.setItem("ukagStyle", SET.style); localStorage.setItem("ukagArea", SET.area); } catch (e) {}
+    var chain = Promise.resolve();
+    SET.shows.forEach(function (slug) { chain = chain.then(function () { return call("addTrip", { showSlug: slug }).catch(function () {}); }); });
+    chain.then(load).then(function () {
+      $("hubSetup").hidden = true; btn.disabled = false;
+      say(SET.shows.length ? "Your hub is ready. Your countdowns are on the dashboard." : "Your hub is ready.");
+      showPage("overview"); homeCard();
+    });
+  });
+
+  /* add to home screen, offered once after a member's first login */
+  function homeCard() {
+    var done = false; try { done = localStorage.getItem("ukagA2HS") === "1"; } catch (e) {}
+    if (done) return;
+    var ua = navigator.userAgent || "";
+    $("a2hsP").textContent = /iPhone|iPad|iPod/.test(ua) ? "Tap the Share button, then Add to Home Screen. It opens like an app with the red jet icon."
+      : /Android/.test(ua) ? "Open your browser menu, then Install app or Add to Home screen. It opens like an app with the red jet icon."
+      : "On your phone, open My Airshow Hub, then choose Add to Home Screen from the browser menu. It opens like an app with the red jet icon.";
+    setTimeout(function () { $("a2hs").hidden = false; }, 700);
+  }
+  function a2hsClose() { $("a2hs").hidden = true; try { localStorage.setItem("ukagA2HS", "1"); } catch (e) {} }
+  $("a2hsOk").addEventListener("click", a2hsClose);
+  $("a2hsNo").addEventListener("click", function () { $("a2hs").hidden = true; });
+
+  /* phone tab bar, within thumb reach */
+  document.querySelectorAll("#hubDock [data-dock]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var p = b.dataset.dock;
+      if (p === "me") { $("hubMe").hidden = !$("hubMe").hidden; return; }
+      $("hubMe").hidden = true; showPage(p);
+    });
+  });
+  document.querySelectorAll("#hubMe [data-mep]").forEach(function (b) { b.addEventListener("click", function () { $("hubMe").hidden = true; showPage(b.dataset.mep); }); });
+  $("hubMeOut").addEventListener("click", function () { $("hubMe").hidden = true; logOut(); });
+  function dockSync(p) { document.querySelectorAll("#hubDock [data-dock]").forEach(function (b) { b.classList.toggle("on", b.dataset.dock === p || (b.dataset.dock === "me" && ["overview", "trips", "showday", "forum"].indexOf(p) < 0)); }); }
+
+  /* friendly messages */
+  window.addEventListener("offline", function () { say("You are offline. Your hub will catch up when your signal comes back.", true); });
+  window.addEventListener("online", function () { say("Back online."); if (S.hub && S.hub.member) load(); });
 
   /* big welcome back screen after logging in, then the Overview page ("Systems online. Welcome back.") */
   function welcomeBack(name) {
     var w = $("hubWB"); if (!w) return;
     $("hubWBName").textContent = (name || "").trim().split(/\s+/)[0] || "";
     $("hubWBHead").textContent = window.ukagWBJoin ? "WELCOME ABOARD" : "WELCOME BACK";
-    showPage("overview");
+    var next = window.ukagNext || "overview"; window.ukagNext = null;
+    showPage(next);
     w.classList.remove("go"); w.hidden = false;
-    setTimeout(function () { w.classList.add("go"); setTimeout(function () { w.hidden = true; w.classList.remove("go"); }, 650); }, 3400);
+    setTimeout(function () { w.classList.add("go"); setTimeout(function () { w.hidden = true; w.classList.remove("go"); afterWelcome(); }, 650); }, 3400);
   }
 
   function renderAll() {
@@ -2111,13 +2774,15 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
   function showPage(p) {
     S.page = p;
     document.querySelectorAll(".tabs button").forEach(function (x) { x.classList.toggle("on", x.dataset.p === p); });
-    ["overview", "briefing", "trips", "showday", "updates", "community", "kit", "group", "hangar", "saved", "history", "year", "posts"].forEach(function (k) { $("p-" + k).hidden = k !== p; });
+    ["overview", "briefing", "trips", "showday", "updates", "community", "kit", "group", "hangar", "saved", "history", "year", "posts", "forum"].forEach(function (k) { $("p-" + k).hidden = k !== p; });
     if (S.hub && S.hub.member && /overview|briefing|hangar|year/.test(p)) renderHudx();
     if (p === "community" && !F.loaded) loadFeed();
     if (p === "updates" && S.hub.unread) {
-      call("markUpdatesRead").then(function () { S.hub.unread = 0; $("unreadDot").hidden = true; }).catch(function () {});
+      call("markUpdatesRead").then(function () { S.hub.unread = 0; $("unreadDot").hidden = true; hubSummary(); }).catch(function () {});
     }
     if (p === "group") startChat(); else stopChat();
+    if (p === "forum") openForum();
+    dockSync(p);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -2894,76 +3559,451 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
   }
 
   /* ---------- Overview ---------- */
-  function renderOverview() {
-    var h = S.hub, trips = h.trips || [];
-    $("ovGreet").textContent = partOfDay() + ", " + firstName();
-    var open = 0; trips.forEach(function (t) { open += (t.todo || []).filter(function (x) { return !x.done; }).length; });
-    var lineup = (h.updates || []).filter(function (u) { return u.kind === "lineup" && !u.read; }).length;
-    var bits = [];
-    bits.push(trips.length ? "You have " + (trips.length === 1 ? "one show" : trips.length + " shows") + " on your radar." : "Your radar is clear. Add a show in My Trips and it appears here.");
-    if (open) bits.push((open === 1 ? "One thing" : open + " things") + " on your trip lists still need sorting.");
-    if (lineup) bits.push("The line up changed " + (lineup === 1 ? "once" : lineup + " times") + " while you were away.");
-    $("ovSum").textContent = bits.join(" ");
-    var seenCount = X.hangar ? uniqueSeen().length : "…";
-    var next = trips[0];
-    var st = clear($("ovStats"));
-    [[pad(trips.length), "Shows saved"], [seenCount, "Aircraft in my hangar"], [pad((h.mustSee || []).length), "Must see aircraft"], [next ? "18:00" : "…", next ? "Briefing arrives the night before" : "Briefing waits for a show"]].forEach(function (x) {
-      var d = el("div"); d.appendChild(el("b", "", String(x[0]))); d.appendChild(el("span", "", x[1])); st.appendChild(d);
-    });
-    $("ovShow").textContent = next ? next.showName : "No show saved yet";
-    $("ovNextTag").textContent = next ? dayStr(next.start) : "Saved show";
-    var rows = clear($("ovRows"));
-    function row(k, v, hot) { var r = el("div", "row" + (hot ? " hot" : "")); r.appendChild(el("span", "", k)); r.appendChild(el("b", "", v)); rows.appendChild(r); }
-    if (next) {
-      row("Gates open", next.gatesOpen || "To be confirmed");
-      row("Travel", next.travel || "Not planned yet", !next.travel);
-      var todo = (next.todo || []).find(function (x) { return !x.done; });
-      if (todo) row("Still to do", todo.t, true);
-      $("ovProg").style.width = readiness(next) + "%";
+  /* ---------- Overview: cockpit layout (21 Oct 2026) ---------- */
+  var O2 = { typed: false, flapsBuilt: false, lastMsg: "", celebrated: {}, radarStarted: false, blips: [] };
+  var O2_REDUCE = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var O2_SHOWPTS = { riat: [51.682, -1.790], cosford: [52.640, -2.306], midlands: [52.203, -1.888], eastbourne: [50.763, 0.285], clacton: [51.788, 1.155], wales: [51.615, -3.944], duxford: [52.090, 0.132], shuttleworth: [52.088, -0.320], "little-gransden": [52.167, -0.149], southport: [53.648, -3.010], blackpool: [53.810, -3.055], ayr: [55.462, -4.640] };
+  var O2_AREAS = [["London and the South East", 51.507, -0.128], ["East of England", 51.95, 0.75], ["Midlands", 52.48, -1.90], ["North of England", 53.80, -1.55], ["South West", 51.45, -2.59], ["Wales", 51.48, -3.18], ["Scotland", 55.86, -4.25]];
+  var O2_CODES = { riat: "FFD", cosford: "COS", midlands: "MID", eastbourne: "EBN", clacton: "CLA", wales: "SWA", duxford: "DUX", shuttleworth: "OWD", "little-gransden": "LGR", southport: "SPT", blackpool: "BPL", ayr: "AYR" };
+
+  /* cockpit sounds, made in the browser, off until the member switches them on */
+  var O2S = (function () {
+    var on = false, ctx = null;
+    try { on = localStorage.getItem("ukagOvSound") === "on"; } catch (e) {}
+    function ac() { if (!ctx) { var A = window.AudioContext || window.webkitAudioContext; if (!A) return null; ctx = new A(); } if (ctx.state === "suspended") ctx.resume(); return ctx; }
+    function noise(dur, f0, f1, vol, type) {
+      var c = ac(); if (!c) return; var t = c.currentTime;
+      var n = Math.floor(c.sampleRate * dur), b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+      for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      var s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      s.buffer = b; f.type = type || "bandpass"; f.Q.value = 1.2; f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + dur * .3); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      s.connect(f); f.connect(g); g.connect(c.destination); s.start(t); s.stop(t + dur);
     }
-    renderRadar(trips);
-    var up = clear($("ovUpdates"));
-    var list = (h.updates || []).slice(0, 3);
-    if (!list.length) up.appendChild(el("div", "empty", "Nothing new yet. I check the official sites every day."));
-    list.forEach(function (u) { up.appendChild(upRow(u)); });
-    var mb = el("button", "link", "All updates"); mb.onclick = function () { showPage("updates"); }; up.appendChild(mb);
-    var mu = clear($("ovMust")); var must = h.mustSee || [];
-    $("ovMustTag").textContent = must.length ? must.filter(function (m) { return /confirm/i.test(m.status); }).length + " confirmed" : "";
-    if (!must.length) mu.appendChild(el("div", "empty", "Tap Add To Must See on any aircraft in My Trips."));
-    must.slice(0, 6).forEach(function (m) {
-      var r = el("div", "ov-must"); r.appendChild(el("b", "", m.name)); r.appendChild(el("span", "", m.showName || ""));
-      r.appendChild(el("em", "st" + statusClass(m.status), m.status || "Waiting")); mu.appendChild(r);
-    });
-    ovTick();
+    function tone(f0, f1, dur, vol, type) {
+      var c = ac(); if (!c) return; var t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+      o.type = type || "sine"; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + .05);
+    }
+    return {
+      isOn: function () { return on; },
+      set: function (v) { on = v; try { localStorage.setItem("ukagOvSound", v ? "on" : "off"); } catch (e) {} if (v) ac(); },
+      click: function () { if (on) { noise(.03, 2500, 2400, .4, "highpass"); tone(1800, 900, .04, .08, "square"); } },
+      radio: function () { if (on) { noise(.35, 1800, 900, .12); tone(1000, 1000, .06, .05, "sine"); } },
+      jet: function () { if (on) noise(3.2, 200, 1400, .5, "lowpass"); },
+      boom: function () { if (on) { tone(90, 30, 1.2, .6, "sine"); noise(1.4, 600, 60, .7, "lowpass"); } },
+      taxi: function () { if (on) { tone(700, 1100, 2.4, .05, "sawtooth"); noise(2.4, 400, 900, .12, "lowpass"); } }
+    };
+  })();
+  function o2SndUI() { $("o2Snd").setAttribute("aria-pressed", String(O2S.isOn())); $("o2SndT").textContent = O2S.isOn() ? "Cockpit sounds on" : "Cockpit sounds off"; }
+  $("o2Snd").addEventListener("click", function () { O2S.set(!O2S.isOn()); o2SndUI(); O2S.click(); });
+  o2SndUI();
+
+  /* panels open from the middle as they come into view */
+  var o2io = "IntersectionObserver" in window ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("on"); o2io.unobserve(e.target); } }); }, { threshold: .1 }) : null;
+  document.querySelectorAll(".o2-p").forEach(function (p) { if (o2io && !O2_REDUCE) o2io.observe(p); else p.classList.add("on"); });
+
+  /* header photo leans gently with the mouse */
+  if (!O2_REDUCE) document.addEventListener("pointermove", function (e) {
+    if (e.pointerType !== "mouse" || S.page !== "overview") return;
+    var ph = $("o2Photo"); ph.style.setProperty("--px", ((e.clientX / innerWidth - .5) * -18) + "px"); ph.style.setProperty("--py", ((e.clientY / innerHeight - .5) * -10) + "px");
+  });
+
+  function o2Home() {
+    var area = ""; try { area = localStorage.getItem("ukagArea") || ""; } catch (e) {}
+    if (!area && S.hub && S.hub.member) area = S.hub.member.area || "";
+    var a = O2_AREAS.find(function (x) { return area && (x[0].toLowerCase().indexOf(area.toLowerCase()) >= 0 || area.toLowerCase().indexOf(x[0].split(" ")[0].toLowerCase()) >= 0); });
+    return a ? { name: a[0], lat: a[1], lon: a[2] } : { name: "Centre of England", lat: 52.56, lon: -1.46 };
   }
-  function renderRadar(trips) {
-    var g = $("radarBlips"); while (g.firstChild) g.removeChild(g.firstChild);
-    var ul = clear($("ovBlips"));
-    if (!trips.length) { ul.appendChild(el("li", "", "No shows inbound yet.")); return; }
-    trips.slice(0, 8).forEach(function (t, i) {
-      var d = daysTo(t.start);
-      var r = d === null ? 140 : d <= 30 ? 35 * d / 30 : d <= 90 ? 35 + 35 * (d - 30) / 60 : d <= 180 ? 70 + 35 * (d - 90) / 90 : Math.min(140, 105 + 35 * (d - 180) / 185);
-      r = Math.max(10, r);
-      var a = (i * 137.5 + 20) * Math.PI / 180;
-      var x = 150 + r * Math.cos(a), y = 150 + r * Math.sin(a);
-      var col = i === 0 ? "#D74949" : i % 2 ? "#5FE3DC" : "#9C86D8";
-      g.appendChild(svg("circle", { cx: x.toFixed(1), cy: y.toFixed(1), r: 9, fill: col, opacity: ".18", class: "blip-ring" }));
-      g.appendChild(svg("circle", { cx: x.toFixed(1), cy: y.toFixed(1), r: 4, fill: col }));
-      var tx = svg("text", { x: (x + 8).toFixed(1), y: (y - 6).toFixed(1), fill: "#E8F1F6", "font-size": "10", "font-family": "Barlow, sans-serif", "font-weight": "600" });
-      var sh = (S.hub.shows || []).find(function (z) { return z.slug === t.showSlug; }); tx.textContent = sh ? sh.shortName : (t.showName || "").split(/[ ,]/).slice(0, 2).join(" "); g.appendChild(tx);
-      var li = el("li"); var sw = el("i"); sw.style.background = col; li.appendChild(sw);
-      li.appendChild(el("b", "", t.showName)); li.appendChild(el("span", "", d === null ? "Date to be confirmed" : d <= 0 ? "Today" : d + (d === 1 ? " day" : " days")));
-      li.onclick = function () { S.tripId = t.id; renderAll(); showPage("trips"); };
-      ul.appendChild(li);
+  function o2Geo(a, b) {
+    var R = 3959, toR = Math.PI / 180, dLat = (b[0] - a[0]) * toR, dLon = (b[1] - a[1]) * toR;
+    var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a[0] * toR) * Math.cos(b[0] * toR) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var dist = 2 * R * Math.asin(Math.sqrt(h));
+    var y = Math.sin(dLon) * Math.cos(b[0] * toR), x = Math.cos(a[0] * toR) * Math.sin(b[0] * toR) - Math.sin(a[0] * toR) * Math.cos(b[0] * toR) * Math.cos(dLon);
+    return { dist: dist, brg: (Math.atan2(y, x) / toR + 360) % 360 };
+  }
+  function o2Next() {
+    var now = Date.now();
+    return (S.hub.trips || []).filter(function (t) { return t.start && new Date(t.end || t.start).getTime() + 864e5 > now; })
+      .sort(function (a, b) { return a.start.localeCompare(b.start); })[0] || null;
+  }
+  function o2ShowFor(t) { return (S.hub.shows || []).find(function (z) { return z.slug === t.showSlug; }) || {}; }
+  function o2Days(iso) { return Math.ceil((new Date(iso) - new Date()) / 864e5); }
+  function o2Type(node, text, delay, cb) {
+    if (O2_REDUCE || O2.typed) { node.textContent = text; if (cb) cb(); return; }
+    var i = 0; setTimeout(function step() { node.textContent = text.slice(0, ++i); if (i < text.length) setTimeout(step, 40); else if (cb) cb(); }, delay);
+  }
+
+  function renderOverview() {
+    if (!S.hub || !S.hub.member || !$("o2")) return;
+    var h = S.hub, next = o2Next(), home = o2Home();
+    var today = next && new Date(next.start).getTime() <= Date.now() + 36e5 * 2;
+    $("o2").classList.toggle("sd", !!today);
+
+    /* sky: time of day tint, forecast and greeting */
+    var hr = +new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", hour12: false }).format(new Date());
+    var tod = hr < 5 || hr >= 21 ? ["Night flying", "No displays until morning", "linear-gradient(180deg,#0B1F3A,#13293C)", false]
+      : hr < 12 ? ["Morning light", "Sun in the east", "linear-gradient(180deg,#9FD3F0,#F7D9A0)", true]
+      : hr < 17 ? ["Afternoon light", "Sun in the south west", "linear-gradient(180deg,#5FA8D3,#F2D29B)", true]
+      : ["Golden hour", "Sun low in the west", "linear-gradient(180deg,#E8875A,#6950A1)", true];
+    $("o2Tod").textContent = tod[0]; $("o2TodS").textContent = tod[1]; $("o2Tint").style.setProperty("--tod", tod[2]);
+    var w = next && h.weather ? h.weather[next.id] : null, wx = tod[3] ? "sun" : "";
+    if (w) {
+      wx = w.rain >= 50 ? "rain" : w.rain >= 25 ? "cloud" : (tod[3] ? "sun" : "");
+      $("o2WxT").textContent = "High " + w.high + "°C, rain " + w.rain + "%";
+      $("o2WxS").textContent = "Wind " + w.wind + " mph " + w.windDir + " at " + (o2ShowFor(next).shortName || next.showName);
+    } else {
+      $("o2WxT").textContent = next ? "Forecast on its way" : "No forecast yet";
+      $("o2WxS").textContent = next ? "It arrives the week before " + (o2ShowFor(next).shortName || "your show") : "Save a show to see its weather here";
+    }
+    $("o2Wx").className = "o2-wx " + wx; $("o2Sky").classList.toggle("dim", wx === "rain" || wx === "cloud");
+    var clk = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" }).format(new Date());
+    $("o2Clock").textContent = clk;
+    var greet = (today ? "Show day" : partOfDay()) + ",";
+    if (!O2.typed && !O2.typing) { O2.typing = true; $("o2Greet").textContent = ""; $("o2Name").textContent = ""; o2Type($("o2Greet"), greet.toUpperCase(), 250, function () { o2Type($("o2Name"), firstName().toUpperCase(), 100, function () { O2.typed = true; O2.typing = false; }); }); }
+    else if (O2.typed) { $("o2Greet").textContent = greet.toUpperCase(); $("o2Name").textContent = firstName().toUpperCase(); }
+    var trips = h.trips || [], open = 0; trips.forEach(function (t) { open += (t.todo || []).filter(function (x) { return !x.done; }).length; });
+    var bits = [];
+    if (today) bits.push("Enjoy " + (o2ShowFor(next).shortName || "the show") + " today. I would head to the crowd line early and save your pitch.");
+    else if (next) bits.push("You have " + (trips.length === 1 ? "one show" : trips.length + " shows") + " on your radar. " + next.showName + " is up first, in " + o2Days(next.start) + " days.");
+    else bits.push("Your radar is clear. Save the shows you are going to and your countdowns start here.");
+    if (!today && open) bits.push((open === 1 ? "One check is" : open + " checks are") + " still to sort.");
+    $("o2Brief").textContent = bits.join(" ");
+
+    o2Pass(next, home, today);
+    o2Ready(next);
+    o2Radio();
+    o2Must();
+    o2Radar(home);
+    o2Runway(next);
+    o2Hangar();
+    o2Quick(next);
+    o2Milestone(next);
+  }
+
+  /* boarding pass with the split flap countdown */
+  var O2_CELLS = {};
+  function o2Flaps() {
+    if (O2.flapsBuilt) return; O2.flapsBuilt = true;
+    var box = $("o2Flaps");
+    [["d", "Days", 3], ["h", "Hours", 2], ["m", "Mins", 2], ["s", "Secs", 2]].forEach(function (u) {
+      if (box.children.length) { var sp = el("span", "sep", ":"); sp.setAttribute("aria-hidden", "true"); box.appendChild(sp); }
+      var unit = el("div", "unit"), row = el("div", "d"); O2_CELLS[u[0]] = [];
+      for (var i = 0; i < u[2]; i++) { var f = el("div", "flap"); f.appendChild(el("span", "", "0")); row.appendChild(f); O2_CELLS[u[0]].push(f); }
+      unit.appendChild(row); unit.appendChild(el("small", "", u[1])); box.appendChild(unit);
+    });
+  }
+  function o2SetNum(key, n) {
+    var cells = O2_CELLS[key]; if (!cells) return;
+    var str = String(Math.max(0, n)).padStart(cells.length, "0").slice(-cells.length);
+    cells.forEach(function (f, i) {
+      var sp = f.firstChild; if (sp.textContent === str[i]) return;
+      if (O2_REDUCE || S.page !== "overview") { sp.textContent = str[i]; return; }
+      f.classList.remove("go"); void f.offsetWidth; f.classList.add("go");
+      setTimeout(function () { sp.textContent = str[i]; }, 230);
     });
   }
   function ovTick() {
-    var t = S.hub && S.hub.trips && S.hub.trips[0]; if (!t || !$("ovDays")) return;
-    var ms = t.start ? Math.max(0, new Date(t.start) - new Date()) : 0;
-    $("ovDays").textContent = Math.floor(ms / 864e5);
-    $("ovClock").textContent = pad(Math.floor(ms % 864e5 / 36e5)) + ":" + pad(Math.floor(ms % 36e5 / 6e4)) + ":" + pad(Math.floor(ms % 6e4 / 1e3));
+    var t = S.hub && S.hub.member ? o2Next() : null; if (!t) return;
+    var ms = Math.max(0, new Date(t.start) - new Date());
+    o2SetNum("d", Math.floor(ms / 864e5)); o2SetNum("h", Math.floor(ms / 36e5) % 24); o2SetNum("m", Math.floor(ms / 6e4) % 60); o2SetNum("s", Math.floor(ms / 1e3) % 60);
   }
   setInterval(function () { if (S.hub && S.hub.member && S.page === "overview") ovTick(); }, 1000);
+  function o2Pass(next, home, today) {
+    o2Flaps();
+    $("o2PassEmpty").hidden = !!next; $("o2RouteBox").hidden = !next; $("o2Flaps").hidden = !next || today; $("o2Today").hidden = !today; $("o2Stub").hidden = !next;
+    $("o2Home").textContent = home.name;
+    if (!next) { $("o2PassT").textContent = "No show saved yet"; $("o2PassK").textContent = "BOARDING PASS"; $("o2Gate").textContent = ""; return; }
+    var sh = o2ShowFor(next);
+    $("o2PassK").textContent = today ? "SHOW DAY · TODAY" : "BOARDING PASS · NEXT SHOW";
+    $("o2PassT").textContent = today ? "Today at " + (sh.shortName || next.showName) : next.showName;
+    $("o2Gate").textContent = next.gatesOpen ? "GATES " + next.gatesOpen : "";
+    $("o2Code").textContent = O2_CODES[next.showSlug] || (next.showName || "").replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase();
+    $("o2Where").textContent = sh.shortName || "";
+    $("o2Date").textContent = dayStr(next.start);
+    $("o2Gates").textContent = next.gatesOpen || "To be confirmed";
+    $("o2Travel").textContent = next.travel || "To plan";
+    ovTick();
+  }
+
+  /* readiness horizon and the pre flight switches (the trip's own to do list) */
+  function o2Ready(next) {
+    var box = clear($("o2Switches"));
+    var todo = next ? (next.todo || []) : [];
+    if (!next) { box.appendChild(el("p", "o2-mut", "Your pre flight checks appear when you save a show.")); }
+    todo.slice(0, 6).forEach(function (x) {
+      var b = el("button", "o2tg"); b.type = "button"; b.setAttribute("aria-pressed", String(!!x.done));
+      b.appendChild(el("span", "base")); var tx = el("span"); tx.appendChild(el("b", "", x.t)); if (x.d) tx.appendChild(el("small", "", x.d)); b.appendChild(tx); b.appendChild(el("span", "led"));
+      b.onclick = function () {
+        x.done = !x.done; b.setAttribute("aria-pressed", String(x.done));
+        S.tripId = next.id; saveTrip({ todo: next.todo });
+        if (navigator.vibrate) navigator.vibrate(12); O2S.click();
+        o2ReadyGauge(next, true); renderTrips();
+      };
+      box.appendChild(b);
+    });
+    if (todo.length > 6) { var more = el("button", "o2-link", "All " + todo.length + " checks in My Trips"); more.type = "button"; more.onclick = function () { S.tripId = next.id; renderAll(); showPage("trips"); }; box.appendChild(more); }
+    o2ReadyGauge(next, false);
+  }
+  function o2ReadyGauge(next, user) {
+    var todo = next ? (next.todo || []) : [], done = todo.filter(function (x) { return x.done; }).length;
+    var pct = todo.length ? Math.round(done / todo.length * 100) : 0;
+    $("o2Pct").textContent = pct; $("o2SwCount").textContent = todo.length ? done + " OF " + todo.length : "";
+    $("o2Ball").style.transform = "translateY(" + ((100 - pct) / 100 * -34) + "px)";
+    var left = todo.filter(function (x) { return !x.done; })[0];
+    $("o2ReadyNext").textContent = !next ? "" : left ? "> Next: " + left.t.toLowerCase() : "> All checks complete";
+    $("o2ReadyLine").textContent = !next ? "Save a show and its checks set the horizon." : pct === 100 ? "Wings level. You are cleared for " + (o2ShowFor(next).shortName || next.showName) + "." : pct >= 50 ? "Climbing nicely. A few more checks and you are ready." : "Flip the pre flight switches as you sort each part of your trip. The horizon levels out as you go.";
+    $("o2Route").style.setProperty("--prog", Math.max(8, pct * .9) + "%");
+    if (next && pct === 100 && user && !O2.celebrated[next.id]) { O2.celebrated[next.id] = true; o2Flypast("Cleared for " + (o2ShowFor(next).shortName || "take off")); }
+  }
+
+  /* Red Arrows flypast with red, white and blue smoke */
+  function o2Flypast(text) {
+    if (O2_REDUCE) { say(text); return; }
+    var fp = el("div", "o2-fly"); fp.setAttribute("aria-hidden", "true");
+    var fm = el("div", "fm"), pos = [[150, 80], [110, 40], [110, 120], [70, 0], [70, 160], [30, 40], [30, 120], [-10, 80], [-50, 80]], col = ["#D74949", "#E8F1F6", "#2E5BD7"];
+    pos.forEach(function (p, i) {
+      var sm = el("i", "sm"); sm.style.top = (p[1] + 18) + "px"; sm.style.right = (340 - p[0] - 6) + "px"; sm.style.background = "linear-gradient(270deg," + col[i % 3] + ",transparent)"; fm.appendChild(sm);
+      var im = el("img"); im.src = "https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp"; im.alt = ""; im.style.left = p[0] + "px"; im.style.top = p[1] + "px"; fm.appendChild(im);
+    });
+    fp.appendChild(fm); document.body.appendChild(fp);
+    var c = el("div", "o2-cleared", text); document.body.appendChild(c); O2S.jet();
+    setTimeout(function () { fp.remove(); c.remove(); }, 4200);
+  }
+
+  /* show radio: the latest updates arrive like air traffic messages */
+  function o2Radio() {
+    var box = clear($("o2Msgs")), ups = (S.hub.updates || []).slice(0, 3);
+    var unread = (S.hub.updates || []).filter(function (u) { return !u.read; }).length;
+    $("o2RadN").textContent = unread ? unread + " NEW" : "LIVE UPDATES";
+    if (!ups.length) { box.appendChild(el("p", "o2-mut", "All quiet on the radio. I check the official show websites every day and anything new lands here.")); $("o2Freq").textContent = "HUB 01"; $("o2FreqName").textContent = "Hub control"; return; }
+    var first = ups[0], sh = (S.hub.shows || []).find(function (z) { return z.slug === first.showSlug; });
+    var code = sh ? (O2_CODES[sh.slug] || sh.shortName.slice(0, 3).toUpperCase()) : "HUB";
+    var key = first.id || first.heading;
+    var fresh = key !== O2.lastMsg; O2.lastMsg = key;
+    $("o2FreqName").textContent = sh ? sh.shortName + " updates" : "Hub control";
+    if (fresh && !O2_REDUCE) {
+      var f = $("o2Freq"), n = 0; $("o2Wave").classList.remove("quiet"); O2S.radio();
+      var spin = setInterval(function () { f.textContent = code + " " + String(Math.floor(Math.random() * 90) + 10); if (++n > 8) { clearInterval(spin); f.textContent = code + " 01"; } }, 45);
+      setTimeout(function () { $("o2Wave").classList.add("quiet"); }, 2600);
+    } else $("o2Freq").textContent = code + " 01";
+    ups.forEach(function (u, i) {
+      var d = el("div", "o2msg" + (u.kind === "lineup" ? "" : " p")), s2 = (S.hub.shows || []).find(function (z) { return z.slug === u.showSlug; });
+      d.appendChild(el("small", "", ((s2 ? s2.shortName : "Hub") + " · " + (u.created ? new Date(u.created).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "")).toUpperCase()));
+      var p = el("p"); d.appendChild(p); box.appendChild(d);
+      var text = (u.heading || "") + (u.body ? ". " + u.body : "");
+      if (i === 0 && fresh) o2Type(p, text.replace(/\.\./g, "."), 500); else p.textContent = text.replace(/\.\./g, ".");
+    });
+  }
+
+  /* must see deck with tilt */
+  function o2Must() {
+    var box = clear($("o2Deck")), must = S.hub.mustSee || [];
+    $("o2MsN").textContent = must.length ? must.length + " WATCHING" : "";
+    if (!must.length) { box.appendChild(el("p", "o2-mut", "Tap Add To Must See on any aircraft in a show line up and it lands here.")); return; }
+    must.slice(0, 4).forEach(function (m) {
+      var c = el("div", "card"); c.appendChild(el("b", "", m.name));
+      var st = m.status || "Waiting", cls = /cancel|withdrawn|not/i.test(st) ? "no" : /confirm/i.test(st) ? "ok" : "wait";
+      c.appendChild(el("span", "stamp " + cls, st)); c.appendChild(el("small", "", m.showName || ""));
+      c.addEventListener("pointermove", function (e) {
+        if (e.pointerType !== "mouse" || O2_REDUCE) return;
+        var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.setProperty("--ry", ((x - .5) * 10) + "deg"); c.style.setProperty("--rx", ((.5 - y) * 10) + "deg"); c.style.setProperty("--mx", (x * 100) + "%"); c.style.setProperty("--my", (y * 100) + "%");
+      });
+      c.addEventListener("pointerleave", function () { c.style.setProperty("--rx", "0deg"); c.style.setProperty("--ry", "0deg"); });
+      box.appendChild(c);
+    });
+  }
+
+  /* show radar: featured shows plotted by real direction and distance from home */
+  function o2Radar(home) {
+    var g = $("o2Blips"); while (g.firstChild) g.removeChild(g.firstChild);
+    var mine = (S.hub.trips || []).map(function (t) { return t.showSlug; });
+    var list = (S.hub.shows || []).filter(function (s) { return O2_SHOWPTS[s.slug]; }).map(function (s) { var gpos = o2Geo([home.lat, home.lon], O2_SHOWPTS[s.slug]); return { s: s, d: gpos.dist, b: gpos.brg, mine: mine.indexOf(s.slug) >= 0 }; });
+    var max = list.reduce(function (m, x) { return Math.max(m, x.d); }, 100), range = Math.ceil(max * 1.08 / 50) * 50;
+    $("o2Range").textContent = "RANGE " + range + " MI"; $("o2R1").textContent = Math.round(range / 3); $("o2R2").textContent = Math.round(range * 2 / 3);
+    O2.blips = [];
+    list.forEach(function (x) {
+      var rad = (x.b - 90) * Math.PI / 180, r = Math.max(14, x.d / range * 190), cx = 200 + Math.cos(rad) * r, cy = 200 + Math.sin(rad) * r;
+      var col = x.mine ? "#5FE3D6" : "#8C77C9", grp = svg("g", { class: "blip" });
+      grp.appendChild(svg("circle", { class: "ring", cx: cx.toFixed(1), cy: cy.toFixed(1), r: 6, fill: "none", stroke: col }));
+      grp.appendChild(svg("circle", { cx: cx.toFixed(1), cy: cy.toFixed(1), r: x.mine ? 6 : 4, fill: col }));
+      var left = cx < 200, t = svg("text", { x: (left ? cx - 9 : cx + 9).toFixed(1), y: (cy + 4).toFixed(1), fill: col, "text-anchor": left ? "end" : "start" });
+      t.textContent = x.s.shortName; grp.appendChild(t);
+      var ttl = svg("title", {}); ttl.textContent = x.s.name + ", about " + Math.round(x.d) + " miles"; grp.appendChild(ttl);
+      g.appendChild(grp); O2.blips.push({ el: grp, ang: (x.b - 90 + 360) % 360 });
+    });
+    if (!O2.radarStarted && !O2_REDUCE) {
+      O2.radarStarted = true; var t0 = performance.now();
+      (function loop(now) {
+        if (S.page === "overview") {
+          var ang = ((now - t0) / 6000 * 360) % 360;
+          O2.blips.forEach(function (b) { var diff = (ang - b.ang + 360) % 360; if (diff < 6 && !b.el.classList.contains("hit")) { b.el.classList.add("hit"); setTimeout(function () { b.el.classList.remove("hit"); }, 1400); } });
+        }
+        requestAnimationFrame(loop);
+      })(t0);
+    }
+  }
+
+  /* season runway: featured shows as runway markers, yours lit up, the jet taxis to today */
+  function o2Runway(next) {
+    var rw = $("o2Runway"); rw.querySelectorAll(".mk").forEach(function (m) { m.remove(); });
+    var shows = (S.hub.shows || []).filter(function (s) { return s.start; });
+    var mine = (S.hub.trips || []).map(function (t) { return t.showSlug; });
+    var ref = next ? new Date(next.start) : shows.length ? new Date(shows.map(function (s) { return s.start; }).sort().filter(function (d) { return new Date(d) > new Date(); })[0] || shows[0].start) : new Date();
+    var yr = ref.getFullYear(), s0 = new Date(yr, 4, 1).getTime(), s1 = new Date(yr, 8, 30).getTime();
+    $("o2RwY").textContent = "MAY TO SEPT " + yr;
+    var inSeason = shows.filter(function (s) { var t = new Date(s.start).getTime(); return t >= s0 && t <= s1; }).sort(function (a, b) { return a.start.localeCompare(b.start); });
+    inSeason.forEach(function (sh, i) {
+      var pct = (new Date(sh.start).getTime() - s0) / (s1 - s0) * 100, isMine = mine.indexOf(sh.slug) >= 0;
+      var b = el("button", "mk " + (isMine ? "mine" : "dim")); b.type = "button"; b.style.left = pct + "%";
+      var hh = [26, 50, 74][i % 3]; b.style.setProperty("--h", hh + "px"); b.style.top = (77 - hh) + "px";
+      b.appendChild(el("b", "", sh.shortName)); b.appendChild(el("i")); b.appendChild(el("em"));
+      b.title = sh.name + ", " + sh.dateText;
+      b.onclick = function () { $("o2Rnote").textContent = sh.name + ": " + sh.dateText + ". " + (isMine ? "It is in your trips." : "Add it in My Trips to start its countdown."); };
+      rw.appendChild(b);
+    });
+    var now = Date.now(), pos = now < s0 ? 0 : Math.min(100, (now - s0) / (s1 - s0) * 100);
+    setTimeout(function () { $("o2Jet").style.left = (pos || 2) + "%"; }, 600);
+    var firstMine = inSeason.filter(function (s) { return mine.indexOf(s.slug) >= 0 && new Date(s.start).getTime() > now; })[0];
+    var note = $("o2Rnote"); note.textContent = "";
+    if (now < s0) { note.appendChild(document.createTextNode("Holding at the threshold. ")); note.appendChild(el("b", "", o2Days(new Date(s0).toISOString()) + " days")); note.appendChild(document.createTextNode(" until the season starts" + (firstMine ? ", and " + firstMine.shortName + " is your first show." : "."))); }
+    else if (now > s1) note.textContent = "That is the season wrapped. The new dates land here as soon as the shows announce them.";
+    else note.textContent = firstMine ? "Rolling. " + firstMine.shortName + " is your next stop." : "The season is under way.";
+    /* end of season replay for the latest year logged */
+    var past = S.hub.past || [], years = past.map(function (p) { return p.year; }).filter(Boolean).sort(), last = years[years.length - 1];
+    var rb = $("o2ReplayBtn"); rb.hidden = !last; if (last) { rb.textContent = "Replay my " + last + " season"; rb.onclick = function () { o2Replay(last); }; }
+  }
+
+  /* hangar: newly logged aircraft taxi in and park */
+  function o2Hangar() {
+    var bays = clear($("o2Bays"));
+    if (!X.hangar) { $("o2HgN").textContent = ""; bays.appendChild(el("div", "bay free", "Opening the hangar doors")); return; }
+    var seen = (X.hangar.seen || []).slice().sort(function (a, b) { return String(b.created || "").localeCompare(String(a.created || "")); });
+    var count = uniqueSeen().length; $("o2HgN").textContent = count + " AIRCRAFT";
+    var prev = -1; try { prev = +(localStorage.getItem("ukagHgCount") || -1); } catch (e) {}
+    try { localStorage.setItem("ukagHgCount", String(count)); } catch (e) {}
+    function bay(x, isNew) {
+      var c = (X.hangar.catalog || []).find(function (z) { return z.key === x.key; }), rare = c && rarity(c) !== "Common";
+      var d = el("div", "bay" + (rare ? " rare" : "") + (isNew ? " new" : ""));
+      var im = el("img"); im.src = "https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp"; im.alt = ""; d.appendChild(im);
+      d.appendChild(el("b", "", x.name)); d.appendChild(el("small", "", (x.showName || "Logged") + (x.year ? " " + x.year : "") + (rare ? " · " + rarity(c) : "")));
+      return d;
+    }
+    if (!seen.length) { bays.appendChild(el("div", "bay free", "Your first aircraft parks here")); $("o2HgLine").textContent = "Every aircraft you log taxis in and parks here."; return; }
+    var arriving = prev >= 0 && count > prev && !O2_REDUCE;
+    seen.slice(arriving ? 1 : 0, 4).forEach(function (x) { bays.appendChild(bay(x)); });
+    $("o2HgLine").textContent = "Latest: " + seen[0].name + (seen[0].showName ? " at " + seen[0].showName : "") + ".";
+    if (!arriving) return;
+    var j = $("o2Taxi"); j.className = "taxijet"; j.style.left = "110%"; j.style.bottom = "12px"; j.style.transform = "rotate(-90deg)"; j.style.opacity = "";
+    void j.offsetWidth; j.className = "taxijet go"; O2S.taxi();
+    setTimeout(function () { j.style.left = "16%"; }, 30);
+    setTimeout(function () { j.style.transform = "rotate(0deg)"; j.style.bottom = "150px"; }, 2300);
+    setTimeout(function () { j.className = "taxijet"; j.style.opacity = "0"; bays.insertBefore(bay(seen[0], true), bays.firstChild); while (bays.children.length > 4) bays.removeChild(bays.lastChild); }, 3400);
+  }
+
+  /* quick launch display */
+  function o2Quick(next) {
+    var sh = next ? (o2ShowFor(next).shortName || next.showName) : "";
+    var Q = {
+      trips: ["L1 · PLAN", "My Trips", next ? "Tickets, travel, budget and your day timeline. " + sh + (next.travel ? " travel: " + next.travel + "." : " still needs your travel planned.") : "Tickets, travel, budget and your day timeline for every show you are going to."],
+      showday: ["L2 · LIVE", "Show Day", "On the day, upload the flying display page from your programme and see what is flying now and next, with ear defender alerts."],
+      briefing: ["L3 · BRIEF", "Flight Briefing", "Everything for your next show on one sheet: gates, weather, sun, parking and what is new on the line up."],
+      forum: ["F1 · COMMS", "Airshow Forum", "Talk to other members, find a buddy for the show, share your photos and follow show day as it happens."],
+      hangar: ["R2 · COLLECT", "My Hangar", "Every aircraft you have seen, collected show by show. Rare ones glow purple."],
+      kit: ["R3 · PACK", "Kit And Packing", "Your packing list, with a photographer version if you are taking the camera."]
+    };
+    var cur = $("o2Scr").dataset.q || "trips";
+    function show(k) {
+      var q = Q[k]; $("o2Scr").dataset.q = k;
+      document.querySelectorAll(".o2 .bz").forEach(function (x) { x.classList.toggle("on", x.dataset.q === k); });
+      var s = $("o2Scr"); s.classList.remove("swap"); void s.offsetWidth; s.classList.add("swap");
+      $("o2QK").textContent = q[0]; $("o2QT").textContent = q[1]; $("o2QP").textContent = q[2]; $("o2QGo").textContent = "Open " + q[1];
+    }
+    if (!O2.qlWired) {
+      O2.qlWired = true;
+      document.querySelectorAll(".o2 .bz").forEach(function (b) { b.addEventListener("mouseenter", function () { show(b.dataset.q); }); b.addEventListener("focus", function () { show(b.dataset.q); }); b.addEventListener("click", function () { show(b.dataset.q); }); });
+      $("o2QGo").addEventListener("click", function () { showPage($("o2Scr").dataset.q || "trips"); });
+      document.querySelectorAll("[data-o2go]").forEach(function (b) { b.addEventListener("click", function () { showPage(b.dataset.o2go); }); });
+    }
+    show(cur);
+  }
+
+  /* sonic boom at 100, 30 and 7 days to go, once each */
+  function o2Milestone(next) {
+    if (!next || O2_REDUCE) return;
+    var d = o2Days(next.start);
+    [100, 30, 7].forEach(function (m) {
+      if (d !== m) return;
+      var key = "ukagBoom-" + next.id + "-" + m, done = false; try { done = localStorage.getItem(key) === "1"; localStorage.setItem(key, "1"); } catch (e) {}
+      if (done || S.page !== "overview") return;
+      setTimeout(function () {
+        var b = el("div", "o2-boom"); b.setAttribute("aria-hidden", "true");
+        b.appendChild(el("i")); b.appendChild(el("i")); b.appendChild(el("i"));
+        var t = el("b", "", m + " days to go"); t.appendChild(el("small", "", (next.showName || "").toUpperCase())); b.appendChild(t);
+        document.body.appendChild(b); document.body.classList.add("o2-shake"); O2S.boom();
+        if (navigator.vibrate) navigator.vibrate([60, 40, 120]);
+        setTimeout(function () { document.body.classList.remove("o2-shake"); }, 600);
+        setTimeout(function () { b.remove(); }, 3200);
+      }, 1600);
+    });
+  }
+
+  /* end of season replay: a flight through every show logged for that year */
+  var o2RpRaf = null;
+  function o2Replay(year) {
+    var past = (S.hub.past || []).filter(function (p) { return p.year === year; });
+    var home = o2Home(), stops = [];
+    past.forEach(function (p) {
+      var n = (p.showName || "").toLowerCase(), hit = null;
+      PICWORDS.forEach(function (w) { if (!hit && n.indexOf(w[0]) >= 0) hit = w[1]; });
+      var sh = hit && (S.hub.shows || []).find(function (z) { return z.slug === hit; });
+      if (hit && O2_SHOWPTS[hit]) stops.push({ name: sh ? sh.shortName : p.showName, slug: hit, pt: O2_SHOWPTS[hit], month: sh && sh.start ? new Date(sh.start).getMonth() : 6 });
+    });
+    stops.sort(function (a, b) { return a.month - b.month; });
+    if (!stops.length) { say("I could not place those shows on the map yet."); return; }
+    $("o2RpT").textContent = "YOUR " + year + " SEASON";
+    var pts = [[home.lat, home.lon]].concat(stops.map(function (s) { return s.pt; }));
+    var lats = pts.map(function (p) { return p[0]; }), lons = pts.map(function (p) { return p[1]; });
+    var la0 = Math.min.apply(null, lats) - .4, la1 = Math.max.apply(null, lats) + .4, lo0 = Math.min.apply(null, lons) - .8, lo1 = Math.max.apply(null, lons) + .8;
+    var sx = 700 / (lo1 - lo0), sy = 380 / (la1 - la0), sc = Math.min(sx, sy * 1.6);
+    function xy(p) { return [50 + (p[1] - lo0) * sc + (700 - (lo1 - lo0) * sc) / 2, 420 - (p[0] - la0) * sc / 1.6 - (380 - (la1 - la0) * sc / 1.6) / 2]; }
+    var P = pts.map(xy), d = "M" + P[0][0].toFixed(1) + " " + P[0][1].toFixed(1), miles = 0;
+    for (var i = 1; i < P.length; i++) {
+      var a = P[i - 1], b = P[i], mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2 - 40;
+      d += " Q" + mx.toFixed(1) + " " + my.toFixed(1) + " " + b[0].toFixed(1) + " " + b[1].toFixed(1);
+    }
+    stops.forEach(function (s) { miles += o2Geo([home.lat, home.lon], s.pt).dist * 2; });
+    var path = $("o2RpPath"); path.setAttribute("d", d);
+    var len = path.getTotalLength(); path.style.strokeDasharray = len; path.style.strokeDashoffset = len;
+    var g = $("o2RpStops"); while (g.firstChild) g.removeChild(g.firstChild);
+    var homeG = svg("g", { class: "rp-stop on", transform: "translate(" + P[0][0].toFixed(1) + " " + P[0][1].toFixed(1) + ")" });
+    homeG.appendChild(svg("circle", { r: 6, fill: "#F2B233" })); var ht = svg("text", { x: 12, y: 5 }); ht.textContent = "Home"; homeG.appendChild(ht); g.appendChild(homeG);
+    var marks = stops.map(function (s, k) {
+      var q = P[k + 1], m = svg("g", { class: "rp-stop", transform: "translate(" + q[0].toFixed(1) + " " + q[1].toFixed(1) + ")" });
+      m.appendChild(svg("circle", { r: 8, fill: "#5FE3D6" })); m.appendChild(svg("circle", { r: 15, fill: "none", stroke: "#5FE3D6", "stroke-opacity": ".4" }));
+      var t = svg("text", { x: 14, y: -6 }); t.textContent = s.name; m.appendChild(t);
+      var dt = svg("text", { x: 14, y: 10, class: "dt" }); dt.textContent = "Stop " + (k + 1); m.appendChild(dt);
+      g.appendChild(m); return m;
+    });
+    var st = clear($("o2RpStats")), photos = (S.hub.photos || []).filter(function (p) { return p.created && new Date(p.created).getFullYear() === year; }).length;
+    [[String(stops.length), stops.length === 1 ? "Show" : "Shows"], [Math.round(miles).toLocaleString("en-GB"), "Miles travelled, about"], [String(photos), "Photos shared"], [String(X.hangar ? uniqueSeen().length : 0), "Aircraft in your hangar"]].forEach(function (x) { var dv = el("div"); dv.appendChild(el("b", "", x[0])); dv.appendChild(el("small", "", x[1])); st.appendChild(dv); });
+    $("o2Replay").hidden = false; $("o2RpX").focus(); O2S.jet();
+    var jet = $("o2RpJet"), dur = O2_REDUCE ? 1 : 7000, t0 = performance.now(), segs = marks.length;
+    cancelAnimationFrame(o2RpRaf);
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / dur), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      path.style.strokeDashoffset = len * (1 - e);
+      var p = path.getPointAtLength(len * e), p2 = path.getPointAtLength(Math.min(len, len * e + 2));
+      jet.setAttribute("transform", "translate(" + p.x + " " + p.y + ") rotate(" + (Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI + 90) + ")");
+      marks.forEach(function (m, idx) { if (e >= (idx + 1) / segs - .02) m.classList.add("on"); });
+      if (k < 1) o2RpRaf = requestAnimationFrame(step);
+      else [].forEach.call(st.children, function (dv, i2) { setTimeout(function () { dv.classList.add("on"); }, i2 * 220); });
+    })(t0);
+  }
+  $("o2RpX").addEventListener("click", function () { $("o2Replay").hidden = true; cancelAnimationFrame(o2RpRaf); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && $("o2Replay") && !$("o2Replay").hidden) $("o2RpX").click(); });
 
   /* ---------- Flight Briefing ---------- */
   function bfTrip() { var trips = S.hub.trips || []; return trips.find(function (t) { return t.id === X.bfTrip; }) || trips[0]; }
@@ -3396,7 +4436,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       setTimeout(function () { if (!done) { delete pending[id]; resolve(tries > 0 ? hello(tries - 1) : {}); } }, 700);
     });
   }
-  hello(40).then(function (r) { S.join = r.join || ""; S.pageUrl = r.pageUrl || ""; if (r.loggedOut) $("lgOut").hidden = false; }).then(load);
+  hello(40).then(function (r) { S.join = r.join || ""; S.pageUrl = r.pageUrl || ""; if (r.loggedOut) $("lgOut").hidden = false; S.startPage = r.page || ""; if (S.startPage === "forum") window.ukagNext = "forum"; }).then(load);
 })();
 </script>
 <!-- typing readout (21 Oct 2026): the forum's terminal text and blinking block show above a box while you type -->

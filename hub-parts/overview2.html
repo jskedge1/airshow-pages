@@ -1,0 +1,175 @@
+  <!-- OVERVIEW (cockpit layout, 21 Oct 2026): boarding pass, readiness horizon, pre flight switches, show radio, must see,
+       show radar, season runway, hangar arrivals, quick launch, plus show day mode, sonic boom milestones, weather sky,
+       Red Arrows flypast, end of season replay and optional cockpit sounds. Filled by renderOverview(). -->
+  <main class="page" id="p-overview">
+    <div class="wrap o2" id="o2">
+      <section class="o2-sky" id="o2Sky">
+        <div class="o2-photo" id="o2Photo"></div>
+        <div class="o2-tint" id="o2Tint"></div>
+        <span class="o2-trail" aria-hidden="true"></span>
+        <div class="o2-wx" id="o2Wx" aria-hidden="true"><i class="glow"></i><i class="cl c1"></i><i class="cl c2"></i><i class="cl c3"></i><i class="rain"></i></div>
+        <div class="o2-skyin">
+          <div>
+            <div class="o2-sys"><b>SYS 02</b><span id="o2Clock">--:--</span><span>· Overview</span></div>
+            <h2 class="o2-h"><span id="o2Greet">Good afternoon,</span><br><span class="t" id="o2Name"></span><span class="caret" aria-hidden="true"></span></h2>
+            <p class="o2-brief" id="o2Brief"></p>
+          </div>
+          <div class="o2-chips">
+            <div class="o2-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><div><b id="o2Tod">Afternoon light</b><small id="o2TodS">Sun in the south west</small></div></div>
+            <div class="o2-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4 4 0 010-8 6 6 0 0111.3 1.5A3.5 3.5 0 0117.5 18z"/></svg><div><b id="o2WxT">Forecast on its way</b><small id="o2WxS">It arrives the week before your show</small></div></div>
+            <button class="o2-chip snd" type="button" id="o2Snd" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/></svg><div><b id="o2SndT">Cockpit sounds off</b><small>Switch clicks, radio and jets</small></div></button>
+          </div>
+        </div>
+      </section>
+
+      <div class="o2-grid">
+        <section class="o2-p c7 q1" style="--d:.05s" aria-labelledby="o2PassT">
+          <div class="o2-pass">
+            <div class="main">
+              <div class="top"><span id="o2PassK">BOARDING PASS · NEXT SHOW</span><span id="o2Gate"></span></div>
+              <h3 id="o2PassT">No show saved yet</h3>
+              <div class="route" id="o2RouteBox">
+                <div><b>HOME</b><small id="o2Home">Your area</small></div>
+                <div class="line" id="o2Route"><img src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt=""></div>
+                <div><b id="o2Code">---</b><small id="o2Where"></small></div>
+              </div>
+              <div class="flaps" id="o2Flaps"></div>
+              <div class="o2-today" id="o2Today" hidden>
+                <p>Gates are open. Upload the flying display page from your programme and Show Day tells you what is flying now and next.</p>
+                <div class="ear"><span aria-hidden="true">!</span>Loud jets today. Ear defenders on for the little ones.</div>
+                <button class="o2-btn" type="button" data-o2go="showday">Open Show Day</button>
+              </div>
+              <div class="o2-empty" id="o2PassEmpty" hidden>
+                <p>Save the shows you are going to and your boarding pass, countdown and pre flight checks appear here.</p>
+                <button class="o2-btn" type="button" data-o2go="trips">Add your first show</button>
+              </div>
+            </div>
+            <div class="stub" id="o2Stub">
+              <div class="srow"><small>DATE</small><b id="o2Date">To be confirmed</b></div>
+              <div class="srow"><small>GATES</small><b id="o2Gates">To be confirmed</b></div>
+              <div class="srow"><small>TRAVEL</small><b id="o2Travel">To plan</b></div>
+              <div class="bars" aria-hidden="true"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="o2-p c5 q2 o2-ready" style="--d:.15s" aria-labelledby="o2ReadyT">
+          <div class="ph"><h3 id="o2ReadyT">Trip readiness</h3><small>ATTITUDE</small></div>
+          <div class="pb">
+            <div class="adi" aria-hidden="true">
+              <svg viewBox="0 0 170 170">
+                <defs><clipPath id="o2Clip"><circle cx="85" cy="85" r="74"/></clipPath></defs>
+                <g clip-path="url(#o2Clip)"><g class="roll"><g class="ball" id="o2Ball">
+                  <rect x="-60" y="-200" width="290" height="285" fill="#1C5C80"/><rect x="-60" y="85" width="290" height="285" fill="#3A2E24"/><rect x="-60" y="84" width="290" height="2" fill="#E8F1F6"/>
+                  <g stroke="#E8F1F6" stroke-width="1.5" opacity=".75"><path d="M70 65h30M75 45h20M70 105h30M75 125h20"/></g>
+                </g></g></g>
+                <circle cx="85" cy="85" r="74" fill="none" stroke="#5FE3D6" stroke-width="2"/>
+                <circle cx="85" cy="85" r="80" fill="none" stroke="rgba(95,227,214,.25)" stroke-width="6" stroke-dasharray="2 9"/>
+                <path d="M45 85h26l8 8 6-8 6 8 8-8h26" fill="none" stroke="#F2B233" stroke-width="3.5" stroke-linejoin="round"/>
+                <circle cx="85" cy="85" r="3" fill="#F2B233"/>
+              </svg>
+            </div>
+            <div>
+              <div class="pct"><span id="o2Pct">0</span><small>%</small></div>
+              <p id="o2ReadyLine">Flip the pre flight switches as you sort each part of your trip. The horizon levels out as you go.</p>
+              <div class="next" id="o2ReadyNext"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="o2-p c4 q3" style="--d:.25s" aria-labelledby="o2SwT">
+          <div class="ph"><h3 id="o2SwT">Pre flight checks</h3><small id="o2SwCount"></small></div>
+          <div class="pb o2sw" id="o2Switches"></div>
+        </section>
+
+        <section class="o2-p c4 q4 o2-radio" style="--d:.32s" aria-labelledby="o2RadT">
+          <div class="ph"><h3 id="o2RadT">Show radio</h3><small id="o2RadN">LIVE UPDATES</small></div>
+          <div class="pb">
+            <div class="freq"><div><b id="o2Freq">HUB 01</b><small id="o2FreqName">Hub control</small></div><div class="wave quiet" id="o2Wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="msgs" id="o2Msgs" aria-live="polite"></div>
+            <button class="o2-link" type="button" data-o2go="updates">All updates</button>
+          </div>
+        </section>
+
+        <section class="o2-p c4 q6" style="--d:.4s" aria-labelledby="o2MsT">
+          <div class="ph"><h3 id="o2MsT">Must see</h3><small id="o2MsN"></small></div>
+          <div class="pb deck" id="o2Deck"></div>
+        </section>
+
+        <section class="o2-p c5 q5 o2-radar" style="--d:.48s" aria-labelledby="o2RdT">
+          <div class="ph"><h3 id="o2RdT">Show radar</h3><small id="o2Range">RANGE</small></div>
+          <div class="pb">
+            <svg viewBox="0 0 400 400" role="img" aria-label="Radar of the featured shows around your home, your shows in teal">
+              <defs><radialGradient id="o2rg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#0E2A3A"/><stop offset="1" stop-color="#050D14"/></radialGradient>
+                <linearGradient id="o2sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5FE3D6" stop-opacity="0"/><stop offset="1" stop-color="#5FE3D6" stop-opacity=".5"/></linearGradient></defs>
+              <circle cx="200" cy="200" r="190" fill="url(#o2rg)" stroke="#5FE3D6" stroke-opacity=".5"/>
+              <g fill="none" stroke="#5FE3D6" stroke-opacity=".2"><circle cx="200" cy="200" r="63"/><circle cx="200" cy="200" r="126"/><path d="M200 10v380M10 200h380"/></g>
+              <g font-family="Share Tech Mono,monospace" font-size="11" fill="#5FE3D6" fill-opacity=".6"><text x="204" y="134" id="o2R1"></text><text x="204" y="71" id="o2R2"></text><text x="196" y="24" text-anchor="end">N</text></g>
+              <g class="sweep"><path d="M200 200 L390 200 A190 190 0 0 0 334 66 Z" fill="url(#o2sg)"/></g>
+              <g id="o2Blips"></g>
+              <circle cx="200" cy="200" r="5" fill="#F2B233"/><text x="210" y="216" font-family="Share Tech Mono,monospace" font-size="12" fill="#F2B233">YOU</text>
+            </svg>
+            <div class="legend"><span><i style="background:#5FE3D6"></i>Your shows</span><span><i style="background:#8C77C9"></i>Other featured shows</span></div>
+          </div>
+        </section>
+
+        <section class="o2-p c7 q7" style="--d:.55s" aria-labelledby="o2RwT">
+          <div class="ph"><h3 id="o2RwT">Your season runway</h3><small id="o2RwY"></small></div>
+          <div class="pb">
+            <div class="runway" id="o2Runway">
+              <div class="strip"></div><div class="lights"></div>
+              <img class="jet" id="o2Jet" src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt="">
+              <div class="months"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+            </div>
+            <p class="rnote" id="o2Rnote"></p>
+            <button class="o2-btn ghost" type="button" id="o2ReplayBtn" hidden>Replay my season</button>
+          </div>
+        </section>
+
+        <section class="o2-p c5 q8" style="--d:.6s" aria-labelledby="o2HgT">
+          <div class="ph"><h3 id="o2HgT">My Hangar</h3><small id="o2HgN"></small></div>
+          <div class="pb">
+            <div class="hangar" id="o2Hangar">
+              <div class="doors" aria-hidden="true"><i></i><i></i></div>
+              <div class="taxi" aria-hidden="true"></div>
+              <img class="taxijet" id="o2Taxi" src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt="">
+              <div class="bays" id="o2Bays"></div>
+            </div>
+            <div class="hg-foot"><p id="o2HgLine">Every aircraft you log taxis in and parks here.</p><button class="o2-btn" type="button" data-o2go="hangar">Log a spotted aircraft</button></div>
+          </div>
+        </section>
+
+        <section class="o2-p c7 q9" style="--d:.66s" aria-labelledby="o2QlT">
+          <div class="ph"><h3 id="o2QlT">Quick launch</h3><small>MULTI FUNCTION DISPLAY</small></div>
+          <div class="pb mfd">
+            <div class="bez l">
+              <button class="bz on" type="button" data-q="trips"><small>L1</small>My Trips</button>
+              <button class="bz" type="button" data-q="showday"><small>L2</small>Show Day</button>
+              <button class="bz" type="button" data-q="briefing"><small>L3</small>Flight Briefing</button>
+            </div>
+            <div class="scr" id="o2Scr"><small id="o2QK">L1 · PLAN</small><h4 id="o2QT">My Trips</h4><p id="o2QP"></p><button class="o2-btn" type="button" id="o2QGo">Open My Trips</button></div>
+            <div class="bez r">
+              <button class="bz forum" type="button" data-q="forum"><small>F1 · COMMS</small>Airshow Forum</button>
+              <button class="bz" type="button" data-q="hangar"><small>R2</small>My Hangar</button>
+              <button class="bz" type="button" data-q="kit"><small>R3</small>Kit And Packing</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="o2-replay" id="o2Replay" role="dialog" aria-modal="true" aria-labelledby="o2RpT" hidden>
+      <div class="rp-in">
+        <div class="rp-top"><span class="rp-tag">End of season replay</span><button type="button" id="o2RpX">Close</button></div>
+        <h3 id="o2RpT">YOUR SEASON</h3>
+        <svg viewBox="0 0 800 460" id="o2RpMap" aria-hidden="true">
+          <defs><pattern id="o2rpg" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="rgba(95,227,214,.08)"/></pattern></defs>
+          <rect width="800" height="460" fill="url(#o2rpg)"/>
+          <path id="o2RpPath" d="M0 0" fill="none" stroke="#5FE3D6" stroke-width="3" stroke-linecap="round"/>
+          <g id="o2RpStops"></g>
+          <image id="o2RpJet" href="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" width="34" height="41" x="-17" y="-20"/>
+        </svg>
+        <div class="rp-stats" id="o2RpStats"></div>
+      </div>
+    </div>
+  </main>
