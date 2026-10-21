@@ -92,6 +92,7 @@ demo = r'''
         else if (m.action === "login" || m.action === "signup") { out.data = { prompted: true }; loginBox(m.action); }
         else if (m.action === "logout") { state.in = false; put("ukagDemoIn", "0"); put("ukagDemoOut", "1"); out.data = { loggedOut: true }; }
         else if (m.action === "addTrip") out.data = addTrip(m.payload || {});
+        else if (m.action === "saveTrip") { var all = trips(); all.forEach(function (t) { if (t.id === (m.payload || {}).id) Object.assign(t, (m.payload || {}).changes || {}); }); putJ("ukagDemoTrips", all); out.data = {}; }
         else if (m.action === "markUpdatesRead") { putJ("ukagDemoUpdates", updates().map(function (u) { u.read = true; return u; })); out.data = {}; }
         else if (m.action === "go") out.data = {};
         else { out.ok = false; out.error = "This part needs the live site. The preview shows logging in, setting up and the forum."; }
