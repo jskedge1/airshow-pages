@@ -518,6 +518,91 @@ section{position:relative}
 .hero .tag,.hero h1,.hero .lead,.hero .ac,.hero .todlbl{transition:opacity .8s var(--ease)}
 .hero.hd-shut .tag,.hero.hd-shut h1,.hero.hd-shut .lead,.hero.hd-shut .ac,.hero.hd-shut .todlbl{opacity:0}
 .hero.hd-open .tag{transition-delay:1.6s}.hero.hd-open h1{transition-delay:1.8s}.hero.hd-open .lead,.hero.hd-open .ac,.hero.hd-open .todlbl{transition-delay:2.1s}
+/* Airshow Hub HUD band, under Next Departures */
+.hx{position:relative;overflow:hidden;color:#fff;padding-block:84px;background:radial-gradient(ellipse at 74% 46%,#16344C 0%,#0E2131 46%,#0A1824 100%)}
+.hx::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(50,180,175,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(50,180,175,.07) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+.hx-scan{position:absolute;left:0;right:0;top:-4%;height:2px;background:linear-gradient(90deg,transparent,rgba(50,180,175,.55),transparent);pointer-events:none}
+.hx-live .hx-scan{animation:hxScan 6s linear infinite}
+.hx-corner{position:absolute;width:30px;height:30px;border:2px solid var(--teal);pointer-events:none}
+.hx-corner.a{left:20px;top:20px;border-right:0;border-bottom:0}.hx-corner.b{right:20px;top:20px;border-left:0;border-bottom:0}
+.hx-corner.c{left:20px;bottom:20px;border-right:0;border-top:0}.hx-corner.d{right:20px;bottom:20px;border-left:0;border-top:0}
+.hx .in{position:relative;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:40px;align-items:center}
+.hx-copy{display:grid;gap:20px;align-content:start}
+.hx-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hx-status .tag{margin:0}
+.hx-on{display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:16px;color:var(--teal)}
+.hx-on i{width:9px;height:9px;border-radius:50%;background:var(--teal)}
+.hx-live .hx-on i,.hx-live .hx-dot{animation:hxBlink 1.4s ease-in-out infinite}
+.hx .stitle{color:#fff;border-left-color:var(--teal);margin:0;font-size:clamp(40px,5.6vw,72px);line-height:.92;text-transform:uppercase;max-width:12ch}
+.hx .stitle span{color:var(--teal)}
+.hx .sintro{color:#D5E3EA;padding-left:20px;max-width:44ch}
+.hx-acts{display:flex;flex-wrap:wrap;gap:12px;padding-left:20px}
+.hx-acts .btn{background:var(--purple);border-color:var(--purple)}
+.hx-acts .btn.ghost{background:transparent;border-color:var(--teal)}
+.hx-acts .btn.ghost:hover{background:var(--teal);color:#0B1E2C}
+.hx-stage{position:relative;aspect-ratio:640/560;width:100%}
+.hx-radar{position:absolute;left:50%;top:50%;width:62%;translate:-50% -50%}
+.hx-radar svg{display:block;width:100%;height:auto;overflow:visible}
+.hx-sweep{transform-origin:210px 210px;transform-box:view-box}
+.hx-live .hx-sweep{animation:hxSweep 5s linear infinite}
+.hx-live .hx-smoke path{animation:hxFlow .8s linear infinite}
+.hx-form{position:absolute;left:50%;top:14.3%;width:37.6%;aspect-ratio:158/156;translate:-50% 0}
+.hx-form img{position:absolute;width:19%;height:auto;filter:drop-shadow(0 0 4px rgba(50,180,175,.6))}
+.hx-live .hx-form img{animation:hxBob 4s ease-in-out infinite}
+.hx-read{position:absolute;left:50%;top:76%;translate:-50% 0;text-align:center;white-space:nowrap}
+.hx-read b{display:block;font:700 20px/1.1 var(--cond);text-transform:uppercase;letter-spacing:.06em}
+.hx-read span{font-size:14px;font-weight:500;color:var(--teal)}
+.hx-wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hx-tab{position:absolute;width:42%;min-height:128px;box-sizing:border-box;display:flex;gap:12px;align-items:flex-start;padding:16px 18px;background:rgba(14,33,49,.84);border:1px solid rgba(50,180,175,.35);border-top:3px solid var(--teal);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;text-decoration:none;isolation:isolate;transition:translate .45s var(--ease),box-shadow .45s,border-color .45s}
+.hx-tab.r{border-top-color:var(--red)}.hx-tab.p{border-top-color:var(--purple)}
+.hx-tab.t1{left:0;top:2%}.hx-tab.t2{right:0;top:2%}.hx-tab.t3{left:0;bottom:2%}.hx-tab.t4{right:0;bottom:2%}
+.hx-ico{flex:none;width:40px;height:40px;border-radius:50%;background:#fff;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:box-shadow .4s}
+.hx-tab.r .hx-ico{color:var(--red)}.hx-tab.p .hx-ico{color:var(--purple)}
+.hx-ico svg{width:20px;height:20px}
+.hx-tab b{display:block;font:700 22px/1.05 var(--cond);text-transform:uppercase}
+.hx-tab span.d{display:block;font-size:15px;line-height:1.4;color:#D5E3EA;margin-top:4px}
+.hx-tab::before{content:"";position:absolute;inset:-9px;pointer-events:none;opacity:0;transform:scale(1.08);transition:opacity .35s,transform .45s var(--ease);background:linear-gradient(var(--teal),var(--teal)) top left/16px 2px no-repeat,linear-gradient(var(--teal),var(--teal)) top left/2px 16px no-repeat,linear-gradient(var(--teal),var(--teal)) top right/16px 2px no-repeat,linear-gradient(var(--teal),var(--teal)) top right/2px 16px no-repeat,linear-gradient(var(--teal),var(--teal)) bottom left/16px 2px no-repeat,linear-gradient(var(--teal),var(--teal)) bottom left/2px 16px no-repeat,linear-gradient(var(--teal),var(--teal)) bottom right/16px 2px no-repeat,linear-gradient(var(--teal),var(--teal)) bottom right/2px 16px no-repeat}
+.hx-tab::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;opacity:0;pointer-events:none;background:linear-gradient(90deg,transparent,#5FE0DA,transparent);box-shadow:0 0 10px var(--teal)}
+.hx-tab:hover,.hx-tab:focus-visible,.hx-tab:active{translate:0 -4px;border-color:var(--teal);box-shadow:0 10px 30px rgba(0,0,0,.35),0 0 24px rgba(50,180,175,.25),inset 0 0 30px rgba(50,180,175,.12)}
+.hx-tab:hover::before,.hx-tab:focus-visible::before,.hx-tab:active::before{opacity:1;transform:scale(1)}
+.hx-tab:hover::after,.hx-tab:focus-visible::after{animation:hxDown .9s cubic-bezier(.4,0,.2,1) forwards}
+.hx-tab:hover .hx-ico{box-shadow:0 0 0 4px rgba(50,180,175,.35),0 0 18px rgba(50,180,175,.6)}
+.hx-tab:hover .hx-ico svg{animation:hxPing .6s var(--ease)}
+.hx-tab:hover b{animation:hxGlitch .45s steps(2,end)}
+.hx-more{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding-top:18px;border-top:1px solid rgba(50,180,175,.3)}
+.hx-more b{font:700 21px/1 var(--cond);text-transform:uppercase;color:var(--teal);margin-right:4px}
+.hx-chip{font-size:15px;font-weight:500;padding:6px 12px;border:1px solid rgba(255,255,255,.25);transition:background .3s,border-color .3s,translate .3s}
+.hx-chip:hover{background:rgba(50,180,175,.16);border-color:var(--teal);translate:0 -2px}
+/* open out from the middle, glitch, then settle: only once the band is on screen */
+.hx-js .hx-pop{opacity:0}
+.hx-live .hx-pop{animation:hxOpen .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes hxOpen{0%{opacity:0;transform:scaleX(0)}45%{opacity:1;transform:scaleX(1)}52%{transform:translateX(3px);filter:brightness(1.6)}58%{transform:translateX(-2px);filter:none}64%{transform:translateX(1px)}100%{opacity:1;transform:none}}
+@keyframes hxSweep{to{transform:rotate(360deg)}}
+@keyframes hxScan{to{top:104%}}
+@keyframes hxBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes hxFlow{to{stroke-dashoffset:-24}}
+@keyframes hxBob{0%,100%{translate:0 0}50%{translate:0 -6px}}
+@keyframes hxDown{0%{top:0;opacity:1}85%{opacity:1}100%{top:calc(100% - 2px);opacity:0}}
+@keyframes hxPing{0%{transform:scale(.7) rotate(-12deg)}100%{transform:none}}
+@keyframes hxGlitch{0%{text-shadow:2px 0 var(--red),-2px 0 var(--teal);translate:1px 0}50%{text-shadow:-2px 0 var(--purple),2px 0 var(--teal);translate:-1px 0}100%{text-shadow:none;translate:0 0}}
+@media(max-width:1000px){
+  .hx .in{grid-template-columns:1fr}
+  .hx-stage{aspect-ratio:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .hx-radar{position:relative;left:auto;top:auto;translate:none;grid-column:1/-1;width:min(380px,82%);margin:0 auto 8px}
+  .hx-wires{display:none}
+  .hx-tab{position:relative;width:auto;inset:auto;min-height:0}
+}
+@media(max-width:560px){
+  .hx{padding-block:60px}
+  .hx-stage{grid-template-columns:1fr}
+  .hx-acts{padding-left:0}.hx-acts .btn{flex:1 1 100%;text-align:center}
+  .hx .sintro{padding-left:0}
+  .hx-corner{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .hx-js .hx-pop,.hx-live .hx-pop{opacity:1;animation:none}
+  .hx-live .hx-sweep,.hx-live .hx-scan,.hx-live .hx-on i,.hx-live .hx-dot,.hx-live .hx-smoke path,.hx-live .hx-form img,.hx-tab:hover::after,.hx-tab:hover .hx-ico svg,.hx-tab:hover b{animation:none}
+}
 </style>
 <style id="mobile-comfort">html,body{overflow-x:clip}
 @media (max-width:760px){
@@ -649,6 +734,57 @@ section{position:relative}
       <div class="btable"><div class="brow th"><span>Date</span><span>Show</span><span>Where</span><span>Status</span></div><div id="brows"></div></div>
       <p class="bnote">Confirmed means the organiser has announced it. Expected means the date is listed but I am still waiting for the organiser to confirm it. Please check the official website before you book anything.</p>
     </div>
+  </div>
+</section>
+
+<section class="hx" id="hub-hud" aria-labelledby="hxtitle">
+  <div class="hx-scan" aria-hidden="true"></div>
+  <span class="hx-corner a" aria-hidden="true"></span><span class="hx-corner b" aria-hidden="true"></span><span class="hx-corner c" aria-hidden="true"></span><span class="hx-corner d" aria-hidden="true"></span>
+  <div class="in">
+    <div class="hx-copy">
+      <div class="hx-status hx-pop" style="animation-delay:.1s"><span class="tag">My Airshow Hub</span><span class="hx-on"><i aria-hidden="true"></i>Hub online</span></div>
+      <h2 class="stitle hx-pop" id="hxtitle" style="animation-delay:.25s">This is your airshow planner <span>and airshow hub</span></h2>
+      <p class="sintro hx-pop" style="animation-delay:.4s">Everything for your show day lives in one place. Log in, pick your shows and the hub keeps you up to date from the first ticket to the last flypast.</p>
+      <div class="hx-acts hx-pop" style="animation-delay:.55s"><a class="btn" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Open My Hub</a><a class="btn ghost" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Join For Free</a></div>
+    </div>
+    <div class="hx-stage">
+      <svg class="hx-wires" viewBox="0 0 640 560" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="#32B4AF" stroke-opacity=".55" stroke-width="1.2" vector-effect="non-scaling-stroke"><path d="M190 114V140L213 173"/><path d="M450 114V140L427 173"/><path d="M190 446V420L213 387"/><path d="M450 446V420L427 387"/></g></svg>
+      <div class="hx-radar hx-pop" style="animation-delay:.3s">
+        <svg viewBox="0 0 420 420" aria-hidden="true">
+          <defs><clipPath id="hxrc"><circle cx="210" cy="210" r="159"/></clipPath></defs>
+          <circle cx="210" cy="210" r="200" fill="none" stroke="#32B4AF" stroke-opacity=".35" stroke-dasharray="2 8"/>
+          <circle cx="210" cy="210" r="160" fill="rgba(14,33,49,.6)" stroke="#32B4AF" stroke-opacity=".7" stroke-width="1.5"/>
+          <circle cx="210" cy="210" r="110" fill="none" stroke="#32B4AF" stroke-opacity=".35"/>
+          <circle cx="210" cy="210" r="60" fill="none" stroke="#32B4AF" stroke-opacity=".35"/>
+          <path d="M210 40V380M40 210H380" stroke="#32B4AF" stroke-opacity=".2"/>
+          <path d="M210 4v18M210 398v18M4 210h18M398 210h18" stroke="#32B4AF" stroke-width="2"/>
+          <g class="hx-sweep"><path d="M210 210L210 50A160 160 0 0 1 323 97Z" fill="#32B4AF" fill-opacity=".18"/><path d="M210 210L323 97" stroke="#32B4AF" stroke-width="2"/></g>
+          <g clip-path="url(#hxrc)" fill="none" stroke-linecap="round">
+            <g stroke-width="10" stroke-opacity=".22"><path d="M210 94v120" stroke="#FFFFFF"/><path d="M178 124v110" stroke="#D74949"/><path d="M242 124v110" stroke="#3B6FE8"/><path d="M146 154v100" stroke="#D74949"/><path d="M274 154v100" stroke="#3B6FE8"/><path d="M178 184v90" stroke="#D74949"/><path d="M242 184v90" stroke="#3B6FE8"/><path d="M210 214v90" stroke="#FFFFFF"/></g>
+            <g class="hx-smoke" stroke-width="2.5" stroke-dasharray="6 6"><path d="M210 94v120" stroke="#FFFFFF"/><path d="M178 124v110" stroke="#D74949"/><path d="M242 124v110" stroke="#3B6FE8"/><path d="M146 154v100" stroke="#D74949"/><path d="M274 154v100" stroke="#3B6FE8"/><path d="M178 184v90" stroke="#D74949"/><path d="M242 184v90" stroke="#3B6FE8"/><path d="M210 214v90" stroke="#FFFFFF"/></g>
+          </g>
+          <circle class="hx-dot" cx="124" cy="300" r="5" fill="#6950A1"/>
+          <circle class="hx-dot" cx="306" cy="128" r="4" fill="#FFFFFF"/>
+        </svg>
+        <div class="hx-form" role="img" aria-label="The Red Arrows in Diamond Nine formation on the radar">
+          <img class="nopic" src="hub-img/hawk-hud.png" alt="" style="left:40.5%;top:0%" width="148" height="180">
+          <img class="nopic" src="hub-img/hawk-hud.png" alt="" style="left:20.25%;top:19.2%" width="148" height="180">
+          <img class="nopic" src="hub-img/hawk-hud.png" alt="" style="left:60.76%;top:19.2%" width="148" height="180">
+          <img class="nopic" src="hub-img/hawk-hud.png" alt="" style="left:0%;top:38.5%" width="148" height="180">
+          <img class="nopic" src="hub-img/hawk-hud.png" alt="" style="left:40.5%;top:38.5%" width="148" height="180">
+          <img class="nopic" src="hub-img/hawk-hud.png" alt="" style="left:81%;top:38.5%" width="148" height="180">
+          <img class="nopic" src="hub-img/hawk-hud.png" alt="" style="left:20.25%;top:57.7%" width="148" height="180">
+          <img class="nopic" src="hub-img/hawk-hud.png" alt="" style="left:60.76%;top:57.7%" width="148" height="180">
+          <img class="nopic" src="hub-img/hawk-hud.png" alt="" style="left:40.5%;top:76.9%" width="148" height="180">
+        </div>
+        <div class="hx-read"><b>Your season</b><span>all shows tracked</span></div>
+      </div>
+      <a class="hx-tab t1 hx-pop" style="animation-delay:.9s" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top"><span class="hx-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-6-4-6 4z"/></svg></span><span><b>Save your tips</b><span class="d">Keep the advice you like from any guide, ready for show day.</span></span></a>
+      <a class="hx-tab t2 hx-pop" style="animation-delay:1.05s" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top"><span class="hx-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span><b>Plan your airshow</b><span class="d">Tickets, travel, parking and packing ticked off in one planner.</span></span></a>
+      <a class="hx-tab t3 p hx-pop" style="animation-delay:1.35s" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top"><span class="hx-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c.8-4 3.4-6 6.5-6s5.7 2 6.5 6M15 14.5c2.8 0 5 1.8 5.6 5"/></svg></span><span><b>Connect with visitors</b><span class="d">Meet other airshow fans, share photos and plan meet ups.</span></span></a>
+      <a class="hx-tab t4 r hx-pop" style="animation-delay:1.2s" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top"><span class="hx-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.5"/><path d="M7 7a7 7 0 0 0 0 10M17 7a7 7 0 0 1 0 10M4 4a11 11 0 0 0 0 16M20 4a11 11 0 0 1 0 16"/></svg></span><span><b>See live updates</b><span class="d">Line up changes and show news for the shows you follow.</span></span></a>
+    </div>
+    <div class="hx-more hx-pop" style="animation-delay:1.5s"><b>Plus more</b><span class="hx-chip">Show countdowns</span><span class="hx-chip">Must see aircraft</span><span class="hx-chip">Show day mode</span><span class="hx-chip">Weather before you go</span><span class="hx-chip">Your airshow year</span></div>
   </div>
 </section>
 
@@ -919,6 +1055,14 @@ section{position:relative}
   </div>
 </footer>
 
+<script id="hub-hud-js">
+(function(){var s=document.getElementById('hub-hud');if(!s)return;
+  if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){s.classList.add('hx-live');return}
+  s.classList.add('hx-js');
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){s.classList.add('hx-live');io.disconnect()}})},{rootMargin:'0px 0px -15% 0px'});io.observe(s);
+  setTimeout(function(){s.classList.add('hx-live')},8000);
+})();
+</script>
 <script>
 var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d30305b4df49133d0d95bd3f88b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/blenheim-smoke.jpg", "rafale": "https://static.wixstatic.com/media/a0546b_135c4e895a0443a9acc0e129eab2be3f~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/rafale.jpg", "bbmf": "https://static.wixstatic.com/media/a0546b_a3d52d78537444b4876b348a1047c682~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/bbmf.jpg", "swordfish": "https://static.wixstatic.com/media/a0546b_3289b1124ca845859e3d6b5ad33dd7d5~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/swordfish.jpg", "chinook": "https://static.wixstatic.com/media/a0546b_ee0c8ea214a94e34820ced48cf472742~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/chinook.jpg", "chinook-static": "https://static.wixstatic.com/media/a0546b_0b3c08b99b20462ebc479fea2b44e898~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/chinook-static.jpg", "typhoon-static": "https://static.wixstatic.com/media/a0546b_0b3c08b99b20462ebc479fea2b44e898~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/typhoon-static.jpg", "apache": "https://static.wixstatic.com/media/a0546b_ee0c8ea214a94e34820ced48cf472742~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/apache.jpg", "apache-static": "https://static.wixstatic.com/media/a0546b_be58de4798c048f4ba7f45336202286b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/apache-static.jpg", "b17": "https://static.wixstatic.com/media/a0546b_b5d9599a2c074757899004ee048c3d0f~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/b17.jpg", "thunderbolt": "https://static.wixstatic.com/media/a0546b_2b53500c98aa44b8acbe1b798f722359~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/thunderbolt.jpg", "spitfire": "https://static.wixstatic.com/media/a0546b_c91131d5a8a540be80233102e0c65f5b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/spitfire.jpg", "pitts": "https://static.wixstatic.com/media/a0546b_c91131d5a8a540be80233102e0c65f5b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/pitts.jpg", "c17": "https://static.wixstatic.com/media/a0546b_e19add6cdb0b4398aa7cc431777a7485~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/c17.jpg", "tent-night": "https://static.wixstatic.com/media/a0546b_2c76345e206e42548daf20ac1178ffa5~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/tent-night.jpg", "kit-laid-out": "https://static.wixstatic.com/media/a0546b_667a385f7da1441798979d489b8b2d6a~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/kit-laid-out.jpg", "crowd": "https://static.wixstatic.com/media/a0546b_667a385f7da1441798979d489b8b2d6a~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/crowd.jpg", "redarrows": "https://static.wixstatic.com/media/a0546b_59400d30305b4df49133d0d95bd3f88b~mv2.jpg/v1/fill/w_900,h_600,al_c,q_80,enc_jpg/redarrows.jpg"};
 (function(){
