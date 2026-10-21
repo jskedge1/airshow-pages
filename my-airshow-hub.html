@@ -730,6 +730,24 @@ label.f{color:var(--hud-fg)}
 .tabs a.hub-forum span{color:#7CFF9E;display:inline-block;transition:transform .3s ease}
 .tabs a.hub-forum:hover{box-shadow:inset 4px 0 0 #7CFF9E,0 0 26px rgba(124,255,158,.4)}
 .tabs a.hub-forum:hover span{transform:translateX(5px)}
+.tabs a.hub-logout{display:inline-flex;flex-direction:column;justify-content:center;min-height:44px;padding:4px 14px;margin-left:6px;background:#050C11;border:1px solid #D74949;box-shadow:inset 4px 0 0 #D74949,0 0 14px rgba(215,73,73,.22);color:#fff;text-decoration:none;font-weight:700;font-size:15px;line-height:1.2;white-space:nowrap;transition:box-shadow .3s ease,padding .4s ease}
+.tabs a.hub-logout small{font-family:"Share Tech Mono",ui-monospace,monospace;font-weight:400;font-size:11px;color:#F3B5B5}
+.tabs a.hub-logout span{color:#F3B5B5;display:inline-block;margin-left:4px;transition:transform .3s ease}
+.tabs a.hub-logout:hover,.tabs a.hub-logout:focus-visible{padding-inline:20px;box-shadow:inset 4px 0 0 #D74949,0 0 26px rgba(215,73,73,.45);outline:none}
+.tabs a.hub-logout:hover span{transform:rotate(90deg)}
+#guest .lg-nav .lg-navlogin{font:700 15px "Barlow",Arial,sans-serif;color:#061019;background:#32B4AF;border:0;padding:9px 18px;cursor:pointer;box-shadow:0 0 18px rgba(95,227,214,.3);transition:padding .4s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+#guest .lg-nav .lg-navlogin:hover,#guest .lg-nav .lg-navlogin:focus-visible{padding-inline:26px;box-shadow:0 0 26px rgba(95,227,214,.5);outline:none}
+#guest .lg-out{position:relative;z-index:5;background:#13293C;border-bottom:1px solid #32B4AF}
+#guest .lg-out>div{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding-top:12px;padding-bottom:12px;font-size:16px;color:#E8F1F6}
+#guest .lg-out b{color:#5FE3D6;font-weight:700}
+#guest .lg-out button{font:700 15px "Barlow",Arial,sans-serif;color:#061019;background:#32B4AF;border:0;padding:9px 18px;cursor:pointer}
+#hubSO{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,13,20,.95);color:#fff;font-family:"Barlow",Arial,sans-serif}
+#hubSO>div{width:min(560px,100%);border:1px solid #D74949;background:#08141F;padding:26px 28px;box-shadow:0 0 60px rgba(215,73,73,.18);animation:wbOpen .8s cubic-bezier(.2,.8,.2,1) both}
+#hubSO .so-tag{display:inline-block;background:#6950A1;font-weight:600;font-size:14px;padding:4px 10px}
+#hubSO b{display:block;font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:clamp(32px,6vw,48px);line-height:1;margin-top:14px}
+#hubSO p{font-family:"Share Tech Mono",ui-monospace,Menlo,Consolas,monospace;font-size:16px;color:#F3B5B5;margin-top:12px}
+#hubSO i{display:block;height:6px;background:#13293C;margin-top:18px;position:relative;overflow:hidden}
+#hubSO i::after{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:#D74949;box-shadow:0 0 12px #D74949;animation:wbFill 1.6s cubic-bezier(.4,0,.2,1) forwards}
 </style>
 </head>
 <body>
@@ -979,12 +997,15 @@ label.f{color:var(--hud-fg)}
     </div>
     <nav class="lg-nav" aria-label="Hub">
       <button type="button" class="lg-sound" id="lgSound" aria-pressed="false">Cockpit sounds off</button>
+      <button type="button" class="lg-navlogin" id="lgNavLogin">Log In</button>
       <a href="#lgTabs">Hub and forum</a>
       <a href="#lgInside">How it works</a>
       <a class="back" href="https://www.ukairshowguide.co.uk" target="_top">Back to the guide</a>
     </nav>
   </div>
 </header>
+
+<div class="lg-out" id="lgOut" role="status" hidden><div class="lg-in"><span><b>You are logged out.</b> Your shows, trips and hangar are saved for when you come back.</span><button type="button" id="lgOutLogin">Log In</button></div></div>
 
 <section class="lg-hero">
   <div class="lg-in">
@@ -1222,6 +1243,8 @@ label.f{color:var(--hud-fg)}
   ask.addEventListener("click", function (e) { if (e.target === ask) closeAsk(); });
   cta.addEventListener("click", function () { if (mode === "in") askEnter(); else { window.ukagWB = Date.now(); takeOff(mode); } });
   $("lgHubTab").addEventListener("click", askEnter);
+  $("lgNavLogin").addEventListener("click", askEnter);
+  $("lgOutLogin").addEventListener("click", askEnter);
   $("lgNoteJoin").addEventListener("click", function () { setMode("join"); fx("whoosh"); var c = document.querySelector("#guest .lg-card"); if (c && c.scrollIntoView) c.scrollIntoView({ behavior: "smooth", block: "center" }); });
 
   /* the ten tools on the Typhoon, the pop out screen and the phone */
@@ -1320,6 +1343,7 @@ label.f{color:var(--hud-fg)}
         <button data-p="year">My Airshow Year</button>
         <button data-p="posts">My Posts</button>
         <a class="hub-forum" href="https://www.ukairshowguide.co.uk/community-forum" target="_top"><small>F1 · COMMS</small>Airshow Forum <span aria-hidden="true">→</span></a>
+        <a class="hub-logout" id="hubLogout" href="#" role="button"><small>EJECT</small>Log Out <span aria-hidden="true">⏻</span></a>
       </nav>
     </div>
   </section>
@@ -1880,6 +1904,9 @@ label.f{color:var(--hud-fg)}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<!-- Signing off screen (21 Oct 2026): shows while the Log Out tab logs the member out, then the hub login page appears. -->
+<div id="hubSO" role="status" aria-live="polite" hidden><div><span class="so-tag">My Airshow Hub</span><b>SIGNING OFF</b><p>&gt; CLOSING YOUR SESSION. SEE YOU AT THE NEXT SHOW</p><i></i></div></div>
+
 <!-- Welcome back screen (21 Oct 2026): shows once after a member logs in from the hub, then opens the Overview page. -->
 <div id="hubWB" role="status" aria-live="polite" hidden><div class="wb-in"><span class="wb-tag">Systems online</span><b class="wb-h">WELCOME BACK</b><b class="wb-n" id="hubWBName"></b><p class="wb-l">&gt; TAKING YOU TO YOUR HUB</p><i class="wb-p"></i></div></div>
 <style>
@@ -1975,7 +2002,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       S.hub = hub;
       $("loading").hidden = true;
       if (!hub.member) { $("guest").hidden = false; $("app").hidden = true; return; }
-      $("guest").hidden = true; $("app").hidden = false;
+      $("guest").hidden = true; $("app").hidden = false; $("lgOut").hidden = true;
       if (!trip()) S.tripId = hub.trips[0] ? hub.trips[0].id : null;
       renderAll();
       if (window.ukagWB && Date.now() - window.ukagWB < 600000) { window.ukagWB = 0; welcomeBack(hub.member.name); }
@@ -1987,6 +2014,27 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       $("loading").appendChild(b);
     });
   }
+
+  /* Log Out tab: signing off screen, the page code logs the member out, then the hub shows its login page */
+  function logOut(e) {
+    if (e) e.preventDefault();
+    var so = $("hubSO"); so.hidden = false;
+    window.ukagWB = 0;
+    var done = false;
+    function finish() {
+      if (done) return; done = true;
+      setTimeout(function () {
+        S.hub = null; $("app").hidden = true; $("guest").hidden = false; so.hidden = true;
+        $("lgOut").hidden = false; window.scrollTo(0, 0);
+        load();
+      }, 1700);
+    }
+    call("logout").then(finish, function (err) {
+      so.hidden = true;
+      say((err && err.message) || "You could not be logged out just now. Please try again.", true);
+    });
+  }
+  $("hubLogout").addEventListener("click", logOut);
 
   /* big welcome back screen after logging in, then the Overview page ("Systems online. Welcome back.") */
   function welcomeBack(name) {
