@@ -861,3 +861,14 @@ renderPosts();renderChal();renderSpots();renderBuddies();renderRare();renderQueu
   }
 </style>
 <!-- mobile-fit -->
+
+<!-- jump-wrap-fix (21 Oct 2026): every forum menu link shows on screen without scrolling (the bar wraps onto more rows), and sections still land below the bar. -->
+<style id="jump-wrap-fix">
+.jump .wrap{flex-wrap:wrap;overflow:visible}
+.jump a:hover,.jump a:focus-visible{padding-inline:16px}
+.sec{scroll-margin-top:calc(var(--jump-h,56px) + 8px)}
+@media (max-width:700px){.jump a{padding:10px 12px;font-size:14px}.jump a:hover,.jump a:focus-visible{padding-inline:12px}}
+</style>
+<script id="jump-wrap-fix-js">
+(function(){var bar=document.querySelector(".jump");if(!bar)return;function set(){document.documentElement.style.setProperty("--jump-h",bar.offsetHeight+"px")}set();window.addEventListener("resize",set);if(window.ResizeObserver)new ResizeObserver(set).observe(bar)})();
+</script>
