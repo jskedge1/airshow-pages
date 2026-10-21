@@ -107,6 +107,8 @@ rep('''  /* big welcome back screen after logging in''', r'''  /* ---------- int
       f.addEventListener("load", function () {
         var d; try { d = f.contentDocument; } catch (e) { return; }
         if (!d) return;
+        /* inside the hub, the forum's own "Open My Airshow Hub" and "Join or log in" buttons are not needed */
+        var st = d.createElement("style"); st.textContent = '.btns a[href*="my-airshow-hub"]{display:none!important}'; d.head.appendChild(st);
         d.addEventListener("click", function (e) {
           var a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
           if (/my-airshow-hub/.test(a.getAttribute("href") || "")) { e.preventDefault(); showPage("overview"); }
