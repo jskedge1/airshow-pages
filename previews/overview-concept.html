@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Overview Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=Share+Tech+Mono&display=swap">
+<style>
+/* Concept for a new My Airshow Hub Overview: a cockpit you plan from.
+   Boarding pass with a split flap countdown, a readiness horizon driven by the pre flight switches,
+   a radar of your shows, a season runway, an air traffic radio for updates, a must see deck and a quick launch display.
+   Finish every pre flight check and the Red Arrows fly past. */
+:root{
+  --bg:#050D14;--panel:#0A1824;--panel2:#0E2131;--navy:#13293C;
+  --teal:#32B4AF;--cyan:#5FE3D6;--purple:#6950A1;--red:#D74949;--amber:#F2B233;
+  --fg:#E8F1F6;--mut:#A9BDCB;--line:rgba(95,227,214,.22);--line2:rgba(95,227,214,.1);
+  --cond:"Barlow Condensed","Barlow",Arial,sans-serif;--body:"Barlow",Arial,sans-serif;--mono:"Share Tech Mono",ui-monospace,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background-image:radial-gradient(900px 600px at 85% 0%,rgba(50,180,175,.12),transparent 60%),radial-gradient(700px 500px at 0% 70%,rgba(105,80,161,.12),transparent 60%),linear-gradient(var(--line2) 1px,transparent 1px),linear-gradient(90deg,var(--line2) 1px,transparent 1px);
+  background-size:auto,auto,44px 44px,44px 44px}
+button{font-family:inherit;color:inherit;cursor:pointer}
+img{display:block;max-width:100%;pointer-events:none;user-select:none;-webkit-user-drag:none}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.example{background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:8px 16px;text-align:center}
+.wrap{max-width:1320px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left,0px))}
+
+/* ---------- cockpit header: time of day sky, parallax photo, greeting typed in ---------- */
+.sky{position:relative;overflow:hidden;min-height:330px;border-bottom:1px solid var(--line)}
+.sky .photo{position:absolute;inset:-30px;background:url(https://jskedge1.github.io/airshow-pages/hub-img/c035006943.jpg) 62% 40%/cover;transform:translate3d(var(--px,0),var(--py,0),0) scale(1.06);transition:transform .8s var(--ease)}
+.sky::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,var(--bg) 0%,rgba(5,13,20,.93) 34%,rgba(5,13,20,.55) 62%,rgba(5,13,20,.25) 100%),linear-gradient(0deg,var(--bg) 0%,transparent 55%)}
+.sky::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.tint{position:absolute;inset:0;z-index:1;mix-blend-mode:soft-light;opacity:.55;background:var(--tod,linear-gradient(180deg,#5FA8D3,#F2B233))}
+.contrail{position:absolute;z-index:1;top:22%;left:-30%;width:30%;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75));filter:blur(.4px);animation:trail 14s linear infinite;opacity:.8}
+.contrail::after{content:"";position:absolute;right:-3px;top:-2px;width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff}
+@keyframes trail{0%{transform:translateX(0) rotate(-6deg)}55%,100%{transform:translateX(480%) rotate(-6deg)}}
+.sky .wrap{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:24px;align-items:end;padding-top:48px;padding-bottom:88px}
+.sys{font-family:var(--mono);font-size:14px;color:var(--cyan);display:flex;gap:10px;align-items:center}
+.sys b{font-weight:400;border:1px solid var(--line);padding:2px 8px}
+h1{font-family:var(--cond);font-weight:800;text-transform:uppercase;font-size:clamp(44px,7.4vw,96px);line-height:.9;margin:14px 0 0;letter-spacing:.005em;text-shadow:0 0 34px rgba(95,227,214,.2)}
+h1 .t{color:var(--cyan)}
+h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);vertical-align:-.05em;margin-left:.08em;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.brief{max-width:52ch;margin-top:14px;color:#D2DFE8;font-size:17px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.chip{display:flex;align-items:center;gap:10px;background:rgba(10,24,36,.78);border:1px solid var(--line);padding:9px 12px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.chip svg{width:22px;height:22px;flex:none}
+.chip b{display:block;font-size:15px}
+.chip small{display:block;font-family:var(--mono);font-size:12px;color:var(--cyan)}
+
+/* ---------- panels that open from the middle and glitch once ---------- */
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;margin-top:-64px;position:relative;z-index:3;padding-bottom:40px}
+.p{position:relative;background:linear-gradient(155deg,rgba(18,44,64,.92),rgba(9,24,37,.94));border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 18px 40px rgba(0,0,0,.35);min-width:0;opacity:0}
+.p::before,.p::after{content:"";position:absolute;width:16px;height:16px;border:2px solid var(--cyan);pointer-events:none}
+.p::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.p::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.p.on{animation:open .7s var(--ease) var(--d,0s) both,glitch .45s steps(1,end) calc(var(--d,0s) + .7s) 1}
+@keyframes open{0%{clip-path:inset(50% 50% 50% 50%);opacity:0}15%{opacity:1}45%{clip-path:inset(50% -4px 50% -4px)}100%{clip-path:inset(-30px);opacity:1}}
+@keyframes glitch{0%{transform:translate(5px,0);filter:drop-shadow(-4px 0 0 rgba(215,73,73,.8)) drop-shadow(4px 0 0 rgba(95,227,214,.8))}25%{transform:translate(-5px,1px) skewX(4deg)}50%{transform:translate(2px,-1px);filter:drop-shadow(3px 0 0 rgba(105,80,161,.9))}75%{transform:none;filter:none;opacity:.8}100%{transform:none;filter:none;opacity:1}}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.ph h2{margin:0;font-family:var(--cond);font-weight:800;font-size:20px;letter-spacing:.03em;text-transform:uppercase}
+.ph small{font-family:var(--mono);font-size:13px;color:var(--cyan)}
+.pb{padding:16px}
+.c7{grid-column:span 7}.c5{grid-column:span 5}.c4{grid-column:span 4}.c8{grid-column:span 8}.c12{grid-column:1/-1}
+
+/* ---------- boarding pass with split flap countdown ---------- */
+.pass{display:grid;grid-template-columns:minmax(0,1fr) 150px;overflow:hidden}
+.pass .main{padding:18px 20px;min-width:0}
+.pass .top{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:13px;color:var(--cyan)}
+.pass h3{margin:8px 0 0;font-family:var(--cond);font-weight:800;font-size:clamp(28px,3.6vw,44px);line-height:.95;text-transform:uppercase}
+.route{display:flex;align-items:center;gap:12px;margin-top:14px}
+.route b{font-family:var(--cond);font-weight:800;font-size:30px;line-height:1}
+.route small{display:block;font-family:var(--mono);font-size:12px;color:var(--mut)}
+.route .line{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 14px);position:relative;min-width:60px}
+.route .line img{position:absolute;top:50%;left:var(--prog,40%);width:30px;transform:translate(-50%,-50%) rotate(90deg);filter:drop-shadow(0 0 6px rgba(215,73,73,.6));transition:left 1.6s var(--ease)}
+.flaps{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.unit{text-align:center}
+.unit .d{display:flex;gap:4px}
+.flap{position:relative;width:46px;height:62px;perspective:300px;font-family:var(--cond);font-weight:800;font-size:46px;line-height:62px;text-align:center;color:#fff}
+.flap span{position:absolute;inset:0;background:linear-gradient(180deg,#132D42 0 49.5%,#0B1C2A 50.5% 100%);border:1px solid rgba(95,227,214,.18);box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+.flap span::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.6)}
+.flap.go span{animation:flip .5s var(--ease)}
+@keyframes flip{0%{transform:rotateX(0)}45%{transform:rotateX(-90deg);filter:brightness(.6)}55%{transform:rotateX(90deg);filter:brightness(.6)}100%{transform:rotateX(0)}}
+.unit small{display:block;margin-top:6px;font-size:14px;color:var(--mut)}
+.stub{border-left:2px dashed var(--line);padding:18px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;background:rgba(5,13,20,.4);position:relative}
+.stub::before,.stub::after{content:"";position:absolute;left:-12px;width:22px;height:22px;border-radius:50%;background:var(--bg)}
+.stub::before{top:-12px}.stub::after{bottom:-12px}
+.stub .row{font-size:14px}.stub .row small{display:block;font-family:var(--mono);font-size:12px;color:var(--cyan)}.stub .row b{font-size:17px}
+.bars{height:34px;background:repeating-linear-gradient(90deg,#E8F1F6 0 2px,transparent 2px 4px,#E8F1F6 4px 5px,transparent 5px 8px,#E8F1F6 8px 11px,transparent 11px 12px);opacity:.85}
+
+/* ---------- readiness: an artificial horizon ---------- */
+.ready .pb{display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;align-items:center}
+.adi{position:relative;width:170px;height:170px}
+.adi svg{width:100%;height:100%;display:block}
+.adi .ball{transition:transform 1.2s var(--ease)}
+.adi .roll{transform-origin:85px 85px;animation:sway 6s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.pct{font-family:var(--cond);font-weight:800;font-size:58px;line-height:1}
+.pct small{font-size:24px;color:var(--cyan)}
+.ready p{margin:6px 0 0;color:#D2DFE8}
+.ready .next{margin-top:10px;font-family:var(--mono);font-size:14px;color:var(--cyan)}
+
+/* ---------- radar ---------- */
+.radar .pb{display:grid;place-items:center}
+.radar svg{width:100%;max-width:400px;height:auto;display:block}
+.sweep{transform-origin:200px 200px;animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.blip circle.c{transition:opacity .3s}
+.blip .ring{transform-box:fill-box;transform-origin:center;opacity:0}
+.blip.hit .ring{animation:ping 1.4s ease-out}
+@keyframes ping{0%{transform:scale(.5);opacity:1}100%{transform:scale(3);opacity:0}}
+.blip text{font-family:var(--mono);font-size:12px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:14px;color:var(--mut)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}
+
+/* ---------- season runway ---------- */
+.runway{position:relative;height:150px;margin:6px 4px 0}
+.strip{position:absolute;left:0;right:0;top:58px;height:46px;background:#0B1C2A;border:1px solid rgba(95,227,214,.25)}
+.strip::before{content:"";position:absolute;left:12px;right:12px;top:50%;height:2px;background:repeating-linear-gradient(90deg,rgba(232,241,246,.75) 0 22px,transparent 22px 40px);transform:translateY(-50%)}
+.lights{position:absolute;left:0;right:0;top:52px;height:58px;pointer-events:none;background:radial-gradient(circle,rgba(242,178,51,.9) 1.5px,transparent 2.5px) 0 0/30px 6px repeat-x,radial-gradient(circle,rgba(242,178,51,.9) 1.5px,transparent 2.5px) 0 52px/30px 6px repeat-x;animation:chase 2.4s linear infinite}
+@keyframes chase{to{background-position:30px 0,30px 52px}}
+.months{position:absolute;left:0;right:0;top:112px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--mut)}
+.mk{position:absolute;top:8px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0}
+.mk b{font-size:13px;font-weight:700;white-space:nowrap;background:var(--panel2);border:1px solid var(--line);padding:2px 8px;transition:background .25s,color .25s}
+.mk i{width:2px;height:26px;background:var(--cyan)}
+.mk em{width:12px;height:12px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 0 rgba(95,227,214,.6);animation:beacon 2s infinite}
+.mk.mine b{background:var(--teal);color:#061019;border-color:var(--teal)}
+.mk.dim em{background:#41586B;animation:none}.mk.dim i{background:#41586B}.mk.dim b{color:var(--mut)}
+.mk:hover b,.mk:focus-visible b{background:var(--cyan);color:#061019}
+@keyframes beacon{70%{box-shadow:0 0 0 10px rgba(95,227,214,0)}100%{box-shadow:0 0 0 0 rgba(95,227,214,0)}}
+.jet{position:absolute;top:62px;left:0;width:38px;transform:translateX(-50%) rotate(90deg);transition:left 2.2s var(--ease);filter:drop-shadow(0 0 8px rgba(215,73,73,.6))}
+.rnote{margin-top:6px;color:#D2DFE8;font-size:15px}
+.rnote b{color:var(--cyan)}
+
+/* ---------- pre flight switches ---------- */
+.sw{display:grid;gap:8px}
+.tg{display:grid;grid-template-columns:44px minmax(0,1fr) 12px;gap:12px;align-items:center;background:rgba(5,13,20,.45);border:1px solid var(--line2);padding:9px 12px;text-align:left;transition:border-color .3s,background .3s}
+.tg:hover{border-color:var(--line)}
+.tg .base{position:relative;width:44px;height:26px;border-radius:13px;background:#0B1C2A;border:1px solid rgba(95,227,214,.3)}
+.tg .base::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:linear-gradient(180deg,#E8F1F6,#8FA6B6);box-shadow:0 2px 4px rgba(0,0,0,.5);transition:transform .35s var(--ease)}
+.tg b{font-size:15px;font-weight:600}
+.tg small{display:block;font-size:13px;color:var(--mut)}
+.tg .led{width:10px;height:10px;border-radius:50%;background:#2A1A1A;box-shadow:inset 0 0 0 1px rgba(215,73,73,.5)}
+.tg[aria-pressed="true"]{border-color:rgba(95,227,214,.45);background:rgba(50,180,175,.1)}
+.tg[aria-pressed="true"] .base{background:rgba(50,180,175,.35)}
+.tg[aria-pressed="true"] .base::after{transform:translateX(18px)}
+.tg[aria-pressed="true"] .led{background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+
+/* ---------- air traffic radio ---------- */
+.radio .freq{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#030A10;border:1px solid var(--line);padding:10px 12px}
+.radio .freq b{font-family:var(--mono);font-weight:400;font-size:26px;color:var(--amber);text-shadow:0 0 10px rgba(242,178,51,.5)}
+.radio .freq small{display:block;font-size:13px;color:var(--mut)}
+.wave{display:flex;gap:3px;align-items:center;height:24px}
+.wave i{width:3px;background:var(--cyan);border-radius:2px;animation:wave 1s ease-in-out infinite}
+.wave i:nth-child(2){animation-delay:.1s}.wave i:nth-child(3){animation-delay:.2s}.wave i:nth-child(4){animation-delay:.3s}.wave i:nth-child(5){animation-delay:.4s}.wave i:nth-child(6){animation-delay:.5s}
+@keyframes wave{0%,100%{height:5px}50%{height:22px}}
+.wave.quiet i{animation-play-state:paused;height:4px}
+.msgs{display:grid;gap:8px;margin-top:12px;max-height:250px;overflow:hidden}
+.msg{border-left:3px solid var(--teal);background:rgba(5,13,20,.45);padding:8px 10px;animation:msgIn .5s var(--ease) both}
+.msg.p{border-color:var(--purple)}.msg.r{border-color:var(--red)}
+.msg small{display:block;font-family:var(--mono);font-size:12px;color:var(--cyan)}
+.msg p{margin:2px 0 0;font-size:15px}
+@keyframes msgIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* ---------- must see deck with tilt ---------- */
+.deck{display:grid;gap:10px}
+.card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;padding:12px 14px;background:linear-gradient(135deg,#132D42,#0B1C2A);border:1px solid var(--line);transform:perspective(700px) rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .25s ease-out,box-shadow .3s;will-change:transform}
+.card:hover{box-shadow:0 14px 30px rgba(0,0,0,.4),0 0 0 1px var(--cyan)}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(95,227,214,.16),transparent 60%);opacity:0;transition:opacity .3s}
+.card:hover::after{opacity:1}
+.card b{font-family:var(--cond);font-weight:800;font-size:21px;text-transform:uppercase;line-height:1}
+.card small{grid-column:1/-1;font-size:14px;color:var(--mut)}
+.stamp{font-family:var(--mono);font-size:12px;padding:3px 8px;border:1.5px solid currentColor;transform:rotate(-4deg)}
+.stamp.ok{color:var(--cyan)}.stamp.wait{color:#CBB9F5}.stamp.no{color:#F09A9A}
+
+/* ---------- quick launch display with bezel buttons ---------- */
+.mfd{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:stretch}
+.bez{display:grid;gap:10px;align-content:center}
+.bz{position:relative;min-width:150px;padding:12px 14px;background:#0B1C2A;border:1px solid var(--line);text-align:left;font-weight:700;font-size:15px;transition:background .3s,padding .4s var(--ease),box-shadow .3s}
+.bz small{display:block;font-family:var(--mono);font-weight:400;font-size:12px;color:var(--cyan)}
+.bz:hover,.bz:focus-visible,.bz.on{background:var(--teal);color:#061019;box-shadow:0 0 22px rgba(95,227,214,.35);outline:none}
+.bz:hover small,.bz.on small{color:#061019}
+.bez.l .bz:hover{padding-left:22px}.bez.r .bz:hover{padding-right:22px}
+.bz.forum{border-color:rgba(124,255,158,.6);box-shadow:inset 4px 0 0 #7CFF9E}
+.scr{position:relative;background:#030A10;border:1px solid var(--line);padding:22px;min-height:220px;overflow:hidden}
+.scr::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(95,227,214,.04) 0 1px,transparent 1px 3px);pointer-events:none}
+.scr small{font-family:var(--mono);font-size:13px;color:var(--cyan)}
+.scr h3{margin:8px 0 0;font-family:var(--cond);font-weight:800;font-size:clamp(30px,4vw,46px);line-height:.95;text-transform:uppercase}
+.scr p{margin:10px 0 0;color:#D2DFE8;max-width:56ch}
+.scr .go{display:inline-block;margin-top:16px;background:var(--teal);color:#061019;font-weight:700;padding:10px 16px;border:0}
+.scr.swap h3,.scr.swap p{animation:msgIn .4s var(--ease) both}
+
+/* ---------- Red Arrows flypast when every check is done ---------- */
+.flypast{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}
+.flypast .fm{position:absolute;top:38%;left:-360px;width:340px;height:200px;animation:fly 3.6s cubic-bezier(.45,.05,.4,1) forwards}
+.flypast .fm img{position:absolute;width:44px;transform:rotate(90deg);filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+.flypast .sm{position:absolute;height:9px;right:30px;width:0;border-radius:5px;filter:blur(3px);animation:smoke 3.6s linear forwards}
+@keyframes fly{0%{transform:translate(0,40px) rotate(-4deg)}100%{transform:translate(calc(100vw + 420px),-120px) rotate(-8deg)}}
+@keyframes smoke{0%{width:0}100%{width:1400px}}
+.cleared{position:fixed;left:50%;top:22%;z-index:61;transform:translateX(-50%);font-family:var(--cond);font-weight:800;font-size:clamp(34px,6vw,72px);text-transform:uppercase;color:#fff;text-shadow:0 0 30px rgba(95,227,214,.6);pointer-events:none;white-space:nowrap;animation:clr 3.8s var(--ease) forwards}
+@keyframes clr{0%{opacity:0;transform:translate(-50%,10px)}15%,75%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-10px)}}
+.reset{display:inline-block;margin-top:10px;background:transparent;border:1px solid var(--line);color:var(--mut);font-size:14px;padding:6px 10px}
+
+/* ---------- layout on smaller screens ---------- */
+@media (max-width:1100px){.c7,.c5,.c4,.c8{grid-column:span 6}.c12{grid-column:1/-1}}
+@media (max-width:760px){
+  .sky .wrap{grid-template-columns:1fr;padding-bottom:80px}
+  .chips{justify-content:flex-start}
+  .grid{gap:14px}
+  .c7,.c5,.c4,.c8{grid-column:1/-1}
+  .o1{order:1}.o2{order:2}.o3{order:3}.o4{order:4}.o5{order:5}.o6{order:6}.o7{order:7}.o8{order:8}
+  .pass{grid-template-columns:1fr}
+  .stub{border-left:0;border-top:2px dashed var(--line);flex-direction:row;flex-wrap:wrap}
+  .stub::before,.stub::after{display:none}
+  .bars{flex-basis:100%}
+  .ready .pb{grid-template-columns:120px minmax(0,1fr)}
+  .adi{width:120px;height:120px}
+  .flap{width:38px;height:52px;font-size:38px;line-height:52px}
+  .mfd{grid-template-columns:1fr}
+  .bez{grid-template-columns:1fr 1fr}
+  .bz{min-width:0}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.p{opacity:1}}
+</style>
+</head>
+<body>
+
+<div class="example">Overview concept with example data. The switches, radar, runway and quick launch all work.</div>
+
+<header class="sky" id="sky">
+  <div class="photo" id="photo"></div>
+  <div class="tint" id="tint"></div>
+  <span class="contrail" aria-hidden="true"></span>
+  <div class="wrap">
+    <div>
+      <div class="sys"><b>SYS 02</b><span id="clock">--:--</span><span>· Overview</span></div>
+      <h1><span id="greet"></span><br><span class="t" id="name"></span><span class="caret" aria-hidden="true"></span></h1>
+      <p class="brief" id="brief">You have two shows on your radar this season. Cosford is up first, so I would get your travel booked while the cheaper trains are still about.</p>
+    </div>
+    <div class="chips">
+      <div class="chip"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#5FE3D6" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><div><b id="todText">Afternoon light</b><small id="todSub">Sun in the south west</small></div></div>
+      <div class="chip"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#5FE3D6" stroke-width="1.6"><path d="M3 15l7-1 5-9h2l-2 9 5 1-1 2-5-1-4 6H8l2-6-6 1z"/></svg><div><b>2 inbound</b><small>Aircraft heading to your shows</small></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+
+    <!-- boarding pass -->
+    <section class="p c7 o1" style="--d:.05s" aria-labelledby="passT">
+      <div class="pass">
+        <div class="main">
+          <div class="top"><span>BOARDING PASS · NEXT SHOW</span><span>GATE 08:00</span></div>
+          <h3 id="passT">RAF Cosford Air Show</h3>
+          <div class="route">
+            <div><b>HOME</b><small>East of England</small></div>
+            <div class="line" id="route"><img src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt=""></div>
+            <div><b>COS</b><small>Shropshire</small></div>
+          </div>
+          <div class="flaps" id="flaps" aria-live="off"></div>
+        </div>
+        <div class="stub">
+          <div class="row"><small>DATE</small><b>Sun 13 June</b></div>
+          <div class="row"><small>SEAT</small><b>Crowd line</b></div>
+          <div class="row"><small>TRAVEL</small><b>Train, to book</b></div>
+          <div class="bars" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- readiness horizon -->
+    <section class="p c5 o2 ready" style="--d:.15s" aria-labelledby="readyT">
+      <div class="ph"><h2 id="readyT">Trip readiness</h2><small>ATTITUDE</small></div>
+      <div class="pb">
+        <div class="adi" aria-hidden="true">
+          <svg viewBox="0 0 170 170">
+            <defs><clipPath id="clip"><circle cx="85" cy="85" r="74"/></clipPath></defs>
+            <g clip-path="url(#clip)">
+              <g class="roll"><g class="ball" id="ball">
+                <rect x="-60" y="-200" width="290" height="285" fill="#1C5C80"/>
+                <rect x="-60" y="85" width="290" height="285" fill="#3A2E24"/>
+                <rect x="-60" y="84" width="290" height="2" fill="#E8F1F6"/>
+                <g stroke="#E8F1F6" stroke-width="1.5" opacity=".75"><path d="M70 65h30M75 45h20M70 105h30M75 125h20"/></g>
+              </g></g>
+            </g>
+            <circle cx="85" cy="85" r="74" fill="none" stroke="#5FE3D6" stroke-width="2"/>
+            <circle cx="85" cy="85" r="80" fill="none" stroke="rgba(95,227,214,.25)" stroke-width="6" stroke-dasharray="2 9"/>
+            <path d="M45 85h26l8 8 6-8 6 8 8-8h26" fill="none" stroke="#F2B233" stroke-width="3.5" stroke-linejoin="round"/>
+            <circle cx="85" cy="85" r="3" fill="#F2B233"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pct"><span id="pct">0</span><small>%</small></div>
+          <p id="readyLine">Flip the pre flight switches as you sort each part of your trip. The horizon levels out as you go.</p>
+          <div class="next" id="readyNext">&gt; Next: book your tickets</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- pre flight switches -->
+    <section class="p c4 o3" style="--d:.25s" aria-labelledby="swT">
+      <div class="ph"><h2 id="swT">Pre flight checks</h2><small id="swCount">0 of 6</small></div>
+      <div class="pb sw" id="switches"></div>
+    </section>
+
+    <!-- radio -->
+    <section class="p c4 o4 radio" style="--d:.32s" aria-labelledby="radT">
+      <div class="ph"><h2 id="radT">Show radio</h2><small>LIVE UPDATES</small></div>
+      <div class="pb">
+        <div class="freq"><div><b id="freq">118.725</b><small id="freqName">Cosford tower</small></div><div class="wave" id="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="msgs" id="msgs" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- must see -->
+    <section class="p c4 o6" style="--d:.4s" aria-labelledby="msT">
+      <div class="ph"><h2 id="msT">Must see</h2><small>3 WATCHING</small></div>
+      <div class="pb deck">
+        <div class="card"><b>Typhoon display</b><span class="stamp ok">CONFIRMED</span><small>Cosford, Saturday and Sunday</small></div>
+        <div class="card"><b>Red Arrows</b><span class="stamp ok">CONFIRMED</span><small>Cosford, Sunday</small></div>
+        <div class="card"><b>B-17 Sally B</b><span class="stamp wait">WAITING</span><small>RIAT, not on the line up yet</small></div>
+      </div>
+    </section>
+
+    <!-- radar -->
+    <section class="p c5 o5 radar" style="--d:.48s" aria-labelledby="rdT">
+      <div class="ph"><h2 id="rdT">Show radar</h2><small>RANGE 200 MI</small></div>
+      <div class="pb">
+        <svg viewBox="0 0 400 400" role="img" aria-label="Radar with your saved shows and other featured shows around your home">
+          <defs><radialGradient id="rg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#0E2A3A"/><stop offset="1" stop-color="#050D14"/></radialGradient>
+            <linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5FE3D6" stop-opacity="0"/><stop offset="1" stop-color="#5FE3D6" stop-opacity=".5"/></linearGradient></defs>
+          <circle cx="200" cy="200" r="190" fill="url(#rg)" stroke="#5FE3D6" stroke-opacity=".5"/>
+          <g fill="none" stroke="#5FE3D6" stroke-opacity=".2"><circle cx="200" cy="200" r="63"/><circle cx="200" cy="200" r="126"/><path d="M200 10v380M10 200h380"/></g>
+          <g font-family="Share Tech Mono,monospace" font-size="11" fill="#5FE3D6" fill-opacity=".6"><text x="204" y="134">70</text><text x="204" y="71">140</text><text x="196" y="24" text-anchor="end">N</text></g>
+          <g class="sweep" id="sweep"><path d="M200 200 L390 200 A190 190 0 0 0 334 66 Z" fill="url(#sg)"/></g>
+          <g id="blips"></g>
+          <circle cx="200" cy="200" r="5" fill="#F2B233"/><text x="210" y="216" font-family="Share Tech Mono,monospace" font-size="12" fill="#F2B233">YOU</text>
+        </svg>
+        <div class="legend"><span><i style="background:#5FE3D6"></i>Your shows</span><span><i style="background:#6950A1"></i>Other featured shows</span></div>
+      </div>
+    </section>
+
+    <!-- season runway -->
+    <section class="p c7 o7" style="--d:.55s" aria-labelledby="rwT">
+      <div class="ph"><h2 id="rwT">Your season runway</h2><small>MAY TO SEPT 2027</small></div>
+      <div class="pb">
+        <div class="runway" id="runway">
+          <div class="strip"></div><div class="lights"></div>
+          <img class="jet" id="jet" src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt="">
+          <div class="months"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+        </div>
+        <p class="rnote" id="rnote">Holding at the threshold. <b>234 days</b> until your season starts at Cosford.</p>
+      </div>
+    </section>
+
+    <!-- quick launch -->
+    <section class="p c12 o8" style="--d:.62s" aria-labelledby="qlT">
+      <div class="ph"><h2 id="qlT">Quick launch</h2><small>MULTI FUNCTION DISPLAY</small></div>
+      <div class="pb mfd">
+        <div class="bez l">
+          <button class="bz on" type="button" data-q="0"><small>L1</small>My Trips</button>
+          <button class="bz" type="button" data-q="1"><small>L2</small>Show Day</button>
+          <button class="bz" type="button" data-q="2"><small>L3</small>Flight Briefing</button>
+        </div>
+        <div class="scr" id="scr"><small id="qK">L1 · PLAN</small><h3 id="qT">My Trips</h3><p id="qP">Tickets, travel, budget and your day timeline for every show you are going to. Cosford still needs your train booked.</p><button class="go" type="button" id="qGo">Open My Trips</button></div>
+        <div class="bez r">
+          <button class="bz forum" type="button" data-q="3"><small>F1 · COMMS</small>Airshow Forum</button>
+          <button class="bz" type="button" data-q="4"><small>R2</small>My Hangar</button>
+          <button class="bz" type="button" data-q="5"><small>R3</small>Kit And Packing</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* example show date for the preview */
+  var SHOW = new Date("2027-06-13T08:00:00");
+
+  /* panels open from the middle one after another */
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); } }); }, { threshold: .12 });
+  document.querySelectorAll(".p").forEach(function (p) { io.observe(p); });
+
+  /* greeting and sky follow the time of day */
+  var h = new Date().getHours();
+  var tod = h < 5 ? ["Good evening", "Night flying", "Stars out, no display today", "linear-gradient(180deg,#0B1F3A,#13293C)"]
+    : h < 12 ? ["Good morning", "Morning light", "Sun in the east", "linear-gradient(180deg,#9FD3F0,#F7D9A0)"]
+    : h < 17 ? ["Good afternoon", "Afternoon light", "Sun in the south west", "linear-gradient(180deg,#5FA8D3,#F2D29B)"]
+    : h < 21 ? ["Good evening", "Golden hour", "Sun low in the west", "linear-gradient(180deg,#E8875A,#6950A1)"]
+    : ["Good evening", "Night flying", "Stars out, no display today", "linear-gradient(180deg,#0B1F3A,#13293C)"];
+  $("todText").textContent = tod[1]; $("todSub").textContent = tod[2]; $("tint").style.setProperty("--tod", tod[3]);
+  function clock() { var d = new Date(); $("clock").textContent = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }
+  clock(); setInterval(clock, 15000);
+  function typeIn(el, text, delay, cb) {
+    if (reduce) { el.textContent = text; if (cb) cb(); return; }
+    var i = 0; setTimeout(function step() { el.textContent = text.slice(0, ++i); if (i < text.length) setTimeout(step, 45); else if (cb) cb(); }, delay);
+  }
+  typeIn($("greet"), tod[0].toUpperCase() + ",", 300, function () { typeIn($("name"), "JACK", 120); });
+
+  /* header photo leans gently with the mouse */
+  if (!reduce) document.addEventListener("pointermove", function (e) {
+    if (e.pointerType !== "mouse") return;
+    var x = (e.clientX / innerWidth - .5) * -18, y = (e.clientY / innerHeight - .5) * -10;
+    $("photo").style.setProperty("--px", x + "px"); $("photo").style.setProperty("--py", y + "px");
+  });
+
+  /* split flap countdown */
+  var flaps = $("flaps"), cells = {};
+  [["d", "Days", 3], ["h", "Hours", 2], ["m", "Mins", 2], ["s", "Secs", 2]].forEach(function (u) {
+    var unit = document.createElement("div"); unit.className = "unit";
+    var row = document.createElement("div"); row.className = "d"; cells[u[0]] = [];
+    for (var i = 0; i < u[2]; i++) { var f = document.createElement("div"); f.className = "flap"; var s = document.createElement("span"); s.textContent = "0"; f.appendChild(s); row.appendChild(f); cells[u[0]].push(f); }
+    unit.appendChild(row); var sm = document.createElement("small"); sm.textContent = u[1]; unit.appendChild(sm); flaps.appendChild(unit);
+  });
+  function setNum(key, n) {
+    var str = String(n).padStart(cells[key].length, "0").slice(-cells[key].length);
+    cells[key].forEach(function (f, i) {
+      var sp = f.firstChild; if (sp.textContent === str[i]) return;
+      if (reduce) { sp.textContent = str[i]; return; }
+      f.classList.remove("go"); void f.offsetWidth; f.classList.add("go");
+      setTimeout(function () { sp.textContent = str[i]; }, 230);
+    });
+  }
+  function tick() {
+    var ms = Math.max(0, SHOW - new Date());
+    setNum("d", Math.floor(ms / 864e5)); setNum("h", Math.floor(ms / 36e5) % 24); setNum("m", Math.floor(ms / 6e4) % 60); setNum("s", Math.floor(ms / 1e3) % 60);
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* pre flight switches drive the readiness horizon */
+  var ITEMS = [["Tickets booked", "Cosford is free entry, but car parking needs booking"], ["Travel sorted", "Train to Cosford station, then the shuttle"], ["Ear defenders packed", "For the Typhoon and the jets"], ["Camera batteries charged", "Two bodies, both batteries topped up"], ["Weather checked", "I check it the week before"], ["Crowd line spot planned", "Head there first and save your pitch"]];
+  var on = []; try { on = JSON.parse(localStorage.getItem("ukagOvChecks")) || []; } catch (e) {}
+  var box = $("switches"), celebrated = false;
+  ITEMS.forEach(function (it, i) {
+    var b = document.createElement("button"); b.type = "button"; b.className = "tg"; b.setAttribute("aria-pressed", String(on.indexOf(i) > -1));
+    b.innerHTML = '<span class="base" aria-hidden="true"></span><span><b></b><small></small></span><span class="led" aria-hidden="true"></span>';
+    b.querySelector("b").textContent = it[0]; b.querySelector("small").textContent = it[1];
+    b.addEventListener("click", function () {
+      var now = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(now));
+      var k = on.indexOf(i); if (now && k < 0) on.push(i); if (!now && k > -1) on.splice(k, 1);
+      try { localStorage.setItem("ukagOvChecks", JSON.stringify(on)); } catch (e) {}
+      if (navigator.vibrate) navigator.vibrate(12);
+      ready(true);
+    });
+    box.appendChild(b);
+  });
+  var rs = document.createElement("button"); rs.type = "button"; rs.className = "reset"; rs.textContent = "Reset the switches";
+  rs.addEventListener("click", function () { on = []; celebrated = false; try { localStorage.removeItem("ukagOvChecks"); } catch (e) {} box.querySelectorAll(".tg").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); ready(); });
+  box.appendChild(rs);
+  function ready(user) {
+    var pct = Math.round(on.length / ITEMS.length * 100);
+    $("pct").textContent = pct; $("swCount").textContent = on.length + " of " + ITEMS.length;
+    /* nose down when nothing is sorted, level when it all is */
+    $("ball").style.transform = "translateY(" + ((100 - pct) / 100 * -46) + "px)";
+    var next = ITEMS.filter(function (_, i) { return on.indexOf(i) < 0; })[0];
+    $("readyNext").textContent = next ? "> Next: " + next[0].toLowerCase() : "> All checks complete";
+    $("readyLine").textContent = pct === 100 ? "Wings level. You are cleared for Cosford." : pct >= 50 ? "Climbing nicely. A few more checks and you are ready." : "Flip the pre flight switches as you sort each part of your trip. The horizon levels out as you go.";
+    $("route").style.setProperty("--prog", Math.max(8, pct * .9) + "%");
+    if (pct === 100 && user && !celebrated) { celebrated = true; flypast(); }
+  }
+  ready();
+
+  /* Red Arrows flypast with red, white and blue smoke */
+  function flypast() {
+    if (reduce) return;
+    var fp = document.createElement("div"); fp.className = "flypast"; fp.setAttribute("aria-hidden", "true");
+    var fm = document.createElement("div"); fm.className = "fm";
+    var pos = [[150, 80], [110, 40], [110, 120], [70, 0], [70, 160], [30, 40], [30, 120], [-10, 80], [-50, 80]];
+    var colours = ["#D74949", "#E8F1F6", "#2E5BD7"];
+    pos.forEach(function (p, i) {
+      var sm = document.createElement("i"); sm.className = "sm"; sm.style.top = (p[1] + 18) + "px"; sm.style.right = (340 - p[0] - 6) + "px";
+      sm.style.background = "linear-gradient(270deg," + colours[i % 3] + ",transparent)"; fm.appendChild(sm);
+      var img = document.createElement("img"); img.src = "https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp"; img.alt = ""; img.style.left = p[0] + "px"; img.style.top = p[1] + "px"; fm.appendChild(img);
+    });
+    fp.appendChild(fm); document.body.appendChild(fp);
+    var c = document.createElement("div"); c.className = "cleared"; c.textContent = "Cleared for Cosford"; document.body.appendChild(c);
+    setTimeout(function () { fp.remove(); c.remove(); }, 4200);
+  }
+
+  /* show radio: updates arrive like air traffic messages */
+  var MSG = [["Cosford tower", "118.725", "Two aircraft added to the line up since you saved the show.", ""], ["Fairford ops", "119.150", "RIAT car park passes go on sale next week. I would set a reminder.", "p"], ["Hub control", "121.500", "You have 2 must see aircraft confirmed at Cosford.", ""], ["Cosford tower", "118.725", "Shuttle bus times from the station are now on the show page.", ""], ["Fairford ops", "119.150", "Camping at Townsend Farm is filling up for the Friday.", "r"]];
+  var mi = 0, msgs = $("msgs");
+  function radio() {
+    var m = MSG[mi % MSG.length]; mi++;
+    $("wave").classList.remove("quiet"); $("freqName").textContent = m[0];
+    var f = $("freq"), target = m[1], n = 0;
+    var spin = setInterval(function () { f.textContent = (118 + Math.random() * 3).toFixed(3); if (++n > 8) { clearInterval(spin); f.textContent = target; } }, 45);
+    var d = document.createElement("div"); d.className = "msg " + m[3];
+    var s = document.createElement("small"); s.textContent = m[0].toUpperCase() + " · " + m[1]; var p = document.createElement("p");
+    d.appendChild(s); d.appendChild(p); msgs.insertBefore(d, msgs.firstChild);
+    while (msgs.children.length > 4) msgs.removeChild(msgs.lastChild);
+    typeIn(p, m[2], 450, function () { setTimeout(function () { $("wave").classList.add("quiet"); }, 600); });
+  }
+  radio(); setTimeout(radio, 2600); setInterval(radio, 7000);
+
+  /* must see cards tilt toward the pointer */
+  document.querySelectorAll(".card").forEach(function (c) {
+    c.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse" || reduce) return;
+      var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      c.style.setProperty("--ry", ((x - .5) * 10) + "deg"); c.style.setProperty("--rx", ((.5 - y) * 10) + "deg");
+      c.style.setProperty("--mx", (x * 100) + "%"); c.style.setProperty("--my", (y * 100) + "%");
+    });
+    c.addEventListener("pointerleave", function () { c.style.setProperty("--rx", "0deg"); c.style.setProperty("--ry", "0deg"); });
+  });
+
+  /* radar: blips light up as the sweep passes over them */
+  var BL = [["Cosford", 290, 112, true], ["RIAT", 245, 128, true], ["Duxford", 30, 30, false], ["Shuttleworth", 330, 34, false], ["Eastbourne", 175, 96, false], ["Clacton", 95, 52, false], ["Southport", 318, 170, false], ["Blackpool", 322, 180, false]];
+  var blips = $("blips"), NS = "http://www.w3.org/2000/svg";
+  BL.forEach(function (b) {
+    var a = (b[1] - 90) * Math.PI / 180, r = b[2] * .95, x = 200 + Math.cos(a) * r, y = 200 + Math.sin(a) * r;
+    var g = document.createElementNS(NS, "g"); g.setAttribute("class", "blip"); g.dataset.ang = b[1];
+    var col = b[3] ? "#5FE3D6" : "#8C77C9";
+    var ring = document.createElementNS(NS, "circle"); ring.setAttribute("class", "ring"); ring.setAttribute("cx", x); ring.setAttribute("cy", y); ring.setAttribute("r", 6); ring.setAttribute("fill", "none"); ring.setAttribute("stroke", col);
+    var c = document.createElementNS(NS, "circle"); c.setAttribute("class", "c"); c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", b[3] ? 6 : 4); c.setAttribute("fill", col);
+    var t = document.createElementNS(NS, "text"); t.setAttribute("x", x + 9); t.setAttribute("y", y + 4); t.setAttribute("fill", col); t.textContent = b[0];
+    if (x > 300) { t.setAttribute("x", x - 9); t.setAttribute("text-anchor", "end"); }
+    g.appendChild(ring); g.appendChild(c); g.appendChild(t); blips.appendChild(g);
+  });
+  var start = performance.now();
+  function radarLoop(now) {
+    var ang = ((now - start) / 6000 * 360) % 360; /* sweep starts pointing east, clockwise */
+    blips.querySelectorAll(".blip").forEach(function (g) {
+      var bAng = (+g.dataset.ang - 90 + 360) % 360, diff = (ang - bAng + 360) % 360;
+      if (diff < 6 && !g.classList.contains("hit")) { g.classList.add("hit"); setTimeout(function () { g.classList.remove("hit"); }, 1400); }
+    });
+    if (!reduce) requestAnimationFrame(radarLoop);
+  }
+  requestAnimationFrame(radarLoop);
+
+  /* season runway: shows as runway markers, the jet taxis to where you are in the year */
+  var SEASON = [["Duxford", "2027-05-22", false], ["Shuttleworth", "2027-06-06", false], ["Cosford", "2027-06-13", true], ["RIAT", "2027-07-16", true], ["Eastbourne", "2027-08-12", false], ["Clacton", "2027-08-26", false], ["Southport", "2027-09-04", false]];
+  var s0 = new Date("2027-05-01").getTime(), s1 = new Date("2027-09-30").getTime(), rw = $("runway");
+  SEASON.forEach(function (sh, i) {
+    var pct = (new Date(sh[1]).getTime() - s0) / (s1 - s0) * 100;
+    var b = document.createElement("button"); b.type = "button"; b.className = "mk " + (sh[2] ? "mine" : "dim"); b.style.left = pct + "%";
+    b.style.top = (i % 2 ? 4 : 18) + "px";
+    b.innerHTML = "<b></b><i></i><em></em>"; b.querySelector("b").textContent = sh[0];
+    b.title = sh[0] + ", " + new Date(sh[1]).toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+    b.addEventListener("click", function () { $("rnote").innerHTML = ""; var t = document.createElement("span"); t.textContent = sh[0] + " is on " + new Date(sh[1]).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }) + ". "; var bb = document.createElement("b"); bb.textContent = sh[2] ? "It is on your trips." : "Tap Add to my trips on its show page to save it."; $("rnote").appendChild(t); $("rnote").appendChild(bb); });
+    rw.appendChild(b);
+  });
+  setTimeout(function () { var now = Date.now(); var pct = now < s0 ? 0 : Math.min(100, (now - s0) / (s1 - s0) * 100); $("jet").style.left = (pct || 2) + "%"; }, 900);
+  var days = Math.ceil((SHOW - new Date()) / 864e5);
+  $("rnote").innerHTML = "Holding at the threshold. <b>" + days + " days</b> until your season starts at Cosford.";
+
+  /* quick launch: bezel buttons change the centre display */
+  var QL = [["L1 · PLAN", "My Trips", "Tickets, travel, budget and your day timeline for every show you are going to. Cosford still needs your train booked."], ["L2 · LIVE", "Show Day", "On the day, upload the flying display page from your programme and see what is flying now and next, with ear defender alerts."], ["L3 · BRIEF", "Flight Briefing", "Everything for your next show on one sheet: gates, weather, sun, parking and what is new on the line up."], ["F1 · COMMS", "Airshow Forum", "Talk to other members, find a buddy for the show, share your photos and follow show day as it happens."], ["R2 · COLLECT", "My Hangar", "Every aircraft you have seen, collected show by show. Rare ones glow purple."], ["R3 · PACK", "Kit And Packing", "Your packing list, with a photographer version if you are taking the camera."]];
+  document.querySelectorAll(".bz").forEach(function (b) {
+    function show() {
+      var q = QL[+b.dataset.q]; document.querySelectorAll(".bz").forEach(function (x) { x.classList.toggle("on", x === b); });
+      var s = $("scr"); s.classList.remove("swap"); void s.offsetWidth; s.classList.add("swap");
+      $("qK").textContent = q[0]; $("qT").textContent = q[1]; $("qP").textContent = q[2]; $("qGo").textContent = "Open " + q[1];
+    }
+    b.addEventListener("mouseenter", show); b.addEventListener("focus", show); b.addEventListener("click", show);
+  });
+  $("qGo").addEventListener("click", function () { this.textContent = "In the hub this opens " + $("qT").textContent; });
+})();
+</script>
+</body>
+</html>
