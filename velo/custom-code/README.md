@@ -11,3 +11,9 @@ Log In and Log Out flow (21 Oct 2026):
   and once the member is logged in a big "Welcome back" screen shows, then they land on My Airshow Hub.
 - The overlay styles are in header-login-overlays.css, appended to the header menu styles block.
 - The hub login card (my-airshow-hub.html) asks the same question and shows its own welcome back screen.
+
+Airshow Hub button HUD effect (21 Oct 2026):
+- The Airshow Hub button in the header has the HUD look on every page, not only on My Airshow Hub and the forum:
+  dark box, cyan glow, bracket corners that open out on hover, pinging dot when logged out.
+- The styles are in header-hub-button-hud.css, appended to the header menu styles block (marked /*hubhud*/).
+  The old purple button rules and the hub-only button rules were folded into it, as that block has a 15,000 character limit.
