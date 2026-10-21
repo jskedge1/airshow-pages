@@ -3303,5 +3303,27 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
   hello(40).then(function (r) { S.join = r.join || ""; S.pageUrl = r.pageUrl || ""; }).then(load);
 })();
 </script>
+<!-- typing readout (21 Oct 2026): the forum's terminal text and blinking block show above a box while you type -->
+<style id="typing-readout">
+textarea,.input{caret-color:#5FE3DC;caret-shape:block}
+textarea:focus,.input:focus{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:15px}
+.typing{grid-column:1/-1;flex-basis:100%;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:#5FE3DC;min-height:1.5em;margin-bottom:6px;opacity:0;transform:translateY(3px);transition:opacity .25s,transform .25s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.typing.on{opacity:1;transform:none}
+.typing i{display:inline-block;width:8px;height:14px;background:#5FE3DC;vertical-align:-2px;margin-left:2px;animation:tblink 1s steps(2) infinite}
+@keyframes tblink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.typing i{animation:none}}
+</style>
+<script>
+(function(){
+  const PICK='textarea,.fcomments .input,.fcomments input[type=text],.addrow .input';
+  const LABEL={cBody:'Typing your post',todoIn:'Adding to your list',tlText:'Adding to your timeline',extraIn:'Adding a cost',gJoinCode:'Typing a group code'};
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function box(f){let p=f.previousElementSibling;if(!(p&&p.classList.contains('typing'))){p=document.createElement('div');p.className='typing';p.setAttribute('aria-hidden','true');f.insertAdjacentElement('beforebegin',p)}return p}
+  function draw(f){const b=box(f),n=f.value.length,what=LABEL[f.id]||(f.tagName==='TEXTAREA'?'Typing a post':'Typing a reply');b.innerHTML=esc('> '+what+(n?' ['+n+']':''))+'<i></i>';b.classList.add('on')}
+  document.addEventListener('focusin',e=>{const f=e.target.closest&&e.target.closest(PICK);if(f)draw(f)});
+  document.addEventListener('input',e=>{const f=e.target.closest&&e.target.closest(PICK);if(f)draw(f)});
+  document.addEventListener('focusout',e=>{const f=e.target.closest&&e.target.closest(PICK);if(f){const b=box(f);setTimeout(()=>{if(document.activeElement!==f)b.classList.remove('on')},900)}});
+})();
+</script>
 </body>
 </html>

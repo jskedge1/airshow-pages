@@ -1,0 +1,842 @@
+<title>UK Airshow Forum</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: dark HUD cockpit. Photo header with radar and a glass comms box, sticky bracket jump bar, then one long page of glass panels that open from the middle and glitch once: feed with side rail, groups, Photographer's Corner, buddy board, show day live, rarity log, kit swap and the admin queue. */
+:root{
+  color-scheme:dark;
+  --bg:#061019; --fg:#E8F1F6; --mut:#A9BDCB; --cyan:#5FE3DC;
+  --navy:#13293C; --navy-2:#0E2131; --teal:#32B4AF; --purple:#6950A1; --red:#D74949;
+  --glass:rgba(22,52,74,.55); --glass-2:rgba(6,16,25,.62); --line:rgba(95,227,220,.22); --line-2:rgba(95,227,220,.1);
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+html{scroll-behavior:smooth}
+body{margin:0;background-color:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1200px 700px at 80% -10%,rgba(50,180,175,.16),transparent 60%),radial-gradient(900px 600px at -10% 60%,rgba(105,80,161,.14),transparent 60%),linear-gradient(var(--line-2) 1px,transparent 1px),linear-gradient(90deg,var(--line-2) 1px,transparent 1px);
+  background-size:auto,auto,48px 48px,48px 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
+img{display:block;max-width:100%;pointer-events:none;user-select:none;-webkit-user-drag:none}
+button,input,select,textarea{font-family:inherit;font-size:16px;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+h1,h2,h3,h4{margin:0;font-family:var(--f-display);text-transform:uppercase;line-height:1;letter-spacing:.01em;text-wrap:balance}
+p{margin:0}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* example strip */
+.example{background:var(--purple);color:#fff;font-weight:600;font-size:14px}
+.example .wrap{padding-block:8px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.example b{background:#fff;color:var(--purple);padding:2px 8px;font-size:13px}
+
+/* header */
+.head{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.sky{position:absolute;inset:0}
+.sky img{width:100%;height:100%;object-fit:cover;object-position:64% 45%;animation:drift 24s ease-in-out infinite alternate}
+.sky::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#061019 0%,rgba(6,16,25,.94) 36%,rgba(6,16,25,.6) 64%,rgba(6,16,25,.3) 100%),linear-gradient(0deg,#061019 0%,transparent 45%)}
+@keyframes drift{from{transform:scale(1.08)}to{transform:scale(1.01) translate(-14px,4px)}}
+.scan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.radar{position:absolute;right:-120px;top:-120px;width:520px;height:520px;pointer-events:none;opacity:.55}
+.radar .sw{transform-origin:260px 260px;animation:spin 7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sweep{position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:sweepline 6s linear infinite}
+@keyframes sweepline{from{background-position:-40% 0}to{background-position:140% 0}}
+.head .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.9fr);gap:40px;align-items:end;padding-block:56px 44px}
+.tagp{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:4px 10px}
+.head h1{font-size:clamp(50px,8.4vw,104px);font-weight:800;margin-top:14px;line-height:.9;text-shadow:0 0 34px rgba(95,227,220,.22)}
+.head h1 span{color:var(--cyan)}
+.head .sub{font-family:var(--f-display);font-weight:700;font-size:clamp(18px,2.2vw,22px);color:var(--cyan);text-transform:uppercase;letter-spacing:.04em;margin-top:12px}
+.intro{color:#D2DFE8;max-width:56ch;margin-top:18px;font-size:17px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--teal);background:var(--teal);color:#061019;font-weight:700;font-size:15px;padding:10px 18px;text-decoration:none;transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 22px rgba(95,227,220,.35)}
+.btn.o{background:transparent;color:var(--fg);border-color:var(--fg)}
+.btn.o:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn.p{background:var(--purple);border-color:var(--purple);color:#fff}
+.btn.r{background:var(--red);border-color:var(--red);color:#fff}
+.btn.sm{padding:6px 12px;font-size:14px}
+.btn svg{width:16px;height:16px}
+
+/* glass with HUD corners */
+.glass,.panel{position:relative;background:linear-gradient(155deg,var(--glass),rgba(10,26,40,.42));border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 14px 30px rgba(0,0,0,.28);min-width:0}
+.glass{backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%)}
+.panel{background:linear-gradient(155deg,rgba(18,44,64,.9),rgba(9,24,37,.88))}
+.sec{content-visibility:auto;contain-intrinsic-size:auto 1400px}
+.glass::before,.panel::before,.glass::after,.panel::after{content:"";position:absolute;width:16px;height:16px;pointer-events:none;border:2px solid var(--cyan)}
+.glass::before,.panel::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.glass::after,.panel::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.glass{padding:22px 24px}
+.glass h2{font-size:15px;color:var(--cyan);font-family:var(--f-body);font-weight:700;letter-spacing:.06em}
+.boot{font-family:var(--f-mono);font-size:13px;color:var(--cyan);margin-top:10px;min-height:2.6em;white-space:pre-wrap}
+.boot i{display:inline-block;width:8px;height:14px;background:var(--cyan);vertical-align:-2px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.rows{display:grid;gap:6px;margin-top:12px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--glass-2);border:1px solid var(--line-2);padding:8px 12px;font-size:15px}
+.row span{color:#9FDCD9;font-weight:500}
+.row b{font-family:var(--f-mono);font-weight:500;text-align:right}
+.row.hot{background:var(--red);border-color:var(--red)}
+.row.hot span{color:#fff}
+.sig{display:flex;gap:3px;align-items:flex-end;height:18px}
+.sig i{width:4px;background:var(--cyan);animation:sig 1.6s ease-in-out infinite}
+.sig i:nth-child(1){height:30%}.sig i:nth-child(2){height:55%;animation-delay:.2s}.sig i:nth-child(3){height:80%;animation-delay:.4s}.sig i:nth-child(4){height:100%;animation-delay:.6s}
+@keyframes sig{50%{opacity:.35}}
+.live{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:var(--fg)}
+.live::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(215,73,73,.7);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(215,73,73,0)}100%{box-shadow:0 0 0 0 rgba(215,73,73,0)}}
+.gline{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px}
+
+/* jump bar with HUD bracket animation */
+.jump{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(6,16,25,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.jump .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.jump .wrap::-webkit-scrollbar{display:none}
+.jump a{position:relative;flex:0 0 auto;text-decoration:none;color:var(--fg);font-weight:600;font-size:15px;padding:14px 16px;transition:padding .4s var(--ease),background .4s var(--ease),color .3s}
+.jump a::before,.jump a::after{content:"";position:absolute;top:9px;bottom:9px;width:8px;border:2px solid var(--cyan);opacity:0;transition:opacity .3s,transform .4s var(--ease)}
+.jump a::before{left:4px;border-right:0;transform:translateX(-8px)}
+.jump a::after{right:4px;border-left:0;transform:translateX(8px)}
+.jump a:hover,.jump a:focus-visible{padding-inline:26px;color:var(--cyan)}
+.jump a:hover::before,.jump a:hover::after,.jump a:focus-visible::before,.jump a:focus-visible::after{opacity:1;transform:none}
+.jump a.on{background:var(--teal);color:#061019}
+.jump a em{font-style:normal;background:var(--red);color:#fff;font-size:12px;font-weight:700;padding:1px 6px;margin-left:6px}
+
+/* sections */
+.sec{padding-block:56px;scroll-margin-top:56px}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px 24px;flex-wrap:wrap;margin-bottom:24px}
+.sh h2{font-size:clamp(32px,4.4vw,48px);font-weight:800;color:var(--red);border-left:6px solid var(--red);padding-left:14px;text-shadow:0 0 22px rgba(215,73,73,.3)}
+.sh p{color:var(--mut);max-width:62ch;margin-top:10px;padding-left:20px}
+.back{display:inline-block;margin-top:22px;color:var(--cyan);font-weight:600;text-decoration:none}
+.back:hover{text-decoration:underline;text-underline-offset:3px}
+.phead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;background:rgba(19,41,60,.85);border-bottom:1px solid var(--line)}
+.phead.p{background:rgba(105,80,161,.85)}
+.phead.t{background:rgba(50,180,175,.88);color:#061019}
+.phead.r{background:rgba(215,73,73,.88)}
+.phead h3{font-size:16px;font-weight:700;letter-spacing:.03em}
+.phead small{font-weight:600;font-size:14px}
+.pbody{padding:16px}
+.note{border-left:4px solid var(--purple);background:rgba(105,80,161,.16);padding:12px 14px;font-size:15px}
+.note b{color:#CBB9F5}
+
+/* open from the middle, glitch, then settle */
+.hud-in{animation:hudOpen .7s var(--ease) var(--d,0s) both,hudGlitch .5s steps(1,end) calc(var(--d,0s) + .7s) 1}
+@keyframes hudOpen{0%{clip-path:inset(50% 50% 50% 50%);opacity:0}12%{opacity:1}40%{clip-path:inset(50% -4px 50% -4px)}100%{clip-path:inset(-24px);opacity:1}}
+@keyframes hudGlitch{0%{transform:translate(5px,0);filter:drop-shadow(-4px 0 0 rgba(215,73,73,.85)) drop-shadow(4px 0 0 rgba(95,227,220,.85))}16%{transform:translate(-6px,1px) skewX(5deg);clip-path:inset(14% 0 46% 0)}32%{transform:translate(4px,-2px);clip-path:inset(58% 0 6% 0);filter:drop-shadow(5px 0 0 rgba(105,80,161,.9))}48%{transform:translate(-2px,0);clip-path:inset(-24px);filter:drop-shadow(-3px 0 0 rgba(215,73,73,.7)) drop-shadow(3px 0 0 rgba(95,227,220,.7))}64%{transform:translate(1px,1px) skewX(-2deg);filter:none;opacity:.75}80%{transform:none;opacity:1}100%{transform:none;filter:none;clip-path:inset(-24px);opacity:1}}
+
+/* feed */
+.split{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:24px;align-items:start}
+.col{display:grid;gap:20px;align-content:start;min-width:0}
+.compose textarea{width:100%;min-height:92px;resize:vertical;background:rgba(6,16,25,.7);border:1px solid var(--line);padding:12px;color:var(--fg)}
+.compose textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(95,227,220,.15)}
+.crow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:rgba(19,41,60,.6);border:1px solid var(--line);padding:5px 11px;font-size:14px;font-weight:500;transition:background .25s,border-color .25s}
+.chip:hover{border-color:var(--cyan)}
+.chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#061019}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.post .top{display:flex;gap:12px;align-items:center;padding:14px 16px 0}
+.av{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:19px;color:#061019;background:var(--cyan);box-shadow:0 0 0 3px rgba(95,227,220,.18)}
+.av.p{background:#B9A6EC}.av.r{background:#F09A9A}.av.w{background:#E8F1F6}
+.who{min-width:0;flex:1}
+.who b{font-weight:700}
+.who .m{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:14px;color:var(--mut);align-items:center}
+.bdg{font-size:12px;font-weight:700;padding:2px 7px;background:rgba(105,80,161,.5);color:#fff}
+.bdg.t{background:rgba(50,180,175,.35);color:#BFF4F1}
+.bdg.r{background:var(--red)}
+.post .txt{padding:12px 16px}
+.post figure{margin:0 16px;position:relative;border:1px solid var(--line-2);overflow:hidden}
+.post figure img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.post figure figcaption{position:absolute;left:0;right:0;bottom:0;padding:8px 10px;font-family:var(--f-mono);font-size:12px;color:#CFEFEC;background:linear-gradient(0deg,rgba(6,16,25,.85),transparent)}
+.acts{display:flex;gap:4px;padding:10px 10px 6px;flex-wrap:wrap}
+.act{background:transparent;border:0;display:inline-flex;align-items:center;gap:6px;padding:7px 10px;font-weight:600;font-size:15px;color:var(--mut);transition:color .2s,background .2s}
+.act:hover{color:var(--cyan);background:rgba(95,227,220,.08)}
+.act svg{width:18px;height:18px}
+.act[aria-pressed="true"]{color:var(--red)}
+.act[aria-pressed="true"] svg{fill:var(--red)}
+.act.rep{margin-left:auto;font-size:14px}
+.cmts{border-top:1px solid var(--line-2);padding:10px 16px 14px;display:grid;gap:8px}
+.cmt{display:flex;gap:10px}
+.cmt .av{width:30px;height:30px;font-size:14px}
+.cmt p{background:var(--glass-2);border:1px solid var(--line-2);padding:7px 10px;font-size:15px;flex:1;min-width:0}
+.cmt p b{display:block;font-size:14px}
+.cin{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.input{width:100%;background:rgba(6,16,25,.7);border:1px solid var(--line);padding:9px 11px;color:var(--fg)}
+.input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(95,227,220,.15)}
+select.input option{background:#0B1D2C}
+
+.me{display:flex;gap:14px;align-items:center}
+.me .av{width:64px;height:64px;font-size:28px}
+.me h3{font-size:24px;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+.stats div{background:var(--glass-2);border:1px solid var(--line-2);text-align:center;padding:10px 4px}
+.stats b{display:block;font-family:var(--f-mono);font-weight:500;font-size:24px;line-height:1.1;color:#fff;text-shadow:0 0 14px rgba(95,227,220,.45)}
+.stats small{font-size:13px;color:var(--mut)}
+.blist{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.nlist{display:grid}
+.n{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;padding:10px 14px;border-top:1px solid var(--line-2);font-size:15px}
+.n:first-child{border-top:0}
+.n.unread{background:rgba(105,80,161,.18)}
+.n .ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--teal);color:#061019;font-weight:800;font-size:14px}
+.n .ic.p{background:var(--purple);color:#fff}.n .ic.r{background:var(--red);color:#fff}
+.n small{display:block;color:var(--mut);font-size:13px}
+.trend{display:flex;flex-wrap:wrap;gap:6px}
+.trend span{font-family:var(--f-mono);font-size:13px;border:1px solid var(--line);padding:4px 9px;color:#BFF4F1}
+
+/* groups */
+.groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.grp{display:flex;flex-direction:column;padding:0;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.grp:hover{transform:translateY(-4px);box-shadow:0 0 0 1px var(--cyan),0 18px 44px rgba(0,0,0,.4)}
+.grp .ph{position:relative;aspect-ratio:16/10;overflow:hidden}
+.grp .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),filter .6s}
+.grp:hover .ph img{transform:scale(1.06);filter:brightness(1.1)}
+.grp .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,26,40,.95),transparent 60%)}
+.grp .ph .bdg{position:absolute;top:10px;left:10px;z-index:1}
+.grp .gb{padding:0 14px 14px;margin-top:-26px;position:relative;z-index:1;display:grid;gap:6px;flex:1}
+.grp h3{font-size:22px;font-weight:800}
+.grp .gm{display:flex;gap:12px;font-size:14px;color:var(--mut)}
+.grp .gm b{font-family:var(--f-mono);font-weight:500;color:var(--fg)}
+.grp .btn{margin-top:auto;justify-content:center}
+.grp .btn[aria-pressed="true"]{background:transparent;color:var(--cyan);border-color:var(--cyan)}
+.suggest{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:24px;align-items:center;margin-top:20px;padding:20px}
+.suggest h3{font-size:26px;font-weight:800}
+.suggest p{color:var(--mut);margin-top:6px}
+.sform{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px}
+
+/* Photographer's Corner */
+.pc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.pc .wide{grid-column:1/-1}
+.chal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.entry{border:1px solid var(--line-2);background:var(--glass-2);display:flex;flex-direction:column}
+.entry img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.entry .eb{padding:10px;display:grid;gap:6px;flex:1}
+.entry .eb b{font-size:15px}
+.entry .eb small{color:var(--mut);font-size:13px}
+.vbar{height:5px;background:rgba(255,255,255,.08)}
+.vbar i{display:block;height:100%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);transition:width .6s var(--ease)}
+.vrow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
+.vrow .mono{font-size:14px}
+.vote{background:transparent;border:1px solid var(--cyan);color:var(--cyan);font-weight:700;font-size:14px;padding:5px 10px;transition:background .2s,color .2s}
+.vote:hover{background:rgba(95,227,220,.12)}
+.vote[aria-pressed="true"]{background:var(--cyan);color:#061019}
+.ba{position:relative;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line-2);user-select:none;touch-action:pan-y}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba .before{filter:saturate(.35) contrast(.78) brightness(.9);clip-path:inset(0 calc(100% - var(--x,50%)) 0 0)}
+.ba .line{position:absolute;top:0;bottom:0;left:var(--x,50%);width:2px;background:var(--cyan);box-shadow:0 0 12px var(--cyan);pointer-events:none}
+.ba .line::after{content:"";position:absolute;top:50%;left:50%;width:30px;height:30px;transform:translate(-50%,-50%);border:2px solid var(--cyan);background:rgba(6,16,25,.75)}
+.ba .lab{position:absolute;bottom:10px;font-family:var(--f-mono);font-size:12px;background:rgba(6,16,25,.8);padding:3px 8px;border:1px solid var(--line)}
+.ba .lab.l{left:10px}.ba .lab.rr{right:10px}
+.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.readout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:12px}
+.readout div{background:var(--glass-2);border:1px solid var(--line-2);padding:8px;text-align:center}
+.readout b{display:block;font-family:var(--f-mono);font-weight:500;font-size:17px;color:#fff}
+.readout small{color:var(--mut);font-size:13px}
+.spot{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+.map{position:relative;border:1px solid var(--line-2);background:rgba(6,16,25,.6)}
+.map svg{display:block;width:100%;height:auto}
+.pin{cursor:pointer}
+.pin circle.o{fill:none;stroke:var(--cyan);stroke-width:2;transform-box:fill-box;transform-origin:center;animation:ping 2.4s ease-out infinite}
+@keyframes ping{from{transform:scale(.6);opacity:1}to{transform:scale(2.2);opacity:0}}
+.pin.on circle.c{fill:var(--red)}
+.pin:focus{outline:none}
+.pin:focus-visible circle.c{stroke:#fff;stroke-width:3}
+.spotinfo h4{font-size:22px;font-weight:800}
+.spotinfo p{color:#D2DFE8;margin-top:8px;font-size:15px}
+.qa{display:grid;gap:12px}
+.q{border:1px solid var(--line-2);background:var(--glass-2);padding:12px 14px}
+.q b{display:block}
+.q p{color:#D2DFE8;font-size:15px;margin-top:6px}
+.q .ans{border-left:3px solid var(--teal);padding-left:10px;margin-top:10px}
+.q .ans small{color:var(--mut)}
+
+/* buddy board */
+.bfil{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.buddies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.bud .pbody{display:grid;gap:10px}
+.bud .need{display:flex;flex-wrap:wrap;gap:6px}
+.bud .need span{font-size:13px;font-weight:600;padding:3px 8px;border:1px solid var(--line);color:#BFF4F1}
+.bud .when{font-family:var(--f-mono);font-size:13px;color:var(--cyan)}
+.bud p{font-size:15px;color:#D2DFE8}
+.bud .btn{justify-self:start}
+
+/* show day live */
+.livewrap{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px;align-items:start}
+.tick{display:grid;max-height:440px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--teal) transparent}
+.tk{display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px;padding:12px 16px;border-top:1px solid var(--line-2)}
+.tk:first-child{border-top:0}
+.tk time{font-family:var(--f-mono);font-size:14px;color:var(--cyan)}
+.tk p{font-size:15px}
+.tk .k{display:inline-block;font-size:12px;font-weight:700;padding:1px 7px;margin-right:6px;background:rgba(50,180,175,.3);color:#BFF4F1}
+.tk .k.q{background:rgba(105,80,161,.55);color:#fff}
+.tk .k.d{background:var(--red);color:#fff}
+.tk.new{animation:flash 1.6s ease}
+@keyframes flash{from{background:rgba(95,227,220,.22)}to{background:transparent}}
+.gauges{display:grid;gap:10px}
+.gauge{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;font-size:15px}
+.gauge .vbar{grid-column:1/-1;height:7px}
+.gauge .vbar i.a{background:#F2B233;box-shadow:0 0 10px #F2B233}
+.gauge .vbar i.r{background:var(--red);box-shadow:0 0 10px var(--red)}
+
+/* rarity log */
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{text-align:left;padding:11px 14px;border-top:1px solid var(--line-2);font-size:15px;vertical-align:middle}
+th{font-weight:600;color:var(--mut);font-size:14px;border-top:0;background:rgba(19,41,60,.7)}
+td .mono{font-size:14px}
+.ac{display:flex;align-items:center;gap:10px}
+.ac img{width:64px;height:40px;object-fit:cover;border:1px solid var(--line-2)}
+.rar{display:flex;gap:3px}
+.rar i{width:10px;height:10px;border:1px solid var(--cyan)}
+.rar i.f{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+
+/* kit swap */
+.kit{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.item .pbody{display:grid;gap:8px}
+.item h4{font-size:20px;font-weight:800}
+.item .pr{font-family:var(--f-mono);font-size:22px;color:#fff;text-shadow:0 0 14px rgba(95,227,220,.4)}
+.item .im{display:flex;flex-wrap:wrap;gap:6px}
+.item .im span{font-size:13px;color:var(--mut)}
+.item .btn{justify-self:start}
+
+/* admin */
+.queue{display:grid}
+.qi{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 16px;align-items:center;padding:12px 16px;border-top:1px solid var(--line-2)}
+.qi:first-child{border-top:0}
+.qi p{font-size:15px}
+.qi small{display:block;color:var(--mut);font-size:13px}
+.qi .ab{display:flex;gap:6px;flex-wrap:wrap}
+.qi.done{opacity:.45}
+
+.foot{border-top:1px solid var(--line);padding-block:32px 48px}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center}
+.foot p{color:var(--mut);font-size:14px;max-width:62ch}
+
+/* typing readout: the boot text and blinker appear while someone types */
+.compose textarea,.input{caret-color:var(--cyan);caret-shape:block}
+.compose textarea:focus,.input:focus{font-family:var(--f-mono);font-size:15px}
+.typing{grid-column:1/-1;font-family:var(--f-mono);font-size:13px;color:var(--cyan);min-height:1.5em;margin-bottom:6px;opacity:0;transform:translateY(3px);transition:opacity .25s,transform .25s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.typing.on{opacity:1;transform:none}
+.typing i,.boot i{display:inline-block;width:8px;height:14px;background:var(--cyan);vertical-align:-2px;margin-left:2px;animation:blink 1s steps(2) infinite}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:rgba(6,16,25,.95);border:1px solid var(--cyan);backdrop-filter:blur(12px);color:var(--fg);padding:10px 16px;font-weight:600;z-index:50;max-width:calc(100% - 32px)}
+
+@media (max-width:1040px){
+  .groups,.kit{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chal{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .buddies{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .head .wrap,.split,.pc,.livewrap,.spot,.suggest{grid-template-columns:minmax(0,1fr)}
+  .radar{width:380px;height:380px;right:-140px;top:-140px}
+}
+@media (max-width:600px){
+  .groups,.kit,.buddies{grid-template-columns:minmax(0,1fr)}
+  .sform{grid-template-columns:minmax(0,1fr)}
+  .readout{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .head .wrap{padding-block:40px 32px}
+  .glass{padding:18px}
+  .act span.t{display:none}
+  .act.rep span.t{display:inline}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<div class="example"><div class="wrap"><b>Preview</b>Example members, posts and numbers so you can see the design. Nothing here is live yet.</div></div>
+
+<header class="head" id="top">
+  <div class="sky"><img src="forum-img/typhoon-pan.webp" alt="" fetchpriority="high" decoding="async"></div>
+  <div class="scan"></div>
+  <svg class="radar" viewBox="0 0 520 520" aria-hidden="true">
+    <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5FE3DC" stop-opacity="0"/><stop offset="1" stop-color="#5FE3DC" stop-opacity=".45"/></linearGradient></defs>
+    <g fill="none" stroke="#5FE3DC" stroke-opacity=".35"><circle cx="260" cy="260" r="80"/><circle cx="260" cy="260" r="160"/><circle cx="260" cy="260" r="240"/><path d="M260 20v480M20 260h480"/></g>
+    <g class="sw"><path d="M260 260 L500 260 A240 240 0 0 0 430 90 Z" fill="url(#rg)"/></g>
+    <g fill="#5FE3DC"><circle cx="352" cy="190" r="4"/><circle cx="210" cy="356" r="4"/><circle cx="400" cy="320" r="3"/></g>
+  </svg>
+  <div class="wrap">
+    <div>
+      <span class="tagp">Members community</span>
+      <h1>Airshow <span>Forum</span></h1>
+      <p class="sub">Talk, share and plan with other UK airshow fans</p>
+      <p class="intro">This is where I want everyone who loves airshows to meet. Post your photos, ask about parking, find someone to share a lift with and follow show day as it happens. If you are new here, I would suggest starting in the group for the show you are going to.</p>
+      <div class="btns">
+        <a class="btn" href="#feed">Start a thread</a>
+        <a class="btn o" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Open My Airshow Hub</a>
+        <a class="btn p" href="https://www.ukairshowguide.co.uk/forum" target="_top">Join or log in</a>
+      </div>
+    </div>
+    <aside class="glass hud-in" style="--d:.15s" aria-label="Forum status">
+      <h2>Forum status</h2>
+      <div class="boot mono" id="boot" aria-live="polite"></div>
+      <div class="rows">
+        <div class="row"><span>Members online</span><b id="online">148</b></div>
+        <div class="row"><span>New posts today</span><b>63</b></div>
+        <div class="row"><span>Active show groups</span><b>14</b></div>
+        <div class="row"><span>Buddy board meet ups</span><b>27</b></div>
+        <div class="row hot"><span>Waiting for your approval</span><b>3</b></div>
+      </div>
+      <div class="gline"><span class="live">Show day live is quiet until the 2027 season</span><span class="sig" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
+    </aside>
+  </div>
+  <div class="sweep"></div>
+</header>
+
+<nav class="jump" aria-label="Forum sections">
+  <div class="wrap">
+    <a href="#feed">News Feed<em>12</em></a>
+    <a href="#groups">Show Groups</a>
+    <a href="#corner">Photographer's Corner</a>
+    <a href="#buddy">Buddy Board</a>
+    <a href="#live">Show Day Live</a>
+    <a href="#rarity">Rarity Log</a>
+    <a href="#kit">Kit Swap</a>
+    <a href="#admin">Admin</a>
+  </div>
+</nav>
+
+<main>
+<!-- FEED -->
+<section class="sec" id="feed">
+  <div class="wrap">
+    <div class="sh"><div><h2>News Feed</h2><p>Posts from every member, or only the shows you follow. Like, comment and tag a post by show, aircraft or topic so others can find it.</p></div>
+      <div class="filters" role="group" aria-label="Show posts from">
+        <button class="chip" type="button" data-feed="all" aria-pressed="true">All shows</button>
+        <button class="chip" type="button" data-feed="follow" aria-pressed="false">Shows I follow</button>
+      </div>
+    </div>
+    <div class="split">
+      <div class="col" id="feedcol">
+        <form class="panel compose hud-in" id="compose">
+          <div class="phead t"><h3>Share something</h3><small>Posting as Jack</small></div>
+          <div class="pbody">
+            <label for="ctext" class="sr" style="position:absolute;left:-9999px">Your post</label>
+            <textarea id="ctext" placeholder="What did you see? Ask a question, share a photo or tell a story from the crowd line."></textarea>
+            <div class="crow">
+              <div class="chips" id="ctags" role="group" aria-label="Tag your post">
+                <button type="button" class="chip" aria-pressed="false" data-tag="RIAT">RIAT</button>
+                <button type="button" class="chip" aria-pressed="false" data-tag="Duxford">Duxford</button>
+                <button type="button" class="chip" aria-pressed="false" data-tag="Photography">Photography</button>
+                <button type="button" class="chip" aria-pressed="false" data-tag="Parking">Parking</button>
+                <button type="button" class="chip" aria-pressed="false" data-tag="Red Arrows">Red Arrows</button>
+              </div>
+              <button class="btn" type="submit">Post</button>
+            </div>
+          </div>
+        </form>
+        <div id="posts" class="col"></div>
+      </div>
+
+      <div class="col">
+        <div class="panel hud-in" style="--d:.1s">
+          <div class="pbody">
+            <div class="me"><div class="av">J</div><div><h3>Jack Skedge</h3><div class="who"><div class="m"><span class="bdg r">Admin</span><span>Canvey Island</span></div></div></div></div>
+            <div class="stats"><div><b class="mono">19</b><small>Shows</small></div><div><b class="mono">412</b><small>Photos</small></div><div><b class="mono">86</b><small>Following</small></div></div>
+            <div class="blist"><span class="bdg">RIAT regular since 2006</span><span class="bdg t">Top photographer</span><span class="bdg t">Duxford member</span></div>
+          </div>
+        </div>
+        <div class="panel hud-in" style="--d:.2s">
+          <div class="phead p"><h3>Notifications</h3><small id="ncount">3 new</small></div>
+          <div class="nlist">
+            <div class="n unread"><span class="ic">♥</span><div>Sarah liked your Hawk photo<small>12 minutes ago</small></div></div>
+            <div class="n unread"><span class="ic p">✈</span><div>RAF Cosford Air Show added two aircraft to its line up<small>1 hour ago</small></div></div>
+            <div class="n unread"><span class="ic r">!</span><div>A post in Kit Swap was reported<small>3 hours ago</small></div></div>
+            <div class="n"><span class="ic">+</span><div>Dan started following you<small>Yesterday</small></div></div>
+          </div>
+        </div>
+        <div class="panel hud-in" style="--d:.3s">
+          <div class="phead"><h3>Trending tags</h3><small>This week</small></div>
+          <div class="pbody trend"><span>#RIAT2027</span><span>#RedArrows</span><span>#Propblur</span><span>#Typhoon</span><span>#Duxford</span><span>#CampingTips</span><span>#Panning</span></div>
+        </div>
+      </div>
+    </div>
+    <a class="back" href="#top">Back to the top ↑</a>
+  </div>
+</section>
+
+<!-- GROUPS -->
+<section class="sec" id="groups">
+  <div class="wrap">
+    <div class="sh"><div><h2>Show Groups</h2><p>One group for each show I cover. Join the ones you are going to and their posts land in your feed.</p></div></div>
+    <div class="groups" id="grouplist"></div>
+    <form class="panel suggest hud-in" id="suggest">
+      <div><h3>Suggest A Group</h3><p>Can't see your show or topic? Suggest it and I will look at it before it goes live.</p></div>
+      <div class="sform">
+        <label style="position:absolute;left:-9999px" for="gname">Group name</label>
+        <input class="input" id="gname" placeholder="Group name, for example Headcorn">
+        <label style="position:absolute;left:-9999px" for="gwhy">Why it would help</label>
+        <input class="input" id="gwhy" placeholder="Why it would help">
+        <button class="btn p" type="submit">Send to Jack</button>
+      </div>
+    </form>
+    <a class="back" href="#top">Back to the top ↑</a>
+  </div>
+</section>
+
+<!-- PHOTOGRAPHER'S CORNER -->
+<section class="sec" id="corner">
+  <div class="wrap">
+    <div class="sh"><div><h2>Photographer's Corner</h2><p>A friendly place to learn. Enter the monthly challenge, see how members edit, find the best spots on each airfield and ask for help with your settings.</p></div></div>
+    <div class="pc">
+      <div class="panel wide hud-in">
+        <div class="phead r"><h3>Monthly challenge: Smoke On</h3><small class="mono" id="cdays">9 days left</small></div>
+        <div class="pbody"><div class="chal" id="chal"></div></div>
+      </div>
+
+      <div class="panel hud-in">
+        <div class="phead"><h3>Before and after</h3><small>Drag the line</small></div>
+        <div class="pbody">
+          <div class="ba" id="ba" style="--x:50%">
+            <img src="forum-img/f16-pan.webp" alt="F-16 panning shot after editing" loading="lazy" decoding="async">
+            <img class="before" src="forum-img/f16-pan.webp" alt="" loading="lazy" decoding="async">
+            <span class="lab l">Straight from the camera</span><span class="lab rr">Edited</span>
+            <div class="line"></div>
+            <input type="range" min="0" max="100" value="50" id="baR" aria-label="Compare before and after">
+          </div>
+          <div class="readout"><div><b>1/160</b><small>Shutter</small></div><div><b>f/11</b><small>Aperture</small></div><div><b>100</b><small>ISO</small></div><div><b>500mm</b><small>Lens</small></div></div>
+          <p style="margin-top:12px;font-size:15px;color:#D2DFE8">Dan lifted the shadows on the jet, warmed the white balance and cropped to put space in front of the nose. Panning at 1/160 keeps the background moving while the jet stays sharp.</p>
+        </div>
+      </div>
+
+      <div class="panel hud-in" style="--d:.1s">
+        <div class="phead p"><h3>Settings swap</h3><small>For beginners</small></div>
+        <div class="pbody qa">
+          <div class="q"><b>Why are my propellers frozen?</b><p>Shot the Spitfire at 1/2000 and the prop looks stopped dead. What should I try?</p>
+            <div class="ans"><p>I would suggest dropping to 1/250 for warbirds, then 1/160 once you are steady. Take bursts and expect a few soft ones.</p><small>Answered by Jack</small></div></div>
+          <div class="q"><b>Too dark against a bright sky</b><p>Every Typhoon comes out as a black shape.</p>
+            <div class="ans"><p>Try plus 1 exposure compensation, or spot meter on the jet. This will work well when the sky is flat grey.</p><small>Answered by Sarah</small></div></div>
+        </div>
+      </div>
+
+      <div class="panel wide hud-in">
+        <div class="phead t"><h3>Spot the Spot: RAF Cosford</h3><small>Tap a pin</small></div>
+        <div class="pbody spot">
+          <div class="map">
+            <svg viewBox="0 0 600 340" role="img" aria-label="Example airfield layout with member photo spots">
+              <rect width="600" height="340" fill="#08182A"/>
+              <g stroke="#5FE3DC" stroke-opacity=".1"><path d="M0 40h600M0 100h600M0 160h600M0 220h600M0 280h600M60 0v340M180 0v340M300 0v340M420 0v340M540 0v340"/></g>
+              <rect x="40" y="150" width="520" height="40" fill="#1B3A52" stroke="#5FE3DC" stroke-opacity=".5"/>
+              <path d="M60 170h480" stroke="#E8F1F6" stroke-width="2" stroke-dasharray="14 12"/>
+              <text x="48" y="174" fill="#E8F1F6" font-family="JetBrains Mono,monospace" font-size="12">06</text>
+              <text x="534" y="174" fill="#E8F1F6" font-family="JetBrains Mono,monospace" font-size="12">24</text>
+              <path d="M30 240h540" stroke="#D74949" stroke-width="3"/>
+              <text x="40" y="262" fill="#F09A9A" font-family="Barlow,sans-serif" font-size="14" font-weight="600">Crowd line</text>
+              <path d="M30 110h540" stroke="#6950A1" stroke-width="2" stroke-dasharray="6 6"/>
+              <text x="40" y="100" fill="#CBB9F5" font-family="Barlow,sans-serif" font-size="14" font-weight="600">Display line</text>
+              <rect x="80" y="270" width="140" height="44" fill="#13293C" stroke="#5FE3DC" stroke-opacity=".35"/>
+              <text x="92" y="297" fill="#A9BDCB" font-family="Barlow,sans-serif" font-size="13">Static park</text>
+              <rect x="380" y="270" width="160" height="44" fill="#13293C" stroke="#5FE3DC" stroke-opacity=".35"/>
+              <text x="392" y="297" fill="#A9BDCB" font-family="Barlow,sans-serif" font-size="13">Hangars and museum</text>
+              <g id="pins"></g>
+            </svg>
+          </div>
+          <div class="spotinfo" id="spotinfo" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+    <a class="back" href="#top">Back to the top ↑</a>
+  </div>
+</section>
+
+<!-- BUDDY BOARD -->
+<section class="sec" id="buddy">
+  <div class="wrap">
+    <div class="sh"><div><h2>Buddy Board</h2><p>Going on your own? Find someone heading to the same show to meet up with, share a lift or pitch your tents next to each other.</p></div>
+      <button class="btn" type="button" data-toast="In the live version this opens a short form for your show, day and what you are offering.">Post a meet up</button></div>
+    <div class="bfil" id="bfil" role="group" aria-label="Filter by show"></div>
+    <div class="buddies" id="buddies"></div>
+    <p class="note" style="margin-top:18px"><b>Staying safe.</b> I would advise meeting in a busy place first, like the main entrance or a food stall, and telling someone at home who you are meeting. Please see the rules before you go.</p>
+    <a class="back" href="#top">Back to the top ↑</a>
+  </div>
+</section>
+
+<!-- SHOW DAY LIVE -->
+<section class="sec" id="live">
+  <div class="wrap">
+    <div class="sh"><div><h2>Show Day Live</h2><p>On show day members post what they see as it happens: car parks filling up, queues, delays and what is flying. This preview replays an example day so you can see how it moves.</p></div><span class="live">Example replay</span></div>
+    <div class="livewrap">
+      <div class="panel hud-in">
+        <div class="phead r"><h3>Example show day thread</h3><small class="mono" id="clock">07:42</small></div>
+        <div class="tick" id="tick" aria-live="polite"></div>
+        <form class="pbody cin" id="liveform" style="border-top:1px solid var(--line)">
+          <label style="position:absolute;left:-9999px" for="ltext">Post an update</label>
+          <input class="input" id="ltext" placeholder="What can you see right now?">
+          <button class="btn" type="submit">Send</button>
+        </form>
+      </div>
+      <div class="col">
+        <div class="panel hud-in" style="--d:.1s">
+          <div class="phead"><h3>Crowd readings</h3><small>From member posts</small></div>
+          <div class="pbody gauges">
+            <div class="gauge"><span>Car park A</span><b class="mono">82%</b><div class="vbar"><i class="a" style="width:82%"></i></div></div>
+            <div class="gauge"><span>Gate queue</span><b class="mono">25 min</b><div class="vbar"><i class="r" style="width:64%"></i></div></div>
+            <div class="gauge"><span>Food court</span><b class="mono">Busy</b><div class="vbar"><i style="width:55%"></i></div></div>
+            <div class="gauge"><span>Toilets near crowd line</span><b class="mono">10 min</b><div class="vbar"><i style="width:30%"></i></div></div>
+          </div>
+        </div>
+        <p class="note"><b>A tip from me.</b> If you are not waiting for a particular display, use it as a toilet break. The queues drop right down while everyone is watching.</p>
+      </div>
+    </div>
+    <a class="back" href="#top">Back to the top ↑</a>
+  </div>
+</section>
+
+<!-- RARITY LOG -->
+<section class="sec" id="rarity">
+  <div class="wrap">
+    <div class="sh"><div><h2>Rarity Log</h2><p>Rare aircraft members have seen at UK shows, year by year. Tap the column names to sort.</p></div></div>
+    <div class="panel hud-in">
+      <div class="tbl">
+        <table id="rtable">
+          <thead><tr><th><button class="act" data-sort="ac" type="button" style="padding:0;color:inherit">Aircraft</button></th><th><button class="act" data-sort="show" type="button" style="padding:0;color:inherit">Show</button></th><th><button class="act" data-sort="year" type="button" style="padding:0;color:inherit">Year</button></th><th>Logged by</th><th><button class="act" data-sort="r" type="button" style="padding:0;color:inherit">Rarity</button></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <a class="back" href="#top">Back to the top ↑</a>
+  </div>
+</section>
+
+<!-- KIT SWAP -->
+<section class="sec" id="kit">
+  <div class="wrap">
+    <div class="sh"><div><h2>Kit Swap</h2><p>Members selling or swapping cameras, lenses and camping kit. Payment and collection are sorted between you, so please see the rules before you buy.</p></div>
+      <button class="btn" type="button" data-toast="In the live version this opens a listing form with photos, price and condition.">List an item</button></div>
+    <div class="kit" id="kitlist"></div>
+    <a class="back" href="#top">Back to the top ↑</a>
+  </div>
+</section>
+
+<!-- ADMIN -->
+<section class="sec" id="admin">
+  <div class="wrap">
+    <div class="sh"><div><h2>Admin Queue</h2><p>Only you see this. Reported posts and group suggestions wait here until you approve or remove them.</p></div></div>
+    <div class="panel hud-in">
+      <div class="phead r"><h3>Waiting for you</h3><small id="qcount">3 items</small></div>
+      <div class="queue" id="queue"></div>
+    </div>
+    <a class="back" href="#top">Back to the top ↑</a>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Be kind, keep it about airshows, and credit other people's photos. Reported posts are checked by me before anything is removed.</p>
+    <div class="btns" style="margin-top:0">
+      <a class="btn o sm" href="https://www.ukairshowguide.co.uk/" target="_top">The Big Guide to UK Airshows</a>
+      <a class="btn sm" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">My Airshow Hub</a>
+    </div>
+  </div>
+</footer>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const IMGS=new Proxy({},{get:(_,n)=>'forum-img/'+String(n)+'.webp'});
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,3400)}
+const HEART='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 4.5 6.7 4.5c2.2 0 3.6 1.2 4.3 2.4.7-1.2 2.1-2.4 4.3-2.4 3.7 0 5.8 3.7 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg>';
+const CMT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H9l-5 4z"/></svg>';
+const FLAG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>';
+
+/* boot text */
+(function(){
+  const lines=['> Linking to the forum','> 14 show groups online','> Feed ready'];
+  const el=$('#boot');let li=0,ci=0,out='';
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){el.textContent=lines.join('\n');return}
+  function step(){
+    if(li>=lines.length){el.innerHTML=esc(out)+'<i></i>';return}
+    out+=lines[li][ci++];
+    if(ci>=lines[li].length){li++;ci=0;if(li<lines.length)out+='\n'}
+    el.innerHTML=esc(out)+'<i></i>';
+    setTimeout(step,ci===0?260:28);
+  }
+  el.textContent='';step();
+})();
+setInterval(()=>{const o=$('#online');o.textContent=140+Math.round(Math.random()*16)},4200);
+
+/* feed */
+const posts=[
+  {id:1,n:'Sarah Holt',i:'S',c:'p',b:['Top photographer'],g:'Photography',t:'2 hours ago',follow:true,txt:'Finally got the smoke and the formation in one frame. 1/1000 at f/8, waited for them to come round on the second pass. Any tips for keeping the horizon level when tracking?',img:'hawks-smoke',cap:'1/1000  f/8  ISO 200  400mm',likes:48,liked:false,cm:[['Dan Price','D','Try turning on the grid in your viewfinder. Made a huge difference for me.']]},
+  {id:2,n:'Mike Turner',i:'M',c:'r',b:['RIAT regular'],g:'RIAT',t:'5 hours ago',follow:true,txt:'First time camping at Townsend Farm next year with my two kids. Is it worth bringing a trolley from the car or is it a short walk? Any advice welcome.',likes:12,liked:false,cm:[['Jack Skedge','J','I would advise a trolley. It is a fair walk with tents and chairs, and I see lots of families do it this way.']]},
+  {id:3,n:'Priya Shah',i:'P',c:'w',b:['First show 2026'],g:'Duxford',t:'Yesterday',follow:false,txt:'My first ever airshow was Duxford this year and I am hooked. The Spitfire sound going over is something else. Who else is going to the Battle of Britain show next year?',img:'spitfire',cap:'Shot on my phone',likes:31,liked:false,cm:[]},
+  {id:4,n:'Dan Price',i:'D',c:'',b:['Helicopter fan'],g:'Photography',t:'2 days ago',follow:false,txt:'Hover shots are harder than jets. Slowed down to 1/125 so the blades show some movement. Took about 200 frames to get three keepers.',img:'heli-hover',cap:'1/125  f/9  ISO 100  300mm',likes:22,liked:false,cm:[]}
+];
+let feedMode='all';
+function renderPosts(){
+  $('#posts').innerHTML=posts.filter(p=>feedMode==='all'||p.follow).map((p,k)=>`
+  <article class="panel post hud-in" style="--d:${k*.08}s" data-id="${p.id}">
+    <div class="top"><div class="av ${p.c}">${esc(p.i)}</div><div class="who"><b>${esc(p.n)}</b><div class="m">${p.b.map(x=>`<span class="bdg">${esc(x)}</span>`).join('')}<span class="bdg t">${esc(p.g)}</span><span>${esc(p.t)}</span></div></div></div>
+    <p class="txt">${esc(p.txt)}</p>
+    ${p.img?`<figure><img loading="lazy" decoding="async" src="${IMGS[p.img]}" alt="Photo posted by ${esc(p.n)}"><figcaption>${esc(p.cap||'')}</figcaption></figure>`:''}
+    <div class="acts">
+      <button class="act" type="button" data-like="${p.id}" aria-pressed="${p.liked}">${HEART}<span class="mono">${p.likes}</span></button>
+      <button class="act" type="button" data-cmt="${p.id}">${CMT}<span class="mono">${p.cm.length}</span><span class="t">Comment</span></button>
+      <button class="act rep" type="button" data-report="${p.id}">${FLAG}<span class="t">Report</span></button>
+    </div>
+    <div class="cmts">${p.cm.map(c=>`<div class="cmt"><div class="av">${esc(c[1])}</div><p><b>${esc(c[0])}</b>${esc(c[2])}</p></div>`).join('')}
+      <form class="cin" data-cform="${p.id}"><label style="position:absolute;left:-9999px" for="ci${p.id}">Write a comment</label><input class="input" id="ci${p.id}" placeholder="Write a comment"><button class="btn sm" type="submit">Reply</button></form>
+    </div>
+  </article>`).join('');
+}
+$$('[data-feed]').forEach(b=>b.addEventListener('click',()=>{feedMode=b.dataset.feed;$$('[data-feed]').forEach(x=>x.setAttribute('aria-pressed',x===b));renderPosts()}));
+$('#ctags').addEventListener('click',e=>{const c=e.target.closest('.chip');if(c)c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')!=='true')});
+$('#compose').addEventListener('submit',e=>{
+  e.preventDefault();const t=$('#ctext').value.trim();if(!t){toast('Write something first.');return}
+  const tags=$$('#ctags .chip[aria-pressed="true"]').map(c=>c.dataset.tag);
+  posts.unshift({id:Date.now(),n:'Jack Skedge',i:'J',c:'',b:['Admin'],g:tags[0]||'General',t:'Just now',follow:true,txt:t,likes:0,liked:false,cm:[]});
+  $('#ctext').value='';$$('#ctags .chip').forEach(c=>c.setAttribute('aria-pressed','false'));renderPosts();toast('Posted to the feed.');
+});
+document.addEventListener('click',e=>{
+  const l=e.target.closest('[data-like]');
+  if(l){const p=posts.find(x=>x.id==l.dataset.like);p.liked=!p.liked;p.likes+=p.liked?1:-1;l.setAttribute('aria-pressed',p.liked);l.querySelector('.mono').textContent=p.likes;return}
+  const c=e.target.closest('[data-cmt]');if(c){const i=document.getElementById('ci'+c.dataset.cmt);if(i)i.focus();return}
+  const r=e.target.closest('[data-report]');if(r){toast('Reported. It is now in the admin queue for Jack to check.');return}
+  const t=e.target.closest('[data-toast]');if(t){toast(t.dataset.toast);return}
+});
+document.addEventListener('submit',e=>{
+  const f=e.target.closest('[data-cform]');if(!f)return;e.preventDefault();
+  const v=f.querySelector('input').value.trim();if(!v)return;
+  posts.find(x=>x.id==f.dataset.cform).cm.push(['Jack Skedge','J',v]);renderPosts();
+});
+
+/* groups */
+const groups=[
+  ['Royal International Air Tattoo','c17-cloud',4210,38,'Most active'],
+  ['RAF Cosford Air Show','phantom-tiger',1880,12,''],
+  ['IWM Duxford Air Shows','b17',2360,21,''],
+  ['Airbourne Eastbourne','frecce-smoke',1540,9,''],
+  ['Shuttleworth Air Shows','swordfish',990,6,''],
+  ['Wales Airshow','typhoon-gear',870,4,''],
+  ['Photographer\'s Corner','f16-burner',3120,44,'Most active'],
+  ['Camping At Airshows','twin-prop-landing',760,7,'New']
+];
+$('#grouplist').innerHTML=groups.map((g,k)=>`<article class="panel grp hud-in" style="--d:${(k%4)*.08}s"><div class="ph"><img loading="lazy" decoding="async" src="${IMGS[g[1]]}" alt="">${g[4]?`<span class="bdg ${g[4]==='New'?'':'r'}">${g[4]}</span>`:''}</div><div class="gb"><h3>${esc(g[0])}</h3><div class="gm"><span><b>${g[2].toLocaleString('en-GB')}</b> members</span><span><b>${g[3]}</b> new today</span></div><button class="btn sm" type="button" aria-pressed="false" data-join>Join group</button></div></article>`).join('');
+$('#grouplist').addEventListener('click',e=>{const b=e.target.closest('[data-join]');if(!b)return;const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);b.textContent=on?'Joined':'Join group'});
+$('#suggest').addEventListener('submit',e=>{e.preventDefault();const n=$('#gname').value.trim();if(!n){toast('Add a group name first.');return}
+  queue.unshift({k:'Group suggestion',t:`New group: ${n}`,s:'Suggested by you just now'});$('#gname').value='';$('#gwhy').value='';renderQueue();toast('Sent to Jack for approval.')});
+
+/* challenge */
+const entries=[['Frecce smoke burst','Sarah Holt','frecce-smoke',61],['Blades and smoke','Mike Turner','aero-smoke',44],['Vapour on the pull','Dan Price','jet-vapour',38],['Wheels down','Priya Shah','typhoon-gear',19]];
+let myVote=-1;
+function renderChal(){const max=Math.max(...entries.map(e=>e[3]));
+  $('#chal').innerHTML=entries.map((e,k)=>`<div class="entry"><img loading="lazy" decoding="async" src="${IMGS[e[2]]}" alt="${esc(e[0])}"><div class="eb"><b>${esc(e[0])}</b><small>${esc(e[1])}</small><div class="vbar"><i style="width:${e[3]/max*100}%"></i></div><div class="vrow"><span class="mono">${e[3]} votes</span><button class="vote" type="button" data-vote="${k}" aria-pressed="${myVote===k}">${myVote===k?'Voted':'Vote'}</button></div></div></div>`).join('')}
+$('#chal').addEventListener('click',e=>{const b=e.target.closest('[data-vote]');if(!b)return;const k=+b.dataset.vote;if(myVote>=0)entries[myVote][3]--;if(myVote===k){myVote=-1}else{myVote=k;entries[k][3]++}renderChal()});
+
+/* before and after */
+$('#baR').addEventListener('input',e=>$('#ba').style.setProperty('--x',e.target.value+'%'));
+
+/* spot the spot */
+const spots=[
+  {x:150,y:240,n:'Sarah Holt',t:'Crowd line, west end',s:'1/1000  f/8  ISO 200',w:'Morning, sun behind you',tip:'The best spot for the morning flying. Arrive early as it fills up by 10:00.'},
+  {x:320,y:240,n:'Dan Price',t:'Crowd line, centre',s:'1/250  f/11  ISO 100',w:'Midday, high sun',tip:'Right on crowd centre, so the display teams turn in front of you. Bring a stool.'},
+  {x:470,y:240,n:'Mike Turner',t:'Crowd line, east end',s:'1/1600  f/7.1  ISO 400',w:'Afternoon, side light',tip:'Good for arrivals and departures off runway 24. Quieter for families.'},
+  {x:200,y:292,n:'Priya Shah',t:'Static park',s:'1/500  f/5.6  ISO 100',w:'All day',tip:'Go here while the flying is quiet. Speak to the crews, they love questions.'}
+];
+let curSpot=0;
+function renderSpots(){
+  $('#pins').innerHTML=spots.map((s,k)=>`<g class="pin${k===curSpot?' on':''}" tabindex="0" role="button" aria-label="${esc(s.t)}" data-spot="${k}"><circle class="o" cx="${s.x}" cy="${s.y}" r="9"/><circle class="c" cx="${s.x}" cy="${s.y}" r="8" fill="#5FE3DC"/></g>`).join('');
+  const s=spots[curSpot];
+  $('#spotinfo').innerHTML=`<span class="bdg t">${esc(s.n)}</span><h4 style="margin-top:10px">${esc(s.t)}</h4><div class="readout" style="grid-template-columns:1fr 1fr"><div><b style="font-size:14px">${esc(s.s)}</b><small>Settings</small></div><div><b style="font-size:14px">${esc(s.w)}</b><small>Light</small></div></div><p>${esc(s.tip)}</p>`;
+}
+$('#pins').addEventListener('click',e=>{const g=e.target.closest('[data-spot]');if(g){curSpot=+g.dataset.spot;renderSpots()}});
+$('#pins').addEventListener('keydown',e=>{const g=e.target.closest('[data-spot]');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();curSpot=+g.dataset.spot;renderSpots();document.querySelector(`[data-spot="${curSpot}"]`).focus()}});
+
+/* buddy board */
+const buddies=[
+  ['RIAT','Friday and Saturday','Tom','T','Going solo for the first time. Driving from Swindon with two spare seats, happy to share fuel.',['Lift share','2 seats']],
+  ['RIAT','All weekend','Lucy','L','Camping at Townsend Farm. Looking for a couple of people to pitch next to and swap photo tips.',['Camping','Photography']],
+  ['Duxford','Battle of Britain show','Ray','R','Retired and keen on warbirds. Meet at the entrance at 09:00 and grab a front row spot together?',['Meet up']],
+  ['Eastbourne','Saturday','Hannah','H','Taking the train from London Victoria. Anyone want to walk down to the seafront together?',['Train','Meet up']],
+  ['Cosford','Sunday','Ben','B','Shooting with a 150 to 600. Would love someone to go round the hangars with after the flying.',['Photography']],
+  ['Duxford','Flying Legends weekend','Amir','A','Bringing my son, he is nine. Happy to meet other families near the play area.',['Families']]
+];
+let bshow='All';
+function renderBuddies(){
+  const shows=['All',...new Set(buddies.map(b=>b[0]))];
+  $('#bfil').innerHTML=shows.map(s=>`<button class="chip" type="button" data-bshow="${s}" aria-pressed="${s===bshow}">${s==='All'?'All shows':s}</button>`).join('');
+  $('#buddies').innerHTML=buddies.filter(b=>bshow==='All'||b[0]===bshow).map((b,k)=>`<article class="panel bud hud-in" style="--d:${(k%3)*.08}s"><div class="phead"><h3>${esc(b[0])}</h3><small class="mono">${esc(b[1])}</small></div><div class="pbody"><div class="me"><div class="av" style="width:40px;height:40px;font-size:18px">${b[3]}</div><b>${esc(b[2])}</b></div><p>${esc(b[4])}</p><div class="need">${b[5].map(n=>`<span>${esc(n)}</span>`).join('')}</div><button class="btn sm o" type="button" data-toast="In the live version this opens a private message to ${esc(b[2])}.">Message ${esc(b[2])}</button></div></article>`).join('');
+}
+$('#bfil').addEventListener('click',e=>{const b=e.target.closest('[data-bshow]');if(b){bshow=b.dataset.bshow;renderBuddies()}});
+
+/* show day live replay */
+const ticks=[['07:42','','Car park A gates open. Short queue so far.'],['08:05','q','Main gate queue about 10 minutes. Have your tickets ready on your phone.'],['08:30','','Front row by the crowd centre is filling up. Plenty of space at the east end.'],['09:12','d','Slow traffic on the A41 junction. Allow an extra 20 minutes.'],['10:00','','Static park is quiet now. Good time to see the Chinook up close.'],['10:48','q','Food court queues building. The burger van near gate B is quicker.'],['11:30','','Flying display has started. Red Arrows due at 14:10.'],['12:15','d','Display paused for 15 minutes for a weather check.']];
+let ti=0;
+function addTick(t,isNew){const d=document.createElement('div');d.className='tk'+(isNew?' new':'');d.innerHTML=`<time>${esc(t[0])}</time><p>${t[1]?`<span class="k ${t[1]}">${t[1]==='q'?'Queue':'Delay'}</span>`:'<span class="k">Update</span>'}${esc(t[2])}</p>`;$('#tick').prepend(d);$('#clock').textContent=t[0]}
+for(;ti<4;ti++)addTick(ticks[ti],false);
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()=>{if(ti<ticks.length){addTick(ticks[ti++],true)}},5200);
+$('#liveform').addEventListener('submit',e=>{e.preventDefault();const v=$('#ltext').value.trim();if(!v)return;const n=new Date();addTick([String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'),'',v],true);$('#ltext').value=''});
+
+/* rarity log */
+const rare=[['P-47 Thunderbolt','Duxford',2026,'Ray',4,'thunderbolt'],['Fairey Swordfish','Shuttleworth',2026,'Priya',4,'swordfish'],['Bristol Blenheim','Duxford',2025,'Jack',5,'blenheim-smoke'],['Rafale','RIAT',2026,'Sarah',3,'rafale'],['Jaguar','Cosford',2025,'Mike',4,'jaguar'],['B-17 Flying Fortress','Duxford',2024,'Dan',3,'b17']];
+let rs={k:'year',d:-1};
+function renderRare(){const ix={ac:0,show:1,year:2,r:4}[rs.k];const rows=[...rare].sort((a,b)=>(a[ix]>b[ix]?1:a[ix]<b[ix]?-1:0)*rs.d);
+  $('#rtable tbody').innerHTML=rows.map(r=>`<tr><td><div class="ac"><img loading="lazy" decoding="async" src="${IMGS[r[5]]}" alt=""><b>${esc(r[0])}</b></div></td><td>${esc(r[1])}</td><td class="mono">${r[2]}</td><td>${esc(r[3])}</td><td><span class="rar" aria-label="${r[4]} out of 5">${[1,2,3,4,5].map(i=>`<i class="${i<=r[4]?'f':''}"></i>`).join('')}</span></td></tr>`).join('')}
+$('#rtable thead').addEventListener('click',e=>{const b=e.target.closest('[data-sort]');if(!b)return;rs={k:b.dataset.sort,d:rs.k===b.dataset.sort?-rs.d:(b.dataset.sort==='ac'||b.dataset.sort==='show'?1:-1)};renderRare()});
+
+/* kit swap */
+const kit=[['Nikon 200 to 500 f/5.6','£650','Used, very good','Essex','Sell'],['Two person tent','£40','Used twice','Gloucestershire','Sell'],['Gimbal head','Swap','Good','Kent','Swap for a monopod'],['Camping chairs, pair','£25','Good','Shropshire','Sell']];
+$('#kitlist').innerHTML=kit.map((k,i)=>`<article class="panel item hud-in" style="--d:${i*.08}s"><div class="phead ${k[4]==='Sell'?'':'p'}"><h3>${k[4]==='Sell'?'For sale':'Swap'}</h3><small>${esc(k[3])}</small></div><div class="pbody"><h4>${esc(k[0])}</h4><div class="pr">${esc(k[1])}</div><div class="im"><span>${esc(k[2])}</span>${k[4]!=='Sell'?`<span>${esc(k[4])}</span>`:''}</div><button class="btn sm o" type="button" data-toast="In the live version this opens a private message to the seller.">Message seller</button></div></article>`).join('');
+
+/* admin queue */
+const queue=[{k:'Reported post',t:'Kit Swap listing with no photos and a price that looks too good to be true',s:'Reported by 2 members, 3 hours ago'},{k:'Group suggestion',t:'New group: Headcorn Airshow',s:'Suggested by Lucy, yesterday'},{k:'Reported comment',t:'Off topic comment in RIAT about ticket resale',s:'Reported by Mike, 2 days ago'}];
+function renderQueue(){const open=queue.filter(q=>!q.done).length;$('#qcount').textContent=open+(open===1?' item':' items');
+  $('#queue').innerHTML=queue.map((q,i)=>`<div class="qi${q.done?' done':''}"><div><span class="bdg ${q.k.startsWith('Report')?'r':''}">${esc(q.k)}</span><p style="margin-top:6px">${esc(q.t)}</p><small>${esc(q.done||q.s)}</small></div><div class="ab">${q.done?'':`<button class="btn sm" type="button" data-q="${i}" data-a="Approved">Approve</button><button class="btn sm r" type="button" data-q="${i}" data-a="Removed">Remove</button>`}</div></div>`).join('')}
+$('#queue').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(!b)return;queue[+b.dataset.q].done=b.dataset.a;renderQueue();toast(b.dataset.a+'.')});
+
+renderPosts();renderChal();renderSpots();renderBuddies();renderRare();renderQueue();
+
+/* replay the open and glitch as panels come into view */
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+  const vh=innerHeight;
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){const el=en.target;el.classList.remove('hud-in');void el.offsetWidth;el.classList.add('hud-in');io.unobserve(el)}}),{threshold:.15});
+  $$('.hud-in').forEach(el=>{if(el.getBoundingClientRect().top>vh){el.classList.remove('hud-in');io.observe(el)}});
+})();
+
+/* typing readout: same text and blinker as the forum status box */
+(function(){
+  const LABEL={ctext:'Typing your post',gname:'Typing a group idea',gwhy:'Typing a group idea',ltext:'Typing a live update'};
+  function box(f){let p=f.previousElementSibling;if(!(p&&p.classList.contains('typing'))){p=document.createElement('div');p.className='typing';p.setAttribute('aria-hidden','true');f.insertAdjacentElement('beforebegin',p)}return p}
+  function draw(f){const b=box(f),n=f.value.length,what=LABEL[f.id]||'Typing a reply';
+    b.innerHTML=esc('> '+what+(n?' ['+n+']':''))+'<i></i>';b.classList.add('on')}
+  document.addEventListener('focusin',e=>{const f=e.target.closest('textarea,.input');if(f)draw(f)});
+  document.addEventListener('input',e=>{const f=e.target.closest('textarea,.input');if(f)draw(f)});
+  document.addEventListener('focusout',e=>{const f=e.target.closest('textarea,.input');if(f){const b=box(f);setTimeout(()=>{if(document.activeElement!==f)b.classList.remove('on')},900)}});
+})();
+
+/* scroll spy */
+(function(){
+  const links=$$('.jump a'),secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+  function spy(){let cur=0;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<140)cur=i});links.forEach((a,i)=>a.classList.toggle('on',i===cur&&scrollY>200))}
+  addEventListener('scroll',spy,{passive:true});spy();
+})();
+</script>
+
+<script src="links.js"></script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  .split>*,.pc>*,.livewrap>*,.spot>*,.suggest>*,.head .wrap>*{min-width:0}
+  @media (max-width:440px){
+    .head h1{font-size:46px}
+    .readout{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .chal{grid-template-columns:minmax(0,1fr)}
+    .stats b{font-size:20px}
+    .row{font-size:14px;padding:8px 10px}
+    .act{padding:7px 6px}
+  }
+  @media (pointer:coarse){
+    .chip,.vote,.act,.jump a{min-height:40px}
+    .chip,.vote{display:inline-flex;align-items:center}
+  }
+</style>
+<!-- mobile-fit -->
