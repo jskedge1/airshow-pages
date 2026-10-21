@@ -155,31 +155,37 @@ function km(a, b) {
 }
 function okNumber(n, lo, hi) { return typeof n === 'number' && isFinite(n) && n >= lo && n <= hi; }
 
-// First full date in text such as "Fri 16 – Sun 18 July 2027" or "Sunday 13 June 2027".
+// Every show day in text such as "Fri 16 – Sun 18 July 2027", "Sunday 13 June 2027",
+// "19 to 20 June, 11 to 12 Sept" or a Duxford events list ("Sat 19 – Sun 20 June|Duxford Summer Air Show").
 function parseShowDates(text, year) {
   const t = String(text || '').toLowerCase();
-  const re = /(\d{1,2})(?:st|nd|rd|th)?\s*(?:[–\-to ]+\s*(?:[a-z]+\s+)?(\d{1,2})(?:st|nd|rd|th)?)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)(?:\s+(\d{4}))?/;
-  const m = re.exec(t);
-  if (!m) return null;
-  const y = Number(m[4] || year || new Date().getFullYear());
-  const mon = MONTHS.indexOf(m[3]);
-  const a = Number(m[1]), b = m[2] ? Number(m[2]) : a;
+  const re = /(\d{1,2})(?:st|nd|rd|th)?(?:\s*(?:–|—|-|to)\s*(?:[a-z]+\s+)?(\d{1,2})(?:st|nd|rd|th)?)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?(?:\s+(\d{4}))?/g;
   const days = [];
-  for (let d = a; d <= Math.max(a, b); d += 1) days.push(`${y}-${String(mon + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
+  let m;
+  while ((m = re.exec(t))) {
+    const y = Number(m[4] || year || new Date().getFullYear());
+    const mon = MONTHS.findIndex((x) => x.startsWith(m[3]));
+    const a = Number(m[1]), b = m[2] ? Number(m[2]) : a;
+    if (mon < 0 || a < 1 || a > 31 || b < a || b - a > 6) continue;
+    for (let d = a; d <= b; d += 1) days.push(`${y}-${String(mon + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
+  }
   return days;
 }
 
-// The days a show is on, from Show Info, then the featured show list, plus any extra days above.
+// The days a show is on, read live from Show Info (dates and the events list) and the featured show list,
+// so dates the daily and weekly date checks add there are picked up here straight away. Plus any extra days below.
 async function showDays(showId) {
-  let days = null;
+  let days = [];
   const info = await wixData.query('ShowInfo').eq('slug', showId).limit(1).find({ suppressAuth: true });
-  if (info.items[0]) days = parseShowDates(info.items[0].dateText, info.items[0].year);
-  if (!days) {
-    const featured = await wixData.query('FeaturedAirshows').limit(100).find({ suppressAuth: true });
-    const f = featured.items.find((x) => FEATURED_SLUGS[x.shortName] === showId);
-    if (f) days = parseShowDates(f.dates, null);
+  const row = info.items[0];
+  if (row) {
+    const year = row.year || null;
+    days = days.concat(parseShowDates(row.dateText, year), parseShowDates(row.events, year));
   }
-  return (days || []).concat(EXTRA_SHOW_DAYS[showId] || []);
+  const featured = await wixData.query('FeaturedAirshows').limit(100).find({ suppressAuth: true });
+  const f = featured.items.find((x) => FEATURED_SLUGS[x.shortName] === showId);
+  if (f) days = days.concat(parseShowDates(f.dates, row && row.year));
+  return [...new Set(days.concat(EXTRA_SHOW_DAYS[showId] || []))];
 }
 
 // The four checks. Every one has to pass before a photo goes live.
