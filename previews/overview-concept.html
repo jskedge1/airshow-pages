@@ -80,7 +80,10 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
 .route small{display:block;font-family:var(--mono);font-size:12px;color:var(--mut)}
 .route .line{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 14px);position:relative;min-width:60px}
 .route .line img{position:absolute;top:50%;left:var(--prog,40%);width:30px;transform:translate(-50%,-50%) rotate(90deg);filter:drop-shadow(0 0 6px rgba(215,73,73,.6));transition:left 1.6s var(--ease)}
-.flaps{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.flaps{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap;align-items:flex-start}
+.flaps .sep{font-family:var(--cond);font-weight:800;font-size:40px;line-height:62px;color:var(--cyan);opacity:.55;animation:sepb 1s steps(2) infinite}
+@keyframes sepb{50%{opacity:.15}}
+.unit .d{gap:5px}
 .unit{text-align:center}
 .unit .d{display:flex;gap:4px}
 .flap{position:relative;width:46px;height:62px;perspective:300px;font-family:var(--cond);font-weight:800;font-size:46px;line-height:62px;text-align:center;color:#fff}
@@ -208,6 +211,114 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
 @keyframes clr{0%{opacity:0;transform:translate(-50%,10px)}15%,75%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-10px)}}
 .reset{display:inline-block;margin-top:10px;background:transparent;border:1px solid var(--line);color:var(--mut);font-size:14px;padding:6px 10px}
 
+/* ---------- weather sky in the header ---------- */
+.wx{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.wx i{position:absolute;opacity:0;transition:opacity 1.2s ease}
+.wx .glow{right:8%;top:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,226,150,.55),rgba(255,200,90,.15) 40%,transparent 70%);animation:glow 8s ease-in-out infinite}
+@keyframes glow{50%{transform:scale(1.08)}}
+.wx .cl{width:520px;height:120px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(220,230,240,.55),rgba(220,230,240,0) 70%);filter:blur(6px)}
+.wx .c1{top:6%;left:-30%;animation:cloud 60s linear infinite}
+.wx .c2{top:30%;left:-50%;width:680px;animation:cloud 85s linear infinite -20s}
+.wx .c3{top:52%;left:-40%;animation:cloud 70s linear infinite -45s}
+@keyframes cloud{to{transform:translateX(220vw)}}
+.wx .rain{inset:-40px;background:repeating-linear-gradient(105deg,transparent 0 14px,rgba(200,220,235,.32) 14px 15px,transparent 15px 28px);background-size:28px 64px;animation:rain .45s linear infinite}
+@keyframes rain{to{background-position:-12px 64px}}
+.wx-sun .glow{opacity:1}
+.wx-cloud .cl{opacity:1}
+.wx-rain .cl{opacity:.8}.wx-rain .rain{opacity:1}
+.sky.dim .photo{filter:saturate(.6) brightness(.75);transition:filter 1.2s}
+.chip.snd{text-align:left;color:inherit;font:inherit;cursor:pointer;transition:border-color .3s,box-shadow .3s}
+.chip.snd:hover{border-color:var(--cyan)}
+.chip.snd[aria-pressed="true"]{border-color:var(--cyan);box-shadow:0 0 18px rgba(95,227,214,.25)}
+
+/* ---------- show day mode: the whole hub turns amber ---------- */
+body.sd{--cyan:#F2B233;--line:rgba(242,178,51,.3);--line2:rgba(242,178,51,.1)}
+body.sd .p::before,body.sd .p::after{border-color:#F2B233}
+body.sd .flaps{display:none}
+.sdbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;justify-content:center;background:#F2B233;color:#061019;font-weight:700;font-size:15px;padding:9px 16px}
+.sdbar .dot{width:10px;height:10px;border-radius:50%;background:#D74949;animation:beacon2 1.4s infinite}
+@keyframes beacon2{0%{box-shadow:0 0 0 0 rgba(215,73,73,.8)}70%{box-shadow:0 0 0 9px rgba(215,73,73,0)}100%{box-shadow:0 0 0 0 rgba(215,73,73,0)}}
+.nowfly{margin-top:16px;display:grid;gap:10px}
+.nf-row{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:4px 12px;align-items:center;background:rgba(242,178,51,.08);border:1px solid rgba(242,178,51,.35);padding:10px 12px}
+.nf-row small{font-family:var(--mono);font-size:12px;color:#F2B233}
+.nf-row b{font-family:var(--cond);font-weight:800;font-size:26px;text-transform:uppercase;line-height:1}
+.nf-row.next b{font-size:20px;color:#D2DFE8}
+.nf-bar{grid-column:1/-1;display:block;height:5px;background:#13293C}
+.nf-bar em{display:block;height:100%;width:40%;background:#F2B233;box-shadow:0 0 10px #F2B233;transition:width 1s linear}
+.ear{display:flex;gap:10px;align-items:center;background:#D74949;color:#fff;font-weight:600;padding:10px 12px;animation:earP 1.6s ease-in-out infinite}
+.ear span{width:24px;height:24px;border-radius:50%;background:#fff;color:#D74949;display:grid;place-items:center;font-weight:800;flex:none}
+@keyframes earP{50%{box-shadow:0 0 0 4px rgba(215,73,73,.35)}}
+#inbound .ac text{font-family:var(--mono);font-size:11px;fill:#F2B233}
+#inbound .ac circle{fill:#F2B233}
+
+/* ---------- milestone sonic boom ---------- */
+.boom{position:fixed;inset:0;z-index:70;pointer-events:none;display:grid;place-items:center}
+.boom i{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:3px solid var(--cyan);box-shadow:0 0 30px var(--cyan),inset 0 0 30px rgba(95,227,214,.4);animation:ripple 1.6s cubic-bezier(.15,.6,.3,1) forwards}
+.boom i:nth-child(2){animation-delay:.18s}.boom i:nth-child(3){animation-delay:.36s}
+@keyframes ripple{0%{transform:scale(.2);opacity:1}100%{transform:scale(60);opacity:0}}
+.boom b{position:relative;font-family:var(--cond);font-weight:800;font-size:clamp(46px,10vw,140px);line-height:.9;text-align:center;text-transform:uppercase;color:#fff;text-shadow:0 0 40px rgba(95,227,214,.7);animation:boomT 3s var(--ease) forwards}
+.boom b small{display:block;font-family:var(--mono);font-weight:400;font-size:clamp(14px,2vw,20px);color:var(--cyan);margin-top:10px;text-shadow:none}
+@keyframes boomT{0%{opacity:0;transform:scale(1.4)}12%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:scale(.96)}}
+body.shake main,body.shake .sky{animation:shake .5s linear}
+@keyframes shake{10%,90%{transform:translate(-2px,1px)}20%,80%{transform:translate(4px,-2px)}30%,50%,70%{transform:translate(-5px,2px)}40%,60%{transform:translate(5px,-1px)}}
+
+/* ---------- hangar arrivals ---------- */
+.hangar{position:relative;height:250px;background:linear-gradient(180deg,#0B1C2A,#08141F);border:1px solid var(--line);overflow:hidden}
+.doors{position:absolute;inset:0 0 auto 0;height:22px;display:flex}
+.doors i{flex:1;background:repeating-linear-gradient(90deg,#13293C 0 18px,#0E2131 18px 20px);border-bottom:2px solid rgba(95,227,214,.35)}
+.taxi{position:absolute;left:0;right:0;bottom:30px;height:2px;background:repeating-linear-gradient(90deg,#F2B233 0 16px,transparent 16px 26px);opacity:.7}
+.bays{position:absolute;left:12px;right:12px;top:34px;bottom:46px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.bay{position:relative;border:1px dashed rgba(95,227,214,.25);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:8px 6px;text-align:center;min-width:0}
+.bay img{width:46px;margin-bottom:auto;margin-top:10px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+.bay b{font-family:var(--cond);font-weight:800;font-size:16px;line-height:1;text-transform:uppercase}
+.bay small{font-size:12px;color:var(--mut)}
+.bay.rare{border-color:#8C77C9;box-shadow:inset 0 0 20px rgba(105,80,161,.35)}
+.bay.new{animation:bayIn .8s var(--ease) both}
+@keyframes bayIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.taxijet{position:absolute;bottom:12px;left:110%;width:40px;transform:rotate(-90deg);opacity:0;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+.taxijet.go{opacity:1;transition:left 2.4s cubic-bezier(.45,.05,.4,1),bottom .9s ease 2.4s,transform .5s ease 2.2s,opacity .3s}
+.hg-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.hg-foot p{margin:0;color:#D2DFE8;font-size:15px}
+.hg-add{background:var(--teal);color:#061019;border:0;font-weight:700;padding:9px 14px}
+
+/* ---------- sun dial ---------- */
+.sun{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:center}
+.sun svg{width:100%;height:auto;display:block}
+#sunDot{transition:transform .6s var(--ease)}
+.sun-l{display:flex;justify-content:space-between;font-weight:600}
+.sun-l b{font-weight:400;color:var(--cyan)}
+.sun input{width:100%;margin:10px 0;accent-color:#F2B233}
+.sun-v{margin:0;color:#D2DFE8;font-size:15px}
+
+/* ---------- end of season replay ---------- */
+.replay{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(3,9,14,.96)}
+.rp-in{width:min(980px,100%);max-height:calc(100vh - 32px);overflow-y:auto;scrollbar-width:none}
+.rp-top{display:flex;justify-content:space-between;align-items:center}
+.rp-tag{background:var(--purple);font-weight:600;font-size:14px;padding:4px 10px}
+.rp-top button{background:transparent;border:1px solid var(--line);color:#fff;padding:6px 12px}
+.replay h2{font-family:var(--cond);font-weight:800;font-size:clamp(36px,6vw,64px);line-height:.95;margin:14px 0 8px}
+#rpMap{width:100%;height:auto;display:block;border:1px solid var(--line);background:#050D14}
+#rpPath{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.rp-stop text{font-family:var(--body);font-weight:700;font-size:15px;fill:#fff}
+.rp-stop .dt{font-family:var(--mono);font-weight:400;font-size:12px;fill:var(--cyan)}
+.rp-stop{opacity:0;transition:opacity .5s}
+.rp-stop.on{opacity:1}
+.rp-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.rp-stats div{border:1px solid var(--line);padding:10px 12px;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
+.rp-stats div.on{opacity:1;transform:none}
+.rp-stats b{display:block;font-family:var(--cond);font-weight:800;font-size:34px;line-height:1}
+.rp-stats small{color:var(--mut);font-size:14px}
+
+/* ---------- preview controls ---------- */
+.try{position:fixed;right:16px;bottom:16px;z-index:55;width:250px;background:var(--purple);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.try-h{display:block;width:100%;text-align:left;background:transparent;border:0;color:#fff;font-weight:700;font-size:15px;padding:10px 12px}
+.try-b{display:grid;gap:6px;padding:0 10px 10px}
+.try-b button{background:#fff;color:#2B1F4A;border:0;font-weight:700;font-size:14px;padding:8px 10px;text-align:left}
+.try-b button[aria-pressed="true"]{background:#F2B233}
+.try-r{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.try-r button{text-align:center}
+.try.min .try-b{display:none}
+
 /* ---------- layout on smaller screens ---------- */
 @media (max-width:1100px){.c7,.c12{grid-column:1/-1}.c5,.c4,.c8{grid-column:span 6}.o6,.radar{grid-column:1/-1}}
 @media (max-width:760px){
@@ -222,11 +333,19 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
   .bars{flex-basis:100%}
   .ready .pb{grid-template-columns:120px minmax(0,1fr)}
   .adi{width:120px;height:120px}
-  .flap{width:38px;height:52px;font-size:38px;line-height:52px}
+  .flap{width:36px;height:50px;font-size:36px;line-height:50px}
+  .flaps{gap:10px 12px}
+  .flaps .sep{font-size:30px;line-height:50px}
   .mfd{grid-template-columns:1fr}
   .bez{grid-template-columns:1fr 1fr}
   .bz{min-width:0}
   .mk.dim b{display:none}
+  .sun{grid-template-columns:150px minmax(0,1fr)}
+  .bays{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hangar{height:330px}
+  .rp-stats{grid-template-columns:1fr 1fr}
+  .try{right:8px;bottom:8px;width:220px}
+  .nf-row{grid-template-columns:1fr auto}.nf-row small{grid-column:1/-1}
   .mk b{font-size:12px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.p{opacity:1}}
@@ -234,12 +353,13 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
 </head>
 <body>
 
-<div class="example">Overview concept with example data. The switches, radar, runway and quick launch all work.</div>
+<div class="example">Overview concept with example data. Everything works, and the purple Try the effects panel plays the rest.</div>
 
 <header class="sky" id="sky">
   <div class="photo" id="photo"></div>
   <div class="tint" id="tint"></div>
   <span class="contrail" aria-hidden="true"></span>
+  <div class="wx wx-sun" id="wx" aria-hidden="true"><i class="glow"></i><i class="cl c1"></i><i class="cl c2"></i><i class="cl c3"></i><i class="rain"></i></div>
   <div class="wrap">
     <div>
       <div class="sys"><b>SYS 02</b><span id="clock">--:--</span><span>· Overview</span></div>
@@ -249,6 +369,8 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
     <div class="chips">
       <div class="chip"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#5FE3D6" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><div><b id="todText">Afternoon light</b><small id="todSub">Sun in the south west</small></div></div>
       <div class="chip"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#5FE3D6" stroke-width="1.6"><path d="M3 15l7-1 5-9h2l-2 9 5 1-1 2-5-1-4 6H8l2-6-6 1z"/></svg><div><b>2 inbound</b><small>Aircraft heading to your shows</small></div></div>
+      <div class="chip"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#5FE3D6" stroke-width="1.6"><path d="M7 18a4 4 0 010-8 6 6 0 0111.3 1.5A3.5 3.5 0 0117.5 18z"/></svg><div><b id="wxT">Sunny spells, 19°C</b><small id="wxS">Cosford forecast, example</small></div></div>
+      <button class="chip snd" type="button" id="snd" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#5FE3D6" stroke-width="1.6"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/></svg><div><b id="sndT">Cockpit sounds off</b><small>Switch clicks, radio and jets</small></div></button>
     </div>
   </div>
 </header>
@@ -268,6 +390,11 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
             <div><b>COS</b><small>Shropshire</small></div>
           </div>
           <div class="flaps" id="flaps" aria-live="off"></div>
+          <div class="nowfly" id="nowfly" hidden>
+            <div class="nf-row"><small>NOW FLYING</small><b id="nfNow">Typhoon display</b><span class="mono" id="nfTime">14:05 to 14:20</span><i class="nf-bar"><em id="nfBar"></em></i></div>
+            <div class="nf-row next"><small>NEXT</small><b id="nfNext">Red Arrows</b><span class="mono" id="nfNextT">14:30</span></div>
+            <div class="ear" id="ear"><span aria-hidden="true">!</span>Loud jet now. Ear defenders on for the little ones.</div>
+          </div>
         </div>
         <div class="stub">
           <div class="row"><small>DATE</small><b>Sun 13 June</b></div>
@@ -344,6 +471,7 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
           <g font-family="Share Tech Mono,monospace" font-size="11" fill="#5FE3D6" fill-opacity=".6"><text x="204" y="134">70</text><text x="204" y="71">140</text><text x="196" y="24" text-anchor="end">N</text></g>
           <g class="sweep" id="sweep"><path d="M200 200 L390 200 A190 190 0 0 0 334 66 Z" fill="url(#sg)"/></g>
           <g id="blips"></g>
+          <g id="inbound"></g>
           <circle cx="200" cy="200" r="5" fill="#F2B233"/><text x="210" y="216" font-family="Share Tech Mono,monospace" font-size="12" fill="#F2B233">YOU</text>
         </svg>
         <div class="legend"><span><i style="background:#5FE3D6"></i>Your shows</span><span><i style="background:#6950A1"></i>Other featured shows</span></div>
@@ -360,6 +488,43 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
           <div class="months"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
         </div>
         <p class="rnote" id="rnote">Holding at the threshold. <b>234 days</b> until your season starts at Cosford.</p>
+      </div>
+    </section>
+
+    <!-- hangar arrivals -->
+    <section class="p c7 o7" style="--d:.58s" aria-labelledby="hgT">
+      <div class="ph"><h2 id="hgT">My Hangar</h2><small id="hgCount">4 AIRCRAFT</small></div>
+      <div class="pb">
+        <div class="hangar" id="hangar">
+          <div class="doors" aria-hidden="true"><i></i><i></i></div>
+          <div class="taxi" aria-hidden="true"></div>
+          <img class="taxijet" id="taxijet" src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt="">
+          <div class="bays" id="bays"></div>
+        </div>
+        <div class="hg-foot"><p id="hgLine">Every aircraft you spot taxis in and parks here.</p><button class="hg-add" type="button" id="hgAdd">Log a spotted aircraft</button></div>
+      </div>
+    </section>
+
+    <!-- sun dial -->
+    <section class="p c5 o7" style="--d:.6s" aria-labelledby="sunT">
+      <div class="ph"><h2 id="sunT">Sun at the show</h2><small>EXAMPLE LAYOUT</small></div>
+      <div class="pb sun">
+        <svg viewBox="0 0 220 220" role="img" aria-label="Compass showing the sun position over the crowd line">
+          <circle cx="110" cy="110" r="96" fill="#071520" stroke="rgba(95,227,214,.4)"/>
+          <circle cx="110" cy="110" r="60" fill="none" stroke="rgba(95,227,214,.15)"/>
+          <g font-family="Share Tech Mono,monospace" font-size="12" fill="#5FE3D6" text-anchor="middle"><text x="110" y="26">N</text><text x="200" y="114">E</text><text x="110" y="204">S</text><text x="20" y="114">W</text></g>
+          <rect x="44" y="80" width="132" height="10" fill="#13293C" stroke="rgba(95,227,214,.4)"/>
+          <text x="110" y="74" text-anchor="middle" font-family="Barlow,sans-serif" font-size="11" fill="#CBB9F5">Display line</text>
+          <path d="M44 128h132" stroke="#D74949" stroke-width="3"/>
+          <text x="110" y="144" text-anchor="middle" font-family="Barlow,sans-serif" font-size="11" fill="#F09A9A">Crowd line, facing north</text>
+          <line id="sunRay" x1="110" y1="110" x2="110" y2="200" stroke="#F2B233" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <g id="sunDot"><circle r="11" fill="#F2B233"/><circle r="17" fill="none" stroke="#F2B233" stroke-opacity=".4"/></g>
+        </svg>
+        <div>
+          <label for="sunTime" class="sun-l">Display time <b class="mono" id="sunClock">14:00</b></label>
+          <input type="range" id="sunTime" min="10" max="18" step=".25" value="14">
+          <p class="sun-v" id="sunV">Sun behind you, high in the south west. The aircraft are lit on the side you see.</p>
+        </div>
       </div>
     </section>
 
@@ -384,11 +549,70 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
   </div>
 </main>
 
+<div class="sdbar" id="sdbar" hidden><span class="dot" aria-hidden="true"></span>SHOW DAY MODE · RAF Cosford Air Show · Gates open 08:00</div>
+
+<div class="replay" id="replay" role="dialog" aria-modal="true" aria-labelledby="rpT" hidden>
+  <div class="rp-in">
+    <div class="rp-top"><span class="rp-tag">End of season replay</span><button type="button" id="rpX">Close</button></div>
+    <h2 id="rpT">YOUR 2026 SEASON</h2>
+    <svg viewBox="0 0 800 460" id="rpMap" aria-hidden="true">
+      <defs><pattern id="rpg" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="rgba(95,227,214,.08)"/></pattern></defs>
+      <rect width="800" height="460" fill="url(#rpg)"/>
+      <path id="rpPath" d="M560 330 C 520 300, 470 260, 430 250 C 380 240, 330 210, 300 190 C 330 260, 350 330, 380 360 C 460 400, 560 410, 640 400" fill="none" stroke="#5FE3D6" stroke-width="3" stroke-linecap="round"/>
+      <g id="rpStops"></g>
+      <image id="rpJet" href="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" width="34" height="41" x="-17" y="-20"/>
+    </svg>
+    <div class="rp-stats" id="rpStats"></div>
+  </div>
+</div>
+
+<aside class="try" id="try" aria-label="Try the effects">
+  <button type="button" class="try-h" id="tryH" aria-expanded="true">Try the effects</button>
+  <div class="try-b" id="tryB">
+    <button type="button" id="tSD" aria-pressed="false">Show day mode</button>
+    <button type="button" id="tBoom">Milestone: 100 days to go</button>
+    <div class="try-r"><button type="button" data-wx="sun">Sun</button><button type="button" data-wx="cloud">Cloud</button><button type="button" data-wx="rain">Rain</button></div>
+    <button type="button" id="tHangar">Aircraft arrives in My Hangar</button>
+    <button type="button" id="tReplay">End of season replay</button>
+    <button type="button" id="tFly">Red Arrows flypast</button>
+  </div>
+</aside>
+
 <script>
 (function () {
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* cockpit sounds, made in the browser, off until switched on */
+  var SND = (function () {
+    var on = false, ctx = null;
+    try { on = localStorage.getItem("ukagOvSound") === "on"; } catch (e) {}
+    function ac() { if (!ctx) { var A = window.AudioContext || window.webkitAudioContext; if (!A) return null; ctx = new A(); } if (ctx.state === "suspended") ctx.resume(); return ctx; }
+    function noise(dur, f0, f1, vol, type) {
+      var c = ac(); if (!c) return; var t = c.currentTime;
+      var n = Math.floor(c.sampleRate * dur), b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+      for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      var s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      s.buffer = b; f.type = type || "bandpass"; f.Q.value = 1.2; f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + dur * .3); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      s.connect(f); f.connect(g); g.connect(c.destination); s.start(t); s.stop(t + dur);
+    }
+    function tone(f0, f1, dur, vol, type) {
+      var c = ac(); if (!c) return; var t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+      o.type = type || "sine"; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + .05);
+    }
+    return {
+      get on() { return on; },
+      set: function (v) { on = v; try { localStorage.setItem("ukagOvSound", v ? "on" : "off"); } catch (e) {} if (v) ac(); },
+      click: function () { if (!on) return; noise(.03, 2500, 2400, .4, "highpass"); tone(1800, 900, .04, .08, "square"); },
+      radio: function () { if (!on) return; noise(.35, 1800, 900, .12); tone(1000, 1000, .06, .05, "sine"); },
+      jet: function () { if (!on) return; noise(3.2, 200, 1400, .5, "lowpass"); },
+      boom: function () { if (!on) return; tone(90, 30, 1.2, .6, "sine"); noise(1.4, 600, 60, .7, "lowpass"); },
+      taxi: function () { if (!on) return; tone(700, 1100, 2.4, .05, "sawtooth"); noise(2.4, 400, 900, .12, "lowpass"); }
+    };
+  })();
   /* example show date for the preview */
   var SHOW = new Date("2027-06-13T08:00:00");
 
@@ -425,7 +649,9 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
     var unit = document.createElement("div"); unit.className = "unit";
     var row = document.createElement("div"); row.className = "d"; cells[u[0]] = [];
     for (var i = 0; i < u[2]; i++) { var f = document.createElement("div"); f.className = "flap"; var s = document.createElement("span"); s.textContent = "0"; f.appendChild(s); row.appendChild(f); cells[u[0]].push(f); }
-    unit.appendChild(row); var sm = document.createElement("small"); sm.textContent = u[1]; unit.appendChild(sm); flaps.appendChild(unit);
+    unit.appendChild(row); var sm = document.createElement("small"); sm.textContent = u[1]; unit.appendChild(sm);
+    if (flaps.children.length) { var sp = document.createElement("span"); sp.className = "sep"; sp.setAttribute("aria-hidden", "true"); sp.textContent = ":"; flaps.appendChild(sp); }
+    flaps.appendChild(unit);
   });
   function setNum(key, n) {
     var str = String(n).padStart(cells[key].length, "0").slice(-cells[key].length);
@@ -455,6 +681,7 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
       var k = on.indexOf(i); if (now && k < 0) on.push(i); if (!now && k > -1) on.splice(k, 1);
       try { localStorage.setItem("ukagOvChecks", JSON.stringify(on)); } catch (e) {}
       if (navigator.vibrate) navigator.vibrate(12);
+      SND.click();
       ready(true);
     });
     box.appendChild(b);
@@ -487,16 +714,17 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
       sm.style.background = "linear-gradient(270deg," + colours[i % 3] + ",transparent)"; fm.appendChild(sm);
       var img = document.createElement("img"); img.src = "https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp"; img.alt = ""; img.style.left = p[0] + "px"; img.style.top = p[1] + "px"; fm.appendChild(img);
     });
-    fp.appendChild(fm); document.body.appendChild(fp);
+    fp.appendChild(fm); document.body.appendChild(fp); SND.jet();
     var c = document.createElement("div"); c.className = "cleared"; c.textContent = "Cleared for Cosford"; document.body.appendChild(c);
     setTimeout(function () { fp.remove(); c.remove(); }, 4200);
   }
 
   /* show radio: updates arrive like air traffic messages */
   var MSG = [["Cosford tower", "118.725", "Two aircraft added to the line up since you saved the show.", ""], ["Fairford ops", "119.150", "RIAT car park passes go on sale next week. I would set a reminder.", "p"], ["Hub control", "121.500", "You have 2 must see aircraft confirmed at Cosford.", ""], ["Cosford tower", "118.725", "Shuttle bus times from the station are now on the show page.", ""], ["Fairford ops", "119.150", "Camping at Townsend Farm is filling up for the Friday.", "r"]];
+  var MSG_SD = [["Cosford display", "130.200", "Typhoon display now. Ear defenders on, it is loud.", "r"], ["Cosford display", "130.200", "Red Arrows next at 14:30. Head to the crowd line now if you want a front row view.", ""], ["Hub control", "121.500", "Car park B is filling up. Members report a 10 minute walk from C.", "p"], ["Cosford display", "130.200", "Quiet spell after the Red Arrows. A good time for a toilet break.", ""]];
   var mi = 0, msgs = $("msgs");
   function radio() {
-    var m = MSG[mi % MSG.length]; mi++;
+    var list = document.body.classList.contains("sd") ? MSG_SD : MSG; var m = list[mi % list.length]; mi++; SND.radio();
     $("wave").classList.remove("quiet"); $("freqName").textContent = m[0];
     var f = $("freq"), target = m[1], n = 0;
     var spin = setInterval(function () { f.textContent = (118 + Math.random() * 3).toFixed(3); if (++n > 8) { clearInterval(spin); f.textContent = target; } }, 45);
@@ -570,6 +798,161 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
     b.addEventListener("mouseenter", show); b.addEventListener("focus", show); b.addEventListener("click", show);
   });
   $("qGo").addEventListener("click", function () { this.textContent = "In the hub this opens " + $("qT").textContent; });
+
+  /* ================= new effects ================= */
+
+  function sndUI() { $("snd").setAttribute("aria-pressed", String(SND.on)); $("sndT").textContent = SND.on ? "Cockpit sounds on" : "Cockpit sounds off"; }
+  $("snd").addEventListener("click", function () { SND.set(!SND.on); sndUI(); SND.click(); });
+  sndUI();
+
+  /* weather sky: the header shows the forecast for your next show */
+  var WX = { sun: ["Sunny spells, 19°C", "Cosford forecast, example", false], cloud: ["Grey and dry, 15°C", "Cosford forecast, example. Plus 1 exposure for the jets", true], rain: ["Showers, 13°C", "Cosford forecast, example. Pack the waterproofs", true] };
+  function weather(k) {
+    $("wx").className = "wx wx-" + k; $("wxT").textContent = WX[k][0]; $("wxS").textContent = WX[k][1];
+    $("sky").classList.toggle("dim", WX[k][2]);
+    document.querySelectorAll("[data-wx]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.wx === k)); });
+  }
+  document.querySelectorAll("[data-wx]").forEach(function (b) { b.addEventListener("click", function () { weather(b.dataset.wx); }); });
+  weather("sun");
+
+  /* milestone sonic boom at 100, 30 and 7 days to go */
+  function boom(days) {
+    if (reduce) return;
+    var b = document.createElement("div"); b.className = "boom"; b.setAttribute("aria-hidden", "true");
+    b.innerHTML = "<i></i><i></i><i></i><b>" + days + " days to go<small>RAF COSFORD AIR SHOW · SONIC BOOM</small></b>";
+    document.body.appendChild(b); document.body.classList.add("shake"); SND.boom();
+    if (navigator.vibrate) navigator.vibrate([60, 40, 120]);
+    setTimeout(function () { document.body.classList.remove("shake"); }, 600);
+    setTimeout(function () { b.remove(); }, 3200);
+  }
+  (function () { var d = Math.ceil((SHOW - new Date()) / 864e5), seen = ""; try { seen = localStorage.getItem("ukagOvBoom") || ""; } catch (e) {}
+    [100, 30, 7].forEach(function (m) { if (d === m && seen !== String(m)) { setTimeout(function () { boom(m); }, 1800); try { localStorage.setItem("ukagOvBoom", String(m)); } catch (e) {} } }); })();
+  $("tBoom").addEventListener("click", function () { boom(100); });
+
+  /* show day mode: amber hub, now and next, ear defender alerts, inbound aircraft on the radar */
+  var RUN = [["Typhoon display", "14:05", "14:20", true], ["Red Arrows", "14:30", "14:55", true], ["Spitfire and Hurricane", "15:05", "15:20", false], ["Chinook display", "15:30", "15:45", true]];
+  var runI = 0, runT = null, inT = null;
+  function showRun() {
+    var a = RUN[runI % RUN.length], n = RUN[(runI + 1) % RUN.length];
+    $("nfNow").textContent = a[0]; $("nfTime").textContent = a[1] + " to " + a[2]; $("nfNext").textContent = n[0]; $("nfNextT").textContent = n[1];
+    $("ear").hidden = !a[3]; $("nfBar").style.width = "8%"; setTimeout(function () { $("nfBar").style.width = "100%"; }, 60);
+  }
+  var AC = [["Typhoon", 40], ["Red Arrows x9", 120], ["Spitfire", 250], ["Chinook", 320]];
+  function inbound(on) {
+    var g = $("inbound"); while (g.firstChild) g.removeChild(g.firstChild); cancelAnimationFrame(inT);
+    if (!on) return;
+    var NS2 = "http://www.w3.org/2000/svg", target = { x: 200 + Math.cos((300 - 90) * Math.PI / 180) * 124, y: 200 + Math.sin((300 - 90) * Math.PI / 180) * 124 };
+    var items = AC.map(function (a, i) {
+      var el = document.createElementNS(NS2, "g"); el.setAttribute("class", "ac");
+      var c = document.createElementNS(NS2, "circle"); c.setAttribute("r", 4); var t = document.createElementNS(NS2, "text"); t.textContent = a[0];
+      el.appendChild(c); el.appendChild(t); g.appendChild(el);
+      return { el: el, c: c, t: t, ang: a[1], off: i * .25 };
+    });
+    var t0 = performance.now();
+    (function step(now) {
+      var k = ((now - t0) / 16000);
+      items.forEach(function (it) {
+        var p = (k + it.off) % 1, rad = (it.ang - 90) * Math.PI / 180;
+        var sx = 200 + Math.cos(rad) * 188, sy = 200 + Math.sin(rad) * 188;
+        var x = sx + (target.x - sx) * p, y = sy + (target.y - sy) * p;
+        it.c.setAttribute("cx", x); it.c.setAttribute("cy", y); it.t.setAttribute("x", x + 7); it.t.setAttribute("y", y - 6);
+      });
+      if (!reduce) inT = requestAnimationFrame(step);
+    })(t0);
+  }
+  $("tSD").addEventListener("click", function () {
+    var on = !document.body.classList.contains("sd");
+    document.body.classList.toggle("sd", on); this.setAttribute("aria-pressed", String(on));
+    $("sdbar").hidden = !on; $("nowfly").hidden = !on;
+    document.querySelector("#passT").textContent = on ? "Today at Cosford" : "RAF Cosford Air Show";
+    clearInterval(runT); inbound(on);
+    if (on) { runI = 0; showRun(); runT = setInterval(function () { runI++; showRun(); }, 7000); mi = 0; radio(); window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); }
+  });
+
+  /* hangar: spotted aircraft taxi in and park */
+  var PARKED = [["Hawk T1", "Red Arrows", false], ["Typhoon FGR4", "Cosford 2026", false], ["A400M Atlas", "RIAT 2026", false], ["B-17 Sally B", "Duxford 2026", true]];
+  var SPOT = [["Spitfire Mk IX", "Cosford 2027", false], ["F-35B Lightning", "RIAT 2027", true], ["Chinook HC6", "Cosford 2027", false], ["Vulcan replica", "Southport 2027", true]];
+  var spotI = 0, bays = $("bays");
+  function bay(a, isNew) {
+    var d = document.createElement("div"); d.className = "bay" + (a[2] ? " rare" : "") + (isNew ? " new" : "");
+    d.innerHTML = '<img src="https://jskedge1.github.io/airshow-pages/hub-img/red-arrows-hawk.webp" alt=""><b></b><small></small>';
+    d.querySelector("b").textContent = a[0]; d.querySelector("small").textContent = a[1] + (a[2] ? " · Rare" : "");
+    return d;
+  }
+  PARKED.forEach(function (a) { bays.appendChild(bay(a)); });
+  function arrive() {
+    var a = SPOT[spotI % SPOT.length]; spotI++;
+    var j = $("taxijet"); j.className = "taxijet"; j.style.left = "110%"; j.style.bottom = "12px"; j.style.transform = "rotate(-90deg)";
+    void j.offsetWidth; j.className = "taxijet go"; SND.taxi();
+    setTimeout(function () { j.style.left = "12%"; }, 30);
+    setTimeout(function () { j.style.transform = "rotate(0deg)"; j.style.bottom = "120px"; }, 2300);
+    setTimeout(function () {
+      j.className = "taxijet"; j.style.opacity = "0";
+      if (bays.children.length >= 8) bays.removeChild(bays.firstChild);
+      bays.insertBefore(bay(a, true), bays.firstChild);
+      $("hgCount").textContent = (4 + spotI) + " AIRCRAFT";
+      $("hgLine").textContent = a[0] + " parked in your hangar." + (a[2] ? " That one is rare, nice catch." : "");
+      setTimeout(function () { j.style.opacity = ""; }, 400);
+    }, 3400);
+  }
+  $("hgAdd").addEventListener("click", arrive);
+  $("tHangar").addEventListener("click", function () { $("hangar").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" }); setTimeout(arrive, reduce ? 0 : 600); });
+
+  /* sun dial: where the sun sits over the crowd line at display time (mid June, example layout) */
+  function sunAt(t) {
+    var az = 180 + (t - 13.1) * 15.5, alt = Math.max(4, 61 * Math.cos((t - 13.1) / 8.4 * Math.PI / 2));
+    var r = 92 - alt * .9, rad = (az - 90) * Math.PI / 180, x = 110 + Math.cos(rad) * r, y = 110 + Math.sin(rad) * r;
+    $("sunDot").setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ")");
+    $("sunRay").setAttribute("x2", x.toFixed(1)); $("sunRay").setAttribute("y2", y.toFixed(1));
+    var hh = Math.floor(t), mm = Math.round((t - hh) * 60); $("sunClock").textContent = String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
+    var dir = ["north", "north east", "east", "south east", "south", "south west", "west", "north west"][Math.round(((az % 360) + 360) % 360 / 45) % 8];
+    var behind = az > 95 && az < 265;
+    $("sunV").textContent = (behind ? "Sun behind you" : "Into the sun") + ", " + (alt > 45 ? "high" : alt > 20 ? "mid height" : "low") + " in the " + dir + ". " +
+      (behind ? (alt > 45 ? "Top light on the aircraft, so I would add a touch of exposure." : "The aircraft are lit on the side you see.") : "Expect silhouettes. Try plus 1 exposure or shoot the topside passes.");
+  }
+  $("sunTime").addEventListener("input", function () { sunAt(+this.value); });
+  sunAt(14);
+
+  /* end of season replay */
+  var STOPS = [["Duxford", "22 May", .0], ["Shuttleworth", "6 June", .24], ["Cosford", "13 June", .45], ["RIAT", "17 July", .62], ["Eastbourne", "14 August", 1]];
+  var rpRaf = null;
+  function replay() {
+    var R = $("replay"); R.hidden = false; $("rpX").focus();
+    var path = $("rpPath"), len = path.getTotalLength(); path.style.setProperty("--len", len);
+    path.style.transition = "none"; path.style.strokeDashoffset = len;
+    var g = $("rpStops"); while (g.firstChild) g.removeChild(g.firstChild);
+    var NS3 = "http://www.w3.org/2000/svg";
+    var marks = STOPS.map(function (s) {
+      var pt = path.getPointAtLength(len * s[2]), el = document.createElementNS(NS3, "g"); el.setAttribute("class", "rp-stop");
+      el.innerHTML = '<circle r="8" fill="#5FE3D6"/><circle r="15" fill="none" stroke="#5FE3D6" stroke-opacity=".4"/>';
+      var t = document.createElementNS(NS3, "text"); t.setAttribute("x", 14); t.setAttribute("y", -6); t.textContent = s[0];
+      var d = document.createElementNS(NS3, "text"); d.setAttribute("class", "dt"); d.setAttribute("x", 14); d.setAttribute("y", 10); d.textContent = s[1];
+      el.appendChild(t); el.appendChild(d); el.setAttribute("transform", "translate(" + pt.x + " " + pt.y + ")"); g.appendChild(el);
+      return { el: el, at: s[2] };
+    });
+    var st = $("rpStats"); st.innerHTML = "";
+    [["5", "Shows"], ["1,240", "Miles travelled"], ["412", "Photos shared"], ["37", "Aircraft in your hangar"]].forEach(function (x) { var d = document.createElement("div"); d.innerHTML = "<b></b><small></small>"; d.querySelector("b").textContent = x[0]; d.querySelector("small").textContent = x[1]; st.appendChild(d); });
+    var jet = $("rpJet"), dur = reduce ? 1 : 7000, t0 = performance.now(); SND.jet();
+    cancelAnimationFrame(rpRaf);
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / dur), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      path.style.strokeDashoffset = len * (1 - e);
+      var p = path.getPointAtLength(len * e), p2 = path.getPointAtLength(Math.min(len, len * e + 2));
+      var ang = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI + 90;
+      jet.setAttribute("transform", "translate(" + p.x + " " + p.y + ") rotate(" + ang + ")");
+      marks.forEach(function (m) { if (e >= m.at - .001) m.el.classList.add("on"); });
+      if (k < 1) rpRaf = requestAnimationFrame(step);
+      else [].forEach.call(st.children, function (d, i) { setTimeout(function () { d.classList.add("on"); }, i * 220); });
+    })(t0);
+  }
+  $("tReplay").addEventListener("click", replay);
+  $("rpX").addEventListener("click", function () { $("replay").hidden = true; cancelAnimationFrame(rpRaf); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("replay").hidden) $("rpX").click(); });
+
+  /* preview controls */
+  $("tFly").addEventListener("click", flypast);
+  $("tryH").addEventListener("click", function () { var t = $("try"); t.classList.toggle("min"); this.setAttribute("aria-expanded", String(!t.classList.contains("min"))); });
+  if (innerWidth < 760) { $("try").classList.add("min"); $("tryH").setAttribute("aria-expanded", "false"); }
 })();
 </script>
 </body>
