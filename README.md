@@ -93,8 +93,16 @@ web module (`velo/backend/showday.web.js`):
 - `FlyingProgrammes`: one item per show day. `showId` (riat, cosford, duxford, eastbourne, clacton, wales, midlands,
   shuttleworth, little-gransden, southport, blackpool, ayr, headcorn), `dayLabel`, `showDate`, `live`,
   and `running.acts` as a list of `{start, end, name, loud}`. Untick `live` to hide a day.
-- `ProgrammeUploads`: member photos of the programme, status `Waiting`. Send the photo to Claude to read, then
-  set the status to `Done`.
+- `ProgrammeUploads`: member photos of the flying display page. Since 21 Oct 2026 every upload is checked automatically
+  before it goes live: the airshow (the page must not name a different show), the date (the show is on today by
+  Show Info or the featured list dates, the photo was taken today, any day named on the page is today), the location
+  (the phone, asked through the page code, or the photo's own location is within a few km of the crowd line) and that
+  it is a flying display page (at least 4 display times read on the phone). All four pass: status `Live` and it shows
+  on the board as Flying Display From The Crowd for that show, today only. Any fail: status `Held`, never shown, kept
+  for Jack. Two member flags, or the sender's own flag, set `Reported` and take it off. The `checks` field records why.
+  Duxford and Shuttleworth have several events a year, so add their show days to `EXTRA_SHOW_DAYS` in
+  `showday.web.js` once announced, or uploads there stay `Held`. Shows with "date to be confirmed" also stay `Held`
+  until Show Info has the date. Test page: `previews/show-day-harness.html` (add `?photo=1` to see the crowd photo).
 - `CrowdReports`: members' car park, toilet and queue reports. Only the last 45 minutes show.
 
 My Airshow Hub has a Show Day tab that loads `show-day.html?mode=hub` and passes its messages through the hub box
