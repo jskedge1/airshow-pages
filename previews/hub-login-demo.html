@@ -748,6 +748,24 @@ label.f{color:var(--hud-fg)}
 #hubSO i::after{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:#D74949;box-shadow:0 0 12px #D74949;animation:wbFill 1.6s cubic-bezier(.4,0,.2,1) forwards}
 </style>
 <style id="hub-overview2">
+
+/* remove tab on each trip card (22 Oct 2026) */
+.tripw{position:relative;display:flex;min-width:0}
+.tripw>.trip{flex:1;min-width:0}
+.trip-x{position:absolute;top:10px;right:10px;z-index:3;display:inline-flex;align-items:center;gap:6px;background:rgba(5,12,17,.88);color:#F3B5B5;border:1px solid #D74949;box-shadow:inset 3px 0 0 #D74949;font:700 13px "Barlow",Arial,sans-serif;padding:5px 10px;cursor:pointer;transition:background .25s,color .25s,padding .3s}
+.trip-x:hover,.trip-x:focus-visible{background:#D74949;color:#fff;outline:none;padding-inline:14px}
+.trip-x.armed{background:#D74949;color:#fff;animation:tripArm 1s ease-in-out infinite}
+@keyframes tripArm{50%{box-shadow:0 0 0 4px rgba(215,73,73,.35)}}
+
+/* HUD tab to the forum on the Overview */
+.o2-forum{position:relative;overflow:hidden;display:inline-grid;grid-template-columns:auto auto;gap:2px 18px;align-items:center;margin-top:18px;padding:10px 18px 10px 16px;background:#050C11;border:1px solid #7CFF9E;box-shadow:inset 4px 0 0 #7CFF9E,0 0 16px rgba(124,255,158,.22);text-align:left;color:#fff;transition:box-shadow .3s ease,padding .4s var(--o2e)}
+.o2-forum small{grid-column:1;font-family:var(--o2mono);font-size:12px;color:#7CFF9E}
+.o2-forum b{grid-column:1;font-family:var(--o2cond);font-weight:800;font-size:22px;letter-spacing:.03em;text-transform:uppercase;line-height:1}
+.o2-forum i{grid-column:2;grid-row:1/3;font-style:normal;font-size:22px;color:#7CFF9E;transition:transform .3s ease}
+.o2-forum .scan{position:absolute;top:0;bottom:0;left:-40%;width:35%;background:linear-gradient(90deg,transparent,rgba(124,255,158,.18),transparent);animation:o2scan 3.2s linear infinite;pointer-events:none}
+@keyframes o2scan{to{left:120%}}
+.o2-forum:hover,.o2-forum:focus-visible{padding-right:24px;box-shadow:inset 4px 0 0 #7CFF9E,0 0 28px rgba(124,255,158,.45);outline:none}
+.o2-forum:hover i{transform:translateX(5px)}
 /* ---------- Overview, cockpit layout (21 Oct 2026) ---------- */
 .o2{--o2c:#5FE3D6;--o2l:rgba(95,227,214,.22);--o2l2:rgba(95,227,214,.1);--o2m:#A9BDCB;--o2e:cubic-bezier(.2,.8,.2,1);--o2cond:"Barlow Condensed","Barlow",Arial,sans-serif;--o2mono:"Share Tech Mono",ui-monospace,Menlo,Consolas,monospace;padding-top:18px;color:#E8F1F6}
 .o2 [hidden]{display:none!important}
@@ -1092,6 +1110,7 @@ body.o2-shake #app{animation:o2shake .5s linear}
         else if (m.action === "logout") { state.in = false; put("ukagDemoIn", "0"); put("ukagDemoOut", "1"); out.data = { loggedOut: true }; }
         else if (m.action === "addTrip") out.data = addTrip(m.payload || {});
         else if (m.action === "saveTrip") { var all = trips(); all.forEach(function (t) { if (t.id === (m.payload || {}).id) Object.assign(t, (m.payload || {}).changes || {}); }); putJ("ukagDemoTrips", all); out.data = {}; }
+        else if (m.action === "removeTrip") { putJ("ukagDemoTrips", trips().filter(function (t) { return t.id !== (m.payload || {}).id; })); out.data = { removed: true }; }
         else if (m.action === "markUpdatesRead") { putJ("ukagDemoUpdates", updates().map(function (u) { u.read = true; return u; })); out.data = {}; }
         else if (m.action === "go") out.data = {};
         else { out.ok = false; out.error = "This part needs the live site. The preview shows logging in, setting up and the forum."; }
@@ -1763,6 +1782,7 @@ body.o2-shake #app{animation:o2shake .5s linear}
             <div class="o2-sys"><b>SYS 02</b><span id="o2Clock">--:--</span><span>· Overview</span></div>
             <h2 class="o2-h"><span id="o2Greet">Good afternoon,</span><br><span class="t" id="o2Name"></span><span class="caret" aria-hidden="true"></span></h2>
             <p class="o2-brief" id="o2Brief"></p>
+            <button class="o2-forum" type="button" data-o2go="forum"><span class="scan" aria-hidden="true"></span><small>F1 · COMMS · LINK READY</small><b>Airshow Forum</b><i aria-hidden="true">→</i></button>
           </div>
           <div class="o2-chips">
             <div class="o2-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><div><b id="o2Tod">Afternoon light</b><small id="o2TodS">Sun in the south west</small></div></div>
@@ -2932,7 +2952,17 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       body.appendChild(el("span", "", "Plan " + readiness(t) + "% ready"));
       b.appendChild(body);
       b.onclick = function () { S.tripId = t.id; renderTrips(); renderTripDetail(); renderGlass(); renderKit(); renderGroup(); renderGoing(); };
-      box.appendChild(b);
+      /* remove tab, in case the wrong show was added: tap once to arm, tap again to remove */
+      var w = el("div", "tripw"); w.appendChild(b);
+      var x = el("button", "trip-x", "× Remove"); x.type = "button"; x.setAttribute("aria-label", "Remove " + t.showName + " from my trips");
+      x.onclick = function (e) {
+        e.stopPropagation();
+        if (!x.classList.contains("armed")) { x.classList.add("armed"); x.textContent = "Tap again to remove"; setTimeout(function () { x.classList.remove("armed"); x.textContent = "× Remove"; }, 4000); return; }
+        x.disabled = true; x.textContent = "Removing";
+        call("removeTrip", { id: t.id }).then(function () { say(t.showName + " removed from your trips"); if (S.tripId === t.id) S.tripId = null; return load(); }).catch(function (err) { x.disabled = false; x.textContent = "× Remove"; x.classList.remove("armed"); oops(err); });
+      };
+      w.appendChild(x);
+      box.appendChild(w);
     });
     var add = el("div", "addcard");
     add.appendChild(el("b", "", S.hub.trips.length ? "+ Add another show" : "+ Add your first show"));
