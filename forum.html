@@ -70,7 +70,6 @@ p{margin:0}
 .glass,.panel{position:relative;background:linear-gradient(155deg,var(--glass),rgba(10,26,40,.42));border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 14px 30px rgba(0,0,0,.28);min-width:0}
 .glass{backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%)}
 .panel{background:linear-gradient(155deg,rgba(18,44,64,.9),rgba(9,24,37,.88))}
-.sec{content-visibility:auto;contain-intrinsic-size:auto 1400px}
 .glass::before,.panel::before,.glass::after,.panel::after{content:"";position:absolute;width:16px;height:16px;pointer-events:none;border:2px solid var(--cyan)}
 .glass::before,.panel::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
 .glass::after,.panel::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
@@ -322,6 +321,19 @@ td .mono{font-size:14px}
 .typing{grid-column:1/-1;font-family:var(--f-mono);font-size:13px;color:var(--cyan);min-height:1.5em;margin-bottom:6px;opacity:0;transform:translateY(3px);transition:opacity .25s,transform .25s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .typing.on{opacity:1;transform:none}
 .typing i,.boot i{display:inline-block;width:8px;height:14px;background:var(--cyan);vertical-align:-2px;margin-left:2px;animation:blink 1s steps(2) infinite}
+/* tabs: one section shows at a time so every view fits the Wix box */
+.sec[data-off]{display:none}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pager .mono{font-size:14px;color:var(--mut)}
+.pager .chip[disabled]{opacity:.4;cursor:default}
+body{display:flex;flex-direction:column;min-height:100vh}
+main{flex:1}
+.more{padding-block:8px 40px}
+.more .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.more b{font-weight:600;color:var(--mut);margin-right:6px}
+.more a{text-decoration:none;font-weight:600;font-size:15px;padding:8px 14px;border:1px solid var(--line);color:var(--fg);transition:border-color .25s,color .25s}
+.more a:hover{border-color:var(--cyan);color:var(--cyan)}
+.more a.on{background:var(--teal);border-color:var(--teal);color:#061019}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:rgba(6,16,25,.95);border:1px solid var(--cyan);backdrop-filter:blur(12px);color:var(--fg);padding:10px 16px;font-weight:600;z-index:50;max-width:calc(100% - 32px)}
 
 @media (max-width:1040px){
@@ -430,6 +442,7 @@ td .mono{font-size:14px}
           </div>
         </form>
         <div id="posts" class="col"></div>
+        <div class="pager" id="pager" aria-label="Feed pages"></div>
       </div>
 
       <div class="col">
@@ -455,7 +468,7 @@ td .mono{font-size:14px}
         </div>
       </div>
     </div>
-    <a class="back" href="#top">Back to the top ↑</a>
+    
   </div>
 </section>
 
@@ -474,7 +487,7 @@ td .mono{font-size:14px}
         <button class="btn p" type="submit">Send to Jack</button>
       </div>
     </form>
-    <a class="back" href="#top">Back to the top ↑</a>
+    
   </div>
 </section>
 
@@ -539,7 +552,7 @@ td .mono{font-size:14px}
         </div>
       </div>
     </div>
-    <a class="back" href="#top">Back to the top ↑</a>
+    
   </div>
 </section>
 
@@ -551,7 +564,7 @@ td .mono{font-size:14px}
     <div class="bfil" id="bfil" role="group" aria-label="Filter by show"></div>
     <div class="buddies" id="buddies"></div>
     <p class="note" style="margin-top:18px"><b>Staying safe.</b> I would advise meeting in a busy place first, like the main entrance or a food stall, and telling someone at home who you are meeting. Please see the rules before you go.</p>
-    <a class="back" href="#top">Back to the top ↑</a>
+    
   </div>
 </section>
 
@@ -582,7 +595,7 @@ td .mono{font-size:14px}
         <p class="note"><b>A tip from me.</b> If you are not waiting for a particular display, use it as a toilet break. The queues drop right down while everyone is watching.</p>
       </div>
     </div>
-    <a class="back" href="#top">Back to the top ↑</a>
+    
   </div>
 </section>
 
@@ -598,7 +611,7 @@ td .mono{font-size:14px}
         </table>
       </div>
     </div>
-    <a class="back" href="#top">Back to the top ↑</a>
+    
   </div>
 </section>
 
@@ -608,7 +621,7 @@ td .mono{font-size:14px}
     <div class="sh"><div><h2>Kit Swap</h2><p>Members selling or swapping cameras, lenses and camping kit. Payment and collection are sorted between you, so please see the rules before you buy.</p></div>
       <button class="btn" type="button" data-toast="In the live version this opens a listing form with photos, price and condition.">List an item</button></div>
     <div class="kit" id="kitlist"></div>
-    <a class="back" href="#top">Back to the top ↑</a>
+    
   </div>
 </section>
 
@@ -620,9 +633,10 @@ td .mono{font-size:14px}
       <div class="phead r"><h3>Waiting for you</h3><small id="qcount">3 items</small></div>
       <div class="queue" id="queue"></div>
     </div>
-    <a class="back" href="#top">Back to the top ↑</a>
+    
   </div>
 </section>
+<nav class="more" aria-label="More forum sections"><div class="wrap" id="more"><b>More of the forum</b></div></nav>
 </main>
 
 <footer class="foot">
@@ -634,6 +648,8 @@ td .mono{font-size:14px}
     </div>
   </div>
 </footer>
+<!-- the "More air shows" band from links.js is left off this page, which is not a show guide -->
+<div id="xl-band" hidden></div>
 <div class="toast" id="toast" hidden></div>
 
 <script>
@@ -670,8 +686,12 @@ const posts=[
   {id:4,n:'Dan Price',i:'D',c:'',b:['Helicopter fan'],g:'Photography',t:'2 days ago',follow:false,txt:'Hover shots are harder than jets. Slowed down to 1/125 so the blades show some movement. Took about 200 frames to get three keepers.',img:'heli-hover',cap:'1/125  f/9  ISO 100  300mm',likes:22,liked:false,cm:[]}
 ];
 let feedMode='all';
+let feedPage=0;const PER=2;
 function renderPosts(){
-  $('#posts').innerHTML=posts.filter(p=>feedMode==='all'||p.follow).map((p,k)=>`
+  const list=posts.filter(p=>feedMode==='all'||p.follow),pages=Math.max(1,Math.ceil(list.length/PER));
+  if(feedPage>=pages)feedPage=pages-1;
+  $('#pager').innerHTML=pages>1?`<button class="chip" type="button" data-pg="-1" ${feedPage===0?'disabled':''}>Newer posts</button><span class="mono">Page ${feedPage+1} of ${pages}</span><button class="chip" type="button" data-pg="1" ${feedPage>=pages-1?'disabled':''}>Older posts</button>`:'';
+  $('#posts').innerHTML=list.slice(feedPage*PER,feedPage*PER+PER).map((p,k)=>`
   <article class="panel post hud-in" style="--d:${k*.08}s" data-id="${p.id}">
     <div class="top"><div class="av ${p.c}">${esc(p.i)}</div><div class="who"><b>${esc(p.n)}</b><div class="m">${p.b.map(x=>`<span class="bdg">${esc(x)}</span>`).join('')}<span class="bdg t">${esc(p.g)}</span><span>${esc(p.t)}</span></div></div></div>
     <p class="txt">${esc(p.txt)}</p>
@@ -686,12 +706,13 @@ function renderPosts(){
     </div>
   </article>`).join('');
 }
-$$('[data-feed]').forEach(b=>b.addEventListener('click',()=>{feedMode=b.dataset.feed;$$('[data-feed]').forEach(x=>x.setAttribute('aria-pressed',x===b));renderPosts()}));
+$('#pager').addEventListener('click',e=>{const b=e.target.closest('[data-pg]');if(!b||b.disabled)return;feedPage+=+b.dataset.pg;renderPosts()});
+$$('[data-feed]').forEach(b=>b.addEventListener('click',()=>{feedMode=b.dataset.feed;feedPage=0;$$('[data-feed]').forEach(x=>x.setAttribute('aria-pressed',x===b));renderPosts()}));
 $('#ctags').addEventListener('click',e=>{const c=e.target.closest('.chip');if(c)c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')!=='true')});
 $('#compose').addEventListener('submit',e=>{
   e.preventDefault();const t=$('#ctext').value.trim();if(!t){toast('Write something first.');return}
   const tags=$$('#ctags .chip[aria-pressed="true"]').map(c=>c.dataset.tag);
-  posts.unshift({id:Date.now(),n:'Jack Skedge',i:'J',c:'',b:['Admin'],g:tags[0]||'General',t:'Just now',follow:true,txt:t,likes:0,liked:false,cm:[]});
+  feedPage=0;posts.unshift({id:Date.now(),n:'Jack Skedge',i:'J',c:'',b:['Admin'],g:tags[0]||'General',t:'Just now',follow:true,txt:t,likes:0,liked:false,cm:[]});
   $('#ctext').value='';$$('#ctags .chip').forEach(c=>c.setAttribute('aria-pressed','false'));renderPosts();toast('Posted to the feed.');
 });
 document.addEventListener('click',e=>{
@@ -793,14 +814,6 @@ $('#queue').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if
 
 renderPosts();renderChal();renderSpots();renderBuddies();renderRare();renderQueue();
 
-/* replay the open and glitch as panels come into view */
-(function(){
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
-  const vh=innerHeight;
-  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){const el=en.target;el.classList.remove('hud-in');void el.offsetWidth;el.classList.add('hud-in');io.unobserve(el)}}),{threshold:.15});
-  $$('.hud-in').forEach(el=>{if(el.getBoundingClientRect().top>vh){el.classList.remove('hud-in');io.observe(el)}});
-})();
-
 /* typing readout: same text and blinker as the forum status box */
 (function(){
   const LABEL={ctext:'Typing your post',gname:'Typing a group idea',gwhy:'Typing a group idea',ltext:'Typing a live update'};
@@ -812,11 +825,19 @@ renderPosts();renderChal();renderSpots();renderBuddies();renderRare();renderQueu
   document.addEventListener('focusout',e=>{const f=e.target.closest('textarea,.input');if(f){const b=box(f);setTimeout(()=>{if(document.activeElement!==f)b.classList.remove('on')},900)}});
 })();
 
-/* scroll spy */
+/* tabs: the menu shows one section at a time */
 (function(){
-  const links=$$('.jump a'),secs=links.map(a=>document.querySelector(a.getAttribute('href')));
-  function spy(){let cur=0;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<140)cur=i});links.forEach((a,i)=>a.classList.toggle('on',i===cur&&scrollY>200))}
-  addEventListener('scroll',spy,{passive:true});spy();
+  const links=$$('.jump a'),ids=links.map(a=>a.getAttribute('href').slice(1));
+  $('#more').insertAdjacentHTML('beforeend',links.map(a=>`<a href="${a.getAttribute('href')}">${esc(a.childNodes[0].textContent)}</a>`).join(''));
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function show(id,anim){
+    if(!ids.includes(id))id='feed';
+    ids.forEach(x=>{const s=document.getElementById(x);if(x===id)s.removeAttribute('data-off');else s.setAttribute('data-off','')});
+    $$('.jump a,#more a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+id));
+    if(anim&&!reduce)document.getElementById(id).querySelectorAll('.panel').forEach((p,k)=>{p.classList.remove('hud-in');p.style.setProperty('--d',(k%6)*.06+'s');void p.offsetWidth;p.classList.add('hud-in')});
+  }
+  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(!ids.includes(id))return;e.preventDefault();show(id,true);if(id==='feed'&&a.closest('.btns'))setTimeout(()=>$('#ctext').focus({preventScroll:true}),300)});
+  show((location.hash||'#feed').slice(1),false);
 })();
 </script>
 
