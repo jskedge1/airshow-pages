@@ -121,21 +121,21 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
 .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}
 
 /* ---------- season runway ---------- */
-.runway{position:relative;height:150px;margin:6px 4px 0}
-.strip{position:absolute;left:0;right:0;top:58px;height:46px;background:#0B1C2A;border:1px solid rgba(95,227,214,.25)}
+.runway{position:relative;height:172px;margin:6px 4px 0}
+.strip{position:absolute;left:0;right:0;top:90px;height:46px;background:#0B1C2A;border:1px solid rgba(95,227,214,.25)}
 .strip::before{content:"";position:absolute;left:12px;right:12px;top:50%;height:2px;background:repeating-linear-gradient(90deg,rgba(232,241,246,.75) 0 22px,transparent 22px 40px);transform:translateY(-50%)}
-.lights{position:absolute;left:0;right:0;top:52px;height:58px;pointer-events:none;background:radial-gradient(circle,rgba(242,178,51,.9) 1.5px,transparent 2.5px) 0 0/30px 6px repeat-x,radial-gradient(circle,rgba(242,178,51,.9) 1.5px,transparent 2.5px) 0 52px/30px 6px repeat-x;animation:chase 2.4s linear infinite}
+.lights{position:absolute;left:0;right:0;top:84px;height:58px;pointer-events:none;background:radial-gradient(circle,rgba(242,178,51,.9) 1.5px,transparent 2.5px) 0 0/30px 6px repeat-x,radial-gradient(circle,rgba(242,178,51,.9) 1.5px,transparent 2.5px) 0 52px/30px 6px repeat-x;animation:chase 2.4s linear infinite}
 @keyframes chase{to{background-position:30px 0,30px 52px}}
-.months{position:absolute;left:0;right:0;top:112px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--mut)}
+.months{position:absolute;left:0;right:0;top:146px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--mut)}
 .mk{position:absolute;top:8px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0}
 .mk b{font-size:13px;font-weight:700;white-space:nowrap;background:var(--panel2);border:1px solid var(--line);padding:2px 8px;transition:background .25s,color .25s}
-.mk i{width:2px;height:26px;background:var(--cyan)}
+.mk i{width:2px;height:var(--h,26px);background:var(--cyan)}
 .mk em{width:12px;height:12px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 0 rgba(95,227,214,.6);animation:beacon 2s infinite}
 .mk.mine b{background:var(--teal);color:#061019;border-color:var(--teal)}
 .mk.dim em{background:#41586B;animation:none}.mk.dim i{background:#41586B}.mk.dim b{color:var(--mut)}
 .mk:hover b,.mk:focus-visible b{background:var(--cyan);color:#061019}
 @keyframes beacon{70%{box-shadow:0 0 0 10px rgba(95,227,214,0)}100%{box-shadow:0 0 0 0 rgba(95,227,214,0)}}
-.jet{position:absolute;top:62px;left:0;width:38px;transform:translateX(-50%) rotate(90deg);transition:left 2.2s var(--ease);filter:drop-shadow(0 0 8px rgba(215,73,73,.6))}
+.jet{position:absolute;top:90px;left:0;width:38px;transform:translateX(-50%) rotate(90deg);transition:left 2.2s var(--ease);filter:drop-shadow(0 0 8px rgba(215,73,73,.6))}
 .rnote{margin-top:6px;color:#D2DFE8;font-size:15px}
 .rnote b{color:var(--cyan)}
 
@@ -518,7 +518,7 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
   });
 
   /* radar: blips light up as the sweep passes over them */
-  var BL = [["Cosford", 300, 130, true, 1, 4], ["RIAT", 272, 112, true, 0, 16], ["Duxford", 318, 46, false, 1, 4], ["Shuttleworth", 298, 66, false, 1, 4], ["Eastbourne", 200, 72, false, 0, 4], ["Clacton", 82, 58, false, 0, 4], ["Southport", 312, 168, false, 1, 10], ["Blackpool", 322, 186, false, 1, -4]];
+  var BL = [["Cosford", 300, 130, true, 1, 4], ["RIAT", 272, 112, true, 0, 16], ["Duxford", 322, 46, false, 0, -6], ["Shuttleworth", 298, 66, false, 1, 4], ["Eastbourne", 200, 72, false, 0, 4], ["Clacton", 82, 58, false, 0, 4], ["Southport", 312, 168, false, 1, 10], ["Blackpool", 322, 186, false, 1, -4]];
   var blips = $("blips"), NS = "http://www.w3.org/2000/svg";
   BL.forEach(function (b) {
     var a = (b[1] - 90) * Math.PI / 180, r = b[2] * .95, x = 200 + Math.cos(a) * r, y = 200 + Math.sin(a) * r;
@@ -547,7 +547,7 @@ h1 .caret{display:inline-block;width:.42em;height:.78em;background:var(--cyan);v
   SEASON.forEach(function (sh, i) {
     var pct = (new Date(sh[1]).getTime() - s0) / (s1 - s0) * 100;
     var b = document.createElement("button"); b.type = "button"; b.className = "mk " + (sh[2] ? "mine" : "dim"); b.style.left = pct + "%";
-    b.style.top = (i % 2 ? 4 : 18) + "px";
+    var hh = [26, 50, 74][i % 3]; b.style.setProperty("--h", hh + "px"); b.style.top = (77 - hh) + "px";
     b.innerHTML = "<b></b><i></i><em></em>"; b.querySelector("b").textContent = sh[0];
     b.title = sh[0] + ", " + new Date(sh[1]).toLocaleDateString("en-GB", { day: "numeric", month: "long" });
     b.addEventListener("click", function () { $("rnote").innerHTML = ""; var t = document.createElement("span"); t.textContent = sh[0] + " is on " + new Date(sh[1]).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }) + ". "; var bb = document.createElement("b"); bb.textContent = sh[2] ? "It is on your trips." : "Tap Add to my trips on its show page to save it."; $("rnote").appendChild(t); $("rnote").appendChild(bb); });
