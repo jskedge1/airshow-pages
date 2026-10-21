@@ -937,6 +937,13 @@ label.f{color:var(--hud-fg)}
 #guest .lg-tower i{display:block;height:6px;background:#13293C;margin-top:18px;position:relative}
 #guest .lg-tower i::after{content:"";position:absolute;left:0;top:0;bottom:0;background:var(--lg-cyan);box-shadow:0 0 12px var(--lg-cyan);animation:lgFill 2s cubic-bezier(.4,0,.2,1) both}
 
+#guest .lg-ask .lg-ask-tag{display:inline-block;background:#6950A1;color:#fff;font-family:var(--lg-body,"Barlow",Arial,sans-serif);font-weight:600;font-size:14px;padding:4px 10px;margin-bottom:14px}
+#guest .lg-ask .lg-ask-p{font-family:"Barlow",Arial,sans-serif;font-size:17px;line-height:1.5;color:#D2DFE8;margin-top:12px}
+#guest .lg-ask-b{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+#guest .lg-ask-b button{font:700 16px "Barlow",Arial,sans-serif;padding:12px 20px;border:2px solid #32B4AF;cursor:pointer;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,background .3s}
+#guest .lg-ask-b .y{background:#32B4AF;color:#061019}
+#guest .lg-ask-b .n{background:transparent;color:#fff;border-color:#fff}
+#guest .lg-ask-b button:hover,#guest .lg-ask-b button:focus-visible{transform:translateY(-2px);box-shadow:0 0 22px rgba(95,227,214,.35);outline:none}
 @keyframes lgSmoke{0%,100%{transform:scaleX(1);opacity:1;filter:blur(1.2px)}50%{transform:scaleX(.88);opacity:.8;filter:blur(2px)}}
 @keyframes lgBob{0%,100%{transform:rotate(90deg) translateX(0)}50%{transform:rotate(90deg) translateX(-2px)}}
 @keyframes lgFrame{from{width:0;height:0;opacity:0}to{width:34px;height:34px;opacity:1}}
@@ -1135,6 +1142,8 @@ label.f{color:var(--hud-fg)}
 
 <div class="lg-tower" id="lgTower" role="status" aria-live="polite" hidden><div><small>TOWER · MY AIRSHOW HUB</small><b id="lgTowerT">CLEARED FOR TAKE OFF</b><p id="lgTowerP">&gt; OPENING THE MEMBERS LOGIN</p><i></i></div></div>
 
+<div class="lg-tower lg-ask" id="lgAsk" role="dialog" aria-modal="true" aria-labelledby="lgAskT" hidden><div><span class="lg-ask-tag">My Airshow Hub</span><b id="lgAskT">READY TO ENTER YOUR HUB?</b><p class="lg-ask-p">Log in to open your saved shows, trips, must see aircraft and the forum.</p><div class="lg-ask-b"><button type="button" class="y" id="lgAskY">Yes, take me in</button><button type="button" class="n" id="lgAskN">Not now</button></div></div></div>
+
 <button type="button" data-act="login" id="lgActLogin" hidden></button>
 <button type="button" data-act="signup" id="lgActSignup" hidden></button>
 
@@ -1200,8 +1209,19 @@ label.f{color:var(--hud-fg)}
     var tw = $("lgTower"); tw.hidden = false;
     setTimeout(function () { tw.hidden = true; $(m === "in" ? "lgActLogin" : "lgActSignup").click(); }, 2100);
   }
-  cta.addEventListener("click", function () { takeOff(mode); });
-  $("lgHubTab").addEventListener("click", function () { takeOff("in"); });
+  /* Log in asks "Ready to enter your hub?" first. Yes opens the login, and once it works the hub shows the big welcome back screen. */
+  var ask = $("lgAsk");
+  function closeAsk() { ask.hidden = true; document.removeEventListener("keydown", askKey, true); }
+  function askKey(e) { if (e.key === "Escape") closeAsk(); }
+  function askEnter() {
+    fx("lock"); ask.hidden = false; document.addEventListener("keydown", askKey, true);
+    setTimeout(function () { $("lgAskY").focus(); }, 60);
+  }
+  $("lgAskY").addEventListener("click", function () { closeAsk(); window.ukagWB = Date.now(); takeOff("in"); });
+  $("lgAskN").addEventListener("click", closeAsk);
+  ask.addEventListener("click", function (e) { if (e.target === ask) closeAsk(); });
+  cta.addEventListener("click", function () { if (mode === "in") askEnter(); else { window.ukagWB = Date.now(); takeOff(mode); } });
+  $("lgHubTab").addEventListener("click", askEnter);
   $("lgNoteJoin").addEventListener("click", function () { setMode("join"); fx("whoosh"); var c = document.querySelector("#guest .lg-card"); if (c && c.scrollIntoView) c.scrollIntoView({ behavior: "smooth", block: "center" }); });
 
   /* the ten tools on the Typhoon, the pop out screen and the phone */
@@ -1860,6 +1880,25 @@ label.f{color:var(--hud-fg)}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<!-- Welcome back screen (21 Oct 2026): shows once after a member logs in from the hub, then opens the Overview page. -->
+<div id="hubWB" role="status" aria-live="polite" hidden><div class="wb-in"><span class="wb-tag">Systems online</span><b class="wb-h">WELCOME BACK</b><b class="wb-n" id="hubWBName"></b><p class="wb-l">&gt; TAKING YOU TO YOUR HUB</p><i class="wb-p"></i></div></div>
+<style>
+#hubWB{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(900px 500px at 50% 40%,rgba(50,180,175,.18),transparent 70%),rgba(5,13,20,.96);color:#fff;font-family:"Barlow",Arial,sans-serif;text-align:center;transition:opacity .6s ease}
+#hubWB.go{opacity:0}
+#hubWB .wb-in{width:min(1100px,100%);animation:wbOpen .9s cubic-bezier(.2,.8,.2,1) both}
+#hubWB .wb-tag{display:inline-block;background:#6950A1;font-weight:600;font-size:15px;padding:5px 12px}
+#hubWB .wb-h{display:block;font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:clamp(58px,14vw,200px);line-height:.88;letter-spacing:.01em;margin-top:18px;text-shadow:0 0 44px rgba(95,227,214,.4);animation:wbGlitch .6s steps(1,end) .9s 1}
+#hubWB .wb-n{display:block;font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:clamp(30px,6.4vw,80px);line-height:1;color:#5FE3D6;margin-top:12px;text-transform:uppercase}
+#hubWB .wb-n:empty{display:none}
+#hubWB .wb-l{font-family:"Share Tech Mono",ui-monospace,Menlo,Consolas,monospace;font-size:17px;color:#5FE3D6;margin-top:18px}
+#hubWB .wb-p{display:block;height:6px;max-width:520px;margin:22px auto 0;background:#13293C;position:relative;overflow:hidden}
+#hubWB .wb-p::after{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:#5FE3D6;box-shadow:0 0 12px #5FE3D6;animation:wbFill 3s cubic-bezier(.4,0,.2,1) .2s forwards}
+@keyframes wbOpen{0%{clip-path:inset(50% 0 50% 0);opacity:0}35%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(-60px);opacity:1}}
+@keyframes wbGlitch{0%{transform:translateX(-6px);text-shadow:4px 0 #D74949,-4px 0 #5FE3D6}25%{transform:translateX(5px) skewX(-4deg)}50%{transform:translateX(-2px);text-shadow:-3px 0 #6950A1,3px 0 #5FE3D6}75%{transform:none;text-shadow:0 0 44px rgba(95,227,214,.4)}100%{transform:none}}
+@keyframes wbFill{to{width:100%}}
+@media (prefers-reduced-motion:reduce){#hubWB *,#hubWB{animation:none!important;transition:none!important}#hubWB .wb-p::after{width:100%}}
+</style>
+
 <script>
 (function () {
   "use strict";
@@ -1939,6 +1978,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       $("guest").hidden = true; $("app").hidden = false;
       if (!trip()) S.tripId = hub.trips[0] ? hub.trips[0].id : null;
       renderAll();
+      if (window.ukagWB && Date.now() - window.ukagWB < 600000) { window.ukagWB = 0; welcomeBack(hub.member.name); }
       if (S.join) { var c = S.join; S.join = ""; joinGroup(c); }
     }).catch(function (e) {
       $("loading").innerHTML = "";
@@ -1946,6 +1986,15 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       var b = el("button", "btn", "Try again"); b.onclick = function () { $("loading").innerHTML = '<div class="spin"></div>Loading your hub'; load(); };
       $("loading").appendChild(b);
     });
+  }
+
+  /* big welcome back screen after logging in, then the Overview page ("Systems online. Welcome back.") */
+  function welcomeBack(name) {
+    var w = $("hubWB"); if (!w) return;
+    $("hubWBName").textContent = (name || "").trim().split(/\s+/)[0] || "";
+    showPage("overview");
+    w.classList.remove("go"); w.hidden = false;
+    setTimeout(function () { w.classList.add("go"); setTimeout(function () { w.hidden = true; w.classList.remove("go"); }, 650); }, 3400);
   }
 
   function renderAll() {
