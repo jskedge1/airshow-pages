@@ -118,8 +118,21 @@ body{font-family:'Barlow',sans-serif;color:#fff;-webkit-font-smoothing:antialias
   /* warm the second look once the first has loaded, so switching is instant */
   F.clean.addEventListener('load',()=>{setTimeout(()=>{if(!F.hud.src)F.hud.src=F.hud.dataset.src},1200)},{once:true});
 
-  const saved=store.get('forumLook');
-  if(saved==='hud'){cur='clean';set('hud',false)}
+  /* inside My Airshow Hub: open on the HUD look to match the hub, and keep the hub's own forum tweaks working */
+  let hubWin=null;
+  try{if(window.parent!==window&&window.parent.document.getElementById('hubForumFrame'))hubWin=window.parent}catch(e){}
+  function hubTweaks(f){
+    if(!hubWin)return;
+    const d=doc(f);if(!d||d.__hubDone)return;d.__hubDone=true;
+    const st=d.createElement('style');st.textContent='.btns a[href*="my-airshow-hub"],.hub-cta a[href*="my-airshow-hub"],.how-links a[href*="my-airshow-hub"],.member-login{display:none!important}';d.head.appendChild(st);
+    d.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href]');if(!a)return;
+      if(/my-airshow-hub/.test(a.getAttribute('href')||'')){e.preventDefault();e.stopPropagation();if(hubWin.ukagShowPage)hubWin.ukagShowPage('overview')}},true);
+  }
+  Object.values(F).forEach(f=>f.addEventListener('load',()=>hubTweaks(f)));
+  hubTweaks(F.clean);
+
+  const saved=store.get('forumLook')||(hubWin?'hud':'');
+  if(saved==='hud'){cur='clean';F.clean.classList.add('off');set('hud',false)}
 
   function hideHint(){$('#hint').hidden=true;store.set('forumLookHint','1')}
   $('#hintOk').addEventListener('click',hideHint);
