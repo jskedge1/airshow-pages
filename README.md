@@ -131,3 +131,9 @@ fields, plus `pending` for changes waiting for Jack, `status` pending, live, sen
 linked the first time they log in with the same email. Photos upload to the Media folder /traders/<slug>.
 Opened on their own (not inside Wix) the three pages show example data so the design can be checked.
 Phase 2: Wix Pricing Plans (plans set up but switched off until Jack says go), show day updates, offers, messages and emails.
+
+Wix editor setup for the traders pages (done 25 Oct 2026, saved, not published):
+- /airshow-traders, /trader-hub and /trader-admin are hidden from the menu. /trader-admin is set to site members only.
+- Each page has one HTML embed with ID html1, stretched full width, H 1000, Y 360, inside a section set to H 1020 (the section must be taller than the embed or the footer sits on top of it).
+- Page code from velo/page-code is pasted into each page, and velo/backend/traders.web.js is the backend web module traders.web.js.
+- To try it without publishing, use Test Site in the editor. Click Test Site again after each save, and add a new &v= to the address if the old layout still shows.
