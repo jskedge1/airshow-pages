@@ -129,7 +129,7 @@ async function getMemberOrNull() {
 async function isAdmin() {
   try {
     const roles = await currentMember.getRoles();
-    return roles.some((r) => r._id === ADMIN_ROLE_ID || r.title === "Admin" || r.name === "Admin");
+    return roles.some((r) => r._id === ADMIN_ROLE_ID || r.title === "Admin" || r["name"] === "Admin");
   } catch (e) {
     return false;
   }
@@ -280,7 +280,7 @@ export const getDirectory = webMethod(Permissions.Anyone, () => wrap(async () =>
   const res = await wixData.query(C.traders).eq("status", "live").limit(500).find(OPTS);
   const shows = await showsFor(res.items.map((t) => t._id));
   const cards = res.items.map((t) => publicCard(t, shows));
-  cards.sort((a, b) => (b.headliner - a.headliner) || a.name.localeCompare(b.name));
+  cards.sort((a, b) => (Number(b.headliner) - Number(a.headliner)) || a.name.localeCompare(b.name));
   const taken = await foundingTaken();
   const m = await getMemberOrNull();
   return { traders: cards, shows: SHOWS, founding: { taken, total: FOUNDING_PLACES }, loggedIn: !!m };
@@ -457,7 +457,7 @@ export const getAdmin = webMethod(Permissions.Anyone, () => wrap(async () => {
   const res = await wixData.query(C.traders).descending("_createdDate").limit(1000).find(OPTS);
   const shows = await showsFor(res.items.map((t) => t._id));
   const rows = res.items.map((t) => adminRow(t, shows));
-  const queue = rows.filter((r) => r.isNew || r.changes.length).sort((a, b) => new Date(a.submittedDate) - new Date(b.submittedDate));
+  const queue = rows.filter((r) => r.isNew || r.changes.length).sort((a, b) => new Date(a.submittedDate).getTime() - new Date(b.submittedDate).getTime());
   return { admin: true, queue, traders: rows, founding: { taken: rows.filter((r) => r.founding).length, total: FOUNDING_PLACES } };
 }));
 
