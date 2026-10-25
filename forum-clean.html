@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airshow Forum | The Big Guide to UK Airshows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#13293C; --navy-d:#0E2131; --teal:#32B4AF; --teal-d:#0E5F5B; --teal-p:#E8F6F5;
+  --purple:#6950A1; --purple-p:#F3F0F9; --red:#D74949; --red-p:#FBEDED; --forest:#1E3A34;
+  --grey:#757575; --grey-l:#C6C6C6; --page:#F2F4F5; --ink:#0B1620; --line:#DCE1E4;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;font-size:16px;line-height:1.55;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+img{display:block;max-width:100%;pointer-events:none;-webkit-user-drag:none;user-select:none}
+[hidden]{display:none!important}
+.sr{position:absolute;left:-9999px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+.preview-strip{background:var(--purple);color:#fff;font-weight:500;font-size:14px;text-align:center;padding:8px 16px}
+.preview-strip b{font-weight:700}
+
+/* Tabs: one section shows at a time so every view fits the Wix box */
+.sec[data-off]{display:none}
+body{display:flex;flex-direction:column;min-height:100vh}
+main{flex:1}
+.more{background:#fff;padding:10px 0 44px}
+.more .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.more b{font-weight:700;color:var(--navy);margin-right:6px}
+.more a{text-decoration:none;font-weight:600;font-size:15px;padding:8px 14px;border:1px solid var(--line);color:var(--navy);transition:border-color .3s,background .3s,color .3s}
+.more a:hover{border-color:var(--teal)}
+.more a.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.sec.grey+.more,.more.grey{background:var(--page)}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px}
+.pager span{font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums}
+.pager .chip[disabled]{opacity:.4;cursor:default}
+.secfade{animation:secin .5s var(--ease)}
+@keyframes secin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* Header */
+.hero{position:relative;background:var(--navy);color:#fff;overflow:hidden}
+.hero-art{position:absolute;inset:0;pointer-events:none}
+.hero-art svg{position:absolute;right:-40px;bottom:0;width:min(920px,82vw);height:auto}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:sweep 7s var(--ease) infinite}
+@keyframes sweep{0%{background-position:-40% 0}100%{background-position:140% 0}}
+.bubble{animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-6px)}}
+.trail{stroke-dasharray:600;stroke-dashoffset:600;animation:draw 9s var(--ease) infinite}
+@keyframes draw{40%,100%{stroke-dashoffset:0}}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.75fr);gap:56px;align-items:end;padding:64px 0 0}
+.crumb{font-size:14px;font-weight:500;color:#A9C2CF;margin-bottom:22px}
+.crumb a{text-decoration:none;border-bottom:1px solid rgba(169,194,207,.4)}
+.crumb a:hover{color:#fff}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:5px 12px;margin-bottom:18px}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(44px,6.4vw,84px);line-height:.92;letter-spacing:-.005em;max-width:12ch}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.hero .sub{margin-top:18px;font-weight:700;text-transform:uppercase;color:var(--teal);font-size:17px;letter-spacing:.04em}
+.hero p.intro{margin-top:18px;max-width:56ch;color:#D7E3EA;font-size:17px;line-height:1.6}
+.hero p.intro strong{color:#fff;font-weight:600}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 22px;font-weight:600;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .35s var(--ease),background .35s var(--ease),color .35s var(--ease),border-color .35s}
+.btn:hover{transform:translateY(-2px)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:#2AA29D}
+.btn-out{border-color:#fff;color:#fff;background:transparent}
+.btn-out:hover{background:#fff;color:var(--navy)}
+.btn-navy{border-color:var(--navy);color:var(--navy);background:transparent}
+.btn-navy:hover{background:var(--navy);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:#C23E3E}
+.btn-purple{background:var(--purple);color:#fff}
+.btn.sm{padding:9px 14px;font-size:14.5px}
+.btn .arr{transition:transform .35s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.btn[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+.member-login{margin-top:16px;font-size:15px;color:#A9C2CF}
+.member-login a{color:#fff;font-weight:600;text-decoration:none;border-bottom:2px solid var(--teal)}
+.keybox{background:rgba(14,33,49,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:4px solid var(--teal);box-shadow:0 20px 50px rgba(0,0,0,.35);padding:22px 24px 20px;margin-bottom:-1px}
+.keybox h2{display:flex;align-items:center;gap:12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:22px;color:var(--teal);margin-bottom:12px}
+.ico{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none}
+.ico svg{width:18px;height:18px}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08);font-size:15px}
+.kv span:first-child{color:#9FD8D5;font-weight:500}
+.kv span:last-child{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;transition:color .4s}
+.kv.hl span:last-child{background:var(--red);padding:1px 8px}
+.kv .live{display:inline-flex;align-items:center;gap:8px}
+.kv .live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(50,180,175,.7)}70%{box-shadow:0 0 0 8px rgba(50,180,175,0)}100%{box-shadow:0 0 0 0 rgba(50,180,175,0)}}
+.jump{position:relative;display:flex;flex-wrap:wrap;gap:4px;margin-top:48px}
+.jump::-webkit-scrollbar{display:none}
+.jump a{flex:none;color:#fff;text-decoration:none;font-weight:600;padding:14px 18px;transition:padding .4s var(--ease),background .4s var(--ease)}
+.jump a:hover,.jump a:focus-visible,.jump a.on{background:var(--teal);outline:none}
+@media (min-width:1021px){.jump a:hover,.jump a:focus-visible,.jump a.on{padding:14px 26px}}
+@media (max-width:700px){.jump a{padding:10px 12px;font-size:14.5px}}
+.jump a b{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:8px;border-radius:11px;background:var(--purple);font-size:12.5px;padding:0 6px}
+
+/* Section titles */
+section{scroll-margin-top:12px}
+.sec{padding:84px 0 80px}
+.sec.grey{background:var(--page)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px;align-items:end;margin-bottom:34px}
+.sec-head h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--red);font-size:clamp(34px,4vw,50px);line-height:.95;padding-left:18px;border-left:4px solid var(--red)}
+.sec-head p{color:#33424D;max-width:58ch}
+.sec-head .side-btn{margin-top:14px}
+.back{display:inline-block;margin-top:34px;font-weight:600;color:var(--navy);text-decoration:none;border-bottom:2px solid var(--teal);padding-bottom:2px;transition:transform .35s var(--ease)}
+.back:hover{transform:translateX(4px)}
+.h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:26px;line-height:1}
+
+/* Shared form bits */
+.search,.inp,select,textarea{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#fff;transition:border-color .3s,box-shadow .3s}
+.search:focus,.inp:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(50,180,175,.18)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2313293C' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer;padding-right:34px}
+textarea{min-height:92px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--grey-l);background:#fff;padding:7px 11px;font-weight:600;font-size:14px;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease),border-color .3s}
+.chip:hover{border-color:var(--teal)}
+.chip[aria-pressed=true],.chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+
+/* Feed */
+.hub-cta{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:var(--navy);color:#fff;padding:18px 22px;margin-bottom:28px;border-left:6px solid var(--teal)}
+.hub-cta .me{display:flex;align-items:center;gap:14px}
+.hub-cta b{font-weight:700}
+.hub-cta span{color:#D7E3EA}
+.hub-cta .bdgs{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.av{width:44px;height:44px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:21px;flex:none}
+.av.p{background:var(--purple)}.av.r{background:var(--red)}.av.n{background:var(--navy)}.av.f{background:var(--forest)}
+.av.sm{width:32px;height:32px;font-size:16px}
+.bdg{display:inline-block;font-weight:600;font-size:13px;padding:2px 9px;color:#fff;background:var(--teal-d)}
+.bdg.p{background:var(--purple)}.bdg.r{background:var(--red)}.bdg.n{background:var(--navy)}
+.bdg.l{background:var(--teal-p);color:var(--teal-d)}
+.finder{display:grid;grid-template-columns:270px minmax(0,1fr);gap:32px;align-items:start}
+.side{position:sticky;top:16px;display:flex;flex-direction:column;gap:16px}
+.sidebox{background:#fff;border:1px solid var(--line);padding:22px}
+.sidebox label.lbl,.sidebox .lbl{display:block;font-weight:700;font-size:15px;color:var(--navy);margin:0 0 8px}
+.sidebox .grp+.grp{margin-top:22px}
+.clear{margin-top:20px;background:none;border:0;font-weight:600;color:var(--red);cursor:pointer;padding:0}
+.tip{border-left:4px solid var(--purple);background:var(--purple-p);padding:12px 14px;font-size:14px;line-height:1.5}
+.tip b{color:var(--purple)}
+.notes{background:var(--navy);color:#fff;padding:20px 22px;border-top:4px solid var(--teal)}
+.notes h4{display:flex;justify-content:space-between;align-items:baseline;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;color:var(--teal);font-size:21px;margin-bottom:6px}
+.notes h4 button{font-family:'Barlow',sans-serif;text-transform:none;font-size:13.5px;font-weight:600;color:#9FD8D5;background:none;border:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.note-i{display:flex;gap:10px;padding:9px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14.5px;line-height:1.4;transition:opacity .4s}
+.note-i:first-of-type{border-top:0}
+.note-i::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:6px;transition:background .4s}
+.note-i.read{opacity:.6}
+.note-i.read::before{background:rgba(255,255,255,.25)}
+.note-i small{display:block;color:#9FB3C0;font-size:13px;margin-top:2px}
+.trend{display:flex;flex-wrap:wrap;gap:6px}
+.trend button{border:0;background:var(--teal-p);color:var(--teal-d);font-weight:600;font-size:14px;padding:5px 10px;cursor:pointer;transition:background .3s,color .3s}
+.trend button:hover{background:var(--teal);color:#fff}
+.results-bar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:24px 0 16px;font-weight:500;color:#33424D}
+.results-bar strong{color:var(--navy);font-weight:700}
+.results-bar select{width:auto;min-width:200px}
+.formbox{background:#fff;border:1px solid var(--line);border-top:4px solid var(--purple);padding:24px 26px}
+.formbox .lead{color:#33424D;margin:6px 0 16px}
+.crow{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px}
+.count{font-size:13.5px;color:#5A6873;font-variant-numeric:tabular-nums}
+.posts{display:flex;flex-direction:column;gap:20px}
+.card{position:relative;display:grid;grid-template-columns:62px minmax(0,1fr);background:#fff;border:1px solid var(--line);transition:transform .45s var(--ease),box-shadow .45s var(--ease),opacity .6s var(--ease)}
+.js .rv{opacity:0;transform:translateY(14px)}
+.js .rv.in{opacity:1;transform:none}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(19,41,60,.12)}
+.card::before{content:"";position:absolute;top:-1px;left:-1px;height:3px;width:0;background:var(--teal);transition:width .5s var(--ease);z-index:1}
+.card:hover::before{width:calc(100% + 2px)}
+.strip{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0;color:#fff}
+.strip .ico{width:38px;height:38px}
+.strip .vert{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:15px;letter-spacing:.04em;white-space:nowrap}
+.body{padding:20px 22px}
+.ptop{display:flex;gap:12px;align-items:center}
+.ptop .who{flex:1;min-width:0}
+.ptop .who b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:23px;line-height:1;color:var(--navy)}
+.ptop .who .m{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px;font-size:14px;color:#4E5D68;font-weight:500}
+.ptxt{margin-top:14px;font-size:15.5px;color:#26343E}
+.pfig{margin-top:14px;position:relative}
+.pfig img{width:100%;aspect-ratio:16/8;object-fit:cover}
+.pfig figcaption{position:absolute;left:0;bottom:0;background:var(--navy);color:#fff;font-size:13.5px;font-weight:600;padding:5px 10px;font-variant-numeric:tabular-nums}
+.acts{display:flex;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.act{display:inline-flex;align-items:center;gap:7px;border:1px solid transparent;background:none;padding:7px 10px;font-weight:600;font-size:14.5px;color:var(--navy);cursor:pointer;transition:border-color .3s,background .3s,color .3s}
+.act svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.act:hover{border-color:var(--line);background:var(--page)}
+.act[aria-pressed=true]{color:var(--red)}
+.act[aria-pressed=true] svg{fill:var(--red);transform:scale(1.12)}
+.act.rep{margin-left:auto;color:#4E5D68}
+.act.rep:hover{color:var(--red)}
+.cmts{margin-top:10px;background:#FAFBFB;border:1px solid var(--line)}
+.cmt{display:flex;gap:10px;padding:12px 14px;border-top:1px solid var(--line);font-size:15px}
+.cmt:first-child{border-top:0}
+.cmt b{display:block;color:var(--navy);font-weight:700;font-size:14.5px}
+.cin{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
+.cmts .cin:first-child{border-top:0}
+.cin .inp{padding:9px 11px}
+.empty{background:#fff;border:1px solid var(--line);padding:40px;text-align:center}
+.empty p{margin-top:8px;color:#33424D}
+
+/* Groups runway */
+.runway{position:relative;background:var(--navy);padding:34px 28px 26px;color:#fff}
+.months{display:grid;grid-template-columns:repeat(6,1fr);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:18px;color:#9FD8D5;margin-bottom:16px}
+.track{position:relative;height:6px;background:#2A4358;margin-bottom:6px}
+.track::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:repeating-linear-gradient(90deg,#fff 0 26px,transparent 26px 52px);opacity:.55;animation:centre 4s linear infinite}
+@keyframes centre{to{background-position:52px 0}}
+.flags{display:grid;grid-template-columns:repeat(6,1fr);gap:0 8px;margin-top:18px}
+.flag{position:relative;display:block;width:100%;text-align:left;background:rgba(255,255,255,.06);border:0;border-left:3px solid var(--teal);color:#fff;padding:10px 38px 10px 12px;margin-bottom:8px;cursor:pointer;transition:background .35s var(--ease),transform .35s var(--ease)}
+.flag:hover{background:rgba(50,180,175,.22);transform:translateX(3px)}
+.flag.on{background:#fff;color:var(--navy)}
+.flag b{display:block;font-weight:700;font-size:14.5px;line-height:1.25}
+.flag small{display:block;margin-top:3px;font-size:13px;color:#A9C2CF;font-weight:500}
+.flag.on small{color:var(--teal-d)}
+.flag .n{position:absolute;top:8px;right:8px;min-width:24px;height:24px;border-radius:12px;background:var(--purple);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center;padding:0 6px}
+.flag .j{position:absolute;bottom:8px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--teal)}
+.gfeat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:#fff;border:1px solid var(--line);margin-top:20px;animation:rise .5s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.gfeat .ph{position:relative;min-height:280px}
+.gfeat .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gfeat .ph .bdg{position:absolute;top:14px;left:14px}
+.gfeat .gb{padding:26px 28px}
+.gfeat .gb .town{margin-top:6px;font-weight:500;color:#4E5D68}
+.gstats{display:grid;grid-template-columns:repeat(3,1fr);margin:18px 0;border:1px solid var(--line)}
+.gstats div{padding:12px 14px;border-left:1px solid var(--line)}
+.gstats div:first-child{border-left:0}
+.gstats b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums}
+.gstats small{display:block;font-size:14px;color:#4E5D68;font-weight:500;margin-top:3px}
+.latest{background:var(--teal-p);padding:12px 14px;font-size:15px;margin-bottom:18px}
+.latest b{color:var(--teal-d)}
+.topics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:28px}
+.tcard{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .45s var(--ease),box-shadow .45s var(--ease),opacity .6s var(--ease)}
+.tcard:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(19,41,60,.12)}
+.tcard .ph{position:relative}
+.tcard .ph img{width:100%;aspect-ratio:16/8;object-fit:cover}
+.tcard .ph .bdg{position:absolute;top:12px;left:12px}
+.tcard .tb{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.tcard .tb p{font-size:15px;color:#33424D;flex:1}
+.tcard .gm{display:flex;gap:16px;font-size:14.5px;color:#4E5D68}
+.tcard .gm b{color:var(--navy)}
+.suggest{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:24px;align-items:center;margin-top:28px;background:var(--purple-p);border-left:4px solid var(--purple);padding:22px 24px}
+.suggest h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--purple);font-size:24px}
+.suggest p{font-size:15px;color:#33424D;margin-top:4px}
+.sform{display:grid;grid-template-columns:1fr 1fr auto;gap:8px}
+
+/* Photographer's corner */
+.corner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+.box{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal)}
+.box.red{border-top-color:var(--red)}.box.purple{border-top-color:var(--purple)}
+.box.wide{grid-column:1/-1}
+.bhead{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:20px 24px 0}
+.bhead span{font-weight:600;font-size:14.5px;color:var(--teal-d)}
+.bhead span.r{background:var(--red);color:#fff;padding:2px 9px}
+.bbody{padding:16px 24px 24px}
+.chal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.entry{border:1px solid var(--line);display:flex;flex-direction:column}
+.entry img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.entry .eb{padding:12px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.entry b{color:var(--navy);font-weight:700}
+.entry small{color:#4E5D68;font-size:14px}
+.vbar{height:6px;background:var(--page);overflow:hidden}
+.vbar i{display:block;height:100%;background:var(--teal);transition:width .6s var(--ease)}
+.vbar i.r{background:var(--red)}.vbar i.a{background:#E9A23B}.vbar i.p{background:var(--purple)}
+.vrow{display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-size:14px;font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums}
+.vote{border:2px solid var(--teal);background:#fff;color:var(--teal-d);font-weight:700;font-size:14px;padding:5px 12px;cursor:pointer;transition:background .3s,color .3s}
+.vote:hover,.vote[aria-pressed=true]{background:var(--teal);color:#fff}
+.ba{position:relative;aspect-ratio:16/9;overflow:hidden;--x:50%}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba .before{clip-path:inset(0 calc(100% - var(--x)) 0 0);filter:saturate(.55) brightness(.78) contrast(.9)}
+.ba .line{position:absolute;top:0;bottom:0;left:var(--x);width:3px;margin-left:-1.5px;background:#fff;pointer-events:none}
+.ba .line::after{content:"";position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:var(--teal);border:3px solid #fff}
+.ba .lab{position:absolute;bottom:10px;background:var(--navy);color:#fff;font-size:13.5px;font-weight:600;padding:4px 9px;pointer-events:none}
+.ba .lab.l{left:10px}.ba .lab.rr{right:10px}
+.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize}
+.readout{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);margin-top:14px}
+.readout div{padding:10px 12px;border-left:1px solid var(--line)}
+.readout div:first-child{border-left:0}
+.readout b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--navy);line-height:1.05}
+.readout small{font-size:13.5px;color:#4E5D68;font-weight:500}
+.bbody p.cap{margin-top:12px;font-size:15px;color:#26343E}
+.qa{display:flex;flex-direction:column;gap:14px}
+.q{border:1px solid var(--line)}
+.q summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;font-weight:700;color:var(--navy)}
+.q summary::-webkit-details-marker{display:none}
+.q summary i{flex:none;width:28px;height:28px;background:var(--teal);color:#fff;display:grid;place-items:center;font-style:normal;font-size:19px;transition:transform .35s var(--ease)}
+.q summary i::before{content:"+"}.q[open] summary i::before{content:"\2212"}
+.q .qb{padding:0 16px 16px;font-size:15px;color:#33424D}
+.ans{margin-top:10px;border-left:4px solid var(--teal);background:var(--teal-p);padding:10px 12px;color:#26343E}
+.ans small{display:block;margin-top:4px;font-weight:600;color:var(--teal-d);font-size:13.5px}
+.ask{display:flex;gap:8px;margin-top:4px}
+.spot{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:stretch}
+.map{background:var(--navy);padding:10px}
+.map svg{width:100%;height:auto;display:block}
+.pin{cursor:pointer;outline:none}
+.pin .o{fill:none;stroke:#fff;stroke-width:2;opacity:0;transition:opacity .3s}
+.pin .c{transition:transform .35s var(--ease);transform-box:fill-box;transform-origin:center}
+.pin:hover .c,.pin:focus .c{transform:scale(1.3)}
+.pin.on .o{opacity:1;animation:ring 1.8s var(--ease) infinite;transform-box:fill-box;transform-origin:center}
+@keyframes ring{0%{transform:scale(1);opacity:1}100%{transform:scale(2.4);opacity:0}}
+.spotinfo{border:1px solid var(--line);padding:18px 20px;animation:rise .4s var(--ease)}
+.spotinfo h4{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:24px;color:var(--navy);margin-top:10px;line-height:1}
+.spotinfo p{margin-top:12px;font-size:15px;color:#26343E}
+.spotinfo .kv2{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:14.5px}
+.spotinfo .kv2:first-of-type{margin-top:12px}
+.spotinfo .kv2 span:first-child{color:var(--teal-d);font-weight:600}
+.spotinfo .kv2 span:last-child{font-weight:700;color:var(--navy);text-align:right}
+.spotnav{display:flex;gap:6px;margin-top:14px}
+
+/* Buddy board */
+.bgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:20px}
+.bgrid .card .body{display:flex;flex-direction:column;gap:12px;height:100%}
+.bgrid .ptxt{margin-top:0;flex:1}
+.need{display:flex;flex-wrap:wrap;gap:6px}
+.when{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:14.5px}
+.when span:first-child{font-weight:600;color:var(--navy)}
+.when .d{font-weight:600;font-size:13px;border:1px solid var(--grey-l);padding:2px 8px}
+.links a,.links button{background:none;border:0;padding:0;cursor:pointer;text-decoration:none;color:var(--navy);font-weight:600;font-size:14.5px;transition:color .3s}
+.links span{color:var(--red);display:inline-block;transition:transform .35s var(--ease)}
+.links a:hover,.links button:hover{color:var(--teal-d)}
+.links a:hover span,.links button:hover span{transform:translateX(4px)}
+.visitor-tip{margin-top:26px;max-width:880px;border-left:4px solid var(--purple);background:var(--purple-p);padding:18px 20px}
+.visitor-tip h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;color:var(--purple);font-size:20px;margin-bottom:4px}
+
+/* Show day live */
+.livegrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:24px;align-items:start}
+.liveboard{background:var(--navy);color:#fff;border-top:4px solid var(--red)}
+.lbhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.1)}
+.lbhead h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:24px}
+.clock{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;color:var(--teal);font-variant-numeric:tabular-nums;line-height:1}
+.ticks{max-height:400px;overflow:auto;scrollbar-width:none}
+.ticks::-webkit-scrollbar{display:none}
+.tk{display:grid;grid-template-columns:62px minmax(0,1fr);gap:14px;padding:13px 22px;border-top:1px solid rgba(255,255,255,.07)}
+.tk:first-child{border-top:0}
+.tk.new{animation:slidein .6s var(--ease);background:rgba(50,180,175,.1)}
+@keyframes slidein{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+.tk time{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;color:#9FD8D5;font-variant-numeric:tabular-nums}
+.tk p{font-size:15px;color:#E6EEF2}
+.tk .k{display:inline-block;font-weight:600;font-size:13px;padding:1px 8px;margin-right:8px;background:var(--teal-d)}
+.tk .k.q{background:#B7791F}.tk .k.d{background:var(--red)}
+.liveform{display:flex;gap:8px;padding:14px 22px;background:rgba(0,0,0,.2)}
+.liveform .inp{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff}
+.liveform .inp::placeholder{color:#8FA6B4}
+.gauges{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);padding:20px 22px}
+.gauge{padding:12px 0;border-top:1px solid var(--line)}
+.gauge:first-of-type{border-top:0}
+.gauge .gl{display:flex;justify-content:space-between;font-size:15px;margin-bottom:8px}
+.gauge .gl span{font-weight:600;color:var(--navy)}
+.gauge .gl b{font-variant-numeric:tabular-nums}
+.season-note{display:flex;gap:16px;align-items:start;margin-top:20px}
+.season-note .ico{background:var(--purple)}
+.season-note p{color:#26343E;font-size:15px}
+
+/* Rarity table */
+.ctable{width:100%;border-collapse:collapse;font-size:15px;background:#fff;border:1px solid var(--line)}
+.ctable th{background:var(--navy);color:#fff;font-weight:600;padding:12px 14px;text-align:left}
+.ctable th button{background:none;border:0;color:#fff;font-weight:600;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.ctable th button i{font-style:normal;color:var(--teal);opacity:0;transition:opacity .3s}
+.ctable th button.on i{opacity:1}
+.ctable td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:middle}
+.ctable tr{transition:background .3s}
+.ctable tbody tr:hover{background:var(--teal-p)}
+.ac{display:flex;align-items:center;gap:12px}
+.ac img{width:74px;height:46px;object-fit:cover;flex:none}
+.ac b{color:var(--navy)}
+.rar{display:inline-flex;gap:4px}
+.rar i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.rar i.f{background:var(--teal)}
+.rar.top i.f{background:var(--red)}
+
+/* Kit swap tickets */
+.tickets{display:flex;flex-direction:column;gap:16px}
+.ticket{position:relative;display:grid;grid-template-columns:240px minmax(0,1fr) 190px;background:#fff;border:1px solid var(--line);transition:transform .45s var(--ease),box-shadow .45s var(--ease),opacity .6s var(--ease)}
+.ticket:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(19,41,60,.12)}
+.ticket .tname{padding:22px 22px 20px;border-right:2px dashed var(--line);position:relative}
+.ticket .tname::before,.ticket .tname::after{content:"";position:absolute;right:-11px;width:20px;height:20px;border-radius:50%;background:var(--page);border:1px solid var(--line)}
+.ticket .tname::before{top:-11px;clip-path:inset(50% 0 0 0)}
+.ticket .tname::after{bottom:-11px;clip-path:inset(0 0 50% 0)}
+.ticket h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:24px;line-height:1.05;color:var(--navy);margin-top:10px}
+.ticket .price{margin-top:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;line-height:1;color:var(--navy)}
+.ticket .tfeat{padding:20px 22px;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;align-content:center}
+.ticket .tfeat li{display:flex;gap:9px;font-size:14.5px;line-height:1.4}
+.ticket .tfeat li::before{content:"";flex:none;width:14px;height:8px;border:solid var(--teal);border-width:0 0 2.5px 2.5px;transform:rotate(-45deg);margin-top:4px}
+.ticket .tfeat li span{color:#4E5D68;margin-right:4px}
+.ticket .tact{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:20px 20px 20px 0}
+.ticket .tact small{font-size:13px;color:var(--grey);text-align:center}
+.ticket.swap{background:var(--navy);border-color:var(--navy);color:#fff}
+.ticket.swap .tname{border-right-color:rgba(255,255,255,.2)}
+.ticket.swap .tname::before,.ticket.swap .tname::after{border-color:var(--navy)}
+.ticket.swap h3,.ticket.swap .price{color:#fff}
+.ticket.swap .tfeat li,.ticket.swap .tfeat li span{color:#D7E3EA}
+.ticket.swap .tact small{color:#A9C2CF}
+.ticket.swap .btn-navy{border-color:#fff;color:#fff}
+.ticket.swap .btn-navy:hover{background:#fff;color:var(--navy)}
+.kitbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+
+/* How it works */
+.steps{position:relative;display:grid;max-width:880px;margin-left:min(8vw,110px)}
+.steps::before{content:"";position:absolute;left:21px;top:10px;bottom:10px;width:3px;background:var(--line)}
+.step{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);gap:22px;padding:0 0 30px}
+.num{position:relative;z-index:1;width:46px;height:46px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px}
+.step.wix .num{background:var(--purple)}
+.step h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:24px;line-height:1.1;padding-top:8px}
+.step p{margin-top:6px;color:#26343E;max-width:62ch}
+.doer{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;background:var(--page);border:1px solid var(--line);padding:3px 9px;color:var(--navy)}
+.how-links{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 0 min(8vw,110px)}
+
+/* Admin */
+.queue{background:#fff;border:1px solid var(--line);border-top:4px solid var(--red)}
+.qhead{display:flex;justify-content:space-between;align-items:baseline;padding:18px 22px;border-bottom:1px solid var(--line)}
+.qhead span{font-weight:700;background:var(--red);color:#fff;padding:2px 9px;font-size:14.5px;font-variant-numeric:tabular-nums}
+.qi{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding:16px 22px;border-top:1px solid var(--line);transition:background .4s,opacity .4s}
+.qi:first-of-type{border-top:0}
+.qi p{margin-top:6px;color:#26343E;font-weight:500}
+.qi small{display:block;margin-top:3px;color:#4E5D68;font-size:14px}
+.qi.done{opacity:.55;background:#FAFBFB}
+.qi .ab{display:flex;gap:8px}
+
+.small{background:var(--navy-d);color:#A9C2CF;font-size:14px;padding:30px 0}
+.small p+p{margin-top:8px}
+.small a{color:#fff}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:30;background:var(--navy);color:#fff;border-left:6px solid var(--teal);padding:14px 18px;font-weight:500;box-shadow:0 18px 40px rgba(0,0,0,.3);max-width:calc(100% - 32px);animation:rise .4s var(--ease)}
+
+@media (max-width:1020px){
+  .hero-grid{grid-template-columns:1fr;gap:30px;padding-top:48px}
+  .keybox{margin-bottom:0}
+  .finder{grid-template-columns:1fr}
+  .side{position:relative;top:0;display:grid;grid-template-columns:1fr 1fr}
+  .side .tip{grid-column:1/-1}
+  .flags{grid-template-columns:repeat(3,1fr)}
+  .months{display:none}
+  .sec-head{grid-template-columns:1fr;gap:14px}
+  .gfeat{grid-template-columns:1fr}
+  .gfeat .ph{min-height:220px}
+  .topics,.bgrid{grid-template-columns:1fr 1fr}
+  .suggest{grid-template-columns:1fr}
+  .corner{grid-template-columns:1fr}
+  .chal{grid-template-columns:1fr 1fr}
+  .spot{grid-template-columns:1fr}
+  .livegrid{grid-template-columns:1fr}
+  .ticket{grid-template-columns:210px minmax(0,1fr)}
+  .ticket .tact{grid-column:1/-1;flex-direction:row;padding:0 20px 20px;align-items:center}
+  .ticket .tact .btn{flex:1}
+}
+@media (max-width:620px){
+  .wrap{padding:0 18px}
+  .sec{padding:60px 0 56px}
+  .side{grid-template-columns:1fr}
+  .flags{grid-template-columns:1fr 1fr}
+  .topics,.bgrid{grid-template-columns:1fr}
+  .sform{grid-template-columns:1fr}
+  .chal{grid-template-columns:1fr 1fr;gap:10px}
+  .card{grid-template-columns:48px minmax(0,1fr)}
+  .strip .vert{font-size:13px}
+  .strip .ico{width:32px;height:32px}
+  .body{padding:16px}
+  .ptop .who b{font-size:20px}
+  .acts .act .t{display:none}
+  .results-bar{flex-direction:column;align-items:stretch}
+  .results-bar select{width:100%}
+  .readout{grid-template-columns:1fr 1fr}
+  .readout div:nth-child(3){border-left:0}
+  .readout div:nth-child(n+3){border-top:1px solid var(--line)}
+  .gstats b{font-size:24px}
+  .ctable{font-size:14px}
+  .ctable th,.ctable td{padding:8px}
+  .ac img{width:52px;height:34px}
+  .ticket{grid-template-columns:1fr}
+  .ticket .tname{border-right:0;border-bottom:2px dashed var(--line)}
+  .ticket.swap .tname{border-bottom-color:rgba(255,255,255,.2)}
+  .ticket .tname::before,.ticket .tname::after{display:none}
+  .ticket .tfeat{grid-template-columns:1fr}
+  .ticket .tact{flex-direction:column;align-items:stretch}
+  .steps,.how-links{margin-left:0}
+  .qi{grid-template-columns:1fr}
+  .tk{grid-template-columns:52px minmax(0,1fr);padding:12px 16px}
+  .lbhead,.liveform{padding-left:16px;padding-right:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="preview-strip"><b>Preview.</b> The members, posts and numbers on this page are examples to show how the forum will look. Nothing is saved.</div>
+
+<header class="hero" id="top">
+  <div class="hero-art" aria-hidden="true">
+    <svg viewBox="0 0 900 360" fill="none">
+      <defs>
+        <linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="#13293C"/><stop offset=".35" stop-color="#13293C" stop-opacity="0"/></linearGradient>
+      </defs>
+      <!-- smoke trails and jets -->
+      <g transform="translate(0 6)">
+        <path class="trail" d="M120 150 C300 40 480 30 700 70" stroke="#D74949" stroke-opacity=".55" stroke-width="7" stroke-linecap="round"/>
+        <path class="trail" d="M120 170 C300 62 480 52 700 92" stroke="#ffffff" stroke-opacity=".45" stroke-width="7" stroke-linecap="round" style="animation-delay:.25s"/>
+        <path class="trail" d="M120 190 C300 84 480 74 700 114" stroke="#2E6FD8" stroke-opacity=".5" stroke-width="7" stroke-linecap="round" style="animation-delay:.5s"/>
+      </g>
+      <!-- speech bubbles over the crowd -->
+      <g class="bubble"><rect x="210" y="176" width="104" height="40" fill="#32B4AF"/><path d="M228 216 l0 14 14 -14z" fill="#32B4AF"/><rect x="224" y="188" width="60" height="5" fill="#fff"/><rect x="224" y="199" width="40" height="5" fill="#fff" fill-opacity=".7"/></g>
+      <g class="bubble" style="animation-delay:1.4s"><rect x="420" y="150" width="122" height="44" fill="#6950A1"/><path d="M500 194 l0 15 -15 -15z" fill="#6950A1"/><rect x="434" y="163" width="80" height="5" fill="#fff"/><rect x="434" y="175" width="52" height="5" fill="#fff" fill-opacity=".7"/></g>
+      <g class="bubble" style="animation-delay:2.6s"><rect x="640" y="182" width="96" height="38" fill="#ffffff" fill-opacity=".9"/><path d="M660 220 l0 13 13 -13z" fill="#ffffff" fill-opacity=".9"/><circle cx="664" cy="201" r="4" fill="#D74949"/><rect x="676" y="198" width="46" height="5" fill="#13293C"/></g>
+      <!-- crowd line -->
+      <g fill="#0E2131">
+        <rect x="0" y="300" width="900" height="60"/>
+        <g>
+          <circle cx="150" cy="262" r="13"/><path d="M130 302 q20 -38 40 0z"/>
+          <circle cx="196" cy="268" r="11"/><path d="M179 302 q17 -32 34 0z"/>
+          <circle cx="250" cy="258" r="14"/><path d="M228 302 q22 -42 44 0z"/>
+          <circle cx="310" cy="266" r="12"/><path d="M291 302 q19 -34 38 0z"/>
+          <circle cx="360" cy="260" r="13"/><path d="M340 302 q20 -38 40 0z"/>
+          <circle cx="398" cy="276" r="8"/><path d="M386 302 q12 -22 24 0z"/>
+          <circle cx="450" cy="258" r="14"/><path d="M428 302 q22 -42 44 0z"/>
+          <circle cx="512" cy="264" r="12"/><path d="M493 302 q19 -34 38 0z"/>
+          <circle cx="570" cy="260" r="13"/><path d="M550 302 q20 -38 40 0z"/>
+          <circle cx="630" cy="268" r="11"/><path d="M613 302 q17 -32 34 0z"/>
+          <circle cx="690" cy="258" r="14"/><path d="M668 302 q22 -42 44 0z"/>
+          <circle cx="748" cy="264" r="12"/><path d="M729 302 q19 -34 38 0z"/>
+          <circle cx="806" cy="262" r="13"/><path d="M786 302 q20 -38 40 0z"/>
+        </g>
+      </g>
+      <!-- camera lens and pointing arm -->
+      <rect x="436" y="246" width="22" height="12" fill="#32B4AF"/>
+      <path d="M570 262 l26 -30" stroke="#0E2131" stroke-width="7" stroke-linecap="round"/>
+      <!-- barrier -->
+      <path d="M0 304 h900" stroke="#D74949" stroke-width="4"/>
+      <g stroke="#ffffff" stroke-opacity=".35" stroke-width="2"><path d="M60 304v-26M180 304v-26M300 304v-26M420 304v-26M540 304v-26M660 304v-26M780 304v-26"/><path d="M60 284h720"/></g>
+      <rect x="0" y="0" width="900" height="360" fill="url(#fade)"/>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="crumb"><a href="https://www.ukairshowguide.co.uk/" target="_top">The Big Guide to UK Airshows</a> &nbsp;›&nbsp; Members &nbsp;›&nbsp; Airshow forum</div>
+        <span class="tag">Members community</span>
+        <h1>Talk <em>airshows</em> with other fans</h1>
+        <div class="sub">Share photos, ask questions, plan your day</div>
+        <p class="intro">Half the fun of an airshow is the chat along the crowd line. Who is flying, where to park, which end of the barrier gets the best light. <strong>This forum puts that chat in one place, so you can ask the people who have been before and help the people going for the first time.</strong></p>
+        <div class="btns">
+          <a class="btn btn-teal" href="#feed">Start a thread <span class="arr">→</span></a>
+          <a class="btn btn-out" href="#groups">Browse show groups</a>
+          <a class="btn btn-red" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Join free</a>
+        </div>
+        <p class="member-login">Already a member? <a href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Log in through My Airshow Hub</a> to post and reply.</p>
+      </div>
+      <aside class="keybox" aria-label="Forum today">
+        <h2><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2.2"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span>Forum today</h2>
+        <div class="kv"><span>Members online</span><span class="live" id="kOnline">148</span></div>
+        <div class="kv"><span>New posts today</span><span id="kPosts">63</span></div>
+        <div class="kv"><span>Show groups</span><span id="kGroups">9</span></div>
+        <div class="kv"><span>Buddy board meet ups</span><span id="kBuddy">6</span></div>
+        <div class="kv hl"><span>Cost to join</span><span>Free</span></div>
+      </aside>
+    </div>
+    <nav class="jump" aria-label="Forum sections">
+      <a href="#feed">News feed<b id="jFeed">4</b></a>
+      <a href="#groups">Show groups</a>
+      <a href="#corner">Photographer's corner</a>
+      <a href="#buddy">Buddy board</a>
+      <a href="#live">Show day live</a>
+      <a href="#rarity">Rarity log</a>
+      <a href="#kit">Kit swap</a>
+      <a href="#how">How it works</a>
+      <a href="#admin">Admin</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- FEED -->
+<section class="sec grey" id="feed">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>News feed</h2>
+      <p>Posts from every member, or only the shows you follow. Tag your post with a show or a topic so others can find it, and I would suggest searching before you ask, as someone may have had the same question last season.</p>
+    </div>
+    <div class="hub-cta">
+      <div class="me"><span class="av">J</span><div><b>Jack Skedge</b> <span>· Canvey Island</span><div class="bdgs"><span class="bdg r">Admin</span><span class="bdg">RIAT regular since 2006</span><span class="bdg p">Duxford member</span></div></div></div>
+      <a class="btn btn-teal sm" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Open My Airshow Hub <span class="arr">→</span></a>
+    </div>
+    <div class="finder">
+      <aside class="side" aria-label="Filters">
+        <div class="sidebox">
+          <div class="grp">
+            <label class="lbl" for="q">Search posts</label>
+            <input class="search" id="q" type="search" placeholder="Aircraft, show or question" autocomplete="off">
+          </div>
+          <div class="grp">
+            <label class="lbl" for="showSel">Show</label>
+            <select id="showSel"><option value="">All shows</option></select>
+          </div>
+          <div class="grp">
+            <span class="lbl">Show me</span>
+            <div class="chips" id="followChips">
+              <button type="button" class="chip" data-follow="all" aria-pressed="true">Everything</button>
+              <button type="button" class="chip" data-follow="follow" aria-pressed="false">Shows I follow</button>
+            </div>
+          </div>
+          <div class="grp">
+            <span class="lbl">Trending this week</span>
+            <div class="trend" id="trend"></div>
+          </div>
+          <button class="clear" id="clear" type="button">Clear all</button>
+        </div>
+        <div class="notes" aria-live="polite">
+          <h4>Notifications <button type="button" id="readAll">Mark as read</button></h4>
+          <div id="notes"></div>
+        </div>
+        <div class="tip"><b>Good to know.</b> Please credit other people's photos and keep it about airshows. If something doesn't look right, tap Report and I will check it.</div>
+      </aside>
+      <div>
+        <form class="formbox" id="compose" novalidate>
+          <h3 class="h3">Share something</h3>
+          <p class="lead">What did you see? Ask a question, share a photo or tell a story from the crowd line.</p>
+          <label class="sr" for="ctext">Your post</label>
+          <textarea id="ctext" maxlength="400" placeholder="e.g. First time at Cosford next year. Is it worth getting there before the gates open?"></textarea>
+          <div class="crow">
+            <div class="chips" id="ctags" role="group" aria-label="Tag your post"></div>
+            <span class="count" id="cCount">0 of 400</span>
+          </div>
+          <div class="crow"><span class="count">Posting as Jack</span><button class="btn btn-teal" type="submit">Post to the feed <span class="arr">→</span></button></div>
+        </form>
+        <div class="results-bar">
+          <div id="count"></div>
+          <select id="sort" aria-label="Sort posts">
+            <option value="new">Newest first</option>
+            <option value="likes">Most liked</option>
+            <option value="cm">Most replies</option>
+          </select>
+        </div>
+        <div class="posts" id="posts"></div>
+        <div class="pager" id="pager" aria-label="Feed pages"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GROUPS -->
+<section class="sec" id="groups">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Show groups</h2>
+      <p>One group for each show I cover, laid out across the season. The purple number shows new posts today. Tap a show to see its group, then join the ones you are going to so their posts land in your feed.</p>
+    </div>
+    <div class="runway">
+      <div class="months"><span>May</span><span>June</span><span>July</span><span>August</span><span>September</span><span>October</span></div>
+      <div class="track"></div>
+      <div class="flags" id="flags"></div>
+    </div>
+    <div id="gfeat"></div>
+    <div class="topics" id="topics"></div>
+    <form class="suggest" id="suggest" novalidate>
+      <div><h3>Suggest a group</h3><p>Can't see your show or topic? Suggest it and I will take a look before it goes live.</p></div>
+      <div class="sform">
+        <label class="sr" for="gname">Group name</label><input class="inp" id="gname" placeholder="Group name, e.g. Headcorn">
+        <label class="sr" for="gwhy">Why it would help</label><input class="inp" id="gwhy" placeholder="Why it would help">
+        <button class="btn btn-purple" type="submit">Send to Jack</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- PHOTOGRAPHER'S CORNER -->
+<section class="sec grey" id="corner">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Photographer's corner</h2>
+      <p>A friendly place to learn. Enter the monthly challenge, see how members edit their shots, find the best spots on each airfield and ask for help with your settings. Beginners are very welcome here.</p>
+    </div>
+    <div class="corner">
+      <div class="box red wide">
+        <div class="bhead"><h3 class="h3">Monthly challenge: Smoke on</h3><span class="r" id="cdays">9 days left</span></div>
+        <div class="bbody"><div class="chal" id="chal"></div></div>
+      </div>
+      <div class="box">
+        <div class="bhead"><h3 class="h3">Before and after</h3><span>Drag the line</span></div>
+        <div class="bbody">
+          <div class="ba" id="ba">
+            <img src="forum-img/f16-pan.webp" alt="Danish F-16 on the runway after editing" loading="lazy" decoding="async">
+            <img class="before" src="forum-img/f16-pan.webp" alt="" loading="lazy" decoding="async">
+            <div class="line"></div>
+            <span class="lab l">Straight from the camera</span><span class="lab rr">Edited</span>
+            <input type="range" min="0" max="100" value="50" id="baR" aria-label="Compare before and after">
+          </div>
+          <div class="readout"><div><b>1/160</b><small>Shutter</small></div><div><b>f/11</b><small>Aperture</small></div><div><b>100</b><small>ISO</small></div><div><b>500mm</b><small>Lens</small></div></div>
+          <p class="cap">Dan lifted the shadows on the jet, warmed the white balance and cropped to give the nose space to move into. Panning at 1/160 keeps the background moving while the jet stays sharp.</p>
+        </div>
+      </div>
+      <div class="box purple">
+        <div class="bhead"><h3 class="h3">Settings swap</h3><span>For beginners</span></div>
+        <div class="bbody">
+          <div class="qa" id="qa"></div>
+          <form class="ask" id="askForm" style="margin-top:14px" novalidate>
+            <label class="sr" for="askQ">Ask a settings question</label>
+            <input class="inp" id="askQ" placeholder="Ask a settings question">
+            <button class="btn btn-purple sm" type="submit">Ask</button>
+          </form>
+        </div>
+      </div>
+      <div class="box wide">
+        <div class="bhead"><h3 class="h3">Spot the spot: RAF Cosford</h3><span>Tap a pin</span></div>
+        <div class="bbody spot">
+          <div class="map">
+            <svg viewBox="0 0 600 340" role="img" aria-label="Example airfield layout with member photo spots">
+              <rect width="600" height="340" fill="#13293C"/>
+              <g stroke="#ffffff" stroke-opacity=".05"><path d="M0 40h600M0 100h600M0 160h600M0 220h600M0 280h600M60 0v340M180 0v340M300 0v340M420 0v340M540 0v340"/></g>
+              <rect x="40" y="150" width="520" height="40" fill="#2A4358"/>
+              <path d="M60 170h480" stroke="#E8F1F6" stroke-width="2" stroke-dasharray="14 12"/>
+              <text x="48" y="174" fill="#E8F1F6" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="15">06</text>
+              <text x="534" y="174" fill="#E8F1F6" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="15">24</text>
+              <path d="M30 240h540" stroke="#D74949" stroke-width="3"/>
+              <text x="40" y="262" fill="#F3A3A3" font-family="Barlow,sans-serif" font-size="14" font-weight="600">Crowd line</text>
+              <path d="M30 110h540" stroke="#6950A1" stroke-width="2.5" stroke-dasharray="6 6"/>
+              <text x="40" y="100" fill="#CBB9F5" font-family="Barlow,sans-serif" font-size="14" font-weight="600">Display line</text>
+              <rect x="80" y="270" width="140" height="44" fill="#0E2131"/>
+              <text x="92" y="297" fill="#C9D8E1" font-family="Barlow,sans-serif" font-size="13.5" font-weight="500">Static park</text>
+              <rect x="380" y="270" width="160" height="44" fill="#0E2131"/>
+              <text x="392" y="297" fill="#C9D8E1" font-family="Barlow,sans-serif" font-size="13.5" font-weight="500">Hangars and museum</text>
+              <g id="pins"></g>
+            </svg>
+          </div>
+          <div class="spotinfo" id="spotinfo" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUDDY BOARD -->
+<section class="sec" id="buddy">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Buddy board</h2>
+      <div><p>Going on your own? Find someone heading to the same show to meet up with, share a lift or pitch your tents next to each other.</p>
+      <button class="btn btn-teal side-btn" type="button" data-toast="In the live version this opens a short form for your show, your day and what you are offering.">Post a meet up <span class="arr">→</span></button></div>
+    </div>
+    <div class="chips" id="bfil" role="group" aria-label="Filter by show"></div>
+    <div class="bgrid" id="buddies"></div>
+    <div class="visitor-tip">
+      <h4>Staying safe</h4>
+      <p>I would advise meeting in a busy place first, like the main entrance or a food stall, and telling someone at home who you are meeting. Keep chats on the forum until you are happy, and please see the forum rules before you go.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SHOW DAY LIVE -->
+<section class="sec grey" id="live">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Show day live</h2>
+      <p>On show day members post what they can see as it happens: car parks filling up, queues, delays and what is flying. This preview replays an example day so you can see how it moves.</p>
+    </div>
+    <div class="livegrid">
+      <div class="liveboard">
+        <div class="lbhead"><h3>Example show day thread</h3><span class="clock" id="clock">07:42</span></div>
+        <div class="ticks" id="tick" aria-live="polite"></div>
+        <form class="liveform" id="liveform" novalidate>
+          <label class="sr" for="ltext">Post an update</label>
+          <input class="inp" id="ltext" placeholder="What can you see right now?">
+          <button class="btn btn-teal sm" type="submit">Send</button>
+        </form>
+      </div>
+      <div>
+        <div class="gauges">
+          <h3 class="h3" style="margin-bottom:6px">Crowd readings</h3>
+          <p style="font-size:14.5px;color:#4E5D68;margin-bottom:8px">Worked out from member posts, updated as they come in.</p>
+          <div id="gauges"></div>
+        </div>
+        <div class="season-note">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg></span>
+          <p>If you aren't waiting to see a particular display, use it as a toilet break. The queues drop right down while everyone is watching.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RARITY LOG -->
+<section class="sec" id="rarity">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Rarity log</h2>
+      <p>Rare aircraft members have seen at UK shows, year by year. Tap a column name to sort. Five red dots means you may not see it again for a long time.</p>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="ctable" id="rtable">
+        <thead><tr>
+          <th><button type="button" data-sort="ac">Aircraft <i>↕</i></button></th>
+          <th><button type="button" data-sort="show">Show <i>↕</i></button></th>
+          <th><button type="button" data-sort="year" class="on">Year <i>↓</i></button></th>
+          <th>Logged by</th>
+          <th><button type="button" data-sort="r">Rarity <i>↕</i></button></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- KIT SWAP -->
+<section class="sec grey" id="kit">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Kit swap</h2>
+      <div><p>Members selling or swapping cameras, lenses and camping kit. Payment and collection are sorted between you, so I would suggest meeting at a show or paying in a way that protects you. Please see the rules before you buy.</p>
+      <button class="btn btn-teal side-btn" type="button" data-toast="In the live version this opens a listing form with photos, price and condition.">List an item <span class="arr">→</span></button></div>
+    </div>
+    <div class="kitbar chips" id="kitfil" role="group" aria-label="Filter kit"></div>
+    <div class="tickets" id="kitlist"></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>How it works</h2>
+      <p>Free to join, no adverts in your feed. You use the same log in as My Airshow Hub, so your shows, your must see list and your forum posts all sit together.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><div><h3>Join free</h3><p>Create your account through My Airshow Hub. It takes about two minutes and you can add a photo and the shows you have been to later.</p><span class="doer">You do this</span></div></div>
+      <div class="step"><span class="num">2</span><div><h3>Follow your shows</h3><p>Join the group for each show you are going to. Their posts land in your feed, and you get a nudge when the line up changes.</p><span class="doer">You do this</span></div></div>
+      <div class="step"><span class="num">3</span><div><h3>Post, reply and help</h3><p>Ask a question, share your photos, enter the challenge or post a meet up on the buddy board. Your first post is checked by me before it goes live.</p><span class="doer">You do this, with my help</span></div></div>
+      <div class="step wix"><span class="num">4</span><div><h3>Reports are checked</h3><p>If a post is reported it goes straight into my admin queue. I check every one myself before anything is removed.</p><span class="doer">I do this</span></div></div>
+      <div class="step"><span class="num">5</span><div><h3>Show day live</h3><p>On the day, post what you can see from your phone. Queues, car parks and delays help everyone still on their way in.</p><span class="doer">You and me</span></div></div>
+    </div>
+    <div class="how-links">
+      <a class="btn btn-teal" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Join free <span class="arr">→</span></a>
+      <a class="btn btn-navy" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Member log in</a>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN -->
+<section class="sec grey" id="admin">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Admin queue</h2>
+      <p>Only you see this. Reported posts, group ideas and first posts from new members wait here until you approve or remove them.</p>
+    </div>
+    <div class="queue">
+      <div class="qhead"><h3 class="h3">Waiting for you</h3><span id="qcount">3 items</span></div>
+      <div id="queue"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<nav class="more" id="moreNav" aria-label="More forum sections">
+  <div class="wrap" id="more"><b>More of the forum</b></div>
+</nav>
+
+<footer class="small">
+  <div class="wrap">
+    <p><a href="https://www.ukairshowguide.co.uk/" target="_top">The Big Guide to UK Airshows</a> &nbsp;·&nbsp; <a href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">My Airshow Hub</a> &nbsp;·&nbsp; <a href="#how">How the forum works</a></p>
+    <p>Be kind, keep it about airshows, and credit other people's photos. Reported posts are checked by me before anything is removed.</p>
+    <p>Show plans can change on the day. Please see each show's own rules before you go.</p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+  const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;t.style.animation='none';void t.offsetWidth;t.style.animation='';clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,3400)}
+
+  const ICON={
+    chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+    camera:'<rect x="3" y="7" width="18" height="13"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.5"/>',
+    jet:'<path d="M2 13l9-2 3-7h2l-1 7 7 1v2l-7 1 1 5h-2l-3-5-9-1z"/>',
+    tent:'<path d="M3 20L12 4l9 16z"/><path d="M12 4v16M9 20l3-6 3 6"/>',
+    car:'<path d="M3 16v-4l2-5h14l2 5v4z"/><circle cx="7.5" cy="16.5" r="2"/><circle cx="16.5" cy="16.5" r="2"/>',
+    users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14a5 5 0 0 1 6 6"/>'
+  };
+  const ico=(k,c)=>`<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2">${ICON[k]}</svg></span>`;
+  const TOPIC={
+    'RIAT':{col:'#D74949',i:'jet'},'Duxford':{col:'#13293C',i:'jet'},'Cosford':{col:'#0E5F5B',i:'jet'},
+    'Photography':{col:'#6950A1',i:'camera'},'Camping':{col:'#1E3A34',i:'tent'},'Parking':{col:'#32B4AF',i:'car'},
+    'Red Arrows':{col:'#D74949',i:'jet'},'General':{col:'#13293C',i:'chat'},'Eastbourne':{col:'#32B4AF',i:'jet'}
+  };
+  const T=k=>TOPIC[k]||TOPIC.General;
+
+  /* Key details ticking */
+  setInterval(()=>{$('#kOnline').textContent=140+Math.round(Math.random()*16)},4200);
+
+  /* FEED */
+  const SHOWS=['RIAT','Duxford','Cosford','Eastbourne'];
+  const TAGS=['RIAT','Duxford','Cosford','Photography','Camping','Parking','Red Arrows'];
+  const posts=[
+    {id:1,n:'Sarah Holt',i:'S',c:'p',b:['Top photographer'],g:'Photography',show:'RIAT',age:2,t:'2 hours ago',follow:true,txt:'Finally got the smoke and the formation in one frame. 1/1000 at f/8, waited for them to come round on the second pass. Any tips for keeping the horizon level when tracking?',img:'hawks-smoke',cap:'1/1000 · f/8 · ISO 200 · 400mm',likes:48,liked:false,cm:[['Dan Price','D','Try turning on the grid in your viewfinder. It made a huge difference for me.']]},
+    {id:2,n:'Mike Turner',i:'M',c:'r',b:['RIAT regular'],g:'Camping',show:'RIAT',age:5,t:'5 hours ago',follow:true,txt:'First time camping at Townsend Farm next year with my two kids. Is it worth bringing a trolley from the car or is it a short walk? Any advice welcome.',likes:12,liked:false,cm:[['Jack Skedge','J','I would advise a trolley. It is a fair walk with tents and chairs, and I see lots of families do it this way.']]},
+    {id:3,n:'Priya Shah',i:'P',c:'f',b:['First show 2026'],g:'Duxford',show:'Duxford',age:24,t:'Yesterday',follow:false,txt:'My first ever airshow was Duxford this year and I am hooked. The Spitfire sound going over is something else. Who else is going to the Battle of Britain show next year?',img:'spitfire',cap:'Shot on my phone',likes:31,liked:false,cm:[]},
+    {id:4,n:'Dan Price',i:'D',c:'n',b:['Helicopter fan'],g:'Photography',show:'Cosford',age:48,t:'2 days ago',follow:false,txt:'Hover shots are harder than jets. Slowed down to 1/125 so the blades show some movement. Took about 200 frames to get three keepers.',img:'heli-hover',cap:'1/125 · f/9 · ISO 100 · 300mm',likes:22,liked:false,cm:[]},
+    {id:5,n:'Hannah Cole',i:'H',c:'',b:['Train traveller'],g:'Parking',show:'Eastbourne',age:72,t:'3 days ago',follow:true,txt:'Is it better to park and ride for Eastbourne or get the train? Last time we sat in traffic for over an hour on the way out.',likes:9,liked:false,cm:[['Ray Mills','R','Train every time for us. It is a short walk from the station to the seafront and you miss all the traffic.'],['Jack Skedge','J','I would suggest leaving before the last display if you drive. You lose one act and save a lot of waiting.']]}
+  ];
+  const F={q:'',show:'',follow:'all',sort:'new'};let feedPage=0;const PER=2;
+  $('#showSel').innerHTML+=SHOWS.map(s=>`<option value="${s}">${s}</option>`).join('');
+  $('#ctags').innerHTML=TAGS.map(t=>`<button type="button" class="chip" aria-pressed="false" data-tag="${t}">${t}</button>`).join('');
+  const TREND=['RIAT2027','RedArrows','Propblur','Typhoon','Duxford','CampingTips','Panning'];
+  $('#trend').innerHTML=TREND.map(t=>`<button type="button" data-trend="${t}">#${t}</button>`).join('');
+
+  const HEART='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 4.5 6.7 4.5c2.2 0 3.6 1.2 4.3 2.4.7-1.2 2.1-2.4 4.3-2.4 3.7 0 5.8 3.7 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg>';
+  const CMT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H9l-5 4z"/></svg>';
+  const FLAG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>';
+
+  function filtered(){
+    const q=F.q.toLowerCase().replace('#','');
+    let list=posts.filter(p=>(!F.show||p.show===F.show||p.g===F.show)&&(F.follow==='all'||p.follow)&&
+      (!q||(p.txt+' '+p.n+' '+p.g+' '+p.show).toLowerCase().replace(/\s/g,'').includes(q.replace(/\s/g,''))||(p.txt+' '+p.g+' '+p.show).toLowerCase().includes(q)));
+    if(F.sort==='likes')list.sort((a,b)=>b.likes-a.likes);
+    else if(F.sort==='cm')list.sort((a,b)=>b.cm.length-a.cm.length);
+    else list.sort((a,b)=>a.age-b.age);
+    return list;
+  }
+  function postHTML(p){
+    const t=T(p.g);
+    return `<article class="card rv" data-id="${p.id}">
+      <div class="strip" style="background:${t.col}">${ico(t.i,t.col)}<span class="vert">${esc(p.g)}</span></div>
+      <div class="body">
+        <div class="ptop"><span class="av ${p.c}">${esc(p.i)}</span><div class="who"><b>${esc(p.n)}</b><div class="m">${p.b.map(x=>`<span class="bdg ${x==='Admin'?'r':'l'}">${esc(x)}</span>`).join('')}<span>${esc(p.show)} · ${esc(p.t)}</span></div></div></div>
+        <p class="ptxt">${esc(p.txt)}</p>
+        ${p.img?`<figure class="pfig"><img loading="lazy" decoding="async" src="forum-img/${p.img}.webp" alt="Photo posted by ${esc(p.n)}">${p.cap?`<figcaption>${esc(p.cap)}</figcaption>`:''}</figure>`:''}
+        <div class="acts">
+          <button class="act" type="button" data-like="${p.id}" aria-pressed="${p.liked}" aria-label="Like">${HEART}<span>${p.likes}</span></button>
+          <button class="act" type="button" data-cmt="${p.id}">${CMT}<span>${p.cm.length}</span><span class="t">${p.cm.length===1?'Reply':'Replies'}</span></button>
+          <button class="act rep" type="button" data-report="${p.id}">${FLAG}<span class="t">Report</span></button>
+        </div>
+        <div class="cmts">${p.cm.map(c=>`<div class="cmt"><span class="av sm ${c[1]==='J'?'':'n'}">${esc(c[1])}</span><p><b>${esc(c[0])}</b>${esc(c[2])}</p></div>`).join('')}
+          <form class="cin" data-cform="${p.id}" novalidate><label class="sr" for="ci${p.id}">Write a reply</label><input class="inp" id="ci${p.id}" placeholder="Write a reply"><button class="btn btn-teal sm" type="submit">Reply</button></form>
+        </div>
+      </div>
+    </article>`;
+  }
+  function renderPosts(){
+    const list=filtered(),pages=Math.max(1,Math.ceil(list.length/PER));
+    if(feedPage>=pages)feedPage=pages-1;
+    $('#count').innerHTML=`<strong>${list.length}</strong> of ${posts.length} posts`;
+    $('#jFeed').textContent=posts.length;
+    $('#pager').innerHTML=pages>1?`<button class="chip" type="button" data-pg="-1" ${feedPage===0?'disabled':''}>Newer posts</button><span>Page ${feedPage+1} of ${pages}</span><button class="chip" type="button" data-pg="1" ${feedPage>=pages-1?'disabled':''}>Older posts</button>`:'';
+    $('#posts').innerHTML=list.length?list.slice(feedPage*PER,feedPage*PER+PER).map(postHTML).join(''):`<div class="empty"><h3 class="h3">Nothing here yet</h3><p>Try a different search, or be the first to post about it.</p></div>`;
+    reveal();
+  }
+  $('#q').addEventListener('input',e=>{F.q=e.target.value.trim();feedPage=0;renderPosts()});
+  $('#showSel').addEventListener('change',e=>{F.show=e.target.value;feedPage=0;renderPosts()});
+  $('#sort').addEventListener('change',e=>{F.sort=e.target.value;feedPage=0;renderPosts()});
+  $('#followChips').addEventListener('click',e=>{const b=e.target.closest('[data-follow]');if(!b)return;F.follow=b.dataset.follow;feedPage=0;$$('#followChips .chip').forEach(x=>x.setAttribute('aria-pressed',x===b));renderPosts()});
+  $('#trend').addEventListener('click',e=>{const b=e.target.closest('[data-trend]');if(!b)return;const map={RIAT2027:'RIAT',RedArrows:'Red Arrows',Propblur:'prop',Typhoon:'Typhoon',Duxford:'Duxford',CampingTips:'camping',Panning:'pan'};F.q=map[b.dataset.trend]||b.dataset.trend;feedPage=0;$('#q').value=F.q;renderPosts();$('#posts').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})});
+  $('#clear').addEventListener('click',()=>{feedPage=0;F.q='';F.show='';F.follow='all';F.sort='new';$('#q').value='';$('#showSel').value='';$('#sort').value='new';$$('#followChips .chip').forEach((x,i)=>x.setAttribute('aria-pressed',i===0));renderPosts()});
+  $('#pager').addEventListener('click',e=>{const b=e.target.closest('[data-pg]');if(!b||b.disabled)return;feedPage+=+b.dataset.pg;renderPosts();$('#count').scrollIntoView({block:'nearest'})});
+  $('#ctext').addEventListener('input',e=>{$('#cCount').textContent=e.target.value.length+' of 400'});
+  $('#ctags').addEventListener('click',e=>{const c=e.target.closest('.chip');if(c)c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')!=='true')});
+  $('#compose').addEventListener('submit',e=>{
+    e.preventDefault();const t=$('#ctext').value.trim();if(!t){toast('Write something first, then press post.');$('#ctext').focus();return}
+    const tags=$$('#ctags .chip[aria-pressed="true"]').map(c=>c.dataset.tag);
+    const show=tags.find(x=>SHOWS.includes(x))||'All shows';
+    posts.push({id:Date.now(),n:'Jack Skedge',i:'J',c:'',b:['Admin'],g:tags.find(x=>!SHOWS.includes(x))||tags[0]||'General',show,age:0,t:'Just now',follow:true,txt:t,likes:0,liked:false,cm:[]});
+    $('#ctext').value='';$('#cCount').textContent='0 of 400';$$('#ctags .chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+    F.sort='new';feedPage=0;$('#sort').value='new';renderPosts();toast('Posted to the feed.');
+  });
+  document.addEventListener('click',e=>{
+    const l=e.target.closest('[data-like]');
+    if(l){const p=posts.find(x=>x.id==l.dataset.like);p.liked=!p.liked;p.likes+=p.liked?1:-1;l.setAttribute('aria-pressed',p.liked);l.querySelector('span').textContent=p.likes;return}
+    const c=e.target.closest('[data-cmt]');if(c){const i=document.getElementById('ci'+c.dataset.cmt);if(i)i.focus();return}
+    const r=e.target.closest('[data-report]');if(r){const p=posts.find(x=>x.id==r.dataset.report);queue.unshift({k:'Reported post',t:`Post by ${p.n}: "${p.txt.slice(0,60)}…"`,s:'Reported by you just now'});renderQueue();toast('Reported. It is now in the admin queue for Jack to check.');return}
+    const t=e.target.closest('[data-toast]');if(t){toast(t.dataset.toast);return}
+  });
+  document.addEventListener('submit',e=>{
+    const f=e.target.closest('[data-cform]');if(!f)return;e.preventDefault();
+    const v=f.querySelector('input').value.trim();if(!v)return;
+    posts.find(x=>x.id==f.dataset.cform).cm.push(['Jack Skedge','J',v]);renderPosts();
+  });
+
+  /* notifications */
+  const notes=[['Sarah liked your Hawk photo','12 minutes ago',false],['RAF Cosford Air Show added two aircraft to its line up','1 hour ago',false],['A post in Kit swap was reported','3 hours ago',false],['Dan started following you','Yesterday',true]];
+  function renderNotes(){$('#notes').innerHTML=notes.map((n,i)=>`<div class="note-i${n[2]?' read':''}" data-note="${i}"><span>${esc(n[0])}<small>${esc(n[1])}</small></span></div>`).join('')}
+  renderNotes();
+  $('#readAll').addEventListener('click',()=>{notes.forEach(n=>n[2]=true);renderNotes()});
+  $('#notes').addEventListener('click',e=>{const n=e.target.closest('[data-note]');if(n){notes[+n.dataset.note][2]=true;renderNotes()}});
+
+  /* GROUPS */
+  const groups=[
+    {id:'duxford',name:'IWM Duxford Air Shows',m:0,when:'May to Sep',img:'b17',mem:2360,today:21,thr:'Best spot for the Battle of Britain show flypast?'},
+    {id:'shuttleworth',name:'Shuttleworth Air Shows',m:0,when:'May to Oct',img:'swordfish',mem:990,today:6,thr:'Evening show picnic ideas for families'},
+    {id:'midlands',name:'Midlands Air Festival',m:1,when:'Early June',img:'twin-prop-landing',mem:610,today:3,thr:'Balloon launch times, worth staying late?'},
+    {id:'cosford',name:'RAF Cosford Air Show',m:1,when:'June',img:'phantom-tiger',mem:1880,today:12,thr:'Park and ride or the train from Wolverhampton?'},
+    {id:'riat',name:'Royal International Air Tattoo',m:2,when:'July',img:'c17-cloud',mem:4210,today:38,thr:'Townsend Farm camping, what time do you arrive?',badge:'Most active'},
+    {id:'wales',name:'Wales Airshow',m:2,when:'July',img:'typhoon-gear',mem:870,today:4,thr:'Where to stand on the seafront for the Typhoon'},
+    {id:'eastbourne',name:'Airbourne Eastbourne',m:3,when:'August',img:'frecce-smoke',mem:1540,today:9,thr:'Train or park and ride this year?'},
+    {id:'clacton',name:'Clacton Airshow',m:3,when:'August',img:'aero-smoke',mem:720,today:5,thr:'Pier end or the cliff top for photos?'},
+    {id:'southport',name:'Southport Air Show',m:4,when:'September',img:'rafale',mem:540,today:2,thr:'Best beach access for the morning practice'}
+  ];
+  const joined=new Set(['riat','duxford']);
+  let curG='riat';
+  function renderFlags(){
+    const cols=[[],[],[],[],[],[]];groups.forEach(g=>cols[g.m].push(g));
+    $('#flags').innerHTML=cols.map(c=>`<div>${c.map(g=>`<button type="button" class="flag${g.id===curG?' on':''}" data-g="${g.id}"><b>${esc(g.name)}</b><small>${esc(g.when)}</small><span class="n">${g.today}</span>${joined.has(g.id)?'<span class="j" title="Joined"></span>':''}</button>`).join('')}</div>`).join('');
+  }
+  function renderGFeat(){
+    const g=groups.find(x=>x.id===curG),on=joined.has(g.id);
+    $('#gfeat').innerHTML=`<div class="gfeat">
+      <div class="ph"><img src="forum-img/${g.img}.webp" alt="" loading="lazy" decoding="async">${g.badge?`<span class="bdg r">${g.badge}</span>`:''}</div>
+      <div class="gb"><h3 class="h3" style="font-size:34px">${esc(g.name)}</h3><div class="town">Show group · ${esc(g.when)}</div>
+        <div class="gstats"><div><b>${g.mem.toLocaleString('en-GB')}</b><small>Members</small></div><div><b>${g.today}</b><small>New today</small></div><div><b>${on?'Yes':'No'}</b><small>You follow</small></div></div>
+        <div class="latest"><b>Latest thread.</b> ${esc(g.thr)}</div>
+        <div class="btns" style="margin-top:0"><button class="btn ${on?'btn-navy':'btn-teal'}" type="button" data-join="${g.id}" aria-pressed="${on}">${on?'Joined, leave group':'Join this group <span class="arr">→</span>'}</button><button class="btn btn-navy" type="button" data-open="${g.id}">See its posts</button></div>
+      </div></div>`;
+  }
+  $('#flags').addEventListener('click',e=>{const b=e.target.closest('[data-g]');if(!b)return;curG=b.dataset.g;renderFlags();renderGFeat()});
+  $('#gfeat').addEventListener('click',e=>{
+    const j=e.target.closest('[data-join]');if(j){const id=j.dataset.join;joined.has(id)?joined.delete(id):joined.add(id);renderFlags();renderGFeat();toast(joined.has(id)?'Joined. Posts from this group will show in your feed.':'You have left the group.');return}
+    const o=e.target.closest('[data-open]');if(o){const map={riat:'RIAT',duxford:'Duxford',cosford:'Cosford',eastbourne:'Eastbourne'};const s=map[o.dataset.open];if(s){F.show=s;$('#showSel').value=s}else{F.show='';$('#showSel').value='';F.q='';}feedPage=0;renderPosts();showSec('feed',true);if(!s)toast('No example posts for this group yet in the preview.')}
+  });
+  const topics=[
+    ['Photographer\'s corner','f16-burner',3120,44,'Most active','Settings help, edits, the monthly challenge and the best spots on each airfield.','#corner'],
+    ['Camping at airshows','twin-prop-landing',760,7,'New','Pitch tips, what to pack and who is camping where. Good for first timers.','#feed'],
+    ['Families at airshows','typhoon-pan',540,5,'','Ear defenders, buggies, quiet spots and what children love to see.','#feed']
+  ];
+  $('#topics').innerHTML=topics.map(t=>`<article class="tcard rv"><div class="ph"><img loading="lazy" decoding="async" src="forum-img/${t[1]}.webp" alt="">${t[4]?`<span class="bdg ${t[4]==='New'?'p':'r'}">${t[4]}</span>`:''}</div><div class="tb"><h3 class="h3" style="font-size:24px">${esc(t[0])}</h3><p>${esc(t[5])}</p><div class="gm"><span><b>${t[2].toLocaleString('en-GB')}</b> members</span><span><b>${t[3]}</b> new today</span></div><div class="links"><a href="${t[6]}">Go to the group <span>→</span></a></div></div></article>`).join('');
+  $('#suggest').addEventListener('submit',e=>{e.preventDefault();const n=$('#gname').value.trim();if(!n){toast('Add a group name first.');$('#gname').focus();return}
+    queue.unshift({k:'Group suggestion',t:`New group: ${n}`,s:'Suggested by you just now'});$('#gname').value='';$('#gwhy').value='';renderQueue();toast('Sent to Jack for approval.')});
+
+  /* CHALLENGE */
+  const entries=[['Frecce smoke burst','Sarah Holt','frecce-smoke',61],['Blades and smoke','Mike Turner','aero-smoke',44],['Vapour on the pull','Dan Price','jet-vapour',38],['Smoke trails at Duxford','Priya Shah','blenheim-smoke',19]];
+  let myVote=-1;
+  function renderChal(){const max=Math.max(...entries.map(e=>e[3]));
+    $('#chal').innerHTML=entries.map((e,k)=>`<div class="entry"><img loading="lazy" decoding="async" src="forum-img/${e[2]}.webp" alt="${esc(e[0])}"><div class="eb"><b>${esc(e[0])}</b><small>${esc(e[1])}</small><div class="vbar"><i style="width:${e[3]/max*100}%"></i></div><div class="vrow"><span>${e[3]} votes</span><button class="vote" type="button" data-vote="${k}" aria-pressed="${myVote===k}">${myVote===k?'Voted':'Vote'}</button></div></div></div>`).join('')}
+  $('#chal').addEventListener('click',e=>{const b=e.target.closest('[data-vote]');if(!b)return;const k=+b.dataset.vote;if(myVote>=0)entries[myVote][3]--;if(myVote===k){myVote=-1}else{myVote=k;entries[k][3]++}renderChal()});
+  $('#baR').addEventListener('input',e=>$('#ba').style.setProperty('--x',e.target.value+'%'));
+
+  /* SETTINGS SWAP */
+  const qa=[
+    ['Why are my propellers frozen?','Shot the Spitfire at 1/2000 and the prop looks stopped dead. What should I try?','I would suggest dropping to 1/250 for warbirds, then 1/160 once you are steady. Take bursts and expect a few soft ones.','Jack'],
+    ['Too dark against a bright sky','Every Typhoon comes out as a black shape.','Try plus 1 exposure compensation, or spot meter on the jet. This will work well when the sky is flat grey.','Sarah'],
+    ['Which focus mode for display teams?','My camera keeps jumping to the smoke.','Use continuous focus with a small group of points in the middle. I see lots of people get on well with that for formations.','Dan']
+  ];
+  function renderQA(){$('#qa').innerHTML=qa.map((q,i)=>`<details class="q"${i===0?' open':''}><summary>${esc(q[0])}<i aria-hidden="true"></i></summary><div class="qb"><p>${esc(q[1])}</p>${q[2]?`<div class="ans">${esc(q[2])}<small>Answered by ${esc(q[3])}</small></div>`:'<div class="ans">Waiting for an answer from the community.<small>Asked by you just now</small></div>'}</div></details>`).join('')}
+  renderQA();
+  $('#askForm').addEventListener('submit',e=>{e.preventDefault();const v=$('#askQ').value.trim();if(!v){toast('Type your question first.');return}qa.unshift([v,'Asked in Photographer\'s corner.','','']);$('#askQ').value='';renderQA();toast('Question posted. I will let you know when someone answers.')});
+
+  /* SPOT THE SPOT */
+  const spots=[
+    {x:150,y:240,n:'Sarah Holt',t:'Crowd line, west end',s:'1/1000 · f/8 · ISO 200',w:'Morning, sun behind you',tip:'The best spot for the morning flying. Arrive early as it fills up by 10:00.'},
+    {x:320,y:240,n:'Dan Price',t:'Crowd line, centre',s:'1/250 · f/11 · ISO 100',w:'Midday, high sun',tip:'Right on crowd centre, so the display teams turn in front of you. Bring a stool.'},
+    {x:470,y:240,n:'Mike Turner',t:'Crowd line, east end',s:'1/1600 · f/7.1 · ISO 400',w:'Afternoon, side light',tip:'Good for arrivals and departures off runway 24. Quieter for families.'},
+    {x:204,y:282,n:'Priya Shah',t:'Static park',s:'1/500 · f/5.6 · ISO 100',w:'All day',tip:'Go here while the flying is quiet. Speak to the crews, they love questions.'}
+  ];
+  let curSpot=0;
+  function renderSpots(){
+    $('#pins').innerHTML=spots.map((s,k)=>`<g class="pin${k===curSpot?' on':''}" tabindex="0" role="button" aria-label="${esc(s.t)}" data-spot="${k}"><circle class="o" cx="${s.x}" cy="${s.y}" r="10"/><circle class="c" cx="${s.x}" cy="${s.y}" r="9" fill="${k===curSpot?'#32B4AF':'#ffffff'}" stroke="#13293C" stroke-width="2"/><text x="${s.x}" y="${s.y+4}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="800" font-size="12" fill="#13293C" style="pointer-events:none">${k+1}</text></g>`).join('');
+    const s=spots[curSpot];
+    $('#spotinfo').innerHTML=`<span class="bdg l">Spot ${curSpot+1} of ${spots.length} · shared by ${esc(s.n)}</span><h4>${esc(s.t)}</h4><div class="kv2"><span>Settings</span><span>${esc(s.s)}</span></div><div class="kv2"><span>Light</span><span>${esc(s.w)}</span></div><p>${esc(s.tip)}</p><div class="spotnav"><button class="btn btn-navy sm" type="button" data-sn="-1">Previous</button><button class="btn btn-teal sm" type="button" data-sn="1">Next spot <span class="arr">→</span></button></div>`;
+    const si=$('#spotinfo');si.style.animation='none';void si.offsetWidth;si.style.animation='';
+  }
+  $('#pins').addEventListener('click',e=>{const g=e.target.closest('[data-spot]');if(g){curSpot=+g.dataset.spot;renderSpots()}});
+  $('#pins').addEventListener('keydown',e=>{const g=e.target.closest('[data-spot]');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();curSpot=+g.dataset.spot;renderSpots();document.querySelector(`[data-spot="${curSpot}"]`).focus()}});
+  $('#spotinfo').addEventListener('click',e=>{const b=e.target.closest('[data-sn]');if(b){curSpot=(curSpot+(+b.dataset.sn)+spots.length)%spots.length;renderSpots()}});
+
+  /* BUDDY BOARD */
+  const BCOL={RIAT:'#D74949',Duxford:'#13293C',Eastbourne:'#32B4AF',Cosford:'#0E5F5B'};
+  const buddies=[
+    ['RIAT','Fri and Sat','Tom','T','Going solo for the first time. Driving from Swindon with two spare seats, happy to share fuel.',['Lift share','2 seats'],'car'],
+    ['RIAT','All weekend','Lucy','L','Camping at Townsend Farm. Looking for a couple of people to pitch next to and swap photo tips.',['Camping','Photography'],'tent'],
+    ['Duxford','Battle of Britain','Ray','R','Retired and keen on warbirds. Meet at the entrance at 09:00 and grab a front row spot together?',['Meet up'],'users'],
+    ['Eastbourne','Saturday','Hannah','H','Taking the train from London Victoria. Anyone want to walk down to the seafront together?',['Train','Meet up'],'users'],
+    ['Cosford','Sunday','Ben','B','Shooting with a 150 to 600. Would love someone to go round the hangars with after the flying.',['Photography'],'camera'],
+    ['Duxford','Flying Legends','Amir','A','Bringing my son, he is nine. Happy to meet other families near the play area.',['Families'],'users']
+  ];
+  let bshow='All';
+  function renderBuddies(){
+    const shows=['All',...new Set(buddies.map(b=>b[0]))];
+    $('#bfil').innerHTML=shows.map(s=>`<button class="chip" type="button" data-bshow="${s}" aria-pressed="${s===bshow}">${s==='All'?'All shows':s}</button>`).join('');
+    $('#buddies').innerHTML=buddies.filter(b=>bshow==='All'||b[0]===bshow).map(b=>{const c=BCOL[b[0]];return `<article class="card rv"><div class="strip" style="background:${c}">${ico(b[6],c)}<span class="vert">${esc(b[0])}</span></div><div class="body"><div class="ptop"><span class="av n">${esc(b[3])}</span><div class="who"><b>${esc(b[2])}</b></div></div><div class="when"><span>${esc(b[0])}</span><span class="d">${esc(b[1])}</span></div><p class="ptxt">${esc(b[4])}</p><div class="need">${b[5].map(n=>`<span class="bdg l">${esc(n)}</span>`).join('')}</div><div class="links"><button type="button" data-toast="In the live version this opens a private message to ${esc(b[2])}.">Message ${esc(b[2])} <span>→</span></button></div></div></article>`}).join('');
+    reveal();
+  }
+  $('#bfil').addEventListener('click',e=>{const b=e.target.closest('[data-bshow]');if(b){bshow=b.dataset.bshow;renderBuddies()}});
+
+  /* SHOW DAY LIVE */
+  const ticks=[['07:42','','Car park A gates open. Short queue so far.'],['08:05','q','Main gate queue about 10 minutes. Have your tickets ready on your phone.'],['08:30','','Front row by crowd centre is filling up. Plenty of space at the east end.'],['09:12','d','Slow traffic at the A41 junction. Allow an extra 20 minutes.'],['10:00','','Static park is quiet now. Good time to see the Chinook up close.'],['10:48','q','Food court queues building. The burger van near gate B is quicker.'],['11:30','','Flying display has started. Red Arrows due at 14:10.'],['12:15','d','Display paused for 15 minutes for a weather check.']];
+  const gaugeSets=[[82,64,55,30],[86,58,62,28],[90,44,74,22],[94,30,88,40],[95,22,92,52],[96,15,80,64]];
+  let ti=0,gi=0;
+  function renderGauges(){const g=gaugeSets[Math.min(gi,gaugeSets.length-1)];
+    const rows=[['Car park A',g[0]+'%',g[0],'a'],['Gate queue',Math.round(g[1]*.4)+' min',g[1],'r'],['Food court',g[2]>80?'Very busy':g[2]>60?'Busy':'Steady',g[2],'p'],['Toilets near crowd line',Math.round(g[3]/3)+' min',g[3],'']];
+    $('#gauges').innerHTML=rows.map(r=>`<div class="gauge"><div class="gl"><span>${r[0]}</span><b>${r[1]}</b></div><div class="vbar"><i class="${r[3]}" style="width:${r[2]}%"></i></div></div>`).join('')}
+  function addTick(t,isNew){const d=document.createElement('div');d.className='tk'+(isNew?' new':'');d.innerHTML=`<time>${esc(t[0])}</time><p>${t[1]?`<span class="k ${t[1]}">${t[1]==='q'?'Queue':'Delay'}</span>`:'<span class="k">Update</span>'}${esc(t[2])}</p>`;$('#tick').prepend(d);$('#clock').textContent=t[0]}
+  for(;ti<4;ti++)addTick(ticks[ti],false);
+  renderGauges();
+  if(!reduce)setInterval(()=>{if(ti<ticks.length){addTick(ticks[ti++],true);gi++;renderGauges()}},5200);
+  $('#liveform').addEventListener('submit',e=>{e.preventDefault();const v=$('#ltext').value.trim();if(!v)return;const n=new Date();addTick([String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'),'',v],true);$('#ltext').value=''});
+
+  /* RARITY LOG */
+  const rare=[['P-47 Thunderbolt','Duxford',2026,'Ray',4,'thunderbolt'],['Fairey Swordfish','Shuttleworth',2026,'Priya',4,'swordfish'],['Bristol Blenheim','Duxford',2025,'Jack',5,'blenheim-smoke'],['Dassault Rafale','RIAT',2026,'Sarah',3,'rafale'],['SEPECAT Jaguar','Cosford',2025,'Mike',4,'jaguar'],['B-17 Flying Fortress','Duxford',2024,'Dan',3,'b17'],['F-4 Phantom','RIAT',2024,'Jack',5,'phantom-tiger']];
+  let rs={k:'year',d:-1};
+  function renderRare(){const ix={ac:0,show:1,year:2,r:4}[rs.k];const rows=[...rare].sort((a,b)=>(a[ix]>b[ix]?1:a[ix]<b[ix]?-1:0)*rs.d);
+    $('#rtable tbody').innerHTML=rows.map(r=>`<tr><td><div class="ac"><img loading="lazy" decoding="async" src="forum-img/${r[5]}.webp" alt=""><b>${esc(r[0])}</b></div></td><td>${esc(r[1])}</td><td>${r[2]}</td><td>${esc(r[3])}</td><td><span class="rar${r[4]===5?' top':''}" aria-label="${r[4]} out of 5">${[1,2,3,4,5].map(i=>`<i class="${i<=r[4]?'f':''}"></i>`).join('')}</span></td></tr>`).join('');
+    $$('#rtable th button').forEach(b=>{const on=b.dataset.sort===rs.k;b.classList.toggle('on',on);b.querySelector('i').textContent=on?(rs.d>0?'↑':'↓'):'↕'})}
+  $('#rtable thead').addEventListener('click',e=>{const b=e.target.closest('[data-sort]');if(!b)return;rs={k:b.dataset.sort,d:rs.k===b.dataset.sort?-rs.d:(b.dataset.sort==='ac'||b.dataset.sort==='show'?1:-1)};renderRare()});
+
+  /* KIT SWAP */
+  const kit=[
+    ['Nikon 200 to 500mm f/5.6','£650','Used, very good','Essex','Sell','Camera','Lens hood and both caps included'],
+    ['Two person tent','£40','Used twice','Gloucestershire','Sell','Camping','Packs down small, fine for one night at Fairford'],
+    ['Gimbal head','Swap','Good','Kent','Swap','Camera','Looking for a monopod in return'],
+    ['Camping chairs, pair','£25','Good','Shropshire','Sell','Camping','Collection at Cosford is fine']
+  ];
+  let kf='All';
+  function renderKit(){
+    $('#kitfil').innerHTML=['All','Camera','Camping','Swap'].map(s=>`<button class="chip" type="button" data-kf="${s}" aria-pressed="${s===kf}">${s==='All'?'Everything':s==='Swap'?'Swaps only':s+' kit'}</button>`).join('');
+    $('#kitlist').innerHTML=kit.filter(k=>kf==='All'||k[5]===kf||(kf==='Swap'&&k[4]==='Swap')).map(k=>`<article class="ticket rv${k[4]==='Swap'?' swap':''}"><div class="tname"><span class="bdg ${k[4]==='Swap'?'p':'l'}">${k[4]==='Swap'?'Swap':'For sale'}</span><h3>${esc(k[0])}</h3><div class="price">${esc(k[1])}</div></div><ul class="tfeat"><li><span>Condition</span>${esc(k[2])}</li><li><span>Area</span>${esc(k[3])}</li><li><span>Type</span>${esc(k[5])} kit</li><li>${esc(k[6])}</li></ul><div class="tact"><button class="btn ${k[4]==='Swap'?'btn-navy':'btn-teal'} sm" type="button" data-toast="In the live version this opens a private message to the seller.">Message the seller</button><small>Listed this week</small></div></article>`).join('');
+    reveal();
+  }
+  $('#kitfil').addEventListener('click',e=>{const b=e.target.closest('[data-kf]');if(b){kf=b.dataset.kf;renderKit()}});
+
+  /* ADMIN QUEUE */
+  const queue=[{k:'Reported post',t:'Kit swap listing with no photos and a price that looks too good to be true',s:'Reported by 2 members, 3 hours ago'},{k:'Group suggestion',t:'New group: Headcorn Airshow',s:'Suggested by Lucy, yesterday'},{k:'Reported comment',t:'Off topic comment in RIAT about ticket resale',s:'Reported by Mike, 2 days ago'}];
+  function renderQueue(){const open=queue.filter(q=>!q.done).length;$('#qcount').textContent=open+(open===1?' item':' items');
+    $('#queue').innerHTML=queue.map((q,i)=>`<div class="qi${q.done?' done':''}"><div><span class="bdg ${q.k.startsWith('Report')?'r':'p'}">${esc(q.k)}</span><p>${esc(q.t)}</p><small>${esc(q.done?q.done+' by you':q.s)}</small></div><div class="ab">${q.done?`<button class="btn btn-navy sm" type="button" data-undo="${i}">Undo</button>`:`<button class="btn btn-teal sm" type="button" data-q="${i}" data-a="Approved">Approve</button><button class="btn btn-red sm" type="button" data-q="${i}" data-a="Removed">Remove</button>`}</div></div>`).join('')}
+  $('#queue').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(b){queue[+b.dataset.q].done=b.dataset.a;renderQueue();toast(b.dataset.a+'.');return}
+    const u=e.target.closest('[data-undo]');if(u){delete queue[+u.dataset.undo].done;renderQueue()}});
+
+  /* reveal on scroll */
+  let io=null;
+  if(!reduce&&'IntersectionObserver' in window)io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.08});
+  function reveal(){$$('.rv:not(.in)').forEach((el,k)=>{if(io){el.style.transitionDelay=(k%4)*60+'ms';io.observe(el)}else el.classList.add('in')})}
+
+  renderPosts();renderFlags();renderGFeat();renderChal();renderSpots();renderBuddies();renderRare();renderKit();renderQueue();reveal();
+
+  /* tabs: the menu shows one section at a time */
+  const links=$$('.jump a'),ids=links.map(a=>a.getAttribute('href').slice(1));
+  $('#more').insertAdjacentHTML('beforeend',links.map(a=>`<a href="${a.getAttribute('href')}">${esc(a.childNodes[0].textContent)}</a>`).join(''));
+  function showSec(id,move){
+    if(!ids.includes(id))id='feed';
+    ids.forEach(x=>{const el=document.getElementById(x);if(x===id){el.removeAttribute('data-off');if(move&&!reduce){el.classList.remove('secfade');void el.offsetWidth;el.classList.add('secfade')}}else el.setAttribute('data-off','')});
+    $$('.jump a,#more a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+id));
+    $('#moreNav').classList.toggle('grey',document.getElementById(id).classList.contains('grey'));
+    reveal();
+    if(move){const bar=$('.jump');const top=bar.getBoundingClientRect().top;if(top<0||top>innerHeight*.6)bar.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})}
+  }
+  window.showSec=showSec;
+  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(!ids.includes(id))return;e.preventDefault();showSec(id,true);if(id==='feed'&&a.closest('.btns'))setTimeout(()=>$('#ctext').focus({preventScroll:true}),400)});
+  showSec((location.hash||'#feed').slice(1),false);
+})();
+</script>
+<!-- the "More air shows" band from links.js is left off this page, which is not a show guide -->
+<div id="xl-band" hidden></div>
+<script src="links.js"></script>
+</body>
+</html>
