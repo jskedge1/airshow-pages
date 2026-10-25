@@ -31,6 +31,9 @@ so a change saved here shows on the Wix site within a minute or two.
 | Show Day Live (Show Day page, every show with a running order plus the member upload bay) | https://jskedge1.github.io/airshow-pages/show-day.html |
 | Show Day Live, one show (Show Day section of a feature show page, change the show at the end) | https://jskedge1.github.io/airshow-pages/show-day.html?show=eastbourne |
 | Show Day Live, member's saved shows (My Airshow Hub) | https://jskedge1.github.io/airshow-pages/show-day.html?mode=hub |
+| Airshow traders directory (Wix page /airshow-traders, page code velo/page-code/airshow-traders.js) | https://jskedge1.github.io/airshow-pages/traders/directory.html |
+| Trader Hub, trader log in and dashboard (Wix page /trader-hub, page code velo/page-code/trader-hub.js) | https://jskedge1.github.io/airshow-pages/traders/trader-hub.html |
+| Trader admin, Jack only (Wix page /trader-admin, members only, page code velo/page-code/trader-admin.js) | https://jskedge1.github.io/airshow-pages/traders/admin.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
@@ -117,3 +120,14 @@ The hub's photos are files in `hub-img/`. Tabs added on 21 Oct: Overview (inboun
 weather from Open-Meteo, where to stand, must see slots from the Show Day running orders, camera settings), My Hangar (backend
 `velo/backend/hangar.web.js`, collection `MemberHangar`; rarity comes from how many show line ups list the aircraft), My Airshow Year
 (story cards) and Share A Photo in My Posts (reads the camera settings from the file and posts through the forum gallery upload).
+
+## Airshow traders (Phase 1, 25 Oct 2026)
+
+Small businesses list themselves on /airshow-traders, Jack checks each listing on /trader-admin, and traders keep their
+own listing up to date on /trader-hub. All three pages talk to `velo/backend/traders.web.js` through their page code
+(postMessage, source `ukag-traders`). Collections, admin-only like the hub ones: `Traders` (one item per business; approved
+fields, plus `pending` for changes waiting for Jack, `status` pending, live, sentBack or paused) and `TraderShows`
+(one item per trader per airshow; changes go live straight away). A listing sent before the trader makes an account is
+linked the first time they log in with the same email. Photos upload to the Media folder /traders/<slug>.
+Opened on their own (not inside Wix) the three pages show example data so the design can be checked.
+Phase 2: Wix Pricing Plans (plans set up but switched off until Jack says go), show day updates, offers, messages and emails.

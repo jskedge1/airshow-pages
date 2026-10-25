@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trader Hub</title>
+<!-- Trader Hub (live). Lives in a Wix HTML embed (Website address) on /trader-hub and talks to the
+     page code (velo/page-code/trader-hub.js) with postMessage, source "ukag-traders".
+     Opened on its own (not inside Wix) it shows example data so the design can be checked. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#13293C; --navy-d:#0E2131; --teal:#32B4AF; --teal-d:#0E5F5B; --teal-p:#E8F6F5;
+  --purple:#6950A1; --purple-p:#F3F0F9; --red:#D74949; --red-p:#FBEDED; --forest:#1E3A34;
+  --grey-l:#C6C6C6; --page:#F2F4F5; --ink:#0B1620; --line:#DCE1E4; --muted:#4E5D68;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{font-family:'Barlow',sans-serif;font-size:16px;line-height:1.55;color:var(--ink);background:var(--page);-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+[hidden]{display:none!important}
+.cond{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase}
+.preview-strip{background:var(--purple);color:#fff;font-weight:500;font-size:14px;text-align:center;padding:8px 16px}
+.preview-strip b{font-weight:700}
+
+/* Shared controls */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;font-weight:600;text-decoration:none;border:2px solid transparent;cursor:pointer;background:none;transition:transform .35s var(--ease),background .35s var(--ease),color .35s var(--ease),border-color .35s}
+.btn:hover{transform:translateY(-2px)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:#2AA29D}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-out{border-color:var(--navy);color:var(--navy)}
+.btn-out:hover{background:var(--navy);color:#fff}
+.btn-outw{border-color:#fff;color:#fff}
+.btn-outw:hover{background:#fff;color:var(--navy)}
+.btn-red{background:var(--red);color:#fff}
+.btn-sm{padding:8px 13px;font-size:14.5px}
+.arr{transition:transform .35s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.field{margin-bottom:16px}
+.field label,.lbl{display:block;font-weight:600;font-size:15px;color:var(--navy);margin-bottom:6px}
+.field label i,.lbl i{font-style:normal;font-weight:400;color:#5A6873;font-size:14px}
+.field input,.field textarea,.field select,.inp{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#fff;transition:border-color .3s,box-shadow .3s}
+.field textarea{min-height:100px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(50,180,175,.18)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2313293C' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px!important;cursor:pointer}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.count{display:block;text-align:right;font-size:13px;color:#5A6873;margin-top:4px;font-variant-numeric:tabular-nums}
+.ico{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none}
+.ico svg{width:18px;height:18px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--grey-l);background:#fff;padding:7px 11px;font-weight:600;font-size:14px;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease),border-color .3s}
+.chip:hover{border-color:var(--teal)}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.note{border-left:4px solid var(--purple);background:var(--purple-p);padding:12px 14px;font-size:14.5px;line-height:1.5}
+.note b{color:var(--purple)}
+.switch{position:relative;width:46px;height:26px;flex:none}
+.switch input{position:absolute;opacity:0;inset:0;cursor:pointer;z-index:1;margin:0}
+.switch span{position:absolute;inset:0;background:var(--grey-l);transition:background .3s}
+.switch span::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;transition:transform .35s var(--ease)}
+.switch input:checked+span{background:var(--teal)}
+.switch input:checked+span::after{transform:translateX(20px)}
+.switch input:focus-visible+span{box-shadow:0 0 0 3px rgba(50,180,175,.35)}
+
+/* ===== Log in screen ===== */
+#auth{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);background:var(--navy)}
+.auth-left{position:relative;color:#fff;padding:56px 56px 48px;display:flex;flex-direction:column;overflow:hidden}
+.auth-left .crumb{font-size:14px;font-weight:500;color:#A9C2CF}
+.auth-left .crumb a{text-decoration:none;border-bottom:1px solid rgba(169,194,207,.4)}
+.auth-left .crumb a:hover{color:#fff}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:5px 12px}
+.auth-left h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(52px,7vw,96px);line-height:.9;margin-top:16px}
+.auth-left h1 em{font-style:normal;color:var(--teal)}
+.auth-left .sub{margin-top:14px;font-weight:700;text-transform:uppercase;color:var(--teal);letter-spacing:.04em}
+.auth-left p.intro{margin-top:16px;max-width:48ch;color:#D7E3EA;font-size:17px}
+.perks{margin-top:34px;display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:620px;border-top:1px solid rgba(255,255,255,.1)}
+.perk{display:flex;gap:12px;padding:16px 16px 16px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.perk .ico{width:32px;height:32px;background:rgba(50,180,175,.18)}
+.perk b{display:block;font-weight:700;font-size:15.5px}
+.perk small{display:block;color:#A9C2CF;font-size:14px;line-height:1.4;margin-top:2px}
+.auth-art{position:absolute;right:-60px;bottom:-10px;width:420px;opacity:.16;pointer-events:none}
+.auth-right{background:var(--page);display:flex;align-items:center;justify-content:center;padding:48px 28px}
+.authbox{width:100%;max-width:440px;background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);box-shadow:0 30px 60px rgba(19,41,60,.12);transform:translateX(-56px)}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr}
+.auth-tabs button{padding:16px;border:0;background:var(--page);font-weight:700;color:var(--navy);cursor:pointer;border-bottom:1px solid var(--line);transition:background .3s}
+.auth-tabs button.on{background:#fff;border-bottom-color:#fff;color:var(--teal-d)}
+.authform{padding:26px 28px 28px}
+.authform h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:30px;line-height:1}
+.authform p.lead{color:#33424D;margin:6px 0 20px;font-size:15px}
+.pw{position:relative}
+.pw button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:none;font-weight:600;font-size:14px;color:var(--teal-d);cursor:pointer;padding:4px}
+.authrow{display:flex;justify-content:space-between;align-items:center;margin:-4px 0 18px;font-size:14.5px}
+.authrow label{display:flex;gap:8px;align-items:center;cursor:pointer}
+.authrow input{accent-color:var(--teal)}
+.linkbtn{border:0;background:none;font-weight:600;color:var(--teal-d);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px}
+.or{display:flex;align-items:center;gap:12px;margin:18px 0;color:#5A6873;font-size:14px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.authmsg{margin-top:14px;font-size:14.5px;padding:10px 12px;display:none}
+.authmsg.show{display:block;animation:rise .4s var(--ease)}
+.authmsg.err{background:var(--red-p);border-left:4px solid var(--red)}
+.authmsg.ok{background:var(--teal-p);border-left:4px solid var(--teal)}
+.w100{width:100%}
+.authfoot{padding:14px 28px;border-top:1px solid var(--line);font-size:14px;color:#33424D;background:#FAFBFB}
+
+/* ===== Dashboard ===== */
+#dash{min-height:100vh}
+.topbar{background:var(--navy);color:#fff}
+.topbar .in{max-width:1320px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;gap:20px}
+.brand{font-weight:700;font-size:15px;color:#fff;text-decoration:none;display:flex;align-items:center;gap:10px}
+.brand .jet{width:26px;height:26px}
+.brand small{display:block;font-weight:500;color:var(--teal);font-size:13px}
+.topbar .sp{flex:1}
+.topbar a.view{color:#fff;font-weight:600;font-size:14.5px;text-decoration:none;border-bottom:2px solid var(--teal)}
+.me{display:flex;align-items:center;gap:10px;position:relative}
+.me button.mebtn{display:flex;align-items:center;gap:10px;background:none;border:0;color:#fff;cursor:pointer;font-weight:600}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--teal);display:grid;place-items:center;font-weight:800;font-family:'Barlow Condensed',sans-serif;font-size:17px;overflow:hidden;color:#fff;flex:none}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.menu{position:absolute;right:0;top:calc(100% + 10px);background:#fff;color:var(--ink);min-width:210px;border-top:4px solid var(--teal);box-shadow:0 20px 40px rgba(0,0,0,.2);z-index:20;display:none}
+.menu.open{display:block;animation:rise .3s var(--ease)}
+.menu button{display:block;width:100%;text-align:left;padding:11px 16px;border:0;background:none;cursor:pointer;font-weight:500;border-top:1px solid var(--line)}
+.menu button:first-child{border-top:0}
+.menu button:hover{background:var(--teal-p)}
+
+.dhead{background:var(--navy);color:#fff;position:relative;overflow:hidden}
+.dhead .in{max-width:1320px;margin:0 auto;padding:30px 28px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end}
+.dhead h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(38px,5vw,62px);line-height:.92}
+.dhead h1 em{font-style:normal;color:var(--teal)}
+.dhead .hello{color:#D7E3EA;margin-top:10px;max-width:62ch}
+.statusrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.statusrow .pill{padding:6px 12px}
+.pill{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14px;padding:4px 11px;background:rgba(255,255,255,.08)}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.pill.live .dot{animation:pulse 2s infinite}
+.pill.pend{background:var(--purple)}
+.pill.pend .dot{background:#fff}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(50,180,175,.7)}70%{box-shadow:0 0 0 8px rgba(50,180,175,0)}100%{box-shadow:0 0 0 0 rgba(50,180,175,0)}}
+.dhead .acts{display:flex;gap:10px;flex-wrap:wrap;padding-bottom:4px}
+.dhead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:sweep 7s var(--ease) infinite}
+@keyframes sweep{0%{background-position:-40% 0}100%{background-position:140% 0}}
+.dtabs{max-width:1320px;margin:22px auto 0;padding:0 28px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.dtabs::-webkit-scrollbar{display:none}
+.dtabs button{flex:none;display:flex;align-items:center;gap:8px;border:0;background:none;color:#fff;font-weight:600;padding:13px 16px;cursor:pointer;transition:padding .4s var(--ease),background .4s var(--ease)}
+.dtabs button:hover,.dtabs button:focus-visible{background:rgba(50,180,175,.35);padding:13px 24px;outline:none}
+.dtabs button.on{background:var(--teal);padding:13px 24px}
+.dtabs .badge{min-width:20px;height:20px;border-radius:10px;background:var(--red);font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 6px}
+
+.main{max-width:1320px;margin:0 auto;padding:36px 28px 70px}
+.panel{display:none}
+.panel.on{display:block;animation:rise .45s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ptitle{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:36px;align-items:end;margin-bottom:28px}
+.ptitle h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--red);font-size:clamp(32px,3.6vw,46px);line-height:.95;padding-left:16px;border-left:4px solid var(--red)}
+.ptitle p{color:#33424D;max-width:60ch}
+.box{background:#fff;border:1px solid var(--line);padding:24px}
+.box h3,.boxh{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:23px;line-height:1.05;margin-bottom:12px}
+.box h3 small{font-family:'Barlow',sans-serif;text-transform:none;font-weight:500;font-size:14px;color:var(--muted);margin-left:8px}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:28px;align-items:start}
+.sticky{position:sticky;top:16px}
+
+/* Overview */
+.ov{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px}
+.navybox{background:var(--navy-d);color:#fff;border-top:4px solid var(--teal);padding:22px 24px}
+.navybox h3{display:flex;align-items:center;gap:12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:22px;color:var(--teal);margin-bottom:10px}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08);font-size:15px}
+.kv span:first-child{color:#9FD8D5;font-weight:500}
+.kv span:last-child{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.kv.hl span:last-child{background:var(--red);padding:1px 8px}
+.kv.pu span:last-child{background:var(--purple);padding:1px 8px}
+.bar{height:6px;background:rgba(255,255,255,.12);margin-top:12px}
+.bar i{display:block;height:100%;background:var(--teal);transition:width .8s var(--ease)}
+.stat{background:#fff;border:1px solid var(--line);padding:18px 20px;position:relative;overflow:hidden}
+.stat .n{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:44px;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums}
+.stat .l{font-weight:600;color:var(--navy);margin-top:4px}
+.stat .c{font-size:14px;color:var(--teal-d);font-weight:600;margin-top:2px}
+.stat svg{position:absolute;right:14px;bottom:14px;width:110px;height:38px}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--teal)}
+.stat.p::before{background:var(--purple)}
+.stat.r::before{background:var(--red)}
+.stat.n2::before{background:var(--navy)}
+.next li{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line);list-style:none}
+.next li:first-child{border-top:0}
+.cd{background:var(--navy);color:#fff;text-align:center;padding:6px 0}
+.cd b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;line-height:1}
+.cd small{font-size:12px;font-weight:600;color:#9FD8D5}
+.next .nm{font-weight:700;color:var(--navy)}
+.next .dt{font-size:14px;color:var(--muted)}
+.st{font-size:13px;font-weight:600;padding:3px 9px;color:#fff;white-space:nowrap}
+.st-booked{background:var(--teal-d)}
+.st-applied{background:var(--purple)}
+.st-hoping{background:#5A6873}
+.st-cancelled{background:var(--red)}
+.todo li{display:flex;gap:12px;align-items:start;padding:11px 0;border-top:1px solid var(--line);list-style:none}
+.todo li:first-child{border-top:0}
+.tick{width:22px;height:22px;border:2px solid var(--grey-l);flex:none;display:grid;place-items:center;margin-top:1px}
+.todo li.done .tick{background:var(--teal);border-color:var(--teal)}
+.todo li.done .tick::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.todo li.done b{text-decoration:line-through;color:#7A8790}
+.todo b{display:block;font-weight:700;color:var(--navy)}
+.todo small{display:block;color:var(--muted);font-size:14px}
+.todo button{margin-left:auto;flex:none}
+.feed li{list-style:none;display:grid;grid-template-columns:10px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.feed li:first-child{border-top:0}
+.feed li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:8px}
+.feed small{display:block;color:var(--muted);font-size:13.5px}
+
+/* Card (same as directory) */
+.card{position:relative;display:grid;grid-template-columns:62px minmax(0,1fr);background:#fff;border:1px solid var(--line)}
+.strip{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0;color:#fff}
+.strip .ico{width:38px;height:38px}
+.strip .vert{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:15px;letter-spacing:.04em}
+.cbody{padding:18px 20px}
+.ctop{display:flex;gap:12px;align-items:center}
+.clogo{width:52px;height:52px;border-radius:50%;background:var(--page);border:1px solid var(--line);flex:none;overflow:hidden;display:grid;place-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;color:var(--navy);font-size:20px}
+.clogo img{width:100%;height:100%;object-fit:cover}
+.cbody h4{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:25px;line-height:1;color:var(--navy)}
+.town{margin-top:4px;font-weight:500;font-size:14px;color:var(--muted)}
+.cbadge{margin-left:auto;align-self:start;flex:none;font-weight:600;font-size:13px;padding:3px 9px;color:#fff;background:var(--forest)}
+.cphotos{display:grid;grid-template-columns:2fr 1fr 1fr;gap:4px;margin-top:14px;height:96px}
+.cphotos div{background:var(--page) center/cover no-repeat;pointer-events:none}
+.cphotos div:first-child{grid-row:span 1}
+.blurb{margin-top:12px;font-size:15px;color:#26343E}
+.tagsl{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.tagsl span{font-size:13px;font-weight:600;border:1px solid var(--line);padding:2px 8px;color:var(--navy);background:#FAFBFB}
+.offer{margin-top:12px;display:flex;gap:10px;align-items:baseline;font-size:14.5px;background:var(--teal-p);padding:9px 12px}
+.offer b{color:var(--teal-d);font-weight:700;flex:none}
+.live{margin-top:12px;display:flex;gap:10px;align-items:center;background:var(--navy);color:#fff;padding:9px 12px;font-size:14.5px}
+.live b{flex:none;font-weight:700;padding:1px 8px}
+.where{grid-column:2;padding:16px 20px;border-top:1px solid var(--line)}
+.where h5{font-weight:700;font-size:15px;color:var(--navy);margin-bottom:6px;display:flex;justify-content:space-between}
+.where h5 span{font-weight:500;color:var(--muted)}
+.stops{list-style:none}
+.stops li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line);font-size:14.5px}
+.stops li:first-child{border-top:0}
+.stops li b{font-weight:600;color:var(--navy)}
+.stops .d{flex:none;font-weight:600;font-size:13px;border:1px solid var(--grey-l);padding:2px 8px}
+.stops li.x b{text-decoration:line-through;color:#7A8790}
+.stops li.x .d{border-color:var(--red);color:var(--red)}
+.clinks{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-weight:600;font-size:14.5px;color:var(--navy)}
+.clinks span i{font-style:normal;color:var(--red)}
+
+/* Photos */
+.drop{border:2px dashed var(--teal);background:var(--teal-p);padding:26px;text-align:center;cursor:pointer;transition:background .3s,border-color .3s;position:relative}
+.drop.over{background:#D5EFED;border-color:var(--teal-d)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop b{display:block;font-weight:700;color:var(--navy);font-size:17px}
+.drop small{color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.ph{position:relative;background:var(--page);border:1px solid var(--line);aspect-ratio:4/3;overflow:hidden;cursor:grab;transition:transform .35s var(--ease),box-shadow .35s var(--ease),opacity .3s}
+.ph:hover{box-shadow:0 10px 26px rgba(19,41,60,.15)}
+.ph.dragging{opacity:.4}
+.ph.target{outline:3px solid var(--teal);outline-offset:-3px}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.ph .cover{position:absolute;left:8px;top:8px;background:var(--purple);color:#fff;font-size:12.5px;font-weight:700;padding:2px 8px}
+.ph .tools{position:absolute;left:0;right:0;bottom:0;display:flex;gap:4px;padding:8px;background:linear-gradient(transparent,rgba(14,33,49,.85));opacity:0;transition:opacity .3s}
+.ph:hover .tools,.ph:focus-within .tools{opacity:1}
+.ph .tools button{border:0;background:#fff;color:var(--navy);font-weight:600;font-size:13px;padding:5px 8px;cursor:pointer}
+.ph .tools button.del{margin-left:auto;color:var(--red)}
+.ph .cap{position:absolute;right:8px;top:8px;background:rgba(14,33,49,.8);color:#fff;font-size:12px;padding:2px 7px;font-weight:600}
+.slot{border:1px dashed var(--grey-l);aspect-ratio:4/3;display:grid;place-items:center;color:#7A8790;font-weight:600;font-size:14px;background:#FAFBFB}
+.logo-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:center}
+.logo-big{width:120px;height:120px;border-radius:50%;background:var(--page);border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:44px;color:var(--navy)}
+.logo-big img{width:100%;height:100%;object-fit:cover}
+.filebtn{position:relative;overflow:hidden}
+.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.rules{list-style:none;margin-top:14px}
+.rules li{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:14.5px}
+.rules li:first-child{border-top:0}
+.rules li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:8px}
+
+/* Shows table */
+.tbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)}
+.tbl th{text-align:left;background:var(--navy);color:#fff;font-weight:600;font-size:14.5px;padding:12px 14px}
+.tbl td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:middle;font-size:15px}
+.tbl td .inp,.tbl td select{padding:8px 10px}
+.tbl tr.cx td{background:#FFF8F8}
+.tbl tr.cx .nm{text-decoration:line-through;color:#7A8790}
+.tbl .nm{font-weight:700;color:var(--navy)}
+.tbl .sm{font-size:13.5px;color:var(--muted)}
+.rmx{border:1px solid var(--grey-l);background:#fff;width:34px;height:34px;cursor:pointer;color:var(--red);font-size:19px;line-height:1}
+.rmx:hover{background:var(--red-p)}
+.season{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:22px;background:var(--navy);padding:16px;color:#fff}
+.season div{min-height:74px;padding:4px 6px;border-left:1px solid rgba(255,255,255,.1)}
+.season h6{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:16px;color:#9FD8D5;margin-bottom:6px}
+.season span{display:block;font-size:13px;font-weight:600;padding:3px 7px;margin-bottom:4px;background:rgba(50,180,175,.25);border-left:3px solid var(--teal)}
+.season span.a{background:rgba(105,80,161,.35);border-left-color:#B7A7DC}
+.season span.h{background:rgba(255,255,255,.08);border-left-color:#A9C2CF}
+.season span.c{text-decoration:line-through;opacity:.55;border-left-color:var(--red)}
+
+/* Show day */
+.statusbtns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sbtn{border:1px solid var(--line);background:#fff;padding:14px 12px;text-align:left;cursor:pointer;transition:transform .35s var(--ease),background .3s,border-color .3s}
+.sbtn:hover{transform:translateY(-2px);border-color:var(--teal)}
+.sbtn b{display:block;font-weight:700;color:var(--navy)}
+.sbtn small{display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
+.sbtn i{display:block;width:26px;height:4px;margin-bottom:10px}
+.sbtn.on{background:var(--navy);border-color:var(--navy)}
+.sbtn.on b{color:#fff}
+.sbtn.on small{color:#A9C2CF}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+
+/* Messages */
+.msgs{display:grid;grid-template-columns:280px minmax(0,1fr);background:#fff;border:1px solid var(--line);min-height:460px}
+.threads{border-right:1px solid var(--line);background:#FAFBFB}
+.threads button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:14px 16px;cursor:pointer;transition:background .3s}
+.threads button:hover{background:var(--teal-p)}
+.threads button.on{background:#fff;box-shadow:inset 4px 0 0 var(--teal)}
+.threads b{display:block;font-weight:700;color:var(--navy);font-size:15px}
+.threads small{display:block;color:var(--muted);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.threads .unread b::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-left:8px;vertical-align:middle}
+.convo{display:flex;flex-direction:column}
+.convo .hd{padding:14px 20px;border-bottom:1px solid var(--line);font-weight:700;color:var(--navy);display:flex;justify-content:space-between;align-items:center}
+.convo .hd small{font-weight:500;color:var(--muted)}
+.bubbles{flex:1;padding:20px;display:flex;flex-direction:column;gap:12px;max-height:420px;overflow-y:auto;scrollbar-width:thin}
+.bub{max-width:76%;padding:11px 14px;font-size:15px;line-height:1.5}
+.bub small{display:block;font-size:12.5px;margin-top:4px;opacity:.75}
+.bub.them{background:var(--page);align-self:flex-start;border-left:3px solid var(--purple)}
+.bub.me{background:var(--navy);color:#fff;align-self:flex-end}
+.compose{display:flex;gap:8px;padding:14px;border-top:1px solid var(--line)}
+.compose input{flex:1}
+
+/* Account */
+.setrow{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:13px 0;border-top:1px solid var(--line)}
+.setrow:first-of-type{border-top:0}
+.setrow b{display:block;font-weight:700;color:var(--navy)}
+.setrow small{display:block;color:var(--muted);font-size:14px}
+.team li{list-style:none;display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.team li:first-child{border-top:0}
+.team .avatar{width:32px;height:32px;font-size:15px}
+.team .role{margin-left:auto;font-size:13px;font-weight:600;padding:2px 8px;border:1px solid var(--line)}
+.danger{border:1px solid #F0C9C9;border-top:4px solid var(--red)}
+/* Plans */
+.lock{display:flex;gap:14px;align-items:center;background:var(--purple-p);border-left:4px solid var(--purple);padding:14px 16px;margin-bottom:16px}
+.lock .ico{background:var(--purple)}
+.lock b{display:block;color:var(--navy);font-weight:700}
+.lock small{display:block;color:#33424D;font-size:14px}
+.lock .btn{margin-left:auto;flex:none}
+.statsWrap{position:relative}
+.statsWrap.locked .stat{filter:blur(5px);pointer-events:none;user-select:none}
+.statsWrap .over{display:none;position:absolute;inset:0;z-index:2;align-items:center;justify-content:center;padding:20px}
+.statsWrap.locked .over{display:flex}
+.statsWrap .over .lock{max-width:520px;margin:0;box-shadow:0 20px 40px rgba(19,41,60,.18);background:#fff}
+.ph.hid img{filter:grayscale(1) brightness(.6)}
+.ph .hidtag{position:absolute;inset:auto 8px 44px 8px;background:var(--purple);color:#fff;font-size:12.5px;font-weight:600;padding:4px 8px;text-align:center}
+.cbadges{margin-left:auto;align-self:start;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.cbadges span{font-weight:600;font-size:12.5px;padding:3px 9px;color:#fff;white-space:nowrap}
+.cb-found{background:var(--purple)}
+.cb-head{background:var(--teal-d)}
+.cb-boost{background:var(--red)}
+.ptickets{display:flex;flex-direction:column;gap:14px}
+.pt{position:relative;display:grid;grid-template-columns:200px minmax(0,1fr) 170px;background:#fff;border:1px solid var(--line);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.pt:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(19,41,60,.1)}
+.pt .tn{padding:18px 20px;border-right:2px dashed var(--line)}
+.pt h4{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:26px;line-height:1;color:var(--navy)}
+.pt .pr{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:36px;line-height:1;color:var(--navy);margin-top:8px}
+.pt .pr small{font-family:'Barlow',sans-serif;font-weight:500;font-size:13.5px;color:#5A6873;margin-left:4px}
+.pt .pr s{font-size:22px;color:#8C98A1;margin-right:6px}
+.pt ul{list-style:none;padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;align-content:center}
+.pt li{display:flex;gap:8px;font-size:14px;line-height:1.4}
+.pt li::before{content:"";flex:none;width:13px;height:7px;border:solid var(--teal);border-width:0 0 2.5px 2.5px;transform:rotate(-45deg);margin-top:4px}
+.pt .ta{display:flex;flex-direction:column;justify-content:center;gap:6px;padding:16px 18px 16px 0}
+.pt .ta small{font-size:13px;color:#5A6873;text-align:center}
+.pt.cur{background:var(--navy);border-color:var(--navy);color:#fff}
+.pt.cur h4,.pt.cur .pr{color:#fff}
+.pt.cur .pr small,.pt.cur .ta small{color:#A9C2CF}
+.pt.cur li{color:#D7E3EA}
+.pt.cur .tn{border-right-color:rgba(255,255,255,.2)}
+.curtag{display:inline-flex;justify-content:center;background:var(--teal);color:#fff;font-weight:700;padding:10px 12px}
+.pt .rib{position:absolute;top:-11px;left:20px;background:var(--purple);color:#fff;font-weight:600;font-size:12.5px;padding:2px 9px}
+.boostrow{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.boostrow:first-child{border-top:0}
+.boostrow .nm{font-weight:700;color:var(--navy)}
+.boostrow small{display:block;color:var(--muted);font-size:13.5px}
+.boostrow .btn,.boostrow .on{margin-left:auto;flex:none}
+.boostrow .on{background:var(--red);color:#fff;font-weight:600;font-size:13.5px;padding:5px 10px}
+.paylines{margin-top:14px;border-top:2px solid var(--navy)}
+.paylines div{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.paylines div.tot{font-weight:800;font-size:18px;color:var(--navy);border-bottom:0}
+.cardfield{display:grid;grid-template-columns:1fr 90px 70px;gap:8px;margin-top:14px}
+
+/* Toast and dialog */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);background:var(--navy);color:#fff;padding:14px 20px;border-left:6px solid var(--teal);box-shadow:0 20px 40px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .35s var(--ease),transform .35s var(--ease);z-index:50;max-width:min(560px,calc(100% - 32px));font-size:15px}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast b{color:var(--teal)}
+.dlg{position:fixed;inset:0;background:rgba(11,22,32,.6);display:none;align-items:center;justify-content:center;z-index:60;padding:20px}
+.dlg.open{display:flex;animation:fade .3s}
+@keyframes fade{from{opacity:0}}
+.dlg .box{max-width:460px;width:100%;border-top:4px solid var(--red);animation:rise .4s var(--ease)}
+.dlg .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+
+@media (max-width:1060px){
+  .pt{grid-template-columns:180px minmax(0,1fr)}
+  .pt .ta{grid-column:1/-1;flex-direction:row;padding:0 18px 18px;align-items:center}
+
+  #auth{grid-template-columns:1fr}
+  .auth-left{padding:40px 24px 30px}
+  .authbox{transform:none}
+  .split{grid-template-columns:1fr}
+  .sticky{position:relative;top:0}
+  .ptitle{grid-template-columns:1fr;gap:12px}
+  .ov>*{grid-column:1/-1!important}
+  .statusbtns{grid-template-columns:1fr 1fr}
+  .msgs{grid-template-columns:1fr}
+  .threads{border-right:0;border-bottom:1px solid var(--line);display:flex;overflow-x:auto}
+  .threads button{flex:none;width:220px;border-bottom:0;border-right:1px solid var(--line)}
+  .dhead .in{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .pt{grid-template-columns:1fr}
+  .pt .tn{border-right:0;border-bottom:2px dashed var(--line)}
+  .pt.cur .tn{border-bottom-color:rgba(255,255,255,.2)}
+  .pt ul{grid-template-columns:1fr}
+  .pt .ta{padding:0 18px 18px}
+  .lock{flex-wrap:wrap}
+  .lock .btn{margin-left:0}
+
+  .perks{grid-template-columns:1fr}
+  .row2,.row3{grid-template-columns:1fr}
+  .main{padding:26px 16px 60px}
+  .topbar .in,.dhead .in,.dtabs{padding-left:16px;padding-right:16px}
+  .topbar a.view,.me .nm{display:none}
+  .gallery{grid-template-columns:1fr 1fr}
+  .ph .tools{opacity:1}
+  .season{grid-template-columns:1fr 1fr 1fr}
+  .tbl thead{display:none}
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+  .tbl tr{border-top:4px solid var(--navy);padding:6px 0}
+  .tbl td{border-top:0;padding:6px 12px}
+  .logo-row{grid-template-columns:1fr;justify-items:start}
+  .card{grid-template-columns:48px minmax(0,1fr)}
+  .bub{max-width:90%}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+<style>
+.state{max-width:620px;margin:60px auto;background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);padding:32px}
+.state h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:34px;line-height:1}
+.state h2 em{font-style:normal;color:var(--teal)}
+.state p{margin-top:12px;color:#33424D}
+.state .btn{margin-top:20px}
+.banner{display:flex;gap:14px;align-items:flex-start;padding:14px 18px;margin-bottom:20px;border-left:5px solid var(--teal);background:#fff;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.banner.wait{border-left-color:var(--purple);background:var(--purple-p)}
+.banner.back{border-left-color:var(--red);background:var(--red-p)}
+.banner.pause{border-left-color:#5A6873;background:#EEF1F3}
+.banner b{display:block;color:var(--navy);font-weight:700}
+.banner span{color:#33424D;font-size:15px}
+.wix-note{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:14px;font-size:13.5px;color:var(--muted)}
+.loading{padding:80px 20px;text-align:center;color:var(--muted);font-weight:600}
+.loading i{display:inline-block;width:18px;height:18px;border:2px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-3px;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.btn[disabled]{opacity:.6;pointer-events:none}
+.ph .up{position:absolute;inset:0;display:grid;place-items:center;background:rgba(14,33,49,.6);color:#fff;font-weight:600;font-size:14px}
+.save-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.save-row small{color:var(--muted)}
+.dirty{display:none;background:var(--purple);color:#fff;font-size:13px;font-weight:600;padding:3px 9px}
+.dirty.on{display:inline-block}
+.plancard{background:var(--navy-d);color:#fff;border-top:4px solid var(--teal);padding:22px 24px}
+.plancard h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;color:var(--teal);font-size:22px;margin-bottom:8px}
+@media (max-width:640px){.state{margin:24px 14px;padding:22px}}
+</style>
+</head>
+<body>
+<div class="preview-strip" id="demoStrip" hidden><b>Example data.</b> On ukairshowguide.co.uk this page uses real Wix log ins and your own listing.</div>
+
+<div id="boot" class="loading"><i></i>Loading your Trader Hub</div>
+
+<!-- ================= LOG IN ================= -->
+<main id="auth" hidden>
+  <section class="auth-left">
+    <div class="crumb"><a href="https://www.ukairshowguide.co.uk/airshow-traders" target="_top">Airshow traders directory</a> &nbsp;›&nbsp; Trader Hub</div>
+    <div style="margin-top:auto;padding-top:48px">
+      <span class="tag">For airshow traders</span>
+      <h1>Trader <em>Hub</em></h1>
+      <div class="sub">Your stall, your listing, your season</div>
+      <p class="intro">Log in to keep your listing up to date through the season. Change your details, add your photos and logo, and add each airshow the day you book it. Free support from me the whole way through.</p>
+      <div class="perks">
+        <div class="perk"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#32B4AF" stroke-width="2"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></span><div><b>Edit your listing</b><small>Changes come to me to check, your listing stays live meanwhile</small></div></div>
+        <div class="perk"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#32B4AF" stroke-width="2"><rect x="3" y="5" width="18" height="14"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg></span><div><b>Upload photos</b><small>Your logo and your stall photos</small></div></div>
+        <div class="perk"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#32B4AF" stroke-width="2"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><div><b>Manage your shows</b><small>Dates, where to find you, and whether you are booked</small></div></div>
+        <div class="perk"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#32B4AF" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div><b>Free support</b><small>Email me any time at contactus@ukairshowguide.co.uk</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="auth-right">
+    <div class="authbox">
+      <div class="auth-tabs" role="tablist">
+        <button type="button" class="on" data-auth="login" role="tab" aria-selected="true">Log in</button>
+        <button type="button" data-auth="signup" role="tab" aria-selected="false">Create an account</button>
+      </div>
+
+      <form class="authform" id="loginForm" novalidate>
+        <h2>Welcome back</h2>
+        <p class="lead">Log in with the email you used when you sent your listing.</p>
+        <div class="field"><label for="lEmail">Email</label><input id="lEmail" type="email" autocomplete="email" placeholder="you@yourbusiness.co.uk"></div>
+        <div class="field"><label for="lPw">Password</label><div class="pw"><input id="lPw" type="password" autocomplete="current-password"><button type="button" data-pw="lPw">Show</button></div></div>
+        <div class="authrow"><span></span><button type="button" class="linkbtn" id="forgot">Forgotten password?</button></div>
+        <button class="btn btn-teal w100" type="submit" id="loginBtn">Log in <span class="arr">→</span></button>
+        <div class="or">or</div>
+        <button class="btn btn-out w100" type="button" id="google"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h5.9a5 5 0 0 1-2.2 3.3v2.7h3.5c2.1-1.9 3.3-4.7 3.3-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.5-2.7c-1 .7-2.3 1-3.8 1-2.9 0-5.4-2-6.3-4.6H2v2.8A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.7 14c-.2-.7-.4-1.3-.4-2s.1-1.4.4-2V7.2H2a11 11 0 0 0 0 9.6z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.1-3.1A11 11 0 0 0 2 7.2L5.7 10c.9-2.6 3.4-4.6 6.3-4.6z"/></svg>Log in with Google</button>
+        <div class="wix-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0E5F5B" stroke-width="2.2"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Log ins are handled securely by Wix</div>
+        <div class="authmsg" id="loginMsg" role="status"></div>
+      </form>
+
+      <div class="authform" id="signupForm" hidden>
+        <h2>Join as a trader</h2>
+        <p class="lead">Free to join. Use the same email you sent your listing from, so your account finds your listing straight away.</p>
+        <ol style="margin:0 0 18px 20px;color:#33424D;font-size:15px;line-height:1.7">
+          <li>Send your listing from the traders directory, if you have not already</li>
+          <li>Create your account here with the same email</li>
+          <li>Confirm your email if Wix asks you to</li>
+        </ol>
+        <button class="btn btn-teal w100" type="button" id="signupBtn">Create my account <span class="arr">→</span></button>
+        <a class="btn btn-out w100" style="margin-top:10px" href="https://www.ukairshowguide.co.uk/airshow-traders#list" target="_top">I have not sent my listing yet</a>
+        <div class="authmsg" id="signupMsg" role="status"></div>
+      </div>
+
+      <form class="authform" id="resetForm" hidden novalidate>
+        <h2>Reset your password</h2>
+        <p class="lead">Enter your email and Wix will send you a link to set a new password. It works for 3 hours.</p>
+        <div class="field"><label for="rEmail">Email</label><input id="rEmail" type="email" autocomplete="email"></div>
+        <button class="btn btn-teal w100" type="submit" id="resetBtn">Send the link</button>
+        <p style="margin-top:14px"><button type="button" class="linkbtn" id="backLogin">Back to log in</button></p>
+        <div class="authmsg" id="resetMsg" role="status"></div>
+      </form>
+      <div class="authfoot">Not trading at airshows? The <a href="https://www.ukairshowguide.co.uk/airshow-traders" target="_top">traders directory</a> shows who you will find at each show.</div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= NO LISTING YET ================= -->
+<div id="nolisting" hidden>
+  <div class="state">
+    <h2>No listing <em>yet</em></h2>
+    <p id="nlText">You are logged in, but there is no trader listing for this email yet.</p>
+    <p>Send your listing from the traders directory using <b id="nlEmail"></b>, and it will appear here as soon as you do. If you sent it from a different email, email me at contactus@ukairshowguide.co.uk and I will link it for you.</p>
+    <a class="btn btn-teal" href="https://www.ukairshowguide.co.uk/airshow-traders#list" target="_top">Send my listing <span class="arr">→</span></a>
+    <p style="margin-top:16px"><button type="button" class="linkbtn" data-act="logout">Log out</button></p>
+  </div>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="dash" hidden>
+  <div class="topbar"><div class="in">
+    <a class="brand" href="https://www.ukairshowguide.co.uk/" target="_top"><svg class="jet" viewBox="0 0 48 24" fill="#D74949"><path d="M0 12 l30 -2 -6 -10 4 0 12 9 6 1 2 2 -2 2 -6 1 -12 9 -4 0 6 -10z"/></svg><span>The Big Guide to UK Airshows<small>Trader Hub</small></span></a>
+    <span class="sp"></span>
+    <a class="view" href="https://www.ukairshowguide.co.uk/airshow-traders" target="_top">See the directory</a>
+    <div class="me">
+      <button type="button" class="mebtn" id="meBtn" aria-haspopup="true" aria-expanded="false"><span class="avatar" id="topAvatar">?</span><span class="nm" id="topName"></span> ▾</button>
+      <div class="menu" id="meMenu">
+        <button type="button" data-go="listing">Edit my listing</button>
+        <button type="button" data-go="account">Account</button>
+        <button type="button" data-act="logout">Log out</button>
+      </div>
+    </div>
+  </div></div>
+
+  <header class="dhead">
+    <div class="in">
+      <div>
+        <h1 id="dTitle"></h1>
+        <p class="hello" id="hello"></p>
+        <div class="statusrow" id="statusRow"></div>
+      </div>
+      <div class="acts">
+        <button class="btn btn-teal btn-sm" type="button" data-go="listing">Edit my listing <span class="arr">→</span></button>
+      </div>
+    </div>
+    <nav class="dtabs" id="tabs" aria-label="Trader Hub sections">
+      <button type="button" data-tab="overview" class="on">Overview</button>
+      <button type="button" data-tab="listing">My listing</button>
+      <button type="button" data-tab="photos">Logo and photos</button>
+      <button type="button" data-tab="shows">My airshows</button>
+      <button type="button" data-tab="plan">My plan</button>
+      <button type="button" data-tab="account">Account</button>
+    </nav>
+  </header>
+
+  <div class="main">
+    <div id="banner"></div>
+
+    <section class="panel on" id="p-overview">
+      <div class="ov">
+        <div class="navybox" style="grid-column:span 4">
+          <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2.2"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/></svg></span>Your listing</h3>
+          <div class="kv"><span>Status</span><span id="ovStatus"></span></div>
+          <div class="kv"><span>Last checked by Jack</span><span id="ovChecked"></span></div>
+          <div class="kv hl"><span>Next show</span><span id="ovNext"></span></div>
+          <div class="kv"><span>Shows listed</span><span id="ovShows"></span></div>
+          <div class="kv"><span>Plan</span><span id="ovPlan"></span></div>
+          <div class="kv"><span>Profile complete</span><span id="ovPct"></span></div>
+          <div class="bar"><i id="ovBar" style="width:0"></i></div>
+        </div>
+        <div class="box" style="grid-column:span 4">
+          <h3>Your next shows</h3>
+          <ul class="next" id="nextList"></ul>
+          <button class="btn btn-out btn-sm" type="button" data-go="shows" style="margin-top:12px">Manage my airshows</button>
+        </div>
+        <div class="box" style="grid-column:span 4">
+          <h3>Things to do <small id="todoLeft"></small></h3>
+          <ul class="todo" id="todo"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="p-listing">
+      <div class="ptitle"><h2>My listing</h2><p>Everything visitors see on your card. When you save, your changes come to me to check, usually within a day or two. Your current listing stays live until then.</p></div>
+      <div class="split">
+        <form class="box" id="listForm" novalidate>
+          <h3>Business details</h3>
+          <div class="row2">
+            <div class="field"><label for="eName">Business name</label><input id="eName" maxlength="60"></div>
+            <div class="field"><label for="eTown">Where you are based</label><input id="eTown" maxlength="60"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="eCat">Type of stall</label><select id="eCat"></select></div>
+            <div class="field"><label for="eWeb">Website</label><input id="eWeb" placeholder="yourbusiness.co.uk"></div>
+          </div>
+          <div class="field"><label for="eBlurb">About your stall <i>(what you sell, what makes you different)</i></label><textarea id="eBlurb" maxlength="240"></textarea><span class="count" id="eCount"></span></div>
+          <div class="field" id="offerWrap"><label for="eOffer">Show day offer <i>(Flypast and Headliner)</i></label><input id="eOffer" maxlength="80" placeholder="e.g. 10% off for anyone who mentions the guide"></div>
+          <h3 style="margin-top:8px">Social pages</h3>
+          <div class="row3">
+            <div class="field"><label for="eIg">Instagram</label><input id="eIg" placeholder="@yourstall"></div>
+            <div class="field"><label for="eFb">Facebook</label><input id="eFb" placeholder="facebook.com/yourstall"></div>
+            <div class="field"><label for="eTt">TikTok</label><input id="eTt" placeholder="@yourstall"></div>
+          </div>
+          <h3 style="margin-top:8px">Helpful for visitors</h3>
+          <div class="field"><span class="lbl">How people can pay</span><div class="chips" id="payChips"></div></div>
+          <div class="field" id="dietWrap"><span class="lbl">Dietary options <i>(food stalls)</i></span><div class="chips" id="dietChips"></div></div>
+          <div class="field"><span class="lbl">About your business</span><div class="chips" id="aboutChips"></div></div>
+          <div class="save-row">
+            <button class="btn btn-teal" type="submit" id="saveListing">Save and send to Jack <span class="arr">→</span></button>
+            <button class="btn btn-out" type="button" id="undoList">Undo my changes</button>
+            <span class="dirty" id="listDirty">Not saved yet</span>
+          </div>
+        </form>
+        <div class="sticky">
+          <h3 class="boxh">How visitors see you</h3>
+          <div id="prevCard"></div>
+          <div class="note" style="margin-top:14px"><b>Tip.</b> I would suggest keeping your about line to two short sentences. Visitors scan these on their phones in a queue, so lead with what you sell.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="p-photos">
+      <div class="ptitle"><h2>Logo and photos</h2><p>Your logo sits beside your name and your first photo leads your card. Drag photos to change the order, or use the arrows on a phone. Save when you are done, and the new photos come to me to check.</p></div>
+      <div class="split">
+        <div>
+          <div class="box">
+            <h3>Your logo</h3>
+            <div class="logo-row">
+              <div class="logo-big" id="logoBig">?</div>
+              <div>
+                <p style="color:#33424D;margin-bottom:12px">A square image works best. It shows in a circle, so keep anything important away from the corners.</p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                  <label class="btn btn-teal btn-sm filebtn">Upload a logo<input type="file" accept="image/*" id="logoIn"></label>
+                  <button class="btn btn-out btn-sm" type="button" id="logoRm">Remove</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="box" style="margin-top:20px">
+            <h3>Stall photos <small id="phCount"></small></h3>
+            <div class="drop" id="drop">
+              <input type="file" accept="image/*" multiple id="phIn" aria-label="Upload stall photos">
+              <b>Drop photos here or tap to choose</b>
+              <small>JPG or PNG. Large photos are made smaller before they upload.</small>
+            </div>
+            <div class="gallery" id="gallery"></div>
+            <div class="save-row">
+              <button class="btn btn-teal" type="button" id="savePhotos">Save and send to Jack <span class="arr">→</span></button>
+              <span class="dirty" id="phDirty">Not saved yet</span>
+            </div>
+          </div>
+        </div>
+        <div class="sticky">
+          <div class="navybox">
+            <h3>Photos that work</h3>
+            <ul class="rules" style="color:#D7E3EA">
+              <li>Your stall from the front, with the name or sign showing, so people can spot you on the day</li>
+              <li>Close ups of what you sell. Food photos taken in daylight look best</li>
+              <li>Landscape photos fit the card better than portrait ones</li>
+              <li>Only use photos you took or have permission to use</li>
+              <li>Photos on your card cannot be clicked to enlarge, so make sure they read well small</li>
+            </ul>
+          </div>
+          <h3 class="boxh" style="margin-top:20px">Card preview</h3>
+          <div id="prevCard2"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="p-shows">
+      <div class="ptitle"><h2>My airshows</h2><p>Add each show as soon as you book it, and your card appears on that airshow in the directory straight away. If you have to pull out, mark it as not attending rather than deleting it, so visitors who planned to see you know.</p></div>
+      <div class="box" style="margin-bottom:20px">
+        <h3>Add an airshow</h3>
+        <form id="addShow" class="row3" style="grid-template-columns:1.4fr 1fr .8fr auto;align-items:end" novalidate>
+          <div class="field" style="margin:0"><label for="asShow">Airshow</label><select id="asShow"></select></div>
+          <div class="field" style="margin:0"><label for="asDates">Dates you will trade</label><input id="asDates" placeholder="e.g. Sat 17 to Sun 18 Jul"></div>
+          <div class="field" style="margin:0"><label for="asStatus">Status</label><select id="asStatus"><option value="booked">Booked</option><option value="applied">Applied</option><option value="hoping">Hoping to go</option></select></div>
+          <button class="btn btn-teal" type="submit" id="addShowBtn">Add</button>
+        </form>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Airshow</th><th>Dates</th><th>Where to find you <span style="font-weight:400">(Flypast and Headliner)</span></th><th>Status</th><th></th></tr></thead>
+        <tbody id="showRows"></tbody>
+      </table>
+      <div class="season" id="seasonView"></div>
+      <div class="note" style="margin-top:16px"><b>What visitors see.</b> Booked shows show on your card straight away, and shows you are not attending show as "Not attending". Applied and hoping shows stay private to you.</div>
+    </section>
+
+    <section class="panel" id="p-plan">
+      <div class="ptitle"><h2>My plan</h2><p>What your plan includes. Paid plans, show boosts and payments open before the 2027 season, and nothing is ever charged without you choosing it.</p></div>
+      <div class="split">
+        <div class="box" id="planInfo"></div>
+        <div class="plancard" id="planCard"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="p-account">
+      <div class="ptitle"><h2>Account</h2><p>Your log in, pausing your listing, and how to reach me.</p></div>
+      <div class="split">
+        <div class="box">
+          <h3>Your details</h3>
+          <div class="setrow"><div><b>Logged in as</b><small id="accEmail"></small></div></div>
+          <div class="setrow"><div><b>Contact on your listing</b><small id="accContact"></small></div></div>
+          <div class="setrow"><div><b>Change your password</b><small>Wix emails you a link to set a new one</small></div><button class="btn btn-out btn-sm" type="button" id="accReset">Send link</button></div>
+          <div class="setrow"><div><b>Log out</b><small>You can log back in any time</small></div><button class="btn btn-out btn-sm" type="button" data-act="logout">Log out</button></div>
+        </div>
+        <div>
+          <div class="box danger">
+            <h3>Pause your listing</h3>
+            <div class="setrow"><div><b>Hide my card</b><small>Takes your card off the directory until you turn it back on</small></div><label class="switch"><input type="checkbox" id="pause"><span></span></label></div>
+            <div class="setrow"><div><b>Remove my listing for good</b><small>Email me and I will remove your listing and photos</small></div><a class="btn btn-out btn-sm" href="mailto:contactus@ukairshowguide.co.uk?subject=Remove%20my%20trader%20listing" target="_top">Email me</a></div>
+          </div>
+          <div class="note" style="margin-top:20px"><b>Free support.</b> Stuck on anything? Email me at contactus@ukairshowguide.co.uk and I will help you get set up. Messages inside the Trader Hub arrive in 2027.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const okEmail = v => /^\S+@\S+\.\S+$/.test(v);
+  const imgUrl = u => { const m=/^wix:image:\/\/v1\/([^/]+)/.exec(u||''); return m?`https://static.wixstatic.com/media/${m[1]}`:(u||''); };
+
+  const SHOWS = [
+    {id:'duxford',name:'IWM Duxford Air Shows',short:'Duxford',m:0},
+    {id:'shuttleworth',name:'Shuttleworth Air Shows (Old Warden)',short:'Old Warden',m:0},
+    {id:'midlands',name:'Midlands Air Festival',short:'Midlands',m:1},
+    {id:'cosford',name:'RAF Cosford Air Show',short:'Cosford',m:1},
+    {id:'wales',name:'Wales Airshow',short:'Wales',m:2},
+    {id:'riat',name:'Royal International Air Tattoo',short:'RIAT',m:2},
+    {id:'little-gransden',name:'Little Gransden Air & Car Show',short:'Little Gransden',m:3},
+    {id:'blackpool',name:'Blackpool Air Show',short:'Blackpool',m:3},
+    {id:'eastbourne',name:'Airbourne: Eastbourne International Airshow',short:'Eastbourne',m:3},
+    {id:'clacton',name:'Clacton Airshow',short:'Clacton',m:3},
+    {id:'southport',name:'Southport Air Show',short:'Southport',m:4},
+    {id:'ayr',name:'The International Ayr Show, Festival of Flight',short:'Ayr',m:4}
+  ];
+  const S = Object.fromEntries(SHOWS.map(s=>[s.id,s]));
+  const CATS = [
+    {id:'food',name:'Food and drink',col:'#D74949',icon:'<path d="M5 3v8a3 3 0 0 0 6 0V3M8 3v18M17 3c-2 0-3 2.5-3 6s1.3 4 3 4v8"/>'},
+    {id:'art',name:'Art and prints',col:'#6950A1',icon:'<rect x="3" y="4" width="18" height="16"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/>'},
+    {id:'models',name:'Models and toys',col:'#32B4AF',icon:'<path d="M2 13l9-2 3-7h2l-1 7 7 1v2l-7 1 1 5h-2l-3-5-9-1z"/>'},
+    {id:'clothing',name:'Clothing and patches',col:'#13293C',icon:'<path d="M8 3l-5 3 2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/>'},
+    {id:'kit',name:'Camera and show kit',col:'#1E3A34',icon:'<rect x="3" y="7" width="18" height="13"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.5"/>'},
+    {id:'family',name:'Family fun',col:'#0E5F5B',icon:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/>'}
+  ];
+  const C = Object.fromEntries(CATS.map(c=>[c.id,c]));
+  const TAGS = {pay:['Cash','Card','Contactless','Apple Pay and Google Pay'],diet:['Vegetarian','Vegan','Gluten free','Dairy free','Halal'],about:['Independent','Family run','Local to the show','Dog friendly','Step free counter']};
+  const PLAN_INFO = {
+    free:{name:'Static Display',feat:['Your card in the directory','Logo and 2 photos','Up to 3 airshows']},
+    flypast:{name:'Flypast',feat:['6 stall photos','Unlimited airshows','Show day offers','Where to find you on each show']},
+    headliner:{name:'Headliner',feat:['Everything in Flypast','Top of every show you attend','Mention in show week posts']}
+  };
+
+  /* ---------- talking to the Wix page code ---------- */
+  const IN_WIX = window.parent !== window;
+  const pendingCalls = {}; let seq = 0;
+  function call(action, payload, wait){
+    if(!IN_WIX) return demo(action, payload||{});
+    return new Promise((resolve,reject)=>{
+      const id='h'+(++seq); pendingCalls[id]={resolve,reject};
+      try{window.parent.postMessage({source:'ukag-traders',id,action,payload:payload||{}},'*')}catch(e){}
+      setTimeout(()=>{if(pendingCalls[id]){delete pendingCalls[id];reject(new Error('The page could not reach the site. Please refresh and try again.'))}},wait||(action==='prompt'?600000:30000));
+    });
+  }
+  window.addEventListener('message',e=>{
+    const m=e.data; if(!m||m.source!=='ukag-traders')return;
+    if(m.event==='refresh'){boot();return}
+    const p=pendingCalls[m.id]; if(!p)return; delete pendingCalls[m.id];
+    if(m.ok)p.resolve(m.data); else p.reject(new Error(m.error||'Something went wrong.'));
+  });
+
+  /* example data when the page is opened on its own, outside the Wix site */
+  const D = {loggedIn:false, trader:{id:'demo',status:'live',waiting:false,adminNote:'',lastChecked:new Date(Date.now()-4*864e5).toISOString(),plan:'flypast',planName:'Flypast',limits:{photos:6,shows:null,offers:true},requestedPlan:'founding',founding:true,contactName:'Sam Whitlock',contactEmail:'sam@hangarbrew.co.uk',
+    listing:{name:'Hangar Brew Co.',town:'Saffron Walden, Cambridgeshire',cat:'food',about:'Speciality coffee and hot chocolate from a converted 1970s Citroën van. We open the hatch before the gates do.',web:'hangarbrew.co.uk',instagram:'@hangarbrew',facebook:'',tiktok:'',tags:{pay:['Card','Contactless'],diet:['Vegan'],about:['Independent']},logo:'',photos:[],offer:'Free refill if you bring your own cup'},
+    shows:[{id:'s1',showId:'duxford',name:'IWM Duxford Air Shows',dates:'Sat 22 to Sun 23 May',pitch:'Food court',status:'booked'},{id:'s2',showId:'riat',name:'Royal International Air Tattoo',dates:'Fri 16 to Sun 18 Jul',pitch:'',status:'booked'}]}};
+  function demo(action,p){
+    return new Promise((res,rej)=>setTimeout(()=>{
+      const me=()=>D.loggedIn?{loggedIn:true,firstName:'Sam',email:'sam@hangarbrew.co.uk',trader:JSON.parse(JSON.stringify(D.trader)),founding:{taken:8,total:25}}:{loggedIn:false};
+      const t=D.trader;
+      switch(action){
+        case 'me': return res(me());
+        case 'login': if(!p.email||!p.password)return rej(new Error('That email and password did not match.')); D.loggedIn=true; return res(me());
+        case 'prompt': D.loggedIn=true; return res(me());
+        case 'logout': D.loggedIn=false; return res({loggedIn:false});
+        case 'reset': return res({sent:true});
+        case 'saveListing': Object.assign(t.listing,p); t.waiting=true; return res(JSON.parse(JSON.stringify(t)));
+        case 'upload': return res({url:p.dataUrl,kind:p.kind});
+        case 'savePhotos': t.listing.photos=p.photos; t.listing.logo=p.logo; t.waiting=true; return res(JSON.parse(JSON.stringify(t)));
+        case 'saveShow': { if(p.id){Object.assign(t.shows.find(s=>s.id===p.id),p)} else t.shows.push(Object.assign({id:'s'+Date.now(),name:S[p.showId].name},p)); return res(JSON.parse(JSON.stringify(t))); }
+        case 'removeShow': t.shows=t.shows.filter(s=>s.id!==p.id); return res(JSON.parse(JSON.stringify(t)));
+        case 'pause': t.status=p.pause?'paused':'live'; return res(JSON.parse(JSON.stringify(t)));
+      }
+      res({});
+    },350));
+  }
+
+  /* ---------- toast + busy buttons ---------- */
+  let tt; function toast(h){const t=$('#toast');t.innerHTML=h;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),4500)}
+  async function busy(btn, fn){ if(btn){btn.disabled=true;} try{ return await fn(); } finally { if(btn) btn.disabled=false; } }
+  const showMsg=(id,cls,h)=>{const m=$(id);m.className='authmsg '+cls;m.innerHTML=h;void m.offsetWidth;m.classList.add('show')};
+
+  /* ---------- state ---------- */
+  let ME=null, T=null, L=null, saved=null, photos=[], logo='', photosDirty=false;
+
+  function screen(name){
+    $('#boot').hidden=true;
+    $('#auth').hidden=name!=='auth'; $('#nolisting').hidden=name!=='none'; $('#dash').hidden=name!=='dash';
+    window.scrollTo(0,0);
+  }
+  async function boot(){
+    try{ apply(await call('me')); }
+    catch(err){ $('#boot').innerHTML=`<p>${esc(err.message)}</p>`; }
+  }
+  function apply(me){
+    ME=me||{loggedIn:false};
+    if(!ME.loggedIn){ screen('auth'); return; }
+    if(!ME.trader){ $('#nlEmail').textContent=ME.email||'your email'; screen('none'); return; }
+    setTrader(ME.trader); screen('dash'); go('overview');
+  }
+  function setTrader(t){
+    T=t; L=JSON.parse(JSON.stringify(t.listing)); saved=JSON.stringify(L);
+    photos=(t.listing.photos||[]).slice(); logo=t.listing.logo||''; photosDirty=false;
+    fillListing(); refresh();
+  }
+
+  /* ---------- log in ---------- */
+  $$('.auth-tabs button').forEach(b=>b.addEventListener('click',()=>{
+    $$('.auth-tabs button').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b)});
+    $('#loginForm').hidden=b.dataset.auth!=='login'; $('#signupForm').hidden=b.dataset.auth!=='signup'; $('#resetForm').hidden=true;
+  }));
+  $$('[data-pw]').forEach(b=>b.addEventListener('click',()=>{const i=document.getElementById(b.dataset.pw);const s=i.type==='password';i.type=s?'text':'password';b.textContent=s?'Hide':'Show'}));
+  $('#loginForm').addEventListener('submit',e=>{e.preventDefault();
+    const email=$('#lEmail').value.trim(), password=$('#lPw').value;
+    if(!okEmail(email)||!password){showMsg('#loginMsg','err','Please enter your email and password.');return}
+    busy($('#loginBtn'),async()=>{ try{ apply(await call('login',{email,password})); }catch(err){ showMsg('#loginMsg','err',esc(err.message)); } });
+  });
+  $('#google').addEventListener('click',()=>busy($('#google'),async()=>{ try{ apply(await call('prompt',{mode:'login'})); }catch(err){ showMsg('#loginMsg','err','The log in window was closed before you logged in.'); } }));
+  $('#signupBtn').addEventListener('click',()=>busy($('#signupBtn'),async()=>{ try{ apply(await call('prompt',{mode:'signup'})); }catch(err){ showMsg('#signupMsg','err','The sign up window was closed before your account was made. If Wix asked you to confirm your email, do that, then log in.'); } }));
+  $('#forgot').addEventListener('click',()=>{$('#loginForm').hidden=true;$('#resetForm').hidden=false;$('#rEmail').value=$('#lEmail').value});
+  $('#backLogin').addEventListener('click',()=>{$('#resetForm').hidden=true;$('#loginForm').hidden=false});
+  $('#resetForm').addEventListener('submit',e=>{e.preventDefault();
+    const email=$('#rEmail').value.trim();
+    if(!okEmail(email)){showMsg('#resetMsg','err','Please enter the email you log in with.');return}
+    busy($('#resetBtn'),async()=>{ try{ await call('reset',{email}); showMsg('#resetMsg','ok','If that email has an account, a reset link is on its way. It works for 3 hours.'); }catch(err){ showMsg('#resetMsg','ok','If that email has an account, a reset link is on its way. It works for 3 hours.'); } });
+  });
+  document.addEventListener('click',async e=>{const b=e.target.closest('[data-act="logout"]');if(!b)return;e.preventDefault();
+    $('#meMenu').classList.remove('open');
+    try{ await call('logout'); }catch(err){}
+    ME={loggedIn:false}; screen('auth'); showMsg('#loginMsg','ok','You have logged out. See you at the next show.');
+  });
+  $('#meBtn').addEventListener('click',e=>{e.stopPropagation();const m=$('#meMenu');m.classList.toggle('open');$('#meBtn').setAttribute('aria-expanded',m.classList.contains('open'))});
+  document.addEventListener('click',()=>$('#meMenu').classList.remove('open'));
+
+  /* ---------- tabs ---------- */
+  function go(tab){
+    $$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+    $$('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+tab));
+    $('#meMenu').classList.remove('open');
+    const top=$('.dhead').getBoundingClientRect().bottom+window.scrollY-60;
+    if(window.scrollY>top) window.scrollTo({top,behavior:reduce?'auto':'smooth'});
+  }
+  $('#tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.tab)});
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){e.preventDefault();go(b.dataset.go)}});
+
+  /* ---------- the card ---------- */
+  const initials = n => (n||'?').replace(/[^A-Za-z0-9 ]/g,'').trim().charAt(0).toUpperCase()||'?';
+  function card(useLocalPhotos){
+    const c=C[L.cat]||CATS[0]; const lim=T.limits||{photos:2,offers:false};
+    const stops=(T.shows||[]).filter(s=>s.status==='booked'||s.status==='cancelled');
+    const pics=(useLocalPhotos?photos:(L.photos||[])).slice(0,Math.min(3,lim.photos));
+    const lg=useLocalPhotos?logo:L.logo;
+    const tags=[...(L.tags.pay||[])].concat(L.cat==='food'?(L.tags.diet||[]):[]);
+    return `<article class="card"${T.status==='paused'?' style="opacity:.55"':''}>
+      <div class="strip" style="background:${c.col}"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="${c.col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">${c.icon}</svg></span><span class="vert">${esc(c.name)}</span></div>
+      <div class="cbody">
+        <div class="ctop"><div class="clogo">${lg?`<img src="${esc(imgUrl(lg))}" alt="">`:esc(initials(L.name))}</div><div><h4>${esc(L.name||'Your business name')}</h4><div class="town">${esc(L.town)}</div></div><div class="cbadges">${T.plan==='headliner'?'<span class="cb-head">Headliner</span>':''}${T.founding?'<span class="cb-found">Founding trader</span>':''}${(L.tags.about||[]).includes('Independent')?'<span class="cbadge" style="margin:0">Independent</span>':''}</div></div>
+        ${pics.length?`<div class="cphotos" style="${pics.length===1?'grid-template-columns:1fr':pics.length===2?'grid-template-columns:2fr 1fr':''}">${pics.map(p=>`<div style="background-image:url('${esc(imgUrl(p))}')"></div>`).join('')}</div>`:''}
+        <p class="blurb">${esc(L.about||'A short line about what you sell.')}</p>
+        ${tags.length?`<div class="tagsl">${tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>`:''}
+        ${lim.offers&&L.offer?`<div class="offer"><b>Show day offer</b><span>${esc(L.offer)}</span></div>`:''}
+        <div class="clinks">${L.web?'<span>Visit their page <i>→</i></span>':''}${L.instagram?'<span>Instagram <i>→</i></span>':''}${L.facebook?'<span>Facebook <i>→</i></span>':''}${L.tiktok?'<span>TikTok <i>→</i></span>':''}</div>
+      </div>
+      <div class="where"><h5>Find them at <span>${stops.filter(s=>s.status==='booked').length} shows</span></h5>
+        <ul class="stops">${stops.length?stops.map(s=>`<li class="${s.status==='cancelled'?'x':''}"><b>${esc((S[s.showId]||{}).short||s.name)}</b><span class="d">${s.status==='cancelled'?'Not attending':esc(s.dates)}</span></li>`).join(''):'<li><span style="color:#5A6873">No booked shows yet</span></li>'}</ul></div>
+    </article>${T.status==='paused'?'<p class="note" style="margin-top:10px"><b>Paused.</b> Your card is hidden from visitors.</p>':''}`;
+  }
+
+  /* ---------- header, banner, overview ---------- */
+  const dateKey = d => {const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const n=parseInt((d.match(/\d+/)||[])[0],10);const mm=d.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*$/i);const m=mm?M.indexOf(mm[1].charAt(0).toUpperCase()+mm[1].slice(1,3).toLowerCase()):-1;if(m<0||isNaN(n))return null;const now=new Date();let y=now.getFullYear();let dt=new Date(y,m,n);if(dt<new Date(now.getTime()-30*864e5))dt=new Date(y+1,m,n);return dt};
+  const fmtDate = d => d?new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'Not yet';
+  function header(){
+    const parts=(L.name||'').split(' '); const last=parts.length>1?parts.pop():'';
+    $('#dTitle').innerHTML=esc(parts.join(' '))+(last?' <em>'+esc(last)+'</em>':'');
+    $('#topName').textContent=L.name;
+    $('#topAvatar').innerHTML=logo?`<img src="${esc(imgUrl(logo))}" alt="">`:esc(initials(L.name));
+    const h=new Date().getHours(); const g=h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+    const first=ME.firstName||(T.contactName||'').split(' ')[0]||'';
+    const booked=(T.shows||[]).filter(s=>s.status==='booked').length;
+    const statusLine={live:`Your listing is live in the directory and on ${booked} airshow ${booked===1?'page':'pages'}.`,pending:'Your listing is with me to check. I will email you as soon as it is live.',sentBack:'I have sent your listing back with a note. Make the change and save it to send it again.',paused:'Your listing is paused, so visitors cannot see it at the moment.'}[T.status]||'';
+    $('#hello').textContent=`${g}${first?', '+first:''}. ${statusLine}`;
+    const pill={live:'<span class="pill live"><span class="dot"></span>Live in the directory</span>',pending:'<span class="pill pend"><span class="dot"></span>Waiting for Jack to check</span>',sentBack:'<span class="pill" style="background:#D74949"><span class="dot" style="background:#fff"></span>Sent back with a note</span>',paused:'<span class="pill"><span class="dot" style="background:#D74949"></span>Paused</span>'}[T.status]||'';
+    $('#statusRow').innerHTML=pill+(T.status==='live'&&T.waiting?'<span class="pill pend"><span class="dot"></span>Changes waiting for Jack to check</span>':'')+`<span class="pill" style="background:rgba(50,180,175,.22)"><span class="dot"></span>${T.founding?'Founding trader, Flypast':esc(T.planName)+' plan'}</span>`;
+    let b='';
+    if(T.status==='sentBack'&&T.adminNote) b=`<div class="banner back"><div><b>Jack sent your listing back</b><span>${esc(T.adminNote)}</span></div></div>`;
+    else if(T.status==='live'&&T.adminNote) b=`<div class="banner back"><div><b>A note from Jack about your last changes</b><span>${esc(T.adminNote)}</span></div></div>`;
+    else if(T.status==='pending') b=`<div class="banner wait"><div><b>Your listing is with me to check</b><span>Usually within a few days. You can keep adding photos and shows meanwhile.</span></div></div>`;
+    else if(T.waiting) b=`<div class="banner wait"><div><b>Your changes are waiting for me to check</b><span>Your current listing stays live until I approve them.</span></div></div>`;
+    else if(T.status==='paused') b=`<div class="banner pause"><div><b>Your listing is paused</b><span>Turn it back on in Account whenever you are ready.</span></div></div>`;
+    $('#banner').innerHTML=b;
+  }
+  function completeness(){
+    const checks=[!!L.name,!!L.town,(L.about||'').length>40,!!L.web,!!(L.instagram||L.facebook||L.tiktok),!!logo,photos.length>=Math.min(3,T.limits.photos),(L.tags.pay||[]).length>0,(T.shows||[]).some(s=>s.status==='booked')];
+    return Math.round(checks.filter(Boolean).length/checks.length*100);
+  }
+  function overview(){
+    const statusWord={live:'Live',pending:'Waiting to check',sentBack:'Sent back',paused:'Paused'}[T.status]||T.status;
+    $('#ovStatus').textContent=statusWord+(T.status==='live'&&T.waiting?', changes waiting':'');
+    $('#ovChecked').textContent=fmtDate(T.lastChecked);
+    const up=(T.shows||[]).filter(s=>s.status!=='cancelled').map(s=>Object.assign({},s,{k:dateKey(s.dates)})).filter(s=>s.k).sort((a,b)=>a.k-b.k);
+    $('#ovNext').textContent=up[0]?((S[up[0].showId]||{}).short||up[0].name):'None yet';
+    $('#ovShows').textContent=(T.shows||[]).filter(s=>s.status!=='cancelled').length;
+    $('#ovPlan').textContent=T.founding?'Flypast, founding':T.planName;
+    const pct=completeness(); $('#ovPct').textContent=pct+'%'; requestAnimationFrame(()=>$('#ovBar').style.width=pct+'%');
+    const now=new Date();
+    $('#nextList').innerHTML=up.slice(0,4).map(s=>{const days=Math.max(0,Math.ceil((s.k-now)/864e5));return `<li><div class="cd"><b>${days}</b><small>days</small></div><div><div class="nm">${esc(s.name)}</div><div class="dt">${esc(s.dates)}</div></div><span class="st st-${s.status}">${s.status==='booked'?'Booked':s.status==='applied'?'Applied':'Hoping'}</span></li>`}).join('')||'<li style="display:block">No shows added yet.</li>';
+    const todos=[
+      {t:'Upload your logo',d:'Shows beside your name on your card',done:!!logo,go:'photos'},
+      {t:`Add ${Math.min(3,T.limits.photos)} stall photos`,d:`You have ${photos.length} so far`,done:photos.length>=Math.min(3,T.limits.photos),go:'photos'},
+      {t:'Add a booked airshow',d:'Your card shows on each one',done:(T.shows||[]).some(s=>s.status==='booked'),go:'shows'},
+      {t:'Add how people can pay',d:'Cash, card or contactless',done:(L.tags.pay||[]).length>0,go:'listing'},
+      {t:'Add a social page',d:'Instagram, Facebook or TikTok',done:!!(L.instagram||L.facebook||L.tiktok),go:'listing'}
+    ];
+    const left=todos.filter(t=>!t.done).length;
+    $('#todoLeft').textContent=left?left+' left':'All done';
+    $('#todo').innerHTML=todos.map(t=>`<li class="${t.done?'done':''}"><span class="tick"></span><div><b>${t.t}</b><small>${t.d}</small></div>${t.done?'':`<button class="btn btn-out btn-sm" type="button" data-go="${t.go}">Do it</button>`}</li>`).join('');
+  }
+
+  /* ---------- my listing ---------- */
+  CATS.forEach(c=>$('#eCat').insertAdjacentHTML('beforeend',`<option value="${c.id}">${esc(c.name)}</option>`));
+  function chipSet(el,key){const set=new Set(L.tags[key]||[]);el.innerHTML=TAGS[key].map(x=>`<button type="button" class="chip${set.has(x)?' on':''}" aria-pressed="${set.has(x)}">${esc(x)}</button>`).join('');
+    el.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const v=b.textContent;const s=new Set(L.tags[key]||[]);s.has(v)?s.delete(v):s.add(v);L.tags[key]=TAGS[key].filter(x=>s.has(x));b.classList.toggle('on');b.setAttribute('aria-pressed',s.has(v));listChanged()}}
+  function fillListing(){
+    $('#eName').value=L.name;$('#eTown').value=L.town;$('#eCat').value=L.cat;$('#eWeb').value=L.web;$('#eBlurb').value=L.about;$('#eOffer').value=L.offer||'';
+    $('#eIg').value=L.instagram;$('#eFb').value=L.facebook;$('#eTt').value=L.tiktok;
+    L.tags=L.tags||{};chipSet($('#payChips'),'pay');chipSet($('#dietChips'),'diet');chipSet($('#aboutChips'),'about');
+  }
+  function listChanged(){ $('#listDirty').classList.toggle('on',JSON.stringify(L)!==saved); refresh(); }
+  $('#listForm').addEventListener('input',()=>{
+    Object.assign(L,{name:$('#eName').value,town:$('#eTown').value,cat:$('#eCat').value,web:$('#eWeb').value,about:$('#eBlurb').value,offer:$('#eOffer').value,instagram:$('#eIg').value,facebook:$('#eFb').value,tiktok:$('#eTt').value});
+    listChanged();
+  });
+  $('#listForm').addEventListener('submit',e=>{e.preventDefault();
+    if(!L.name.trim()||!L.about.trim()){toast('<b>Nearly there.</b> Your listing needs a business name and an about line.');return}
+    busy($('#saveListing'),async()=>{ try{ setTrader(await call('saveListing',L)); toast(T.status==='pending'?'<b>Saved.</b> Your listing is with me to check.':'<b>Sent to Jack.</b> Your changes go live once checked, usually within a day or two.'); }catch(err){ toast(`<b>That did not save.</b> ${esc(err.message)}`); } });
+  });
+  $('#undoList').addEventListener('click',()=>{L=JSON.parse(saved);fillListing();listChanged();toast('Your listing is back to how it was last saved.')});
+
+  /* ---------- photos ---------- */
+  function shrink(file, max, kind){
+    return new Promise((res,rej)=>{
+      if(!/^image\//.test(file.type))return rej(new Error('Please choose a JPG or PNG photo.'));
+      const img=new Image(); const url=URL.createObjectURL(file);
+      img.onload=()=>{const sc=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);const x=c.getContext('2d');if(kind==='logo'){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height)}x.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);res(c.toDataURL('image/jpeg',.84))};
+      img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('That file could not be read as a photo.'))};
+      img.src=url;
+    });
+  }
+  async function uploadFile(file, kind){
+    const dataUrl=await shrink(file, kind==='logo'?600:1600, kind);
+    const r=await call('upload',{dataUrl,kind},60000);
+    return r.url;
+  }
+  function setPhotosDirty(){photosDirty=true;$('#phDirty').classList.add('on');refresh()}
+  $('#logoIn').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+    $('#logoBig').innerHTML='<i style="width:22px;height:22px;border:2px solid #DCE1E4;border-top-color:#32B4AF;border-radius:50%;display:block;animation:sp .8s linear infinite"></i>';
+    try{logo=await uploadFile(f,'logo');setPhotosDirty();toast('<b>Logo uploaded.</b> Save to send it to Jack.')}catch(err){toast(esc(err.message));refresh()}});
+  $('#logoRm').addEventListener('click',()=>{logo='';setPhotosDirty()});
+  let uploading=0;
+  async function addPhotos(files){
+    const max=T.limits.photos;
+    for(const f of files){
+      if(photos.length+uploading>=max){toast(`Your plan shows up to ${max} photos.`);break}
+      uploading++;gallery();
+      try{photos.push(await uploadFile(f,'photo'));setPhotosDirty()}catch(err){toast(esc(err.message))}
+      finally{uploading--;gallery()}
+    }
+  }
+  $('#phIn').addEventListener('change',e=>{addPhotos([...e.target.files]);e.target.value=''});
+  const drop=$('#drop');
+  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{if(e.dataTransfer&&[...e.dataTransfer.types].includes('Files')){e.preventDefault();drop.classList.add('over')}}));
+  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,()=>drop.classList.remove('over')));
+  drop.addEventListener('drop',e=>{e.preventDefault();if(e.dataTransfer.files.length)addPhotos([...e.dataTransfer.files])});
+  let dragI=null;
+  function gallery(){
+    const max=T.limits.photos;
+    $('#phCount').textContent=`${photos.length} of ${max}`;
+    $('#gallery').innerHTML=photos.map((p,i)=>`<div class="ph" draggable="true" data-i="${i}"><img src="${esc(imgUrl(p))}" alt="Stall photo ${i+1}">${i===0?'<span class="cover">Cover photo</span>':`<span class="cap">${i+1}</span>`}
+      <div class="tools"><button type="button" data-a="left" aria-label="Move earlier"${i===0?' disabled':''}>←</button><button type="button" data-a="right" aria-label="Move later"${i===photos.length-1?' disabled':''}>→</button>${i?'<button type="button" data-a="cover">Make cover</button>':''}<button type="button" class="del" data-a="del">Delete</button></div></div>`).join('')
+      + Array.from({length:uploading},()=>'<div class="ph"><span class="up">Uploading</span></div>').join('')
+      + Array.from({length:Math.max(0,Math.min(3,max-photos.length-uploading))},()=>'<div class="slot">Empty slot</div>').join('');
+    $$('.ph[draggable]').forEach(el=>{
+      el.addEventListener('dragstart',e=>{dragI=+el.dataset.i;el.classList.add('dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',dragI)});
+      el.addEventListener('dragend',()=>{el.classList.remove('dragging');$$('.ph').forEach(x=>x.classList.remove('target'))});
+      el.addEventListener('dragover',e=>{if(dragI===null)return;e.preventDefault();el.classList.add('target')});
+      el.addEventListener('dragleave',()=>el.classList.remove('target'));
+      el.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();const to=+el.dataset.i;if(dragI!==null&&dragI!==to){const [m]=photos.splice(dragI,1);photos.splice(to,0,m);setPhotosDirty()}dragI=null});
+    });
+  }
+  $('#gallery').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;const i=+b.closest('.ph').dataset.i;const a=b.dataset.a;const P=photos;
+    if(a==='left'&&i>0)[P[i-1],P[i]]=[P[i],P[i-1]];
+    if(a==='right'&&i<P.length-1)[P[i+1],P[i]]=[P[i],P[i+1]];
+    if(a==='cover'){const [m]=P.splice(i,1);P.unshift(m)}
+    if(a==='del')P.splice(i,1);
+    setPhotosDirty();
+  });
+  $('#savePhotos').addEventListener('click',()=>busy($('#savePhotos'),async()=>{
+    try{ setTrader(await call('savePhotos',{photos,logo})); toast('<b>Sent to Jack.</b> Your new photos go live once checked.'); }catch(err){ toast(`<b>That did not save.</b> ${esc(err.message)}`); }
+  }));
+
+  /* ---------- shows ---------- */
+  SHOWS.forEach(s=>$('#asShow').insertAdjacentHTML('beforeend',`<option value="${s.id}">${esc(s.name)}</option>`));
+  const stLabel={booked:'Booked',applied:'Applied',hoping:'Hoping to go',cancelled:'Not attending'};
+  function shows(){
+    const pitchOk=T.limits.offers;
+    $('#showRows').innerHTML=(T.shows||[]).map(s=>`<tr class="${s.status==='cancelled'?'cx':''}" data-id="${esc(s.id)}">
+      <td><div class="nm">${esc(s.name)}</div></td>
+      <td><input class="inp" data-f="dates" value="${esc(s.dates)}" aria-label="Dates"></td>
+      <td><input class="inp" data-f="pitch" value="${esc(s.pitch)}" placeholder="${pitchOk?'e.g. Trade village, row C':'Available on Flypast'}" aria-label="Where to find you"${pitchOk?'':' disabled'}></td>
+      <td><select class="inp" data-f="status" aria-label="Status">${Object.entries(stLabel).map(([k,v])=>`<option value="${k}"${k===s.status?' selected':''}>${v}</option>`).join('')}</select></td>
+      <td><button class="rmx" type="button" aria-label="Remove ${esc(s.name)}">×</button></td></tr>`).join('')||'<tr><td colspan="5">No shows yet. Add your first one above.</td></tr>';
+    const cols=[[],[],[],[],[],[]];
+    (T.shows||[]).forEach(s=>{const sh=S[s.showId];if(sh)cols[sh.m].push(s)});
+    $('#seasonView').innerHTML=['May','June','July','August','September','October'].map((m,i)=>`<div><h6>${m}</h6>${cols[i].map(s=>`<span class="${s.status==='applied'?'a':s.status==='hoping'?'h':s.status==='cancelled'?'c':''}">${esc(S[s.showId].short)}</span>`).join('')}</div>`).join('');
+  }
+  $('#showRows').addEventListener('change',e=>{const tr=e.target.closest('tr');if(!tr||!e.target.dataset.f)return;
+    const s=(T.shows||[]).find(x=>x.id===tr.dataset.id);if(!s)return;
+    const upd=Object.assign({},s,{[e.target.dataset.f]:e.target.value.trim()});
+    call('saveShow',{id:s.id,showId:upd.showId,dates:upd.dates,pitch:upd.pitch,status:upd.status}).then(t=>{T.shows=t.shows;refresh();toast(upd.status==='cancelled'&&s.status!=='cancelled'?`<b>${esc(s.name)} updated.</b> Visitors will see you are not attending.`:'<b>Saved.</b>')}).catch(err=>{toast(`<b>That did not save.</b> ${esc(err.message)}`);refresh()});
+  });
+  $('#showRows').addEventListener('click',e=>{const b=e.target.closest('.rmx');if(!b)return;const id=b.closest('tr').dataset.id;
+    b.disabled=true; call('removeShow',{id}).then(t=>{T.shows=t.shows;refresh();toast('Show removed.')}).catch(err=>{b.disabled=false;toast(esc(err.message))});
+  });
+  $('#addShow').addEventListener('submit',e=>{e.preventDefault();const dates=$('#asDates').value.trim();if(!dates){toast('Please add the dates you will be trading.');$('#asDates').focus();return}
+    const showId=$('#asShow').value,status=$('#asStatus').value;
+    busy($('#addShowBtn'),async()=>{ try{ const t=await call('saveShow',{showId,dates,status}); T.shows=t.shows; $('#asDates').value=''; refresh(); toast(`<b>${esc(S[showId].short)} added.</b>${status==='booked'&&T.status==='live'?' Your card now shows on that airshow.':''}`); }catch(err){ toast(`<b>That did not save.</b> ${esc(err.message)}`); } });
+  });
+
+  /* ---------- plan + account ---------- */
+  function plan(){
+    const id=T.plan||'free', p=PLAN_INFO[id]||PLAN_INFO.free;
+    $('#planCard').innerHTML=`<h3>Your plan</h3>
+      <div class="kv"><span>Plan</span><span>${esc(p.name)}</span></div>
+      ${T.founding?'<div class="kv pu"><span>Founding trader</span><span>Flypast free for 2027</span></div><div class="kv"><span>From 2028</span><span>£19 a season, locked in</span></div>':''}
+      <div class="kv"><span>Photos</span><span>${photos.length} of ${T.limits.photos}</span></div>
+      <div class="kv"><span>Airshows</span><span>${(T.shows||[]).filter(s=>s.status!=='cancelled').length} of ${T.limits.shows||'unlimited'}</span></div>
+      ${T.requestedPlan&&T.requestedPlan!==id&&T.requestedPlan!=='founding'?`<div class="kv hl"><span>You asked for</span><span>${esc((PLAN_INFO[T.requestedPlan]||{}).name||T.requestedPlan)}</span></div>`:''}`;
+    $('#planInfo').innerHTML=`<h3>What ${esc(p.name)} includes</h3><ul class="rules">${p.feat.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
+      <div class="note" style="margin-top:16px"><b>Paid plans.</b> Flypast (£29 a season), Headliner (£79 a season) and the £9 show boost open before the 2027 season. I will email you when they do. Nothing is charged without you choosing it.</div>`;
+  }
+  function account(){
+    $('#accEmail').textContent=ME.email||'';
+    $('#accContact').textContent=[T.contactName,T.contactEmail].filter(Boolean).join(', ');
+    $('#pause').checked=T.status==='paused'; $('#pause').disabled=!(T.status==='live'||T.status==='paused');
+  }
+  $('#accReset').addEventListener('click',()=>busy($('#accReset'),async()=>{try{await call('reset',{email:ME.email});toast('<b>Link sent.</b> Check your email, it works for 3 hours.')}catch(err){toast(esc(err.message))}}));
+  $('#pause').addEventListener('change',e=>{const pause=e.target.checked;
+    call('pause',{pause}).then(t=>{setTrader(t);toast(pause?'<b>Listing paused.</b> Your card is hidden until you turn it back on.':'<b>Welcome back.</b> Your card is showing again.')}).catch(err=>{e.target.checked=!pause;toast(esc(err.message))});
+  });
+
+  /* ---------- refresh ---------- */
+  function refresh(){
+    $('#eCount').textContent=`${($('#eBlurb').value||'').length} of 240`;
+    $('#dietWrap').style.display=L.cat==='food'?'':'none';
+    $('#offerWrap').style.display=T.limits.offers?'':'none';
+    $('#logoBig').innerHTML=logo?`<img src="${esc(imgUrl(logo))}" alt="Your logo">`:esc(initials(L.name));
+    header();overview();gallery();shows();plan();account();
+    $('#prevCard').innerHTML=card(false);$('#prevCard2').innerHTML=card(true);
+  }
+
+  if(!IN_WIX) $('#demoStrip').hidden=false;
+  boot();
+})();
+</script>
+
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  .split>*,.ov>*,.row2>*,.row3>*{min-width:0}
+  @media (max-width:440px){.auth-left h1{font-size:52px}.dhead h1{font-size:34px}.statusbtns{grid-template-columns:1fr}}
+  @media (pointer:coarse){.chip,.btn-sm{min-height:40px}}
+</style>
+<!-- mobile-fit -->
+</body>
+</html>

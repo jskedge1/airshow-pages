@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Trader Admin</title>
+<!-- Trader admin (live). Lives in a Wix HTML embed (Website address) on /trader-admin and talks to the
+     page code (velo/page-code/trader-admin.js) with postMessage, source "ukag-traders". The backend checks
+     the Admin role on every request, so this page shows nothing to anyone else. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#13293C; --navy-d:#0E2131; --teal:#32B4AF; --teal-d:#0E5F5B; --teal-p:#E8F6F5;
+  --purple:#6950A1; --purple-p:#F3F0F9; --red:#D74949; --red-p:#FBEDED; --forest:#1E3A34;
+  --grey-l:#C6C6C6; --page:#F2F4F5; --ink:#0B1620; --line:#DCE1E4; --muted:#4E5D68;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{font-family:'Barlow',sans-serif;font-size:16px;line-height:1.55;color:var(--ink);background:var(--page);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+[hidden]{display:none!important}
+.preview-strip{background:var(--purple);color:#fff;font-weight:500;font-size:14px;text-align:center;padding:8px 16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;font-weight:600;border:2px solid transparent;cursor:pointer;background:none;text-decoration:none;transition:transform .35s var(--ease),background .3s,color .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-out{border-color:var(--navy);color:var(--navy)}
+.btn-out:hover{background:var(--navy);color:#fff}
+.btn-sm{padding:7px 12px;font-size:14px}
+.inp{width:100%;border:1px solid var(--grey-l);padding:10px 12px;background:#fff}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(50,180,175,.18)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2313293C' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px!important;cursor:pointer}
+.chip{border:1px solid var(--grey-l);background:#fff;padding:6px 11px;font-weight:600;font-size:14px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.chip:hover{border-color:var(--teal)}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.t{display:inline-block;font-size:12.5px;font-weight:600;padding:2px 8px;color:#fff;white-space:nowrap}
+.t-new{background:var(--purple)}.t-chg{background:var(--teal-d)}.t-ph{background:var(--navy)}.t-found{background:var(--purple)}
+.t-live{background:var(--teal-d)}.t-pend{background:var(--purple)}.t-pause{background:#5A6873}
+.t-free{background:#E7EBEE;color:var(--navy)}.t-fly{background:var(--teal)}.t-head{background:var(--navy)}
+
+/* Header */
+.top{background:var(--navy);color:#fff;position:relative}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:sweep 7s var(--ease) infinite}
+@keyframes sweep{0%{background-position:-40% 0}100%{background-position:140% 0}}
+.top .in{max-width:1320px;margin:0 auto;padding:0 28px}
+.bar{display:flex;align-items:center;gap:16px;padding:16px 0}
+.brand{display:flex;gap:10px;align-items:center;text-decoration:none;font-weight:700;font-size:15px}
+.brand small{display:block;color:var(--teal);font-weight:500;font-size:13px}
+.bar .sp{flex:1}
+.me{display:flex;align-items:center;gap:10px;font-weight:600}
+.av{width:36px;height:36px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;color:#fff;flex:none}
+.hrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end;padding:22px 0 0}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:5px 12px;margin-bottom:12px}
+h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(40px,5vw,64px);line-height:.92}
+h1 em{font-style:normal;color:var(--teal)}
+.hello{color:#C9D8E1;margin-top:8px}
+.tiles{display:flex;gap:2px}
+.tile{background:rgba(14,33,49,.92);border-top:4px solid var(--teal);padding:12px 18px;min-width:118px}
+.tile b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.tile span{font-size:13.5px;color:#9FD8D5;font-weight:500}
+.tile.r{border-top-color:var(--red)}
+.tile.p{border-top-color:var(--purple)}
+.tabs{display:flex;gap:2px;margin-top:22px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs a{flex:none;display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-weight:600;padding:13px 16px;transition:padding .4s var(--ease),background .4s var(--ease)}
+.tabs a:hover,.tabs a:focus-visible{background:rgba(50,180,175,.35);padding:13px 24px;outline:none}
+.tabs a.on{background:var(--teal);padding:13px 24px}
+.badge{min-width:20px;height:20px;border-radius:10px;background:var(--red);font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 6px}
+
+main{max-width:1320px;margin:0 auto;padding:32px 28px 70px}
+.panel{display:none}.panel.on{display:block;animation:rise .45s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ptitle{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:36px;align-items:end;margin-bottom:24px}
+.ptitle h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--red);font-size:clamp(30px,3.4vw,44px);line-height:.95;padding-left:16px;border-left:4px solid var(--red)}
+.ptitle p{color:#33424D;max-width:60ch}
+.box{background:#fff;border:1px solid var(--line)}
+.boxh{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:22px;line-height:1.05}
+
+/* Queue */
+.queue{display:grid;grid-template-columns:360px minmax(0,1fr);gap:20px;align-items:start}
+.qfilters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.qlist{list-style:none}
+.qi{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;padding:14px 16px;border-top:1px solid var(--line);cursor:pointer;background:#fff;transition:background .3s,transform .4s var(--ease),opacity .4s}
+.qi:first-child{border-top:0}
+.qi:hover{background:var(--teal-p)}
+.qi.on{box-shadow:inset 5px 0 0 var(--teal);background:#FAFBFB}
+.qi.out{opacity:0;transform:translateX(40px)}
+.qi .lg{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px}
+.qi b{display:block;color:var(--navy);font-weight:700}
+.qi small{display:block;color:var(--muted);font-size:13.5px}
+.qi .meta{display:flex;gap:6px;align-items:center;margin-top:5px;flex-wrap:wrap}
+.qi .age{font-size:12.5px;color:var(--muted);font-weight:600}
+.qi .age.old{color:var(--red)}
+.detail{padding:24px}
+.dh{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.dh .lg{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;flex:none}
+.dh h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:30px;line-height:1}
+.dh .sub{color:var(--muted);font-size:14.5px}
+.dh .tags{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.diff{margin-top:18px;border:1px solid var(--line)}
+.drow{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--line)}
+.drow:first-child{border-top:0}
+.drow>div{padding:11px 14px;font-size:15px}
+.drow .f{font-weight:700;color:var(--navy);background:#FAFBFB}
+.drow .was{color:#7A8790;text-decoration:line-through;background:#FFF8F8}
+.drow .now{background:var(--teal-p);color:var(--ink)}
+.drow.hd>div{background:var(--navy);color:#fff;font-weight:600;font-size:14px;text-decoration:none}
+.drow.single{grid-template-columns:150px minmax(0,1fr)}
+.photos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:16px}
+.photos div{aspect-ratio:4/3;background:var(--page) center/cover;position:relative;pointer-events:none}
+.photos span{position:absolute;left:6px;top:6px;background:var(--purple);color:#fff;font-size:12px;font-weight:600;padding:1px 6px}
+.checks{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.checks label{display:flex;gap:9px;align-items:start;font-size:15px;cursor:pointer}
+.checks input{accent-color:var(--teal);width:18px;height:18px;margin-top:3px;flex:none}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.sendback{margin-top:14px;background:var(--red-p);border-left:4px solid var(--red);padding:14px}
+.sendback textarea{width:100%;min-height:80px;border:1px solid var(--grey-l);padding:10px;margin:8px 0;background:#fff}
+.reasons{display:flex;flex-wrap:wrap;gap:6px}
+.done{padding:60px 24px;text-align:center}
+.done h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:34px;color:var(--navy)}
+.done p{color:var(--muted);margin-top:6px}
+.plane{width:90px;margin:0 auto 14px;display:block}
+
+/* Inbox */
+.inbox{display:grid;grid-template-columns:320px minmax(0,1fr);min-height:520px}
+.threads{border-right:1px solid var(--line);background:#FAFBFB}
+.threads button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:14px 16px;cursor:pointer;transition:background .3s}
+.threads button:hover{background:var(--teal-p)}
+.threads button.on{background:#fff;box-shadow:inset 4px 0 0 var(--teal)}
+.threads .r1{display:flex;justify-content:space-between;gap:8px}
+.threads b{font-weight:700;color:var(--navy)}
+.threads .when{font-size:12.5px;color:var(--muted);font-weight:600}
+.threads small{display:block;color:var(--muted);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.threads .unread b::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-left:8px;vertical-align:middle}
+.convo{display:flex;flex-direction:column}
+.convo .hd{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.convo .hd b{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:22px}
+.bubbles{flex:1;padding:20px;display:flex;flex-direction:column;gap:12px;max-height:420px;overflow-y:auto;scrollbar-width:thin}
+.bub{max-width:74%;padding:11px 14px;font-size:15px}
+.bub small{display:block;font-size:12.5px;margin-top:4px;opacity:.75}
+.bub.them{background:var(--page);align-self:flex-start;border-left:3px solid var(--teal)}
+.bub.me{background:var(--navy);color:#fff;align-self:flex-end}
+.saved{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px 0;border-top:1px solid var(--line)}
+.compose{display:flex;gap:8px;padding:12px 14px 14px}
+
+/* Traders table */
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.tools .inp{max-width:280px}
+.tools select{width:auto}
+.tbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)}
+.tbl th{text-align:left;background:var(--navy);color:#fff;font-weight:600;font-size:14.5px;padding:12px 14px;white-space:nowrap}
+.tbl th button{border:0;background:none;color:#fff;font-weight:600;cursor:pointer;padding:0}
+.tbl th button::after{content:" ↕";color:#9FD8D5}
+.tbl td{padding:12px 14px;border-top:1px solid var(--line);font-size:15px;vertical-align:middle}
+.tbl tr:hover td{background:#FAFBFB}
+.tbl .nm{font-weight:700;color:var(--navy)}
+.tbl .sm{display:block;font-size:13.5px;color:var(--muted)}
+.tbl .num{font-variant-numeric:tabular-nums}
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.sum{background:#fff;border:1px solid var(--line);padding:16px 18px;position:relative}
+.sum::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--teal)}
+.sum.p::before{background:var(--purple)}.sum.r::before{background:var(--red)}.sum.n::before{background:var(--navy)}
+.sum b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:38px;line-height:1;color:var(--navy)}
+.sum span{font-weight:600;color:var(--navy)}
+.sum small{display:block;color:var(--muted);font-size:13.5px}
+.slots{display:grid;grid-template-columns:repeat(25,minmax(0,1fr));gap:2px;margin-top:10px}
+.slots i{aspect-ratio:1;background:#E7EBEE}
+.slots i.t{background:var(--purple)}
+
+/* Weekly check */
+.week{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.wk-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.wk-head .nav{display:flex}
+.wk-head .nav button{border:1px solid var(--grey-l);background:#fff;width:38px;height:38px;cursor:pointer;font-size:18px}
+.wk-head b{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:24px;color:var(--navy)}
+.wgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.wcard{background:#fff;border:1px solid var(--line)}
+.wcard .wh{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 16px;background:var(--purple);color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:19px}
+.wcard.all .wh{background:var(--navy)}
+.wcard .wh small{font-family:'Barlow',sans-serif;text-transform:none;font-weight:600;font-size:13.5px}
+.wrow{display:flex;gap:11px;align-items:start;padding:10px 16px;border-top:1px solid var(--line);cursor:pointer;font-size:15px}
+.wrow:first-of-type{border-top:0}
+.wrow .cb{width:21px;height:21px;border:2px solid var(--grey-l);flex:none;display:grid;place-items:center;margin-top:1px;transition:background .3s,border-color .3s}
+.wrow.on .cb{background:var(--teal);border-color:var(--teal)}
+.wrow.on .cb::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.wrow.on span{text-decoration:line-through;color:#8C98A1}
+.wrow .flag{margin-left:auto;flex:none}
+.navyside{background:var(--navy-d);color:#fff;border-top:4px solid var(--teal);padding:20px 22px}
+.navyside h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;color:var(--teal);font-size:22px;margin-bottom:8px}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid rgba(255,255,255,.08);font-size:15px}
+.kv span:first-child{color:#9FD8D5;font-weight:500}
+.kv span:last-child{font-weight:700;font-variant-numeric:tabular-nums}
+.kv.hl span:last-child{background:var(--red);padding:1px 8px}
+.progress{height:6px;background:rgba(255,255,255,.12);margin-top:12px}
+.progress i{display:block;height:100%;background:var(--teal);transition:width .6s var(--ease)}
+.note{border-left:4px solid var(--purple);background:var(--purple-p);padding:12px 14px;font-size:14.5px;margin-top:14px}
+.note b{color:var(--purple)}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);background:var(--navy);color:#fff;padding:14px 20px;border-left:6px solid var(--teal);box-shadow:0 20px 40px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .35s var(--ease),transform .35s var(--ease);z-index:50;max-width:min(560px,calc(100% - 32px));font-size:15px}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast b{color:var(--teal)}
+
+@media (max-width:1060px){
+  .hrow{grid-template-columns:1fr}
+  .tiles{flex-wrap:wrap}
+  .queue,.inbox,.week{grid-template-columns:1fr}
+  .threads{border-right:0;border-bottom:1px solid var(--line);display:flex;overflow-x:auto}
+  .threads button{flex:none;width:230px;border-bottom:0;border-right:1px solid var(--line)}
+  .summary{grid-template-columns:1fr 1fr}
+  .ptitle{grid-template-columns:1fr;gap:10px}
+  .tblwrap{overflow-x:auto}
+}
+@media (max-width:640px){
+  .top .in,main{padding-left:16px;padding-right:16px}
+  .tile{min-width:0;flex:1 1 40%}
+  .drow,.drow.single{grid-template-columns:1fr}
+  .drow .f{padding-bottom:4px}
+  .drow.hd{display:none}
+  .checks,.wgrid{grid-template-columns:1fr}
+  .photos{grid-template-columns:1fr 1fr}
+  .bub{max-width:90%}
+  .me span{display:none}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+<style>
+.state{max-width:560px;margin:60px auto;background:#fff;border:1px solid var(--line);border-top:4px solid var(--red);padding:30px}
+.state h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:32px}
+.state p{margin-top:10px;color:#33424D}
+.loading{padding:80px 20px;text-align:center;color:var(--muted);font-weight:600}
+.drow .now img,.drow .was img{max-width:120px;max-height:80px;display:inline-block;margin:2px;vertical-align:top;pointer-events:none}
+.links{display:flex;gap:12px;flex-wrap:wrap}
+.links a{color:var(--navy);font-weight:600}
+.btn[disabled]{opacity:.6;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="preview-strip" id="demoStrip" hidden><b>Example data.</b> On ukairshowguide.co.uk this page shows real listings and only opens for the site admin.</div>
+<div id="boot" class="loading">Loading the trader admin</div>
+<div id="denied" hidden><div class="state"><h2>Admin only</h2><p id="deniedText">This page is for the site admin. Log in with the site owner account to see the trader admin.</p><button class="btn btn-teal" type="button" id="adminLogin" style="margin-top:18px">Log in</button></div></div>
+
+<div id="app" hidden>
+<header class="top">
+  <div class="in">
+    <div class="bar">
+      <a class="brand" href="https://www.ukairshowguide.co.uk/" target="_top"><svg width="26" height="26" viewBox="0 0 48 24" fill="#D74949"><path d="M0 12 l30 -2 -6 -10 4 0 12 9 6 1 2 2 -2 2 -6 1 -12 9 -4 0 6 -10z"/></svg><span>The Big Guide to UK Airshows<small>Trader admin</small></span></a>
+      <span class="sp"></span>
+      <a href="https://www.ukairshowguide.co.uk/airshow-traders" target="_top" style="color:#fff;font-weight:600;font-size:14.5px;text-decoration:none;border-bottom:2px solid var(--teal)">Traders directory</a>
+      <div class="me"><span class="av">J</span><span>Jack Skedge</span></div>
+    </div>
+    <div class="hrow">
+      <div>
+        <span class="tag">Admin only</span>
+        <h1>Trader <em>admin</em></h1>
+        <p class="hello" id="hello"></p>
+      </div>
+      <div class="tiles">
+        <div class="tile r"><b id="tQ">0</b><span>Waiting to check</span></div>
+        <div class="tile"><b id="tL">0</b><span>Live traders</span></div>
+        <div class="tile p"><b id="tF">0</b><span>Founding places taken</span></div>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <a href="#queue" data-t="queue">Approval queue <span class="badge" id="bQ">0</span></a>
+      <a href="#traders" data-t="traders">All traders</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="panel" id="p-queue">
+    <div class="ptitle"><h2>Approval queue</h2><p>New traders and changes to listings wait here until you check them. Their current listing stays live meanwhile, so there is no rush, but I would aim to clear it every couple of days.</p></div>
+    <div class="queue">
+      <div class="box">
+        <div style="padding:14px 16px 0"><div class="qfilters" id="qf">
+          <button class="chip on" data-f="all" type="button">All</button>
+          <button class="chip" data-f="new" type="button">New traders</button>
+          <button class="chip" data-f="chg" type="button">Listing changes</button>
+        </div></div>
+        <ul class="qlist" id="qlist"></ul>
+      </div>
+      <div class="box detail" id="detail"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-traders">
+    <div class="ptitle"><h2>All traders</h2><p>Every trader on the guide, their plan and when you last checked them. Tap a column heading to sort, and use Checked once you have looked over a listing.</p></div>
+    <div class="summary" id="summary"></div>
+    <div class="tools">
+      <input class="inp" id="tq" type="search" placeholder="Search traders or towns">
+      <select class="inp" id="tplan"><option value="">All plans</option><option value="free">Static Display</option><option value="flypast">Flypast</option><option value="headliner">Headliner</option></select>
+      <select class="inp" id="tstat"><option value="">Any status</option><option value="live">Live</option><option value="pending">Waiting to check</option><option value="sentBack">Sent back</option><option value="paused">Paused</option></select>
+    </div>
+    <div class="tblwrap"><table class="tbl"><thead><tr>
+      <th><button type="button" data-k="name">Trader</button></th><th>Plan</th><th>Status</th><th><button type="button" data-k="shows">Shows</button></th><th><button type="button" data-k="checked">Last checked</button></th><th></th>
+    </tr></thead><tbody id="tbody"></tbody></table></div>
+  </section>
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+  const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const imgUrl=u=>{const m=/^wix:image:\/\/v1\/([^/]+)/.exec(u||'');return m?`https://static.wixstatic.com/media/${m[1]}`:(u||'')};
+  let tt;function toast(h){const t=$('#toast');t.innerHTML=h;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),4200)}
+  const COL={food:'#D74949',art:'#6950A1',models:'#32B4AF',clothing:'#13293C',kit:'#1E3A34',family:'#0E5F5B'};
+  const CATNAME={food:'Food and drink',art:'Art and prints',models:'Models and toys',clothing:'Clothing and patches',kit:'Camera and show kit',family:'Family fun'};
+  const FIELD={title:'Business name',town:'Town',category:'Type of stall',about:'About',website:'Website',instagram:'Instagram',facebook:'Facebook',tiktok:'TikTok',tags:'Tags',logo:'Logo',photos:'Photos',offer:'Show day offer'};
+  const PLAN={free:'Static Display',flypast:'Flypast',headliner:'Headliner'};
+
+  /* ---------- talking to the Wix page code ---------- */
+  const IN_WIX=window.parent!==window;
+  const pendingCalls={};let seq=0;
+  function call(action,payload,wait){
+    if(!IN_WIX)return demo(action,payload||{});
+    return new Promise((resolve,reject)=>{const id='a'+(++seq);pendingCalls[id]={resolve,reject};
+      try{window.parent.postMessage({source:'ukag-traders',id,action,payload:payload||{}},'*')}catch(e){}
+      setTimeout(()=>{if(pendingCalls[id]){delete pendingCalls[id];reject(new Error('The page could not reach the site. Please refresh and try again.'))}},wait||(action==='login'?600000:30000));});
+  }
+  window.addEventListener('message',e=>{const m=e.data;if(!m||m.source!=='ukag-traders')return;
+    if(m.event==='refresh'){load();return}
+    const p=pendingCalls[m.id];if(!p)return;delete pendingCalls[m.id];
+    if(m.ok)p.resolve(m.data);else p.reject(new Error(m.error||'Something went wrong.'));});
+  const DEMO={admin:true,founding:{taken:8,total:25},queue:[],traders:[
+    {id:'d1',name:'Spitfire Scoops',town:'Aylsham, Norfolk',cat:'food',about:'Handmade ice cream from our Norfolk dairy, served from a 1950s Bedford van.',web:'spitfirescoops.co.uk',instagram:'',facebook:'',tiktok:'',tags:{pay:['Card'],diet:[],about:['Independent']},logo:'',photos:[],contactName:'Ruth Kemp',contactEmail:'ruth@spitfirescoops.co.uk',hasAccount:false,plan:'free',requestedPlan:'founding',founding:false,status:'pending',isNew:true,changes:[],submittedDate:new Date(Date.now()-3*864e5).toISOString(),lastChecked:null,shows:[{name:'IWM Duxford Air Shows',dates:'Sat 22 to Sun 23 May',status:'booked'}]},
+    {id:'d2',name:'Hangar Brew Co.',town:'Saffron Walden',cat:'food',about:'Speciality coffee.',web:'hangarbrew.co.uk',tags:{pay:[],diet:[],about:[]},photos:[],contactName:'Sam Whitlock',contactEmail:'sam@hangarbrew.co.uk',hasAccount:true,plan:'flypast',requestedPlan:'founding',founding:true,status:'live',isNew:false,changes:[{field:'about',was:'Speciality coffee.',now:'Speciality coffee and hot chocolate from a converted 1970s Citroën van.'},{field:'town',was:'Saffron Walden',now:'Saffron Walden, Cambridgeshire'}],submittedDate:new Date().toISOString(),lastChecked:new Date(Date.now()-4*864e5).toISOString(),shows:[{name:'Royal International Air Tattoo',dates:'Fri 16 to Sun 18 Jul',status:'booked'}]}
+  ]};
+  DEMO.queue=DEMO.traders.filter(t=>t.isNew||t.changes.length);
+  function demo(action,p){return new Promise(res=>setTimeout(()=>{
+    if(action==='approve'||action==='sendBack'){const t=DEMO.traders.find(x=>x.id===p.id);let nf=false;if(action==='approve'){if(t.isNew){t.status='live';if(t.requestedPlan==='founding'&&!t.founding){t.founding=true;t.plan='flypast';DEMO.founding.taken++;nf=true}}t.isNew=false;t.changes=[];t.lastChecked=new Date().toISOString()}else{if(t.isNew)t.status='sentBack';t.isNew=false;t.changes=[]}DEMO.queue=DEMO.traders.filter(t=>t.isNew||t.changes.length);return res({name:t.name,founding:nf,foundingTaken:DEMO.founding.taken})}
+    if(action==='checked'){const t=DEMO.traders.find(x=>x.id===p.id);t.lastChecked=new Date().toISOString();return res({})}
+    if(action==='status'){const t=DEMO.traders.find(x=>x.id===p.id);t.status=p.status;return res({})}
+    res(JSON.parse(JSON.stringify(DEMO)));},300))}
+
+  /* ---------- load ---------- */
+  let A=null, qf='all', sel=null;
+  async function load(){
+    try{
+      A=await call('admin');
+      $('#boot').hidden=true;
+      if(!A.admin){$('#app').hidden=true;$('#denied').hidden=false;return}
+      $('#denied').hidden=true;$('#app').hidden=false;
+      if(!A.queue.find(q=>q.id===sel))sel=A.queue[0]&&A.queue[0].id;
+      renderQ();renderTraders();counts();
+    }catch(err){$('#boot').textContent=err.message}
+  }
+  $('#adminLogin').addEventListener('click',async()=>{try{A=await call('login');load()}catch(e){}});
+
+  const fmt=d=>d?new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'Not yet';
+  const ago=d=>{const days=Math.floor((Date.now()-new Date(d))/864e5);return days<=0?'Today':days===1?'Yesterday':days+' days'};
+  const initial=n=>(n||'?').replace(/[^A-Za-z]/g,'').charAt(0)||'?';
+  const planTag=t=>t.founding?'<span class="t t-found">Founding trader</span>':t.plan==='headliner'?'<span class="t t-head">Headliner</span>':t.plan==='flypast'?'<span class="t t-fly">Flypast</span>':'<span class="t t-free">Static Display</span>';
+  const show=v=>{if(Array.isArray(v)){return v.length&&String(v[0]).startsWith('wix:image')||String(v[0]||'').startsWith('http')?v.map(u=>`<img src="${esc(imgUrl(u))}" alt="">`).join(''):esc(v.join(', ')||'None')}if(v&&typeof v==='object'){return esc(Object.values(v).flat().join(', ')||'None')}if(typeof v==='string'&&(v.startsWith('wix:image')||v.startsWith('data:image')))return `<img src="${esc(imgUrl(v))}" alt="">`;return esc(v||'None')};
+
+  function renderQ(){
+    const items=A.queue.filter(q=>qf==='all'||(qf==='new'?q.isNew:!q.isNew));
+    $('#qlist').innerHTML=items.map(q=>{const old=(Date.now()-new Date(q.submittedDate))/864e5>=3;return `<li class="qi${q.id===sel?' on':''}" data-id="${esc(q.id)}" tabindex="0"><span class="lg" style="background:${COL[q.cat]||'#13293C'}">${esc(initial(q.name))}</span><div><b>${esc(q.name)}</b><small>${esc(q.town)}</small><div class="meta">${q.isNew?'<span class="t t-new">New trader</span>':'<span class="t t-chg">Listing change</span>'}<span class="age${old?' old':''}">${ago(q.submittedDate)}${old?', waiting longest':''}</span></div></div></li>`}).join('')||'<li style="padding:20px;color:#4E5D68">Nothing in this list.</li>';
+    const q=A.queue.find(x=>x.id===sel);const d=$('#detail');
+    if(!A.queue.length){d.innerHTML=`<div class="done"><svg class="plane" viewBox="0 0 120 50"><path d="M5 25 l70 -4 -12 -20 8 0 24 18 12 2 4 4 -4 4 -12 2 -24 18 -8 0 12 -20z" fill="#32B4AF"/></svg><h3>All clear</h3><p>Nothing waiting for you. Every listing is live and up to date.</p></div>`;return}
+    if(!q){d.innerHTML='<div class="done"><p>Pick something from the list to check it.</p></div>';return}
+    let body='';
+    if(q.isNew){
+      const rows=[['Type of stall',CATNAME[q.cat]||q.cat],['About',q.about],['Website',q.web],['Social',[q.instagram,q.facebook,q.tiktok].filter(Boolean).join(', ')],['Tags',Object.values(q.tags||{}).flat().join(', ')],['Airshows',q.shows.map(s=>`${s.name}, ${s.dates} (${s.status})`).join('. ')],['Plan asked for',q.requestedPlan==='founding'?`Founding trader (${A.founding.taken} of 25 taken)`:PLAN[q.requestedPlan]||'Static Display'],['Contact',`${q.contactName?q.contactName+', ':''}${q.contactEmail}`],['Account',q.hasAccount?'Has a Trader Hub account':'No account yet']];
+      body=`<div class="diff">${rows.map(r=>`<div class="drow single"><div class="f">${esc(r[0])}</div><div>${esc(r[1]||'None')}</div></div>`).join('')}</div>`;
+      if(q.photos.length||q.logo)body+=`<div class="photos">${q.photos.map((p,i)=>`<div style="background-image:url('${esc(imgUrl(p))}')">${i===0?'<span>Cover</span>':''}</div>`).join('')}${q.logo?`<div style="background:#fff center/contain no-repeat url('${esc(imgUrl(q.logo))}');border:1px solid #DCE1E4"><span>Logo</span></div>`:''}</div>`;
+    }else{
+      body=`<div class="diff"><div class="drow hd"><div>Field</div><div>Live now</div><div>Changed to</div></div>${q.changes.map(c=>`<div class="drow"><div class="f">${esc(FIELD[c.field]||c.field)}</div><div class="was">${show(c.was)}</div><div class="now">${show(c.now)}</div></div>`).join('')}</div>`;
+    }
+    d.innerHTML=`<div class="dh"><span class="lg" style="background:${COL[q.cat]||'#13293C'}">${esc(initial(q.name))}</span><div><h3>${esc(q.name)}</h3><div class="sub">${esc(q.town)}, ${(x=>x==='Today'?'sent today':x==='Yesterday'?'sent yesterday':'sent '+x+' ago')(ago(q.submittedDate))}</div></div><div class="tags">${q.isNew?'<span class="t t-new">New trader</span>':'<span class="t t-chg">Listing change</span>'}${planTag(q)}</div></div>
+      ${body}
+      <div class="checks"><label><input type="checkbox"> Real business with a working website or social page</label><label><input type="checkbox"> Photos are of their own stall and products</label><label><input type="checkbox"> Airshows and dates look right</label><label><input type="checkbox"> Wording is friendly and accurate</label></div>
+      <div class="acts"><button class="btn btn-teal" type="button" id="approve">${q.isNew?'Approve and put live':'Approve changes'}</button><button class="btn btn-out" type="button" id="back" style="border-color:var(--red);color:var(--red)">Send back</button>${q.web?`<a class="btn btn-out" href="https://${esc(q.web.replace(/^https?:\/\//,''))}" target="_blank" rel="noopener">Open their website</a>`:''}</div>
+      <div class="sendback" id="sb" hidden><b style="color:var(--navy)">Tell ${esc(q.name)} what to change</b>
+        <div class="reasons" style="margin-top:8px">${['Could you send a photo of your stall from the front?','Please add a working website or social page.','Please check your dates for this show.','Could you shorten your about line a little?'].map(r=>`<button class="chip" type="button">${r}</button>`).join('')}</div>
+        <textarea id="sbText" placeholder="Write a short note. They see it in their Trader Hub."></textarea>
+        <button class="btn btn-red btn-sm" type="button" id="sbSend">Send back with this note</button></div>`;
+    $('#approve').onclick=async e=>{e.target.disabled=true;try{const r=await call('approve',{id:q.id});toast(`<b>${esc(r.name)} ${q.isNew?'is live':'changes are live'}.</b>${r.founding?` Founding place ${r.foundingTaken||''} of 25 taken.`:''}`);await load()}catch(err){toast(esc(err.message));e.target.disabled=false}};
+    $('#back').onclick=()=>{$('#sb').hidden=!$('#sb').hidden};
+    $$('#sb .chip').forEach(c=>c.onclick=()=>{$('#sbText').value=($('#sbText').value?$('#sbText').value+' ':'')+c.textContent});
+    $('#sbSend').onclick=async e=>{const note=$('#sbText').value.trim();if(!note){$('#sbText').focus();return}e.target.disabled=true;try{await call('sendBack',{id:q.id,note});toast(`<b>Sent back to ${esc(q.name)}.</b> They see your note in their Trader Hub.`);await load()}catch(err){toast(esc(err.message));e.target.disabled=false}};
+  }
+  $('#qlist').addEventListener('click',e=>{const li=e.target.closest('.qi');if(!li)return;sel=li.dataset.id;renderQ()});
+  $('#qlist').addEventListener('keydown',e=>{if(e.key==='Enter'){const li=e.target.closest('.qi');if(li){sel=li.dataset.id;renderQ()}}});
+  $('#qf').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;qf=b.dataset.f;$$('#qf .chip').forEach(c=>c.classList.toggle('on',c===b));renderQ()});
+
+  let sortK='name',sortD=1;
+  function renderTraders(){
+    const TR=A.traders;
+    const q=$('#tq').value.toLowerCase(),p=$('#tplan').value,s=$('#tstat').value;
+    let list=TR.filter(t=>(!q||(t.name+' '+t.town).toLowerCase().includes(q))&&(!p||t.plan===p)&&(!s||t.status===s));
+    list.sort((a,b)=>sortK==='shows'?(a.shows.length-b.shows.length)*sortD:sortK==='checked'?((new Date(a.lastChecked||0))-(new Date(b.lastChecked||0)))*sortD:a.name.localeCompare(b.name)*sortD);
+    const st={live:'<span class="t t-live">Live</span>',pending:'<span class="t t-pend">Waiting to check</span>',sentBack:'<span class="t" style="background:#D74949">Sent back</span>',paused:'<span class="t t-pause">Paused</span>'};
+    $('#tbody').innerHTML=list.map(t=>`<tr data-id="${esc(t.id)}"><td><span class="nm">${esc(t.name)}</span><span class="sm">${esc(t.town)}${t.contactEmail?', '+esc(t.contactEmail):''}</span></td><td>${planTag(t)}</td><td>${st[t.status]||esc(t.status)}${t.changes.length?' <span class="t t-chg">Changes</span>':''}</td><td class="num">${t.shows.filter(x=>x.status!=='cancelled').length}</td><td class="num">${fmt(t.lastChecked)}</td><td style="white-space:nowrap"><button class="btn btn-out btn-sm" type="button" data-a="checked">Checked</button> ${t.status==='live'?'<button class="btn btn-out btn-sm" type="button" data-a="paused">Pause</button>':t.status==='paused'?'<button class="btn btn-out btn-sm" type="button" data-a="live">Unpause</button>':''}</td></tr>`).join('')||'<tr><td colspan="6">No traders yet. They appear here as soon as someone sends a listing.</td></tr>';
+    const paid=TR.filter(t=>t.plan!=='free');
+    $('#summary').innerHTML=`<div class="sum"><b>${TR.length}</b><span>Traders</span><small>${TR.filter(t=>t.status==='live').length} live right now</small></div>
+      <div class="sum p"><b>${A.founding.taken} of 25</b><span>Founding places</span><div class="slots">${Array.from({length:25},(_,i)=>`<i class="${i<A.founding.taken?'t':''}"></i>`).join('')}</div></div>
+      <div class="sum n"><b>${paid.length}</b><span>On Flypast or Headliner</span><small>Paid plans open in Phase 2</small></div>
+      <div class="sum r"><b>${A.queue.length}</b><span>Waiting to check</span><small>${A.queue.filter(x=>x.isNew).length} new, ${A.queue.filter(x=>!x.isNew).length} changes</small></div>`;
+  }
+  ['#tq','#tplan','#tstat'].forEach(s=>$(s).addEventListener('input',renderTraders));
+  $$('.tbl th button').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.k;sortD=sortK===k?-sortD:1;sortK=k;renderTraders()}));
+  $('#tbody').addEventListener('click',async e=>{const b=e.target.closest('button[data-a]');if(!b)return;const id=b.closest('tr').dataset.id;b.disabled=true;
+    try{if(b.dataset.a==='checked'){await call('checked',{id});toast('<b>Marked as checked.</b>')}else{await call('status',{id,status:b.dataset.a});toast(b.dataset.a==='paused'?'<b>Listing paused.</b> It is hidden from visitors.':'<b>Listing back on.</b>')}await load()}catch(err){toast(esc(err.message));b.disabled=false}});
+
+  function counts(){
+    $('#tQ').textContent=A.queue.length;$('#bQ').textContent=A.queue.length;$('#bQ').hidden=!A.queue.length;
+    $('#tL').textContent=A.traders.filter(t=>t.status==='live').length;$('#tF').textContent=A.founding.taken;
+    const h=new Date().getHours();const g=h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+    const n=A.queue.length;$('#hello').textContent=n?`${g}, Jack. You have ${n} ${n===1?'listing':'listings'} to check.`:`${g}, Jack. Nothing waiting, everything is up to date.`;
+  }
+  function tab(t){if(!document.getElementById('p-'+t))t='queue';$$('#tabs a').forEach(a=>a.classList.toggle('on',a.dataset.t===t));$$('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+t))}
+  $('#tabs').addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;e.preventDefault();tab(a.dataset.t)});
+  tab('queue');
+  if(!IN_WIX)$('#demoStrip').hidden=false;
+  load();
+})();
+</script>
+
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  .queue>*,.summary>*{min-width:0}
+  @media (max-width:440px){h1{font-size:40px}.summary{grid-template-columns:1fr}}
+</style>
+<!-- mobile-fit -->
+</body>
+</html>
