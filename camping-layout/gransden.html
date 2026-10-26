@@ -1680,24 +1680,6 @@ img.photo{display:block;width:100%;height:100%;object-fit:cover;pointer-events:n
 .inline-link{color:#fff}
 </style>
 <style>
-.wn{background:#fff;border:1px solid #e3e6ec;border-left:6px solid #6950A1;border-radius:14px;padding:28px 30px;margin:0 0 40px}
-.wn-head h3{display:flex;align-items:center;gap:12px;margin:0 0 6px;font-size:1.5rem;color:var(--navy,#14273a);text-transform:uppercase}
-.wn-head h3 i{display:inline-flex;width:40px;height:40px;flex:0 0 40px;border-radius:50%;background:#6950A1;color:#fff;align-items:center;justify-content:center}
-.wn-head h3 i svg{width:22px;height:22px}
-.wn-head p{margin:0 0 20px;color:#4a5568}
-.wn-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
-.wn-col h4{margin:0 0 12px;font-size:1.05rem;color:#D74949;text-transform:uppercase}
-.wn-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.wn-list li,.wn-item{background:#f2f4f8;border-radius:10px;padding:14px 16px;line-height:1.5}
-.wn-date{display:inline-block;margin:0 8px 6px 0;font-weight:700;color:var(--navy,#14273a)}
-.wn-list li span:not(.wn-date),.wn-tag{display:inline-block;background:#6950A1;color:#fff;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:700;margin-bottom:6px}
-.wn-list li p{margin:4px 0 0}
-.wn-empty{color:#4a5568;background:#f2f4f8;border-radius:10px;padding:14px 16px}
-.wn-more{margin-top:12px;background:transparent;border:2px solid #6950A1;color:#6950A1;border-radius:999px;padding:8px 18px;font-weight:700;cursor:pointer}
-.wn-more:hover{background:#6950A1;color:#fff}
-.wn-foot{margin:20px 0 0;color:#4a5568;font-size:.95rem}
-.wn-foot button{background:#D74949;color:#fff;border:0;border-radius:999px;padding:8px 16px;font-weight:700;cursor:pointer;margin-left:6px}
-@media(max-width:760px){.wn{padding:22px 18px}.wn-cols{grid-template-columns:minmax(0,1fr)}}
 </style>
 <style id="hdr-tweak">.byline:empty{display:none}.cg-red{color:#32B4AF!important;text-transform:uppercase;letter-spacing:.04em}</style>
 
@@ -1799,24 +1781,245 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
 <section class="panel active" id="overview" role="tabpanel" aria-labelledby="t-overview">
   <div class="wrap">
 
-    <section class="wn reveal" id="whatsNew" aria-labelledby="wnTitle">
-      <div class="wn-head">
-        <h3 id="wnTitle"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></i>What's new at Little Gransden</h3>
-        <p>The latest news and flying display changes for the show, newest first.</p>
+    <!-- =========================================================
+         AIRSHOW NEWS FEED (reusable: edit the NEWS config only)
+         Wix page code can post {type:"airshowNews", items:[...], lastChecked:"YYYY-MM-DD"} to refresh it
+         ========================================================= -->
+    <style>
+    .nf{margin-top:72px}
+    .nf .sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 40px;margin-bottom:22px}
+    .nf .sec-head h3{font-size:clamp(30px,4vw,42px);margin-top:6px}
+    .nf .sec-head .note{max-width:52ch;font-size:17px;line-height:27px;color:#1B1B1B}
+    .nf .sec-head .note b{color:var(--navy)}
+    .nf-grid{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(300px,1fr);gap:var(--gap);align-items:start}
+    .nf-feed{display:grid;gap:var(--gap);min-width:0}
+    .nf-count{font-family:"Barlow",sans-serif;font-weight:500;font-size:15px;color:var(--navy)}
+    /* lead story */
+    .nf-lead .rcard-head{min-height:150px}
+    .nf-lead .rcard-head h3{font-size:clamp(24px,2.6vw,34px)}
+    .nf-lead .rcard-head h3 small{margin-bottom:8px;text-transform:none;font-weight:600;font-size:17px}
+    .nf-lead .rwhat p{font-size:17px;line-height:27px}
+    .nf-lead .more-link{text-decoration:none}
+    .nf .tag.new{background:var(--riat-red);color:#fff}
+    /* compact stories: flight strip rows */
+    .nf-list{display:grid;gap:var(--gap);list-style:none;margin:0;padding:0}
+    .nf-item{display:grid;grid-template-columns:92px minmax(0,1fr) auto;background:var(--navy);color:#fff;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+    .nf-item:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(11,26,39,.18)}
+    .nf-date{background:var(--teal);color:var(--navy-deep);display:grid;align-content:center;justify-items:center;padding:14px 6px;font-family:"Barlow",sans-serif;line-height:1}
+    .nf-date b{font-size:34px;font-weight:700;color:#fff}
+    .nf-date span{font-size:16px;font-weight:600;margin-top:6px}
+    .nf-date i{font-style:normal;font-size:14px;font-weight:500;margin-top:4px}
+    .nf-body{padding:16px 20px 16px 20px;min-width:0}
+    .nf-body .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+    .nf-body h4{font-family:"Barlow",sans-serif;font-weight:700;font-size:20px;line-height:1.2;color:#fff}
+    .nf-body p{font-size:16px;line-height:24px;color:#D7E1E8;margin-top:6px}
+    .nf-go{display:grid;place-items:center;width:64px;border-left:1px solid rgba(255,255,255,.12);color:#fff;text-decoration:none;transition:background .3s var(--ease)}
+    .nf-go svg{width:22px;height:22px;transition:transform .3s var(--ease)}
+    .nf-item:hover .nf-go{background:var(--riat-red)}
+    .nf-item:hover .nf-go svg{transform:translateX(3px)}
+    .nf-go:focus-visible{outline:3px solid var(--sky);outline-offset:-3px}
+    .nf-more{justify-self:start}
+    .nf-empty{background:var(--mist);padding:22px;font-family:"Barlow",sans-serif;font-weight:500;color:var(--navy)}
+    /* follow panel */
+    .nf-follow{background:var(--navy-deep);color:#fff;position:sticky;top:72px}
+    .nf-follow .rcard-head{min-height:96px}
+    .nf-social{list-style:none;margin:0;padding:6px 0}
+    .nf-social a{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:14px;padding:12px 20px;color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.1);transition:background .3s var(--ease)}
+    .nf-social li:last-child a{border-bottom:0}
+    .nf-social a:hover{background:var(--navy-2)}
+    .nf-social a:focus-visible{outline:3px solid var(--sky);outline-offset:-3px}
+    .nf-ic{width:44px;height:44px;border-radius:50%;background:#fff;color:var(--navy);display:grid;place-items:center}
+    .nf-ic svg{width:22px;height:22px}
+    .nf-social strong{display:block;font-family:"Barlow",sans-serif;font-weight:700;font-size:17px;line-height:1.2}
+    .nf-social em{display:block;font-style:normal;font-size:15px;color:var(--teal);margin-top:2px;overflow-wrap:anywhere}
+    .nf-social .chev{color:var(--riat-red);font-weight:700;font-size:18px}
+    .nf-fb{margin:6px 16px 16px;background:#fff;color:#1B1B1B;padding:16px 18px 18px}
+    .nf-fb h4{font-weight:700;font-size:18px;color:var(--teal-ink);margin-bottom:4px}
+    .nf-fb p{font-size:15px;line-height:23px}
+    .nf-fb .btn{margin-top:12px}
+    .nf-fb-frame{margin-top:12px;display:none;justify-content:center;background:var(--mist);min-height:120px}
+    .nf-fb-frame.on{display:flex}
+    .nf-fb-frame iframe{border:0;display:block;max-width:100%}
+    @media(max-width:1000px){
+      .nf-grid{grid-template-columns:1fr}
+      .nf-follow{position:static}
+      .nf-social{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+      .nf-social li a{border-bottom:1px solid rgba(255,255,255,.1)}
+    }
+    @media(max-width:600px){
+      .nf{margin-top:48px}
+      .nf-item{grid-template-columns:70px minmax(0,1fr)}
+      .nf-date b{font-size:28px}
+      .nf-date span{font-size:15px}
+      .nf-body{padding:14px 16px 6px}
+      .nf-body h4{font-size:18px}
+      .nf-body p{font-size:15px;line-height:23px}
+      .nf-go{grid-column:2;width:auto;place-items:center start;padding:4px 16px 14px;border-left:0;font-family:"Barlow",sans-serif;font-weight:700;font-size:15px;gap:6px;grid-auto-flow:column;justify-content:start}
+      .nf-go::before{content:"Read the full story";}
+      .nf-go svg{width:16px;height:16px;color:var(--riat-red)}
+      .nf-item:hover .nf-go{background:transparent}
+      .nf-social{grid-template-columns:1fr}
+      .nf-lead .rcard-head{min-height:120px}
+    }
+    @media (prefers-reduced-motion:reduce){.nf-item,.nf-go svg{transition:none}.nf-item:hover{transform:none}}
+    </style>
+
+    <div class="nf reveal" id="airshowNews">
+      <div class="sec-head">
+        <div><h3>Latest <em>news</em></h3></div>
+        <p class="note" id="nfNote">Line-up changes, flying times and road closures as soon as they&rsquo;re announced.</p>
       </div>
-      <div class="wn-cols">
-        <div class="wn-col">
-          <h4>News updates</h4>
-          <ul class="wn-list" id="wnNews"></ul>
-          <button type="button" class="wn-more" id="wnMore" hidden>Show older updates</button>
+      <div class="fbar" id="nfBar">
+        <div class="fbar-group" role="group" aria-label="Filter news">
+          <span class="fbar-label">Show</span>
+          <button type="button" data-nf="all" aria-pressed="true">All news</button>
+          <button type="button" data-nf="show" aria-pressed="false">Show news</button>
+          <button type="button" data-nf="lineup" aria-pressed="false">Line-up</button>
+          <button type="button" data-nf="visit" aria-pressed="false">Visitor info</button>
         </div>
-        <div class="wn-col">
-          <h4>Flying display updates</h4>
-          <ul class="wn-list" id="wnDisplay"></ul>
+        <div class="fbar-group">
+          <label class="fbar-label" for="nfSort">Sort</label>
+          <select id="nfSort"><option value="new">Newest first</option><option value="old">Oldest first</option></select>
+          <span class="nf-count" id="nfCount" aria-live="polite"></span>
         </div>
       </div>
-      <p class="wn-foot">Checked against the official Little Gransden Air &amp; Car Show website. On show day, delays and display changes are announced at the airfield, so listen out for the commentary. <button type="button" data-goto="lineup">See the aircraft line-up</button></p>
-    </section>
+      <div class="nf-grid">
+        <div class="nf-feed" id="nfFeed"></div>
+        <aside class="rcard nf-follow" aria-labelledby="nfFollowTitle">
+          <div class="rcard-head"><h3 id="nfFollowTitle"><small>Live updates</small>Follow the show</h3><span class="ricon" id="nfFollowIcon"></span></div>
+          <ul class="nf-social" id="nfSocial"></ul>
+          <div class="nf-fb" id="nfFb">
+            <h4>Their Facebook feed</h4>
+            <p>On show weekend the team post flying changes and weather calls here first. Loading it shows Facebook&rsquo;s own posts and lets Facebook set cookies.</p>
+            <button type="button" class="btn small" id="nfFbBtn">Show the live feed</button>
+            <div class="nf-fb-frame" id="nfFbFrame"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+    (function(){
+      /* ---- Edit this block for each airshow page ---- */
+      var NEWS={
+        show:"Little Gransden Air & Car Show",
+        newsUrl:"https://littlegransdenairshow.co.uk/",
+        lastChecked:"2026-10-12",
+        newDays:21,
+        showFirst:5,
+        facebookPage:"https://www.facebook.com/littlegransden",
+        social:[
+          {k:"web",name:"Official website",handle:"littlegransdenairshow.co.uk",url:"https://littlegransdenairshow.co.uk/"},
+          {k:"facebook",name:"Facebook",handle:"Little Gransden Air & Car Show",url:"https://www.facebook.com/littlegransden"},
+          {k:"web",name:"Air display",handle:"Who is flying this year",url:"https://littlegransdenairshow.co.uk/air-display/"},
+          {k:"web",name:"Visitor information",handle:"Tickets, parking and what to bring",url:"https://littlegransdenairshow.co.uk/information/"}
+        ],
+        /* cat: show | lineup | visit. Dates are the day each story was checked */
+        items:[
+          {date:"2026-10-12",cat:"show",title:"2027 date not announced yet",summary:"The show is usually held on the Sunday of the August bank holiday weekend, which in 2027 would be Sunday 29 August. I will update this as soon as the organisers confirm it.",url:"https://littlegransdenairshow.co.uk/"},
+          {date:"2026-08-30",cat:"show",title:"The 2026 show took place on Sunday 30 August",summary:"An RAF Typhoon, two Hurricanes, a Spitfire, an A-26 Invader and the Global Stars were among the displays.",url:"https://littlegransdenairshow.co.uk/air-display/"}
+        ]
+      };
+      /* ---- End of edit block ---- */
+
+      var CAT={show:"Show news",lineup:"Line-up",visit:"Visitor info"};
+      var CATTAG={show:"tag teal",lineup:"tag sky",visit:"tag soft"};
+      var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      var IC={
+        news:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 16h4"/></svg>',
+        web:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg>',
+        facebook:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H8v3h2.5V21z"/></svg>',
+        instagram:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>',
+        x:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8zm-1.1 16.2h1.7L7.4 4.7H5.5z"/></svg>',
+        youtube:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z"/></svg>',
+        mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3.5 6l8.5 7 8.5-7"/></svg>',
+        star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6-4.5-4.2 6.1-.8z"/></svg>',
+        arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>'
+      };
+      function $(id){return document.getElementById(id);}
+      function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+      function safeUrl(u){return /^https:\/\//i.test(u||"")?u:"#";}
+      function parse(d){var p=String(d||"").split("-");return new Date(+p[0],(+p[1]||1)-1,+p[2]||1);}
+      function longDate(d){var x=parse(d);return x.getDate()+" "+["January","February","March","April","May","June","July","August","September","October","November","December"][x.getMonth()]+" "+x.getFullYear();}
+      function isNew(d){return (Date.now()-parse(d).getTime())/864e5 <= NEWS.newDays;}
+      var st={f:"all",sort:"new",all:false};
+      var feed=$("nfFeed");
+
+      function lead(it){
+        return '<article class="rcard nf-lead"><div class="rcard-head"><h3><small>'+esc(longDate(it.date))+'</small>'+esc(it.title)+'</h3><span class="ricon">'+IC.news+'</span></div>'
+          +'<div class="rrows">'+(isNew(it.date)?'<div class="rrow hl"><span>Just announced</span><b>'+esc(CAT[it.cat]||"News")+'</b></div>':'<div class="rrow"><span>Topic</span><b>'+esc(CAT[it.cat]||"News")+'</b></div>')
+          +'</div>'
+          +'<div class="rwhat"><h4>What it means for you</h4><p>'+esc(it.summary)+'</p>'
+          +'<div class="rwhat-foot"><a class="more-link" href="'+esc(safeUrl(it.url))+'" target="_blank" rel="noopener"><span class="m">Read</span> the full story<span class="chev">&gt;</span></a>'
+          +'<a class="btn small" href="'+esc(safeUrl(NEWS.newsUrl))+'" target="_blank" rel="noopener">All official news</a></div></div></article>';
+      }
+      function row(it){
+        var x=parse(it.date);
+        return '<li class="nf-item"><div class="nf-date" aria-hidden="true"><b>'+x.getDate()+'</b><span>'+MON[x.getMonth()]+'</span><i>'+x.getFullYear()+'</i></div>'
+          +'<div class="nf-body"><div class="tags">'+(isNew(it.date)?'<span class="tag new">New</span>':'')+'<span class="'+(CATTAG[it.cat]||"tag soft")+'">'+esc(CAT[it.cat]||"News")+'</span></div>'
+          +'<h4>'+esc(it.title)+'</h4><p>'+esc(it.summary)+'</p></div>'
+          +'<a class="nf-go" href="'+esc(safeUrl(it.url))+'" target="_blank" rel="noopener" aria-label="Read the full story: '+esc(it.title)+' ('+esc(longDate(it.date))+')">'+IC.arrow+'</a></li>';
+      }
+      function render(){
+        var list=NEWS.items.filter(function(i){return st.f==="all"||i.cat===st.f;});
+        list.sort(function(a,b){return st.sort==="new"?parse(b.date)-parse(a.date):parse(a.date)-parse(b.date);});
+        $("nfCount").textContent=list.length+(list.length===1?" story":" stories");
+        if(!list.length){feed.innerHTML='<p class="nf-empty">No stories in this category yet. Check back closer to the show.</p>';return;}
+        var first=list[0], rest=list.slice(1), lim=st.all?rest.length:Math.max(0,NEWS.showFirst-1);
+        var h=lead(first);
+        if(rest.length)h+='<ul class="nf-list">'+rest.slice(0,lim).map(row).join('')+'</ul>';
+        if(rest.length>lim)h+='<button type="button" class="btn outline small nf-more" id="nfMore">Show all '+list.length+' stories</button>';
+        feed.innerHTML=h;
+        var m=$("nfMore"); if(m)m.addEventListener("click",function(){st.all=true;render();});
+      }
+      function social(){
+        $("nfFollowIcon").innerHTML=IC.news;
+        $("nfSocial").innerHTML=NEWS.social.map(function(s){
+          return '<li><a href="'+esc(safeUrl(s.url))+'" target="_blank" rel="noopener"><span class="nf-ic">'+(IC[s.k]||IC.web)+'</span><span><strong>'+esc(s.name)+'</strong><em>'+esc(s.handle)+'</em></span><span class="chev" aria-hidden="true">&gt;</span></a></li>';
+        }).join('');
+        if(!NEWS.facebookPage){$("nfFb").style.display="none";return;}
+        $("nfFbBtn").addEventListener("click",function(){
+          var box=$("nfFbFrame"), w=Math.max(180,Math.min(500,Math.floor(box.parentNode.clientWidth-36)));
+          box.innerHTML='<iframe title="'+esc(NEWS.show)+' on Facebook" width="'+w+'" height="560" loading="lazy" allow="encrypted-media" src="https://www.facebook.com/plugins/page.php?href='+encodeURIComponent(NEWS.facebookPage)+'&tabs=timeline&width='+w+'&height=560&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false"></iframe>';
+          box.classList.add("on"); this.style.display="none";
+        });
+      }
+      function note(){
+        if(!NEWS.lastChecked)return;
+        $("nfNote").innerHTML='Line-up changes, flying times and road closures as soon as they&rsquo;re announced. <b>Last checked '+esc(longDate(NEWS.lastChecked))+'.</b>';
+      }
+      document.querySelectorAll("#nfBar [data-nf]").forEach(function(b){b.addEventListener("click",function(){
+        st.f=b.getAttribute("data-nf");st.all=false;
+        document.querySelectorAll("#nfBar [data-nf]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});
+        render();
+      });});
+      $("nfSort").addEventListener("change",function(e){st.sort=e.target.value;render();});
+
+      /* new aircraft from the line-up appear as Line-up stories */
+      var baseItems=NEWS.items.slice();
+      window.wnAircraft=function(air){
+        var by={};
+        (air||[]).forEach(function(i){
+          if(i.status==="Cancelled"||!i.isNew||!i.firstSeenAt)return;
+          var day=String(i.firstSeenAt.$date||i.firstSeenAt).slice(0,10);
+          (by[day]=by[day]||[]).push(i.aircraftName);
+        });
+        NEWS.items=baseItems.concat(Object.keys(by).map(function(d){var n=by[d],list=n.length>1?n.slice(0,-1).join(", ")+" and "+n[n.length-1]:n[0];
+          return {date:d,cat:"lineup",title:list+" added to the line-up",summary:"Newly confirmed for the "+NEWS.show+". See the line-up tab for the full list.",url:"https://littlegransdenairshow.co.uk/air-display/"};}));
+        render();
+      };
+      /* Wix bridge: page code (or a scheduled job) can push fresh stories */
+      window.addEventListener("message",function(e){
+        var d=e.data; if(typeof d==="string"){try{d=JSON.parse(d);}catch(err){return;}}
+        if(!d||d.type!=="airshowNews"||!Array.isArray(d.items))return;
+        NEWS.items=d.items.filter(function(i){return i&&i.title&&i.date;});
+        if(d.lastChecked)NEWS.lastChecked=d.lastChecked;
+        note();render();
+      });
+      if(window.parent&&window.parent!==window)window.parent.postMessage({type:"airshowNewsReady"},"*");
+      social();note();render();
+    })();
+    </script>
     <div class="panel-head reveal">
       <div><h2>The show at <span class="sky">a glance</span></h2></div>
       <p>Little Gransden is a working grass airfield in Cambridgeshire, home to the Global Stars aerobatic team. Once a year it opens its gates for a family day out that's part air show, part classic car show and part village fête, all raising money for children's charities.</p>
@@ -3269,42 +3472,6 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
   setWho('family');
 
 
-  /* what's new: news updates and flying display updates. Built in entries below; the Wix page code can replace them by posting {type:"showNews", items:[{date:"2026-10-12", kind:"news"|"display", tag:"Tickets", text:"..."}]} */
-  (function(){
-    var NEWS=[
-      {date:"2026-10-12",kind:"news",tag:"Dates",text:"<b>2027 date not announced yet.</b> The show is usually held on the Sunday of the August bank holiday weekend, which in 2027 would be Sunday 29 August. We’ll update this as soon as the organisers confirm it."},
-      {date:"2026-08-30",kind:"news",tag:"Show",text:"<b>The 2026 show took place on Sunday 30 August</b>, with an RAF Typhoon, two Hurricanes, a Spitfire, an A-26 Invader and the Global Stars among the displays."}
-    ];
-    var air=[], posted=null, showAll=false;
-    function E(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
-    function fmt(d){var t=new Date(d);return isNaN(t)?"":t.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});}
-    function cls(tag){return "t-"+String(tag||"").toLowerCase().replace(/[^a-z]+/g,"");}
-    function item(n){return '<li class="wn-item"><div class="wn-top"><span class="wn-date">'+E(fmt(n.date))+'</span><span class="wn-tag '+cls(n.tag)+'">'+E(n.tag)+'</span></div><p>'+n.text+'</p></li>';}
-    function fromAircraft(){
-      var by={};
-      air.forEach(function(i){
-        if(i.status==="Cancelled"||!i.isNew||!i.firstSeenAt)return;
-        var day=String(i.firstSeenAt.$date||i.firstSeenAt).slice(0,10), k=day+"|"+(i.eventName||"");
-        (by[k]=by[k]||{date:day,ev:i.eventName,names:[]}).names.push(i.aircraftName);
-      });
-      return Object.keys(by).map(function(k){var g=by[k],nm=g.names.map(E);
-        var list=nm.length>1?nm.slice(0,-1).join(", ")+" and "+nm[nm.length-1]:nm[0];
-        return {date:g.date,kind:"news",tag:"Aircraft",text:"<b>"+list+"</b> added to the "+E(g.ev||"show")+" line-up."};});
-    }
-    function render(){
-      var all=(posted||NEWS).concat(fromAircraft()).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
-      var news=all.filter(function(n){return n.kind!=="display";}), disp=all.filter(function(n){return n.kind==="display";});
-      var shown=showAll?news:news.slice(0,4);
-      document.getElementById("wnNews").innerHTML=shown.length?shown.map(item).join(""):'<li class="wn-empty">No news yet. Updates will appear here as the organisers announce them.</li>';
-      var more=document.getElementById("wnMore"); more.hidden=news.length<=4; more.textContent=showAll?"Show fewer updates":"Show older updates";
-      document.getElementById("wnDisplay").innerHTML=disp.length?disp.map(item).join(""):'<li class="wn-empty">No display changes announced. If a display is delayed, moved or cancelled, it will show here.</li>';
-    }
-    document.getElementById("wnMore").addEventListener("click",function(){showAll=!showAll;render();});
-    window.wnAircraft=function(items){air=items||[];render();};
-    window.addEventListener("message",function(e){var d=e.data;if(typeof d==="string"){try{d=JSON.parse(d);}catch(err){return;}}
-      if(d&&d.type==="showNews"&&Array.isArray(d.items)){posted=d.items.map(function(n){return {date:n.date,kind:n.kind==="display"?"display":"news",tag:n.tag||"News",text:E(n.text)};});render();}});
-    render();
-  })();
   /* aircraft line-up: one list per show, chosen with the show picker (rows matched on eventName) */
   (function(){
     var FALLBACK={type:"aircraftLineup",showName:"Little Gransden Air & Car Show",year:2027,officialUrl:"https://littlegransdenairshow.co.uk/air-display/",lastChecked:"2026-10-12T18:00:00.000Z",
