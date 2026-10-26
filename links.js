@@ -27,7 +27,7 @@
     {key:'new-to-aviation-photography', name:'New to Aviation Photography', where:'Settings, kit and planning', slug:'new-to-aviation-photography', live:false},
     {key:'first',       name:'Planning your first air show', where:'Start here if you are new',     slug:'planning-your-first-airshow', live:true},
     {key:'camping',     name:'Camping at Air Shows',         where:'Campsites and what to pack',    slug:'camping-at-airshows',         live:true},
-    {key:'airshow-security', name:'Airshow Security and Bag Searches', where:'What happens at the gate and how to pack', slug:'airshow-security', live:false}
+    {key:'airshow-security', name:'Airshow Security and Bag Searches', where:'What happens at the gate and how to pack', slug:'airshow-security', live:true}
   ];
   window.AIRSHOW_LINKS={site:SITE,find:SITE+FIND,pages:PAGES,guides:GUIDES};
 
