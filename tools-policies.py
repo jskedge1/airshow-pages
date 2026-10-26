@@ -13,12 +13,13 @@ SRC = ROOT / "policies-src"
 OUT = ROOT / "policies.html"
 
 POLICIES = [
-    ("privacy", "privacy.txt", "Privacy Policy", "What I collect, why, who else sees it and your rights."),
-    ("cookies", "cookies.txt", "Cookie Policy", "What the site saves on your device and how to say no."),
-    ("terms", "terms.txt", "Website Terms and Disclaimer", "Using the site, checking before you travel and what I am responsible for."),
-    ("community", "community.txt", "Community Rules", "How the forum, My Airshow Hub and Show Day stay friendly and safe."),
-    ("copyright", "copyright.txt", "Copyright, Photos and Contributors", "Who owns what, sharing my work and getting your work taken down."),
-    ("traders", "traders.txt", "Traders and Paid Plans Terms", "Listings, paid plans, renewals and your right to cancel."),
+    # key, source file, tab label, page title, intro, banner alt text, banner focus
+    ("privacy", "privacy.txt", "Privacy Policy", "Privacy Policy", "What I collect, why I collect it, who else handles it and the rights you have.", "U.S. Air Force RC-135 reconnaissance jet landing over trees at RAF Fairford", "center 45%"),
+    ("cookies", "cookies.txt", "Cookie Policy", "Cookie Policy", "What the site saves on your device, why, and how to say no.", "Fiat G.91 in the blue Frecce Tricolori scheme taxiing past other aircraft", "center 52%"),
+    ("terms", "terms.txt", "Terms and Disclaimer", "Website Terms and Disclaimer", "Using the site, checking details before you travel and what I am responsible for.", "French Navy Atlantique patrol aircraft banking against a cloudy sky", "center 50%"),
+    ("community", "community.txt", "Community Rules", "Community Rules", "How the forum, My Airshow Hub and Show Day stay friendly, useful and safe.", "Grumman Wildcat in invasion stripes parked on the flight line at Duxford", "center 55%"),
+    ("copyright", "copyright.txt", "Copyright and Contributors", "Copyright, Photos and Contributors", "Who owns what, sharing my work, and how to get your work credited or taken down.", "Apache attack helicopter hovering low over a line of trees", "center 45%"),
+    ("traders", "traders.txt", "Traders and Paid Plans", "Traders and Paid Plans Terms", "Trader listings, paid plans, renewals and your right to cancel.", "Douglas Invader in USAF markings flying through broken cloud", "center 50%"),
 ]
 
 # Words that keep their capitals when a heading is put into sentence case.
@@ -55,7 +56,7 @@ def inline(text, own):
     for phrase, key in CROSS:
         if key == own:
             continue
-        t = t.replace(phrase, f'<a href="#{key}" data-go="{key}">{phrase}</a>', 1)
+        t = t.replace(phrase, f'<a href="#{key}" data-tab="{key}">{phrase}</a>', 1)
     return t
 
 
@@ -66,7 +67,7 @@ def block(par, own):
     first = lines[0]
     if len(first) < 60 and not first.endswith((".", ":", "?")) and len(lines) >= 2 and lines[1].endswith("."):
         body = "".join(f"<p>{inline(l, own)}</p>" for l in lines[1:])
-        return f'<div class="sub"><h4>{html.escape(first)}</h4>{body}</div>'
+        return f'<div class="sub"><h3>{html.escape(first)}</h3>{body}</div>'
     return "<ul>" + "".join(f"<li>{inline(l, own)}</li>" for l in lines) + "</ul>"
 
 
@@ -85,31 +86,48 @@ def parse(key, path):
     return updated, first.group(1).strip() if first else "", sections
 
 
+def esc(s):
+    return html.escape(s, quote=True)
+
+
 def build():
-    nav, panels = [], []
-    for i, (key, path, name, blurb) in enumerate(POLICIES):
+    imgs, tabs, panels = [], [], []
+    latest = ""
+    for key, path, tab, name, intro, alt, focus in POLICIES:
         updated, first, sections = parse(key, path)
-        nav.append(
-            f'<button class="pick" type="button" role="tab" id="t-{key}" aria-controls="p-{key}" data-go="{key}">'
-            f'<span class="n">{i + 1}</span><span class="nm">{name}</span><span class="bl">{blurb}</span></button>'
-        )
-        secs = []
-        for j, (num, title, body) in enumerate(sections):
-            open_attr = " open" if j == 0 else ""
-            secs.append(
-                f'<details class="sec"{open_attr}><summary><span class="sn">{num}</span>'
-                f'<span class="st">{html.escape(title)}</span><span class="pm" aria-hidden="true"></span></summary>'
-                f'<div class="sb">{body}</div></details>'
-            )
-        meta = f"Last updated {updated}" + (f". First published {first}." if first and first != updated else ".")
-        panels.append(
-            f'<section class="panel" role="tabpanel" id="p-{key}" aria-labelledby="t-{key}" data-key="{key}" hidden>'
-            f'<header class="ph"><h2>{name}</h2><p class="meta">{meta}</p>'
-            f'<div class="tools"><button type="button" class="ghost" data-all="open">Open every section</button>'
-            f'<button type="button" class="ghost" data-print>Print or save as PDF</button></div></header>'
-            f'{"".join(secs)}</section>'
-        )
-    page = TEMPLATE.replace("{{NAV}}", "".join(nav)).replace("{{PANELS}}", "".join(panels))
+        latest = latest or updated
+        imgs.append(f'<img data-tab="{key}" src="policies-img/{key}.jpg" alt="{esc(alt)}" style="object-position:{focus}" draggable="false" hidden>')
+        tabs.append(f'<button class="tab" role="tab" id="tab-{key}" aria-controls="panel-{key}" aria-selected="false" data-tab="{key}" tabindex="-1">{esc(tab)}</button>')
+        toc = "".join(f'<li><a href="#s-{key}-{n}" data-jump="s-{key}-{n}">{n}. {esc(title)}</a></li>' for n, title, _ in sections)
+        secs = "".join(f'<section class="sec" id="s-{key}-{n}"><h2>{n}. {esc(title)}</h2>{body}</section>' for n, title, body in sections)
+        rows = '<div class="row"><span>Website</span><strong>www.ukairshowguide.co.uk</strong></div>'
+        if first and first != updated:
+            rows += f'<div class="row"><span>First published</span><strong>{esc(first)}</strong></div>'
+        rows += f'<div class="row hot"><span>Last updated</span><strong>{esc(updated)}</strong></div>'
+        panels.append(f"""
+<div class="panel" role="tabpanel" id="panel-{key}" aria-labelledby="tab-{key}" hidden>
+  <div class="layout">
+    <aside class="side">
+      <div class="info">
+        <div class="info-title">{esc(name)}</div>
+        {rows}
+        <div class="bar"><i></i></div>
+      </div>
+      <nav class="toc" aria-label="{esc(name)} sections">
+        <div class="toc-title">In this policy</div>
+        <ol>{toc}</ol>
+      </nav>
+    </aside>
+    <article class="doc">
+      <h1 class="doc-title">{esc(name)}</h1>
+      <p class="doc-intro">{esc(intro)}</p>
+      {secs}
+      <a class="top" href="#top" data-top>Back to the top <span aria-hidden="true">&uarr;</span></a>
+    </article>
+  </div>
+</div>""")
+    page = (TEMPLATE.replace("{{IMGS}}", "\n".join(imgs)).replace("{{TABS}}", "\n".join(tabs))
+            .replace("{{PANELS}}", "".join(panels)).replace("{{UPDATED}}", latest))
     OUT.write_text(page)
     print("wrote", OUT, len(page), "bytes")
 
@@ -119,198 +137,203 @@ TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy, cookies and terms | The Big Guide to UK Airshows</title>
+<title>Our Policies | The Big Guide to UK Airshows</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#13293C; --navy-d:#0E2131; --teal:#32B4AF; --teal-d:#0E5F5B; --teal-p:#E8F6F5;
-  --purple:#6950A1; --red:#D74949; --ink:#0B1620; --line:#DCE1E4; --page:#F2F4F5; --soft:#3A4A57;
-  --ease:cubic-bezier(.22,.61,.36,1);
+  --navy:#13293C; --navy-d:#0E2131; --teal:#32B4AF; --teal-d:#0E5F5B; --teal-l:#BFE6E3;
+  --purple:#6950A1; --red:#D74949; --line:#C6C6C6; --ink:#111; --wash:#F3F5F7;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-/* hide the page scrollbar inside the Wix box; scrolling with a mouse wheel, trackpad or finger still works */
-html,body{scrollbar-width:none;-ms-overflow-style:none}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;scrollbar-width:none;-ms-overflow-style:none;background:#fff}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
-html{scroll-behavior:smooth}
-body{font-family:'Barlow',sans-serif;font-size:17px;line-height:1.6;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-a{color:var(--teal-d);text-decoration:none;border-bottom:1px solid rgba(14,95,91,.35);transition:border-color .3s var(--ease),color .3s var(--ease)}
-a:hover{color:var(--navy);border-color:var(--navy)}
-.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+body{font-family:'Barlow',Arial,sans-serif;font-size:16px;line-height:1.55;color:var(--ink);font-weight:400}
+a{color:var(--teal-d);font-weight:500}
+a:hover{color:var(--red)}
 
-/* Hero */
-.hero{position:relative;background:var(--navy);color:#fff;overflow:hidden}
-.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:sweep 8s var(--ease) infinite}
-@keyframes sweep{0%{background-position:-40% 0}100%{background-position:140% 0}}
-.hero-art{position:absolute;right:-60px;top:-20px;width:min(620px,62vw);height:auto;opacity:.9;pointer-events:none}
-.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:48px;align-items:end;padding:58px 0 46px}
-.crumb{font-size:15px;font-weight:500;color:#A9C2CF;margin-bottom:20px}
-.crumb a{color:#A9C2CF;border-color:rgba(169,194,207,.4)}
-.crumb a:hover{color:#fff;border-color:#fff}
-.hero h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(42px,6vw,78px);line-height:.92;max-width:13ch}
-.hero h1 em{font-style:normal;color:var(--teal)}
-.hero p{margin-top:18px;max-width:54ch;color:#D7E3EA;font-size:17.5px;line-height:1.6}
-.hero p b{color:#fff;font-weight:600}
-.promise{background:rgba(14,33,49,.9);border-top:4px solid var(--teal);padding:20px 22px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
-.promise h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:22px;letter-spacing:.01em}
-.promise ul{list-style:none;margin-top:10px}
-.promise li{position:relative;padding-left:22px;margin-top:8px;color:#D7E3EA;font-size:16px;line-height:1.45}
-.promise li::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:2px;background:var(--teal)}
+/* Header */
+.head{background:var(--navy);color:#fff}
+.banner{position:relative;height:clamp(200px,38vw,480px);background:var(--navy-d);overflow:hidden}
+.banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.banner img[hidden]{display:none}
+.head-in{max-width:1200px;margin:0 auto;padding:40px 32px 0}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:15px;padding:6px 14px;letter-spacing:.01em}
+.head h1{margin:18px 0 10px;font-size:clamp(38px,6.4vw,76px);line-height:.98;font-weight:800;text-transform:uppercase;letter-spacing:.005em}
+.head p{margin:0 0 30px;max-width:640px;color:#C9D6E2;font-size:18px;line-height:1.5}
+.tabs{display:flex;flex-wrap:wrap;gap:0;margin-left:-0px}
+.tab{appearance:none;border:0;background:transparent;color:#fff;font:600 17px/1 'Barlow',Arial,sans-serif;
+  padding:18px 24px;cursor:pointer;border-radius:0;transition:padding .4s ease,background .4s ease}
+.tab:hover,.tab:focus-visible{padding-left:30px;padding-right:30px;background:var(--teal);outline:none}
+.tab[aria-selected="true"]{background:var(--teal);color:#fff}
+.tab:focus-visible{box-shadow:inset 0 0 0 3px #fff}
 
 /* Layout */
-.body{background:var(--page);padding:40px 0 64px}
-.layout{display:grid;grid-template-columns:minmax(250px,330px) minmax(0,1fr);gap:34px;align-items:start}
-.side{position:sticky;top:18px}
-.side h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:26px;color:var(--navy);margin-bottom:12px}
-.picks{display:flex;flex-direction:column;gap:6px}
-.pick{position:relative;display:grid;align-content:start;grid-template-columns:34px 1fr;gap:2px 10px;text-align:left;background:#fff;padding:14px 16px 14px 12px;border-left:4px solid transparent;transition:border-color .35s var(--ease),transform .35s var(--ease),box-shadow .35s var(--ease)}
-.pick:hover{transform:translateX(3px);box-shadow:0 6px 18px rgba(19,41,60,.08)}
-.pick .n{grid-row:span 2;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;line-height:1;color:var(--teal);padding-top:2px}
-.pick .nm{font-weight:700;color:var(--navy);font-size:17px;line-height:1.25}
-.pick .bl{font-size:14.5px;line-height:1.4;color:var(--soft)}
-.pick[aria-selected="true"]{border-left-color:var(--red);box-shadow:0 10px 26px rgba(19,41,60,.12)}
-.pick[aria-selected="true"] .n{color:var(--red)}
-.help{margin-top:16px;background:var(--navy);color:#D7E3EA;padding:16px 18px;font-size:15.5px;line-height:1.5}
-.help b{color:#fff;font-weight:600}
-.help a{color:#fff;border-color:var(--teal)}
+.wrap{max-width:1200px;margin:0 auto;padding:40px 32px 56px}
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:40px;align-items:start}
+.side{position:sticky;top:16px}
+.info{background:var(--navy-d);border-top:4px solid var(--teal);color:#fff;padding:22px 22px 20px}
+.info-title{color:var(--teal);font-weight:800;font-size:20px;line-height:1.15;text-transform:uppercase;margin-bottom:14px}
+.row{display:flex;justify-content:space-between;gap:14px;padding:9px 0;font-variant-numeric:tabular-nums;font-size:15px}
+.row span{color:var(--teal-l)}
+.row strong{color:#fff;font-weight:700;text-align:right}
+.row.hot{background:transparent;margin:6px -10px 0;padding:9px 10px}
+.row.hot strong{background:var(--red);padding:2px 9px}
+.bar{height:3px;background:rgba(255,255,255,.14);margin-top:16px}
+.bar i{display:block;height:100%;width:100%;background:var(--teal)}
+.toc{margin-top:18px;background:var(--wash);border:1px solid var(--line);padding:18px 18px 12px}
+.toc-title{font-weight:700;font-size:18px;color:var(--navy);margin-bottom:8px}
+.toc ol{list-style:none;margin:0;padding:0;max-height:48vh;overflow:auto;scrollbar-width:none}
+.toc ol::-webkit-scrollbar{display:none}
+.toc li{margin:0}
+.toc a{display:block;padding:6px 8px;color:var(--navy);text-decoration:none;font-weight:500;font-size:15px;line-height:1.3;
+  border-left:4px solid transparent;transition:transform .25s ease,border-color .25s ease,background .25s ease}
+.toc a:hover{transform:translateX(4px);border-left-color:var(--teal);color:var(--navy)}
+.toc a.on{border-left-color:var(--red);background:#fff;font-weight:600}
 
-/* Reading panel */
-.panel{background:#fff;padding:30px 34px 34px;animation:rise .5s var(--ease)}
-@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.ph h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(30px,3.6vw,44px);line-height:1;color:var(--navy)}
-.meta{margin-top:10px;font-weight:500;color:var(--teal-d);font-size:15.5px}
-.tools{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 10px}
-.ghost{padding:9px 16px;border:2px solid var(--navy);color:var(--navy);font-weight:600;font-size:15px;transition:background .3s var(--ease),color .3s var(--ease)}
-.ghost:hover{background:var(--navy);color:#fff}
-.sec{border-top:1px solid var(--line)}
-.sec:last-child{border-bottom:1px solid var(--line)}
-.sec summary{list-style:none;display:grid;grid-template-columns:38px 1fr 22px;gap:10px;align-items:center;padding:16px 2px;cursor:pointer}
-.sec summary::-webkit-details-marker{display:none}
-.sn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;color:var(--teal)}
-.st{font-weight:700;font-size:19px;color:var(--navy);line-height:1.25}
-.pm{position:relative;width:16px;height:16px;justify-self:end}
-.pm::before,.pm::after{content:"";position:absolute;left:0;top:7px;width:16px;height:2px;background:var(--navy);transition:transform .35s var(--ease)}
-.pm::after{transform:rotate(90deg)}
-.sec[open] .pm::after{transform:rotate(0)}
-.sec summary:hover .st{color:var(--teal-d)}
-.sb{padding:0 0 20px 48px;max-width:76ch}
-.sb p{margin-top:12px}
-.sb p:first-child,.sb .sub:first-child{margin-top:0}
-.sb ul{list-style:none;margin-top:12px}
-.sb li{position:relative;padding-left:22px;margin-top:7px}
-.sb li::before{content:"";position:absolute;left:2px;top:.72em;width:9px;height:9px;border:2px solid var(--teal);border-radius:50%}
-.sub{margin-top:18px;padding-left:14px;border-left:3px solid var(--teal-p)}
-.sub h4{font-weight:600;color:var(--navy);font-size:17.5px}
-.sub p{margin-top:4px}
+/* Document */
+.doc{min-width:0}
+.doc-title{margin:0 0 6px;font-size:clamp(28px,4vw,44px);line-height:1.04;font-weight:800;color:var(--navy);text-transform:uppercase}
+.doc-intro{margin:0 0 26px;font-size:18px;color:#333;max-width:680px}
+.sec{background:#fff;border:1px solid var(--line);border-left:6px solid var(--navy);padding:26px 30px 14px;margin:0 0 18px;scroll-margin-top:16px}
+.sec h2{margin:0 0 14px;font-size:22px;line-height:1.2;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.01em}
+.sec h3{margin:20px 0 4px;font-size:18px;font-weight:700;color:var(--navy)}
+.sec p{margin:0 0 14px;max-width:760px}
+.sec ul{margin:0 0 16px;padding:0;list-style:none;max-width:760px}
+.sec li{position:relative;padding:0 0 7px 22px}
+.sec li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;background:var(--teal)}
+.top{display:inline-block;margin-top:8px;background:var(--navy);color:#fff;text-decoration:none;font-weight:600;padding:12px 20px;transition:background .3s ease,padding .3s ease}
+.top:hover{background:var(--purple);color:#fff;padding-left:26px;padding-right:26px}
 
-/* Phones and tablets */
-@media (max-width:900px){
-  .hero-grid{grid-template-columns:1fr;gap:26px;padding:44px 0 34px}
-  .layout{grid-template-columns:1fr;gap:18px}
+#hgt{position:fixed;right:10px;bottom:10px;background:var(--purple);color:#fff;font:600 13px/1 'Barlow',Arial,sans-serif;padding:8px 10px;z-index:9;display:none}
+
+@media (max-width:860px){
+  .head-in{padding:28px 18px 0}
+  .wrap{padding:24px 16px 40px}
+  .layout{grid-template-columns:1fr;gap:22px}
   .side{position:static}
-  .picks{flex-direction:row;overflow-x:auto;scrollbar-width:none;margin:0 -28px;padding:0 28px 4px}
-  .picks::-webkit-scrollbar{display:none}
-  .pick{flex:0 0 230px;border-left:0;border-top:4px solid transparent}
-  .pick:hover{transform:none}
-  .pick[aria-selected="true"]{border-top-color:var(--red)}
-  .help{display:none}
+  .toc ol{max-height:230px}
+  .tab{flex:1 1 auto;text-align:center;padding:16px 12px;font-size:16px}
+  .tab:hover,.tab:focus-visible{padding-left:12px;padding-right:12px}
+  .sec{padding:20px 18px 8px}
+  .sec h2{font-size:19px}
 }
-@media (max-width:560px){
-  .wrap{padding:0 18px}
-  .picks{margin:0 -18px;padding:0 18px 4px}
-  .panel{padding:22px 18px 24px;margin:0 -18px}
-  .sb{padding-left:0}
-  .sec summary{grid-template-columns:30px 1fr 18px}
-  .hero-art{opacity:.35}
-}
-@media print{
-  .hero,.side,.tools{display:none}
-  .body{background:#fff;padding:0}
-  .layout{display:block}
-  .panel{padding:0}
-  .sec .sb{display:block}
-}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+.sub{margin:0 0 14px}
+.sub h3{margin-top:0}
+.doc .sec a[data-tab]{font-weight:600}
+@media (min-width:861px){.tab{padding:18px 17px;font-size:16.5px}.tab:hover,.tab:focus-visible{padding-left:21px;padding-right:21px}.tabs{flex-wrap:nowrap}}
 </style>
 </head>
-<body>
-<header class="hero">
-  <svg class="hero-art" viewBox="0 0 620 300" fill="none" aria-hidden="true">
-    <path d="M40 250 C200 230 330 170 600 40" stroke="#32B4AF" stroke-width="2" stroke-dasharray="2 10" opacity=".7"/>
-    <path d="M10 280 C210 262 360 200 610 90" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="1 12" opacity=".35"/>
-    <g transform="translate(470 86) rotate(-24)"><path d="M0 0 L58 -6 L70 0 L58 6 Z" fill="#D74949"/><path d="M22 -2 L4 -26 L14 -26 L38 -3 Z M22 2 L4 26 L14 26 L38 3 Z" fill="#D74949"/><path d="M0 0 L-8 -10 L-2 -10 L8 -1 Z M0 0 L-8 10 L-2 10 L8 1 Z" fill="#D74949"/></g>
-  </svg>
-  <div class="wrap hero-grid">
-    <div>
-      <div class="crumb"><a href="https://www.ukairshowguide.co.uk" target="_top">Home</a> &nbsp;/&nbsp; Privacy, cookies and terms</div>
-      <h1>The small print, <em>in plain English</em></h1>
-      <p>These pages explain how I run the site, what I do with your information and the rules for the forum and My Airshow Hub. I have kept them as short and clear as I can, so you can find the bit you need and get back to planning your day.</p>
+<body id="top">
+<header class="head">
+  <div class="banner">
+{{IMGS}}
+  </div>
+  <div class="head-in">
+    <span class="tag">Last updated {{UPDATED}}</span>
+    <h1>Our policies</h1>
+    <p>How I run the site, what I do with your information, and the rules for the forum, My Airshow Hub and traders, all in plain English.</p>
+    <div class="tabs" role="tablist" aria-label="Policies">
+{{TABS}}
     </div>
-    <aside class="promise">
-      <h3>My promises to you</h3>
-      <ul>
-        <li>Every guide is free to read without giving me any details.</li>
-        <li>I never sell your information or use it for advertising.</li>
-        <li>Your planning tools are private to you.</li>
-        <li>You can see, change or delete your information whenever you like.</li>
-      </ul>
-    </aside>
   </div>
 </header>
-<main class="body">
-  <div class="wrap layout">
-    <nav class="side" aria-label="Policies">
-      <h2>Choose a policy</h2>
-      <div class="picks" role="tablist">{{NAV}}</div>
-      <div class="help"><b>Something not right?</b> Email <a href="mailto:contactus@ukairshowguide.co.uk">contactus@ukairshowguide.co.uk</a> and I will get back to you.</div>
-    </nav>
-    <div class="read">{{PANELS}}</div>
-  </div>
+<main class="wrap">
+{{PANELS}}
 </main>
+<div id="hgt"></div>
 <script>
 (function(){
-  var keys=[].map.call(document.querySelectorAll('.panel'),function(p){return p.dataset.key});
-  function show(key,scroll){
-    if(keys.indexOf(key)<0)key=keys[0];
-    document.querySelectorAll('.panel').forEach(function(p){p.hidden=p.dataset.key!==key});
-    document.querySelectorAll('.pick').forEach(function(b){
-      var on=b.dataset.go===key;b.setAttribute('aria-selected',on?'true':'false');b.tabIndex=on?0:-1;
-      if(on&&b.scrollIntoView&&window.innerWidth<=900)b.scrollIntoView({block:'nearest',inline:'center'});
-    });
-    try{history.replaceState(null,'','#'+key)}catch(e){}
-    if(scroll){var r=document.querySelector('.read');window.scrollTo({top:r.getBoundingClientRect().top+window.scrollY-12,behavior:'smooth'})}
+  var DEFAULT_TAB='privacy';
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  var panels=[].slice.call(document.querySelectorAll('.panel'));
+  var keys=tabs.map(function(t){return t.getAttribute('data-tab')});
+  var spy=null;
+
+  function tidy(){ /* page height helper, only when opened on its own */
+    try{
+      if(window.top!==window.self) return;
+      var h=document.getElementById('hgt');
+      h.style.display='block';
+      h.textContent='Page height '+document.documentElement.scrollHeight+'px';
+    }catch(e){}
   }
+
+  function observe(panel){
+    if(spy) spy.disconnect();
+    if(!('IntersectionObserver' in window)) return;
+    var links=[].slice.call(panel.querySelectorAll('.toc a'));
+    spy=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(a){a.classList.toggle('on',a.getAttribute('data-jump')===e.target.id)});
+        }
+      });
+    },{rootMargin:'-10% 0px -75% 0px'});
+    [].slice.call(panel.querySelectorAll('.sec')).forEach(function(s){spy.observe(s)});
+  }
+
+  function setTab(key,focus,noScroll){
+    if(keys.indexOf(key)<0) key=DEFAULT_TAB;
+    tabs.forEach(function(t){
+      var on=t.getAttribute('data-tab')===key;
+      t.setAttribute('aria-selected',on?'true':'false');
+      t.setAttribute('tabindex',on?'0':'-1');
+      if(on&&focus) t.focus();
+    });
+    panels.forEach(function(p){p.hidden=(p.id!=='panel-'+key)});
+    [].slice.call(document.querySelectorAll('.banner img')).forEach(function(i){i.hidden=(i.getAttribute('data-tab')!==key)});
+    try{ history.replaceState(null,'','#'+key); }catch(e){}
+    if(!noScroll){ try{ window.scrollTo(0,0); }catch(e){} }
+    observe(document.getElementById('panel-'+key));
+    tidy();
+  }
+
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){setTab(t.getAttribute('data-tab'))});
+    t.addEventListener('keydown',function(e){
+      var n=null;
+      if(e.key==='ArrowRight') n=(i+1)%tabs.length;
+      else if(e.key==='ArrowLeft') n=(i-1+tabs.length)%tabs.length;
+      else if(e.key==='Home') n=0;
+      else if(e.key==='End') n=tabs.length-1;
+      if(n!==null){e.preventDefault();setTab(keys[n],true)}
+    });
+  });
+
   document.addEventListener('click',function(e){
-    var go=e.target.closest('[data-go]');
-    if(go){e.preventDefault();show(go.dataset.go,true);return}
-    var all=e.target.closest('[data-all]');
-    if(all){
-      var panel=all.closest('.panel'),open=all.dataset.all==='open';
-      panel.querySelectorAll('details').forEach(function(d){d.open=open});
-      all.dataset.all=open?'close':'open';all.textContent=open?'Close every section':'Open every section';return}
-    if(e.target.closest('[data-print]')){
-      var p=e.target.closest('.panel');p.querySelectorAll('details').forEach(function(d){d.open=true});window.print()}
+    var a=e.target.closest?e.target.closest('a'):null;
+    if(!a) return;
+    if(a.hasAttribute('data-tab')){e.preventDefault();setTab(a.getAttribute('data-tab'));return}
+    if(a.hasAttribute('data-jump')){
+      e.preventDefault();
+      var el=document.getElementById(a.getAttribute('data-jump'));
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+      return;
+    }
+    if(a.hasAttribute('data-top')){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})}
   });
-  document.querySelector('.picks').addEventListener('keydown',function(e){
-    if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft'&&e.key!=='ArrowDown'&&e.key!=='ArrowUp')return;
-    var cur=keys.indexOf(document.querySelector('.pick[aria-selected="true"]').dataset.go);
-    var next=keys[(cur+(e.key==='ArrowRight'||e.key==='ArrowDown'?1:keys.length-1))%keys.length];
-    e.preventDefault();show(next,false);document.getElementById('t-'+next).focus();
+
+  var start=(location.hash||'').replace('#','');
+  setTab(keys.indexOf(start)>=0?start:DEFAULT_TAB,false,true);
+  window.addEventListener('hashchange',function(){
+    var h=(location.hash||'').replace('#','');
+    if(keys.indexOf(h)>=0) setTab(h);
   });
-  var start=(location.hash||'').slice(1);
-  try{var q=new URLSearchParams(location.search).get('policy');if(q)start=q}catch(e){}
-  show(start,false);
-  window.addEventListener('hashchange',function(){show(location.hash.slice(1),true)});
+  window.addEventListener('resize',tidy);
 })();
 </script>
 <!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
 <style id="mobile-fit">
-  img,video,iframe,svg{max-width:100%}
-  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label,summary{overflow-wrap:break-word}
-  .hero-grid>*,.layout>*,.pick>*{min-width:0}
-  @media (max-width:440px){.hero h1{font-size:40px}.pick{flex-basis:200px}.tools .ghost{flex:1 1 auto;text-align:center}}
-  @media (pointer:coarse){.pick,.ghost,.sec summary{min-height:44px}}
+  img,video,iframe{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  .layout>*,.row>*{min-width:0}
+  @media (max-width:860px){.tab{flex:1 1 45%}}
+  @media (max-width:440px){.head h1{font-size:36px}.row{flex-wrap:wrap}.row strong{text-align:left}}
+  @media (pointer:coarse){.tab,.toc a{min-height:44px}}
 </style>
 <!-- mobile-fit -->
 </body>
