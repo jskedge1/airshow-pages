@@ -502,8 +502,10 @@ section{position:relative}
 .rwy{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);height:7px;background:#0A1824;z-index:60;pointer-events:none}
 .rwy::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 14px,transparent 14px 26px)}
 .rwy .done{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,rgba(50,180,175,.25),var(--teal))}
-.rwy svg{position:absolute;top:-8px;left:0;width:22px;height:22px;color:var(--red);transform:translateX(-50%);transition:transform .6s var(--ease),opacity .6s}
-.rwy.up svg{transform:translate(-50%,-26px) rotate(-18deg);opacity:0}
+.rwy .rwy-ac{position:absolute;left:0;max-width:none;transform:translateX(-50%);filter:drop-shadow(0 2px 3px rgba(0,0,0,.45));transition:transform .6s var(--ease),opacity .6s}
+.rwy .rwy-ac.swap{animation:acSwap .45s var(--ease)}
+@keyframes acSwap{from{opacity:0;transform:translate(-50%,6px) scale(.7)}to{opacity:1;transform:translateX(-50%)}}
+.rwy.up .rwy-ac{transform:translate(-50%,-26px) rotate(-18deg);opacity:0}
 /* layered header */
 .hclouds{position:absolute;inset:-10% -5%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 26% 9% at 18% 28%,rgba(255,255,255,.22),transparent 70%),radial-gradient(ellipse 30% 8% at 78% 18%,rgba(255,255,255,.18),transparent 70%),radial-gradient(ellipse 22% 7% at 60% 62%,rgba(255,255,255,.14),transparent 70%);will-change:transform}
 .hero .slides,.hero .hclouds,.hero .tag,.hero h1,.hero .lead{will-change:transform}
@@ -723,7 +725,7 @@ section{position:relative}
   <button class="pf-skip" type="button" id="pfskip">Skip</button>
 </div>
 
-<div class="rwy" id="rwy" aria-hidden="true"><div class="done"></div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" transform="rotate(90 12 12)"/></svg></div>
+<div class="rwy" id="rwy" aria-hidden="true"><div class="done"></div><img class="rwy-ac" src="https://jskedge1.github.io/airshow-pages/home-img/ac/tornado.webp" alt="" width="56.0" height="18.0" decoding="async" style="width:56px;height:18px;top:-5.5px"></div>
 <header class="hero" id="top">
   <div class="slides" aria-hidden="true">
     <div class="slide on nopic" style="background-image:url(https://static.wixstatic.com/media/a0546b_59400d30305b4df49133d0d95bd3f88b~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_80,enc_jpg/redarrows.jpg)"></div>
@@ -1256,12 +1258,13 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
     var tod=h>=5&&h<9?['dawn','Good morning. Perfect light for a dawn arrival.']:h>=9&&h<17?['day','Clear skies on the guide today.']:h>=17&&h<21?['dusk','Evening light. The best time for photos.']:['night','Night stop. Plan tomorrow\'s trip.'];
     var t=document.getElementById('tod');if(t)t.className='tod '+tod[0];var l=document.getElementById('todlbl');if(l)l.textContent=tod[1];})();
   /* runway progress */
-  var rwy=document.getElementById('rwy'),rwyDone=rwy&&rwy.querySelector('.done'),rwyJet=rwy&&rwy.querySelector('svg'),hero=document.getElementById('top'),pageRoot=document.getElementById('top').parentNode;
+  var rwy=document.getElementById('rwy'),rwyDone=rwy&&rwy.querySelector('.done'),rwyJet=rwy&&rwy.querySelector('.rwy-ac'),RWAC=[["tornado", 56.0, 18.0], ["typhoon", 56.0, 19.9], ["a10", 56.0, 15.2], ["rafale", 39.5, 22.0], ["vulcan", 56.0, 14.0], ["apache", 52.9, 22.0], ["jaguar", 56.0, 16.4], ["f35", 37.6, 22.0], ["chinook", 56.0, 20.8], ["mirage4", 56.0, 12.6], ["b52", 56.0, 13.1], ["tiger", 55.7, 22.0], ["canberra", 56.0, 11.9], ["f15ex", 34.1, 22.0], ["blackhawk", 56.0, 21.0], ["a7", 56.0, 21.3], ["do228", 56.0, 16.2], ["mh47g", 51.8, 22.0]],acBase='https://jskedge1.github.io/airshow-pages/home-img/ac/',acNow=0,hero=document.getElementById('top'),pageRoot=document.getElementById('top').parentNode;
   if(boxMode&&rwy)rwy.hidden=true;
   var heroLayers=[[hero.querySelector('.slides'),.35],[hero.querySelector('.hclouds'),.6],[hero.querySelector('.tag'),-.05],[hero.querySelector('h1'),-.12],[hero.querySelector('.lead'),-.18]];
   function feat(){var top=hero.getBoundingClientRect().top,foot=document.querySelector('footer').getBoundingClientRect().bottom,total=foot-top-innerHeight,k=Math.max(0,Math.min(1,-top/Math.max(1,total)));
-    if(rwy&&!boxMode){rwyDone.style.width=(k*100)+'%';rwyJet.style.left=(k*100)+'%';rwy.classList.toggle('up',k>.985)}
+    if(rwy&&!boxMode){rwyDone.style.width=(k*100)+'%';rwyJet.style.left=(k*100)+'%';var ai=Math.min(RWAC.length-1,Math.floor(k*RWAC.length));if(ai!==acNow){acNow=ai;var a=RWAC[ai];rwyJet.src=acBase+a[0]+'.webp';rwyJet.style.width=a[1]+'px';rwyJet.style.height=a[2]+'px';rwyJet.style.top=(3.5-a[2]/2).toFixed(1)+'px';rwyJet.classList.remove('swap');void rwyJet.offsetWidth;rwyJet.classList.add('swap')}rwy.classList.toggle('up',k>.985)}
     if(!reduce&&!boxMode){var p=Math.max(0,-top);if(p<hero.offsetHeight+200)heroLayers.forEach(function(L){if(L[0])L[0].style.translate='0 '+(p*L[1]).toFixed(1)+'px'})}}
+  if(rwy&&!boxMode)RWAC.forEach(function(a){var i=new Image();i.src=acBase+a[0]+'.webp'});
   addEventListener('scroll',feat,{passive:true});addEventListener('resize',feat);feat();
   /* photos settle as they reach the middle of the screen */
   var sio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('soft');sio.unobserve(e.target)}})},{rootMargin:'-22% 0px -22% 0px'});
