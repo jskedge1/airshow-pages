@@ -48,6 +48,10 @@ Every page ends with the `mobile-fit` block (between the `<!-- mobile-fit` comme
 It keeps the page inside the screen down to 320px wide, which is the width Wix gives an HTML box on phones.
 Keep it when copying a template to make a new show page.
 
+## AI generated guide images
+
+`guide-img/` holds the AI generated guide images (made in Canva, 26 Oct 2026). Every one used on a page carries a caption saying what it shows, ending "AI generated for a visual look." Copies used on pages sit in that page's own image folder (first-airshow-img/, camping-hub-img/, photography-hub-img/, security-img/). The originals are in the Canva design "Blank landscape photo canvas".
+
 ## Links between pages
 
 `links.js` is loaded by every page. It holds the list of show pages and their addresses on
