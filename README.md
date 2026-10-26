@@ -34,6 +34,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | Airshow traders directory (Wix page /airshow-traders, page code velo/page-code/airshow-traders.js) | https://jskedge1.github.io/airshow-pages/traders/directory.html |
 | Trader Hub, trader log in and dashboard (Wix page /trader-hub, page code velo/page-code/trader-hub.js) | https://jskedge1.github.io/airshow-pages/traders/trader-hub.html |
 | Trader admin, Jack only (Wix page /trader-admin, members only, page code velo/page-code/trader-admin.js) | https://jskedge1.github.io/airshow-pages/traders/admin.html |
+| Privacy, cookies and terms (Wix page /policies, linked from the footer). Six policies in one tabbed page, built from the text files in policies-src/ by tools-policies.py. The same text is in the CMS collection "UK Air Show Guide Policy's" for the /ourpolicys list page, so change both. | https://jskedge1.github.io/airshow-pages/policies.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
