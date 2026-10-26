@@ -172,9 +172,12 @@ img{display:block;max-width:100%}
 .ans.swap .body{animation:fadeup .6s var(--ease) both}
 
 /* day timeline */
-.dayhead{margin-bottom:26px}
+.dayhead{margin-bottom:6px}
+.daybar{position:sticky;top:var(--navh,54px);z-index:6;background:var(--pale);padding:14px 0 6px 20px;margin:0 0 20px;box-shadow:0 10px 18px -16px rgba(19,41,60,.5)}
+.daybar .tipsw{margin:12px 0 2px}
+#day.pf{overflow:clip}
 .day{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:44px;align-items:start}
-.day .stick{position:sticky;top:74px}
+.day .stick{position:sticky;top:calc(var(--navh,54px) + var(--barh,120px) + 16px)}
 .scene{position:relative;background:var(--navy);overflow:hidden;box-shadow:0 18px 40px rgba(19,41,60,.25)}
 .scene svg{display:block;width:100%;height:auto}
 .scene stop{transition:stop-color 1.2s ease}
@@ -208,7 +211,7 @@ img{display:block;max-width:100%}
 .glance button{all:unset;cursor:pointer;padding:12px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:filter .3s}
 .glance button:hover,.glance button:focus-visible{filter:brightness(1.15)}
 .glance button:focus-visible{outline:3px solid var(--purple)}
-.glance .g1{background:#2A4459}.glance .g2{background:var(--purple)}.glance .g3{background:var(--tealink)}.glance .g4{background:var(--red)}.glance .g5{background:var(--navy)}
+.glance .g1{background:#2A4459}.glance .g2{background:var(--purple)}.glance .g3{background:#1F7F7B}.glance .g4{background:var(--red)}.glance .g5{background:var(--navy)}
 .gscale{position:relative;height:18px;font-size:14px;color:var(--mute);margin-top:4px;font-variant-numeric:tabular-nums}
 .gmark{position:absolute;top:-8px;width:3px;height:calc(100% + 16px);background:var(--ink);left:0;transition:left .8s var(--ease);pointer-events:none}
 .gmark::before{content:"";position:absolute;top:-6px;left:-5px;border:6.5px solid transparent;border-top-color:var(--ink)}
@@ -494,7 +497,6 @@ section{position:relative}
   .how::before,.how .line{display:none}
   .comm{grid-template-columns:1fr}
   form.of2{grid-template-columns:1fr}
-  .day .stick{position:sticky;top:54px;z-index:5}
   .day .pin{display:none}
   .scap{display:none}
   .hud .clk{font-size:34px}
@@ -901,13 +903,13 @@ section{position:relative}
   <div class="in">
     <div class="dayhead">
       <h2 class="stitle">Your Day, Hour By Hour</h2>
-      <p class="sintro">How I would plan a typical show day, from packing the car to backing up your photos. Times change from show to show, so check the timeline on each show page. Scroll down and watch the airfield change through the day.</p>
-      <div style="padding-left:20px;margin-top:20px">
+      <p class="sintro">How I would plan a typical show day, from packing the car to backing up your photos. Times change from show to show, so check the timeline on each show page. Scroll down and the photos follow the day with you.</p>
+    </div>
+      <div class="daybar" id="daybar">
         <div class="glance" id="glance"><span class="gmark" id="gmark"></span><button class="g1" data-go="0">Before</button><button class="g2" data-go="1">Arrive</button><button class="g3" data-go="4">Explore</button><button class="g4" data-go="8">Flying Display</button><button class="g5" data-go="13">Home</button></div>
         <div class="gscale"><span style="position:absolute;left:0.0%;transform:translateX(-0%)">06:00</span><span style="position:absolute;left:22.2%;transform:translateX(-50%)">09:00</span><span style="position:absolute;left:44.4%;transform:translateX(-50%)">12:00</span><span style="position:absolute;left:66.7%;transform:translateX(-50%)">15:00</span><span style="position:absolute;left:88.9%;transform:translateX(-50%)">18:00</span></div>
         <div class="tipsw" role="group" aria-label="Extra tips"><button class="fbtn on" id="tfam" aria-pressed="true">Family Tips</button><button class="fbtn on" id="tpho" aria-pressed="true">Photography Tips</button></div>
       </div>
-    </div>
     <div class="day">
       <div class="stick">
         <figure class="dayph" id="dayph" aria-live="off"><img id="dayimgA" class="on" src="https://jskedge1.github.io/airshow-pages/home-img/day-06.webp" alt="An airfield car park in the early morning, still almost empty" decoding="async"><img id="dayimgB" alt="" decoding="async"><div class="hud"><div class="clk" id="clk">06:00</div><span class="ph" id="phase">Before You Go</span></div><figcaption class="dcap" id="scap">Final Checks Before You Leave</figcaption></figure>
@@ -1296,6 +1298,9 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
   function dayPhoto(st){var u=st.dataset.img;if(!u||u===dCur)return;dCur=u;var show=dA.classList.contains('on')?dB:dA,hide=show===dA?dB:dA;
     show.onload=function(){show.classList.add('on');hide.classList.remove('on')};show.alt=st.dataset.alt||'';show.src=u;if(show.complete&&show.naturalWidth)show.onload();}
   sts.forEach(function(st){if(!st.dataset.img)return;var im=document.createElement('img');im.className='stimg';im.loading='lazy';im.decoding='async';im.src=st.dataset.img;im.alt=st.dataset.alt||'';var b=st.querySelector('b');b.parentNode.insertBefore(im,b.nextSibling)});
+  (function(){var nav=document.querySelector('.nav'),bar=document.getElementById('daybar'),root=document.documentElement;
+    function m(){if(nav)root.style.setProperty('--navh',nav.offsetHeight+'px');if(bar)root.style.setProperty('--barh',bar.offsetHeight+'px')}
+    m();addEventListener('resize',m);if(window.ResizeObserver&&bar)new ResizeObserver(m).observe(bar);})();
   function scene(i){if(i===lastScene)return;lastScene=i;var st=sts[i],hr=+st.dataset.h;
     for(var k=0;k<SKY.length-1&&hr>SKY[k+1][0];k++);var A=SKY[k],B=SKY[Math.min(k+1,SKY.length-1)],f=B[0]===A[0]?0:Math.max(0,Math.min(1,(hr-A[0])/(B[0]-A[0])));
     var s1=document.getElementById('sk1');if(s1){s1.setAttribute('stop-color',mix(A[1],B[1],f));document.getElementById('sk2').setAttribute('stop-color',mix(A[2],B[2],f));}
