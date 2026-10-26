@@ -612,7 +612,9 @@ section{position:relative}
 .hx-radar{position:absolute;left:50%;top:50%;width:62%;translate:-50% -50%}
 .hx-radar svg{display:block;width:100%;height:auto;overflow:visible}
 .hx-sweep{transform-origin:210px 210px;transform-box:view-box}
-.hx-live .hx-sweep{animation:hxSweep 5s linear infinite}
+.hx-sweep,.hx-ring{transform-origin:210px 210px;transform-box:view-box}
+.hx-sweep{animation:hxSweep 4s linear infinite}
+.hx-ring{animation:hxSweep 30s linear infinite reverse}
 .hx-live .hx-smoke path{animation:hxFlow .8s linear infinite}
 .hx-form{position:absolute;left:50%;top:14.3%;width:37.6%;aspect-ratio:158/156;translate:-50% 0}
 .hx-form img{position:absolute;width:19%;height:auto;filter:drop-shadow(0 0 4px rgba(50,180,175,.6))}
@@ -669,7 +671,7 @@ section{position:relative}
 }
 @media(prefers-reduced-motion:reduce){
   .hx-js .hx-pop,.hx-live .hx-pop{opacity:1;animation:none}
-  .hx-live .hx-sweep,.hx-live .hx-scan,.hx-live .hx-on i,.hx-live .hx-dot,.hx-live .hx-smoke path,.hx-live .hx-form img,.hx-tab:hover::after,.hx-tab:hover .hx-ico svg,.hx-tab:hover b{animation:none}
+  .hx-live .hx-scan,.hx-live .hx-on i,.hx-live .hx-dot,.hx-live .hx-smoke path,.hx-live .hx-form img,.hx-tab:hover::after,.hx-tab:hover .hx-ico svg,.hx-tab:hover b{animation:none}
 }
 </style>
 <style id="mobile-comfort">html,body{overflow-x:clip}
@@ -828,12 +830,12 @@ section{position:relative}
       <div class="hx-radar hx-pop" style="animation-delay:.3s">
         <svg viewBox="0 0 420 420" aria-hidden="true">
           <defs><clipPath id="hxrc"><circle cx="210" cy="210" r="159"/></clipPath></defs>
-          <circle cx="210" cy="210" r="200" fill="none" stroke="#32B4AF" stroke-opacity=".35" stroke-dasharray="2 8"/>
+          <g class="hx-ring"><circle cx="210" cy="210" r="200" fill="none" stroke="#32B4AF" stroke-opacity=".35" stroke-dasharray="2 8"/>
           <circle cx="210" cy="210" r="160" fill="rgba(14,33,49,.6)" stroke="#32B4AF" stroke-opacity=".7" stroke-width="1.5"/>
           <circle cx="210" cy="210" r="110" fill="none" stroke="#32B4AF" stroke-opacity=".35"/>
           <circle cx="210" cy="210" r="60" fill="none" stroke="#32B4AF" stroke-opacity=".35"/>
           <path d="M210 40V380M40 210H380" stroke="#32B4AF" stroke-opacity=".2"/>
-          <path d="M210 4v18M210 398v18M4 210h18M398 210h18" stroke="#32B4AF" stroke-width="2"/>
+          <path d="M210 4v18M210 398v18M4 210h18M398 210h18" stroke="#32B4AF" stroke-width="2"/></g>
           <g class="hx-sweep"><path d="M210 210L210 50A160 160 0 0 1 323 97Z" fill="#32B4AF" fill-opacity=".18"/><path d="M210 210L323 97" stroke="#32B4AF" stroke-width="2"/></g>
           <g clip-path="url(#hxrc)" fill="none" stroke-linecap="round">
             <g stroke-width="10" stroke-opacity=".22"><path d="M210 94v120" stroke="#FFFFFF"/><path d="M178 124v110" stroke="#D74949"/><path d="M242 124v110" stroke="#3B6FE8"/><path d="M146 154v100" stroke="#D74949"/><path d="M274 154v100" stroke="#3B6FE8"/><path d="M178 184v90" stroke="#D74949"/><path d="M242 184v90" stroke="#3B6FE8"/><path d="M210 214v90" stroke="#FFFFFF"/></g>
