@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airshow Security and Bag Searches | The Big Guide to UK Airshows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#13293C; --navy2:#0E2131; --teal:#32B4AF; --tealdk:#0E5F5B; --red:#D74949;
+  --purple:#6950A1; --g1:#757575; --g2:#C6C6C6; --pale:#F2F4F5; --ink:#111;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{font-family:"Barlow",sans-serif;font-size:16px;line-height:1.55;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+h1,h2,h3,.cond{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.01em}
+
+/* HEADER */
+.hero{position:relative;background:var(--navy);color:#fff;overflow:hidden}
+.hero-art{position:relative;height:clamp(300px,52vh,520px);overflow:hidden}
+.hero-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:58% 0%;animation:drift 22s var(--ease) both;pointer-events:none;user-select:none}
+@keyframes drift{from{transform:scale(1.06)}to{transform:scale(1)}}
+.hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(19,41,60,.94) 0%,rgba(19,41,60,.7) 28%,rgba(19,41,60,.1) 58%,rgba(19,41,60,0) 100%),linear-gradient(0deg,var(--navy) 0%,rgba(19,41,60,0) 38%)}
+.hero-body{position:relative;margin-top:-300px;padding-bottom:0;z-index:2}
+.hero-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:48px;align-items:end}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:5px 12px}
+.hero h1{font-size:clamp(46px,6.4vw,84px);line-height:.92;font-weight:800;margin:16px 0 12px;max-width:12ch}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.hero .sub{font-family:"Barlow Condensed";font-weight:700;text-transform:uppercase;color:var(--teal);font-size:21px;letter-spacing:.02em;margin-bottom:14px}
+.hero p.intro{color:#dfe7ee;max-width:56ch;font-size:17px}
+.hero p.intro b{color:#fff}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{font-family:"Barlow";font-weight:600;font-size:15px;padding:12px 20px;border:2px solid transparent;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .3s var(--ease),background .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.out{border-color:#fff;color:#fff;background:transparent}
+.btn.red{background:var(--red);color:#fff}
+.glass{background:rgba(14,33,49,.92);border-top:4px solid var(--teal);box-shadow:0 18px 40px rgba(0,0,0,.28);backdrop-filter:blur(6px);padding:22px 24px}
+.glass h3{color:var(--teal);font-size:22px;font-weight:800;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.ico{width:34px;height:34px;border-radius:50%;background:#fff;display:inline-grid;place-items:center;flex:none}
+.ico svg{width:18px;height:18px}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:15px}
+.kv:last-child{border-bottom:0}
+.kv span{color:#9fd9d6;font-weight:500}
+.kv b{color:#fff;text-align:right;font-variant-numeric:tabular-nums}
+.kv.hl b{background:var(--red);padding:2px 8px}
+.light{height:3px;background:linear-gradient(90deg,transparent,var(--teal),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:sweep 6s linear infinite;margin-top:34px}
+@keyframes sweep{from{background-position:-40% 0}to{background-position:140% 0}}
+
+/* jump bar */
+.jump{background:var(--navy);position:sticky;top:0;z-index:20;border-top:1px solid rgba(255,255,255,.08)}
+.jump .wrap{display:flex;overflow-x:auto;scrollbar-width:none}
+.jump .wrap::-webkit-scrollbar{display:none}
+.jump a{color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 16px;white-space:nowrap;transition:padding .4s ease,background .4s ease}
+.jump a:hover,.jump a:focus,.jump a.on{background:var(--teal);padding:14px 28px}
+
+/* open all strip */
+.strip{background:var(--pale);padding:14px 0}
+.strip .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.strip button{font:600 15px "Barlow";background:#fff;border:1px solid var(--g2);padding:8px 14px;cursor:pointer;color:var(--navy)}
+.strip button:hover{border-color:var(--teal);color:var(--tealdk)}
+.strip .count{font-weight:500;color:var(--navy)}
+
+/* collapsible sections */
+.sec{border-bottom:2px solid #fff}
+.sec-h{font-family:"Barlow",sans-serif;width:100%;display:flex;align-items:center;gap:18px;background:var(--navy);color:#fff;border:0;text-align:left;padding:22px 28px;cursor:pointer;border-left:6px solid transparent;transition:background .35s,border-color .35s,padding .35s var(--ease)}
+.sec-h:hover{padding-left:36px}
+.sec.open .sec-h{background:var(--navy2);border-left-color:var(--teal)}
+.sec-h .ico{width:44px;height:44px;transition:background .35s}
+.sec.open .sec-h .ico{background:var(--teal)}
+.sec.open .sec-h .ico svg *{stroke:#fff}
+.sec-h .t{flex:1}
+.sec-h .t b{display:block;font-family:"Barlow Condensed";font-weight:800;text-transform:uppercase;font-size:27px;line-height:1.05}
+.sec-h .t small{color:#b9c7d3;font-size:15px}
+.pm{background:var(--teal);color:#fff;font-weight:600;font-size:14px;padding:8px 12px;display:flex;gap:8px;align-items:center;min-width:92px;justify-content:center}
+.pm em{font-style:normal}
+.pm i{font-style:normal;font-size:18px;line-height:1}
+.sec-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease)}
+.sec.open .sec-b{grid-template-rows:1fr}
+.sec-b>div{overflow:hidden}
+.inner{padding:48px 0 34px}
+.sec-foot{display:flex;gap:10px;margin-top:34px}
+.sec-foot button{font:600 14px "Barlow";padding:9px 14px;cursor:pointer;border:1px solid var(--navy);background:#fff;color:var(--navy)}
+.sec-foot button.dk{background:var(--navy);color:#fff}
+
+/* titles */
+.st{display:grid;grid-template-columns:minmax(260px,.9fr) 1.1fr;gap:40px;align-items:start;margin-bottom:30px}
+.st h2{color:var(--red);font-size:clamp(32px,3.6vw,46px);line-height:.95;font-weight:800;border-left:6px solid var(--red);padding-left:16px}
+.st p{font-size:17px;color:#222;max-width:62ch}
+.lead p+p{margin-top:12px}
+.note{border-left:4px solid var(--purple);background:#f6f4fa;padding:16px 20px;margin-top:22px;max-width:760px}
+.note b{color:var(--purple);font-family:"Barlow Condensed";text-transform:uppercase;font-size:19px;display:block;margin-bottom:2px}
+
+/* show type rows */
+.types{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.type{border:1px solid #dfe3e6;background:#fff;padding:24px;position:relative;transition:transform .35s var(--ease),box-shadow .35s}
+.type:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(19,41,60,.12)}
+.type:nth-child(1){grid-column:span 7;background:var(--navy);color:#fff;border-color:var(--navy)}
+.type:nth-child(2){grid-column:span 5}
+.type:nth-child(3){grid-column:3 / span 10}
+.type h3{font-size:25px;font-weight:800;margin:10px 0 8px}
+.type:nth-child(1) h3{color:#fff}
+.type:not(:first-child) h3{color:var(--navy)}
+.lvl{display:inline-flex;gap:4px;align-items:center;font-weight:600;font-size:14px}
+.lvl i{width:22px;height:8px;background:var(--g2)}
+.lvl i.f{background:var(--red)}
+.type:nth-child(1) .lvl{color:#9fd9d6}
+.type p{font-size:15.5px}
+.type:nth-child(1) p{color:#dfe7ee}
+.type ul{margin:12px 0 0 0;list-style:none}
+.type li{padding:7px 0 7px 22px;position:relative;border-top:1px solid rgba(0,0,0,.08);font-size:15px}
+.type:nth-child(1) li{border-color:rgba(255,255,255,.12)}
+.type li::before{content:"";position:absolute;left:0;top:14px;width:9px;height:9px;border-radius:50%;background:var(--teal)}
+
+/* steps walkthrough */
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.rail{position:relative;padding-left:62px}
+.rail::before{content:"";position:absolute;left:21px;top:8px;bottom:8px;width:3px;background:#e2e6e9}
+.step{position:relative;padding-bottom:26px;cursor:pointer}
+.step .n{position:absolute;left:-62px;top:0;width:45px;height:45px;border-radius:50%;background:#fff;border:3px solid var(--teal);color:var(--navy);font:800 21px "Barlow Condensed";display:grid;place-items:center;transition:background .3s,color .3s}
+.step.on .n{background:var(--teal);color:#fff}
+.step.p .n{border-color:var(--purple)}
+.step.p.on .n{background:var(--purple)}
+.step h4{font:800 21px "Barlow Condensed";text-transform:uppercase;color:var(--navy);margin-top:8px}
+.step p{font-size:15.5px;color:#222;margin-top:4px}
+.step .who{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;background:var(--pale);padding:3px 9px;color:var(--navy)}
+.stage{position:sticky;top:70px;background:var(--navy);color:#fff;padding:26px;border-top:4px solid var(--teal)}
+.stage h4{font:800 26px "Barlow Condensed";text-transform:uppercase;color:var(--teal)}
+.stage p{color:#dfe7ee;margin-top:8px}
+.stage .time{display:flex;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-weight:600}
+.stage .time b{color:#fff;background:var(--purple);padding:2px 10px}
+.stage svg{width:100%;height:auto;margin-top:18px;background:#1b3a52}
+
+/* martyn's law */
+.law{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+.infob{background:var(--navy2);border-top:4px solid var(--teal);color:#fff;padding:24px}
+.infob h3{color:var(--teal);font-size:23px;font-weight:800;margin-bottom:8px}
+.bar{height:6px;background:rgba(255,255,255,.12);margin-top:18px;position:relative}
+.bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--teal);transition:width 1.6s var(--ease)}
+.bar-l{display:flex;justify-content:space-between;font-size:13px;color:#9fd9d6;margin-top:6px;font-weight:500}
+.tiers{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+.tier{border:1px solid #dfe3e6;padding:20px;background:#fff}
+.tier .num{font:800 46px "Barlow Condensed";color:var(--navy);line-height:1}
+.tier .num small{font-size:20px;color:var(--tealdk)}
+.tier h4{font:800 20px "Barlow Condensed";text-transform:uppercase;margin:6px 0;color:var(--purple)}
+.tier.enh{border-top:4px solid var(--purple)}
+.tier.std{border-top:4px solid var(--teal)}
+.tier.std h4{color:var(--tealdk)}
+.tier p{font-size:15px}
+.mean{margin-top:26px}
+.mean h3{color:var(--navy);font-size:24px;font-weight:800;margin-bottom:6px}
+.mean-row{display:grid;grid-template-columns:48px 1fr;gap:14px;padding:14px 0;border-top:1px solid #e3e6e9}
+.mean-row .ico{background:var(--navy);width:42px;height:42px}
+.mean-row .ico svg *{stroke:var(--teal)}
+.mean-row b{color:var(--navy);display:block}
+.mean-row p{font-size:15px;color:#333}
+
+/* trays */
+.trays-wrap{background:var(--pale);padding:34px;margin:0 -6px}
+.trays{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tray{background:#fff;transition:transform .35s var(--ease),box-shadow .35s}
+.tray:hover{transform:translateY(-5px);box-shadow:0 16px 30px rgba(19,41,60,.14)}
+.tray-h{display:flex;align-items:center;gap:12px;padding:14px 18px;color:#fff}
+.tray-h b{font:800 22px "Barlow Condensed";text-transform:uppercase}
+.tray.ok .tray-h{background:var(--teal)}
+.tray.chk .tray-h{background:var(--purple)}
+.tray.no .tray-h{background:var(--red)}
+.tray ul{list-style:none;padding:6px 18px 14px}
+.tray li{padding:10px 0;border-bottom:1px solid #e8ebed;color:var(--navy);font-weight:500;font-size:15.5px}
+.tray li:last-child{border-bottom:0}
+.tray li small{display:block;color:#555;font-weight:400;font-size:14px}
+
+/* checklist */
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.cl{border:1px solid #dfe3e6;background:#fff}
+.cl-h{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;color:#fff;font:800 20px "Barlow Condensed";text-transform:uppercase}
+.cl-h.pu{background:var(--purple)}.cl-h.nv{background:var(--navy)}
+.cl-h small{font:600 14px "Barlow";text-transform:none}
+.cl label{display:grid;grid-template-columns:24px 1fr;gap:12px;padding:12px 16px;border-top:1px solid #edf0f2;cursor:pointer;transition:background .25s}
+.cl label:hover{background:#f7fafa}
+.cl input{appearance:none;width:20px;height:20px;border:2px solid var(--g2);margin-top:2px;display:grid;place-items:center;cursor:pointer;transition:border-color .2s,background .2s}
+.cl input:checked{background:var(--teal);border-color:var(--teal)}
+.cl input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.cl label b{display:block;color:var(--navy);font-weight:600}
+.cl label span{font-size:14.5px;color:#555}
+.cl label.done b,.cl label.done span{text-decoration:line-through;color:#9aa3aa}
+.first{display:inline-block;background:var(--red);color:#fff;font-size:12px;font-weight:600;padding:1px 7px;margin-left:6px;vertical-align:2px}
+.prog{display:flex;align-items:center;gap:14px;margin:0 0 22px}
+.prog .track{flex:1;height:6px;background:#e3e7ea;position:relative;max-width:420px}
+.prog .track i{position:absolute;left:0;top:0;bottom:0;background:var(--teal);width:0;transition:width .5s var(--ease)}
+.prog b{color:var(--navy);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* bag layers */
+.bag{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:center;margin-bottom:36px}
+
+.layer{cursor:pointer;transition:opacity .3s,transform .4s var(--ease)}
+.layers-off .layer{opacity:.3}
+.layers-off .layer.lit{opacity:1}
+.ltabs{display:flex;flex-direction:column;gap:8px}
+.ltab{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;text-align:left;border:1px solid #dfe3e6;background:#fff;padding:14px 16px;cursor:pointer;font:inherit;border-left:4px solid transparent;transition:border-color .3s,transform .3s var(--ease)}
+.ltab:hover{transform:translateX(4px)}
+.ltab.on{border-left-color:var(--teal);background:#f4fbfb}
+.ltab .nb{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font:800 18px "Barlow Condensed"}
+.ltab.on .nb{background:var(--teal)}
+.ltab b{color:var(--navy);display:block;font-size:16.5px}
+.ltab span{font-size:14.5px;color:#444}
+
+/* trolley */
+.trol{background:var(--navy);color:#fff;padding:34px;display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+.trol h3{color:#fff;font-size:30px;font-weight:800;line-height:1}
+.trol h3 em{font-style:normal;color:var(--teal)}
+.trol>div>p{color:#c9d5df;margin-top:8px}
+.tl-list{margin-top:18px}
+.tl-item{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:12px 0;border-top:1px solid rgba(255,255,255,.12);cursor:pointer;transition:padding .3s var(--ease)}
+.tl-item:hover{padding-left:6px}
+.tl-item .d{width:22px;height:22px;border-radius:50%;border:2px solid var(--teal);margin-top:2px;transition:background .3s}
+.tl-item.on .d{background:var(--teal)}
+.tl-item b{display:block;color:#fff;font-weight:600}
+.tl-item span{color:#b9c7d3;font-size:14.5px}
+
+.tseg{transition:opacity .35s,transform .45s var(--ease)}
+.dim .tseg{opacity:.28}
+.dim .tseg.lit{opacity:1}
+
+
+/* photos with guide pins */
+.photo{position:relative;margin:0;overflow:hidden;background:var(--navy)}
+.photo img{display:block;width:100%;height:auto;pointer-events:none;user-select:none;transition:transform 1.2s var(--ease),filter .5s}
+.photo:hover img{transform:scale(1.025)}
+.photo figcaption{position:absolute;left:0;bottom:0;background:var(--navy);color:#fff;font-weight:600;font-size:14px;padding:8px 14px;border-top:3px solid var(--teal)}
+.pin{position:absolute;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;border:3px solid #fff;background:var(--teal);color:#fff;font:800 19px "Barlow Condensed";cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);transition:transform .35s var(--ease),background .3s,opacity .3s}
+.pin::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:2px solid rgba(255,255,255,.7);animation:ping 2.4s var(--ease) infinite}
+@keyframes ping{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.35);opacity:0}}
+.pin:hover{transform:translate(-50%,-50%) scale(1.12)}
+.layers-off .pin.layer{opacity:.35}
+.layers-off .pin.layer.lit,.dim .pin.tseg.lit{opacity:1;background:var(--purple)}
+.dim .pin.tseg{opacity:.35}
+.layers-off img,.dim img{filter:brightness(.85)}
+.trol{grid-template-columns:.95fr 1.05fr}
+
+/* queue tips */
+.tips{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.tip{background:#fff;border:1px solid #dfe3e6;padding:22px;border-top:4px solid var(--navy);transition:transform .35s var(--ease)}
+.tip:hover{transform:translateY(-4px)}
+.tip:nth-child(1){grid-column:span 5;border-top-color:var(--teal)}
+.tip:nth-child(2){grid-column:span 7;border-top-color:var(--purple)}
+.tip:nth-child(3){grid-column:span 4}
+.tip:nth-child(4){grid-column:span 4;border-top-color:var(--red)}
+.tip:nth-child(5){grid-column:span 4;border-top-color:var(--teal)}
+.tip h4{font:800 21px "Barlow Condensed";text-transform:uppercase;color:var(--navy);margin-bottom:6px}
+.tip p{font-size:15.5px}
+
+/* view band and small print */
+.view{background:var(--navy);color:#fff;padding:46px 0}
+.view .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:start}
+.view h2{color:var(--red);font-size:44px;font-weight:800;line-height:.95}
+.view p{color:#dfe7ee;font-size:17px}
+.view p+p{margin-top:12px}
+.sig{margin-top:16px;color:var(--teal);font-weight:600}
+.small{padding:26px 0 40px;font-size:14px;color:#444;background:var(--pale)}
+.small p+p{margin-top:8px}
+
+
+.related{background:#fff;padding:46px 0 40px}
+.related h2{color:var(--red);font-size:38px;font-weight:800;border-left:6px solid var(--red);padding-left:14px;margin-bottom:22px}
+.rel-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.rel-grid a{display:flex;flex-direction:column;gap:4px;text-decoration:none;border:1px solid #dfe3e6;border-top:4px solid var(--teal);padding:18px;transition:transform .35s var(--ease),box-shadow .35s}
+.rel-grid a:nth-child(2){border-top-color:var(--purple)}.rel-grid a:nth-child(3){border-top-color:var(--red)}.rel-grid a:nth-child(4){border-top-color:var(--navy)}
+.rel-grid a:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(19,41,60,.12)}
+.rel-grid b{font:800 21px "Barlow Condensed";text-transform:uppercase;color:var(--navy)}
+.rel-grid span{font-size:15px;color:#444}
+.rel-grid em{font-style:normal;font-weight:600;color:var(--tealdk);margin-top:6px}
+@media (max-width:900px){.rel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.rel-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* floating sections + height helper */
+.fab{position:fixed;right:18px;bottom:18px;z-index:40;background:var(--teal);color:#fff;border:0;font:600 15px "Barlow";padding:12px 18px;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.2)}
+.fab-menu{position:fixed;right:18px;bottom:70px;z-index:40;background:var(--navy);width:270px;padding:8px 0;display:none;box-shadow:0 18px 40px rgba(0,0,0,.3)}
+.fab-menu.show{display:block}
+.fab-menu a{display:flex;justify-content:space-between;color:#fff;text-decoration:none;padding:10px 18px;font-weight:500;font-size:15px}
+.fab-menu a:hover{background:var(--teal)}
+.fab-menu a i{font-style:normal;color:var(--teal);font-size:13px}
+.fab-menu a:hover i{color:#fff}
+.helper{position:fixed;left:18px;bottom:18px;z-index:40;background:var(--purple);color:#fff;font:600 13px "Barlow";padding:8px 12px;display:none}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:900px){
+  .hero-grid,.st,.steps,.law,.bag,.trol,.view .wrap{grid-template-columns:1fr}
+  .hero-body{margin-top:-90px}
+  .hero-art{height:clamp(300px,62vw,420px)}
+  .type,.tip{grid-column:1 / -1 !important}
+  .trays{grid-template-columns:1fr}
+  .stage{position:relative;top:0}
+  .tiers{grid-template-columns:1fr}
+  .sec-h{padding:18px}
+  .sec-h .t b{font-size:22px}
+  .trays-wrap,.trol{padding:22px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-art">
+    <img src="https://jskedge1.github.io/airshow-pages/security-img/security-tent.webp" alt="A security steward checks a visitor's rucksack at the Skyhaven Air Festival bag search tent, with an X-ray bag scanner and a queue of families">
+  </div>
+  <div class="hero-body">
+    <div class="wrap hero-grid">
+      <div class="rv">
+        <span class="tag">Visitor planning guide</span>
+        <h1>Getting through <em>airshow security</em></h1>
+        <div class="sub">What happens at the gate and how to get through it quicker</div>
+        <p class="intro">Some shows search every bag that comes through the gate, others wave you straight in. <b>With Martyn's Law expected to come into force in spring 2027, more shows may bring in checks, so I would advise planning for a bag search wherever you go.</b> This guide shows you what to expect, how to pack so the queue moves, and how to load a trolley so it doesn't have to come apart at the table.</p>
+        <div class="btns">
+          <button class="btn teal" data-go="gate">See the gate step by step</button>
+          <button class="btn out" data-go="pack">Pack my bag</button>
+          <button class="btn red" data-go="trolley">Pack my trolley</button>
+        </div>
+      </div>
+      <aside class="glass rv">
+        <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>KEY DETAILS</h3>
+        <div class="kv"><span>Bag Searches</span><b>Most big ticketed shows</b></div>
+        <div class="kv"><span>Free Seafront Shows</span><b>Usually no gate checks</b></div>
+        <div class="kv hl"><span>Martyn's Law</span><b>Expected spring 2027</b></div>
+        <div class="kv"><span>Quickest Way In</span><b>Arrive with no bag</b></div>
+        <div class="kv"><span>Best Packing Trick</span><b>Pack in layers</b></div>
+      </aside>
+    </div>
+    <div class="light"></div>
+  </div>
+</header>
+
+<nav class="jump" aria-label="Sections">
+  <div class="wrap">
+    <a href="#start" data-go="start">Start here</a>
+    <a href="#gate" data-go="gate">At the gate</a>
+    <a href="#law" data-go="law">Martyn's Law</a>
+    <a href="#trays" data-go="trays">What goes through</a>
+    <a href="#pack" data-go="pack">Pack your bag</a>
+    <a href="#trolley" data-go="trolley">Pack your trolley</a>
+    <a href="#queue" data-go="queue">Beat the queue</a>
+  </div>
+</nav>
+
+<div class="strip"><div class="wrap">
+  <span class="count" id="count">1 of 7 sections open</span>
+  <span><button id="openAll">Open all sections</button> <button id="closeAll">Close all sections</button></span>
+</div></div>
+
+<main id="secs">
+
+<!-- 1 START -->
+<section class="sec open" id="start">
+  <button class="sec-h" aria-expanded="true">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg></span>
+    <span class="t"><b>Start here</b><small>How security works at different UK airshows</small></span>
+    <span class="pm"><i>−</i><em>Close</em></span>
+  </button>
+  <div class="sec-b"><div><div class="wrap inner">
+    <div class="st">
+      <h2>HOW STRICT IS THE GATE?</h2>
+      <div class="lead">
+        <p>The first time I queued for a bag search at an airshow, I had a rucksack stuffed with lenses, a picnic and a camping chair strapped to the side. It took me a long time to get through, and I held up everyone behind me.</p>
+        <p>Security changes a lot from show to show. It mostly comes down to whether the show is ticketed, how many people go, and whether it is held on a military base. Have a look at the type of show you are heading to below.</p>
+      </div>
+    </div>
+    <div class="types">
+      <article class="type rv">
+        <span class="lvl"><i class="f"></i><i class="f"></i><i class="f"></i> Full checks</span>
+        <h3>Big ticketed shows and military bases</h3>
+        <p>Think of the Royal International Air Tattoo or RAF Cosford. When I last checked, the Air Tattoo planned to search every bag brought in, using an airport style setup with X-ray machines.</p>
+        <ul>
+          <li>Every bag searched by hand or scanned</li>
+          <li>Ticket scanned after the bag search</li>
+          <li>Prohibited items list in the ticket terms</li>
+          <li>Queues build fast at opening time</li>
+        </ul>
+      </article>
+      <article class="type rv">
+        <span class="lvl"><i class="f"></i><i class="f"></i><i></i> Some checks</span>
+        <h3>Smaller airfield and museum shows</h3>
+        <p>Shows like Duxford or Old Warden may do a quick look inside your bag at the gate, and some days there may be no check at all. I would still pack as if there will be one.</p>
+        <ul>
+          <li>Spot checks or a quick look in bags</li>
+          <li>Car checks at some gates</li>
+          <li>Rules can change between days</li>
+        </ul>
+      </article>
+      <article class="type rv">
+        <span class="lvl"><i class="f"></i><i></i><i></i> Light touch</span>
+        <h3>Free seafront shows</h3>
+        <p>It's rare to have your bag searched at a seafront airshow like Eastbourne, Clacton or Southport, as they are held on public ground with no single entrance, so you normally walk straight in. With Martyn's Law coming in, we might see this change, but nothing I have seen so far has been confirmed. I will keep an eye on it and update this page if anything changes.</p>
+      </article>
+    </div>
+    <div class="note"><b>I would advise</b>Before you go, look at your show's own rules page for its prohibited items list. Lists change from year to year, and what is fine at one show can be turned away at another.</div>
+    <div class="sec-foot"><button class="dk" data-top>Back to the sections ↑</button><button data-close>Close this section</button></div>
+  </div></div></div>
+</section>
+
+<!-- 2 GATE -->
+<section class="sec" id="gate">
+  <button class="sec-h" aria-expanded="false">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><path d="M4 20V8l8-4 8 4v12"/><path d="M9 20v-6h6v6"/></svg></span>
+    <span class="t"><b>At the gate</b><small>What happens from the queue to the showground</small></span>
+    <span class="pm"><i>+</i><em>Open</em></span>
+  </button>
+  <div class="sec-b"><div><div class="wrap inner">
+    <div class="st">
+      <h2>FROM QUEUE TO SHOWGROUND</h2>
+      <p>This is how a full security gate usually works at a big show. Tap a step to see what happens and roughly how long it takes when the queue is moving well.</p>
+    </div>
+    <div class="steps">
+      <div class="rail" id="rail">
+        <div class="step on" data-s="0"><span class="n">1</span><h4>Join the right queue</h4><p>Staff often split the queue into bag and no bag lanes, with a separate lane for wheelchairs, scooters and buggies.</p><span class="who">You</span></div>
+        <div class="step" data-s="1"><span class="n">2</span><h4>Get your bag ready</h4><p>Unzip the main pocket and pull anything bulky to the top before you reach the table.</p><span class="who">You</span></div>
+        <div class="step" data-s="2"><span class="n">3</span><h4>Bag search or scanner</h4><p>Your bag goes through an X-ray scanner or a steward looks through it by hand. Chairs, cool boxes and trolleys are checked too.</p><span class="who">Security team</span></div>
+        <div class="step p" data-s="3"><span class="n">4</span><h4>Personal check</h4><p>At some gates you may walk through an arch or be checked with a hand wand. This tends to happen at military bases. If you would feel more comfortable, you can ask for a member of staff of the same sex to carry out a search.</p><span class="who">Security team</span></div>
+        <div class="step" data-s="4"><span class="n">5</span><h4>Ticket scan</h4><p>At the Air Tattoo the ticket check comes after the bag search, once you are past the security tents. Keep your ticket on your phone with the brightness up.</p><span class="who">Gate staff</span></div>
+        <div class="step" data-s="5"><span class="n">6</span><h4>You're in</h4><p>Head for your front row pitch first if you want one, then explore the static park and trade stalls.</p><span class="who">You</span></div>
+      </div>
+      <div class="stage rv" id="stage">
+        <h4 id="stT">Join the right queue</h4>
+        <p id="stP">Look for signs above the lanes. If you have no bag at all, some shows let you skip the search line. At the Air Tattoo, staff said visitors with no bags would be fast tracked.</p>
+        <div class="time"><span>Typical time at this step</span><b id="stM">5 to 45 min</b></div>
+        <svg viewBox="0 0 400 120" id="stSvg" aria-hidden="true">
+          <g id="dots"></g>
+          <rect x="0" y="100" width="400" height="20" fill="#13293C"/>
+          <rect id="stBar" x="0" y="106" width="60" height="8" fill="#32B4AF"/>
+        </svg>
+      </div>
+    </div>
+    <div class="note"><b>Accessible entry</b>If you use a wheelchair or scooter, the Air Tattoo has let visitors use any of its customer entry points. Other shows may have one accessible gate, so please check the rules before you go.</div>
+    <div class="sec-foot"><button class="dk" data-top>Back to the sections ↑</button><button data-close>Close this section</button></div>
+  </div></div></div>
+</section>
+
+<!-- 3 LAW -->
+<section class="sec" id="law">
+  <button class="sec-h" aria-expanded="false">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><path d="M12 3v18M5 7h14M7 7l-3 7a3 3 0 006 0zM17 7l-3 7a3 3 0 006 0z"/></svg></span>
+    <span class="t"><b>Martyn's Law</b><small>The new security law and what it could change at shows</small></span>
+    <span class="pm"><i>+</i><em>Open</em></span>
+  </button>
+  <div class="sec-b"><div><div class="wrap inner">
+    <div class="st">
+      <h2>WHAT IS MARTYN'S LAW?</h2>
+      <div class="lead">
+        <p>Martyn's Law is the name people use for the Terrorism (Protection of Premises) Act 2025. It is named after Martyn Hett, one of the 22 people killed in the Manchester Arena attack in 2017, and it follows years of campaigning by his mum, Figen Murray.</p>
+        <p>The law puts a duty on whoever runs a venue or event to plan for an attack and keep people safe if one happens. It does not ask anything new of you as a visitor, but it may change what you see at the gate.</p>
+      </div>
+    </div>
+    <div class="law">
+      <div>
+        <div class="tiers">
+          <div class="tier std rv"><div class="num">200<small> to 799</small></div><h4>Standard tier</h4><p>Venues and events expecting this many people at once need a plan, trained staff and a way to evacuate, lock down or move people to safety.</p></div>
+          <div class="tier enh rv"><div class="num">800<small>+</small></div><h4>Enhanced tier</h4><p>Bigger events must also look at how to reduce the risk itself. That could mean bag search policies, CCTV and vehicle checks, all written into a plan.</p></div>
+        </div>
+        <div class="mean">
+          <h3>What it could mean on show day</h3>
+          <div class="mean-row"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="7" width="16" height="12"/><path d="M9 7V5h6v2"/></svg></span><div><b>More shows searching bags</b><p>Shows that only did spot checks may move to searching most or all bags, so I would pack as if every show will check.</p></div></div>
+          <div class="mean-row"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 12h18M12 3v18"/></svg></span><div><b>Clearer exits and announcements</b><p>Expect more signs, briefed stewards and safety messages over the speakers. Take a look at where your nearest exit is when you set up your pitch.</p></div></div>
+          <div class="mean-row"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span><div><b>Longer queues at first</b><p>New checks usually slow things down in the first season while staff and visitors get used to them. I would leave extra time in 2027.</p></div></div>
+          <div class="mean-row"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg></span><div><b>Car and coach checks</b><p>Some shows may check vehicles coming into car parks or close to the crowd, which can add a little time to your arrival.</p></div></div>
+        </div>
+      </div>
+      <aside class="infob rv" id="lawBox">
+        <h3>WHERE IT STANDS NOW</h3>
+        <div class="kv"><span>Became Law</span><b>3 April 2025</b></div>
+        <div class="kv"><span>Statutory Guidance</span><b>Published April 2026</b></div>
+        <div class="kv hl"><span>Expected In Force</span><b>Spring 2027</b></div>
+        <div class="kv"><span>Regulator</span><b>Security Industry Authority</b></div>
+        <div class="kv"><span>Applies To</span><b>England, Wales, Scotland, NI</b></div>
+        <div class="bar"><i id="lawBar"></i></div>
+        <div class="bar-l"><span>April 2025</span><span>Today</span><span>Spring 2027</span></div>
+      </aside>
+    </div>
+    <div class="note"><b>I will keep this updated</b>The exact start date is still to be confirmed. As each show publishes its plans for 2027, I will add what it means for you on that show's own page.</div>
+    <div class="sec-foot"><button class="dk" data-top>Back to the sections ↑</button><button data-close>Close this section</button></div>
+  </div></div></div>
+</section>
+
+<!-- 4 TRAYS -->
+<section class="sec" id="trays">
+  <button class="sec-h" aria-expanded="false">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><path d="M3 9h18l-2 10H5z"/><path d="M8 9V5h8v4"/></svg></span>
+    <span class="t"><b>What goes through</b><small>What's usually fine, what to check and what gets turned away</small></span>
+    <span class="pm"><i>+</i><em>Open</em></span>
+  </button>
+  <div class="sec-b"><div><div class="wrap inner">
+    <div class="st">
+      <h2>INTO THE TRAY</h2>
+      <p>This is a general guide built from what I see at most UK shows. Every show has its own list, so please see the rules before you go, especially for alcohol, gazebos and barbecues.</p>
+    </div>
+    <div class="trays-wrap">
+      <div class="trays">
+        <div class="tray ok rv">
+          <div class="tray-h"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#32B4AF" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg></span><b>Usually fine</b></div>
+          <ul>
+            <li>Picnic food and soft drinks<small>Sealed bottles go through quicker</small></li>
+            <li>Camera bags and lenses</li>
+            <li>Folding chairs and blankets</li>
+            <li>Small cool boxes</li>
+            <li>Pushchairs and trolley wagons</li>
+            <li>Ear defenders and sun cream</li>
+          </ul>
+        </div>
+        <div class="tray chk rv">
+          <div class="tray-h"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#6950A1" stroke-width="3"><path d="M12 6v8M12 18v.5"/></svg></span><b>Check first</b></div>
+          <ul>
+            <li>Alcohol<small>Some shows allow it, others don't</small></li>
+            <li>Gazebos, windbreaks and tents</li>
+            <li>Barbecues and gas stoves</li>
+            <li>Tall stepladders and big tripods</li>
+            <li>Glass bottles and jars</li>
+            <li>Pets other than assistance dogs</li>
+          </ul>
+        </div>
+        <div class="tray no rv">
+          <div class="tray-h"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#D74949" stroke-width="3"><path d="M7 7l10 10M17 7L7 17"/></svg></span><b>Not allowed</b></div>
+          <ul>
+            <li>Weapons, including knives</li>
+            <li>Fireworks, flares and smoke grenades</li>
+            <li>Drones of any size</li>
+            <li>Loudhailers and amplified speakers</li>
+            <li>Leaflets or items to hand out</li>
+            <li>Anything staff think is unsafe</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="note"><b>Worth knowing</b>Many shows have nowhere to store items that get turned away, so they may be binned or you will have to walk them back to the car. A pocket knife you forgot about can cost you a long walk.</div>
+    <div class="sec-foot"><button class="dk" data-top>Back to the sections ↑</button><button data-close>Close this section</button></div>
+  </div></div></div>
+</section>
+
+<!-- 5 PACK -->
+<section class="sec" id="pack">
+  <button class="sec-h" aria-expanded="false">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><path d="M6 8h12v12H6z"/><path d="M9 8V5h6v3M6 13h12"/></svg></span>
+    <span class="t"><b>Pack your bag</b><small>Pack in layers so the search takes seconds</small></span>
+    <span class="pm"><i>+</i><em>Open</em></span>
+  </button>
+  <div class="sec-b"><div><div class="wrap inner">
+    <div class="st">
+      <h2>PACK FOR A QUICKER SEARCH</h2>
+      <p>The stewards want to see inside your bag quickly. If the things they need to check are at the top, the search is over in a few seconds and the whole queue moves. Tap a number on the photo or a layer in the list to see what goes where.</p>
+    </div>
+    <div class="bag">
+      <figure class="photo" id="bagSvg">
+        <img src="https://jskedge1.github.io/airshow-pages/security-img/packed-bag.webp" alt="A rucksack packed in layers for an airshow bag search, with the camera and a clear pouch of batteries on top, food boxes and water in the middle and a jacket and blanket at the bottom">
+        <button class="pin layer" data-l="0" style="left:52%;top:17%" aria-label="Top layer">1</button>
+        <button class="pin layer" data-l="0" style="left:81%;top:24%" aria-label="Clear pouch for batteries">1</button>
+        <button class="pin layer" data-l="1" style="left:40%;top:54%" aria-label="Middle layer">2</button>
+        <button class="pin layer" data-l="1" style="left:77%;top:56%" aria-label="Sealed water bottles">2</button>
+        <button class="pin layer" data-l="2" style="left:44%;top:81%" aria-label="Bottom layer">3</button>
+        <figcaption>Packed in three layers, ready for the table</figcaption>
+      </figure>
+      <div class="ltabs">
+        <button class="ltab" data-l="0"><span class="nb">1</span><span><b>Top layer: what they need to see</b><span>Camera and lenses, power banks, spare batteries, medicines and anything with a blade like scissors in a first aid kit. Put batteries and cables in one clear pouch.</span></span></button>
+        <button class="ltab" data-l="1"><span class="nb">2</span><span><b>Middle layer: food and drink</b><span>Sandwiches and snacks in see-through boxes or bags, and sealed bottles stood upright. A quick look is all they need.</span></span></button>
+        <button class="ltab" data-l="2"><span class="nb">3</span><span><b>Bottom layer: soft things</b><span>Waterproofs, a spare jumper, hats and a blanket. These rarely need checking, so they can stay packed.</span></span></button>
+      </div>
+    </div>
+    <div class="prog"><b id="pc">0 of 12 ready</b><span class="track"><i id="pbar"></i></span></div>
+    <div class="cl-grid" id="checks">
+      <div class="cl">
+        <div class="cl-h pu">Before you leave home <small data-left>6 left</small></div>
+        <label><input type="checkbox"><span><b>Bring one bag per person <span class="first">Do first</span></b><span>Several small bags take longer than one.</span></span></label>
+        <label><input type="checkbox"><span><b>Choose a bag that opens wide</b><span>A top zip or wide opening beats a drawstring sack.</span></span></label>
+        <label><input type="checkbox"><span><b>Check the show's prohibited list</b><span>Especially alcohol, glass and gazebos.</span></span></label>
+        <label><input type="checkbox"><span><b>Take out anything you won't need</b><span>Old receipts, tools and that forgotten pocket knife.</span></span></label>
+        <label><input type="checkbox"><span><b>Pack food in clear boxes</b><span>Staff can see inside without opening them.</span></span></label>
+        <label><input type="checkbox"><span><b>Leave padlocks off</b><span>Locked bags slow the table down.</span></span></label>
+      </div>
+      <div class="cl">
+        <div class="cl-h nv">In the queue <small data-left>6 left</small></div>
+        <label><input type="checkbox"><span><b>Ticket open on your phone <span class="first">Do first</span></b><span>Brightness up, or a printed copy ready.</span></span></label>
+        <label><input type="checkbox"><span><b>Unzip the main pocket</b><span>Do it a few people before the table.</span></span></label>
+        <label><input type="checkbox"><span><b>Empty your coat pockets into the bag</b><span>Keys, phone and coins in one spot.</span></span></label>
+        <label><input type="checkbox"><span><b>Take your camera off your shoulder</b><span>Put it in the tray or hold it out ready.</span></span></label>
+        <label><input type="checkbox"><span><b>Unfold nothing</b><span>Chairs and blankets stay folded unless asked.</span></span></label>
+        <label><input type="checkbox"><span><b>Keep children with you</b><span>Agree a meeting point past the gate.</span></span></label>
+      </div>
+    </div>
+    <div class="note"><b>For photographers</b>I keep my lenses in a bag with a wide top so a steward can see the whole kit in one look. Having batteries in a clear pouch also saves me getting everything out each year.</div>
+    <div class="sec-foot"><button class="dk" data-top>Back to the sections ↑</button><button data-close>Close this section</button></div>
+  </div></div></div>
+</section>
+
+<!-- 6 TROLLEY -->
+<section class="sec" id="trolley">
+  <button class="sec-h" aria-expanded="false">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><rect x="3" y="9" width="15" height="7"/><circle cx="6" cy="19" r="2"/><circle cx="15" cy="19" r="2"/><path d="M18 11l4-4"/></svg></span>
+    <span class="t"><b>Pack your trolley</b><small>Load a wagon so it can be checked without unpacking</small></span>
+    <span class="pm"><i>+</i><em>Open</em></span>
+  </button>
+  <div class="sec-b"><div><div class="wrap inner">
+    <div class="st">
+      <h2>LOAD IT IN LAYERS</h2>
+      <p>A trolley wagon is brilliant for a long day with children and chairs, but a badly packed one has to be emptied on the grass at the search tent. I see others do this every year. Load it so a steward can lift one layer and see the rest.</p>
+    </div>
+    <div class="trol">
+      <div>
+        <h3>Wagon <em>packing order</em></h3>
+        <p>Tap a step or a number on the photo to see where it sits.</p>
+        <div class="tl-list" id="tl">
+          <div class="tl-item" data-t="0"><span class="d"></span><div><b>Chairs flat on the bottom</b><span>Folded chairs make a firm base and stop the wagon tipping.</span></div></div>
+          <div class="tl-item" data-t="1"><span class="d"></span><div><b>Cool box at the back</b><span>Heavy weight over the back wheels makes it easier to pull. Leave the lid free to open.</span></div></div>
+          <div class="tl-item" data-t="2"><span class="d"></span><div><b>Soft bags in the gaps</b><span>Blankets and coats fill spaces so nothing rattles about.</span></div></div>
+          <div class="tl-item" data-t="3"><span class="d"></span><div><b>Search bag on top</b><span>Your rucksack with the camera, medicines and power banks goes on top where it can be lifted off.</span></div></div>
+          <div class="tl-item" data-t="4"><span class="d"></span><div><b>One strap or net over it all</b><span>Easy to unclip at the table. Avoid wrapping it in rope or bungees you need two hands to undo.</span></div></div>
+        </div>
+      </div>
+      <figure class="photo dark" id="trolSvg">
+        <img src="https://jskedge1.github.io/airshow-pages/security-img/packed-trolley.webp" alt="A steward lifts a rucksack off the top of a trolley wagon packed in layers with a cool box, blankets and one teal strap">
+        <button class="pin tseg" data-t="0" style="left:33%;top:62%" aria-label="Chairs on the bottom">1</button>
+        <button class="pin tseg" data-t="1" style="left:37%;top:46%" aria-label="Cool box at the back">2</button>
+        <button class="pin tseg" data-t="2" style="left:58%;top:53%" aria-label="Soft bags in the gaps">3</button>
+        <button class="pin tseg" data-t="3" style="left:52%;top:30%" aria-label="Search bag on top">4</button>
+        <button class="pin tseg" data-t="4" style="left:48%;top:74%" aria-label="One strap">5</button>
+        <figcaption>One strap off, bag lifted, checked in seconds</figcaption>
+      </figure>
+    </div>
+    <div class="cl-grid" style="margin-top:22px">
+      <div class="cl">
+        <div class="cl-h pu">Trolley tips from me <small>Good to know</small></div>
+        <label><input type="checkbox"><span><b>Check your wagon fits the lanes</b><span>Very wide wagons can struggle between barriers. Narrow ones move through easier.</span></span></label>
+        <label><input type="checkbox"><span><b>Pull it in front, not behind you</b><span>So you can see it and staff can reach it.</span></span></label>
+        <label><input type="checkbox"><span><b>Children walk, not ride, through the gate</b><span>Staff may need to look underneath them.</span></span></label>
+        <label><input type="checkbox"><span><b>Keep the ticket in your pocket, not the wagon</b><span>Digging for it at the scan point holds the queue.</span></span></label>
+      </div>
+    </div>
+    <div class="sec-foot"><button class="dk" data-top>Back to the sections ↑</button><button data-close>Close this section</button></div>
+  </div></div></div>
+</section>
+
+<!-- 7 QUEUE -->
+<section class="sec" id="queue">
+  <button class="sec-h" aria-expanded="false">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+    <span class="t"><b>Beat the queue</b><small>When to arrive and how to keep it moving</small></span>
+    <span class="pm"><i>+</i><em>Open</em></span>
+  </button>
+  <div class="sec-b"><div><div class="wrap inner">
+    <div class="st">
+      <h2>KEEP IT MOVING</h2>
+      <p>The queue is at its longest just before the gates open and again mid morning. Think about what you are after on the day and pick your arrival time to suit you and your family.</p>
+    </div>
+    <div class="tips">
+      <div class="tip rv"><h4>Want a front row pitch?</h4><p>Arrive before the gates open and be near the front of the queue. Head to the crowd line first and save your pitch, then look around the static show and trade stalls.</p></div>
+      <div class="tip rv"><h4>Bringing young children?</h4><p>I would suggest arriving a little after opening when the first rush has gone through. Children love to see the static aircraft up close, and you won't be stood still in a long line with them.</p></div>
+      <div class="tip rv"><h4>Travel light</h4><p>Leave the extras in the car. One bag between two people is quicker than two half full bags.</p></div>
+      <div class="tip rv"><h4>No bag lane</h4><p>If you can carry everything in your pockets, look out for a no bag lane. It can save a lot of time.</p></div>
+      <div class="tip rv"><h4>Park and ride</h4><p>At some shows the checks happen before you board the bus, so you walk straight onto the showground at the other end.</p></div>
+    </div>
+    <div class="sec-foot"><button class="dk" data-top>Back to the sections ↑</button><button data-close>Close this section</button></div>
+  </div></div></div>
+</section>
+</main>
+
+<section class="view">
+  <div class="wrap">
+    <h2>MY VIEW</h2>
+    <div>
+      <p>Bag searches can feel like a hassle at the start of a long day, but they are there to keep everyone safe, and the stewards are usually friendly and quick when you are ready for them. Pack in layers, keep your ticket handy and you will be through before you know it.</p>
+      <p>With Martyn's Law on the way, I expect checks to become normal at most big shows from 2027. I will update each show's page when its plans are announced.</p>
+      <div class="sig">Jack Skedge, Founder and Managing Editor</div>
+    </div>
+  </div>
+</section>
+<section class="related">
+  <div class="wrap">
+    <h2>MORE PLANNING GUIDES</h2>
+    <div class="rel-grid">
+      <a href="https://www.ukairshowguide.co.uk/first-airshow-what-to-pack" target="_top"><b>What to pack</b><span>Top ten lists for every kind of show</span><em>Open guide →</em></a>
+      <a href="https://www.ukairshowguide.co.uk/first-airshow-safety" target="_top"><b>Safety and show rules</b><span>What shows expect and keeping everyone safe</span><em>Open guide →</em></a>
+      <a href="https://www.ukairshowguide.co.uk/foodanddrinkatairshows" target="_top"><b>Food and drink</b><span>What is on offer and bringing your own</span><em>Open guide →</em></a>
+      <a href="https://www.ukairshowguide.co.uk/visitorplanningguides" target="_top"><b>All planning guides</b><span>Everything you need before show day</span><em>Open guides →</em></a>
+    </div>
+  </div>
+</section>
+<footer class="small"><div class="wrap">
+  <p>This guide gives general advice for UK airshows. Every show sets its own security rules and prohibited items list, and these can change at short notice. Please see the rules for your show before you go and follow instructions from staff on the day.</p>
+</div></footer>
+
+<button class="fab" id="fab" aria-expanded="false">Sections ☰</button>
+<nav class="fab-menu" id="fabMenu"></nav>
+<div class="helper" id="helper"></div>
+
+<script>
+(function(){
+  const secs=[...document.querySelectorAll('.sec')];
+  const count=document.getElementById('count');
+  function setOpen(s,open){
+    s.classList.toggle('open',open);
+    const h=s.querySelector('.sec-h');h.setAttribute('aria-expanded',open);
+    s.querySelector('.pm').innerHTML=open?'<i>−</i><em>Close</em>':'<i>+</i><em>Open</em>';
+    update();
+    if(open&&s.id==='law')setTimeout(lawBar,400);
+  }
+  function update(){
+    const n=secs.filter(s=>s.classList.contains('open')).length;
+    count.textContent=n+' of '+secs.length+' sections open';
+    buildMenu();helper();
+  }
+  secs.forEach(s=>s.querySelector('.sec-h').addEventListener('click',()=>setOpen(s,!s.classList.contains('open'))));
+  document.getElementById('openAll').onclick=()=>secs.forEach(s=>setOpen(s,true));
+  document.getElementById('closeAll').onclick=()=>secs.forEach(s=>setOpen(s,false));
+  function go(id){const s=document.getElementById(id);if(!s)return;if(!s.classList.contains('open'))setOpen(s,true);setTimeout(()=>s.scrollIntoView({behavior:'smooth',block:'start'}),60)}
+  document.querySelectorAll('[data-go]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.go);fabMenu.classList.remove('show')}));
+  document.querySelectorAll('[data-top]').forEach(b=>b.onclick=()=>document.querySelector('.jump').scrollIntoView({behavior:'smooth'}));
+  document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>{const s=b.closest('.sec');setOpen(s,false);s.scrollIntoView({behavior:'smooth'})});
+
+  // floating sections menu
+  const fab=document.getElementById('fab'),fabMenu=document.getElementById('fabMenu');
+  function buildMenu(){fabMenu.innerHTML=secs.map(s=>'<a href="#'+s.id+'" data-id="'+s.id+'">'+s.querySelector('.t b').textContent+'<i>'+(s.classList.contains('open')?'Open':'')+'</i></a>').join('');
+    fabMenu.querySelectorAll('a').forEach(a=>a.onclick=e=>{e.preventDefault();go(a.dataset.id);fabMenu.classList.remove('show')})}
+  fab.onclick=()=>{fabMenu.classList.toggle('show');fab.setAttribute('aria-expanded',fabMenu.classList.contains('show'))};
+
+  // scroll spy
+  const links=[...document.querySelectorAll('.jump a')];
+  const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('on',l.dataset.go===e.target.id))}}),{rootMargin:'-40% 0px -55% 0px'});
+  secs.forEach(s=>spy.observe(s));
+
+  // reveal
+  const rv=new IntersectionObserver(es=>es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*90);rv.unobserve(e.target)}}),{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>rv.observe(el));
+
+  // gate steps
+  const data=[
+    ['Join the right queue','Look for signs above the lanes. If you have no bag at all, some shows let you skip the search line. At the Air Tattoo, staff said visitors with no bags would be fast tracked.','5 to 45 min',60,14],
+    ['Get your bag ready','Use the waiting time. Open the main zip, move your camera and power banks to the top, and empty your coat pockets into the bag.','While you wait',120,10],
+    ['Bag search or scanner','A steward looks through your bag or it rides through the X-ray machine. A well packed bag takes seconds. A stuffed one can take a few minutes.','30 sec to 3 min',200,6],
+    ['Personal check','Walk through the arch or stand still for a hand wand. Take big metal items like keys out of your pockets first. You can ask for a member of staff of the same sex if a search is needed.','Under a minute',260,4],
+    ['Ticket scan','Ticket on your phone with the brightness up, or a printed copy. One person can scan for the group if all the tickets are on one phone.','Under a minute',330,3],
+    ['You\'re in','If you want a front row seat, head there first and save your pitch. Visit the toilet before the flying display starts.','Enjoy the show',400,0]
+  ];
+  const steps=[...document.querySelectorAll('.step')];
+  const dots=document.getElementById('dots');
+  function showStep(i){
+    steps.forEach((s,k)=>s.classList.toggle('on',k<=i));
+    const d=data[i];document.getElementById('stT').textContent=d[0];document.getElementById('stP').textContent=d[1];document.getElementById('stM').textContent=d[2];
+    document.getElementById('stBar').setAttribute('width',d[3]);
+    let h='';for(let k=0;k<d[4];k++){const x=385-k*24;h+='<g transform="translate('+x+',40)"><circle r="9" fill="#9fd9d6"/><rect x="-9" y="12" width="18" height="34" fill="#32B4AF"/></g>'}
+    h+='<g transform="translate('+(Math.max(20,d[3]-14))+',40)"><circle r="10" fill="#fff"/><rect x="-10" y="12" width="20" height="36" fill="#6950A1"/></g>';
+    dots.innerHTML=h;
+  }
+  steps.forEach((s,i)=>s.addEventListener('click',()=>showStep(i)));showStep(0);
+
+  // law timeline bar
+  function lawBar(){const a=new Date('2025-04-03'),b=new Date('2027-04-01'),n=new Date();document.getElementById('lawBar').style.width=Math.min(100,Math.max(0,(n-a)/(b-a)*100))+'%'}
+
+  // bag layers
+  const bagSvg=document.getElementById('bagSvg');
+  document.querySelectorAll('.ltab').forEach(t=>t.addEventListener('click',()=>{
+    const l=t.dataset.l,on=t.classList.contains('on');
+    document.querySelectorAll('.ltab').forEach(x=>x.classList.remove('on'));
+    bagSvg.querySelectorAll('.layer').forEach(g=>g.classList.toggle('lit',g.dataset.l===l));
+    if(on){bagSvg.classList.remove('layers-off')}else{t.classList.add('on');bagSvg.classList.add('layers-off')}
+  }));
+  bagSvg.querySelectorAll('.layer').forEach(g=>g.addEventListener('click',()=>document.querySelector('.ltab[data-l="'+g.dataset.l+'"]').click()));
+
+  // trolley
+  const trol=document.getElementById('trolSvg');
+  document.querySelectorAll('.tl-item').forEach(t=>t.addEventListener('click',()=>{
+    const i=+t.dataset.t;
+    document.querySelectorAll('.tl-item').forEach(x=>x.classList.toggle('on',+x.dataset.t<=i));
+    trol.classList.add('dim');trol.querySelectorAll('.tseg').forEach(g=>g.classList.toggle('lit',+g.dataset.t<=i));
+  }));
+
+  trol.querySelectorAll('.pin').forEach(g=>g.addEventListener('click',()=>document.querySelector('.tl-item[data-t="'+g.dataset.t+'"]').click()));
+
+  // checklists
+  const groups=[...document.querySelectorAll('#checks .cl')];
+  function tally(){
+    let all=0,done=0;
+    groups.forEach(g=>{const c=[...g.querySelectorAll('input')];const d=c.filter(x=>x.checked).length;all+=c.length;done+=d;g.querySelector('[data-left]').textContent=(c.length-d)?(c.length-d)+' left':'All done'});
+    document.getElementById('pc').textContent=done+' of '+all+' ready';document.getElementById('pbar').style.width=(done/all*100)+'%';
+  }
+  document.querySelectorAll('.cl input').forEach(i=>i.addEventListener('change',()=>{i.closest('label').classList.toggle('done',i.checked);tally()}));
+  tally();
+
+  // page height helper (only when opened on its own, not inside Wix)
+  const hp=document.getElementById('helper');
+  function helper(){if(window.self!==window.top)return;hp.style.display='block';const n=secs.filter(s=>s.classList.contains('open')).length;setTimeout(()=>{hp.textContent='Page height '+document.documentElement.scrollHeight+'px · '+n+' open'},600)}
+  update();
+})();
+</script>
+<script src="https://jskedge1.github.io/airshow-pages/links.js"></script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
+</body>
+</html>

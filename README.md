@@ -35,6 +35,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | Trader Hub, trader log in and dashboard (Wix page /trader-hub, page code velo/page-code/trader-hub.js) | https://jskedge1.github.io/airshow-pages/traders/trader-hub.html |
 | Trader admin, Jack only (Wix page /trader-admin, members only, page code velo/page-code/trader-admin.js) | https://jskedge1.github.io/airshow-pages/traders/admin.html |
 | Privacy, cookies and terms (Wix page /policies, linked from the footer). Six policies in one tabbed page in the original Our Policies design (banner photos in policies-img/), built from the text files in policies-src/ by tools-policies.py. The same text is in the CMS collection "UK Air Show Guide Policy's" for the /ourpolicys list page, so change both. | https://jskedge1.github.io/airshow-pages/policies.html |
+| Airshow Security and Bag Searches (planning guide, Wix page /airshow-security, photos in security-img/) | https://jskedge1.github.io/airshow-pages/airshow-security.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
@@ -75,6 +76,7 @@ Set `live:false` on a page until its Wix page exists.
 | Find your Air Show | /air-shows-guides |
 | Planning your first airshow | /planning-your-first-airshow |
 | Camping at Airshows | /camping-at-airshows |
+| Airshow Security and Bag Searches | /airshow-security |
 
 Addresses checked against the live site on 19 Oct 2026.
 
