@@ -1565,8 +1565,9 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Dakota, Spitfire an
     var hb=document.querySelector('.hero2-banner');
     if(hb){hb.classList.add('has-photo');hb.style.backgroundImage='url('+PHOTO.bbmf+')';hb.setAttribute('role','img');hb.setAttribute('aria-label',PHOTO_ALT.bbmf);}
     /* photographer credit on every photo by Chris Murgatroyd */
-    function credits(){    document.querySelectorAll('img[data-k]').forEach(function(im){
-      if(!PHOTO[im.getAttribute('data-k')]||im.classList.contains('sf-bg'))return;
+    function credits(){    document.querySelectorAll('img[data-k], .lu-thumb img').forEach(function(im){
+      var dk=im.getAttribute('data-k');
+      if((dk&&!PHOTO[dk])||im.classList.contains('sf-bg'))return;
       var box=im.parentElement;if(!box||box.querySelector(':scope>.cm-credit'))return;
       if(getComputedStyle(box).position==='static')box.style.position='relative';
       var c=document.createElement('span');c.className='cm-credit';c.textContent='\u00A9 Chris Murgatroyd';box.appendChild(c);
@@ -1597,6 +1598,7 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Dakota, Spitfire an
 /* photographer credit: Chris Murgatroyd took every photo on this page */
 .cm-credit{position:absolute;right:8px;bottom:8px;z-index:3;pointer-events:none;font:500 12px/1.2 "Barlow",Arial,sans-serif;letter-spacing:.01em;color:#fff;background:rgba(19,41,60,.72);padding:3px 8px;border-radius:3px;white-space:nowrap}
 .cg-bg .cm-credit{bottom:auto;top:12px;right:12px}
+.lu-thumb{position:relative}.lu-thumb .cm-credit{right:2px;bottom:2px;font-size:9px;padding:1px 4px;border-radius:2px}
 .lu-thumb{position:relative}
 .lu-thumb .cm-credit{right:2px;bottom:2px;font-size:9px;padding:1px 4px;border-radius:2px}
 @media(max-width:640px){.cm-credit{font-size:11px;padding:2px 6px;right:6px;bottom:6px}.cg-bg .cm-credit{top:8px;right:8px}.lu-thumb .cm-credit{font-size:8px;padding:1px 3px;right:1px;bottom:1px}}
@@ -4952,7 +4954,7 @@ body .gt-facts dt,body .facts dt{text-transform:capitalize!important}
   /* keep reading tiles and the list of every section, at the end of the guide */
   if(!main) return;
   var tabs=[].slice.call(document.querySelectorAll('.tablist .tab'));
-  var PICS={"stay": "spitfire", "timeline": "pitts", "photo": "p47"};
+  var PICS={"stay": "spitfire", "timeline": "pitts", "photo": "typhoon"};
   var SUB={stay:'Hotels and campsites nearby',timeline:'Your day planner and weather',photo:'Sun guide and settings'};
   var tiles=['stay','timeline','photo'].map(function(id){
     var tab=document.querySelector('.tab[aria-controls="'+id+'"]'); if(!tab) return '';
