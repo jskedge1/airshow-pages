@@ -128,6 +128,28 @@ img{display:block;max-width:100%}
 .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-weight:500;color:var(--mute);font-size:16px}
 .legend i{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px}
 
+.sl{background:var(--navy);border:0;padding:26px 26px 22px;overflow:visible;color:#fff}
+.sl-all{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:0 0 18px;border-bottom:1px dashed rgba(255,255,255,.22)}
+.sl-all>b{font:800 22px/1 var(--cond);color:#fff;margin-right:6px}
+.sl-months{list-style:none;margin:0;padding:0}
+.sl-m{display:grid;grid-template-columns:230px minmax(0,1fr);gap:10px 28px;align-items:center;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.1);opacity:1;transform:none;transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i)*70ms)}
+.sl.pre .sl-m{opacity:0;transform:translateX(-14px)}
+.sl-h{position:relative;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;padding-bottom:10px}
+.sl-h b{font:800 clamp(30px,3.4vw,44px)/1 var(--cond);letter-spacing:.005em;color:#fff}
+.sl-h span{font-weight:500;font-size:15px;color:#BFD3DE;white-space:nowrap}
+.sl-h em{font-style:normal;font-weight:600;font-size:13px;line-height:1;background:var(--red);color:#fff;padding:5px 8px;margin-top:6px}
+.sl-bar{position:absolute;left:0;bottom:0;height:4px;width:min(100%,calc(var(--n) * 18% + 8%));background:var(--teal);transform-origin:left;transition:transform .9s var(--ease);transition-delay:calc(var(--i)*70ms + 200ms)}
+.sl.pre .sl-bar{transform:scaleX(0)}
+.sl-m.hot .sl-bar{background:var(--red)}
+.sl-shows{display:flex;flex-wrap:wrap;gap:8px}
+.sl-chip{display:inline-flex;flex-direction:column;gap:3px;text-decoration:none;color:var(--navy);background:#fff;border-left:5px solid var(--teal);padding:9px 14px 10px;font-weight:600;font-size:17px;line-height:1.15;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.sl-chip span{font-weight:500;font-size:13px;color:#4F6272}
+.sl-chip.r{border-left-color:var(--red)}.sl-chip.p{border-left-color:var(--purple)}.sl-chip.n{border-left-color:#6B8BA4}
+.sl-chip:hover,.sl-chip:focus-visible{transform:translateY(-3px);box-shadow:0 10px 18px -10px rgba(0,0,0,.6);outline:none}
+.sl-note{margin:0;color:#BFD3DE;font-size:16px}
+.sl .legend{color:#BFD3DE;margin-top:18px}
+@media(max-width:760px){.sl{padding:20px 16px}.sl-m{grid-template-columns:1fr;gap:10px}.sl-chip{font-size:16px}.sl::before{content:none!important;display:none!important}}
+@media(prefers-reduced-motion:reduce){.sl .sl-m,.sl .sl-bar{transition:none;opacity:1;transform:none}}
 /* tiles */
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;padding-left:20px}
 .fbtn{font:600 16px/1 var(--font);padding:11px 15px;background:#fff;border:1px solid var(--line);color:var(--navy);cursor:pointer;transition:background .3s,color .3s,padding .3s}
@@ -804,26 +826,17 @@ section{position:relative}
   <div class="in">
     <h2 class="stitle rv">When The Shows Usually Run</h2>
     <p class="sintro rv">The UK season runs from late spring to early autumn. These are the months each featured show usually falls in. I confirm the exact dates on each show page as soon as organisers announce them.</p>
-    <div class="season pre" id="seasonbox">
-      <div class="track">
-        <svg class="plane" id="splane" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" transform="rotate(90 12 12)"/></svg>
-        <div class="months"><div>May</div><div>June</div><div>July</div><div>August</div><div>September</div><div>October</div></div>
-        <div class="rows">
-          <div class="row"><span class="pill n" style="left:0%;width:83%;transition-delay:0.00s">IWM Duxford Air Shows, several shows through the season</span></div>
-          <div class="row"><span class="pill n" style="left:0%;width:100%;transition-delay:0.05s">Shuttleworth Air Shows at Old Warden, shows most months</span></div>
-          <div class="row"><span class="pill " style="left:9%;transition-delay:0.10s">Midlands Air Festival</span></div>
-          <div class="row"><span class="pill " style="left:22%;transition-delay:0.15s">RAF Cosford</span></div>
-          <div class="row"><span class="pill p" style="left:40%;transition-delay:0.20s">RIAT, Fairford</span></div>
-          <div class="row"><span class="pill r" style="left:46%;transition-delay:0.25s">Wales Airshow</span></div>
-          <div class="row"><span class="pill r" style="left:52%;transition-delay:0.30s">Blackpool</span></div>
-          <div class="row"><span class="pill r" style="left:57%;transition-delay:0.35s">Eastbourne</span></div>
-          <div class="row"><span class="pill r" style="left:61%;transition-delay:0.40s">Clacton</span></div>
-          <div class="row"><span class="pill r" style="left:63%;transition-delay:0.45s">Southport</span></div>
-          <div class="row"><span class="pill " style="left:64%;transition-delay:0.50s">Little Gransden</span></div>
-          <div class="row"><span class="pill r" style="left:67.5%;transition-delay:0.55s">International Ayr Show</span></div>
-        </div>
-      </div>
-      <div class="legend"><span><i style="background:var(--red)"></i>Seafront shows, free to watch from the prom</span><span><i style="background:var(--teal)"></i>Airfield and estate shows</span><span><i style="background:var(--purple)"></i>The biggest military show</span><span><i style="background:var(--navy)"></i>Historic airfields with a full season</span></div>
+    <div class="season sl pre" id="seasonbox">
+      <div class="sl-all"><b>All season long</b><a class="sl-chip n" href="https://www.ukairshowguide.co.uk/duxfordairshows" target="_top"><span>May to September</span>IWM Duxford</a><a class="sl-chip n" href="https://www.ukairshowguide.co.uk/shuttleworthairshows" target="_top"><span>May to October</span>Shuttleworth, Old Warden</a></div>
+      <ol class="sl-months">
+        <li class="sl-m" style="--i:0;--n:0"><div class="sl-h"><b>May</b><span>Season shows only</span><i class="sl-bar" aria-hidden="true"></i></div><div class="sl-shows"><p class="sl-note">The historic airfields open their seasons at Duxford and Old Warden.</p></div></li>
+        <li class="sl-m" style="--i:1;--n:2"><div class="sl-h"><b>June</b><span>2 shows</span><i class="sl-bar" aria-hidden="true"></i></div><div class="sl-shows"><a class="sl-chip t" href="https://www.ukairshowguide.co.uk/midlandsairfestival" target="_top"><span>Late May or June</span>Midlands Air Festival</a><a class="sl-chip t" href="https://www.ukairshowguide.co.uk/cosfordairshow" target="_top"><span>Mid June</span>RAF Cosford</a></div></li>
+        <li class="sl-m" style="--i:2;--n:2"><div class="sl-h"><b>July</b><span>2 shows</span><i class="sl-bar" aria-hidden="true"></i></div><div class="sl-shows"><a class="sl-chip p" href="https://www.ukairshowguide.co.uk/riat" target="_top"><span>Mid July</span>RIAT, Fairford</a><a class="sl-chip r" href="https://www.ukairshowguide.co.uk/walesairshow" target="_top"><span>Late July</span>Wales Airshow</a></div></li>
+        <li class="sl-m hot" style="--i:3;--n:5"><div class="sl-h"><b>August</b><span>5 shows</span><em>Busiest month</em><i class="sl-bar" aria-hidden="true"></i></div><div class="sl-shows"><a class="sl-chip r" href="https://www.ukairshowguide.co.uk/blackpool-air-show" target="_top"><span>Early August</span>Blackpool</a><a class="sl-chip r" href="https://www.ukairshowguide.co.uk/eastbourneairshow" target="_top"><span>Mid August</span>Eastbourne</a><a class="sl-chip r" href="https://www.ukairshowguide.co.uk/clactonairshow" target="_top"><span>Late August</span>Clacton</a><a class="sl-chip r" href="https://www.ukairshowguide.co.uk/southport-air-show" target="_top"><span>Late August</span>Southport</a><a class="sl-chip t" href="https://www.ukairshowguide.co.uk/little-gransden-air-and-car-show" target="_top"><span>Bank Holiday</span>Little Gransden</a></div></li>
+        <li class="sl-m" style="--i:4;--n:1"><div class="sl-h"><b>September</b><span>1 show</span><i class="sl-bar" aria-hidden="true"></i></div><div class="sl-shows"><a class="sl-chip r" href="https://www.ukairshowguide.co.uk/international-ayr-show" target="_top"><span>Early September</span>International Ayr Show</a></div></li>
+        <li class="sl-m" style="--i:5;--n:0"><div class="sl-h"><b>October</b><span>Season shows only</span><i class="sl-bar" aria-hidden="true"></i></div><div class="sl-shows"><p class="sl-note">Shuttleworth usually closes the season with its last shows.</p></div></li>
+      </ol>
+      <div class="legend"><span><i style="background:var(--red)"></i>Seafront shows, free to watch from the prom</span><span><i style="background:var(--teal)"></i>Airfield and estate shows</span><span><i style="background:var(--purple)"></i>The biggest military show</span><span><i style="background:#6B8BA4"></i>Historic airfields with a full season</span></div>
     </div>
   </div>
 </section>
@@ -1320,7 +1333,7 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
     var r=tl.getBoundingClientRect(),k=Math.max(0,Math.min(1,(h*.6-r.top)/r.height)),px=k*(r.height-16);
     fill.style.height=px+'px';jet.style.top=Math.max(0,px-10)+'px';
     var cur=0;sts.forEach(function(s,i){var on=s.getBoundingClientRect().top<h*.6;s.classList.toggle('lit',on);if(on)cur=i});scene(cur);
-    var sr=sb.getBoundingClientRect(),sk=Math.max(0,Math.min(1,(h-sr.top)/(h+sr.height)));splane.style.left='calc('+(sk*100)+'% - '+(sk*30)+'px)';
+    var sr=sb.getBoundingClientRect(),sk=Math.max(0,Math.min(1,(h-sr.top)/(h+sr.height)));if(splane)splane.style.left='calc('+(sk*100)+'% - '+(sk*30)+'px)';
     if(orghow.getBoundingClientRect().top<h*.8)howline.style.width='calc(100% - 48px)';
     var on=0;secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<140)on=i});links.forEach(function(a,i){a.classList.toggle('on',i===on)});
   }
