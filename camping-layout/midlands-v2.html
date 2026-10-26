@@ -6205,6 +6205,8 @@ body h1.cg-title{text-transform:none!important}
 /* a small jet flies along the red reading line */
 .cg-jet{position:absolute;bottom:-9px;left:0;width:27px;height:18px;margin-left:-13px;z-index:3;color:#D74949;pointer-events:none;transition:left .1s linear,opacity .3s}
 .cg-jet svg{width:100%;height:100%;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.cg-jet img{width:100%;height:100%;display:block;object-fit:contain;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+.cg-jet.swap img{animation:cgSwap .6s cubic-bezier(.2,.7,.2,1)}
 .cg-jet.swap svg{animation:cgSwap .6s cubic-bezier(.2,.7,.2,1)}
 @keyframes cgSwap{0%{transform:scale(.2) rotate(-25deg);opacity:0}60%{transform:scale(1.25) rotate(4deg);opacity:1}100%{transform:none}}
 .cg-jlab{position:absolute;top:22px;left:50%;transform:translate(-50%,-4px);white-space:nowrap;font:600 13px/1 "Barlow",sans-serif;font-style:normal;color:#fff;background:#D74949;padding:5px 8px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
@@ -6232,7 +6234,7 @@ body h1.cg-title{text-transform:none!important}
   .mo .mo-i{clip-path:none!important;scale:1!important;transition:none!important}
   .mo .mo-px img{translate:none!important}
   .mo .panel-head>div:first-child::before{transform:none!important;transition:none!important}
-  .cg-jet{transition:none}.cg-jet.swap svg,.cg-rotor{animation:none!important}
+  .cg-jet{transition:none}.cg-jet.swap svg,.cg-jet.swap img,.cg-rotor{animation:none!important}
   .mo-glow::after{display:none}
 }
 </style>
@@ -6425,15 +6427,17 @@ body h1.cg-title{text-transform:none!important}
       flightline:['bomber','Flying Fortress'],watch:['fighter','Spitfire'],photo:['camera','Say cheese'],kids:['delta','Concorde'],
       flights:['biplane','Tiger Moth'],facilities:['bomber','Flying Fortress']};
     var jet=document.createElement('span'); jet.className='cg-jet'; jet.setAttribute('aria-hidden','true');
-    jet.innerHTML='<svg viewBox="0 0 24 16"></svg><em class="cg-jlab"></em>';
+    jet.innerHTML='<img alt="" decoding="async"><em class="cg-jlab"></em>';
     bar.appendChild(jet);
-    var svg=jet.querySelector('svg'), lab=jet.querySelector('.cg-jlab'), cur='', labT=0;
+    var img=jet.querySelector('img'),AC={"tornado": [40.0, 12.9, "Tornado"], "typhoon": [40.0, 14.2, "Typhoon"], "a10": [40.0, 10.9, "A-10 Warthog"], "rafale": [32.3, 18.0, "Rafale"], "vulcan": [40.0, 10.0, "Vulcan"], "apache": [40.0, 16.6, "Apache"], "jaguar": [40.0, 11.7, "Jaguar"], "f35": [30.8, 18.0, "F-35"], "chinook": [40.0, 14.9, "Chinook"], "mirage4": [40.0, 9.0, "Mirage IV"], "b52": [40.0, 9.4, "B-52"], "tiger": [40.0, 15.8, "Tiger"], "canberra": [40.0, 8.5, "Canberra"], "f15ex": [27.9, 18.0, "F-15EX"], "blackhawk": [40.0, 15.0, "Black Hawk"], "a7": [40.0, 15.2, "A-7 Corsair"], "do228": [40.0, 11.6, "Dornier 228"], "mh47g": [40.0, 17.0, "MH-47G Chinook"]},ACTAB={"overview": "typhoon", "right": "chinook", "story": "vulcan", "lineup": "f35", "travel": "apache", "stay": "a10", "timeline": "tornado", "watch": "rafale", "photo": "f15ex", "kids": "jaguar", "help": "blackhawk", "flightline": "b52", "flights": "do228", "facilities": "canberra", "balloons": "tiger", "days": "mirage4", "weekend": "a7", "museum": "vulcan", "enclosures": "mh47g", "ready": "typhoon"},ACORD=["typhoon", "chinook", "vulcan", "f35", "apache", "a10", "tornado", "rafale", "f15ex", "jaguar", "blackhawk", "b52", "tiger", "mirage4", "canberra", "a7", "do228", "mh47g"],ACB='https://jskedge1.github.io/airshow-pages/home-img/ac/', lab=jet.querySelector('.cg-jlab'), cur='', labT=0;
+    function acFor(id){ if(ACTAB[id]) return ACTAB[id]; var t=[].slice.call(document.querySelectorAll('.tablist .tab')), i=0; t.forEach(function(x,n){ if(x.getAttribute('aria-controls')===id) i=n; }); return ACORD[i%ACORD.length]; }
     function setPlane(id){
-      var m=MAP[id]||['delta','']; var key=m[0]+'|'+m[1]; if(key===cur) return; var first=!cur; cur=key;
+      var k=acFor(id); if(k===cur) return; var first=!cur; cur=k; var a=AC[k];
       jet.classList.remove('swap'); void jet.offsetWidth; if(!first) jet.classList.add('swap');
-      svg.innerHTML='<g fill="currentColor">'+SHAPE[m[0]]+'</g>';
-      if(!first&&m[1]){ lab.textContent=m[1]; jet.classList.add('lab'); clearTimeout(labT); labT=setTimeout(function(){jet.classList.remove('lab');},1800); }
+      img.src=ACB+k+'.webp'; jet.style.width=a[0]+'px'; jet.style.height=a[1]+'px'; jet.style.marginLeft=(-a[0]/2)+'px'; jet.style.bottom=(1.5-a[1]/2)+'px';
+      if(!first){ lab.textContent=a[2]; jet.classList.add('lab'); clearTimeout(labT); labT=setTimeout(function(){jet.classList.remove('lab');},1800); }
     }
+    ACORD.forEach(function(k){ var p=new Image(); p.src=ACB+k+'.webp'; });
     setPlane('overview');
     var follow=function(){
       jet.style.left=line.style.width||'0%'; jet.style.opacity=parseFloat(line.style.width)>0.5?'1':'0';
