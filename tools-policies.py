@@ -18,7 +18,7 @@ POLICIES = [
     ("cookies", "cookies.txt", "Cookie Policy", "Cookie Policy", "What the site saves on your device, why, and how to say no.", "Fiat G.91 in the blue Frecce Tricolori scheme taxiing past other aircraft", "center 52%"),
     ("terms", "terms.txt", "Terms and Disclaimer", "Website Terms and Disclaimer", "Using the site, checking details before you travel and what I am responsible for.", "French Navy Atlantique patrol aircraft banking against a cloudy sky", "center 50%"),
     ("community", "community.txt", "Community Rules", "Community Rules", "How the forum, My Airshow Hub and Show Day stay friendly, useful and safe.", "Grumman Wildcat in invasion stripes parked on the flight line at Duxford", "center 55%"),
-    ("copyright", "copyright.txt", "Copyright and Contributors", "Copyright, Photos and Contributors", "Who owns what, sharing my work, and how to get your work credited or taken down.", "Apache attack helicopter hovering low over a line of trees", "center 45%"),
+    ("copyright", "copyright.txt", "Copyright and Photos", "Copyright, Photos and Contributors", "Who owns the photos and guides, how guest photographers are credited, and how to get your work taken down.", "Apache attack helicopter hovering low over a line of trees", "center 45%"),
     ("traders", "traders.txt", "Traders and Paid Plans", "Traders and Paid Plans Terms", "Trader listings, paid plans, renewals and your right to cancel.", "Douglas Invader in USAF markings flying through broken cloud", "center 50%"),
 ]
 
