@@ -24,7 +24,7 @@ POLICIES = [
 
 # Words that keep their capitals when a heading is put into sentence case.
 KEEP = {
-    "i": "I", "uk": "UK", "riat": "RIAT", "show day": "Show Day", "my airshow hub": "My Airshow Hub",
+    "i": "I", "ai": "AI", "uk": "UK", "riat": "RIAT", "show day": "Show Day", "my airshow hub": "My Airshow Hub",
     "community rules": "Community Rules", "online safety act": "Online Safety Act",
 }
 
