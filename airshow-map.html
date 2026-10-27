@@ -141,7 +141,7 @@ a{color:inherit}
 <section class="band" id="map">
   <div class="in">
     <h2 class="stitle">UK Airshow Map</h2>
-    <p class="sintro">Every UK airshow I know of, colour coded by type, with my featured shows in red. Type your town or use your location and the radar finds the closest. Tap any blip to see the show, zoom in on your area to see the motorways and main railway lines around you, and turn the sound on to hear each show ping as the sweep passes.</p>
+    <p class="sintro">Every UK airshow I know of, colour coded by type, with my featured shows in red. If you type in your town or use your location, the radar will find the closest ones for you. You can tap any blip to see the show, or zoom in on your area to see the motorways and main railway lines around you. If you turn the sound on, you will hear each show ping as the sweep passes.</p>
     <div class="near">
       <div class="radar" id="radarbox">
         <div class="rtools">
@@ -274,7 +274,7 @@ a{color:inherit}
     var list=FEAT.map(function(f,i){return[i,miles(me[1],me[2],f[2],f[3])]}).filter(function(x){return shown(x[0])&&(!maxD||x[1]<=maxD)}).sort(function(a,b){return a[1]-b[1]});
     var lim=maxD||100,within=list.filter(function(x){return x[1]<=lim}),wf=within.filter(function(x){return FEAT[x[0]][4]==='feat'}).length;
     var all=FEAT.map(function(f,i){return i}).filter(shown);
-    document.getElementById('nsum').innerHTML=!all.length?'Turn on at least one type of show to see results.':!list.length?'Nothing within <b>'+maxD+' miles</b> of '+esc(me[0])+'. Try a longer distance.':
+    document.getElementById('nsum').innerHTML=!all.length?'I would turn on at least one type of show, then the results will show here.':!list.length?'Nothing within <b>'+maxD+' miles</b> of '+esc(me[0])+'. Try a longer distance.':
       'From <b>'+esc(me[0])+'</b>: '+(within.length?'<b>'+within.length+'</b> '+(within.length>1?'shows are':'show is')+' within '+lim+' miles'+(wf?', <b>'+wf+'</b> of them featured.':'.'):'the nearest show is <b>'+Math.round(list[0][1])+' miles</b> away.');
     var ol=document.getElementById('nlist');
     ol.innerHTML=list.slice(0,maxD?40:10).map(function(x){var f=FEAT[x[0]],col=TYPES[f[4]][1];return '<li><button type="button" data-i="'+x[0]+'"><span class="rk" style="color:'+col+'">●</span><span><b>'+esc(f[0])+(f[4]==='feat'?' <em class="ftag">Featured</em>':'')+'</b><small>'+esc(f[1])+(f[4]==='feat'?'':' · '+TYPES[f[4]][0])+'</small></span><span class="mi">'+Math.round(x[1])+' mi</span></button></li>'}).join('');
@@ -282,7 +282,7 @@ a{color:inherit}
       b.onmouseenter=b.onfocus=function(){[].forEach.call(rs.querySelectorAll('.blip'),function(g){g.classList.toggle('hl',g.dataset.i===b.dataset.i||+g.dataset.i===picked)})};
       b.onmouseleave=b.onblur=function(){[].forEach.call(rs.querySelectorAll('.blip'),function(g){g.classList.toggle('hl',+g.dataset.i===picked)})}});
     var keep=picked!==null&&list.some(function(x){return x[0]===picked});
-    if(keep)pick(picked,false);else if(list.length)pick(list[0][0],false);else{picked=null;document.getElementById('card').innerHTML='<h3>No shows here</h3><p>Turn a type back on or pick a longer distance.</p>'}
+    if(keep)pick(picked,false);else if(list.length)pick(list[0][0],false);else{picked=null;document.getElementById('card').innerHTML='<h3>No shows here</h3><p>You could turn a type back on, or pick a longer distance.</p>'}
     if(zoomed)setVB(zoomBox());
   }
 
@@ -303,7 +303,7 @@ a{color:inherit}
   function findTown(q){q=q.trim().toLowerCase();if(!q)return null;var ex=null,pre=null;
     for(var i=0;i<GEO.towns.length;i++){var n=GEO.towns[i][0].toLowerCase();if(n===q){ex=GEO.towns[i];break}if(!pre&&n.indexOf(q)===0)pre=GEO.towns[i]}return ex||pre}
   document.getElementById('nform').addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('ntown').value,t=findTown(v);
-    if(t){cur=t;picked=null;drawRadar()}else document.getElementById('nsum').innerHTML='I could not find <b>'+esc(v)+'</b>. Try the nearest large town, or pick one from the list as you type.'});
+    if(t){cur=t;picked=null;drawRadar()}else document.getElementById('nsum').innerHTML='I could not find <b>'+esc(v)+'</b>. You could try the nearest large town, or pick one from the list as you type.'});
 
   /* your location: rounded to the nearest town name for the label */
   var gb=document.getElementById('geo');

@@ -220,7 +220,7 @@ body.compact .brand p{display:none}
       <svg width="46" height="46" viewBox="0 0 38 38" aria-hidden="true" style="flex:none"><circle cx="19" cy="19" r="17.5" fill="none" stroke="#32B4AF" stroke-width="1.5"/><path d="M19 6 L21.2 16 L32 20.5 L32 23 L21 20.8 L20.4 27.5 L24 30 L24 31.8 L19 30.6 L14 31.8 L14 30 L17.6 27.5 L17 20.8 L6 23 L6 20.5 L16.8 16 Z" fill="#D74949"/></svg>
       <div style="min-width:0">
         <h1 id="title">Show Day <span>Live</span></h1>
-        <p id="intro">What is flying now, what is next and when to cover little ears. Pick your show, and on the day leave this open on your phone.</p>
+        <p id="intro">What is flying now, what is next and when to cover little ears. Pick your show, and on the day I would suggest leaving this open on your phone.</p>
       </div>
     </div>
     <div class="clock glass">
@@ -246,7 +246,7 @@ body.compact .brand p{display:none}
 
   <section class="upload glass boot" style="--d:.5s" id="upload" aria-labelledby="up-title">
     <div class="ph"><h2 id="up-title">Send Us The Flying Programme</h2><span class="tag purple">Members</span></div>
-    <p style="margin:0;color:#C9D8E2;max-width:760px" id="up-intro">Got the programme in your hand? Take a clear photo of the flying display times page and send it here. Each photo is checked straight away for the airshow, the date and that you are at the show, then it goes live for everyone heading there.</p>
+    <p style="margin:0;color:#C9D8E2;max-width:760px" id="up-intro">If you have the programme in your hand, I would be really grateful for a clear photo of the flying display times page sent here. Each photo is checked straight away for the airshow, the date and that you are at the show, then it goes live for everyone heading there.</p>
     <div id="up-guest" hidden>
       <div class="btns"><button class="btn primary" id="login-btn">Log In To Send A Programme</button><span class="mut">It is free to join.</span></div>
     </div>
@@ -521,7 +521,7 @@ function tick(){
     nowTag='<span class="tag ghost">Between Displays</span>';
     nowHtml='<div class="mut" style="font-weight:600">'+(before?'Flying starts in':'Next display in')+'</div><div class="big-count mono">'+fmtLeft(up[0].start*60-sec)+'</div>'+
       '<div style="font-weight:600">'+esc(up[0].name)+' at <span class="mono">'+hhmm(up[0].start)+'</span></div>'+
-      '<div class="note">'+(before?'I would advise heading to the crowd line now and saving your pitch, then use the toilet before the flying starts.':'A good moment for a toilet or food break if this next one is not on your list.')+'</div>';
+      '<div class="note">'+(before?'I would advise heading to the crowd line now and saving your pitch, then using the toilet before the flying starts.':'A good moment for a toilet or food break if this next one is not on your list.')+'</div>';
   }else{
     nowTag='<span class="tag ghost">Finished</span>';
     nowHtml='<div class="now-name" style="font-size:40px">Flying has finished</div><div class="mut">That is the last display on the '+esc(cd.day.day)+' running order. Safe journey home.</div>';
@@ -614,12 +614,12 @@ function onOri(e){
 function startCompass(){
   var D=window.DeviceOrientationEvent;
   var say=function(t){var el=$('#facing-tip');if(el)el.textContent=t;};
-  if(!D){say('This device has no compass. Use the slider instead.');return;}
+  if(!D){say('This device has no compass, but you can use the slider instead.');return;}
   var go=function(){
     window.addEventListener('deviceorientationabsolute',onOri,true);window.addEventListener('deviceorientation',onOri,true);
-    setTimeout(function(){if(!gotReading)say('No compass reading came through. Some phones block the compass inside websites, so use the slider instead.');},3000);
+    setTimeout(function(){if(!gotReading)say('No compass reading came through. Some phones block the compass inside websites, so you can use the slider instead.');},3000);
   };
-  if(typeof D.requestPermission==='function'){D.requestPermission().then(function(r){if(r==='granted')go();else say('Compass access was not allowed. Use the slider instead.');}).catch(function(){say('Your browser blocked the compass here. Use the slider instead.');});}
+  if(typeof D.requestPermission==='function'){D.requestPermission().then(function(r){if(r==='granted')go();else say('Compass access was not allowed, but you can use the slider instead.');}).catch(function(){say('Your browser blocked the compass here, but you can use the slider instead.');});}
   else go();
 }
 
@@ -722,7 +722,7 @@ function addFiles(list){
   chain.then(function(){
     renderThumbs();
     setStatus(esc((st.files.length?st.files.length+' page'+(st.files.length>1?'s':'')+' ready to send.':'')+(skipped?' '+skipped+' file'+(skipped>1?'s were':' was')+' skipped. Up to 3 pages, as a photo or PDF.':'')));
-  }).catch(function(){setStatus('That file could not be opened. Try a photo or screenshot of the flying display page instead.','err');});
+  }).catch(function(){setStatus('That file could not be opened. You could try a photo or screenshot of the flying display page instead.','err');});
 }
 /* Photo details: the date it was taken and, when the phone kept it, where. JPEG only; nothing else is read. */
 function readExif(file){
