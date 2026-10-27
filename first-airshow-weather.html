@@ -409,6 +409,7 @@ button{font-family:var(--f)}
 .hubsign{background:#13293C;color:#fff;border-color:#fff}
 .sg-ch{display:none;padding:56px 0 64px;background:#fff}
 .sg-ch.on{display:block;animation:sgin .45s ease}
+.emb .sg-ch{display:block;animation:none}.emb .tabnav{position:relative}
 @keyframes sgin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .sg-head{display:flex;align-items:flex-start;gap:16px}
 .th-signs .sg-code{flex:none;font:800 30px/1 var(--cond);background:#111;color:#F2C230;border:3px solid #F2C230;box-shadow:0 0 0 3px #111;padding:9px 14px;margin-top:4px}
@@ -1605,16 +1606,19 @@ button{font-family:var(--f)}
 
   // Airfield sign tabs: one chapter at a time
   var sgs=[].slice.call(document.querySelectorAll('.sg-ch')), signs=[].slice.call(document.querySelectorAll('.tabnav [data-go]'));
+  var EMB=/[?&]embed=1/.test(location.search);
+  if(EMB)document.documentElement.classList.add('emb');
   function act(id,scroll){
-    var k=-1;sgs.forEach(function(c,n){var on=c.id===id;c.classList.toggle('on',on);if(on)k=n;});
+    var k=-1;sgs.forEach(function(c,n){var on=c.id===id;if(!EMB)c.classList.toggle('on',on);else c.classList.add('on');if(on)k=n;});
     if(k<0)return false;
     signs.forEach(function(b,n){b.classList.toggle('on',n===k);if(n===k)b.classList.add('seen');b.setAttribute('data-rel',n<k?'l':n>k?'r':'');b.setAttribute('aria-pressed',n===k?'true':'false');});
-    if(scroll){var ap=document.querySelector('.tabnav');window.scrollTo({top:ap.getBoundingClientRect().top+window.scrollY-2,behavior:'smooth'});}
+    if(scroll){if(EMB){var tg=document.getElementById(id);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});}else{var ap=document.querySelector('.tabnav');window.scrollTo({top:ap.getBoundingClientRect().top+window.scrollY-2,behavior:'smooth'});}}
     if(typeof window.__hh==='function')window.__hh();
     return true;
   }
   if(sgs.length){
     document.addEventListener('click',function(e){var b=e.target.closest('[data-go]');if(b){e.preventDefault();act(b.getAttribute('data-go'),true);}});
+    if(EMB)sgs.forEach(function(c){c.classList.add('on');});
     act(sgs[0].id,false);
   }
 
