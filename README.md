@@ -48,6 +48,11 @@ Every page ends with the `mobile-fit` block (between the `<!-- mobile-fit` comme
 It keeps the page inside the screen down to 320px wide, which is the width Wix gives an HTML box on phones.
 Keep it when copying a template to make a new show page.
 
+## Seafront Information map and tides (27 Oct 2026)
+
+The six seafront show pages (camping-layout/eastbourne, clacton, southport, blackpool, ayr and wales) have the "Coastal command" block at the top of Seafront Information: the `<sf-command data-show="...">` element, defined by the `seafront-command` script at the end of each page. It holds its own styles inside a shadow root, so it can't clash with the page. It shows the satellite map (camping-layout/img/sf-map-<show>.webp, imagery © Esri, Maxar, Earthstar Geographics, credit kept in the map corner), Pick Your Pitch, the 2027 show day tide chart, the beach side view, the sea wall answer, springs or neaps, the beach facts and Jack's tip. It replaced the old Pick Your Pitch and Tides And The Beach tabs; the tabs below now start at Sea Mist And Wind.
+Show day tide times are worked out from a tide model checked against published tables, so they are approximate (about half an hour). Blackpool, Southport and Wales use expected dates until 2027 is confirmed: change the dates in the block's data and re-run the tide numbers when they are announced.
+
 ## AI generated guide images
 
 `guide-img/` holds the AI generated guide images (made in Canva, 26 Oct 2026). Every one used on a page carries a caption saying what it shows, ending "AI generated for a visual look." Copies used on pages sit in that page's own image folder (first-airshow-img/, camping-hub-img/, photography-hub-img/, security-img/). The originals are in the Canva design "Blank landscape photo canvas". Added 27 Oct 2026 (pages 31 to 39 of that design): gate-queue, bag-check and wand-check (security guide), kids-cockpit, shade-seating, plus food-court and toilets (facilities boxes on the show pages, as fac-*.webp in camping-layout/img/), check-before-travel (first airshow page), and night-before, calm-visit and getting-home, saved ready for those guides when they are built. Pages 40 and 41: paying-stall and banned-items-gate, on the Paying and Banned items boxes of the historic show pages. Page 42: duxford-shuttle-minibus, in the "Duxford's own shuttle" band on the Duxford page.
