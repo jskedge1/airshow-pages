@@ -52,6 +52,17 @@ Keep it when copying a template to make a new show page.
 
 `guide-img/` holds the AI generated guide images (made in Canva, 26 Oct 2026). Every one used on a page carries a caption saying what it shows, ending "AI generated for a visual look." Copies used on pages sit in that page's own image folder (first-airshow-img/, camping-hub-img/, photography-hub-img/, security-img/). The originals are in the Canva design "Blank landscape photo canvas". Added 27 Oct 2026 (pages 31 to 39 of that design): gate-queue, bag-check and wand-check (security guide), kids-cockpit, shade-seating, plus food-court and toilets (facilities boxes on the show pages, as fac-*.webp in camping-layout/img/), check-before-travel (first airshow page), and night-before, calm-visit and getting-home, saved ready for those guides when they are built. Pages 40 and 41: paying-stall and banned-items-gate, on the Paying and Banned items boxes of the historic show pages.
 
+## Line-up photos for confirmed aircraft
+
+Every show page's aircraft line-up puts a small photo (not clickable) beside each aircraft. A row gets a photo from the page's own photos first, then from `lineup-photos.js`, then from the built-in list in the page's `lu-lib` block.
+
+To add a photo for a newly confirmed aircraft, do it once in `lineup-photos.js` and every feature page picks it up:
+1. Find the photo in Jack's Google Drive, Mac or hard drives (Jacks Drive, T7). Use another photographer's photo only with their name as the credit (4th value), e.g. Chris Murgatroyd.
+2. Save a 240 x 140 webp, cropped on the aircraft, as `camping-layout/img/lu-<type>.webp`.
+3. Add a line to `window.LU_EXTRA`: pattern, photo address, alt text, credit ("" for Jack's own).
+
+Added 27 Oct 2026: Westland Lysander (Jack's photo of the Lysander on display at Old Warden, IMG_9128 on Jacks Drive). Still needed: Hawker Fury (Midlands Air Festival), no photo found yet.
+
 ## Links between pages
 
 `links.js` is loaded by every page. It holds the list of show pages and their addresses on
