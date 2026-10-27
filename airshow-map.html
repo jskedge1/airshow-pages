@@ -141,7 +141,7 @@ a{color:inherit}
 <section class="band" id="map">
   <div class="in">
     <h2 class="stitle">UK Airshow Map</h2>
-    <p class="sintro">Every UK airshow I know of, colour coded by type, with my featured shows in red. If you type in your town or use your location, the radar will find the closest ones for you. You can tap any blip to see the show, or zoom in on your area to see the motorways and main railway lines around you. If you turn the sound on, you will hear each show ping as the sweep passes.</p>
+    <p class="sintro">This is every UK airshow I know of, colour coded by type, with my featured shows in red. Just type in your town or use your location and the radar will find the closest ones for you. You can tap any blip to see the show, or zoom in on your area to take a look at the motorways and main railway lines around you. If you turn the sound on, you'll hear each show ping as the sweep passes.</p>
     <div class="near">
       <div class="radar" id="radarbox">
         <div class="rtools">
@@ -176,7 +176,7 @@ a{color:inherit}
         <div class="card" id="card" aria-live="polite"></div>
         <p class="nsum" id="nsum"></p>
         <ol class="nlist" id="nlist"></ol>
-        <p class="nnote">Distances are straight line miles, so the drive will be a bit further. Each featured show page has the roads, trains and buses.</p>
+        <p class="nnote">Distances are straight line miles, so the drive will be a bit further. I would take a look at each featured show page for the roads, trains and buses.</p>
       </div>
     </div>
   </div>
@@ -243,7 +243,7 @@ a{color:inherit}
       +'<div class="row"><span>Where</span><b>'+esc(f[1])+'</b></div>'
       +'<div class="row"><span>From '+esc(cur[0])+'</span><b>'+Math.round(d)+' miles '+bearing(cur[1],cur[2],f[2],f[3])+'</b></div>'
       +'<div class="row"><span>Rough drive</span><b>'+drive(d)+'</b></div></div>';
-    if(feat&&slug)h+='<div class="tip">I have a full guide for this one, with parking, trains and buses, where to watch and the aircraft line up.</div><div class="acts"><a class="btn" href="'+SITE+slug+'" target="_top">Open The Guide</a><a class="btn line" href="https://www.google.com/maps/search/?api=1&query='+f[2]+','+f[3]+'" target="_blank" rel="noopener">Open In Google Maps</a></div>';
+    if(feat&&slug)h+='<div class="tip">I have written a full guide for this one, with parking, trains and buses, where I would watch from and the aircraft line up.</div><div class="acts"><a class="btn" href="'+SITE+slug+'" target="_top">Open The Guide</a><a class="btn line" href="https://www.google.com/maps/search/?api=1&query='+f[2]+','+f[3]+'" target="_blank" rel="noopener">Open In Google Maps</a></div>';
     else if(feat)h+='<div class="tip">My guide for this show is on its way. I would suggest checking the official website for dates in the meantime.</div><div class="acts"><a class="btn line" href="https://www.google.com/maps/search/?api=1&query='+f[2]+','+f[3]+'" target="_blank" rel="noopener">Open In Google Maps</a></div>';
     else h+='<div class="tip">I do not have a guide for this show yet. Please check the organiser\'s website for dates and tickets before you go.</div><div class="acts"><a class="btn line" href="https://www.google.com/maps/search/?api=1&query='+f[2]+','+f[3]+'" target="_blank" rel="noopener">Open In Google Maps</a></div>';
     var c=document.getElementById('card');c.innerHTML=h;if(flash&&!reduce){c.classList.remove('flash');void c.offsetWidth;c.classList.add('flash')}}
@@ -282,7 +282,7 @@ a{color:inherit}
       b.onmouseenter=b.onfocus=function(){[].forEach.call(rs.querySelectorAll('.blip'),function(g){g.classList.toggle('hl',g.dataset.i===b.dataset.i||+g.dataset.i===picked)})};
       b.onmouseleave=b.onblur=function(){[].forEach.call(rs.querySelectorAll('.blip'),function(g){g.classList.toggle('hl',+g.dataset.i===picked)})}});
     var keep=picked!==null&&list.some(function(x){return x[0]===picked});
-    if(keep)pick(picked,false);else if(list.length)pick(list[0][0],false);else{picked=null;document.getElementById('card').innerHTML='<h3>No shows here</h3><p>You could turn a type back on, or pick a longer distance.</p>'}
+    if(keep)pick(picked,false);else if(list.length)pick(list[0][0],false);else{picked=null;document.getElementById('card').innerHTML='<h3>No shows here</h3><p>You could turn a type back on, or think about travelling a bit further.</p>'}
     if(zoomed)setVB(zoomBox());
   }
 
@@ -303,19 +303,19 @@ a{color:inherit}
   function findTown(q){q=q.trim().toLowerCase();if(!q)return null;var ex=null,pre=null;
     for(var i=0;i<GEO.towns.length;i++){var n=GEO.towns[i][0].toLowerCase();if(n===q){ex=GEO.towns[i];break}if(!pre&&n.indexOf(q)===0)pre=GEO.towns[i]}return ex||pre}
   document.getElementById('nform').addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('ntown').value,t=findTown(v);
-    if(t){cur=t;picked=null;drawRadar()}else document.getElementById('nsum').innerHTML='I could not find <b>'+esc(v)+'</b>. You could try the nearest large town, or pick one from the list as you type.'});
+    if(t){cur=t;picked=null;drawRadar()}else document.getElementById('nsum').innerHTML='I could not find <b>'+esc(v)+'</b>. I would try the nearest large town, or just pick one from the list as you type.'});
 
   /* your location: rounded to the nearest town name for the label */
   var gb=document.getElementById('geo');
   gb.onclick=function(){var old=gb.lastChild.textContent;
-    if(!navigator.geolocation){document.getElementById('nsum').textContent='Your browser cannot share your location here, so please type your town instead.';return}
+    if(!navigator.geolocation){document.getElementById('nsum').textContent='Your browser cannot share your location here, so I would just type your town in instead.';return}
     gb.lastChild.textContent='Finding You';
     navigator.geolocation.getCurrentPosition(function(p){var la=p.coords.latitude,lo=p.coords.longitude,best=null,bd=1e9;
       GEO.towns.forEach(function(t){var d=miles(la,lo,t[1],t[2]);if(d<bd){bd=d;best=t}});
       gb.lastChild.textContent=old;
       if(la<49||la>61||lo<-9||lo>2.5){document.getElementById('nsum').textContent='You look to be outside the UK, so please type a UK town instead.';return}
       cur=[bd<15&&best?'Near '+best[0]:'You',la,lo];picked=null;drawRadar()},
-      function(){gb.lastChild.textContent=old;document.getElementById('nsum').textContent='I could not get your location. Please type your town instead.'},{timeout:10000,maximumAge:600000})};
+      function(){gb.lastChild.textContent=old;document.getElementById('nsum').textContent='I could not get your location this time. Please type your town in instead.'},{timeout:10000,maximumAge:600000})};
 
   var start=findTown('Birmingham')||['Birmingham',52.48,-1.9];cur=start;drawRadar();
 })();

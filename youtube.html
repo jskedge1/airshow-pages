@@ -220,10 +220,10 @@ footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
   </div>
   <div class="wrap">
     <div class="hero-copy">
-      <span class="tag">Our YouTube channel</span>
+      <span class="tag">My YouTube channel</span>
       <h1>The Big Guide to <em>UK Airshows</em> on YouTube</h1>
       <p class="sub">Watch before you go</p>
-      <p class="intro">I film the shows I plan for, so you can see the crowd line, the car parks and the campsites before you get there. <b>Every new video I upload lands on this page by itself</b>, sorted by airshow and topic, with a link to the matching guide on this site.</p>
+      <p class="intro">I film the shows I write about, so you can take a look at the crowd line, the car parks and the campsites before you get there. <b>Every new video I upload lands on this page by itself</b>, sorted by airshow and topic, and I add a link to the matching guide on this site.</p>
       <div class="btns">
         <a class="btn red" href="https://www.youtube.com/@TheBigGuidetoUKAirShows?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
         <a class="btn teal" href="#latest">Watch the featured video</a>
@@ -256,7 +256,7 @@ footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
 <section id="latest" class="band">
   <div class="wrap">
     <h2 class="sec-title">Featured Video</h2>
-    <p class="sec-intro">This is the video I would watch first. Press play to watch it right here on the page, or pick any video further down to play it in this spot. New uploads still appear below by themselves.</p>
+    <p class="sec-intro">This is the video I would watch first. Just press play to watch it here on the page, or pick any video further down and it will play in this spot. New uploads still turn up below by themselves.</p>
     <div class="latest">
       <div class="screen" id="screen">
         <img id="latestImg" alt="" src="">
@@ -299,7 +299,7 @@ footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
 <section id="departures" class="band board-band">
   <div class="wrap">
     <h2 class="sec-title">Departures Board</h2>
-    <p class="sec-intro">The latest uploads, newest at the top, the way you would see it at the terminal.</p>
+    <p class="sec-intro">My latest uploads, with the newest at the top, a bit like the board you see at the terminal.</p>
     <div class="board">
       <div class="board-head"><h3>Now Showing</h3><div class="clock" id="clock">00:00:00</div></div>
       <div class="board-scroll">
@@ -321,7 +321,7 @@ footer.small a{color:var(--teal);font-weight:600;text-decoration:none}
     </svg></div>
     <div>
       <h2>Come Along For The 2027 Season</h2>
-      <p>RIAT is still a big part of the channel, with arrivals and departures, camping at Fairford and photography advice. I am adding more shows from across the UK as I visit them. If you subscribe, you will see the new videos on YouTube too.</p>
+      <p>RIAT is still a big part of the channel, with arrivals and departures, camping at Fairford and my photography advice. I am adding more shows from across the UK as I visit them. If you subscribe, you'll see the new videos on YouTube as well.</p>
       <div class="handle"><code id="handleText">@TheBigGuidetoUKAirShows</code><button class="copy" id="copyBtn" type="button">Copy handle</button></div>
       <a class="btn red" href="https://www.youtube.com/@TheBigGuidetoUKAirShows?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
     </div>
@@ -368,7 +368,7 @@ function setLatest(v,play){
   var a=document.createElement('span');a.className='chip p';a.textContent=showName(v.show);ch.appendChild(a);
   var b=document.createElement('span');b.className='chip';b.textContent=topicName(v.topic);ch.appendChild(b);
   txt($('latestTitle'),v.title);
-  txt($('latestText'),v.summary||'Press play to watch it here, or open it on YouTube to leave a comment.');
+  txt($('latestText'),v.summary||'Just press play to watch it here, or open it on YouTube if you would like to leave a comment.');
   txt($('latestLine'),[v.published?'Uploaded '+fmt(v.published):'',views(v.views)].filter(Boolean).join('  ·  '));
   $('latestYt').href=yt(v);
   $('latestGuide').href=guideUrl(v.show);
@@ -410,13 +410,13 @@ function render(){
   var g=$('grid');g.innerHTML='';
   txt($('count'),list.length+(list.length===1?' video':' videos'));
   var pl=$('planning');
-  if(curShow!=='all'){pl.hidden=false;txt($('planText'),'Planning to go to '+showName(curShow)+'? I would advise reading the guide alongside the videos, as it has the parking, timings and best places to watch.');$('planLink').href=guideUrl(curShow);}
+  if(curShow!=='all'){pl.hidden=false;txt($('planText'),'Planning to go to '+showName(curShow)+'? I would advise reading the guide alongside the videos, as that is where you will find the parking, timings and the spots I like to watch from.');$('planLink').href=guideUrl(curShow);}
   else pl.hidden=true;
   var pages=Math.max(1,Math.ceil(list.length/PER));if(page>=pages)page=pages-1;
   var pg=$('pager');pg.hidden=pages<2;
   txt($('pgText'),'Page '+(page+1)+' of '+pages);$('prevPg').disabled=page===0;$('nextPg').disabled=page>=pages-1;
   if(!list.length){
-    g.innerHTML='<div class="empty"><b>No videos for this one yet.</b><p>I am adding more shows as I visit them, so this may fill up soon. You can try another topic, or have a look on the channel.</p></div>';
+    g.innerHTML='<div class="empty"><b>No videos for this one yet.</b><p>I am adding more shows as I visit them, so this may fill up quite soon. You can try another topic for now, or take a look on the channel.</p></div>';
     return;
   }
   list.slice(page*PER,page*PER+PER).forEach(function(v,i){
