@@ -50,7 +50,7 @@ Keep it when copying a template to make a new show page.
 
 ## AI generated guide images
 
-`guide-img/` holds the AI generated guide images (made in Canva, 26 Oct 2026). Every one used on a page carries a caption saying what it shows, ending "AI generated for a visual look." Copies used on pages sit in that page's own image folder (first-airshow-img/, camping-hub-img/, photography-hub-img/, security-img/). The originals are in the Canva design "Blank landscape photo canvas".
+`guide-img/` holds the AI generated guide images (made in Canva, 26 Oct 2026). Every one used on a page carries a caption saying what it shows, ending "AI generated for a visual look." Copies used on pages sit in that page's own image folder (first-airshow-img/, camping-hub-img/, photography-hub-img/, security-img/). The originals are in the Canva design "Blank landscape photo canvas". Added 27 Oct 2026 (pages 31 to 39 of that design): gate-queue, bag-check and wand-check (security guide), kids-cockpit, shade-seating, plus food-court and toilets (facilities boxes on the show pages, as fac-*.webp in camping-layout/img/), check-before-travel (first airshow page), and night-before, calm-visit and getting-home, saved ready for those guides when they are built.
 
 ## Links between pages
 
