@@ -2484,7 +2484,7 @@ h3{font-weight:700}
     <section class="ph-sec" id="phCalc" aria-label="Airshow settings calculator">
       <div class="sec-head reveal">
         <div><h3>Starting <em>settings</em></h3></div>
-        <p class="note">Pick what&rsquo;s flying and the weather for a starting point. It never goes faster than 1/2500 or outside ISO 100 to 1500. Check your histogram after the first pass and adjust.</p>
+        <p class="note">Pick what&rsquo;s flying and the weather for a starting point. It never goes faster than 1/2000 or above ISO 1200. Check your histogram after the first pass and adjust.</p>
       </div>
       <div class="calc reveal">
         <div class="calc-form">
@@ -3201,11 +3201,11 @@ h3{font-weight:700}
     new MutationObserver(function(){ if(!panel.hidden) load(); }).observe(panel,{attributes:true,attributeFilter:['hidden']});
   })();
 
-/* Airshow settings calculator: limits 1/2500 s fastest, ISO 100–1500 */
+/* Airshow settings calculator: limits 1/2000 s fastest, ISO 100–1200 */
 var PC=(function(){
-  var SH=[2500,2000,1600,1250,1000,800,640,500,400,320,250,200,160,125,100,80,60];
+  var SH=[2000,1600,1250,1000,800,640,500,400,320,250,200,160,125,100,80,60];
   var AP=[4,4.5,5,5.6,6.3,7.1,8,9,10,11,13,14,16];
-  var ISOS=[100,125,160,200,250,320,400,500,640,800,1000,1250,1500];
+  var ISOS=[100,125,160,200,250,320,400,500,640,800,1000,1200];
   var SUBJ={
     fastjet:{label:'Fast jets',short:'Fast jets',kind:'freeze',t:1600,min:1000},
     team:{label:'Display team jets',short:'Display teams',kind:'freeze',t:1250,min:1000},
@@ -3236,9 +3236,9 @@ var PC=(function(){
       iso=need(t,N,ev);
       while(iso<100 && idx(SH,t)>0){t=SH[idx(SH,t)-1];iso=need(t,N,ev);}
       while(iso<100 && N<11){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
-      if(iso>1500){N=Math.max(maxAp,Math.min(N,maxAp));N=maxAp;iso=need(t,N,ev);}
-      while(iso>1500 && t>s.min){t=SH[idx(SH,t)+1];iso=need(t,N,ev);}
-      if(t<s.t && iso<=1500) notes.push('Shutter dropped to 1/'+t+' to keep ISO at or below 1500. That\u2019s fine for most passes, but pan smoothly.');
+      if(iso>1200){N=Math.max(maxAp,Math.min(N,maxAp));N=maxAp;iso=need(t,N,ev);}
+      while(iso>1200 && t>s.min){t=SH[idx(SH,t)+1];iso=need(t,N,ev);}
+      if(t<s.t && iso<=1200) notes.push('Shutter dropped to 1/'+t+' to keep ISO at or below 1200. That\u2019s fine for most passes, but pan smoothly.');
     } else {
       N=8; iso=need(t,N,ev);
       while(iso<100 && N<16){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
@@ -3247,20 +3247,20 @@ var PC=(function(){
         while(iso<100 && idx(SH,t)>0){t=SH[idx(SH,t)-1];iso=need(t,N,ev);}
         notes.push('Too bright for 1/'+orig+' even at f/16 and ISO 100. Use 1/'+t+', or fit a 1 or 2 stop ND filter to keep the slower shutter.');
       }
-      if(iso>1500){N=maxAp;iso=need(t,N,ev);}
+      if(iso>1200){N=maxAp;iso=need(t,N,ev);}
     }
     var under=0;
-    if(iso>1500){under=LOG2(iso/1500);iso=1500;}
-    var isoR=iso>=1500?1500:Math.min(1500,nearest(ISOS,Math.max(100,iso)));
+    if(iso>1200){under=LOG2(iso/1200);iso=1200;}
+    var isoR=iso>=1200?1200:Math.min(1200,nearest(ISOS,Math.max(100,iso)));
     var NR=nearest(AP,N);
-    if(under>0.15) notes.push('Even at ISO 1500 you’ll be about '+(Math.round(under*3)/3).toFixed(1).replace('.0','')+' stop'+(under>1.15?'s':'')+' dark. Keep the exposure (don’t raise ISO past 1500) and lift it in editing'+(s.kind==='freeze'?', or slow the shutter a little if your panning is steady.':'.'));
+    if(under>0.15) notes.push('Even at ISO 1200 you’ll be about '+(Math.round(under*3)/3).toFixed(1).replace('.0','')+' stop'+(under>1.15?'s':'')+' dark. Keep the exposure (don’t raise ISO past 1200) and lift it in editing'+(s.kind==='freeze'?', or slow the shutter a little if your panning is steady.':'.'));
     if(s.kind==='blur') notes.push('Pan smoothly through the whole pass and take short bursts. Expect fewer sharp frames at slow speeds.');
     if(backlit) notes.push('Shooting into the sun: undersides go dark. The extra +0.7 compensation helps, or aim for silhouettes and vapour.');
     if(wxKey==='evening') notes.push('Low evening sun gives warm side light, the best colour of the day when it’s behind you.');
     return {
       subject:s.label, weather:w.label, kind:s.kind,
       shutter:'1/'+t, aperture:'f/'+(NR%1===0?NR.toFixed(0):NR), iso:isoR, comp:fmtComp(comp),
-      mode:s.kind==='freeze'?'Manual + Auto ISO (min 100, max 1500)':'Shutter priority (S / Tv), ISO set to '+isoR,
+      mode:s.kind==='freeze'?'Manual + Auto ISO (min 100, max 1200)':'Shutter priority (S / Tv), ISO set to '+isoR,
       af:s.kind==='freeze'?'AF-C / AI Servo · dynamic area, zone or tracking':'AF-C / AI Servo · single point or small dynamic area',
       drive:'Continuous high, short bursts of 3 to 5. Avoid the machine gun',
       vr:s.kind==='freeze'?'Stabilisation on (Sport mode if you have it)':'Stabilisation on, panning mode (Sport or Mode 2)',
@@ -3317,8 +3317,8 @@ var KIT={
     {g:'Camera settings',items:[
       ['s_raw','Image quality: RAW (or RAW + JPEG)','More room to recover dark undersides'],
       ['s_mode','Mode: Manual with Auto ISO, or Shutter priority','You choose the shutter speed'],
-      ['s_iso','Auto ISO: minimum 100, maximum 1500','Use 1250 if your camera jumps from 1250 to 1600'],
-      ['s_shutter','Starting shutter: 1/1250 jets, 1/320 propellers','Never faster than 1/2500'],
+      ['s_iso','Auto ISO: minimum 100, maximum 1200','Use 1000 if your camera has no 1200 setting. Higher ISO means noisy files'],
+      ['s_shutter','Starting shutter: 1/1250 jets, 1/320 propellers','Never faster than 1/2000'],
       ['s_af','Focus: AF-C / AI Servo','Continuous focus to track moving aircraft'],
       ['s_area','AF area: dynamic, zone or single point','Tracking modes suit display teams'],
       ['s_prio','AF-C priority: release, or focus + release','So the camera never refuses to fire'],
@@ -3372,7 +3372,7 @@ var KIT={
         +'<div class="readout"><div><span>Shutter</span><b>'+r.shutter+'</b></div><div><span>Aperture</span><b>'+r.aperture+'</b></div><div><span>ISO</span><b>'+r.iso+'</b></div><div><span>Exp. comp</span><b>'+r.comp+'</b></div></div>'
         +'<dl class="howto"><div><dt>Mode</dt><dd>'+E(r.mode)+'</dd></div><div><dt>Focus</dt><dd>'+E(r.af)+'</dd></div><div><dt>Drive</dt><dd>'+E(r.drive)+'</dd></div><div><dt>Stabilisation</dt><dd>'+E(r.vr)+'</dd></div></dl>'
         +(r.notes.length?'<ul class="calc-notes">'+r.notes.map(function(n){return '<li>'+E(n)+'</li>';}).join('')+'</ul>':'')
-        +'<p class="calc-limits">Limits used: fastest 1/2500 · ISO 100 to 1500 · '+(r.kind==='blur'?'aperture up to f/16':'aperture f/'+cs.ap+' to f/11')+'</p>';
+        +'<p class="calc-limits">Limits used: fastest 1/2000 · ISO 100 to 1200 · '+(r.kind==='blur'?'aperture up to f/16':'aperture f/'+cs.ap+' to f/11')+'</p>';
       wxGrid.innerHTML=Object.keys(PC.WX).map(function(k){
         var x=PC.calc(cs.subj,k,cs.back==='yes',parseFloat(cs.ap));
         return '<button type="button" data-wx="'+k+'" aria-pressed="'+(k===cs.wx)+'"><span>'+E(PC.WX[k].short)+'</span><b>'+x.shutter+' · '+x.aperture+'</b><i'+(x.under>0.15?' class="dark"':'')+'>ISO '+x.iso+(x.under>0.15?' · dark':'')+'</i></button>';
