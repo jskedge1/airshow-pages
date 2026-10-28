@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<title>Nikon D500 3D Camera Guide | The Big Guide to UK Airshows</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap">
+<style>
+:root{
+  --navy:#13293C; --deep:#0E2131; --abyss:#091826; --teal:#32B4AF; --tealink:#0E5F5B; --mint:#8FDCD8; --purple:#6950A1; --red:#D74949;
+  --paper:#F4F6F8; --ink:#0B1722; --line:#CBD5DD; --mute:#33475A; --pale:#DCE6EE;
+  --font:'Barlow','Helvetica Neue',Arial,sans-serif; --cond:'Barlow Condensed','Barlow',Arial Narrow,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+*{box-sizing:border-box}
+body{margin:0;font:400 17px/1.6 var(--font);color:var(--ink);background:var(--paper)}
+h1,h2,h3,h4,p{margin:0}
+button{font-family:var(--font)}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+.preview-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;background:var(--purple);color:#fff;font:500 15px/1.3 var(--font);padding:9px 20px}
+.preview-bar b{font-weight:700}
+.preview-bar a{color:#fff;font-weight:600;text-underline-offset:3px}
+.preview-bar a[aria-current]{text-decoration:none;background:rgba(0,0,0,.22);padding:3px 8px}
+.preview-bar .sp{flex:1}
+
+/* 3D stage pieces shared by every design */
+.stage{position:relative;overflow:hidden;touch-action:none;cursor:grab}
+.stage:active{cursor:grabbing}
+.stage canvas{display:block;width:100%;height:100%}
+.pins{position:absolute;inset:0;pointer-events:none}
+.pin{position:absolute;left:0;top:0;width:30px;height:30px;margin:-15px 0 0 -15px;border:0;padding:0;background:transparent;cursor:pointer;pointer-events:auto;opacity:0;transition:opacity .35s ease}
+.pin.vis{opacity:1}
+.pin.vis.hidepin{opacity:0;pointer-events:none}
+.pin i{position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:var(--teal);opacity:.92;box-shadow:0 0 0 3px rgba(50,180,175,.28),0 2px 6px rgba(0,0,0,.5);transition:transform .3s var(--ease),background .3s}
+.pin:hover i,.pin:focus-visible i{transform:scale(1.35)}
+.pin.sel i{background:#fff;opacity:1;box-shadow:0 0 0 4px var(--teal),0 0 0 10px rgba(50,180,175,.25)}
+.pin.sel i::after{content:"";position:absolute;inset:-12px;border-radius:50%;border:2px solid var(--teal);animation:ping 1.8s var(--ease) infinite}
+@media (max-width:560px){.pin i{width:9px;height:9px;margin:-4.5px 0 0 -4.5px}}
+@keyframes ping{from{transform:scale(.5);opacity:1}to{transform:scale(1.6);opacity:0}}
+.tt{position:absolute;left:0;top:0;pointer-events:none;background:var(--navy);color:#fff;font:600 15px/1.2 var(--font);padding:8px 11px;border-left:4px solid var(--teal);white-space:nowrap;opacity:0;transform:translate(14px,-50%);transition:opacity .2s;z-index:6;box-shadow:0 8px 20px rgba(0,0,0,.35)}
+.tt.on{opacity:1}
+.loading{position:absolute;inset:0;display:grid;place-items:center;font:600 18px var(--font);color:var(--mint);pointer-events:none;transition:opacity .5s}
+.loading.gone{opacity:0}
+.rows div{display:flex;justify-content:space-between;gap:16px;padding:9px 12px;background:rgba(255,255,255,.06);margin-top:4px}
+.rows div span:first-child{color:var(--mint);font-weight:500}
+.rows div span:last-child{font-weight:700;text-align:right}
+.rows div.hot{background:var(--red)}.rows div.hot span:first-child{color:#fff}
+.fade-in{animation:fin .5s var(--ease)}
+@keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<style>
+body{background:var(--paper)}
+.studio{position:relative;height:clamp(700px,58vw,880px);background:radial-gradient(70% 62% at 50% 55%,#1f3d57 0%,#10273a 48%,var(--abyss) 100%);color:#fff;overflow:hidden}
+.studio::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(143,220,216,.055) 0 1px,transparent 1px 56px);-webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000)}
+.stage{position:absolute;inset:0;z-index:1}
+.glass{background:rgba(9,24,38,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+
+/* title, top left */
+.title{position:absolute;left:clamp(16px,2.6vw,36px);top:22px;z-index:4;pointer-events:none;max-width:330px}
+.title a{pointer-events:auto;color:var(--pale);font-weight:500;font-size:15px;text-underline-offset:4px}
+.title a:hover{color:var(--teal)}
+.title h1{font:800 clamp(46px,4.6vw,70px)/.86 var(--cond);text-transform:uppercase;margin-top:10px;letter-spacing:.005em}
+.title h1 em{font-style:normal;color:var(--teal)}
+.title p{color:var(--pale);font-size:16px;line-height:1.45;margin-top:8px}
+
+/* three modes, top right */
+.modes{position:absolute;right:clamp(16px,2.6vw,36px);top:22px;z-index:4;display:grid;grid-template-columns:repeat(3,minmax(0,170px));gap:5px}
+.mode{all:unset;box-sizing:border-box;cursor:pointer;padding:12px 14px 14px;border-top:4px solid transparent;transition:background .35s,border-color .35s,transform .4s var(--ease)}
+.mode:hover{transform:translateY(-2px)}
+.mode:focus-visible{outline:3px solid var(--purple)}
+.mode .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--teal);font:800 14px/1 var(--font)}
+.mode:nth-child(2) .n{background:var(--purple)}.mode:nth-child(3) .n{background:var(--red)}
+.mode b{display:block;font:700 17px/1.15 var(--font);margin-top:8px}
+.mode small{display:block;color:var(--mint);font-size:14px;line-height:1.25;margin-top:2px}
+.mode.on{background:#fff;color:var(--navy);border-top-color:var(--teal)}
+.mode.on small{color:var(--mute)}
+
+/* list panel, left */
+.list{position:absolute;left:clamp(16px,2.6vw,36px);top:clamp(200px,17vw,230px);bottom:84px;width:300px;z-index:4;display:flex;flex-direction:column;border-top:4px solid var(--purple)}
+.list .head{padding:14px 14px 10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.list .head b{display:block;font:700 18px/1.2 var(--font)}
+.list .head small{display:block;color:var(--pale);font-size:15px;margin-top:2px}
+.search{width:100%;margin-top:10px;font:500 16px var(--font);padding:10px 12px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#fff}
+.search::placeholder{color:#9FB3C3}
+.search:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.chips button{font:600 13px/1 var(--font);padding:7px 9px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;cursor:pointer;transition:background .3s,border-color .3s}
+.chips button:hover{border-color:var(--teal)}
+.chips button.on{background:var(--teal);border-color:var(--teal)}
+.prog{height:5px;background:rgba(255,255,255,.12);margin-top:10px}.prog i{display:block;height:100%;width:0;background:var(--teal);transition:width .6s var(--ease)}
+.items{overflow-y:auto;scrollbar-width:none;flex:1}
+.items::-webkit-scrollbar{display:none}
+.it{all:unset;box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;width:100%;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.06);border-left:4px solid transparent;cursor:pointer;transition:background .25s,border-color .25s,padding .3s var(--ease)}
+.it:hover{background:rgba(255,255,255,.06);padding-left:18px}
+.it:focus-visible{outline:2px solid var(--purple);outline-offset:-2px}
+.it.on{background:rgba(50,180,175,.16);border-left-color:var(--teal)}
+.it .dot{width:10px;height:10px;border-radius:50%;background:#51677A}
+.it .dot.u1{background:var(--teal)}.it .dot.u2{background:var(--purple)}
+.it b{display:block;font:600 16px/1.2 var(--font);color:#fff}
+.it small{display:block;font-size:14px;color:#9FB3C3;line-height:1.25}
+.it .box{width:22px;height:22px;border:2px solid #7F94A6;display:grid;place-items:center;transition:background .25s,border-color .25s}
+.it .box:hover{border-color:var(--teal)}
+.it.done .box{background:var(--teal);border-color:var(--teal)}
+.it.done .box::after{content:"";width:5px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.it.done b{text-decoration:line-through;color:#8A9DAE}
+.it .shs{font:800 22px/1 var(--cond);color:var(--red);min-width:60px}
+
+/* detail card, right */
+.card{position:absolute;right:clamp(16px,2.6vw,36px);top:clamp(140px,11vw,150px);bottom:84px;width:380px;z-index:4;display:flex;flex-direction:column;border-top:4px solid var(--teal)}
+.card .dh{padding:16px 18px 4px}
+.ptags{display:flex;flex-wrap:wrap;gap:5px}
+.ptags span{font:500 13px/1 var(--font);padding:5px 7px;background:rgba(255,255,255,.1);color:var(--pale)}
+.ptags .u1{background:var(--teal);color:#fff}.ptags .u2{background:var(--purple);color:#fff}.ptags .rd{background:var(--red);color:#fff}
+.card h2{font:800 clamp(28px,2.4vw,36px)/.95 var(--cond);text-transform:uppercase;color:var(--teal);margin-top:10px}
+.card .db{overflow-y:auto;scrollbar-width:none;padding:6px 18px 16px;flex:1}
+.card .db::-webkit-scrollbar{display:none}
+.phow{margin-top:10px;border-left:4px solid var(--teal);background:rgba(255,255,255,.06);padding:10px 12px;font-weight:500}
+.db p{margin-top:10px;color:var(--pale)}
+.db h4{font:700 17px/1.2 var(--font);margin-top:14px}
+.db .rows{margin-top:10px}
+.ptip{background:rgba(105,80,161,.26)!important;border-left:4px solid var(--purple);padding:11px 13px;color:#EFEAFB!important}
+.ptip b{color:#fff}
+.empty b{color:#fff}
+.df{display:flex;gap:8px;padding:12px 14px;border-top:1px solid rgba(255,255,255,.08)}
+.df button{font:600 15px/1 var(--font);padding:12px 14px;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;cursor:pointer;transition:background .3s,border-color .3s}
+.df button:hover{background:rgba(255,255,255,.1)}
+.df .go{flex:1;background:var(--teal);border-color:var(--teal)}
+.df .go:hover{background:var(--tealink);border-color:var(--tealink)}
+
+/* view dock, bottom centre */
+.dock{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:4;display:flex;flex-wrap:nowrap}
+.dock button{font:600 15px/1 var(--font);color:#fff;background:transparent;border:0;padding:13px 13px;cursor:pointer;white-space:nowrap;transition:background .3s,padding .35s var(--ease)}
+.dock button:hover,.dock button:focus-visible{background:var(--teal);padding-left:18px;padding-right:18px}
+.dock .spin{background:var(--red)}
+.dock .on{background:rgba(50,180,175,.22)}
+.hint{position:absolute;left:50%;bottom:78px;transform:translateX(-50%);z-index:3;background:rgba(9,24,38,.78);border-left:4px solid var(--purple);padding:8px 13px;color:#EAF1F6;font:500 15px/1.4 var(--font);pointer-events:none;transition:opacity .6s ease;white-space:nowrap}
+.hint.gone{opacity:0}
+
+/* below: settings compared */
+.below{padding:56px 0 64px}
+.in{max-width:1240px;margin:0 auto;padding:0 20px}
+.stitle{font:800 clamp(34px,4vw,54px)/.95 var(--cond);text-transform:uppercase;color:var(--red);border-left:5px solid var(--red);padding-left:14px}
+.sintro{color:var(--mute);max-width:62ch;margin-top:10px}
+.cmp{margin-top:24px;overflow-x:auto;scrollbar-width:none;border:1px solid var(--line);background:#fff}
+.cmp::-webkit-scrollbar{display:none}
+.cmp table{border-collapse:collapse;width:100%;min-width:820px}
+.cmp th,.cmp td{padding:12px 14px;text-align:left;border-top:1px solid #E3E9EE;vertical-align:top}
+.cmp thead th{border-top:0;background:var(--navy);color:#fff;font:700 16px/1.2 var(--font);cursor:pointer;transition:background .3s}
+.cmp thead th:first-child{cursor:default;background:var(--deep);width:150px}
+.cmp thead th:not(:first-child):hover{background:var(--tealink)}
+.cmp thead th.on{background:var(--teal)}
+.cmp thead th small{display:block;font-weight:500;color:var(--mint);font-size:13px;margin-top:3px}
+.cmp thead th.on small{color:#fff}
+.cmp tbody th{font-weight:600;color:var(--navy);background:#F8FAFB}
+.cmp td{font-weight:500}
+.cmp td.on{background:#EAF7F6}
+.cmp tr.hl td{font-weight:700;color:var(--navy)}
+.cmp td.why{font-weight:400;color:var(--mute);font-size:15px;line-height:1.45}
+.note{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;margin-top:32px;align-items:start}
+.note p{max-width:64ch}
+.note aside{background:#fff;border-left:5px solid var(--purple);padding:16px 18px}
+.note aside b{color:var(--navy)}
+.foot{margin-top:26px;color:var(--mute);font-size:16px;display:flex;gap:18px;flex-wrap:wrap}
+.foot a{color:var(--navy);font-weight:700;text-decoration:none;border-bottom:2px solid var(--teal)}
+
+/* tablet: list and card drop below the camera side by side */
+@media (max-width:1180px){
+  .studio{height:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);overflow:visible}
+  .title,.modes,.list,.card,.dock{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;width:auto}
+  .title{order:1}.modes{order:2}.stage{order:3}.dock{order:4}.list{order:5}.card{order:6}
+  .title{grid-column:1/-1;padding:0 20px;margin-top:22px;max-width:none}
+  .modes{grid-column:1/-1;margin:16px 20px 0;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .stage{position:relative;inset:auto;grid-column:1/-1;height:clamp(380px,62vw,620px)}
+  .dock{grid-column:1/-1;justify-self:center;margin-top:-64px;margin-bottom:12px;flex-wrap:wrap;justify-content:center}
+  .hint{bottom:auto;top:12px}
+  .list{height:520px;margin:0 0 20px 20px}
+  .card{height:520px;margin:0 20px 20px 8px}
+  .note{grid-template-columns:1fr}
+}
+/* phone: everything stacks, list scrolls sideways */
+@media (max-width:700px){
+  .studio{display:flex;flex-direction:column}
+  .title h1 br{display:none}
+  .modes{margin:14px 12px 0;gap:4px}
+  .mode{padding:10px 8px 12px}.mode small{display:none}.mode b{font-size:15px}
+  .stage{height:clamp(300px,84vw,440px)}
+  .dock{margin:0 0 10px;align-self:center}
+  .dock button{padding:11px 10px;font-size:14px}
+  .list{height:auto;margin:0 12px}
+  .items{display:flex;overflow-x:auto;overflow-y:hidden}
+  .it{flex:none;max-width:210px;border-bottom:4px solid transparent;border-left:0;border-right:1px solid rgba(255,255,255,.06)}
+  .it.on{border-bottom-color:var(--teal)}
+  .it small{display:none}
+  .card{height:auto;margin:10px 12px 16px}
+  .card .db{overflow:visible}
+  .hint{white-space:normal;width:calc(100% - 24px)}
+}
+</style>
+</head>
+<body>
+<div class="pv" id="pb"></div>
+<section class="studio" id="studio">
+  <div class="stage" id="stage">
+    <div class="loading" id="loading">Building the camera&hellip;</div>
+    <div class="pins" id="pins"></div>
+    <div class="tt" id="tt"></div>
+    <div class="hint" id="hint">Drag to turn it. Tap the body to spin it. Tap a teal dot to learn that control.</div>
+  </div>
+
+  <header class="title">
+    <a href="https://www.ukairshowguide.co.uk/airshow-photography-hub" target="_top">Airshow Photography Hub</a>
+    <h1>Nikon <em>D500</em></h1>
+    <p>Learn every button, set it up the night before, then pick what's flying.</p>
+  </header>
+
+  <div class="modes" role="tablist" aria-label="What do you want to do?">
+    <button class="mode glass on" data-m="learn" role="tab"><span class="n">1</span><b>Learn the buttons</b><small>Every control</small></button>
+    <button class="mode glass" data-m="setup" role="tab"><span class="n">2</span><b>Set up for a show</b><small>Ten things to tick off</small></button>
+    <button class="mode glass" data-m="fly" role="tab"><span class="n">3</span><b>What's flying?</b><small>Settings by aircraft</small></button>
+  </div>
+
+  <div class="list glass"><div class="head" id="lhead"></div><div class="items" id="items"></div></div>
+
+  <aside class="card glass" aria-live="polite"><div class="dh" id="dh"></div><div class="db" id="db"></div><div class="df" id="df"></div></aside>
+
+  <div class="dock glass" role="toolbar" aria-label="Camera view">
+    <button class="spin" id="spin">Spin it</button><button data-view="front">Front</button><button data-view="back">Back</button><button data-view="top">Top</button><button data-view="left">Left</button><button data-view="right">Grip</button><button data-view="under">Under</button><button id="lensB" class="on">Lens on</button><button id="dotsB" class="on">Dots on</button>
+  </div>
+</section>
+
+<section class="below">
+  <div class="in">
+    <h2 class="stitle">Settings by aircraft</h2>
+    <p class="sintro">All five starting points side by side. Tap a column and the camera's screens change to match, so you can see what yours should look like.</p>
+    <div class="cmp"><table id="cmp"></table></div>
+    <div class="note">
+      <p>Settings are a starting point. The light changes all day, so take a look at your pictures after the first display and adjust from there. I would keep ISO at 1200 or below so your pictures stay clean, and I wouldn't push the shutter speed faster than the aircraft needs.</p>
+      <aside><b>Please note:</b> this is a 3D model I've made for the guide. The layout follows the real D500, but small details can differ, and menu names can change with firmware updates.</aside>
+    </div>
+    <div class="foot"><a href="https://www.ukairshowguide.co.uk/airshow-photography-hub" target="_top">Back to the Airshow Photography Hub</a><span>&copy; The Big Guide to UK Airshows</span></div>
+  </div>
+</section>
+
+<script>
+// Control data for the D500 page. pos and n are in model space (cm), x right from the back, y up, z towards the photographer.
+const CONTROLS = [
+  // ---------- TOP ----------
+  {id:'shutter', area:'top', name:'Shutter release button', use:1, pos:[5.3,4.95,-3.3], n:[0,1,0],
+   how:'Half press to wake the camera and meter the light. Press all the way to take the picture.',
+   what:'This takes the picture. If you set up back button focus, it only fires the shutter and leaves focusing to your thumb.',
+   helps:'When you are panning with a jet, squeeze it gently. A sharp jab can shake the lens, and that shows up even more at the slower shutter speeds you use for propeller aircraft.',
+   rows:[['Fast jets','Short bursts of 3 to 5 frames'],['Props and helicopters','A gentle squeeze while you keep panning'],['Static aircraft','One press, take your time']],
+   tip:'Keep panning after you let go. I see a lot of people stop the moment they press, and the aircraft ends up soft.'},
+  {id:'power', area:'top', name:'Power switch', use:1, pos:[6.25,4.85,-3.1], n:[0,1,0],
+   how:'Turn the collar around the shutter button. OFF, ON, then push it past ON and let go to light up the buttons and top screen.',
+   what:'Turns the camera on and off, and lights up the top control panel and the button labels.',
+   helps:'The light position is handy at dusk and evening displays when you can no longer read the buttons. During the day I would leave it on between displays, the standby timer looks after the battery.',
+   rows:[['Daytime','ON all day'],['Dusk and night displays','Push past ON to light the buttons']],
+   tip:'Before the flying starts, take a look at the battery level on the top screen.'},
+  {id:'frontdial', area:'top', name:'Front command dial', use:1, pos:[5.2,3.6,-5.1], n:[0.2,0.35,-1],
+   how:'Turn it with your index finger, just in front of the shutter button.',
+   what:'In Manual it sets the aperture. Hold a button such as ISO or the AF mode button and turn it to reach that button’s second job.',
+   helps:'In Manual you can change the aperture without taking your eye away from the viewfinder, which matters when the next jet is already running in.',
+   rows:[['Manual mode','Aperture'],['Holding the AF mode button','AF area mode'],['Holding ISO','Auto ISO on or off']]},
+  {id:'movie', area:'top', name:'Movie record button', use:3, pos:[3.1,4.95,-1.5], n:[0,1,0],
+   how:'Move the Lv switch on the back to movie, press Lv, then press this to start and stop recording.',
+   what:'Records video. It only works once the camera is in movie live view.',
+   helps:'Good for filming the Red Arrows running in or a warbird taxiing past. Following fast jets on the screen is hard work, so I would suggest keeping video for slower displays and ground action. Bear in mind 4K on the D500 crops in a lot more than photos do, so a lens that frames a flypast nicely for stills will be very tight.',
+   rows:[['4K UHD','Up to 30 frames a second'],['Full HD','Up to 60 frames a second'],['Lens','Go a lot wider than for photos, especially in 4K']],
+   tip:'Video uses the battery quicker, so take a charged spare if you plan to film.'},
+  {id:'iso', area:'top', name:'ISO button', use:1, pos:[4.1,4.95,-1.5], n:[0,1,0],
+   how:'Hold it and turn the main dial to set ISO. Turn the front dial to switch Auto ISO on or off.',
+   what:'Sets how sensitive the sensor is to light. Higher ISO lets you keep a fast shutter speed in dull light, at the cost of more noise.',
+   helps:'I would advise Auto ISO with the maximum set to 1000. That keeps you under ISO 1200 so pictures stay clean, and the camera lifts the ISO for you when a cloud comes over.',
+   rows:[['Sunny, fast jets','Around ISO 200 to 400'],['Grey sky, fast jets','Up to ISO 1000'],['Auto ISO maximum','1000'],['Never go above','ISO 1200', 'hot']],
+   tip:'The D500 moves ISO in third of a stop steps, so 1000 is the nearest setting under 1200. You set the maximum in the Photo shooting menu under ISO sensitivity settings.'},
+  {id:'ec', area:'top', name:'Exposure compensation button', use:1, pos:[5.1,4.95,-1.45], n:[0,1,0],
+   how:'Hold it and turn the main dial. Plus makes the picture brighter, minus makes it darker.',
+   what:'Tells the camera to make the picture brighter or darker than its meter thinks it should be.',
+   helps:'A bright sky fools the meter, so aircraft come out dark, almost like a silhouette. A little plus brings the detail back on the underside of the aircraft.',
+   rows:[['Blue sky','+0.3 to +0.7'],['Grey or white sky','+0.7 to +1.0'],['Aircraft on the ground','0']],
+   tip:'This also works in Manual with Auto ISO switched on, which is a set up a lot of airshow photographers like.'},
+  {id:'toplcd', area:'top', name:'Top control panel', use:2, pos:[4.3,4.82,0.35], n:[0,1,0],
+   what:'A small screen showing shutter speed, aperture, ISO, release mode, battery and how many shots you have left.',
+   helps:'A quick look down before each display saves you finding out you are still on settings from the static park. Pick a preset in the settings section further down and watch this screen change.',
+   rows:[['Before each display','Shutter speed and ISO'],['Every hour or so','Battery and shots left']]},
+  {id:'reldial', area:'top', name:'Release mode dial', use:1, pos:[-4.7,4.72,1.25], n:[0,1,0.4],
+   how:'Hold the small lock button at the front corner and turn the dial under the four buttons.',
+   what:'Sets what happens when you hold the shutter down. Options include S for single, CL for a slower burst, CH for a fast burst at up to 10 frames a second, Q for quiet, the self timer and MUP for mirror up.',
+   helps:'CH is brilliant for fast jets, but I would advise short bursts and avoid machine gun shooting. You end up with hundreds of nearly identical frames to sort through at home.',
+   rows:[['Fast jets','CH, short bursts'],['Props and helicopters','CL, set to around 3 to 5 frames a second'],['Static aircraft','S']],
+   tip:'You can change the CL speed in the Custom Setting menu, under Shooting/display.'},
+  {id:'rellock', area:'top', name:'Release mode dial lock', use:3, pos:[-6.15,4.42,-1.5], n:[0,1,0],
+   how:'Hold it down while you turn the release mode dial.',
+   what:'Stops the release mode dial turning on its own.',
+   helps:'It saves the dial getting knocked into self timer in your bag, or by someone brushing past you on the crowd line.',
+   rows:[['To use','Press and hold, then turn the dial']]},
+  {id:'qual', area:'top', name:'QUAL button (image quality)', use:1, pos:[-5.25,5.12,0.45], n:[0,1,0],
+   how:'Hold it and turn the main dial for the file type. Turn the front dial for JPEG size.',
+   what:'Chooses RAW (Nikon calls it NEF), JPEG, TIFF or RAW plus JPEG.',
+   helps:'I would suggest RAW. You get far more room to lift the shadows on the underside of an aircraft and pull back a bright sky when you edit.',
+   rows:[['My choice','RAW'],['Want quick shares from your phone','RAW + JPEG basic'],['RAW compression','Lossless compressed']],
+   tip:'RAW files are bigger, so take a spare card if you shoot a lot of bursts.'},
+  {id:'metering', area:'top', name:'Metering button', use:2, pos:[-4.15,5.12,0.45], n:[0,1,0],
+   how:'Hold it and turn the main dial.',
+   what:'Picks how the camera reads the light. Matrix looks at the whole frame, centre weighted favours the middle, spot reads a small area under your focus point, and highlight weighted protects bright areas.',
+   helps:'Matrix with a touch of exposure compensation covers most of the day. Spot can help with a dark aircraft against a bright sky, but only if you can keep the point on the aircraft.',
+   rows:[['Most of the day','Matrix'],['Dark aircraft, bright sky','Spot, if you can hold it on the aircraft'],['Static park','Matrix']]},
+  {id:'mode', area:'top', name:'MODE button', use:1, pos:[-5.25,5.12,-0.65], n:[0,1,0],
+   how:'Hold it and turn the main dial to pick P, S, A or M.',
+   what:'Sets who controls the shutter speed and aperture, you or the camera.',
+   helps:'Shutter Priority (S) is the easiest place to start for flying aircraft. You pick the shutter speed and the camera picks the rest. As you get more confident, Manual with Auto ISO gives you the same control with the aperture fixed too.',
+   rows:[['First airshow','S'],['More confident','M with Auto ISO'],['Static aircraft','A']]},
+  {id:'wb', area:'top', name:'WB button (white balance)', use:2, pos:[-4.15,5.12,-0.65], n:[0,1,0],
+   how:'Hold it and turn the main dial. The front dial fine tunes it.',
+   what:'Keeps colours looking natural in different light, from bright sun to a grey sky.',
+   helps:'If you shoot RAW you can change it afterwards, so Auto is fine. Some people like Direct sunlight so a whole day of pictures matches.',
+   rows:[['Shooting RAW','Auto'],['JPEG only','Direct sunlight or Cloudy to suit the day']]},
+  {id:'hotshoe', area:'top', name:'Accessory shoe', use:3, pos:[-0.4,7.35,0.25], n:[0,1,0],
+   what:'A mount on top for a flashgun, microphone or other accessory.',
+   helps:'You won’t need flash for flying displays. If you film for YouTube, a small microphone here sounds far better than the built in one.',
+   rows:[['Flying displays','Leave it empty'],['Filming','A small on camera microphone']]},
+
+  // ---------- BACK ----------
+  {id:'eyepiece', area:'back', name:'Viewfinder', use:1, pos:[-0.4,5.6,3.05], n:[0,0.15,1],
+   what:'An optical viewfinder that shows 100% of the frame.',
+   helps:'There is no lag in an optical viewfinder, which is a big part of why the D500 tracks fast jets so well. Try keeping your other eye open, it helps you see what is coming into frame.',
+   rows:[['Flying','Use the viewfinder'],['Low angles on static aircraft','Live view on the tilting screen']]},
+  {id:'diopter', area:'back', name:'Diopter adjustment', use:2, pos:[1.55,6.05,2.55], n:[0.3,0.2,1],
+   how:'Turn the little knob beside the viewfinder until the focus points look sharp.',
+   what:'Adjusts the viewfinder to suit your eyesight.',
+   helps:'If it is out, pictures can look soft in the viewfinder when they are sharp. Worth a check if someone else has used your camera.',
+   rows:[['When to set it','At home, before the show']]},
+  {id:'vfshutter', area:'back', name:'Eyepiece shutter lever', use:3, pos:[-2.35,6.25,2.55], n:[-0.2,0.2,1],
+   what:'Closes a small shutter inside the viewfinder.',
+   helps:'Only needed for long exposures on a tripod, like a night shoot of static aircraft, so light from behind doesn’t creep in.',
+   rows:[['Daytime show','Leave it open'],['Night shoot on a tripod','Close it']]},
+  {id:'playback', area:'back', name:'Playback button', use:2, pos:[-5.65,3.15,2.18], n:[0,0,1],
+   how:'Press to see your pictures. Press up or down on the multi selector to see the photo info and histogram.',
+   what:'Shows the pictures you have taken.',
+   helps:'After the first display, zoom in on a frame to check the cockpit is sharp and the exposure looks right. Then put the camera up and watch for the next one.',
+   rows:[['After the first display','Zoom in to check sharpness'],['Exposure','Check the histogram']],
+   tip:'Try not to spend a whole display looking at the screen, it is easy to miss the next pass.'},
+  {id:'delete', area:'back', name:'Delete button', use:3, pos:[-4.4,3.15,2.18], n:[0,0,1],
+   how:'Press once, then again to confirm.',
+   what:'Deletes the picture on screen.',
+   helps:'I would advise leaving pictures alone on the day. Frames that look soft on the small screen can turn out to be keepers on the computer.',
+   rows:[['On the day','Leave them'],['At home','Sort on the computer']]},
+  {id:'menu', area:'back', name:'MENU button', use:2, pos:[-5.65,1.35,2.18], n:[0,0,1],
+   what:'Opens the camera menus.',
+   helps:'Set things like the Auto ISO limit, card slot roles and AF-ON before you travel. I would suggest adding the settings you change most to My Menu.',
+   rows:[['Before the show','Auto ISO, card roles, AF-ON'],['My Menu','Add your most used settings']]},
+  {id:'pcontrol', area:'back', name:'Picture Control and protect button', use:3, pos:[-5.65,0.25,2.18], n:[0,0,1],
+   what:'Sets the look of JPEGs, such as Standard or Vivid. In playback it locks a picture so it can’t be deleted, and in the menus it shows help.',
+   helps:'Lock your best frame of the day so it survives if you clear the card by mistake.',
+   rows:[['Shooting RAW','Only changes how the preview looks'],['In playback','Lock your best shots']]},
+  {id:'zoomin', area:'back', name:'Zoom in button', use:2, pos:[-5.65,-0.85,2.18], n:[0,0,1],
+   what:'Zooms into a picture in playback.',
+   helps:'Zoom right in on the cockpit or the squadron markings to check your focus landed where you wanted it.',
+   rows:[['Check focus','Zoom to the cockpit']]},
+  {id:'zoomout', area:'back', name:'Zoom out and thumbnails button', use:3, pos:[-5.65,-1.95,2.18], n:[0,0,1],
+   what:'Zooms back out, then shows thumbnails of several pictures at once.',
+   helps:'A quick way to find the start of a burst.',
+   rows:[['Find a burst','Thumbnail view']]},
+  {id:'fn2', area:'back', name:'Fn2 button', use:2, pos:[-5.65,-3.1,2.18], n:[0,0,1],
+   what:'A function button with a short list of jobs, such as opening My Menu or giving a picture a star rating.',
+   helps:'Set it to rating and you can star your keepers while you wait for the next display. Sorting at home is far quicker.',
+   rows:[['My suggestion','Rating']]},
+  {id:'screen', area:'back', name:'Tilting touch screen', use:2, pos:[-0.7,-0.9,2.2], n:[0,0,1], dist:26,
+   what:'A 3.2 inch screen that tilts up and down. Touch works for playback, menus and focusing in live view.',
+   helps:'Tilt it and use live view to shoot over people’s heads in the static park, or get low under a wing without lying on the grass.',
+   rows:[['Static, low angles','Tilt it and use live view'],['Flying','The viewfinder works better']]},
+  {id:'afon', area:'back', name:'AF-ON button', use:1, pos:[4.1,3.15,2.18], n:[0,0,1],
+   how:'Press and hold with your thumb to focus.',
+   what:'Starts autofocus with your thumb, separate from the shutter button.',
+   helps:'This is back button focus. Set AF activation in the Custom Setting menu to AF-ON only, then hold AF-ON to track the aircraft and fire with the shutter when you are ready. Focus won’t restart every time you press the shutter.',
+   rows:[['Flying','Hold AF-ON the whole pass'],['Static','Press, let go, then recompose']]},
+  {id:'maindial', area:'back', name:'Main command dial', use:1, pos:[6.1,4.05,2.55], n:[0.2,0.4,1],
+   how:'Turn it with your thumb.',
+   what:'Sets the shutter speed in S and M, and picks the option when you hold most buttons.',
+   helps:'This is the dial you will use most at an airshow, moving the shutter speed between jets and propeller aircraft.',
+   rows:[['Shutter Priority','Shutter speed'],['Manual','Shutter speed'],['Holding MODE','P, S, A or M']]},
+  {id:'subsel', area:'back', name:'Sub selector (focus joystick)', use:1, pos:[4.1,1.55,2.3], n:[0,0,1],
+   how:'Push it in any direction to move the focus point. Press it in to lock focus and exposure.',
+   what:'A small joystick for moving your focus point quickly with your thumb.',
+   helps:'For flying aircraft I would suggest keeping the focus point near the centre and only moving it for composition.',
+   rows:[['Flying','Centre, or just above'],['Static','On the cockpit'],['Press in','Locks focus and exposure']]},
+  {id:'multisel', area:'back', name:'Multi selector and OK', use:2, pos:[4.3,-0.6,2.2], n:[0,0,1],
+   what:'Moves around the menus and your pictures, and can move the focus point too. OK confirms.',
+   helps:'In playback, press up or down to see the histogram and shooting info for each picture.',
+   rows:[['Menus','Move, then OK'],['Playback','Up or down for photo info']]},
+  {id:'lock', area:'back', name:'Focus selector lock', use:2, pos:[4.3,-1.95,2.2], n:[0,0,1],
+   what:'Locks the multi selector and sub selector so your focus point can’t be moved by accident.',
+   helps:'A bump from the crowd or your coat can move the focus point without you noticing. Lock it once you are set.',
+   rows:[['On the day','Locked']]},
+  {id:'info', area:'back', name:'info button', use:2, pos:[3.5,-3.2,2.18], n:[0,0,1],
+   what:'Shows all your shooting settings on the rear screen.',
+   helps:'A quick way to check everything in one place without going into the menus.',
+   rows:[['To use','Press once to show, again to hide']]},
+  {id:'lv', area:'back', name:'Lv button and photo or movie switch', use:2, pos:[4.65,-3.2,2.18], n:[0,0,1],
+   what:'Turns live view on and off. The switch around it picks photo or movie.',
+   helps:'Live view and the tilting screen are great for static aircraft. For flying displays, stay with the viewfinder.',
+   rows:[['Static','Live view'],['Video','Switch to movie first']]},
+  {id:'ibutton', area:'back', name:'i button', use:2, pos:[5.85,-3.2,2.18], n:[0,0,1],
+   what:'Opens a quick menu of handy settings.',
+   helps:'Quicker than the main menus for things like the image area or Active D-Lighting.',
+   rows:[['Tip','Put your most used settings in it']]},
+
+  // ---------- FRONT ----------
+  {id:'lens', area:'front', name:'Lens', use:1, pos:[-0.4,3.05,-6.2], n:[0,1,-0.25], dist:36,
+   what:'This model has a standard zoom fitted. The D500 has a DX sensor, so every lens gives you 1.5 times the reach.',
+   helps:'A 150 to 600mm behaves like 225 to 900mm on the D500, which is why it is so popular with aviation photographers. I would advise thinking about how close your show’s display line is before buying a huge lens.',
+   rows:[['Flying','100 to 400, 150 to 600 or 200 to 500'],['Static','16 to 80 or similar'],['VR','On, Sport mode if your lens has it']],
+   tip:'Use the Lens on and off button under the camera to take the lens off and see the mount.'},
+  {id:'lensrel', area:'front', name:'Lens release button', use:2, pos:[-3.85,1.6,-2.3], n:[-0.3,0,-1],
+   how:'Press it and turn the lens to take it off.',
+   what:'Unlocks the lens from the mount.',
+   helps:'Airfields are dusty and windy. Change lenses with the camera pointing down and keep the body cap ready so it is quick.',
+   rows:[['Changing lenses','Camera facing down']]},
+  {id:'bkt', area:'front', name:'BKT button (bracketing)', use:3, pos:[-4.3,-0.35,-2.3], n:[-0.3,0,-1],
+   how:'Hold it and turn the main dial for the number of shots, the front dial for the gap between them.',
+   what:'Takes a set of pictures at different exposures.',
+   helps:'Useful inside a dark hangar or museum, where you can blend the frames later. Leave it off for flying.',
+   rows:[['Flying','Off'],['Hangars and museums','3 frames, 1 stop apart']]},
+  {id:'afmode', area:'front', name:'Focus mode switch and AF mode button', use:1, pos:[-4.0,-2.3,-2.35], n:[-0.3,0,-1],
+   how:'Hold the button in the middle. Main dial picks AF-S or AF-C, front dial picks the AF area mode. The switch around it is AF or M.',
+   what:'Sets how the camera focuses and how many focus points it uses.',
+   helps:'AF-C keeps focusing as the aircraft moves. Against a clear sky I would start with single point or dynamic 25 point. Group area can help when the aircraft passes in front of busy cloud or trees.',
+   rows:[['Flying','AF-C'],['Clear sky','Single point or d25'],['Busy background','Group area'],['Static','AF-S, single point']]},
+  {id:'pv', area:'front', name:'Pv button', use:3, pos:[2.75,0.95,-2.3], n:[0.3,0,-1],
+   what:'Depth of field preview by default. It can be set to other jobs in the Controls menu.',
+   helps:'A lot of people set it to switch AF area mode while it is held, so they can jump to group area when a jet goes in front of busy cloud.',
+   rows:[['Default','Depth of field preview'],['Idea','AF area mode while held']]},
+  {id:'fn1', area:'front', name:'Fn1 button', use:2, pos:[2.75,-0.45,-2.3], n:[0.3,0,-1],
+   what:'A function button on the front, easy to reach with your middle finger. You choose its job in the Controls menu.',
+   helps:'Try setting it to choose image area, so you can jump into the 1.3x crop for a little more reach on a distant aircraft.',
+   rows:[['Idea','Image area, 1.3x crop'],['Or','AF area mode while held']]},
+
+  // ---------- SIDES AND BOTTOM ----------
+  {id:'cards', area:'side', name:'Memory card slots', use:1, pos:[7.1,-0.6,0.3], n:[1,0,0.2], dist:24,
+   what:'One XQD slot and one SD slot, behind the door on the grip side.',
+   helps:'Put your fastest card in the XQD slot so a 10 frames a second burst clears quickly. Set slot 2 to backup if you want a second copy of every picture.',
+   rows:[['Slot 1','XQD, your fastest card'],['Slot 2 role','Backup or overflow'],['Buffer','Up to 200 RAW frames with a fast card']]},
+  {id:'ports', area:'side', name:'Connector covers', use:3, pos:[-7.15,-0.4,0.3], n:[-1,0,0.2], dist:24,
+   what:'Rubber covers over the microphone, headphone, HDMI and USB sockets.',
+   helps:'Keep them shut on a dusty or wet day. Open them only when you plug something in.',
+   rows:[['Filming','Microphone in the mic socket']]},
+  {id:'battery', area:'side', name:'Battery chamber', use:1, pos:[5.2,-4.4,-3.0], n:[0,-1,0], dist:24,
+   what:'Takes an EN-EL15 battery, under the grip.',
+   helps:'It is rated at around 1240 shots, but cold mornings and live view use it faster. I would advise carrying a charged spare.',
+   rows:[['Spare','One charged spare'],['Battery grip','MB-D17, optional']]},
+  {id:'tripod', area:'side', name:'Tripod socket', use:3, pos:[-0.4,-4.4,0.2], n:[0,-1,0], dist:22,
+   what:'A standard thread for a tripod or monopod plate.',
+   helps:'With a big lens, fix the lens foot to your monopod or tripod rather than this socket, so the weight is balanced and the mount isn’t strained.',
+   rows:[['Small lenses','Use this socket'],['Big lenses','Use the lens foot']]},
+  {id:'strap', area:'side', name:'Strap eyelets', use:3, pos:[-7.15,3.3,-0.3], n:[-1,0.2,0], dist:22,
+   what:'Loops for your camera strap.',
+   helps:'Long lenses get heavy by mid afternoon. A sling strap takes the weight off your neck and keeps the camera ready at your hip.',
+   rows:[['Big lens','Strap to the lens foot if it has a lug']]}
+];
+
+const AREAS = {top:'Top of the camera', back:'Back of the camera', front:'Front and lens', side:'Sides and underneath'};
+const USE = {1:['Use it every show','u1'],2:['Handy to know','u2'],3:['Rarely at airshows','u3']};
+
+const TOUR = [
+  ['power','Switch on and check the battery'],
+  ['qual','Set RAW'],
+  ['cards','Set your card slots'],
+  ['mode','Pick Shutter Priority'],
+  ['iso','Turn on Auto ISO, maximum 1000'],
+  ['afmode','Set AF-C and your focus area'],
+  ['afon','Focus with your thumb'],
+  ['subsel','Put your focus point near the centre'],
+  ['reldial','Pick CH or CL'],
+  ['ec','Add a touch of plus for bright skies']
+];
+
+const PRESETS = [
+  {id:'jets', name:'Fast jets, blue sky', scr:{mode:'S',sh:'1250',f:'8',iso:'320',af:'AF-C',area:'d25',rel:'CH',meter:'Matrix',ec:'+0.3'},
+   text:'This is my starting point for Typhoons and F-35s on a bright day. The shutter speed freezes the jet, and the camera sorts out the aperture and ISO for you.',
+   rows:[['Mode','S, or M with Auto ISO'],['Shutter speed','1/1250'],['Aperture','Around f/8'],['ISO','Around 200 to 400'],['Focus','AF-C, d25'],['Release mode','CH, short bursts'],['Exposure','Matrix, +0.3 to +0.7']]},
+  {id:'grey', name:'Fast jets, grey sky', scr:{mode:'S',sh:'1000',f:'5.6',iso:'1000',af:'AF-C',area:'d25',rel:'CH',meter:'Matrix',ec:'+0.7'},
+   text:'On a dull day there is a lot less light, so I would drop the shutter speed a little rather than push the ISO past my limit. 1/800 to 1/1000 still freezes a jet if you pan smoothly. Your lens will most likely be wide open, and a grey sky fools the meter, so add more plus.',
+   rows:[['Mode','S, or M with Auto ISO'],['Shutter speed','1/800 to 1/1000'],['Aperture','Wide open, often f/5.6 to f/6.3'],['ISO','Up to 1000'],['Focus','AF-C, d25 or group area'],['Release mode','CH, short bursts'],['Exposure','Matrix, +0.7 to +1.0']]},
+  {id:'props', name:'Warbirds and props', scr:{mode:'S',sh:'250',f:'13',iso:'100',af:'AF-C',area:'d25',rel:'CL',meter:'Matrix',ec:'+0.3'},
+   text:'Spitfires and Mustangs look far better with a blurred propeller. Start around 1/250 and work down to 1/125 or 1/160 for a full disc as your panning improves.',
+   rows:[['Mode','S'],['Shutter speed','1/250 to 1/320 to start'],['Aperture','f/11 to f/16 on a sunny day'],['ISO','100'],['Focus','AF-C, d25'],['Release mode','CL, about 3 to 5 frames a second'],['Exposure','Matrix, +0.3']]},
+  {id:'heli', name:'Helicopters', scr:{mode:'S',sh:'125',f:'16',iso:'100',af:'AF-C',area:'Group',rel:'CL',meter:'Matrix',ec:'+0.3'},
+   text:'Rotor blades turn a lot slower than propellers, so you need a slower shutter speed to show them moving. At 1/200 the blades look frozen, as if the helicopter is hanging in the air. I would advise starting at 1/125 and working down to 1/60 once you are happy panning smoothly.',
+   rows:[['Mode','S'],['Shutter speed','1/125, down to 1/60'],['Aperture','f/16 or smaller on a sunny day'],['ISO','100'],['Focus','AF-C, group area'],['Release mode','CL'],['Exposure','Matrix, +0.3']]},
+  {id:'static', name:'Static aircraft', scr:{mode:'A',sh:'640',f:'8',iso:'100',af:'AF-S',area:'S',rel:'S',meter:'Matrix',ec:'0'},
+   text:'On the ground you have time. Walk round the aircraft and think about the angle and the light. Aperture Priority keeps the whole aircraft sharp.',
+   rows:[['Mode','A'],['Shutter speed','Camera chooses'],['Aperture','f/8, or f/5.6 to f/11'],['ISO','100 to 400'],['Focus','AF-S, single point'],['Release mode','S'],['Exposure','Matrix, 0']]}
+];
+
+// Shared helpers used by all three designs
+function esc(s){ return String(s).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+function rowsHTML(rows){ return rows.map(r=>`<div class="${r[2]||''}"><span>${esc(r[0])}</span><span>${esc(r[1])}</span></div>`).join(''); }
+function firstLine(t){ return t.split('. ')[0].replace(/\.$/,'') + '.'; }
+const BYID = Object.fromEntries(CONTROLS.map((c,i)=>[c.id,c]));
+const SETTING_ROWS = ['Mode','Shutter speed','Aperture','ISO','Focus','Release mode','Exposure'];
+function presetValue(p, label){ const r = p.rows.find(x=>x[0]===label); return r ? r[1] : ''; }
+function previewBar(n){
+  const names = ['Hangar studio','Field notebook','Show day planner'];
+  return `<div class="preview-bar"><b>Preview</b><span>Design ${n} of 3: ${names[n-1]}</span><span class="sp"></span>${names.map((t,i)=>`<a href="design-${i+1}.html"${i+1===n?' aria-current="page"':''}>Design ${i+1}</a>`).join('')}<a href="index.html">All three</a></div>`;
+}
+
+document.getElementById('pb').remove();
+</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+function initViewer(cfg){
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+const stage = cfg.stage, pinsEl = cfg.pins, tt = cfg.tt, hint = cfg.hint || document.createElement('div');
+const V = (x,y,z) => new THREE.Vector3(x,y,z);
+const byId = Object.fromEntries(CONTROLS.map((c,i)=>[c.id,Object.assign(c,{i})]));
+
+/* ---------- renderer and scene ---------- */
+const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+stage.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(32, 1, 0.5, 400);
+camera.position.set(...(cfg.camPos||[22,13,-34]));
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.target.set(0, 0.6, -2);
+controls.minDistance = 12; controls.maxDistance = 70;
+controls.enablePan = false;
+controls.autoRotate = !reduce; controls.autoRotateSpeed = 0.9;
+
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(-14, 22, 12); scene.add(key);
+const rim = new THREE.DirectionalLight(0x32B4AF, 1.1); rim.position.set(18, 6, -20); scene.add(rim);
+const fill = new THREE.DirectionalLight(0xb9c8ff, .45); fill.position.set(10, -8, 18); scene.add(fill);
+scene.add(new THREE.AmbientLight(0xffffff, .12));
+const front = new THREE.DirectionalLight(0xffffff, 1.1); front.position.set(12, 16, -26); scene.add(front);
+
+const model = new THREE.Group(); scene.add(model);
+
+/* ---------- textures ---------- */
+function canvasTex(w,h,draw,srgb=true){
+  const c=document.createElement('canvas'); c.width=w; c.height=h; const g=c.getContext('2d'); draw(g,w,h);
+  const t=new THREE.CanvasTexture(c); if(srgb) t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=8; t.userData={c,g,draw}; return t;
+}
+const noiseTex = canvasTex(256,256,(g,w,h)=>{g.fillStyle='#808080';g.fillRect(0,0,w,h);for(let i=0;i<9000;i++){const v=110+Math.random()*40|0;g.fillStyle=`rgb(${v},${v},${v})`;g.fillRect(Math.random()*w,Math.random()*h,1.4,1.4)}},false);
+noiseTex.wrapS=noiseTex.wrapT=THREE.RepeatWrapping; noiseTex.repeat.set(3,3);
+const leatherTex = canvasTex(512,512,(g,w,h)=>{g.fillStyle='#7a7a7a';g.fillRect(0,0,w,h);for(let i=0;i<5200;i++){const r=1.5+Math.random()*4;const v=60+Math.random()*120|0;g.fillStyle=`rgba(${v},${v},${v},.7)`;g.beginPath();g.ellipse(Math.random()*w,Math.random()*h,r,r*(.6+Math.random()*.6),Math.random()*3,0,7);g.fill()}},false);
+leatherTex.wrapS=leatherTex.wrapT=THREE.RepeatWrapping; leatherTex.repeat.set(2.5,2.5);
+const knurlTex = canvasTex(512,32,(g,w,h)=>{for(let x=0;x<w;x+=8){g.fillStyle='#d0d0d0';g.fillRect(x,0,4,h);g.fillStyle='#202020';g.fillRect(x+4,0,4,h)}},false);
+knurlTex.wrapS=THREE.RepeatWrapping;
+
+/* ---------- materials ---------- */
+const M = {
+  body: new THREE.MeshPhysicalMaterial({color:0x151719, roughness:.5, clearcoat:.2, clearcoatRoughness:.5, bumpMap:noiseTex, bumpScale:.35, envMapIntensity:.55}),
+  rubber: new THREE.MeshStandardMaterial({color:0x101112, roughness:.93, bumpMap:leatherTex, bumpScale:1.4}),
+  btn: new THREE.MeshStandardMaterial({color:0x1f2125, roughness:.38, metalness:.15}),
+  knurl: new THREE.MeshStandardMaterial({color:0x1b1c1f, roughness:.55, metalness:.25, bumpMap:knurlTex, bumpScale:2}),
+  metal: new THREE.MeshStandardMaterial({color:0xc4c9cf, metalness:1, roughness:.26}),
+  dark: new THREE.MeshStandardMaterial({color:0x34373c, metalness:.85, roughness:.34}),
+  gloss: new THREE.MeshPhysicalMaterial({color:0x07080a, roughness:.12, clearcoat:1}),
+  glass: new THREE.MeshPhysicalMaterial({color:0x1d2a4a, roughness:.03, metalness:.35, clearcoat:1, envMapIntensity:2.2, iridescence:1, iridescenceIOR:1.6, iridescenceThicknessRange:[250,600]}),
+  red: new THREE.MeshStandardMaterial({color:0xc8262b, roughness:.4}),
+  white: new THREE.MeshStandardMaterial({color:0xe9ecef, roughness:.5})
+};
+
+/* ---------- control registry ---------- */
+const meshesFor = {};   // id -> [mesh]
+const hitList = [];
+function reg(id, mesh){
+  if(!id){ mesh.userData.cid=null; hitList.push(mesh); return mesh; }
+  const mats = Array.isArray(mesh.material) ? mesh.material.map(m=>m.clone()) : mesh.material.clone();
+  mesh.material = mats;
+  mesh.userData.cid = id; (meshesFor[id] ||= []).push(mesh); hitList.push(mesh); return mesh;
+}
+function add(mesh, id, parent=model){ parent.add(mesh); return reg(id, mesh); }
+function rbox(w,h,d,r,mat){ return new THREE.Mesh(new RoundedBoxGeometry(w,h,d,5,r), mat); }
+// orient a y-axis geometry so its axis points along n
+const UP = V(0,1,0);
+function alignTo(obj, n){ obj.quaternion.setFromUnitVectors(UP, n.clone().normalize()); }
+
+/* label decals */
+const labelCache = {};
+function labelTex(text){
+  if(labelCache[text]) return labelCache[text];
+  const t = canvasTex(256,256,(g,w,h)=>{
+    g.clearRect(0,0,w,h); g.fillStyle='#f3f5f7'; g.strokeStyle='#f3f5f7'; g.lineWidth=12; g.lineCap='round'; g.textAlign='center'; g.textBaseline='middle';
+    if(text==='REC'){ g.fillStyle='#e0262d'; g.beginPath(); g.arc(128,128,62,0,7); g.fill(); return; }
+    if(text==='PLAY'){ g.beginPath(); g.moveTo(98,78); g.lineTo(178,128); g.lineTo(98,178); g.closePath(); g.fill(); return; }
+    if(text==='BIN'){ g.lineWidth=11; g.strokeRect(92,100,72,86); g.beginPath(); g.moveTo(78,90); g.lineTo(178,90); g.moveTo(112,74); g.lineTo(144,74); g.moveTo(116,118); g.lineTo(116,168); g.moveTo(140,118); g.lineTo(140,168); g.stroke(); return; }
+    if(text==='ZIN'||text==='ZOUT'){ g.lineWidth=11; g.beginPath(); g.arc(116,116,46,0,7); g.moveTo(150,150); g.lineTo(186,186); g.moveTo(94,116); g.lineTo(138,116); if(text==='ZIN'){g.moveTo(116,94); g.lineTo(116,138);} g.stroke(); return; }
+    if(text==='METER'){ g.lineWidth=10; g.strokeRect(62,82,132,92); g.beginPath(); g.arc(128,128,22,0,7); g.fill(); return; }
+    if(text==='EC'){ g.lineWidth=9; g.strokeRect(70,70,116,116); g.beginPath(); g.moveTo(70,186); g.lineTo(186,70); g.stroke(); g.font='700 46px Barlow'; g.fillText('+',104,104); g.fillText('−',154,154); return; }
+    const size = text.length>4?62:text.length>3?72:text.length>2?84:text.length>1?100:120;
+    g.font=`700 ${size}px Barlow, Arial`; g.fillText(text,128,134);
+  });
+  return labelCache[text]=t;
+}
+function decal(text, r, pos, n, id){
+  const m = new THREE.Mesh(new THREE.CircleGeometry(r,40), new THREE.MeshBasicMaterial({map:labelTex(text), transparent:true, depthWrite:false, toneMapped:false}));
+  m.position.copy(pos); m.quaternion.setFromUnitVectors(V(0,0,1), n.clone().normalize());
+  m.material.userData.noHi = true; add(m, id); return m;
+}
+
+/* button: a short cylinder sitting on the surface at p, facing n */
+function button(id, p, n, r, h, label, mat=M.btn){
+  n = n.clone().normalize(); p = V(...p);
+  const g = new THREE.CylinderGeometry(r, r*1.04, h, 40);
+  const m = new THREE.Mesh(g, mat); alignTo(m, n); m.position.copy(p).addScaledVector(n, h/2); add(m, id);
+  // collar
+  const c = new THREE.Mesh(new THREE.TorusGeometry(r*1.08, r*.1, 10, 40), M.dark); c.quaternion.setFromUnitVectors(V(0,0,1), n); c.position.copy(p).addScaledVector(n,.02); add(c, id);
+  if(label) decal(label, r*.92, p.clone().addScaledVector(n, h+.012), n, id);
+  return m;
+}
+function dial(id, p, axis, r, h, opts={}){
+  const g = new THREE.CylinderGeometry(r, r, h, 64, 1);
+  const knurl = M.knurl.clone(); knurl.bumpMap = knurlTex.clone(); knurl.bumpMap.needsUpdate=true; knurl.bumpMap.repeat.set(opts.rep||5,1);
+  const m = new THREE.Mesh(g, [knurl, opts.cap||M.btn, opts.cap||M.btn]); alignTo(m, axis); m.position.set(...p); add(m, id); return m;
+}
+
+/* ---------- build the body ---------- */
+// main shell
+add(rbox(14, 8.6, 4.2, .62, M.body), null);
+// front leatherette panel left of the mount
+const lp = rbox(4.1, 6.6, .24, .1, M.rubber); lp.position.set(-4.95, -0.55, -2.13); add(lp, null);
+// back leatherette strip under the screen area left
+// grip
+const grip = rbox(4.0, 9.0, 3.7, 1.35, M.rubber); grip.position.set(5.2, 0.2, -3.0); add(grip, null);
+const gripTop = rbox(4.0, 1.2, 3.7, .5, M.body); gripTop.position.set(5.2, 4.3, -3.0); add(gripTop, null);
+// thumb rest
+const thumb = rbox(2.1, 2.8, .3, .14, M.rubber); thumb.position.set(6.05, 1.3, 2.12); add(thumb, null);
+// top right shoulder slab
+const slab = rbox(5.5, .62, 3.95, .22, M.body); slab.position.set(4.25, 4.5, -0.15); add(slab, null);
+// pentaprism
+{
+  const s = new THREE.Shape(); s.moveTo(-1.85,0); s.lineTo(1.75,0); s.lineTo(.65,2.6); s.lineTo(-1.25,2.6); s.closePath();
+  const g = new THREE.ExtrudeGeometry(s,{depth:4.8,bevelEnabled:true,bevelThickness:.3,bevelSize:.3,bevelSegments:5,curveSegments:8});
+  g.translate(0,0,-2.4); g.rotateY(Math.PI/2); g.translate(-0.4,4.2,0);
+  { const a=g.attributes.position; for(let i=0;i<a.count;i++){ const t=Math.min(1,Math.max(0,(a.getY(i)-4.2)/2.9)); a.setX(i, -0.4+(a.getX(i)+0.4)*(1-0.22*t)); } g.computeVertexNormals(); }
+  add(new THREE.Mesh(g, M.body), null);
+  // prism front badge plate, left blank
+  const plate = rbox(3.2, 1.05, .12, .05, M.gloss); plate.position.set(-0.4, 5.85, -1.7); plate.rotation.x = -0.4; add(plate, null);
+}
+// hot shoe
+{ const base = rbox(2.1,.22,1.9,.06,M.dark); base.position.set(-0.4,7.2,0.25); add(base,'hotshoe');
+  for(const sx of [-1,1]){ const rail = rbox(.22,.28,1.9,.05,M.metal); rail.position.set(-0.4+sx*.95,7.3,0.25); add(rail,'hotshoe'); } }
+// eyepiece
+{ const e = rbox(3.2, 2.5, 1.05, .45, M.rubber); e.position.set(-0.4, 5.6, 2.55); add(e, 'eyepiece');
+  const gl = new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.25), M.glass); gl.position.set(-0.4,5.65,3.09); add(gl,'eyepiece'); }
+button('diopter',[1.55,6.0,2.35],V(.15,.05,1),.3,.25,null,M.knurl);
+{ const lev = rbox(.5,.8,.25,.08,M.btn); lev.position.set(-2.35,6.2,2.42); add(lev,'vfshutter'); }
+
+// top left: release mode dial + four buttons + lock
+{
+  const d = dial('reldial',[-4.7,4.65,-0.1],V(0,1,0),1.58,.72,{rep:7});
+  // printed ring on top
+  const ringTex = canvasTex(512,512,(g,w,h)=>{
+    g.clearRect(0,0,w,h); g.translate(256,256); g.fillStyle='#f3f5f7'; g.font='700 40px Barlow'; g.textAlign='center'; g.textBaseline='middle';
+    const items=['S','CL','CH','Q','⌚','MUP']; items.forEach((t,i)=>{const a=-Math.PI/2+ (i-2.5)*0.42 + Math.PI; g.save(); g.rotate(a); g.fillText(t,0,-222); g.restore();});
+  });
+  const top = new THREE.Mesh(new THREE.CircleGeometry(1.58,64), new THREE.MeshBasicMaterial({map:ringTex,transparent:true,depthWrite:false,toneMapped:false}));
+  top.rotation.x=-Math.PI/2; top.position.set(-4.7,5.015,-0.1); add(top,'reldial');
+  const plinth = new THREE.Mesh(new THREE.CylinderGeometry(1.22,1.22,.12,48), M.btn); plinth.position.set(-4.7,5.06,-0.1); add(plinth,'reldial');
+  button('qual',[-5.25,5.12,0.45],V(0,1,0),.4,.2,'QUAL');
+  button('metering',[-4.15,5.12,0.45],V(0,1,0),.4,.2,'METER');
+  button('mode',[-5.25,5.12,-0.65],V(0,1,0),.4,.2,'MODE');
+  button('wb',[-4.15,5.12,-0.65],V(0,1,0),.4,.2,'WB');
+  button('rellock',[-6.15,4.3,-1.5],V(0,1,0),.24,.14,null);
+}
+// top right: shutter, power, buttons, LCD
+{
+  button('shutter',[5.3,4.9,-3.3],V(0,1,0),.56,.32,null,M.btn);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(.92,.22,16,48), M.dark); ring.rotation.x=Math.PI/2; ring.position.set(5.3,4.98,-3.3); add(ring,'power');
+  const tab = rbox(.9,.3,.42,.1,M.dark); tab.position.set(6.25,4.98,-3.0); tab.rotation.y=-.5; add(tab,'power');
+  button('movie',[3.1,4.81,-1.5],V(0,1,0),.36,.16,'REC');
+  button('iso',[4.1,4.81,-1.5],V(0,1,0),.36,.16,'ISO');
+  button('ec',[5.1,4.81,-1.45],V(0,1,0),.36,.16,'EC');
+  dial('frontdial',[5.2,3.55,-4.65],V(0,1,0),.85,.46,{rep:4});
+}
+/* screens */
+const scr = {mode:'S',sh:'1250',f:'8',iso:'200',af:'AF-C',area:'d25',rel:'CH',meter:'Matrix',ec:'+0.3'};
+const lcdTex = canvasTex(512,288,(g,w,h)=>drawLCD(g,w,h));
+function drawLCD(g,w,h){
+  const gr=g.createLinearGradient(0,0,0,h); gr.addColorStop(0,'#aab4a6'); gr.addColorStop(1,'#8f9a8c'); g.fillStyle=gr; g.fillRect(0,0,w,h);
+  g.fillStyle='#1b211b'; g.textBaseline='alphabetic';
+  g.font='700 112px "Barlow Condensed", Arial Narrow'; g.textAlign='left'; g.fillText(scr.sh, 28, 132);
+  g.font='700 40px "Barlow Condensed"'; g.fillText('F', 286, 126); g.font='700 112px "Barlow Condensed"'; g.fillText(scr.f, 312, 132);
+  g.font='700 40px "Barlow Condensed"'; g.fillText(scr.mode, 28, 46); g.fillText(scr.rel, 96, 46); g.fillText(scr.meter==='Matrix'?'[•]':'(•)', 180, 46);
+  g.fillText('ISO-A', 28, 200); g.font='700 64px "Barlow Condensed"'; g.fillText(scr.iso, 138, 206);
+  g.font='700 40px "Barlow Condensed"'; g.fillText('[  1.2k ]', 330, 206);
+  g.fillText(scr.ec==='0'?'':'±'+scr.ec.replace('+',''), 28, 262); g.fillText(scr.af, 160, 262);
+  // battery
+  g.lineWidth=4; g.strokeStyle='#1b211b'; g.strokeRect(430,20,58,28); g.fillRect(488,28,6,12); for(let i=0;i<4;i++) g.fillRect(436+i*13,25,10,18);
+}
+{ const m = new THREE.Mesh(new THREE.PlaneGeometry(3.85,2.17), new THREE.MeshStandardMaterial({map:lcdTex, roughness:.7, metalness:0, envMapIntensity:.15, emissive:0xffffff, emissiveMap:lcdTex, emissiveIntensity:.25}));
+  m.rotation.x=-Math.PI/2; m.position.set(4.3,4.838,0.35); add(m,'toplcd');
+  const bez = rbox(4.15,.06,2.45,.03,M.gloss); bez.position.set(4.3,4.795,0.35); add(bez,'toplcd'); }
+
+const rearTex = canvasTex(1024,640,(g,w,h)=>drawRear(g,w,h));
+function drawRear(g,w,h){
+  const gr=g.createLinearGradient(0,0,0,h); gr.addColorStop(0,'#0c1b28'); gr.addColorStop(1,'#050a10'); g.fillStyle=gr; g.fillRect(0,0,w,h);
+  g.fillStyle='#13293C'; g.fillRect(0,0,w,70); g.fillStyle='#32B4AF'; g.fillRect(0,70,w,4);
+  g.font='600 36px Barlow'; g.fillStyle='#DCE6EE'; g.textBaseline='middle'; g.textAlign='left'; g.fillText('Shooting info', 30, 37);
+  g.textAlign='right'; g.fillText('RAW  •  XQD  [1.2k]', w-30, 37);
+  // mode box
+  g.fillStyle='#32B4AF'; g.fillRect(30,110,150,150); g.fillStyle='#fff'; g.textAlign='center'; g.font='800 120px "Barlow Condensed"'; g.fillText(scr.mode,105,190);
+  g.textAlign='left'; g.font='700 140px "Barlow Condensed"'; g.fillStyle='#fff'; g.fillText('1/'+scr.sh, 220, 186);
+  g.font='700 140px "Barlow Condensed"'; g.fillText('f/'+scr.f, 640, 186);
+  g.font='600 30px Barlow'; g.fillStyle='#8FDCD8'; g.fillText('Shutter speed', 224, 266); g.fillText('Aperture', 644, 266);
+  // chips
+  const chips=[['ISO',scr.iso],['Focus',scr.af],['Area',scr.area],['Release',scr.rel],['Metering',scr.meter],['Exp. comp',scr.ec]];
+  chips.forEach((c,i)=>{ const x=30+(i%3)*325, y=320+Math.floor(i/3)*150; g.fillStyle='rgba(255,255,255,.07)'; g.fillRect(x,y,305,130);
+    g.fillStyle=i===0?'#D74949':'#6950A1'; g.fillRect(x,y,8,130);
+    g.fillStyle='#8FDCD8'; g.font='600 30px Barlow'; g.fillText(c[0],x+30,y+38); g.fillStyle='#fff'; g.font='700 62px "Barlow Condensed"'; g.fillText(c[1],x+30,y+94); });
+}
+{ const bez = rbox(7.7,5.05,.12,.12,M.gloss); bez.position.set(-0.7,-0.9,2.12); add(bez,'screen');
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(7.2,4.5), new THREE.MeshStandardMaterial({color:0x000000, emissive:0xffffff, emissiveMap:rearTex, emissiveIntensity:.95, roughness:.12, metalness:.1}));
+  m.material.userData.noHi = true; m.position.set(-0.7,-0.9,2.19); add(m,'screen'); }
+function redrawScreens(){ for(const t of [lcdTex, rearTex]){ const {g,c,draw}=t.userData; g.setTransform(1,0,0,1,0,0); draw(g,c.width,c.height); t.needsUpdate=true; } }
+
+// back left column
+button('playback',[-5.65,3.15,2.1],V(0,0,1),.42,.18,'PLAY');
+button('delete',[-4.4,3.15,2.1],V(0,0,1),.42,.18,'BIN');
+button('menu',[-5.65,1.35,2.1],V(0,0,1),.42,.18,'MENU');
+button('pcontrol',[-5.65,0.25,2.1],V(0,0,1),.42,.18,'?');
+button('zoomin',[-5.65,-0.85,2.1],V(0,0,1),.42,.18,'ZIN');
+button('zoomout',[-5.65,-1.95,2.1],V(0,0,1),.42,.18,'ZOUT');
+button('fn2',[-5.65,-3.1,2.1],V(0,0,1),.42,.18,'Fn2');
+// back right cluster
+button('afon',[4.1,3.15,2.1],V(0,0,1),.56,.22,'AF-ON');
+dial('maindial',[6.15,3.75,1.85],V(0,1,0),.98,.5,{rep:5});
+{ const base = new THREE.Mesh(new THREE.CylinderGeometry(.42,.48,.18,32), M.dark); base.rotation.x=Math.PI/2; base.position.set(4.1,1.55,2.19); add(base,'subsel');
+  const stick = new THREE.Mesh(new THREE.SphereGeometry(.36,32,16,0,Math.PI*2,0,Math.PI/2), M.rubber); stick.rotation.x=Math.PI/2; stick.position.set(4.1,1.55,2.27); add(stick,'subsel'); }
+{ const ring = new THREE.Mesh(new THREE.CylinderGeometry(1.0,1.04,.2,48), M.btn); ring.rotation.x=Math.PI/2; ring.position.set(4.3,-0.6,2.2); add(ring,'multisel');
+  const arrows = canvasTex(256,256,(g)=>{g.fillStyle='#f3f5f7'; g.translate(128,128); for(let i=0;i<4;i++){g.rotate(Math.PI/2); g.beginPath(); g.moveTo(0,-112); g.lineTo(-14,-94); g.lineTo(14,-94); g.closePath(); g.fill();}});
+  const top = new THREE.Mesh(new THREE.CircleGeometry(1.0,48), new THREE.MeshBasicMaterial({map:arrows,transparent:true,depthWrite:false,toneMapped:false})); top.material.userData.noHi=true; top.position.set(4.3,-0.6,2.305); add(top,'multisel');
+  button('multisel',[4.3,-0.6,2.3],V(0,0,1),.36,.1,'OK'); }
+{ const lv = rbox(.9,.36,.18,.1,M.btn); lv.position.set(4.3,-1.95,2.17); add(lv,'lock');
+  decal('L',.18,V(5.0,-1.95,2.105),V(0,0,1),'lock'); }
+button('info',[3.5,-3.2,2.1],V(0,0,1),.36,.16,'info');
+{ const ring = new THREE.Mesh(new THREE.TorusGeometry(.6,.13,12,40), M.dark); ring.position.set(4.65,-3.2,2.16); add(ring,'lv');
+  const tab = rbox(.3,.25,.25,.06,M.dark); tab.position.set(5.3,-3.55,2.18); add(tab,'lv');
+  button('lv',[4.65,-3.2,2.1],V(0,0,1),.38,.16,'Lv'); }
+button('ibutton',[5.85,-3.2,2.1],V(0,0,1),.36,.16,'i');
+
+// front
+{ const mount = new THREE.Mesh(new THREE.CylinderGeometry(2.6,2.6,.36,64,1,true), M.metal); mount.rotation.x=Math.PI/2; mount.position.set(-0.4,0.1,-2.28); add(mount,null);
+  const face = new THREE.Mesh(new THREE.RingGeometry(2.05,2.6,64), M.metal); face.position.set(-0.4,0.1,-2.461); face.rotation.y=Math.PI; add(face,null);
+  const hole = new THREE.Mesh(new THREE.CircleGeometry(2.05,64), new THREE.MeshStandardMaterial({color:0x020202,roughness:1})); hole.position.set(-0.4,0.1,-2.14); hole.rotation.y=Math.PI; add(hole,null);
+  const mirror = new THREE.Mesh(new THREE.PlaneGeometry(2.3,1.6), M.glass); mirror.position.set(-0.4,0.35,-1.5); mirror.rotation.set(Math.PI/4,Math.PI,0); add(mirror,null); }
+button('lensrel',[-3.85,1.6,-2.25],V(-.3,0,-1),.38,.2,null,M.dark);
+button('bkt',[-4.3,-0.35,-2.25],V(-.3,0,-1),.34,.16,'BKT');
+{ const ring = new THREE.Mesh(new THREE.TorusGeometry(.62,.14,12,40), M.dark); ring.position.set(-4.0,-2.3,-2.33); add(ring,'afmode');
+  const lever = rbox(.35,.7,.26,.08,M.dark); lever.position.set(-4.0,-1.55,-2.35); add(lever,'afmode');
+  button('afmode',[-4.0,-2.3,-2.25],V(-.3,0,-1),.4,.18,'AF'); }
+button('pv',[2.75,0.95,-2.1],V(.3,0,-1),.33,.18,'Pv');
+button('fn1',[2.75,-0.45,-2.1],V(.3,0,-1),.33,.18,'Fn1');
+// sides
+{ const flap = rbox(.24,5.6,2.5,.14,M.rubber); flap.position.set(-7.04,-0.45,0.25); add(flap,'ports');
+  for(const y of [1.3,-0.3,-1.9]){ const s=rbox(.08,.06,2.1,.02,M.gloss); s.position.set(-7.17,y,0.25); add(s,'ports'); } }
+{ const door = rbox(.18,5.2,2.7,.16,M.body); door.position.set(7.04,-0.6,0.3); add(door,'cards');
+  const latch = rbox(.18,.9,.5,.08,M.dark); latch.position.set(7.15,-0.6,1.35); add(latch,'cards'); }
+for(const [x,y,z] of [[-7.08,3.3,-0.3],[7.22,3.45,-0.45]]){ const t = new THREE.Mesh(new THREE.TorusGeometry(.42,.12,10,30), M.metal); t.position.set(x,y,z); t.rotation.y=Math.PI/2; add(t,'strap'); }
+// bottom
+{ const bd = rbox(2.6,.12,2.9,.12,M.body); bd.position.set(5.2,-4.32,-3.0); add(bd,'battery');
+  const lt = rbox(.9,.14,.45,.08,M.dark); lt.position.set(5.2,-4.36,-1.9); add(lt,'battery');
+  const ts = new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,.05,32), M.metal); ts.position.set(-0.4,-4.315,0.2); add(ts,'tripod');
+  const th = new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.06,24), new THREE.MeshStandardMaterial({color:0x050505})); th.position.set(-0.4,-4.33,0.2); add(th,'tripod'); }
+
+/* lens built from lathe profiles, pointing out of the front */
+const lens = new THREE.Group(); lens.position.set(-0.4,0.1,0); model.add(lens);
+function lathe(points, mat, id){
+  const g = new THREE.LatheGeometry(points.map(([r,z])=>new THREE.Vector2(r,z)), 96);
+  g.rotateX(-Math.PI/2); // lathe y axis becomes -z
+  const m = new THREE.Mesh(g, mat); lens.add(m); reg(id,m); return m;
+}
+function ridges(r0,r1,z0,z1,step){ const p=[[r0,z0]]; let z=z0, k=0; while(z<z1){ p.push([k%2?r0:r1, z]); z+=step; k++; } p.push([r0,z1]); return p; }
+lathe([[2.5,2.45],[2.6,2.5],[2.6,2.62],[2.78,2.7],[2.82,3.4]], M.metal, 'lens');
+lathe([[2.82,3.4],[2.86,3.45],[2.86,4.2],[2.9,4.25]], M.body, 'lens');
+lathe(ridges(2.9,3.0,4.25,6.3,.1), M.rubber, 'lens');
+lathe([[2.9,6.3],[2.86,6.35],[2.86,7.2],[2.92,7.25]], M.gloss, 'lens');
+lathe(ridges(2.92,3.0,7.25,8.35,.09), M.rubber, 'lens');
+lathe([[2.92,8.35],[2.95,8.4],[3.1,9.3],[3.14,9.55],[3.0,9.6],[2.65,9.6],[2.6,9.3]], M.body, 'lens');
+{ const idx = rbox(.08,.32,.05,.02,M.white); idx.position.set(0,2.88,-6.8); idx.rotation.x=0.02; lens.add(idx); reg('lens',idx);
+  const R=8, th=Math.asin(2.6/R); const g = new THREE.SphereGeometry(R,64,12,0,Math.PI*2,0,th); g.rotateX(-Math.PI/2);
+  const e = new THREE.Mesh(g, M.glass); e.position.set(0,0,-9.25 + R*Math.cos(th)); lens.add(e); reg('lens',e);
+  const inner = new THREE.Mesh(new THREE.CylinderGeometry(2.62,2.62,.3,64,1,true), new THREE.MeshStandardMaterial({color:0x050505,roughness:.9,side:THREE.DoubleSide})); inner.rotation.x=Math.PI/2; inner.position.z=-9.42; lens.add(inner); reg('lens',inner);
+  const sr = new THREE.Mesh(new THREE.TorusGeometry(2.66,.035,8,96), M.metal); sr.position.z=-9.58; lens.add(sr); reg('lens',sr);
+  const lip = new THREE.Mesh(new THREE.RingGeometry(2.62,3.12,96), new THREE.MeshStandardMaterial({color:0x111214,roughness:.6})); lip.rotation.y=Math.PI; lip.position.z=-9.6; lens.add(lip); reg('lens',lip); }
+
+/* soft floor shadow */
+{ const t = canvasTex(256,256,(g,w,h)=>{const r=g.createRadialGradient(128,128,4,128,128,128); r.addColorStop(0,'rgba(0,0,0,.55)'); r.addColorStop(1,'rgba(0,0,0,0)'); g.fillStyle=r; g.fillRect(0,0,w,h);});
+  const sh = new THREE.Mesh(new THREE.PlaneGeometry(26,20), new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false}));
+  sh.rotation.x=-Math.PI/2; sh.position.set(0,-6.2,-2.5); scene.add(sh); }
+
+/* centre the model */
+model.position.set(0,-0.4,1.6);
+
+/* ---------- pins ---------- */
+const pinEls = {};
+CONTROLS.forEach(c=>{
+  const b = document.createElement('button'); b.className='pin'; b.setAttribute('aria-label', c.name); b.innerHTML='<i></i>';
+  b.addEventListener('click', e=>{ e.stopPropagation(); select(c.id); });
+  b.addEventListener('pointerdown', e=>e.stopPropagation());
+  b.addEventListener('pointerenter', ()=>showTT(c.name, b)); b.addEventListener('pointerleave', hideTT);
+  pinsEl.appendChild(b); pinEls[c.id]=b; c._p=V(...c.pos); c._n=V(...c.n).normalize();
+});
+
+function showTT(text, el, x, y){
+  tt.textContent = text; tt.classList.add('on');
+  if(el){ const r=el.getBoundingClientRect(), s=stage.getBoundingClientRect(); x=r.left-s.left+r.width/2; y=r.top-s.top+r.height/2; }
+  const flip = x > stage.clientWidth - 220;
+  tt.style.transform = flip ? 'translate(calc(-100% - 14px),-50%)' : 'translate(14px,-50%)';
+  tt.style.left = x+'px'; tt.style.top = y+'px';
+}
+function hideTT(){ tt.classList.remove('on'); }
+
+/* ---------- state, tweens ---------- */
+
+const tweens = [];
+const ease = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+function tween(dur, fn, done, key){ if(reduce) dur=1; if(key){ for(let i=tweens.length-1;i>=0;i--) if(tweens[i].key===key) tweens.splice(i,1); } tweens.push({t0:performance.now(), dur, fn, done, key}); }
+function stopAuto(){ controls.autoRotate=false; hint.classList.add('gone'); cfg.onStop&&cfg.onStop(); }
+
+function flyTo(pos, target, dur=1100){
+  const p0=camera.position.clone(), t0=controls.target.clone();
+  controls.enabled=false;
+  tween(dur, e=>{ camera.position.lerpVectors(p0,pos,e); controls.target.lerpVectors(t0,target,e); }, ()=>{ controls.enabled=true; }, 'cam');
+}
+function settleRotation(){
+  const r = model.rotation.y, to = Math.round(r/(Math.PI*2))*Math.PI*2;
+  if(Math.abs(r-to)<1e-4) return; spinning=false;
+  tween(900, e=>{ model.rotation.y = r+(to-r)*e; }, ()=>{ model.rotation.y=0; }, 'rot');
+}
+let spinning=false;
+function spin(){
+  if(spinning) return; stopAuto(); spinning=true; const r0=model.rotation.y;
+  tween(1700, e=>{ model.rotation.y = r0 + Math.PI*2*e; }, ()=>{ spinning=false; model.rotation.y = r0; }, 'rot');
+}
+const CENTER = V(0,0.2,-1.4);
+function worldOf(v){ return v.clone().add(model.position); }
+function viewFor(c){
+  const n = c._n.clone(); const p = worldOf(c._p);
+  const extra = Math.abs(n.y)>.85 ? V(.12,0,c._p.z>-2.6?.6:-.6) : V(n.x*.1, .38, 0);
+  const dir = n.clone().add(extra).normalize();
+  const dist = (c.dist || 25)*(cfg.distScale||1)*(stage.clientWidth<560?.78:1);
+  const target = p.clone().lerp(worldOf(CENTER), .4);
+  return [target.clone().addScaledVector(dir, dist), target];
+}
+const VIEWS = { front:[V(0,4,-38)], back:[V(0,5,38)], top:[V(0.01,40,4)], left:[V(-38,5,0)], right:[V(38,5,-2)], under:[V(0.01,-38,2)] };
+function setView(name){
+  stopAuto(); settleRotation();
+  const [pos] = VIEWS[name]; flyTo(pos.clone().multiplyScalar(stage.clientWidth<560?.8:1), V(0,0.2,-0.6));
+}
+
+
+let selected=null, hovered=null, lensOn=true;
+let showPins = true;
+function select(id){
+  const c = byId[id]; if(!c) return;
+  stopAuto();
+  if(id==='lens' && !lensOn) toggleLens(true);
+  selected = id;
+  Object.values(pinEls).forEach(p=>p.classList.remove('sel')); pinEls[id].classList.add('sel');
+  settleRotation();
+  const [pos, target] = viewFor(c); flyTo(pos, target);
+  cfg.onSelect && cfg.onSelect(c);
+}
+function clearSel(){ selected=null; Object.values(pinEls).forEach(p=>p.classList.remove('sel')); }
+function toggleLens(on){
+  lensOn = on ?? !lensOn;
+  const s0 = lens.scale.z, s1 = lensOn?1:0.001; if(lensOn) lens.visible=true;
+  tween(600, e=>{ const s=s0+(s1-s0)*e; lens.scale.set(1,1,s); }, ()=>{ lens.visible=lensOn; }, 'lens');
+  cfg.onLens && cfg.onLens(lensOn); return lensOn;
+}
+function setScreens(o){ Object.assign(scr,o); redrawScreens(); }
+/* ---------- picking ---------- */
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function pick(ev){
+  const r = renderer.domElement.getBoundingClientRect();
+  ndc.set(((ev.clientX-r.left)/r.width)*2-1, -((ev.clientY-r.top)/r.height)*2+1);
+  ray.setFromCamera(ndc, camera);
+  const hits = ray.intersectObjects(hitList.filter(m=>m.visible && (m.parent!==lens || lens.visible)), false);
+  return hits.length ? hits[0] : null;
+}
+let down=null;
+renderer.domElement.addEventListener('pointerdown', e=>{ down={x:e.clientX,y:e.clientY}; stopAuto(); });
+renderer.domElement.addEventListener('pointerup', e=>{
+  if(!down) return; const moved = Math.hypot(e.clientX-down.x, e.clientY-down.y); down=null;
+  if(moved>6) return;
+  const h = pick(e); if(!h) return;
+  const id = h.object.userData.cid;
+  if(id) select(id); else spin();
+});
+let lastMove=0;
+renderer.domElement.addEventListener('pointermove', e=>{
+  if(e.pointerType!=='mouse' || down) return;
+  const now=performance.now(); if(now-lastMove<40) return; lastMove=now;
+  const h = pick(e); const id = h ? h.object.userData.cid : null;
+  hovered = id;
+  renderer.domElement.style.cursor = h ? 'pointer' : '';
+  const s = stage.getBoundingClientRect();
+  if(id) showTT(byId[id].name, null, e.clientX-s.left, e.clientY-s.top);
+  else if(h) showTT('Tap to spin the camera', null, e.clientX-s.left, e.clientY-s.top);
+  else hideTT();
+});
+renderer.domElement.addEventListener('pointerleave', ()=>{ hovered=null; hideTT(); });
+
+/* ---------- loop ---------- */
+const tmp = V(0,0,0), tn = V(0,0,0), camDir = V(0,0,0);
+let shiftCur=0;
+function applyShift(){ const w=stage.clientWidth,h=stage.clientHeight; if(Math.abs(shiftCur)>1e-4) camera.setViewOffset(w,h,shiftCur*w,0,w,h); else camera.clearViewOffset(); camera.updateProjectionMatrix(); }
+function setShift(v){ const s0=shiftCur; tween(800,e=>{ shiftCur=s0+(v-s0)*e; applyShift(); },null,'shift'); }
+function resize(){
+  const w=stage.clientWidth, h=stage.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h;
+  camera.fov = w<560 ? 44 : 32; applyShift();
+}
+new ResizeObserver(resize).observe(stage); resize();
+let visible = true;
+new IntersectionObserver(es=>{ visible = es[0].isIntersecting; }).observe(stage);
+
+const BIG = new Set(['lens','cards','ports','battery','eyepiece','screen','toplcd']);
+function highlight(t){
+  for(const [id, list] of Object.entries(meshesFor)){
+    const big = BIG.has(id)?.35:1; const k = (id===selected ? .55+.35*Math.sin(t*4.2) : id===hovered ? .4 : 0)*big;
+    for(const m of list){ const mats = Array.isArray(m.material)?m.material:[m.material];
+      for(const mt of mats){ if(!mt.emissive || mt.userData.noHi) continue; if(k){ mt.emissive.setHex(0x32B4AF); mt.emissiveIntensity=k; } else if(mt.emissiveIntensity){ mt.emissiveIntensity=0; } } }
+  }
+}
+function updatePins(){
+  const w=stage.clientWidth, h=stage.clientHeight;
+  for(const c of CONTROLS){
+    const el = pinEls[c.id];
+    if(c.id==='lens' && !lensOn){ el.classList.remove('vis'); continue; }
+    tmp.copy(c._p); model.localToWorld(tmp);
+    tn.copy(c._n).applyQuaternion(model.quaternion);
+    camDir.copy(camera.position).sub(tmp).normalize();
+    const facing = tn.dot(camDir) > .22;
+    const v = tmp.clone().project(camera);
+    const on = facing && v.z<1 && Math.abs(v.x)<1.05 && Math.abs(v.y)<1.05;
+    el.classList.toggle('vis', on && (showPins || c.id===selected));
+    el.classList.toggle('hidepin', !on);
+    if(on){ el.style.transform = `translate(${(v.x*.5+.5)*w}px,${(-v.y*.5+.5)*h}px)`; }
+  }
+}
+function loop(now){
+  requestAnimationFrame(loop);
+  if(!visible) return;
+  for(let i=tweens.length-1;i>=0;i--){ const tw=tweens[i]; const k=Math.min(1,(now-tw.t0)/tw.dur); tw.fn(ease(k)); if(k>=1){ tweens.splice(i,1); tw.done&&tw.done(); } }
+  controls.update();
+  highlight(now/1000);
+  renderer.render(scene, camera);
+  updatePins();
+}
+requestAnimationFrame(loop);
+cfg.onReady && cfg.onReady();
+document.fonts && document.fonts.ready.then(()=>{ Promise.all(['700 40px "Barlow Condensed"','700 40px Barlow','600 30px Barlow','800 40px "Barlow Condensed"'].map(f=>document.fonts.load(f))).then(()=>{ for(const k in labelCache){ const t=labelCache[k]; const {g,c,draw}=t.userData; g.setTransform(1,0,0,1,0,0); draw(g,c.width,c.height); t.needsUpdate=true; } redrawScreens(); }); });
+
+
+return { setShift, select, clearSel, setView, spin, toggleLens, setScreens, setPins:v=>{showPins=v;}, get selected(){return selected;}, resize, CONTROLS };
+}
+
+const $ = s=>document.querySelector(s);
+const overlay = ()=>innerWidth>1180;
+let mode='learn', area='all', q='', stepIdx=0, presetId='jets', quiet=false;
+let done={}; try{ done=JSON.parse(localStorage.getItem('d500-setup')||'{}'); }catch(e){}
+const save=()=>{ try{ localStorage.setItem('d500-setup',JSON.stringify(done)); }catch(e){} };
+
+const V = initViewer({
+  stage:$('#stage'), pins:$('#pins'), tt:$('#tt'), hint:$('#hint'), camPos:[26,13,-40], distScale:1.3,
+  onReady:()=>$('#loading').classList.add('gone'),
+  onSelect:c=>{ if(quiet) return; if(mode!=='learn') setMode('learn'); showControl(c); markList(c.id); }
+});
+const selectQuiet=id=>{ quiet=true; V.select(id); quiet=false; };
+// keep the camera centred in the gap between the two panels
+function placeCamera(){ V.setShift(overlay() ? ((380-300)/2)/innerWidth : 0); }
+addEventListener('resize', placeCamera); placeCamera();
+
+function detail(tags, title, body){
+  $('#dh').innerHTML=`<div class="ptags">${tags}</div><h2>${esc(title)}</h2>`;
+  $('#db').innerHTML=`<div class="fade-in">${body}</div>`; $('#db').scrollTop=0;
+}
+function controlBody(c){ return `${c.how?`<p class="phow">${esc(c.how)}</p>`:''}<p>${esc(c.what)}</p><h4>How it helps at an airshow</h4><p>${esc(c.helps)}</p><div class="rows">${rowsHTML(c.rows)}</div>${c.tip?`<p class="ptip"><b>I would suggest:</b> ${esc(c.tip)}</p>`:''}`; }
+function useTags(c){ const [u,cls]=USE[c.use]; return `<span>${AREAS[c.area]}</span><span class="${cls}">${u}</span>`; }
+
+/* mode 1: learn the buttons */
+function filtered(){ return CONTROLS.filter(c=>(area==='all'||c.area===area)&&(!q||(c.name+' '+c.what).toLowerCase().includes(q))); }
+function keepInList(el){ if(!el) return; const box=$('#items'); const r=el.getBoundingClientRect(), b=box.getBoundingClientRect();
+  if(r.top<b.top) box.scrollTop-=b.top-r.top+8; else if(r.bottom>b.bottom) box.scrollTop+=r.bottom-b.bottom+8;
+  if(r.left<b.left) box.scrollLeft-=b.left-r.left+8; else if(r.right>b.right) box.scrollLeft+=r.right-b.right+8; }
+function markList(id){ document.querySelectorAll('.it[data-id]').forEach(b=>b.classList.toggle('on',b.dataset.id===id)); keepInList(document.querySelector(`.it[data-id="${id}"]`)); }
+function showControl(c){
+  detail(useTags(c), c.name, controlBody(c));
+  $('#df').innerHTML=`<button id="pv">Previous</button><button class="go" id="nx">Next control</button>`;
+  const step=d=>{ const l=filtered().length?filtered():CONTROLS; const i=l.findIndex(x=>x.id===c.id); V.select(l[(i+d+l.length)%l.length].id); };
+  $('#pv').onclick=()=>step(-1); $('#nx').onclick=()=>step(1);
+}
+function renderLearn(){
+  $('#lhead').innerHTML=`<b>Every control</b><input class="search" id="q" placeholder="Search, for example ISO" value="${esc(q)}" aria-label="Search the controls"><div class="chips">${[['all','All'],['top','Top'],['back','Back'],['front','Front'],['side','Sides']].map(([k,l])=>`<button data-a="${k}" class="${area===k?'on':''}">${l}</button>`).join('')}</div>`;
+  const draw=()=>{ $('#items').innerHTML=filtered().map(c=>`<button class="it" data-id="${c.id}"><span class="dot u${c.use}"></span><span><b>${esc(c.name)}</b><small>${USE[c.use][0]}</small></span></button>`).join('') || '<p style="padding:14px;color:var(--pale)">Nothing matches that. Try a button name like MODE or AF-ON.</p>';
+    document.querySelectorAll('.it[data-id]').forEach(b=>b.onclick=()=>V.select(b.dataset.id)); if(V.selected) markList(V.selected); };
+  draw();
+  $('#q').oninput=e=>{ q=e.target.value.trim().toLowerCase(); draw(); };
+  document.querySelectorAll('.chips button').forEach(b=>b.onclick=()=>{ area=b.dataset.a; document.querySelectorAll('.chips button').forEach(x=>x.classList.toggle('on',x===b)); draw();
+    const map={top:'top',back:'back',front:'front',side:'right'}; if(map[area]){ V.clearSel(); V.setView(map[area]); } });
+  if(V.selected){ showControl(BYID[V.selected]); return; }
+  detail('<span class="u1">Start here</span>','Tap any control',`<p class="empty">Pick a control from the list, or tap one on the camera. Teal dots in the list are the ones I would learn first, <b>purple</b> are handy to know and grey you'll rarely touch at a show.</p><p class="ptip"><b>New to the D500?</b> Try Set up for a show next. It walks through the ten things I would sort the night before.</p>`);
+  $('#df').innerHTML=`<button class="go" id="toSetup">Set up for a show</button>`; $('#toSetup').onclick=()=>setMode('setup');
+}
+
+/* mode 2: set up for a show */
+function renderSetup(){
+  const n=TOUR.filter(([id])=>done[id]).length;
+  $('#lhead').innerHTML=`<b>Set up for a show</b><small>${n===TOUR.length?'All done, enjoy the show':`${n} of ${TOUR.length} done`}</small><div class="prog"><i style="width:${n/TOUR.length*100}%"></i></div>`;
+  $('#items').innerHTML=TOUR.map(([id,t],i)=>`<button class="it ${done[id]?'done':''} ${i===stepIdx?'on':''}" data-i="${i}"><span class="box" title="Tick it off"></span><span><b>${esc(t)}</b><small>${esc(BYID[id].name)}</small></span></button>`).join('');
+  keepInList(document.querySelector('.it.on'));
+  document.querySelectorAll('.it[data-i]').forEach(b=>b.onclick=e=>{ const i=+b.dataset.i; if(e.target.classList.contains('box')){ const id=TOUR[i][0]; done[id]=!done[id]; save(); renderSetup(); return; } goStep(i); });
+}
+function goStep(i){
+  stepIdx=Math.max(0,Math.min(TOUR.length-1,i)); const [id,t]=TOUR[stepIdx]; const c=BYID[id];
+  selectQuiet(id);
+  detail(`<span class="u2">Step ${stepIdx+1} of ${TOUR.length}</span><span>${esc(t)}</span>`, c.name, controlBody(c));
+  $('#df').innerHTML=`<button id="pv">Back</button><button class="go" id="tick">${done[id]?'Done, next step':'Tick it off, next step'}</button>`;
+  $('#pv').onclick=()=>goStep(stepIdx-1);
+  $('#tick').onclick=()=>{ done[id]=true; save(); if(stepIdx<TOUR.length-1) goStep(stepIdx+1); else { renderSetup(); V.clearSel(); V.setView('back');
+    detail('<span class="u1">All done</span>','Ready for the show',`<p>That's the camera set. On the day, take a look at your pictures after the first display and adjust from there.</p><p class="ptip"><b>Next:</b> pick what's flying for a starting point.</p>`); $('#df').innerHTML=`<button class="go" id="toFly">What's flying?</button>`; $('#toFly').onclick=()=>setMode('fly'); } };
+  renderSetup();
+}
+
+/* mode 3: what's flying */
+function renderFly(){
+  $('#lhead').innerHTML=`<b>What's flying?</b><small>Pick one and the camera's screens change to match.</small>`;
+  $('#items').innerHTML=PRESETS.map(p=>`<button class="it ${p.id===presetId?'on':''}" data-p="${p.id}"><span class="shs">1/${p.scr.sh}</span><span><b>${p.name}</b><small>f/${p.scr.f}, ISO ${p.scr.iso}, ${p.scr.rel}</small></span></button>`).join('');
+  document.querySelectorAll('.it[data-p]').forEach(b=>b.onclick=()=>setPreset(b.dataset.p));
+}
+function setPreset(id, fromTable){
+  presetId=id; const p=PRESETS.find(x=>x.id===id); V.setScreens(p.scr);
+  document.querySelectorAll('#cmp th[data-id]').forEach(t=>t.classList.toggle('on',t.dataset.id===id));
+  const ci=PRESETS.findIndex(x=>x.id===id)+1;
+  document.querySelectorAll('#cmp tbody tr').forEach(tr=>[...tr.children].forEach((td,i)=>td.classList.toggle('on',i===ci)));
+  if(mode!=='fly' && !fromTable) return;
+  if(fromTable && mode!=='fly'){ setMode('fly'); return; }
+  V.clearSel(); V.setView('back');
+  detail('<span class="rd">Starting settings</span>', p.name, `<p>${esc(p.text)}</p><div class="rows">${rowsHTML(p.rows)}</div><p class="ptip"><b>Remember:</b> keep ISO at 1200 or below so your pictures stay clean, and don't push the shutter speed faster than the aircraft needs.</p>`);
+  $('#df').innerHTML=`<button class="go" id="seeMode">Where do I set the mode?</button>`; $('#seeMode').onclick=()=>{ setMode('learn'); V.select('mode'); };
+  renderFly();
+}
+
+function setMode(m){
+  mode=m; document.querySelectorAll('.mode').forEach(b=>{ const on=b.dataset.m===m; b.classList.toggle('on',on); b.setAttribute('aria-selected',on); });
+  if(m==='learn') renderLearn();
+  if(m==='setup') goStep(stepIdx);
+  if(m==='fly') setPreset(presetId);
+}
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>V.setView(b.dataset.view));
+$('#spin').onclick=()=>V.spin();
+$('#lensB').onclick=e=>{ const on=V.toggleLens(); e.target.classList.toggle('on',on); e.target.textContent=on?'Lens on':'Lens off'; };
+let dots=true; $('#dotsB').onclick=e=>{ dots=!dots; V.setPins(dots); e.target.classList.toggle('on',dots); e.target.textContent=dots?'Dots on':'Dots off'; };
+
+/* comparison table below */
+$('#cmp').innerHTML = `<thead><tr><th>Setting</th>${PRESETS.map(p=>`<th data-id="${p.id}" tabindex="0">${p.name}<small>Show on the camera</small></th>`).join('')}</tr></thead>
+  <tbody>${SETTING_ROWS.map((r,i)=>`<tr class="${i===1?'hl':''}"><th>${r}</th>${PRESETS.map(p=>`<td>${esc(presetValue(p,r))}</td>`).join('')}</tr>`).join('')}
+  <tr><th>Why</th>${PRESETS.map(p=>`<td class="why">${esc(p.text)}</td>`).join('')}</tr></tbody>`;
+document.querySelectorAll('#cmp th[data-id]').forEach(t=>{ const go=()=>{ presetId=t.dataset.id; setPreset(t.dataset.id,true); $('#studio').scrollIntoView({behavior:'smooth'}); }; t.onclick=go; t.onkeydown=e=>{ if(e.key==='Enter') go(); }; });
+setPreset('jets'); setMode('learn');
+window.__v=V;
+</script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
+</body>
+</html>

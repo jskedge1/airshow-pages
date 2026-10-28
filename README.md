@@ -36,6 +36,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | Trader admin, Jack only (Wix page /trader-admin, members only, page code velo/page-code/trader-admin.js) | https://jskedge1.github.io/airshow-pages/traders/admin.html |
 | Privacy, cookies and terms (Wix page /policies, linked from the footer). Six policies in one tabbed page in the original Our Policies design (banner photos in policies-img/), built from the text files in policies-src/ by tools-policies.py. The same text is in the CMS collection "UK Air Show Guide Policy's" for the /ourpolicys list page, so change both. | https://jskedge1.github.io/airshow-pages/policies.html |
 | Airshow Security and Bag Searches (planning guide, Wix page /airshow-security, photos in security-img/) | https://jskedge1.github.io/airshow-pages/airshow-security.html |
+| Nikon D500 3D Camera Guide (photography guide; Wix page /nikon-d500-guide still to be created, then set live:true in links.js). 3D camera built with three.js from jsDelivr, every control clickable with airshow settings, set up checklist and settings by aircraft | https://jskedge1.github.io/airshow-pages/nikon-d500.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
