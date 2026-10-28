@@ -286,6 +286,26 @@ export const getDirectory = webMethod(Permissions.Anyone, () => wrap(async () =>
   return { traders: cards, shows: SHOWS, founding: { taken, total: FOUNDING_PLACES }, loggedIn: !!m };
 }));
 
+// Traders at this show: the block on each feature show page (traders-block.js) reads this through the public
+// feed in http-functions.js. Only live listings booked (or marked cancelled) for that show, each trimmed by publicCard.
+export async function getShowTraders(showId) {
+  const id = clean(showId, 40);
+  if (!SHOWS[id]) return { show: id, traders: [] };
+  const booked = await wixData.query(C.shows).eq("showId", id).hasSome("status", ["booked", "cancelled"]).limit(500).find(OPTS);
+  const ids = [...new Set(booked.items.map((s) => s.traderId))];
+  if (!ids.length) return { show: id, name: SHOWS[id], traders: [] };
+  const res = await wixData.query(C.traders).hasSome("_id", ids).eq("status", "live").limit(500).find(OPTS);
+  const traders = [];
+  res.items.forEach((t) => {
+    const card = publicCard(t, booked.items);
+    const here = card.shows.find((s) => s.showId === id);
+    if (!here) return;
+    delete card.shows;
+    traders.push(Object.assign(card, { dates: here.dates, pitch: here.pitch, cancelled: here.cancelled }));
+  });
+  return { show: id, name: SHOWS[id], traders };
+}
+
 export const submitListing = webMethod(Permissions.Anyone, (input) => wrap(async () => {
   const i = input || {};
   const listing = listingFromInput(i);

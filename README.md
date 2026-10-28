@@ -160,3 +160,15 @@ Wix editor setup for the traders pages (done 25 Oct 2026, saved, not published):
 - Each page has one HTML embed with ID html1, stretched full width, H 1000, Y 360, inside a section set to H 1020 (the section must be taller than the embed or the footer sits on top of it).
 - Page code from velo/page-code is pasted into each page, and velo/backend/traders.web.js is the backend web module traders.web.js.
 - To try it without publishing, use Test Site in the editor. Click Test Site again after each save, and add a new &v= to the address if the old layout still shows.
+
+## Traders at this show (28 Oct 2026)
+
+Every feature show page (camping-layout/<show>.html) has a "Traders at this show" block in Food and facilities, just
+above the drop downs: `<ukag-show-traders data-show="cosford" data-name="RAF Cosford Air Show">`, drawn by `traders-block.js`
+(shadow DOM, so it can't clash with the page). It shows the approved Airshow Traders listings booked for that show, food and
+drink first and Headliners leading, in a sideways rail (arrows and swipe) so the page height stays the same however many
+traders join. Data comes from the public feed `https://www.ukairshowguide.co.uk/_functions/showTraders?show=<id>`
+(`velo/backend/http-functions.js`, which calls `getShowTraders` in `traders.web.js`). Show ids match the backend SHOWS list
+(gransden.html uses little-gransden; Headcorn has no traders list yet). If the feed can't be reached or nobody has listed the
+show, a short "first traders are on their way" note shows instead. Add `?tdemo=1` to a page address to check the layout with
+example traders; visitors never see those.
