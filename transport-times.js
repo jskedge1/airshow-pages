@@ -169,6 +169,118 @@ var DATA = {
      "https://www.gwr.com/-/media/gwr-sc-website/files/timetables/may-26-december-26/BL-train-times-17-May-to-12-December-2026-v3.pdf"
     ]
    }
+  ],
+  "bus": [
+   {
+    "title": "Stagecoach 77 at Fairford Market Place, Monday to Friday",
+    "rows": [
+     [
+      "07:00",
+      "Fairford to Lechlade and Highworth",
+      "Stagecoach West, at Highworth 07:35"
+     ],
+     [
+      "07:14",
+      "Fairford to Cirencester",
+      "At Cirencester, The Forum 07:46"
+     ],
+     [
+      "09:50",
+      "Fairford to Cirencester",
+      "At Cirencester 10:13"
+     ],
+     [
+      "11:29",
+      "Fairford to Lechlade and Highworth",
+      "At Highworth 12:00"
+     ],
+     [
+      "12:50",
+      "Fairford to Cirencester",
+      "At Cirencester 13:13"
+     ],
+     [
+      "13:49",
+      "Fairford to Lechlade",
+      "At Lechlade 14:07"
+     ],
+     [
+      "17:05",
+      "Fairford to Cirencester",
+      "At Cirencester 17:24"
+     ],
+     [
+      "18:04",
+      "Fairford to Lechlade and Highworth",
+      "Last bus, at Highworth 18:35"
+     ]
+    ],
+    "note": "From the Stagecoach West timetable data on the Bus Open Data Service, valid until 22 July 2027. Extra school day journeys are not shown. The roads around RAF Fairford are under traffic management during the show, so I wouldn't rely on these to reach the showground.",
+    "source": [
+     "Stagecoach West timetable data, Bus Open Data Service",
+     "https://www.bus-data.dft.gov.uk/"
+    ]
+   },
+   {
+    "title": "Saturday buses at Fairford Market Place",
+    "rows": [
+     [
+      "07:00",
+      "77 Fairford to Lechlade and Highworth",
+      "Stagecoach West, at Highworth 07:35"
+     ],
+     [
+      "08:15",
+      "77 Fairford to Cirencester",
+      "At Cirencester, The Forum 08:40"
+     ],
+     [
+      "09:10",
+      "77 Fairford to Lechlade",
+      "At Lechlade 09:30"
+     ],
+     [
+      "10:15",
+      "76 Fairford to Cirencester via Kempsford",
+      "At Cirencester 10:55"
+     ],
+     [
+      "12:00",
+      "77 Fairford to Lechlade and Highworth",
+      "At Highworth 12:35"
+     ],
+     [
+      "13:15",
+      "77 Fairford to Cirencester",
+      "At Cirencester 13:40"
+     ],
+     [
+      "15:05",
+      "76 Fairford to Lechlade via Southrop",
+      "At Lechlade 15:42"
+     ],
+     [
+      "17:05",
+      "77 Fairford to Cirencester",
+      "At Cirencester 17:28"
+     ],
+     [
+      "18:04",
+      "77 Fairford to Lechlade and Highworth",
+      "Last bus, at Highworth 18:35"
+     ],
+     [
+      "Sunday",
+      "No buses",
+      "No Sunday or bank holiday service on either route"
+     ]
+    ],
+    "note": "From the Stagecoach West timetable data on the Bus Open Data Service, valid until 22 July 2027. Route 76 also runs one journey each way on Monday, Tuesday and Thursday, leaving Fairford at 09:45 for Cirencester and at 13:23 back towards Southrop.",
+    "source": [
+     "Stagecoach West timetable data, Bus Open Data Service",
+     "https://www.bus-data.dft.gov.uk/"
+    ]
+   }
   ]
  },
  "cosford": {
@@ -263,14 +375,34 @@ var DATA = {
       "Transport for Wales, Wolverhampton 18:11, Birmingham 18:31"
      ],
      [
+      "18:12",
+      "Cosford to Birmingham New Street",
+      "West Midlands Railway, Wolverhampton 18:31, Birmingham 18:51"
+     ],
+     [
       "18:44",
       "Cosford to Birmingham New Street",
       "West Midlands Railway, Wolverhampton 19:03, Birmingham 19:21"
      ],
      [
+      "18:59",
+      "Cosford to Birmingham New Street",
+      "Transport for Wales, Wolverhampton 19:11, Birmingham 19:32"
+     ],
+     [
+      "19:12",
+      "Cosford to Birmingham New Street",
+      "West Midlands Railway, Wolverhampton 19:31, Birmingham 19:51"
+     ],
+     [
+      "19:25",
+      "Cosford to Wolverhampton",
+      "Show extra, arrives 19:44"
+     ],
+     [
       "Then",
       "Hourly at 12 minutes past",
-      "19:12, 20:12 and 21:12, about 40 minutes to Birmingham"
+      "20:12 and 21:12, about 40 minutes to Birmingham"
      ],
      [
       "22:25",
@@ -298,9 +430,19 @@ var DATA = {
       "West Midlands Railway, Telford Central 16:42, Shrewsbury 17:05"
      ],
      [
+      "16:53",
+      "Cosford to Shrewsbury",
+      "Transport for Wales, Telford Central 17:02, Shrewsbury 17:24"
+     ],
+     [
       "17:32",
       "Cosford to Shrewsbury",
       "West Midlands Railway, arrives 18:05"
+     ],
+     [
+      "17:47",
+      "Cosford to Shrewsbury",
+      "Show extra, arrives 18:21"
      ],
      [
       "17:53",
@@ -313,14 +455,19 @@ var DATA = {
       "Show extra, arrives 18:44"
      ],
      [
+      "18:32",
+      "Cosford to Shrewsbury",
+      "West Midlands Railway, arrives 19:05"
+     ],
+     [
       "18:53",
       "Cosford to Shrewsbury",
       "Transport for Wales, arrives 19:22"
      ],
      [
       "Then",
-      "Hourly at 32 minutes past",
-      "19:32, 20:32 and 21:32, about 33 minutes"
+      "About hourly at 32 minutes past",
+      "19:32, 20:11, 20:32 and 21:32, about 33 minutes"
      ],
      [
       "22:46",
@@ -352,7 +499,7 @@ var DATA = {
      [
       "10:41",
       "Wolverhampton to Cosford",
-      "Show day train, at Cosford 10:52"
+      "Transport for Wales, extra show day stop, at Cosford 10:52"
      ],
      [
       "08:50",
@@ -362,7 +509,7 @@ var DATA = {
      [
       "11:41",
       "Wolverhampton to Cosford",
-      "Show day train, at Cosford 11:52"
+      "Transport for Wales, extra show day stop, at Cosford 11:52"
      ]
     ],
     "note": "Avanti times from the timetable valid 17 May to 12 December 2026, Sunday trains to Wolverhampton are hourly and take about 2 hours 40 minutes. Cosford times from the 2026 show day timetable.",
@@ -434,7 +581,7 @@ var DATA = {
      [
       "Saturday",
       "Wolverhampton 07:30, 09:25, 11:15, 13:25, 15:35",
-      "Cosford about 22 minutes later"
+      "Cosford garage about 22 to 30 minutes later"
      ],
      [
       "Saturday",
@@ -447,7 +594,7 @@ var DATA = {
       "Last bus from Cosford 18:01"
      ]
     ],
-    "note": "From the Banga Buses timetable starting 29 March 2026. The show is on a Sunday, so the train is the only public transport option on the day.",
+    "note": "From the Banga Buses timetable data on the Bus Open Data Service, valid until July 2027. The show is on a Sunday, so the train is the only public transport option on the day.",
     "source": [
      "Banga Buses timetables",
      "https://bangabuses.co.uk/bus-timetables/"
@@ -459,33 +606,118 @@ var DATA = {
   "checked": "2026-10-29",
   "rail-red": [
    {
-    "title": "Linking with the 247 bus at Redditch",
+    "title": "Saturday, linking with the 247 bus",
     "rows": [
      [
-      "Bus",
-      "Redditch Bus Station, Stand H",
-      "Diamond 247 to Ragley Hall, about 45 minutes"
+      "08:15",
+      "Birmingham New Street to Redditch",
+      "Arrives 08:53, in time for the 09:30 bus"
      ],
      [
-      "Saturday",
-      "Buses leave Redditch 09:30, 12:40, 15:50",
-      "Last bus back reaches Redditch 18:54"
+      "11:43",
+      "Birmingham New Street to Redditch",
+      "Arrives 12:23, in time for the 12:40 bus"
      ],
      [
-      "Friday",
-      "Buses leave Redditch through the day",
-      "Last bus back reaches Redditch 18:54"
+      "14:43",
+      "Birmingham New Street to Redditch",
+      "Arrives 15:23, in time for the 15:50 bus"
      ],
      [
-      "Sunday",
-      "No 247 shown",
-      "No Sunday bus in the current timetable"
+      "Then",
+      "Every 30 minutes",
+      "West Midlands Railway, about 40 minutes"
+     ],
+     [
+      "16:01",
+      "Redditch to Birmingham New Street",
+      "Arrives 16:42, after the bus that reaches Redditch at 15:44"
+     ],
+     [
+      "19:01",
+      "Redditch to Birmingham New Street",
+      "Arrives 19:42, after the last bus reaches Redditch at 18:54"
+     ],
+     [
+      "23:31",
+      "Last train, Redditch to Birmingham New Street",
+      "Arrives 00:11"
      ]
     ],
-    "note": "I could not read the current West Midlands Railway Cross City timetable for Redditch, so train times are not shown. Please check National Rail. The last buses back leave well before the Friday Nightfire and the evening balloons.",
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel. The 247 leaves from Redditch Bus Station, Stand H.",
     "source": [
-     "Diamond Bus 247 timetable",
-     "https://www.diamondbuses.com/bus-services/ww/ww247-redditch/"
+     "Network Rail timetable, Table 70",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/London%20North%20West%20Route/Table%20070.pdf"
+    ]
+   },
+   {
+    "title": "Friday, linking with the 247 bus",
+    "rows": [
+     [
+      "11:43",
+      "Birmingham New Street to Redditch",
+      "Arrives 12:23, in time for the 12:40 bus"
+     ],
+     [
+      "12:43",
+      "Birmingham New Street to Redditch",
+      "Arrives 13:23, in time for the 14:00 bus"
+     ],
+     [
+      "14:43",
+      "Birmingham New Street to Redditch",
+      "Arrives 15:23, in time for the 15:50 bus"
+     ],
+     [
+      "Then",
+      "Every 30 minutes",
+      "West Midlands Railway, about 40 minutes"
+     ],
+     [
+      "19:01",
+      "Redditch to Birmingham New Street",
+      "Arrives 19:42, after the last bus reaches Redditch at 18:54"
+     ],
+     [
+      "23:31",
+      "Last train, Redditch to Birmingham New Street",
+      "Arrives 00:11"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel. There is no bus back after the Nightfire, so I would book a taxi to Redditch if you are staying late.",
+    "source": [
+     "Network Rail timetable, Table 70",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/London%20North%20West%20Route/Table%20070.pdf"
+    ]
+   },
+   {
+    "title": "Sunday",
+    "rows": [
+     [
+      "08:58",
+      "First train, Birmingham New Street to Redditch",
+      "Arrives 09:22"
+     ],
+     [
+      "Then",
+      "Every 30 minutes",
+      "West Midlands Railway, about 37 minutes"
+     ],
+     [
+      "Bus",
+      "No 247 on Sundays",
+      "You would need a taxi from Redditch to Ragley Hall"
+     ],
+     [
+      "22:57",
+      "Last train, Redditch to Birmingham New Street",
+      "Arrives 23:33"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel. Diamond’s current 247 timetable has no Sunday service.",
+    "source": [
+     "Network Rail timetable, Table 70",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/London%20North%20West%20Route/Table%20070.pdf"
     ]
    }
   ],
@@ -510,21 +742,21 @@ var DATA = {
      ],
      [
       "11:44",
-      "Ragley Hall to Redditch",
-      "Arrives 12:34"
+      "Ragley Hall to Redditch Bus Station",
+      "Time at Arrow, Worcester Road. Arrives 12:34"
      ],
      [
       "14:54",
-      "Ragley Hall to Redditch",
-      "Arrives 15:44"
+      "Ragley Hall to Redditch Bus Station",
+      "Time at Arrow, Worcester Road. Arrives 15:44"
      ],
      [
       "18:04",
-      "Ragley Hall to Redditch",
-      "Last bus, arrives 18:54"
+      "Ragley Hall to Redditch Bus Station",
+      "Last bus, time at Arrow, Worcester Road. Arrives 18:54"
      ]
     ],
-    "note": "Diamond Bus, current timetable checked October 2026. Three buses each way on Saturdays. The Ragley Hall stop is not timed, so times shown are for Arrow, Worcester Road, the next stop along. Be at the stop a few minutes early.",
+    "note": "Diamond Bus, current timetable checked October 2026. Three buses each way on Saturdays, and no service on Sundays or bank holidays. The Ragley Hall stop is not timed, so times shown are for Arrow, Worcester Road, the stop on the Alcester side of Ragley. Buses from Redditch reach Ragley a few minutes after that time, and buses back to Redditch call there a few minutes before it, so I would be at the stop early.",
     "source": [
      "Diamond Bus 247 timetable",
      "https://www.diamondbuses.com/bus-services/ww/ww247-redditch/"
@@ -540,13 +772,13 @@ var DATA = {
      ],
      [
       "Friday",
-      "Leaves Redditch 10:50, 12:40, 14:00, 15:50",
-      "At Arrow, Worcester Road 11:32, 13:22, 14:42, 16:32"
+      "Leaves Redditch 12:40, 14:00, 15:50",
+      "At Arrow, Worcester Road 13:22, 14:42, 16:32"
      ],
      [
       "Friday",
       "Back towards Redditch 13:04, 14:54, 16:04, 18:04",
-      "From Arrow, Worcester Road. Last bus arrives Redditch 18:54"
+      "Times at Arrow, Worcester Road. Last bus arrives Redditch 18:54"
      ],
      [
       "Sunday",
@@ -566,7 +798,7 @@ var DATA = {
   "checked": "2026-10-29",
   "bus-local": [
    {
-    "title": "Bus 132 on Sundays",
+    "title": "Bus 132 on Sundays and bank holidays",
     "rows": [
      [
       "10:12",
@@ -605,14 +837,350 @@ var DATA = {
      ],
      [
       "Every 2 hours",
-      "Sundays only",
-      "About 30 minutes from Cambridge station, stop at IWM Hangar 1 on Whittlesford Road"
+      "Sundays and bank holidays only",
+      "About 30 minutes from Cambridge station, also calls at Trumpington Park and Ride. Stop at IWM Hangar 1"
      ]
     ],
-    "note": "From Traveline journey planner data for Sunday 10 January 2027, the same as November 2026. Traveline lists A2B Bus and Coach as the operator, not Myall's. There is no 132 on Saturdays, and the 7A runs on weekdays only with a few journeys that do not call at the museum.",
+    "note": "From the operator’s data on the DfT Bus Open Data Service, valid 22 October 2026 to 22 July 2027, which lists A2B Bus and Coach as the operator. There is no 132 on Saturdays, and the 7A runs on weekdays only and does not call at the museum.",
     "source": [
-     "Traveline journey planner",
-     "https://www.traveline.info/"
+     "DfT Bus Open Data Service",
+     "https://data.bus-data.dft.gov.uk/"
+    ]
+   }
+  ],
+  "rail-shuttle": [
+   {
+    "title": "Trains to Cambridge on Saturday",
+    "rows": [
+     [
+      "07:24",
+      "London King’s Cross to Cambridge",
+      "Great Northern, arrives 08:14"
+     ],
+     [
+      "07:31",
+      "London St Pancras to Cambridge",
+      "Thameslink, arrives 08:39"
+     ],
+     [
+      "07:54",
+      "London King’s Cross to Cambridge",
+      "Great Northern, arrives 08:43"
+     ],
+     [
+      "07:54",
+      "London Liverpool Street to Cambridge",
+      "Greater Anglia, arrives 09:07"
+     ],
+     [
+      "08:24",
+      "London King’s Cross to Cambridge",
+      "Great Northern, arrives 09:13"
+     ],
+     [
+      "Then",
+      "Every 30 minutes from each",
+      "King’s Cross about 50 minutes, St Pancras and Liverpool Street about 70 minutes"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel.",
+    "source": [
+     "Network Rail timetable, Table 15",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20015.pdf"
+    ]
+   },
+   {
+    "title": "Trains home from Cambridge on Saturday",
+    "rows": [
+     [
+      "16:12",
+      "Cambridge to London King’s Cross",
+      "Great Northern, arrives 17:02"
+     ],
+     [
+      "16:21",
+      "Cambridge to London St Pancras",
+      "Thameslink, arrives 17:29"
+     ],
+     [
+      "16:59",
+      "Cambridge to London Liverpool Street",
+      "Greater Anglia, arrives 18:12"
+     ],
+     [
+      "Then",
+      "King’s Cross at 12 and 42 minutes past",
+      "Liverpool Street at 18 and 59 minutes past"
+     ],
+     [
+      "22:47",
+      "Last train to London Liverpool Street",
+      "Arrives 00:12"
+     ],
+     [
+      "23:51",
+      "Last train to London King’s Cross",
+      "Arrives 01:04"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel. In 2026 the last free shuttle left Duxford at 18:30.",
+    "source": [
+     "Network Rail timetable, Table 15",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20015.pdf"
+    ]
+   },
+   {
+    "title": "Sunday",
+    "rows": [
+     [
+      "08:12",
+      "London King’s Cross to Cambridge",
+      "Great Northern, arrives 09:15"
+     ],
+     [
+      "08:41",
+      "London King’s Cross to Cambridge",
+      "Great Northern, arrives 09:50"
+     ],
+     [
+      "08:54",
+      "London Liverpool Street to Cambridge",
+      "Greater Anglia, arrives 10:09"
+     ],
+     [
+      "Then",
+      "Every 30 to 60 minutes",
+      "Thameslink from St Pancras starts later on Sundays"
+     ],
+     [
+      "16:42",
+      "Cambridge to London King’s Cross",
+      "Great Northern, arrives 17:35, then hourly at 42 minutes past"
+     ],
+     [
+      "16:57",
+      "Cambridge to London Liverpool Street",
+      "Greater Anglia, arrives 18:11, then every 30 minutes"
+     ],
+     [
+      "22:18",
+      "Last train to London Liverpool Street",
+      "Arrives 23:42"
+     ],
+     [
+      "23:42",
+      "Last train to London King’s Cross",
+      "Arrives 01:14"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel.",
+    "source": [
+     "Network Rail timetable, Table 15",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20015.pdf"
+    ]
+   }
+  ],
+  "rail-whit": [
+   {
+    "title": "Trains to Whittlesford Parkway on Saturday",
+    "rows": [
+     [
+      "07:24",
+      "London Liverpool Street to Whittlesford Parkway",
+      "Arrives 08:35, stopping train"
+     ],
+     [
+      "07:54",
+      "London Liverpool Street to Whittlesford Parkway",
+      "Arrives 08:55"
+     ],
+     [
+      "08:54",
+      "London Liverpool Street to Whittlesford Parkway",
+      "Arrives 09:55"
+     ],
+     [
+      "Then",
+      "At 24 and 54 minutes past the hour",
+      "Greater Anglia, about 1 hour to 1 hour 10 minutes"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel.",
+    "source": [
+     "Network Rail timetable, Table 14",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20014.pdf"
+    ]
+   },
+   {
+    "title": "Trains home on Saturday",
+    "rows": [
+     [
+      "16:09",
+      "Whittlesford Parkway to London Liverpool Street",
+      "Arrives 17:12"
+     ],
+     [
+      "16:29",
+      "Whittlesford Parkway to London Liverpool Street",
+      "Arrives 17:42"
+     ],
+     [
+      "Then",
+      "At 09 and 29 minutes past the hour",
+      "Until 21:29"
+     ],
+     [
+      "21:58",
+      "Whittlesford Parkway to London Liverpool Street",
+      "Arrives 23:12"
+     ],
+     [
+      "22:58",
+      "Last train to London Liverpool Street",
+      "Arrives 00:12"
+     ],
+     [
+      "Two or three an hour",
+      "Whittlesford Parkway to Cambridge",
+      "About 12 minutes, last train 23:56"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel.",
+    "source": [
+     "Network Rail timetable, Table 14",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20014.pdf"
+    ]
+   },
+   {
+    "title": "Sunday",
+    "rows": [
+     [
+      "07:54",
+      "London Liverpool Street to Whittlesford Parkway",
+      "Arrives 09:00"
+     ],
+     [
+      "08:54",
+      "London Liverpool Street to Whittlesford Parkway",
+      "Arrives 09:58"
+     ],
+     [
+      "Then",
+      "At 23 and 54 minutes past the hour",
+      "Greater Anglia"
+     ],
+     [
+      "16:06",
+      "Whittlesford Parkway to London Liverpool Street",
+      "Arrives 17:11"
+     ],
+     [
+      "16:29",
+      "Whittlesford Parkway to London Liverpool Street",
+      "Arrives 17:42"
+     ],
+     [
+      "Then",
+      "At 06 and 29 minutes past the hour",
+      "Last train 22:29, arrives 23:42"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel.",
+    "source": [
+     "Network Rail timetable, Table 14",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20014.pdf"
+    ]
+   }
+  ],
+  "rail-roy": [
+   {
+    "title": "Saturday",
+    "rows": [
+     [
+      "08:01",
+      "London St Pancras to Royston",
+      "Thameslink, arrives 08:53"
+     ],
+     [
+      "08:31",
+      "London St Pancras to Royston",
+      "Thameslink, arrives 09:23"
+     ],
+     [
+      "08:36",
+      "London King’s Cross to Royston",
+      "Great Northern, arrives 09:43"
+     ],
+     [
+      "Then",
+      "Thameslink every 30 minutes",
+      "Great Northern hourly from King’s Cross"
+     ],
+     [
+      "16:07",
+      "Royston to London St Pancras",
+      "Thameslink, arrives 16:59"
+     ],
+     [
+      "16:46",
+      "Royston to London King’s Cross",
+      "Great Northern, arrives 17:52"
+     ],
+     [
+      "Then",
+      "Thameslink at 07 and 37 minutes past",
+      "Hourly at 07 minutes past after 19:37"
+     ],
+     [
+      "23:53",
+      "Last train to London King’s Cross",
+      "Great Northern, arrives 00:58"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel.",
+    "source": [
+     "Network Rail timetable, Table 15",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20015.pdf"
+    ]
+   },
+   {
+    "title": "Sunday",
+    "rows": [
+     [
+      "08:06",
+      "London King’s Cross to Royston",
+      "Great Northern, arrives 09:14"
+     ],
+     [
+      "08:12",
+      "London King’s Cross to Royston",
+      "Great Northern, arrives 08:58"
+     ],
+     [
+      "09:40",
+      "London St Pancras to Royston",
+      "Thameslink, arrives 10:34"
+     ],
+     [
+      "16:14",
+      "Royston to London King’s Cross",
+      "Great Northern, arrives 17:22, then hourly"
+     ],
+     [
+      "16:39",
+      "Royston to London St Pancras",
+      "Thameslink, arrives 17:34, then hourly until 21:40"
+     ],
+     [
+      "23:14",
+      "Last train to London King’s Cross",
+      "Arrives 00:24"
+     ]
+    ],
+    "note": "From the Network Rail timetable valid 17 May to 12 December 2026. Timetables change in December 2026 and May 2027, so please treat these as a guide and check National Rail before you travel.",
+    "source": [
+     "Network Rail timetable, Table 15",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20015.pdf"
     ]
    }
   ]
@@ -1161,23 +1729,95 @@ var DATA = {
      [
       "Sunday",
       "Whippet 18, no service",
-      "Route 18 does not run on Sundays or public holidays"
+      "Route 18 does not run on Sundays"
      ],
      [
       "Saturday",
       "Whippet 18 via Great Gransden",
       "Only a few journeys call at Great Gransden"
-     ],
-     [
-      "Route 28",
-      "No timetable found",
-      "Not listed on the Whippet website"
      ]
     ],
-    "note": "From the Whippet route 18 timetable. The show is on a Sunday, so a taxi from the station is the only practical option.",
+    "note": "From the Whippet route 18 timetable and Whippet's data on the DfT Bus Open Data Service. Whippet lists no route 28. The show is on a Sunday, so a taxi from the station is the only practical option.",
     "source": [
      "Whippet route 18",
      "https://www.whippetbus.co.uk/times/1818a/18/"
+    ]
+   }
+  ],
+  "rail-cam": [
+   {
+    "title": "Sunday trains between King's Cross and Cambridge",
+    "rows": [
+     [
+      "08:12",
+      "King's Cross to Cambridge, arrives 09:15",
+      "Great Northern, fast"
+     ],
+     [
+      "08:41",
+      "King's Cross to Cambridge, arrives 09:50",
+      "Great Northern"
+     ],
+     [
+      "09:24",
+      "King's Cross to Cambridge, arrives 10:14",
+      "Great Northern, fast, then 10:24 arriving 11:14"
+     ],
+     [
+      "Hourly",
+      "King's Cross to Cambridge at :06",
+      "Great Northern stopping train, about 1 hour 31 minutes"
+     ],
+     [
+      "Hourly",
+      "Cambridge to King's Cross at :42",
+      "Great Northern, about 51 minutes, 16:42 to 22:42"
+     ],
+     [
+      "Hourly",
+      "Cambridge to King's Cross at :51",
+      "Great Northern stopping train, about 1 hour 31 minutes"
+     ],
+     [
+      "23:42",
+      "Last train to King's Cross",
+      "Arrives 01:14"
+     ]
+    ],
+    "note": "From the Network Rail timetable for 17 May to 12 December 2026 (Table 015). The December 2026 and May 2027 timetables are not in the Network Rail set yet, and the show on Sunday 29 August 2027 is on a bank holiday weekend, when engineering work is common, so please check National Rail before you travel.",
+    "source": [
+     "Network Rail timetable, Table 015",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20015.pdf"
+    ]
+   },
+   {
+    "title": "Sunday trains between Liverpool Street and Cambridge",
+    "rows": [
+     [
+      "07:54",
+      "Liverpool Street to Cambridge, arrives 09:10",
+      "Greater Anglia, then 08:23 and 08:54"
+     ],
+     [
+      "Every 30 min",
+      "Liverpool Street to Cambridge at :23 and :54",
+      "About 1 hour 15 to 1 hour 25 minutes"
+     ],
+     [
+      "Every 30 min",
+      "Cambridge to Liverpool Street at :18 and :57",
+      "Greater Anglia, about 1 hour 15 to 1 hour 25 minutes"
+     ],
+     [
+      "22:18",
+      "Last train to Liverpool Street",
+      "Arrives 23:42"
+     ]
+    ],
+    "note": "From the Network Rail timetable for 17 May to 12 December 2026 (Table 014). The December 2026 and May 2027 timetables are not in the Network Rail set yet, and the show on Sunday 29 August 2027 is on a bank holiday weekend, when engineering work is common, so please check National Rail before you travel.",
+    "source": [
+     "Network Rail timetable, Table 014",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Anglia%20Route/Table%20014.pdf"
     ]
    }
   ]
@@ -1348,7 +1988,7 @@ var DATA = {
   ],
   "bus-station": [
    {
-    "title": "Stagecoach route 3, station to the seafront",
+    "title": "Stagecoach route 3, station to the Winter Garden",
     "rows": [
      [
       "09:55",
@@ -1366,22 +2006,22 @@ var DATA = {
       "Sunday, then hourly at 20 minutes past"
      ],
      [
-      "17:03",
-      "Grand Hotel to Gildredge Road",
+      "17:04",
+      "Winter Garden to Gildredge Road",
       "Route 3 back towards the station, Thursday to Saturday"
      ],
      [
-      "17:43",
+      "17:44",
       "Last bus back, Thursday to Saturday",
-      "Grand Hotel to Gildredge Road"
+      "Winter Garden to Gildredge Road"
      ],
      [
-      "18:52",
+      "18:54",
       "Last bus back on Sunday",
-      "Grand Hotel to Gildredge Road, hourly before that"
+      "Winter Garden to Gildredge Road, hourly before that"
      ]
     ],
-    "note": "Operator timetable data published through the Bus Open Data Service on 22 October 2026, which is the winter timetable. Summer and show week times can differ, and stops move during the show. Route 3 evening journeys were withdrawn in April 2026. With the seafront closed during the show, route 3 is likely to be diverted, so it may not reach the Winter Garden.",
+    "note": "Operator timetable data published through the Bus Open Data Service on 22 October 2026, which is the winter timetable. Summer and show week times can differ. Route 3 evening journeys were withdrawn in April 2026. In 2026 route 3 ran from stop R1 opposite the station to the Winter Garden in Compton Street, with extra buses on the Saturday and Sunday, but it kept to its published last bus times.",
     "source": [
      "Bus Open Data Service, Department for Transport",
      "https://www.bus-data.dft.gov.uk/"
@@ -1433,7 +2073,7 @@ var DATA = {
       "Arrives about 01:03, then the N12 hourly overnight"
      ]
     ],
-    "note": "Operator timetable data published through the Bus Open Data Service on 22 October 2026, which is the winter timetable. Summer and show week times can differ, and stops move during the show. Data runs to 20 December 2026. The 12X does not run on Sundays. Out of town buses use different stops during the show.",
+    "note": "Operator timetable data published through the Bus Open Data Service on 22 October 2026, which is the winter timetable. Summer and show week times can differ, and stops move during the show. Data runs to 20 December 2026. The 12X does not run on Sundays. In 2026 buses from Brighton terminated at The Beacon during the show. The 12A was merged into the 12 in July 2026.",
     "source": [
      "Bus Open Data Service, Department for Transport",
      "https://www.bus-data.dft.gov.uk/"
@@ -1483,7 +2123,7 @@ var DATA = {
       "Every 20 to 30 minutes in the evening"
      ]
     ],
-    "note": "Operator timetable data published through the Bus Open Data Service on 22 October 2026, which is the winter timetable. Summer and show week times can differ, and stops move during the show. Brighton & Hove says the summer 13X runs every 15 minutes on Sundays and bank holidays, hourly on Saturdays and five times a day Monday to Friday.",
+    "note": "Operator timetable data published through the Bus Open Data Service on 22 October 2026, which is the winter timetable. Summer and show week times can differ, and stops move during the show. In summer 2026 Brighton & Hove ran the 13X every 15 minutes on Sundays and bank holidays, with a summer service on Mondays to Saturdays as well. In 2026 buses from Brighton terminated at The Beacon during the show.",
     "source": [
      "Bus Open Data Service, Department for Transport",
      "https://www.bus-data.dft.gov.uk/"
@@ -1516,11 +2156,11 @@ var DATA = {
      ],
      [
       "Summer",
-      "Thursday to Saturday",
-      "Five journeys a day Monday to Friday and hourly on Saturdays"
+      "Monday to Saturday",
+      "Brighton & Hove added a summer Monday to Saturday service in 2026, with Sundays every 15 minutes"
      ]
     ],
-    "note": "Operator timetable data published through the Bus Open Data Service on 22 October 2026, which is the winter timetable. Summer and show week times can differ, and stops move during the show. In the current winter timetable the 13X runs on Sundays only. The summer 13X times come from Brighton & Hove's service changes page. No timetable was found for the open top sightseeing bus.",
+    "note": "Operator timetable data published through the Bus Open Data Service on 22 October 2026, which is the winter timetable. Summer and show week times can differ, and stops move during the show. In the current winter timetable the 13X runs on Sundays only. The summer 2026 changes come from Brighton & Hove's June and July service changes pages, which do not give the Monday to Saturday times. No timetable was found for the open top sightseeing bus.",
     "source": [
      "Bus Open Data Service, Department for Transport",
      "https://www.bus-data.dft.gov.uk/"
@@ -1579,12 +2219,12 @@ var DATA = {
      [
       "10:30",
       "25 Lewes station to Eastbourne",
-      "Arrives Cornfield Road 11:41, via Firle and Berwick"
+      "Arrives Cornfield Road 11:41, via Glynde, Firle, Alfriston and Polegate"
      ],
      [
       "13:30",
       "25 Lewes station to Eastbourne",
-      "Arrives 14:41, via Alfriston"
+      "Arrives 14:41, same route, also 16:30 arriving 17:41"
      ],
      [
       "15:00",
@@ -1845,6 +2485,48 @@ var DATA = {
     "source": [
      "Bus Open Data Service, Department for Transport",
      "https://www.bus-data.dft.gov.uk/"
+    ]
+   }
+  ],
+  "pr": [
+   {
+    "title": "Park and Ride in 2026, Thursday and Friday",
+    "rows": [
+     [
+      "10:00",
+      "Shopping Village to the seafront",
+      "Every 10 minutes, about 15 minutes to Marine Parade East"
+     ],
+     [
+      "12:00",
+      "First bus back from the seafront",
+      "Then every 10 minutes through the afternoon"
+     ],
+     [
+      "16:08",
+      "Shopping Village to the seafront",
+      "Every 8 minutes in the late afternoon"
+     ],
+     [
+      "18:30",
+      "Last bus back on Friday",
+      "From Marine Parade East"
+     ],
+     [
+      "22:00",
+      "Last bus back on Thursday",
+      "From Marine Parade East, after the twilight display"
+     ],
+     [
+      "Fares",
+      "£6 adult, £5 ages 5 to 19",
+      "£16 group ticket, no concessionary pass discount"
+     ]
+    ],
+    "note": "From the Central Connect Park and Ride timetable for Thursday 27 and Friday 28 August 2026, linked from the Clacton Airshow FAQs. The 2027 timetable and fares have not been published yet.",
+    "source": [
+     "Clacton Airshow: Central Connect Park and Ride timetable 2026",
+     "https://clactonairshow.com/wp-content/uploads/2026/07/Konect-Buses-A4.pdf"
     ]
    }
   ]
@@ -2110,6 +2792,16 @@ var DATA = {
       "Arrives 10:32, then every 30 min"
      ],
      [
+      "08:15",
+      "Arriva 47, Liverpool Queen Square to Southport",
+      "Via Crosby and Formby, arrives town centre 09:19"
+     ],
+     [
+      "08:45",
+      "Arriva 47, Liverpool Queen Square to Southport",
+      "Arrives 09:55, then every 30 min at 15 and 45 past"
+     ],
+     [
       "17:17",
       "X2, Southport Wellington Street to Liverpool",
       "Arrives 18:35"
@@ -2133,9 +2825,19 @@ var DATA = {
       "18:48",
       "Last 300 to Liverpool",
       "Arrives 20:06"
+     ],
+     [
+      "17:12",
+      "47, Southport town centre to Liverpool",
+      "Arrives Queen Square 18:35, every 30 min until 18:12, then hourly"
+     ],
+     [
+      "20:58",
+      "Last 47 to Liverpool",
+      "Arrives Queen Square 22:05"
      ]
     ],
-    "note": "From the current Lancashire County Council timetable, checked 29 October 2026. Summer 2027 times may change. Some evening X2 journeys run only as far as Formby.",
+    "note": "From the current Lancashire County Council timetable, checked 29 October 2026, and Arriva’s 47 times on the Bus Open Data Service. Summer 2027 times may change. Some evening X2 journeys run only as far as Formby.",
     "source": [
      "Lancashire County Council bus timetable, X2",
      "https://www.lancashire.gov.uk/roads-parking-and-travel/public-transport/bus-timetables/bus-timetable-service/?service=LAEX002"
@@ -2165,6 +2867,11 @@ var DATA = {
       "Arrives Leicester Street 10:36"
      ],
      [
+      "09:15",
+      "Arriva 47, Liverpool Queen Square to Southport",
+      "Arrives town centre 10:33, then every 30 min"
+     ],
+     [
       "17:08",
       "X2, Southport Wellington Street to Liverpool",
       "Arrives 18:13"
@@ -2183,9 +2890,19 @@ var DATA = {
       "17:51",
       "Last 300 to Liverpool",
       "Arrives 19:11"
+     ],
+     [
+      "17:12",
+      "47, Southport town centre to Liverpool",
+      "Arrives Queen Square 18:35, every 30 min until 18:12, then hourly"
+     ],
+     [
+      "20:58",
+      "Last 47 to Liverpool",
+      "Arrives Queen Square 22:05"
      ]
     ],
-    "note": "From the current Lancashire County Council timetable, checked 29 October 2026. Summer 2027 times may change. Arriva 47 and 44 times were not available from an official source.",
+    "note": "From the current Lancashire County Council timetable, checked 29 October 2026, and Arriva’s 47 times on the Bus Open Data Service. Summer 2027 times may change.",
     "source": [
      "Lancashire County Council bus timetable, 300",
      "https://www.lancashire.gov.uk/roads-parking-and-travel/public-transport/bus-timetables/bus-timetable-service/?service=LAAO300"
@@ -2213,7 +2930,7 @@ var DATA = {
      ],
      [
       "10:20",
-      "347, Chorley bus station to Southport",
+      "Vision Bus 347, Chorley bus station to Southport",
       "Arrives 11:50, every 2 hours"
      ],
      [
@@ -2242,7 +2959,7 @@ var DATA = {
       "Arrives 19:21"
      ]
     ],
-    "note": "From the current Lancashire County Council timetable, checked 29 October 2026. Summer 2027 times may change.",
+    "note": "From the current Lancashire County Council timetable, checked 29 October 2026. Summer 2027 times may change. The 347 is run by Vision Bus on Mondays to Saturdays.",
     "source": [
      "Lancashire County Council bus timetable, X2",
      "https://www.lancashire.gov.uk/roads-parking-and-travel/public-transport/bus-timetables/bus-timetable-service/?service=LAEX002"
@@ -2332,6 +3049,11 @@ var DATA = {
       "19:00",
       "X37, Southport Union Street to St Helens",
       "Arrives 20:00, the only X37 listed from Southport"
+     ],
+     [
+      "17:15",
+      "37A, Southport Union Street to St Helens",
+      "Via Ormskirk, arrives 18:49, the last 37A on Saturdays"
      ]
     ],
     "note": "From the current Lancashire County Council timetable, checked 29 October 2026. Summer 2027 times may change.",
@@ -2365,7 +3087,7 @@ var DATA = {
      ],
      [
       "No service",
-      "385 and X37",
+      "385, X37 and 37A",
       "Do not run to Southport on Sundays"
      ]
     ],
@@ -2414,7 +3136,7 @@ var DATA = {
       "About 25 minutes, e.g. 10:28 arriving 10:51"
      ]
     ],
-    "note": "From the Northern timetable valid 17 May to 12 December 2026. The 2027 show will fall in the May 2027 timetable, so treat these as a guide.",
+    "note": "From the Northern timetable valid 17 May to 12 December 2026. The 2027 show will fall in the May 2027 timetable, so treat these as a guide. Avanti West Coast has no direct trains from London Euston to Blackpool North on Saturdays, so change at Preston.",
     "source": [
      "Northern timetable N27, Blackpool North to Manchester",
      "https://www.northernrailway.co.uk/sites/default/files/templates/N27/2026-05-17-to-2026-12-12-1775569905.pdf"
@@ -2765,7 +3487,7 @@ var DATA = {
      [
       "3 an hour",
       "Glasgow Central to Ayr",
-      "ScotRail stopping trains on the 2026 show Saturday"
+      "ScotRail on the 2026 show Saturday, with extra carriages"
      ],
      [
       "Hourly",
@@ -2776,6 +3498,11 @@ var DATA = {
       "Before and after",
       "Extra Kilwinning to Ayr shuttles",
       "Calling at Irvine, Barassie, Troon, Prestwick and Newton-on-Ayr"
+     ],
+     [
+      "Before the show",
+      "Queue system at Glasgow Central",
+      "Run by ScotRail in 2026"
      ],
      [
       "After the show",
@@ -2795,23 +3522,168 @@ var DATA = {
     ]
    },
    {
-    "title": "Normal service",
+    "title": "Friday: Glasgow Central to Ayr",
     "rows": [
      [
-      "Up to 41 a day",
+      "16:00",
       "Glasgow Central to Ayr",
-      "ScotRail, about 54 minutes on average"
+      "ScotRail, arrives 16:52"
      ],
      [
-      "00:15",
-      "Last train from Glasgow Central",
-      "Based on ScotRail's Monday timetable"
+      "16:30",
+      "Glasgow Central to Ayr",
+      "Arrives 17:21"
+     ],
+     [
+      "17:00",
+      "Glasgow Central to Ayr",
+      "Arrives 17:55"
+     ],
+     [
+      "17:30",
+      "Glasgow Central to Ayr",
+      "Arrives 18:22"
+     ],
+     [
+      "18:00",
+      "Glasgow Central to Ayr",
+      "Arrives 18:54"
+     ],
+     [
+      "18:30",
+      "Glasgow Central to Ayr",
+      "Arrives 19:23"
      ]
     ],
-    "note": "From ScotRail's route page, which is based on a Monday timetable. Weekend and evening times were not available from an official timetable, so please check before the Friday evening show.",
+    "note": "From the National Rail timetable (Table 202), valid 17 May to 12 December 2026. The September 2027 show falls in the May 2027 timetable, so I would check these again nearer the time, and look out for extra show trains. Trains run about every 30 minutes, taking 50 to 60 minutes.",
     "source": [
-     "ScotRail train times, Glasgow Central to Ayr",
-     "https://www.scotrail.co.uk/train-times/glasgow-central-to-ayr"
+     "National Rail timetable, Table 202: Glasgow to Ayr",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Scotland%20Route/Table%20202.pdf"
+    ]
+   },
+   {
+    "title": "Friday evening: Ayr to Glasgow Central",
+    "rows": [
+     [
+      "20:05",
+      "Ayr to Glasgow Central",
+      "ScotRail, arrives 20:58"
+     ],
+     [
+      "20:38",
+      "Ayr to Glasgow Central",
+      "Arrives 21:30"
+     ],
+     [
+      "21:05",
+      "Ayr to Glasgow Central",
+      "Arrives 21:57"
+     ],
+     [
+      "21:36",
+      "Ayr to Glasgow Central",
+      "Arrives 22:26"
+     ],
+     [
+      "22:05",
+      "Ayr to Glasgow Central",
+      "Arrives 22:59"
+     ],
+     [
+      "22:33",
+      "Ayr to Glasgow Central",
+      "Arrives 23:24"
+     ],
+     [
+      "23:05",
+      "Ayr to Glasgow Central",
+      "Last train, arrives 23:58"
+     ]
+    ],
+    "note": "From the National Rail timetable (Table 202), valid 17 May to 12 December 2026. The September 2027 show falls in the May 2027 timetable, so I would check these again nearer the time, and look out for extra show trains. All of these call at Newton-on-Ayr, Prestwick Town and Prestwick Airport.",
+    "source": [
+     "National Rail timetable, Table 202: Ayr to Glasgow",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Scotland%20Route/Table%20202.pdf"
+    ]
+   },
+   {
+    "title": "Saturday",
+    "rows": [
+     [
+      "08:30",
+      "Glasgow Central to Ayr",
+      "ScotRail, arrives 09:24"
+     ],
+     [
+      "09:00",
+      "Glasgow Central to Ayr",
+      "Arrives 09:52"
+     ],
+     [
+      "09:30",
+      "Glasgow Central to Ayr",
+      "Arrives 10:24"
+     ],
+     [
+      "10:00",
+      "Glasgow Central to Ayr",
+      "Arrives 10:55"
+     ],
+     [
+      "10:30",
+      "Glasgow Central to Ayr",
+      "Arrives 11:24"
+     ],
+     [
+      "11:01",
+      "Glasgow Central to Ayr",
+      "Arrives 11:57"
+     ],
+     [
+      "Then",
+      "Every 30 minutes",
+      "About 50 to 55 minutes"
+     ],
+     [
+      "17:05",
+      "Ayr to Glasgow Central",
+      "Arrives 17:57"
+     ],
+     [
+      "17:35",
+      "Ayr to Glasgow Central",
+      "Arrives 18:26"
+     ],
+     [
+      "18:05",
+      "Ayr to Glasgow Central",
+      "Arrives 18:56"
+     ],
+     [
+      "18:35",
+      "Ayr to Glasgow Central",
+      "Arrives 19:25"
+     ],
+     [
+      "19:05",
+      "Ayr to Glasgow Central",
+      "Arrives 19:58"
+     ],
+     [
+      "Then",
+      "About every 30 minutes",
+      "Including 20:03, 20:35, 21:05, 21:36, 22:07 and 22:33"
+     ],
+     [
+      "23:05",
+      "Ayr to Glasgow Central",
+      "Last train, arrives 00:01"
+     ]
+    ],
+    "note": "From the National Rail timetable (Table 202), valid 17 May to 12 December 2026. The September 2027 show falls in the May 2027 timetable, so I would check these again nearer the time, and look out for extra show trains. These are the normal Saturday times. In 2026 ScotRail added extra show trains on top.",
+    "source": [
+     "National Rail timetable, Table 202: Glasgow to Ayr",
+     "https://sacuksprodnrdigital0001.blob.core.windows.net/electronic-national-rail-timetable/electronic%20National%20Rail%20Timetable/01.%20May%202026%20timetable%20documents/Scotland%20Route/Table%20202.pdf"
     ]
    }
   ],
@@ -2839,23 +3711,145 @@ var DATA = {
   ],
   "bus": [
    {
-    "title": "Stagecoach X77",
+    "title": "Stagecoach X77, Friday",
     "rows": [
      [
-      "Every 20 min",
-      "Stagecoach X77, Glasgow to Ayr",
-      "Via Prestwick and Monkton"
+      "15:30",
+      "Glasgow Buchanan to Ayr",
+      "Arrives Ayr bus station 16:38, via Prestwick Airport and Prestwick"
      ],
      [
-      "Late buses",
-      "Fridays and Saturdays",
-      "Stagecoach says late services run on these nights"
+      "16:00",
+      "Glasgow Buchanan to Ayr",
+      "Arrives 17:08"
+     ],
+     [
+      "16:30",
+      "Glasgow Buchanan to Ayr",
+      "Arrives 17:45"
+     ],
+     [
+      "17:00",
+      "Glasgow Buchanan to Ayr",
+      "Arrives 18:14"
+     ],
+     [
+      "17:25",
+      "Glasgow Buchanan to Ayr",
+      "Arrives 18:39"
+     ],
+     [
+      "17:50",
+      "Glasgow Buchanan to Ayr",
+      "Arrives 18:55"
+     ],
+     [
+      "20:10",
+      "Ayr to Glasgow Buchanan",
+      "Via Kilmarnock, arrives 21:25"
+     ],
+     [
+      "Then",
+      "Every 30 minutes",
+      "20:40, 21:10, 21:40, 22:10 and 22:40, about 1 hour 15 minutes"
+     ],
+     [
+      "23:40",
+      "Ayr to Glasgow Buchanan",
+      "Last bus, via Kilmarnock, arrives 00:55"
      ]
     ],
-    "note": "From Stagecoach's X77 page. Exact times and last buses were not available from an official timetable I could open.",
+    "note": "From Stagecoach West Scotland's timetable on the Bus Open Data Service, valid from 22 October 2026 to 22 July 2027. In the evening the X77 runs via Kilmarnock. The 2027 show times may differ, so check again nearer the time.",
     "source": [
-     "Stagecoach: Ayr to Glasgow X77",
-     "https://www.stagecoachbus.com/promos-and-offers/west-scotland/ayr-to-glasgow-x77"
+     "Bus Open Data Service: Stagecoach West Scotland timetables",
+     "https://data.bus-data.dft.gov.uk/timetable/download/gtfs-file/scotland/"
+    ]
+   },
+   {
+    "title": "Stagecoach X77, Saturday",
+    "rows": [
+     [
+      "08:55",
+      "Glasgow Buchanan to Ayr",
+      "Arrives Ayr bus station 09:59"
+     ],
+     [
+      "09:25",
+      "Glasgow Buchanan to Ayr",
+      "Arrives 10:27"
+     ],
+     [
+      "09:55",
+      "Glasgow Buchanan to Ayr",
+      "Arrives 10:57"
+     ],
+     [
+      "10:25",
+      "Glasgow Buchanan to Ayr",
+      "Arrives 11:27"
+     ],
+     [
+      "Then",
+      "Every 20 minutes",
+      "From 10:50 to 17:10, about an hour"
+     ],
+     [
+      "17:10",
+      "Ayr to Glasgow Buchanan",
+      "Arrives 18:13"
+     ],
+     [
+      "17:40",
+      "Ayr to Glasgow Buchanan",
+      "Via Kilmarnock, arrives 19:00"
+     ],
+     [
+      "18:40",
+      "Ayr to Glasgow Buchanan",
+      "Via Kilmarnock, arrives 19:55"
+     ],
+     [
+      "Then",
+      "Every 30 minutes",
+      "Via Kilmarnock, about 1 hour 15 minutes"
+     ],
+     [
+      "23:40",
+      "Ayr to Glasgow Buchanan",
+      "Last bus, arrives 00:55"
+     ]
+    ],
+    "note": "From Stagecoach West Scotland's timetable on the Bus Open Data Service, valid from 22 October 2026 to 22 July 2027. The X77 stops at Prestwick, Prestwick Airport and Monkton. Seafront roads close for the show, so expect diversions and delays.",
+    "source": [
+     "Bus Open Data Service: Stagecoach West Scotland timetables",
+     "https://data.bus-data.dft.gov.uk/timetable/download/gtfs-file/scotland/"
+    ]
+   }
+  ],
+  "shuttle": [
+   {
+    "title": "Park and ride shuttles in 2026",
+    "rows": [
+     [
+      "Friday",
+      "15:45 to 22:00",
+      "Ayr Racecourse only, to Charlotte Street and the Esplanade"
+     ],
+     [
+      "Saturday",
+      "10:15 to 20:00",
+      "Ayr Racecourse, and Rozelle Estate to Racecourse View"
+     ],
+     [
+      "Every",
+      "5 to 10 minutes",
+      "Stagecoach, low floor buses"
+     ]
+    ],
+    "note": "These are the official 2026 times. The 2027 shuttle times have not been published yet.",
+    "source": [
+     "Destination South Ayrshire: Ayr Show parking",
+     "https://destinationsouthayrshire.co.uk/ayrshow/ayr-show-parking/"
     ]
    }
   ]
@@ -3327,6 +4321,83 @@ var DATA = {
     "source": [
      "Southeastern timetables, Tables 1 and 8",
      "https://www.southeasternrailway.co.uk/travel-information/plan-your-journey/timetables"
+    ]
+   }
+  ],
+  "bus-local": [
+   {
+    "title": "Bus 12 on Saturday",
+    "rows": [
+     [
+      "07:45",
+      "Maidstone, Royal Star Arcade to the Aerodrome, arrives 08:26",
+      "Arriva, then 08:45, 09:15 and every 30 minutes"
+     ],
+     [
+      "08:55",
+      "Tenterden, The Vine to the Aerodrome, arrives 09:16",
+      "Then 09:55, 10:25 and every 30 minutes"
+     ],
+     [
+      "Station",
+      "Headcorn Railway Station to the Aerodrome",
+      "About 3 minutes on buses towards Tenterden"
+     ],
+     [
+      "Every 30 min",
+      "Aerodrome to Maidstone at :16 and :46",
+      "About 44 minutes to Royal Star Arcade"
+     ],
+     [
+      "18:15",
+      "Aerodrome to Maidstone, arrives 18:55",
+      "Then 22:29 arriving 23:00, the last from the Aerodrome"
+     ],
+     [
+      "Every 30 min",
+      "Aerodrome to Tenterden at :26 and :56",
+      "About 21 minutes, last 18:12 then 21:56"
+     ]
+    ],
+    "note": "From Arriva Kent and Surrey's route 12 timetable as published to the DfT Bus Open Data Service, valid from 1 November 2026 (data runs to 1 August 2027). Times can change before June 2027, so I would check nearer the show. Friday buses run to the weekday timetable.",
+    "source": [
+     "Arriva route 12",
+     "https://www.arrivabus.co.uk/services/AKS_MD_12"
+    ]
+   },
+   {
+    "title": "Bus 12 on Sunday",
+    "rows": [
+     [
+      "09:59",
+      "Maidstone, Royal Star Arcade to the Aerodrome, arrives 10:40",
+      "Arriva, then hourly at :59"
+     ],
+     [
+      "11:06",
+      "Tenterden, The Vine to the Aerodrome, arrives 11:27",
+      "First bus from Tenterden, then hourly"
+     ],
+     [
+      "Hourly",
+      "Aerodrome to Maidstone at :27",
+      "About 37 minutes to King Street, 11:27 to 18:27"
+     ],
+     [
+      "18:27",
+      "Last bus from the Aerodrome to Maidstone",
+      "Arrives King Street 19:04"
+     ],
+     [
+      "Hourly",
+      "Aerodrome to Tenterden at :40",
+      "About 21 minutes, last at 17:40"
+     ]
+    ],
+    "note": "From Arriva Kent and Surrey's route 12 timetable as published to the DfT Bus Open Data Service, valid from 1 November 2026 (data runs to 1 August 2027). Times can change before June 2027, so I would check nearer the show.",
+    "source": [
+     "Arriva route 12",
+     "https://www.arrivabus.co.uk/services/AKS_MD_12"
     ]
    }
   ]

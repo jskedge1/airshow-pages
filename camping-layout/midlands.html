@@ -2419,7 +2419,7 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
       <details open><summary>Is parking free?</summary><div class="body">Standard parking is free and included with your ticket. Premium parking is bought when you book, and it has its own entry gate, its own ticket lane and parking in the event field. Disabled parking is free, but you choose it as a ticket when you book.</div></details>
       <details><summary>Is there parking for Blue Badge holders?</summary><div class="body">Yes. There&rsquo;s a signed disabled car park directly opposite the main event field, with accessible toilets. You’ll need a disabled parking pass, which you choose when you buy your ticket, then just display your Blue Badge on the day. The stewards will help you when you arrive.</div></details>
       <details><summary>Should I follow my sat nav?</summary><div class="body">Only until you&rsquo;re close. I would head for Alcester, then follow the yellow event signs once you see them, rather than your sat nav.</div></details>
-      <details><summary>Can I come by bus on a Sunday?</summary><div class="body">The Diamond 247 between Redditch and Evesham stops right by the Ragley Hall main entrance. When I last checked, I couldn&rsquo;t confirm a Sunday service, so please check the Diamond Bus timetable before you rely on it.</div></details>
+      <details><summary>Can I come by bus on a Sunday?</summary><div class="body">The Diamond 247 between Redditch and Evesham stops right by the Ragley Hall main entrance. Diamond&rsquo;s current timetable has no Sunday service on the 247, so on the Sunday I would plan another way to get there, and check the Diamond Bus timetable again closer to the festival.</div></details>
       <details><summary>How far is the walk from the entrance?</summary><div class="body">It&rsquo;s about 1.5 miles from the main entrance to the house, so I&rsquo;d suggest you wear comfortable shoes. From the main car park it&rsquo;s between about 250 metres and a kilometre to the event field.</div></details>
     </div>
   </div>
@@ -3341,7 +3341,7 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
       <li><a href="https://www.midlandsairfestival.com/directions.html" target="_blank" rel="noopener">Official directions ↗</a></li>
       <li><a href="https://www.midlandsairfestival.com/parking.html" target="_blank" rel="noopener">Official parking ↗</a></li>
       <li><a href="https://www.midlandsairfestival.com/accessibility.html" target="_blank" rel="noopener">Official accessibility ↗</a></li>
-      <li><a href="https://bustimes.org/services/247-redditch-evesham" target="_blank" rel="noopener">247 bus times ↗</a></li>
+      <li><a href="https://www.diamondbuses.com/bus-services/ww/ww247-redditch/" target="_blank" rel="noopener">247 bus times ↗</a></li>
       <li><a href="https://www.nationalrail.co.uk" target="_blank" rel="noopener">National Rail ↗</a></li>
       <li><a href="https://www.metoffice.gov.uk" target="_blank" rel="noopener">Met Office forecast ↗</a></li>
     </ul>
@@ -3654,9 +3654,9 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
     {id:'bus-247',name:'Diamond 247 bus',sub:'Redditch to Evesham',title:'The Diamond 247 bus',
       text:'The Diamond Bus route 247 runs between Redditch and Evesham and stops right by the Ragley Hall main entrance.',
       place:'Ragley Hall main entrance, Alcester',
-      warn:'When I last checked, I couldn’t confirm a Sunday service, so please check the timetable before you rely on it.',
+      warn:'Diamond’s current timetable has no Sunday or bank holiday service on the 247, and only three buses each way on a Saturday, so please check the timetable before you rely on it.',
       arrive:'It’s about 1.5 miles from the main entrance to the house, so it’s a good idea to wear comfortable shoes.',
-      walk:'Buses may finish before the evening balloons or Nightfire do, so I’d check the last bus before you go.',
+      walk:'In the current timetable the last bus back to Redditch passes Ragley at about 18:00, well before the evening balloons and the Nightfire, so I’d check the last bus before you go.',
       meta:[['Route','247'],['Stop','Ragley Hall main entrance']],off:['247 bus times','https://www.diamondbuses.com/bus-services/ww/ww247-redditch/'],
       opt:['Bus · 247','Redditch to Evesham, stopping right by the Ragley Hall main entrance.']},
     {id:'bike',name:'By bike',sub:'Lock up by the disabled parking',title:'Cycling to Ragley',
@@ -3712,7 +3712,7 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
   pl.querySelectorAll('button').forEach(function(b){ b.addEventListener('click',function(){setTopic(b.dataset.id,true);}); });
   var groupOf={}, gname='';
   topics.forEach(function(t){ if(t.g) gname=t.g; else groupOf[t.id]=gname; });
-    var OPT_BADGE={'park-main':['Free with your ticket','teal'],'park-premium':['Parking in the event field',''],'park-blue':['Accessible','teal'],'rail-red':['Easiest without a car',''],'bus-247':['Check the Sunday service','warn']};
+    var OPT_BADGE={'park-main':['Free with your ticket','teal'],'park-premium':['Parking in the event field',''],'park-blue':['Accessible','teal'],'rail-red':['Easiest without a car',''],'bus-247':['No Sunday service','warn']};
   var optItems=items.filter(function(t){return t.opt;}), ost={f:'all',sort:'rec'};
   var og=document.getElementById('optGrid');
   og.className='cards r2 reveal';
@@ -3816,8 +3816,8 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
         steps.push([at-60,'Arrive and park','You might want to head for Alcester on the A435 or the A46, then follow the yellow event signs rather than your sat nav.'+(st.travel==='premium'?' Premium parking has its own entry gate and ticket lane, and you park right in the event field.':' Standard parking is free and on grass, somewhere between about 250 metres and a kilometre from the event field.')+(st.step?' I would head for the signed disabled car park, with your Blue Badge on display.':'')]);
       } else if(st.travel==='bus'){
         steps.push([at-60,'Train and bus','Take the train to Redditch, then the Diamond 247 towards Evesham, which stops right by the Ragley Hall main entrance. It’s about 1.5 miles from the entrance to the house.']);
-        if(early) warn='The first buses of the day may not run early enough for the dawn balloons, so I would check the times before you plan around them.';
-        if(last) warn=(warn?warn+' ':'')+'I couldn’t confirm a Sunday 247 service, so please check before you travel.';
+        if(early) warn='The first 247 of the day leaves Redditch too late for the dawn balloons, so I would check the times before you plan around them.';
+        if(last) warn=(warn?warn+' ':'')+'The current 247 timetable has no Sunday service, so please check before you travel.';
       } else {
         steps.push([at-30,'Wake up on site','Camping is in the coppice area of the Polo Field, within walking distance of the festival. I’d suggest you wrap up warm and walk over.']);
         tips.push('Camping is only for people with 3 day festival tickets, so it’s a good idea to book both together.');

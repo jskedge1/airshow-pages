@@ -53,7 +53,7 @@ Keep it when copying a template to make a new show page.
 
 `transport-times.js` holds the train and bus timetable tables for every feature show page (camping-layout/<show>.html, both Midlands versions included). Each page loads it in its head and shows the tables inside the matching Getting There topic (the topic ids, such as `rail` or `bus-74`, are the keys). Edit only the `DATA` block: one entry per show, `checked` date, then per topic a list of tables `{title, rows:[[time, service, details]], note, source:[name, url]}`. No dashes in text, 24 hour times.
 Times come from official operator, Network Rail, Traveline and Bus Open Data (DfT) sources. The first set (29 Oct 2026) uses the timetables current now, so they are a guide only: summer 2027 shows fall in the May 2027 timetable, published around March 2027. The weekly "Feature page checker" scheduled task (Wednesdays) checks dates, news, prices, parking, taxi numbers and transport details on the feature pages and refreshes these times, with a full timetable refresh from March 2027.
-Still to fill: Duxford trains (Cambridge, Whittlesford Parkway, Royston), Little Gransden Cambridge trains, RIAT local buses, Headcorn bus 12, Redditch trains for Midlands, and train times for Ayr (only frequencies so far).
+Still to fill: nothing major. Full audit of every public transport detail on 29 Oct 2026 (stations, operators, routes, days, stops, links, times). Times still come from the May to December 2026 and December 2026 timetables; replace them with the May 2027 timetables when published. Unconfirmed items are listed in the weekly task report.
 
 ## Seafront Information map and tides (27 Oct 2026)
 
