@@ -49,6 +49,12 @@ Every page ends with the `mobile-fit` block (between the `<!-- mobile-fit` comme
 It keeps the page inside the screen down to 320px wide, which is the width Wix gives an HTML box on phones.
 Keep it when copying a template to make a new show page.
 
+## Train and bus times (29 Oct 2026)
+
+`transport-times.js` holds the train and bus timetable tables for every feature show page (camping-layout/<show>.html, both Midlands versions included). Each page loads it in its head and shows the tables inside the matching Getting There topic (the topic ids, such as `rail` or `bus-74`, are the keys). Edit only the `DATA` block: one entry per show, `checked` date, then per topic a list of tables `{title, rows:[[time, service, details]], note, source:[name, url]}`. No dashes in text, 24 hour times.
+Times come from official operator, Network Rail, Traveline and Bus Open Data (DfT) sources. The first set (29 Oct 2026) uses the timetables current now, so they are a guide only: summer 2027 shows fall in the May 2027 timetable, published around March 2027. The weekly "Feature page checker" scheduled task (Wednesdays) checks dates, news, prices, parking, taxi numbers and transport details on the feature pages and refreshes these times, with a full timetable refresh from March 2027.
+Still to fill: Duxford trains (Cambridge, Whittlesford Parkway, Royston), Little Gransden Cambridge trains, RIAT local buses, Headcorn bus 12, Redditch trains for Midlands, and train times for Ayr (only frequencies so far).
+
 ## Seafront Information map and tides (27 Oct 2026)
 
 The six seafront show pages (camping-layout/eastbourne, clacton, southport, blackpool, ayr and wales) have the "Coastal command" block at the top of Seafront Information: the `<sf-command data-show="...">` element, defined by the `seafront-command` script at the end of each page. It holds its own styles inside a shadow root, so it can't clash with the page. It shows the satellite map (camping-layout/img/sf-map-<show>.webp, imagery © Esri, Maxar, Earthstar Geographics, credit kept in the map corner), Pick Your Pitch, the 2027 show day tide chart, the beach side view, the sea wall answer, springs or neaps, the beach facts and Jack's tip. It replaced the old Pick Your Pitch and Tides And The Beach tabs; the tabs below now start at Sea Mist And Wind.
