@@ -1538,16 +1538,15 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   const SITE = 'https://www.ukairshowguide.co.uk/';
   const pendingCalls = {}; let seq = 0;
   function call(action, payload, wait){
-    // tips and advert packages rise like the Start Simple, Build Up steps
-  document.querySelectorAll('.notes,.ladder,.ptabs').forEach(n=>{if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)});
-  (function(){return;const n=document.querySelector('.notes');if(!n||!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)})();
-
   if(!IN_WIX) return demo(action, payload||{});
     return new Promise((resolve,reject)=>{
       const id='t'+(++seq); pendingCalls[id]={resolve,reject};
-      try{window.parent.postMessage({source:'ukag-traders',id,action,payload:payload||{}},'*')}catch(e){}
+      const msg={source:'ukag-traders',id,action,payload:payload||{}};
+      const send=()=>{try{window.parent.postMessage(msg,'*')}catch(e){}};
+      send();
+      // the site's page code can start a moment after this page, so ask again until it answers
+      // (never for a sign up, so a listing is only ever sent once)
+      if(action!=='submit'){let n=0;const t=setInterval(()=>{if(!pendingCalls[id]||++n>8){clearInterval(t);return}send()},2000)}
       setTimeout(()=>{if(pendingCalls[id]){delete pendingCalls[id];reject(new Error('The page could not reach the site. Please refresh and try again.'))}},wait||20000);
     });
   }
@@ -1792,6 +1791,12 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
     const spy=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){links.forEach(l=>l.classList.toggle('on',l.dataset.s===en.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
     ['audience','why','pricing','packages','examples','enquire','faq'].forEach(id=>spy.observe(document.getElementById(id)));
   }
+
+    // tips and advert packages rise like the Start Simple, Build Up steps
+  document.querySelectorAll('.notes,.ladder,.ptabs').forEach(n=>{if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)});
+  (function(){return;const n=document.querySelector('.notes');if(!n||!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)})();
 
   if(!IN_WIX)document.getElementById('demoStrip').hidden=false;
   grid.innerHTML='<div class="empty"><h3>Loading traders</h3><p>One moment.</p></div>';
