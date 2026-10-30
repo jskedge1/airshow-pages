@@ -155,6 +155,14 @@ Set `live:false` on a page until its Wix page exists.
 
 Addresses checked against the live site on 19 Oct 2026.
 
+## Site-wide airshow-page element (Wix Velo file public/custom-elements/airshow-page.js)
+
+A custom element in the site header turns every full-width guide box into normal page content, so the page
+grows with the guide and scrolls like the rest of the site on phones. It converts boxes holding pasted code
+and, since 30 Oct 2026, boxes pointing at the GitHub pages listed in `AE_GH_PAGES` inside that file.
+When a new full-page guide is added to Wix by website address, add its path to `AE_GH_PAGES` too,
+or it will sit in a fixed-height box and won't scroll properly on phones. Changes to the element go live when the site is published.
+
 ## Find your Air Show page
 
 `find-your-airshow.html` is pasted as code into the first HTML embed on the Find your Air Show page, so the
