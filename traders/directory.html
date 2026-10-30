@@ -102,9 +102,14 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
 .results-bar strong{color:var(--navy);font-weight:700}
 .results-bar select{width:auto;min-width:190px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-.card{position:relative;display:grid;grid-template-columns:62px minmax(0,1fr);background:#fff;border:1px solid var(--line);transition:transform .45s var(--ease),box-shadow .45s var(--ease);opacity:0;transform:translateY(14px)}
-.card.in{opacity:1;transform:none}
-.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(19,41,60,.12)}
+.card{position:relative;display:grid;grid-template-columns:62px minmax(0,1fr);background:#fff;border:1px solid var(--line);transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .45s ease,border-color .3s ease .5s,background .3s ease .5s}
+.card:not(.in){background:transparent;border-color:transparent;transition:none}
+.card>*{clip-path:inset(100% 0 0 0);transition:clip-path 1s cubic-bezier(.22,1,.36,1),padding .55s cubic-bezier(.22,1,.36,1);transition-delay:inherit}
+.card.in>*{clip-path:inset(0 0 0 0)}
+.card:hover,.card:active{transform:translateY(-6px);box-shadow:0 -10px 24px -14px rgba(19,41,60,.45),0 18px 34px -18px rgba(19,41,60,.35);z-index:2}
+.card:hover .strip{padding-top:26px}
+.card:hover .badge{filter:brightness(.8)}
+@media (prefers-reduced-motion:reduce){.card>*{clip-path:none!important;transition:none}.card:hover{transform:none}}
 .card::before{content:"";position:absolute;top:-1px;left:-1px;height:3px;width:0;background:var(--teal);transition:width .5s var(--ease)}
 .card:hover::before{width:calc(100% + 2px)}
 .card.featured{grid-column:span 2;grid-template-columns:62px minmax(0,1.1fr) minmax(0,.9fr)}
@@ -191,7 +196,8 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .previewbox{position:sticky;top:16px}
 .previewbox .lead{color:#33424D;margin-bottom:14px}
-.previewbox .card{opacity:1;transform:none}
+.previewbox .card{background:#fff;border-color:var(--line)}
+.previewbox .card>*{clip-path:none}
 .perks{margin-top:20px;background:var(--navy);color:#fff;padding:22px 24px;border-top:4px solid var(--teal)}
 .perks h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;color:var(--teal);font-size:21px;margin-bottom:8px}
 .perks ul{list-style:none}
@@ -342,6 +348,277 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   .card{opacity:1;transform:none}
   html{scroll-behavior:auto}
 }
+
+/* ===== Layout preview 2 ===== */
+.hero::before{display:none}
+.hero-grid{grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:64px;align-items:end;padding:60px 0 0}
+.doors{position:relative;display:flex;flex-direction:column;gap:14px;padding-bottom:6px}
+.door{position:relative;display:grid;gap:4px;text-decoration:none;padding:22px 64px 22px 24px;transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.door:hover{transform:translateX(-6px);box-shadow:0 22px 44px rgba(0,0,0,.3)}
+.door .dl{font-weight:500;font-size:15px}
+.door b{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:34px;line-height:.95;letter-spacing:.005em}
+.door .dt{font-size:15px;line-height:1.45;margin-top:4px}
+.door .go{position:absolute;right:22px;top:50%;margin-top:-18px;width:36px;height:36px;display:grid;place-items:center;font-size:18px;transition:transform .45s var(--ease)}
+.door:hover .go{transform:translateX(4px)}
+.door-v{background:var(--navy-d);border-left:5px solid var(--teal);color:#fff;margin-right:44px}
+.door-v .dl{color:#9FD8D5}.door-v .dt{color:#D7E3EA}.door-v .go{background:var(--teal);color:#fff}
+.door-t{background:var(--teal);color:var(--navy);margin-left:44px;margin-bottom:-38px;box-shadow:0 20px 40px rgba(0,0,0,.25);z-index:2}
+.door-t .dt strong{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;line-height:1}
+.door-t .go{background:var(--navy);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:64px;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
+.stats div{padding:16px 18px 14px;border-left:1px solid rgba(255,255,255,.12)}
+.stats div:first-child{border-left:0;padding-left:0}
+.stats dt{font-weight:500;font-size:14px;color:#9FD8D5}
+.stats dd{margin-top:2px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.stats .hl dd{color:var(--teal)}
+.jump{margin-top:8px}
+
+/* runway sits inside the finder */
+#find .runway{padding:22px 24px 16px;margin-bottom:0}
+.rw-top{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.rw-l{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:26px;line-height:1}
+.flag.all{width:auto;margin:0;padding:7px 14px;border-left:0;background:rgba(255,255,255,.1);font-weight:600;font-size:14.5px}
+.flag.all.on{background:var(--teal);color:#fff}
+.flags{margin-top:14px}
+.filterbar{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:14px 20px;align-items:center;background:#fff;border:1px solid var(--line);border-top:0;padding:16px 20px}
+.filterbar .chips{gap:6px}
+.results-bar{margin:22px 0 14px}
+.rb-r{display:flex;align-items:center;gap:18px}
+.rb-r .clear{margin:0}
+.grid{grid-template-columns:1fr;gap:16px}
+.card{grid-template-columns:62px minmax(0,1.25fr) minmax(260px,.75fr)}
+.card .where{border-top:0;border-left:1px solid var(--line);background:#FAFBFB}
+.card.featured{grid-column:auto;grid-template-columns:62px minmax(0,1.25fr) minmax(260px,.75fr);box-shadow:inset 0 3px 0 var(--teal)}
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;align-items:end;margin-top:34px}
+.note{position:relative;padding:22px;color:#fff;font-size:15.5px;line-height:1.5;transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+.notes.wait .note{clip-path:inset(100% 0 0 0)}
+.notes.grow .note{clip-path:inset(0 0 0 0)}
+.notes.grow .note.n-t{transition-delay:0s,.18s,0s}
+.notes.grow .note.n-n{transition-delay:0s,.36s,0s}
+.note.n-p{background:var(--teal);min-height:210px}.note.n-t{background:var(--purple);min-height:280px}.note.n-n{background:var(--navy);min-height:350px}
+.note.n-p:hover,.note.n-p:active{min-height:255px}
+.note.n-t:hover,.note.n-t:active{min-height:325px}
+.note.n-n:hover,.note.n-n:active{min-height:395px}
+.note:hover,.note:active{box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.note .tg{display:inline-block;background:rgba(0,0,0,.25);padding:3px 9px;font-weight:600;font-size:15px;margin-bottom:10px;transition:background .3s ease}
+.note:hover .tg{background:rgba(0,0,0,.4)}
+.note h4{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;line-height:1;margin-bottom:8px;color:#fff}
+.note.n-n h4{color:var(--teal)}
+.note p{color:#EAF1F6}
+@media (prefers-reduced-motion:reduce){.note{transition:none}.notes.wait .note{clip-path:none}}
+
+/* how it works rail */
+#how{background:var(--navy);color:#fff;padding:80px 0 76px}
+.sec-head.dark p{color:#D7E3EA}
+.sec-head.dark h2{color:#fff;border-left-color:var(--teal)}
+#how .steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px;max-width:none;margin:0}
+#how .steps::before{left:23px;right:0;top:22px;bottom:auto;width:auto;height:3px;background:rgba(255,255,255,.14)}
+#how .step{grid-template-columns:1fr;grid-template-rows:auto auto;align-content:start;gap:16px;padding:0}
+#how .step:nth-child(even){margin-top:34px}
+#how .step h3{color:#fff;font-size:22px;padding-top:0}
+#how .step p{color:#D7E3EA;font-size:15px}
+#how .who{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#9FD8D5}
+#how .how-links{margin:40px 0 0}
+#how .btn-out{border-color:rgba(255,255,255,.6)}
+
+@media (max-width:1020px){
+  .hero-grid{grid-template-columns:1fr;gap:28px}
+  .door-v{margin-right:0}.door-t{margin-left:0;margin-bottom:0}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:36px}
+  .stats div:nth-child(4){border-left:0;padding-left:0}
+  .filterbar{grid-template-columns:1fr}
+  .card,.card.featured{grid-template-columns:62px minmax(0,1fr)}
+  .card .where,.card.featured .where{grid-column:2;border-left:0;border-top:1px solid var(--line)}
+  .notes{grid-template-columns:1fr}.note.n-p,.note.n-t,.note.n-n{min-height:0}
+  #how .steps{grid-template-columns:1fr 1fr}
+  #how .step:nth-child(even){margin-top:0}
+  #how .steps::before{display:none}
+}
+@media (max-width:620px){
+  .door b{font-size:28px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stats div{padding:12px 12px 10px}
+  .stats div:nth-child(odd){border-left:0;padding-left:0}
+  .stats div:nth-child(4){border-left:1px solid rgba(255,255,255,.12);padding-left:12px}
+  .stats div:last-child{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12)}
+  .stats dd{font-size:28px}
+  .rw-l{font-size:22px}
+  #find .flags{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+  #find .flag{padding:9px 34px 9px 10px}
+  .rb-r .clear{white-space:nowrap}
+  .results-bar{flex-wrap:wrap}
+  .card,.card.featured{grid-template-columns:48px minmax(0,1fr)}
+  #how .steps{grid-template-columns:1fr}
+}
+
+/* Advertise with us link band */
+.adv{position:relative;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr) auto;grid-template-rows:auto auto;gap:4px 36px;align-items:center;margin-top:48px;background:var(--navy);color:#fff;text-decoration:none;padding:28px 32px 28px 36px;border-left:6px solid var(--red);transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.adv:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(19,41,60,.22)}
+.adv-k{grid-column:1;font-weight:500;font-size:16px;color:#9FD8D5}
+.adv-t{grid-column:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:40px;line-height:.95}
+.adv-p{grid-column:2;grid-row:1/3;color:#D7E3EA;font-size:15.5px;line-height:1.55}
+.adv-go{grid-column:3;grid-row:1/3;display:inline-flex;align-items:center;gap:10px;background:var(--red);padding:13px 20px;font-weight:600;white-space:nowrap}
+.adv-go span{transition:transform .35s var(--ease)}
+.adv:hover .adv-go span{transform:translateX(4px)}
+@media (max-width:1020px){.adv{grid-template-columns:1fr;padding:24px 22px}.adv-k,.adv-t,.adv-p,.adv-go{grid-column:1;grid-row:auto}.adv-p{margin-top:8px}.adv-go{justify-self:start;margin-top:12px}.adv-t{font-size:34px}}
+
+/* Why trade with the guide */
+#why{background:#fff;padding:88px 0 84px;position:relative}
+.why-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:64px;align-items:start}
+.why-t{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--red);font-size:clamp(38px,4.6vw,58px);line-height:.92;padding-left:18px;border-left:4px solid var(--red);margin-bottom:22px}
+.why-l p{color:#26343E;font-size:17px;line-height:1.6;max-width:50ch}
+.why-l p+p{margin-top:12px}
+.why-l .sig{margin-top:18px;font-weight:700;color:var(--navy);line-height:1.3}
+.why-l .sig span{font-weight:500;color:#4E5D68;font-size:15px}
+.why-key{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:var(--teal);color:var(--navy);padding:20px 24px;margin:30px -40px 0 0;position:relative;z-index:1;box-shadow:0 20px 40px -18px rgba(19,41,60,.45)}
+.why-key b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:64px;line-height:.85}
+.why-key span{font-weight:600;font-size:16px;line-height:1.4}
+.why-list{list-style:none;counter-reset:w;border-top:2px solid var(--navy);margin-top:6px}
+.why-list li{counter-increment:w;display:grid;grid-template-columns:52px minmax(0,1fr);gap:4px 18px;padding:18px 0 18px;border-bottom:1px solid var(--line);transition:padding .45s var(--ease),background .45s var(--ease)}
+.why-list li::before{content:counter(w,decimal-leading-zero);grid-row:1/3;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;line-height:1;color:var(--teal)}
+.why-list li:hover{padding-left:10px;background:linear-gradient(90deg,var(--teal-p),transparent 70%)}
+.why-list b{font-weight:700;font-size:18px;color:var(--navy)}
+.why-list span{color:#33424D;font-size:15.5px;line-height:1.5}
+.why-list li:last-child b{color:var(--purple)}
+
+/* Plans and prices parts */
+.part{display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:30px;line-height:1;color:var(--navy);margin:0 0 22px}
+.part span{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;font-size:22px}
+.adhead{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:36px;align-items:end;margin-top:72px;padding-top:40px;border-top:2px solid var(--navy)}
+.adhead .part{margin:0}
+.adhead p{color:#33424D}
+.adhead a,.adnote a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:2px solid var(--teal)}
+.adstairs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;align-items:end;margin-top:28px}
+.ast{position:relative;display:flex;flex-direction:column;padding:22px;color:#fff;transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+.adstairs.wait .ast{clip-path:inset(100% 0 0 0)}
+.adstairs.grow .ast{clip-path:inset(0 0 0 0)}
+.adstairs.grow .ast.b{transition-delay:0s,.18s,0s}
+.adstairs.grow .ast.c{transition-delay:0s,.36s,0s}
+.ast.a{background:var(--teal);min-height:300px}.ast.b{background:var(--purple);min-height:370px}.ast.c{background:var(--navy);min-height:440px}
+.ast.a:hover,.ast.a:active{min-height:345px}.ast.b:hover,.ast.b:active{min-height:415px}.ast.c:hover,.ast.c:active{min-height:485px}
+.ast:hover,.ast:active{box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.ast .tg{align-self:flex-start;background:rgba(0,0,0,.25);padding:3px 9px;font-weight:600;font-size:15px;margin-bottom:12px;transition:background .3s ease}
+.ast:hover .tg{background:rgba(0,0,0,.4)}
+.ast b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;line-height:1}
+.ast.c b{color:var(--teal)}
+.ast .ap{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:48px;line-height:1;margin-top:8px}
+.ast .ap small{font-family:'Barlow',sans-serif;font-weight:500;font-size:14px;margin-left:6px;color:rgba(255,255,255,.85)}
+.ast p{margin-top:10px;color:#EAF1F6;font-size:15px;line-height:1.5}
+.ast .inc{align-self:flex-start;margin-top:auto;padding-top:14px;font-weight:600;font-size:14px}
+.ast .inc::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:8px;vertical-align:middle}
+.ast-go{align-self:flex-start;margin-top:14px;display:inline-flex;gap:10px;align-items:center;background:#fff;color:var(--navy);text-decoration:none;font-weight:600;padding:10px 16px}
+.ast.c .ast-go{margin-top:auto}
+.ast-go span{transition:transform .35s var(--ease)}
+.ast-go:hover span{transform:translateX(4px)}
+.adnote{margin-top:18px;color:#33424D;font-size:15px;max-width:80ch}
+@media (prefers-reduced-motion:reduce){.ast{transition:none}.adstairs.wait .ast{clip-path:none}}
+@media (max-width:1020px){
+  .why-grid{grid-template-columns:1fr;gap:36px}
+  .why-key{margin-right:0}
+  .adhead{grid-template-columns:1fr;gap:12px}
+  .adstairs{grid-template-columns:1fr}
+  .ast.a,.ast.b,.ast.c,.ast:hover{min-height:0}
+  .ast .inc{margin-top:12px}.ast.c .ast-go{margin-top:14px}
+}
+@media (max-width:620px){.why-key b{font-size:50px}.part{font-size:25px}}
+
+/* ===== One ladder of plans, built like the 3 tabs ===== */
+.ladder{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;align-items:end;margin-top:8px}
+.rung{position:relative;display:flex;flex-direction:column;padding:20px 18px 18px;color:#fff;transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+.ladder.wait .rung{clip-path:inset(100% 0 0 0)}
+.ladder.grow .rung{clip-path:inset(0 0 0 0)}
+.ladder.grow .r2{transition-delay:0s,.18s,0s}.ladder.grow .r3{transition-delay:0s,.36s,0s}.ladder.grow .r4{transition-delay:0s,.54s,0s}.ladder.grow .r5{transition-delay:0s,.72s,0s}
+.r1{background:#4E6475;min-height:470px}.r2{background:var(--teal);min-height:540px}.r3{background:var(--purple);min-height:605px}.r4{background:var(--navy);min-height:670px}.r5{background:var(--red);min-height:735px}
+.r1:hover,.r1:active{min-height:515px}.r2:hover,.r2:active{min-height:585px}.r3:hover,.r3:active{min-height:650px}.r4:hover,.r4:active{min-height:715px}.r5:hover,.r5:active{min-height:780px}
+.rung:hover,.rung:active{box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.rung .tg{align-self:flex-start;background:rgba(0,0,0,.25);padding:3px 9px;font-weight:600;font-size:14px;margin-bottom:12px;transition:background .3s ease}
+.rung:hover .tg{background:rgba(0,0,0,.4)}
+.rung h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;line-height:1}
+.r4 h3{color:var(--teal)}
+.rung .price{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:46px;line-height:1;margin-top:8px}
+.rung .price small{font-family:'Barlow',sans-serif;font-weight:500;font-size:13.5px;margin-left:6px;color:rgba(255,255,255,.85)}
+.rung .tline{margin-top:8px;font-size:14.5px;line-height:1.45;color:#EAF1F6}
+.rung .tfeat{list-style:none;margin-top:12px;border-top:1px solid rgba(255,255,255,.22)}
+.rung .tfeat li{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:14px;line-height:1.35}
+.rung .tfeat li::before{content:"";flex:none;width:11px;height:6px;border:solid #fff;border-width:0 0 2px 2px;transform:rotate(-45deg);margin-top:5px}
+.rung .tact{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.rung .pick{font-weight:700;font-size:14px}
+.rung .pick::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:8px;vertical-align:middle}
+.rbtn{display:inline-flex;gap:10px;align-items:center;background:#fff;color:var(--navy);text-decoration:none;font-weight:600;padding:10px 15px;white-space:nowrap}
+.rbtn span{transition:transform .35s var(--ease)}
+.rbtn:hover span{transform:translateX(4px)}
+.rung .tact small{font-size:13px;color:rgba(255,255,255,.88)}
+.ladder-note{margin-top:18px;color:#33424D;font-size:15px;max-width:92ch}
+.ladder-note a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:2px solid var(--teal)}
+.plan-extras{display:grid;grid-template-columns:minmax(260px,.62fr) minmax(0,1.38fr);gap:32px;align-items:start;margin-top:40px}
+.founding.wide{position:relative;top:0}
+.pe-r .compare{margin-top:16px}
+.ctable th small{font-weight:500;color:#9FD8D5}
+@media (prefers-reduced-motion:reduce){.rung{transition:none}.ladder.wait .rung{clip-path:none}}
+@media (max-width:1020px){
+  .ladder{grid-template-columns:1fr 1fr}
+  .rung,.r1,.r2,.r3,.r4,.r5,.rung:hover{min-height:0}
+  .r5{grid-column:1/-1}
+  .plan-extras{grid-template-columns:1fr}
+}
+@media (max-width:620px){.ladder{grid-template-columns:1fr}}
+
+/* faded trade village photo behind the header */
+.hero-photo{position:absolute;inset:0;background:url("../guide-img/trade-stalls.jpg") 70% 40%/cover no-repeat;opacity:.55;animation:drift 28s ease-in-out infinite alternate;pointer-events:none}
+.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--navy) 0%,var(--navy) 30%,rgba(19,41,60,.86) 52%,rgba(19,41,60,.5) 78%,rgba(19,41,60,.62) 100%),linear-gradient(0deg,var(--navy) 0%,rgba(19,41,60,0) 38%)}
+@keyframes drift{from{transform:scale(1.04) translateX(0)}to{transform:scale(1.1) translateX(-1.5%)}}
+.hero .wrap{position:relative}
+.hero-cap{position:absolute;right:18px;top:14px;z-index:1;margin:0;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.75);background:rgba(14,33,49,.55);padding:3px 8px}
+@media (prefers-reduced-motion:reduce){.hero-photo{animation:none}}
+@media (max-width:1020px){.hero-photo{opacity:.35;background-position:60% 30%}.hero-photo::after{background:linear-gradient(180deg,rgba(19,41,60,.55) 0%,var(--navy) 70%)}}
+
+/* boost and promises as tabs */
+.ptabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;align-items:end}
+.pt{position:relative;display:flex;flex-direction:column;padding:18px 16px 16px;color:#fff;transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+.ptabs.wait .pt{clip-path:inset(100% 0 0 0)}
+.ptabs.grow .pt{clip-path:inset(0 0 0 0)}
+.ptabs.grow .p2{transition-delay:0s,.18s,0s}.ptabs.grow .p3{transition-delay:0s,.36s,0s}.ptabs.grow .p4{transition-delay:0s,.54s,0s}
+.p1{background:var(--teal);min-height:300px}.p2{background:var(--purple);min-height:340px}.p3{background:var(--navy);min-height:380px}.p4{background:var(--red);min-height:420px}
+.p1:hover,.p1:active{min-height:345px}.p2:hover,.p2:active{min-height:385px}.p3:hover,.p3:active{min-height:425px}.p4:hover,.p4:active{min-height:465px}
+.pt:hover,.pt:active{box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.pt .tg{align-self:flex-start;background:rgba(0,0,0,.25);padding:3px 8px;font-weight:600;font-size:13.5px;margin-bottom:10px;transition:background .3s ease}
+.pt:hover .tg{background:rgba(0,0,0,.4)}
+.pt b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:25px;line-height:1}
+.p3 b{color:var(--teal)}
+.pt .pp{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;line-height:1;margin-top:6px}
+.pt .pp small{font-family:'Barlow',sans-serif;font-weight:500;font-size:13px;margin-left:5px;color:rgba(255,255,255,.88)}
+.pt p{margin-top:8px;font-size:14.5px;line-height:1.45;color:#EAF1F6}
+.pt .rbtn{align-self:flex-start;margin-top:auto;padding:9px 13px;font-size:14.5px}
+.pe-r .compare{margin-top:20px}
+@media (prefers-reduced-motion:reduce){.pt{transition:none}.ptabs.wait .pt{clip-path:none}}
+@media (max-width:1020px){.ptabs{grid-template-columns:1fr 1fr}.pt,.p1,.p2,.p3,.p4,.pt:hover{min-height:0}.pt .rbtn{margin-top:12px}}
+@media (max-width:620px){.ptabs{grid-template-columns:1fr}}
+#traders{background:#fff;padding:20px 0 70px}
+#traders .adv{margin-top:0;border-left-color:var(--teal)}
+#traders .adv-go{background:var(--teal);color:var(--navy)}
+.hero-photo{background-image:url("../home-img/day-1330.webp");background-position:30% 62%;opacity:.75}
+
+/* filter bar, tidier */
+.filterbar{grid-template-columns:minmax(240px,320px) minmax(0,1fr);gap:16px 28px;padding:18px 22px 18px;border-bottom:3px solid var(--navy)}
+.fb-search{position:relative;display:block}
+.fb-search svg{position:absolute;left:14px;top:50%;width:18px;height:18px;margin-top:-9px;fill:none;stroke:var(--navy);stroke-width:2.2;stroke-linecap:round;pointer-events:none}
+.fb-search .search{height:48px;padding:0 14px 0 42px;border:1px solid #AEB9C1;font-size:15.5px;background:#FAFBFB}
+.fb-search .search:focus{background:#fff}
+.fb-cats{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.fb-l{font-weight:500;font-size:15px;color:var(--navy);white-space:nowrap}
+.filterbar .chips{gap:8px}
+.filterbar .chip{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 12px;border:1px solid #C9D2D8;background:#fff;color:var(--navy);font-weight:600;font-size:14px;transition:border-color .3s var(--ease),background .3s var(--ease),color .3s var(--ease),transform .35s var(--ease)}
+.filterbar .chip i{width:10px;height:10px;background:var(--cc);flex:none}
+.filterbar .chip .cn{min-width:22px;height:22px;padding:0 6px;display:grid;place-items:center;background:var(--page);color:#4E5D68;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.filterbar .chip:hover{border-color:var(--navy);transform:translateY(-1px)}
+.filterbar .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.filterbar .chip.on i{outline:2px solid #fff;outline-offset:1px}
+.filterbar .chip.on .cn{background:var(--teal);color:var(--navy)}
+.filterbar .chip.none{opacity:.55}
+@media (max-width:1020px){.filterbar{grid-template-columns:1fr;padding:16px}}
+.fb-cats{flex-direction:column;align-items:flex-start;gap:8px}
+.fb-cats .chips{width:100%}
+@media (max-width:620px){.fb-cats{gap:8px}.filterbar .chips{gap:6px}.filterbar .chip{height:38px;font-size:13.5px;padding:0 7px 0 9px;gap:6px}}
 </style>
 <style id="device-fix">
 @media (max-width:1024px) and (pointer:coarse),(max-width:760px){
@@ -366,40 +643,43 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
 <div class="preview-strip" id="demoStrip" hidden><b>Example data.</b> This page shows real traders when it sits on ukairshowguide.co.uk.</div>
 
 <header class="hero" id="top">
-
+  <div class="hero-photo" role="img" aria-label="Food vans and trade stalls lined up along the edge of an airshow showground"></div>
   <div class="wrap">
     <div class="hero-grid">
-      <div>
+      <div class="hero-main">
         <div class="crumb"><a href="#top">The Big Guide to UK Airshows</a> &nbsp;›&nbsp; Planning guides &nbsp;›&nbsp; Airshow traders</div>
         <span class="tag">Supporting small business</span>
         <h1>Find your <em>airshow</em> traders</h1>
         <div class="sub">See who is trading at each show, and on which days</div>
         <p class="intro">Some of my best airshow memories are not in the sky at all. They are the coffee van that saved me on a cold Duxford morning, or the print I still have on my wall from a stall at Fairford. <strong>This page just puts those small businesses in one place, so you can see where to find them before you go.</strong></p>
-        <div class="btns">
-          <a class="btn btn-teal" href="#find">Find a trader <span class="arr">→</span></a>
-          <a class="btn btn-out" href="#season">Browse by airshow</a>
-          <a class="btn btn-red" href="#list">List your business free</a>
-        </div>
         <p class="trader-login">Already listed? <a href="https://www.ukairshowguide.co.uk/trader-hub" target="_top">Log in to the Trader Hub</a> to edit your listing.</p>
       </div>
-      <div class="hero-side">
-      <a class="fpanel" href="#pricing"><span class="fnum" id="kPlaces">25</span><b>Founding places left for 2027</b><span>Flypast free for the whole season →</span></a>
-      <aside class="keybox" aria-label="Key details">
-        <h2><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2.2"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M3 9c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3"/></svg></span>Key details</h2>
-        <div class="kv"><span>Traders listed</span><span id="kTraders">10</span></div>
-        <div class="kv"><span>Airshows covered</span><span id="kShows">12</span></div>
-        <div class="kv"><span>Show days with a trader</span><span id="kStops">0</span></div>
-        <div class="kv hl"><span>Cost to list</span><span>From free</span></div>
-        <div class="kv"><span>Listings checked</span><span>Every week</span></div>
-      </aside>
+      <div class="doors">
+        <a class="door door-v" href="#find">
+          <span class="dl">Going to a show?</span>
+          <b>See who is trading</b>
+          <span class="dt">Pick your airshow and see every stall, with the days they are there.</span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+        <a class="door door-t" href="https://www.ukairshowguide.co.uk/advertise-with-us" target="_top">
+          <span class="dl">Trade at airshows?</span>
+          <b>List your stall free</b>
+          <span class="dt"><strong id="kPlaces">25</strong> founding places left for 2027, with Flypast free for the season.</span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
+    <dl class="stats" aria-label="Key details">
+      <div><dt>Traders listed</dt><dd id="kTraders">10</dd></div>
+      <div><dt>Airshows covered</dt><dd id="kShows">12</dd></div>
+      <div><dt>Show days with a trader</dt><dd id="kStops">0</dd></div>
+      <div class="hl"><dt>Cost to list</dt><dd>From free</dd></div>
+      <div><dt>Listings checked</dt><dd>Every week</dd></div>
+    </dl>
     <nav class="jump" aria-label="Page sections">
       <a href="#find" data-s="find">Find a trader</a>
-      <a href="#season" data-s="season">Traders by airshow</a>
-      <a href="#list" data-s="list">List your business</a>
-      <a href="#pricing" data-s="pricing">Pricing</a>
-      <a href="#how" data-s="how">How it works</a>
+      <a href="#traders" data-s="traders">For traders</a>
+      <a href="https://www.ukairshowguide.co.uk/advertise-with-us" target="_top">Advertise with us</a>
       <a href="https://www.ukairshowguide.co.uk/trader-hub" target="_top">Trader log in</a>
     </nav>
   </div>
@@ -409,179 +689,50 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   <div class="wrap">
     <div class="sec-head">
       <h2>Find a trader</h2>
-      <p>Pick an airshow, a type of stall or search by name. I would suggest looking here the week before your show, so you know who to head for once you have saved your pitch and before the flying starts.</p>
+      <p>Start with your airshow, then narrow it down by type of stall or search by name. I would suggest looking here the week before your show, so you know who to head for once you have saved your pitch and before the flying starts.</p>
     </div>
-    <div class="finder">
-      <aside class="side" aria-label="Filters">
-        <div class="grp">
-          <label class="lbl" for="q">Search</label>
-          <input class="search" id="q" type="search" placeholder="Name, product or town" autocomplete="off">
-        </div>
-        <div class="grp">
-          <label class="lbl" for="showSel">Airshow</label>
-          <select id="showSel"><option value="">All airshows</option></select>
-        </div>
-        <div class="grp">
-          <span class="lbl">Type of stall</span>
-          <div class="chips" id="cats"></div>
-        </div>
-        <button class="clear" id="clear" type="button">Clear all</button>
-        <div class="tip"><b>Good to know.</b> Traders can change their plans, so if you are travelling to see one stall in particular, I would advise checking their own page the day before.</div>
-      </aside>
-      <div>
-        <div class="results-bar">
-          <div id="count"></div>
-          <select id="sort" aria-label="Sort traders">
-            <option value="next">Sort by next show</option>
-            <option value="az">Sort by name, A to Z</option>
-            <option value="most">Sort by most shows</option>
-          </select>
-        </div>
-        <div class="grid" id="grid"></div>
+    <div class="runway" aria-label="Pick an airshow">
+      <div class="rw-top">
+        <span class="rw-l">Pick your airshow</span>
+        <button type="button" class="flag all on" data-show="">All airshows</button>
       </div>
-    </div>
-    <a class="back" href="#top">Back to the sections ↑</a>
-  </div>
-</section>
-
-<section id="season">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2>Traders by airshow</h2>
-      <p>Here is the season laid out from May to October. The purple number shows how many listed traders are booked in for each show, and you can tap a show to see who will be there.</p>
-    </div>
-    <div class="runway">
       <div class="months"><span>May</span><span>June</span><span>July</span><span>August</span><span>September</span><span>October</span></div>
       <div class="track"></div>
       <div class="flags" id="flags"></div>
     </div>
-    <div class="season-note">
-      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg></span>
-      <p>You'll find most shows put their traders in a village near the main entrance, with food spread along the crowd line. If you aren't waiting to see a particular display, it can be a good chance to get round the stalls while the queues are short.</p>
+    <div class="filterbar">
+      <label class="fb-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><input class="search" id="q" type="search" placeholder="Search by name, product or town" autocomplete="off" aria-label="Search traders"></label>
+      <div class="fb-cats"><span class="fb-l" id="catsLabel">Type of stall</span><div class="chips" id="cats" role="group" aria-labelledby="catsLabel"></div></div>
+      <select id="showSel" hidden aria-hidden="true" tabindex="-1"><option value="">All airshows</option></select>
     </div>
-    <a class="back" href="#top">Back to the sections ↑</a>
-  </div>
-</section>
-
-<section id="pricing">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2>Pricing for traders</h2>
-      <p>A basic listing is free and always will be. If you would like more photos, your offers and stats, or a spot at the top of each show page, there are two plans priced by the season, so you are never paying through the quiet winter months.</p>
-    </div>
-    <div class="price-grid">
-      <aside class="founding">
-        <span class="tag">Founding traders</span>
-        <div class="big" id="placesLeft">25</div>
-        <h3>Founding places left for 2027</h3>
-        <p>The first 25 traders to join get Flypast free for the whole 2027 season. After that, you keep a founding price of £19 a season for as long as you stay, instead of £29.</p>
-        <div class="places" id="places" aria-hidden="true"></div>
-        <div class="places-l"><span id="placesTaken">0 taken</span><span id="placesLeft2">25 left</span></div>
-        <ul>
-          <li>Flypast free from March to October 2027</li>
-          <li>£19 a season from 2028, locked in for good</li>
-          <li>A founding trader badge on your card</li>
-          <li>A say in what I add to the Trader Hub next</li>
-        </ul>
-        <a class="btn btn-teal" href="#list">Claim a founding place <span class="arr">→</span></a>
-      </aside>
-      <div>
-        <div class="tickets" id="tickets"></div>
-        <div class="boost" style="margin-top:16px">
-          <div class="p">£9<small>a show</small></div>
-          <div><b>Show boost.</b> Only doing one or two big shows? Boost your card to the top of that airshow's trader list for the show weekend, without taking a season plan.</div>
-          <a class="btn btn-out" href="#list" style="border-color:var(--purple);color:var(--purple)">Add a boost</a>
-        </div>
-        <details class="compare">
-          <summary>Compare every feature <span>+</span></summary>
-          <div style="overflow-x:auto"><table class="ctable" id="ctable"></table></div>
-        </details>
-        <div class="promise"><span>Money back if you cancel before your first show</span><span>No contracts</span><span>Pay once a season, by card</span><span>Nothing is charged until your listing is live</span></div>
+    <div class="results-bar">
+      <div id="count"></div>
+      <div class="rb-r">
+        <button class="clear" id="clear" type="button">Clear all</button>
+        <select id="sort" aria-label="Sort traders">
+          <option value="next">Sort by next show</option>
+          <option value="az">Sort by name, A to Z</option>
+          <option value="most">Sort by most shows</option>
+        </select>
       </div>
     </div>
-    <a class="back" href="#top">Back to the sections ↑</a>
+    <div class="grid" id="grid"></div>
+    <div class="notes">
+      <div class="note n-p"><span class="tg">Before you go</span><h4>Good to know</h4><p>Traders can change their plans, so if you are travelling to see one stall in particular, I would advise checking their own page the day before.</p></div>
+      <div class="note n-t"><span class="tg">When you arrive</span><h4>Where to find the stalls</h4><p>You'll find most shows put their traders in a village near the main entrance, with food spread along the crowd line. If you aren't waiting to see a particular display, it can be a good chance to get round the stalls while the queues are short.</p></div>
+      <div class="note n-n"><span class="tg">At the stalls</span><h4>Bring some cash</h4><p>I would advise bringing some cash as well as your card. Signal on a busy airfield can drop out, and I have seen card machines struggle at the bigger shows. I would suggest visiting the toilets and grabbing your food before the main flying display starts, as you will miss the worst of the queues.</p></div>
+    </div>
   </div>
 </section>
 
-<section id="list">
+<section id="traders">
   <div class="wrap">
-    <div class="sec-head">
-      <h2>List your business</h2>
-      <p>If you trade at UK airshows, I would love to feature you. It costs nothing, and you choose what goes on your listing. If you fill in the form, you can watch your card build itself on the right as you type.</p>
-    </div>
-    <div class="hub-cta"><div><b>Already have a listing?</b> <span>Log in to change your details, add photos, manage your shows and post show day updates.</span></div><a class="btn btn-teal" href="https://www.ukairshowguide.co.uk/trader-hub" target="_top">Trader Hub log in <span class="arr">→</span></a></div>
-    <div class="list-grid">
-      <form class="formbox" id="form" novalidate>
-        <h3>Your listing</h3>
-        <p class="lead">It only takes about five minutes. Once you are live, create your Trader Hub account with the same email to manage your listing.</p>
-        <div class="row2">
-          <div class="field"><label for="fName">Business name</label><input id="fName" maxlength="40" placeholder="e.g. Hangar Brew Co."></div>
-          <div class="field"><label for="fTown">Where you are based</label><input id="fTown" maxlength="40" placeholder="e.g. Chelmsford, Essex"></div>
-        </div>
-        <div class="row2">
-          <div class="field"><label for="fCat">Type of stall</label><select id="fCat"></select></div>
-          <div class="field"><label for="fWeb">Website or social page</label><input id="fWeb" placeholder="e.g. instagram.com/yourstall"></div>
-        </div>
-        <div class="field">
-          <label for="fBlurb">Tell visitors about your stall <i>(what you sell, what makes you different)</i></label>
-          <textarea id="fBlurb" maxlength="220" placeholder="Fresh stone baked pizza from a converted horsebox, made to order in about four minutes."></textarea>
-          <span class="count" id="blurbCount">0 of 220</span>
-        </div>
-        <div class="field"><label for="fOffer">Show day offer <i>(optional)</i></label><input id="fOffer" maxlength="70" placeholder="e.g. 10% off for anyone who mentions the guide"></div>
-        <div class="field">
-          <label>Airshows and dates you will be at</label>
-          <div class="show-rows" id="rows"></div>
-          <button class="add" type="button" id="addRow">+ Add another airshow</button>
-        </div>
-        <div class="field"><label for="fPlan">Your plan</label><select id="fPlan"><option value="founding">Founding trader: Flypast free for 2027</option><option value="free">Static Display: free</option><option value="flypast">Flypast: £29 a season</option><option value="headliner">Headliner: £79 a season</option></select></div>
-        <div class="row2"><div class="field"><label for="fContact">Your name</label><input id="fContact" maxlength="60" autocomplete="name" placeholder="e.g. Sam Whitlock"></div><div class="field"><label for="fEmail">Contact email <i>(not shown on the site)</i></label><input id="fEmail" type="email" autocomplete="email" placeholder="you@yourbusiness.co.uk"></div></div>
-        <div class="checks">
-          <label><input type="checkbox" id="cIndep" checked> I am an independent or family run business</label>
-          <label><input type="checkbox" id="cOk"> I am happy for The Big Guide to UK Airshows to share my listing on Facebook and Instagram</label>
-        </div>
-        <button class="btn btn-teal" type="submit">Send my listing <span class="arr">→</span></button>
-        <div class="formmsg" id="msg" role="status"></div>
-      </form>
-
-      <div class="previewbox">
-        <h3>Your card</h3>
-        <p class="lead">This is how visitors will see you in the directory.</p>
-        <div id="livecard"></div>
-        <div class="perks">
-          <h4>What you get</h4>
-          <ul>
-            <li>A free listing for the whole season, checked every week</li>
-            <li>Your stall shown on every airshow you list, so visitors planning that show find you</li>
-            <li>A link straight to your website or social page</li>
-            <li>A mention in my show week posts on Facebook and Instagram, if you would like one</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <a class="back" href="#top">Back to the sections ↑</a>
-  </div>
-</section>
-
-<section id="how">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2>How it works</h2>
-      <p>There are no fees and no contracts. You just tell me where you will be, I check it and add you, and you can ask to be removed whenever you like.</p>
-    </div>
-    <div class="steps">
-      <div class="step"><span class="num">1</span><div><h3>Send your listing</h3><p>Fill in the form above with your shows and dates, and pick your plan. If you only know some of your bookings so far, I would suggest sending those and adding the rest later.</p><span class="who">You do this</span></div></div>
-      <div class="step"><span class="num">2</span><div><h3>I check and add you</h3><p>I check your details and add your card to the directory, usually within a few days. Your stall then shows on each airshow you have listed.</p><span class="who">I do this</span></div></div>
-      <div class="step"><span class="num">3</span><div><h3>Create a profile to manage your listing</h3><p>Once you are live, create your account in the Trader Hub, which is the log in for traders. From there you can manage your account, edit your listing, upload your photos and look after your payments and plan.</p><p>You also get free support the whole way through. Send me a message from your Trader Hub and I will help you get set up.</p><span class="who">You do this, with my help</span></div></div>
-      <div class="step wix"><span class="num">4</span><div><h3>Visitors find you</h3><p>People planning their day can search by show or by type of stall, then click through to take a look at your page before they travel.</p><span class="who">Handled by the website</span></div></div>
-      <div class="step"><span class="num">5</span><div><h3>Keep it up to date</h3><p>Booked another show, or had to pull out of one? Change it yourself in the Trader Hub, and post show day updates from your phone at the stall. I also check each listing once a week through the season.</p><span class="who">You and me</span></div></div>
-    </div>
-    <div class="how-links">
-      <a class="btn btn-out" href="https://www.ukairshowguide.co.uk/trader-hub" target="_top" style="border-color:var(--navy);color:var(--navy)">Trader log in</a>
-    </div>
-    <div class="visitor-tip">
-      <h4>A tip for visitors</h4>
-      <p>I would advise bringing some cash as well as your card. Signal on a busy airfield can drop out, and I have seen card machines struggle at the bigger shows. I would suggest visiting the toilets and grabbing your food before the main flying display starts, as you will miss the worst of the queues.</p>
-    </div>
+    <a class="adv tr-band" href="https://www.ukairshowguide.co.uk/advertise-with-us" target="_top">
+      <span class="adv-k">Trade at airshows?</span>
+      <span class="adv-t">List your stall</span>
+      <span class="adv-p">Listing your stall here is free. The plans, the founding trader offer and the sign up form are all on my Advertise With Us page, alongside the adverts for businesses near the shows.</span>
+      <span class="adv-go">See the trader plans <span aria-hidden="true">→</span></span>
+    </a>
   </div>
 </section>
 
@@ -663,11 +814,18 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   function prep(){TRADERS.forEach(t=>{t.stops.sort((a,b)=>key(a[1])-key(b[1]))})}
 
   // ---------- talking to the Wix page code ----------
-  const IN_WIX = window.parent !== window;
+  const HOST = (location.ancestorOrigins && location.ancestorOrigins.length ? location.ancestorOrigins[0] : document.referrer) || '';
+  const IN_WIX = window.parent !== window && /ukairshowguide|wix|filesusr/i.test(HOST);
   const SITE = 'https://www.ukairshowguide.co.uk/';
   const pendingCalls = {}; let seq = 0;
   function call(action, payload, wait){
-    if(!IN_WIX) return demo(action, payload||{});
+    // tips and advert packages rise like the Start Simple, Build Up steps
+  document.querySelectorAll('.notes,.ladder,.ptabs').forEach(n=>{if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)});
+  (function(){return;const n=document.querySelector('.notes');if(!n||!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)})();
+
+  if(!IN_WIX) return demo(action, payload||{});
     return new Promise((resolve,reject)=>{
       const id='t'+(++seq); pendingCalls[id]={resolve,reject};
       try{window.parent.postMessage({source:'ukag-traders',id,action,payload:payload||{}},'*')}catch(e){}
@@ -727,7 +885,7 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
         ${t.offer?`<div class="offer"><b>Show day offer</b><span>${esc(t.offer)}</span></div>`:''}
         <div class="links"><a href="${esc(href(t.web))}" target="_blank" rel="noopener">Visit their page <span>→</span></a></div>
       </div>
-      <div class="where"${t.featured&&!opts.noFeature?'':' style="grid-column:2"'}>
+      <div class="where">
         <h4>Find them at <span>${n} ${n===1?'show':'shows'}</span></h4>
         <ul class="stops">${stops}</ul>
       </div>
@@ -740,12 +898,13 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   const showSel = document.getElementById('showSel');
   const catsEl = document.getElementById('cats');
   SHOWS.forEach(s=>showSel.insertAdjacentHTML('beforeend',`<option value="${s.id}">${esc(s.name)}</option>`));
-  CATS.forEach(c=>catsEl.insertAdjacentHTML('beforeend',`<button type="button" class="chip" data-cat="${c.id}" aria-pressed="false">${esc(c.name)}</button>`));
+  CATS.forEach(c=>catsEl.insertAdjacentHTML('beforeend',`<button type="button" class="chip" data-cat="${c.id}" aria-pressed="false" style="--cc:${c.col}"><i aria-hidden="true"></i>${esc(c.name)}<b class="cn">0</b></button>`));
 
   function stats(){
     document.getElementById('kTraders').textContent = TRADERS.length;
     document.getElementById('kShows').textContent = SHOWS.length;
     document.getElementById('kStops').textContent = TRADERS.reduce((a,t)=>a+t.stops.filter(s=>!s[2]).length,0);
+    catsEl.querySelectorAll('.chip').forEach(ch=>{const n=TRADERS.filter(t=>t.cat===ch.dataset.cat).length;ch.querySelector('.cn').textContent=n;ch.classList.toggle('none',!n)});
   }
 
   let io;
@@ -754,7 +913,7 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
     if(!('IntersectionObserver' in window)){cards.forEach(c=>c.classList.add('in'));return}
     io && io.disconnect();
     io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
-    cards.forEach((c,i)=>{c.style.transitionDelay=(Math.min(i,6)*60)+'ms';io.observe(c);setTimeout(()=>c.style.transitionDelay='',900)});
+    cards.forEach((c,i)=>{const d=Math.min(i,5)*180;[...c.children].forEach((ch,k)=>ch.style.transitionDelay=(d+k*120)+'ms,0ms');io.observe(c);setTimeout(()=>{[...c.children].forEach(ch=>ch.style.transitionDelay='')},2600)});
   }
 
   function render(){
@@ -796,7 +955,7 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   });
   function pickShow(id){
     state.show = id; showSel.value = id; render();
-    document.getElementById('find').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    document.querySelector('#find .filterbar').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   }
   grid.addEventListener('click',e=>{const b=e.target.closest('button[data-show]'); if(b) pickShow(b.dataset.show)});
 
@@ -822,24 +981,33 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
     document.querySelectorAll('.flag').forEach(f=>f.classList.toggle('on',f.dataset.show===state.show));
   }
   buildFlags();
+  document.querySelector('.flag.all').addEventListener('click',()=>{state.show='';showSel.value='';render()});
   let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(buildFlags,150)});
 
 
   // ---------- Pricing ----------
+  const ADV='https://www.ukairshowguide.co.uk/advertise-with-us';
   const PLANS=[
-    {id:'free',name:'Static Display',price:'Free',per:'',line:'A simple card so visitors can find you.',feat:['Your card in the directory','Logo and 2 photos','Up to 3 airshows','Show day status updates'],btn:'List for free',cls:''},
-    {id:'flypast',name:'Flypast',price:'£29',per:'a season',line:'Everything most traders need to stand out.',feat:['6 stall photos','Unlimited airshows','Show day offers','Your pitch pinned on the show map','Visitor stats on your dashboard','Up to 3 staff logins'],btn:'Choose Flypast',cls:'pop',ribbon:'Recommended',note:'Free for founding traders'},
-    {id:'headliner',name:'Headliner',price:'£79',per:'a season',line:'Top of the list at every show you attend.',feat:['Everything in Flypast','Featured at the top of show pages','A mention in my show week posts','Trader of the week, once a season','Your changes checked first','Unlimited staff logins'],btn:'Choose Headliner',cls:'head'}
+    {id:'free',lvl:1,tag:'Directory',name:'Static Display',price:'Free',per:'',line:'A simple card so visitors can find you.',feat:['Your card in the directory','Logo and 2 photos','Up to 3 airshows','Show day status updates'],btn:'List for free',href:'#list'},
+    {id:'flypast',lvl:2,tag:'Directory',name:'Flypast',price:'£19',per:'a season',line:'Everything most traders need to stand out.',feat:['6 stall photos and unlimited airshows','Show day offers','Your pitch pinned on the show map','Visitor stats and 3 staff logins'],btn:'Choose Flypast',href:'#list',note:'Free for founding traders',pick:'Recommended'},
+    {id:'headliner',lvl:3,tag:'Directory and advert',name:'Headliner',price:'£49',per:'a season',line:'Top of the list at every show you attend.',feat:['Everything in Flypast','Guide Listing advert in one show guide','A mention in my show week posts','Trader of the week, once a season'],btn:'Choose Headliner',href:'#list'},
+    {id:'team',lvl:4,tag:'Directory and advert',name:'Display Team',price:'£129',per:'a season',line:'A big featured advert where people plan their day.',feat:['Everything in Headliner','Featured Partner advert in one show guide','Main photo, highlights and an order or book button','Shown first in its section'],btn:'Enquire',href:ADV},
+    {id:'finale',lvl:5,tag:'Up to three show guides',name:'Finale',price:'£249',per:'a season',line:'For traders who work the whole circuit.',feat:['Everything in Display Team','Featured adverts in up to three show guides','One agreed social media promotion','A basic summary of how it went'],btn:'Enquire',href:ADV}
   ];
-  document.getElementById('tickets').innerHTML=PLANS.map(p=>`<article class="ticket ${p.cls}">${p.ribbon?`<span class="ribbon">${p.ribbon}</span>`:''}
-    <div class="tname"><h3>${p.name}</h3><div class="price">${p.price}${p.per?`<small>${p.per}</small>`:''}</div><div class="tline">${p.line}</div></div>
+  (document.getElementById('tickets')||{}).innerHTML=PLANS.map(p=>`<article class="rung r${p.lvl}">
+    <span class="tg">${p.tag}</span>
+    <h3>${p.name}</h3>
+    <div class="price">${p.price}${p.per?`<small>${p.per}</small>`:''}</div>
+    <p class="tline">${p.line}</p>
     <ul class="tfeat">${p.feat.map(f=>`<li>${f}</li>`).join('')}</ul>
-    <div class="tact"><a class="btn ${p.cls==='pop'?'btn-teal':'btn-out'}" href="#list"${p.cls==='pop'?'':' style="border-color:var(--navy);color:var(--navy)"'}>${p.btn}</a>${p.note?`<small>${p.note}</small>`:''}</div></article>`).join('');
-  const ROWS=[['Your card in the directory',1,1,1],['Stall photos','2','6','6'],['Airshows on your card','Up to 3','Unlimited','Unlimited'],['Show day status updates',1,1,1],['Show day offers',0,1,1],['Pitch pinned on the show map',0,1,1],['Visitor stats',0,1,1],['Staff logins',0,'Up to 3','Unlimited'],['Featured at the top of show pages',0,0,1],['Show week social media mention',0,0,1],['Trader of the week feature',0,0,'Once a season'],['Changes checked first',0,0,1]];
+    <div class="tact">${p.pick?`<span class="pick">${p.pick}</span>`:''}<a class="rbtn" href="${p.href}"${p.href.startsWith('http')?' target="_top"':''}>${p.btn} <span aria-hidden="true">→</span></a>${p.note?`<small>${p.note}</small>`:''}</div>
+  </article>`).join('');
+  const ROWS=[['Your card in the directory',1,1,1,1,1],['Stall photos','2','6','6','6','6'],['Airshows on your card','Up to 3','Unlimited','Unlimited','Unlimited','Unlimited'],['Show day status updates',1,1,1,1,1],['Show day offers',0,1,1,1,1],['Pitch pinned on the show map',0,1,1,1,1],['Visitor stats',0,1,1,1,1],['Staff logins',0,'Up to 3','Unlimited','Unlimited','Unlimited'],['Featured at the top of show pages',0,0,1,1,1],['Show week social media mention',0,0,1,1,1],['Trader of the week feature',0,0,'Once a season','Once a season','Once a season'],['Changes checked first',0,0,1,1,1],['Advert in the show guides',0,0,'Guide Listing, one guide','Featured, one guide','Featured, up to three guides'],['Agreed social media promotion',0,0,0,0,1],['Summary of how your advert did',0,0,0,0,1]];
   const cell=v=>v===1?'<td class="y">✓</td>':v===0?'<td class="n">Not included</td>':`<td>${v}</td>`;
-  document.getElementById('ctable').innerHTML=`<colgroup><col><col><col class="pop"><col></colgroup><thead><tr><th>Feature</th><th>Static Display</th><th>Flypast</th><th>Headliner</th></tr></thead><tbody>${ROWS.map(r=>`<tr><td>${r[0]}</td>${cell(r[1])}${cell(r[2])}${cell(r[3])}</tr>`).join('')}</tbody>`;
+  (document.getElementById('ctable')||{}).innerHTML=`<colgroup><col><col><col class="pop"><col><col><col></colgroup><thead><tr><th>Feature</th>${PLANS.map(p=>`<th>${p.name}<br><small>${p.price}</small></th>`).join('')}</tr></thead><tbody>${ROWS.map(r=>`<tr><td>${r[0]}</td>${r.slice(1).map(cell).join('')}</tr>`).join('')}</tbody>`;
   function setPlaces(TAKEN){
     TAKEN=Math.min(25,TAKEN||0);
+    if(!document.getElementById('places')){const k=document.getElementById('kPlaces');if(k)k.textContent=25-Math.min(25,TAKEN||0);return}
     document.getElementById('places').innerHTML=Array.from({length:25},(_,i)=>`<i class="${i<TAKEN?'t':''}"></i>`).join('');
     document.getElementById('placesLeft').textContent=25-TAKEN;
     document.getElementById('kPlaces').textContent=25-TAKEN;
@@ -850,6 +1018,7 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   }
   setPlaces(0);
 
+  if(document.getElementById('form')){
   // ---------- List your business form ----------
   const fCat = document.getElementById('fCat');
   CATS.forEach(c=>fCat.insertAdjacentHTML('beforeend',`<option value="${c.id}">${esc(c.name)}</option>`));
@@ -901,11 +1070,13 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
     finally{sending=false;btn.disabled=false;btn.style.opacity=''}
   });
 
+  }
+
   // ---------- Jump link scroll spy ----------
   const links=[...document.querySelectorAll('.jump a')];
   if('IntersectionObserver' in window){
     const spy=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){links.forEach(l=>l.classList.toggle('on',l.dataset.s===en.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
-    ['find','season','pricing','list','how'].forEach(id=>spy.observe(document.getElementById(id)));
+    ['find','traders'].forEach(id=>spy.observe(document.getElementById(id)));
   }
 
   if(!IN_WIX)document.getElementById('demoStrip').hidden=false;

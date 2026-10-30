@@ -1,286 +1,889 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Advertise with Us | The Big Guide to UK Airshows</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#13293C;--navy-2:#1C3A52;--navy-3:#0C1D2B;
-  --teal:#32B4AF;--teal-dark:#0E5F5B;--teal-pale:#E3F4F3;
-  --red:#DF3336;--sky:#00A6E2;
-  --grey:#757575;--grey-line:#C6C6C6;--box:#F1F4F6;
-  --ink:#000000;--white:#FFFFFF;
+  --navy:#13293C; --navy-d:#0E2131; --teal:#32B4AF; --teal-d:#0E5F5B; --teal-p:#E8F6F5;
+  --purple:#6950A1; --red:#D74949; --forest:#1E3A34; --grey:#757575; --grey-l:#C6C6C6;
+  --page:#F2F4F5; --ink:#0B1620; --line:#DCE1E4;
   --ease:cubic-bezier(.22,.61,.36,1);
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--white)}
-body{color:var(--ink);font:400 16px/1.65 Barlow,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-img,svg{display:block;max-width:100%}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;font-size:16px;line-height:1.55;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
 a{color:inherit}
-.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
-h1,h2,h3,h4{font-family:Barlow,Arial,sans-serif;margin:0}
-h2.title{color:var(--red);font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1.12;letter-spacing:-.01em;margin-bottom:14px}
-.intro{max-width:760px;font-size:18px;line-height:1.6;margin:0 0 34px}
-section{padding:72px 0}
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
-
-/* Buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:12px 24px;border:2px solid transparent;border-radius:0;font:600 16px/1 Barlow,Arial,sans-serif;text-decoration:none;cursor:pointer;transition:transform .25s var(--ease),background-color .25s var(--ease),color .25s var(--ease)}
-.btn:hover{transform:translateY(-2px)}
-.btn-teal{background:var(--teal);color:var(--navy)}
-.btn-teal:hover{background:#4FC4BF}
-.btn-outline{border-color:var(--white);color:var(--white);background:transparent}
-.btn-outline:hover{background:var(--white);color:var(--navy)}
-.btn-red{background:var(--red);color:var(--white)}
-.btn-red:hover{background:#C9282B}
-.btn-navy{background:var(--navy);color:var(--white)}
-.btn-navy:hover{background:var(--navy-2)}
-.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,.chip:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+.cond{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.01em}
+.preview-strip{background:var(--purple);color:#fff;font-weight:500;font-size:14px;text-align:center;padding:8px 16px}
+.preview-strip b{font-weight:700}
 
 /* Header */
-.header{background:var(--navy);color:var(--white);padding:56px 0 64px;position:relative;overflow:hidden}
-.header:after{content:"";position:absolute;right:-120px;top:-160px;width:520px;height:520px;border:60px solid rgba(50,180,175,.07);border-radius:50%;pointer-events:none}
-.header-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:56px;align-items:start;position:relative;z-index:1}
-.crumb{font:500 15px/1.3 Barlow,Arial,sans-serif;color:var(--teal);margin:0 0 22px}
-.crumb a{text-decoration:none}
-.crumb a:hover{text-decoration:underline}
-.header h1{font-weight:800;font-size:clamp(38px,5.4vw,66px);line-height:1.02;letter-spacing:.005em;text-transform:uppercase;margin:0 0 16px}
-.sub{color:var(--red);font-weight:700;font-size:clamp(19px,2vw,24px);line-height:1.3;margin:0 0 20px}
-.header p.lede{font-size:18px;line-height:1.65;max-width:620px;margin:0 0 30px;color:#E8EEF2}
-.header p.lede strong{color:var(--white);font-weight:700}
-.actions{display:flex;flex-wrap:wrap;gap:12px}
+.hero{position:relative;background:var(--navy);color:#fff;overflow:hidden}
+.hero::before{content:"";position:absolute;top:0;bottom:0;right:0;width:calc((100% - 1200px)/2 + 400px);background:var(--navy-d);border-left:1px solid rgba(255,255,255,.06)}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:sweep 7s var(--ease) infinite}
+@keyframes sweep{0%{background-position:-40% 0}100%{background-position:140% 0}}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.75fr);gap:56px;align-items:end;padding:64px 0 0}
+.crumb{font-size:14px;font-weight:500;color:#A9C2CF;margin-bottom:22px}
+.crumb a{text-decoration:none;border-bottom:1px solid rgba(169,194,207,.4)}
+.crumb a:hover{color:#fff}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:5px 12px;margin-bottom:18px}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(44px,6.4vw,84px);line-height:.92;letter-spacing:-.005em;max-width:12ch}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.hero .sub{margin-top:20px;font-weight:500;color:#9FD8D5;font-size:19px;line-height:1.35;letter-spacing:.005em}
+.hero p.intro{margin-top:18px;max-width:56ch;color:#D7E3EA;font-size:17px;line-height:1.6}
+.hero p.intro strong{color:#fff;font-weight:600}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;font-weight:600;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .35s var(--ease),background .35s var(--ease),color .35s var(--ease)}
+.btn:hover{transform:translateY(-2px)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:#2AA29D}
+.btn-out{border-color:#fff;color:#fff;background:transparent}
+.btn-out:hover{background:#fff;color:var(--navy)}
+.btn-red{background:var(--red);color:#fff}
+.btn .arr{transition:transform .35s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.trader-login{margin-top:16px;font-size:15px;color:#A9C2CF}
+.trader-login a{color:#fff;font-weight:600;text-decoration:none;border-bottom:2px solid var(--teal)}
+.hub-cta{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:var(--navy);color:#fff;padding:18px 22px;margin-bottom:28px;border-left:6px solid var(--teal)}
+.hub-cta b{font-weight:700}
+.hub-cta span{color:#D7E3EA}
+.keybox{position:relative;background:var(--navy);border-top:4px solid var(--teal);box-shadow:0 24px 50px rgba(0,0,0,.32);padding:22px 24px 20px;margin-bottom:-1px}
+.fpanel{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:center;background:var(--teal);color:var(--navy);text-decoration:none;padding:16px 20px 16px 18px;margin:0 0 22px -44px;box-shadow:0 18px 40px rgba(0,0,0,.28);transition:transform .45s var(--ease)}
+.fpanel:hover{transform:translateX(6px)}
+.fpanel .fnum{grid-row:1/3;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:64px;line-height:.85;font-variant-numeric:tabular-nums}
+.fpanel b{font-weight:700;font-size:17px;line-height:1.2}
+.fpanel span:last-child{font-weight:500;font-size:14px;line-height:1.35}
+.keybox h2{display:flex;align-items:center;gap:12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:22px;color:var(--teal);margin-bottom:12px}
+.ico{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none}
+.ico svg{width:18px;height:18px}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08);font-size:15px}
+.kv span:first-child{color:#9FD8D5;font-weight:500}
+.kv span:last-child{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.kv.hl span:last-child{background:var(--red);padding:1px 8px}
+.jump{position:relative;display:flex;gap:4px;margin-top:48px;overflow-x:auto;scrollbar-width:none}
+.jump::-webkit-scrollbar{display:none}
+.jump a{flex:none;color:#fff;text-decoration:none;font-weight:600;padding:14px 18px;transition:padding .4s var(--ease),background .4s var(--ease)}
+.jump a:hover,.jump a:focus-visible,.jump a.on{background:var(--teal);padding:14px 28px;outline:none}
 
-/* Key details box */
-.keybox{background:var(--navy-2);border:1px solid rgba(255,255,255,.08)}
-.keybox-head{background:var(--teal);color:var(--white);display:flex;align-items:center;gap:14px;padding:16px 20px}
-.keybox-head h2{font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
-.icon-round{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:var(--white);display:grid;place-items:center}
-.icon-round svg{width:22px;height:22px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.rows{padding:8px 0}
-.row{display:grid;grid-template-columns:42% 58%;gap:0;margin:6px 12px;background:rgba(255,255,255,.04)}
-.row span{padding:11px 12px;font-size:15px;line-height:1.4}
-.row span:first-child{color:var(--teal);font-weight:600}
-.row span:last-child{color:var(--white)}
-.row.hot{background:var(--red)}
-.row.hot span:first-child{color:var(--white)}
+/* Section titles */
+section{scroll-margin-top:12px}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px;align-items:end;margin-bottom:34px}
+.sec-head h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--red);font-size:clamp(34px,4vw,50px);line-height:.95;padding-left:18px;border-left:4px solid var(--red)}
+.sec-head p{color:#33424D;max-width:58ch}
+.back{display:inline-block;margin-top:34px;font-weight:600;color:var(--navy);text-decoration:none;border-bottom:2px solid var(--teal);padding-bottom:2px;transition:transform .35s var(--ease)}
+.back:hover{transform:translateX(4px)}
 
-/* Promise strip */
-.strip{background:var(--navy-3);color:var(--white)}
-.strip .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;padding-top:18px;padding-bottom:18px}
-.tag{display:inline-block;background:var(--red);color:var(--white);font:600 14px/1 Barlow,Arial,sans-serif;padding:8px 12px}
-.strip p{margin:0;font-size:16px;color:#DCE6EB}
+/* Finder */
+#find{background:var(--page);padding:84px 0 80px;position:relative}
+.finder{display:grid;grid-template-columns:270px minmax(0,1fr);gap:32px;align-items:start}
+.side{position:sticky;top:16px;background:#fff;border:1px solid var(--line);padding:22px}
+.side label.lbl{display:block;font-weight:700;font-size:15px;color:var(--navy);margin:0 0 8px}
+.side .grp+.grp{margin-top:22px}
+.search{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#fff;transition:border-color .3s}
+.search:focus,select:focus,.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(50,180,175,.18)}
+select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#fff;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2313293C' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--grey-l);background:#fff;padding:7px 11px;font-weight:600;font-size:14px;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease),border-color .3s}
+.chip:hover{border-color:var(--teal)}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.clear{margin-top:20px;background:none;border:0;font-weight:600;color:var(--red);cursor:pointer;padding:0}
+.side .tip{margin-top:22px;border-left:4px solid var(--purple);background:#F3F0F9;padding:12px 14px;font-size:14px;line-height:1.5}
+.side .tip b{color:var(--purple)}
+.results-bar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px;font-weight:500;color:#33424D}
+.results-bar strong{color:var(--navy);font-weight:700}
+.results-bar select{width:auto;min-width:190px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.card{position:relative;display:grid;grid-template-columns:62px minmax(0,1fr);background:#fff;border:1px solid var(--line);transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .45s ease,border-color .3s ease .5s,background .3s ease .5s}
+.card:not(.in){background:transparent;border-color:transparent;transition:none}
+.card>*{clip-path:inset(100% 0 0 0);transition:clip-path 1s cubic-bezier(.22,1,.36,1),padding .55s cubic-bezier(.22,1,.36,1);transition-delay:inherit}
+.card.in>*{clip-path:inset(0 0 0 0)}
+.card:hover,.card:active{transform:translateY(-6px);box-shadow:0 -10px 24px -14px rgba(19,41,60,.45),0 18px 34px -18px rgba(19,41,60,.35);z-index:2}
+.card:hover .strip{padding-top:26px}
+.card:hover .badge{filter:brightness(.8)}
+@media (prefers-reduced-motion:reduce){.card>*{clip-path:none!important;transition:none}.card:hover{transform:none}}
+.card::before{content:"";position:absolute;top:-1px;left:-1px;height:3px;width:0;background:var(--teal);transition:width .5s var(--ease)}
+.card:hover::before{width:calc(100% + 2px)}
+.card.featured{grid-column:span 2;grid-template-columns:62px minmax(0,1.1fr) minmax(0,.9fr)}
+.strip{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0;color:#fff}
+.strip .ico{width:38px;height:38px}
+.strip .vert{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:15px;letter-spacing:.04em}
+.body{padding:20px 22px 20px}
+.body .top{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.body h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:27px;line-height:1;color:var(--navy)}
+.body .town{margin-top:5px;font-weight:500;font-size:14px;color:#4E5D68}
+.badge{flex:none;font-weight:600;font-size:13px;padding:3px 9px;color:#fff}
+.b-new{background:var(--purple)}
+.b-indep{background:var(--forest)}
+.body p.blurb{margin-top:12px;font-size:15.5px;color:#26343E}
+.pics{display:grid;grid-template-columns:2fr 1fr 1fr;gap:4px;margin-top:12px;height:90px}.pics img{width:100%;height:100%;object-fit:cover;pointer-events:none;display:block}
+.offer{margin-top:12px;display:flex;gap:10px;align-items:baseline;font-size:14.5px;background:var(--teal-p);padding:9px 12px}
+.offer b{color:var(--teal-d);font-weight:700;flex:none}
+.where{padding:20px 22px;border-top:1px solid var(--line)}
+.card.featured .where{border-top:0;border-left:1px solid var(--line);background:#FAFBFB}
+.where h4{font-weight:700;font-size:15px;color:var(--navy);margin-bottom:8px;display:flex;justify-content:space-between}
+.where h4 span{font-weight:500;color:#4E5D68}
+.stops{list-style:none}
+.stops li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:14.5px}
+.stops li:first-child{border-top:0}
+.stops button{background:none;border:0;padding:0;cursor:pointer;font-weight:600;color:var(--navy);text-align:left;transition:color .3s,transform .35s var(--ease)}
+.stops button:hover{color:var(--teal-d);transform:translateX(3px)}
+.stops .d{flex:none;font-weight:600;font-size:13px;font-variant-numeric:tabular-nums;border:1px solid var(--grey-l);padding:2px 8px;background:#fff}
+.stops li.match .d{background:var(--teal);border-color:var(--teal);color:#fff}
+.links{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;font-weight:600;font-size:14.5px}
+.links a{text-decoration:none;color:var(--navy);transition:color .3s}
+.links a span{color:var(--red);display:inline-block;transition:transform .35s var(--ease)}
+.links a:hover{color:var(--teal-d)}
+.links a:hover span{transform:translateX(4px)}
+.empty{grid-column:1/-1;background:#fff;border:1px solid var(--line);padding:40px;text-align:center}
+.empty h3{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;color:var(--navy);font-size:26px}
+.empty p{margin-top:8px;color:#33424D}
 
-/* Audience */
-.aud-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:start}
-.aud-lead p{font-size:18px;line-height:1.65;margin:0 0 18px}
-.aud-lead .pull{border-left:6px solid var(--teal);background:var(--teal-pale);padding:20px 22px;font-weight:500;color:var(--navy);margin-top:26px}
-.reader-list{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.reader{background:var(--box);padding:22px 22px 20px;transition:transform .3s var(--ease)}
-.reader:hover{transform:translateY(-3px)}
-.reader:nth-child(2){margin-top:28px}
-.reader:nth-child(4){margin-top:28px}
-.reader:nth-child(6){margin-top:28px}
-.reader h3{color:var(--navy);font-weight:700;font-size:20px;line-height:1.2;margin-bottom:6px}
-.reader p{margin:0;font-size:15.5px;line-height:1.55}
+/* Season runway */
+#season{padding:84px 0 80px;background:#fff;position:relative;overflow:hidden}
+.runway{position:relative;background:var(--navy);padding:34px 28px 26px;color:#fff}
+.months{display:grid;grid-template-columns:repeat(6,1fr);font-family:'Barlow',sans-serif;font-weight:500;font-size:17px;color:#9FD8D5;margin-bottom:16px}
+.track{position:relative;height:6px;background:#2A4358;margin-bottom:6px}
+.track::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:repeating-linear-gradient(90deg,#fff 0 26px,transparent 26px 52px);opacity:.55;animation:centre 4s linear infinite}
+@keyframes centre{to{background-position:52px 0}}
+.flags{position:relative;height:auto;display:grid;grid-template-columns:repeat(6,1fr);gap:0 8px;margin-top:18px}
+.flag{position:relative;display:block;width:100%;text-align:left;background:rgba(255,255,255,.06);border:0;border-left:3px solid var(--teal);color:#fff;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:background .35s var(--ease),transform .35s var(--ease)}
+.flag:hover{background:rgba(50,180,175,.22);transform:translateX(3px)}
+.flag.on{background:#fff;color:var(--navy)}
+.flag b{display:block;font-weight:700;font-size:14.5px;line-height:1.25}
+.flag small{display:block;margin-top:3px;font-size:13px;color:#A9C2CF;font-weight:500}
+.flag.on small{color:var(--teal-d)}
+.flag .n{position:absolute;top:8px;right:8px;min-width:24px;height:24px;border-radius:12px;background:var(--purple);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center;padding:0 6px}
+.season-note{display:flex;gap:16px;align-items:start;margin-top:24px;max-width:780px}
+.season-note .ico{background:var(--purple)}
+.season-note p{color:#26343E}
 
-/* Who can advertise (package card format) */
-.who{background:var(--box)}
-.who .pk-grid{gap:22px}
-.who-card.wide{grid-column:1/-1}
-.who-card .note{margin:14px 0 0;font-size:14.5px;color:var(--navy);background:#FFF1F1;border-left:4px solid var(--red);padding:10px 12px}
-.who-card .pk-foot{justify-content:flex-end}
-.who-card .for{margin-top:18px;font-size:16px}
-.pk-head{min-height:62px}
+/* List your business */
+#list{background:var(--page);padding:84px 0 90px}
+.list-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:36px;align-items:start}
+.formbox{background:#fff;border:1px solid var(--line);border-top:4px solid var(--purple);padding:28px}
+.formbox h3,.previewbox h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:26px;margin-bottom:6px}
+.formbox .lead{color:#33424D;margin-bottom:20px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:600;font-size:15px;color:var(--navy);margin-bottom:6px}
+.field label i{font-style:normal;font-weight:400;color:#5A6873;font-size:14px}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#fff;transition:border-color .3s}
+.field textarea{min-height:96px;resize:vertical}
+.count{display:block;text-align:right;font-size:13px;color:#5A6873;margin-top:4px;font-variant-numeric:tabular-nums}
+.show-rows{border:1px solid var(--line);background:#FAFBFB}
+.show-row{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) 40px;gap:8px;padding:10px;border-top:1px solid var(--line)}
+.show-row:first-child{border-top:0}
+.show-row input,.show-row select{border:1px solid var(--grey-l);padding:9px 10px;background:#fff;width:100%}
+.rm{background:#fff;border:1px solid var(--grey-l);cursor:pointer;font-size:20px;line-height:1;color:var(--red);transition:background .3s}
+.rm:hover{background:#FBEDED}
+.add{margin-top:10px;background:none;border:1px dashed var(--teal);color:var(--teal-d);font-weight:600;padding:9px 14px;cursor:pointer;width:100%;transition:background .3s}
+.add:hover{background:var(--teal-p)}
+.checks{display:flex;flex-direction:column;gap:10px;margin:6px 0 20px}
+.checks label{display:flex;gap:10px;align-items:start;font-size:15px;cursor:pointer}
+.checks input{accent-color:var(--teal);width:18px;height:18px;margin-top:3px;flex:none}
+.formmsg{display:none;margin-top:16px;background:var(--navy);color:#fff;padding:16px 18px;border-left:6px solid var(--teal)}
+.formmsg b{color:var(--teal)}
+.formmsg.show{display:block;animation:rise .5s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.previewbox{position:sticky;top:16px}
+.previewbox .lead{color:#33424D;margin-bottom:14px}
+.previewbox .card{background:#fff;border-color:var(--line)}
+.previewbox .card>*{clip-path:none}
+.perks{margin-top:20px;background:var(--navy);color:#fff;padding:22px 24px;border-top:4px solid var(--teal)}
+.perks h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;color:var(--teal);font-size:21px;margin-bottom:8px}
+.perks ul{list-style:none}
+.perks li{display:flex;gap:10px;padding:8px 0;border-top:1px solid rgba(255,255,255,.08);font-size:15px}
+.perks li:first-child{border-top:0}
+.perks li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:8px}
 
-/* Packages */
-.pk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.pk{display:flex;flex-direction:column;background:var(--navy);transition:transform .3s var(--ease)}
-.pk:hover{transform:translateY(-4px)}
-.pk-head{background:var(--teal);color:var(--white);display:flex;align-items:center;gap:14px;padding:16px 20px}
-.pk-head h3{font-weight:800;font-size:21px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
-.pk-head .pick{margin-left:auto;background:var(--red);color:var(--white);font:600 13.5px/1 Barlow,Arial,sans-serif;padding:7px 10px;white-space:nowrap}
-.pk .rows{padding:12px 0 6px}
-.pk .row span:first-child{color:var(--teal)}
-.pk .row.hot span:first-child{color:var(--white)}
-.price-row{display:flex;align-items:baseline;gap:12px;color:var(--white);padding:18px 24px 4px}
-.price-row strong{font-weight:800;font-size:46px;line-height:1}
-.price-row span{font-size:16px;color:#C9D6DE}
-.pk .for{color:#DCE6EB;font-size:15.5px;margin:4px 24px 10px}
-.getbox{background:var(--white);margin:12px 12px 0;padding:18px 20px}
-.getbox h4{color:var(--navy);font-weight:700;font-size:17px;margin-bottom:8px}
-.getbox ul{margin:0;padding:0;list-style:none}
-.getbox li{position:relative;padding:6px 0 6px 26px;font-size:15.5px;line-height:1.45}
-.getbox li:before{content:"";position:absolute;left:2px;top:12px;width:12px;height:7px;border-left:2.5px solid var(--teal-dark);border-bottom:2.5px solid var(--teal-dark);transform:rotate(-45deg)}
-.pk-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:18px 12px 14px;margin-top:auto}
-.more{color:var(--white);text-decoration:none;font-weight:600;font-size:15.5px;background:none;border:0;cursor:pointer;font-family:inherit;padding:8px 6px}
-.more b{color:var(--red)}
-.more:hover{text-decoration:underline}
-.pk-small{font-size:14.5px;line-height:1.55;color:var(--navy);background:var(--box);padding:18px 22px;margin-top:22px}
+/* How it works */
+#how{padding:84px 0 70px;background:#fff}
+.steps{position:relative;display:grid;gap:0;max-width:880px;margin-left:min(8vw,110px)}
+.steps::before{content:"";position:absolute;left:21px;top:10px;bottom:10px;width:3px;background:var(--line)}
+.step{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);gap:22px;padding:0 0 30px}
+.num{position:relative;z-index:1;width:46px;height:46px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px}
+.step.wix .num{background:var(--purple)}
+.step h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--navy);font-size:24px;line-height:1.1;padding-top:8px}
+.step p{margin-top:6px;color:#26343E;max-width:62ch}
+.how-links{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 30px min(8vw,110px)}
+@media (max-width:620px){.how-links{margin-left:0}}
+.who{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;background:var(--page);border:1px solid var(--line);padding:3px 9px;color:var(--navy)}
+.visitor-tip{margin:10px 0 0 min(8vw,110px);max-width:880px;border-left:4px solid var(--purple);background:#F3F0F9;padding:18px 20px}
+.visitor-tip h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;color:var(--purple);font-size:20px;margin-bottom:4px}
 
-/* Examples */
-.ex{background:var(--box)}
-.ex-layout{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
-.ex-col h3{color:var(--navy);font-weight:700;font-size:20px;margin-bottom:6px}
-.ex-col > p{margin:0 0 16px;font-size:15.5px}
-.ex-stack{display:flex;flex-direction:column;gap:30px}
-.where{font:500 14.5px/1.3 Barlow,Arial,sans-serif;color:var(--navy);margin-bottom:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.where em{font-style:normal;background:var(--white);padding:5px 9px}
-.adlabel{display:inline-block;background:var(--navy);color:var(--white);font:600 13px/1 Barlow,Arial,sans-serif;padding:6px 9px}
-.ad-listing{display:grid;grid-template-columns:160px 1fr;background:var(--white);border:2px solid var(--grey-line)}
-.ad-listing .pic{background:#DCEFF0;min-height:150px}
-.ad-listing .txt{padding:16px 18px}
-.ad-listing h4{color:var(--navy);font-weight:800;font-size:20px;margin:10px 0 4px}
-.ad-listing p{margin:0 0 8px;font-size:15px;line-height:1.5}
-.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--navy);font-weight:500}
-.adlink{display:inline-block;margin-top:8px;color:var(--teal-dark);font-weight:700;font-size:15px;text-decoration:none}
-.adlink:hover{text-decoration:underline}
-.ad-featured{background:var(--white);border:3px solid var(--teal)}
-.ad-featured .pic{background:#E7E1D4;height:200px;position:relative}
-.ad-featured .pic .adlabel{position:absolute;left:14px;top:14px}
-.ad-featured .txt{padding:20px 22px 22px}
-.ad-featured h4{color:var(--navy);font-weight:800;font-size:24px;margin-bottom:6px}
-.ad-featured p{margin:0 0 12px;font-size:15.5px}
-.hl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 16px;padding:0;list-style:none}
-.hl li{background:var(--teal-pale);color:var(--teal-dark);font-weight:500;font-size:14.5px;padding:8px 10px}
-.trader{background:var(--white);border:2px solid var(--grey-line);padding:16px 18px;display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:start}
-.trader .mark{width:64px;height:64px;background:var(--navy);display:grid;place-items:center}
-.trader h4{color:var(--navy);font-weight:800;font-size:19px;margin:8px 0 4px}
-.trader p{margin:0;font-size:15px}
-.confirmed{display:inline-block;margin-top:10px;background:var(--teal-pale);color:var(--teal-dark);font-weight:600;font-size:13.5px;padding:6px 9px}
-.fict{font-size:14px;color:var(--navy);margin-top:10px}
+.small{background:var(--navy-d);color:#A9C2CF;font-size:14px;padding:30px 0}
+.small p+p{margin-top:8px}
+.small a{color:#fff}
 
-/* Placements */
-.place-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:start}
-.mock{background:var(--navy);padding:18px}
-.mock-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.mock-tabs button{font:500 14px/1 Barlow,Arial,sans-serif;background:rgba(255,255,255,.07);color:var(--white);border:0;padding:10px 12px;cursor:pointer;transition:background .2s var(--ease)}
-.mock-tabs button.ad{box-shadow:inset 0 -3px 0 var(--red)}
-.mock-tabs button[aria-selected="true"]{background:var(--teal);color:var(--navy);font-weight:600}
-.mock-panel{background:var(--white);padding:22px;min-height:250px}
-.mock-panel h3{color:var(--red);font-weight:800;font-size:22px;margin-bottom:8px}
-.mock-panel p{margin:0 0 14px;font-size:15.5px}
-.slot{border:2px dashed var(--teal);background:var(--teal-pale);padding:14px 16px;color:var(--teal-dark);font-weight:600;font-size:15px}
-.slot.none{border-color:var(--grey-line);background:var(--box);color:var(--navy)}
-.key{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--white);margin-top:12px}
-.key i{display:inline-block;width:22px;height:3px;background:var(--red)}
-.place-side h3{color:var(--navy);font-weight:700;font-size:20px;margin:0 0 8px}
-.place-side p{margin:0 0 18px;font-size:16px}
-.shows{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
-.shows li{background:var(--box);color:var(--navy);font-weight:500;font-size:14.5px;padding:8px 11px}
 
-/* Process */
-.process{background:var(--navy);color:var(--white)}
-.process h2.title{color:var(--red)}
-.process .intro{color:#DCE6EB}
-.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
-.step{background:var(--navy-2);padding:22px 20px 24px;position:relative;margin-right:14px}
-.step:last-child{margin-right:0}
-.step:not(:last-child):after{content:"";position:absolute;right:-14px;top:50%;width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:10px solid var(--teal);transform:translate(2px,-50%)}
-.step .icon-round{margin-bottom:14px}
-.step h3{font-weight:700;font-size:18px;line-height:1.25;margin-bottom:6px}
-.step p{margin:0;font-size:15px;line-height:1.5;color:#DCE6EB}
-.step.go{background:var(--teal)}
-.step.go h3,.step.go p{color:var(--navy)}
-.thumb{display:block;width:42px;height:42px;margin-bottom:14px}
-.thumb svg{width:42px;height:42px;fill:none;stroke:var(--navy);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* Pricing */
+#pricing{background:#fff;padding:84px 0 84px;position:relative}
+.price-grid{display:grid;grid-template-columns:minmax(260px,.62fr) minmax(0,1.38fr);gap:32px;align-items:start}
+.founding{position:sticky;top:16px;background:var(--navy);color:#fff;padding:28px 26px 26px;border-top:4px solid var(--purple);overflow:hidden}
+.founding .tag{margin-bottom:14px}
+.founding .big{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:120px;line-height:.8;color:var(--teal);letter-spacing:-.02em}
+.founding h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:30px;line-height:1;margin-top:8px}
+.founding p{color:#D7E3EA;margin-top:12px;font-size:15.5px}
+.places{display:grid;grid-template-columns:repeat(25,1fr);gap:3px;margin-top:18px}
+.places i{display:block;aspect-ratio:1;background:rgba(255,255,255,.14);transition:background .4s var(--ease)}
+.places i.t{background:var(--teal)}
+.places-l{display:flex;justify-content:space-between;font-size:14px;font-weight:600;margin-top:8px;color:#9FD8D5}
+.founding ul{list-style:none;margin:18px 0 20px}
+.founding li{display:flex;gap:10px;padding:8px 0;border-top:1px solid rgba(255,255,255,.1);font-size:15px}
+.founding li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:8px}
+.founding .btn{width:100%;justify-content:center}
+.tickets{display:flex;flex-direction:column;gap:16px}
+.ticket{position:relative;display:grid;grid-template-columns:230px minmax(0,1fr) 170px;background:#fff;border:1px solid var(--line);transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.ticket:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(19,41,60,.12)}
+.ticket .tname{padding:22px 22px 20px;border-right:2px dashed var(--line);position:relative}
+.ticket .tname::before,.ticket .tname::after{content:"";position:absolute;right:-11px;width:20px;height:20px;border-radius:50%;background:#fff;border:1px solid var(--line)}
+.ticket .tname::before{top:-11px;clip-path:inset(50% 0 0 0)}
+.ticket .tname::after{bottom:-11px;clip-path:inset(0 0 50% 0)}
+.ticket h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:30px;line-height:1;color:var(--navy)}
+.ticket .price{margin-top:10px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:44px;line-height:1;color:var(--navy)}
+.ticket .price small{font-family:'Barlow',sans-serif;font-weight:500;font-size:14px;color:var(--grey);margin-left:4px}
+.ticket .price s{font-size:26px;color:#8C98A1;margin-right:6px}
+.ticket .tline{margin-top:8px;font-size:14.5px;color:#33424D}
+.ticket .tfeat{padding:20px 22px;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;align-content:center}
+.ticket .tfeat li{display:flex;gap:9px;font-size:14.5px;line-height:1.4}
+.ticket .tfeat li::before{content:"";flex:none;width:14px;height:8px;border:solid var(--teal);border-width:0 0 2.5px 2.5px;transform:rotate(-45deg);margin-top:4px}
+.ticket .tact{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:20px 20px 20px 0}
+.ticket .tact .btn{justify-content:center;padding:11px 14px;white-space:nowrap}
+.ticket .tact small{font-size:13px;color:var(--grey);text-align:center}
+.ticket.pop{background:var(--navy);border-color:var(--navy);color:#fff}
+.ticket.pop .tname{border-right-color:rgba(255,255,255,.2)}
+.ticket.pop .tname::before,.ticket.pop .tname::after{border-color:var(--navy)}
+.ticket.pop h3,.ticket.pop .price{color:#fff}
+.ticket.pop .price small,.ticket.pop .tact small{color:#A9C2CF}
+.ticket.pop .tline,.ticket.pop .tfeat li{color:#D7E3EA}
+.ticket .ribbon{position:absolute;top:-13px;left:22px;background:var(--teal);color:var(--navy);font-weight:600;font-size:14px;padding:3px 12px}
+.ticket.head{border-top:4px solid var(--teal)}
+.boost{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;background:#F3F0F9;border-left:4px solid var(--purple);padding:18px 20px}
+.boost .p{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:38px;color:var(--purple);line-height:1}
+.boost .p small{font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:block;line-height:1.2}
+.boost b{color:var(--navy)}
+.compare{margin-top:24px;border:1px solid var(--line);background:#fff}
+.compare summary{cursor:pointer;list-style:none;padding:16px 20px;font-weight:700;color:var(--navy);display:flex;justify-content:space-between;align-items:center}
+.compare summary::-webkit-details-marker{display:none}
+.compare summary span{width:30px;height:30px;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:20px;transition:transform .35s var(--ease)}
+.compare[open] summary span{transform:rotate(45deg)}
+.ctable{width:100%;border-collapse:collapse;font-size:15px}
+.ctable th{background:var(--navy);color:#fff;font-weight:600;padding:11px 14px;text-align:center}
+.ctable th:first-child,.ctable td:first-child{text-align:left}
+.ctable td{padding:10px 14px;border-top:1px solid var(--line);text-align:center}
+.ctable td.y{color:var(--teal-d);font-weight:700}
+.ctable td.n{color:#B5BEC4}
+.ctable col.pop{background:var(--teal-p)}
+.promise{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:22px;font-weight:600;color:var(--navy);font-size:15px}
+.promise span{display:flex;gap:8px;align-items:center}
+.promise span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal)}
 
-/* Enquiry */
-.enq-grid{display:grid;grid-template-columns:1.5fr .85fr;gap:36px;align-items:start}
-.form-box{background:var(--box);padding:30px}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.field{display:flex;flex-direction:column;gap:7px;min-width:0}
-.field.full{grid-column:1/-1}
-.field label,.field .lab{font:600 15px/1.3 Barlow,Arial,sans-serif;color:var(--navy)}
-.field .hint{font-size:14px;color:var(--navy);font-weight:400}
-.field input,.field select,.field textarea{border:1.5px solid #A9B7C1;border-radius:0;background:var(--white);padding:12px 13px;font:400 16px/1.4 Barlow,Arial,sans-serif;color:var(--ink);width:100%;transition:border-color .2s var(--ease)}
-.field input:hover,.field select:hover,.field textarea:hover{border-color:var(--navy)}
-.field textarea{min-height:130px;resize:vertical}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{font:500 14.5px/1 Barlow,Arial,sans-serif;background:var(--white);color:var(--navy);border:1.5px solid #A9B7C1;padding:10px 12px;cursor:pointer;transition:background .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease)}
-.chip:hover{transform:translateY(-1px);border-color:var(--navy)}
-.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--white)}
-.check{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5}
-.check input{width:20px;height:20px;margin:2px 0 0;flex:0 0 auto;accent-color:var(--navy)}
-.form-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:22px}
-.small{font-size:14px;line-height:1.5;color:var(--navy);margin:14px 0 0}
-.result{display:none;margin-top:22px;background:var(--white);border-left:6px solid var(--teal);padding:20px}
-.result.show{display:block}
-.result h3{color:var(--navy);font-weight:700;font-size:19px;margin-bottom:6px}
-.result p{margin:0 0 12px;font-size:15.5px}
-.result pre{white-space:pre-wrap;font:400 14.5px/1.55 Barlow,Arial,sans-serif;background:var(--box);padding:14px;margin:0 0 12px;max-height:260px;overflow:auto}
-.contact-box{background:var(--navy);color:var(--white)}
-.contact-box .keybox-head h2{font-size:18px}
-.contact-box .inner{padding:22px}
-.contact-box p{margin:0 0 14px;font-size:15.5px;color:#DCE6EB}
-.contact-box a.mail{color:var(--teal);font-weight:700;font-size:18px;word-break:break-word;text-decoration:none}
-.contact-box a.mail:hover{text-decoration:underline}
-.contact-box ul{margin:0 0 16px;padding:0;list-style:none}
-.contact-box li{background:rgba(255,255,255,.05);margin-bottom:6px;padding:9px 12px;font-size:15px}
+@media (max-width:1020px){
+  .price-grid{grid-template-columns:1fr}
+  .founding{position:relative;top:0}
+  .ticket{grid-template-columns:200px minmax(0,1fr)}
+  .ticket .tact{grid-column:1/-1;flex-direction:row;padding:0 20px 20px;align-items:center}
+  .ticket .tact .btn{flex:1}
 
-/* FAQ */
-.faq{background:var(--box)}
-.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
-.faq-side p{font-size:17px;margin:0 0 18px}
-.faq-list details{background:var(--white);margin-bottom:10px}
-.faq-list summary{list-style:none;cursor:pointer;padding:18px 54px 18px 20px;position:relative;font:700 18px/1.35 Barlow,Arial,sans-serif;color:var(--navy)}
-.faq-list summary::-webkit-details-marker{display:none}
-.faq-list summary:after{content:"";position:absolute;right:22px;top:50%;width:10px;height:10px;border-right:2.5px solid var(--red);border-bottom:2.5px solid var(--red);transform:translateY(-70%) rotate(45deg);transition:transform .3s var(--ease)}
-.faq-list details[open] summary:after{transform:translateY(-30%) rotate(225deg)}
-.faq-list details p{margin:0;padding:0 20px 20px;font-size:16px}
+  .hero-grid{grid-template-columns:1fr;gap:30px;padding-top:48px}
+  .keybox{margin-bottom:0}
+  .hero::before{display:none}
+  .fpanel{margin-left:0}
+}
+@media (max-width:620px){
+  .fpanel{padding:12px 16px;margin-bottom:14px;gap:2px 12px}
+  .fpanel .fnum{font-size:46px}
+  .keybox{padding:16px 18px 12px}
+  .keybox h2{margin-bottom:6px}
+  .kv{padding:8px 0}
+  .jump{margin-top:32px}
+  .btns{gap:10px;margin-top:22px}
+  .finder{grid-template-columns:1fr}
+  .side{position:relative;top:0}
+  .grid{grid-template-columns:1fr}
+  .card.featured{grid-column:auto;grid-template-columns:62px minmax(0,1fr)}
+  .card.featured .where{grid-column:2;border-left:0;border-top:1px solid var(--line)}
+  .flags{grid-template-columns:repeat(3,1fr)}
+  .months{display:none}
+  .list-grid{grid-template-columns:1fr}
+  .previewbox{position:relative;top:0}
+  .sec-head{grid-template-columns:1fr;gap:14px}
+}
+@media (max-width:620px){
+  .ticket{grid-template-columns:1fr}
+  .ticket .tname{border-right:0;border-bottom:2px dashed var(--line)}
+  .ticket.pop .tname{border-bottom-color:rgba(255,255,255,.2)}
+  .ticket .tname::before,.ticket .tname::after{display:none}
+  .ticket .tfeat{grid-template-columns:1fr}
+  .ticket .tact{flex-direction:column;align-items:stretch}
+  .boost{grid-template-columns:1fr}
+  .ctable{font-size:13.5px}
+  .ctable th,.ctable td{padding:8px 6px}
 
-/* Terms */
-.terms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.term{background:var(--box);padding:20px 22px}
-.term h3{color:var(--navy);font-weight:700;font-size:17px;margin-bottom:6px}
-.term p{margin:0;font-size:15px;line-height:1.55}
-.view{background:var(--navy);color:var(--white);padding:40px 0}
-.view-grid{display:grid;grid-template-columns:.5fr 1.5fr;gap:30px;align-items:start}
-.view h2{color:var(--red);font-weight:800;font-size:28px;line-height:1.15}
-.view p{margin:0;font-size:17px;line-height:1.65;color:#E8EEF2}
-.smallprint{padding:26px 0 34px;font-size:14px;line-height:1.6;color:var(--navy)}
-.smallprint p{margin:0 0 8px}
+  .wrap{padding:0 18px}
+  .flags{grid-template-columns:1fr 1fr}
+  .row2{grid-template-columns:1fr}
+  .card{grid-template-columns:48px minmax(0,1fr)}
+  .card.featured{grid-template-columns:48px minmax(0,1fr)}
+  .strip .vert{font-size:13px}
+  .body,.where{padding:16px}
+  .body h3{font-size:24px}
+  .results-bar{flex-direction:column;align-items:stretch}
+  .results-bar select{width:100%}
+  .steps,.visitor-tip{margin-left:0}
+  .show-row{grid-template-columns:1fr 40px}
+  .show-row input{grid-column:1}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .card{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
 
-/* Responsive */
+/* ===== Layout preview 2 ===== */
+.hero::before{display:none}
+.hero-grid{grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:64px;align-items:end;padding:60px 0 0}
+.doors{position:relative;display:flex;flex-direction:column;gap:14px;padding-bottom:6px}
+.door{position:relative;display:grid;gap:4px;text-decoration:none;padding:22px 64px 22px 24px;transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.door:hover{transform:translateX(-6px);box-shadow:0 22px 44px rgba(0,0,0,.3)}
+.door .dl{font-weight:500;font-size:15px}
+.door b{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:34px;line-height:.95;letter-spacing:.005em}
+.door .dt{font-size:15px;line-height:1.45;margin-top:4px}
+.door .go{position:absolute;right:22px;top:50%;margin-top:-18px;width:36px;height:36px;display:grid;place-items:center;font-size:18px;transition:transform .45s var(--ease)}
+.door:hover .go{transform:translateX(4px)}
+.door-v{background:var(--navy-d);border-left:5px solid var(--teal);color:#fff;margin-right:44px}
+.door-v .dl{color:#9FD8D5}.door-v .dt{color:#D7E3EA}.door-v .go{background:var(--teal);color:#fff}
+.door-t{background:var(--teal);color:var(--navy);margin-left:44px;margin-bottom:-38px;box-shadow:0 20px 40px rgba(0,0,0,.25);z-index:2}
+.door-t .dt strong{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;line-height:1}
+.door-t .go{background:var(--navy);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:64px;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
+.stats div{padding:16px 18px 14px;border-left:1px solid rgba(255,255,255,.12)}
+.stats div:first-child{border-left:0;padding-left:0}
+.stats dt{font-weight:500;font-size:14px;color:#9FD8D5}
+.stats dd{margin-top:2px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.stats .hl dd{color:var(--teal)}
+.jump{margin-top:8px}
+
+/* runway sits inside the finder */
+#find .runway{padding:22px 24px 16px;margin-bottom:0}
+.rw-top{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.rw-l{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:26px;line-height:1}
+.flag.all{width:auto;margin:0;padding:7px 14px;border-left:0;background:rgba(255,255,255,.1);font-weight:600;font-size:14.5px}
+.flag.all.on{background:var(--teal);color:#fff}
+.flags{margin-top:14px}
+.filterbar{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:14px 20px;align-items:center;background:#fff;border:1px solid var(--line);border-top:0;padding:16px 20px}
+.filterbar .chips{gap:6px}
+.results-bar{margin:22px 0 14px}
+.rb-r{display:flex;align-items:center;gap:18px}
+.rb-r .clear{margin:0}
+.grid{grid-template-columns:1fr;gap:16px}
+.card{grid-template-columns:62px minmax(0,1.25fr) minmax(260px,.75fr)}
+.card .where{border-top:0;border-left:1px solid var(--line);background:#FAFBFB}
+.card.featured{grid-column:auto;grid-template-columns:62px minmax(0,1.25fr) minmax(260px,.75fr);box-shadow:inset 0 3px 0 var(--teal)}
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;align-items:end;margin-top:34px}
+.note{position:relative;padding:22px;color:#fff;font-size:15.5px;line-height:1.5;transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+.notes.wait .note{clip-path:inset(100% 0 0 0)}
+.notes.grow .note{clip-path:inset(0 0 0 0)}
+.notes.grow .note.n-t{transition-delay:0s,.18s,0s}
+.notes.grow .note.n-n{transition-delay:0s,.36s,0s}
+.note.n-p{background:var(--teal);min-height:210px}.note.n-t{background:var(--purple);min-height:280px}.note.n-n{background:var(--navy);min-height:350px}
+.note.n-p:hover,.note.n-p:active{min-height:255px}
+.note.n-t:hover,.note.n-t:active{min-height:325px}
+.note.n-n:hover,.note.n-n:active{min-height:395px}
+.note:hover,.note:active{box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.note .tg{display:inline-block;background:rgba(0,0,0,.25);padding:3px 9px;font-weight:600;font-size:15px;margin-bottom:10px;transition:background .3s ease}
+.note:hover .tg{background:rgba(0,0,0,.4)}
+.note h4{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;line-height:1;margin-bottom:8px;color:#fff}
+.note.n-n h4{color:var(--teal)}
+.note p{color:#EAF1F6}
+@media (prefers-reduced-motion:reduce){.note{transition:none}.notes.wait .note{clip-path:none}}
+
+/* how it works rail */
+#how{background:var(--navy);color:#fff;padding:80px 0 76px}
+.sec-head.dark p{color:#D7E3EA}
+.sec-head.dark h2{color:#fff;border-left-color:var(--teal)}
+#how .steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px;max-width:none;margin:0}
+#how .steps::before{left:23px;right:0;top:22px;bottom:auto;width:auto;height:3px;background:rgba(255,255,255,.14)}
+#how .step{grid-template-columns:1fr;grid-template-rows:auto auto;align-content:start;gap:16px;padding:0}
+#how .step:nth-child(even){margin-top:34px}
+#how .step h3{color:#fff;font-size:22px;padding-top:0}
+#how .step p{color:#D7E3EA;font-size:15px}
+#how .who{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#9FD8D5}
+#how .how-links{margin:40px 0 0}
+#how .btn-out{border-color:rgba(255,255,255,.6)}
+
+@media (max-width:1020px){
+  .hero-grid{grid-template-columns:1fr;gap:28px}
+  .door-v{margin-right:0}.door-t{margin-left:0;margin-bottom:0}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:36px}
+  .stats div:nth-child(4){border-left:0;padding-left:0}
+  .filterbar{grid-template-columns:1fr}
+  .card,.card.featured{grid-template-columns:62px minmax(0,1fr)}
+  .card .where,.card.featured .where{grid-column:2;border-left:0;border-top:1px solid var(--line)}
+  .notes{grid-template-columns:1fr}.note.n-p,.note.n-t,.note.n-n{min-height:0}
+  #how .steps{grid-template-columns:1fr 1fr}
+  #how .step:nth-child(even){margin-top:0}
+  #how .steps::before{display:none}
+}
+@media (max-width:620px){
+  .door b{font-size:28px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stats div{padding:12px 12px 10px}
+  .stats div:nth-child(odd){border-left:0;padding-left:0}
+  .stats div:nth-child(4){border-left:1px solid rgba(255,255,255,.12);padding-left:12px}
+  .stats div:last-child{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12)}
+  .stats dd{font-size:28px}
+  .rw-l{font-size:22px}
+  #find .flags{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+  #find .flag{padding:9px 34px 9px 10px}
+  .rb-r .clear{white-space:nowrap}
+  .results-bar{flex-wrap:wrap}
+  .card,.card.featured{grid-template-columns:48px minmax(0,1fr)}
+  #how .steps{grid-template-columns:1fr}
+}
+
+/* Advertise with us link band */
+.adv{position:relative;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr) auto;grid-template-rows:auto auto;gap:4px 36px;align-items:center;margin-top:48px;background:var(--navy);color:#fff;text-decoration:none;padding:28px 32px 28px 36px;border-left:6px solid var(--red);transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.adv:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(19,41,60,.22)}
+.adv-k{grid-column:1;font-weight:500;font-size:16px;color:#9FD8D5}
+.adv-t{grid-column:1;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:40px;line-height:.95}
+.adv-p{grid-column:2;grid-row:1/3;color:#D7E3EA;font-size:15.5px;line-height:1.55}
+.adv-go{grid-column:3;grid-row:1/3;display:inline-flex;align-items:center;gap:10px;background:var(--red);padding:13px 20px;font-weight:600;white-space:nowrap}
+.adv-go span{transition:transform .35s var(--ease)}
+.adv:hover .adv-go span{transform:translateX(4px)}
+@media (max-width:1020px){.adv{grid-template-columns:1fr;padding:24px 22px}.adv-k,.adv-t,.adv-p,.adv-go{grid-column:1;grid-row:auto}.adv-p{margin-top:8px}.adv-go{justify-self:start;margin-top:12px}.adv-t{font-size:34px}}
+
+/* Why trade with the guide */
+#why{background:#fff;padding:88px 0 84px;position:relative}
+.why-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:64px;align-items:start}
+.why-t{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--red);font-size:clamp(38px,4.6vw,58px);line-height:.92;padding-left:18px;border-left:4px solid var(--red);margin-bottom:22px}
+.why-l p{color:#26343E;font-size:17px;line-height:1.6;max-width:50ch}
+.why-l p+p{margin-top:12px}
+.why-l .sig{margin-top:18px;font-weight:700;color:var(--navy);line-height:1.3}
+.why-l .sig span{font-weight:500;color:#4E5D68;font-size:15px}
+.why-key{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:var(--teal);color:var(--navy);padding:20px 24px;margin:30px -40px 0 0;position:relative;z-index:1;box-shadow:0 20px 40px -18px rgba(19,41,60,.45)}
+.why-key b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:64px;line-height:.85}
+.why-key span{font-weight:600;font-size:16px;line-height:1.4}
+.why-list{list-style:none;counter-reset:w;border-top:2px solid var(--navy);margin-top:6px}
+.why-list li{counter-increment:w;display:grid;grid-template-columns:52px minmax(0,1fr);gap:4px 18px;padding:18px 0 18px;border-bottom:1px solid var(--line);transition:padding .45s var(--ease),background .45s var(--ease)}
+.why-list li::before{content:counter(w,decimal-leading-zero);grid-row:1/3;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;line-height:1;color:var(--teal)}
+.why-list li:hover{padding-left:10px;background:linear-gradient(90deg,var(--teal-p),transparent 70%)}
+.why-list b{font-weight:700;font-size:18px;color:var(--navy)}
+.why-list span{color:#33424D;font-size:15.5px;line-height:1.5}
+.why-list li:last-child b{color:var(--purple)}
+
+/* Plans and prices parts */
+.part{display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:30px;line-height:1;color:var(--navy);margin:0 0 22px}
+.part span{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;font-size:22px}
+.adhead{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:36px;align-items:end;margin-top:72px;padding-top:40px;border-top:2px solid var(--navy)}
+.adhead .part{margin:0}
+.adhead p{color:#33424D}
+.adhead a,.adnote a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:2px solid var(--teal)}
+.adstairs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;align-items:end;margin-top:28px}
+.ast{position:relative;display:flex;flex-direction:column;padding:22px;color:#fff;transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+.adstairs.wait .ast{clip-path:inset(100% 0 0 0)}
+.adstairs.grow .ast{clip-path:inset(0 0 0 0)}
+.adstairs.grow .ast.b{transition-delay:0s,.18s,0s}
+.adstairs.grow .ast.c{transition-delay:0s,.36s,0s}
+.ast.a{background:var(--teal);min-height:300px}.ast.b{background:var(--purple);min-height:370px}.ast.c{background:var(--navy);min-height:440px}
+.ast.a:hover,.ast.a:active{min-height:345px}.ast.b:hover,.ast.b:active{min-height:415px}.ast.c:hover,.ast.c:active{min-height:485px}
+.ast:hover,.ast:active{box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.ast .tg{align-self:flex-start;background:rgba(0,0,0,.25);padding:3px 9px;font-weight:600;font-size:15px;margin-bottom:12px;transition:background .3s ease}
+.ast:hover .tg{background:rgba(0,0,0,.4)}
+.ast b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;line-height:1}
+.ast.c b{color:var(--teal)}
+.ast .ap{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:48px;line-height:1;margin-top:8px}
+.ast .ap small{font-family:'Barlow',sans-serif;font-weight:500;font-size:14px;margin-left:6px;color:rgba(255,255,255,.85)}
+.ast p{margin-top:10px;color:#EAF1F6;font-size:15px;line-height:1.5}
+.ast .inc{align-self:flex-start;margin-top:auto;padding-top:14px;font-weight:600;font-size:14px}
+.ast .inc::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:8px;vertical-align:middle}
+.ast-go{align-self:flex-start;margin-top:14px;display:inline-flex;gap:10px;align-items:center;background:#fff;color:var(--navy);text-decoration:none;font-weight:600;padding:10px 16px}
+.ast.c .ast-go{margin-top:auto}
+.ast-go span{transition:transform .35s var(--ease)}
+.ast-go:hover span{transform:translateX(4px)}
+.adnote{margin-top:18px;color:#33424D;font-size:15px;max-width:80ch}
+@media (prefers-reduced-motion:reduce){.ast{transition:none}.adstairs.wait .ast{clip-path:none}}
+@media (max-width:1020px){
+  .why-grid{grid-template-columns:1fr;gap:36px}
+  .why-key{margin-right:0}
+  .adhead{grid-template-columns:1fr;gap:12px}
+  .adstairs{grid-template-columns:1fr}
+  .ast.a,.ast.b,.ast.c,.ast:hover{min-height:0}
+  .ast .inc{margin-top:12px}.ast.c .ast-go{margin-top:14px}
+}
+@media (max-width:620px){.why-key b{font-size:50px}.part{font-size:25px}}
+
+/* ===== One ladder of plans, built like the 3 tabs ===== */
+.ladder{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;align-items:end;margin-top:8px}
+.rung{position:relative;display:flex;flex-direction:column;padding:20px 18px 18px;color:#fff;transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+.ladder.wait .rung{clip-path:inset(100% 0 0 0)}
+.ladder.grow .rung{clip-path:inset(0 0 0 0)}
+.ladder.grow .r2{transition-delay:0s,.18s,0s}.ladder.grow .r3{transition-delay:0s,.36s,0s}.ladder.grow .r4{transition-delay:0s,.54s,0s}.ladder.grow .r5{transition-delay:0s,.72s,0s}
+.r1{background:#4E6475;min-height:470px}.r2{background:var(--teal);min-height:540px}.r3{background:var(--purple);min-height:605px}.r4{background:var(--navy);min-height:670px}.r5{background:var(--red);min-height:735px}
+.r1:hover,.r1:active{min-height:515px}.r2:hover,.r2:active{min-height:585px}.r3:hover,.r3:active{min-height:650px}.r4:hover,.r4:active{min-height:715px}.r5:hover,.r5:active{min-height:780px}
+.rung:hover,.rung:active{box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.rung .tg{align-self:flex-start;background:rgba(0,0,0,.25);padding:3px 9px;font-weight:600;font-size:14px;margin-bottom:12px;transition:background .3s ease}
+.rung:hover .tg{background:rgba(0,0,0,.4)}
+.rung h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;line-height:1}
+.r4 h3{color:var(--teal)}
+.rung .price{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:46px;line-height:1;margin-top:8px}
+.rung .price small{font-family:'Barlow',sans-serif;font-weight:500;font-size:13.5px;margin-left:6px;color:rgba(255,255,255,.85)}
+.rung .tline{margin-top:8px;font-size:14.5px;line-height:1.45;color:#EAF1F6}
+.rung .tfeat{list-style:none;margin-top:12px;border-top:1px solid rgba(255,255,255,.22)}
+.rung .tfeat li{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:14px;line-height:1.35}
+.rung .tfeat li::before{content:"";flex:none;width:11px;height:6px;border:solid #fff;border-width:0 0 2px 2px;transform:rotate(-45deg);margin-top:5px}
+.rung .tact{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.rung .pick{font-weight:700;font-size:14px}
+.rung .pick::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:8px;vertical-align:middle}
+.rbtn{display:inline-flex;gap:10px;align-items:center;background:#fff;color:var(--navy);text-decoration:none;font-weight:600;padding:10px 15px;white-space:nowrap}
+.rbtn span{transition:transform .35s var(--ease)}
+.rbtn:hover span{transform:translateX(4px)}
+.rung .tact small{font-size:13px;color:rgba(255,255,255,.88)}
+.ladder-note{margin-top:18px;color:#33424D;font-size:15px;max-width:92ch}
+.ladder-note a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:2px solid var(--teal)}
+.plan-extras{display:grid;grid-template-columns:minmax(260px,.62fr) minmax(0,1.38fr);gap:32px;align-items:start;margin-top:40px}
+.founding.wide{position:relative;top:0}
+.pe-r .compare{margin-top:16px}
+.ctable th small{font-weight:500;color:#9FD8D5}
+@media (prefers-reduced-motion:reduce){.rung{transition:none}.ladder.wait .rung{clip-path:none}}
+@media (max-width:1020px){
+  .ladder{grid-template-columns:1fr 1fr}
+  .rung,.r1,.r2,.r3,.r4,.r5,.rung:hover{min-height:0}
+  .r5{grid-column:1/-1}
+  .plan-extras{grid-template-columns:1fr}
+}
+@media (max-width:620px){.ladder{grid-template-columns:1fr}}
+
+/* faded trade village photo behind the header */
+.hero-photo{position:absolute;inset:0;background:url("../guide-img/trade-stalls.jpg") 70% 40%/cover no-repeat;opacity:.55;animation:drift 28s ease-in-out infinite alternate;pointer-events:none}
+.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--navy) 0%,var(--navy) 30%,rgba(19,41,60,.86) 52%,rgba(19,41,60,.5) 78%,rgba(19,41,60,.62) 100%),linear-gradient(0deg,var(--navy) 0%,rgba(19,41,60,0) 38%)}
+@keyframes drift{from{transform:scale(1.04) translateX(0)}to{transform:scale(1.1) translateX(-1.5%)}}
+.hero .wrap{position:relative}
+.hero-cap{position:absolute;right:18px;top:14px;z-index:1;margin:0;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.75);background:rgba(14,33,49,.55);padding:3px 8px}
+@media (prefers-reduced-motion:reduce){.hero-photo{animation:none}}
+@media (max-width:1020px){.hero-photo{opacity:.35;background-position:60% 30%}.hero-photo::after{background:linear-gradient(180deg,rgba(19,41,60,.55) 0%,var(--navy) 70%)}}
+
+/* boost and promises as tabs */
+.ptabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;align-items:end}
+.pt{position:relative;display:flex;flex-direction:column;padding:18px 16px 16px;color:#fff;transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+.ptabs.wait .pt{clip-path:inset(100% 0 0 0)}
+.ptabs.grow .pt{clip-path:inset(0 0 0 0)}
+.ptabs.grow .p2{transition-delay:0s,.18s,0s}.ptabs.grow .p3{transition-delay:0s,.36s,0s}.ptabs.grow .p4{transition-delay:0s,.54s,0s}
+.p1{background:var(--teal);min-height:300px}.p2{background:var(--purple);min-height:340px}.p3{background:var(--navy);min-height:380px}.p4{background:var(--red);min-height:420px}
+.p1:hover,.p1:active{min-height:345px}.p2:hover,.p2:active{min-height:385px}.p3:hover,.p3:active{min-height:425px}.p4:hover,.p4:active{min-height:465px}
+.pt:hover,.pt:active{box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.pt .tg{align-self:flex-start;background:rgba(0,0,0,.25);padding:3px 8px;font-weight:600;font-size:13.5px;margin-bottom:10px;transition:background .3s ease}
+.pt:hover .tg{background:rgba(0,0,0,.4)}
+.pt b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:25px;line-height:1}
+.p3 b{color:var(--teal)}
+.pt .pp{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;line-height:1;margin-top:6px}
+.pt .pp small{font-family:'Barlow',sans-serif;font-weight:500;font-size:13px;margin-left:5px;color:rgba(255,255,255,.88)}
+.pt p{margin-top:8px;font-size:14.5px;line-height:1.45;color:#EAF1F6}
+.pt .rbtn{align-self:flex-start;margin-top:auto;padding:9px 13px;font-size:14.5px}
+.pe-r .compare{margin-top:20px}
+@media (prefers-reduced-motion:reduce){.pt{transition:none}.ptabs.wait .pt{clip-path:none}}
+@media (max-width:1020px){.ptabs{grid-template-columns:1fr 1fr}.pt,.p1,.p2,.p3,.p4,.pt:hover{min-height:0}.pt .rbtn{margin-top:12px}}
+@media (max-width:620px){.ptabs{grid-template-columns:1fr}}
+
+
+.ao, .ao *{box-sizing:border-box}
+.ao,.ao{margin:0;padding:0;background:var(--white)}
+.ao{color:var(--ink);font:400 16px/1.65 Barlow,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.ao img,.ao svg{display:block;max-width:100%}
+.ao a{color:inherit}
+.ao .o-wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+.ao h1,.ao h2,.ao h3,.ao h4{font-family:Barlow,Arial,sans-serif;margin:0}
+.ao h2.o-title{color:var(--red);font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1.12;letter-spacing:-.01em;margin-bottom:14px}
+.ao .o-intro{max-width:760px;font-size:18px;line-height:1.6;margin:0 0 34px}
+.ao section{padding:72px 0}
+.ao .o-reveal{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.ao .o-reveal.o-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.ao .o-reveal{opacity:1;transform:none;transition:none}}
+
+
+.ao .o-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:12px 24px;border:2px solid transparent;border-radius:0;font:600 16px/1 Barlow,Arial,sans-serif;text-decoration:none;cursor:pointer;transition:transform .25s var(--ease),background-color .25s var(--ease),color .25s var(--ease)}
+.ao .o-btn:hover{transform:translateY(-2px)}
+.ao .o-btn-teal{background:var(--teal);color:var(--navy)}
+.ao .o-btn-teal:hover{background:#4FC4BF}
+.ao .o-btn-outline{border-color:var(--white);color:var(--white);background:transparent}
+.ao .o-btn-outline:hover{background:var(--white);color:var(--navy)}
+.ao .o-btn-red{background:var(--red);color:var(--white)}
+.ao .o-btn-red:hover{background:#C9282B}
+.ao .o-btn-navy{background:var(--navy);color:var(--white)}
+.ao .o-btn-navy:hover{background:var(--navy-2)}
+.ao .o-btn:focus-visible,.ao input:focus-visible,.ao select:focus-visible,.ao textarea:focus-visible,.ao summary:focus-visible,.ao .o-chip:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+
+
+.ao .o-header{background:var(--navy);color:var(--white);padding:56px 0 64px;position:relative;overflow:hidden}
+.ao .o-header:after{content:"";position:absolute;right:-120px;top:-160px;width:520px;height:520px;border:60px solid rgba(50,180,175,.07);border-radius:50%;pointer-events:none}
+.ao .o-header-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:56px;align-items:start;position:relative;z-index:1}
+.ao .o-crumb{font:500 15px/1.3 Barlow,Arial,sans-serif;color:var(--teal);margin:0 0 22px}
+.ao .o-crumb a{text-decoration:none}
+.ao .o-crumb a:hover{text-decoration:underline}
+.ao .o-header h1{font-weight:800;font-size:clamp(38px,5.4vw,66px);line-height:1.02;letter-spacing:.005em;text-transform:uppercase;margin:0 0 16px}
+.ao .o-sub{color:var(--red);font-weight:700;font-size:clamp(19px,2vw,24px);line-height:1.3;margin:0 0 20px}
+.ao .o-header p.o-lede{font-size:18px;line-height:1.65;max-width:620px;margin:0 0 30px;color:#E8EEF2}
+.ao .o-header p.o-lede strong{color:var(--white);font-weight:700}
+.ao .o-actions{display:flex;flex-wrap:wrap;gap:12px}
+
+
+.ao .o-keybox{background:var(--navy-2);border:1px solid rgba(255,255,255,.08)}
+.ao .o-keybox-head{background:var(--teal);color:var(--white);display:flex;align-items:center;gap:14px;padding:16px 20px}
+.ao .o-keybox-head h2{font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
+.ao .o-icon-round{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:var(--white);display:grid;place-items:center}
+.ao .o-icon-round svg{width:22px;height:22px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ao .o-rows{padding:8px 0}
+.ao .o-row{display:grid;grid-template-columns:42% 58%;gap:0;margin:6px 12px;background:rgba(255,255,255,.04)}
+.ao .o-row span{padding:11px 12px;font-size:15px;line-height:1.4}
+.ao .o-row span:first-child{color:var(--teal);font-weight:600}
+.ao .o-row span:last-child{color:var(--white)}
+.ao .o-row.o-hot{background:var(--red)}
+.ao .o-row.o-hot span:first-child{color:var(--white)}
+
+
+.ao .o-strip{background:var(--navy-3);color:var(--white)}
+.ao .o-strip .o-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;padding-top:18px;padding-bottom:18px}
+.ao .o-tag{display:inline-block;background:var(--red);color:var(--white);font:600 14px/1 Barlow,Arial,sans-serif;padding:8px 12px}
+.ao .o-strip p{margin:0;font-size:16px;color:#DCE6EB}
+
+
+.ao .o-aud-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:start}
+.ao .o-aud-lead p{font-size:18px;line-height:1.65;margin:0 0 18px}
+.ao .o-aud-lead .o-pull{border-left:6px solid var(--teal);background:var(--teal-pale);padding:20px 22px;font-weight:500;color:var(--navy);margin-top:26px}
+.ao .o-reader-list{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ao .o-reader{background:var(--box);padding:22px 22px 20px;transition:transform .3s var(--ease)}
+.ao .o-reader:hover{transform:translateY(-3px)}
+.ao .o-reader:nth-child(2){margin-top:28px}
+.ao .o-reader:nth-child(4){margin-top:28px}
+.ao .o-reader:nth-child(6){margin-top:28px}
+.ao .o-reader h3{color:var(--navy);font-weight:700;font-size:20px;line-height:1.2;margin-bottom:6px}
+.ao .o-reader p{margin:0;font-size:15.5px;line-height:1.55}
+
+
+.ao .o-who{background:var(--box)}
+.ao .o-who .o-pk-grid{gap:22px}
+.ao .o-who-card.o-wide{grid-column:1/-1}
+.ao .o-who-card .o-note{margin:14px 0 0;font-size:14.5px;color:var(--navy);background:#FFF1F1;border-left:4px solid var(--red);padding:10px 12px}
+.ao .o-who-card .o-pk-foot{justify-content:flex-end}
+.ao .o-who-card .o-for{margin-top:18px;font-size:16px}
+.ao .o-pk-head{min-height:62px}
+
+
+.ao .o-pk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.ao .o-pk{display:flex;flex-direction:column;background:var(--navy);transition:transform .3s var(--ease)}
+.ao .o-pk:hover{transform:translateY(-4px)}
+.ao .o-pk-head{background:var(--teal);color:var(--white);display:flex;align-items:center;gap:14px;padding:16px 20px}
+.ao .o-pk-head h3{font-weight:800;font-size:21px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
+.ao .o-pk-head .o-pick{margin-left:auto;background:var(--red);color:var(--white);font:600 13.5px/1 Barlow,Arial,sans-serif;padding:7px 10px;white-space:nowrap}
+.ao .o-pk .o-rows{padding:12px 0 6px}
+.ao .o-pk .o-row span:first-child{color:var(--teal)}
+.ao .o-pk .o-row.o-hot span:first-child{color:var(--white)}
+.ao .o-price-row{display:flex;align-items:baseline;gap:12px;color:var(--white);padding:18px 24px 4px}
+.ao .o-price-row strong{font-weight:800;font-size:46px;line-height:1}
+.ao .o-price-row span{font-size:16px;color:#C9D6DE}
+.ao .o-pk .o-for{color:#DCE6EB;font-size:15.5px;margin:4px 24px 10px}
+.ao .o-getbox{background:var(--white);margin:12px 12px 0;padding:18px 20px}
+.ao .o-getbox h4{color:var(--navy);font-weight:700;font-size:17px;margin-bottom:8px}
+.ao .o-getbox ul{margin:0;padding:0;list-style:none}
+.ao .o-getbox li{position:relative;padding:6px 0 6px 26px;font-size:15.5px;line-height:1.45}
+.ao .o-getbox li:before{content:"";position:absolute;left:2px;top:12px;width:12px;height:7px;border-left:2.5px solid var(--teal-dark);border-bottom:2.5px solid var(--teal-dark);transform:rotate(-45deg)}
+.ao .o-pk-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:18px 12px 14px;margin-top:auto}
+.ao .o-more{color:var(--white);text-decoration:none;font-weight:600;font-size:15.5px;background:none;border:0;cursor:pointer;font-family:inherit;padding:8px 6px}
+.ao .o-more b{color:var(--red)}
+.ao .o-more:hover{text-decoration:underline}
+.ao .o-pk-small{font-size:14.5px;line-height:1.55;color:var(--navy);background:var(--box);padding:18px 22px;margin-top:22px}
+
+
+.ao .o-ex{background:var(--box)}
+.ao .o-ex-layout{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.ao .o-ex-col h3{color:var(--navy);font-weight:700;font-size:20px;margin-bottom:6px}
+.ao .o-ex-col > p{margin:0 0 16px;font-size:15.5px}
+.ao .o-ex-stack{display:flex;flex-direction:column;gap:30px}
+.ao .o-where{font:500 14.5px/1.3 Barlow,Arial,sans-serif;color:var(--navy);margin-bottom:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ao .o-where em{font-style:normal;background:var(--white);padding:5px 9px}
+.ao .o-adlabel{display:inline-block;background:var(--navy);color:var(--white);font:600 13px/1 Barlow,Arial,sans-serif;padding:6px 9px}
+.ao .o-ad-listing{display:grid;grid-template-columns:160px 1fr;background:var(--white);border:2px solid var(--grey-line)}
+.ao .o-ad-listing .o-pic{background:#DCEFF0;min-height:150px}
+.ao .o-ad-listing .o-txt{padding:16px 18px}
+.ao .o-ad-listing h4{color:var(--navy);font-weight:800;font-size:20px;margin:10px 0 4px}
+.ao .o-ad-listing p{margin:0 0 8px;font-size:15px;line-height:1.5}
+.ao .o-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--navy);font-weight:500}
+.ao .o-adlink{display:inline-block;margin-top:8px;color:var(--teal-dark);font-weight:700;font-size:15px;text-decoration:none}
+.ao .o-adlink:hover{text-decoration:underline}
+.ao .o-ad-featured{background:var(--white);border:3px solid var(--teal)}
+.ao .o-ad-featured .o-pic{background:#E7E1D4;height:200px;position:relative}
+.ao .o-ad-featured .o-pic .o-adlabel{position:absolute;left:14px;top:14px}
+.ao .o-ad-featured .o-txt{padding:20px 22px 22px}
+.ao .o-ad-featured h4{color:var(--navy);font-weight:800;font-size:24px;margin-bottom:6px}
+.ao .o-ad-featured p{margin:0 0 12px;font-size:15.5px}
+.ao .o-hl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 16px;padding:0;list-style:none}
+.ao .o-hl li{background:var(--teal-pale);color:var(--teal-dark);font-weight:500;font-size:14.5px;padding:8px 10px}
+.ao .o-trader{background:var(--white);border:2px solid var(--grey-line);padding:16px 18px;display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:start}
+.ao .o-trader .o-mark{width:96px;height:96px;overflow:hidden;background:var(--navy);display:grid;place-items:center}
+.ao .o-trader h4{color:var(--navy);font-weight:800;font-size:19px;margin:8px 0 4px}
+.ao .o-trader p{margin:0;font-size:15px}
+.ao .o-confirmed{display:inline-block;margin-top:10px;background:var(--teal-pale);color:var(--teal-dark);font-weight:600;font-size:13.5px;padding:6px 9px}
+.ao .o-fict{font-size:14px;color:var(--navy);margin-top:10px}
+
+
+.ao .o-place-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:start}
+.ao .o-mock{background:var(--navy);padding:18px}
+.ao .o-mock-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.ao .o-mock-tabs button{font:500 14px/1 Barlow,Arial,sans-serif;background:rgba(255,255,255,.07);color:var(--white);border:0;padding:10px 12px;cursor:pointer;transition:background .2s var(--ease)}
+.ao .o-mock-tabs button.o-ad{box-shadow:inset 0 -3px 0 var(--red)}
+.ao .o-mock-tabs button[aria-selected="true"]{background:var(--teal);color:var(--navy);font-weight:600}
+.ao .o-mock-panel{background:var(--white);padding:22px;min-height:250px}
+.ao .o-mock-panel h3{color:var(--red);font-weight:800;font-size:22px;margin-bottom:8px}
+.ao .o-mock-panel p{margin:0 0 14px;font-size:15.5px}
+.ao .o-slot{border:2px dashed var(--teal);background:var(--teal-pale);padding:14px 16px;color:var(--teal-dark);font-weight:600;font-size:15px}
+.ao .o-slot.o-none{border-color:var(--grey-line);background:var(--box);color:var(--navy)}
+.ao .o-key{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--white);margin-top:12px}
+.ao .o-key i{display:inline-block;width:22px;height:3px;background:var(--red)}
+.ao .o-place-side h3{color:var(--navy);font-weight:700;font-size:20px;margin:0 0 8px}
+.ao .o-place-side p{margin:0 0 18px;font-size:16px}
+.ao .o-shows{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.ao .o-shows li{background:var(--box);color:var(--navy);font-weight:500;font-size:14.5px;padding:8px 11px}
+
+
+.ao .o-process{background:var(--navy);color:var(--white)}
+.ao .o-process h2.o-title{color:var(--red)}
+.ao .o-process .o-intro{color:#DCE6EB}
+.ao .o-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+.ao .o-step{background:var(--navy-2);padding:22px 20px 24px;position:relative;margin-right:14px}
+.ao .o-step:last-child{margin-right:0}
+.ao .o-step:not(:last-child):after{content:"";position:absolute;right:-14px;top:50%;width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:10px solid var(--teal);transform:translate(2px,-50%)}
+.ao .o-step .o-icon-round{margin-bottom:14px}
+.ao .o-step h3{font-weight:700;font-size:18px;line-height:1.25;margin-bottom:6px}
+.ao .o-step p{margin:0;font-size:15px;line-height:1.5;color:#DCE6EB}
+.ao .o-step.o-go{background:var(--teal)}
+.ao .o-step.o-go h3,.ao .o-step.o-go p{color:var(--navy)}
+.ao .o-thumb{display:block;width:42px;height:42px;margin-bottom:14px}
+.ao .o-thumb svg{width:42px;height:42px;fill:none;stroke:var(--navy);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+
+.ao .o-enq-grid{display:grid;grid-template-columns:1.5fr .85fr;gap:36px;align-items:start}
+.ao .o-form-box{background:var(--box);padding:30px}
+.ao .o-fields{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ao .o-field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.ao .o-field.o-full{grid-column:1/-1}
+.ao .o-field label,.ao .o-field .o-lab{font:600 15px/1.3 Barlow,Arial,sans-serif;color:var(--navy)}
+.ao .o-field .o-hint{font-size:14px;color:var(--navy);font-weight:400}
+.ao .o-field input,.ao .o-field select,.ao .o-field textarea{border:1.5px solid #A9B7C1;border-radius:0;background:var(--white);padding:12px 13px;font:400 16px/1.4 Barlow,Arial,sans-serif;color:var(--ink);width:100%;transition:border-color .2s var(--ease)}
+.ao .o-field input:hover,.ao .o-field select:hover,.ao .o-field textarea:hover{border-color:var(--navy)}
+.ao .o-field textarea{min-height:130px;resize:vertical}
+.ao .o-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ao .o-chip{font:500 14.5px/1 Barlow,Arial,sans-serif;background:var(--white);color:var(--navy);border:1.5px solid #A9B7C1;padding:10px 12px;cursor:pointer;transition:background .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease)}
+.ao .o-chip:hover{transform:translateY(-1px);border-color:var(--navy)}
+.ao .o-chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--white)}
+.ao .o-check{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5}
+.ao .o-check input{width:20px;height:20px;margin:2px 0 0;flex:0 0 auto;accent-color:var(--navy)}
+.ao .o-form-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:22px}
+.ao .o-small{font-size:14px;line-height:1.5;color:var(--navy);margin:14px 0 0}
+.ao .o-result{display:none;margin-top:22px;background:var(--white);border-left:6px solid var(--teal);padding:20px}
+.ao .o-result.o-show{display:block}
+.ao .o-result h3{color:var(--navy);font-weight:700;font-size:19px;margin-bottom:6px}
+.ao .o-result p{margin:0 0 12px;font-size:15.5px}
+.ao .o-result pre{white-space:pre-wrap;font:400 14.5px/1.55 Barlow,Arial,sans-serif;background:var(--box);padding:14px;margin:0 0 12px;max-height:260px;overflow:auto}
+.ao .o-contact-box{background:var(--navy);color:var(--white)}
+.ao .o-contact-box .o-keybox-head h2{font-size:18px}
+.ao .o-contact-box .o-inner{padding:22px}
+.ao .o-contact-box p{margin:0 0 14px;font-size:15.5px;color:#DCE6EB}
+.ao .o-contact-box a.o-mail{color:var(--teal);font-weight:700;font-size:18px;word-break:break-word;text-decoration:none}
+.ao .o-contact-box a.o-mail:hover{text-decoration:underline}
+.ao .o-contact-box ul{margin:0 0 16px;padding:0;list-style:none}
+.ao .o-contact-box li{background:rgba(255,255,255,.05);margin-bottom:6px;padding:9px 12px;font-size:15px}
+
+
+.ao .o-faq{background:var(--box)}
+.ao .o-faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
+.ao .o-faq-side p{font-size:17px;margin:0 0 18px}
+.ao .o-faq-list details{background:var(--white);margin-bottom:10px}
+.ao .o-faq-list summary{list-style:none;cursor:pointer;padding:18px 54px 18px 20px;position:relative;font:700 18px/1.35 Barlow,Arial,sans-serif;color:var(--navy)}
+.ao .o-faq-list summary::-webkit-details-marker{display:none}
+.ao .o-faq-list summary:after{content:"";position:absolute;right:22px;top:50%;width:10px;height:10px;border-right:2.5px solid var(--red);border-bottom:2.5px solid var(--red);transform:translateY(-70%) rotate(45deg);transition:transform .3s var(--ease)}
+.ao .o-faq-list details[open] summary:after{transform:translateY(-30%) rotate(225deg)}
+.ao .o-faq-list details p{margin:0;padding:0 20px 20px;font-size:16px}
+
+
+.ao .o-terms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ao .o-term{background:var(--box);padding:20px 22px}
+.ao .o-term h3{color:var(--navy);font-weight:700;font-size:17px;margin-bottom:6px}
+.ao .o-term p{margin:0;font-size:15px;line-height:1.55}
+.ao .o-view{background:var(--navy);color:var(--white);padding:40px 0}
+.ao .o-view-grid{display:grid;grid-template-columns:.5fr 1.5fr;gap:30px;align-items:start}
+.ao .o-view h2{color:var(--red);font-weight:800;font-size:28px;line-height:1.15}
+.ao .o-view p{margin:0;font-size:17px;line-height:1.65;color:#E8EEF2}
+.ao .o-smallprint{padding:26px 0 34px;font-size:14px;line-height:1.6;color:var(--navy)}
+.ao .o-smallprint p{margin:0 0 8px}
+
+
 @media (max-width:1000px){
-  .header-grid,.aud-grid,.place-grid,.enq-grid,.faq-grid,.ex-layout{grid-template-columns:1fr}
-  .steps{grid-template-columns:1fr 1fr}
-  .step{margin:0 14px 14px 0}
-  .step:after{display:none}
-    .terms-grid{grid-template-columns:1fr 1fr}
-  .view-grid{grid-template-columns:1fr}
+  .ao .o-header-grid,.ao .o-aud-grid,.ao .o-place-grid,.ao .o-enq-grid,.ao .o-faq-grid,.ao .o-ex-layout{grid-template-columns:1fr}
+  .ao .o-steps{grid-template-columns:1fr 1fr}
+  .ao .o-step{margin:0 14px 14px 0}
+  .ao .o-step:after{display:none}
+    .ao .o-terms-grid{grid-template-columns:1fr 1fr}
+  .ao .o-view-grid{grid-template-columns:1fr}
 }
 @media (max-width:640px){
-  body{font-size:16px}
-  .wrap{padding:0 16px}
-  section{padding:50px 0}
-  .header{padding:40px 0 46px}
-  .actions .btn{flex:1 1 100%}
-  .reader-list,.pk-grid,.fields,.steps,.terms-grid,.hl{grid-template-columns:1fr}
-  .reader:nth-child(n){margin-top:0}
-  .step{margin-right:0}
-  .ad-listing{grid-template-columns:1fr}
-  .ad-listing .pic{min-height:140px}
-  .row{grid-template-columns:1fr}
-  .row span:first-child{padding-bottom:0}
-  .form-box{padding:20px}
-  .price-row strong{font-size:40px}
+  .ao{font-size:16px}
+  .ao .o-wrap{padding:0 16px}
+  .ao section{padding:50px 0}
+  .ao .o-header{padding:40px 0 46px}
+  .ao .o-actions .o-btn{flex:1 1 100%}
+  .ao .o-reader-list,.ao .o-pk-grid,.ao .o-fields,.ao .o-steps,.ao .o-terms-grid,.ao .o-hl{grid-template-columns:1fr}
+  .ao .o-reader:nth-child(n){margin-top:0}
+  .ao .o-step{margin-right:0}
+  .ao .o-ad-listing{grid-template-columns:1fr}
+  .ao .o-ad-listing .o-pic{min-height:140px}
+  .ao .o-row{grid-template-columns:1fr}
+  .ao .o-row span:first-child{padding-bottom:0}
+  .ao .o-form-box{padding:20px}
+  .ao .o-price-row strong{font-size:40px}
 }
+
+/* old sections, brought into the new look */
+.ao{--navy-2:#1C3A52;--navy-3:#0C1D2B;--teal-dark:#0E5F5B;--teal-pale:#E3F4F3;--sky:#00A6E2;--grey-line:#C6C6C6;--box:#F1F4F6;--white:#FFFFFF;--red:#D74949;--ink:#0B1620}
+.ao h2.o-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;color:var(--red);font-size:clamp(34px,4vw,50px);line-height:.95;padding-left:18px;border-left:4px solid var(--red);margin-bottom:18px;letter-spacing:0}
+.ao .o-wrap{max-width:1200px;padding:0 28px}
+@media (max-width:620px){.ao .o-wrap{padding:0 18px}}
+
+/* lanes between the trader part and the other businesses part */
+.lane{background:var(--navy-d);color:#fff;padding:26px 0;border-top:4px solid var(--teal)}
+.lane.l2{border-top-color:var(--red)}
+.lane .wrap{display:flex;align-items:center;gap:18px}
+.lane-n{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--teal);color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;flex:none}
+.lane.l2 .lane-n{background:var(--red);color:#fff}
+.lane b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:30px;line-height:1}
+.lane span{color:#A9C2CF;font-weight:500}
+#packages{background:var(--page);padding:84px 0 80px}
+.pkl{grid-template-columns:repeat(4,minmax(0,1fr))}
+.pkl .r2{min-height:470px}.pkl .r3{min-height:530px}.pkl .r4{min-height:590px}.pkl .r5{min-height:650px}
+.pkl .r2:hover{min-height:515px}.pkl .r3:hover{min-height:575px}.pkl .r4:hover{min-height:635px}.pkl .r5:hover{min-height:695px}
+@media (max-width:1020px){.pkl{grid-template-columns:1fr 1fr}.pkl .rung,.pkl .rung:hover{min-height:0}.pkl .r5{grid-column:auto}}
+@media (max-width:620px){.pkl{grid-template-columns:1fr}}
+.whol .r2{min-height:300px}.whol .r3{min-height:340px}.whol .r4{min-height:380px}.whol .r5{min-height:420px}.r6{background:#4E6475;min-height:460px}
+.whol .r2:hover{min-height:345px}.whol .r3:hover{min-height:385px}.whol .r4:hover{min-height:425px}.whol .r5:hover{min-height:465px}.r6:hover,.r6:active{min-height:505px}
+.whol .r5{grid-column:auto}
+#who{background:var(--page);padding:84px 0 80px}
+@media (max-width:1020px){.whol .rung,.whol .rung:hover{min-height:0}.r6{grid-column:1/-1}}
+
+#packages .sec-head p a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:2px solid var(--teal)}
+.hero-photo{background-image:url("home-img/day-10.webp");background-position:60% 45%;opacity:.7}
 </style>
 <style id="device-fix">
-html,body{overflow-x:clip;scrollbar-width:none}
-html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
-@media (max-width:760px){
-  input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}
-}
 @media (max-width:1024px) and (pointer:coarse),(max-width:760px){
-  .crumb a,nav[aria-label*=readcrumb] a,.reset,#reset,a.adlink{display:inline-flex;align-items:center;min-height:40px}
-  input[type=checkbox]{min-width:24px;min-height:24px}
+  .crumb a,.trader-login a,.links a,a.back,#clear{display:inline-flex;align-items:center;min-height:40px}
+  #grid li button{min-height:40px}
 }
 </style>
 <!-- seo: matches the Wix page on ukairshowguide.co.uk -->
@@ -297,294 +900,395 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 </head>
 <body>
 
-<header class="header">
-  <div class="wrap header-grid">
-    <div class="reveal">
-      <p class="crumb"><a href="https://www.ukairshowguide.co.uk/" target="_top">Home</a> &gt; Advertise with us</p>
-      <h1>Advertise with us</h1>
-      <p class="sub">Put your business in front of people planning their airshow day.</p>
-      <p class="lede">The Big Guide to UK Airshows helps visitors work out where to stay, how to get there, what to bring and where to watch. <strong>Your advert sits right beside the advice they are reading, at the moment they are making plans.</strong> Every placement is clearly labelled, and the visitor guides stay free and independent.</p>
-      <div class="actions">
-        <a class="btn btn-teal jump" href="#packages" data-target="packages">See the 2027 packages</a>
-        <a class="btn btn-outline jump" href="#examples" data-target="examples">How adverts look</a>
-        <a class="btn btn-red jump" href="#enquire" data-target="enquire">Make an enquiry</a>
+<div class="preview-strip" id="demoStrip" hidden><b>Example data.</b> This page shows real traders when it sits on ukairshowguide.co.uk.</div>
+
+<header class="hero" id="top">
+  <div class="hero-photo" role="img" aria-label="Visitors gathered round historic aircraft behind the fence at an airshow"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-main">
+        <div class="crumb"><a href="https://www.ukairshowguide.co.uk/" target="_top">The Big Guide to UK Airshows</a> &nbsp;›&nbsp; Advertise with us</div>
+        <span class="tag">For businesses and traders</span>
+        <h1>Advertise <em>with us</em></h1>
+        <div class="sub">Put your business in front of people planning their airshow day</div>
+        <p class="intro">The guides help visitors work out where to stay, how to get there, what to bring and where to watch. <strong>Your advert or stall card sits right beside the advice they are reading, while they are still making plans.</strong> Every placement is clearly labelled, and the visitor guides stay free and independent.</p>
+        <p class="trader-login">Already a listed trader? <a href="https://www.ukairshowguide.co.uk/trader-hub" target="_top">Log in to the Trader Hub</a></p>
+      </div>
+      <div class="doors">
+        <a class="door door-v" href="#why">
+          <span class="dl">Trading at the shows?</span>
+          <b>Trader plans</b>
+          <span class="dt">Food, prints, models and kit stalls. Start with a free card, <strong id="kPlaces">25</strong> founding places left for 2027.</span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+        <a class="door door-t" href="#packages">
+          <span class="dl">A business near the shows?</span>
+          <b>Advert packages</b>
+          <span class="dt">Hotels, cafés, camera shops and attractions. Packages from <strong>£49</strong> a season.</span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
-    <aside class="keybox reveal" aria-label="Key details">
-      <div class="keybox-head">
-        
-        <h2>Key details</h2>
-      </div>
-      <div class="rows">
-        <div class="row"><span>Season</span><span>1 March to 31 October 2027</span></div>
-        <div class="row"><span>Packages from</span><span>£79 per season</span></div>
-        <div class="row"><span>Airshow guides</span><span>Nine major UK shows at launch</span></div>
-        <div class="row"><span>Placements</span><span>Matched to the right guide and section</span></div>
-        <div class="row"><span>Labelling</span><span>Every advert clearly marked</span></div>
-        <div class="row hot"><span>Introductory rates</span><span>Book early for the 2027 season</span></div>
-      </div>
-    </aside>
+    <dl class="stats" aria-label="Key details">
+      <div><dt>Season</dt><dd>Mar to Oct 2027</dd></div>
+      <div><dt>Show guides</dt><dd>12</dd></div>
+      <div class="hl"><dt>Trader listing</dt><dd>From free</dd></div>
+      <div><dt>Advert packages</dt><dd>From £49</dd></div>
+      <div><dt>Every advert</dt><dd>Labelled</dd></div>
+    </dl>
+    <nav class="jump" aria-label="Page sections">
+      <a href="#audience" data-s="audience">Who reads the guides</a>
+      <a href="#why" data-s="why">For traders</a>
+      <a href="#pricing" data-s="pricing">Trader plans</a>
+      <a href="#packages" data-s="packages">Other businesses</a>
+      <a href="#examples" data-s="examples">How adverts look</a>
+      <a href="#enquire" data-s="enquire">Enquire</a>
+      <a href="#faq" data-s="faq">Questions</a>
+      <a href="https://www.ukairshowguide.co.uk/airshow-traders" target="_top">Find a trader</a>
+    </nav>
   </div>
 </header>
 
-<div class="strip">
-  <div class="wrap">
-    <span class="tag">Our promise</span>
+<div class="ao">
+<div class="o-strip">
+  <div class="o-wrap">
+    <span class="o-tag">Our promise</span>
     <p>Paid placements never change our visitor advice. Adverts are labelled, kept apart from our recommendations and checked for suitability before they go live.</p>
   </div>
 </div>
+</div>
 
-<main>
-
+<div class="ao">
 <section id="audience">
-  <div class="wrap aud-grid">
-    <div class="aud-lead reveal">
-      <h2 class="title">Who reads the guides</h2>
+  <div class="o-wrap o-aud-grid">
+    <div class="o-aud-lead o-reveal">
+      <h2 class="o-title">Who reads the guides</h2>
       <p>People come to us before the big day, when they are still choosing a show, booking somewhere to stay and working out how to get there. That planning stage is exactly when a nearby hotel, a campsite or a good camera shop is most useful to them.</p>
       <p>Our guides are written from first hand airshow experience, local knowledge and official information, so readers trust them and come back as their plans take shape.</p>
-      <div class="pull">We are building our audience for the 2027 season. We will share real figures as they come in, and we will never promise numbers we cannot show you.</div>
+      <div class="o-pull">We are building our audience for the 2027 season. We will share real figures as they come in, and we will never promise numbers we cannot show you.</div>
     </div>
-    <div class="reader-list reveal">
-      <div class="reader"><h3>First time visitors</h3><p>Looking for clear advice on travel, parking and what to expect on the day.</p></div>
-      <div class="reader"><h3>Families</h3><p>Planning around children, meals, toilets and somewhere comfortable to stay.</p></div>
-      <div class="reader"><h3>Aviation enthusiasts</h3><p>Following line ups closely and often travelling to several shows a year.</p></div>
-      <div class="reader"><h3>Photographers</h3><p>Choosing lenses, bags and settings, and finding the best spots to shoot from.</p></div>
-      <div class="reader"><h3>Campers and weekenders</h3><p>Booking pitches, rooms and places to eat for a full airshow weekend.</p></div>
-      <div class="reader"><h3>Visitors with access needs</h3><p>Checking step free routes, accessible parking and suitable places to stay.</p></div>
+    <div class="o-reader-list o-reveal">
+      <div class="o-reader"><h3>First time visitors</h3><p>Looking for clear advice on travel, parking and what to expect on the day.</p></div>
+      <div class="o-reader"><h3>Families</h3><p>Planning around children, meals, toilets and somewhere comfortable to stay.</p></div>
+      <div class="o-reader"><h3>Aviation enthusiasts</h3><p>Following line ups closely and often travelling to several shows a year.</p></div>
+      <div class="o-reader"><h3>Photographers</h3><p>Choosing lenses, bags and settings, and finding the best spots to shoot from.</p></div>
+      <div class="o-reader"><h3>Campers and weekenders</h3><p>Booking pitches, rooms and places to eat for a full airshow weekend.</p></div>
+      <div class="o-reader"><h3>Visitors with access needs</h3><p>Checking step free routes, accessible parking and suitable places to stay.</p></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<section id="who">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Businesses I work with</h2>
+      <p>If your business helps airshow visitors have a better day or a better trip, there is likely a place for you in the guides. Pick the one closest to you.</p>
+    </div>
+    <div class="ladder whol">
+      <article class="rung r2"><span class="tg">Hotels, B&amp;Bs, campsites, holiday parks</span><h3>Places to stay</h3><p class="tline">Reach visitors booking a night or a weekend near the airfield.</p><div class="tact"><a class="rbtn" href="#packages">See the packages <span aria-hidden="true">→</span></a></div></article>
+      <article class="rung r3"><span class="tg">Cafés, coffee shops, restaurants, pubs</span><h3>Food and local favourites</h3><p class="tline">Be the place people stop at on the way in, or celebrate at afterwards.</p><div class="tact"><a class="rbtn" href="#packages">See the packages <span aria-hidden="true">→</span></a></div></article>
+      <article class="rung r4"><span class="tg">Camera shops, lenses, bags, tripods</span><h3>Photography and video</h3><p class="tline">Sit beside the camera guides, kit planners and settings advice.</p><div class="tact"><a class="rbtn" href="#packages">See the packages <span aria-hidden="true">→</span></a></div></article>
+      <article class="rung r5"><span class="tg">Museums, flying experiences, parking, transport</span><h3>Attractions and travel</h3><p class="tline">Help visitors make a full trip of it.</p><div class="tact"><a class="rbtn" href="#packages">See the packages <span aria-hidden="true">→</span></a></div></article>
+      <article class="rung r6"><span class="tg">Food, merchandise, models, clothing, art</span><h3>Traders at the shows</h3><p class="tline">Let visitors know you will be there before they arrive. Traders have their own plans, starting with a free listing.</p><div class="tact"><a class="rbtn" href="#why">See the trader plans <span aria-hidden="true">→</span></a></div></article>
+    </div>
+    <p class="ladder-note">I only show that a trader is attending once the trader or the event organiser has confirmed it.</p>
+  </div>
+</section>
+
+<div class="lane"><div class="wrap"><span class="lane-n">1</span><div><b>For traders at the shows</b><span>If your stall is on the airfield, this part is for you. Want an advert in the show guides too? Take Headliner or above</span></div></div></div>
+
+<section id="why">
+  <div class="wrap">
+    <div class="why-grid">
+      <div class="why-l">
+        <span class="tag">For traders</span>
+        <h2 class="why-t">Why trade with the guide</h2>
+        <p>I go to these shows every summer, and the stalls are a big part of the day for me. The trouble is, most visitors only find out who is there once they are already walking round the trade village.</p>
+        <p>This page changes that. People look you up in the week before they travel, so they turn up knowing your name and roughly where to find you. Some will come looking for you on purpose.</p>
+        <p class="sig">Jack Skedge<br><span>Founder and Managing Editor</span></p>
+        <div class="why-key"><b>£0</b><span>commission on anything you sell. You keep every penny you take on the day.</span></div>
+      </div>
+      <ol class="why-list">
+        <li><b>Found before the gates open</b><span>Your card sits on every show you list, with your dates, so visitors can put you on their list for the day before they leave home.</span></li>
+        <li><b>In the right place, at the right time</b><span>Visitors search by show and by type of stall. Food, prints, models and kit all have their own filter, so you are not lost in a long list.</span></li>
+        <li><b>You stay in control</b><span>Change your shows, photos and offers yourself in the Trader Hub, and post show day updates from your phone at the stall. Sold out of something? Tell people.</span></li>
+        <li><b>A flat price, paid by the season</b><span>The basic listing is free. Paid plans are one payment from March to October, so you never pay through the quiet winter months.</span></li>
+        <li><b>Room to grow</b><span>Start with a free card. If it works for you, add a plan or a labelled advert inside the show guides people read before they go.</span></li>
+        <li><b>Honest about numbers</b><span>I am building the audience for the 2027 season. I will share real figures as they come in, and I won't promise numbers I can't show you.</span></li>
+      </ol>
     </div>
   </div>
 </section>
 
-<section class="who" id="who">
+<section id="how">
   <div class="wrap">
-    <div class="reveal">
-      <h2 class="title">Businesses we work with</h2>
-      <p class="intro">If your business helps airshow visitors have a better day or a better trip, there is likely a place for you in our guides.</p>
+    <div class="sec-head dark">
+      <h2>How listing works</h2>
+      <p>A basic listing is free, with no contract. You tell me where you will be, I check it and add you, and you can ask to be removed whenever you like.</p>
     </div>
-    <div class="pk-grid">
-      <article class="pk who-card">
-        <div class="pk-head"><h3>Places to stay</h3></div>
-        <p class="for">Reach visitors booking a night or a weekend near the airfield.</p>
-        <div class="getbox"><h4>Who this suits</h4><ul><li>Hotels</li><li>B&amp;Bs</li><li>Campsites</li><li>Holiday parks</li></ul></div>
-        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
-      </article>
-      <article class="pk who-card">
-        <div class="pk-head"><h3>Food and local favourites</h3></div>
-        <p class="for">Be the place people stop at on the way in or celebrate at afterwards.</p>
-        <div class="getbox"><h4>Who this suits</h4><ul><li>Cafés</li><li>Coffee shops</li><li>Restaurants</li><li>Pubs</li></ul></div>
-        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
-      </article>
-      <article class="pk who-card">
-        <div class="pk-head"><h3>Photography and video</h3></div>
-        <p class="for">Sit beside our camera guides, kit planners and settings advice.</p>
-        <div class="getbox"><h4>Who this suits</h4><ul><li>Camera retailers</li><li>Lens makers</li><li>Bags and tripods</li><li>Gimbals and memory cards</li></ul></div>
-        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
-      </article>
-      <article class="pk who-card">
-        <div class="pk-head"><h3>Attractions and travel</h3></div>
-        <p class="for">Help visitors make a full trip of it.</p>
-        <div class="getbox"><h4>Who this suits</h4><ul><li>Aviation museums</li><li>Flying experiences</li><li>Parking providers</li><li>Local transport</li></ul></div>
-        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
-      </article>
-      <article class="pk who-card wide">
-        <div class="pk-head"><h3>Traders attending the shows</h3></div>
-        <p class="for">Let visitors know you will be there before they arrive, on the guide for the show you are attending.</p>
-        <div class="getbox"><h4>Who this suits</h4><ul><li>Food and drink vendors</li><li>Aviation merchandise</li><li>Clothing and accessories</li><li>Model aircraft</li><li>Photography equipment</li><li>Aviation artists and photographers</li></ul><p class="note">We only show that a trader is attending once the trader or the event organiser has confirmed it.</p></div>
-        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
-      </article>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><div><h3>Send your listing</h3><p>Fill in the form below with your shows and dates, and pick your plan. If you only know some of your bookings so far, I would suggest sending those and adding the rest later.</p><span class="who">You do this</span></div></div>
+      <div class="step"><span class="num">2</span><div><h3>I check and add you</h3><p>I check your details and add your card to the directory, usually within a few days. Your stall then shows on each airshow you have listed.</p><span class="who">I do this</span></div></div>
+      <div class="step"><span class="num">3</span><div><h3>Create a profile to manage your listing</h3><p>Once you are live, create your account in the Trader Hub, which is the log in for traders. From there you can manage your account, edit your listing, upload your photos and look after your payments and plan.</p><p>You also get free support the whole way through. Send me a message from your Trader Hub and I will help you get set up.</p><span class="who">You do this, with my help</span></div></div>
+      <div class="step wix"><span class="num">4</span><div><h3>Visitors find you</h3><p>People planning their day can search by show or by type of stall, then click through to take a look at your page before they travel.</p><span class="who">Handled by the website</span></div></div>
+      <div class="step"><span class="num">5</span><div><h3>Keep it up to date</h3><p>Booked another show, or had to pull out of one? Change it yourself in the Trader Hub, and post show day updates from your phone at the stall. I also check each listing once a week through the season.</p><span class="who">You and me</span></div></div>
+    </div>
+    <div class="how-links">
+      <a class="btn btn-teal" href="#list">List your business <span class="arr">→</span></a>
+      <a class="btn btn-out" href="#pricing">See the plans</a>
+      <a class="btn btn-out" href="https://www.ukairshowguide.co.uk/trader-hub" target="_top">Trader log in</a>
     </div>
   </div>
 </section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Plans and prices</h2>
+      <p>Five plans, one ladder. Start with a free card on the shows you are trading at, then step up when it suits you. From Headliner upwards, your plan also puts a labelled advert inside the show guides people read while they plan.</p>
+    </div>
+    <div class="ladder" id="tickets"></div>
+    <p class="ladder-note">The Headliner advert is the same as the £49 Guide Listing, Display Team matches the £129 Featured Partner and Finale matches the £249 Regional Partner on the <a href="#packages">packages for other businesses</a> further down this page. Here they come with your directory plan built in. Adverts run from 1 March to 31 October 2027, go in the Food and facilities part of the show guide, are clearly labelled and only go live once your attendance is confirmed.</p>
+    <div class="plan-extras">
+      <aside class="founding wide">
+        <span class="tag">Founding traders</span>
+        <div class="big" id="placesLeft">25</div>
+        <h3>Founding places left for 2027</h3>
+        <p>The first 25 traders to join get Flypast free for the whole 2027 season. After that, you keep a founding price of £12 a season for as long as you stay, instead of £19.</p>
+        <div class="places" id="places" aria-hidden="true"></div>
+        <div class="places-l"><span id="placesTaken">0 taken</span><span id="placesLeft2">25 left</span></div>
+        <ul>
+          <li>Flypast free from March to October 2027</li>
+          <li>£12 a season from 2028, locked in for good</li>
+          <li>A founding trader badge on your card</li>
+          <li>A say in what I add to the Trader Hub next</li>
+        </ul>
+        <a class="btn btn-teal" href="#list">Claim a founding place <span class="arr">→</span></a>
+      </aside>
+      <div class="pe-r">
+<div class="ptabs">
+          <div class="pt p1"><span class="tg">Doing one big show?</span><b>Show boost</b><div class="pp">£5<small>a show</small></div><p>Boost your card to the top of that airshow's trader list for the show weekend, without taking a season plan.</p><a class="rbtn" href="#list">Add a boost <span aria-hidden="true">→</span></a></div>
+          <div class="pt p2"><span class="tg">Peace of mind</span><b>Money back</b><p>Change your mind before your first show and you get your money back.</p></div>
+          <div class="pt p3"><span class="tg">No tie in</span><b>No contracts</b><p>You pay once a season, by card. There is no contract to sign and nothing to cancel.</p></div>
+          <div class="pt p4"><span class="tg">Only once you're live</span><b>Nothing charged yet</b><p>Nothing is taken until your listing is checked and live on the site.</p></div>
+        </div>
+        <details class="compare">
+          <summary>Compare every feature <span>+</span></summary>
+          <div style="overflow-x:auto"><table class="ctable" id="ctable"></table></div>
+        </details>
+      </div>
+    </div>
+    <a class="back" href="#top">Back to the sections ↑</a>
+  </div>
+</section>
+
+<section id="list">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>List your business</h2>
+      <p>If you trade at UK airshows, I would love to feature you. It costs nothing, and you choose what goes on your listing. If you fill in the form, you can watch your card build itself on the right as you type.</p>
+    </div>
+    <div class="hub-cta"><div><b>Already have a listing?</b> <span>Log in to change your details, add photos, manage your shows and post show day updates.</span></div><a class="btn btn-teal" href="https://www.ukairshowguide.co.uk/trader-hub" target="_top">Trader Hub log in <span class="arr">→</span></a></div>
+    <div class="list-grid">
+      <form class="formbox" id="form" novalidate>
+        <h3>Your listing</h3>
+        <p class="lead">It only takes about five minutes. Once you are live, create your Trader Hub account with the same email to manage your listing.</p>
+        <div class="row2">
+          <div class="field"><label for="fName">Business name</label><input id="fName" maxlength="40" placeholder="e.g. Hangar Brew Co."></div>
+          <div class="field"><label for="fTown">Where you are based</label><input id="fTown" maxlength="40" placeholder="e.g. Chelmsford, Essex"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="fCat">Type of stall</label><select id="fCat"></select></div>
+          <div class="field"><label for="fWeb">Website or social page</label><input id="fWeb" placeholder="e.g. instagram.com/yourstall"></div>
+        </div>
+        <div class="field">
+          <label for="fBlurb">Tell visitors about your stall <i>(what you sell, what makes you different)</i></label>
+          <textarea id="fBlurb" maxlength="220" placeholder="Fresh stone baked pizza from a converted horsebox, made to order in about four minutes."></textarea>
+          <span class="count" id="blurbCount">0 of 220</span>
+        </div>
+        <div class="field"><label for="fOffer">Show day offer <i>(optional)</i></label><input id="fOffer" maxlength="70" placeholder="e.g. 10% off for anyone who mentions the guide"></div>
+        <div class="field">
+          <label>Airshows and dates you will be at</label>
+          <div class="show-rows" id="rows"></div>
+          <button class="add" type="button" id="addRow">+ Add another airshow</button>
+        </div>
+        <div class="field"><label for="fPlan">Your plan</label><select id="fPlan"><option value="founding">Founding trader: Flypast free for 2027</option><option value="free">Static Display: free</option><option value="flypast">Flypast: £19 a season</option><option value="headliner">Headliner: £49 a season</option></select></div>
+        <div class="row2"><div class="field"><label for="fContact">Your name</label><input id="fContact" maxlength="60" autocomplete="name" placeholder="e.g. Sam Whitlock"></div><div class="field"><label for="fEmail">Contact email <i>(not shown on the site)</i></label><input id="fEmail" type="email" autocomplete="email" placeholder="you@yourbusiness.co.uk"></div></div>
+        <div class="checks">
+          <label><input type="checkbox" id="cIndep" checked> I am an independent or family run business</label>
+          <label><input type="checkbox" id="cOk"> I am happy for The Big Guide to UK Airshows to share my listing on Facebook and Instagram</label>
+        </div>
+        <button class="btn btn-teal" type="submit">Send my listing <span class="arr">→</span></button>
+        <div class="formmsg" id="msg" role="status"></div>
+      </form>
+
+      <div class="previewbox">
+        <h3>Your card</h3>
+        <p class="lead">This is how visitors will see you in the directory.</p>
+        <div id="livecard"></div>
+        <div class="perks">
+          <h4>What you get</h4>
+          <ul>
+            <li>A free listing for the whole season, checked every week</li>
+            <li>Your stall shown on every airshow you list, so visitors planning that show find you</li>
+            <li>A link straight to your website or social page</li>
+            <li>A mention in my show week posts on Facebook and Instagram, if you would like one</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a class="back" href="#top">Back to the sections ↑</a>
+  </div>
+</section>
+
+<div class="lane l2"><div class="wrap"><span class="lane-n">2</span><div><b>For businesses near the shows</b><span>If your business is off the airfield, near a show, these packages are for you</span></div></div></div>
 
 <section id="packages">
   <div class="wrap">
-    <div class="reveal">
-      <h2 class="title">Advertising packages for 2027</h2>
-      <p class="intro">Every package runs for the full season, 1 March to 31 October 2027. These are introductory rates while the site grows, so the earlier you book, the better the value.</p>
+    <div class="sec-head">
+      <h2>Packages for other businesses</h2>
+      <p>For hotels, B&amp;Bs, campsites, cafés, pubs, camera shops, museums and transport. Trading at the show itself? The <a href="#pricing">trader plans</a> are cheaper and made for stalls. Every package runs from 1 March to 31 October 2027. These are introductory rates while the site grows, so the earlier you book, the better the value.</p>
     </div>
-    <div class="pk-grid">
-      <article class="pk reveal">
-        <div class="pk-head"><h3>Business Listing</h3></div>
-        <div class="price-row"><strong>£79</strong><span>per season</span></div>
-        <p class="for">An affordable way for a small local business to be seen in one guide.</p>
-        <div class="rows">
-          <div class="row"><span>Airshow guides</span><span>One</span></div>
-          <div class="row"><span>Size</span><span>Compact listing</span></div>
-          <div class="row"><span>Best for</span><span>Smaller hotels, cafés, campsites and traders</span></div>
-        </div>
-        <div class="getbox"><h4>What you get</h4><ul><li>Business name, logo or one photo</li><li>Short description and business category</li><li>General location</li><li>Website or social media link</li><li>Placement in a relevant section of the guide</li></ul></div>
-        <div class="pk-foot"><button class="more jump" data-target="examples" type="button">More information <b>&gt;</b></button><a class="btn btn-teal choose" href="#enquire" data-package="Business Listing">Enquire about this</a></div>
-      </article>
-
-      <article class="pk reveal">
-        <div class="pk-head"><h3>Featured Partner</h3><span class="pick">Recommended</span></div>
-        <div class="price-row"><strong>£199</strong><span>per season</span></div>
-        <p class="for">More space and priority positioning, so you are the first business people see.</p>
-        <div class="rows">
-          <div class="row"><span>Airshow guides</span><span>One</span></div>
-          <div class="row"><span>Size</span><span>Large featured advert</span></div>
-          <div class="row hot"><span>Position</span><span>Priority within the section</span></div>
-        </div>
-        <div class="getbox"><h4>What you get</h4><ul><li>Larger main photograph</li><li>Expanded description and business highlights</li><li>Location, facilities and services</li><li>Website or booking link</li><li>Prominent call to action button</li></ul></div>
-        <div class="pk-foot"><button class="more jump" data-target="examples" type="button">More information <b>&gt;</b></button><a class="btn btn-teal choose" href="#enquire" data-package="Featured Partner">Enquire about this</a></div>
-      </article>
-
-      <article class="pk reveal">
-        <div class="pk-head"><h3>Regional Partner</h3></div>
-        <div class="price-row"><strong>£399</strong><span>per season</span></div>
-        <p class="for">For businesses that serve visitors to several shows.</p>
-        <div class="rows">
-          <div class="row"><span>Airshow guides</span><span>Up to three</span></div>
-          <div class="row"><span>Social media</span><span>One agreed promotion</span></div>
-          <div class="row"><span>Best for</span><span>Hotel groups, regional attractions and camera shops</span></div>
-        </div>
-        <div class="getbox"><h4>What you get</h4><ul><li>Featured placements across up to three guides</li><li>Business photography and a detailed description</li><li>Website links in every placement</li><li>One agreed social media promotion</li><li>A basic performance summary where tracking allows</li></ul></div>
-        <div class="pk-foot"><button class="more jump" data-target="placements" type="button">More information <b>&gt;</b></button><a class="btn btn-teal choose" href="#enquire" data-package="Regional Partner">Enquire about this</a></div>
-      </article>
-
-      <article class="pk reveal">
-        <div class="pk-head"><h3>Main Website Partner</h3></div>
-        <div class="price-row"><strong>From £999</strong><span>per season</span></div>
-        <p class="for">A tailored campaign for larger brands, manufacturers and retailers.</p>
-        <div class="rows">
-          <div class="row"><span>Airshow guides</span><span>Agreed with you</span></div>
-          <div class="row"><span>Homepage</span><span>Possible, by agreement</span></div>
-          <div class="row"><span>Best for</span><span>Camera brands, national retailers and aviation companies</span></div>
-        </div>
-        <div class="getbox"><h4>What you get</h4><ul><li>Tailored placements across relevant sections</li><li>Priority visibility across the site</li><li>Agreed promotional content</li><li>Possible social media and YouTube collaboration</li><li>Campaign planning, review and a bespoke proposal</li></ul></div>
-        <div class="pk-foot"><button class="more jump" data-target="placements" type="button">More information <b>&gt;</b></button><a class="btn btn-teal choose" href="#enquire" data-package="Main Website Partner">Discuss a partnership</a></div>
-      </article>
+    <div class="ladder pkl" id="pkl">
+      <article class="rung r2"><span class="tg">One show guide</span><h3>Guide Listing</h3><div class="price">£49<small>a season</small></div><p class="tline">Seen by people planning where to stay and eat, before they have decided. A small local business in one show guide.</p><ul class="tfeat"><li>Business name, logo or one photo</li><li>Short description and category</li><li>General location</li><li>Website or social link</li></ul><div class="tact"><a class="rbtn choose" href="#enquire" data-package="Guide Listing">Choose this <span aria-hidden="true">→</span></a></div></article>
+      <article class="rung r3"><span class="tg">One show guide</span><h3>Featured Partner</h3><div class="price">£129<small>a season</small></div><p class="tline">More space and priority, so you are the first business people see.</p><ul class="tfeat"><li>Larger main photograph</li><li>Highlights, facilities and services</li><li>Website or booking link</li><li>A clear call to action button</li></ul><div class="tact"><span class="pick">Recommended</span><a class="rbtn choose" href="#enquire" data-package="Featured Partner">Choose this <span aria-hidden="true">→</span></a></div></article>
+      <article class="rung r4"><span class="tg">Up to three show guides</span><h3>Regional Partner</h3><div class="price">£249<small>a season</small></div><p class="tline">For businesses that serve visitors to several shows.</p><ul class="tfeat"><li>Featured adverts in up to three guides</li><li>Photos and a detailed description</li><li>One agreed social media promotion</li><li>A basic summary where tracking allows</li></ul><div class="tact"><a class="rbtn choose" href="#enquire" data-package="Regional Partner">Choose this <span aria-hidden="true">→</span></a></div></article>
+      <article class="rung r5"><span class="tg">Agreed with you</span><h3>Main Website Partner</h3><div class="price"><small style="margin:0 6px 0 0">from</small>£699<small>a season</small></div><p class="tline">A tailored campaign for camera brands, national retailers and aviation companies.</p><ul class="tfeat"><li>Placements across the right sections</li><li>Priority visibility across the site</li><li>Possible homepage space, by agreement</li><li>Possible social and YouTube work</li></ul><div class="tact"><a class="rbtn choose" href="#enquire" data-package="Main Website Partner">Talk to me <span aria-hidden="true">→</span></a></div></article>
     </div>
-    <p class="pk-small reveal">All packages are subject to available space, suitability and a confirmed booking. Any VAT that applies will be shown on your invoice. Your exact placement, start date and artwork requirements are set out in your advertiser agreement. We provide the agreed advertising space and cannot guarantee visitor numbers, clicks, enquiries, bookings or sales.</p>
+    <p class="ladder-note">All packages are subject to available space, suitability and a confirmed booking. Any VAT that applies will be shown on your invoice. I provide the agreed advertising space and can't guarantee visitor numbers, clicks, enquiries, bookings or sales.</p>
   </div>
 </section>
 
-<section class="ex" id="examples">
-  <div class="wrap">
-    <div class="reveal">
-      <h2 class="title">How your advert will look</h2>
-      <p class="intro">Adverts are designed to match the guides, so they feel helpful rather than intrusive. The businesses below are fictional examples.</p>
+<div class="ao">
+<section class="o-ex" id="examples">
+  <div class="o-wrap">
+    <div class="o-reveal">
+      <h2 class="o-title">How your advert will look</h2>
+      <p class="o-intro">Adverts are designed to match the guides, so they feel helpful rather than intrusive. The businesses below are fictional examples.</p>
     </div>
-    <div class="ex-layout">
-      <div class="ex-col reveal">
-        <h3>Business Listing, £79</h3>
+    <div class="o-ex-layout">
+      <div class="o-ex-col o-reveal">
+        <h3>Guide Listing, £49</h3>
         <p>A compact listing with one photo, placed where visitors are already looking for that kind of business.</p>
-        <div class="where"><em>RAF Cosford Air Show guide</em><em>Where to stay</em></div>
-        <div class="ad-listing">
-          <div class="pic" aria-hidden="true">
-            <svg viewBox="0 0 160 150" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><rect width="160" height="150" fill="#CFE9EA"/><circle cx="124" cy="34" r="14" fill="#FFFFFF" opacity=".8"/><rect y="112" width="160" height="38" fill="#9FC9A6"/><path d="M34 112V66l38-24 38 24v46z" fill="#F4EEE2"/><path d="M28 70l44-30 44 30" fill="none" stroke="#13293C" stroke-width="5"/><rect x="62" y="88" width="20" height="24" fill="#13293C"/><rect x="44" y="76" width="12" height="12" fill="#32B4AF"/><rect x="90" y="76" width="12" height="12" fill="#32B4AF"/></svg>
-          </div>
-          <div class="txt">
-            <span class="adlabel">Advertisement</span>
-            <h4>Oakfield Country Hotel</h4>
-            <p>Planning a weekend at the air show? Comfortable rooms, a full English breakfast and free on site parking, a short drive from the airfield.</p>
-            <div class="meta"><span>Near Cosford, Shropshire</span><span>Hotel</span></div>
-            <a class="adlink" href="#examples" onclick="return false">Visit website &gt;</a>
+        <div class="o-where"><em>RAF Cosford Air Show guide</em><em>Where to stay</em></div>
+        <div class="o-ad-listing">
+          <div class="o-pic"><img src="camping-hub-img/field-sunny.jpg" alt="A sunny camping field with tents behind windbreaks and trees along the edge" loading="lazy" style="width:100%;height:100%;object-fit:cover;pointer-events:none"></div>
+          <div class="o-txt">
+            <span class="o-adlabel">Advertisement</span>
+            <h4>Oakfield Farm Camping</h4>
+            <p>Making a weekend of the air show? Flat grass pitches, hot showers and the car parked beside your tent, a short drive from the airfield.</p>
+            <div class="o-meta"><span>Near Cosford, Shropshire</span><span>Campsite</span></div>
+            <a class="o-adlink" href="#examples" onclick="return false">Visit website &gt;</a>
           </div>
         </div>
         <div style="margin-top:30px">
           <h3>Trader advert</h3>
-          <p>Shown on the guide for the show you are attending, once attendance is confirmed.</p>
-          <div class="where"><em>Eastbourne Airshow guide</em><em>Food and facilities</em></div>
-          <div class="trader">
-            <div class="mark" aria-hidden="true"><svg viewBox="0 0 40 40" width="38" height="38"><path d="M4 24l14-3 6-13h4l-2 13 10 2 2 3-12 2-5 8h-3l2-8-14-2z" fill="#32B4AF"/></svg></div>
+          <p>Comes with the Headliner trader plan and above. Shown on the guide for the show you are attending, once attendance is confirmed.</p>
+          <div class="o-where"><em>Eastbourne Airshow guide</em><em>Food and facilities</em></div>
+          <div class="o-trader">
+            <div class="o-mark"><img src="guide-img/contrail-prints-logo.jpg" alt="Contrail Prints logo" loading="lazy" style="width:100%;height:100%;object-fit:cover;pointer-events:none;display:block"></div>
             <div>
-              <span class="adlabel">Advertisement</span>
+              <span class="o-adlabel">Advertisement</span>
               <h4>Contrail Prints</h4>
               <p>Limited edition aviation art and framed prints of the display teams. Find us beside the main trade village.</p>
-              <span class="confirmed">Attendance confirmed by the trader</span>
+              <span class="o-confirmed">Attendance confirmed by the trader</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="ex-col reveal">
-        <h3>Featured Partner, £199</h3>
+      <div class="o-ex-col o-reveal">
+        <h3>Featured Partner, £129</h3>
         <p>A larger advert with highlights and a booking button, given priority within its section.</p>
-        <div class="where"><em>IWM Duxford guide</em><em>Food and facilities</em></div>
-        <div class="ad-featured">
-          <div class="pic" aria-hidden="true">
-            <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><rect width="400" height="200" fill="#E7E1D4"/><rect y="150" width="400" height="50" fill="#C9B79A"/><rect x="40" y="70" width="140" height="80" fill="#13293C"/><rect x="52" y="82" width="52" height="40" fill="#32B4AF"/><rect x="116" y="82" width="52" height="40" fill="#32B4AF"/><path d="M230 112h70v22a35 35 0 0 1-70 0z" fill="#FFFFFF"/><path d="M300 118h10a10 10 0 0 1 0 20h-10" fill="none" stroke="#FFFFFF" stroke-width="7"/><path d="M252 92c-6-10 6-14 0-24M272 92c-6-10 6-14 0-24" fill="none" stroke="#13293C" stroke-width="4" stroke-linecap="round"/></svg>
-            <span class="adlabel">Advertisement</span>
+        <div class="o-where"><em>IWM Duxford guide</em><em>Food and facilities</em></div>
+        <div class="o-ad-featured">
+          <div class="o-pic">
+            <img src="guide-img/coffee-shop.jpg" alt="Visitors in outdoor jackets queuing at the counter of a cosy countryside coffee shop" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:50% 45%;pointer-events:none;display:block">
+            <span class="o-adlabel">Advertisement</span>
           </div>
-          <div class="txt">
+          <div class="o-txt">
             <h4>Hangar Door Coffee Co.</h4>
             <p>Start your Duxford day properly. Freshly roasted coffee, bacon rolls from 7am and plenty of room to sit, ten minutes from the museum gates.</p>
-            <ul class="hl"><li>Open from 7am on show days</li><li>Free parking</li><li>Takeaway breakfast boxes</li><li>Dog friendly</li></ul>
-            <div class="meta" style="margin-bottom:16px"><span>Near Duxford, Cambridgeshire</span><span>Café</span></div>
-            <a class="btn btn-navy" href="#examples" onclick="return false">Pre order breakfast</a>
+            <ul class="o-hl"><li>Open from 7am on show days</li><li>Free parking</li><li>Takeaway breakfast boxes</li><li>Dog friendly</li></ul>
+            <div class="o-meta" style="margin-bottom:16px"><span>Near Duxford, Cambridgeshire</span><span>Café</span></div>
+            <a class="o-btn o-btn-navy" href="#examples" onclick="return false">Pre order breakfast</a>
           </div>
         </div>
-        <p class="fict">Oakfield Country Hotel, Contrail Prints and Hangar Door Coffee Co. are made up to show layouts only.</p>
+        <p class="o-fict">The coffee shop photo is a café counter with visitors queuing, and the Contrail Prints logo is a made-up logo. Both are AI generated for a visual look. Oakfield Farm Camping, Contrail Prints and Hangar Door Coffee Co. are made up to show layouts only.</p>
       </div>
     </div>
   </div>
 </section>
+</div>
 
+<div class="ao">
 <section id="placements">
-  <div class="wrap place-grid">
-    <div class="reveal">
-      <h2 class="title">Where adverts appear</h2>
-      <p class="intro">We do not fill every page with adverts. Each one goes in the part of a guide where it is genuinely useful. Tap a tab to see what goes where.</p>
-      <div class="mock">
-        <div class="mock-tabs" role="tablist" aria-label="Guide sections">
-          <button role="tab" aria-selected="true" class="ad" data-i="0">Where to stay</button>
-          <button role="tab" aria-selected="false" class="ad" data-i="1">Getting there and parking</button>
-          <button role="tab" aria-selected="false" class="ad" data-i="2">Food and facilities</button>
-          <button role="tab" aria-selected="false" class="ad" data-i="3">Photography</button>
+  <div class="o-wrap o-place-grid">
+    <div class="o-reveal">
+      <h2 class="o-title">Where adverts appear</h2>
+      <p class="o-intro">We do not fill every page with adverts. Each one goes in the part of a guide where it is genuinely useful. Tap a tab to see what goes where.</p>
+      <div class="o-mock">
+        <div class="o-mock-tabs" role="tablist" aria-label="Guide sections">
+          <button role="tab" aria-selected="true" class="o-ad" data-i="0">Where to stay</button>
+          <button role="tab" aria-selected="false" class="o-ad" data-i="1">Getting there and parking</button>
+          <button role="tab" aria-selected="false" class="o-ad" data-i="2">Food and facilities</button>
+          <button role="tab" aria-selected="false" class="o-ad" data-i="3">Photography</button>
           <button role="tab" aria-selected="false" data-i="4">Aircraft line up</button>
         </div>
-        <div class="mock-panel" role="tabpanel" aria-live="polite">
+        <div class="o-mock-panel" role="tabpanel" aria-live="polite">
           <h3 id="mp-title">Where to stay</h3>
           <p id="mp-text">Visitors compare hotels, B&amp;Bs and campsites within easy reach of the show.</p>
-          <div class="slot" id="mp-slot">Advert space for hotels, B&amp;Bs, campsites and holiday parks</div>
+          <div class="o-slot" id="mp-slot">Advert space for hotels, B&amp;Bs, campsites and holiday parks</div>
         </div>
-        <div class="key"><i></i><span>Sections with advert space</span></div>
+        <div class="o-key"><i></i><span>Sections with advert space</span></div>
       </div>
     </div>
-    <div class="place-side reveal">
-      <h3>The guides at launch</h3>
+    <div class="o-place-side o-reveal">
+      <h3>The show guides</h3>
       <p>Choose one show, or several on the Regional and Main Website Partner packages.</p>
-      <ul class="shows">
-        <li>Royal International Air Tattoo</li><li>RAF Cosford Air Show</li><li>IWM Duxford</li><li>Shuttleworth</li><li>Eastbourne Airshow</li><li>Clacton Airshow</li><li>Wales Airshow</li><li>Little Gransden</li><li>Hampshire Air Festival</li>
-      </ul>
+      <ul class="o-shows"><li>Royal International Air Tattoo</li><li>RAF Cosford Air Show</li><li>IWM Duxford</li><li>Shuttleworth, Old Warden</li><li>Midlands Air Festival</li><li>Wales Airshow</li><li>Eastbourne Airshow</li><li>Clacton Airshow</li><li>Little Gransden</li><li>Blackpool Air Show</li><li>Southport Air Show</li><li>International Ayr Show</li></ul>
       <h3 style="margin-top:30px">Photography section</h3>
       <p>Camera, lens, bag and accessory brands can appear alongside our beginner and enthusiast guides. Any affiliate links are marked, and our kit advice is written independently.</p>
     </div>
   </div>
 </section>
+</div>
 
-<section class="process" id="process">
-  <div class="wrap">
-    <div class="reveal">
-      <h2 class="title">How booking works</h2>
-      <p class="intro">Simple from your first message to your advert going live.</p>
+<div class="ao">
+<section class="o-process" id="process">
+  <div class="o-wrap">
+    <div class="o-reveal">
+      <h2 class="o-title">How booking works</h2>
+      <p class="o-intro">Simple from your first message to your advert going live.</p>
     </div>
-    <div class="steps reveal">
-      <div class="step"><span class="icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14"/><path d="M8 10h8M8 14h5"/></svg></span><h3>Choose a package</h3><p>Pick the option that suits your business and the shows you want.</p></div>
-      <div class="step"><span class="icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></span><h3>Send your details</h3><p>Use the form below or email us about your business.</p></div>
-      <div class="step"><span class="icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><h3>Agree your placement</h3><p>We check suitability and space, then agree dates and artwork.</p></div>
-      <div class="step"><span class="icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12"/><path d="M3 10h18"/></svg></span><h3>Confirm and pay</h3><p>You receive written terms and an invoice or secure payment link.</p></div>
-      <div class="step go"><span class="thumb" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10v11H3V10z"/><path d="M7 10l4-7c1.7 0 2.6 1.2 2.2 2.8L12.6 9H19a2 2 0 0 1 2 2.3l-1.2 7.5A2.6 2.6 0 0 1 17.2 21H7"/></svg></span><h3>Go live</h3><p>Your labelled advert is published for the agreed season.</p></div>
+    <div class="o-steps o-reveal">
+      <div class="o-step"><span class="o-icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14"/><path d="M8 10h8M8 14h5"/></svg></span><h3>Choose a package</h3><p>Pick the option that suits your business and the shows you want.</p></div>
+      <div class="o-step"><span class="o-icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></span><h3>Send your details</h3><p>Use the form below or email us about your business.</p></div>
+      <div class="o-step"><span class="o-icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><h3>Agree your placement</h3><p>We check suitability and space, then agree dates and artwork.</p></div>
+      <div class="o-step"><span class="o-icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12"/><path d="M3 10h18"/></svg></span><h3>Confirm and pay</h3><p>You receive written terms and an invoice or secure payment link.</p></div>
+      <div class="o-step o-go"><span class="o-thumb" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10v11H3V10z"/><path d="M7 10l4-7c1.7 0 2.6 1.2 2.2 2.8L12.6 9H19a2 2 0 0 1 2 2.3l-1.2 7.5A2.6 2.6 0 0 1 17.2 21H7"/></svg></span><h3>Go live</h3><p>Your labelled advert is published for the agreed season.</p></div>
     </div>
   </div>
 </section>
+</div>
 
+<div class="ao">
 <section id="enquire">
-  <div class="wrap">
-    <div class="reveal">
-      <h2 class="title">Make an enquiry</h2>
-      <p class="intro">Tell us about your business and where you would like to appear. We will reply with availability, a suggested package and the next steps.</p>
+  <div class="o-wrap">
+    <div class="o-reveal">
+      <h2 class="o-title">Make an enquiry</h2>
+      <p class="o-intro">Tell us about your business and where you would like to appear. We will reply with availability, a suggested package and the next steps.</p>
     </div>
-    <div class="enq-grid">
-      <div class="form-box reveal">
+    <div class="o-enq-grid">
+      <div class="o-form-box o-reveal">
         <form id="adform" novalidate>
-          <div class="fields">
-            <div class="field"><label for="business">Business name</label><input id="business" name="business" required maxlength="120" autocomplete="organization"></div>
-            <div class="field"><label for="person">Your name</label><input id="person" name="person" required maxlength="100" autocomplete="name"></div>
-            <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" required maxlength="150" autocomplete="email"></div>
-            <div class="field"><label for="phone">Phone number <span class="hint">(optional)</span></label><input id="phone" name="phone" type="tel" maxlength="30" autocomplete="tel"></div>
-            <div class="field"><label for="website">Website or social media <span class="hint">(optional)</span></label><input id="website" name="website" maxlength="250" placeholder="www.yourbusiness.co.uk"></div>
-            <div class="field"><label for="category">Type of business</label>
+          <div class="o-fields">
+            <div class="o-field"><label for="business">Business name</label><input id="business" name="business" required maxlength="120" autocomplete="organization"></div>
+            <div class="o-field"><label for="person">Your name</label><input id="person" name="person" required maxlength="100" autocomplete="name"></div>
+            <div class="o-field"><label for="email">Email address</label><input id="email" name="email" type="email" required maxlength="150" autocomplete="email"></div>
+            <div class="o-field"><label for="phone">Phone number <span class="o-hint">(optional)</span></label><input id="phone" name="phone" type="tel" maxlength="30" autocomplete="tel"></div>
+            <div class="o-field"><label for="website">Website or social media <span class="o-hint">(optional)</span></label><input id="website" name="website" maxlength="250" placeholder="www.yourbusiness.co.uk"></div>
+            <div class="o-field"><label for="category">Type of business</label>
               <select id="category" name="category" required>
                 <option value="">Choose one</option>
                 <option>Hotel, B&amp;B or guest house</option>
@@ -597,54 +1301,57 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
                 <option>Other</option>
               </select>
             </div>
-            <div class="field full"><label for="package">Package</label>
+            <div class="o-field o-full"><label for="package">Package</label>
               <select id="package" name="package" required>
                 <option value="">Choose a package</option>
-                <option>Business Listing</option>
+                <option>Guide Listing</option>
                 <option>Featured Partner</option>
                 <option>Regional Partner</option>
                 <option>Main Website Partner</option>
                 <option>Not sure yet</option>
               </select>
             </div>
-            <div class="field full"><span class="lab" id="shows-label">Which airshow guides interest you?</span>
-              <div class="chips" role="group" aria-labelledby="shows-label" id="chips">
-                <button type="button" class="chip" aria-pressed="false">Royal International Air Tattoo</button>
-                <button type="button" class="chip" aria-pressed="false">RAF Cosford</button>
-                <button type="button" class="chip" aria-pressed="false">IWM Duxford</button>
-                <button type="button" class="chip" aria-pressed="false">Shuttleworth</button>
-                <button type="button" class="chip" aria-pressed="false">Eastbourne</button>
-                <button type="button" class="chip" aria-pressed="false">Clacton</button>
-                <button type="button" class="chip" aria-pressed="false">Wales Airshow</button>
-                <button type="button" class="chip" aria-pressed="false">Little Gransden</button>
-                <button type="button" class="chip" aria-pressed="false">Hampshire Air Festival</button>
-                <button type="button" class="chip" aria-pressed="false">Photography guides</button>
+            <div class="o-field o-full"><span class="o-lab" id="shows-label">Which airshow guides interest you?</span>
+              <div class="o-chips" role="group" aria-labelledby="shows-label" id="chips">
+                <button type="button" class="o-chip" aria-pressed="false">Royal International Air Tattoo</button>
+                <button type="button" class="o-chip" aria-pressed="false">RAF Cosford</button>
+                <button type="button" class="o-chip" aria-pressed="false">IWM Duxford</button>
+                <button type="button" class="o-chip" aria-pressed="false">Shuttleworth</button>
+                <button type="button" class="o-chip" aria-pressed="false">Midlands Air Festival</button>
+                <button type="button" class="o-chip" aria-pressed="false">Wales Airshow</button>
+                <button type="button" class="o-chip" aria-pressed="false">Eastbourne</button>
+                <button type="button" class="o-chip" aria-pressed="false">Clacton</button>
+                <button type="button" class="o-chip" aria-pressed="false">Little Gransden</button>
+                <button type="button" class="o-chip" aria-pressed="false">Blackpool</button>
+                <button type="button" class="o-chip" aria-pressed="false">Southport</button>
+                <button type="button" class="o-chip" aria-pressed="false">Ayr</button>
+                <button type="button" class="o-chip" aria-pressed="false">Photography guides</button>
               </div>
             </div>
-            <div class="field full"><label for="message">Tell us about your business</label><textarea id="message" name="message" required maxlength="2000" placeholder="What you offer, how far you are from the show, and what you would like to promote."></textarea></div>
-            <div class="field full"><label class="check"><input type="checkbox" id="trader" name="trader"> I am a trader and my attendance at the show is confirmed by the organiser</label></div>
-            <div class="field full"><label class="check"><input type="checkbox" id="agree" name="agree" required> I understand adverts are subject to approval, available space and an advertiser agreement</label></div>
+            <div class="o-field o-full"><label for="message">Tell us about your business</label><textarea id="message" name="message" required maxlength="2000" placeholder="What you offer, how far you are from the show, and what you would like to promote."></textarea></div>
+            <div class="o-field o-full"><label class="o-check"><input type="checkbox" id="trader" name="trader"> I am a trader and my attendance at the show is confirmed by the organiser</label></div>
+            <div class="o-field o-full"><label class="o-check"><input type="checkbox" id="agree" name="agree" required> I understand adverts are subject to approval, available space and an advertiser agreement</label></div>
           </div>
-          <div class="form-actions">
-            <button class="btn btn-teal" type="submit">Prepare my enquiry email</button>
+          <div class="o-form-actions">
+            <button class="o-btn o-btn-teal" type="submit">Prepare my enquiry email</button>
           </div>
-          <p class="small" id="formmsg" role="alert">This opens your own email app with your enquiry written out, ready to send to us. Nothing is stored on this page.</p>
-          <div class="result" id="result">
+          <p class="o-small" id="formmsg" role="alert">This opens your own email app with your enquiry written out, ready to send to us. Nothing is stored on this page.</p>
+          <div class="o-result" id="result">
             <h3>Your enquiry is ready</h3>
             <p>If your email app did not open, copy the message below and send it to contactus@ukairshowguide.co.uk.</p>
             <pre id="preview"></pre>
-            <button class="btn btn-navy" type="button" id="copy">Copy message</button>
+            <button class="o-btn o-btn-navy" type="button" id="copy">Copy message</button>
           </div>
         </form>
       </div>
-      <aside class="contact-box reveal">
-        <div class="keybox-head">
+      <aside class="o-contact-box o-reveal">
+        <div class="o-keybox-head">
           
           <h2>Prefer to email?</h2>
         </div>
-        <div class="inner">
+        <div class="o-inner">
           <p>For advertising and partnership enquiries, email us directly at</p>
-          <p><a class="mail" href="mailto:contactus@ukairshowguide.co.uk" target="_top">contactus@ukairshowguide.co.uk</a></p>
+          <p><a class="o-mail" href="mailto:contactus@ukairshowguide.co.uk" target="_top">contactus@ukairshowguide.co.uk</a></p>
           <p>It helps if you include</p>
           <ul>
             <li>Your business name and website</li>
@@ -658,16 +1365,18 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
     </div>
   </div>
 </section>
+</div>
 
-<section class="faq" id="faq">
-  <div class="wrap faq-grid">
-    <div class="faq-side reveal">
-      <h2 class="title">Questions businesses ask</h2>
+<div class="ao">
+<section class="o-faq" id="faq">
+  <div class="o-wrap o-faq-grid">
+    <div class="o-faq-side o-reveal">
+      <h2 class="o-title">Questions businesses ask</h2>
       <p>Cannot see your question here? Email us and we will happily talk it through.</p>
-      <a class="btn btn-red jump" href="#enquire" data-target="enquire">Ask us a question</a>
+      <a class="o-btn o-btn-red o-jump" href="#enquire" data-target="enquire">Ask us a question</a>
     </div>
-    <div class="faq-list reveal">
-      <details><summary>Can I advertise on just one airshow guide?</summary><p>Yes. The Business Listing and Featured Partner packages each cover one guide, so you only pay for the show your customers are visiting.</p></details>
+    <div class="o-faq-list o-reveal">
+      <details><summary>Can I advertise on just one airshow guide?</summary><p>Yes. The Guide Listing and Featured Partner packages each cover one guide, so you only pay for the show your customers are visiting.</p></details>
       <details><summary>Can I appear on several shows?</summary><p>Yes. The Regional Partner package covers up to three guides, and the Main Website Partner package is built around the shows and sections that suit you.</p></details>
       <details><summary>Can I use my own photos and logo?</summary><p>Yes, as long as you own them or have permission to use them. We will confirm the sizes we need before your advert is built.</p></details>
       <details><summary>Will advertising guarantee bookings or sales?</summary><p>No. We provide the agreed advertising space for the season. We cannot guarantee visitors, clicks, enquiries, bookings or sales, and we will only share performance figures we can actually measure.</p></details>
@@ -678,54 +1387,412 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
     </div>
   </div>
 </section>
+</div>
 
+<div class="ao">
 <section id="terms">
-  <div class="wrap">
-    <div class="reveal">
-      <h2 class="title">Advertising terms in brief</h2>
-      <p class="intro">Your full terms will be set out in your advertiser agreement. These are the main points.</p>
+  <div class="o-wrap">
+    <div class="o-reveal">
+      <h2 class="o-title">Advertising terms in brief</h2>
+      <p class="o-intro">Your full terms will be set out in your advertiser agreement. These are the main points.</p>
     </div>
-    <div class="terms-grid reveal">
-      <div class="term"><h3>Season and dates</h3><p>Packages run from 1 March to 31 October 2027 unless your agreement says otherwise.</p></div>
-      <div class="term"><h3>Approval</h3><p>All adverts are reviewed for suitability and relevance. We may decline an advert that does not fit the guides.</p></div>
-      <div class="term"><h3>Your content</h3><p>You confirm that your text, images and logos are accurate and that you have the right to use them.</p></div>
-      <div class="term"><h3>Labelling</h3><p>Every paid placement is marked as an advertisement and kept apart from our independent advice.</p></div>
-      <div class="term"><h3>Payment</h3><p>Adverts go live once payment is received. Any VAT that applies will be shown on your invoice.</p></div>
-      <div class="term"><h3>No guarantees</h3><p>We provide the agreed space. We do not guarantee traffic, clicks, enquiries, bookings or sales.</p></div>
+    <div class="o-terms-grid o-reveal">
+      <div class="o-term"><h3>Season and dates</h3><p>Packages run from 1 March to 31 October 2027 unless your agreement says otherwise.</p></div>
+      <div class="o-term"><h3>Approval</h3><p>All adverts are reviewed for suitability and relevance. We may decline an advert that does not fit the guides.</p></div>
+      <div class="o-term"><h3>Your content</h3><p>You confirm that your text, images and logos are accurate and that you have the right to use them.</p></div>
+      <div class="o-term"><h3>Labelling</h3><p>Every paid placement is marked as an advertisement and kept apart from our independent advice.</p></div>
+      <div class="o-term"><h3>Payment</h3><p>Adverts go live once payment is received. Any VAT that applies will be shown on your invoice.</p></div>
+      <div class="o-term"><h3>No guarantees</h3><p>We provide the agreed space. We do not guarantee traffic, clicks, enquiries, bookings or sales.</p></div>
     </div>
   </div>
 </section>
+</div>
 
-<div class="view">
-  <div class="wrap view-grid">
+<div class="ao">
+<div class="o-view">
+  <div class="o-wrap o-view-grid">
     <h2>Our view</h2>
     <p>The guides will always stay free for visitors. Advertising is what keeps them that way, so we want it to work for you and for our readers. If your business makes an airshow trip easier, better or more memorable, we would love to hear from you.</p>
   </div>
 </div>
+</div>
 
-<div class="smallprint">
-  <div class="wrap">
+<div class="ao">
+<div class="o-smallprint">
+  <div class="o-wrap">
     <p>The Big Guide to UK Airshows is an independent visitor planning website and is not connected to any airshow organiser or event operator. Advertising does not imply endorsement by any organiser.</p>
     <p>Prices shown are introductory rates for the 2027 season and may be reviewed for future seasons. Contact: contactus@ukairshowguide.co.uk</p>
   </div>
 </div>
+</div>
 
-</main>
+<footer class="small">
+  <div class="wrap">
+    <p>Listings are free and I only add a business with their permission. Any business can ask me for changes or removal at any time.</p>
+    <p>Trading plans can change on the day. Please see each show's own rules before you go, as some airshows limit what you can bring in or buy on site.</p>
+  </div>
+</footer>
 
 <script>
 (function(){
-  // Gentle reveal on scroll
-  var els=document.querySelectorAll('.reveal');
+  const SHOWS = [
+    {id:'duxford', name:'IWM Duxford Air Shows', short:'Duxford', m:0, when:'May to Sep'},
+    {id:'shuttleworth', name:'Shuttleworth Air Shows (Old Warden)', short:'Old Warden', m:0, when:'May to Oct'},
+    {id:'midlands', name:'Midlands Air Festival', short:'Midlands', m:1, when:'Early June'},
+    {id:'cosford', name:'RAF Cosford Air Show', short:'Cosford', m:1, when:'June'},
+    {id:'wales', name:'Wales Airshow', short:'Wales', m:2, when:'July'},
+    {id:'riat', name:'Royal International Air Tattoo', short:'RIAT', m:2, when:'July'},
+    {id:'gransden', name:'Little Gransden Air & Car Show', short:'Little Gransden', m:3, when:'August'},
+    {id:'blackpool', name:'Blackpool Air Show', short:'Blackpool', m:3, when:'August'},
+    {id:'eastbourne', name:'Airbourne: Eastbourne International Airshow', short:'Eastbourne', m:3, when:'August'},
+    {id:'clacton', name:'Clacton Airshow', short:'Clacton', m:3, when:'August'},
+    {id:'southport', name:'Southport Air Show', short:'Southport', m:4, when:'September'},
+    {id:'ayr', name:'The International Ayr Show, Festival of Flight', short:'Ayr', m:4, when:'September'}
+  ];
+  const S = Object.fromEntries(SHOWS.map(s=>[s.id,s]));
+
+  const CATS = [
+    {id:'food', name:'Food and drink', col:'#D74949', icon:'<path d="M5 3v8a3 3 0 0 0 6 0V3M8 3v18M17 3c-2 0-3 2.5-3 6s1.3 4 3 4v8"/>'},
+    {id:'art', name:'Art and prints', col:'#6950A1', icon:'<rect x="3" y="4" width="18" height="16"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/>'},
+    {id:'models', name:'Models and toys', col:'#32B4AF', icon:'<path d="M2 13l9-2 3-7h2l-1 7 7 1v2l-7 1 1 5h-2l-3-5-9-1z"/>'},
+    {id:'clothing', name:'Clothing and patches', col:'#13293C', icon:'<path d="M8 3l-5 3 2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/>'},
+    {id:'kit', name:'Camera and show kit', col:'#1E3A34', icon:'<rect x="3" y="7" width="18" height="13"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.5"/>'},
+    {id:'family', name:'Family fun', col:'#0E5F5B', icon:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/>'}
+  ];
+  const C = Object.fromEntries(CATS.map(c=>[c.id,c]));
+
+  const DEMO_TRADERS = [
+    {name:'Hangar Brew Co.', town:'Saffron Walden, Cambridgeshire', cat:'food', indep:true, featured:true,
+     blurb:'Speciality coffee and hot chocolate from a converted 1970s Citroën van. We open the hatch before the gates do, so early arrivals get the first cup.',
+     offer:'Free refill if you bring your own cup', web:'hangarbrew.co.uk',
+     stops:[['duxford','Sat 22 to Sun 23 May'],['shuttleworth','Sun 6 Jun'],['riat','Fri 16 to Sun 18 Jul'],['gransden','Sun 29 Aug'],['duxford','Sat 11 to Sun 12 Sep']]},
+    {name:'Contrail Prints', town:'Cirencester, Gloucestershire', cat:'art', indep:true, isNew:true,
+     blurb:'Limited run giclée prints of display teams and Cold War jets, painted in the studio and signed. Each one comes rolled in a tube, ready for the walk back to the car.',
+     web:'contrailprints.co.uk', stops:[['riat','Fri 16 to Sun 18 Jul'],['cosford','Sun 13 Jun'],['wales','Sat 3 to Sun 4 Jul']]},
+    {name:'Wingtip Models', town:'Lincoln, Lincolnshire', cat:'models', indep:true,
+     blurb:'Diecast models in 1:72 and 1:48, plus starter kits for young builders. We stock the aircraft flying that weekend wherever we can.',
+     offer:'Free display stand with any 1:72 model', web:'wingtipmodels.co.uk',
+     stops:[['cosford','Sun 13 Jun'],['midlands','Sat 5 to Sun 6 Jun'],['blackpool','Sat 14 to Sun 15 Aug'],['southport','Sat 18 to Sun 19 Sep']]},
+    {name:'Flightline Grill', town:'Clacton on Sea, Essex', cat:'food', indep:true,
+     blurb:'Locally reared beef burgers and halloumi wraps cooked over charcoal. Family run for twenty years and a regular along the Essex seafront.',
+     web:'instagram.com/flightlinegrill', stops:[['clacton','Thu 26 to Fri 27 Aug'],['eastbourne','Thu 19 to Sun 22 Aug']]},
+    {name:'Squadron Stitch', town:'Lossiemouth, Moray', cat:'clothing', indep:true,
+     blurb:'Embroidered patches, caps and hoodies in squadron colours. Bring your old jacket and we will sew a patch on while you watch the next display.',
+     web:'squadronstitch.co.uk', stops:[['ayr','Sat 4 to Sun 5 Sep'],['riat','Fri 16 to Sun 18 Jul'],['southport','Sat 18 to Sun 19 Sep']]},
+    {name:'Crowdline Outdoor', town:'Swindon, Wiltshire', cat:'kit', indep:false,
+     blurb:'Folding chairs, windbreaks, ponchos and children\'s ear defenders. If you have forgotten something at home, this is usually where you will find it.',
+     offer:'Kids ear defenders at half price on Sunday', web:'crowdlineoutdoor.co.uk',
+     stops:[['riat','Fri 16 to Sun 18 Jul'],['cosford','Sun 13 Jun'],['wales','Sat 3 to Sun 4 Jul'],['duxford','Sat 22 to Sun 23 May']]},
+    {name:'Little Aviators', town:'Bedford, Bedfordshire', cat:'family', indep:true, isNew:true,
+     blurb:'Face painting, pilot wings and a cardboard cockpit for photos. A good stop for younger children while the grown ups wait for the next flypast.',
+     web:'facebook.com/littleaviatorsuk', stops:[['shuttleworth','Sun 6 Jun'],['gransden','Sun 29 Aug'],['shuttleworth','Sun 3 Oct']]},
+    {name:'Prop and Shutter Hire', town:'Norwich, Norfolk', cat:'kit', indep:true,
+     blurb:'Hire a long lens for the day and return it before you leave. Collect from the stall from opening and we will help you set it up for the first display.',
+     offer:'£10 off any lens hire booked online first', web:'propandshutter.co.uk',
+     stops:[['duxford','Sat 11 to Sun 12 Sep'],['riat','Fri 16 to Sun 18 Jul'],['eastbourne','Thu 19 to Sun 22 Aug']]},
+    {name:'Tailwind Fudge Kitchen', town:'Lytham St Annes, Lancashire', cat:'food', indep:true,
+     blurb:'Handmade fudge in small batches, with a different flavour named after an aircraft at every show. Sold by the slab or in gift boxes.',
+     web:'tailwindfudge.co.uk', stops:[['blackpool','Sat 14 to Sun 15 Aug'],['southport','Sat 18 to Sun 19 Sep'],['midlands','Sat 5 to Sun 6 Jun']]},
+    {name:'Hawk and Hound Leather', town:'Brecon, Powys', cat:'clothing', indep:true,
+     blurb:'Leather camera straps, belts and lanyards, cut and stamped by hand in our Welsh workshop. Initials added at the stall in about ten minutes.',
+     web:'hawkandhound.co.uk', stops:[['wales','Sat 3 to Sun 4 Jul'],['cosford','Sun 13 Jun']]}
+  ];
+  // month order for sorting by "next show"
+  const ORDER = ['May','Jun','Jul','Aug','Sep','Oct'];
+  const key = d => {const n=parseInt((d.match(/\d+/)||[])[0],10);const m=d.match(/(May|Jun|Jul|Aug|Sep|Oct)\s*$/);return (m?ORDER.indexOf(m[1]):9)*100+n};
+  let TRADERS = [];
+  function prep(){TRADERS.forEach(t=>{t.stops.sort((a,b)=>key(a[1])-key(b[1]))})}
+
+  // ---------- talking to the Wix page code ----------
+  const HOST = (location.ancestorOrigins && location.ancestorOrigins.length ? location.ancestorOrigins[0] : document.referrer) || '';
+  const IN_WIX = window.parent !== window && /ukairshowguide|wix|filesusr/i.test(HOST);
+  const SITE = 'https://www.ukairshowguide.co.uk/';
+  const pendingCalls = {}; let seq = 0;
+  function call(action, payload, wait){
+    // tips and advert packages rise like the Start Simple, Build Up steps
+  document.querySelectorAll('.notes,.ladder,.ptabs').forEach(n=>{if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)});
+  (function(){return;const n=document.querySelector('.notes');if(!n||!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)})();
+
+  if(!IN_WIX) return demo(action, payload||{});
+    return new Promise((resolve,reject)=>{
+      const id='t'+(++seq); pendingCalls[id]={resolve,reject};
+      try{window.parent.postMessage({source:'ukag-traders',id,action,payload:payload||{}},'*')}catch(e){}
+      setTimeout(()=>{if(pendingCalls[id]){delete pendingCalls[id];reject(new Error('The page could not reach the site. Please refresh and try again.'))}},wait||20000);
+    });
+  }
+  window.addEventListener('message',e=>{
+    const m=e.data; if(!m||m.source!=='ukag-traders')return;
+    if(m.event==='refresh'){load();return}
+    const p=pendingCalls[m.id]; if(!p)return; delete pendingCalls[m.id];
+    if(m.ok)p.resolve(m.data); else p.reject(new Error(m.error||'Something went wrong.'));
+  });
+  function demo(action, p){
+    return new Promise(res=>setTimeout(()=>{
+      if(action==='directory') res({traders:DEMO_TRADERS.map(t=>({name:t.name,town:t.town,cat:t.cat,about:t.blurb,offer:t.offer||'',web:t.web,headliner:!!t.featured,founding:false,tags:{about:t.indep?['Independent']:[]},photos:[],logo:'',shows:t.stops.map(s=>({showId:s[0],dates:s[1]}))})),founding:{taken:8,total:25}});
+      else if(action==='submit') res({sent:true,name:p.name,founding:p.plan==='founding'});
+      else res({});
+    },300));
+  }
+  function fromCard(c){
+    return {name:c.name,town:c.town,cat:c.cat,blurb:c.about,offer:c.offer,web:c.web,featured:c.headliner,founding:c.founding,
+      indep:((c.tags&&c.tags.about)||[]).includes('Independent'),logo:c.logo,photos:c.photos||[],
+      stops:(c.shows||[]).map(s=>[s.showId,s.dates,!!s.cancelled,s.pitch||''])};
+  }
+  async function load(){
+    try{
+      const d=await call('directory');
+      TRADERS=(d.traders||[]).map(fromCard); prep();
+      stats(); setPlaces((d.founding&&d.founding.taken)||0); render(); buildFlags();
+    }catch(err){
+      grid.innerHTML=`<div class="empty"><h3>Traders could not load</h3><p>${esc(err.message)}</p></div>`;
+    }
+  }
+
+  const svgIcon = (c,stroke) => `<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="${stroke||c.col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">${c.icon}</svg></span>`;
+  const esc = s => String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const href = w => w ? (/^https?:\/\//.test(w)?w:'https://'+w) : '#';
+  // Wix image addresses (wix:image://v1/<id>/...) to a normal web address.
+  const imgUrl = u => { const m=/^wix:image:\/\/v1\/([^/]+)/.exec(u||''); return m?`https://static.wixstatic.com/media/${m[1]}`:u; };
+
+  function cardHTML(t, opts={}){
+    const c = C[t.cat] || CATS[0];
+    const showF = opts.show || '';
+    const stops = t.stops.length ? t.stops.map(([sid,d,cx])=>{
+      const s = S[sid]; if(!s) return '';
+      return `<li class="${sid===showF?'match':''}"><button type="button" data-show="${sid}" title="See every trader at ${esc(s.name)}">${esc(s.short)}</button><span class="d"${cx?' style="border-color:#D74949;color:#D74949"':''}>${cx?'Not attending':esc(d)}</span></li>`;
+    }).join('') : '<li><span style="color:#5A6873">Add your airshows on the left</span></li>';
+    const badge = t.isNew ? '<span class="badge b-new">New listing</span>' : t.founding ? '<span class="badge b-new">Founding trader</span>' : (t.indep ? '<span class="badge b-indep">Independent</span>' : '');
+    const pics = (t.photos||[]).slice(0,3);
+    const n = t.stops.length;
+    return `<article class="card${t.featured&&!opts.noFeature?' featured':''}">
+      <div class="strip" style="background:${c.col}">${svgIcon(c)}<span class="vert">${esc(c.name)}</span></div>
+      <div class="body">
+        <div class="top"><div><h3>${esc(t.name||'Your business name')}</h3><div class="town">${esc(t.town||'Where you are based')}</div></div>${badge}</div>
+        ${pics.length?`<div class="pics">${pics.map(u=>`<img src="${esc(imgUrl(u))}" alt="" loading="lazy">`).join('')}</div>`:''}
+        <p class="blurb">${esc(t.blurb||'A short line about what you sell and what makes your stall worth a visit.')}</p>
+        ${t.offer?`<div class="offer"><b>Show day offer</b><span>${esc(t.offer)}</span></div>`:''}
+        <div class="links"><a href="${esc(href(t.web))}" target="_blank" rel="noopener">Visit their page <span>→</span></a></div>
+      </div>
+      <div class="where">
+        <h4>Find them at <span>${n} ${n===1?'show':'shows'}</span></h4>
+        <ul class="stops">${stops}</ul>
+      </div>
+    </article>`;
+  }
+
+  // ---------- Finder ----------
+  const state = {q:'', show:'', cats:new Set(), sort:'next'};
+  const grid = document.getElementById('grid') || document.createElement('div');
+  const showSel = document.getElementById('showSel') || document.createElement('select');
+  const catsEl = document.getElementById('cats') || document.createElement('div');
+  SHOWS.forEach(s=>showSel.insertAdjacentHTML('beforeend',`<option value="${s.id}">${esc(s.name)}</option>`));
+  CATS.forEach(c=>catsEl.insertAdjacentHTML('beforeend',`<button type="button" class="chip" data-cat="${c.id}" aria-pressed="false">${esc(c.name)}</button>`));
+
+  function stats(){
+    document.getElementById('kTraders').textContent = TRADERS.length;
+    document.getElementById('kShows').textContent = SHOWS.length;
+    document.getElementById('kStops').textContent = TRADERS.reduce((a,t)=>a+t.stops.filter(s=>!s[2]).length,0);
+  }
+
+  let io;
+  function reveal(){
+    const cards = grid.querySelectorAll('.card');
+    if(!('IntersectionObserver' in window)){cards.forEach(c=>c.classList.add('in'));return}
+    io && io.disconnect();
+    io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
+    cards.forEach((c,i)=>{const d=Math.min(i,5)*180;[...c.children].forEach((ch,k)=>ch.style.transitionDelay=(d+k*120)+'ms,0ms');io.observe(c);setTimeout(()=>{[...c.children].forEach(ch=>ch.style.transitionDelay='')},2600)});
+  }
+
+  function render(){
+    const q = state.q.trim().toLowerCase();
+    let list = TRADERS.filter(t=>{
+      if(state.show && !t.stops.some(s=>s[0]===state.show)) return false;
+      if(state.cats.size && !state.cats.has(t.cat)) return false;
+      if(q){const hay=(t.name+' '+t.town+' '+t.blurb+' '+C[t.cat].name).toLowerCase(); if(!hay.includes(q)) return false}
+      return true;
+    });
+    const nextKey = t => {const s = state.show ? t.stops.find(x=>x[0]===state.show) : t.stops[0]; return s?key(s[1]):9999};
+    if(state.sort==='az') list.sort((a,b)=>a.name.localeCompare(b.name));
+    else if(state.sort==='most') list.sort((a,b)=>b.stops.length-a.stops.length);
+    else list.sort((a,b)=>nextKey(a)-nextKey(b));
+    const filtered = state.show || state.cats.size || q;
+    if(!filtered) list.sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
+    grid.innerHTML = list.length ? list.map(t=>cardHTML(t,{show:state.show,noFeature:filtered})).join('') :
+      `<div class="empty"><h3>${TRADERS.length?'No traders found yet':'The first traders are on their way'}</h3><p>${TRADERS.length?'Nobody matches those filters so far. Try another type of stall, or clear the filters to see everyone.':'I am checking the first listings now. Trade at airshows yourself? <a href="#list">List your business free</a> and be one of the first.'}</p></div>`;
+    const sname = state.show ? S[state.show].name : 'all airshows';
+    (document.getElementById('count')||{}).innerHTML = `<strong>${list.length} ${list.length===1?'trader':'traders'}</strong> at ${esc(sname)}`;
+    document.querySelectorAll('.flag').forEach(f=>f.classList.toggle('on',f.dataset.show===state.show));
+    reveal();
+  }
+
+  (document.getElementById('q')||document.createElement('i')).addEventListener('input',e=>{state.q=e.target.value;render()});
+  showSel.addEventListener('change',e=>{state.show=e.target.value;render()});
+  (document.getElementById('sort')||document.createElement('i')).addEventListener('change',e=>{state.sort=e.target.value;render()});
+  catsEl.addEventListener('click',e=>{
+    const b=e.target.closest('.chip'); if(!b) return;
+    const id=b.dataset.cat; state.cats.has(id)?state.cats.delete(id):state.cats.add(id);
+    b.classList.toggle('on'); b.setAttribute('aria-pressed',b.classList.contains('on'));
+    render();
+  });
+  (document.getElementById('clear')||document.createElement('i')).addEventListener('click',()=>{
+    state.q='';state.show='';state.cats.clear();
+    document.getElementById('q').value='';showSel.value='';
+    catsEl.querySelectorAll('.chip').forEach(c=>{c.classList.remove('on');c.setAttribute('aria-pressed','false')});
+    render();
+  });
+  function pickShow(id){
+    state.show = id; showSel.value = id; render();
+    (document.querySelector('#find .filterbar')||document.body).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  }
+  grid.addEventListener('click',e=>{const b=e.target.closest('button[data-show]'); if(b) pickShow(b.dataset.show)});
+
+  // ---------- Season runway ----------
+  const flags = document.getElementById('flags') || document.createElement('div');
+  const cols = [[],[],[],[],[],[]];
+  SHOWS.forEach(s=>cols[s.m].push(s));
+  const colEls = cols.map(()=>{const d=document.createElement('div');flags.appendChild(d);return d});
+  const isNarrow = () => matchMedia('(max-width:1020px)').matches;
+  function buildFlags(){
+    flags.innerHTML='';
+    const make = s => {
+      const n = TRADERS.filter(t=>t.stops.some(x=>x[0]===s.id)).length;
+      const b = document.createElement('button');
+      b.type='button';b.className='flag';b.dataset.show=s.id;
+      b.innerHTML=`<b>${esc(s.short)}</b><small>${esc(s.when)}</small><span class="n">${n}</span>`;
+      b.setAttribute('aria-label',`${s.name}, ${n} traders`);
+      b.addEventListener('click',()=>pickShow(s.id));
+      return b;
+    };
+    if(isNarrow()){ SHOWS.forEach(s=>flags.appendChild(make(s))) }
+    else { cols.forEach(c=>{const d=document.createElement('div');c.forEach(s=>d.appendChild(make(s)));flags.appendChild(d)}) }
+    document.querySelectorAll('.flag').forEach(f=>f.classList.toggle('on',f.dataset.show===state.show));
+  }
+  buildFlags();
+  (document.querySelector('.flag.all')||document.createElement('i')).addEventListener('click',()=>{state.show='';showSel.value='';render()});
+  let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(buildFlags,150)});
+
+
+  // ---------- Pricing ----------
+  const ADV='#enquire';
+  const PLANS=[
+    {id:'free',lvl:1,tag:'Directory',name:'Static Display',price:'Free',per:'',line:'A simple card so visitors can find you.',feat:['Your card in the directory','Logo and 2 photos','Up to 3 airshows','Show day status updates'],btn:'List for free',href:'#list'},
+    {id:'flypast',lvl:2,tag:'Directory',name:'Flypast',price:'£19',per:'a season',line:'Everything most traders need to stand out.',feat:['6 stall photos and unlimited airshows','Show day offers','Your pitch pinned on the show map','Visitor stats and 3 staff logins'],btn:'Choose Flypast',href:'#list',note:'Free for founding traders',pick:'Recommended'},
+    {id:'headliner',lvl:3,tag:'Directory and advert',name:'Headliner',price:'£49',per:'a season',line:'Top of the list at every show you attend.',feat:['Everything in Flypast','Guide Listing advert in one show guide','A mention in my show week posts','Trader of the week, once a season'],btn:'Choose Headliner',href:'#list'},
+    {id:'team',lvl:4,tag:'Directory and advert',name:'Display Team',price:'£129',per:'a season',line:'A big featured advert where people plan their day.',feat:['Everything in Headliner','Featured Partner advert in one show guide','Main photo, highlights and an order or book button','Shown first in its section'],btn:'Enquire',href:ADV},
+    {id:'finale',lvl:5,tag:'Up to three show guides',name:'Finale',price:'£249',per:'a season',line:'For traders who work the whole circuit.',feat:['Everything in Display Team','Featured adverts in up to three show guides','One agreed social media promotion','A basic summary of how it went'],btn:'Enquire',href:ADV}
+  ];
+  document.getElementById('tickets').innerHTML=PLANS.map(p=>`<article class="rung r${p.lvl}">
+    <span class="tg">${p.tag}</span>
+    <h3>${p.name}</h3>
+    <div class="price">${p.price}${p.per?`<small>${p.per}</small>`:''}</div>
+    <p class="tline">${p.line}</p>
+    <ul class="tfeat">${p.feat.map(f=>`<li>${f}</li>`).join('')}</ul>
+    <div class="tact">${p.pick?`<span class="pick">${p.pick}</span>`:''}<a class="rbtn${p.href==='#enquire'?' choose':''}" href="${p.href}"${p.href==='#enquire'?` data-package="${p.name}"`:''}>${p.btn} <span aria-hidden="true">→</span></a>${p.note?`<small>${p.note}</small>`:''}</div>
+  </article>`).join('');
+  const ROWS=[['Your card in the directory',1,1,1,1,1],['Stall photos','2','6','6','6','6'],['Airshows on your card','Up to 3','Unlimited','Unlimited','Unlimited','Unlimited'],['Show day status updates',1,1,1,1,1],['Show day offers',0,1,1,1,1],['Pitch pinned on the show map',0,1,1,1,1],['Visitor stats',0,1,1,1,1],['Staff logins',0,'Up to 3','Unlimited','Unlimited','Unlimited'],['Featured at the top of show pages',0,0,1,1,1],['Show week social media mention',0,0,1,1,1],['Trader of the week feature',0,0,'Once a season','Once a season','Once a season'],['Changes checked first',0,0,1,1,1],['Advert in the show guides',0,0,'Guide Listing, one guide','Featured, one guide','Featured, up to three guides'],['Agreed social media promotion',0,0,0,0,1],['Summary of how your advert did',0,0,0,0,1]];
+  const cell=v=>v===1?'<td class="y">✓</td>':v===0?'<td class="n">Not included</td>':`<td>${v}</td>`;
+  document.getElementById('ctable').innerHTML=`<colgroup><col><col><col class="pop"><col><col><col></colgroup><thead><tr><th>Feature</th>${PLANS.map(p=>`<th>${p.name}<br><small>${p.price}</small></th>`).join('')}</tr></thead><tbody>${ROWS.map(r=>`<tr><td>${r[0]}</td>${r.slice(1).map(cell).join('')}</tr>`).join('')}</tbody>`;
+  function setPlaces(TAKEN){
+    TAKEN=Math.min(25,TAKEN||0);
+    document.getElementById('places').innerHTML=Array.from({length:25},(_,i)=>`<i class="${i<TAKEN?'t':''}"></i>`).join('');
+    document.getElementById('placesLeft').textContent=25-TAKEN;
+    document.getElementById('kPlaces').textContent=25-TAKEN;
+    document.getElementById('placesTaken').textContent=TAKEN+' taken';
+    document.getElementById('placesLeft2').textContent=(25-TAKEN)+' left';
+    const opt=document.querySelector('#fPlan option[value="founding"]');
+    if(opt&&TAKEN>=25){opt.disabled=true;opt.textContent='Founding trader: all 25 places taken';if(document.getElementById('fPlan').value==='founding')document.getElementById('fPlan').value='free';}
+  }
+  setPlaces(0);
+
+  // ---------- List your business form ----------
+  const fCat = document.getElementById('fCat');
+  CATS.forEach(c=>fCat.insertAdjacentHTML('beforeend',`<option value="${c.id}">${esc(c.name)}</option>`));
+  const rows = document.getElementById('rows');
+  function addRow(sid,d){
+    const r=document.createElement('div');r.className='show-row';
+    r.innerHTML=`<select aria-label="Airshow"><option value="">Choose an airshow</option>${SHOWS.map(s=>`<option value="${s.id}"${s.id===sid?' selected':''}>${esc(s.name)}</option>`).join('')}</select>
+      <input aria-label="Dates you will trade" placeholder="e.g. Sat 17 to Sun 18 Jul" value="${d?esc(d):''}">
+      <button class="rm" type="button" aria-label="Remove this airshow">×</button>`;
+    rows.appendChild(r);
+  }
+  addRow('',''); addRow('','');
+  document.getElementById('addRow').addEventListener('click',()=>{addRow();rows.lastElementChild.querySelector('select').focus()});
+  rows.addEventListener('click',e=>{if(e.target.closest('.rm')){ if(rows.children.length>1){e.target.closest('.show-row').remove()} else {rows.querySelector('select').value='';rows.querySelector('input').value=''} live()}});
+
+  const v = id => document.getElementById(id).value.trim();
+  function live(){
+    const stops=[...rows.querySelectorAll('.show-row')].map(r=>[r.querySelector('select').value, r.querySelector('input').value.trim()||'Dates to follow']).filter(s=>s[0]);
+    const t={name:v('fName'),town:v('fTown'),cat:fCat.value,blurb:v('fBlurb'),offer:v('fOffer'),web:v('fWeb'),indep:document.getElementById('cIndep').checked,stops,isNew:true};
+    document.getElementById('livecard').innerHTML = cardHTML(t,{noFeature:true});
+    document.getElementById('blurbCount').textContent = `${v('fBlurb').length} of 220`;
+  }
+  document.getElementById('form').addEventListener('input',live);
+  document.getElementById('form').addEventListener('change',live);
+  document.getElementById('livecard').addEventListener('click',e=>{if(e.target.closest('a,button'))e.preventDefault()});
+  live();
+
+  let sending=false;
+  document.getElementById('form').addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(sending)return;
+    const msg=document.getElementById('msg');
+    const showRows=[...rows.querySelectorAll('.show-row')].map(r=>({showId:r.querySelector('select').value,dates:r.querySelector('input').value.trim()})).filter(x=>x.showId);
+    const missing=[];
+    if(!v('fName')) missing.push('your business name');
+    if(!v('fBlurb')) missing.push('a line about your stall');
+    if(!showRows.length) missing.push('at least one airshow');
+    if(showRows.some(x=>!x.dates)) missing.push('the dates for each airshow');
+    if(!/^\S+@\S+\.\S+$/.test(v('fEmail'))) missing.push('a contact email');
+    const show=h=>{msg.classList.remove('show');void msg.offsetWidth;msg.innerHTML=h;msg.classList.add('show')};
+    if(missing.length){show(`<b>Nearly there.</b> Please add ${missing.join(', ').replace(/, ([^,]*)$/,' and $1')}.`);return}
+    const btn=e.target.querySelector('button[type=submit]');sending=true;btn.disabled=true;btn.style.opacity=.7;
+    const tags={about:document.getElementById('cIndep').checked?['Independent']:[]};
+    try{
+      const r=await call('submit',{name:v('fName'),town:v('fTown'),cat:fCat.value,web:v('fWeb'),about:v('fBlurb'),offer:v('fOffer'),shows:showRows,contactName:v('fContact'),email:v('fEmail'),plan:document.getElementById('fPlan').value,tags});
+      show(`<b>Thank you, ${esc(r.name)}.</b> Your listing has come to me to check, and I will email you within a few days${r.founding?' to confirm your founding trader place':''}. Once you are live, create your <a href="${SITE}trader-hub" target="_top" style="color:#32B4AF">Trader Hub</a> account with the same email to manage your listing.`);
+      e.target.reset();rows.innerHTML='';addRow('','');addRow('','');live();
+    }catch(err){show(`<b>That did not send.</b> ${esc(err.message)}`)}
+    finally{sending=false;btn.disabled=false;btn.style.opacity=''}
+  });
+
+  // ---------- Jump link scroll spy ----------
+  const links=[...document.querySelectorAll('.jump a')];
   if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
+    const spy=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){links.forEach(l=>l.classList.toggle('on',l.dataset.s===en.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
+    ['audience','why','pricing','packages','examples','enquire','faq'].forEach(id=>spy.observe(document.getElementById(id)));
+  }
+
+  if(!IN_WIX)document.getElementById('demoStrip').hidden=false;
+  grid.innerHTML='<div class="empty"><h3>Loading traders</h3><p>One moment.</p></div>';
+  load();
+})();
+</script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  .finder>*,.list-grid>*,.price-grid>*,.hero-grid>*,.row2>*{min-width:0}
+  @media (max-width:440px){.hero h1{font-size:44px}.flags{grid-template-columns:1fr}}
+  @media (pointer:coarse){.chip,.flag{min-height:40px}}
+</style>
+<!-- mobile-fit -->
+<script>
+
+(function(){
+  // Gentle reveal on scroll
+  var els=document.querySelectorAll('.o-reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('o-in');io.unobserve(e.target);}});},{threshold:.08});
     els.forEach(function(el){io.observe(el);});
-  } else { els.forEach(function(el){el.classList.add('in');}); }
+  } else { els.forEach(function(el){el.classList.add('o-in');}); }
   // Safety net so nothing stays hidden inside a Wix embed
-  setTimeout(function(){els.forEach(function(el){el.classList.add('in');});},2500);
+  setTimeout(function(){els.forEach(function(el){el.classList.add('o-in');});},2500);
 
   function go(id){var t=document.getElementById(id);if(t){t.scrollIntoView({behavior:'smooth',block:'start'});}}
-  document.querySelectorAll('.jump').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(a.dataset.target);});});
-  document.querySelectorAll('.choose').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();document.getElementById('package').value=a.dataset.package;go('enquire');});});
+  document.querySelectorAll('.o-jump[data-target]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(a.dataset.target);});});
+  document.querySelectorAll('.choose,.o-choose').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var pk=document.getElementById('package');if(pk&&![].some.call(pk.options,function(o){return o.value===a.dataset.package||o.text===a.dataset.package})){var op=document.createElement('option');op.text=a.dataset.package;pk.appendChild(op)}pk.value=a.dataset.package;go('enquire');});});
 
   // Placement tabs
   var data=[
@@ -735,18 +1802,18 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
     ['Photography','Readers choose lenses, bags, tripods and settings before the show.','Advert space for camera retailers, equipment brands and accessories',true],
     ['Aircraft line up','Visitors check which aircraft are booked to display.','No adverts here. The line up stays clear and easy to read.',false]
   ];
-  var tabs=document.querySelectorAll('.mock-tabs button');
+  var tabs=document.querySelectorAll('.o-mock-tabs button');
   tabs.forEach(function(b){b.addEventListener('click',function(){
     tabs.forEach(function(x){x.setAttribute('aria-selected','false');});
     b.setAttribute('aria-selected','true');
     var d=data[+b.dataset.i];
     document.getElementById('mp-title').textContent=d[0];
     document.getElementById('mp-text').textContent=d[1];
-    var s=document.getElementById('mp-slot');s.textContent=d[2];s.className=d[3]?'slot':'slot none';
+    var s=document.getElementById('mp-slot');s.textContent=d[2];s.className=d[3]?'o-slot':'o-slot o-none';
   });});
 
   // Show chips
-  document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true');});});
+  document.querySelectorAll('.o-chip').forEach(function(c){c.addEventListener('click',function(){c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true');});});
 
   // Enquiry email
   var form=document.getElementById('adform'),msg=document.getElementById('formmsg');
@@ -759,7 +1826,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
     if(!document.getElementById('agree').checked)missing.push('the approval box');
     if(missing.length){msg.textContent='Please add '+missing.join(', ')+'.';msg.style.color='#DF3336';return;}
     msg.style.color='';msg.textContent='This opens your own email app with your enquiry written out, ready to send to us. Nothing is stored on this page.';
-    var shows=[].map.call(document.querySelectorAll('.chip[aria-pressed="true"]'),function(c){return c.textContent;});
+    var shows=[].map.call(document.querySelectorAll('.o-chip[aria-pressed="true"]'),function(c){return c.textContent;});
     var body=['Advertising enquiry for the 2027 season','',
       'Business: '+v('business'),'Contact: '+v('person'),'Email: '+em,
       'Phone: '+(v('phone')||'Not given'),'Website: '+(v('website')||'Not given'),
@@ -768,7 +1835,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
       'Confirmed trader: '+(document.getElementById('trader').checked?'Yes':'No'),
       '','About the business:',v('message')].join('\n');
     document.getElementById('preview').textContent=body;
-    document.getElementById('result').classList.add('show');
+    document.getElementById('result').classList.add('o-show');
     var url='mailto:contactus@ukairshowguide.co.uk?subject='+encodeURIComponent('Advertising enquiry: '+v('business'))+'&body='+encodeURIComponent(body);
     var a=document.createElement('a');a.href=url;a.target='_top';document.body.appendChild(a);
     try{a.click();}catch(err){try{window.open(url,'_blank');}catch(e2){}}
@@ -781,6 +1848,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
     function fallback(){var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();}
   });
 })();
+
 </script>
 </body>
 </html>

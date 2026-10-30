@@ -32,7 +32,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Show Day Live (Show Day page, every show with a running order plus the member upload bay) | https://jskedge1.github.io/airshow-pages/show-day.html |
 | Show Day Live, one show (Show Day section of a feature show page, change the show at the end) | https://jskedge1.github.io/airshow-pages/show-day.html?show=eastbourne |
 | Show Day Live, member's saved shows (My Airshow Hub) | https://jskedge1.github.io/airshow-pages/show-day.html?mode=hub |
-| Airshow traders directory (Wix page /airshow-traders, page code velo/page-code/airshow-traders.js) | https://jskedge1.github.io/airshow-pages/traders/directory.html |
+| Airshow traders directory, the visitor side: trader finder, tips and a link to the trader plans (Wix page /airshow-traders, page code velo/page-code/airshow-traders.js; new layout live 30 Oct 2026, about 4900px tall on desktop, 7500px on tablets and 9500px on phones) | https://jskedge1.github.io/airshow-pages/traders/directory.html |
 | Trader Hub, trader log in and dashboard (Wix page /trader-hub, page code velo/page-code/trader-hub.js) | https://jskedge1.github.io/airshow-pages/traders/trader-hub.html |
 | Trader admin, Jack only (Wix page /trader-admin, members only, page code velo/page-code/trader-admin.js) | https://jskedge1.github.io/airshow-pages/traders/admin.html |
 | Admin board, Jack only (Wix page /site-admin, members only, page code velo/page-code/site-admin.js) | https://jskedge1.github.io/airshow-pages/admin/board.html |
@@ -54,7 +54,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Food and Drink at Airshows (Wix page /foodanddrinkatairshows) | https://jskedge1.github.io/airshow-pages/food-and-drink.html |
 | Visitor Planning Guides (Wix page /visitorplanningguides) | https://jskedge1.github.io/airshow-pages/visitor-planning-guides.html |
 | Photography Equipment (Wix page /photography-equipment) | https://jskedge1.github.io/airshow-pages/photography-equipment.html |
-| Advertise With Us (Wix page /advertise-with-us) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
+| Advertise With Us, the one hub for businesses (30 Oct 2026): trader plans ladder, founding places, trader sign up form, advert packages for businesses near the shows, enquiry form (Wix page /advertise-with-us; needs page code velo/page-code/advertise-with-us.js for the trader sign up form; about 14100px tall on desktop, 19700px on tablets and 28200px on phones) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
 | Landing page (Wix page /coming-soon-03) | https://jskedge1.github.io/airshow-pages/landing.html |
 | Groups page header (Wix page /groups, above the Wix Groups list) | https://jskedge1.github.io/airshow-pages/groups-header.html |
 | Public transport to UK airshows, every bus and train route page by show in tabs, with a town search (Wix page /airshow-public-transport made 30 Oct 2026 by copying Train to Clacton, hidden from the menu, embed html12, path added to AE_GH_PAGES; linked from the Public transport section of Getting there; Airshows on a Budget layout; built by public-transport-src/build.py from the bus and train route pages) | https://jskedge1.github.io/airshow-pages/public-transport.html |
@@ -352,3 +352,19 @@ Added 30 Oct 2026. Same template, in GWR greens (#1F8A5B, gold #C9A44C, dark #0E
 - Refreshing: `train-routes-src/riat-tools/` (scrape.py, journeys.py which drops journeys with bus legs, build_data.py, fares.py, geo.py; set the dates in dates.json). `buspath.json` is the road route from the Swindon Bus Interchange to the Yellow entry (OSRM).
 - Wix: page /train-to-riat, hidden from the menu, copy of Train to Clacton, one HTML embed set to the address above, 8100 tall on desktop and 15100 on mobile (tallest measured 8004 and 15018 on 30 Oct 2026). The RIAT page (`camping-layout/riat.html`) shows a "Train route details" button in the Train to Swindon and shuttle topic.
 
+
+## Trader plans and advert prices (30 Oct 2026)
+
+One ladder, used on Advertise With Us and in the Trader Hub. Each trader plan from Headliner up includes the advert package at the same price.
+
+| Trader plan | Price | Includes |
+|---|---|---|
+| Static Display | Free | Card in the directory |
+| Flypast | £19 a season (founding traders free for 2027, then £12 locked in) | Full directory card |
+| Headliner | £49 a season | Guide Listing advert in one show guide |
+| Display Team | £129 a season | Featured Partner advert in one show guide |
+| Finale | £249 a season | Regional Partner adverts in up to three show guides |
+| Show boost | £5 a show | Top of one show's trader list for the weekend |
+
+Advert packages for businesses off the airfield: Guide Listing £49 (was Business Listing), Featured Partner £129, Regional Partner £249, Main Website Partner from £699. Every advert is labelled as an advert.
+The backend (velo/backend/traders.web.js) only takes the plans free, founding, flypast and headliner from the sign up form; Display Team and Finale come through the enquiry form.
