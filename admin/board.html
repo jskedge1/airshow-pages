@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Departures | UK Airshow Guide</title>
+<!--
+  Jack's admin board for The Big Guide to UK Airshows. Shown on the Wix page /site-admin (members only, admin role),
+  inside one HTML embed (html1) set to this address. All data comes through the page code
+  (velo/page-code/site-admin.js) and the backend web module (velo/backend/admin.web.js), source "ukag-admin".
+  Opened on its own, the page shows example data so the design can be checked. No real data is ever in this file.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#070D13;--board:#0B1A26;--panel:#13293C;--line:#1E3A52;--row:#16283A;--teal:#32B4AF;--pale:#9FE0DC;--muted:#C9D6E0;--purple:#6950A1;--red:#B83B3B;--sky:#7CCBF0}
+html,body{margin:0;background:var(--ink);color:#fff;font-family:Barlow,system-ui,sans-serif;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+*{box-sizing:border-box}
+button,input,select,textarea{font-family:inherit}
+a{color:var(--pale)}a:hover{color:#fff}
+.cond{font-family:'Barlow Condensed',sans-serif}
+.flap{background:linear-gradient(#16222D 0 49%,#0A1219 49% 51%,#16222D 51% 100%)}
+.wrap{max-width:1360px;margin:0 auto;padding:0 28px}
+header{background:var(--panel);border-bottom:4px solid var(--teal)}
+.hd{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;padding-top:20px;padding-bottom:20px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand .ic{width:54px;height:54px;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 54px}
+.brand b{display:block;font:800 38px/0.95 'Barlow Condensed',sans-serif}
+.brand span{color:var(--pale);font-weight:500}
+.hbox{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.hbox>div{padding:9px 16px;display:flex;flex-direction:column;justify-content:center;min-width:130px}
+.hbox small{font-size:13px;font-weight:600;color:var(--pale)}
+.hbox .v{font:800 30px/1 'Barlow Condensed',sans-serif;letter-spacing:.03em}
+#clock{font-variant-numeric:tabular-nums}
+.st-live{background:#1F7A55}.st-off{background:var(--red)}.st-unk{background:#3A5A74}
+.pub{display:flex;gap:6px;margin-top:6px}
+.pub button{min-height:34px;border:0;padding:0 10px;font-weight:700;font-size:13px;cursor:pointer;background:#fff;color:var(--panel)}
+.ticker{background:var(--board);overflow:hidden;border-top:1px solid var(--line)}
+.ticker .run{display:flex;width:max-content;gap:64px;padding:11px 0;font-weight:600;white-space:nowrap;animation:tick 48s linear infinite}
+.ticker .run span:nth-child(even){color:var(--pale)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.demo{background:var(--purple);font-weight:600;padding:10px 0;text-align:center}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:2px;background:var(--line);border:2px solid var(--line);margin-top:26px}
+.strip div{background:var(--board);padding:16px 18px}
+.strip small{display:block;color:var(--pale);font-weight:600}
+.strip b{font:800 44px/1.05 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+nav.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:28px}
+nav.tabs button{min-height:50px;padding:0 20px;border:0;cursor:pointer;font:800 21px 'Barlow Condensed',sans-serif;letter-spacing:.03em;background:var(--panel);color:#fff;display:inline-flex;align-items:center;gap:10px;transition:padding .35s ease,background .3s ease}
+nav.tabs button:hover{padding:0 28px}
+nav.tabs button .n{font:700 14px Barlow,sans-serif;padding:2px 8px;background:var(--teal);color:var(--board)}
+nav.tabs button.on{background:var(--teal);color:var(--board)}
+nav.tabs button.on .n{background:var(--board);color:#fff}
+section.board{background:var(--board);border:2px solid var(--line);border-top:4px solid var(--teal);margin-bottom:60px}
+.bh{padding:20px 22px 8px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:baseline}
+.bh h2{margin:0;font:800 32px 'Barlow Condensed',sans-serif;color:#D74949}
+.bh p{margin:0;color:var(--muted);font-size:15px}
+.grid-head,.dep{display:grid;grid-template-columns:96px 96px minmax(0,1fr) 170px 160px;align-items:center}
+.grid-head{padding:10px 22px;color:var(--pale);font-weight:700;font-size:15px}
+.scroll{overflow-x:auto}.scroll>div{min-width:880px}
+.dep{padding:8px 22px;border-top:1px solid var(--row);transition:background .3s ease}
+.dep:hover,.lrow:hover{background:#0F1C27}
+.cell{font:700 21px 'Barlow Condensed',sans-serif;padding:6px 10px;margin-right:10px;letter-spacing:.04em}
+.dest b{display:block;font:700 23px/1.1 'Barlow Condensed',sans-serif}
+.dest span{font-size:14px;color:var(--muted)}
+.done b{text-decoration:line-through;color:#8FA6B8}
+.gate{font-weight:600;font-size:15px;color:var(--muted)}
+.stbtn{min-height:44px;width:100%;border:0;cursor:pointer;font:800 19px 'Barlow Condensed',sans-serif;letter-spacing:.05em}
+.s-Scheduled{background:#16222D;color:#fff;border:1px solid #3A5A74}.s-Boarding{background:var(--purple);color:#fff}.s-Delayed{background:var(--red);color:#fff}.s-Departed{background:var(--teal);color:var(--board)}
+.menu{display:flex;gap:4px;flex-wrap:wrap}
+.menu button{flex:1;min-height:40px;border:0;cursor:pointer;font:800 15px 'Barlow Condensed',sans-serif;letter-spacing:.04em}
+.form{display:flex;flex-wrap:wrap;gap:8px;padding:16px 22px;border-top:1px solid var(--row);background:#0E2131;align-items:center}
+.form input,.form select{min-height:44px;background:var(--board);color:#fff;border:1px solid #3A5A74;padding:0 12px;font-size:16px}
+.form input{flex:1 1 220px}
+.go{min-height:44px;border:0;padding:0 18px;background:var(--teal);color:var(--board);font-weight:800;cursor:pointer}
+.ghost{min-height:44px;padding:0 16px;border:2px solid var(--teal);background:transparent;color:#fff;font-weight:700;cursor:pointer}
+.arr{display:flex;flex-wrap:wrap;gap:22px;padding:0 22px 24px;align-items:flex-start}
+.arr .main{flex:2 1 520px;min-width:0}
+.arr .side{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.arow{display:grid;grid-template-columns:minmax(0,1fr) 90px 100px 140px;padding:10px 0;border-top:1px solid var(--row);align-items:center}
+.arow .l b{display:block;font:700 23px 'Barlow Condensed',sans-serif}.arow .l span{font-size:14px;color:var(--muted)}
+.tag{font:800 17px 'Barlow Condensed',sans-serif;padding:5px 8px;text-align:center;letter-spacing:.03em}
+.panel{background:var(--panel);padding:18px}
+.panel h3{margin:0 0 10px;font-size:17px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:140px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:100%}
+.bars i{display:block;width:100%;background:#3A5A74}.bars div:last-child i{background:var(--teal)}
+.bars span{font-size:12px;color:var(--muted)}.bars b{font-size:13px}
+.meter{height:8px;background:var(--board);margin-top:8px}.meter i{display:block;height:8px;background:#D74949}
+.q{padding:10px 0;border-top:1px solid var(--line);font-size:15px;line-height:1.5}
+.q b{display:block}.q span{color:var(--muted);font-size:14px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;padding:0 22px 12px;align-items:center}
+.filters button{min-height:40px;padding:0 14px;border:1px solid #3A5A74;background:transparent;color:#fff;font-weight:600;cursor:pointer}
+.filters button.on{background:var(--teal);color:var(--board);border-color:var(--teal)}
+.filters input{min-height:40px;flex:1 1 200px;background:var(--board);color:#fff;border:1px solid #3A5A74;padding:0 12px;font-size:15px}
+.wk{padding:12px 22px;background:#0E2131;font:800 20px 'Barlow Condensed',sans-serif;color:var(--pale);border-top:1px solid var(--row)}
+.lrow{display:flex;flex-wrap:wrap;gap:6px 14px;padding:12px 22px;border-top:1px solid var(--row);align-items:center;transition:background .3s ease}
+.lrow .d{min-width:104px;font:700 19px 'Barlow Condensed',sans-serif;padding:4px 10px}
+.lrow .t{flex:0 0 108px;font:800 17px 'Barlow Condensed',sans-serif;padding:4px 8px;text-align:center}
+.lrow .w{flex:1 1 340px;font-size:16px;line-height:1.5}
+.lrow .a{font-weight:600;font-size:14px;color:var(--pale)}
+.lrow .by{font-size:13px;color:var(--muted)}
+.t-Updated{background:var(--teal);color:var(--board)}.t-Changed{background:var(--purple);color:#fff}.t-Added{background:#fff;color:#13293C}.t-Searched{background:var(--sky);color:var(--board)}.t-Published{background:var(--red);color:#fff}.t-Fixed{background:#E8A33D;color:var(--board)}
+.hangar{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:2px;background:var(--row);border-top:1px solid var(--row)}
+.idea{background:var(--board);padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.idea .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.idea b{font:700 25px/1.05 'Barlow Condensed',sans-serif}
+.idea p{margin:0;font-size:15px;line-height:1.5;color:var(--muted)}
+.idea .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.gh,.gr{display:grid;grid-template-columns:minmax(0,1fr) 110px 110px 110px 150px 120px;align-items:center}
+.gh{padding:10px 22px;color:var(--pale);font-weight:700;font-size:15px}
+.gr{padding:9px 22px;border-top:1px solid var(--row)}
+.gr .p b{display:block;font-weight:600;font-size:16px}.gr .p a{font-size:13px}
+.ck{min-height:40px;margin-right:10px;border:0;cursor:pointer;font:800 16px 'Barlow Condensed',sans-serif;letter-spacing:.04em}
+.c-Clear{background:var(--teal);color:var(--board)}.c-Check{background:var(--red);color:#fff}.c-Not{background:#16222D;color:#C9D6E0;border:1px solid #3A5A74}
+.small{font-size:14px;color:var(--muted)}
+.empty{padding:22px;color:var(--muted)}
+.gate-msg{max-width:560px;margin:80px auto;padding:30px;background:var(--panel);border-top:4px solid var(--teal)}
+.gate-msg h1{margin:0 0 10px;font:800 40px 'Barlow Condensed',sans-serif}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--panel);border-top:3px solid var(--teal);padding:12px 18px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transition:opacity .3s ease;pointer-events:none;max-width:90vw}
+.toast.on{opacity:1}
+.modal{position:fixed;inset:0;background:rgba(7,13,19,.75);display:flex;align-items:center;justify-content:center;padding:20px}
+.modal>div{background:var(--panel);border-top:4px solid #D74949;max-width:440px;padding:24px}
+.modal h3{margin:0 0 8px;font:800 28px 'Barlow Condensed',sans-serif}
+.modal p{margin:0 0 18px;color:var(--muted);line-height:1.5}
+.modal .acts{display:flex;gap:10px;flex-wrap:wrap}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){.ticker .run{animation:none}nav.tabs button,.dep,.lrow{transition:none}}
+</style>
+</head>
+<body>
+<div id="demoStrip" class="demo" hidden>Example data. On ukairshowguide.co.uk this board shows your real figures and only opens for the site admin.</div>
+
+<div id="gate" class="gate-msg" hidden>
+  <h1>ADMIN ONLY</h1>
+  <p class="small" id="gateText">This board is for the site admin. Log in with your admin account to open it.</p>
+  <button class="go" id="loginBtn" type="button">Log in</button>
+</div>
+
+<div id="app" hidden>
+<header>
+  <div class="wrap hd">
+    <div class="brand">
+      <span class="ic"><svg width="32" height="32" viewBox="0 0 24 24" fill="#13293C" aria-hidden="true"><path d="M2.5 19h19v2h-19zM22.07 9.64c-.21-.8-1.04-1.28-1.84-1.06L14.92 10l-6.9-6.43-1.93.51 4.14 7.17-4.97 1.33-1.97-1.54-1.45.39 2.59 4.49L21 11.49c.81-.23 1.28-1.05 1.07-1.85z"></path></svg></span>
+      <div><b>ADMIN DEPARTURES</b><span>UK Airshow Guide, Terminal 1</span></div>
+    </div>
+    <div class="hbox">
+      <div class="flap"><small>UK time</small><span class="v" id="clock">00:00:00</span></div>
+      <div style="background:var(--purple)"><small style="color:#fff">Launch window</small><span class="v">NOVEMBER</span></div>
+      <div id="siteBox" class="st-unk"><small style="color:#fff">Site status</small><span class="v" id="siteState">CHECKING</span>
+        <div class="pub"><button type="button" id="pubBtn">Publish</button><button type="button" id="unpubBtn">Take offline</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="ticker" aria-label="Announcements"><div class="run" id="ticker"></div></div>
+</header>
+
+<main class="wrap">
+  <div class="strip">
+    <div><small>Jobs departing</small><b id="sOpen">0</b></div>
+    <div><small>Departed</small><b id="sDone">0</b></div>
+    <div><small>Logged this week</small><b id="sWeek">0</b></div>
+    <div><small>Hub members</small><b id="sMembers">0</b></div>
+    <div><small>Ideas on standby</small><b id="sIdeas">0</b></div>
+  </div>
+
+  <nav class="tabs" aria-label="Board" id="tabs">
+    <button type="button" data-tab="dep" class="on">DEPARTURES <span class="n" id="nDep">0</span></button>
+    <button type="button" data-tab="arr">ARRIVALS <span class="n" id="nArr">0</span></button>
+    <button type="button" data-tab="log">FLIGHT RECORDS <span class="n" id="nLog">0</span></button>
+    <button type="button" data-tab="hangar">HANGAR <span class="n" id="nHangar">0</span></button>
+    <button type="button" data-tab="gates">GATE CHECKS <span class="n" id="nGates">0</span></button>
+  </nav>
+
+  <section class="board" id="p-dep">
+    <div class="bh"><h2>DEPARTURES, PLANS TO IMPROVE</h2><p>Tap a status to change it. Departed jobs go in the log on their own.</p></div>
+    <div class="scroll"><div>
+      <div class="grid-head"><span>Due</span><span>Flight</span><span>Destination</span><span>Gate</span><span>Status</span></div>
+      <div id="depRows"></div>
+    </div></div>
+    <form class="form" id="planForm">
+      <input id="planTitle" maxlength="90" placeholder="New job, for example Ayr bus map" aria-label="New job">
+      <input id="planGate" maxlength="40" placeholder="Area" aria-label="Area" style="flex:0 1 180px">
+      <select id="planDue" aria-label="Due"><option>NOV</option><option>DEC</option><option>JAN</option><option>FEB</option><option>MAR</option><option>SPRING</option><option>WINTER</option><option>LATER</option></select>
+      <button class="go" type="submit">Add to departures</button>
+    </form>
+  </section>
+
+  <section class="board" id="p-arr" hidden>
+    <div class="bh"><h2>ARRIVALS, SIGN UPS</h2><p id="arrNote">Live from your Wix site.</p></div>
+    <div class="arr">
+      <div class="main">
+        <div class="arow" style="color:var(--pale);font-weight:700;font-size:15px;border-top:0"><span>Arriving from</span><span>Total</span><span>This week</span><span>Status</span></div>
+        <div id="arrRows"></div>
+      </div>
+      <div class="side">
+        <div class="panel"><h3>Hub members per week</h3><div class="bars" id="bars" role="img"></div></div>
+        <div class="panel"><div style="display:flex;justify-content:space-between;font-weight:600"><span>Founding trader places</span><span id="foundTxt">0 of 25</span></div><div class="meter"><i id="foundBar" style="width:0"></i></div></div>
+        <div class="panel"><h3>Reader questions</h3><div id="questions"></div></div>
+        <div class="panel"><h3>Reported in the forum</h3><div id="reports"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="board" id="p-log" hidden>
+    <div class="bh"><h2>FLIGHT RECORDS, WEEKLY LOG</h2><p>Changes I make, scheduled checks and every page change on GitHub.</p></div>
+    <div class="filters" id="logFilters"></div>
+    <div id="logRows"></div>
+    <form class="form" id="logForm">
+      <select id="logType" aria-label="Type"><option>Updated</option><option>Changed</option><option>Added</option><option>Fixed</option><option>Searched</option><option>Published</option></select>
+      <input id="logWhat" maxlength="200" placeholder="What changed" aria-label="What changed">
+      <input id="logArea" maxlength="40" placeholder="Page or area" aria-label="Page or area" style="flex:0 1 180px">
+      <button class="go" type="submit">Add to the log</button>
+    </form>
+  </section>
+
+  <section class="board" id="p-hangar" hidden>
+    <div class="bh"><h2>HANGAR, IDEAS ON STANDBY</h2><p>Give an idea a vote to move it up, or request a slot to put it on Departures.</p></div>
+    <div class="hangar" id="ideas"></div>
+    <form class="form" id="ideaForm">
+      <input id="ideaTitle" maxlength="90" placeholder="New idea" aria-label="New idea">
+      <input id="ideaDetail" maxlength="200" placeholder="One line about it" aria-label="About the idea">
+      <input id="ideaArea" maxlength="40" placeholder="Area" aria-label="Area" style="flex:0 1 160px">
+      <button class="go" type="submit">Park it in the hangar</button>
+    </form>
+  </section>
+
+  <section class="board" id="p-gates" hidden>
+    <div class="bh"><h2>GATE CHECKS, PAGES</h2><p>Tap a box to mark it Clear or Check. The weekly site checker fills these in too.</p></div>
+    <div class="scroll"><div>
+      <div class="gh"><span>Page</span><span>Desktop</span><span>Mobile</span><span>Tablet</span><span>Links and photos</span><span>Last checked</span></div>
+      <div id="gateRows"></div>
+    </div></div>
+  </section>
+</main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" hidden><div role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <h3 id="mTitle">Publish the site?</h3><p id="mText"></p>
+  <div class="acts"><button class="go" type="button" id="mYes">Yes, do it</button><button class="ghost" type="button" id="mNo">Cancel</button></div>
+</div></div>
+
+<script>
+(function(){
+  'use strict';
+  var $=function(s){return document.querySelector(s)};
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+  var SITE='https://www.ukairshowguide.co.uk';
+  var REPO='https://github.com/jskedge1/airshow-pages';
+  var IN_WIX=window.parent!==window;
+  var state={tab:'dep',filter:'All',q:'',data:null,commits:[],openMenu:null,hideGh:false};
+
+  /* ---------- talking to the Wix page code ---------- */
+  var pending={},seq=0;
+  function call(action,payload){
+    if(!IN_WIX)return demo(action,payload||{});
+    return new Promise(function(resolve,reject){
+      var id='a'+(++seq);pending[id]={resolve:resolve,reject:reject};
+      try{window.parent.postMessage({source:'ukag-admin',id:id,action:action,payload:payload||{}},'*')}catch(e){}
+      setTimeout(function(){if(pending[id]){delete pending[id];reject(new Error('The board could not reach the site. Please refresh and try again.'))}},action==='login'?600000:30000);
+    });
+  }
+  window.addEventListener('message',function(e){
+    var m=e.data;if(!m||m.source!=='ukag-admin')return;
+    if(m.event==='refresh'){load();return}
+    var p=pending[m.id];if(!p)return;delete pending[m.id];
+    if(m.ok)p.resolve(m.data);else p.reject(new Error(m.error||'Something went wrong.'));
+  });
+
+  function toast(msg){var t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('on')},3200)}
+
+  /* ---------- dates ---------- */
+  function ymd(d){return new Date(d).toLocaleDateString('en-CA',{timeZone:'Europe/London'})}
+  function dayLabel(s){var d=new Date(s+'T12:00:00');return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}).replace(',','').toUpperCase()}
+  function niceDate(s){return new Date(s+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}).replace(',','')}
+  function mondayOf(s){var d=new Date(s+'T12:00:00');var k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)}
+  function weekTitle(mon){
+    var thisMon=mondayOf(ymd(Date.now()));
+    var lastMon=mondayOf(ymd(Date.now()-7*864e5));
+    var end=new Date(mon+'T12:00:00');end.setDate(end.getDate()+6);
+    var range=new Date(mon+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' to '+end.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+    if(mon===thisMon)return 'THIS WEEK, '+range.toUpperCase();
+    if(mon===lastMon)return 'LAST WEEK, '+range.toUpperCase();
+    return 'WEEK OF '+range.toUpperCase();
+  }
+
+  /* ---------- GitHub page changes, public so no key needed ---------- */
+  function loadCommits(){
+    var since=new Date(Date.now()-42*864e5).toISOString();
+    return fetch('https://api.github.com/repos/jskedge1/airshow-pages/commits?per_page=100&since='+encodeURIComponent(since))
+      .then(function(r){return r.ok?r.json():[]})
+      .then(function(list){
+        state.commits=(Array.isArray(list)?list:[]).map(function(c){
+          var msg=(c.commit&&c.commit.message||'').split('\n')[0];
+          var area=msg.indexOf(':')>0?msg.slice(0,msg.indexOf(':')):'Pages';
+          var what=msg.indexOf(':')>0?msg.slice(msg.indexOf(':')+1).trim():msg;
+          what=what.charAt(0).toUpperCase()+what.slice(1);
+          return {id:'gh'+c.sha,date:ymd(c.commit.author.date),type:'Updated',what:what,area:area,source:'GitHub',link:c.html_url};
+        });
+      }).catch(function(){state.commits=[]});
+  }
+
+  /* ---------- load ---------- */
+  function load(){
+    return Promise.all([call('board'),loadCommits()]).then(function(r){
+      var d=r[0];
+      if(!d||!d.admin){$('#app').hidden=true;$('#gate').hidden=false;return}
+      $('#gate').hidden=true;$('#app').hidden=false;
+      state.data=d;render();
+    }).catch(function(err){$('#app').hidden=true;$('#gate').hidden=false;$('#gateText').textContent=err.message});
+  }
+
+  function render(){renderHeader();renderDep();renderArr();renderLog();renderHangar();renderGates();renderTicker()}
+
+  function renderHeader(){
+    var d=state.data,s=d.site||{};
+    var box=$('#siteBox');box.className=s.known?(s.live?'st-live':'st-off'):'st-unk';
+    $('#siteState').textContent=s.known?(s.live?'LIVE':'OFFLINE'):'ASK CLAUDE';
+    box.title=s.note||'';
+    var open=d.plans.filter(function(p){return p.status!=='Departed'}).length;
+    $('#sOpen').textContent=open;$('#nDep').textContent=open;
+    $('#sDone').textContent=d.plans.length-open;
+    var mon=mondayOf(ymd(Date.now()));
+    $('#sWeek').textContent=allLog().filter(function(l){return l.date>=mon}).length;
+    $('#sMembers').textContent=d.signups.members==null?'?':d.signups.members;
+    var standby=d.ideas.filter(function(i){return i.status==='standby'}).length;
+    $('#sIdeas').textContent=standby;$('#nHangar').textContent=standby;
+    $('#nGates').textContent=d.checks.length;
+  }
+
+  /* ---------- departures ---------- */
+  var STATUSES=['Scheduled','Boarding','Delayed','Departed'];
+  function renderDep(){
+    var d=state.data;
+    $('#depRows').innerHTML=d.plans.map(function(p,n){
+      var menu=state.openMenu===p.id
+        ?'<div class="menu">'+STATUSES.map(function(s){return '<button type="button" class="s-'+s+'" data-plan="'+esc(p.id)+'" data-set="'+s+'">'+s.toUpperCase()+'</button>'}).join('')+'</div>'
+        :'<button type="button" class="stbtn s-'+esc(p.status)+'" data-open="'+esc(p.id)+'">'+esc(p.status.toUpperCase())+'</button>';
+      return '<div class="dep'+(p.status==='Departed'?' done':'')+'">'
+        +'<span class="cell flap">'+esc(p.due||'LATER')+'</span>'
+        +'<span class="cell flap" style="color:var(--pale)">AG'+(101+n)+'</span>'
+        +'<span class="dest"><b>'+esc(p.title)+'</b><span>'+esc(p.detail)+(p.doneOn?(p.detail?'. ':'')+'Done '+esc(niceDate(p.doneOn))+'.':'')+'</span></span>'
+        +'<span class="gate">'+esc(p.gate)+'</span>'+menu+'</div>';
+    }).join('')||'<div class="empty">No jobs on the board yet.</div>';
+  }
+  $('#depRows').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    if(b.dataset.open){state.openMenu=b.dataset.open;renderDep();return}
+    if(b.dataset.set){
+      var id=b.dataset.plan,status=b.dataset.set;state.openMenu=null;
+      call('planStatus',{id:id,status:status}).then(function(r){
+        state.data.plans.forEach(function(p){if(p.id===id){p.status=r.status;p.doneOn=r.doneOn}});
+        if(status==='Departed')return load().then(function(){toast('Departed and added to the log.')});
+        render();toast('Status saved.');
+      }).catch(function(err){renderDep();toast(err.message)});
+    }
+  });
+  $('#planForm').addEventListener('submit',function(e){
+    e.preventDefault();var title=$('#planTitle').value.trim();if(!title){toast('Give the job a name.');return}
+    call('addPlan',{title:title,gate:$('#planGate').value.trim(),due:$('#planDue').value}).then(function(){
+      $('#planTitle').value='';$('#planGate').value='';return load();
+    }).then(function(){toast('Added to departures.')}).catch(function(err){toast(err.message)});
+  });
+
+  /* ---------- arrivals ---------- */
+  function n(v){return v==null?'?':v}
+  function renderArr(){
+    var s=state.data.signups,t=s.traders||{};
+    var rows=[
+      ['Airshow Hub members','Accounts on the site',n(s.members),s.membersWeek==null?'':'+'+s.membersWeek,s.members?'LANDED':'WAITING',s.members?'t-Updated':''],
+      ['Forum profiles','Members who set up a forum profile',n(s.profiles),'',s.profiles?'LANDED':'WAITING',s.profiles?'t-Updated':''],
+      ['Forum posts and photos','Threads plus gallery photos',(s.threads==null||s.photos==null)?'?':s.threads+s.photos,'',(s.threads+s.photos)?'LANDED':'WAITING',(s.threads+s.photos)?'t-Updated':''],
+      ['Trip plans saved','Shows saved in My Airshow Hub',n(s.trips),'',s.trips?'LANDED':'WAITING',s.trips?'t-Updated':''],
+      ['Traders','Live '+n(t.live)+', waiting for you '+n(t.pending),n(t.all),'',t.pending?'TO CHECK':(t.all?'LANDED':'WAITING'),t.pending?'t-Changed':(t.all?'t-Updated':'')],
+      ['Crowd reports','Car park, toilet and queue reports',n(s.crowd),'',s.crowd?'LANDED':'WAITING',s.crowd?'t-Updated':''],
+      ['Show Day uploads held','Programme photos that failed a check',n(s.uploadsHeld),'',s.uploadsHeld?'TO CHECK':'CLEAR',s.uploadsHeld?'t-Changed':'t-Updated']
+    ];
+    var f=s.forms||{};
+    if(f.known)(f.forms||[]).forEach(function(x){
+      rows.push([x.name,x.unseen?x.unseen+' not opened yet':'Wix form',x.total,'',x.unseen?'NEW':(x.total?'LANDED':'WAITING'),x.unseen?'t-Changed':(x.total?'t-Updated':'')]);
+    });
+    $('#arrNote').textContent=f.known?'Live from your Wix site.':'Live from your Wix site. Form sign ups appear once the ukagApiKey secret is added.';
+    $('#arrRows').innerHTML=rows.map(function(r){
+      return '<div class="arow"><span class="l"><b>'+esc(r[0])+'</b><span>'+esc(r[1])+'</span></span>'
+        +'<span class="cell flap" style="font-variant-numeric:tabular-nums">'+esc(r[2])+'</span>'
+        +'<span style="font-weight:700;font-size:18px;color:var(--pale)">'+esc(r[3])+'</span>'
+        +'<span class="tag '+(r[5]||'')+'" style="'+(r[5]?'':'background:#16222D;border:1px solid #3A5A74')+'">'+esc(r[4])+'</span></div>';
+    }).join('');
+    $('#nArr').textContent=rows.length;
+    var weeks=s.weeks||[],max=Math.max(1,Math.max.apply(null,weeks.map(function(w){return w.count})));
+    $('#bars').setAttribute('aria-label','New members per week: '+weeks.map(function(w){return w.label+' '+w.count}).join(', '));
+    $('#bars').innerHTML=weeks.map(function(w){return '<div><b>'+w.count+'</b><i style="height:'+Math.round(w.count/max*96+4)+'px"></i><span>'+esc(w.label)+'</span></div>'}).join('');
+    var taken=t.founding||0,total=t.foundingTotal||25;
+    $('#foundTxt').textContent=taken+' of '+total;$('#foundBar').style.width=Math.round(taken/total*100)+'%';
+    var qs=state.data.questions||[];
+    $('#questions').innerHTML=qs.length?qs.map(function(q){
+      return '<div class="q"><b>'+esc(q.name||'Visitor')+'</b>'+esc(q.message)+'<br><span>'+esc(niceDate(ymd(q.when)))+(q.email?' · <a href="mailto:'+esc(q.email)+'">Reply</a>':'')+'</span></div>';
+    }).join(''):'<p class="small" style="margin:0">No messages yet.</p>';
+    var rp=state.data.reports||[];
+    $('#reports').innerHTML=rp.length?rp.map(function(r){
+      return '<div class="q"><b>'+esc(r.kind)+': '+esc(r.title)+'</b><span>'+esc(r.by)+', reported '+r.reports+' time'+(r.reports>1?'s':'')+'</span></div>';
+    }).join(''):'<p class="small" style="margin:0">Nothing reported. All quiet.</p>';
+  }
+
+  /* ---------- flight records ---------- */
+  var TYPES=['All','Updated','Changed','Added','Fixed','Searched','Published'];
+  function allLog(){return (state.data?state.data.log:[]).concat(state.hideGh?[]:state.commits).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0})}
+  function renderLog(){
+    var list=allLog();
+    $('#nLog').textContent=list.length;
+    $('#logFilters').innerHTML=TYPES.map(function(t){
+      var c=t==='All'?list.length:list.filter(function(l){return l.type===t}).length;
+      return '<button type="button" data-f="'+t+'" class="'+(state.filter===t?'on':'')+'">'+t+' '+c+'</button>';
+    }).join('')+'<button type="button" data-gh="1" class="'+(state.hideGh?'on':'')+'">'+(state.hideGh?'Show GitHub changes':'Hide GitHub changes')+'</button><input type="search" id="logQ" placeholder="Search the log" aria-label="Search the log" value="'+esc(state.q)+'">';
+    var q=state.q.toLowerCase();
+    var rows=list.filter(function(l){return (state.filter==='All'||l.type===state.filter)&&(!q||(l.what+' '+l.area+' '+l.source).toLowerCase().indexOf(q)>-1)});
+    var html='',lastWeek='';
+    rows.forEach(function(l){
+      var mon=mondayOf(l.date);
+      if(mon!==lastWeek){html+='<div class="wk">'+weekTitle(mon)+'</div>';lastWeek=mon}
+      html+='<div class="lrow"><span class="d flap">'+esc(dayLabel(l.date))+'</span><span class="t t-'+esc(l.type)+'">'+esc(l.type.toUpperCase())+'</span>'
+        +'<span class="w">'+esc(l.what)+(l.link?' <a href="'+esc(l.link)+'" target="_blank" rel="noopener">See it</a>':'')+'</span>'
+        +'<span class="a">'+esc(l.area)+'</span><span class="by">'+esc(l.source)+'</span></div>';
+    });
+    $('#logRows').innerHTML=html||'<div class="empty">Nothing matches that.</div>';
+  }
+  $('#logFilters').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.gh){state.hideGh=!state.hideGh;renderLog();renderHeader();return}state.filter=b.dataset.f;renderLog()});
+  $('#logFilters').addEventListener('input',function(e){if(e.target.id!=='logQ')return;state.q=e.target.value;var pos=e.target.selectionStart;renderLog();var i=$('#logQ');i.focus();try{i.setSelectionRange(pos,pos)}catch(x){}});
+  $('#logForm').addEventListener('submit',function(e){
+    e.preventDefault();var what=$('#logWhat').value.trim();if(!what){toast('Say what changed.');return}
+    call('log',{type:$('#logType').value,what:what,area:$('#logArea').value.trim()}).then(function(){$('#logWhat').value='';$('#logArea').value='';return load()})
+      .then(function(){toast('Added to the log.')}).catch(function(err){toast(err.message)});
+  });
+
+  /* ---------- hangar ---------- */
+  function renderHangar(){
+    var ideas=state.data.ideas.filter(function(i){return i.status==='standby'});
+    $('#ideas').innerHTML=ideas.map(function(i,k){
+      return '<div class="idea"><div class="top"><span class="cell flap" style="font-size:17px;color:var(--pale);margin:0">SB'+String(k+1).padStart(2,'0')+'</span><span class="small" style="font-weight:600">'+esc(i.area)+'</span></div>'
+        +'<b>'+esc(i.title)+'</b><p>'+esc(i.detail)+'</p>'
+        +'<div class="acts"><button type="button" class="ghost" data-vote="'+esc(i.id)+'">Vote, '+i.votes+'</button><button type="button" class="go" data-slot="'+esc(i.id)+'">Request a slot</button></div></div>';
+    }).join('')||'<div class="empty" style="background:var(--board)">The hangar is empty. Park a new idea below.</div>';
+  }
+  $('#ideas').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    if(b.dataset.vote)call('vote',{id:b.dataset.vote}).then(function(r){state.data.ideas.forEach(function(i){if(i.id===r.id)i.votes=r.votes});state.data.ideas.sort(function(a,b){return b.votes-a.votes});renderHangar()}).catch(function(err){toast(err.message)});
+    if(b.dataset.slot)call('schedule',{id:b.dataset.slot,due:'WINTER'}).then(function(){return load()}).then(function(){toast('Moved to departures as Scheduled.')}).catch(function(err){toast(err.message)});
+  });
+  $('#ideaForm').addEventListener('submit',function(e){
+    e.preventDefault();var title=$('#ideaTitle').value.trim();if(!title){toast('Give the idea a name.');return}
+    call('addIdea',{title:title,detail:$('#ideaDetail').value.trim(),area:$('#ideaArea').value.trim()}).then(function(){$('#ideaTitle').value='';$('#ideaDetail').value='';$('#ideaArea').value='';return load()})
+      .then(function(){toast('Parked in the hangar.')}).catch(function(err){toast(err.message)});
+  });
+
+  /* ---------- gate checks ---------- */
+  var NEXTC={'Not checked':'Clear','Clear':'Check','Check':'Clear'};
+  function ckClass(v){return v==='Clear'?'c-Clear':v==='Check'?'c-Check':'c-Not'}
+  function renderGates(){
+    $('#gateRows').innerHTML=state.data.checks.map(function(c){
+      var btn=function(f){var v=c[f];return '<button type="button" class="ck '+ckClass(v)+'" data-id="'+esc(c.id)+'" data-field="'+f+'" data-v="'+esc(v)+'">'+esc(v==='Not checked'?'NOT YET':v.toUpperCase())+'</button>'};
+      return '<div class="gr"><span class="p"><b>'+esc(c.page)+'</b>'+(c.wixPath?'<a href="'+SITE+esc(c.wixPath)+'" target="_blank" rel="noopener">'+esc(c.wixPath)+'</a>':'')+(c.notes?'<br><span class="small">'+esc(c.notes)+'</span>':'')+'</span>'
+        +btn('desktop')+btn('mobile')+btn('tablet')
+        +'<span class="small">'+esc([c.links,c.photos].filter(Boolean).join(', ')||'Not checked yet')+'</span>'
+        +'<span class="small">'+esc(c.lastChecked?niceDate(c.lastChecked):'Never')+'</span></div>';
+    }).join('');
+  }
+  $('#gateRows').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    var value=NEXTC[b.dataset.v]||'Clear';
+    call('check',{id:b.dataset.id,field:b.dataset.field,value:value}).then(function(r){
+      state.data.checks.forEach(function(c){if(c.id===r.id){c[r.field]=r.value;c.lastChecked=r.lastChecked}});renderGates();
+    }).catch(function(err){toast(err.message)});
+  });
+
+  /* ---------- ticker ---------- */
+  function renderTicker(){
+    var d=state.data,items=[];
+    d.plans.filter(function(p){return p.status==='Boarding'}).forEach(function(p){items.push(p.title+' is boarding')});
+    d.plans.filter(function(p){return p.status==='Delayed'}).forEach(function(p){items.push(p.title+' is delayed')});
+    if(d.reports&&d.reports.length)items.push(d.reports.length+' forum item'+(d.reports.length>1?'s':'')+' reported, take a look');
+    if(d.signups.uploadsHeld)items.push(d.signups.uploadsHeld+' Show Day upload'+(d.signups.uploadsHeld>1?'s':'')+' held for you');
+    if(d.signups.traders&&d.signups.traders.pending)items.push(d.signups.traders.pending+' trader listing'+(d.signups.traders.pending>1?'s':'')+' waiting for approval');
+    ((d.signups.forms&&d.signups.forms.forms)||[]).forEach(function(f){if(f.unseen)items.push(f.unseen+' new '+f.name+' sign up'+(f.unseen>1?'s':''))});
+    if(d.signups.membersWeek)items.push(d.signups.membersWeek+' new member'+(d.signups.membersWeek>1?'s':'')+' this week');
+    allLog().slice(0,3).forEach(function(l){items.push('Latest: '+l.what)});
+    items.push('Weekly report departs Friday at 14:19');
+    var html=items.map(function(t){return '<span>'+esc(t)+'</span>'}).join('');
+    $('#ticker').innerHTML=html+html;
+  }
+
+  /* ---------- tabs ---------- */
+  $('#tabs').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;state.tab=b.dataset.tab;
+    Array.prototype.forEach.call(document.querySelectorAll('#tabs button'),function(x){x.classList.toggle('on',x===b)});
+    ['dep','arr','log','hangar','gates'].forEach(function(t){$('#p-'+t).hidden=t!==state.tab});
+  });
+
+  /* ---------- publish ---------- */
+  var pendingAct=null;
+  function ask(act){
+    pendingAct=act;
+    $('#mTitle').textContent=act==='publish'?'Publish the site?':'Take the site offline?';
+    $('#mText').textContent=act==='publish'?'Everything saved in the Wix editor goes live on ukairshowguide.co.uk straight away.':'Visitors will not be able to see ukairshowguide.co.uk until you publish again. All your edits stay saved.';
+    $('#modal').hidden=false;$('#mNo').focus();
+  }
+  $('#pubBtn').addEventListener('click',function(){ask('publish')});
+  $('#unpubBtn').addEventListener('click',function(){ask('unpublish')});
+  $('#mNo').addEventListener('click',function(){$('#modal').hidden=true});
+  $('#mYes').addEventListener('click',function(){
+    $('#modal').hidden=true;
+    call(pendingAct).then(function(){return load()}).then(function(){toast(pendingAct==='publish'?'Site published.':'Site taken offline.')}).catch(function(err){toast(err.message)});
+  });
+  $('#loginBtn').addEventListener('click',function(){call('login').then(function(){load()}).catch(function(err){toast(err.message)})});
+
+  /* ---------- clock ---------- */
+  function tick(){try{$('#clock').textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour12:false})}catch(e){}}
+  tick();setInterval(tick,1000);
+
+  /* ---------- example data, only when opened outside Wix ---------- */
+  function demo(action,p){
+    return new Promise(function(res){setTimeout(function(){
+      if(action==='board')return res(DEMO);
+      if(action==='planStatus'){return res({id:p.id,status:p.status,doneOn:p.status==='Departed'?ymd(Date.now()):''})}
+      if(action==='vote'){var i=DEMO.ideas.filter(function(x){return x.id===p.id})[0];i.votes++;return res({id:i.id,votes:i.votes})}
+      if(action==='check')return res({id:p.id,field:p.field,value:p.value,lastChecked:ymd(Date.now())});
+      res({});
+    },150)});
+  }
+  var today=ymd(Date.now());
+  var DEMO={admin:true,site:{known:true,live:false},
+    signups:{members:12,membersWeek:3,profiles:5,threads:2,photos:4,trips:9,crowd:4,uploadsHeld:1,
+      traders:{all:2,live:1,pending:1,founding:1,foundingTotal:25},
+      forms:{known:true,forms:[{name:'Subscribe Form',total:6,unseen:2},{name:'Contact Form',total:1,unseen:0}]},
+      weeks:[{label:'w37',count:0},{label:'w38',count:0},{label:'w39',count:0},{label:'w40',count:0},{label:'w41',count:0},{label:'w42',count:0},{label:'w43',count:5},{label:'w44',count:3}]},
+    reports:[],questions:[],
+    plans:[
+      {id:'p1',title:'Coastal command panels',detail:'Six seafront shows',due:'NOV',gate:'Seafront shows',status:'Departed',doneOn:'2026-10-27'},
+      {id:'p2',title:'Bus route maps',detail:'Roads each bus takes',due:'NOV',gate:'Show pages',status:'Boarding',doneOn:''},
+      {id:'p3',title:'Mobile and tablet checks',detail:'Every page',due:'NOV',gate:'All pages',status:'Scheduled',doneOn:''}],
+    ideas:[{id:'i1',title:'Aircraft A to Z',detail:'Every aircraft on the line-ups',area:'Reference',status:'standby',votes:0},{id:'i2',title:'Printable spotter cards',detail:'For children on the day',area:'Kids',status:'standby',votes:0}],
+    log:[{id:'l1',date:today,type:'Added',what:'Admin dashboard started',area:'Admin',source:'Claude chat',link:''}],
+    checks:[{id:'c1',page:'Royal International Air Tattoo',wixPath:'/riat',desktop:'Not checked',mobile:'Not checked',tablet:'Not checked',links:'',photos:'',lastChecked:'',notes:''}]};
+
+  if(!IN_WIX)$('#demoStrip').hidden=false;
+  load();
+})();
+</script>
+
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  .arr>*,.strip>*{min-width:0}
+  @media (max-width:440px){.brand b{font-size:30px}.strip{grid-template-columns:1fr 1fr}.arow{grid-template-columns:minmax(0,1fr) 70px 70px}.arow .tag{display:none}.wrap{padding:0 12px}}
+</style>
+<!-- mobile-fit -->
+</body>
+</html>

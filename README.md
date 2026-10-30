@@ -34,6 +34,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | Airshow traders directory (Wix page /airshow-traders, page code velo/page-code/airshow-traders.js) | https://jskedge1.github.io/airshow-pages/traders/directory.html |
 | Trader Hub, trader log in and dashboard (Wix page /trader-hub, page code velo/page-code/trader-hub.js) | https://jskedge1.github.io/airshow-pages/traders/trader-hub.html |
 | Trader admin, Jack only (Wix page /trader-admin, members only, page code velo/page-code/trader-admin.js) | https://jskedge1.github.io/airshow-pages/traders/admin.html |
+| Admin board, Jack only (Wix page /site-admin, members only, page code velo/page-code/site-admin.js) | https://jskedge1.github.io/airshow-pages/admin/board.html |
 | Privacy, cookies and terms (Wix page /policies, linked from the footer). Six policies in one tabbed page in the original Our Policies design (banner photos in policies-img/), built from the text files in policies-src/ by tools-policies.py. The same text is in the CMS collection "UK Air Show Guide Policy's" for the /ourpolicys list page, so change both. | https://jskedge1.github.io/airshow-pages/policies.html |
 | Airshow Security and Bag Searches (planning guide, Wix page /airshow-security, photos in security-img/) | https://jskedge1.github.io/airshow-pages/airshow-security.html |
 | Nikon D500 3D Camera Guide (photography guide; Wix page /nikon-d500-guide still to be created, then set live:true in links.js). 3D camera built with three.js from jsDelivr, every control clickable with airshow settings, set up checklist and settings by aircraft | https://jskedge1.github.io/airshow-pages/nikon-d500.html |
@@ -179,3 +180,35 @@ traders join. Data comes from the public feed `https://www.ukairshowguide.co.uk/
 (gransden.html uses little-gransden; Headcorn has no traders list yet). If the feed can't be reached or nobody has listed the
 show, a short "first traders are on their way" note shows instead. Add `?tdemo=1` to a page address to check the layout with
 example traders; visitors never see those.
+
+## Admin board (30 Oct 2026)
+
+`admin/board.html` is Jack's admin board in the Departures Board design: Departures (plans), Arrivals (sign ups),
+Flight Records (weekly log), Hangar (ideas) and Gate Checks (pages), with the live UK clock, site status and
+Publish and Take offline buttons. It shows on the Wix page /site-admin (hidden from the menu, members only) and talks
+to `velo/backend/admin.web.js` through the page code `velo/page-code/site-admin.js` (postMessage, source `ukag-admin`).
+Every request checks the Admin role. Opened on its own the page shows example data only.
+
+Live figures come straight from the site: Members/PrivateMembersData, ForumProfiles, ForumThreads, ForumPhotos,
+MemberTrips, Traders, CrowdReports, ProgrammeUploads (Held), ContactMessages and contactForm, plus forum items with reports.
+The board's own collections, admin only for reading and writing:
+- `AdminPlans`: title, detail, due (NOV, DEC, JAN, FEB, MAR, SPRING, WINTER, LATER), gate (area), status
+  (Scheduled, Boarding, Delayed, Departed), sort, doneOn (YYYY-MM-DD), fromIdea.
+- `AdminIdeas`: title, detail, area, status (standby or scheduled), votes, addedBy.
+- `AdminLog`: title (what changed), logDate (YYYY-MM-DD), type (Updated, Changed, Added, Fixed, Searched, Published),
+  area, source (who logged it, for example "Claude chat" or the scheduled task name), link.
+- `AdminChecks`: one row per page: title, wixPath, pageUrl (file here), desktop, mobile, tablet (Clear, Check or
+  Not checked), links, photos, lastChecked, nextCheck, notes, sort.
+Flight Records also lists every commit to this repository from the last six weeks (read from the public GitHub API in the
+browser, no key needed), so page changes log themselves. Commit messages read best as "Area: what changed".
+
+Scheduled tasks and Claude chats add a row to AdminLog whenever they change something on the site, and the weekly
+whole site checker fills in AdminChecks. The Friday 14:19 weekly report is written from the same collections.
+
+Optional secrets in the Wix Secrets Manager: `ukagApiKey` (a Wix API key with site permissions) turns on the site status,
+form sign up counts and the Publish button; `ukagAccountId` (the Wix account ID) is also needed for Take offline.
+Without them the board still works and those parts say so.
+
+Wix editor setup: page /site-admin, hidden from the menu, Permissions set to members only; one HTML embed with ID html1
+set to the address above, stretched full width, H 1000, inside a section taller than the embed; page code from
+velo/page-code/site-admin.js; backend web module admin.web.js from velo/backend/admin.web.js.
