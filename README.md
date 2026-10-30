@@ -53,7 +53,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Advertise With Us (Wix page /advertise-with-us) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
 | Landing page (Wix page /coming-soon-03) | https://jskedge1.github.io/airshow-pages/landing.html |
 | Groups page header (Wix page /groups, above the Wix Groups list) | https://jskedge1.github.io/airshow-pages/groups-header.html |
-| Bus route maps, every route by show (Wix page /bus-route still to be created) | https://jskedge1.github.io/airshow-pages/bus-routes/index.html |
+| Bus route maps, every route by show (Wix page /bus-route made 30 Oct 2026, hidden from the menu, embed ID html12, page code velo/page-code/bus-route.js; goes live at the next publish) | https://jskedge1.github.io/airshow-pages/bus-routes/index.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
@@ -274,3 +274,9 @@ The page lives on the Wix page /train-to-clacton (hidden from the menu, one HTML
 ## SEO (30 Oct 2026)
 
 Every page file that sits inside a Wix page carries the same title and description as that Wix page, a canonical link to its ukairshowguide.co.uk address and matching share tags, between the `<!-- seo -->` comments. That way search engines credit ukairshowguide.co.uk and not jskedge1.github.io. Templates, admin pages, hub badges and the footer are marked noindex. Bus route pages have no Wix page yet, so they keep their own address with a title and description; once the /bus-route Wix page exists, point them at it. `tools-seo.py` writes all of this; change its `W` list when a page's SEO changes in Wix, then run it.
+
+## Redirects and tidy up (30 Oct 2026)
+
+Redirects set in Wix (SEO Redirects API, live straight away): /photography-equipment to /airshow-photography-hub (the old page no longer exists but the menu and footer still link to it), /inquiry-services-page to /contact-us and /project-4 to the home page (both leftover Wix template pages), /copy-of-template-page-6 (the removed Hampshire page) to /air-shows-guides, /blog (empty Wix blog) to /airshow-news, /ourpolicys to /policies, and /copy-of-template-page-7 plus /littlegrandsenairandchraityshow to /little-gransden-air-and-car-show. Delete a redirect in Wix (Marketing and SEO, URL Redirect Manager) to bring the old page back.
+An empty HTML box (#html2) sat over the top of /visitorplanningguides; it was deleted in the editor.
+Once /bus-route is published, set WIX_PAGE to 'bus-route' in bus-routes.js so the Show route details buttons open it on the site.
