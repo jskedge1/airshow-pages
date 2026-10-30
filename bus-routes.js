@@ -79,7 +79,8 @@
     "Arriva"],["X37","x37-southport",{"op1":"#1D4F91","op2":"#F58025","opink":"#FFFFFF"},
     "Stagecoach"],["37A","37a-southport",{"op1":"#1D4F91","op2":"#F58025","opink":"#FFFFFF"},
     "Stagecoach"],["44","44-southport",{"op1":"#00A5A3","op2":"#003B5C","opink":"#FFFFFF"},
-    "Arriva"]]}};
+    "Arriva"]]},
+    "wales":{"bus":[["3A","3a-wales",{"op1":"#4B2E83","op2":"#E6007E","opink":"#FFFFFF"},"First Cymru and Adventure Travel"],["2A","2a-wales",{"op1":"#4B2E83","op2":"#E6007E","opink":"#FFFFFF"},"First Cymru"],["2","2-wales",{"op1":"#4B2E83","op2":"#E6007E","opink":"#FFFFFF"},"First Cymru"],["1","1-wales",{"op1":"#4B2E83","op2":"#E6007E","opink":"#FFFFFF"},"First Cymru"],["X1","x1-wales",{"op1":"#4B2E83","op2":"#E6007E","opink":"#FFFFFF"},"First Cymru"]]}};
 
   function href(id){ return WIX_PAGE ? SITE + WIX_PAGE + '?r=' + id : BASE + id + '.html'; }
 

@@ -85,6 +85,8 @@ SHOWS = {
    tip='These local buses don’t run on Sundays and don’t reach the show entrances, so on show days I would use the Swindon Shuttle or a Park and Ride instead.'),
  'shuttleworth': dict(name='Shuttleworth Air Shows', slug='shuttleworthairshows', target=[52.08544, -0.31984], label='Old Warden Aerodrome', town='Old Warden',
    tip='There’s no bus to the aerodrome itself, and the nearest stops are a fair walk away. I would use the shuttle bus from Biggleswade station instead if you can.'),
+ 'wales': dict(name='Wales Airshow', slug='walesairshow', target=[51.611, -3.965], label='the seafront by the Cenotaph', town='Swansea',
+   tip='In 2026 Oystermouth Road and Mumbles Road closed for the whole weekend, so buses that normally run along the seafront were sent via Uplands and Sketty, and the seafront stops weren’t used. I would check First Cymru’s diversions before you set off and be ready to walk down from the city centre. Buses back fill up after the flying, so allow extra time.'),
  'southport': dict(name='Southport Air Show', slug='southport-air-show', target=[53.65326, -3.01540], label='Southport Pier', town='Southport',
    tip='The town centre stops on Lord Street are the closest. From there it’s a walk through town to the Promenade and Marine Drive. Buses fill up after the flying, so allow extra time.'),
 }
@@ -103,6 +105,11 @@ OVERRIDE = {
          [['M11', 'A505'], 'Down to Duxford', 'South on the M11 to junction 10, then the A505 to the museum stop by Hangar 1.'],
          [['B1383'], 'On to Saffron Walden', 'After the museum it carries on through Duxford, Ickleton and Great Chesterford to Saffron Walden.']]),
 }
+
+WALES_ALT = ['On Airshow weekend', 'In 2026 buses across Swansea were free on Saturdays and Sundays from the airshow weekend until the August bank holiday, with late buses after the Saturday evening show. I would check if the offer runs again in 2027.']
+for _n, _a, _b in (('1', 'Swansea', 'Caswell Bay'), ('2', 'Swansea', 'Newton'), ('2A', 'Swansea', 'Oystermouth'), ('3A', 'Swansea', 'Bracelet Bay'), ('X1', 'Swansea', 'Bridgend')):
+    OVERRIDE[f'{_n.lower()}-wales'] = dict(alt=WALES_ALT,
+        lead=f'The {_n} runs between {_a} and {_b}. On a normal day I would get off at St Helen’s, which is right by the show, but the seafront roads close on Airshow weekend, so please read my note below before you travel.')
 
 
 def hav(a, b):

@@ -12,6 +12,7 @@ T = {'ayr': {'bus': ['X77', '4', '42', 'X42', '9']},
      'midlands': {'bus-247': ['247']},
      'riat': {'bus': ['76', '77']},
      'shuttleworth': {'bus-74': ['74']},
+     'wales': {'bus': ['3A', '2A', '2', '1', 'X1']},
      'southport': {'bus-liverpool': ['47', '300', 'X2'], 'bus-preston': ['X2', '2', '347'], 'bus-other': ['375', '385', 'X37', '37A', '44']}}
 M = {}
 for sh, tp in T.items():
@@ -28,7 +29,7 @@ open('bus-routes.js', 'w').write(open('bus-routes.tpl.js').read().replace('/*MAP
 
 SHOWN = {'ayr': 'International Ayr Show', 'blackpool': 'Blackpool Air Show', 'clacton': 'Clacton Air Show', 'duxford': 'Duxford Air Shows',
          'eastbourne': 'Eastbourne Airshow', 'headcorn': 'Headcorn Airshow', 'midlands': 'Midlands Air Festival', 'riat': 'Royal International Air Tattoo',
-         'shuttleworth': 'Shuttleworth Air Shows', 'southport': 'Southport Air Show'}
+         'shuttleworth': 'Shuttleworth Air Shows', 'southport': 'Southport Air Show', 'wales': 'Wales Airshow'}
 groups = ''
 for sh in SHOWN:
     rs = sorted([b for b in built if b['show'] == sh], key=lambda b: (len(b['num']), b['num']))
