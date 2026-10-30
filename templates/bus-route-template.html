@@ -1000,8 +1000,33 @@ html.hdr section.s{scroll-margin-top:114px}
 
   /* bell push lights the bus stopping sign */
   var bellT = 0;
+  /* the bell: a short bus bell ding made in the browser, so there is no sound file to load */
+  var actx = null;
+  function ding(){
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === 'suspended') actx.resume();
+      var t0 = actx.currentTime + .01, out = actx.createGain();
+      out.gain.value = .32; out.connect(actx.destination);
+      /* a struck bell: a bright main note with a few overtones that fade at different speeds */
+      [[1318, 1, 1.4], [2637, .38, .7], [3640, .22, .45], [5274, .12, .25]].forEach(function(p){
+        var o = actx.createOscillator(), g = actx.createGain();
+        o.type = 'sine'; o.frequency.value = p[0];
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(p[1], t0 + .006);
+        g.gain.exponentialRampToValueAtTime(.0001, t0 + p[2]);
+        o.connect(g); g.connect(out); o.start(t0); o.stop(t0 + p[2] + .05);
+      });
+      /* the tiny clunk of the button */
+      var n = actx.createOscillator(), ng = actx.createGain();
+      n.type = 'triangle'; n.frequency.setValueAtTime(180, t0); n.frequency.exponentialRampToValueAtTime(60, t0 + .06);
+      ng.gain.setValueAtTime(.25, t0); ng.gain.exponentialRampToValueAtTime(.0001, t0 + .07);
+      n.connect(ng); ng.connect(out); n.start(t0); n.stop(t0 + .08);
+    } catch (e) {}
+  }
   $('bellpush').addEventListener('click', function(){
     var b = $('bellpush'); clearTimeout(bellT);
+    ding();
     b.setAttribute('aria-pressed', 'true'); $('bellled').classList.add('on');
     var hb = document.querySelector('.panel header .bell'); if (hb) hb.classList.add('on');
     bellT = setTimeout(function(){ b.setAttribute('aria-pressed', 'false'); $('bellled').classList.remove('on'); if (hb) hb.classList.remove('on'); }, 4000);
