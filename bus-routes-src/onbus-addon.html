@@ -273,17 +273,29 @@
   function onErr(e){
     if (e && e.code !== 1 && gps.had) return;
     stopGps();
-    var framed = false; try { framed = window.self !== window.top; } catch (x) { framed = true; }
-    if (e && e.code === 1 && framed) {
-      var el = $('obgpsl'); el.hidden = false; el.classList.add('warn');
-      el.innerHTML = 'Your phone can\u2019t share its location inside this part of the website. <a href="' + location.href.split('#')[0] + '#onbus" target="_blank" rel="noopener">Open this bus page full screen</a> and press the button again there.';
-      return;
-    }
     gpsMsg(e && e.code === 1 ? 'Location is turned off for this page. You can allow it in your phone’s settings, or just press play to ride along with the timetable.' : 'Your phone couldn’t find where you are just now. Try again in a moment, ideally by a window.', true);
   }
-  function stopGps(){ if (gps.id !== null && navigator.geolocation) navigator.geolocation.clearWatch(gps.id); gps.id = null; $('obgps').textContent = 'Use my location on the bus'; $('obgps').classList.remove('gps'); }
+  /* Inside the website the page sits in a Wix box, and phones won't share a location with a box.
+     So the bus-route page on the website asks for the location and passes it in (velo/page-code/bus-route.js). */
+  var framed = false; try { framed = window.self !== window.top; } catch (x) { framed = true; }
+  var askTimer = null;
+  function askSite(type){ try { window.parent.postMessage({ ukag: type }, '*'); } catch (x) {} }
+  window.addEventListener('message', function(e){
+    var d = e.data; if (!d || typeof d !== 'object' || gps.id !== 'site') return;
+    if (d.ukag === 'geo' && typeof d.lat === 'number' && typeof d.lng === 'number') { clearTimeout(askTimer); onFix({ coords: { latitude: d.lat, longitude: d.lng, accuracy: d.acc } }); }
+    else if (d.ukag === 'geo-error') { clearTimeout(askTimer); onErr({ code: d.code || 1 }); }
+  });
+  function stopGps(){ clearTimeout(askTimer); if (gps.id === 'site') askSite('geo-stop'); else if (gps.id !== null && navigator.geolocation) navigator.geolocation.clearWatch(gps.id); gps.id = null; $('obgps').textContent = 'Use my location on the bus'; $('obgps').classList.remove('gps'); }
   $('obgps').addEventListener('click', function(){
     if (gps.id !== null) { stopGps(); gpsMsg(''); return; }
+    if (framed) {
+      stop(); gps.buzzed = false; gps.had = false; gps.id = 'site';
+      $('obgps').textContent = 'Stop using my location'; $('obgps').classList.add('gps');
+      gpsMsg('Finding where you are. If your phone asks, tap Allow.');
+      askSite('geo-start');
+      askTimer = setTimeout(function(){ if (gps.id === 'site' && !gps.had) { stopGps(); gpsMsg('Your phone didn\u2019t share its location just now. Check location is turned on and allowed for this website, then try again, or press play to ride along with the timetable.', true); } }, 25000);
+      return;
+    }
     if (!navigator.geolocation) { gpsMsg('This phone or browser can’t share its location, so press play to ride along with the timetable instead.', true); return; }
     stop(); gps.buzzed = false; gps.had = false;
     $('obgps').textContent = 'Stop using my location'; $('obgps').classList.add('gps');
