@@ -438,6 +438,41 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   .card,.card.featured{grid-template-columns:48px minmax(0,1fr)}
   #how .steps{grid-template-columns:1fr}
 }
+
+/* ===== Trader steps, same build as Start Simple, Build Up ===== */
+#grid.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 0;align-items:end}
+.stc{position:relative;display:flex;flex-direction:column;padding:22px 22px 20px;color:#fff;background:var(--c);min-height:var(--h);transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+#grid.wait .stc{clip-path:inset(100% 0 0 0)}
+#grid.grow .stc{clip-path:inset(0 0 0 0)}
+.stc.l1{--h:520px}.stc.l2{--h:590px}.stc.l3{--h:660px}
+.stc .stops li.more{display:none}.stc.open .stops li.more{display:flex}
+.stc .allbtn{margin-top:6px;background:none;border:0;padding:0;color:#fff;font-weight:600;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.stc:hover,.stc:active{min-height:calc(var(--h) + 45px);box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.stc .tg{align-self:flex-start;display:inline-block;background:rgba(0,0,0,.25);padding:3px 9px;font-weight:600;font-size:15px;margin-bottom:12px;transition:background .3s ease}
+.stc:hover .tg{background:rgba(0,0,0,.4)}
+.stc .st-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.stc h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:28px;line-height:.95}
+.stc .town{margin-top:5px;font-weight:500;font-size:14px;color:rgba(255,255,255,.82)}
+.stc .badge{background:rgba(255,255,255,.95);color:var(--navy)}
+.stc p.blurb{margin-top:10px;font-size:15px;line-height:1.5;color:#EAF1F6}
+.stc .offer{margin-top:12px;background:rgba(0,0,0,.2);padding:8px 11px;font-size:14px;display:block}
+.stc .offer b{display:block;color:#fff;font-weight:700}
+.stc .pics{margin-top:12px;height:76px}
+.stc .when{margin-top:auto;padding-top:16px}
+.stc .when h4{display:flex;justify-content:space-between;font-weight:700;font-size:14.5px;margin-bottom:6px;border-top:1px solid rgba(255,255,255,.25);padding-top:10px}
+.stc .when h4 span{font-weight:500;color:rgba(255,255,255,.8)}
+.stc .stops li{border-top-color:rgba(255,255,255,.16);padding:5px 0;font-size:14px}
+.stc .stops button{color:#fff}
+.stc .stops button:hover{color:#fff;text-decoration:underline}
+.stc .stops .d{background:rgba(255,255,255,.95);border:0;color:var(--navy)}
+.stc .stops li.match .d{background:var(--navy);color:#fff}
+.stc .links{margin-top:12px}
+.stc .links a{color:#fff}
+.stc .links a span{color:#fff}
+.stc.feat{box-shadow:inset 0 4px 0 #fff}
+@media (prefers-reduced-motion:reduce){.stc{transition:none}#grid.wait .stc{clip-path:none}}
+@media (max-width:1020px){#grid.grid{grid-template-columns:1fr 1fr}.stc.l3{--h:590px}}
+@media (max-width:620px){#grid.grid{grid-template-columns:1fr;gap:12px}.stc,.stc.l1,.stc.l2,.stc.l3{--h:0px}.stc:hover{min-height:0}}
 </style>
 <style id="device-fix">
 @media (max-width:1024px) and (pointer:coarse),(max-width:760px){
@@ -814,6 +849,28 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
     </article>`;
   }
 
+  function stairHTML(t, i, opts={}){
+    const c = C[t.cat] || CATS[0];
+    const showF = opts.show || '';
+    const stops = t.stops.map(([sid,d,cx],k)=>{
+      const s = S[sid]; if(!s) return '';
+      return `<li class="${sid===showF?'match':''}${k>2&&sid!==showF?' more':''}"><button type="button" data-show="${sid}" title="See every trader at ${esc(s.name)}">${esc(s.short)}</button><span class="d">${cx?'Not attending':esc(d)}</span></li>`;
+    }).join('');
+    const badge = t.isNew ? '<span class="badge">New listing</span>' : t.founding ? '<span class="badge">Founding trader</span>' : (t.indep ? '<span class="badge">Independent</span>' : '');
+    const pics = (t.photos||[]).slice(0,3);
+    const n = t.stops.length;
+    const lvl = 'l'+((i%3)+1);
+    return `<article class="stc ${lvl}${t.featured&&!opts.noFeature?' feat':''}" style="--c:${c.col}">
+      <span class="tg">${esc(c.name)}</span>
+      <div class="st-top"><div><h3>${esc(t.name)}</h3><div class="town">${esc(t.town)}</div></div>${badge}</div>
+      ${pics.length?`<div class="pics">${pics.map(u=>`<img src="${esc(imgUrl(u))}" alt="" loading="lazy">`).join('')}</div>`:''}
+      <p class="blurb">${esc(t.blurb)}</p>
+      ${t.offer?`<div class="offer"><b>Show day offer</b>${esc(t.offer)}</div>`:''}
+      <div class="links"><a href="${esc(href(t.web))}" target="_blank" rel="noopener">Visit their page <span>→</span></a></div>
+      <div class="when"><h4>Find them at <span>${n} ${n===1?'show':'shows'}</span></h4><ul class="stops">${stops}</ul>${n>3?`<button type="button" class="allbtn" data-all>See all ${n} shows</button>`:''}</div>
+    </article>`;
+  }
+
   // ---------- Finder ----------
   const state = {q:'', show:'', cats:new Set(), sort:'next'};
   const grid = document.getElementById('grid');
@@ -830,11 +887,15 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
 
   let io;
   function reveal(){
-    const cards = grid.querySelectorAll('.card');
-    if(!('IntersectionObserver' in window)){cards.forEach(c=>c.classList.add('in'));return}
+    const cards=[...grid.querySelectorAll('.stc')];
+    grid.classList.remove('wait','grow');
+    if(!cards.length||!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const per=matchMedia('(max-width:620px)').matches?1:matchMedia('(max-width:1020px)').matches?2:3;
+    cards.forEach((c,i)=>{c.style.transitionDelay=`0s,${(i%per)*.18+Math.min(Math.floor(i/per),3)*.12}s,0s`});
+    grid.classList.add('wait');
     io && io.disconnect();
-    io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
-    cards.forEach((c,i)=>{const d=Math.min(i,5)*180;[...c.children].forEach((ch,k)=>ch.style.transitionDelay=(d+k*120)+'ms,0ms');io.observe(c);setTimeout(()=>{[...c.children].forEach(ch=>ch.style.transitionDelay='')},2600)});
+    io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){grid.classList.remove('wait');grid.classList.add('grow');io.disconnect();setTimeout(()=>cards.forEach(c=>c.style.transitionDelay=''),1800)}}),{rootMargin:'0px 0px -10% 0px'});
+    io.observe(grid);
   }
 
   function render(){
@@ -851,7 +912,7 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
     else list.sort((a,b)=>nextKey(a)-nextKey(b));
     const filtered = state.show || state.cats.size || q;
     if(!filtered) list.sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
-    grid.innerHTML = list.length ? list.map(t=>cardHTML(t,{show:state.show,noFeature:filtered})).join('') :
+    grid.innerHTML = list.length ? list.map((t,i)=>stairHTML(t,i,{show:state.show,noFeature:filtered})).join('') :
       `<div class="empty"><h3>${TRADERS.length?'No traders found yet':'The first traders are on their way'}</h3><p>${TRADERS.length?'Nobody matches those filters so far. Try another type of stall, or clear the filters to see everyone.':'I am checking the first listings now. Trade at airshows yourself? <a href="#list">List your business free</a> and be one of the first.'}</p></div>`;
     const sname = state.show ? S[state.show].name : 'all airshows';
     document.getElementById('count').innerHTML = `<strong>${list.length} ${list.length===1?'trader':'traders'}</strong> at ${esc(sname)}`;
@@ -878,7 +939,7 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
     state.show = id; showSel.value = id; render();
     document.querySelector('#find .filterbar').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   }
-  grid.addEventListener('click',e=>{const b=e.target.closest('button[data-show]'); if(b) pickShow(b.dataset.show)});
+  grid.addEventListener('click',e=>{const a=e.target.closest('[data-all]');if(a){const c=a.closest('.stc');const o=c.classList.toggle('open');a.textContent=o?'Show fewer':'See all '+c.querySelectorAll('.stops li').length+' shows';return}const b=e.target.closest('button[data-show]'); if(b) pickShow(b.dataset.show)});
 
   // ---------- Season runway ----------
   const flags = document.getElementById('flags');
