@@ -1376,5 +1376,306 @@ var DATA={"stops":[["Bracelet Bay (Car Park)",51.56626,-3.98302,"Bracelet Bay (C
 })();
 </script>
 <!-- /mobile-fit -->
+<!-- on the bus add-on (30 Oct 2026): dot matrix front sign, departures board and on board next stop screen -->
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* dot matrix front sign, replaces the blind and the small number screen */
+.blind.dm{display:block;padding:10px 12px;background:#0f0d0a;border:6px solid #05090D}
+.blind.dm::after{display:none}
+.blind.dm > :not(canvas){display:none}
+.dmcan{display:block;width:100%;height:auto;image-rendering:pixelated}
+.hero .blind.dm{width:min(600px,100%)}
+.numscreen.dm{display:inline-block;padding:6px 8px;background:#0f0d0a;border:4px solid #05090D;width:min(400px,80vw)}
+.numscreen.dm > :not(canvas){display:none}
+
+/* departures board, restyled in the bus company colours */
+.cdscreen.db{background:#0E1A22;padding:0;border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 60px -30px rgba(0,0,0,.75)}
+.cdscreen.db::before,.cdscreen.db::after{display:none}
+.cdscreen.db .cdin{background:transparent;padding:0}
+.cdscreen.db .cdin::after{display:none}
+.cdscreen.db .cdtop{align-items:center;padding:14px 18px;border:0;background:var(--obui,#13293C);color:var(--obon,#fff);text-shadow:none;font:700 21px/1.1 var(--c);letter-spacing:.01em;text-transform:none}
+.cdscreen.db .cdtop .lv{font:500 14px/1 var(--f);margin-right:12px;opacity:.9}
+.cdscreen.db .cdtop #cdclock{font:700 24px/1 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.02em}
+.cdscreen.db .cdrows{margin:0}
+.cdscreen.db .cdrows li{grid-template-columns:58px minmax(0,1fr) auto;align-items:center;padding:11px 18px;border-top:1px solid rgba(255,255,255,.07);
+  font:600 22px/1.1 var(--c);color:#EDF2F2;text-transform:none;letter-spacing:0;text-shadow:none;transition:background .3s var(--ease)}
+.cdscreen.db .cdrows li span:first-child{display:inline-flex;justify-content:center;background:#fff;color:var(--obui,#13293C);font:700 20px/1 var(--c);padding:5px 0;width:48px}
+.cdscreen.db .cdrows li span:last-child{font:700 20px/1 'JetBrains Mono',ui-monospace,monospace;color:#FFB21E;text-shadow:0 0 12px rgba(255,178,30,.35)}
+.cdscreen.db .cdrows li .ex{display:block;font:500 13px/1.3 var(--f);color:#9FB6BA;text-shadow:none;margin-top:3px}
+.cdscreen.db .cdrows li.on{background:rgba(255,255,255,.06)}
+.cdscreen.db .cdtick{margin:0;padding:10px 0;border-top:1px solid rgba(255,255,255,.07);background:#091218;font:500 14px/1.3 'JetBrains Mono',ui-monospace,monospace;color:#FFB21E;letter-spacing:0;text-transform:none}
+
+/* on board next stop screen */
+.onbus{margin-top:44px}
+.onbus .obh{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px 40px;align-items:end;margin-bottom:18px}
+.onbus .obh h2{font:800 clamp(30px,4vw,44px)/.95 var(--c);text-transform:uppercase;color:var(--navy);padding-left:16px;border-left:5px solid var(--op1)}
+.onbus .obh p{color:var(--muted);font-size:16.5px;line-height:1.55}
+.obframe{background:#1B2026;padding:14px;box-shadow:0 30px 60px -30px rgba(12,28,42,.8)}
+.obscreen{position:relative;aspect-ratio:16/9;background:#F3F5F5;overflow:hidden;color:#13232B;container-type:inline-size}
+.obtop{display:flex;align-items:center;gap:2.2cqw;height:14cqw;padding:0 3cqw;background:var(--obui,#13293C);color:var(--obon,#fff)}
+.obnum{background:#fff;color:var(--obui,#13293C);font:800 6.4cqw/1 var(--c);padding:.6cqw 2cqw;letter-spacing:-.01em}
+.obdest{flex:1;min-width:0;font:700 4.6cqw/1 var(--c)}
+.obdest small{display:block;font:500 2cqw/1.25 var(--f);opacity:.92;margin-top:.5cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.obclock{font:700 4.6cqw/1 'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.obbody{display:grid;grid-template-columns:minmax(0,1fr) 44%;height:calc(100% - 14cqw)}
+.obleft{position:relative;padding:4.5cqw 3.6cqw 0;overflow:hidden}
+.oblbl{font:600 2.5cqw/1 var(--f);color:var(--obui,#13293C)}
+.obname{position:relative;height:17cqw;margin-top:1.4cqw}
+.obname div{position:absolute;inset:0;font:800 7.2cqw/1.02 var(--c);letter-spacing:-.01em;transition:transform .55s cubic-bezier(.2,.7,.2,1),opacity .55s cubic-bezier(.2,.7,.2,1)}
+.obname div small{display:block;font:500 2.6cqw/1.2 var(--f);color:#4A5C64;margin-top:1cqw;letter-spacing:0}
+.obname .out{transform:translateY(-4cqw);opacity:0}
+.obname .in{transform:translateY(4cqw);opacity:0}
+.obflag{position:absolute;left:3.6cqw;bottom:4cqw;display:flex;align-items:center;gap:1.4cqw;background:#D74949;color:#fff;font:700 3cqw/1 var(--c);padding:1.3cqw 2.4cqw;opacity:0;transform:translateY(1cqw);transition:opacity .4s ease,transform .4s ease}
+.obflag i{width:1.8cqw;height:1.8cqw;border-radius:50%;background:#fff;animation:obpulse 1.2s ease-in-out infinite}
+.obflag.on{opacity:1;transform:none}
+.obflag.show{background:#13293C}
+@keyframes obpulse{50%{opacity:.35}}
+.obright{position:relative;background:#fff;border-left:2px solid #DDE4E5;overflow:hidden}
+.obright h3{font:600 2.3cqw/1 var(--f);color:var(--obui,#13293C);padding:3.4cqw 3cqw 1.6cqw}
+.oblist{position:absolute;left:0;right:0;top:8cqw;bottom:0;overflow:hidden}
+.oblist ol{list-style:none;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.oblist li{position:relative;display:flex;align-items:center;gap:1cqw;height:7.4cqw;padding:0 2.6cqw 0 7cqw;font:600 2.15cqw/1.15 var(--f)}
+.oblist li::before{content:"";position:absolute;left:4.1cqw;top:0;bottom:0;width:.5cqw;background:var(--obline,#13293C)}
+.oblist li::after{content:"";position:absolute;left:3.45cqw;top:50%;width:1.8cqw;height:1.8cqw;margin-top:-.9cqw;border-radius:50%;background:#fff;border:.45cqw solid var(--obline,#13293C);box-sizing:border-box}
+.oblist li span{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.oblist li b{margin-left:auto;flex:none;font:500 2.1cqw/1 'JetBrains Mono',ui-monospace,monospace;color:#4A5C64}
+.oblist li.off{color:#B8323A}
+.oblist li.off::after{background:#D74949;border-color:#D74949}
+.obend{position:absolute;left:3cqw;right:3cqw;top:9cqw;font:600 2.4cqw/1.4 var(--f);color:#4A5C64;opacity:0;transition:opacity .4s ease}
+.obend.on{opacity:1}
+.oblist::after{content:"";position:absolute;left:0;right:0;bottom:0;height:9cqw;background:linear-gradient(rgba(255,255,255,0),#fff)}
+.obctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.onbus .obctl button{border:2px solid var(--navy);background:#fff;color:var(--navy);font:600 15px/20px var(--f);padding:8px 14px;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease)}
+.onbus .obctl button:hover,.onbus .obctl button:focus-visible{background:var(--navy);color:#fff}
+.onbus .obctl button.pri{background:var(--navy);color:#fff}
+.onbus .obctl button.pri:hover{background:#fff;color:var(--navy)}
+.obctl .obpos{margin-left:auto;font-size:15px;color:var(--muted)}
+.onbus .obctl button.gps{background:#21704D;border-color:#21704D;color:#fff}
+.obgpsl{margin-top:10px;background:#E3F3EC;border-left:4px solid #21704D;padding:10px 14px;font-size:15.5px;line-height:22px;color:#13293C}
+.obgpsl a{color:#13293C;font-weight:700}
+.obgpsl.warn{background:#FBF0DC;border-left-color:#C98A12}
+.obnote{margin-top:10px;font-size:15px;line-height:22px;color:var(--muted)}
+@media (max-width:760px){.onbus .obh{grid-template-columns:1fr}.obframe{padding:8px}.obctl .obpos{margin-left:0;width:100%}}
+@media (prefers-reduced-motion:reduce){.obname div,.oblist ol{transition:none}.obflag i{animation:none}}
+</style>
+<script>
+(function(){
+  if (typeof CFG === 'undefined' || typeof DATA === 'undefined') return;
+  var $ = function(id){ return document.getElementById(id); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var TH = CFG.theme || {};
+  var root = document.documentElement.style;
+  root.setProperty('--obui', TH.ui || '#13293C');
+  root.setProperty('--obon', TH.onui === '#F2B233' ? '#fff' : (TH.onui || '#fff'));
+  root.setProperty('--obline', TH.op1 || TH.ui || '#13293C');
+  var OFFF = 2;
+
+  /* which day, direction and bus the visitor has picked, read from the planner buttons */
+  function picked(sel){ var b = document.querySelector('#' + sel + ' [aria-pressed="true"]'); return b ? +b.getAttribute('data-i') : 0; }
+  function state(){
+    var d = DATA.days[picked('day')] || DATA.days[0];
+    var dirI = Math.min(picked('dir'), d.dirs.length - 1), dir = d.dirs[dirI];
+    var trip = dir && dir.trips[picked('board')] || (dir && dir.trips[0]);
+    return { day: d, dir: dir, trip: trip };
+  }
+  function viaLine(dir){
+    var v = (dir && dir.via && dir.via.length ? dir.via : CFG.blindVia) || [], seen = {}, towns = [], from = '';
+    v.forEach(function(x){
+      if (/^from\s/i.test(x)) { if (!from) from = x; return; }
+      x.replace(/^via\s+/i, '').split(/\s+and\s+|,\s*/).forEach(function(t){ t = t.trim(); if (t && !seen[t]) { seen[t] = 1; towns.push(t); } });
+    });
+    if (!towns.length) return from;
+    return 'via ' + (towns.length > 1 ? towns.slice(0, -1).join(', ') + ' and ' + towns[towns.length - 1] : towns[0]);
+  }
+
+  /* dot matrix sign: amber LEDs, route number left, destination, then the via towns scroll underneath */
+  var HOLD = 6, SPEED = 13;
+  function Sign(host, cols, rows, pitch, twoLine){
+    var can = document.createElement('canvas'); can.className = 'dmcan';
+    can.width = cols * pitch; can.height = rows * pitch; host.appendChild(can);
+    var ctx = can.getContext('2d'), off = document.createElement('canvas'); off.width = cols; off.height = rows;
+    var o = off.getContext('2d', { willReadFrequently: true });
+    var st = { num: '', dest: '', via: '', t0: performance.now(), wipe: 1, prev: null };
+    function font(sz){ o.font = '700 ' + sz + 'px "Barlow Condensed","Barlow",sans-serif'; }
+    function compose(t, s){
+      o.fillStyle = '#000'; o.fillRect(0, 0, cols, rows); o.fillStyle = '#fff'; o.textBaseline = 'alphabetic';
+      var big = Math.round(rows * 1.02); font(big);
+      o.fillText(s.num, 1, rows - 1);
+      var nx = Math.ceil(o.measureText(s.num).width) + Math.round(rows * .35);
+      o.save(); o.beginPath(); o.rect(nx, 0, cols - nx, rows); o.clip();
+      var cyc = 0, scrollW = 0, span = cols - nx;
+      if (twoLine && s.via) { font(Math.round(rows * .46)); scrollW = o.measureText(s.via).width; cyc = HOLD + (scrollW + span) / SPEED + 1.5; }
+      var c = cyc ? (t % cyc) : 0;
+      if (!twoLine || !s.via || c < HOLD || reduce) {
+        var sz = Math.round(rows * (twoLine ? .72 : .78)); font(sz);
+        while (o.measureText(s.dest).width > span - 2 && sz > 8) { sz--; font(sz); }
+        if (reduce && twoLine && s.via) { font(Math.round(rows * .46)); o.fillText(s.dest, nx, Math.round(rows * .44)); o.fillText(s.via, nx, rows - 1); }
+        else o.fillText(s.dest, nx, Math.round(rows * (twoLine ? .78 : .84)));
+      } else {
+        font(Math.round(rows * .46));
+        o.fillText(s.dest, nx, Math.round(rows * .44));
+        o.fillText(s.via, Math.round(cols - (c - HOLD) * SPEED), rows - 1);
+      }
+      o.restore();
+      return o.getImageData(0, 0, cols, rows).data;
+    }
+    function paint(px, wipeCol, oldPx){
+      ctx.fillStyle = '#0f0d0a'; ctx.fillRect(0, 0, can.width, can.height);
+      var r = pitch * .42, g = pitch * .6;
+      for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
+        var src = x < wipeCol ? px : (oldPx || px), on = src[(y * cols + x) * 4] > 118;
+        if (oldPx && x >= wipeCol - 2 && x < wipeCol) on = false;
+        var cx = x * pitch + pitch / 2, cy = y * pitch + pitch / 2;
+        if (on) { ctx.fillStyle = 'rgba(255,150,20,.10)'; ctx.beginPath(); ctx.arc(cx, cy, g, 0, 7); ctx.fill(); }
+        ctx.fillStyle = on ? '#FFB524' : '#1a1208'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.fill();
+      }
+    }
+    function frame(now){
+      var t = (now - st.t0) / 1000, px = compose(t, st);
+      if (st.prev && st.wipe < 1) { st.wipe = Math.min(1, st.wipe + 1 / 75); paint(px, Math.round(st.wipe * cols), st.prev); }
+      else { st.prev = null; paint(px, cols, null); }
+      if (!reduce) requestAnimationFrame(frame);
+    }
+    return {
+      set: function(num, dest, via){
+        if (num === st.num && dest === st.dest && via === st.via) return;
+        var changed = st.dest && dest !== st.dest;
+        if (changed && !reduce) { st.prev = compose((performance.now() - st.t0) / 1000, st); st.wipe = 0; }
+        st.num = num; st.dest = dest; st.via = via; st.t0 = performance.now();
+        if (reduce) paint(compose(0, st), cols, null);
+      },
+      start: function(){ if (!reduce) requestAnimationFrame(frame); else paint(compose(0, st), cols, null); }
+    };
+  }
+
+  var hero = document.querySelector('.hero .blind'), small = document.querySelector('.numscreen');
+  var S1 = null, S2 = null;
+  if (hero) { hero.classList.add('dm'); S1 = Sign(hero, 196, 34, 3, true); }
+  if (small) { small.classList.add('dm'); S2 = Sign(small, 132, 22, 3, false); }
+  function syncSigns(){
+    var dest = ($('bdest') && $('bdest').textContent) || CFG.blindDest, s = state();
+    var via = viaLine(s.dir);
+    if (S1) S1.set(CFG.num, dest, via);
+    if (S2) S2.set(CFG.num, dest, '');
+  }
+
+  /* departures board look */
+  var cds = document.querySelector('.cdscreen'); if (cds) cds.classList.add('db');
+
+  /* on board next stop screen */
+  var plan = document.querySelector('#b-plan .wrap'), nob = $('nobus');
+  var box = document.createElement('div'); box.className = 'onbus'; box.id = 'onbus';
+  box.innerHTML =
+    '<div class="obh"><h2>On the bus</h2><p>This is what the screen inside the bus shows on the journey you picked, stop by stop. Press play to ride along, or skip ahead to see when the bus gets to your stop for the show.</p></div>' +
+    '<div class="obframe"><div class="obscreen" role="img" aria-label="Next stop screen inside the bus">' +
+      '<div class="obtop"><span class="obnum" id="obnum"></span><span class="obdest" id="obdest"></span><span class="obclock" id="obclock"></span></div>' +
+      '<div class="obbody"><div class="obleft"><div class="oblbl" id="oblbl">Next stop</div><div class="obname" id="obname"></div><div class="obflag" id="obflag"><i></i><span id="obflagt">Bus stopping</span></div></div>' +
+      '<div class="obright"><h3>Coming up</h3><div class="oblist"><ol id="oblist"></ol></div><p class="obend" id="obend">This is the end of the journey. Please take all your belongings with you.</p></div></div>' +
+    '</div></div>' +
+    '<div class="obctl"><button type="button" class="pri" id="obplay">Play</button><button type="button" id="obback">Back a stop</button><button type="button" id="obfwd">Next stop</button><button type="button" id="obskip">Skip to my stop</button><button type="button" id="obre">Start again</button><button type="button" id="obgps">Use my location on the bus</button><span class="obpos" id="obpos"></span></div>' +
+    '<p class="obgpsl" id="obgpsl" hidden></p><p class="obnote">Times on the screen come from the timetable for the bus you picked. On the day, roads near the seafront can be busy, so the real bus may run a little behind.</p>';
+  if (plan) plan.insertBefore(box, nob && nob.parentNode === plan ? nob : null);
+
+  var cur = { key: '', i: 1, s: [], off: -1, playing: false, timer: null };
+  function split(name){
+    var sm = name.match(/\s*\((Stop[^)]*)\)\s*$/), stopTag = sm ? sm[1].replace(/^Stop\s*$/, '') : '';
+    var m = sm ? name.slice(0, sm.index) : name, k = m.indexOf(', ');
+    if (k > 0) { var main = m.slice(k + 2); main = main.charAt(0).toUpperCase() + main.slice(1); return [main, m.slice(0, k) + (stopTag ? ', ' + stopTag : '')]; }
+    return [m, stopTag];
+  }
+  function load(){
+    var s = state(); if (!s.trip) { box.style.display = 'none'; return; }
+    box.style.display = '';
+    var key = s.day.key + '|' + s.dir.label + '|' + s.trip.big;
+    if (key === cur.key) return;
+    stop(); gps.buzzed = false; cur.key = key; cur.s = s.trip.s; cur.off = -1;
+    cur.s.forEach(function(p, i){ if (p[4] & OFFF) cur.off = i; });
+    cur.i = 1;
+    $('obnum').textContent = CFG.num;
+    var dest = s.dir.blind || CFG.blindDest;
+    $('obdest').innerHTML = dest + '<small>' + viaLine(s.dir) + '</small>';
+    $('oblist').innerHTML = cur.s.map(function(p, i){ return '<li class="' + (i === cur.off ? 'off' : '') + '"><span>' + split(p[1])[0] + '</span><b>' + p[0] + '</b></li>'; }).join('');
+    $('obname').innerHTML = '';
+    show(true);
+  }
+  function show(jump){
+    var s = cur.s, i = Math.max(1, Math.min(cur.i, s.length - 1)), p = s[i], nm = split(p[1]);
+    var wrap = $('obname'), old = wrap.querySelector('div:not(.out)');
+    var el = document.createElement('div'); el.innerHTML = nm[0] + (nm[1] ? '<small>' + nm[1] + '</small>' : '');
+    if (old && !jump && !reduce) { el.className = 'in'; wrap.appendChild(el); void el.offsetWidth; el.className = ''; old.className = 'out'; setTimeout(function(){ if (old.parentNode) old.parentNode.removeChild(old); }, 600); }
+    else { wrap.innerHTML = ''; wrap.appendChild(el); }
+    var last = i === s.length - 1;
+    $('oblbl').textContent = last ? 'Last stop' : 'Next stop';
+    $('obend').classList.toggle('on', last);
+    $('obclock').textContent = s[i - 1][0];
+    var h = $('oblist').firstChild ? $('oblist').firstChild.offsetHeight : 0;
+    $('oblist').style.transform = 'translateY(' + (-(i + 1) * h) + 'px)';
+    var flag = $('obflag');
+    if (i === cur.off) { flag.className = 'obflag on'; $('obflagt').textContent = 'Your stop for the show, ring the bell'; }
+    else if (last) { flag.className = 'obflag on show'; $('obflagt').textContent = 'This bus terminates here'; }
+    else flag.className = 'obflag';
+    $('obpos').textContent = 'Stop ' + (i + 1) + ' of ' + s.length + (cur.off > 0 && i < cur.off ? ', ' + (cur.off - i) + ' to go until your stop' : '');
+  }
+  function go(n){ cur.i = Math.max(1, Math.min(cur.s.length - 1, n)); show(false); }
+  function tick(){ if (cur.i >= cur.s.length - 1) { stop(); return; } go(cur.i + 1); if (cur.i === cur.off) { stop(); } }
+  function play(){ if (cur.i >= cur.s.length - 1) go(1); cur.playing = true; $('obplay').textContent = 'Pause'; clearInterval(cur.timer); cur.timer = setInterval(tick, 2600); }
+  function stop(){ cur.playing = false; clearInterval(cur.timer); if ($('obplay')) $('obplay').textContent = 'Play'; }
+  $('obplay').addEventListener('click', function(){ cur.playing ? stop() : play(); });
+  $('obback').addEventListener('click', function(){ stop(); go(cur.i - 1); });
+  $('obfwd').addEventListener('click', function(){ stop(); go(cur.i + 1); });
+  $('obskip').addEventListener('click', function(){ stop(); go(cur.off > 0 ? Math.max(1, cur.off - 2) : cur.s.length - 3); play(); });
+  $('obre').addEventListener('click', function(){ stop(); go(1); });
+  $('obskip').hidden = false;
+
+
+  /* follow the bus with the phone's location: works out which stop is next from where you are */
+  var gps = { id: null, buzzed: false };
+  function metres(a, b, c, d){ var R = 6371000, x = (d - b) * Math.PI / 180 * Math.cos((a + c) / 2 * Math.PI / 180), y = (c - a) * Math.PI / 180; return Math.sqrt(x * x + y * y) * R; }
+  function gpsMsg(t, warn){ var el = $('obgpsl'); el.hidden = !t; el.textContent = t || ''; el.classList.toggle('warn', !!warn); }
+  function onFix(pos){
+    gps.had = true;
+    var la = pos.coords.latitude, lo = pos.coords.longitude, s = cur.s, best = 0, bd = 1e12;
+    for (var k = 0; k < s.length; k++) { var dd = metres(la, lo, s[k][2], s[k][3]); if (dd < bd) { bd = dd; best = k; } }
+    if (bd > 1500) { gpsMsg('You don’t seem to be on this bus route right now, so the screen is still showing the timetable. Once you’re on the bus it will follow you.', true); return; }
+    var next = best;
+    if (bd < 60) next = best + 1;
+    else if (best < s.length - 1 && metres(la, lo, s[best + 1][2], s[best + 1][3]) < metres(s[best][2], s[best][3], s[best + 1][2], s[best + 1][3])) next = best + 1;
+    next = Math.max(1, Math.min(s.length - 1, next));
+    if (next !== cur.i) go(next);
+    var n = new Date(); $('obclock').textContent = ('0' + n.getHours()).slice(-2) + ':' + ('0' + n.getMinutes()).slice(-2);
+    var toGo = cur.off > 0 ? cur.off - next : -1;
+    if (next === cur.off) { gpsMsg('Your stop for the show is next. Ring the bell now.'); if (!gps.buzzed && navigator.vibrate) { try { navigator.vibrate([300, 150, 300]); } catch (e) {} gps.buzzed = true; } }
+    else if (toGo > 0) gpsMsg('Following your phone’s location. ' + toGo + (toGo === 1 ? ' stop' : ' stops') + ' to go until your stop for the show.');
+    else gpsMsg('Following your phone’s location.');
+  }
+  function onErr(e){
+    if (e && e.code !== 1 && gps.had) return;
+    stopGps();
+    var framed = false; try { framed = window.self !== window.top; } catch (x) { framed = true; }
+    if (e && e.code === 1 && framed) {
+      var el = $('obgpsl'); el.hidden = false; el.classList.add('warn');
+      el.innerHTML = 'Your phone can\u2019t share its location inside this part of the website. <a href="' + location.href.split('#')[0] + '#onbus" target="_blank" rel="noopener">Open this bus page full screen</a> and press the button again there.';
+      return;
+    }
+    gpsMsg(e && e.code === 1 ? 'Location is turned off for this page. You can allow it in your phone’s settings, or just press play to ride along with the timetable.' : 'Your phone couldn’t find where you are just now. Try again in a moment, ideally by a window.', true);
+  }
+  function stopGps(){ if (gps.id !== null && navigator.geolocation) navigator.geolocation.clearWatch(gps.id); gps.id = null; $('obgps').textContent = 'Use my location on the bus'; $('obgps').classList.remove('gps'); }
+  $('obgps').addEventListener('click', function(){
+    if (gps.id !== null) { stopGps(); gpsMsg(''); return; }
+    if (!navigator.geolocation) { gpsMsg('This phone or browser can’t share its location, so press play to ride along with the timetable instead.', true); return; }
+    stop(); gps.buzzed = false; gps.had = false;
+    $('obgps').textContent = 'Stop using my location'; $('obgps').classList.add('gps');
+    gpsMsg('Finding where you are…');
+    try { gps.id = navigator.geolocation.watchPosition(onFix, onErr, { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }); } catch (e) { onErr(e); }
+  });
+  function refresh(){ syncSigns(); load(); if (cur.off < 1) $('obskip').textContent = 'Skip to the end'; else $('obskip').textContent = 'Skip to my stop'; }
+  document.addEventListener('click', function(e){ if (e.target.closest && e.target.closest('#day,#dir,#board,#cdrows')) setTimeout(refresh, 60); });
+  if ($('bdest')) new MutationObserver(function(){ setTimeout(refresh, 300); }).observe($('bdest'), { childList: true, characterData: true, subtree: true });
+  window.addEventListener('resize', function(){ if (cur.s.length) show(true); });
+  function boot(){ refresh(); if (S1) S1.start(); if (S2) S2.start(); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot); else boot();
+})();
+</script>
+<!-- /on the bus add-on -->
 </body>
 </html>
