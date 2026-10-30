@@ -124,6 +124,26 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
 .modal h3{margin:0 0 8px;font:800 28px 'Barlow Condensed',sans-serif}
 .modal p{margin:0 0 18px;color:var(--muted);line-height:1.5}
 .modal .acts{display:flex;gap:10px;flex-wrap:wrap}
+.tt-row{display:grid;grid-template-columns:150px minmax(0,1fr) 190px 210px 150px;align-items:center;padding:10px 22px;border-top:1px solid var(--row);gap:0 10px}
+.tt-row .nx{font:800 22px 'Barlow Condensed',sans-serif;padding:6px 10px;letter-spacing:.03em;font-variant-numeric:tabular-nums}
+.tt-row .ev{font-weight:600;font-size:15px;color:var(--muted)}
+.tt-row .lc{font-size:14px;color:var(--muted);line-height:1.4}.tt-row .lc b{display:block;color:#fff;font-weight:600}
+.tt-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;background:var(--row);border-top:1px solid var(--row)}
+.tt-day{background:var(--board);padding:14px 12px;display:flex;flex-direction:column;gap:8px}
+.tt-day h4{margin:0;font:800 22px 'Barlow Condensed',sans-serif}
+.tt-day.today h4{color:var(--teal)}
+.tt-blk{padding:8px 10px;font-size:14px;line-height:1.35}.tt-blk b{display:block;font:800 18px 'Barlow Condensed',sans-serif;letter-spacing:.03em}
+.k-m{background:var(--panel);border-left:4px solid #fff}.k-d{background:var(--purple)}.k-f{background:#D74949}.k-s{background:var(--teal);color:var(--board)}.k-e{border:2px dashed var(--teal)}
+.tt-cov{display:grid;grid-template-columns:220px repeat(3,minmax(0,1fr)) 150px;border-top:1px solid var(--row)}
+.tt-cov>div{padding:12px 14px;border-bottom:1px solid var(--row);font-size:15px;line-height:1.45}
+.tt-cov .h{color:var(--pale);font-weight:700;background:#0E2131}
+.tt-cov .w{font:700 21px/1.1 'Barlow Condensed',sans-serif}
+.tt-cov .o{font:800 16px 'Barlow Condensed',sans-serif;letter-spacing:.03em}
+.tt-year{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:2px;background:var(--row);border-top:1px solid var(--row)}
+.tt-year div{background:var(--board);padding:16px 18px;border-top:4px solid var(--teal)}
+.tt-year b{display:block;font:800 24px 'Barlow Condensed',sans-serif}.tt-year span{font-size:15px;color:var(--muted);line-height:1.5}
+.tt-sub{padding:22px 22px 10px;font:800 24px 'Barlow Condensed',sans-serif;color:var(--pale);border-top:1px solid var(--row)}
+.tt-foot{padding:16px 22px 22px;font-size:15px;color:var(--muted);line-height:1.5;border-top:1px solid var(--row)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.ticker .run{animation:none}nav.tabs button,.dep,.lrow{transition:none}}
 </style>
@@ -173,6 +193,7 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
     <button type="button" data-tab="log">FLIGHT RECORDS <span class="n" id="nLog">0</span></button>
     <button type="button" data-tab="hangar">HANGAR <span class="n" id="nHangar">0</span></button>
     <button type="button" data-tab="gates">GATE CHECKS <span class="n" id="nGates">0</span></button>
+    <button type="button" data-tab="sched">TIMETABLE <span class="n" id="nSched">6</span></button>
   </nav>
 
   <section class="board" id="p-dep">
@@ -229,11 +250,26 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
   </section>
 
   <section class="board" id="p-gates" hidden>
-    <div class="bh"><h2>GATE CHECKS, PAGES</h2><p>Tap a box to mark it Clear or Check. The weekly site checker fills these in too.</p></div>
+    <div class="bh"><h2>GATE CHECKS, PAGES</h2><p>Tap a box to mark it Clear or Check. The Sunday debug and fix fills these in too.</p></div>
     <div class="scroll"><div>
       <div class="gh"><span>Page</span><span>Desktop</span><span>Mobile</span><span>Tablet</span><span>Links and photos</span><span>Last checked</span></div>
       <div id="gateRows"></div>
     </div></div>
+  </section>
+
+  <section class="board" id="p-sched" hidden>
+    <div class="bh"><h2>TIMETABLE, SITE CHECKS</h2><p>When each scheduled check runs and what it looks after. Times are UK time.</p></div>
+    <div class="scroll"><div style="min-width:900px">
+      <div class="tt-row" style="color:var(--pale);font-weight:700;font-size:15px;border-top:0"><span>Next run</span><span>Check</span><span>Runs</span><span>Last change logged</span><span>Status</span></div>
+      <div id="ttRows"></div>
+    </div></div>
+    <div class="tt-sub">YOUR WEEK</div>
+    <div class="scroll"><div style="min-width:900px"><div class="tt-week" id="ttWeek"></div></div></div>
+    <div class="tt-sub">WHAT GETS CHECKED</div>
+    <div class="scroll"><div style="min-width:900px"><div class="tt-cov" id="ttCov"></div></div></div>
+    <div class="tt-sub">THE YEAR AHEAD</div>
+    <div class="tt-year" id="ttYear"></div>
+    <div class="tt-foot">Every check sends your phone and email one summary when it changes something, and logs each change in Flight Records. No changes means no message, apart from the Monday dates line. Only official sources are used, and anything a check can't confirm is held back and listed for you.</div>
   </section>
 </main>
 </div>
@@ -314,7 +350,7 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
     }).catch(function(err){$('#app').hidden=true;$('#gate').hidden=false;$('#gateText').textContent=err.message});
   }
 
-  function render(){renderHeader();renderDep();renderArr();renderLog();renderHangar();renderGates();renderTicker()}
+  function render(){renderHeader();renderDep();renderArr();renderLog();renderHangar();renderGates();renderSched();renderTicker()}
 
   function renderHeader(){
     var d=state.data,s=d.site||{};
@@ -487,16 +523,86 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
     ((d.signups.forms&&d.signups.forms.forms)||[]).forEach(function(f){if(f.unseen)items.push(f.unseen+' new '+f.name+' sign up'+(f.unseen>1?'s':''))});
     if(d.signups.membersWeek)items.push(d.signups.membersWeek+' new member'+(d.signups.membersWeek>1?'s':'')+' this week');
     allLog().slice(0,3).forEach(function(l){items.push('Latest: '+l.what)});
+    var nx=renderSched();if(nx)items.push('Next site check: '+nx.t.name+', '+nx.when);
     items.push('Weekly report departs Friday at 14:19');
     var html=items.map(function(t){return '<span>'+esc(t)+'</span>'}).join('');
     $('#ticker').innerHTML=html+html;
+  }
+
+
+  /* ---------- timetable of scheduled checks ---------- */
+  var TT=[
+    {id:'m',name:'Morning show check',what:'News, show dates, times, prices, parking, aircraft line ups and run up travel',every:'Every day 09:01',src:'Morning show check',h:9,mi:1,ok:function(y,m,d,w){return true}},
+    {id:'d',name:'2027 date checker',what:'Airshow calendar and featured show dates',every:'Mondays 12:17',src:'2027 date checker',h:12,mi:17,ok:function(y,m,d,w){return w===1}},
+    {id:'f',name:'Visitor facts check',what:'Timings, tickets, costs, parking, trains, buses, taxis',every:'Wednesdays 10:37',src:'Weekly visitor facts check',h:10,mi:37,ok:function(y,m,d,w){return w===3}},
+    {id:'s',name:'Debug and fix',what:'Every page loaded, bugs and dead links fixed, ready for the week',every:'Sundays 07:13',src:'Weekly debug and fix',h:7,mi:13,ok:function(y,m,d,w){return w===0}},
+    {id:'e1',name:'Train to Eastbourne, monthly',what:'Times, fares and travel advice on the Eastbourne train page',every:'12th, Jan to Jun 2027, 14:23',src:'Train to Eastbourne',h:14,mi:23,ok:function(y,m,d,w){return y===2027&&m>=1&&m<=6&&d===12}},
+    {id:'e2',name:'Train to Eastbourne, weekly',what:'Weekly check in the run up to Airbourne',every:'Mondays, Jul to mid Aug 2027, 14:23',src:'Train to Eastbourne',h:14,mi:23,ok:function(y,m,d,w){return y===2027&&w===1&&(m===7||(m===8&&d<=16))}}
+  ];
+  var DN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function ukNow(){
+    var p={};new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',hour12:false}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value});
+    return {y:+p.year,m:+p.month,d:+p.day,h:+p.hour%24,mi:+p.minute};
+  }
+  function nextRun(t,n){
+    for(var i=0;i<430;i++){
+      var dt=new Date(Date.UTC(n.y,n.m-1,n.d+i)),y=dt.getUTCFullYear(),m=dt.getUTCMonth()+1,d=dt.getUTCDate(),w=dt.getUTCDay();
+      if(!t.ok(y,m,d,w))continue;
+      if(i===0&&(t.h*60+t.mi)<=(n.h*60+n.mi))continue;
+      return {i:i,y:y,m:m,d:d,w:w};
+    }
+    return null;
+  }
+  function two(x){return (x<10?'0':'')+x}
+  function renderSched(){
+    var n=ukNow(),log=state.data?state.data.log:[];
+    var rows=TT.map(function(t){
+      var r=nextRun(t,n),when,st,cls;
+      if(!r){when='Finished';st='Finished';cls='s-Departed'}
+      else{
+        when=(r.i===0?'Today':r.i===1?'Tomorrow':DN[r.w].slice(0,3)+' '+r.d+' '+MN[r.m-1])+' '+two(t.h)+':'+two(t.mi);
+        if(r.i===0){st='Today';cls='s-Boarding'}else if(r.i<7){st='This week';cls='s-Scheduled'}else{st='From '+MN[r.m-1]+(r.y!==n.y?' '+r.y:'');cls='s-Scheduled'}
+      }
+      var last=log.filter(function(l){return String(l.source||'').indexOf(t.src)===0}).sort(function(a,b){return a.date<b.date?1:-1})[0];
+      return {t:t,when:when,st:st,cls:cls,last:last,r:r};
+    });
+    var soon=rows.filter(function(x){return x.r}).sort(function(a,b){return a.r.i-b.r.i||((a.t.h*60+a.t.mi)-(b.t.h*60+b.t.mi))})[0];
+    $('#ttRows').innerHTML=rows.map(function(x){
+      return '<div class="tt-row"><span class="nx flap">'+esc(x.when)+'</span><div class="dest"><b>'+esc(x.t.name)+'</b><span>'+esc(x.t.what)+'</span></div><span class="ev">'+esc(x.t.every)+'</span><span class="lc">'+(x.last?'<b>'+esc(x.last.date)+'</b>'+esc(x.last.what):'Nothing logged yet')+'</span><span class="tag '+x.cls+'"'+(x===soon?' style="background:var(--teal);color:var(--board)"':'')+'>'+esc(x===soon?'Next up':x.st)+'</span></div>';
+    }).join('');
+    var today=new Date(Date.UTC(n.y,n.m-1,n.d)).getUTCDay(),order=[1,2,3,4,5,6,0];
+    var air=(n.y<2027||(n.y===2027&&n.m<3))?'aircraft line ups on Fridays until March':'aircraft line ups every day';
+    $('#ttWeek').innerHTML=order.map(function(w){
+      var b='<div class="tt-blk k-m"><b>09:01</b>Morning show check'+(w===5&&n.y<2028&&!(n.y===2027&&n.m>=3)?', plus the '+air:'')+'</div>';
+      if(w===1)b+='<div class="tt-blk k-d"><b>12:17</b>2027 date checker</div><div class="tt-blk k-e"><b>14:23</b>Train to Eastbourne, July and August</div>';
+      if(w===3)b+='<div class="tt-blk k-f"><b>10:37</b>Visitor facts check</div>';
+      if(w===0)b='<div class="tt-blk k-s"><b>07:13</b>Debug and fix, ready for the week</div>'+b;
+      return '<div class="tt-day'+(w===today?' today':'')+'"><h4>'+DN[w]+(w===today?', today':'')+'</h4>'+b+'</div>';
+    }).join('');
+    var C=[
+      ['Show dates','Every featured show and whether it is confirmed','Monday: 2027 calendar and new shows','Cancellations flagged as alerts','Morning, Dates'],
+      ['Gates and flying times','Gates open, flying times, evening displays','Car park opening and every time on the pages','Last minute organiser changes','Morning, Facts'],
+      ['Tickets and costs','Adult and child prices, tickets on sale','Every price: family, parking, camping, shuttles, fees, early bird deadlines','Price rises and sell outs as news','Morning, Facts'],
+      ['Aircraft line ups','Every day from 1 March, with a photo from your Drive','Fridays until the end of February','Daily checks from March cover every show','Morning'],
+      ['Airshow news','New stories from all 12 organisers','','Travel and safety alerts marked important','Morning'],
+      ['Car parking','Parking line on each show','Car parks, booking, Blue Badge rules, park and ride','Road closures and car park changes daily','Morning, Facts'],
+      ['Trains and buses','','Stations, routes, last trains and buses. Every time refreshed weekly from March','Engineering works, strikes, extra trains, show day buses daily','Facts, Morning'],
+      ['Route pages','','54 bus routes plus Clacton and Cosford trains, rebuilt with summer times from March','Eastbourne train page monthly, then weekly in July and August','Facts, Eastbourne'],
+      ['Taxis and access','','Taxi numbers, wheelchair access, accessible parking, carer tickets','Accessible route changes','Facts'],
+      ['Stays, food, rules','','First Wednesday of each month: hotels, campsites, food, bag rules, venues','','Facts'],
+      ['Links and bugs','','Sunday: every page on desktop, tablet and phone, errors and dead links fixed','','Sunday']
+    ];
+    $('#ttCov').innerHTML='<div class="h">Visitor information</div><div class="h">Every day</div><div class="h">Every week</div><div class="h">Run up to a show</div><div class="h">Owner</div>'+C.map(function(r){return '<div class="w">'+esc(r[0])+'</div><div>'+esc(r[1])+'</div><div>'+esc(r[2])+'</div><div>'+esc(r[3])+'</div><div class="o">'+esc(r[4])+'</div>'}).join('');
+    var Y=[['1 January 2027','First Train to Eastbourne check on the 12th, then monthly to June'],['1 March 2027','Aircraft line ups checked every day. Summer train and bus times go in every week'],['May to October','Daily travel checks for each show from 14 days before. Duxford and Shuttleworth run seven shows each'],['July to mid August','Train to Eastbourne checked every Monday'],['Key 2027 shows','Midlands 4 to 6 June, Cosford 13 June, RIAT 16 to 18 July, Eastbourne 12 to 15 August, Clacton 26 to 27 August']];
+    $('#ttYear').innerHTML=Y.map(function(y){return '<div><b>'+esc(y[0])+'</b><span>'+esc(y[1])+'</span></div>'}).join('');
+    return soon;
   }
 
   /* ---------- tabs ---------- */
   $('#tabs').addEventListener('click',function(e){
     var b=e.target.closest('button');if(!b)return;state.tab=b.dataset.tab;
     Array.prototype.forEach.call(document.querySelectorAll('#tabs button'),function(x){x.classList.toggle('on',x===b)});
-    ['dep','arr','log','hangar','gates'].forEach(function(t){$('#p-'+t).hidden=t!==state.tab});
+    ['dep','arr','log','hangar','gates','sched'].forEach(function(t){$('#p-'+t).hidden=t!==state.tab});
   });
 
   /* ---------- publish ---------- */
