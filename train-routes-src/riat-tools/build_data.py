@@ -8,7 +8,7 @@ HUBS=[('PAD','London Paddington','London'),('RDG','Reading','Reading'),('OXF','O
       ('BHM','Birmingham New Street','Birmingham'),('SOU','Southampton Central','Southampton'),('EXD','Exeter St Davids','Exeter')]
 SHORT={'London Paddington':'Paddington','Birmingham New Street':'Birmingham','Manchester Piccadilly':'Manchester','Cardiff Central':'Cardiff','Bristol Temple Meads':'Temple Meads','Southampton Central':'Southampton','Exeter St Davids':'Exeter','Didcot Parkway':'Didcot','Cheltenham Spa':'Cheltenham'}
 BIG={'London Paddington','Reading','Didcot Parkway','Oxford','Swindon (Wilts)','Bristol Parkway','Bristol Temple Meads','Bath Spa','Chippenham','Newport (South Wales)','Cardiff Central','Cheltenham Spa','Gloucester','Kemble','Birmingham New Street','Southampton Central','Basingstoke','Winchester','Exeter St Davids','Taunton','Manchester Piccadilly','Stockport','Crewe','Stafford','Wolverhampton','Banbury','Leamington Spa','Coventry','Stoke-on-Trent','Severn Tunnel Junction','Westbury','Salisbury','Bristol Parkway'}
-DAYS=[('fri','Friday'),('sat','Saturday'),('sun','Sunday')]
+DAYS=[('mon','Monday'),('tue','Tuesday'),('wed','Wednesday'),('thu','Thursday'),('fri','Friday'),('sat','Saturday'),('sun','Sunday')]
 stops=[];SI={}
 def si(n):
     if n not in SI:
@@ -62,7 +62,7 @@ def dirs(code,full,short,dk):
             {'label':'Back to '+short,'trips':back,'tt':table(back,False,full),'from':DEST,'note':'Times from Swindon. The shuttle gets you back from the airfield about 35 minutes after it leaves, so pick a train with a bit of room.'}]
 hubs=[]
 for code,full,short in HUBS:
-    base=dirs(code,full,short,'fri'); days={}
+    base=dirs(code,full,short,'mon'); days={}
     sig=lambda D:json.dumps([[t['big'],t['s'][-1][0],len(t['changes'])] for d in D for t in d['trips']])
     for dk,_ in DAYS[1:]:
         if dk not in J[code]: continue
