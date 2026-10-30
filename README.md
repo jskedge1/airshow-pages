@@ -184,7 +184,7 @@ Addresses checked against the live site on 19 Oct 2026.
 A custom element in the site header turns every full-width guide box into normal page content, so the page
 grows with the guide and scrolls like the rest of the site on phones. It converts boxes holding pasted code
 and, since 30 Oct 2026, boxes pointing at the GitHub pages listed in `AE_GH_PAGES` inside that file.
-`traders/directory.html` was added to `AE_GH_PAGES` on 30 Oct 2026. Pages shown this way talk to page code through the header element (#airshowAuto: `on('pagemessage')` in, `setAttribute('message', JSON)` out), not through the HTML box.
+`traders/directory.html` was added to `AE_GH_PAGES` on 30 Oct 2026. Edits on 30 Oct 2026: `traders/directory.html` and `advertise-with-us.html` convert whatever their box size (`anySize`), the `pagemessage` events bubble so page code hears them, and the element finds the guide again with `querySelector` if its saved reference is lost. Pages shown this way sit inside the site's own address, so image paths in them must be full `https://jskedge1.github.io/airshow-pages/...` addresses, not relative ones. The converted page only appears once the visitor scrolls or taps, because Wix starts the header element then. Pages shown this way talk to page code through the header element (#airshowAuto: `on('pagemessage')` in, `setAttribute('message', JSON)` out), not through the HTML box.
 When a new full-page guide is added to Wix by website address, add its path to `AE_GH_PAGES` too,
 or it will sit in a fixed-height box and won't scroll properly on phones. Changes to the element go live when the site is published.
 
