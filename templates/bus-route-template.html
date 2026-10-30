@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bus 132 route map, Cambridge to IWM Duxford</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --navy:#13293C;--navy-2:#1C3850;--navy-3:#0C1C2A;
+  --sky:#00A6E2;--sky-ink:#006F99;--teal:#32B4AF;--teal-ink:#0E5F5B;
+  --red:#D74949;--amber:#F2B233;--line:#C6C6C6;--mist:#EEF2F5;--paper:#FFFFFF;--ink:#0B0B0B;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:17px;line-height:27px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* top strip */
+.strip{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 0;font-weight:500;font-size:15px}
+.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy);padding:6px 0;border-bottom:2px solid transparent;transition:border-color .3s var(--ease)}
+.back:hover{border-color:var(--sky)}
+.back svg{width:16px;height:16px}
+.op{color:#3d4a55}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 48px;align-items:end;padding:26px 0 0}
+.blind{position:relative;background:var(--navy-3);border-radius:14px 14px 14px 0;padding:22px 26px 24px;display:flex;align-items:center;gap:22px;overflow:hidden;box-shadow:0 18px 40px -22px rgba(12,28,42,.7)}
+.blind::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.55) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
+.blind .num{font:800 92px/0.9 "Barlow Condensed",sans-serif;color:var(--amber);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
+.blind .dest{font:700 34px/1 "Barlow Condensed",sans-serif;color:var(--amber);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3)}
+.blind .via{display:block;margin-top:8px;font:600 18px/1.2 "Barlow Condensed",sans-serif;color:#f7d68f;letter-spacing:.03em;text-transform:uppercase;opacity:.85;transition:opacity .4s var(--ease)}
+.intro h1{font:800 46px/46px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;letter-spacing:-.005em}
+.intro p{margin-top:12px;font-size:18px;line-height:29px;color:#1d2730;max-width:520px}
+
+/* facts */
+.facts{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.2fr;margin:34px 0 0;border-top:3px solid var(--navy)}
+.fact{padding:14px 18px 16px 0;border-right:1px solid var(--line)}
+.fact+.fact{padding-left:18px}
+.fact:last-child{border-right:0}
+.fact span{display:block;font-weight:500;font-size:15px;line-height:20px;color:var(--navy)}
+.fact b{display:block;margin-top:4px;font:700 25px/28px "Barlow Condensed",sans-serif;color:var(--navy)}
+.fact.hl b{color:var(--red)}
+
+/* planner */
+.planner{margin-top:38px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px 28px;align-items:start}
+.planner h2,.sec h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;grid-column:1/-1}
+.seg{display:inline-flex;background:var(--mist);border-radius:12px;padding:5px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:10px 16px;font-weight:600;font-size:16px;color:var(--navy);transition:background .3s var(--ease),color .3s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.board{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.board::-webkit-scrollbar{display:none}
+.dep{flex:0 0 auto;min-width:150px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px 11px;transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
+.dep:hover{border-color:var(--navy);transform:translateY(-2px)}
+.dep .t{font:700 28px/30px "Barlow Condensed",sans-serif;color:var(--navy);font-variant-numeric:tabular-nums}
+.dep .a{display:block;font-weight:500;font-size:14px;line-height:19px;color:#3d4a55}
+.dep[aria-pressed="true"]{background:var(--navy);border-color:var(--navy)}
+.dep[aria-pressed="true"] .t{color:var(--amber)}
+.dep[aria-pressed="true"] .a{color:#dfe7ee}
+
+/* map stage */
+.stage{position:relative;margin-top:20px}
+.mapbox{position:relative}
+#map{height:640px;border-radius:16px;z-index:0;background:#dfe6ea}
+#map .leaflet-tile-pane{filter:saturate(.55) contrast(.95) brightness(1.04)}
+.leg{position:absolute;left:16px;bottom:16px;z-index:5;background:#fff;border-radius:10px;padding:8px 12px;display:flex;gap:14px;font-weight:500;font-size:14px;line-height:18px;box-shadow:0 6px 18px -8px rgba(12,28,42,.45)}
+.leg i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:2px solid var(--navy);background:#fff}
+.leg i.r{background:var(--red);border-color:var(--red)}
+.leg i.l{width:22px;height:5px;border:0;border-radius:3px;background:var(--sky)}
+.panel{position:absolute;top:18px;right:18px;max-height:calc(100% - 36px);width:372px;z-index:5;background:#fff;border-radius:14px;box-shadow:0 22px 44px -20px rgba(12,28,42,.55);display:flex;flex-direction:column;overflow:hidden}
+.panel header{background:var(--navy);color:#fff;padding:14px 18px 13px}
+.panel header b{display:block;font:700 22px/24px "Barlow Condensed",sans-serif;text-transform:uppercase}
+.panel header span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
+.stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px}
+.stops::-webkit-scrollbar{display:none}
+.stops li{position:relative;padding:5px 0 5px 28px;display:flex;justify-content:space-between;gap:12px;font-size:15px;line-height:21px}
+.stops li::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:3px;background:var(--sky)}
+.stops li:first-child::before{top:14px}
+.stops li:last-child::before{bottom:calc(100% - 14px)}
+.stops li::after{content:"";position:absolute;left:2px;top:10px;width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid var(--sky)}
+.stops li.key{font-weight:700;color:var(--navy);padding-top:8px;padding-bottom:8px}
+.stops li.key::after{top:12px;left:0;width:15px;height:15px;border:3px solid var(--navy)}
+.stops li.off{color:var(--red)}
+.stops li.off::after{background:var(--red);border-color:var(--red)}
+.stops li.off .tag{display:block;font-weight:500;font-size:13px;line-height:17px;color:var(--red)}
+.stops li.stop{cursor:pointer}
+.stops li.stop:hover span:first-child,.stops li.active span:first-child{text-decoration:underline;text-decoration-color:var(--sky);text-underline-offset:3px}
+.stops li.minor{display:none;color:#2c3944}
+.stops li.minor.open{display:flex}
+.stops time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--sky-ink);white-space:nowrap}
+.stops li.key time{color:var(--navy)}
+.stops li.off time{color:var(--red)}
+.stops li.fold{padding-top:2px;padding-bottom:2px}
+.stops li.fold::after{display:none}
+.stops li.fold::before{background:repeating-linear-gradient(var(--sky) 0 4px,transparent 4px 8px)}
+.stops li.fold button{border:0;background:none;padding:2px 0;font-weight:600;font-size:14px;color:var(--sky-ink);text-align:left}
+.stops li.fold button:hover{color:var(--navy)}
+
+/* map bits */
+.lbl{background:var(--navy);color:#fff;border:0;border-radius:6px;font:600 13px "Barlow",sans-serif;padding:3px 8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
+.lbl.off{background:var(--red)}
+.lbl::before{display:none}
+.busdot{width:30px;height:30px;border-radius:50%;background:var(--amber);border:3px solid var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
+.busdot svg{width:15px;height:15px}
+.leaflet-popup-content{font:500 15px/21px "Barlow",sans-serif;margin:10px 14px}
+.leaflet-popup-content b{color:var(--navy)}
+
+/* roads */
+.sec{margin-top:56px}
+.journey{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:34px;align-items:start;margin-top:18px}
+.legs{list-style:none;counter-reset:none}
+.legs li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.legs li:last-child{border-bottom:1px solid var(--line)}
+.signs{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.sign{display:inline-block;font:700 16px/1 "Barlow",sans-serif;padding:5px 7px 4px;border-radius:4px;border:2px solid #111;background:#fff;color:#111;letter-spacing:.01em}
+.sign.m{background:#1D5FAD;border-color:#fff;color:#fff;box-shadow:0 0 0 1px #1D5FAD}
+.legs b{display:block;font:700 21px/24px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
+.legs p{margin-top:3px;font-size:16px;line-height:25px;color:#1d2730}
+.side{position:relative;top:-64px}
+.advice{background:var(--navy);color:#fff;border-radius:16px 16px 16px 0;padding:24px 24px 22px}
+.advice h3{font:700 24px/26px "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--amber)}
+.advice p{margin-top:10px;font-size:16px;line-height:25px;color:#e6edf3}
+.advice a.btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--amber);color:var(--navy);text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:10px;transition:transform .3s var(--ease),background .3s var(--ease)}
+.advice a.btn:hover{transform:translateX(3px);background:#f6c35a}
+.alt{margin-top:14px;border:2px solid var(--teal);border-radius:14px;padding:16px 18px}
+.alt b{display:block;font:700 20px/22px "Barlow Condensed",sans-serif;color:var(--teal-ink);text-transform:uppercase}
+.alt p{margin-top:6px;font-size:15px;line-height:23px}
+
+.note{margin:44px 0 40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;line-height:21px;color:#3d4a55;max-width:820px}
+.note a{color:var(--sky-ink)}
+
+.rise{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rise.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none;transition:none}.dep,.advice a.btn{transition:none}}
+
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;gap:22px}
+  .facts{grid-template-columns:1fr 1fr}
+  .fact:nth-child(2){border-right:0}
+  .fact:nth-child(3){padding-left:0}
+  .fact:nth-child(n+3){border-top:1px solid var(--line)}
+  .planner{grid-template-columns:1fr}
+  #map{height:460px}
+  .panel{position:static;width:auto;margin-top:14px;box-shadow:none;border:1px solid var(--line)}
+  .stops{max-height:none}
+  .journey{grid-template-columns:1fr}
+  .side{top:0}
+}
+@media(max-width:560px){
+  .wrap{padding:0 16px}
+  .strip{flex-direction:column;align-items:flex-start;gap:0;font-size:14px}
+  .op{padding-left:24px;margin-top:-4px}
+  .blind{padding:16px 18px;gap:14px}
+  .blind .num{font-size:64px}
+  .blind .dest{font-size:26px}
+  .blind .via{font-size:15px}
+  .intro h1{font-size:34px;line-height:36px}
+  .intro p{font-size:17px;line-height:27px}
+  .fact{padding-right:10px}
+  .fact+.fact{padding-left:10px}
+  .fact:nth-child(3){padding-left:0}
+  .fact b{font-size:21px;line-height:24px}
+  #map{height:360px;border-radius:12px}
+  .leg{left:auto;right:8px;bottom:auto;top:8px;gap:8px;font-size:12px;padding:6px 8px}
+  .legs li{grid-template-columns:1fr;gap:8px}
+  .seg{display:flex}
+  .seg button{flex:1;padding:10px 8px;font-size:15px}
+  .dep{min-width:128px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="strip">
+    <a class="back" id="backlink" href="#" target="_top"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg><span></span></a>
+    <span class="op" id="op"></span>
+  </nav>
+
+  <header class="hero">
+    <div class="blind rise" aria-hidden="true">
+      <div class="num" id="bnum"></div>
+      <div><div class="dest" id="bdest"></div><span class="via" id="bvia"></span></div>
+    </div>
+    <div class="intro rise">
+      <h1 id="title"></h1>
+      <p id="lead"></p>
+    </div>
+  </header>
+
+  <div class="facts rise" id="facts"></div>
+
+  <section class="planner rise" aria-labelledby="ph">
+    <h2 id="ph">Pick your bus</h2>
+    <div class="seg" id="dir" role="group" aria-label="Direction"></div>
+    <div class="board" id="board" role="group" aria-label="Departure times"></div>
+  </section>
+
+  <div class="stage rise">
+    <div class="mapbox">
+      <div id="map" role="img"></div>
+      <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
+    </div>
+    <aside class="panel" aria-live="polite">
+      <header><b id="ptitle"></b><span id="psub"></span></header>
+      <ol class="stops" id="stops"></ol>
+    </aside>
+  </div>
+
+  <section class="sec rise" aria-labelledby="rh">
+    <h2 id="rh">The roads it takes</h2>
+    <div class="journey">
+      <ol class="legs" id="legs"></ol>
+      <div class="side">
+        <div class="advice"><h3 id="tiph"></h3><p id="tip"></p><a class="btn" id="tipbtn" href="#" target="_top"></a></div>
+        <div class="alt" id="alt" hidden><b id="alth"></b><p id="altp"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="note" id="note"></p>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ---------- route data (one block per route page) ---------- */
+var CFG = {
+  num: '132',
+  operator: 'A2B Bus and Coach',
+  showName: 'Duxford Air Shows',
+  showUrl: 'https://www.ukairshowguide.co.uk/duxfordairshows',
+  title: 'Bus 132 to IWM Duxford',
+  blindDest: 'IWM Duxford',
+  blindVia: ['via Cambridge station', 'via Addenbrooke’s', 'then Saffron Walden'],
+  lead: 'This is the bus I would look at if you’re heading to Duxford on a Sunday without a car. It picks up in Cambridge city centre and outside the railway station, then drops you right by Hangar 1. Pick a time below and the map shows every stop.',
+  dirs: { to: 'To IWM Duxford', back: 'Back to Cambridge' },
+  offStop: 'Imperial War Museum Hangar 1',
+  boardFrom: 'Railway Station',
+  facts: [
+    ['Runs on', 'Sundays and bank holidays'],
+    ['How often', 'About every 2 hours'],
+    ['Station to museum', '{ride} minutes'],
+    ['Get off at', 'Hangar 1, by the museum', 'hl']
+  ],
+  legs: [
+    [['A1307'], 'Cambridge city centre', 'Out of Drummer Street bus station, down Regent Street and Hills Road, stopping right outside the railway station.'],
+    [['A1134'], 'Addenbrooke’s', 'Along Long Road to the hospital bus station, then Robinson Way and through Trumpington.'],
+    [['A1309'], 'Trumpington Park and Ride', 'Hauxton Road to the Park and Ride. Handy if you’d rather leave the car here.'],
+    [['M11', 'A505'], 'Down to Duxford', 'South on the M11 to junction 10, then the A505 to the museum stop by Hangar 1.'],
+    [['B1383'], 'On to Saffron Walden', 'After the museum it carries on through Duxford, Ickleton and Great Chesterford to Saffron Walden.']
+  ],
+  tipHead: 'Before you travel',
+  tip: 'I would advise checking the times on the day. The 132 doesn’t run on Saturdays, and the last bus back leaves the museum at 17:41, which may be before the flying finishes.',
+  tipBtn: 'Back to getting to Duxford',
+  alt: ['On Air Show weekends', 'IWM usually runs its own free shuttle from Cambridge station and Trumpington Park and Ride. That is the easier choice on a big show day, so I would suggest using that instead.'],
+  note: 'Stops and times are from the operator’s timetable on the DfT Bus Open Data Service (Sundays and bank holidays, valid 22 October 2026 to 22 July 2027). Times can change, so treat them as a guide and check with the operator before you travel. The line is drawn along the roads between the official stops. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.'
+};
+/*DATA*/
+</script>
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function nice(n){ return NICE[n] || n; }
+  function mins(t){ var p = t.split(':'); return +p[0] * 60 + +p[1]; }
+  function find(trip, name){ return trip.filter(function(s){ return s[1] === name; })[0]; }
+
+  /* fixed text */
+  $('backlink').href = CFG.showUrl;
+  $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
+  $('op').textContent = 'Run by ' + CFG.operator;
+  $('bnum').textContent = CFG.num;
+  $('bdest').textContent = CFG.blindDest;
+  $('title').textContent = CFG.title;
+  $('lead').textContent = CFG.lead;
+  $('tiph').textContent = CFG.tipHead;
+  $('tip').textContent = CFG.tip;
+  $('tipbtn').href = CFG.showUrl;
+  $('tipbtn').textContent = CFG.tipBtn + ' ›';
+  $('note').innerHTML = CFG.note;
+  $('map').setAttribute('aria-label', 'Map of the bus ' + CFG.num + ' route');
+  if (CFG.alt) { $('alt').hidden = false; $('alth').textContent = CFG.alt[0]; $('altp').textContent = CFG.alt[1]; }
+
+  /* destination blind cycles its "via" line, like the real thing */
+  var vi = 0;
+  $('bvia').textContent = CFG.blindVia[0];
+  if (!reduce && CFG.blindVia.length > 1) {
+    setInterval(function(){
+      var v = $('bvia'); v.style.opacity = 0;
+      setTimeout(function(){ vi = (vi + 1) % CFG.blindVia.length; v.textContent = CFG.blindVia[vi]; v.style.opacity = .85; }, 400);
+    }, 3200);
+  }
+
+  /* facts */
+  var first = TRIPS.to[0];
+  var ride = mins(find(first, CFG.offStop)[0]) - mins(find(first, CFG.boardFrom)[0]);
+  $('facts').innerHTML = CFG.facts.map(function(f){
+    return '<div class="fact' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><b>' + f[1].replace('{ride}', ride) + '</b></div>';
+  }).join('');
+
+  /* roads */
+  $('legs').innerHTML = CFG.legs.map(function(l){
+    var signs = l[0].map(function(r){ return '<span class="sign' + (/^M/.test(r) ? ' m' : '') + '">' + r + '</span>'; }).join('');
+    return '<li><div class="signs">' + signs + '</div><div><b>' + l[1] + '</b><p>' + l[2] + '</p></div></li>';
+  }).join('');
+
+  /* map */
+  var map = L.map('map', { scrollWheelZoom: false, zoomControl: false });
+  L.control.zoom({ position: 'topleft' }).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  var casing = L.polyline(ROUTE, { color: '#13293C', weight: 11, opacity: .18 }).addTo(map);
+  L.polyline(ROUTE, { color: '#00A6E2', weight: 5, opacity: 1 }).addTo(map);
+
+  function fit(){
+    var wide = window.innerWidth > 980;
+    map.fitBounds(casing.getBounds(), { paddingTopLeft: [30, 30], paddingBottomRight: [wide ? 420 : 30, 30] });
+  }
+  fit();
+  window.addEventListener('resize', function(){ map.invalidateSize(); });
+
+  var layer = L.layerGroup().addTo(map);
+  var dir = 'to', idx = 0;
+
+  /* direction buttons */
+  $('dir').innerHTML = Object.keys(CFG.dirs).map(function(d){
+    return '<button type="button" data-d="' + d + '" aria-pressed="' + (d === dir) + '">' + CFG.dirs[d] + '</button>';
+  }).join('');
+  Array.prototype.forEach.call($('dir').children, function(b){
+    b.addEventListener('click', function(){
+      dir = b.getAttribute('data-d'); idx = 0;
+      Array.prototype.forEach.call($('dir').children, function(x){ x.setAttribute('aria-pressed', x === b); });
+      board(); draw(); runBus();
+    });
+  });
+
+  function board(){
+    $('board').innerHTML = TRIPS[dir].map(function(t, i){
+      var off = find(t, CFG.offStop);
+      var main = dir === 'to'
+        ? [t[0][0], 'At the museum ' + off[0]]
+        : [off[0], 'From the museum, in Cambridge ' + (find(t, CFG.boardFrom) || t[t.length - 1])[0]];
+      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '"><span class="t">' + main[0] + '</span><span class="a">' + main[1] + '</span></button>';
+    }).join('');
+    Array.prototype.forEach.call($('board').children, function(b){
+      b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); });
+    });
+  }
+
+  function draw(){
+    layer.clearLayers();
+    var trip = TRIPS[dir][idx], ol = $('stops'), marks = [];
+    var off = find(trip, CFG.offStop);
+    $('ptitle').textContent = dir === 'to' ? 'The ' + trip[0][0] + ' to the museum' : 'The ' + off[0] + ' back to Cambridge';
+    $('psub').textContent = trip.length + ' stops, ' + trip[0][0] + ' to ' + trip[trip.length - 1][0];
+    ol.innerHTML = '';
+
+    var group = null, gid = 0;
+    trip.forEach(function(s, i){
+      var isOff = s[1] === CFG.offStop, key = !!KEY[s[1]] || i === 0 || i === trip.length - 1;
+      var m = L.circleMarker([s[2], s[3]], {
+        radius: isOff ? 10 : (key ? 7 : 4), color: isOff ? '#D74949' : '#13293C', weight: key ? 3 : 2,
+        fillColor: isOff ? '#D74949' : '#FFFFFF', fillOpacity: 1
+      }).addTo(layer);
+      m.bindPopup('<b>' + nice(s[1]) + '</b><br>' + s[0] + (isOff ? '<br>Get off here for the museum' : ''));
+      var small = window.innerWidth < 560 && !isOff && i !== 0 && i !== trip.length - 1;
+      if (KEY[s[1]] && !small) m.bindTooltip(KEY[s[1]], { permanent: true, direction: 'right', offset: [10, 0], className: 'lbl' + (isOff ? ' off' : '') });
+      marks.push(m);
+
+      if (!key) {
+        if (!group) {
+          group = { id: 'g' + (gid++), items: [] };
+          var fl = document.createElement('li'); fl.className = 'fold';
+          fl.innerHTML = '<button type="button" aria-expanded="false"></button>';
+          fl.dataset.g = group.id; ol.appendChild(fl); group.fold = fl;
+        }
+        group.items.push(s);
+      } else { closeGroup(); }
+
+      var li = document.createElement('li');
+      li.className = 'stop' + (key ? ' key' : ' minor') + (isOff ? ' off' : '');
+      if (!key) li.dataset.g = group.id;
+      li.innerHTML = '<span>' + nice(s[1]) + (isOff ? '<span class="tag">Get off here for the museum</span>' : '') + '</span><time>' + s[0] + '</time>';
+      li.addEventListener('click', function(){
+        Array.prototype.forEach.call(ol.querySelectorAll('.active'), function(x){ x.classList.remove('active'); });
+        li.classList.add('active');
+        map.setView([s[2], s[3]], 15, { animate: !reduce }); m.openPopup();
+      });
+      ol.appendChild(li);
+    });
+    closeGroup();
+
+    function closeGroup(){
+      if (!group) return;
+      var g = group, n = g.items.length, btn = g.fold.firstChild;
+      var label = n === 1 ? nice(g.items[0][1]) + ', 1 smaller stop' : nice(g.items[0][1]) + ' and ' + (n - 1) + ' more stops';
+      btn.textContent = label;
+      btn.addEventListener('click', function(){
+        var open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', open);
+        btn.textContent = open ? 'Hide the smaller stops' : label;
+        Array.prototype.forEach.call(ol.querySelectorAll('li.minor[data-g="' + g.id + '"]'), function(x){ x.classList.toggle('open', open); });
+      });
+      group = null;
+    }
+  }
+
+  /* a small bus runs the route once, then fades */
+  var bus = null, raf = 0;
+  var busIcon = L.divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 15],
+    html: '<div class="busdot"><svg viewBox="0 0 16 16" fill="#13293C"><rect x="2" y="1.5" width="12" height="11" rx="2"/><rect x="3.5" y="3" width="9" height="4" rx=".6" fill="#F2B233"/><circle cx="5" cy="10" r="1" fill="#F2B233"/><circle cx="11" cy="10" r="1" fill="#F2B233"/><rect x="3" y="12.5" width="2.4" height="2" rx=".5"/><rect x="10.6" y="12.5" width="2.4" height="2" rx=".5"/></svg></div>' });
+  var cum = [0];
+  for (var k = 1; k < ROUTE.length; k++) cum.push(cum[k - 1] + map.distance(ROUTE[k - 1], ROUTE[k]));
+  function at(d){
+    var lo = 0, hi = cum.length - 1;
+    while (lo < hi - 1) { var mid = (lo + hi) >> 1; if (cum[mid] < d) lo = mid; else hi = mid; }
+    var f = (d - cum[lo]) / ((cum[hi] - cum[lo]) || 1);
+    return [ROUTE[lo][0] + (ROUTE[hi][0] - ROUTE[lo][0]) * f, ROUTE[lo][1] + (ROUTE[hi][1] - ROUTE[lo][1]) * f];
+  }
+  function runBus(){
+    if (reduce) return;
+    cancelAnimationFrame(raf);
+    if (bus) map.removeLayer(bus);
+    var total = cum[cum.length - 1], start = null, dur = 7000;
+    bus = L.marker(at(dir === 'to' ? 0 : total), { icon: busIcon, interactive: false, keyboard: false }).addTo(map);
+    function step(ts){
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      bus.setLatLng(at((dir === 'to' ? e : 1 - e) * total));
+      if (p < 1) raf = requestAnimationFrame(step);
+      else { var el = bus.getElement(); if (el) el.firstChild.style.opacity = 0; var b = bus; setTimeout(function(){ map.removeLayer(b); }, 700); bus = null; }
+    }
+    raf = requestAnimationFrame(step);
+  }
+
+  board(); draw();
+
+  /* reveal on scroll, and start the bus when the map is in view */
+  var started = false;
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in'); io.unobserve(e.target);
+      if (!started && e.target.classList.contains('stage')) { started = true; setTimeout(runBus, 500); }
+    });
+  }, { threshold: .15 }) : null;
+  Array.prototype.forEach.call(document.querySelectorAll('.rise'), function(el){ io ? io.observe(el) : el.classList.add('in'); });
+  if (!io) runBus();
+})();
+</script>
+</body>
+</html>
