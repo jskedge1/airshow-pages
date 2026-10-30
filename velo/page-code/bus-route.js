@@ -46,7 +46,8 @@ function readLocation() {
   wixWindowFrontend.getCurrentGeolocation()
     .then((place) => {
       if (!following) return;
-      const c = place.coords || {};
+      const c = place && place.coords;
+      if (!c) { timer = setTimeout(readLocation, EVERY_MS); return; }
       $w(ROUTE_BOX).postMessage({ ukag: 'geo', lat: c.latitude, lng: c.longitude, acc: c.accuracy });
       timer = setTimeout(readLocation, EVERY_MS);
     })
