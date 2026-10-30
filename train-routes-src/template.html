@@ -561,6 +561,21 @@ footer a{color:#fff}
 .ways-in a[aria-current="page"]{background:#F7C51E;color:#17181A}
 .ways-in a[aria-current="page"] small{color:#3F3200}
 @media (max-width:680px){.ways-in .wrap{flex-direction:column}.ways-in a{border-left:0;border-top:1px solid rgba(255,255,255,.1)}.ways-in .wl{padding:14px 0 10px}}
+
+.bus-taxi{margin-top:18px;border:1px solid var(--line);border-top:5px solid #17181A;background:#fff}
+.bus-taxi .th{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 18px;padding:16px 20px 10px}
+.bus-taxi h3{font:800 24px/1 var(--c);text-transform:uppercase;color:var(--navy)}
+.bus-taxi .th p{font-size:15px;color:var(--muted);max-width:60ch}
+.bus-taxi .tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0;border-top:1px solid var(--line)}
+.bus-taxi .tc{padding:12px 20px 14px;border-right:1px solid var(--line)}
+.bus-taxi .tc:last-child{border-right:0}
+.bus-taxi h4{display:inline-block;font:700 14px/1 var(--f);background:#F7C51E;color:#17181A;padding:5px 9px;margin-bottom:8px}
+.bus-taxi ul{list-style:none}
+.bus-taxi li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--mist);font-size:15.5px;line-height:1.35}
+.bus-taxi li:last-child{border-bottom:0}
+.bus-taxi li a{font-weight:700;color:var(--navy);text-decoration:none;white-space:nowrap;font-variant-numeric:tabular-nums;border-bottom:2px solid #F7C51E}
+.bus-taxi li a:hover{border-color:var(--navy)}
+@media (max-width:680px){.bus-taxi .tc{border-right:0;border-bottom:1px solid var(--line)}}
 </style>
 <!-- seo: matches the Wix page on ukairshowguide.co.uk -->
 <meta name="robots" content="noindex, nofollow">
@@ -774,6 +789,7 @@ footer a{color:#fff}
       <div><h3 id="busthh">To the show</h3><div class="bus-chips" id="busthere"></div></div>
       <div><h3 id="busbkh">Back to the station</h3><div class="bus-chips" id="busback"></div></div>
     </div>
+    <div class="bus-taxi rise" id="bustaxi" hidden><div class="th"><h3 id="bustaxih"></h3><p id="bustaxip"></p></div><div class="tg" id="bustaxig"></div></div>
     <div class="bus-notes rise"><div class="tip"><b id="busn1h"></b><div id="busn1"></div></div><div class="tip"><b id="busn2h"></b><div id="busn2"></div></div></div>
   </div>
 </section>
@@ -1458,6 +1474,10 @@ var DATA=__DATA__;
     $('bustitle').textContent = BUS.title; $('busintro').textContent = BUS.intro;
     $('busfrom').textContent = BUS.stop; $('busto').textContent = BUS.toShort;
     $('busthh').textContent = BUS.thereHead || 'To the show, every ' + BUS.every + ' minutes';
+    if (BUS.taxis) {
+      $('bustaxi').hidden = false; $('bustaxih').textContent = BUS.taxis.title; $('bustaxip').textContent = BUS.taxis.intro;
+      $('bustaxig').innerHTML = BUS.taxis.groups.map(function(g){ return '<div class="tc"><h4>' + g[0] + '</h4><ul>' + g[1].map(function(f){ return '<li><span>' + f[0] + '</span><a href="tel:' + f[1].replace(/\s/g, '') + '">' + f[1] + '</a></li>'; }).join('') + '</ul></div>'; }).join('');
+    }
     $('busn1h').textContent = BUS.notes[0][0]; $('busn1').innerHTML = BUS.notes[0][1].map(function(p){ return '<p>' + p + '</p>'; }).join('');
     $('busn2h').textContent = BUS.notes[1][0]; $('busn2').innerHTML = BUS.notes[1][1].map(function(p){ return '<p>' + p + '</p>'; }).join('');
   }
