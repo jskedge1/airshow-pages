@@ -42,6 +42,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Train to Cosford, West Midlands Railway train route page with connections for the RAF Cosford Air Show (Wix page /train-to-cosford, hidden from the menu; opened by the "Train route details" button in the Cosford page's Train to Cosford topic; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/cosford.html |
 | Train to Swansea, Transport for Wales and GWR train route page for the Wales Airshow (Wix page /train-to-swansea, hidden from the menu; opened by the "Train route details" button in the Wales page's Train to Swansea topic; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/wales.html |
 | Train to RIAT, trains to Swindon plus the free Swindon Shuttle to RAF Fairford (Wix page /train-to-riat, hidden from the menu; opened by the "Train route details" button in the RIAT page's Train to Swindon and shuttle topic; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/riat.html |
+| Airshow Questions and Answers (planning guide, Wix page /airshow-questions, added 30 Oct 2026; built from qa-src/) | https://jskedge1.github.io/airshow-pages/questions-and-answers.html |
 | Airshow Security and Bag Searches (planning guide, Wix page /airshow-security, photos in security-img/) | https://jskedge1.github.io/airshow-pages/airshow-security.html |
 | Nikon D500 3D Camera Guide (shown inside the Airshow Photography Hub since 30 Oct 2026: the full width "Nikon D500 3D camera guide" tile opens it in a frame on the hub's own page, `d500View()` in photography-hub.html; the page sends its height and its Back to the hub clicks to the hub with postMessage. No Wix page of its own, so links.js keeps it live:false). 3D camera built with three.js from jsDelivr, every control clickable with airshow settings, set up checklist and settings by aircraft | https://jskedge1.github.io/airshow-pages/nikon-d500.html |
 | Planning guide 1, Which airshow suits you? (Wix page /first-airshow-which-show) | https://jskedge1.github.io/airshow-pages/first-airshow-which-show.html |
@@ -176,6 +177,7 @@ Set `live:false` on a page until its Wix page exists.
 | Planning your first airshow | /planning-your-first-airshow |
 | Camping at Airshows | /camping-at-airshows |
 | Airshow Security and Bag Searches | /airshow-security |
+| Airshow Questions and Answers | /airshow-questions |
 
 Addresses checked against the live site on 19 Oct 2026.
 
@@ -377,3 +379,12 @@ One ladder, used on Advertise With Us and in the Trader Hub. Each trader plan fr
 
 Advert packages for businesses off the airfield: Guide Listing £49 (was Business Listing), Featured Partner £129, Regional Partner £249, Main Website Partner from £699. Every advert is labelled as an advert.
 The backend (velo/backend/traders.web.js) only takes the plans free, founding, flypast and headliner from the sign up form; Display Team and Finale come through the enquiry form.
+
+## Questions and answers page (30 Oct 2026)
+
+`questions-and-answers.html` is the Q&A page (Wix page /airshow-questions). 59 questions in 11 topics: Planning and tickets, Getting there and parking, On the day, Families and children, Accessibility, Bags, security and show rules, Food, drink and stalls, Weather, Photography, Camping and places to stay, My Airshow Hub and this guide. Each topic is a folding section (feature page style) with Jack's short intro, a photo on a teal block, a link to the full guide, and the questions as open and close rows with a "More in ..." link to the page with the full detail, so answers stay short and don't repeat other pages.
+- Edit the words in `qa-src/questions.py`, then run `python3 build.py` in `qa-src/`. The build stops if any copy has a dash or a banned word. Layout and script are in `qa-src/template.html`. Then run `python3 tools-search.py` so the site search finds the new questions.
+- The search box in the header filters every answer as you type, opens the topics that match and highlights the words. Words that mean the same (kids and children, loo and toilet, dog and pet) only count when nothing matches the word as typed. "People often ask" quick links are `POPULAR` in questions.py.
+- A question can be opened from the address: `?q=dogs` or `#q-dogs` (the question ids are in questions.py); `#family` opens a topic.
+- Photos are Jack's own from home-img/ and first-airshow-img/, plus two AI images from guide-img/ (accessible-viewing and bag-check) with "AI generated for a visual look" captions.
+- The page carries FAQ structured data for search engines, built from the same questions.
