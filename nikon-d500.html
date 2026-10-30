@@ -190,7 +190,7 @@ body{background:var(--paper)}
   .title h1 br{display:none}
   .modes{margin:14px 12px 0;gap:4px}
   .mode{padding:10px 8px 12px}.mode small{display:none}.mode b{font-size:15px}
-  .stage{height:clamp(300px,84vw,440px)}
+  .stage{height:clamp(360px,104vw,520px)}
   .dock{margin:0 0 10px;align-self:center}
   .dock button{padding:11px 10px;font-size:14px}
   .list{height:auto;margin:0 12px}
@@ -542,6 +542,7 @@ scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
 const camera = new THREE.PerspectiveCamera(32, 1, 0.5, 400);
 camera.position.set(...(cfg.camPos||[22,13,-34]));
+if(stage.clientWidth<560) camera.position.multiplyScalar(.66);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor = 0.08;
 controls.target.set(0, 0.6, -2);
@@ -862,14 +863,14 @@ function viewFor(c){
   const n = c._n.clone(); const p = worldOf(c._p);
   const extra = Math.abs(n.y)>.85 ? V(.12,0,c._p.z>-2.6?.6:-.6) : V(n.x*.1, .38, 0);
   const dir = n.clone().add(extra).normalize();
-  const dist = (c.dist || 25)*(cfg.distScale||1)*(stage.clientWidth<560?.78:1);
+  const dist = (c.dist || 25)*(cfg.distScale||1)*(stage.clientWidth<560?.66:1);
   const target = p.clone().lerp(worldOf(CENTER), .4);
   return [target.clone().addScaledVector(dir, dist), target];
 }
 const VIEWS = { front:[V(0,4,-38)], back:[V(0,5,38)], top:[V(0.01,40,4)], left:[V(-38,5,0)], right:[V(38,5,-2)], under:[V(0.01,-38,2)] };
 function setView(name){
   stopAuto(); settleRotation();
-  const [pos] = VIEWS[name]; flyTo(pos.clone().multiplyScalar(stage.clientWidth<560?.8:1), V(0,0.2,-0.6));
+  const [pos] = VIEWS[name]; flyTo(pos.clone().multiplyScalar(stage.clientWidth<560?.66:1), V(0,0.2,-0.6));
 }
 
 
