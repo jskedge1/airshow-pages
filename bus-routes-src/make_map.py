@@ -1,5 +1,6 @@
 """Write bus-routes.js (buttons on the show pages) and out/index.html (every route, by show)."""
 import json, html
+from build import opcol, OPS
 built = json.load(open('index.json'))['built']
 ids = {b['id'] for b in built}
 T = {'ayr': {'bus': ['X77', '4', '42', 'X42', '9']},
@@ -18,7 +19,9 @@ for sh, tp in T.items():
         lst = []
         for n in nums:
             i = f'{n.lower()}-{sh}'
-            if i in ids and [n, i] not in lst: lst.append([n, i])
+            if i in ids and not any(x[1] == i for x in lst):
+                th = opcol(OPS.get(i, '')) or {}
+                lst.append([n, i, {k: th[k] for k in ('op1', 'op2', 'opink') if k in th}, OPS.get(i, '')])
         if lst: M.setdefault(sh, {})[t] = lst
 js = json.dumps(M, separators=(',', ':')).replace('},"', '},\n    "')
 open('bus-routes.js', 'w').write(open('bus-routes.tpl.js').read().replace('/*MAP*/', js))

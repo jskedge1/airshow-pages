@@ -84,6 +84,10 @@ While `WIX_PAGE` in `bus-routes.js` is `null`, the buttons open the route page i
 
 Layout (30 Oct 2026): the Airshows on a Budget page design with square corners: a cover in the company colour with the seat fabric pattern, the destination blind and a Key details box, the bus lane strip, a sticky jump bar, then Your stop for the show (red bus stop sign, bell push that lights a Bus stopping sign), Pick your bus (LED bus number screen, a bus stop departures screen, day and direction, ticket row, a Your bus panel with a planning slip, and See every time), Route map, The roads it takes, Before you travel and Keep planning.
 
+Site menu: each route page (and the route list) starts with the same menu as the website, copied from the Wix custom code "UK Airshow Guide header menu" into `bus-routes-src/header-block.html` (links point at ukairshowguide.co.uk, the Airshow Hub button is a plain link). If the menu in Wix changes, copy it again. When a route page is shown inside the website, its own menu removes itself.
+
+Getting There buttons: on the show pages each "Show route details" button is in its bus company's colours with the company name, square cornered, inside a white box with an amber edge.
+
 Live data: each page asks bustimes.org every 30 seconds for the buses out on that route right now (`vehicles.json?service=<sid>`) and their stop times (`/api/trips/<id>/`). The live buses show on the map, and when today is the picked day the departures screen counts down to the next buses using their real expected times, with minutes late or early. With no live data it counts down to the timetable. Nothing needs a key.
 
 Timetables: collect.py fetches the timetables in force on the next Thursday to Sunday from the day it runs, and the pages say the date they were checked. Rerun the steps below every so often (or ask Claude to) to keep them current.
