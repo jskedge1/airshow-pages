@@ -55,6 +55,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Advertise With Us (Wix page /advertise-with-us) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
 | Landing page (Wix page /coming-soon-03) | https://jskedge1.github.io/airshow-pages/landing.html |
 | Groups page header (Wix page /groups, above the Wix Groups list) | https://jskedge1.github.io/airshow-pages/groups-header.html |
+| Public transport to UK airshows, every bus and train route page by show in tabs, with a town search (Wix page /airshow-public-transport, linked from the Public transport section of Getting there; Airshows on a Budget layout; built by public-transport-src/build.py from the bus and train route pages) | https://jskedge1.github.io/airshow-pages/public-transport.html |
 | Bus route maps, every route by show (Wix page /bus-route made 30 Oct 2026, hidden from the menu, embed ID html12, page code velo/page-code/bus-route.js; live since 30 Oct 2026, 2800px tall on desktop and 4700px on phones) | https://jskedge1.github.io/airshow-pages/bus-routes/index.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
