@@ -1,83 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bus 12, Maidstone to Tenterden | The Big Guide to UK Airshows</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
+/* Site palette. The bus company's colours replace --navy (ui), --amber (acc) and the --op livery set at run time. */
 :root{
-  --navy:#13293C;--navy-2:#1C3850;--navy-3:#0C1C2A;
-  --sky:#00A6E2;--sky-ink:#006F99;--teal:#32B4AF;--teal-ink:#0E5F5B;
-  --red:#D74949;--amber:#F2B233;--line:#C6C6C6;--mist:#EEF2F5;--paper:#FFFFFF;--ink:#0B0B0B;
-  --ease:cubic-bezier(.22,.61,.36,1);
+  --navy:#13293C;--amber:#F2B233;--accink:#13293C;--onui:#F2B233;
+  --op1:#13293C;--op2:#F2B233;--op3:#F2B233;--opink:#fff;--led:#F2B233;
+  --navy-3:#0C1C2A;--red:#D74949;
+  --ink:#1A2731;--muted:#4E5D68;--line:#E3E9ED;--pale:#D5E1E9;--mist:#F1F4F6;
+  --f:'Barlow',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;--c:'Barlow Condensed','Barlow',system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{scrollbar-width:none;-ms-overflow-style:none}
-html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
-body{background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:17px;line-height:27px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-button{font:inherit;color:inherit;cursor:pointer}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
+html{background:#fff}
+body{background:#fff;color:var(--ink);font-family:var(--f);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
-.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3{text-wrap:balance}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
-/* top strip */
-.strip{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 0;font-weight:500;font-size:15px}
-.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy);padding:6px 0;border-bottom:2px solid transparent;transition:border-color .3s var(--ease)}
-.back:hover{border-color:var(--amber)}
-.back svg{width:16px;height:16px}
-.op{color:#3d4a55}
+/* ---------- cover ---------- */
+.cover{position:relative;overflow:hidden;background:var(--navy);color:#fff}
+.cover::before{content:"";position:absolute;inset:0;
+  background-color:var(--op1);
+  background-image:radial-gradient(circle at 25% 25%,var(--op2) 0 3px,transparent 3.5px),radial-gradient(circle at 75% 75%,var(--op3) 0 2.5px,transparent 3px),
+    linear-gradient(45deg,transparent 44%,rgba(255,255,255,.18) 44% 56%,transparent 56%),linear-gradient(-45deg,transparent 44%,rgba(0,0,0,.25) 44% 56%,transparent 56%);
+  background-size:26px 26px;opacity:.9}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--navy) 0%,color-mix(in srgb,var(--navy) 92%,transparent) 46%,color-mix(in srgb,var(--navy) 35%,transparent) 100%)}
+.cover .wrap{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:32px 56px;align-items:end;padding-top:56px;padding-bottom:44px}
+.crumb{display:flex;flex-wrap:wrap;gap:6px 10px;font-weight:500;font-size:15px;color:rgba(255,255,255,.78);margin-bottom:14px}
+.crumb a{text-decoration:none}.crumb a:hover{color:#fff}
+.tag{display:inline-block;background:var(--amber);color:var(--accink);font-weight:600;font-size:14px;padding:5px 12px;margin-bottom:14px}
+h1{font-family:var(--c);font-weight:800;text-transform:uppercase;font-size:clamp(44px,6.4vw,84px);line-height:.92;letter-spacing:.005em}
+h1 em{font-style:normal;color:var(--onui)}
+.lede{margin-top:16px;font-size:19px;color:rgba(255,255,255,.88);max-width:56ch}
 
-/* hero */
-.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 48px;align-items:end;padding:26px 0 0}
-.blind{position:relative;background:var(--navy-3);border-radius:14px 14px 14px 0;padding:22px 26px 24px;display:flex;align-items:center;gap:22px;overflow:hidden;box-shadow:0 18px 40px -22px rgba(12,28,42,.7)}
+/* destination blind */
+.blind{position:relative;background:var(--navy-3);border:6px solid #05090D;padding:16px 20px 18px;display:flex;align-items:center;gap:18px;overflow:hidden;box-shadow:0 24px 50px -20px rgba(0,0,0,.6)}
 .blind::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.55) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
-.blind .num{font:800 92px/0.9 "Barlow Condensed",sans-serif;color:var(--led);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
-.blind .dest{font:700 34px/1 "Barlow Condensed",sans-serif;color:var(--led);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3)}
-.blind .via{display:block;margin-top:8px;font:600 18px/1.2 "Barlow Condensed",sans-serif;color:#FFE2A3;letter-spacing:.03em;text-transform:uppercase;opacity:1;text-shadow:0 0 10px rgba(242,178,51,.3);transition:opacity .4s var(--ease)}
-.intro h1{font:800 46px/46px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;letter-spacing:-.005em}
-.intro p{margin-top:12px;font-size:18px;line-height:29px;color:#1d2730;max-width:520px}
+.blind .num{font:800 76px/.9 var(--c);color:var(--led);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
+.blind .dest{font:700 30px/1 var(--c);color:var(--led);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3);will-change:transform,opacity}
+.blind .via{display:block;margin-top:8px;font:600 17px/1.2 var(--c);color:#FFE2A3;letter-spacing:.03em;text-transform:uppercase;text-shadow:0 0 10px rgba(242,178,51,.3);transition:opacity .4s var(--ease);will-change:transform,opacity}
+.blind .roll{animation:roll .55s cubic-bezier(.65,0,.35,1)}
+@keyframes roll{0%{transform:translateY(0);opacity:1}45%{transform:translateY(-120%);opacity:0}55%{transform:translateY(120%);opacity:0}100%{transform:translateY(0);opacity:1}}
 
-/* facts */
-.facts{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.2fr;margin:34px 0 0;border-top:3px solid var(--navy)}
-.fact{padding:14px 18px 16px 0;border-right:1px solid var(--line)}
-.fact+.fact{padding-left:18px}
-.fact:last-child{border-right:0}
-.fact span{display:block;font-weight:500;font-size:15px;line-height:20px;color:var(--navy)}
-.fact b{display:block;margin-top:4px;font:700 25px/28px "Barlow Condensed",sans-serif;color:var(--navy)}
-.fact.hl b{color:var(--red)}
+/* key details */
+.info{margin-top:12px;background:rgba(0,0,0,.32);border-top:4px solid var(--amber);padding:18px 22px 16px;box-shadow:0 24px 50px -20px rgba(0,0,0,.6)}
+.info h2{font:800 24px/1 var(--c);text-transform:uppercase;color:var(--onui);margin-bottom:8px}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid rgba(255,255,255,.12);font-size:15.5px;line-height:1.35}
+.kv span:first-child{color:rgba(255,255,255,.75);font-weight:500}
+.kv span:last-child{font-weight:700;text-align:right}
+.kv.hl span:last-child{background:var(--red);padding:0 8px}
+.livery{height:8px;background:linear-gradient(100deg,var(--op1) 0 58%,var(--op2) 58% 74%,var(--op3) 74% 84%,var(--op1) 84% 100%)}
 
-/* planner */
-.planner{margin-top:38px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px 28px;align-items:start}
-.planner h2,.sec h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;grid-column:1/-1}
-.seg{display:inline-flex;background:var(--mist);border-radius:12px;padding:5px;gap:4px}
-.seg button{border:0;background:transparent;border-radius:9px;padding:10px 16px;font-weight:600;font-size:16px;color:var(--navy);transition:background .3s var(--ease),color .3s var(--ease)}
+/* bus lane */
+.roadstrip{position:relative;height:56px;overflow:hidden;background:#2B343C;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.2px);background-size:5px 5px}
+.roadstrip::before{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;background:repeating-linear-gradient(90deg,#fff 0 34px,transparent 34px 60px);opacity:.8}
+.roadstrip::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:#F2B233;box-shadow:0 -4px 0 #F2B233}
+.roadstrip .lane{position:absolute;left:max(16px,calc(50% - 574px));top:7px;font:800 13px/1 var(--f);letter-spacing:.32em;color:rgba(255,255,255,.85)}
+.roadstrip .rbus{position:absolute;top:10px;left:-120px;width:96px;height:36px;transition:transform 8s cubic-bezier(.45,.05,.35,1)}
+.roadstrip.go .rbus{transform:translateX(calc(100vw + 160px))}
+.roadstrip .rstop{position:absolute;right:max(16px,calc(50% - 574px));top:4px;width:26px;height:46px}
+.rbus .lv1{fill:var(--op1)}.rbus .lv2{fill:var(--op2)}.rbus .lv3{fill:var(--op3)}
+
+/* jump bar */
+.jump{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.12)}
+.jump .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.jump .wrap::-webkit-scrollbar{display:none}
+.jump a{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:15.5px;padding:14px 16px;transition:background .3s var(--ease),color .3s var(--ease)}
+.jump a:hover,.jump a.on{background:var(--amber);color:var(--accink)}
+.jump .opchip{margin-left:auto;flex:none;display:flex;align-items:center;gap:8px;padding:0 4px 0 16px;color:rgba(255,255,255,.85);font-weight:500;font-size:14.5px;white-space:nowrap}
+.jump .opchip i{width:14px;height:14px;background:conic-gradient(var(--op2) 0 33%,var(--op3) 0 66%,var(--opink) 0);box-shadow:0 0 0 2px rgba(255,255,255,.5)}
+
+/* sections */
+section.s{padding:68px 0 8px;scroll-margin-top:52px}
+.sh{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px 48px;align-items:end;margin-bottom:28px}
+h2.t{font:800 clamp(34px,4.4vw,52px)/.95 var(--c);text-transform:uppercase;color:var(--navy);padding-left:16px;border-left:5px solid var(--op1)}
+.sh p{color:var(--muted);max-width:60ch}
+
+/* your stop */
+.yourstop{display:grid;grid-template-columns:220px minmax(0,1fr);border:1px solid var(--line);box-shadow:0 24px 40px -30px rgba(19,41,60,.5)}
+.ys-sign{background:var(--mist);display:flex;align-items:flex-end;justify-content:center;padding:22px 20px 0;position:relative}
+.ys-sign::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(90deg,var(--op1) 0 18px,var(--op2) 18px 30px)}
+.stopsign{width:150px;height:auto;display:block;filter:drop-shadow(0 10px 14px rgba(12,28,42,.25));transform-origin:50% 100%}
+.yourstop.in .stopsign{animation:sway 1.6s cubic-bezier(.36,.07,.19,.97) .3s 1}
+@keyframes sway{0%{transform:rotate(0)}25%{transform:rotate(-2.2deg)}55%{transform:rotate(1.4deg)}80%{transform:rotate(-.6deg)}100%{transform:rotate(0)}}
+.ys-body{padding:24px 28px 22px}
+.ys-body .lbl{display:inline-block;background:var(--red);color:#fff;font-weight:600;font-size:14px;padding:4px 10px}
+.sname{display:block;margin-top:10px;font:800 clamp(28px,3.4vw,40px)/1 var(--c);color:var(--red);text-transform:uppercase}
+.ys-list{list-style:none;margin-top:14px}
+.ys-list li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--line);font-size:16.5px;line-height:1.5}
+.ys-list li svg{width:26px;height:26px}
+.ys-list li b{color:var(--navy)}
+
+/* planner: pick your bus */
+.planner{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);border:1px solid var(--line);box-shadow:0 24px 40px -30px rgba(19,41,60,.5)}
+.pin{padding:22px 26px 24px;min-width:0}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 18px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0;padding-top:0}
+.row.full{grid-template-columns:minmax(0,1fr)}
+.lb{font-weight:600;color:var(--navy)}
+.lb small{display:block;font-weight:500;color:var(--muted);font-size:14.5px}
+.seg{display:inline-flex;border:2px solid var(--navy)}
+.seg button{border:0;background:transparent;padding:8px 14px;font-weight:600;font-size:15px;color:var(--navy);white-space:nowrap;transition:background .3s var(--ease),color .3s var(--ease)}
 .seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
-.board{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.boardwrap{position:relative;min-width:0}
+.board{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:4px 44px 6px 0;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
 .board::-webkit-scrollbar{display:none}
-.dep{flex:0 0 auto;min-width:150px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px 11px;transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
-.dep:hover{border-color:var(--navy);transform:translateY(-2px)}
-.dep .t{font:700 28px/30px "Barlow Condensed",sans-serif;color:var(--navy);font-variant-numeric:tabular-nums}
-.dep .a{display:block;font-weight:500;font-size:14px;line-height:19px;color:#3d4a55}
-.dep[aria-pressed="true"]{background:var(--navy);border-color:var(--navy)}
+.dep{position:relative;flex:0 0 auto;min-width:148px;max-width:280px;text-align:left;border:0;background:#FBF6EA;padding:11px 16px 12px 22px;box-shadow:inset 0 0 0 1px #E2D7BD;transition:background .3s var(--ease),transform .3s var(--ease);
+  -webkit-mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat}
+.dep::before{content:"";position:absolute;left:12px;top:8px;bottom:8px;border-left:2px dashed #CDBF9E}
+.dep:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px var(--navy)}
+.dep .t{display:block;font:700 28px/30px var(--c);color:var(--navy);font-variant-numeric:tabular-nums}
+.dep .a{display:block;font-weight:500;font-size:14px;line-height:19px;color:var(--muted);white-space:normal}
+.dep[aria-pressed="true"]{background:var(--navy);box-shadow:none}
 .dep[aria-pressed="true"] .t{color:var(--onui)}
-.dep[aria-pressed="true"] .a{color:#dfe7ee}
+.dep[aria-pressed="true"] .a{color:#fff;opacity:.88}
+.dep[aria-pressed="true"]::before{border-color:var(--onui);opacity:.55}
+.dep .nx{position:absolute;right:10px;top:6px;font:700 11px/1 var(--f);background:var(--red);color:#fff;padding:3px 5px}
+.bscroll{position:absolute;top:50%;z-index:3;width:38px;height:38px;margin-top:-21px;border:0;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;transition:opacity .3s var(--ease),background .3s var(--ease)}
+.bscroll:hover{background:var(--amber);color:var(--accink)}
+.bscroll svg{width:16px;height:16px}
+.bscroll.l{left:-6px}.bscroll.r{right:0}
+.bscroll[hidden]{display:none}
+.bscroll:disabled{opacity:0;pointer-events:none}
+.boardnote{margin-top:8px;font-size:15px;line-height:22px;color:var(--muted)}
+.pout{background:var(--navy);color:#fff;padding:24px 26px 24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.pout .lbl{align-self:flex-start;background:var(--amber);color:var(--accink);font-weight:600;font-size:14px;padding:4px 10px}
+.big{font:800 clamp(56px,7vw,84px)/.9 var(--c);color:#fff;font-variant-numeric:tabular-nums}
+.big small{font-size:.38em;color:var(--onui);margin-left:8px;letter-spacing:.02em}
+.per{color:rgba(255,255,255,.82);font-weight:500}
+.per b{color:#fff}
+.sumkv .kv span:first-child{color:rgba(255,255,255,.72)}
+.save{background:rgba(255,255,255,.1);border-left:4px solid var(--amber);padding:12px 14px;font-size:15.5px;color:rgba(255,255,255,.9)}
+.save b{color:#fff}
+.nobus{display:none;margin-top:14px;background:var(--mist);border-left:5px solid var(--red);padding:14px 18px;font-size:16px;line-height:25px}
+.nobus.on{display:block}
 
-/* map stage */
-.stage{position:relative;margin-top:20px}
-.mapbox{position:relative}
-#map{height:640px;border-radius:16px;z-index:0;background:#dfe6ea}
+/* every time */
+.ttbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:22px}
+.ttbtn{display:inline-flex;align-items:center;gap:10px;border:2px solid var(--navy);background:var(--navy);color:#fff;padding:10px 16px;font-weight:700;font-size:15px;line-height:20px;transition:background .3s var(--ease),color .3s var(--ease)}
+.ttbtn:hover{background:#fff;color:var(--navy)}
+.ttbtn svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.ttbtn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.ttcase{display:none;margin-top:14px;background:var(--navy);padding:10px;box-shadow:0 18px 40px -24px rgba(12,28,42,.7)}
+.ttcase.on{display:block;animation:ttin .45s var(--ease)}
+@keyframes ttin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.tthead{display:flex;align-items:center;gap:12px;padding:6px 8px 12px;color:#fff}
+.tthead .br{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:36px;padding:0 8px;background:var(--navy-3);color:var(--led);font:800 24px/1 var(--c)}
+.tthead b{display:block;font:700 21px/23px var(--c);text-transform:uppercase}
+.tthead span{font-weight:500;font-size:14px;line-height:19px;color:rgba(255,255,255,.82)}
+.ttsheet{background:#fff;overflow-x:auto;scrollbar-width:none;position:relative}
+.ttsheet::-webkit-scrollbar{display:none}
+.ttsheet table{border-collapse:separate;border-spacing:0;font-size:15px;line-height:20px}
+.ttsheet th{position:sticky;left:0;z-index:2;background:#fff;text-align:left;font-weight:600;color:var(--navy);padding:7px 14px 7px 12px;min-width:170px;max-width:210px;border-right:2px solid var(--navy);white-space:normal}
+.ttsheet td{padding:7px 10px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink);white-space:nowrap;border-left:1px solid var(--mist)}
+.ttsheet tr:nth-child(even) th,.ttsheet tr:nth-child(even) td{background:#F6F8FA}
+.ttsheet tr.off th,.ttsheet tr.off td{background:#FCEDED;color:var(--red);font-weight:700}
+.ttsheet tr.off th .flag{margin-right:6px}
+.ttsheet td.sel{box-shadow:inset 0 0 0 2px var(--amber)}
+.ttsheet td.no{color:#b6bec5;font-weight:500}
+.tthint{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 8px 4px;font-size:14px;line-height:19px;color:rgba(255,255,255,.82)}
+
+/* route map */
+.stage{display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);border:1px solid var(--line);box-shadow:0 24px 40px -30px rgba(19,41,60,.5)}
+.stage.off{opacity:.45;pointer-events:none}
+.mapbox{position:relative;min-width:0}
+#map{height:620px;z-index:0;background:#dfe6ea}
 #map .leaflet-tile-pane{filter:saturate(.55) contrast(.95) brightness(1.04)}
-.leg{position:absolute;left:16px;bottom:16px;z-index:5;background:#fff;border-radius:10px;padding:8px 12px;display:flex;gap:14px;font-weight:500;font-size:14px;line-height:18px;box-shadow:0 6px 18px -8px rgba(12,28,42,.45)}
+.leaflet-bar,.leaflet-bar a,.leaflet-popup-content-wrapper,.leaflet-popup-tip{border-radius:0!important}
+.leg{position:absolute;left:12px;bottom:12px;z-index:5;background:#fff;padding:8px 12px;display:flex;gap:14px;font-weight:500;font-size:14px;line-height:18px;box-shadow:0 6px 18px -8px rgba(12,28,42,.45)}
 .leg i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:2px solid var(--navy);background:#fff}
 .leg i.r{background:var(--red);border-color:var(--red)}
-.leg i.l{width:22px;height:5px;border:0;border-radius:3px;background:var(--op1)}
-.panel{position:absolute;top:18px;right:18px;max-height:calc(100% - 36px);width:372px;z-index:5;background:#fff;border-radius:14px;box-shadow:0 22px 44px -20px rgba(12,28,42,.55);display:flex;flex-direction:column;overflow:hidden}
-.panel header{background:var(--navy);color:#fff;padding:14px 18px 13px}
-.panel header b{display:block;font:700 22px/24px "Barlow Condensed",sans-serif;text-transform:uppercase}
-.panel header span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
-.stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px}
+.leg i.l{width:22px;height:5px;border:0;border-radius:0;background:var(--op1)}
+.panel{display:flex;flex-direction:column;max-height:620px;min-width:0;border-left:1px solid var(--line)}
+.panel header{position:relative;background:var(--navy-3);color:#fff;padding:14px 18px 13px;overflow:hidden;border-top:5px solid var(--op1)}
+.panel header::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.5) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
+.panel header b{position:relative;z-index:1;display:block;padding-right:92px;font:700 22px/24px var(--c);text-transform:uppercase;color:var(--led);text-shadow:0 0 12px rgba(242,178,51,.35)}
+.panel header span{position:relative;z-index:1;font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
+.bell{position:absolute;right:16px;top:14px;z-index:2;display:flex;align-items:center;gap:6px;font:600 13px/1 var(--f);color:#cfdbe5}
+.bell i{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(215,73,73,.25);animation:bell 2.4s ease-in-out infinite}
+@keyframes bell{0%,100%{box-shadow:0 0 0 3px rgba(215,73,73,.25)}50%{box-shadow:0 0 0 6px rgba(215,73,73,.08)}}
+.stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px;flex:1}
 .stops::-webkit-scrollbar{display:none}
 .stops li{position:relative;padding:5px 0 5px 28px;display:flex;justify-content:space-between;gap:12px;font-size:15px;line-height:21px}
 .stops li::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:3px;background:var(--op1)}
@@ -87,332 +202,337 @@ a{color:inherit}
 .stops li.key{font-weight:700;color:var(--navy);padding-top:8px;padding-bottom:8px}
 .stops li.key::after{top:12px;left:0;width:15px;height:15px;border:3px solid var(--navy)}
 .stops li.off{color:var(--red)}
-.stops li.off::after{background:var(--red);border-color:var(--red)}
+.stops li.off::after{display:none}
+.stops li.off .flag{position:absolute;left:-2px;top:2px;width:18px;height:26px;margin:0}
 .stops li.off .tag{display:block;font-weight:500;font-size:13px;line-height:17px;color:var(--red)}
 .stops li.stop{cursor:pointer}
 .stops li.stop:hover span:first-child,.stops li.active span:first-child{text-decoration:underline;text-decoration-color:var(--amber);text-underline-offset:3px}
 .stops li.minor{display:none;color:#2c3944}
 .stops li.minor.open{display:flex}
-.stops time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);opacity:.85;white-space:nowrap}
-.stops li.key time{color:var(--navy)}
+.stops time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);white-space:nowrap}
 .stops li.off time{color:var(--red)}
 .stops li.fold{padding-top:2px;padding-bottom:2px}
 .stops li.fold::after{display:none}
 .stops li.fold::before{background:repeating-linear-gradient(var(--op1) 0 4px,transparent 4px 8px)}
-.stops li.fold button{border:0;background:none;padding:2px 0;font-weight:600;font-size:14px;color:var(--navy);opacity:.8;text-align:left}
-.stops li.fold button:hover{color:var(--navy)}
-
-/* map bits */
-.lbl{background:var(--navy);color:#fff;border:0;border-radius:6px;font:600 13px "Barlow",sans-serif;padding:3px 8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
+.stops li.fold button{border:0;background:none;padding:2px 0;font-weight:600;font-size:14px;color:var(--navy);text-align:left}
+.lbl{background:var(--navy);color:#fff;border:0;border-radius:0;font:600 13px var(--f);padding:3px 8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
 .lbl.off{background:var(--red)}
 .lbl::before{display:none}
-.busdot{width:30px;height:30px;border-radius:50%;background:var(--amber);border:3px solid var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
+.busdot{width:30px;height:30px;border-radius:50%;background:var(--op2);border:3px solid var(--op1);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
 .busdot svg{width:15px;height:15px}
-.leaflet-popup-content{font:500 15px/21px "Barlow",sans-serif;margin:10px 14px}
+.busdot svg rect:first-child{fill:var(--op1)}
+.offpin{width:30px;height:46px}
+.offpin svg{width:30px;height:46px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+.leaflet-popup-content{font:500 15px/21px var(--f);margin:10px 14px}
 .leaflet-popup-content b{color:var(--navy)}
+.flag{display:inline-block;vertical-align:-3px;width:18px;height:26px;margin-right:6px}
 
-/* roads */
-.sec{margin-top:56px}
-.journey{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:34px;align-items:start;margin-top:18px}
-.legs{list-style:none;counter-reset:none}
-.legs li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
-.legs li:last-child{border-bottom:1px solid var(--line)}
-.signs{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
-.sign{display:inline-block;font:700 16px/1 "Barlow",sans-serif;padding:5px 7px 4px;border-radius:4px;border:2px solid #111;background:#fff;color:#111;letter-spacing:.01em}
+/* roads, numbered like the budget page */
+.ways{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 40px}
+.way{display:grid;grid-template-columns:52px minmax(0,1fr);gap:4px 16px;padding:20px 0;border-top:1px solid var(--line)}
+.way .n{font:800 40px/.9 var(--c);color:var(--op1)}
+.way h3{font-size:20px;line-height:1.25;color:var(--navy)}
+.way p{grid-column:2;color:#2B3A45}
+.signs{grid-column:2;display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 2px}
+.sign{display:inline-block;font:700 15px/1 var(--f);padding:5px 7px 4px;border:2px solid #111;background:#fff;color:#111}
 .sign.m{background:#1D5FAD;border-color:#fff;color:#fff;box-shadow:0 0 0 1px #1D5FAD}
-.legs b{display:block;font:700 21px/24px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
-.legs p{margin-top:3px;font-size:16px;line-height:25px;color:#1d2730}
-.side{position:relative;top:-64px}
-.advice{background:var(--navy);color:#fff;border-radius:16px 16px 16px 0;padding:24px 24px 22px}
-.advice h3{font:700 24px/26px "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--onui)}
-.advice p{margin-top:10px;font-size:16px;line-height:25px;color:#e6edf3}
-.advice a.btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--amber);color:var(--accink);text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:10px;transition:transform .3s var(--ease),background .3s var(--ease)}
-.advice a.btn:hover{transform:translateX(3px);filter:brightness(1.08)}
-.alt{margin-top:14px;border:2px solid var(--op1);border-radius:14px;padding:16px 18px}
-.alt b{display:block;font:700 20px/22px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
-.alt p{margin-top:6px;font-size:15px;line-height:23px}
 
-.note{margin:44px 0 40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;line-height:21px;color:#3d4a55;max-width:820px}
-.note a{color:var(--navy)}
+/* tips */
+.tips{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:16px;margin-top:28px}
+.tip{background:var(--mist);border-left:5px solid var(--op1);padding:16px 18px}
+.tip b{display:block;color:var(--navy);font-weight:700;margin-bottom:2px}
+.tip a.go{display:inline-block;margin-top:10px;font-weight:700;color:var(--navy);text-decoration:none;border-bottom:2px solid var(--amber)}
+.tip a.go:hover{border-color:var(--navy)}
+
+/* keep planning */
+.more{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:6px}
+.more a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px;background:var(--mist);text-decoration:none;font-weight:600;color:var(--navy);border-left:4px solid var(--op1);transition:background .3s var(--ease)}
+.more a:hover{background:color-mix(in srgb,var(--op1) 12%,#fff)}
+.more a i{font-style:normal;transition:transform .3s var(--ease)}
+.more a:hover i{transform:translateX(4px)}
+footer{margin-top:80px;background:var(--navy);color:rgba(255,255,255,.82);font-size:14.5px;line-height:1.55;padding:26px 0}
+footer a{color:#fff}
 
 .rise{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .rise.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none;transition:none}.dep,.advice a.btn{transition:none}}
 
-@media(max-width:980px){
-  .hero{grid-template-columns:1fr;gap:22px}
-  .facts{grid-template-columns:1fr 1fr}
-  .fact:nth-child(2){border-right:0}
-  .fact:nth-child(3){padding-left:0}
-  .fact:nth-child(n+3){border-top:1px solid var(--line)}
-  .planner{grid-template-columns:1fr}
+@media (max-width:980px){
+  .cover .wrap{grid-template-columns:1fr;padding-top:40px}
+  .sh{grid-template-columns:1fr}
+  .planner,.stage,.tips{grid-template-columns:1fr}
+  .panel{max-height:none;border-left:0;border-top:1px solid var(--line)}
   #map{height:460px}
-  .panel{position:static;width:auto;margin-top:14px;box-shadow:none;border:1px solid var(--line)}
-  .stops{max-height:none}
-  .journey{grid-template-columns:1fr}
-  .side{top:0}
+  .more{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:560px){
-  .wrap{padding:0 16px}
-  .strip{flex-direction:column;align-items:flex-start;gap:0;font-size:14px}
-  .op{padding-left:24px;margin-top:-4px}
-  .blind{padding:16px 18px;gap:14px}
-  .blind .num{font-size:64px}
-  .blind .dest{font-size:26px}
-  .blind .via{font-size:15px}
-  .intro h1{font-size:34px;line-height:36px}
-  .intro p{font-size:17px;line-height:27px}
-  .fact{padding-right:10px}
-  .fact+.fact{padding-left:10px}
-  .fact:nth-child(3){padding-left:0}
-  .fact b{font-size:21px;line-height:24px}
-  #map{height:360px;border-radius:12px}
+@media (max-width:680px){
+  body{font-size:16.5px}
+  .yourstop{grid-template-columns:1fr}
+  .ys-sign{padding-top:18px}
+  .stopsign{width:110px}
+  .ys-body{padding:18px}
+  .ways{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}
+  .row .seg{justify-self:start;max-width:100%;overflow-x:auto}
+  .pin,.pout{padding:20px 18px}
+  .more{grid-template-columns:1fr}
+  section.s{padding-top:52px}
+  #map{height:360px}
   .leg{left:auto;right:8px;bottom:auto;top:8px;gap:8px;font-size:12px;padding:6px 8px}
-  .legs li{grid-template-columns:1fr;gap:8px}
-  .seg{display:flex}
-  .seg button{flex:1;padding:10px 8px;font-size:15px}
-  .dep{min-width:128px}
+  .bscroll{display:none}
+  .blind .num{font-size:58px}.blind .dest{font-size:24px}.blind .via{font-size:14px}
+  .jump .opchip{display:none}
+  .dep{max-width:76vw}
 }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}.roadstrip .rbus{left:42%}.roadstrip.go .rbus{transform:none}}
 
-.pickrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.nobus{display:none;margin-top:14px;background:var(--mist);border-left:5px solid var(--red);border-radius:0 12px 12px 0;padding:14px 18px;font-size:16px;line-height:25px}
-.nobus.on{display:block}
-.boardnote{grid-column:1/-1;font-size:15px;line-height:22px;color:#3d4a55;margin-top:-6px}
-.stage.off{opacity:.45;pointer-events:none}
+/* ---------- bus number screen beside the heading ---------- */
+.ph-left{display:flex;flex-direction:column;gap:14px}
+.ph-head{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px}
+.numscreen{position:relative;display:inline-flex;align-items:center;gap:12px;background:#050607;border:5px solid #23292E;padding:8px 14px 8px 12px;overflow:hidden;box-shadow:0 10px 20px -12px rgba(0,0,0,.6)}
+.numscreen::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.6) 1px,transparent 1.3px);background-size:3px 3px;pointer-events:none}
+.numscreen b{font:800 40px/1 var(--c);color:var(--led);text-shadow:0 0 12px rgba(242,178,51,.45);letter-spacing:.01em}
+.numscreen span{font:700 19px/1.1 var(--c);color:var(--led);text-transform:uppercase;letter-spacing:.04em;text-shadow:0 0 10px rgba(242,178,51,.35);max-width:220px}
 
-.seg button{white-space:nowrap}
-.dep{max-width:300px}
-.board{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);padding-right:40px}
-.dep .a{white-space:normal}
-@media(max-width:560px){.blindwrap{padding:0 0 16px 14px}.roadstrip{margin-top:26px;height:48px}.roadstrip .rbus{top:7px}.roadstrip .lane{font-size:11px}.panel header b{padding-right:84px}.pickrow{display:grid;grid-template-columns:1fr;width:100%}.pickrow .seg{width:100%}.dep{max-width:76vw}}
+/* ---------- bus stop countdown screen ---------- */
+.cdscreen{position:relative;background:#2A3036;padding:10px;box-shadow:0 24px 40px -26px rgba(12,28,42,.7)}
+.cdscreen::before,.cdscreen::after{content:"";position:absolute;top:4px;width:5px;height:5px;border-radius:50%;background:#59626B}
+.cdscreen::before{left:4px}.cdscreen::after{right:4px}
+.cdin{position:relative;background:#050607;padding:12px 16px 10px;overflow:hidden}
+.cdin::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.6) 1px,transparent 1.3px);background-size:3px 3px;pointer-events:none}
+.cdtop{display:flex;justify-content:space-between;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(242,178,51,.25);font:700 17px/1.2 var(--c);color:var(--led);text-transform:uppercase;letter-spacing:.05em;text-shadow:0 0 8px rgba(242,178,51,.35)}
+.cdtop #cdclock{font-variant-numeric:tabular-nums}
+.cdtop #cdclock i{font-style:normal;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.cdrows{list-style:none;margin-top:4px}
+.cdrows li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:5px 0;font:700 22px/1.15 var(--c);color:var(--led);text-transform:uppercase;letter-spacing:.03em;text-shadow:0 0 10px rgba(242,178,51,.4);cursor:pointer}
+.cdrows li span:nth-child(2){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cdrows li span:last-child{font-variant-numeric:tabular-nums;text-align:right}
+.cdrows li.on{background:rgba(242,178,51,.12)}
+.cdrows li:hover span:nth-child(2){text-decoration:underline;text-underline-offset:4px}
+.cdrows li.due span:last-child{animation:blink 1.2s steps(1) infinite}
+.cdtick{margin-top:6px;padding-top:6px;border-top:1px solid rgba(242,178,51,.25);overflow:hidden;white-space:nowrap;font:600 15px/1.3 var(--c);color:#FFD27A;letter-spacing:.06em;text-transform:uppercase}
+.cdtick span{display:inline-block;padding-left:100%;animation:tick 22s linear infinite}
+@keyframes tick{to{transform:translateX(-100%)}}
+.cdnote{margin-top:8px;font-size:14px;line-height:20px;color:var(--muted)}
 
-/* ---------- bus touches ---------- */
-/* seat moquette panel behind the destination blind */
-.blindwrap{position:relative;padding:0 0 22px 22px}
-.moquette{position:absolute;left:0;bottom:0;width:72%;height:78%;border-radius:12px;z-index:0;
-  background-color:var(--navy);
-  background-image:
-    radial-gradient(circle at 25% 25%,var(--op2) 0 3px,transparent 3.5px),
-    radial-gradient(circle at 75% 75%,var(--onui) 0 2.5px,transparent 3px),
-    linear-gradient(45deg,transparent 44%,color-mix(in srgb,var(--op2) 45%,transparent) 44% 56%,transparent 56%),
-    linear-gradient(-45deg,transparent 44%,color-mix(in srgb,var(--op3) 40%,transparent) 44% 56%,transparent 56%);
-  background-size:26px 26px,26px 26px,26px 26px,26px 26px}
-.blindwrap .blind{z-index:1}
-/* the blind rolls to a new destination */
-.blind .dest,.blind .via{will-change:transform,opacity}
-.blind .roll{animation:roll .55s cubic-bezier(.65,0,.35,1)}
-@keyframes roll{0%{transform:translateY(0);opacity:1}45%{transform:translateY(-120%);opacity:0}55%{transform:translateY(120%);opacity:0}100%{transform:translateY(0);opacity:1}}
-.blind .ends{display:block;margin-top:6px;font:600 14px/1.2 "Barlow",sans-serif;color:#cfdbe5;opacity:.8;position:relative;z-index:1}
+/* ---------- bell push ---------- */
+.bellrow{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.bellpush{display:inline-flex;align-items:center;gap:12px;border:0;background:#F4C21B;padding:8px 16px 8px 8px;font-weight:700;font-size:15px;color:#1A1A1A;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.bellpush .bp{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 38% 34%,#FF8A8A,#D72B2B 60%,#9D1414);box-shadow:0 0 0 4px #fff,0 0 0 6px #1A1A1A;transition:transform .15s var(--ease),filter .3s var(--ease)}
+.bellpush:active .bp{transform:scale(.9)}
+.bellpush[aria-pressed="true"] .bp{filter:brightness(1.25) drop-shadow(0 0 8px rgba(255,80,80,.9))}
+.stopsign-led{position:relative;display:inline-block;background:#050607;border:4px solid #23292E;padding:6px 14px;overflow:hidden;font:800 20px/1 var(--c);letter-spacing:.08em;text-transform:uppercase;color:#3A1010;transition:color .3s var(--ease),text-shadow .3s var(--ease)}
+.stopsign-led::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.6) 1px,transparent 1.3px);background-size:3px 3px;pointer-events:none}
+.stopsign-led.on{color:#FF4B4B;text-shadow:0 0 12px rgba(255,60,60,.8)}
+.panel header .bell.on i{background:#FF4B4B;box-shadow:0 0 0 6px rgba(255,75,75,.35)}
 
-/* the road: tarmac strip with lane markings and a bus that drives along it */
-.roadstrip{position:relative;height:54px;margin:34px 0 0;border-radius:10px;overflow:hidden;
-  background:#2B343C;
-  background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.2px);background-size:5px 5px}
-.roadstrip::before{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;
-  background:repeating-linear-gradient(90deg,#fff 0 34px,transparent 34px 60px);opacity:.8}
-.roadstrip::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:#F2B233;box-shadow:0 -4px 0 #F2B233}
-.roadstrip .lane{position:absolute;left:18px;top:7px;font:800 13px/1 "Barlow",sans-serif;letter-spacing:.32em;color:rgba(255,255,255,.85)}
-.roadstrip .rbus{position:absolute;top:9px;left:-120px;width:96px;height:36px;transition:transform 7s cubic-bezier(.45,.05,.35,1)}
-.roadstrip.go .rbus{transform:translateX(calc(100vw + 160px))}
-.roadstrip .rstop{position:absolute;right:26px;top:4px;width:26px;height:46px}
-@media (prefers-reduced-motion:reduce){.roadstrip .rbus{left:42%;transition:none}.roadstrip.go .rbus{transform:none}.blind .roll{animation:none}}
+/* ---------- printed planning slip ---------- */
+.slip{position:relative;background:#FFFDF6;color:#1A1A1A;padding:14px 16px 22px;font:600 15px/1.35 var(--c);letter-spacing:.03em;text-transform:uppercase;transform:rotate(-.6deg);box-shadow:0 10px 18px -10px rgba(0,0,0,.6);
+  -webkit-mask:linear-gradient(#000,#000) top/100% calc(100% - 8px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 8px repeat-x;
+          mask:linear-gradient(#000,#000) top/100% calc(100% - 8px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 8px repeat-x}
+.slip .sh1{display:flex;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:1px dashed #9A9A9A;font-weight:800;font-size:17px}
+.slip .ln{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.slip .ln span:last-child{text-align:right}
+.slip .bc{height:30px;margin-top:8px;background:repeating-linear-gradient(90deg,#1A1A1A 0 2px,transparent 2px 4px,#1A1A1A 4px 7px,transparent 7px 8px,#1A1A1A 8px 9px,transparent 9px 12px)}
+.slip .ft{margin-top:6px;font-weight:500;font-size:12.5px;text-align:center;letter-spacing:.06em;color:#555}
+@media (max-width:680px){.numscreen b{font-size:32px}.numscreen span{font-size:16px}.cdrows li{font-size:19px;grid-template-columns:44px minmax(0,1fr) auto}}
+@media (prefers-reduced-motion:reduce){.cdtick span{animation:none;padding-left:0}}
 
-/* departure buttons as bus tickets */
-.dep{position:relative;border:0!important;background:#FBF6EA;border-radius:6px;padding:11px 16px 12px 22px;
-  box-shadow:inset 0 0 0 1px #E2D7BD;
-  -webkit-mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat;
-          mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat}
-.dep::before{content:"";position:absolute;left:12px;top:8px;bottom:8px;border-left:2px dashed #CDBF9E}
-.dep:hover{box-shadow:inset 0 0 0 1px var(--navy)}
-.dep[aria-pressed="true"]{background:var(--navy);box-shadow:none}
-.dep[aria-pressed="true"]::before{border-color:var(--onui);opacity:.55}
-
-/* stop list header as the bus's next stop display */
-.panel header{position:relative;background:#0C1C2A;overflow:hidden}
-.panel header::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.5) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
-.panel header b{color:var(--led);text-shadow:0 0 12px rgba(242,178,51,.35);position:relative;z-index:1}
-.panel header span{position:relative;z-index:1}
-.bell{position:absolute;right:16px;top:14px;z-index:2;display:flex;align-items:center;gap:6px;font:600 13px/1 "Barlow",sans-serif;color:#cfdbe5}
-.bell i{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(215,73,73,.25);animation:bell 2.4s ease-in-out infinite}
-@keyframes bell{0%,100%{box-shadow:0 0 0 3px rgba(215,73,73,.25)}50%{box-shadow:0 0 0 6px rgba(215,73,73,.08)}}
-@media (prefers-reduced-motion:reduce){.bell i{animation:none}}
-.panel header b{padding-right:96px}
-
-/* bus stop flag beside the stop to get off at, and on headings */
-.flag{display:inline-block;vertical-align:-3px;width:18px;height:26px;margin-right:6px}
-.stops li.off .flag{position:absolute;left:-2px;top:2px;width:18px;height:26px;margin:0}
-.stops li.off::after{display:none}
-.hflag{display:inline-block;width:22px;height:32px;margin-right:10px;vertical-align:-4px}
-.fact.hl b{display:flex;align-items:flex-start;gap:4px}
-
-/* full timetable, laid out like the case at a bus stop */
-.ttwrap{grid-column:1/-1}
-.ttbtn{display:inline-flex;align-items:center;gap:10px;border:0;background:var(--amber);color:var(--accink);border-radius:10px;padding:10px 16px;font-weight:700;font-size:15px;line-height:20px;transition:transform .3s var(--ease),background .3s var(--ease)}
-.ttbtn:hover{transform:translateY(-2px);filter:brightness(1.08)}
-.ttbtn svg{width:18px;height:18px;transition:transform .35s var(--ease)}
-.ttbtn[aria-expanded="true"] svg{transform:rotate(180deg)}
-.ttcase{display:none;margin-top:14px;background:var(--navy);border-radius:14px;padding:10px;box-shadow:0 18px 40px -24px rgba(12,28,42,.7)}
-.ttcase.on{display:block;animation:ttin .45s var(--ease)}
-@keyframes ttin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-.tthead{display:flex;align-items:center;gap:12px;padding:6px 8px 12px;color:#fff}
-.tthead .br{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:36px;padding:0 8px;border-radius:8px;background:#0C1C2A;color:var(--led);font:800 24px/1 "Barlow Condensed",sans-serif}
-.tthead b{display:block;font:700 21px/23px "Barlow Condensed",sans-serif;text-transform:uppercase}
-.tthead span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
-.ttsheet{background:#fff;border-radius:8px;overflow-x:auto;scrollbar-width:none;position:relative}
-.ttsheet::-webkit-scrollbar{display:none}
-.ttsheet table{border-collapse:separate;border-spacing:0;font-size:15px;line-height:20px}
-.ttsheet th{position:sticky;left:0;z-index:2;background:#fff;text-align:left;font-weight:600;color:var(--navy);padding:7px 14px 7px 12px;min-width:170px;max-width:210px;border-right:2px solid var(--navy);white-space:normal}
-.ttsheet td{padding:7px 10px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600;color:#1d2730;white-space:nowrap;border-left:1px solid #EEF2F5}
-.ttsheet tr:nth-child(even) th,.ttsheet tr:nth-child(even) td{background:#F6F8FA}
-.ttsheet tr.off th,.ttsheet tr.off td{background:#FCEDED;color:var(--red);font-weight:700}
-.ttsheet tr.off th .flag{margin-right:6px}
-.ttsheet td.sel{box-shadow:inset 0 0 0 2px var(--amber)}
-.ttsheet td.no{color:#b6bec5;font-weight:500}
-.tthint{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 8px 4px;font-size:14px;line-height:19px;color:#cfdbe5}
-
-/* ---------- bus company colours (set from CFG.theme) ---------- */
-:root{--op1:#13293C;--op2:#F2B233;--opink:#fff;--op3:#F2B233;--led:#F2B233;--accink:#13293C;--onui:#F2B233}
-.livery{height:10px;margin:14px 0 0;border-radius:5px;background:linear-gradient(100deg,var(--op1) 0 58%,var(--op2) 58% 74%,var(--op3) 74% 84%,var(--op1) 84% 100%)}
-.opchip{display:inline-flex;align-items:center;gap:8px;background:var(--op1);color:var(--opink);border-radius:999px;padding:6px 14px 6px 8px;font-weight:600;font-size:15px;line-height:20px}
-.opchip i{width:22px;height:22px;border-radius:50%;background:conic-gradient(var(--op2) 0 33%,var(--op3) 0 66%,var(--opink) 0);box-shadow:0 0 0 2px var(--op1),0 0 0 3px rgba(255,255,255,.5)}
-.facts{border-top-color:var(--op1)}
-.busdot{background:var(--op2);border-color:var(--op1)}
-.busdot svg rect:first-child{fill:var(--op1)}
-.rbus .lv1{fill:var(--op1)}.rbus .lv2{fill:var(--op2)}.rbus .lv3{fill:var(--op3)}
-
-/* times row scroll buttons */
-.boardwrap{position:relative;min-width:0}
-.bscroll{position:absolute;top:50%;z-index:3;width:38px;height:38px;margin-top:-21px;border-radius:50%;border:0;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px -6px rgba(12,28,42,.7);transition:opacity .3s var(--ease),transform .3s var(--ease)}
-.bscroll:hover{transform:scale(1.08)}
-.bscroll svg{width:16px;height:16px}
-.bscroll.l{left:-12px}.bscroll.r{right:-4px}
-.bscroll[hidden]{display:none}
-.bscroll:disabled{opacity:0;pointer-events:none}
-
-/* next bus after the time now */
-.dep .nx{position:absolute;right:10px;top:6px;font:700 11px/1 "Barlow",sans-serif;background:var(--red);color:#fff;border-radius:4px;padding:3px 5px}
-
-/* your stop for the show: a red bus stop sign */
-.yourstop{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px 28px;align-items:center;margin-top:28px;background:var(--mist);border-radius:16px 16px 16px 0;padding:18px 26px 18px 18px;position:relative;overflow:hidden}
-.yourstop::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(90deg,var(--amber) 0 18px,transparent 18px 30px);opacity:.7}
-.stopsign{width:150px;height:auto;display:block;filter:drop-shadow(0 10px 14px rgba(12,28,42,.25));transform-origin:50% 100%}
-.yourstop.in .stopsign{animation:sway 1.6s cubic-bezier(.36,.07,.19,.97) .3s 1}
-@keyframes sway{0%{transform:rotate(0)}25%{transform:rotate(-2.2deg)}55%{transform:rotate(1.4deg)}80%{transform:rotate(-.6deg)}100%{transform:rotate(0)}}
-.yourstop h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
-.yourstop .sname{display:block;margin-top:6px;font:700 26px/29px "Barlow Condensed",sans-serif;color:var(--red)}
-.yourstop ul{list-style:none;margin-top:10px;display:grid;gap:8px}
-.yourstop li{display:flex;gap:10px;align-items:flex-start;font-size:16px;line-height:24px}
-.yourstop li svg{flex:0 0 22px;width:22px;height:22px;margin-top:1px}
-.yourstop li b{color:var(--navy)}
-@media (prefers-reduced-motion:reduce){.yourstop.in .stopsign{animation:none}}
-@media(max-width:560px){.yourstop{grid-template-columns:86px minmax(0,1fr);gap:6px 14px;padding:14px 14px 18px 10px}.stopsign{width:86px}.yourstop h2{font-size:24px;line-height:26px}.yourstop .sname{font-size:21px;line-height:24px}.yourstop li{font-size:15px;line-height:22px}.bscroll{display:none}}
-
-/* map marker for the stop to get off at */
-.offpin{width:30px;height:46px}
-.offpin svg{width:30px;height:46px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+/* ---------- live buses ---------- */
+.cdtop .lv{display:inline-flex;align-items:center;gap:6px;margin-right:12px;color:#7A6A40;text-shadow:none}
+.cdtop .lv i{width:8px;height:8px;border-radius:50%;background:#4A4030}
+.cdtop .lv.on{color:#8CF08C;text-shadow:0 0 8px rgba(140,240,140,.5)}
+.cdtop .lv.on i{background:#5BE35B;box-shadow:0 0 8px #5BE35B;animation:blink 1.6s steps(1) infinite}
+.cdrows li .ex{display:block;font-size:.62em;line-height:1;color:#FFD27A;letter-spacing:.06em}
+.livebadge{position:absolute;left:12px;top:12px;z-index:5;margin-left:44px;background:#050607;color:#8CF08C;font:700 14px/1 var(--c);letter-spacing:.06em;text-transform:uppercase;padding:8px 10px;display:flex;align-items:center;gap:8px}
+.livebadge i{width:8px;height:8px;border-radius:50%;background:#5BE35B;box-shadow:0 0 8px #5BE35B}
+.livebadge.off{color:#B8C0C6}.livebadge.off i{background:#6B747B;box-shadow:none}
+.lvbus{width:34px;height:34px;position:relative}
+.lvbus .body{position:absolute;inset:3px;background:var(--op1);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font:800 12px/1 var(--c);color:var(--opink);box-shadow:0 3px 8px rgba(0,0,0,.45)}
+.lvbus .hd{position:absolute;left:50%;top:50%;width:0;height:0;margin:-24px 0 0 -6px;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:9px solid var(--op1);transform-origin:6px 24px}
+.lvbus.late .body{box-shadow:0 0 0 3px rgba(215,73,73,.55),0 3px 8px rgba(0,0,0,.45)}
+.sumlive{display:none;background:rgba(0,0,0,.25);border-left:4px solid #5BE35B;padding:10px 14px;font-size:15.5px;color:#fff}
+.sumlive.on{display:block}
+@media (max-width:680px){.livebadge{font-size:12px;padding:6px 8px}}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <nav class="strip">
-    <a class="back" id="backlink" href="#" target="_top"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg><span></span></a>
-    <span class="opchip" id="op"><i aria-hidden="true"></i><span id="opname"></span></span>
-  </nav>
-  <div class="livery" aria-hidden="true"></div>
-
-  <header class="hero">
-    <div class="blindwrap rise">
-      <div class="moquette" aria-hidden="true"></div>
+<header class="cover">
+  <div class="wrap">
+    <div class="rise">
+      <nav class="crumb" aria-label="Breadcrumb"><a href="https://www.ukairshowguide.co.uk/" target="_top">Home</a><span aria-hidden="true">/</span><a id="crumbshow" href="#" target="_top"></a><span aria-hidden="true">/</span><span id="crumbbus"></span></nav>
+      <span class="tag">Bus route map</span>
+      <h1 id="title"></h1>
+      <p class="lede" id="lead"></p>
+    </div>
+    <aside class="rise" aria-label="Key details">
       <div class="blind" aria-live="polite">
         <div class="num" id="bnum"></div>
         <div><div class="dest" id="bdest"></div><span class="via" id="bvia" aria-hidden="true"></span></div>
       </div>
-    </div>
-    <div class="intro rise">
-      <h1 id="title"></h1>
-      <p id="lead"></p>
-    </div>
-  </header>
-
-  <div class="facts rise" id="facts"></div>
-  <div class="roadstrip" aria-hidden="true">
-    <span class="lane">BUS LANE</span>
-    <svg class="rbus" viewBox="0 0 96 36"><rect class="lv1" x="1" y="2" width="92" height="27" rx="5"/><rect class="lv2" x="1" y="20" width="92" height="4"/><path class="lv3" d="M40 29 L58 2 L66 2 L48 29 Z" opacity=".9"/><rect x="74" y="6" width="16" height="13" rx="2" fill="#9FD8EE"/><g fill="#9FD8EE"><rect x="8" y="6" width="12" height="10" rx="1.5"/><rect x="23" y="6" width="12" height="10" rx="1.5"/><rect x="38" y="6" width="12" height="10" rx="1.5"/><rect x="53" y="6" width="12" height="10" rx="1.5"/></g><rect x="62" y="3.5" width="10" height="3" rx="1" fill="#FFD27A"/><circle cx="20" cy="30" r="5" fill="#0B0B0B"/><circle cx="20" cy="30" r="2" fill="#9AA5AE"/><circle cx="74" cy="30" r="5" fill="#0B0B0B"/><circle cx="74" cy="30" r="2" fill="#9AA5AE"/><rect x="90" y="17" width="3" height="3" rx="1" fill="#F2B233"/></svg>
-    <svg class="rstop" viewBox="0 0 26 46"><rect x="12" y="14" width="2.5" height="32" fill="#cfd6dc"/><rect x="2" y="1" width="22" height="15" rx="2.5" fill="#fff" stroke="#D74949" stroke-width="2.2"/><rect x="6.5" y="4.5" width="13" height="8" rx="1.2" fill="#D74949"/><rect x="8" y="5.6" width="10" height="2.8" rx=".5" fill="#fff"/></svg>
-  </div>
-  <section class="yourstop rise" id="yourstop" aria-labelledby="ysh">
-    <svg class="stopsign" viewBox="0 0 150 250" aria-hidden="true">
-          <rect x="70" y="60" width="10" height="190" rx="3" fill="#9AA5AE"/><rect x="70" y="60" width="4" height="190" fill="#C6CED4"/>
-          <rect x="6" y="6" width="138" height="104" rx="12" fill="#D74949"/><rect x="12" y="12" width="126" height="92" rx="8" fill="none" stroke="#fff" stroke-width="3"/>
-          <g transform="translate(43 24)"><rect x="0" y="0" width="64" height="40" rx="7" fill="#fff"/><rect x="6" y="6" width="52" height="16" rx="3" fill="#D74949"/><rect x="5" y="40" width="12" height="7" rx="2" fill="#fff"/><rect x="47" y="40" width="12" height="7" rx="2" fill="#fff"/><circle cx="12" cy="31" r="3.5" fill="#D74949"/><circle cx="52" cy="31" r="3.5" fill="#D74949"/></g>
-          <text x="75" y="94" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="22" fill="#fff" letter-spacing="1">BUS STOP</text>
-          <rect x="44" y="132" width="62" height="70" rx="5" fill="#fff" stroke="#13293C" stroke-width="3"/><g fill="#C6CED4"><rect x="52" y="142" width="46" height="4" rx="2"/><rect x="52" y="152" width="38" height="4" rx="2"/><rect x="52" y="162" width="46" height="4" rx="2"/><rect x="52" y="172" width="30" height="4" rx="2"/><rect x="52" y="182" width="42" height="4" rx="2"/></g>
-          <ellipse cx="75" cy="248" rx="26" ry="3" fill="rgba(12,28,42,.18)"/>
-        </svg>
-    <div>
-      <h2 id="ysh">Your stop for the show</h2>
-      <span class="sname" id="ysname"></span>
-      <ul>
-        <li id="ysbell"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#D74949"/><path d="M11 5c-2.4 0-4 1.8-4 4.2V12l-1.5 2h11L15 12V9.2C15 6.8 13.4 5 11 5z M9.5 15.5a1.5 1.5 0 0 0 3 0z" fill="#fff"/></svg><span id="ysbelltxt"></span></li>
-        <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13293C"/><circle cx="12" cy="5.5" r="1.8" fill="#fff"/><path d="M11.5 8l-2.5 3 1.5 1.5-1 4.5M11.5 8l1.5 3.5 2.5 1M10.5 12.5l2 1.5 1 3.5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="yswalk"></span></li>
-        <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#F2B233"/><path d="M11 6v5.5l3.5 2" stroke="#13293C" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span id="ysride"></span></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="planner rise" aria-labelledby="ph">
-    <h2 id="ph"><svg class="hflag" viewBox="0 0 18 26" aria-hidden="true"><rect x="8" y="9" width="2" height="17" fill="#13293C"/><rect x="1" y="1" width="16" height="11" rx="2" fill="#fff" stroke="#D74949" stroke-width="2"/><rect x="4.5" y="3.6" width="9" height="5.6" rx="1" fill="#D74949"/><rect x="5.6" y="4.4" width="6.8" height="2" rx=".4" fill="#fff"/></svg>Pick your bus</h2>
-    <div class="pickrow">
-      <div class="seg" id="day" role="group" aria-label="Day"></div>
-      <div class="seg" id="dir" role="group" aria-label="Direction"></div>
-    </div>
-    <div class="boardwrap">
-      <button type="button" class="bscroll l" id="bl" aria-label="Earlier buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10 3L5 8l5 5"/></svg></button>
-      <div class="board" id="board" role="group" aria-label="Departure times"></div>
-      <button type="button" class="bscroll r" id="br" aria-label="Later buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 3l5 5-5 5"/></svg></button>
-    </div>
-    <p class="boardnote" id="bnote"></p>
-    <div class="ttwrap">
-      <button type="button" class="ttbtn" id="ttbtn" aria-expanded="false" aria-controls="ttcase"><span id="ttlbl">See every time</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6l5 5 5-5"/></svg></button>
-      <div class="ttcase" id="ttcase">
-        <div class="tthead"><span class="br" id="ttnum"></span><div><b id="tttitle"></b><span id="ttsub"></span></div></div>
-        <div class="ttsheet" id="ttsheet"></div>
-        <p class="tthint"><span id="tthint"></span><span>Times can change, so check before you travel</span></p>
-      </div>
-    </div>
-  </section>
-  <p class="nobus" id="nobus"></p>
-
-  <div class="stage rise" id="stage">
-    <div class="mapbox">
-      <div id="map" role="img"></div>
-      <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
-    </div>
-    <aside class="panel" aria-live="polite">
-      <header><div class="bell" aria-hidden="true"><i></i>Stopping</div><b id="ptitle"></b><span id="psub"></span></header>
-      <ol class="stops" id="stops"></ol>
+      <div class="info"><h2>Key details</h2><div id="facts"></div></div>
     </aside>
   </div>
+  <div class="livery" aria-hidden="true"></div>
+</header>
 
-  <section class="sec rise" aria-labelledby="rh">
-    <h2 id="rh">The roads it takes</h2>
-    <div class="journey">
-      <ol class="legs" id="legs"></ol>
-      <div class="side">
-        <div class="advice"><h3 id="tiph"></h3><p id="tip"></p><a class="btn" id="tipbtn" href="#" target="_top"></a></div>
-        <div class="alt" id="alt" hidden><b id="alth"></b><p id="altp"></p></div>
+<div class="roadstrip" aria-hidden="true">
+  <span class="lane">BUS LANE</span>
+  <svg class="rbus" viewBox="0 0 96 36"><rect class="lv1" x="1" y="2" width="92" height="27" rx="5"/><rect class="lv2" x="1" y="20" width="92" height="4"/><path class="lv3" d="M40 29 L58 2 L66 2 L48 29 Z" opacity=".9"/><rect x="74" y="6" width="16" height="13" rx="2" fill="#9FD8EE"/><g fill="#9FD8EE"><rect x="8" y="6" width="12" height="10" rx="1.5"/><rect x="23" y="6" width="12" height="10" rx="1.5"/><rect x="38" y="6" width="12" height="10" rx="1.5"/><rect x="53" y="6" width="12" height="10" rx="1.5"/></g><rect x="62" y="3.5" width="10" height="3" rx="1" fill="#FFD27A"/><circle cx="20" cy="30" r="5" fill="#0B0B0B"/><circle cx="20" cy="30" r="2" fill="#9AA5AE"/><circle cx="74" cy="30" r="5" fill="#0B0B0B"/><circle cx="74" cy="30" r="2" fill="#9AA5AE"/><rect x="90" y="17" width="3" height="3" rx="1" fill="#F2B233"/></svg>
+  <svg class="rstop" viewBox="0 0 26 46"><rect x="12" y="14" width="2.5" height="32" fill="#cfd6dc"/><rect x="2" y="1" width="22" height="15" rx="2.5" fill="#fff" stroke="#D74949" stroke-width="2.2"/><rect x="6.5" y="4.5" width="13" height="8" rx="1.2" fill="#D74949"/><rect x="8" y="5.6" width="10" height="2.8" rx=".5" fill="#fff"/></svg>
+</div>
+
+<nav class="jump" aria-label="On this page">
+  <div class="wrap">
+    <a href="#stop">Your stop</a>
+    <a href="#times">Pick your bus</a>
+    <a href="#route">Route map</a>
+    <a href="#roads">The roads it takes</a>
+    <a href="#travel">Before you travel</a>
+    <span class="opchip" id="op"><i aria-hidden="true"></i><span id="opname"></span></span>
+  </div>
+</nav>
+
+<main>
+
+<section class="s" id="stop">
+  <div class="wrap">
+    <div class="sh rise"><h2 class="t">Your stop for the show</h2><p id="ysintro"></p></div>
+    <div class="yourstop rise" id="yourstop">
+      <div class="ys-sign"><svg class="stopsign" viewBox="0 0 150 250" aria-hidden="true">
+          <rect x="70" y="60" width="10" height="190" rx="3" fill="#9AA5AE"/><rect x="70" y="60" width="4" height="190" fill="#C6CED4"/>
+          <rect x="6" y="6" width="138" height="104" rx="3" fill="#D74949"/><rect x="12" y="12" width="126" height="92" rx="2" fill="none" stroke="#fff" stroke-width="3"/>
+          <g transform="translate(43 24)"><rect x="0" y="0" width="64" height="40" rx="3" fill="#fff"/><rect x="6" y="6" width="52" height="16" rx="3" fill="#D74949"/><rect x="5" y="40" width="12" height="7" rx="2" fill="#fff"/><rect x="47" y="40" width="12" height="7" rx="2" fill="#fff"/><circle cx="12" cy="31" r="3.5" fill="#D74949"/><circle cx="52" cy="31" r="3.5" fill="#D74949"/></g>
+          <text x="75" y="94" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="22" fill="#fff" letter-spacing="1">BUS STOP</text>
+          <rect x="44" y="132" width="62" height="70" rx="1" fill="#fff" stroke="#13293C" stroke-width="3"/><g fill="#C6CED4"><rect x="52" y="142" width="46" height="4" rx="2"/><rect x="52" y="152" width="38" height="4" rx="2"/><rect x="52" y="162" width="46" height="4" rx="2"/><rect x="52" y="172" width="30" height="4" rx="2"/><rect x="52" y="182" width="42" height="4" rx="2"/></g>
+          <ellipse cx="75" cy="248" rx="26" ry="3" fill="rgba(12,28,42,.18)"/>
+        </svg></div>
+      <div class="ys-body">
+        <span class="lbl">Get off here</span>
+        <span class="sname" id="ysname"></span>
+        <ul class="ys-list">
+          <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#D74949"/><path d="M11 5c-2.4 0-4 1.8-4 4.2V12l-1.5 2h11L15 12V9.2C15 6.8 13.4 5 11 5z M9.5 15.5a1.5 1.5 0 0 0 3 0z" fill="#fff"/></svg><span id="ysbelltxt"></span></li>
+          <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13293C"/><circle cx="12" cy="5.5" r="1.8" fill="#fff"/><path d="M11.5 8l-2.5 3 1.5 1.5-1 4.5M11.5 8l1.5 3.5 2.5 1M10.5 12.5l2 1.5 1 3.5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="yswalk"></span></li>
+          <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#F2B233"/><path d="M11 6v5.5l3.5 2" stroke="#13293C" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span id="ysride"></span></li>
+        </ul>
+        <div class="bellrow">
+          <button type="button" class="bellpush" id="bellpush" aria-pressed="false"><span class="bp" aria-hidden="true"></span>Press the bell</button>
+          <span class="stopsign-led" id="bellled" aria-live="polite">Bus stopping</span>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <p class="note" id="note"></p>
-</div>
+<section class="s" id="times">
+  <div class="wrap">
+    <div class="sh rise" style="align-items:stretch">
+      <div class="ph-left">
+        <div class="ph-head"><h2 class="t">Pick your bus</h2><span class="numscreen" aria-hidden="true"><b id="nsnum"></b><span id="nsdest"></span></span></div>
+        <p>Pick the day you’re going and which way you’re heading, then tap a time. The screen shows the next buses from that stop, and the map and the stop list below follow whichever bus you pick.</p>
+      </div>
+      <div>
+        <div class="cdscreen" aria-label="Departures screen">
+          <div class="cdin">
+            <div class="cdtop"><span id="cdstop"></span><span><span class="lv" id="cdlive"><i></i><span>Timetable</span></span><span id="cdclock"></span></span></div>
+            <ol class="cdrows" id="cdrows"></ol>
+            <div class="cdtick"><span id="cdtick"></span></div>
+          </div>
+        </div>
+        <p class="cdnote" id="cdnote"></p>
+      </div>
+    </div>
+    <div class="planner rise">
+      <div class="pin">
+        <div class="row" id="dayrow"><div class="lb">Day<small>The days the show runs</small></div><div class="seg" id="day" role="group" aria-label="Day"></div></div>
+        <div class="row" id="dirrow"><div class="lb">Direction<small>To the show, or home again</small></div><div class="seg" id="dir" role="group" aria-label="Direction"></div></div>
+        <div class="row full">
+          <div class="lb">Departure</div>
+          <div class="boardwrap">
+            <button type="button" class="bscroll l" id="bl" aria-label="Earlier buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10 3L5 8l5 5"/></svg></button>
+            <div class="board" id="board" role="group" aria-label="Departure times"></div>
+            <button type="button" class="bscroll r" id="br" aria-label="Later buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 3l5 5-5 5"/></svg></button>
+          </div>
+          <p class="boardnote" id="bnote"></p>
+        </div>
+      </div>
+      <div class="pout" aria-live="polite">
+        <span class="lbl">Your bus</span>
+        <div class="big" id="sumbig"></div>
+        <div class="per" id="sumper"></div>
+        <div class="sumkv" id="sumkv"></div>
+        <div class="sumlive" id="sumlive" aria-live="polite"></div>
+        <div class="save" id="sumsave"></div>
+        <div class="slip" id="slip" aria-label="Planning slip for this bus"></div>
+      </div>
+    </div>
+    <p class="nobus" id="nobus"></p>
+    <div class="ttbar">
+      <button type="button" class="ttbtn" id="ttbtn" aria-expanded="false" aria-controls="ttcase"><span id="ttlbl">See every time</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6l5 5 5-5"/></svg></button>
+    </div>
+    <div class="ttcase" id="ttcase">
+      <div class="tthead"><span class="br" id="ttnum"></span><div><b id="tttitle"></b><span id="ttsub"></span></div></div>
+      <div class="ttsheet" id="ttsheet"></div>
+      <p class="tthint"><span id="tthint"></span><span>Times can change, so check before you travel</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="route">
+  <div class="wrap">
+    <div class="sh rise"><h2 class="t">Route map</h2><p>Every stop on the bus you picked. Tap a stop in the list to find it on the map. The red bus stop is the one to get off at for the show.</p></div>
+    <div class="stage rise" id="stage">
+      <div class="mapbox">
+        <div id="map" role="img"></div>
+        <div class="livebadge off" id="livebadge" aria-live="polite"><i></i><span>Looking for live buses</span></div>
+        <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span><span><i style="border-radius:0;background:var(--op1);border-color:#fff"></i>Live bus</span></div>
+      </div>
+      <aside class="panel">
+        <header><div class="bell" aria-hidden="true"><i></i>Stopping</div><b id="ptitle"></b><span id="psub"></span></header>
+        <ol class="stops" id="stops"></ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="roads">
+  <div class="wrap">
+    <div class="sh rise"><h2 class="t">The roads it takes</h2><p>Handy if you know the area, or if you want to know where you’ll be sitting in traffic on a busy show day.</p></div>
+    <ol class="ways rise" id="legs"></ol>
+  </div>
+</section>
+
+<section class="s" id="travel">
+  <div class="wrap">
+    <div class="sh rise"><h2 class="t">Before you travel</h2></div>
+    <div class="tips rise">
+      <div class="tip"><b id="tiph"></b><span id="tip"></span><br><a class="go" id="tipbtn" href="#" target="_top"></a></div>
+      <div class="tip" id="alt" hidden><b id="alth"></b><span id="altp"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap">
+    <div class="sh rise" style="margin-bottom:16px"><h2 class="t">Keep planning</h2></div>
+    <div class="more rise">
+      <a id="morshow" href="#" target="_top"><span></span><i>&rarr;</i></a>
+      <a href="index.html">Every bus route map <i>&rarr;</i></a>
+      <a href="https://www.ukairshowguide.co.uk/first-airshow-getting-there" target="_top">Getting there guide <i>&rarr;</i></a>
+      <a href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top">Find your airshow <i>&rarr;</i></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap"><p id="note"></p></div></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-var CFG={"num": "12", "operator": "Arriva", "showName": "Headcorn Airshow", "showUrl": "https://www.ukairshowguide.co.uk/headcorn-air-show", "title": "Bus 12, Maidstone to Tenterden", "blindDest": "Headcorn", "blindVia": ["via Shepway", "via Sutton Valence", "via Lashenden Bounds Cross"], "lead": "The 12 runs between Maidstone and Tenterden. For the Headcorn Airshow, I would get off at Headcorn, Aerodrome, which is right by the show. Pick a day and a time below and the map shows every stop.", "facts": [["Runs on", "Saturdays and Sundays"], ["How often", "About every 30 minutes"], ["Get off at", "Headcorn, Aerodrome", "hl"], ["Then walk", "Right by the show"]], "legs": [[["A229", "A274"], "Maidstone Royal Star Arcade to Shepway", "Mostly along Sutton Road, Loose Road and Upper Stone Street, about 3 miles."], [["A274"], "Shepway to Sutton Valence", "Mostly along Sutton Road, North Street and Maidstone Road, about 4 miles."], [["A274"], "Sutton Valence to Lashenden Bounds Cross", "Mostly along Headcorn Road, Maidstone Road and Biddenden Road, about 6 miles."], [["A262", "A28", "A274"], "Lashenden Bounds Cross to Tenterden", "Mostly along Tenterden Road, Headcorn Road and Ashford Road, about 7 miles."]], "tipHead": "Before you travel", "tip": "The Aerodrome stop is on the A274, a short walk from the entrance. I would check the times before you go, as the buses are roughly hourly.", "tipBtn": "Back to getting to Headcorn", "alt": null, "theme": {"op1": "#00A5A3", "op2": "#003B5C", "op3": "#00A5A3", "opink": "#FFFFFF", "ui": "#00706E", "onui": "#FFFFFF", "acc": "#8EDDD9", "accink": "#003B5C"}, "walkLine": "You’re right by the show when you get off.", "walkBack": "The stop is right by the show, so there’s no long walk back.", "target": [51.15559, 0.635093], "targetLabel": "Headcorn Aerodrome", "offTag": "Closest stop to the show", "note": "Stops and times are from Arriva’s timetable on the DfT <a href=\"https://data.bus-data.dft.gov.uk/\" target=\"_blank\" rel=\"noopener\">Bus Open Data Service</a>, through <a href=\"https://bustimes.org/\" target=\"_blank\" rel=\"noopener\">bustimes.org</a>, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with Arriva before you travel. The line is drawn along the roads between the stops, so treat it as a guide. Map data © <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a> contributors."};
-var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maidstone Royal Star Arcade"],["Maidstone Chequers Bus Station (Stop J3)",51.2725,0.52674,"Maidstone Chequers Bus Station"],["Maidstone Lower Stone Street (Stop F)",51.27132,0.52514,"Maidstone Lower Stone Street"],["Maidstone Waterloo Street (just before)",51.26756,0.52688,"Maidstone Waterloo Street"],["Maidstone, Sheal's Crescent",51.26384,0.5284,"Maidstone, Sheal's Crescent"],["Maidstone, Armstrong Road",51.26238,0.52902,"Maidstone, Armstrong Road"],["Shepway, Plains Avenue",51.25986,0.53046,"Shepway, Plains Avenue"],["Shepway The Wheatsheaf",51.25699,0.53166,"Shepway The Wheatsheaf"],["Shepway, Longfield Place",51.25431,0.53572,"Shepway, Longfield Place"],["Shepway, Mangravet Avenue",51.25192,0.53984,"Shepway, Mangravet Avenue"],["Shepway, Grove Road",51.25068,0.54142,"Shepway, Grove Road"],["Shepway, Sutton Road Police HQ",51.24809,0.54591,"Shepway, Sutton Road Police HQ"],["Shepway, Sutton Road Morrisons",51.24708,0.54843,"Shepway, Sutton Road Morrisons"],["Shepway, Sutton Woods",51.24627,0.54979,"Shepway, Sutton Woods"],["Park Wood, Willington Street",51.24464,0.55461,"Park Wood, Willington Street"],["Park Wood, Gore Court Road",51.24373,0.55739,"Park Wood, Gore Court Road"],["Park Wood, Bircholt Road",51.24158,0.5637,"Park Wood, Bircholt Road"],["Langley, Edmett Way",51.24075,0.56871,"Langley, Edmett Way"],["Langley, Pear Tree Row",51.23943,0.57748,"Langley, Pear Tree Row"],["Langley, The Potting Shed",51.23673,0.58403,"Langley, The Potting Shed"],["Langley, The Plough",51.22776,0.58962,"Langley, The Plough"],["Warmlake Crossroads",51.22186,0.59371,"Warmlake Crossroads"],["Sutton Valence, The King's Head",51.21353,0.5915,"Sutton Valence, The King's"],["Sutton Valence, The Harbour",51.20438,0.59227,"Sutton Valence, The Harbour"],["Gladdish Layby",51.19894,0.59572,"Gladdish Layby"],["Headcorn, Weald of Kent Golf Club",51.1879,0.60596,"Headcorn, Weald of Kent Golf"],["Headcorn, Stonestile Road",51.17844,0.6129,"Headcorn, Stonestile Road"],["Headcorn, Bankfields",51.17085,0.61867,"Headcorn, Bankfields"],["Headcorn, George and Dragon",51.16788,0.62179,"Headcorn, George and Dragon"],["Headcorn, Railway Station",51.16698,0.62695,"Headcorn, Railway Station"],["Headcorn, Gibbs Hill",51.16698,0.631,"Headcorn, Gibbs Hill"],["Headcorn, Aerodrome",51.15537,0.63533,"Headcorn, Aerodrome"],["Lashenden Bounds Cross",51.13896,0.64133,"Lashenden Bounds Cross"],["Biddenden, The Weavers",51.11522,0.64382,"Biddenden, The Weavers"],["Biddenden, Woodlands Park",51.10091,0.66456,"Biddenden, Woodlands Park"],["St Michaels, Pope House Lane",51.08916,0.69053,"St Michaels, Pope House Lane"],["St Michaels, The Crown",51.08474,0.69178,"St Michaels, The Crown"],["St Michaels, Wayside Avenue",51.08198,0.69417,"St Michaels, Wayside Avenue"],["Tenterden, The Fat Ox",51.07894,0.69559,"Tenterden, The Fat Ox"],["Tenterden, Homewood School",51.07628,0.69433,"Tenterden, Homewood School"],["Tenterden, Turners Avenue",51.07394,0.69333,"Tenterden, Turners Avenue"],["Tenterden, Old Post Office",51.07115,0.69072,"Tenterden, Old Post Office"],["Tenterden, Town Hall",51.06841,0.68787,"Tenterden, Town Hall"],["Tenterden, The Vine",51.06768,0.6857,"Tenterden, The Vine"],["Tenterden, The Vine",51.06793,0.68602,"Tenterden, The Vine"],["Tenterden, Town Hall",51.06868,0.68816,"Tenterden, Town Hall"],["Tenterden, Old Post Office",51.07046,0.69023,"Tenterden, Old Post Office"],["Tenterden, Turners Avenue",51.07352,0.69252,"Tenterden, Turners Avenue"],["Tenterden, Homewood School",51.07688,0.69437,"Tenterden, Homewood School"],["Tenterden, The Fat Ox",51.08009,0.69479,"Tenterden, The Fat Ox"],["St Michaels, Wayside Avenue",51.08184,0.69405,"St Michaels, Wayside Avenue"],["St Michaels, The Crown",51.08521,0.69107,"St Michaels, The Crown"],["St Michaels, Pope House Lane",51.08917,0.69047,"St Michaels, Pope House Lane"],["Biddenden, Woodlands Park",51.10074,0.66452,"Biddenden, Woodlands Park"],["Biddenden, The Weavers",51.11534,0.64364,"Biddenden, The Weavers"],["Lashenden Bounds Cross",51.13939,0.64103,"Lashenden Bounds Cross"],["Headcorn, Aerodrome",51.1556,0.63502,"Headcorn, Aerodrome"],["Headcorn, Gibbs Hill",51.16686,0.63039,"Headcorn, Gibbs Hill"],["Headcorn, Railway Station",51.1668,0.62762,"Headcorn, Railway Station"],["Headcorn, George and Dragon",51.16778,0.62158,"Headcorn, George and Dragon"],["Headcorn, Bankfields",51.17102,0.61826,"Headcorn, Bankfields"],["Headcorn, Stonestile Road",51.17776,0.61311,"Headcorn, Stonestile Road"],["Headcorn, Weald of Kent Golf Club",51.18794,0.60568,"Headcorn, Weald of Kent Golf"],["Gladdish Layby",51.19994,0.59473,"Gladdish Layby"],["Sutton Valence, The Harbour",51.20594,0.59068,"Sutton Valence, The Harbour"],["Sutton Valence, The King's Head",51.21558,0.59174,"Sutton Valence, The King's"],["Warmlake Crossroads",51.22116,0.59344,"Warmlake Crossroads"],["Langley, The Plough",51.2277,0.58941,"Langley, The Plough"],["Langley, The Potting Shed",51.23615,0.5842,"Langley, The Potting Shed"],["Langley, Pear Tree Row",51.23929,0.57746,"Langley, Pear Tree Row"],["Langley, Edmett Way",51.24062,0.56872,"Langley, Edmett Way"],["Park Wood, Car Showrooms",51.24183,0.56197,"Park Wood, Car Showrooms"],["Park Wood, Gore Court Road",51.24306,0.55844,"Park Wood, Gore Court Road"],["Park Wood, Willington Street",51.2449,0.55319,"Park Wood, Willington Street"],["Shepway, Sutton Woods",51.24598,0.54995,"Shepway, Sutton Woods"],["Shepway, Sutton Road Morrisons",51.24732,0.54751,"Shepway, Sutton Road Morrisons"],["Shepway, Sutton Road Police HQ",51.24839,0.54495,"Shepway, Sutton Road Police HQ"],["Shepway, Grove Road",51.25069,0.54116,"Shepway, Grove Road"],["Shepway, Mangravet Avenue",51.25219,0.53904,"Shepway, Mangravet Avenue"],["Shepway, Longfield Place",51.25421,0.53558,"Shepway, Longfield Place"],["Shepway, Sutton Road Cemetery",51.25569,0.53284,"Shepway, Sutton Road Cemetery"],["Shepway The Wheatsheaf",51.25838,0.53088,"Shepway The Wheatsheaf"],["Maidstone, Armstrong Road",51.26087,0.52974,"Maidstone, Armstrong Road"],["Maidstone, Sheal's Crescent",51.26361,0.52826,"Maidstone, Sheal's Crescent"],["Maidstone, Postley Road",51.26511,0.52371,"Maidstone, Postley Road"],["Maidstone Hayle Road",51.26773,0.52271,"Maidstone Hayle Road"],["Maidstone, College Avenue",51.26947,0.52272,"Maidstone, College Avenue"],["Maidstone Mill Street (Stop C)",51.27204,0.52083,"Maidstone Mill Street"],["Headcorn, on Railway Station Forecourt",51.16602,0.62734,"Headcorn, on Railway Station"],["Maidstone King Street (Stop L2)",51.27395,0.52374,"Maidstone King Street"]],"lines":[[[51.27384,0.52195],[51.27479,0.52128],[51.27433,0.51871],[51.27438,0.51854],[51.27347,0.51839],[51.27303,0.51841],[51.27278,0.5185],[51.27213,0.51906],[51.27183,0.51963],[51.27174,0.52],[51.27161,0.5216],[51.27216,0.52359],[51.27215,0.5246],[51.27202,0.52478],[51.27172,0.52491],[51.27164,0.52514],[51.27173,0.52688],[51.27187,0.52724],[51.27196,0.52715],[51.27232,0.52716],[51.27234,0.52677],[51.27232,0.52716],[51.27196,0.52715],[51.27185,0.52734],[51.2717,0.52743],[51.27159,0.5278],[51.27154,0.52841],[51.27151,0.52844],[51.27124,0.52814],[51.27083,0.52741],[51.27092,0.52739],[51.27111,0.52772],[51.27121,0.52775],[51.27152,0.52767],[51.2717,0.52743],[51.27173,0.52688],[51.27164,0.52514],[51.27154,0.52498],[51.27053,0.52532],[51.26987,0.52587],[51.2692,0.52621],[51.26807,0.52653],[51.26743,0.52686],[51.26676,0.52707],[51.2661,0.52705],[51.2657,0.52719],[51.26466,0.52778],[51.26411,0.52821],[51.26242,0.52893],[51.26125,0.5297],[51.2602,0.53027],[51.25757,0.53133],[51.25691,0.53167],[51.25652,0.53197],[51.25617,0.53237],[51.25556,0.53322],[51.25301,0.53806],[51.25245,0.53879],[51.2515,0.54043],[51.25104,0.54101],[51.25004,0.54186],[51.24955,0.54261],[51.24892,0.54392],[51.24852,0.54493],[51.24792,0.54612],[51.24709,0.54833],[51.24558,0.55079],[51.24525,0.55181],[51.24498,0.55316],[51.24428,0.5557],[51.24379,0.55709],[51.2429,0.55909],[51.2416,0.56331],[51.24103,0.56723],[51.24067,0.5689],[51.24042,0.56956],[51.24041,0.56995],[51.24034,0.57005],[51.23975,0.57241],[51.23947,0.57424],[51.23936,0.57452],[51.23932,0.57604],[51.23941,0.57909],[51.23931,0.5807],[51.23918,0.58134],[51.23885,0.58204],[51.23857,0.58244],[51.23661,0.58408],[51.23576,0.58458],[51.23461,0.58497],[51.23284,0.5854],[51.23171,0.58551],[51.23044,0.58582],[51.23005,0.58612],[51.22866,0.58768],[51.22803,0.58914],[51.22744,0.58996],[51.22521,0.59175],[51.22409,0.59231],[51.22234,0.59357],[51.22207,0.59363],[51.22151,0.59362],[51.22064,0.59352],[51.21753,0.59279],[51.21695,0.59276],[51.21638,0.59247],[51.2149,0.59131],[51.2145,0.59111],[51.21424,0.59107],[51.21355,0.59143],[51.21364,0.59188],[51.21355,0.59143],[51.21331,0.59142],[51.21288,0.59102],[51.21211,0.5905],[51.20987,0.59005],[51.2085,0.58998],[51.20808,0.59003],[51.20722,0.59026],[51.20619,0.59075],[51.20554,0.59118],[51.2041,0.59243],[51.20244,0.59365],[51.20099,0.59448],[51.20001,0.59488],[51.19937,0.59526],[51.19868,0.59586],[51.19567,0.59908],[51.18789,0.60586],[51.1881,0.60646],[51.18813,0.60678],[51.18782,0.60682],[51.18787,0.60663],[51.18809,0.60643],[51.18789,0.60586],[51.18428,0.60894],[51.17439,0.61553],[51.1687,0.62044],[51.16842,0.62056],[51.16785,0.6206],[51.16779,0.62262],[51.167,0.62624],[51.16686,0.62745],[51.16607,0.62726],[51.16596,0.62693],[51.16597,0.62687],[51.1661,0.62689],[51.16614,0.62712],[51.16672,0.62725],[51.16673,0.62704],[51.16597,0.62687],[51.16607,0.62726],[51.16686,0.62745],[51.16693,0.62975],[51.16686,0.63232],[51.16662,0.63308],[51.16596,0.6339],[51.16568,0.63412],[51.16527,0.63418],[51.16371,0.6339],[51.16133,0.63275],[51.16105,0.63268],[51.16069,0.6327],[51.14452,0.6404],[51.14344,0.6406],[51.14076,0.64086],[51.13894,0.64126],[51.13889,0.64149],[51.13894,0.64126],[51.13768,0.64155],[51.13583,0.64175],[51.13504,0.64227],[51.13379,0.64355],[51.13212,0.64482],[51.12689,0.64696],[51.12596,0.64726],[51.12561,0.64746],[51.12446,0.6484],[51.12431,0.64842],[51.12403,0.64834],[51.12303,0.64766],[51.12219,0.6473],[51.12157,0.6467],[51.11968,0.64446],[51.11904,0.64401],[51.11839,0.64379],[51.11797,0.64374],[51.117,0.64405],[51.11646,0.64402],[51.11454,0.6435],[51.1138,0.64341],[51.11311,0.64304],[51.11289,0.64301],[51.11247,0.64329],[51.11186,0.64399],[51.11095,0.6454],[51.11066,0.6456],[51.11048,0.64563],[51.10874,0.64525],[51.10715,0.6451],[51.10659,0.64474],[51.10588,0.64413],[51.10563,0.64403],[51.10543,0.64411],[51.10532,0.64421],[51.10509,0.6447],[51.10483,0.64552],[51.10447,0.64794],[51.10428,0.65082],[51.10391,0.65241],[51.10375,0.65347],[51.10334,0.65485],[51.10296,0.65665],[51.10248,0.66096],[51.10162,0.66326],[51.10022,0.66565],[51.09981,0.66673],[51.09965,0.66744],[51.09948,0.66981],[51.09945,0.67244],[51.09928,0.67313],[51.09876,0.67446],[51.09869,0.67489],[51.09881,0.67737],[51.09923,0.67979],[51.09927,0.68214],[51.09952,0.68425],[51.09939,0.68467],[51.09862,0.68596],[51.09826,0.68679],[51.09642,0.68886],[51.09584,0.68882],[51.09384,0.68925],[51.0926,0.68979],[51.09082,0.69031],[51.09009,0.69046],[51.0891,0.69053],[51.08737,0.69024],[51.08622,0.6906],[51.08546,0.691],[51.08517,0.69122],[51.08378,0.69261],[51.08131,0.69457],[51.08108,0.69468],[51.08005,0.69489],[51.07973,0.69503],[51.07925,0.69537],[51.07894,0.69546],[51.07767,0.69514],[51.07682,0.69447],[51.0763,0.6942],[51.07471,0.69396],[51.07461,0.69407],[51.07457,0.69388],[51.07431,0.69364],[51.07344,0.69256],[51.07162,0.69079],[51.07008,0.69025],[51.0694,0.68985],[51.06897,0.68916],[51.06844,0.68778],[51.06816,0.68804],[51.06822,0.68825],[51.06816,0.68804],[51.06844,0.68778],[51.06773,0.68566]],[[51.06786,0.68607],[51.06807,0.6868],[51.06886,0.68891],[51.06917,0.68953],[51.0694,0.68985],[51.07008,0.69025],[51.07162,0.69079],[51.07344,0.69256],[51.07431,0.69364],[51.07457,0.69388],[51.07463,0.69382],[51.07471,0.69396],[51.07634,0.69422],[51.07682,0.69447],[51.07767,0.69514],[51.07894,0.69546],[51.07925,0.69537],[51.07973,0.69503],[51.08005,0.69489],[51.08108,0.69468],[51.08131,0.69457],[51.08378,0.69261],[51.08517,0.69122],[51.08546,0.691],[51.08622,0.6906],[51.08737,0.69024],[51.0891,0.69053],[51.09009,0.69046],[51.09082,0.69031],[51.0926,0.68979],[51.09384,0.68925],[51.09584,0.68882],[51.09642,0.68886],[51.09826,0.68679],[51.09862,0.68596],[51.09939,0.68467],[51.09952,0.68425],[51.09927,0.68214],[51.09923,0.67979],[51.09881,0.67737],[51.09869,0.67489],[51.09876,0.67446],[51.09928,0.67313],[51.09945,0.67244],[51.09948,0.66981],[51.09965,0.66744],[51.09981,0.66673],[51.10022,0.66565],[51.10162,0.66326],[51.10248,0.66096],[51.10296,0.65665],[51.10334,0.65485],[51.10375,0.65347],[51.10391,0.65241],[51.10428,0.65082],[51.10447,0.64794],[51.10483,0.64552],[51.10509,0.6447],[51.10532,0.64421],[51.10543,0.64411],[51.10563,0.64403],[51.10588,0.64413],[51.10659,0.64474],[51.10715,0.6451],[51.10874,0.64525],[51.11048,0.64563],[51.11066,0.6456],[51.11095,0.6454],[51.11186,0.64399],[51.11247,0.64329],[51.11289,0.64301],[51.11311,0.64304],[51.1138,0.64341],[51.11454,0.6435],[51.11646,0.64402],[51.117,0.64405],[51.11797,0.64374],[51.11839,0.64379],[51.11904,0.64401],[51.11968,0.64446],[51.12157,0.6467],[51.12219,0.6473],[51.12303,0.64766],[51.12403,0.64834],[51.12431,0.64842],[51.12446,0.6484],[51.12561,0.64746],[51.12596,0.64726],[51.12689,0.64696],[51.13212,0.64482],[51.13379,0.64355],[51.13504,0.64227],[51.13583,0.64175],[51.13768,0.64155],[51.14076,0.64086],[51.14344,0.6406],[51.14452,0.6404],[51.16069,0.6327],[51.16105,0.63268],[51.16133,0.63275],[51.16371,0.6339],[51.16527,0.63418],[51.16568,0.63412],[51.16596,0.6339],[51.16662,0.63308],[51.16686,0.63232],[51.16692,0.63035],[51.16657,0.6303],[51.16655,0.63059],[51.16657,0.6303],[51.16692,0.63035],[51.16686,0.62745],[51.16607,0.62726],[51.16596,0.62693],[51.16597,0.62687],[51.1661,0.62689],[51.16614,0.62712],[51.16672,0.62725],[51.16673,0.62704],[51.16597,0.62687],[51.16607,0.62726],[51.16686,0.62745],[51.167,0.62624],[51.16779,0.62262],[51.16785,0.6206],[51.16842,0.62056],[51.1687,0.62044],[51.17439,0.61553],[51.17767,0.6133],[51.17763,0.61307],[51.17771,0.61302],[51.17763,0.61307],[51.17767,0.6133],[51.18428,0.60894],[51.1945,0.60015],[51.19567,0.59908],[51.19868,0.59586],[51.19937,0.59526],[51.20001,0.59488],[51.20099,0.59448],[51.20244,0.59365],[51.2041,0.59243],[51.20554,0.59118],[51.20619,0.59075],[51.20722,0.59026],[51.20808,0.59003],[51.2085,0.58998],[51.20987,0.59005],[51.21199,0.59046],[51.21288,0.59102],[51.21338,0.59145],[51.21376,0.59136],[51.21424,0.59107],[51.2145,0.59111],[51.2149,0.59131],[51.21638,0.59247],[51.21695,0.59276],[51.21753,0.59279],[51.22064,0.59352],[51.22151,0.59362],[51.22207,0.59363],[51.22234,0.59357],[51.22409,0.59231],[51.22521,0.59175],[51.22744,0.58996],[51.22803,0.58914],[51.22866,0.58768],[51.23005,0.58612],[51.23044,0.58582],[51.23171,0.58551],[51.23284,0.5854],[51.23461,0.58497],[51.23576,0.58458],[51.23661,0.58408],[51.23857,0.58244],[51.23898,0.58179],[51.23925,0.58107],[51.23941,0.57909],[51.23934,0.57544],[51.23922,0.57513],[51.23909,0.57504],[51.23907,0.57486],[51.23913,0.5747],[51.23936,0.57452],[51.23947,0.57424],[51.23975,0.57241],[51.24027,0.57041],[51.24015,0.56995],[51.23939,0.56927],[51.23918,0.56885],[51.23951,0.56849],[51.23971,0.56921],[51.23987,0.56931],[51.24056,0.56877],[51.23987,0.56931],[51.23971,0.56921],[51.23951,0.56849],[51.23918,0.56885],[51.23939,0.56927],[51.23993,0.56971],[51.24018,0.56969],[51.24059,0.56915],[51.24108,0.56694],[51.24138,0.56458],[51.24174,0.56239],[51.2421,0.56165],[51.2429,0.55909],[51.24379,0.55709],[51.24412,0.55619],[51.24498,0.55316],[51.2454,0.55127],[51.24558,0.55079],[51.24709,0.54833],[51.24792,0.54612],[51.24852,0.54493],[51.24892,0.54392],[51.24955,0.54261],[51.25004,0.54186],[51.25104,0.54101],[51.2515,0.54043],[51.25214,0.53934],[51.25207,0.53893],[51.25237,0.53892],[51.2529,0.53824],[51.25556,0.53322],[51.25652,0.53197],[51.25728,0.53139],[51.25775,0.53113],[51.25805,0.53115],[51.2602,0.53027],[51.26125,0.5297],[51.26242,0.52893],[51.26411,0.52821],[51.26484,0.52759],[51.26496,0.52725],[51.26463,0.52564],[51.26461,0.52514],[51.26473,0.52446],[51.26503,0.52395],[51.26524,0.52381],[51.26569,0.52381],[51.2668,0.52307],[51.26723,0.52288],[51.26843,0.52276],[51.26902,0.52294],[51.27083,0.5226],[51.27154,0.52125],[51.2717,0.51977],[51.27215,0.51875],[51.27173,0.51808],[51.27173,0.51779],[51.27184,0.51749],[51.27224,0.51697],[51.27239,0.51702],[51.27282,0.51757],[51.27298,0.51802],[51.27289,0.51834],[51.27248,0.51876],[51.27241,0.51898],[51.27246,0.51931],[51.27294,0.52054],[51.27253,0.52079],[51.27199,0.52098],[51.27161,0.52133],[51.27161,0.5216],[51.27215,0.52349],[51.27215,0.5246],[51.27196,0.52482],[51.27092,0.52515],[51.27043,0.5254],[51.2703,0.52355],[51.27041,0.5227],[51.27083,0.5226],[51.27154,0.52125],[51.2717,0.51977],[51.27215,0.51875],[51.27265,0.51841],[51.27313,0.51826],[51.27437,0.51836],[51.27443,0.51863],[51.27456,0.52017],[51.27479,0.52128],[51.27384,0.52195]]],"days":[{"key":"sat","label":"Saturday","dirs":[{"label":"To Tenterden","li":0,"trips":[{"big":"07:45","small":"At Headcorn, Aerodrome 08:26","title":"The 07:45 from Maidstone Royal Star Arcade","s":[["07:45",0,5],["07:47",1,1],["07:50",2,0],["07:51",3,0],["07:53",4,0],["07:53",5,0],["07:54",6,0],["07:56",7,0],["07:57",8,1],["07:59",9,0],["07:59",10,0],["08:01",11,0],["08:02",12,5],["08:02",13,0],["08:03",14,0],["08:03",15,0],["08:04",16,0],["08:05",17,0],["08:07",18,0],["08:08",19,0],["08:10",20,1],["08:11",21,0],["08:13",22,0],["08:14",23,0],["08:15",24,0],["08:17",25,0],["08:19",26,0],["08:20",27,0],["08:21",28,5],["08:23",29,1],["08:23",30,0],["08:26",31,6],["08:29",32,0],["08:33",33,5],["08:37",34,0],["08:40",35,0],["08:41",36,0],["08:42",37,0],["08:42",38,1],["08:43",39,0],["08:44",40,0],["08:45",41,0],["08:46",42,0],["08:47",43,5]]},{"big":"08:45","small":"At Headcorn, Aerodrome 09:26","title":"The 08:45 from Maidstone Royal Star Arcade","s":[["08:45",0,5],["08:47",1,1],["08:50",2,0],["08:51",3,0],["08:53",4,0],["08:53",5,0],["08:54",6,0],["08:56",7,0],["08:57",8,1],["08:59",9,0],["08:59",10,0],["09:01",11,0],["09:02",12,5],["09:02",13,0],["09:03",14,0],["09:03",15,0],["09:04",16,0],["09:05",17,0],["09:07",18,0],["09:08",19,0],["09:10",20,1],["09:11",21,0],["09:13",22,0],["09:14",23,0],["09:15",24,0],["09:17",25,0],["09:19",26,0],["09:20",27,0],["09:21",28,5],["09:23",29,1],["09:23",30,0],["09:26",31,6],["09:29",32,0],["09:33",33,5],["09:37",34,0],["09:40",35,0],["09:41",36,0],["09:42",37,0],["09:42",38,1],["09:43",39,0],["09:44",40,0],["09:45",41,0],["09:46",42,0],["09:47",43,5]]},{"big":"09:15","small":"At Headcorn, Aerodrome 09:56","title":"The 09:15 from Maidstone Royal Star Arcade","s":[["09:15",0,5],["09:17",1,1],["09:20",2,0],["09:21",3,0],["09:23",4,0],["09:23",5,0],["09:24",6,0],["09:26",7,0],["09:27",8,1],["09:29",9,0],["09:29",10,0],["09:31",11,0],["09:32",12,5],["09:32",13,0],["09:33",14,0],["09:33",15,0],["09:34",16,0],["09:35",17,0],["09:37",18,0],["09:38",19,0],["09:40",20,1],["09:41",21,0],["09:43",22,0],["09:44",23,0],["09:45",24,0],["09:47",25,0],["09:49",26,0],["09:50",27,0],["09:51",28,5],["09:53",29,1],["09:53",30,0],["09:56",31,6],["09:59",32,0],["10:03",33,5],["10:07",34,0],["10:10",35,0],["10:11",36,0],["10:12",37,0],["10:12",38,1],["10:13",39,0],["10:14",40,0],["10:15",41,0],["10:16",42,0],["10:17",43,5]]},{"big":"09:45","small":"At Headcorn, Aerodrome 10:26","title":"The 09:45 from Maidstone Royal Star Arcade","s":[["09:45",0,5],["09:47",1,1],["09:50",2,0],["09:51",3,0],["09:53",4,0],["09:53",5,0],["09:54",6,0],["09:56",7,0],["09:57",8,1],["09:59",9,0],["09:59",10,0],["10:01",11,0],["10:02",12,5],["10:02",13,0],["10:03",14,0],["10:03",15,0],["10:04",16,0],["10:05",17,0],["10:07",18,0],["10:08",19,0],["10:10",20,1],["10:11",21,0],["10:13",22,0],["10:14",23,0],["10:15",24,0],["10:17",25,0],["10:19",26,0],["10:20",27,0],["10:21",28,5],["10:23",29,1],["10:23",30,0],["10:26",31,6],["10:29",32,0],["10:33",33,5],["10:37",34,0],["10:40",35,0],["10:41",36,0],["10:42",37,0],["10:42",38,1],["10:43",39,0],["10:44",40,0],["10:45",41,0],["10:46",42,0],["10:47",43,5]]},{"big":"10:15","small":"At Headcorn, Aerodrome 10:56","title":"The 10:15 from Maidstone Royal Star Arcade","s":[["10:15",0,5],["10:17",1,1],["10:20",2,0],["10:21",3,0],["10:23",4,0],["10:23",5,0],["10:24",6,0],["10:26",7,0],["10:27",8,1],["10:29",9,0],["10:29",10,0],["10:31",11,0],["10:32",12,5],["10:32",13,0],["10:33",14,0],["10:33",15,0],["10:34",16,0],["10:35",17,0],["10:37",18,0],["10:38",19,0],["10:40",20,1],["10:41",21,0],["10:43",22,0],["10:44",23,0],["10:45",24,0],["10:47",25,0],["10:49",26,0],["10:50",27,0],["10:51",28,5],["10:53",29,1],["10:53",30,0],["10:56",31,6],["10:59",32,0],["11:03",33,5],["11:07",34,0],["11:10",35,0],["11:11",36,0],["11:12",37,0],["11:12",38,1],["11:13",39,0],["11:14",40,0],["11:15",41,0],["11:16",42,0],["11:17",43,5]]},{"big":"10:45","small":"At Headcorn, Aerodrome 11:26","title":"The 10:45 from Maidstone Royal Star Arcade","s":[["10:45",0,5],["10:47",1,1],["10:50",2,0],["10:51",3,0],["10:53",4,0],["10:53",5,0],["10:54",6,0],["10:56",7,0],["10:57",8,1],["10:59",9,0],["10:59",10,0],["11:01",11,0],["11:02",12,5],["11:02",13,0],["11:03",14,0],["11:03",15,0],["11:04",16,0],["11:05",17,0],["11:07",18,0],["11:08",19,0],["11:10",20,1],["11:11",21,0],["11:13",22,0],["11:14",23,0],["11:15",24,0],["11:17",25,0],["11:19",26,0],["11:20",27,0],["11:21",28,5],["11:23",29,1],["11:23",30,0],["11:26",31,6],["11:29",32,0],["11:33",33,5],["11:37",34,0],["11:40",35,0],["11:41",36,0],["11:42",37,0],["11:42",38,1],["11:43",39,0],["11:44",40,0],["11:45",41,0],["11:46",42,0],["11:47",43,5]]},{"big":"11:15","small":"At Headcorn, Aerodrome 11:56","title":"The 11:15 from Maidstone Royal Star Arcade","s":[["11:15",0,5],["11:17",1,1],["11:20",2,0],["11:21",3,0],["11:23",4,0],["11:23",5,0],["11:24",6,0],["11:26",7,0],["11:27",8,1],["11:29",9,0],["11:29",10,0],["11:31",11,0],["11:32",12,5],["11:32",13,0],["11:33",14,0],["11:33",15,0],["11:34",16,0],["11:35",17,0],["11:37",18,0],["11:38",19,0],["11:40",20,1],["11:41",21,0],["11:43",22,0],["11:44",23,0],["11:45",24,0],["11:47",25,0],["11:49",26,0],["11:50",27,0],["11:51",28,5],["11:53",29,1],["11:53",30,0],["11:56",31,6],["11:59",32,0],["12:03",33,5],["12:07",34,0],["12:10",35,0],["12:11",36,0],["12:12",37,0],["12:12",38,1],["12:13",39,0],["12:14",40,0],["12:15",41,0],["12:16",42,0],["12:17",43,5]]},{"big":"11:45","small":"At Headcorn, Aerodrome 12:26","title":"The 11:45 from Maidstone Royal Star Arcade","s":[["11:45",0,5],["11:47",1,1],["11:50",2,0],["11:51",3,0],["11:53",4,0],["11:53",5,0],["11:54",6,0],["11:56",7,0],["11:57",8,1],["11:59",9,0],["11:59",10,0],["12:01",11,0],["12:02",12,5],["12:02",13,0],["12:03",14,0],["12:03",15,0],["12:04",16,0],["12:05",17,0],["12:07",18,0],["12:08",19,0],["12:10",20,1],["12:11",21,0],["12:13",22,0],["12:14",23,0],["12:15",24,0],["12:17",25,0],["12:19",26,0],["12:20",27,0],["12:21",28,5],["12:23",29,1],["12:23",30,0],["12:26",31,6],["12:29",32,0],["12:33",33,5],["12:37",34,0],["12:40",35,0],["12:41",36,0],["12:42",37,0],["12:42",38,1],["12:43",39,0],["12:44",40,0],["12:45",41,0],["12:46",42,0],["12:47",43,5]]},{"big":"12:15","small":"At Headcorn, Aerodrome 12:56","title":"The 12:15 from Maidstone Royal Star Arcade","s":[["12:15",0,5],["12:17",1,1],["12:20",2,0],["12:21",3,0],["12:23",4,0],["12:23",5,0],["12:24",6,0],["12:26",7,0],["12:27",8,1],["12:29",9,0],["12:29",10,0],["12:31",11,0],["12:32",12,5],["12:32",13,0],["12:33",14,0],["12:33",15,0],["12:34",16,0],["12:35",17,0],["12:37",18,0],["12:38",19,0],["12:40",20,1],["12:41",21,0],["12:43",22,0],["12:44",23,0],["12:45",24,0],["12:47",25,0],["12:49",26,0],["12:50",27,0],["12:51",28,5],["12:53",29,1],["12:53",30,0],["12:56",31,6],["12:59",32,0],["13:03",33,5],["13:07",34,0],["13:10",35,0],["13:11",36,0],["13:12",37,0],["13:12",38,1],["13:13",39,0],["13:14",40,0],["13:15",41,0],["13:16",42,0],["13:17",43,5]]},{"big":"12:45","small":"At Headcorn, Aerodrome 13:26","title":"The 12:45 from Maidstone Royal Star Arcade","s":[["12:45",0,5],["12:47",1,1],["12:50",2,0],["12:51",3,0],["12:53",4,0],["12:53",5,0],["12:54",6,0],["12:56",7,0],["12:57",8,1],["12:59",9,0],["12:59",10,0],["13:01",11,0],["13:02",12,5],["13:02",13,0],["13:03",14,0],["13:03",15,0],["13:04",16,0],["13:05",17,0],["13:07",18,0],["13:08",19,0],["13:10",20,1],["13:11",21,0],["13:13",22,0],["13:14",23,0],["13:15",24,0],["13:17",25,0],["13:19",26,0],["13:20",27,0],["13:21",28,5],["13:23",29,1],["13:23",30,0],["13:26",31,6],["13:29",32,0],["13:33",33,5],["13:37",34,0],["13:40",35,0],["13:41",36,0],["13:42",37,0],["13:42",38,1],["13:43",39,0],["13:44",40,0],["13:45",41,0],["13:46",42,0],["13:47",43,5]]}],"note":"","tt":{"rows":["Maidstone Royal Star Arcade","Maidstone Chequers Bus Station","Shepway, Longfield Place","Shepway, Sutton Road Morrisons","Langley, The Plough","Headcorn, George and Dragon","Headcorn, Railway Station","Headcorn, on Railway Station","Biddenden, The Weavers","Tenterden, The Fat Ox","Tenterden, The Vine"],"off":-1,"cols":[["07:45","07:47","07:57","08:02","08:10","08:21","08:23","","08:33","08:42","08:47"],["08:45","08:47","08:57","09:02","09:10","09:21","09:23","","09:33","09:42","09:47"],["09:15","09:17","09:27","09:32","09:40","09:51","09:53","","10:03","10:12","10:17"],["09:45","09:47","09:57","10:02","10:10","10:21","10:23","","10:33","10:42","10:47"],["10:15","10:17","10:27","10:32","10:40","10:51","10:53","","11:03","11:12","11:17"],["10:45","10:47","10:57","11:02","11:10","11:21","11:23","","11:33","11:42","11:47"],["11:15","11:17","11:27","11:32","11:40","11:51","11:53","","12:03","12:12","12:17"],["11:45","11:47","11:57","12:02","12:10","12:21","12:23","","12:33","12:42","12:47"],["12:15","12:17","12:27","12:32","12:40","12:51","12:53","","13:03","13:12","13:17"],["12:45","12:47","12:57","13:02","13:10","13:21","13:23","","13:33","13:42","13:47"],["13:15","13:17","13:27","13:32","13:40","13:51","13:53","","14:03","14:12","14:17"],["13:45","13:47","13:57","14:02","14:10","14:21","14:23","","14:33","14:42","14:47"],["14:15","14:17","14:27","14:32","14:40","14:51","14:53","","15:03","15:12","15:17"],["14:45","14:47","14:57","15:02","15:10","15:21","15:23","","15:33","15:42","15:47"],["15:15","15:17","15:27","15:32","15:40","15:51","15:53","","16:03","16:12","16:17"],["15:45","15:47","15:57","16:02","16:10","16:21","16:23","","16:33","16:42","16:47"],["16:15","16:17","16:27","16:32","16:40","16:51","16:53","","17:03","17:12","17:17"],["16:45","16:47","16:57","17:02","17:10","17:21","17:23","","17:33","17:42","17:47"],["17:35","17:37","17:47","17:52","17:57","18:08","18:10","","18:19","18:28","18:33"],["18:30","18:32","18:42","18:47","18:52","19:01","19:02","19:03","","",""],["19:55","19:57","20:05","20:08","20:13","20:22","20:23","20:24","","",""],["21:25","21:27","21:34","21:37","21:42","21:51","21:53","21:54","22:00","22:06","22:11"],["23:05","23:07","23:14","23:17","23:22","23:31","23:32","23:33","","",""]]},"blind":"Tenterden","via":["via Shepway and Park Wood","via Langley and Sutton Valence","via Headcorn and St Michaels"]},{"label":"To Maidstone","li":1,"trips":[{"big":"13:46","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 14:30","title":"The 13:46 from Headcorn, Aerodrome","s":[["13:25",44,5],["13:25",45,0],["13:26",46,0],["13:27",47,0],["13:28",48,0],["13:29",49,0],["13:30",50,0],["13:31",51,1],["13:31",52,0],["13:35",53,0],["13:39",54,1],["13:43",55,0],["13:46",56,6],["13:48",57,0],["13:48",58,5],["13:50",59,1],["13:51",60,0],["13:52",61,0],["13:54",62,0],["13:57",63,0],["13:58",64,0],["14:00",65,0],["14:02",66,0],["14:03",67,5],["14:06",68,0],["14:08",69,0],["14:10",70,0],["14:12",71,0],["14:12",72,0],["14:14",73,0],["14:14",74,0],["14:15",75,5],["14:16",76,0],["14:17",77,0],["14:17",78,0],["14:18",79,0],["14:19",80,1],["14:20",81,0],["14:22",82,0],["14:23",83,0],["14:25",84,0],["14:26",85,0],["14:27",86,0],["14:29",87,0],["14:30",0,5]]},{"big":"14:16","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 15:00","title":"The 14:16 from Headcorn, Aerodrome","s":[["13:55",44,5],["13:55",45,0],["13:56",46,0],["13:57",47,0],["13:58",48,0],["13:59",49,0],["14:00",50,0],["14:01",51,1],["14:01",52,0],["14:05",53,0],["14:09",54,1],["14:13",55,0],["14:16",56,6],["14:18",57,0],["14:18",58,5],["14:20",59,1],["14:21",60,0],["14:22",61,0],["14:24",62,0],["14:27",63,0],["14:28",64,0],["14:30",65,0],["14:32",66,0],["14:33",67,5],["14:36",68,0],["14:38",69,0],["14:40",70,0],["14:42",71,0],["14:42",72,0],["14:44",73,0],["14:44",74,0],["14:45",75,5],["14:46",76,0],["14:47",77,0],["14:47",78,0],["14:48",79,0],["14:49",80,1],["14:50",81,0],["14:52",82,0],["14:53",83,0],["14:55",84,0],["14:56",85,0],["14:57",86,0],["14:59",87,0],["15:00",0,5]]},{"big":"14:46","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 15:30","title":"The 14:46 from Headcorn, Aerodrome","s":[["14:25",44,5],["14:25",45,0],["14:26",46,0],["14:27",47,0],["14:28",48,0],["14:29",49,0],["14:30",50,0],["14:31",51,1],["14:31",52,0],["14:35",53,0],["14:39",54,1],["14:43",55,0],["14:46",56,6],["14:48",57,0],["14:48",58,5],["14:50",59,1],["14:51",60,0],["14:52",61,0],["14:54",62,0],["14:57",63,0],["14:58",64,0],["15:00",65,0],["15:02",66,0],["15:03",67,5],["15:06",68,0],["15:08",69,0],["15:10",70,0],["15:12",71,0],["15:12",72,0],["15:14",73,0],["15:14",74,0],["15:15",75,5],["15:16",76,0],["15:17",77,0],["15:17",78,0],["15:18",79,0],["15:19",80,1],["15:20",81,0],["15:22",82,0],["15:23",83,0],["15:25",84,0],["15:26",85,0],["15:27",86,0],["15:29",87,0],["15:30",0,5]]},{"big":"15:16","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 16:00","title":"The 15:16 from Headcorn, Aerodrome","s":[["14:55",44,5],["14:55",45,0],["14:56",46,0],["14:57",47,0],["14:58",48,0],["14:59",49,0],["15:00",50,0],["15:01",51,1],["15:01",52,0],["15:05",53,0],["15:09",54,1],["15:13",55,0],["15:16",56,6],["15:18",57,0],["15:18",58,5],["15:20",59,1],["15:21",60,0],["15:22",61,0],["15:24",62,0],["15:27",63,0],["15:28",64,0],["15:30",65,0],["15:32",66,0],["15:33",67,5],["15:36",68,0],["15:38",69,0],["15:40",70,0],["15:42",71,0],["15:42",72,0],["15:44",73,0],["15:44",74,0],["15:45",75,5],["15:46",76,0],["15:47",77,0],["15:47",78,0],["15:48",79,0],["15:49",80,1],["15:50",81,0],["15:52",82,0],["15:53",83,0],["15:55",84,0],["15:56",85,0],["15:57",86,0],["15:59",87,0],["16:00",0,5]]},{"big":"15:46","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 16:30","title":"The 15:46 from Headcorn, Aerodrome","s":[["15:25",44,5],["15:25",45,0],["15:26",46,0],["15:27",47,0],["15:28",48,0],["15:29",49,0],["15:30",50,0],["15:31",51,1],["15:31",52,0],["15:35",53,0],["15:39",54,1],["15:43",55,0],["15:46",56,6],["15:48",57,0],["15:48",58,5],["15:50",59,1],["15:51",60,0],["15:52",61,0],["15:54",62,0],["15:57",63,0],["15:58",64,0],["16:00",65,0],["16:02",66,0],["16:03",67,5],["16:06",68,0],["16:08",69,0],["16:10",70,0],["16:12",71,0],["16:12",72,0],["16:14",73,0],["16:14",74,0],["16:15",75,5],["16:16",76,0],["16:17",77,0],["16:17",78,0],["16:18",79,0],["16:19",80,1],["16:20",81,0],["16:22",82,0],["16:23",83,0],["16:25",84,0],["16:26",85,0],["16:27",86,0],["16:29",87,0],["16:30",0,5]]},{"big":"16:16","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 17:00","title":"The 16:16 from Headcorn, Aerodrome","s":[["15:55",44,5],["15:55",45,0],["15:56",46,0],["15:57",47,0],["15:58",48,0],["15:59",49,0],["16:00",50,0],["16:01",51,1],["16:01",52,0],["16:05",53,0],["16:09",54,1],["16:13",55,0],["16:16",56,6],["16:18",57,0],["16:18",58,5],["16:20",59,1],["16:21",60,0],["16:22",61,0],["16:24",62,0],["16:27",63,0],["16:28",64,0],["16:30",65,0],["16:32",66,0],["16:33",67,5],["16:36",68,0],["16:38",69,0],["16:40",70,0],["16:42",71,0],["16:42",72,0],["16:44",73,0],["16:44",74,0],["16:45",75,5],["16:46",76,0],["16:47",77,0],["16:47",78,0],["16:48",79,0],["16:49",80,1],["16:50",81,0],["16:52",82,0],["16:53",83,0],["16:55",84,0],["16:56",85,0],["16:57",86,0],["16:59",87,0],["17:00",0,5]]},{"big":"16:46","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 17:30","title":"The 16:46 from Headcorn, Aerodrome","s":[["16:25",44,5],["16:25",45,0],["16:26",46,0],["16:27",47,0],["16:28",48,0],["16:29",49,0],["16:30",50,0],["16:31",51,1],["16:31",52,0],["16:35",53,0],["16:39",54,1],["16:43",55,0],["16:46",56,6],["16:48",57,0],["16:48",58,5],["16:50",59,1],["16:51",60,0],["16:52",61,0],["16:54",62,0],["16:57",63,0],["16:58",64,0],["17:00",65,0],["17:02",66,0],["17:03",67,5],["17:06",68,0],["17:08",69,0],["17:10",70,0],["17:12",71,0],["17:12",72,0],["17:14",73,0],["17:14",74,0],["17:15",75,5],["17:16",76,0],["17:17",77,0],["17:17",78,0],["17:18",79,0],["17:19",80,1],["17:20",81,0],["17:22",82,0],["17:23",83,0],["17:25",84,0],["17:26",85,0],["17:27",86,0],["17:29",87,0],["17:30",0,5]]},{"big":"17:16","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 18:00","title":"The 17:16 from Headcorn, Aerodrome","s":[["16:55",44,5],["16:55",45,0],["16:56",46,0],["16:57",47,0],["16:58",48,0],["16:59",49,0],["17:00",50,0],["17:01",51,1],["17:01",52,0],["17:05",53,0],["17:09",54,1],["17:13",55,0],["17:16",56,6],["17:18",57,0],["17:18",58,5],["17:20",59,1],["17:21",60,0],["17:22",61,0],["17:24",62,0],["17:27",63,0],["17:28",64,0],["17:30",65,0],["17:32",66,0],["17:33",67,5],["17:36",68,0],["17:38",69,0],["17:40",70,0],["17:42",71,0],["17:42",72,0],["17:44",73,0],["17:44",74,0],["17:45",75,5],["17:46",76,0],["17:47",77,0],["17:47",78,0],["17:48",79,0],["17:49",80,1],["17:50",81,0],["17:52",82,0],["17:53",83,0],["17:55",84,0],["17:56",85,0],["17:57",86,0],["17:59",87,0],["18:00",0,5]]},{"big":"17:45","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 18:25","title":"The 17:45 from Headcorn, Aerodrome","s":[["17:25",44,5],["17:25",45,0],["17:26",46,0],["17:27",47,0],["17:28",48,0],["17:29",49,0],["17:30",50,0],["17:31",51,1],["17:31",52,0],["17:35",53,0],["17:39",54,1],["17:43",55,0],["17:45",56,6],["17:47",57,0],["17:47",58,5],["17:48",88,1],["17:50",59,5],["17:51",60,0],["17:52",61,0],["17:54",62,0],["17:57",63,0],["17:58",64,0],["17:59",65,0],["18:01",66,0],["18:02",67,1],["18:05",68,0],["18:06",69,0],["18:08",70,0],["18:09",71,0],["18:10",72,0],["18:11",73,0],["18:11",74,0],["18:12",75,5],["18:13",76,0],["18:14",77,0],["18:14",78,0],["18:15",79,0],["18:16",80,1],["18:17",81,0],["18:18",82,0],["18:19",83,0],["18:21",84,0],["18:22",85,0],["18:22",86,0],["18:24",87,0],["18:25",0,5]]},{"big":"18:15","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 18:55","title":"The 18:15 from Headcorn, Aerodrome","s":[["17:55",44,5],["17:55",45,0],["17:56",46,0],["17:57",47,0],["17:58",48,0],["17:59",49,0],["18:00",50,0],["18:01",51,1],["18:01",52,0],["18:05",53,0],["18:09",54,1],["18:13",55,0],["18:15",56,6],["18:17",57,0],["18:17",58,5],["18:18",88,1],["18:20",59,5],["18:21",60,0],["18:22",61,0],["18:24",62,0],["18:27",63,0],["18:28",64,0],["18:29",65,0],["18:31",66,0],["18:32",67,1],["18:35",68,0],["18:36",69,0],["18:38",70,0],["18:39",71,0],["18:40",72,0],["18:41",73,0],["18:41",74,0],["18:42",75,5],["18:43",76,0],["18:44",77,0],["18:44",78,0],["18:45",79,0],["18:46",80,1],["18:47",81,0],["18:48",82,0],["18:49",83,0],["18:51",84,0],["18:52",85,0],["18:52",86,0],["18:54",87,0],["18:55",0,5]]}],"note":"","tt":{"rows":["Tenterden, The Vine","St Michaels, The Crown","Biddenden, The Weavers","Headcorn, Aerodrome","Headcorn, Railway Station","Headcorn, on Railway Station","Headcorn, George and Dragon","Langley, The Plough","Shepway, Sutton Road Morrisons","Shepway, Sutton Road Cemetery","Maidstone Royal Star Arcade"],"off":3,"cols":[["","","","","","07:23","07:25","07:37","07:47","07:51","08:00"],["","","","","","08:23","08:25","08:37","08:47","08:51","09:00"],["","","","","","08:53","08:55","09:07","09:17","09:21","09:30"],["08:55","09:01","09:09","09:16","09:18","","09:20","09:33","09:45","09:49","10:00"],["09:55","10:01","10:09","10:16","10:18","","10:20","10:33","10:45","10:49","11:00"],["10:25","10:31","10:39","10:46","10:48","","10:50","11:03","11:15","11:19","11:30"],["10:55","11:01","11:09","11:16","11:18","","11:20","11:33","11:45","11:49","12:00"],["11:25","11:31","11:39","11:46","11:48","","11:50","12:03","12:15","12:19","12:30"],["11:55","12:01","12:09","12:16","12:18","","12:20","12:33","12:45","12:49","13:00"],["12:25","12:31","12:39","12:46","12:48","","12:50","13:03","13:15","13:19","13:30"],["12:55","13:01","13:09","13:16","13:18","","13:20","13:33","13:45","13:49","14:00"],["13:25","13:31","13:39","13:46","13:48","","13:50","14:03","14:15","14:19","14:30"],["13:55","14:01","14:09","14:16","14:18","","14:20","14:33","14:45","14:49","15:00"],["14:25","14:31","14:39","14:46","14:48","","14:50","15:03","15:15","15:19","15:30"],["14:55","15:01","15:09","15:16","15:18","","15:20","15:33","15:45","15:49","16:00"],["15:25","15:31","15:39","15:46","15:48","","15:50","16:03","16:15","16:19","16:30"],["15:55","16:01","16:09","16:16","16:18","","16:20","16:33","16:45","16:49","17:00"],["16:25","16:31","16:39","16:46","16:48","","16:50","17:03","17:15","17:19","17:30"],["16:55","17:01","17:09","17:16","17:18","","17:20","17:33","17:45","17:49","18:00"],["17:25","17:31","17:39","17:45","17:47","17:48","17:50","18:02","18:12","18:16","18:25"],["17:55","18:01","18:09","18:15","18:17","18:18","18:20","18:32","18:42","18:46","18:55"],["","","","","","19:06","19:08","19:18","19:23","19:27","19:36"],["","","","","","20:32","20:34","20:44","20:49","20:52","21:00"],["22:15","22:19","22:25","22:29","22:31","22:32","22:34","22:44","22:49","22:52","23:00"]]},"blind":"Maidstone","via":["via St Michaels and Biddenden","via Headcorn and Langley","via Park Wood and Shepway"]}],"none":"In the current timetable there are no 12 buses on Saturdays, so I would look at the other ways to get there on the Headcorn Airshow page."},{"key":"sun","label":"Sunday","dirs":[{"label":"To Tenterden","li":0,"trips":[{"big":"09:59","small":"At Headcorn, Aerodrome 10:40","title":"The 09:59 from Maidstone Royal Star Arcade","s":[["09:59",0,5],["10:01",1,1],["10:04",2,0],["10:05",3,0],["10:07",4,0],["10:07",5,0],["10:08",6,0],["10:10",7,0],["10:11",8,1],["10:13",9,0],["10:13",10,0],["10:15",11,0],["10:16",12,5],["10:16",13,0],["10:17",14,0],["10:17",15,0],["10:18",16,0],["10:19",17,0],["10:21",18,0],["10:22",19,0],["10:24",20,1],["10:25",21,0],["10:27",22,0],["10:28",23,0],["10:29",24,0],["10:31",25,0],["10:33",26,0],["10:34",27,0],["10:35",28,5],["10:37",29,1],["10:37",30,0],["10:40",31,6],["10:43",32,0],["10:47",33,5],["10:50",34,0],["10:54",35,0],["10:54",36,0],["10:55",37,0],["10:55",38,1],["10:56",39,0],["10:57",40,0],["10:59",41,0],["11:00",42,0],["11:01",43,5]]},{"big":"10:59","small":"At Headcorn, Aerodrome 11:40","title":"The 10:59 from Maidstone Royal Star Arcade","s":[["10:59",0,5],["11:01",1,1],["11:04",2,0],["11:05",3,0],["11:07",4,0],["11:07",5,0],["11:08",6,0],["11:10",7,0],["11:11",8,1],["11:13",9,0],["11:13",10,0],["11:15",11,0],["11:16",12,5],["11:16",13,0],["11:17",14,0],["11:17",15,0],["11:18",16,0],["11:19",17,0],["11:21",18,0],["11:22",19,0],["11:24",20,1],["11:25",21,0],["11:27",22,0],["11:28",23,0],["11:29",24,0],["11:31",25,0],["11:33",26,0],["11:34",27,0],["11:35",28,5],["11:37",29,1],["11:37",30,0],["11:40",31,6],["11:43",32,0],["11:47",33,5],["11:50",34,0],["11:54",35,0],["11:54",36,0],["11:55",37,0],["11:55",38,1],["11:56",39,0],["11:57",40,0],["11:59",41,0],["12:00",42,0],["12:01",43,5]]},{"big":"11:59","small":"At Headcorn, Aerodrome 12:40","title":"The 11:59 from Maidstone Royal Star Arcade","s":[["11:59",0,5],["12:01",1,1],["12:04",2,0],["12:05",3,0],["12:07",4,0],["12:07",5,0],["12:08",6,0],["12:10",7,0],["12:11",8,1],["12:13",9,0],["12:13",10,0],["12:15",11,0],["12:16",12,5],["12:16",13,0],["12:17",14,0],["12:17",15,0],["12:18",16,0],["12:19",17,0],["12:21",18,0],["12:22",19,0],["12:24",20,1],["12:25",21,0],["12:27",22,0],["12:28",23,0],["12:29",24,0],["12:31",25,0],["12:33",26,0],["12:34",27,0],["12:35",28,5],["12:37",29,1],["12:37",30,0],["12:40",31,6],["12:43",32,0],["12:47",33,5],["12:50",34,0],["12:54",35,0],["12:54",36,0],["12:55",37,0],["12:55",38,1],["12:56",39,0],["12:57",40,0],["12:59",41,0],["13:00",42,0],["13:01",43,5]]}],"note":"","tt":{"rows":["Maidstone Royal Star Arcade","Maidstone Chequers Bus Station","Shepway, Longfield Place","Shepway, Sutton Road Morrisons","Langley, The Plough","Headcorn, George and Dragon","Headcorn, Railway Station","Headcorn, on Railway Station","Biddenden, The Weavers","Tenterden, The Fat Ox","Tenterden, The Vine"],"off":-1,"cols":[["09:59","10:01","10:11","10:16","10:24","10:35","10:37","","10:47","10:55","11:01"],["10:59","11:01","11:11","11:16","11:24","11:35","11:37","","11:47","11:55","12:01"],["11:59","12:01","12:11","12:16","12:24","12:35","12:37","","12:47","12:55","13:01"],["12:59","13:01","13:11","13:16","13:24","13:35","13:37","","13:47","13:55","14:01"],["13:59","14:01","14:11","14:16","14:24","14:35","14:37","","14:47","14:55","15:01"],["14:59","15:01","15:11","15:16","15:24","15:35","15:37","","15:47","15:55","16:01"],["15:59","16:01","16:11","16:16","16:24","16:35","16:37","","16:47","16:55","17:01"],["16:59","17:01","17:11","17:16","17:24","17:35","17:37","","17:47","17:55","18:01"],["17:59","18:01","18:11","18:16","18:24","18:35","18:37","18:38","","",""]]},"blind":"Tenterden","via":["via Shepway and Park Wood","via Langley and Sutton Valence","via Headcorn and St Michaels"]},{"label":"To Maidstone","li":1,"trips":[{"big":"14:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 15:04","title":"The 14:27 from Headcorn, Aerodrome","s":[["14:06",44,5],["14:06",45,0],["14:07",46,0],["14:08",47,0],["14:09",48,0],["14:10",49,0],["14:11",50,0],["14:12",51,1],["14:12",52,0],["14:16",53,0],["14:20",54,1],["14:24",55,0],["14:27",56,6],["14:29",57,0],["14:29",58,5],["14:31",59,1],["14:32",60,0],["14:33",61,0],["14:35",62,0],["14:38",63,0],["14:39",64,0],["14:40",65,0],["14:42",66,0],["14:43",67,5],["14:45",68,0],["14:46",69,0],["14:48",70,0],["14:49",71,0],["14:49",72,0],["14:50",73,0],["14:51",74,0],["14:51",75,5],["14:52",76,0],["14:53",77,0],["14:53",78,0],["14:54",79,0],["14:55",80,1],["14:56",81,0],["14:56",82,0],["14:57",83,0],["14:58",84,0],["14:58",85,0],["14:59",86,0],["15:00",87,0],["15:04",89,5]]},{"big":"15:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 16:04","title":"The 15:27 from Headcorn, Aerodrome","s":[["15:06",44,5],["15:06",45,0],["15:07",46,0],["15:08",47,0],["15:09",48,0],["15:10",49,0],["15:11",50,0],["15:12",51,1],["15:12",52,0],["15:16",53,0],["15:20",54,1],["15:24",55,0],["15:27",56,6],["15:29",57,0],["15:29",58,5],["15:31",59,1],["15:32",60,0],["15:33",61,0],["15:35",62,0],["15:38",63,0],["15:39",64,0],["15:40",65,0],["15:42",66,0],["15:43",67,5],["15:45",68,0],["15:46",69,0],["15:48",70,0],["15:49",71,0],["15:49",72,0],["15:50",73,0],["15:51",74,0],["15:51",75,5],["15:52",76,0],["15:53",77,0],["15:53",78,0],["15:54",79,0],["15:55",80,1],["15:56",81,0],["15:56",82,0],["15:57",83,0],["15:58",84,0],["15:58",85,0],["15:59",86,0],["16:00",87,0],["16:04",89,5]]},{"big":"16:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 17:04","title":"The 16:27 from Headcorn, Aerodrome","s":[["16:06",44,5],["16:06",45,0],["16:07",46,0],["16:08",47,0],["16:09",48,0],["16:10",49,0],["16:11",50,0],["16:12",51,1],["16:12",52,0],["16:16",53,0],["16:20",54,1],["16:24",55,0],["16:27",56,6],["16:29",57,0],["16:29",58,5],["16:31",59,1],["16:32",60,0],["16:33",61,0],["16:35",62,0],["16:38",63,0],["16:39",64,0],["16:40",65,0],["16:42",66,0],["16:43",67,5],["16:45",68,0],["16:46",69,0],["16:48",70,0],["16:49",71,0],["16:49",72,0],["16:50",73,0],["16:51",74,0],["16:51",75,5],["16:52",76,0],["16:53",77,0],["16:53",78,0],["16:54",79,0],["16:55",80,1],["16:56",81,0],["16:56",82,0],["16:57",83,0],["16:58",84,0],["16:58",85,0],["16:59",86,0],["17:00",87,0],["17:04",89,5]]},{"big":"17:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 18:04","title":"The 17:27 from Headcorn, Aerodrome","s":[["17:06",44,5],["17:06",45,0],["17:07",46,0],["17:08",47,0],["17:09",48,0],["17:10",49,0],["17:11",50,0],["17:12",51,1],["17:12",52,0],["17:16",53,0],["17:20",54,1],["17:24",55,0],["17:27",56,6],["17:29",57,0],["17:29",58,5],["17:31",59,1],["17:32",60,0],["17:33",61,0],["17:35",62,0],["17:38",63,0],["17:39",64,0],["17:40",65,0],["17:42",66,0],["17:43",67,5],["17:45",68,0],["17:46",69,0],["17:48",70,0],["17:49",71,0],["17:49",72,0],["17:50",73,0],["17:51",74,0],["17:51",75,5],["17:52",76,0],["17:53",77,0],["17:53",78,0],["17:54",79,0],["17:55",80,1],["17:56",81,0],["17:56",82,0],["17:57",83,0],["17:58",84,0],["17:58",85,0],["17:59",86,0],["18:00",87,0],["18:04",89,5]]},{"big":"18:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 19:04","title":"The 18:27 from Headcorn, Aerodrome","s":[["18:06",44,5],["18:06",45,0],["18:07",46,0],["18:08",47,0],["18:09",48,0],["18:10",49,0],["18:11",50,0],["18:12",51,1],["18:12",52,0],["18:16",53,0],["18:20",54,1],["18:24",55,0],["18:27",56,6],["18:29",57,0],["18:29",58,5],["18:31",59,1],["18:32",60,0],["18:33",61,0],["18:35",62,0],["18:38",63,0],["18:39",64,0],["18:40",65,0],["18:42",66,0],["18:43",67,5],["18:45",68,0],["18:46",69,0],["18:48",70,0],["18:49",71,0],["18:49",72,0],["18:50",73,0],["18:51",74,0],["18:51",75,5],["18:52",76,0],["18:53",77,0],["18:53",78,0],["18:54",79,0],["18:55",80,1],["18:56",81,0],["18:56",82,0],["18:57",83,0],["18:58",84,0],["18:58",85,0],["18:59",86,0],["19:00",87,0],["19:04",89,5]]}],"note":"","tt":{"rows":["Tenterden, The Vine","St Michaels, The Crown","Biddenden, The Weavers","Headcorn, Aerodrome","Headcorn, Railway Station","Headcorn, George and Dragon","Langley, The Plough","Shepway, Sutton Road Morrisons","Shepway, Sutton Road Cemetery","Maidstone King Street"],"off":3,"cols":[["11:06","11:12","11:20","11:27","11:29","11:31","11:43","11:51","11:55","12:04"],["12:06","12:12","12:20","12:27","12:29","12:31","12:43","12:51","12:55","13:04"],["13:06","13:12","13:20","13:27","13:29","13:31","13:43","13:51","13:55","14:04"],["14:06","14:12","14:20","14:27","14:29","14:31","14:43","14:51","14:55","15:04"],["15:06","15:12","15:20","15:27","15:29","15:31","15:43","15:51","15:55","16:04"],["16:06","16:12","16:20","16:27","16:29","16:31","16:43","16:51","16:55","17:04"],["17:06","17:12","17:20","17:27","17:29","17:31","17:43","17:51","17:55","18:04"],["18:06","18:12","18:20","18:27","18:29","18:31","18:43","18:51","18:55","19:04"]]},"blind":"Maidstone","via":["via St Michaels and Biddenden","via Headcorn and Langley","via Park Wood and Shepway"]}],"none":"In the current timetable there are no 12 buses on Sundays, so I would look at the other ways to get there on the Headcorn Airshow page."}],"start":0};
+var CFG={"sid": "52171", "num": "12", "operator": "Arriva", "showName": "Headcorn Airshow", "showUrl": "https://www.ukairshowguide.co.uk/headcorn-air-show", "title": "Bus 12, Maidstone to Tenterden", "blindDest": "Headcorn", "blindVia": ["via Shepway", "via Sutton Valence", "via Lashenden Bounds Cross"], "lead": "The 12 runs between Maidstone and Tenterden. For the Headcorn Airshow, I would get off at Headcorn, Aerodrome, which is right by the show. Pick a day and a time below and the map shows every stop.", "facts": [["Runs on", "Saturdays and Sundays"], ["How often", "About every 30 minutes"], ["Get off at", "Headcorn, Aerodrome", "hl"], ["Then walk", "Right by the show"]], "legs": [[["A229", "A274"], "Maidstone Royal Star Arcade to Shepway", "Mostly along Sutton Road, Loose Road and Upper Stone Street, about 3 miles."], [["A274"], "Shepway to Sutton Valence", "Mostly along Sutton Road, North Street and Maidstone Road, about 4 miles."], [["A274"], "Sutton Valence to Lashenden Bounds Cross", "Mostly along Headcorn Road, Maidstone Road and Biddenden Road, about 6 miles."], [["A262", "A28", "A274"], "Lashenden Bounds Cross to Tenterden", "Mostly along Tenterden Road, Headcorn Road and Ashford Road, about 7 miles."]], "tipHead": "Before you travel", "tip": "The Aerodrome stop is on the A274, a short walk from the entrance. I would check the times before you go, as the buses are roughly hourly.", "tipBtn": "Back to getting to Headcorn", "alt": null, "theme": {"op1": "#00A5A3", "op2": "#003B5C", "op3": "#00A5A3", "opink": "#FFFFFF", "ui": "#00706E", "onui": "#FFFFFF", "acc": "#8EDDD9", "accink": "#003B5C"}, "walkLine": "You’re right by the show when you get off.", "walkBack": "The stop is right by the show, so there’s no long walk back.", "target": [51.15559, 0.635093], "targetLabel": "Headcorn Aerodrome", "offTag": "Closest stop to the show", "note": "Stops and times are from Arriva’s timetable on the DfT <a href=\"https://data.bus-data.dft.gov.uk/\" target=\"_blank\" rel=\"noopener\">Bus Open Data Service</a>, through <a href=\"https://bustimes.org/\" target=\"_blank\" rel=\"noopener\">bustimes.org</a>, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with Arriva before you travel. Live bus positions and expected times also come from bustimes.org, when the bus company shares them. The line is drawn along the roads between the stops, so treat it as a guide. Map data © <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a> contributors."};
+var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maidstone Royal Star Arcade","2400A000640A"],["Maidstone Chequers Bus Station (Stop J3)",51.2725,0.52674,"Maidstone Chequers Bus Station","2400A050630A"],["Maidstone Lower Stone Street (Stop F)",51.27132,0.52514,"Maidstone Lower Stone Street","2400A000860A"],["Maidstone Waterloo Street (just before)",51.26756,0.52688,"Maidstone Waterloo Street","2400A000870A"],["Maidstone, Sheal's Crescent",51.26384,0.5284,"Maidstone, Sheal's Crescent","2400A000880A"],["Maidstone, Armstrong Road",51.26238,0.52902,"Maidstone, Armstrong Road","2400A000890A"],["Shepway, Plains Avenue",51.25986,0.53046,"Shepway, Plains Avenue","2400A000900A"],["Shepway The Wheatsheaf",51.25699,0.53166,"Shepway The Wheatsheaf","2400A000910A"],["Shepway, Longfield Place",51.25431,0.53572,"Shepway, Longfield Place","2400A000920A"],["Shepway, Mangravet Avenue",51.25192,0.53984,"Shepway, Mangravet Avenue","2400A000940A"],["Shepway, Grove Road",51.25068,0.54142,"Shepway, Grove Road","2400A000960A"],["Shepway, Sutton Road Police HQ",51.24809,0.54591,"Shepway, Sutton Road Police HQ","2400A000990A"],["Shepway, Sutton Road Morrisons",51.24708,0.54843,"Shepway, Sutton Road Morrisons","2400A001010A"],["Shepway, Sutton Woods",51.24627,0.54979,"Shepway, Sutton Woods","2400A001020A"],["Park Wood, Willington Street",51.24464,0.55461,"Park Wood, Willington Street","2400A001160A"],["Park Wood, Gore Court Road",51.24373,0.55739,"Park Wood, Gore Court Road","2400103352"],["Park Wood, Bircholt Road",51.24158,0.5637,"Park Wood, Bircholt Road","2400A060640A"],["Langley, Edmett Way",51.24075,0.56871,"Langley, Edmett Way","2400108949"],["Langley, Pear Tree Row",51.23943,0.57748,"Langley, Pear Tree Row","2400104368"],["Langley, The Potting Shed",51.23673,0.58403,"Langley, The Potting Shed","240075183"],["Langley, The Plough",51.22776,0.58962,"Langley, The Plough","2400A036410A"],["Warmlake Crossroads",51.22186,0.59371,"Warmlake Crossroads","2400A073780A"],["Sutton Valence, The King's Head",51.21353,0.5915,"Sutton Valence, The King's","2400A022580A"],["Sutton Valence, The Harbour",51.20438,0.59227,"Sutton Valence, The Harbour","2400A022600A"],["Gladdish Layby",51.19894,0.59572,"Gladdish Layby","2400A022610A"],["Headcorn, Weald of Kent Golf Club",51.1879,0.60596,"Headcorn, Weald of Kent Golf","2400103150"],["Headcorn, Stonestile Road",51.17844,0.6129,"Headcorn, Stonestile Road","2400A022620A"],["Headcorn, Bankfields",51.17085,0.61867,"Headcorn, Bankfields","2400106927"],["Headcorn, George and Dragon",51.16788,0.62179,"Headcorn, George and Dragon","2400A022640A"],["Headcorn, Railway Station",51.16698,0.62695,"Headcorn, Railway Station","2400103198"],["Headcorn, Gibbs Hill",51.16698,0.631,"Headcorn, Gibbs Hill","2400A022660A"],["Headcorn, Aerodrome",51.15537,0.63533,"Headcorn, Aerodrome","2400105172"],["Lashenden Bounds Cross",51.13896,0.64133,"Lashenden Bounds Cross","2400108568"],["Biddenden, The Weavers",51.11522,0.64382,"Biddenden, The Weavers","2400A022670A"],["Biddenden, Woodlands Park",51.10091,0.66456,"Biddenden, Woodlands Park","2400A022680A"],["St Michaels, Pope House Lane",51.08916,0.69053,"St Michaels, Pope House Lane","240099955"],["St Michaels, The Crown",51.08474,0.69178,"St Michaels, The Crown","2400A022690A"],["St Michaels, Wayside Avenue",51.08198,0.69417,"St Michaels, Wayside Avenue","2400A022700A"],["Tenterden, The Fat Ox",51.07894,0.69559,"Tenterden, The Fat Ox","2400A022710A"],["Tenterden, Homewood School",51.07628,0.69433,"Tenterden, Homewood School","2400A022720A"],["Tenterden, Turners Avenue",51.07394,0.69333,"Tenterden, Turners Avenue","2400A022730A"],["Tenterden, Old Post Office",51.07115,0.69072,"Tenterden, Old Post Office","2400A022740A"],["Tenterden, Town Hall",51.06841,0.68787,"Tenterden, Town Hall","2400A022750A"],["Tenterden, The Vine",51.06768,0.6857,"Tenterden, The Vine","2400A022760A"],["Tenterden, The Vine",51.06793,0.68602,"Tenterden, The Vine","2400A022950A"],["Tenterden, Town Hall",51.06868,0.68816,"Tenterden, Town Hall","2400A022960A"],["Tenterden, Old Post Office",51.07046,0.69023,"Tenterden, Old Post Office","2400A022970A"],["Tenterden, Turners Avenue",51.07352,0.69252,"Tenterden, Turners Avenue","2400A022980A"],["Tenterden, Homewood School",51.07688,0.69437,"Tenterden, Homewood School","2400A022990A"],["Tenterden, The Fat Ox",51.08009,0.69479,"Tenterden, The Fat Ox","2400A023000A"],["St Michaels, Wayside Avenue",51.08184,0.69405,"St Michaels, Wayside Avenue","2400A023010A"],["St Michaels, The Crown",51.08521,0.69107,"St Michaels, The Crown","2400A023020A"],["St Michaels, Pope House Lane",51.08917,0.69047,"St Michaels, Pope House Lane","240099953"],["Biddenden, Woodlands Park",51.10074,0.66452,"Biddenden, Woodlands Park","2400A023030A"],["Biddenden, The Weavers",51.11534,0.64364,"Biddenden, The Weavers","2400A023040A"],["Lashenden Bounds Cross",51.13939,0.64103,"Lashenden Bounds Cross","2400108570"],["Headcorn, Aerodrome",51.1556,0.63502,"Headcorn, Aerodrome","2400A023050A"],["Headcorn, Gibbs Hill",51.16686,0.63039,"Headcorn, Gibbs Hill","2400A023060A"],["Headcorn, Railway Station",51.1668,0.62762,"Headcorn, Railway Station","2400A023070A"],["Headcorn, George and Dragon",51.16778,0.62158,"Headcorn, George and Dragon","2400A023080A"],["Headcorn, Bankfields",51.17102,0.61826,"Headcorn, Bankfields","2400106929"],["Headcorn, Stonestile Road",51.17776,0.61311,"Headcorn, Stonestile Road","2400A022630A"],["Headcorn, Weald of Kent Golf Club",51.18794,0.60568,"Headcorn, Weald of Kent Golf","2400103152"],["Gladdish Layby",51.19994,0.59473,"Gladdish Layby","2400A023090A"],["Sutton Valence, The Harbour",51.20594,0.59068,"Sutton Valence, The Harbour","2400A022590A"],["Sutton Valence, The King's Head",51.21558,0.59174,"Sutton Valence, The King's","2400A022570A"],["Warmlake Crossroads",51.22116,0.59344,"Warmlake Crossroads","2400A023110A"],["Langley, The Plough",51.2277,0.58941,"Langley, The Plough","2400A036411A"],["Langley, The Potting Shed",51.23615,0.5842,"Langley, The Potting Shed","240075185"],["Langley, Pear Tree Row",51.23929,0.57746,"Langley, Pear Tree Row","2400104366"],["Langley, Edmett Way",51.24062,0.56872,"Langley, Edmett Way","2400108947"],["Park Wood, Car Showrooms",51.24183,0.56197,"Park Wood, Car Showrooms","2400104370"],["Park Wood, Gore Court Road",51.24306,0.55844,"Park Wood, Gore Court Road","2400A001180A"],["Park Wood, Willington Street",51.2449,0.55319,"Park Wood, Willington Street","2400A001170A"],["Shepway, Sutton Woods",51.24598,0.54995,"Shepway, Sutton Woods","2400A001030A"],["Shepway, Sutton Road Morrisons",51.24732,0.54751,"Shepway, Sutton Road Morrisons","2400A001000A"],["Shepway, Sutton Road Police HQ",51.24839,0.54495,"Shepway, Sutton Road Police HQ","2400A000980A"],["Shepway, Grove Road",51.25069,0.54116,"Shepway, Grove Road","2400A000970A"],["Shepway, Mangravet Avenue",51.25219,0.53904,"Shepway, Mangravet Avenue","2400A000950A"],["Shepway, Longfield Place",51.25421,0.53558,"Shepway, Longfield Place","2400A000930A"],["Shepway, Sutton Road Cemetery",51.25569,0.53284,"Shepway, Sutton Road Cemetery","2400107493"],["Shepway The Wheatsheaf",51.25838,0.53088,"Shepway The Wheatsheaf","2400A004600A"],["Maidstone, Armstrong Road",51.26087,0.52974,"Maidstone, Armstrong Road","2400A000891A"],["Maidstone, Sheal's Crescent",51.26361,0.52826,"Maidstone, Sheal's Crescent","2400A000881A"],["Maidstone, Postley Road",51.26511,0.52371,"Maidstone, Postley Road","2400A003410A"],["Maidstone Hayle Road",51.26773,0.52271,"Maidstone Hayle Road","2400A003420A"],["Maidstone, College Avenue",51.26947,0.52272,"Maidstone, College Avenue","2400A003430A"],["Maidstone Mill Street (Stop C)",51.27204,0.52083,"Maidstone Mill Street","2400A000840A"],["Headcorn, on Railway Station Forecourt",51.16602,0.62734,"Headcorn, on Railway Station","2400A036440A"],["Maidstone King Street (Stop L2)",51.27395,0.52374,"Maidstone King Street","2400A000690A"]],"lines":[[[51.27384,0.52195],[51.27479,0.52128],[51.27433,0.51871],[51.27438,0.51854],[51.27347,0.51839],[51.27303,0.51841],[51.27278,0.5185],[51.27213,0.51906],[51.27183,0.51963],[51.27174,0.52],[51.27161,0.5216],[51.27216,0.52359],[51.27215,0.5246],[51.27202,0.52478],[51.27172,0.52491],[51.27164,0.52514],[51.27173,0.52688],[51.27187,0.52724],[51.27196,0.52715],[51.27232,0.52716],[51.27234,0.52677],[51.27232,0.52716],[51.27196,0.52715],[51.27185,0.52734],[51.2717,0.52743],[51.27159,0.5278],[51.27154,0.52841],[51.27151,0.52844],[51.27124,0.52814],[51.27083,0.52741],[51.27092,0.52739],[51.27111,0.52772],[51.27121,0.52775],[51.27152,0.52767],[51.2717,0.52743],[51.27173,0.52688],[51.27164,0.52514],[51.27154,0.52498],[51.27053,0.52532],[51.26987,0.52587],[51.2692,0.52621],[51.26807,0.52653],[51.26743,0.52686],[51.26676,0.52707],[51.2661,0.52705],[51.2657,0.52719],[51.26466,0.52778],[51.26411,0.52821],[51.26242,0.52893],[51.26125,0.5297],[51.2602,0.53027],[51.25757,0.53133],[51.25691,0.53167],[51.25652,0.53197],[51.25617,0.53237],[51.25556,0.53322],[51.25301,0.53806],[51.25245,0.53879],[51.2515,0.54043],[51.25104,0.54101],[51.25004,0.54186],[51.24955,0.54261],[51.24892,0.54392],[51.24852,0.54493],[51.24792,0.54612],[51.24709,0.54833],[51.24558,0.55079],[51.24525,0.55181],[51.24498,0.55316],[51.24428,0.5557],[51.24379,0.55709],[51.2429,0.55909],[51.2416,0.56331],[51.24103,0.56723],[51.24067,0.5689],[51.24042,0.56956],[51.24041,0.56995],[51.24034,0.57005],[51.23975,0.57241],[51.23947,0.57424],[51.23936,0.57452],[51.23932,0.57604],[51.23941,0.57909],[51.23931,0.5807],[51.23918,0.58134],[51.23885,0.58204],[51.23857,0.58244],[51.23661,0.58408],[51.23576,0.58458],[51.23461,0.58497],[51.23284,0.5854],[51.23171,0.58551],[51.23044,0.58582],[51.23005,0.58612],[51.22866,0.58768],[51.22803,0.58914],[51.22744,0.58996],[51.22521,0.59175],[51.22409,0.59231],[51.22234,0.59357],[51.22207,0.59363],[51.22151,0.59362],[51.22064,0.59352],[51.21753,0.59279],[51.21695,0.59276],[51.21638,0.59247],[51.2149,0.59131],[51.2145,0.59111],[51.21424,0.59107],[51.21355,0.59143],[51.21364,0.59188],[51.21355,0.59143],[51.21331,0.59142],[51.21288,0.59102],[51.21211,0.5905],[51.20987,0.59005],[51.2085,0.58998],[51.20808,0.59003],[51.20722,0.59026],[51.20619,0.59075],[51.20554,0.59118],[51.2041,0.59243],[51.20244,0.59365],[51.20099,0.59448],[51.20001,0.59488],[51.19937,0.59526],[51.19868,0.59586],[51.19567,0.59908],[51.18789,0.60586],[51.1881,0.60646],[51.18813,0.60678],[51.18782,0.60682],[51.18787,0.60663],[51.18809,0.60643],[51.18789,0.60586],[51.18428,0.60894],[51.17439,0.61553],[51.1687,0.62044],[51.16842,0.62056],[51.16785,0.6206],[51.16779,0.62262],[51.167,0.62624],[51.16686,0.62745],[51.16607,0.62726],[51.16596,0.62693],[51.16597,0.62687],[51.1661,0.62689],[51.16614,0.62712],[51.16672,0.62725],[51.16673,0.62704],[51.16597,0.62687],[51.16607,0.62726],[51.16686,0.62745],[51.16693,0.62975],[51.16686,0.63232],[51.16662,0.63308],[51.16596,0.6339],[51.16568,0.63412],[51.16527,0.63418],[51.16371,0.6339],[51.16133,0.63275],[51.16105,0.63268],[51.16069,0.6327],[51.14452,0.6404],[51.14344,0.6406],[51.14076,0.64086],[51.13894,0.64126],[51.13889,0.64149],[51.13894,0.64126],[51.13768,0.64155],[51.13583,0.64175],[51.13504,0.64227],[51.13379,0.64355],[51.13212,0.64482],[51.12689,0.64696],[51.12596,0.64726],[51.12561,0.64746],[51.12446,0.6484],[51.12431,0.64842],[51.12403,0.64834],[51.12303,0.64766],[51.12219,0.6473],[51.12157,0.6467],[51.11968,0.64446],[51.11904,0.64401],[51.11839,0.64379],[51.11797,0.64374],[51.117,0.64405],[51.11646,0.64402],[51.11454,0.6435],[51.1138,0.64341],[51.11311,0.64304],[51.11289,0.64301],[51.11247,0.64329],[51.11186,0.64399],[51.11095,0.6454],[51.11066,0.6456],[51.11048,0.64563],[51.10874,0.64525],[51.10715,0.6451],[51.10659,0.64474],[51.10588,0.64413],[51.10563,0.64403],[51.10543,0.64411],[51.10532,0.64421],[51.10509,0.6447],[51.10483,0.64552],[51.10447,0.64794],[51.10428,0.65082],[51.10391,0.65241],[51.10375,0.65347],[51.10334,0.65485],[51.10296,0.65665],[51.10248,0.66096],[51.10162,0.66326],[51.10022,0.66565],[51.09981,0.66673],[51.09965,0.66744],[51.09948,0.66981],[51.09945,0.67244],[51.09928,0.67313],[51.09876,0.67446],[51.09869,0.67489],[51.09881,0.67737],[51.09923,0.67979],[51.09927,0.68214],[51.09952,0.68425],[51.09939,0.68467],[51.09862,0.68596],[51.09826,0.68679],[51.09642,0.68886],[51.09584,0.68882],[51.09384,0.68925],[51.0926,0.68979],[51.09082,0.69031],[51.09009,0.69046],[51.0891,0.69053],[51.08737,0.69024],[51.08622,0.6906],[51.08546,0.691],[51.08517,0.69122],[51.08378,0.69261],[51.08131,0.69457],[51.08108,0.69468],[51.08005,0.69489],[51.07973,0.69503],[51.07925,0.69537],[51.07894,0.69546],[51.07767,0.69514],[51.07682,0.69447],[51.0763,0.6942],[51.07471,0.69396],[51.07461,0.69407],[51.07457,0.69388],[51.07431,0.69364],[51.07344,0.69256],[51.07162,0.69079],[51.07008,0.69025],[51.0694,0.68985],[51.06897,0.68916],[51.06844,0.68778],[51.06816,0.68804],[51.06822,0.68825],[51.06816,0.68804],[51.06844,0.68778],[51.06773,0.68566]],[[51.06786,0.68607],[51.06807,0.6868],[51.06886,0.68891],[51.06917,0.68953],[51.0694,0.68985],[51.07008,0.69025],[51.07162,0.69079],[51.07344,0.69256],[51.07431,0.69364],[51.07457,0.69388],[51.07463,0.69382],[51.07471,0.69396],[51.07634,0.69422],[51.07682,0.69447],[51.07767,0.69514],[51.07894,0.69546],[51.07925,0.69537],[51.07973,0.69503],[51.08005,0.69489],[51.08108,0.69468],[51.08131,0.69457],[51.08378,0.69261],[51.08517,0.69122],[51.08546,0.691],[51.08622,0.6906],[51.08737,0.69024],[51.0891,0.69053],[51.09009,0.69046],[51.09082,0.69031],[51.0926,0.68979],[51.09384,0.68925],[51.09584,0.68882],[51.09642,0.68886],[51.09826,0.68679],[51.09862,0.68596],[51.09939,0.68467],[51.09952,0.68425],[51.09927,0.68214],[51.09923,0.67979],[51.09881,0.67737],[51.09869,0.67489],[51.09876,0.67446],[51.09928,0.67313],[51.09945,0.67244],[51.09948,0.66981],[51.09965,0.66744],[51.09981,0.66673],[51.10022,0.66565],[51.10162,0.66326],[51.10248,0.66096],[51.10296,0.65665],[51.10334,0.65485],[51.10375,0.65347],[51.10391,0.65241],[51.10428,0.65082],[51.10447,0.64794],[51.10483,0.64552],[51.10509,0.6447],[51.10532,0.64421],[51.10543,0.64411],[51.10563,0.64403],[51.10588,0.64413],[51.10659,0.64474],[51.10715,0.6451],[51.10874,0.64525],[51.11048,0.64563],[51.11066,0.6456],[51.11095,0.6454],[51.11186,0.64399],[51.11247,0.64329],[51.11289,0.64301],[51.11311,0.64304],[51.1138,0.64341],[51.11454,0.6435],[51.11646,0.64402],[51.117,0.64405],[51.11797,0.64374],[51.11839,0.64379],[51.11904,0.64401],[51.11968,0.64446],[51.12157,0.6467],[51.12219,0.6473],[51.12303,0.64766],[51.12403,0.64834],[51.12431,0.64842],[51.12446,0.6484],[51.12561,0.64746],[51.12596,0.64726],[51.12689,0.64696],[51.13212,0.64482],[51.13379,0.64355],[51.13504,0.64227],[51.13583,0.64175],[51.13768,0.64155],[51.14076,0.64086],[51.14344,0.6406],[51.14452,0.6404],[51.16069,0.6327],[51.16105,0.63268],[51.16133,0.63275],[51.16371,0.6339],[51.16527,0.63418],[51.16568,0.63412],[51.16596,0.6339],[51.16662,0.63308],[51.16686,0.63232],[51.16692,0.63035],[51.16657,0.6303],[51.16655,0.63059],[51.16657,0.6303],[51.16692,0.63035],[51.16686,0.62745],[51.16607,0.62726],[51.16596,0.62693],[51.16597,0.62687],[51.1661,0.62689],[51.16614,0.62712],[51.16672,0.62725],[51.16673,0.62704],[51.16597,0.62687],[51.16607,0.62726],[51.16686,0.62745],[51.167,0.62624],[51.16779,0.62262],[51.16785,0.6206],[51.16842,0.62056],[51.1687,0.62044],[51.17439,0.61553],[51.17767,0.6133],[51.17763,0.61307],[51.17771,0.61302],[51.17763,0.61307],[51.17767,0.6133],[51.18428,0.60894],[51.1945,0.60015],[51.19567,0.59908],[51.19868,0.59586],[51.19937,0.59526],[51.20001,0.59488],[51.20099,0.59448],[51.20244,0.59365],[51.2041,0.59243],[51.20554,0.59118],[51.20619,0.59075],[51.20722,0.59026],[51.20808,0.59003],[51.2085,0.58998],[51.20987,0.59005],[51.21199,0.59046],[51.21288,0.59102],[51.21338,0.59145],[51.21376,0.59136],[51.21424,0.59107],[51.2145,0.59111],[51.2149,0.59131],[51.21638,0.59247],[51.21695,0.59276],[51.21753,0.59279],[51.22064,0.59352],[51.22151,0.59362],[51.22207,0.59363],[51.22234,0.59357],[51.22409,0.59231],[51.22521,0.59175],[51.22744,0.58996],[51.22803,0.58914],[51.22866,0.58768],[51.23005,0.58612],[51.23044,0.58582],[51.23171,0.58551],[51.23284,0.5854],[51.23461,0.58497],[51.23576,0.58458],[51.23661,0.58408],[51.23857,0.58244],[51.23898,0.58179],[51.23925,0.58107],[51.23941,0.57909],[51.23934,0.57544],[51.23922,0.57513],[51.23909,0.57504],[51.23907,0.57486],[51.23913,0.5747],[51.23936,0.57452],[51.23947,0.57424],[51.23975,0.57241],[51.24027,0.57041],[51.24015,0.56995],[51.23939,0.56927],[51.23918,0.56885],[51.23951,0.56849],[51.23971,0.56921],[51.23987,0.56931],[51.24056,0.56877],[51.23987,0.56931],[51.23971,0.56921],[51.23951,0.56849],[51.23918,0.56885],[51.23939,0.56927],[51.23993,0.56971],[51.24018,0.56969],[51.24059,0.56915],[51.24108,0.56694],[51.24138,0.56458],[51.24174,0.56239],[51.2421,0.56165],[51.2429,0.55909],[51.24379,0.55709],[51.24412,0.55619],[51.24498,0.55316],[51.2454,0.55127],[51.24558,0.55079],[51.24709,0.54833],[51.24792,0.54612],[51.24852,0.54493],[51.24892,0.54392],[51.24955,0.54261],[51.25004,0.54186],[51.25104,0.54101],[51.2515,0.54043],[51.25214,0.53934],[51.25207,0.53893],[51.25237,0.53892],[51.2529,0.53824],[51.25556,0.53322],[51.25652,0.53197],[51.25728,0.53139],[51.25775,0.53113],[51.25805,0.53115],[51.2602,0.53027],[51.26125,0.5297],[51.26242,0.52893],[51.26411,0.52821],[51.26484,0.52759],[51.26496,0.52725],[51.26463,0.52564],[51.26461,0.52514],[51.26473,0.52446],[51.26503,0.52395],[51.26524,0.52381],[51.26569,0.52381],[51.2668,0.52307],[51.26723,0.52288],[51.26843,0.52276],[51.26902,0.52294],[51.27083,0.5226],[51.27154,0.52125],[51.2717,0.51977],[51.27215,0.51875],[51.27173,0.51808],[51.27173,0.51779],[51.27184,0.51749],[51.27224,0.51697],[51.27239,0.51702],[51.27282,0.51757],[51.27298,0.51802],[51.27289,0.51834],[51.27248,0.51876],[51.27241,0.51898],[51.27246,0.51931],[51.27294,0.52054],[51.27253,0.52079],[51.27199,0.52098],[51.27161,0.52133],[51.27161,0.5216],[51.27215,0.52349],[51.27215,0.5246],[51.27196,0.52482],[51.27092,0.52515],[51.27043,0.5254],[51.2703,0.52355],[51.27041,0.5227],[51.27083,0.5226],[51.27154,0.52125],[51.2717,0.51977],[51.27215,0.51875],[51.27265,0.51841],[51.27313,0.51826],[51.27437,0.51836],[51.27443,0.51863],[51.27456,0.52017],[51.27479,0.52128],[51.27384,0.52195]]],"days":[{"key":"sat","label":"Saturday","dirs":[{"label":"To Tenterden","li":0,"trips":[{"big":"07:45","small":"At Headcorn, Aerodrome 08:26","title":"The 07:45 from Maidstone Royal Star Arcade","s":[["07:45",0,5],["07:47",1,1],["07:50",2,0],["07:51",3,0],["07:53",4,0],["07:53",5,0],["07:54",6,0],["07:56",7,0],["07:57",8,1],["07:59",9,0],["07:59",10,0],["08:01",11,0],["08:02",12,5],["08:02",13,0],["08:03",14,0],["08:03",15,0],["08:04",16,0],["08:05",17,0],["08:07",18,0],["08:08",19,0],["08:10",20,1],["08:11",21,0],["08:13",22,0],["08:14",23,0],["08:15",24,0],["08:17",25,0],["08:19",26,0],["08:20",27,0],["08:21",28,5],["08:23",29,1],["08:23",30,0],["08:26",31,6],["08:29",32,0],["08:33",33,5],["08:37",34,0],["08:40",35,0],["08:41",36,0],["08:42",37,0],["08:42",38,1],["08:43",39,0],["08:44",40,0],["08:45",41,0],["08:46",42,0],["08:47",43,5]]},{"big":"08:45","small":"At Headcorn, Aerodrome 09:26","title":"The 08:45 from Maidstone Royal Star Arcade","s":[["08:45",0,5],["08:47",1,1],["08:50",2,0],["08:51",3,0],["08:53",4,0],["08:53",5,0],["08:54",6,0],["08:56",7,0],["08:57",8,1],["08:59",9,0],["08:59",10,0],["09:01",11,0],["09:02",12,5],["09:02",13,0],["09:03",14,0],["09:03",15,0],["09:04",16,0],["09:05",17,0],["09:07",18,0],["09:08",19,0],["09:10",20,1],["09:11",21,0],["09:13",22,0],["09:14",23,0],["09:15",24,0],["09:17",25,0],["09:19",26,0],["09:20",27,0],["09:21",28,5],["09:23",29,1],["09:23",30,0],["09:26",31,6],["09:29",32,0],["09:33",33,5],["09:37",34,0],["09:40",35,0],["09:41",36,0],["09:42",37,0],["09:42",38,1],["09:43",39,0],["09:44",40,0],["09:45",41,0],["09:46",42,0],["09:47",43,5]]},{"big":"09:15","small":"At Headcorn, Aerodrome 09:56","title":"The 09:15 from Maidstone Royal Star Arcade","s":[["09:15",0,5],["09:17",1,1],["09:20",2,0],["09:21",3,0],["09:23",4,0],["09:23",5,0],["09:24",6,0],["09:26",7,0],["09:27",8,1],["09:29",9,0],["09:29",10,0],["09:31",11,0],["09:32",12,5],["09:32",13,0],["09:33",14,0],["09:33",15,0],["09:34",16,0],["09:35",17,0],["09:37",18,0],["09:38",19,0],["09:40",20,1],["09:41",21,0],["09:43",22,0],["09:44",23,0],["09:45",24,0],["09:47",25,0],["09:49",26,0],["09:50",27,0],["09:51",28,5],["09:53",29,1],["09:53",30,0],["09:56",31,6],["09:59",32,0],["10:03",33,5],["10:07",34,0],["10:10",35,0],["10:11",36,0],["10:12",37,0],["10:12",38,1],["10:13",39,0],["10:14",40,0],["10:15",41,0],["10:16",42,0],["10:17",43,5]]},{"big":"09:45","small":"At Headcorn, Aerodrome 10:26","title":"The 09:45 from Maidstone Royal Star Arcade","s":[["09:45",0,5],["09:47",1,1],["09:50",2,0],["09:51",3,0],["09:53",4,0],["09:53",5,0],["09:54",6,0],["09:56",7,0],["09:57",8,1],["09:59",9,0],["09:59",10,0],["10:01",11,0],["10:02",12,5],["10:02",13,0],["10:03",14,0],["10:03",15,0],["10:04",16,0],["10:05",17,0],["10:07",18,0],["10:08",19,0],["10:10",20,1],["10:11",21,0],["10:13",22,0],["10:14",23,0],["10:15",24,0],["10:17",25,0],["10:19",26,0],["10:20",27,0],["10:21",28,5],["10:23",29,1],["10:23",30,0],["10:26",31,6],["10:29",32,0],["10:33",33,5],["10:37",34,0],["10:40",35,0],["10:41",36,0],["10:42",37,0],["10:42",38,1],["10:43",39,0],["10:44",40,0],["10:45",41,0],["10:46",42,0],["10:47",43,5]]},{"big":"10:15","small":"At Headcorn, Aerodrome 10:56","title":"The 10:15 from Maidstone Royal Star Arcade","s":[["10:15",0,5],["10:17",1,1],["10:20",2,0],["10:21",3,0],["10:23",4,0],["10:23",5,0],["10:24",6,0],["10:26",7,0],["10:27",8,1],["10:29",9,0],["10:29",10,0],["10:31",11,0],["10:32",12,5],["10:32",13,0],["10:33",14,0],["10:33",15,0],["10:34",16,0],["10:35",17,0],["10:37",18,0],["10:38",19,0],["10:40",20,1],["10:41",21,0],["10:43",22,0],["10:44",23,0],["10:45",24,0],["10:47",25,0],["10:49",26,0],["10:50",27,0],["10:51",28,5],["10:53",29,1],["10:53",30,0],["10:56",31,6],["10:59",32,0],["11:03",33,5],["11:07",34,0],["11:10",35,0],["11:11",36,0],["11:12",37,0],["11:12",38,1],["11:13",39,0],["11:14",40,0],["11:15",41,0],["11:16",42,0],["11:17",43,5]]},{"big":"10:45","small":"At Headcorn, Aerodrome 11:26","title":"The 10:45 from Maidstone Royal Star Arcade","s":[["10:45",0,5],["10:47",1,1],["10:50",2,0],["10:51",3,0],["10:53",4,0],["10:53",5,0],["10:54",6,0],["10:56",7,0],["10:57",8,1],["10:59",9,0],["10:59",10,0],["11:01",11,0],["11:02",12,5],["11:02",13,0],["11:03",14,0],["11:03",15,0],["11:04",16,0],["11:05",17,0],["11:07",18,0],["11:08",19,0],["11:10",20,1],["11:11",21,0],["11:13",22,0],["11:14",23,0],["11:15",24,0],["11:17",25,0],["11:19",26,0],["11:20",27,0],["11:21",28,5],["11:23",29,1],["11:23",30,0],["11:26",31,6],["11:29",32,0],["11:33",33,5],["11:37",34,0],["11:40",35,0],["11:41",36,0],["11:42",37,0],["11:42",38,1],["11:43",39,0],["11:44",40,0],["11:45",41,0],["11:46",42,0],["11:47",43,5]]},{"big":"11:15","small":"At Headcorn, Aerodrome 11:56","title":"The 11:15 from Maidstone Royal Star Arcade","s":[["11:15",0,5],["11:17",1,1],["11:20",2,0],["11:21",3,0],["11:23",4,0],["11:23",5,0],["11:24",6,0],["11:26",7,0],["11:27",8,1],["11:29",9,0],["11:29",10,0],["11:31",11,0],["11:32",12,5],["11:32",13,0],["11:33",14,0],["11:33",15,0],["11:34",16,0],["11:35",17,0],["11:37",18,0],["11:38",19,0],["11:40",20,1],["11:41",21,0],["11:43",22,0],["11:44",23,0],["11:45",24,0],["11:47",25,0],["11:49",26,0],["11:50",27,0],["11:51",28,5],["11:53",29,1],["11:53",30,0],["11:56",31,6],["11:59",32,0],["12:03",33,5],["12:07",34,0],["12:10",35,0],["12:11",36,0],["12:12",37,0],["12:12",38,1],["12:13",39,0],["12:14",40,0],["12:15",41,0],["12:16",42,0],["12:17",43,5]]},{"big":"11:45","small":"At Headcorn, Aerodrome 12:26","title":"The 11:45 from Maidstone Royal Star Arcade","s":[["11:45",0,5],["11:47",1,1],["11:50",2,0],["11:51",3,0],["11:53",4,0],["11:53",5,0],["11:54",6,0],["11:56",7,0],["11:57",8,1],["11:59",9,0],["11:59",10,0],["12:01",11,0],["12:02",12,5],["12:02",13,0],["12:03",14,0],["12:03",15,0],["12:04",16,0],["12:05",17,0],["12:07",18,0],["12:08",19,0],["12:10",20,1],["12:11",21,0],["12:13",22,0],["12:14",23,0],["12:15",24,0],["12:17",25,0],["12:19",26,0],["12:20",27,0],["12:21",28,5],["12:23",29,1],["12:23",30,0],["12:26",31,6],["12:29",32,0],["12:33",33,5],["12:37",34,0],["12:40",35,0],["12:41",36,0],["12:42",37,0],["12:42",38,1],["12:43",39,0],["12:44",40,0],["12:45",41,0],["12:46",42,0],["12:47",43,5]]},{"big":"12:15","small":"At Headcorn, Aerodrome 12:56","title":"The 12:15 from Maidstone Royal Star Arcade","s":[["12:15",0,5],["12:17",1,1],["12:20",2,0],["12:21",3,0],["12:23",4,0],["12:23",5,0],["12:24",6,0],["12:26",7,0],["12:27",8,1],["12:29",9,0],["12:29",10,0],["12:31",11,0],["12:32",12,5],["12:32",13,0],["12:33",14,0],["12:33",15,0],["12:34",16,0],["12:35",17,0],["12:37",18,0],["12:38",19,0],["12:40",20,1],["12:41",21,0],["12:43",22,0],["12:44",23,0],["12:45",24,0],["12:47",25,0],["12:49",26,0],["12:50",27,0],["12:51",28,5],["12:53",29,1],["12:53",30,0],["12:56",31,6],["12:59",32,0],["13:03",33,5],["13:07",34,0],["13:10",35,0],["13:11",36,0],["13:12",37,0],["13:12",38,1],["13:13",39,0],["13:14",40,0],["13:15",41,0],["13:16",42,0],["13:17",43,5]]},{"big":"12:45","small":"At Headcorn, Aerodrome 13:26","title":"The 12:45 from Maidstone Royal Star Arcade","s":[["12:45",0,5],["12:47",1,1],["12:50",2,0],["12:51",3,0],["12:53",4,0],["12:53",5,0],["12:54",6,0],["12:56",7,0],["12:57",8,1],["12:59",9,0],["12:59",10,0],["13:01",11,0],["13:02",12,5],["13:02",13,0],["13:03",14,0],["13:03",15,0],["13:04",16,0],["13:05",17,0],["13:07",18,0],["13:08",19,0],["13:10",20,1],["13:11",21,0],["13:13",22,0],["13:14",23,0],["13:15",24,0],["13:17",25,0],["13:19",26,0],["13:20",27,0],["13:21",28,5],["13:23",29,1],["13:23",30,0],["13:26",31,6],["13:29",32,0],["13:33",33,5],["13:37",34,0],["13:40",35,0],["13:41",36,0],["13:42",37,0],["13:42",38,1],["13:43",39,0],["13:44",40,0],["13:45",41,0],["13:46",42,0],["13:47",43,5]]}],"note":"","tt":{"rows":["Maidstone Royal Star Arcade","Maidstone Chequers Bus Station","Shepway, Longfield Place","Shepway, Sutton Road Morrisons","Langley, The Plough","Headcorn, George and Dragon","Headcorn, Railway Station","Headcorn, on Railway Station","Biddenden, The Weavers","Tenterden, The Fat Ox","Tenterden, The Vine"],"off":-1,"cols":[["07:45","07:47","07:57","08:02","08:10","08:21","08:23","","08:33","08:42","08:47"],["08:45","08:47","08:57","09:02","09:10","09:21","09:23","","09:33","09:42","09:47"],["09:15","09:17","09:27","09:32","09:40","09:51","09:53","","10:03","10:12","10:17"],["09:45","09:47","09:57","10:02","10:10","10:21","10:23","","10:33","10:42","10:47"],["10:15","10:17","10:27","10:32","10:40","10:51","10:53","","11:03","11:12","11:17"],["10:45","10:47","10:57","11:02","11:10","11:21","11:23","","11:33","11:42","11:47"],["11:15","11:17","11:27","11:32","11:40","11:51","11:53","","12:03","12:12","12:17"],["11:45","11:47","11:57","12:02","12:10","12:21","12:23","","12:33","12:42","12:47"],["12:15","12:17","12:27","12:32","12:40","12:51","12:53","","13:03","13:12","13:17"],["12:45","12:47","12:57","13:02","13:10","13:21","13:23","","13:33","13:42","13:47"],["13:15","13:17","13:27","13:32","13:40","13:51","13:53","","14:03","14:12","14:17"],["13:45","13:47","13:57","14:02","14:10","14:21","14:23","","14:33","14:42","14:47"],["14:15","14:17","14:27","14:32","14:40","14:51","14:53","","15:03","15:12","15:17"],["14:45","14:47","14:57","15:02","15:10","15:21","15:23","","15:33","15:42","15:47"],["15:15","15:17","15:27","15:32","15:40","15:51","15:53","","16:03","16:12","16:17"],["15:45","15:47","15:57","16:02","16:10","16:21","16:23","","16:33","16:42","16:47"],["16:15","16:17","16:27","16:32","16:40","16:51","16:53","","17:03","17:12","17:17"],["16:45","16:47","16:57","17:02","17:10","17:21","17:23","","17:33","17:42","17:47"],["17:35","17:37","17:47","17:52","17:57","18:08","18:10","","18:19","18:28","18:33"],["18:30","18:32","18:42","18:47","18:52","19:01","19:02","19:03","","",""],["19:55","19:57","20:05","20:08","20:13","20:22","20:23","20:24","","",""],["21:25","21:27","21:34","21:37","21:42","21:51","21:53","21:54","22:00","22:06","22:11"],["23:05","23:07","23:14","23:17","23:22","23:31","23:32","23:33","","",""]]},"blind":"Tenterden","via":["via Shepway and Park Wood","via Langley and Sutton Valence","via Headcorn and St Michaels"]},{"label":"To Maidstone","li":1,"trips":[{"big":"13:46","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 14:30","title":"The 13:46 from Headcorn, Aerodrome","s":[["13:25",44,5],["13:25",45,0],["13:26",46,0],["13:27",47,0],["13:28",48,0],["13:29",49,0],["13:30",50,0],["13:31",51,1],["13:31",52,0],["13:35",53,0],["13:39",54,1],["13:43",55,0],["13:46",56,6],["13:48",57,0],["13:48",58,5],["13:50",59,1],["13:51",60,0],["13:52",61,0],["13:54",62,0],["13:57",63,0],["13:58",64,0],["14:00",65,0],["14:02",66,0],["14:03",67,5],["14:06",68,0],["14:08",69,0],["14:10",70,0],["14:12",71,0],["14:12",72,0],["14:14",73,0],["14:14",74,0],["14:15",75,5],["14:16",76,0],["14:17",77,0],["14:17",78,0],["14:18",79,0],["14:19",80,1],["14:20",81,0],["14:22",82,0],["14:23",83,0],["14:25",84,0],["14:26",85,0],["14:27",86,0],["14:29",87,0],["14:30",0,5]]},{"big":"14:16","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 15:00","title":"The 14:16 from Headcorn, Aerodrome","s":[["13:55",44,5],["13:55",45,0],["13:56",46,0],["13:57",47,0],["13:58",48,0],["13:59",49,0],["14:00",50,0],["14:01",51,1],["14:01",52,0],["14:05",53,0],["14:09",54,1],["14:13",55,0],["14:16",56,6],["14:18",57,0],["14:18",58,5],["14:20",59,1],["14:21",60,0],["14:22",61,0],["14:24",62,0],["14:27",63,0],["14:28",64,0],["14:30",65,0],["14:32",66,0],["14:33",67,5],["14:36",68,0],["14:38",69,0],["14:40",70,0],["14:42",71,0],["14:42",72,0],["14:44",73,0],["14:44",74,0],["14:45",75,5],["14:46",76,0],["14:47",77,0],["14:47",78,0],["14:48",79,0],["14:49",80,1],["14:50",81,0],["14:52",82,0],["14:53",83,0],["14:55",84,0],["14:56",85,0],["14:57",86,0],["14:59",87,0],["15:00",0,5]]},{"big":"14:46","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 15:30","title":"The 14:46 from Headcorn, Aerodrome","s":[["14:25",44,5],["14:25",45,0],["14:26",46,0],["14:27",47,0],["14:28",48,0],["14:29",49,0],["14:30",50,0],["14:31",51,1],["14:31",52,0],["14:35",53,0],["14:39",54,1],["14:43",55,0],["14:46",56,6],["14:48",57,0],["14:48",58,5],["14:50",59,1],["14:51",60,0],["14:52",61,0],["14:54",62,0],["14:57",63,0],["14:58",64,0],["15:00",65,0],["15:02",66,0],["15:03",67,5],["15:06",68,0],["15:08",69,0],["15:10",70,0],["15:12",71,0],["15:12",72,0],["15:14",73,0],["15:14",74,0],["15:15",75,5],["15:16",76,0],["15:17",77,0],["15:17",78,0],["15:18",79,0],["15:19",80,1],["15:20",81,0],["15:22",82,0],["15:23",83,0],["15:25",84,0],["15:26",85,0],["15:27",86,0],["15:29",87,0],["15:30",0,5]]},{"big":"15:16","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 16:00","title":"The 15:16 from Headcorn, Aerodrome","s":[["14:55",44,5],["14:55",45,0],["14:56",46,0],["14:57",47,0],["14:58",48,0],["14:59",49,0],["15:00",50,0],["15:01",51,1],["15:01",52,0],["15:05",53,0],["15:09",54,1],["15:13",55,0],["15:16",56,6],["15:18",57,0],["15:18",58,5],["15:20",59,1],["15:21",60,0],["15:22",61,0],["15:24",62,0],["15:27",63,0],["15:28",64,0],["15:30",65,0],["15:32",66,0],["15:33",67,5],["15:36",68,0],["15:38",69,0],["15:40",70,0],["15:42",71,0],["15:42",72,0],["15:44",73,0],["15:44",74,0],["15:45",75,5],["15:46",76,0],["15:47",77,0],["15:47",78,0],["15:48",79,0],["15:49",80,1],["15:50",81,0],["15:52",82,0],["15:53",83,0],["15:55",84,0],["15:56",85,0],["15:57",86,0],["15:59",87,0],["16:00",0,5]]},{"big":"15:46","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 16:30","title":"The 15:46 from Headcorn, Aerodrome","s":[["15:25",44,5],["15:25",45,0],["15:26",46,0],["15:27",47,0],["15:28",48,0],["15:29",49,0],["15:30",50,0],["15:31",51,1],["15:31",52,0],["15:35",53,0],["15:39",54,1],["15:43",55,0],["15:46",56,6],["15:48",57,0],["15:48",58,5],["15:50",59,1],["15:51",60,0],["15:52",61,0],["15:54",62,0],["15:57",63,0],["15:58",64,0],["16:00",65,0],["16:02",66,0],["16:03",67,5],["16:06",68,0],["16:08",69,0],["16:10",70,0],["16:12",71,0],["16:12",72,0],["16:14",73,0],["16:14",74,0],["16:15",75,5],["16:16",76,0],["16:17",77,0],["16:17",78,0],["16:18",79,0],["16:19",80,1],["16:20",81,0],["16:22",82,0],["16:23",83,0],["16:25",84,0],["16:26",85,0],["16:27",86,0],["16:29",87,0],["16:30",0,5]]},{"big":"16:16","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 17:00","title":"The 16:16 from Headcorn, Aerodrome","s":[["15:55",44,5],["15:55",45,0],["15:56",46,0],["15:57",47,0],["15:58",48,0],["15:59",49,0],["16:00",50,0],["16:01",51,1],["16:01",52,0],["16:05",53,0],["16:09",54,1],["16:13",55,0],["16:16",56,6],["16:18",57,0],["16:18",58,5],["16:20",59,1],["16:21",60,0],["16:22",61,0],["16:24",62,0],["16:27",63,0],["16:28",64,0],["16:30",65,0],["16:32",66,0],["16:33",67,5],["16:36",68,0],["16:38",69,0],["16:40",70,0],["16:42",71,0],["16:42",72,0],["16:44",73,0],["16:44",74,0],["16:45",75,5],["16:46",76,0],["16:47",77,0],["16:47",78,0],["16:48",79,0],["16:49",80,1],["16:50",81,0],["16:52",82,0],["16:53",83,0],["16:55",84,0],["16:56",85,0],["16:57",86,0],["16:59",87,0],["17:00",0,5]]},{"big":"16:46","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 17:30","title":"The 16:46 from Headcorn, Aerodrome","s":[["16:25",44,5],["16:25",45,0],["16:26",46,0],["16:27",47,0],["16:28",48,0],["16:29",49,0],["16:30",50,0],["16:31",51,1],["16:31",52,0],["16:35",53,0],["16:39",54,1],["16:43",55,0],["16:46",56,6],["16:48",57,0],["16:48",58,5],["16:50",59,1],["16:51",60,0],["16:52",61,0],["16:54",62,0],["16:57",63,0],["16:58",64,0],["17:00",65,0],["17:02",66,0],["17:03",67,5],["17:06",68,0],["17:08",69,0],["17:10",70,0],["17:12",71,0],["17:12",72,0],["17:14",73,0],["17:14",74,0],["17:15",75,5],["17:16",76,0],["17:17",77,0],["17:17",78,0],["17:18",79,0],["17:19",80,1],["17:20",81,0],["17:22",82,0],["17:23",83,0],["17:25",84,0],["17:26",85,0],["17:27",86,0],["17:29",87,0],["17:30",0,5]]},{"big":"17:16","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 18:00","title":"The 17:16 from Headcorn, Aerodrome","s":[["16:55",44,5],["16:55",45,0],["16:56",46,0],["16:57",47,0],["16:58",48,0],["16:59",49,0],["17:00",50,0],["17:01",51,1],["17:01",52,0],["17:05",53,0],["17:09",54,1],["17:13",55,0],["17:16",56,6],["17:18",57,0],["17:18",58,5],["17:20",59,1],["17:21",60,0],["17:22",61,0],["17:24",62,0],["17:27",63,0],["17:28",64,0],["17:30",65,0],["17:32",66,0],["17:33",67,5],["17:36",68,0],["17:38",69,0],["17:40",70,0],["17:42",71,0],["17:42",72,0],["17:44",73,0],["17:44",74,0],["17:45",75,5],["17:46",76,0],["17:47",77,0],["17:47",78,0],["17:48",79,0],["17:49",80,1],["17:50",81,0],["17:52",82,0],["17:53",83,0],["17:55",84,0],["17:56",85,0],["17:57",86,0],["17:59",87,0],["18:00",0,5]]},{"big":"17:45","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 18:25","title":"The 17:45 from Headcorn, Aerodrome","s":[["17:25",44,5],["17:25",45,0],["17:26",46,0],["17:27",47,0],["17:28",48,0],["17:29",49,0],["17:30",50,0],["17:31",51,1],["17:31",52,0],["17:35",53,0],["17:39",54,1],["17:43",55,0],["17:45",56,6],["17:47",57,0],["17:47",58,5],["17:48",88,1],["17:50",59,5],["17:51",60,0],["17:52",61,0],["17:54",62,0],["17:57",63,0],["17:58",64,0],["17:59",65,0],["18:01",66,0],["18:02",67,1],["18:05",68,0],["18:06",69,0],["18:08",70,0],["18:09",71,0],["18:10",72,0],["18:11",73,0],["18:11",74,0],["18:12",75,5],["18:13",76,0],["18:14",77,0],["18:14",78,0],["18:15",79,0],["18:16",80,1],["18:17",81,0],["18:18",82,0],["18:19",83,0],["18:21",84,0],["18:22",85,0],["18:22",86,0],["18:24",87,0],["18:25",0,5]]},{"big":"18:15","small":"From Headcorn, Aerodrome, at Maidstone Royal Star Arcade 18:55","title":"The 18:15 from Headcorn, Aerodrome","s":[["17:55",44,5],["17:55",45,0],["17:56",46,0],["17:57",47,0],["17:58",48,0],["17:59",49,0],["18:00",50,0],["18:01",51,1],["18:01",52,0],["18:05",53,0],["18:09",54,1],["18:13",55,0],["18:15",56,6],["18:17",57,0],["18:17",58,5],["18:18",88,1],["18:20",59,5],["18:21",60,0],["18:22",61,0],["18:24",62,0],["18:27",63,0],["18:28",64,0],["18:29",65,0],["18:31",66,0],["18:32",67,1],["18:35",68,0],["18:36",69,0],["18:38",70,0],["18:39",71,0],["18:40",72,0],["18:41",73,0],["18:41",74,0],["18:42",75,5],["18:43",76,0],["18:44",77,0],["18:44",78,0],["18:45",79,0],["18:46",80,1],["18:47",81,0],["18:48",82,0],["18:49",83,0],["18:51",84,0],["18:52",85,0],["18:52",86,0],["18:54",87,0],["18:55",0,5]]}],"note":"","tt":{"rows":["Tenterden, The Vine","St Michaels, The Crown","Biddenden, The Weavers","Headcorn, Aerodrome","Headcorn, Railway Station","Headcorn, on Railway Station","Headcorn, George and Dragon","Langley, The Plough","Shepway, Sutton Road Morrisons","Shepway, Sutton Road Cemetery","Maidstone Royal Star Arcade"],"off":3,"cols":[["","","","","","07:23","07:25","07:37","07:47","07:51","08:00"],["","","","","","08:23","08:25","08:37","08:47","08:51","09:00"],["","","","","","08:53","08:55","09:07","09:17","09:21","09:30"],["08:55","09:01","09:09","09:16","09:18","","09:20","09:33","09:45","09:49","10:00"],["09:55","10:01","10:09","10:16","10:18","","10:20","10:33","10:45","10:49","11:00"],["10:25","10:31","10:39","10:46","10:48","","10:50","11:03","11:15","11:19","11:30"],["10:55","11:01","11:09","11:16","11:18","","11:20","11:33","11:45","11:49","12:00"],["11:25","11:31","11:39","11:46","11:48","","11:50","12:03","12:15","12:19","12:30"],["11:55","12:01","12:09","12:16","12:18","","12:20","12:33","12:45","12:49","13:00"],["12:25","12:31","12:39","12:46","12:48","","12:50","13:03","13:15","13:19","13:30"],["12:55","13:01","13:09","13:16","13:18","","13:20","13:33","13:45","13:49","14:00"],["13:25","13:31","13:39","13:46","13:48","","13:50","14:03","14:15","14:19","14:30"],["13:55","14:01","14:09","14:16","14:18","","14:20","14:33","14:45","14:49","15:00"],["14:25","14:31","14:39","14:46","14:48","","14:50","15:03","15:15","15:19","15:30"],["14:55","15:01","15:09","15:16","15:18","","15:20","15:33","15:45","15:49","16:00"],["15:25","15:31","15:39","15:46","15:48","","15:50","16:03","16:15","16:19","16:30"],["15:55","16:01","16:09","16:16","16:18","","16:20","16:33","16:45","16:49","17:00"],["16:25","16:31","16:39","16:46","16:48","","16:50","17:03","17:15","17:19","17:30"],["16:55","17:01","17:09","17:16","17:18","","17:20","17:33","17:45","17:49","18:00"],["17:25","17:31","17:39","17:45","17:47","17:48","17:50","18:02","18:12","18:16","18:25"],["17:55","18:01","18:09","18:15","18:17","18:18","18:20","18:32","18:42","18:46","18:55"],["","","","","","19:06","19:08","19:18","19:23","19:27","19:36"],["","","","","","20:32","20:34","20:44","20:49","20:52","21:00"],["22:15","22:19","22:25","22:29","22:31","22:32","22:34","22:44","22:49","22:52","23:00"]]},"blind":"Maidstone","via":["via St Michaels and Biddenden","via Headcorn and Langley","via Park Wood and Shepway"]}],"none":"In the current timetable there are no 12 buses on Saturdays, so I would look at the other ways to get there on the Headcorn Airshow page."},{"key":"sun","label":"Sunday","dirs":[{"label":"To Tenterden","li":0,"trips":[{"big":"09:59","small":"At Headcorn, Aerodrome 10:40","title":"The 09:59 from Maidstone Royal Star Arcade","s":[["09:59",0,5],["10:01",1,1],["10:04",2,0],["10:05",3,0],["10:07",4,0],["10:07",5,0],["10:08",6,0],["10:10",7,0],["10:11",8,1],["10:13",9,0],["10:13",10,0],["10:15",11,0],["10:16",12,5],["10:16",13,0],["10:17",14,0],["10:17",15,0],["10:18",16,0],["10:19",17,0],["10:21",18,0],["10:22",19,0],["10:24",20,1],["10:25",21,0],["10:27",22,0],["10:28",23,0],["10:29",24,0],["10:31",25,0],["10:33",26,0],["10:34",27,0],["10:35",28,5],["10:37",29,1],["10:37",30,0],["10:40",31,6],["10:43",32,0],["10:47",33,5],["10:50",34,0],["10:54",35,0],["10:54",36,0],["10:55",37,0],["10:55",38,1],["10:56",39,0],["10:57",40,0],["10:59",41,0],["11:00",42,0],["11:01",43,5]]},{"big":"10:59","small":"At Headcorn, Aerodrome 11:40","title":"The 10:59 from Maidstone Royal Star Arcade","s":[["10:59",0,5],["11:01",1,1],["11:04",2,0],["11:05",3,0],["11:07",4,0],["11:07",5,0],["11:08",6,0],["11:10",7,0],["11:11",8,1],["11:13",9,0],["11:13",10,0],["11:15",11,0],["11:16",12,5],["11:16",13,0],["11:17",14,0],["11:17",15,0],["11:18",16,0],["11:19",17,0],["11:21",18,0],["11:22",19,0],["11:24",20,1],["11:25",21,0],["11:27",22,0],["11:28",23,0],["11:29",24,0],["11:31",25,0],["11:33",26,0],["11:34",27,0],["11:35",28,5],["11:37",29,1],["11:37",30,0],["11:40",31,6],["11:43",32,0],["11:47",33,5],["11:50",34,0],["11:54",35,0],["11:54",36,0],["11:55",37,0],["11:55",38,1],["11:56",39,0],["11:57",40,0],["11:59",41,0],["12:00",42,0],["12:01",43,5]]},{"big":"11:59","small":"At Headcorn, Aerodrome 12:40","title":"The 11:59 from Maidstone Royal Star Arcade","s":[["11:59",0,5],["12:01",1,1],["12:04",2,0],["12:05",3,0],["12:07",4,0],["12:07",5,0],["12:08",6,0],["12:10",7,0],["12:11",8,1],["12:13",9,0],["12:13",10,0],["12:15",11,0],["12:16",12,5],["12:16",13,0],["12:17",14,0],["12:17",15,0],["12:18",16,0],["12:19",17,0],["12:21",18,0],["12:22",19,0],["12:24",20,1],["12:25",21,0],["12:27",22,0],["12:28",23,0],["12:29",24,0],["12:31",25,0],["12:33",26,0],["12:34",27,0],["12:35",28,5],["12:37",29,1],["12:37",30,0],["12:40",31,6],["12:43",32,0],["12:47",33,5],["12:50",34,0],["12:54",35,0],["12:54",36,0],["12:55",37,0],["12:55",38,1],["12:56",39,0],["12:57",40,0],["12:59",41,0],["13:00",42,0],["13:01",43,5]]}],"note":"","tt":{"rows":["Maidstone Royal Star Arcade","Maidstone Chequers Bus Station","Shepway, Longfield Place","Shepway, Sutton Road Morrisons","Langley, The Plough","Headcorn, George and Dragon","Headcorn, Railway Station","Headcorn, on Railway Station","Biddenden, The Weavers","Tenterden, The Fat Ox","Tenterden, The Vine"],"off":-1,"cols":[["09:59","10:01","10:11","10:16","10:24","10:35","10:37","","10:47","10:55","11:01"],["10:59","11:01","11:11","11:16","11:24","11:35","11:37","","11:47","11:55","12:01"],["11:59","12:01","12:11","12:16","12:24","12:35","12:37","","12:47","12:55","13:01"],["12:59","13:01","13:11","13:16","13:24","13:35","13:37","","13:47","13:55","14:01"],["13:59","14:01","14:11","14:16","14:24","14:35","14:37","","14:47","14:55","15:01"],["14:59","15:01","15:11","15:16","15:24","15:35","15:37","","15:47","15:55","16:01"],["15:59","16:01","16:11","16:16","16:24","16:35","16:37","","16:47","16:55","17:01"],["16:59","17:01","17:11","17:16","17:24","17:35","17:37","","17:47","17:55","18:01"],["17:59","18:01","18:11","18:16","18:24","18:35","18:37","18:38","","",""]]},"blind":"Tenterden","via":["via Shepway and Park Wood","via Langley and Sutton Valence","via Headcorn and St Michaels"]},{"label":"To Maidstone","li":1,"trips":[{"big":"14:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 15:04","title":"The 14:27 from Headcorn, Aerodrome","s":[["14:06",44,5],["14:06",45,0],["14:07",46,0],["14:08",47,0],["14:09",48,0],["14:10",49,0],["14:11",50,0],["14:12",51,1],["14:12",52,0],["14:16",53,0],["14:20",54,1],["14:24",55,0],["14:27",56,6],["14:29",57,0],["14:29",58,5],["14:31",59,1],["14:32",60,0],["14:33",61,0],["14:35",62,0],["14:38",63,0],["14:39",64,0],["14:40",65,0],["14:42",66,0],["14:43",67,5],["14:45",68,0],["14:46",69,0],["14:48",70,0],["14:49",71,0],["14:49",72,0],["14:50",73,0],["14:51",74,0],["14:51",75,5],["14:52",76,0],["14:53",77,0],["14:53",78,0],["14:54",79,0],["14:55",80,1],["14:56",81,0],["14:56",82,0],["14:57",83,0],["14:58",84,0],["14:58",85,0],["14:59",86,0],["15:00",87,0],["15:04",89,5]]},{"big":"15:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 16:04","title":"The 15:27 from Headcorn, Aerodrome","s":[["15:06",44,5],["15:06",45,0],["15:07",46,0],["15:08",47,0],["15:09",48,0],["15:10",49,0],["15:11",50,0],["15:12",51,1],["15:12",52,0],["15:16",53,0],["15:20",54,1],["15:24",55,0],["15:27",56,6],["15:29",57,0],["15:29",58,5],["15:31",59,1],["15:32",60,0],["15:33",61,0],["15:35",62,0],["15:38",63,0],["15:39",64,0],["15:40",65,0],["15:42",66,0],["15:43",67,5],["15:45",68,0],["15:46",69,0],["15:48",70,0],["15:49",71,0],["15:49",72,0],["15:50",73,0],["15:51",74,0],["15:51",75,5],["15:52",76,0],["15:53",77,0],["15:53",78,0],["15:54",79,0],["15:55",80,1],["15:56",81,0],["15:56",82,0],["15:57",83,0],["15:58",84,0],["15:58",85,0],["15:59",86,0],["16:00",87,0],["16:04",89,5]]},{"big":"16:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 17:04","title":"The 16:27 from Headcorn, Aerodrome","s":[["16:06",44,5],["16:06",45,0],["16:07",46,0],["16:08",47,0],["16:09",48,0],["16:10",49,0],["16:11",50,0],["16:12",51,1],["16:12",52,0],["16:16",53,0],["16:20",54,1],["16:24",55,0],["16:27",56,6],["16:29",57,0],["16:29",58,5],["16:31",59,1],["16:32",60,0],["16:33",61,0],["16:35",62,0],["16:38",63,0],["16:39",64,0],["16:40",65,0],["16:42",66,0],["16:43",67,5],["16:45",68,0],["16:46",69,0],["16:48",70,0],["16:49",71,0],["16:49",72,0],["16:50",73,0],["16:51",74,0],["16:51",75,5],["16:52",76,0],["16:53",77,0],["16:53",78,0],["16:54",79,0],["16:55",80,1],["16:56",81,0],["16:56",82,0],["16:57",83,0],["16:58",84,0],["16:58",85,0],["16:59",86,0],["17:00",87,0],["17:04",89,5]]},{"big":"17:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 18:04","title":"The 17:27 from Headcorn, Aerodrome","s":[["17:06",44,5],["17:06",45,0],["17:07",46,0],["17:08",47,0],["17:09",48,0],["17:10",49,0],["17:11",50,0],["17:12",51,1],["17:12",52,0],["17:16",53,0],["17:20",54,1],["17:24",55,0],["17:27",56,6],["17:29",57,0],["17:29",58,5],["17:31",59,1],["17:32",60,0],["17:33",61,0],["17:35",62,0],["17:38",63,0],["17:39",64,0],["17:40",65,0],["17:42",66,0],["17:43",67,5],["17:45",68,0],["17:46",69,0],["17:48",70,0],["17:49",71,0],["17:49",72,0],["17:50",73,0],["17:51",74,0],["17:51",75,5],["17:52",76,0],["17:53",77,0],["17:53",78,0],["17:54",79,0],["17:55",80,1],["17:56",81,0],["17:56",82,0],["17:57",83,0],["17:58",84,0],["17:58",85,0],["17:59",86,0],["18:00",87,0],["18:04",89,5]]},{"big":"18:27","small":"From Headcorn, Aerodrome, at Maidstone King Street 19:04","title":"The 18:27 from Headcorn, Aerodrome","s":[["18:06",44,5],["18:06",45,0],["18:07",46,0],["18:08",47,0],["18:09",48,0],["18:10",49,0],["18:11",50,0],["18:12",51,1],["18:12",52,0],["18:16",53,0],["18:20",54,1],["18:24",55,0],["18:27",56,6],["18:29",57,0],["18:29",58,5],["18:31",59,1],["18:32",60,0],["18:33",61,0],["18:35",62,0],["18:38",63,0],["18:39",64,0],["18:40",65,0],["18:42",66,0],["18:43",67,5],["18:45",68,0],["18:46",69,0],["18:48",70,0],["18:49",71,0],["18:49",72,0],["18:50",73,0],["18:51",74,0],["18:51",75,5],["18:52",76,0],["18:53",77,0],["18:53",78,0],["18:54",79,0],["18:55",80,1],["18:56",81,0],["18:56",82,0],["18:57",83,0],["18:58",84,0],["18:58",85,0],["18:59",86,0],["19:00",87,0],["19:04",89,5]]}],"note":"","tt":{"rows":["Tenterden, The Vine","St Michaels, The Crown","Biddenden, The Weavers","Headcorn, Aerodrome","Headcorn, Railway Station","Headcorn, George and Dragon","Langley, The Plough","Shepway, Sutton Road Morrisons","Shepway, Sutton Road Cemetery","Maidstone King Street"],"off":3,"cols":[["11:06","11:12","11:20","11:27","11:29","11:31","11:43","11:51","11:55","12:04"],["12:06","12:12","12:20","12:27","12:29","12:31","12:43","12:51","12:55","13:04"],["13:06","13:12","13:20","13:27","13:29","13:31","13:43","13:51","13:55","14:04"],["14:06","14:12","14:20","14:27","14:29","14:31","14:43","14:51","14:55","15:04"],["15:06","15:12","15:20","15:27","15:29","15:31","15:43","15:51","15:55","16:04"],["16:06","16:12","16:20","16:27","16:29","16:31","16:43","16:51","16:55","17:04"],["17:06","17:12","17:20","17:27","17:29","17:31","17:43","17:51","17:55","18:04"],["18:06","18:12","18:20","18:27","18:29","18:31","18:43","18:51","18:55","19:04"]]},"blind":"Maidstone","via":["via St Michaels and Biddenden","via Headcorn and Langley","via Park Wood and Shepway"]}],"none":"In the current timetable there are no 12 buses on Sundays, so I would look at the other ways to get there on the Headcorn Airshow page."}],"start":0};
 </script>
 <script>
 (function(){
@@ -426,9 +546,10 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
   var FLAG = '<svg class="flag" viewBox="0 0 18 26" aria-hidden="true"><rect x="8" y="9" width="2" height="17" fill="#13293C"/><rect x="1" y="1" width="16" height="11" rx="2" fill="#fff" stroke="#D74949" stroke-width="2"/><rect x="4.5" y="3.6" width="9" height="5.6" rx="1" fill="#D74949"/><rect x="5.6" y="4.4" width="6.8" height="2" rx=".4" fill="#fff"/></svg>';
 
   /* fixed text */
-  $('backlink').href = CFG.showUrl;
-  $('backlink').target = CFG.showTarget || '_top';
-  $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
+  $('crumbshow').href = CFG.showUrl; $('crumbshow').textContent = CFG.showName;
+  $('crumbbus').textContent = 'Bus ' + CFG.num;
+  $('morshow').href = CFG.showUrl; $('morshow').firstChild.textContent = 'Back to ' + CFG.showName;
+  $('ysintro').textContent = 'This is the stop I would get off at for the ' + CFG.showName + '. The details below follow the bus you pick further down the page.';
   $('opname').textContent = 'Run by ' + CFG.operator;
   if (CFG.theme) {
     var rs = document.documentElement.style, th = CFG.theme;
@@ -437,9 +558,14 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
     if (th.acc) rs.setProperty('--amber', th.acc);
   }
   $('bnum').textContent = CFG.num;
-  $('title').textContent = CFG.title;
+  (function(){
+    var t = CFG.title, k = t.lastIndexOf(' to ');
+    if (k < 0) { $('title').textContent = t; return; }
+    $('title').textContent = t.slice(0, k + 4);
+    var em = document.createElement('em'); em.textContent = t.slice(k + 4); $('title').appendChild(em);
+  })();
   $('lead').textContent = CFG.lead;
-  $('tiph').textContent = CFG.tipHead;
+  $('tiph').textContent = 'My advice';
   $('tip').textContent = CFG.tip;
   $('tipbtn').href = CFG.showUrl;
   $('tipbtn').target = CFG.showTarget || '_top';
@@ -453,6 +579,7 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
      and rolls over like a real blind when the direction changes */
   var vi = 0, VIA = CFG.blindVia, shownDest = null;
   function setBlind(dest, via){
+    $('nsnum').textContent = CFG.num; $('nsdest').textContent = dest;
     VIA = via && via.length ? via : CFG.blindVia; vi = 0;
     if (dest === shownDest) return;
     var first = shownDest === null; shownDest = dest;
@@ -469,13 +596,13 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
     }, 3200);
   }
 
-  $('facts').innerHTML = CFG.facts.map(function(f){
-    return '<div class="fact' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><b>' + f[1] + '</b></div>';
+  $('facts').innerHTML = CFG.facts.concat([['Run by', CFG.operator]]).map(function(f){
+    return '<div class="kv' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><span>' + f[1] + '</span></div>';
   }).join('');
 
-  $('legs').innerHTML = CFG.legs.map(function(l){
+  $('legs').innerHTML = CFG.legs.map(function(l, n){
     var signs = l[0].map(function(r){ return '<span class="sign' + (/^M\d/.test(r) ? ' m' : '') + '">' + r + '</span>'; }).join('');
-    return '<li><div class="signs">' + (signs || '<span class="sign">Local</span>') + '</div><div><b>' + l[1] + '</b><p>' + l[2] + '</p></div></li>';
+    return '<li class="way"><span class="n">' + (n + 1) + '</span><h3>' + l[1] + '</h3>' + (signs ? '<div class="signs">' + signs + '</div>' : '') + '<p>' + l[2] + '</p></li>';
   }).join('');
 
   /* map */
@@ -495,12 +622,12 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
   function fit(){
     if (!casing) return;
     var wide = window.innerWidth > 980;
-    map.fitBounds(casing.getBounds().extend(CFG.target), { paddingTopLeft: [30, 30], paddingBottomRight: [wide ? 420 : 30, 30] });
+    map.fitBounds(casing.getBounds().extend(CFG.target), { padding: [wide ? 40 : 24, wide ? 40 : 24] });
   }
 
   /* unpack journeys: [time, stop index, flags] -> [time, name, lat, lon, flags, short name] */
   DATA.days.forEach(function(dd){ dd.dirs.forEach(function(x){ x.trips.forEach(function(tr){
-    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3]]; });
+    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3], st[4]]; });
   }); }); });
   function D(){ return DATA.days[day]; }
   function DIR(){ return D().dirs[dir]; }
@@ -508,6 +635,7 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
   function segBtns(el, items, cur, onpick){
     el.innerHTML = items.map(function(t, i){ return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === cur) + '">' + t + '</button>'; }).join('');
     el.style.display = items.length > 1 ? '' : 'none';
+    if (el.parentNode.classList.contains('row')) el.parentNode.style.display = items.length > 1 ? '' : 'none';
     each(el.children, function(b){ b.addEventListener('click', function(){ onpick(+b.getAttribute('data-i')); }); });
   }
 
@@ -517,7 +645,8 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
     if (!dd.dirs.length || !dd.dirs.some(function(x){ return x.trips.length; })) {
       setBlind(CFG.blindDest, CFG.blindVia);
       $('ttbtn').parentNode.style.display = 'none';
-      $('dir').style.display = 'none'; $('board').innerHTML = ''; $('bnote').textContent = '';
+      $('dir').style.display = 'none'; $('dirrow').style.display = 'none';
+      $('cdrows').innerHTML = '<li><span>' + CFG.num + '</span><span>No buses today</span><span></span></li>'; $('board').innerHTML = ''; $('bnote').textContent = '';
       $('nobus').textContent = dd.none; $('nobus').classList.add('on'); $('stage').classList.add('off');
       return;
     }
@@ -525,7 +654,7 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
     if (!DIR().trips.length) { dir = dd.dirs.findIndex(function(x){ return x.trips.length; }); idx = 0; }
     segBtns($('dir'), dd.dirs.map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = 0; render(); runBus(); });
     var cur = DIR(); setBlind(cur.blind || CFG.blindDest, cur.via);
-    board(); drawLine(); draw(); table();
+    board(); drawLine(); draw(); table(); screen();
   }
 
   /* every time that day, at the main stops */
@@ -580,13 +709,56 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
     return -1;
   }
 
+  /* bus stop departures screen: the next few buses from the stop the picked bus leaves */
+  function screen(){
+    var d = DIR(); if (!d || !d.trips.length) { $('cdrows').innerHTML = ''; return; }
+    var tr = d.trips, cur = tr[idx], s = cur.s;
+    var fromOff = cur.big !== s[0][0];
+    var stopName = fromOff ? (s.filter(function(p){ return p[4] & OFF; })[0] || s[0])[5] : s[0][5];
+    var dest = (d.blind || CFG.blindDest);
+    $('cdstop').textContent = stopName;
+    var n = ukNow(), today = D().key === n.wd, now = n.h * 60 + n.m;
+    var stop = fromOff ? (s.filter(function(p){ return p[4] & OFF; })[0] || s[0]) : s[0];
+    function tm(x){ var a = x.split(':'); return +a[0] * 60 + +a[1]; }
+    /* which times to show: today, the next buses from the whole day's timetable; other days, from the bus you picked */
+    var list = tr.slice(idx, idx + 4).map(function(t){ return t.big; });
+    if (today && d.tt) {
+      var ri = d.tt.rows.indexOf(stop[5]); if (ri < 0) ri = fromOff ? d.tt.off : 0;
+      var all = d.tt.cols.map(function(c){ return c[ri]; }).filter(Boolean).sort(function(a, b){ return tm(a) - tm(b); });
+      var up = all.filter(function(x){ var lv = liveFor(x, stop), b = lv ? lv.exp : x; return tm(b) >= now - 1; });
+      list = up.slice(0, 4);
+      if (!list.length) list = [];
+    }
+    var anyLive = false;
+    $('cdrows').innerHTML = list.length ? list.map(function(aimed, k){
+      var lv = today ? liveFor(aimed, stop) : null;
+      var base = lv ? lv.exp : aimed, mins = tm(base) - now, show = aimed, due = false, ex = '';
+      if (lv) anyLive = true;
+      if (today && mins >= -1 && mins < 60) { show = mins <= 1 ? 'Due' : mins + ' min'; due = mins <= 1; }
+      else if (lv && lv.exp !== aimed) show = lv.exp;
+      if (lv && lv.late !== 0) ex = '<span class="ex">' + (lv.late > 0 ? lv.late + ' min late' : -lv.late + ' min early') + '</span>';
+      var bi = -1; tr.forEach(function(t, i){ if (t.big === aimed) bi = i; });
+      return '<li data-i="' + bi + '" class="' + (bi === idx ? 'on' : '') + (due ? ' due' : '') + '"><span>' + CFG.num + '</span><span>' + dest + '</span><span>' + show + ex + '</span></li>';
+    }).join('') : '<li><span>' + CFG.num + '</span><span>No more buses today</span><span></span></li>';
+    $('cdlive').classList.toggle('on', anyLive);
+    $('cdlive').lastChild.textContent = anyLive ? 'Live' : 'Timetable';
+    var mine = today ? liveFor(cur.big, stop) : null;
+    $('sumlive').classList.toggle('on', !!mine);
+    if (mine) $('sumlive').innerHTML = '<b>Live now:</b> this bus is ' + (Math.abs(mine.late) <= 1 ? 'on time' : mine.late > 0 ? 'running about ' + mine.late + ' minutes late' : 'running about ' + -mine.late + ' minutes early') + ', expected at ' + mine.stop + ' at ' + mine.exp + '.';
+    each($('cdrows').children, function(li){ li.addEventListener('click', function(){ if (!(+li.getAttribute('data-i') >= 0)) return; idx = +li.getAttribute('data-i'); board(); var sel = $('board').querySelector('[aria-pressed="true"]'); if (sel) $('board').scrollLeft = Math.max(0, sel.offsetLeft - 8); draw(); table(); screen(); }); });
+    $('cdtick').textContent = 'Route ' + CFG.num + ' to ' + dest + '     ' + D().label + ' times     Times can change, so please check with ' + CFG.operator + ' before you travel     ';
+    $('cdnote').textContent = today
+      ? (anyLive ? 'Live: the countdown uses where the buses really are right now, so it follows any delays.' : 'It’s ' + D().label + ' today. No live tracking for these buses at the moment, so the screen counts down to the timetable.')
+      : 'On a ' + D().label + ' this screen counts down to the next buses, live where the bus company shares tracking. Today it shows the timetable times.';
+  }
+
   function board(){
     var d = DIR(), nx = nextIndex();
     $('board').innerHTML = d.trips.map(function(t, i){
       return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
     }).join('');
     $('bnote').textContent = d.note || '';
-    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); var sl = $('board').scrollLeft; board(); $('board').scrollLeft = sl; draw(); table(); }); });
+    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); var sl = $('board').scrollLeft; board(); $('board').scrollLeft = sl; draw(); table(); screen(); }); });
     setTimeout(arrows, 30);
   }
 
@@ -606,6 +778,22 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
     function mm(x){ var a = x.split(':'); return +a[0] * 60 + +a[1]; }
     var ride = mm(s[s.length - 1][0]) - mm(s[0][0]);
     $('psub').textContent = s.length + ' stops, ' + s[0][0] + ' to ' + s[s.length - 1][0] + ', ' + ride + ' minutes';
+    /* the summary panel beside the times */
+    var oe = oi >= 0 ? s[oi] : null;
+    $('sumbig').textContent = s[0][0];
+    $('sumper').innerHTML = 'From <b>' + s[0][1] + '</b>. ' + (oe ? (oi === 0 ? 'Leaves <b>' + oe[1] + '</b> at ' + oe[0] + ' and gets to ' + s[s.length - 1][1] + ' at ' + s[s.length - 1][0] + '.'
+                                           : 'Gets to <b>' + oe[1] + '</b> at ' + oe[0] + '.') : '');
+    $('sumkv').innerHTML = '<div class="kv"><span>On the bus</span><span>' + ride + ' minutes</span></div>' +
+      '<div class="kv"><span>Stops</span><span>' + s.length + '</span></div>' +
+      '<div class="kv"><span>Ends at</span><span>' + s[s.length - 1][5] + ', ' + s[s.length - 1][0] + '</span></div>';
+    var end = s[s.length - 1], stopFor = oe || end;
+    $('slip').innerHTML = '<div class="sh1"><span>' + CFG.operator + '</span><span>Route ' + CFG.num + '</span></div>' +
+      '<div class="ln"><span>' + D().label + '</span><span>' + (DIR().label || '') + '</span></div>' +
+      '<div class="ln"><span>Board</span><span>' + s[0][5] + ' ' + s[0][0] + '</span></div>' +
+      '<div class="ln"><span>Off</span><span>' + stopFor[5] + ' ' + stopFor[0] + '</span></div>' +
+      '<div class="ln"><span>On the bus</span><span>' + ((function(a, b){ return (+b[0] * 60 + +b[1]) - (+a[0] * 60 + +a[1]); })(s[0][0].split(':'), stopFor[0].split(':'))) + ' min</span></div>' +
+      '<div class="bc" aria-hidden="true"></div><div class="ft">Planning slip, not a ticket</div>';
+    $('sumsave').innerHTML = oe && oi > 0 ? 'Press the bell once you pass <b>' + s[oi - 1][1] + '</b>.' : oe ? 'Wave to the driver as the bus comes in, so they know to stop.' : '';
     if (oi >= 0) {
       var o = s[oi];
       $('ysname').textContent = o[1];
@@ -716,6 +904,84 @@ var DATA={"stops":[["Maidstone Royal Star Arcade (Stop M2)",51.2734,0.5215,"Maid
     new IntersectionObserver(function(es, o){ es.forEach(function(e){ if (e.isIntersecting) { setTimeout(function(){ strip.classList.add('go'); }, 300); o.disconnect(); } }); }, { threshold: .6 }).observe(strip);
   } else if (strip) strip.classList.add('go');
   if (!io) runBus();
+
+
+  /* ---------- live buses from bustimes.org ---------- */
+  var LIVE = { veh: [], trips: {}, ok: false };
+  var liveLayer = L.layerGroup().addTo(map);
+  function getJSON(u){ return fetch(u, { cache: 'no-store' }).then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); }); }
+  function addMins(hm, n){ var a = hm.split(':'), t = (+a[0] * 60 + +a[1] + n + 1440) % 1440; return ('0' + Math.floor(t / 60)).slice(-2) + ':' + ('0' + t % 60).slice(-2); }
+  /* expected time for a timetable journey at the stop the screen shows, if a live bus is running it */
+  function liveFor(aimed, stop){
+    if (!LIVE || !stop) return null;
+    var atco = stop[6];
+    for (var i = 0; i < LIVE.veh.length; i++) {
+      var v = LIVE.veh[i], tt = LIVE.trips[v.trip_id];
+      if (!tt || !tt.times || v.delay == null) continue;
+      for (var j = 0; j < tt.times.length; j++) {
+        var e = tt.times[j];
+        if (e.stop && e.stop.atco_code === atco && (e.aimed_departure_time || e.aimed_arrival_time) === aimed) {
+          if (v.progress && v.progress.sequence > j + 1) return null;
+          var late = Math.round(v.delay / 60);
+          return { exp: addMins(aimed, late), late: late, stop: stop[5] };
+        }
+      }
+    }
+    return null;
+  }
+  function drawLive(){
+    liveLayer.clearLayers();
+    var fresh = LIVE.veh.filter(function(v){ return v.coordinates && (Date.now() - new Date(v.datetime).getTime()) < 15 * 60000; });
+    fresh.forEach(function(v){
+      var late = v.delay == null ? null : Math.round(v.delay / 60);
+      var html = '<div class="lvbus' + (late > 3 ? ' late' : '') + '"><span class="hd" style="transform:rotate(' + (v.heading || 0) + 'deg)"></span><span class="body">' + CFG.num + '</span></div>';
+      var m = L.marker([v.coordinates[1], v.coordinates[0]], { icon: L.divIcon({ className: '', html: html, iconSize: [34, 34], iconAnchor: [17, 17] }), zIndexOffset: 900 }).addTo(liveLayer);
+      var d = new Date(v.datetime), seen = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+      m.bindPopup('<b>' + CFG.num + ' to ' + (v.destination || 'unknown') + '</b><br>' +
+        (late == null ? 'No timing information' : Math.abs(late) <= 1 ? 'On time' : late > 0 ? 'Running about ' + late + ' minutes late' : 'Running about ' + -late + ' minutes early') +
+        '<br>Last seen at ' + seen);
+    });
+    var b = $('livebadge');
+    b.classList.toggle('off', !fresh.length);
+    b.lastChild.textContent = !LIVE.ok ? 'Live buses unavailable' : fresh.length ? 'Live: ' + fresh.length + (fresh.length === 1 ? ' bus' : ' buses') + ' out now' : 'No buses out right now';
+  }
+  function pollLive(){
+    if (!CFG.sid || !window.fetch || document.hidden) return;
+    getJSON('https://bustimes.org/vehicles.json?service=' + CFG.sid).then(function(vs){
+      LIVE.veh = Array.isArray(vs) ? vs : []; LIVE.ok = true;
+      var need = LIVE.veh.filter(function(v){ return v.trip_id && !LIVE.trips[v.trip_id]; }).slice(0, 15);
+      return Promise.all(need.map(function(v){
+        return getJSON('https://bustimes.org/api/trips/' + v.trip_id + '/').then(function(x){ LIVE.trips[v.trip_id] = x; }).catch(function(){ LIVE.trips[v.trip_id] = { times: [] }; });
+      }));
+    }).then(function(){ drawLive(); screen(); }).catch(function(){ LIVE.ok = false; LIVE.veh = []; drawLive(); screen(); });
+  }
+  pollLive(); setInterval(pollLive, 30000);
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) pollLive(); });
+
+  /* bell push lights the bus stopping sign */
+  var bellT = 0;
+  $('bellpush').addEventListener('click', function(){
+    var b = $('bellpush'); clearTimeout(bellT);
+    b.setAttribute('aria-pressed', 'true'); $('bellled').classList.add('on');
+    var hb = document.querySelector('.panel header .bell'); if (hb) hb.classList.add('on');
+    bellT = setTimeout(function(){ b.setAttribute('aria-pressed', 'false'); $('bellled').classList.remove('on'); if (hb) hb.classList.remove('on'); }, 4000);
+  });
+
+  /* live clock on the departures screen */
+  function ukNow(){
+    try {
+      var p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+      var g = function(k){ return p.filter(function(x){ return x.type === k; })[0].value; };
+      return { wd: g('weekday').toLowerCase().slice(0, 3), h: +g('hour'), m: +g('minute') };
+    } catch (e) { var d = new Date(); return { wd: ['sun','mon','tue','wed','thu','fri','sat'][d.getDay()], h: d.getHours(), m: d.getMinutes() }; }
+  }
+  function clock(){ var n = ukNow(); $('cdclock').innerHTML = ('0' + n.h).slice(-2) + '<i>:</i>' + ('0' + n.m).slice(-2); }
+  clock(); setInterval(function(){ clock(); screen(); }, 20000);
+
+  /* highlight the section you are in */
+  var links = document.querySelectorAll('.jump a'), secs = [].map.call(links, function(a){ return document.querySelector(a.getAttribute('href')); });
+  function onScroll(){ var y = window.scrollY + 90, cur = -1; secs.forEach(function(s, i){ if (s && s.offsetTop <= y) cur = i; }); each(links, function(a, i){ a.classList.toggle('on', i === cur); }); }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 })();
 </script>
 <!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->

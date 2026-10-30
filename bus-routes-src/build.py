@@ -7,6 +7,9 @@ OPS = json.load(open('operators.json'))
 ENDS = json.load(open('ends.json'))
 DAYNAME = {'thu': 'Thursday', 'fri': 'Friday', 'sat': 'Saturday', 'sun': 'Sunday'}
 SITE = 'https://www.ukairshowguide.co.uk/'
+import datetime
+_d = datetime.date.fromtimestamp(max(os.path.getmtime(f) for f in glob.glob('raw/*.json'))) if glob.glob('raw/*.json') else datetime.date.today()
+CHECKED = f'{_d.day} {_d.strftime("%B %Y")}'
 # bus company colours. Colours only, no logos.
 # op1/op2/op3: livery colours (badge, stripe, bus, map line). opink: text on op1.
 # ui: replaces the site navy for headings, tabs, tickets and panels (dark enough to read on white).
@@ -221,7 +224,7 @@ def build(fn):
                 for i, s in enumerate(t):
                     if s[1] not in loc: continue
                     f = (1 if not s[3] else 0) | (2 if i == oi else 0) | (4 if i in lab else 0)
-                    stops.append([s[0], names[s[1]], round(loc[s[1]][0], 5), round(loc[s[1]][1], 5), f, short(s[2])])
+                    stops.append([s[0], names[s[1]], round(loc[s[1]][0], 5), round(loc[s[1]][1], 5), f, short(s[2]), s[1]])
                 first, last = t[0], t[-1]
                 if mode == 'arrive':
                     big, small = first[0], f'At {short(t[oi][2])} {t[oi][0]}'
@@ -279,7 +282,7 @@ def build(fn):
     missing = [DAYNAME[d] + 's' for d in r['days'] if d not in served]
     if missing and r['show'] not in ('cosford', 'gransden', 'riat'):
         tip = f'In the current timetable the {r["num"]} doesn’t run on {andlist(missing)}. ' + tip
-    cfg = dict(num=r['num'], operator=OPS.get(rid, ''), showName=show['name'], showUrl=SITE + show['slug'],
+    cfg = dict(sid=raw['sid'], num=r['num'], operator=OPS.get(rid, ''), showName=show['name'], showUrl=SITE + show['slug'],
                title=ov.get('title') or f'Bus {r["num"]}, {a} to {b}',
                blindDest=(show['town'] if offd <= 3000 else b or show['town']), blindVia=ov.get('blindVia') or via,
                lead=lead, facts=facts, legs=legs, tipHead='Before you travel', tip=tip,
@@ -291,14 +294,14 @@ def build(fn):
                          f'Allow {walkfact(offd).lower()} to walk back here from {show["label"]}, and a bit more when the crowds leave.' if offd <= 3000 else
                          f'It’s about {round(offd * 1.3 / 1609)} miles back to this stop from {show["label"]}, so book your taxi before the day.'),
                target=target, targetLabel=show['label'], offTag=ov.get('offTag', 'Closest stop to the show'),
-               note=f'Stops and times are from {OPS.get(rid, "the bus company")}’s timetable on the DfT <a href="https://data.bus-data.dft.gov.uk/" target="_blank" rel="noopener">Bus Open Data Service</a>, through <a href="https://bustimes.org/" target="_blank" rel="noopener">bustimes.org</a>, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with {OPS.get(rid, "the operator")} before you travel. The line is drawn along the roads between the stops, so treat it as a guide. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.')
+               note=f'Stops and times are from {OPS.get(rid, "the bus company")}’s timetable on the DfT <a href="https://data.bus-data.dft.gov.uk/" target="_blank" rel="noopener">Bus Open Data Service</a>, through <a href="https://bustimes.org/" target="_blank" rel="noopener">bustimes.org</a>, checked on {CHECKED}. Times for summer 2027 usually come out in the spring, so please check with {OPS.get(rid, "the operator")} before you travel. Live bus positions and expected times also come from bustimes.org, when the bus company shares them. The line is drawn along the roads between the stops, so treat it as a guide. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.')
     stab, sidx = [], {}
     for dd in days:
         for x in dd['dirs']:
             for t in x['trips']:
                 packed = []
                 for p in t['s']:
-                    k = (p[1], p[2], p[3], p[5])
+                    k = (p[1], p[2], p[3], p[5], p[6])
                     if k not in sidx: sidx[k] = len(stab); stab.append(list(k))
                     packed.append([p[0], sidx[k], p[4]])
                 t['s'] = packed

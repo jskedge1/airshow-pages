@@ -5,7 +5,12 @@ from bs4 import BeautifulSoup
 
 os.makedirs('raw', exist_ok=True)
 ROUTES = json.load(open('routes.json'))
-DATES = {'thu': '2026-11-05', 'fri': '2026-11-06', 'sat': '2026-11-07', 'sun': '2026-11-08'}
+import datetime
+def _next(wd):
+    # the next date (from tomorrow) for each weekday, so each run uses the timetable in force now
+    t = datetime.date.today() + datetime.timedelta(days=1)
+    return str(t + datetime.timedelta(days=(wd - t.weekday()) % 7))
+DATES = {'thu': _next(3), 'fri': _next(4), 'sat': _next(5), 'sun': _next(6)}
 
 
 def get(url, tries=3):

@@ -337,6 +337,23 @@ footer a{color:#fff}
 .slip .ft{margin-top:6px;font-weight:500;font-size:12.5px;text-align:center;letter-spacing:.06em;color:#555}
 @media (max-width:680px){.numscreen b{font-size:32px}.numscreen span{font-size:16px}.cdrows li{font-size:19px;grid-template-columns:44px minmax(0,1fr) auto}}
 @media (prefers-reduced-motion:reduce){.cdtick span{animation:none;padding-left:0}}
+
+/* ---------- live buses ---------- */
+.cdtop .lv{display:inline-flex;align-items:center;gap:6px;margin-right:12px;color:#7A6A40;text-shadow:none}
+.cdtop .lv i{width:8px;height:8px;border-radius:50%;background:#4A4030}
+.cdtop .lv.on{color:#8CF08C;text-shadow:0 0 8px rgba(140,240,140,.5)}
+.cdtop .lv.on i{background:#5BE35B;box-shadow:0 0 8px #5BE35B;animation:blink 1.6s steps(1) infinite}
+.cdrows li .ex{display:block;font-size:.62em;line-height:1;color:#FFD27A;letter-spacing:.06em}
+.livebadge{position:absolute;left:12px;top:12px;z-index:5;margin-left:44px;background:#050607;color:#8CF08C;font:700 14px/1 var(--c);letter-spacing:.06em;text-transform:uppercase;padding:8px 10px;display:flex;align-items:center;gap:8px}
+.livebadge i{width:8px;height:8px;border-radius:50%;background:#5BE35B;box-shadow:0 0 8px #5BE35B}
+.livebadge.off{color:#B8C0C6}.livebadge.off i{background:#6B747B;box-shadow:none}
+.lvbus{width:34px;height:34px;position:relative}
+.lvbus .body{position:absolute;inset:3px;background:var(--op1);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font:800 12px/1 var(--c);color:var(--opink);box-shadow:0 3px 8px rgba(0,0,0,.45)}
+.lvbus .hd{position:absolute;left:50%;top:50%;width:0;height:0;margin:-24px 0 0 -6px;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:9px solid var(--op1);transform-origin:6px 24px}
+.lvbus.late .body{box-shadow:0 0 0 3px rgba(215,73,73,.55),0 3px 8px rgba(0,0,0,.45)}
+.sumlive{display:none;background:rgba(0,0,0,.25);border-left:4px solid #5BE35B;padding:10px 14px;font-size:15.5px;color:#fff}
+.sumlive.on{display:block}
+@media (max-width:680px){.livebadge{font-size:12px;padding:6px 8px}}
 </style>
 </head>
 <body>
@@ -418,7 +435,7 @@ footer a{color:#fff}
       <div>
         <div class="cdscreen" aria-label="Departures screen">
           <div class="cdin">
-            <div class="cdtop"><span id="cdstop"></span><span id="cdclock"></span></div>
+            <div class="cdtop"><span id="cdstop"></span><span><span class="lv" id="cdlive"><i></i><span>Timetable</span></span><span id="cdclock"></span></span></div>
             <ol class="cdrows" id="cdrows"></ol>
             <div class="cdtick"><span id="cdtick"></span></div>
           </div>
@@ -445,6 +462,7 @@ footer a{color:#fff}
         <div class="big" id="sumbig"></div>
         <div class="per" id="sumper"></div>
         <div class="sumkv" id="sumkv"></div>
+        <div class="sumlive" id="sumlive" aria-live="polite"></div>
         <div class="save" id="sumsave"></div>
         <div class="slip" id="slip" aria-label="Planning slip for this bus"></div>
       </div>
@@ -467,7 +485,8 @@ footer a{color:#fff}
     <div class="stage rise" id="stage">
       <div class="mapbox">
         <div id="map" role="img"></div>
-        <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
+        <div class="livebadge off" id="livebadge" aria-live="polite"><i></i><span>Looking for live buses</span></div>
+        <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span><span><i style="border-radius:0;background:var(--op1);border-color:#fff"></i>Live bus</span></div>
       </div>
       <aside class="panel">
         <header><div class="bell" aria-hidden="true"><i></i>Stopping</div><b id="ptitle"></b><span id="psub"></span></header>
@@ -607,7 +626,7 @@ footer a{color:#fff}
 
   /* unpack journeys: [time, stop index, flags] -> [time, name, lat, lon, flags, short name] */
   DATA.days.forEach(function(dd){ dd.dirs.forEach(function(x){ x.trips.forEach(function(tr){
-    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3]]; });
+    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3], st[4]]; });
   }); }); });
   function D(){ return DATA.days[day]; }
   function DIR(){ return D().dirs[dir]; }
@@ -698,15 +717,38 @@ footer a{color:#fff}
     var dest = (d.blind || CFG.blindDest);
     $('cdstop').textContent = stopName;
     var n = ukNow(), today = D().key === n.wd, now = n.h * 60 + n.m;
-    var rows = tr.slice(idx, idx + 4);
-    $('cdrows').innerHTML = rows.map(function(t, k){
-      var hm = t.big.split(':'), mins = +hm[0] * 60 + +hm[1] - now, show = t.big, due = false;
-      if (today && mins >= 0 && mins < 60) { show = mins <= 1 ? 'Due' : mins + ' min'; due = mins <= 1; }
-      return '<li data-i="' + (idx + k) + '" class="' + (k === 0 ? 'on' : '') + (due ? ' due' : '') + '"><span>' + CFG.num + '</span><span>' + dest + '</span><span>' + show + '</span></li>';
-    }).join('');
-    each($('cdrows').children, function(li){ li.addEventListener('click', function(){ idx = +li.getAttribute('data-i'); board(); var sel = $('board').querySelector('[aria-pressed="true"]'); if (sel) $('board').scrollLeft = Math.max(0, sel.offsetLeft - 8); draw(); table(); screen(); }); });
+    var stop = fromOff ? (s.filter(function(p){ return p[4] & OFF; })[0] || s[0]) : s[0];
+    function tm(x){ var a = x.split(':'); return +a[0] * 60 + +a[1]; }
+    /* which times to show: today, the next buses from the whole day's timetable; other days, from the bus you picked */
+    var list = tr.slice(idx, idx + 4).map(function(t){ return t.big; });
+    if (today && d.tt) {
+      var ri = d.tt.rows.indexOf(stop[5]); if (ri < 0) ri = fromOff ? d.tt.off : 0;
+      var all = d.tt.cols.map(function(c){ return c[ri]; }).filter(Boolean).sort(function(a, b){ return tm(a) - tm(b); });
+      var up = all.filter(function(x){ var lv = liveFor(x, stop), b = lv ? lv.exp : x; return tm(b) >= now - 1; });
+      list = up.slice(0, 4);
+      if (!list.length) list = [];
+    }
+    var anyLive = false;
+    $('cdrows').innerHTML = list.length ? list.map(function(aimed, k){
+      var lv = today ? liveFor(aimed, stop) : null;
+      var base = lv ? lv.exp : aimed, mins = tm(base) - now, show = aimed, due = false, ex = '';
+      if (lv) anyLive = true;
+      if (today && mins >= -1 && mins < 60) { show = mins <= 1 ? 'Due' : mins + ' min'; due = mins <= 1; }
+      else if (lv && lv.exp !== aimed) show = lv.exp;
+      if (lv && lv.late !== 0) ex = '<span class="ex">' + (lv.late > 0 ? lv.late + ' min late' : -lv.late + ' min early') + '</span>';
+      var bi = -1; tr.forEach(function(t, i){ if (t.big === aimed) bi = i; });
+      return '<li data-i="' + bi + '" class="' + (bi === idx ? 'on' : '') + (due ? ' due' : '') + '"><span>' + CFG.num + '</span><span>' + dest + '</span><span>' + show + ex + '</span></li>';
+    }).join('') : '<li><span>' + CFG.num + '</span><span>No more buses today</span><span></span></li>';
+    $('cdlive').classList.toggle('on', anyLive);
+    $('cdlive').lastChild.textContent = anyLive ? 'Live' : 'Timetable';
+    var mine = today ? liveFor(cur.big, stop) : null;
+    $('sumlive').classList.toggle('on', !!mine);
+    if (mine) $('sumlive').innerHTML = '<b>Live now:</b> this bus is ' + (Math.abs(mine.late) <= 1 ? 'on time' : mine.late > 0 ? 'running about ' + mine.late + ' minutes late' : 'running about ' + -mine.late + ' minutes early') + ', expected at ' + mine.stop + ' at ' + mine.exp + '.';
+    each($('cdrows').children, function(li){ li.addEventListener('click', function(){ if (!(+li.getAttribute('data-i') >= 0)) return; idx = +li.getAttribute('data-i'); board(); var sel = $('board').querySelector('[aria-pressed="true"]'); if (sel) $('board').scrollLeft = Math.max(0, sel.offsetLeft - 8); draw(); table(); screen(); }); });
     $('cdtick').textContent = 'Route ' + CFG.num + ' to ' + dest + '     ' + D().label + ' times     Times can change, so please check with ' + CFG.operator + ' before you travel     ';
-    $('cdnote').textContent = today ? 'It’s ' + D().label + ' today, so the screen counts down to the next buses.' : 'On a ' + D().label + ' this screen counts down to the next buses. Today it shows their times.';
+    $('cdnote').textContent = today
+      ? (anyLive ? 'Live: the countdown uses where the buses really are right now, so it follows any delays.' : 'It’s ' + D().label + ' today. No live tracking for these buses at the moment, so the screen counts down to the timetable.')
+      : 'On a ' + D().label + ' this screen counts down to the next buses, live where the bus company shares tracking. Today it shows the timetable times.';
   }
 
   function board(){
@@ -861,6 +903,59 @@ footer a{color:#fff}
     new IntersectionObserver(function(es, o){ es.forEach(function(e){ if (e.isIntersecting) { setTimeout(function(){ strip.classList.add('go'); }, 300); o.disconnect(); } }); }, { threshold: .6 }).observe(strip);
   } else if (strip) strip.classList.add('go');
   if (!io) runBus();
+
+
+  /* ---------- live buses from bustimes.org ---------- */
+  var LIVE = { veh: [], trips: {}, ok: false };
+  var liveLayer = L.layerGroup().addTo(map);
+  function getJSON(u){ return fetch(u, { cache: 'no-store' }).then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); }); }
+  function addMins(hm, n){ var a = hm.split(':'), t = (+a[0] * 60 + +a[1] + n + 1440) % 1440; return ('0' + Math.floor(t / 60)).slice(-2) + ':' + ('0' + t % 60).slice(-2); }
+  /* expected time for a timetable journey at the stop the screen shows, if a live bus is running it */
+  function liveFor(aimed, stop){
+    if (!LIVE || !stop) return null;
+    var atco = stop[6];
+    for (var i = 0; i < LIVE.veh.length; i++) {
+      var v = LIVE.veh[i], tt = LIVE.trips[v.trip_id];
+      if (!tt || !tt.times || v.delay == null) continue;
+      for (var j = 0; j < tt.times.length; j++) {
+        var e = tt.times[j];
+        if (e.stop && e.stop.atco_code === atco && (e.aimed_departure_time || e.aimed_arrival_time) === aimed) {
+          if (v.progress && v.progress.sequence > j + 1) return null;
+          var late = Math.round(v.delay / 60);
+          return { exp: addMins(aimed, late), late: late, stop: stop[5] };
+        }
+      }
+    }
+    return null;
+  }
+  function drawLive(){
+    liveLayer.clearLayers();
+    var fresh = LIVE.veh.filter(function(v){ return v.coordinates && (Date.now() - new Date(v.datetime).getTime()) < 15 * 60000; });
+    fresh.forEach(function(v){
+      var late = v.delay == null ? null : Math.round(v.delay / 60);
+      var html = '<div class="lvbus' + (late > 3 ? ' late' : '') + '"><span class="hd" style="transform:rotate(' + (v.heading || 0) + 'deg)"></span><span class="body">' + CFG.num + '</span></div>';
+      var m = L.marker([v.coordinates[1], v.coordinates[0]], { icon: L.divIcon({ className: '', html: html, iconSize: [34, 34], iconAnchor: [17, 17] }), zIndexOffset: 900 }).addTo(liveLayer);
+      var d = new Date(v.datetime), seen = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+      m.bindPopup('<b>' + CFG.num + ' to ' + (v.destination || 'unknown') + '</b><br>' +
+        (late == null ? 'No timing information' : Math.abs(late) <= 1 ? 'On time' : late > 0 ? 'Running about ' + late + ' minutes late' : 'Running about ' + -late + ' minutes early') +
+        '<br>Last seen at ' + seen);
+    });
+    var b = $('livebadge');
+    b.classList.toggle('off', !fresh.length);
+    b.lastChild.textContent = !LIVE.ok ? 'Live buses unavailable' : fresh.length ? 'Live: ' + fresh.length + (fresh.length === 1 ? ' bus' : ' buses') + ' out now' : 'No buses out right now';
+  }
+  function pollLive(){
+    if (!CFG.sid || !window.fetch || document.hidden) return;
+    getJSON('https://bustimes.org/vehicles.json?service=' + CFG.sid).then(function(vs){
+      LIVE.veh = Array.isArray(vs) ? vs : []; LIVE.ok = true;
+      var need = LIVE.veh.filter(function(v){ return v.trip_id && !LIVE.trips[v.trip_id]; }).slice(0, 15);
+      return Promise.all(need.map(function(v){
+        return getJSON('https://bustimes.org/api/trips/' + v.trip_id + '/').then(function(x){ LIVE.trips[v.trip_id] = x; }).catch(function(){ LIVE.trips[v.trip_id] = { times: [] }; });
+      }));
+    }).then(function(){ drawLive(); screen(); }).catch(function(){ LIVE.ok = false; LIVE.veh = []; drawLive(); screen(); });
+  }
+  pollLive(); setInterval(pollLive, 30000);
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) pollLive(); });
 
   /* bell push lights the bus stopping sign */
   var bellT = 0;

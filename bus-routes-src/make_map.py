@@ -33,6 +33,9 @@ for sh in SHOWN:
     groups += f'<section class="show"><h2>{SHOWN[sh]}</h2><div class="list">' + ''.join(
         f'<a href="{b["id"]}.html"><span class="n">{b["num"]}</span><span class="t">{html.escape(b["title"].split(", ", 1)[-1] if ", " in b["title"] else b["title"])}</span><i aria-hidden="true">→</i></a>'
         for b in rs) + '</div></section>'
-page = open('index.tpl.html').read().replace('<!--GROUPS-->', groups).replace('<!--COUNT-->', str(len(built)))
+import datetime, glob, os
+_f = [f for f in glob.glob('raw/*.json')]
+_d = datetime.date.fromtimestamp(max(os.path.getmtime(f) for f in _f)) if _f else datetime.date.today()
+page = open('index.tpl.html').read().replace('<!--GROUPS-->', groups).replace('<!--COUNT-->', str(len(built))).replace('30 October 2026', f'{_d.day} {_d.strftime("%B %Y")}')
 open('out/index.html', 'w').write(page)
 print(len(built), 'routes')

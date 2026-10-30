@@ -82,6 +82,12 @@ On the show pages, `bus-routes.js` adds an amber "Route map" box with a "Show ro
 
 While `WIX_PAGE` in `bus-routes.js` is `null`, the buttons open the route page in a new tab. To keep visitors on the site: add a Wix page at /bus-route with one HTML embed (ID html1) set to `https://jskedge1.github.io/airshow-pages/bus-routes/index.html`, paste in `velo/page-code/bus-route.js`, then set `WIX_PAGE = 'bus-route'`.
 
+Layout (30 Oct 2026): the Airshows on a Budget page design with square corners: a cover in the company colour with the seat fabric pattern, the destination blind and a Key details box, the bus lane strip, a sticky jump bar, then Your stop for the show (red bus stop sign, bell push that lights a Bus stopping sign), Pick your bus (LED bus number screen, a bus stop departures screen, day and direction, ticket row, a Your bus panel with a planning slip, and See every time), Route map, The roads it takes, Before you travel and Keep planning.
+
+Live data: each page asks bustimes.org every 30 seconds for the buses out on that route right now (`vehicles.json?service=<sid>`) and their stop times (`/api/trips/<id>/`). The live buses show on the map, and when today is the picked day the departures screen counts down to the next buses using their real expected times, with minutes late or early. With no live data it counts down to the timetable. Nothing needs a key.
+
+Timetables: collect.py fetches the timetables in force on the next Thursday to Sunday from the day it runs, and the pages say the date they were checked. Rerun the steps below every so often (or ask Claude to) to keep them current.
+
 To rebuild after a timetable change (from `bus-routes-src/`): `python3 collect.py` gets stops, times and road lines into `raw/` (delete a route's raw file first to fetch it again), `python3 build.py` makes the pages from `templates/bus-route-template.html` (copied in as template.html), and `python3 make_map.py` remakes `bus-routes.js` and the list page. Routes are in `routes.json`, end names in `ends.json`, bus companies in `operators.json`; show points and advice are `SHOWS` in build.py.
 Times use the current timetable (November 2026 dates for each show's days), so replace them with the summer 2027 timetables when they come out in the spring.
 The note at the bottom of each route page names the timetable source (Bus Open Data Service through bustimes.org) and OpenStreetMap, as Jack asked on 30 Oct 2026.

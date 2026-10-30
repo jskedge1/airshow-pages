@@ -1,83 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bus 76, Highworth to Cirencester | The Big Guide to UK Airshows</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
+/* Site palette. The bus company's colours replace --navy (ui), --amber (acc) and the --op livery set at run time. */
 :root{
-  --navy:#13293C;--navy-2:#1C3850;--navy-3:#0C1C2A;
-  --sky:#00A6E2;--sky-ink:#006F99;--teal:#32B4AF;--teal-ink:#0E5F5B;
-  --red:#D74949;--amber:#F2B233;--line:#C6C6C6;--mist:#EEF2F5;--paper:#FFFFFF;--ink:#0B0B0B;
-  --ease:cubic-bezier(.22,.61,.36,1);
+  --navy:#13293C;--amber:#F2B233;--accink:#13293C;--onui:#F2B233;
+  --op1:#13293C;--op2:#F2B233;--op3:#F2B233;--opink:#fff;--led:#F2B233;
+  --navy-3:#0C1C2A;--red:#D74949;
+  --ink:#1A2731;--muted:#4E5D68;--line:#E3E9ED;--pale:#D5E1E9;--mist:#F1F4F6;
+  --f:'Barlow',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;--c:'Barlow Condensed','Barlow',system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{scrollbar-width:none;-ms-overflow-style:none}
-html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
-body{background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:17px;line-height:27px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-button{font:inherit;color:inherit;cursor:pointer}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
+html{background:#fff}
+body{background:#fff;color:var(--ink);font-family:var(--f);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
-.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3{text-wrap:balance}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
-/* top strip */
-.strip{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 0;font-weight:500;font-size:15px}
-.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy);padding:6px 0;border-bottom:2px solid transparent;transition:border-color .3s var(--ease)}
-.back:hover{border-color:var(--amber)}
-.back svg{width:16px;height:16px}
-.op{color:#3d4a55}
+/* ---------- cover ---------- */
+.cover{position:relative;overflow:hidden;background:var(--navy);color:#fff}
+.cover::before{content:"";position:absolute;inset:0;
+  background-color:var(--op1);
+  background-image:radial-gradient(circle at 25% 25%,var(--op2) 0 3px,transparent 3.5px),radial-gradient(circle at 75% 75%,var(--op3) 0 2.5px,transparent 3px),
+    linear-gradient(45deg,transparent 44%,rgba(255,255,255,.18) 44% 56%,transparent 56%),linear-gradient(-45deg,transparent 44%,rgba(0,0,0,.25) 44% 56%,transparent 56%);
+  background-size:26px 26px;opacity:.9}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--navy) 0%,color-mix(in srgb,var(--navy) 92%,transparent) 46%,color-mix(in srgb,var(--navy) 35%,transparent) 100%)}
+.cover .wrap{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:32px 56px;align-items:end;padding-top:56px;padding-bottom:44px}
+.crumb{display:flex;flex-wrap:wrap;gap:6px 10px;font-weight:500;font-size:15px;color:rgba(255,255,255,.78);margin-bottom:14px}
+.crumb a{text-decoration:none}.crumb a:hover{color:#fff}
+.tag{display:inline-block;background:var(--amber);color:var(--accink);font-weight:600;font-size:14px;padding:5px 12px;margin-bottom:14px}
+h1{font-family:var(--c);font-weight:800;text-transform:uppercase;font-size:clamp(44px,6.4vw,84px);line-height:.92;letter-spacing:.005em}
+h1 em{font-style:normal;color:var(--onui)}
+.lede{margin-top:16px;font-size:19px;color:rgba(255,255,255,.88);max-width:56ch}
 
-/* hero */
-.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 48px;align-items:end;padding:26px 0 0}
-.blind{position:relative;background:var(--navy-3);border-radius:14px 14px 14px 0;padding:22px 26px 24px;display:flex;align-items:center;gap:22px;overflow:hidden;box-shadow:0 18px 40px -22px rgba(12,28,42,.7)}
+/* destination blind */
+.blind{position:relative;background:var(--navy-3);border:6px solid #05090D;padding:16px 20px 18px;display:flex;align-items:center;gap:18px;overflow:hidden;box-shadow:0 24px 50px -20px rgba(0,0,0,.6)}
 .blind::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.55) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
-.blind .num{font:800 92px/0.9 "Barlow Condensed",sans-serif;color:var(--led);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
-.blind .dest{font:700 34px/1 "Barlow Condensed",sans-serif;color:var(--led);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3)}
-.blind .via{display:block;margin-top:8px;font:600 18px/1.2 "Barlow Condensed",sans-serif;color:#FFE2A3;letter-spacing:.03em;text-transform:uppercase;opacity:1;text-shadow:0 0 10px rgba(242,178,51,.3);transition:opacity .4s var(--ease)}
-.intro h1{font:800 46px/46px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;letter-spacing:-.005em}
-.intro p{margin-top:12px;font-size:18px;line-height:29px;color:#1d2730;max-width:520px}
+.blind .num{font:800 76px/.9 var(--c);color:var(--led);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
+.blind .dest{font:700 30px/1 var(--c);color:var(--led);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3);will-change:transform,opacity}
+.blind .via{display:block;margin-top:8px;font:600 17px/1.2 var(--c);color:#FFE2A3;letter-spacing:.03em;text-transform:uppercase;text-shadow:0 0 10px rgba(242,178,51,.3);transition:opacity .4s var(--ease);will-change:transform,opacity}
+.blind .roll{animation:roll .55s cubic-bezier(.65,0,.35,1)}
+@keyframes roll{0%{transform:translateY(0);opacity:1}45%{transform:translateY(-120%);opacity:0}55%{transform:translateY(120%);opacity:0}100%{transform:translateY(0);opacity:1}}
 
-/* facts */
-.facts{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.2fr;margin:34px 0 0;border-top:3px solid var(--navy)}
-.fact{padding:14px 18px 16px 0;border-right:1px solid var(--line)}
-.fact+.fact{padding-left:18px}
-.fact:last-child{border-right:0}
-.fact span{display:block;font-weight:500;font-size:15px;line-height:20px;color:var(--navy)}
-.fact b{display:block;margin-top:4px;font:700 25px/28px "Barlow Condensed",sans-serif;color:var(--navy)}
-.fact.hl b{color:var(--red)}
+/* key details */
+.info{margin-top:12px;background:rgba(0,0,0,.32);border-top:4px solid var(--amber);padding:18px 22px 16px;box-shadow:0 24px 50px -20px rgba(0,0,0,.6)}
+.info h2{font:800 24px/1 var(--c);text-transform:uppercase;color:var(--onui);margin-bottom:8px}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid rgba(255,255,255,.12);font-size:15.5px;line-height:1.35}
+.kv span:first-child{color:rgba(255,255,255,.75);font-weight:500}
+.kv span:last-child{font-weight:700;text-align:right}
+.kv.hl span:last-child{background:var(--red);padding:0 8px}
+.livery{height:8px;background:linear-gradient(100deg,var(--op1) 0 58%,var(--op2) 58% 74%,var(--op3) 74% 84%,var(--op1) 84% 100%)}
 
-/* planner */
-.planner{margin-top:38px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px 28px;align-items:start}
-.planner h2,.sec h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;grid-column:1/-1}
-.seg{display:inline-flex;background:var(--mist);border-radius:12px;padding:5px;gap:4px}
-.seg button{border:0;background:transparent;border-radius:9px;padding:10px 16px;font-weight:600;font-size:16px;color:var(--navy);transition:background .3s var(--ease),color .3s var(--ease)}
+/* bus lane */
+.roadstrip{position:relative;height:56px;overflow:hidden;background:#2B343C;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.2px);background-size:5px 5px}
+.roadstrip::before{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;background:repeating-linear-gradient(90deg,#fff 0 34px,transparent 34px 60px);opacity:.8}
+.roadstrip::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:#F2B233;box-shadow:0 -4px 0 #F2B233}
+.roadstrip .lane{position:absolute;left:max(16px,calc(50% - 574px));top:7px;font:800 13px/1 var(--f);letter-spacing:.32em;color:rgba(255,255,255,.85)}
+.roadstrip .rbus{position:absolute;top:10px;left:-120px;width:96px;height:36px;transition:transform 8s cubic-bezier(.45,.05,.35,1)}
+.roadstrip.go .rbus{transform:translateX(calc(100vw + 160px))}
+.roadstrip .rstop{position:absolute;right:max(16px,calc(50% - 574px));top:4px;width:26px;height:46px}
+.rbus .lv1{fill:var(--op1)}.rbus .lv2{fill:var(--op2)}.rbus .lv3{fill:var(--op3)}
+
+/* jump bar */
+.jump{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.12)}
+.jump .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.jump .wrap::-webkit-scrollbar{display:none}
+.jump a{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:15.5px;padding:14px 16px;transition:background .3s var(--ease),color .3s var(--ease)}
+.jump a:hover,.jump a.on{background:var(--amber);color:var(--accink)}
+.jump .opchip{margin-left:auto;flex:none;display:flex;align-items:center;gap:8px;padding:0 4px 0 16px;color:rgba(255,255,255,.85);font-weight:500;font-size:14.5px;white-space:nowrap}
+.jump .opchip i{width:14px;height:14px;background:conic-gradient(var(--op2) 0 33%,var(--op3) 0 66%,var(--opink) 0);box-shadow:0 0 0 2px rgba(255,255,255,.5)}
+
+/* sections */
+section.s{padding:68px 0 8px;scroll-margin-top:52px}
+.sh{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px 48px;align-items:end;margin-bottom:28px}
+h2.t{font:800 clamp(34px,4.4vw,52px)/.95 var(--c);text-transform:uppercase;color:var(--navy);padding-left:16px;border-left:5px solid var(--op1)}
+.sh p{color:var(--muted);max-width:60ch}
+
+/* your stop */
+.yourstop{display:grid;grid-template-columns:220px minmax(0,1fr);border:1px solid var(--line);box-shadow:0 24px 40px -30px rgba(19,41,60,.5)}
+.ys-sign{background:var(--mist);display:flex;align-items:flex-end;justify-content:center;padding:22px 20px 0;position:relative}
+.ys-sign::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(90deg,var(--op1) 0 18px,var(--op2) 18px 30px)}
+.stopsign{width:150px;height:auto;display:block;filter:drop-shadow(0 10px 14px rgba(12,28,42,.25));transform-origin:50% 100%}
+.yourstop.in .stopsign{animation:sway 1.6s cubic-bezier(.36,.07,.19,.97) .3s 1}
+@keyframes sway{0%{transform:rotate(0)}25%{transform:rotate(-2.2deg)}55%{transform:rotate(1.4deg)}80%{transform:rotate(-.6deg)}100%{transform:rotate(0)}}
+.ys-body{padding:24px 28px 22px}
+.ys-body .lbl{display:inline-block;background:var(--red);color:#fff;font-weight:600;font-size:14px;padding:4px 10px}
+.sname{display:block;margin-top:10px;font:800 clamp(28px,3.4vw,40px)/1 var(--c);color:var(--red);text-transform:uppercase}
+.ys-list{list-style:none;margin-top:14px}
+.ys-list li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--line);font-size:16.5px;line-height:1.5}
+.ys-list li svg{width:26px;height:26px}
+.ys-list li b{color:var(--navy)}
+
+/* planner: pick your bus */
+.planner{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);border:1px solid var(--line);box-shadow:0 24px 40px -30px rgba(19,41,60,.5)}
+.pin{padding:22px 26px 24px;min-width:0}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 18px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0;padding-top:0}
+.row.full{grid-template-columns:minmax(0,1fr)}
+.lb{font-weight:600;color:var(--navy)}
+.lb small{display:block;font-weight:500;color:var(--muted);font-size:14.5px}
+.seg{display:inline-flex;border:2px solid var(--navy)}
+.seg button{border:0;background:transparent;padding:8px 14px;font-weight:600;font-size:15px;color:var(--navy);white-space:nowrap;transition:background .3s var(--ease),color .3s var(--ease)}
 .seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
-.board{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.boardwrap{position:relative;min-width:0}
+.board{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:4px 44px 6px 0;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
 .board::-webkit-scrollbar{display:none}
-.dep{flex:0 0 auto;min-width:150px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px 11px;transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
-.dep:hover{border-color:var(--navy);transform:translateY(-2px)}
-.dep .t{font:700 28px/30px "Barlow Condensed",sans-serif;color:var(--navy);font-variant-numeric:tabular-nums}
-.dep .a{display:block;font-weight:500;font-size:14px;line-height:19px;color:#3d4a55}
-.dep[aria-pressed="true"]{background:var(--navy);border-color:var(--navy)}
+.dep{position:relative;flex:0 0 auto;min-width:148px;max-width:280px;text-align:left;border:0;background:#FBF6EA;padding:11px 16px 12px 22px;box-shadow:inset 0 0 0 1px #E2D7BD;transition:background .3s var(--ease),transform .3s var(--ease);
+  -webkit-mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat}
+.dep::before{content:"";position:absolute;left:12px;top:8px;bottom:8px;border-left:2px dashed #CDBF9E}
+.dep:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px var(--navy)}
+.dep .t{display:block;font:700 28px/30px var(--c);color:var(--navy);font-variant-numeric:tabular-nums}
+.dep .a{display:block;font-weight:500;font-size:14px;line-height:19px;color:var(--muted);white-space:normal}
+.dep[aria-pressed="true"]{background:var(--navy);box-shadow:none}
 .dep[aria-pressed="true"] .t{color:var(--onui)}
-.dep[aria-pressed="true"] .a{color:#dfe7ee}
+.dep[aria-pressed="true"] .a{color:#fff;opacity:.88}
+.dep[aria-pressed="true"]::before{border-color:var(--onui);opacity:.55}
+.dep .nx{position:absolute;right:10px;top:6px;font:700 11px/1 var(--f);background:var(--red);color:#fff;padding:3px 5px}
+.bscroll{position:absolute;top:50%;z-index:3;width:38px;height:38px;margin-top:-21px;border:0;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;transition:opacity .3s var(--ease),background .3s var(--ease)}
+.bscroll:hover{background:var(--amber);color:var(--accink)}
+.bscroll svg{width:16px;height:16px}
+.bscroll.l{left:-6px}.bscroll.r{right:0}
+.bscroll[hidden]{display:none}
+.bscroll:disabled{opacity:0;pointer-events:none}
+.boardnote{margin-top:8px;font-size:15px;line-height:22px;color:var(--muted)}
+.pout{background:var(--navy);color:#fff;padding:24px 26px 24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.pout .lbl{align-self:flex-start;background:var(--amber);color:var(--accink);font-weight:600;font-size:14px;padding:4px 10px}
+.big{font:800 clamp(56px,7vw,84px)/.9 var(--c);color:#fff;font-variant-numeric:tabular-nums}
+.big small{font-size:.38em;color:var(--onui);margin-left:8px;letter-spacing:.02em}
+.per{color:rgba(255,255,255,.82);font-weight:500}
+.per b{color:#fff}
+.sumkv .kv span:first-child{color:rgba(255,255,255,.72)}
+.save{background:rgba(255,255,255,.1);border-left:4px solid var(--amber);padding:12px 14px;font-size:15.5px;color:rgba(255,255,255,.9)}
+.save b{color:#fff}
+.nobus{display:none;margin-top:14px;background:var(--mist);border-left:5px solid var(--red);padding:14px 18px;font-size:16px;line-height:25px}
+.nobus.on{display:block}
 
-/* map stage */
-.stage{position:relative;margin-top:20px}
-.mapbox{position:relative}
-#map{height:640px;border-radius:16px;z-index:0;background:#dfe6ea}
+/* every time */
+.ttbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:22px}
+.ttbtn{display:inline-flex;align-items:center;gap:10px;border:2px solid var(--navy);background:var(--navy);color:#fff;padding:10px 16px;font-weight:700;font-size:15px;line-height:20px;transition:background .3s var(--ease),color .3s var(--ease)}
+.ttbtn:hover{background:#fff;color:var(--navy)}
+.ttbtn svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.ttbtn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.ttcase{display:none;margin-top:14px;background:var(--navy);padding:10px;box-shadow:0 18px 40px -24px rgba(12,28,42,.7)}
+.ttcase.on{display:block;animation:ttin .45s var(--ease)}
+@keyframes ttin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.tthead{display:flex;align-items:center;gap:12px;padding:6px 8px 12px;color:#fff}
+.tthead .br{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:36px;padding:0 8px;background:var(--navy-3);color:var(--led);font:800 24px/1 var(--c)}
+.tthead b{display:block;font:700 21px/23px var(--c);text-transform:uppercase}
+.tthead span{font-weight:500;font-size:14px;line-height:19px;color:rgba(255,255,255,.82)}
+.ttsheet{background:#fff;overflow-x:auto;scrollbar-width:none;position:relative}
+.ttsheet::-webkit-scrollbar{display:none}
+.ttsheet table{border-collapse:separate;border-spacing:0;font-size:15px;line-height:20px}
+.ttsheet th{position:sticky;left:0;z-index:2;background:#fff;text-align:left;font-weight:600;color:var(--navy);padding:7px 14px 7px 12px;min-width:170px;max-width:210px;border-right:2px solid var(--navy);white-space:normal}
+.ttsheet td{padding:7px 10px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink);white-space:nowrap;border-left:1px solid var(--mist)}
+.ttsheet tr:nth-child(even) th,.ttsheet tr:nth-child(even) td{background:#F6F8FA}
+.ttsheet tr.off th,.ttsheet tr.off td{background:#FCEDED;color:var(--red);font-weight:700}
+.ttsheet tr.off th .flag{margin-right:6px}
+.ttsheet td.sel{box-shadow:inset 0 0 0 2px var(--amber)}
+.ttsheet td.no{color:#b6bec5;font-weight:500}
+.tthint{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 8px 4px;font-size:14px;line-height:19px;color:rgba(255,255,255,.82)}
+
+/* route map */
+.stage{display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);border:1px solid var(--line);box-shadow:0 24px 40px -30px rgba(19,41,60,.5)}
+.stage.off{opacity:.45;pointer-events:none}
+.mapbox{position:relative;min-width:0}
+#map{height:620px;z-index:0;background:#dfe6ea}
 #map .leaflet-tile-pane{filter:saturate(.55) contrast(.95) brightness(1.04)}
-.leg{position:absolute;left:16px;bottom:16px;z-index:5;background:#fff;border-radius:10px;padding:8px 12px;display:flex;gap:14px;font-weight:500;font-size:14px;line-height:18px;box-shadow:0 6px 18px -8px rgba(12,28,42,.45)}
+.leaflet-bar,.leaflet-bar a,.leaflet-popup-content-wrapper,.leaflet-popup-tip{border-radius:0!important}
+.leg{position:absolute;left:12px;bottom:12px;z-index:5;background:#fff;padding:8px 12px;display:flex;gap:14px;font-weight:500;font-size:14px;line-height:18px;box-shadow:0 6px 18px -8px rgba(12,28,42,.45)}
 .leg i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:2px solid var(--navy);background:#fff}
 .leg i.r{background:var(--red);border-color:var(--red)}
-.leg i.l{width:22px;height:5px;border:0;border-radius:3px;background:var(--op1)}
-.panel{position:absolute;top:18px;right:18px;max-height:calc(100% - 36px);width:372px;z-index:5;background:#fff;border-radius:14px;box-shadow:0 22px 44px -20px rgba(12,28,42,.55);display:flex;flex-direction:column;overflow:hidden}
-.panel header{background:var(--navy);color:#fff;padding:14px 18px 13px}
-.panel header b{display:block;font:700 22px/24px "Barlow Condensed",sans-serif;text-transform:uppercase}
-.panel header span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
-.stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px}
+.leg i.l{width:22px;height:5px;border:0;border-radius:0;background:var(--op1)}
+.panel{display:flex;flex-direction:column;max-height:620px;min-width:0;border-left:1px solid var(--line)}
+.panel header{position:relative;background:var(--navy-3);color:#fff;padding:14px 18px 13px;overflow:hidden;border-top:5px solid var(--op1)}
+.panel header::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.5) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
+.panel header b{position:relative;z-index:1;display:block;padding-right:92px;font:700 22px/24px var(--c);text-transform:uppercase;color:var(--led);text-shadow:0 0 12px rgba(242,178,51,.35)}
+.panel header span{position:relative;z-index:1;font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
+.bell{position:absolute;right:16px;top:14px;z-index:2;display:flex;align-items:center;gap:6px;font:600 13px/1 var(--f);color:#cfdbe5}
+.bell i{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(215,73,73,.25);animation:bell 2.4s ease-in-out infinite}
+@keyframes bell{0%,100%{box-shadow:0 0 0 3px rgba(215,73,73,.25)}50%{box-shadow:0 0 0 6px rgba(215,73,73,.08)}}
+.stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px;flex:1}
 .stops::-webkit-scrollbar{display:none}
 .stops li{position:relative;padding:5px 0 5px 28px;display:flex;justify-content:space-between;gap:12px;font-size:15px;line-height:21px}
 .stops li::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:3px;background:var(--op1)}
@@ -87,332 +202,337 @@ a{color:inherit}
 .stops li.key{font-weight:700;color:var(--navy);padding-top:8px;padding-bottom:8px}
 .stops li.key::after{top:12px;left:0;width:15px;height:15px;border:3px solid var(--navy)}
 .stops li.off{color:var(--red)}
-.stops li.off::after{background:var(--red);border-color:var(--red)}
+.stops li.off::after{display:none}
+.stops li.off .flag{position:absolute;left:-2px;top:2px;width:18px;height:26px;margin:0}
 .stops li.off .tag{display:block;font-weight:500;font-size:13px;line-height:17px;color:var(--red)}
 .stops li.stop{cursor:pointer}
 .stops li.stop:hover span:first-child,.stops li.active span:first-child{text-decoration:underline;text-decoration-color:var(--amber);text-underline-offset:3px}
 .stops li.minor{display:none;color:#2c3944}
 .stops li.minor.open{display:flex}
-.stops time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);opacity:.85;white-space:nowrap}
-.stops li.key time{color:var(--navy)}
+.stops time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);white-space:nowrap}
 .stops li.off time{color:var(--red)}
 .stops li.fold{padding-top:2px;padding-bottom:2px}
 .stops li.fold::after{display:none}
 .stops li.fold::before{background:repeating-linear-gradient(var(--op1) 0 4px,transparent 4px 8px)}
-.stops li.fold button{border:0;background:none;padding:2px 0;font-weight:600;font-size:14px;color:var(--navy);opacity:.8;text-align:left}
-.stops li.fold button:hover{color:var(--navy)}
-
-/* map bits */
-.lbl{background:var(--navy);color:#fff;border:0;border-radius:6px;font:600 13px "Barlow",sans-serif;padding:3px 8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
+.stops li.fold button{border:0;background:none;padding:2px 0;font-weight:600;font-size:14px;color:var(--navy);text-align:left}
+.lbl{background:var(--navy);color:#fff;border:0;border-radius:0;font:600 13px var(--f);padding:3px 8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
 .lbl.off{background:var(--red)}
 .lbl::before{display:none}
-.busdot{width:30px;height:30px;border-radius:50%;background:var(--amber);border:3px solid var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
+.busdot{width:30px;height:30px;border-radius:50%;background:var(--op2);border:3px solid var(--op1);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
 .busdot svg{width:15px;height:15px}
-.leaflet-popup-content{font:500 15px/21px "Barlow",sans-serif;margin:10px 14px}
+.busdot svg rect:first-child{fill:var(--op1)}
+.offpin{width:30px;height:46px}
+.offpin svg{width:30px;height:46px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+.leaflet-popup-content{font:500 15px/21px var(--f);margin:10px 14px}
 .leaflet-popup-content b{color:var(--navy)}
+.flag{display:inline-block;vertical-align:-3px;width:18px;height:26px;margin-right:6px}
 
-/* roads */
-.sec{margin-top:56px}
-.journey{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:34px;align-items:start;margin-top:18px}
-.legs{list-style:none;counter-reset:none}
-.legs li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
-.legs li:last-child{border-bottom:1px solid var(--line)}
-.signs{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
-.sign{display:inline-block;font:700 16px/1 "Barlow",sans-serif;padding:5px 7px 4px;border-radius:4px;border:2px solid #111;background:#fff;color:#111;letter-spacing:.01em}
+/* roads, numbered like the budget page */
+.ways{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 40px}
+.way{display:grid;grid-template-columns:52px minmax(0,1fr);gap:4px 16px;padding:20px 0;border-top:1px solid var(--line)}
+.way .n{font:800 40px/.9 var(--c);color:var(--op1)}
+.way h3{font-size:20px;line-height:1.25;color:var(--navy)}
+.way p{grid-column:2;color:#2B3A45}
+.signs{grid-column:2;display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 2px}
+.sign{display:inline-block;font:700 15px/1 var(--f);padding:5px 7px 4px;border:2px solid #111;background:#fff;color:#111}
 .sign.m{background:#1D5FAD;border-color:#fff;color:#fff;box-shadow:0 0 0 1px #1D5FAD}
-.legs b{display:block;font:700 21px/24px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
-.legs p{margin-top:3px;font-size:16px;line-height:25px;color:#1d2730}
-.side{position:relative;top:-64px}
-.advice{background:var(--navy);color:#fff;border-radius:16px 16px 16px 0;padding:24px 24px 22px}
-.advice h3{font:700 24px/26px "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--onui)}
-.advice p{margin-top:10px;font-size:16px;line-height:25px;color:#e6edf3}
-.advice a.btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--amber);color:var(--accink);text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:10px;transition:transform .3s var(--ease),background .3s var(--ease)}
-.advice a.btn:hover{transform:translateX(3px);filter:brightness(1.08)}
-.alt{margin-top:14px;border:2px solid var(--op1);border-radius:14px;padding:16px 18px}
-.alt b{display:block;font:700 20px/22px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
-.alt p{margin-top:6px;font-size:15px;line-height:23px}
 
-.note{margin:44px 0 40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;line-height:21px;color:#3d4a55;max-width:820px}
-.note a{color:var(--navy)}
+/* tips */
+.tips{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:16px;margin-top:28px}
+.tip{background:var(--mist);border-left:5px solid var(--op1);padding:16px 18px}
+.tip b{display:block;color:var(--navy);font-weight:700;margin-bottom:2px}
+.tip a.go{display:inline-block;margin-top:10px;font-weight:700;color:var(--navy);text-decoration:none;border-bottom:2px solid var(--amber)}
+.tip a.go:hover{border-color:var(--navy)}
+
+/* keep planning */
+.more{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:6px}
+.more a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px;background:var(--mist);text-decoration:none;font-weight:600;color:var(--navy);border-left:4px solid var(--op1);transition:background .3s var(--ease)}
+.more a:hover{background:color-mix(in srgb,var(--op1) 12%,#fff)}
+.more a i{font-style:normal;transition:transform .3s var(--ease)}
+.more a:hover i{transform:translateX(4px)}
+footer{margin-top:80px;background:var(--navy);color:rgba(255,255,255,.82);font-size:14.5px;line-height:1.55;padding:26px 0}
+footer a{color:#fff}
 
 .rise{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .rise.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none;transition:none}.dep,.advice a.btn{transition:none}}
 
-@media(max-width:980px){
-  .hero{grid-template-columns:1fr;gap:22px}
-  .facts{grid-template-columns:1fr 1fr}
-  .fact:nth-child(2){border-right:0}
-  .fact:nth-child(3){padding-left:0}
-  .fact:nth-child(n+3){border-top:1px solid var(--line)}
-  .planner{grid-template-columns:1fr}
+@media (max-width:980px){
+  .cover .wrap{grid-template-columns:1fr;padding-top:40px}
+  .sh{grid-template-columns:1fr}
+  .planner,.stage,.tips{grid-template-columns:1fr}
+  .panel{max-height:none;border-left:0;border-top:1px solid var(--line)}
   #map{height:460px}
-  .panel{position:static;width:auto;margin-top:14px;box-shadow:none;border:1px solid var(--line)}
-  .stops{max-height:none}
-  .journey{grid-template-columns:1fr}
-  .side{top:0}
+  .more{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:560px){
-  .wrap{padding:0 16px}
-  .strip{flex-direction:column;align-items:flex-start;gap:0;font-size:14px}
-  .op{padding-left:24px;margin-top:-4px}
-  .blind{padding:16px 18px;gap:14px}
-  .blind .num{font-size:64px}
-  .blind .dest{font-size:26px}
-  .blind .via{font-size:15px}
-  .intro h1{font-size:34px;line-height:36px}
-  .intro p{font-size:17px;line-height:27px}
-  .fact{padding-right:10px}
-  .fact+.fact{padding-left:10px}
-  .fact:nth-child(3){padding-left:0}
-  .fact b{font-size:21px;line-height:24px}
-  #map{height:360px;border-radius:12px}
+@media (max-width:680px){
+  body{font-size:16.5px}
+  .yourstop{grid-template-columns:1fr}
+  .ys-sign{padding-top:18px}
+  .stopsign{width:110px}
+  .ys-body{padding:18px}
+  .ways{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}
+  .row .seg{justify-self:start;max-width:100%;overflow-x:auto}
+  .pin,.pout{padding:20px 18px}
+  .more{grid-template-columns:1fr}
+  section.s{padding-top:52px}
+  #map{height:360px}
   .leg{left:auto;right:8px;bottom:auto;top:8px;gap:8px;font-size:12px;padding:6px 8px}
-  .legs li{grid-template-columns:1fr;gap:8px}
-  .seg{display:flex}
-  .seg button{flex:1;padding:10px 8px;font-size:15px}
-  .dep{min-width:128px}
+  .bscroll{display:none}
+  .blind .num{font-size:58px}.blind .dest{font-size:24px}.blind .via{font-size:14px}
+  .jump .opchip{display:none}
+  .dep{max-width:76vw}
 }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}.roadstrip .rbus{left:42%}.roadstrip.go .rbus{transform:none}}
 
-.pickrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.nobus{display:none;margin-top:14px;background:var(--mist);border-left:5px solid var(--red);border-radius:0 12px 12px 0;padding:14px 18px;font-size:16px;line-height:25px}
-.nobus.on{display:block}
-.boardnote{grid-column:1/-1;font-size:15px;line-height:22px;color:#3d4a55;margin-top:-6px}
-.stage.off{opacity:.45;pointer-events:none}
+/* ---------- bus number screen beside the heading ---------- */
+.ph-left{display:flex;flex-direction:column;gap:14px}
+.ph-head{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px}
+.numscreen{position:relative;display:inline-flex;align-items:center;gap:12px;background:#050607;border:5px solid #23292E;padding:8px 14px 8px 12px;overflow:hidden;box-shadow:0 10px 20px -12px rgba(0,0,0,.6)}
+.numscreen::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.6) 1px,transparent 1.3px);background-size:3px 3px;pointer-events:none}
+.numscreen b{font:800 40px/1 var(--c);color:var(--led);text-shadow:0 0 12px rgba(242,178,51,.45);letter-spacing:.01em}
+.numscreen span{font:700 19px/1.1 var(--c);color:var(--led);text-transform:uppercase;letter-spacing:.04em;text-shadow:0 0 10px rgba(242,178,51,.35);max-width:220px}
 
-.seg button{white-space:nowrap}
-.dep{max-width:300px}
-.board{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);padding-right:40px}
-.dep .a{white-space:normal}
-@media(max-width:560px){.blindwrap{padding:0 0 16px 14px}.roadstrip{margin-top:26px;height:48px}.roadstrip .rbus{top:7px}.roadstrip .lane{font-size:11px}.panel header b{padding-right:84px}.pickrow{display:grid;grid-template-columns:1fr;width:100%}.pickrow .seg{width:100%}.dep{max-width:76vw}}
+/* ---------- bus stop countdown screen ---------- */
+.cdscreen{position:relative;background:#2A3036;padding:10px;box-shadow:0 24px 40px -26px rgba(12,28,42,.7)}
+.cdscreen::before,.cdscreen::after{content:"";position:absolute;top:4px;width:5px;height:5px;border-radius:50%;background:#59626B}
+.cdscreen::before{left:4px}.cdscreen::after{right:4px}
+.cdin{position:relative;background:#050607;padding:12px 16px 10px;overflow:hidden}
+.cdin::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.6) 1px,transparent 1.3px);background-size:3px 3px;pointer-events:none}
+.cdtop{display:flex;justify-content:space-between;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(242,178,51,.25);font:700 17px/1.2 var(--c);color:var(--led);text-transform:uppercase;letter-spacing:.05em;text-shadow:0 0 8px rgba(242,178,51,.35)}
+.cdtop #cdclock{font-variant-numeric:tabular-nums}
+.cdtop #cdclock i{font-style:normal;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.cdrows{list-style:none;margin-top:4px}
+.cdrows li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:5px 0;font:700 22px/1.15 var(--c);color:var(--led);text-transform:uppercase;letter-spacing:.03em;text-shadow:0 0 10px rgba(242,178,51,.4);cursor:pointer}
+.cdrows li span:nth-child(2){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cdrows li span:last-child{font-variant-numeric:tabular-nums;text-align:right}
+.cdrows li.on{background:rgba(242,178,51,.12)}
+.cdrows li:hover span:nth-child(2){text-decoration:underline;text-underline-offset:4px}
+.cdrows li.due span:last-child{animation:blink 1.2s steps(1) infinite}
+.cdtick{margin-top:6px;padding-top:6px;border-top:1px solid rgba(242,178,51,.25);overflow:hidden;white-space:nowrap;font:600 15px/1.3 var(--c);color:#FFD27A;letter-spacing:.06em;text-transform:uppercase}
+.cdtick span{display:inline-block;padding-left:100%;animation:tick 22s linear infinite}
+@keyframes tick{to{transform:translateX(-100%)}}
+.cdnote{margin-top:8px;font-size:14px;line-height:20px;color:var(--muted)}
 
-/* ---------- bus touches ---------- */
-/* seat moquette panel behind the destination blind */
-.blindwrap{position:relative;padding:0 0 22px 22px}
-.moquette{position:absolute;left:0;bottom:0;width:72%;height:78%;border-radius:12px;z-index:0;
-  background-color:var(--navy);
-  background-image:
-    radial-gradient(circle at 25% 25%,var(--op2) 0 3px,transparent 3.5px),
-    radial-gradient(circle at 75% 75%,var(--onui) 0 2.5px,transparent 3px),
-    linear-gradient(45deg,transparent 44%,color-mix(in srgb,var(--op2) 45%,transparent) 44% 56%,transparent 56%),
-    linear-gradient(-45deg,transparent 44%,color-mix(in srgb,var(--op3) 40%,transparent) 44% 56%,transparent 56%);
-  background-size:26px 26px,26px 26px,26px 26px,26px 26px}
-.blindwrap .blind{z-index:1}
-/* the blind rolls to a new destination */
-.blind .dest,.blind .via{will-change:transform,opacity}
-.blind .roll{animation:roll .55s cubic-bezier(.65,0,.35,1)}
-@keyframes roll{0%{transform:translateY(0);opacity:1}45%{transform:translateY(-120%);opacity:0}55%{transform:translateY(120%);opacity:0}100%{transform:translateY(0);opacity:1}}
-.blind .ends{display:block;margin-top:6px;font:600 14px/1.2 "Barlow",sans-serif;color:#cfdbe5;opacity:.8;position:relative;z-index:1}
+/* ---------- bell push ---------- */
+.bellrow{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.bellpush{display:inline-flex;align-items:center;gap:12px;border:0;background:#F4C21B;padding:8px 16px 8px 8px;font-weight:700;font-size:15px;color:#1A1A1A;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.bellpush .bp{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 38% 34%,#FF8A8A,#D72B2B 60%,#9D1414);box-shadow:0 0 0 4px #fff,0 0 0 6px #1A1A1A;transition:transform .15s var(--ease),filter .3s var(--ease)}
+.bellpush:active .bp{transform:scale(.9)}
+.bellpush[aria-pressed="true"] .bp{filter:brightness(1.25) drop-shadow(0 0 8px rgba(255,80,80,.9))}
+.stopsign-led{position:relative;display:inline-block;background:#050607;border:4px solid #23292E;padding:6px 14px;overflow:hidden;font:800 20px/1 var(--c);letter-spacing:.08em;text-transform:uppercase;color:#3A1010;transition:color .3s var(--ease),text-shadow .3s var(--ease)}
+.stopsign-led::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.6) 1px,transparent 1.3px);background-size:3px 3px;pointer-events:none}
+.stopsign-led.on{color:#FF4B4B;text-shadow:0 0 12px rgba(255,60,60,.8)}
+.panel header .bell.on i{background:#FF4B4B;box-shadow:0 0 0 6px rgba(255,75,75,.35)}
 
-/* the road: tarmac strip with lane markings and a bus that drives along it */
-.roadstrip{position:relative;height:54px;margin:34px 0 0;border-radius:10px;overflow:hidden;
-  background:#2B343C;
-  background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.2px);background-size:5px 5px}
-.roadstrip::before{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;
-  background:repeating-linear-gradient(90deg,#fff 0 34px,transparent 34px 60px);opacity:.8}
-.roadstrip::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:#F2B233;box-shadow:0 -4px 0 #F2B233}
-.roadstrip .lane{position:absolute;left:18px;top:7px;font:800 13px/1 "Barlow",sans-serif;letter-spacing:.32em;color:rgba(255,255,255,.85)}
-.roadstrip .rbus{position:absolute;top:9px;left:-120px;width:96px;height:36px;transition:transform 7s cubic-bezier(.45,.05,.35,1)}
-.roadstrip.go .rbus{transform:translateX(calc(100vw + 160px))}
-.roadstrip .rstop{position:absolute;right:26px;top:4px;width:26px;height:46px}
-@media (prefers-reduced-motion:reduce){.roadstrip .rbus{left:42%;transition:none}.roadstrip.go .rbus{transform:none}.blind .roll{animation:none}}
+/* ---------- printed planning slip ---------- */
+.slip{position:relative;background:#FFFDF6;color:#1A1A1A;padding:14px 16px 22px;font:600 15px/1.35 var(--c);letter-spacing:.03em;text-transform:uppercase;transform:rotate(-.6deg);box-shadow:0 10px 18px -10px rgba(0,0,0,.6);
+  -webkit-mask:linear-gradient(#000,#000) top/100% calc(100% - 8px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 8px repeat-x;
+          mask:linear-gradient(#000,#000) top/100% calc(100% - 8px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 8px repeat-x}
+.slip .sh1{display:flex;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:1px dashed #9A9A9A;font-weight:800;font-size:17px}
+.slip .ln{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.slip .ln span:last-child{text-align:right}
+.slip .bc{height:30px;margin-top:8px;background:repeating-linear-gradient(90deg,#1A1A1A 0 2px,transparent 2px 4px,#1A1A1A 4px 7px,transparent 7px 8px,#1A1A1A 8px 9px,transparent 9px 12px)}
+.slip .ft{margin-top:6px;font-weight:500;font-size:12.5px;text-align:center;letter-spacing:.06em;color:#555}
+@media (max-width:680px){.numscreen b{font-size:32px}.numscreen span{font-size:16px}.cdrows li{font-size:19px;grid-template-columns:44px minmax(0,1fr) auto}}
+@media (prefers-reduced-motion:reduce){.cdtick span{animation:none;padding-left:0}}
 
-/* departure buttons as bus tickets */
-.dep{position:relative;border:0!important;background:#FBF6EA;border-radius:6px;padding:11px 16px 12px 22px;
-  box-shadow:inset 0 0 0 1px #E2D7BD;
-  -webkit-mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat;
-          mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat}
-.dep::before{content:"";position:absolute;left:12px;top:8px;bottom:8px;border-left:2px dashed #CDBF9E}
-.dep:hover{box-shadow:inset 0 0 0 1px var(--navy)}
-.dep[aria-pressed="true"]{background:var(--navy);box-shadow:none}
-.dep[aria-pressed="true"]::before{border-color:var(--onui);opacity:.55}
-
-/* stop list header as the bus's next stop display */
-.panel header{position:relative;background:#0C1C2A;overflow:hidden}
-.panel header::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.5) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
-.panel header b{color:var(--led);text-shadow:0 0 12px rgba(242,178,51,.35);position:relative;z-index:1}
-.panel header span{position:relative;z-index:1}
-.bell{position:absolute;right:16px;top:14px;z-index:2;display:flex;align-items:center;gap:6px;font:600 13px/1 "Barlow",sans-serif;color:#cfdbe5}
-.bell i{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(215,73,73,.25);animation:bell 2.4s ease-in-out infinite}
-@keyframes bell{0%,100%{box-shadow:0 0 0 3px rgba(215,73,73,.25)}50%{box-shadow:0 0 0 6px rgba(215,73,73,.08)}}
-@media (prefers-reduced-motion:reduce){.bell i{animation:none}}
-.panel header b{padding-right:96px}
-
-/* bus stop flag beside the stop to get off at, and on headings */
-.flag{display:inline-block;vertical-align:-3px;width:18px;height:26px;margin-right:6px}
-.stops li.off .flag{position:absolute;left:-2px;top:2px;width:18px;height:26px;margin:0}
-.stops li.off::after{display:none}
-.hflag{display:inline-block;width:22px;height:32px;margin-right:10px;vertical-align:-4px}
-.fact.hl b{display:flex;align-items:flex-start;gap:4px}
-
-/* full timetable, laid out like the case at a bus stop */
-.ttwrap{grid-column:1/-1}
-.ttbtn{display:inline-flex;align-items:center;gap:10px;border:0;background:var(--amber);color:var(--accink);border-radius:10px;padding:10px 16px;font-weight:700;font-size:15px;line-height:20px;transition:transform .3s var(--ease),background .3s var(--ease)}
-.ttbtn:hover{transform:translateY(-2px);filter:brightness(1.08)}
-.ttbtn svg{width:18px;height:18px;transition:transform .35s var(--ease)}
-.ttbtn[aria-expanded="true"] svg{transform:rotate(180deg)}
-.ttcase{display:none;margin-top:14px;background:var(--navy);border-radius:14px;padding:10px;box-shadow:0 18px 40px -24px rgba(12,28,42,.7)}
-.ttcase.on{display:block;animation:ttin .45s var(--ease)}
-@keyframes ttin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-.tthead{display:flex;align-items:center;gap:12px;padding:6px 8px 12px;color:#fff}
-.tthead .br{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:36px;padding:0 8px;border-radius:8px;background:#0C1C2A;color:var(--led);font:800 24px/1 "Barlow Condensed",sans-serif}
-.tthead b{display:block;font:700 21px/23px "Barlow Condensed",sans-serif;text-transform:uppercase}
-.tthead span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
-.ttsheet{background:#fff;border-radius:8px;overflow-x:auto;scrollbar-width:none;position:relative}
-.ttsheet::-webkit-scrollbar{display:none}
-.ttsheet table{border-collapse:separate;border-spacing:0;font-size:15px;line-height:20px}
-.ttsheet th{position:sticky;left:0;z-index:2;background:#fff;text-align:left;font-weight:600;color:var(--navy);padding:7px 14px 7px 12px;min-width:170px;max-width:210px;border-right:2px solid var(--navy);white-space:normal}
-.ttsheet td{padding:7px 10px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600;color:#1d2730;white-space:nowrap;border-left:1px solid #EEF2F5}
-.ttsheet tr:nth-child(even) th,.ttsheet tr:nth-child(even) td{background:#F6F8FA}
-.ttsheet tr.off th,.ttsheet tr.off td{background:#FCEDED;color:var(--red);font-weight:700}
-.ttsheet tr.off th .flag{margin-right:6px}
-.ttsheet td.sel{box-shadow:inset 0 0 0 2px var(--amber)}
-.ttsheet td.no{color:#b6bec5;font-weight:500}
-.tthint{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 8px 4px;font-size:14px;line-height:19px;color:#cfdbe5}
-
-/* ---------- bus company colours (set from CFG.theme) ---------- */
-:root{--op1:#13293C;--op2:#F2B233;--opink:#fff;--op3:#F2B233;--led:#F2B233;--accink:#13293C;--onui:#F2B233}
-.livery{height:10px;margin:14px 0 0;border-radius:5px;background:linear-gradient(100deg,var(--op1) 0 58%,var(--op2) 58% 74%,var(--op3) 74% 84%,var(--op1) 84% 100%)}
-.opchip{display:inline-flex;align-items:center;gap:8px;background:var(--op1);color:var(--opink);border-radius:999px;padding:6px 14px 6px 8px;font-weight:600;font-size:15px;line-height:20px}
-.opchip i{width:22px;height:22px;border-radius:50%;background:conic-gradient(var(--op2) 0 33%,var(--op3) 0 66%,var(--opink) 0);box-shadow:0 0 0 2px var(--op1),0 0 0 3px rgba(255,255,255,.5)}
-.facts{border-top-color:var(--op1)}
-.busdot{background:var(--op2);border-color:var(--op1)}
-.busdot svg rect:first-child{fill:var(--op1)}
-.rbus .lv1{fill:var(--op1)}.rbus .lv2{fill:var(--op2)}.rbus .lv3{fill:var(--op3)}
-
-/* times row scroll buttons */
-.boardwrap{position:relative;min-width:0}
-.bscroll{position:absolute;top:50%;z-index:3;width:38px;height:38px;margin-top:-21px;border-radius:50%;border:0;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px -6px rgba(12,28,42,.7);transition:opacity .3s var(--ease),transform .3s var(--ease)}
-.bscroll:hover{transform:scale(1.08)}
-.bscroll svg{width:16px;height:16px}
-.bscroll.l{left:-12px}.bscroll.r{right:-4px}
-.bscroll[hidden]{display:none}
-.bscroll:disabled{opacity:0;pointer-events:none}
-
-/* next bus after the time now */
-.dep .nx{position:absolute;right:10px;top:6px;font:700 11px/1 "Barlow",sans-serif;background:var(--red);color:#fff;border-radius:4px;padding:3px 5px}
-
-/* your stop for the show: a red bus stop sign */
-.yourstop{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px 28px;align-items:center;margin-top:28px;background:var(--mist);border-radius:16px 16px 16px 0;padding:18px 26px 18px 18px;position:relative;overflow:hidden}
-.yourstop::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(90deg,var(--amber) 0 18px,transparent 18px 30px);opacity:.7}
-.stopsign{width:150px;height:auto;display:block;filter:drop-shadow(0 10px 14px rgba(12,28,42,.25));transform-origin:50% 100%}
-.yourstop.in .stopsign{animation:sway 1.6s cubic-bezier(.36,.07,.19,.97) .3s 1}
-@keyframes sway{0%{transform:rotate(0)}25%{transform:rotate(-2.2deg)}55%{transform:rotate(1.4deg)}80%{transform:rotate(-.6deg)}100%{transform:rotate(0)}}
-.yourstop h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
-.yourstop .sname{display:block;margin-top:6px;font:700 26px/29px "Barlow Condensed",sans-serif;color:var(--red)}
-.yourstop ul{list-style:none;margin-top:10px;display:grid;gap:8px}
-.yourstop li{display:flex;gap:10px;align-items:flex-start;font-size:16px;line-height:24px}
-.yourstop li svg{flex:0 0 22px;width:22px;height:22px;margin-top:1px}
-.yourstop li b{color:var(--navy)}
-@media (prefers-reduced-motion:reduce){.yourstop.in .stopsign{animation:none}}
-@media(max-width:560px){.yourstop{grid-template-columns:86px minmax(0,1fr);gap:6px 14px;padding:14px 14px 18px 10px}.stopsign{width:86px}.yourstop h2{font-size:24px;line-height:26px}.yourstop .sname{font-size:21px;line-height:24px}.yourstop li{font-size:15px;line-height:22px}.bscroll{display:none}}
-
-/* map marker for the stop to get off at */
-.offpin{width:30px;height:46px}
-.offpin svg{width:30px;height:46px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+/* ---------- live buses ---------- */
+.cdtop .lv{display:inline-flex;align-items:center;gap:6px;margin-right:12px;color:#7A6A40;text-shadow:none}
+.cdtop .lv i{width:8px;height:8px;border-radius:50%;background:#4A4030}
+.cdtop .lv.on{color:#8CF08C;text-shadow:0 0 8px rgba(140,240,140,.5)}
+.cdtop .lv.on i{background:#5BE35B;box-shadow:0 0 8px #5BE35B;animation:blink 1.6s steps(1) infinite}
+.cdrows li .ex{display:block;font-size:.62em;line-height:1;color:#FFD27A;letter-spacing:.06em}
+.livebadge{position:absolute;left:12px;top:12px;z-index:5;margin-left:44px;background:#050607;color:#8CF08C;font:700 14px/1 var(--c);letter-spacing:.06em;text-transform:uppercase;padding:8px 10px;display:flex;align-items:center;gap:8px}
+.livebadge i{width:8px;height:8px;border-radius:50%;background:#5BE35B;box-shadow:0 0 8px #5BE35B}
+.livebadge.off{color:#B8C0C6}.livebadge.off i{background:#6B747B;box-shadow:none}
+.lvbus{width:34px;height:34px;position:relative}
+.lvbus .body{position:absolute;inset:3px;background:var(--op1);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font:800 12px/1 var(--c);color:var(--opink);box-shadow:0 3px 8px rgba(0,0,0,.45)}
+.lvbus .hd{position:absolute;left:50%;top:50%;width:0;height:0;margin:-24px 0 0 -6px;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:9px solid var(--op1);transform-origin:6px 24px}
+.lvbus.late .body{box-shadow:0 0 0 3px rgba(215,73,73,.55),0 3px 8px rgba(0,0,0,.45)}
+.sumlive{display:none;background:rgba(0,0,0,.25);border-left:4px solid #5BE35B;padding:10px 14px;font-size:15.5px;color:#fff}
+.sumlive.on{display:block}
+@media (max-width:680px){.livebadge{font-size:12px;padding:6px 8px}}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <nav class="strip">
-    <a class="back" id="backlink" href="#" target="_top"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg><span></span></a>
-    <span class="opchip" id="op"><i aria-hidden="true"></i><span id="opname"></span></span>
-  </nav>
-  <div class="livery" aria-hidden="true"></div>
-
-  <header class="hero">
-    <div class="blindwrap rise">
-      <div class="moquette" aria-hidden="true"></div>
+<header class="cover">
+  <div class="wrap">
+    <div class="rise">
+      <nav class="crumb" aria-label="Breadcrumb"><a href="https://www.ukairshowguide.co.uk/" target="_top">Home</a><span aria-hidden="true">/</span><a id="crumbshow" href="#" target="_top"></a><span aria-hidden="true">/</span><span id="crumbbus"></span></nav>
+      <span class="tag">Bus route map</span>
+      <h1 id="title"></h1>
+      <p class="lede" id="lead"></p>
+    </div>
+    <aside class="rise" aria-label="Key details">
       <div class="blind" aria-live="polite">
         <div class="num" id="bnum"></div>
         <div><div class="dest" id="bdest"></div><span class="via" id="bvia" aria-hidden="true"></span></div>
       </div>
-    </div>
-    <div class="intro rise">
-      <h1 id="title"></h1>
-      <p id="lead"></p>
-    </div>
-  </header>
-
-  <div class="facts rise" id="facts"></div>
-  <div class="roadstrip" aria-hidden="true">
-    <span class="lane">BUS LANE</span>
-    <svg class="rbus" viewBox="0 0 96 36"><rect class="lv1" x="1" y="2" width="92" height="27" rx="5"/><rect class="lv2" x="1" y="20" width="92" height="4"/><path class="lv3" d="M40 29 L58 2 L66 2 L48 29 Z" opacity=".9"/><rect x="74" y="6" width="16" height="13" rx="2" fill="#9FD8EE"/><g fill="#9FD8EE"><rect x="8" y="6" width="12" height="10" rx="1.5"/><rect x="23" y="6" width="12" height="10" rx="1.5"/><rect x="38" y="6" width="12" height="10" rx="1.5"/><rect x="53" y="6" width="12" height="10" rx="1.5"/></g><rect x="62" y="3.5" width="10" height="3" rx="1" fill="#FFD27A"/><circle cx="20" cy="30" r="5" fill="#0B0B0B"/><circle cx="20" cy="30" r="2" fill="#9AA5AE"/><circle cx="74" cy="30" r="5" fill="#0B0B0B"/><circle cx="74" cy="30" r="2" fill="#9AA5AE"/><rect x="90" y="17" width="3" height="3" rx="1" fill="#F2B233"/></svg>
-    <svg class="rstop" viewBox="0 0 26 46"><rect x="12" y="14" width="2.5" height="32" fill="#cfd6dc"/><rect x="2" y="1" width="22" height="15" rx="2.5" fill="#fff" stroke="#D74949" stroke-width="2.2"/><rect x="6.5" y="4.5" width="13" height="8" rx="1.2" fill="#D74949"/><rect x="8" y="5.6" width="10" height="2.8" rx=".5" fill="#fff"/></svg>
-  </div>
-  <section class="yourstop rise" id="yourstop" aria-labelledby="ysh">
-    <svg class="stopsign" viewBox="0 0 150 250" aria-hidden="true">
-          <rect x="70" y="60" width="10" height="190" rx="3" fill="#9AA5AE"/><rect x="70" y="60" width="4" height="190" fill="#C6CED4"/>
-          <rect x="6" y="6" width="138" height="104" rx="12" fill="#D74949"/><rect x="12" y="12" width="126" height="92" rx="8" fill="none" stroke="#fff" stroke-width="3"/>
-          <g transform="translate(43 24)"><rect x="0" y="0" width="64" height="40" rx="7" fill="#fff"/><rect x="6" y="6" width="52" height="16" rx="3" fill="#D74949"/><rect x="5" y="40" width="12" height="7" rx="2" fill="#fff"/><rect x="47" y="40" width="12" height="7" rx="2" fill="#fff"/><circle cx="12" cy="31" r="3.5" fill="#D74949"/><circle cx="52" cy="31" r="3.5" fill="#D74949"/></g>
-          <text x="75" y="94" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="22" fill="#fff" letter-spacing="1">BUS STOP</text>
-          <rect x="44" y="132" width="62" height="70" rx="5" fill="#fff" stroke="#13293C" stroke-width="3"/><g fill="#C6CED4"><rect x="52" y="142" width="46" height="4" rx="2"/><rect x="52" y="152" width="38" height="4" rx="2"/><rect x="52" y="162" width="46" height="4" rx="2"/><rect x="52" y="172" width="30" height="4" rx="2"/><rect x="52" y="182" width="42" height="4" rx="2"/></g>
-          <ellipse cx="75" cy="248" rx="26" ry="3" fill="rgba(12,28,42,.18)"/>
-        </svg>
-    <div>
-      <h2 id="ysh">Your stop for the show</h2>
-      <span class="sname" id="ysname"></span>
-      <ul>
-        <li id="ysbell"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#D74949"/><path d="M11 5c-2.4 0-4 1.8-4 4.2V12l-1.5 2h11L15 12V9.2C15 6.8 13.4 5 11 5z M9.5 15.5a1.5 1.5 0 0 0 3 0z" fill="#fff"/></svg><span id="ysbelltxt"></span></li>
-        <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13293C"/><circle cx="12" cy="5.5" r="1.8" fill="#fff"/><path d="M11.5 8l-2.5 3 1.5 1.5-1 4.5M11.5 8l1.5 3.5 2.5 1M10.5 12.5l2 1.5 1 3.5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="yswalk"></span></li>
-        <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#F2B233"/><path d="M11 6v5.5l3.5 2" stroke="#13293C" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span id="ysride"></span></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="planner rise" aria-labelledby="ph">
-    <h2 id="ph"><svg class="hflag" viewBox="0 0 18 26" aria-hidden="true"><rect x="8" y="9" width="2" height="17" fill="#13293C"/><rect x="1" y="1" width="16" height="11" rx="2" fill="#fff" stroke="#D74949" stroke-width="2"/><rect x="4.5" y="3.6" width="9" height="5.6" rx="1" fill="#D74949"/><rect x="5.6" y="4.4" width="6.8" height="2" rx=".4" fill="#fff"/></svg>Pick your bus</h2>
-    <div class="pickrow">
-      <div class="seg" id="day" role="group" aria-label="Day"></div>
-      <div class="seg" id="dir" role="group" aria-label="Direction"></div>
-    </div>
-    <div class="boardwrap">
-      <button type="button" class="bscroll l" id="bl" aria-label="Earlier buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10 3L5 8l5 5"/></svg></button>
-      <div class="board" id="board" role="group" aria-label="Departure times"></div>
-      <button type="button" class="bscroll r" id="br" aria-label="Later buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 3l5 5-5 5"/></svg></button>
-    </div>
-    <p class="boardnote" id="bnote"></p>
-    <div class="ttwrap">
-      <button type="button" class="ttbtn" id="ttbtn" aria-expanded="false" aria-controls="ttcase"><span id="ttlbl">See every time</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6l5 5 5-5"/></svg></button>
-      <div class="ttcase" id="ttcase">
-        <div class="tthead"><span class="br" id="ttnum"></span><div><b id="tttitle"></b><span id="ttsub"></span></div></div>
-        <div class="ttsheet" id="ttsheet"></div>
-        <p class="tthint"><span id="tthint"></span><span>Times can change, so check before you travel</span></p>
-      </div>
-    </div>
-  </section>
-  <p class="nobus" id="nobus"></p>
-
-  <div class="stage rise" id="stage">
-    <div class="mapbox">
-      <div id="map" role="img"></div>
-      <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
-    </div>
-    <aside class="panel" aria-live="polite">
-      <header><div class="bell" aria-hidden="true"><i></i>Stopping</div><b id="ptitle"></b><span id="psub"></span></header>
-      <ol class="stops" id="stops"></ol>
+      <div class="info"><h2>Key details</h2><div id="facts"></div></div>
     </aside>
   </div>
+  <div class="livery" aria-hidden="true"></div>
+</header>
 
-  <section class="sec rise" aria-labelledby="rh">
-    <h2 id="rh">The roads it takes</h2>
-    <div class="journey">
-      <ol class="legs" id="legs"></ol>
-      <div class="side">
-        <div class="advice"><h3 id="tiph"></h3><p id="tip"></p><a class="btn" id="tipbtn" href="#" target="_top"></a></div>
-        <div class="alt" id="alt" hidden><b id="alth"></b><p id="altp"></p></div>
+<div class="roadstrip" aria-hidden="true">
+  <span class="lane">BUS LANE</span>
+  <svg class="rbus" viewBox="0 0 96 36"><rect class="lv1" x="1" y="2" width="92" height="27" rx="5"/><rect class="lv2" x="1" y="20" width="92" height="4"/><path class="lv3" d="M40 29 L58 2 L66 2 L48 29 Z" opacity=".9"/><rect x="74" y="6" width="16" height="13" rx="2" fill="#9FD8EE"/><g fill="#9FD8EE"><rect x="8" y="6" width="12" height="10" rx="1.5"/><rect x="23" y="6" width="12" height="10" rx="1.5"/><rect x="38" y="6" width="12" height="10" rx="1.5"/><rect x="53" y="6" width="12" height="10" rx="1.5"/></g><rect x="62" y="3.5" width="10" height="3" rx="1" fill="#FFD27A"/><circle cx="20" cy="30" r="5" fill="#0B0B0B"/><circle cx="20" cy="30" r="2" fill="#9AA5AE"/><circle cx="74" cy="30" r="5" fill="#0B0B0B"/><circle cx="74" cy="30" r="2" fill="#9AA5AE"/><rect x="90" y="17" width="3" height="3" rx="1" fill="#F2B233"/></svg>
+  <svg class="rstop" viewBox="0 0 26 46"><rect x="12" y="14" width="2.5" height="32" fill="#cfd6dc"/><rect x="2" y="1" width="22" height="15" rx="2.5" fill="#fff" stroke="#D74949" stroke-width="2.2"/><rect x="6.5" y="4.5" width="13" height="8" rx="1.2" fill="#D74949"/><rect x="8" y="5.6" width="10" height="2.8" rx=".5" fill="#fff"/></svg>
+</div>
+
+<nav class="jump" aria-label="On this page">
+  <div class="wrap">
+    <a href="#stop">Your stop</a>
+    <a href="#times">Pick your bus</a>
+    <a href="#route">Route map</a>
+    <a href="#roads">The roads it takes</a>
+    <a href="#travel">Before you travel</a>
+    <span class="opchip" id="op"><i aria-hidden="true"></i><span id="opname"></span></span>
+  </div>
+</nav>
+
+<main>
+
+<section class="s" id="stop">
+  <div class="wrap">
+    <div class="sh rise"><h2 class="t">Your stop for the show</h2><p id="ysintro"></p></div>
+    <div class="yourstop rise" id="yourstop">
+      <div class="ys-sign"><svg class="stopsign" viewBox="0 0 150 250" aria-hidden="true">
+          <rect x="70" y="60" width="10" height="190" rx="3" fill="#9AA5AE"/><rect x="70" y="60" width="4" height="190" fill="#C6CED4"/>
+          <rect x="6" y="6" width="138" height="104" rx="3" fill="#D74949"/><rect x="12" y="12" width="126" height="92" rx="2" fill="none" stroke="#fff" stroke-width="3"/>
+          <g transform="translate(43 24)"><rect x="0" y="0" width="64" height="40" rx="3" fill="#fff"/><rect x="6" y="6" width="52" height="16" rx="3" fill="#D74949"/><rect x="5" y="40" width="12" height="7" rx="2" fill="#fff"/><rect x="47" y="40" width="12" height="7" rx="2" fill="#fff"/><circle cx="12" cy="31" r="3.5" fill="#D74949"/><circle cx="52" cy="31" r="3.5" fill="#D74949"/></g>
+          <text x="75" y="94" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="22" fill="#fff" letter-spacing="1">BUS STOP</text>
+          <rect x="44" y="132" width="62" height="70" rx="1" fill="#fff" stroke="#13293C" stroke-width="3"/><g fill="#C6CED4"><rect x="52" y="142" width="46" height="4" rx="2"/><rect x="52" y="152" width="38" height="4" rx="2"/><rect x="52" y="162" width="46" height="4" rx="2"/><rect x="52" y="172" width="30" height="4" rx="2"/><rect x="52" y="182" width="42" height="4" rx="2"/></g>
+          <ellipse cx="75" cy="248" rx="26" ry="3" fill="rgba(12,28,42,.18)"/>
+        </svg></div>
+      <div class="ys-body">
+        <span class="lbl">Get off here</span>
+        <span class="sname" id="ysname"></span>
+        <ul class="ys-list">
+          <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#D74949"/><path d="M11 5c-2.4 0-4 1.8-4 4.2V12l-1.5 2h11L15 12V9.2C15 6.8 13.4 5 11 5z M9.5 15.5a1.5 1.5 0 0 0 3 0z" fill="#fff"/></svg><span id="ysbelltxt"></span></li>
+          <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13293C"/><circle cx="12" cy="5.5" r="1.8" fill="#fff"/><path d="M11.5 8l-2.5 3 1.5 1.5-1 4.5M11.5 8l1.5 3.5 2.5 1M10.5 12.5l2 1.5 1 3.5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="yswalk"></span></li>
+          <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#F2B233"/><path d="M11 6v5.5l3.5 2" stroke="#13293C" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span id="ysride"></span></li>
+        </ul>
+        <div class="bellrow">
+          <button type="button" class="bellpush" id="bellpush" aria-pressed="false"><span class="bp" aria-hidden="true"></span>Press the bell</button>
+          <span class="stopsign-led" id="bellled" aria-live="polite">Bus stopping</span>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <p class="note" id="note"></p>
-</div>
+<section class="s" id="times">
+  <div class="wrap">
+    <div class="sh rise" style="align-items:stretch">
+      <div class="ph-left">
+        <div class="ph-head"><h2 class="t">Pick your bus</h2><span class="numscreen" aria-hidden="true"><b id="nsnum"></b><span id="nsdest"></span></span></div>
+        <p>Pick the day you’re going and which way you’re heading, then tap a time. The screen shows the next buses from that stop, and the map and the stop list below follow whichever bus you pick.</p>
+      </div>
+      <div>
+        <div class="cdscreen" aria-label="Departures screen">
+          <div class="cdin">
+            <div class="cdtop"><span id="cdstop"></span><span><span class="lv" id="cdlive"><i></i><span>Timetable</span></span><span id="cdclock"></span></span></div>
+            <ol class="cdrows" id="cdrows"></ol>
+            <div class="cdtick"><span id="cdtick"></span></div>
+          </div>
+        </div>
+        <p class="cdnote" id="cdnote"></p>
+      </div>
+    </div>
+    <div class="planner rise">
+      <div class="pin">
+        <div class="row" id="dayrow"><div class="lb">Day<small>The days the show runs</small></div><div class="seg" id="day" role="group" aria-label="Day"></div></div>
+        <div class="row" id="dirrow"><div class="lb">Direction<small>To the show, or home again</small></div><div class="seg" id="dir" role="group" aria-label="Direction"></div></div>
+        <div class="row full">
+          <div class="lb">Departure</div>
+          <div class="boardwrap">
+            <button type="button" class="bscroll l" id="bl" aria-label="Earlier buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10 3L5 8l5 5"/></svg></button>
+            <div class="board" id="board" role="group" aria-label="Departure times"></div>
+            <button type="button" class="bscroll r" id="br" aria-label="Later buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 3l5 5-5 5"/></svg></button>
+          </div>
+          <p class="boardnote" id="bnote"></p>
+        </div>
+      </div>
+      <div class="pout" aria-live="polite">
+        <span class="lbl">Your bus</span>
+        <div class="big" id="sumbig"></div>
+        <div class="per" id="sumper"></div>
+        <div class="sumkv" id="sumkv"></div>
+        <div class="sumlive" id="sumlive" aria-live="polite"></div>
+        <div class="save" id="sumsave"></div>
+        <div class="slip" id="slip" aria-label="Planning slip for this bus"></div>
+      </div>
+    </div>
+    <p class="nobus" id="nobus"></p>
+    <div class="ttbar">
+      <button type="button" class="ttbtn" id="ttbtn" aria-expanded="false" aria-controls="ttcase"><span id="ttlbl">See every time</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6l5 5 5-5"/></svg></button>
+    </div>
+    <div class="ttcase" id="ttcase">
+      <div class="tthead"><span class="br" id="ttnum"></span><div><b id="tttitle"></b><span id="ttsub"></span></div></div>
+      <div class="ttsheet" id="ttsheet"></div>
+      <p class="tthint"><span id="tthint"></span><span>Times can change, so check before you travel</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="route">
+  <div class="wrap">
+    <div class="sh rise"><h2 class="t">Route map</h2><p>Every stop on the bus you picked. Tap a stop in the list to find it on the map. The red bus stop is the one to get off at for the show.</p></div>
+    <div class="stage rise" id="stage">
+      <div class="mapbox">
+        <div id="map" role="img"></div>
+        <div class="livebadge off" id="livebadge" aria-live="polite"><i></i><span>Looking for live buses</span></div>
+        <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span><span><i style="border-radius:0;background:var(--op1);border-color:#fff"></i>Live bus</span></div>
+      </div>
+      <aside class="panel">
+        <header><div class="bell" aria-hidden="true"><i></i>Stopping</div><b id="ptitle"></b><span id="psub"></span></header>
+        <ol class="stops" id="stops"></ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="roads">
+  <div class="wrap">
+    <div class="sh rise"><h2 class="t">The roads it takes</h2><p>Handy if you know the area, or if you want to know where you’ll be sitting in traffic on a busy show day.</p></div>
+    <ol class="ways rise" id="legs"></ol>
+  </div>
+</section>
+
+<section class="s" id="travel">
+  <div class="wrap">
+    <div class="sh rise"><h2 class="t">Before you travel</h2></div>
+    <div class="tips rise">
+      <div class="tip"><b id="tiph"></b><span id="tip"></span><br><a class="go" id="tipbtn" href="#" target="_top"></a></div>
+      <div class="tip" id="alt" hidden><b id="alth"></b><span id="altp"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap">
+    <div class="sh rise" style="margin-bottom:16px"><h2 class="t">Keep planning</h2></div>
+    <div class="more rise">
+      <a id="morshow" href="#" target="_top"><span></span><i>&rarr;</i></a>
+      <a href="index.html">Every bus route map <i>&rarr;</i></a>
+      <a href="https://www.ukairshowguide.co.uk/first-airshow-getting-there" target="_top">Getting there guide <i>&rarr;</i></a>
+      <a href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top">Find your airshow <i>&rarr;</i></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap"><p id="note"></p></div></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-var CFG={"num": "76", "operator": "Stagecoach West", "showName": "Royal International Air Tattoo", "showUrl": "https://www.ukairshowguide.co.uk/riat", "title": "Bus 76, Highworth to Cirencester", "blindDest": "Fairford", "blindVia": ["via Hatherop", "via Kempsford", "via Poulton"], "lead": "The 76 runs between Highworth and Cirencester. For the Royal International Air Tattoo, the closest stop is Kempsford, by Mount Pleasant, about 20 minutes from RAF Fairford. Pick a day and a time below and the map shows every stop.", "facts": [["Runs on", "Saturdays only"], ["How often", "A few buses a day"], ["Get off at", "Kempsford, by Mount Pleasant", "hl"], ["Then walk", "About 20 minutes"]], "legs": [[["A361"], "Lechlade to Hatherop", "Mostly along Hambidge Lane, Main Road and The Clock, about 8 miles."], [["A417"], "Hatherop to Fairford", "Mostly along Fairford Road, Coronation Street and Horcott Road, about 7 miles."], [[], "Fairford to Kempsford", "Mostly along Horcott Road, Whelford Road and High Street, about 4 miles."], [[], "Kempsford to Poulton", "Mostly along The Street, Broadleaze and Cricklade Street, about 7 miles."], [["A417"], "Poulton to Cirencester", "Mostly along London Road, about 5 miles."]], "tipHead": "Before you travel", "tip": "These local buses don’t run on Sundays and don’t reach the show entrances, so on show days I would use the Swindon Shuttle or a Park and Ride instead.", "tipBtn": "Back to getting to Fairford", "alt": null, "theme": {"op1": "#1D4F91", "op2": "#F58025", "op3": "#E31B23", "opink": "#FFFFFF", "ui": "#1D4F91", "onui": "#FFA45C", "acc": "#F58025", "accink": "#0F2340"}, "walkLine": "From here it’s about 20 minutes on foot to RAF Fairford.", "walkBack": "Allow about 20 minutes to walk back here from RAF Fairford, and a bit more when the crowds leave.", "target": [51.68514, -1.78647], "targetLabel": "RAF Fairford", "offTag": "Closest stop to the show", "note": "Stops and times are from Stagecoach West’s timetable on the DfT <a href=\"https://data.bus-data.dft.gov.uk/\" target=\"_blank\" rel=\"noopener\">Bus Open Data Service</a>, through <a href=\"https://bustimes.org/\" target=\"_blank\" rel=\"noopener\">bustimes.org</a>, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with Stagecoach West before you travel. The line is drawn along the roads between the stops, so treat it as a guide. Map data © <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a> contributors."};
-var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St John's Street"],["Lechlade, before Sherborne Street",51.69532,-1.69171,"Lechlade, before Sherborne"],["Lechlade, after Jubilee Hall",51.69806,-1.69068,"Lechlade, after Jubilee Hall"],["Lechlade, The Close",51.69937,-1.6905,"Lechlade, The Close"],["Lechlade, Hambidge Lane Turn",51.70967,-1.71018,"Lechlade, Hambidge Lane Turn"],["Southrop, Great Lemhill",51.71536,-1.70618,"Southrop, Great Lemhill"],["Southrop Quarry View (corner of)",51.72642,-1.71414,"Southrop Quarry View (corner"],["Southrop, The Swan",51.72992,-1.71195,"Southrop, The Swan"],["Southrop School",51.72982,-1.70965,"Southrop School"],["Fyfield, by Baxters Barns",51.73438,-1.70406,"Fyfield, by Baxters Barns"],["Eastleach Martin, by Churches",51.7456,-1.70843,"Eastleach Martin, by Churches"],["Eastleach Turville, The Victoria Inn",51.74551,-1.71473,"Eastleach Turville, The"],["Eastleach Turville, before Beerfulong Turn",51.74862,-1.7232,"Eastleach Turville, before"],["Hatherop, Willamstrip Farm",51.75478,-1.75667,"Hatherop, Willamstrip Farm"],["Hatherop Estate",51.74504,-1.77405,"Hatherop Estate"],["Hatherop, Castle School",51.74607,-1.77884,"Hatherop, Castle School"],["Coln St Aldwyns, Post Office",51.74543,-1.79044,"Coln St Aldwyns, Post Office"],["Coln St Aldwyns, by The New Inn",51.74357,-1.7899,"Coln St Aldwyns, by The New"],["Quenington, Coneygar Road",51.73918,-1.79202,"Quenington, Coneygar Road"],["Quenington, on The Green",51.73669,-1.79299,"Quenington, on The Green"],["Fairford, Mill Lane",51.70939,-1.7899,"Fairford, Mill Lane"],["Fairford, The Vortex Inn",51.70692,-1.78691,"Fairford, The Vortex Inn"],["Fairford, after Leafield Road",51.70961,-1.77822,"Fairford, after Leafield Road"],["Fairford, Market Place",51.70779,-1.78115,"Fairford, Market Place"],["Fairford, The Garretts",51.71068,-1.7908,"Fairford, The Garretts"],["Fairford, Lakeside",51.70467,-1.78432,"Fairford, Lakeside"],["Fairford, St Thomas Church",51.70246,-1.78015,"Fairford, St Thomas Church"],["RAF Fairford",51.69637,-1.7696,"RAF Fairford"],["Whelford, by Pope's Court",51.68735,-1.75586,"Whelford, by Pope's Court"],["Kempsford, by Washpool Lane",51.68228,-1.76444,"Kempsford, by Washpool Lane"],["Kempsford, by The Knoll",51.67399,-1.7733,"Kempsford, by The Knoll"],["Kempsford, by Cross Tree Crescent",51.67157,-1.77583,"Kempsford, by Cross Tree"],["Kempsford, by Primary School",51.67222,-1.7786,"Kempsford, by Primary School"],["Kempsford, by Mount Pleasant",51.6728,-1.78435,"Kempsford, by Mount Pleasant"],["Marston Meysey The Turn",51.66763,-1.81492,"Marston Meysey The Turn"],["Marston Meysey Stonewold House",51.67217,-1.81688,"Marston Meysey Stonewold House"],["Marston Meysey Greenleaze",51.67616,-1.81433,"Marston Meysey Greenleaze"],["Down Ampney, Broadleaze",51.67793,-1.85304,"Down Ampney, Broadleaze"],["Poulton, Priory",51.69792,-1.85888,"Poulton, Priory"],["Poulton, The Falcon",51.70672,-1.85684,"Poulton, The Falcon"],["Ampney St Peter, Red Lion",51.71104,-1.87289,"Ampney St Peter, Red Lion"],["Ampney St Peter, Village Street",51.71057,-1.88343,"Ampney St Peter, Village"],["Ampney Crucis, by St Mary's Church",51.71294,-1.89121,"Ampney Crucis, by St Mary's"],["Ampney Crucis, before Village Street",51.71414,-1.90431,"Ampney Crucis, before"],["Ampney Park",51.71644,-1.91675,"Ampney Park"],["Norcote House",51.71888,-1.93313,"Norcote House"],["Cirencester, after Kingshill Lane",51.71914,-1.94387,"Cirencester, after Kingshill"],["The Beeches Pheasant Way (corner of)",51.71898,-1.95104,"The Beeches Pheasant Way"],["The Beeches Churchill Road (corner of)",51.71839,-1.9545,"The Beeches Churchill Road"],["Cirencester, before Burford Road",51.71816,-1.95721,"Cirencester, before Burford"],["Cirencester, by Beeches Car Park",51.71676,-1.96077,"Cirencester, by Beeches Car"],["Cirencester, Bingham Close",51.71525,-1.96374,"Cirencester, Bingham Close"],["Cirencester, The Forum",51.71537,-1.96576,"Cirencester, The Forum"],["Cirencester, Beeches Car Park",51.71675,-1.9609,"Cirencester, Beeches Car Park"],["Cirencester Burford Road (corner of)",51.71826,-1.95729,"Cirencester Burford Road"],["The Beeches, Churchill Road",51.7185,-1.95409,"The Beeches, Churchill Road"],["Cirencester, before Kingshill Lane",51.71967,-1.9463,"Cirencester, before"],["Norcote House (nr)",51.71896,-1.93305,"Norcote House (nr)"],["Ampney Park (nr)",51.71656,-1.91664,"Ampney Park (nr)"],["Ampney Crucis, Village Street",51.71428,-1.90571,"Ampney Crucis, Village Street"],["Ampney Crucis, St Mary's Church",51.71317,-1.89123,"Ampney Crucis, St Mary's"],["Ampney St Peter, before Village Street",51.71067,-1.88342,"Ampney St Peter, before"],["Poulton, by The Falcon",51.7069,-1.85655,"Poulton, by The Falcon"],["Poulton, by Priory",51.69786,-1.85882,"Poulton, by Priory"],["Down Ampney, after Broadleaze",51.67796,-1.85293,"Down Ampney, after Broadleaze"],["Marston Meysey Greenleaze",51.67606,-1.81432,"Marston Meysey Greenleaze"],["Marston Meysey Stonewold House",51.67217,-1.81676,"Marston Meysey Stonewold House"],["Marston Meysey The Turn",51.66763,-1.81479,"Marston Meysey The Turn"],["Marston Meysey Turn",51.66742,-1.81444,"Marston Meysey Turn"],["Kempsford, Primary School",51.67233,-1.77837,"Kempsford, Primary School"],["Kempsford, Cross Tree Crescent",51.67161,-1.77564,"Kempsford, Cross Tree Crescent"],["Kempsford, by Chapel Close",51.67133,-1.77376,"Kempsford, by Chapel Close"],["Kempsford, The Knoll",51.674,-1.77342,"Kempsford, The Knoll"],["Kempsford, Washpool Lane",51.68222,-1.76465,"Kempsford, Washpool Lane"],["Whelford, Pope's Court",51.68766,-1.7557,"Whelford, Pope's Court"],["RAF Fairford (nr)",51.69668,-1.77047,"RAF Fairford (nr)"],["Fairford, St Thomas Church",51.70279,-1.78119,"Fairford, St Thomas Church"],["Fairford, by Lakeside",51.70459,-1.78436,"Fairford, by Lakeside"],["Fairford, after Market Place",51.70826,-1.78128,"Fairford, after Market Place"],["Fairford, before Leafield Road",51.70969,-1.77822,"Fairford, before Leafield Road"],["Quenington, The Green",51.73659,-1.79328,"Quenington, The Green"],["Quenington, by Coneygar Road",51.73908,-1.79238,"Quenington, by Coneygar Road"],["Coln St Aldwyns, The New Inn",51.7436,-1.79012,"Coln St Aldwyns, The New Inn"],["Hatherop, Castle School",51.74617,-1.77878,"Hatherop, Castle School"],["Hatherop Estate",51.74515,-1.774,"Hatherop Estate"],["Hatherop, by Williamstrip Farm",51.75481,-1.75667,"Hatherop, by Williamstrip Farm"],["Eastleach Turville, after Beerfulong Turn",51.74873,-1.723,"Eastleach Turville, after"],["Eastleach Turville, by The Victoria Inn",51.74556,-1.71457,"Eastleach Turville, by The"],["Eastleach Martin, Churches",51.74583,-1.70907,"Eastleach Martin, Churches"],["Fyfield, Baxters Barns",51.73398,-1.70403,"Fyfield, Baxters Barns"],["Southrop School",51.72972,-1.70973,"Southrop School"],["Southrop, The Swan",51.72986,-1.71188,"Southrop, The Swan"],["Southrop, Quarry View",51.72646,-1.71403,"Southrop, Quarry View"],["Lechlade, by Hambidge Lane Turn",51.70973,-1.70996,"Lechlade, by Hambidge Lane"],["Lechlade, after Roman Way",51.69969,-1.69104,"Lechlade, after Roman Way"],["Lechlade, Jubilee Hall",51.69679,-1.69129,"Lechlade, Jubilee Hall"],["Lechlade, after Sherborne Street",51.69528,-1.69151,"Lechlade, after Sherborne"],["Lechlade, on Market Place",51.69409,-1.6914,"Lechlade, on Market Place"]],"lines":[[[51.69441,-1.69113],[51.69456,-1.69115],[51.69558,-1.6917],[51.69592,-1.6917],[51.69628,-1.6916],[51.69673,-1.69143],[51.69761,-1.69095],[51.69915,-1.68973],[51.69957,-1.69099],[51.69987,-1.69167],[51.70097,-1.69373],[51.70177,-1.69557],[51.70234,-1.69661],[51.70254,-1.69686],[51.70273,-1.69698],[51.70397,-1.69737],[51.70425,-1.69769],[51.70503,-1.69933],[51.7059,-1.70139],[51.7068,-1.70405],[51.7075,-1.70532],[51.70787,-1.70645],[51.70863,-1.70759],[51.70905,-1.70847],[51.70959,-1.7102],[51.71282,-1.7064],[51.71317,-1.70602],[51.71346,-1.70589],[51.71506,-1.70686],[51.71531,-1.70615],[51.71543,-1.70617],[51.71847,-1.70922],[51.71857,-1.70921],[51.71865,-1.70911],[51.71926,-1.70749],[51.71941,-1.70732],[51.72036,-1.70834],[51.72203,-1.70973],[51.72286,-1.71074],[51.72355,-1.71185],[51.72399,-1.71237],[51.72639,-1.71405],[51.72635,-1.71565],[51.72639,-1.71405],[51.72718,-1.71434],[51.72783,-1.71473],[51.72812,-1.71483],[51.72824,-1.7148],[51.72836,-1.71473],[51.72855,-1.71446],[51.72854,-1.71398],[51.72885,-1.71294],[51.72897,-1.71273],[51.72928,-1.71238],[51.72969,-1.71223],[51.72983,-1.71208],[51.72997,-1.71146],[51.72999,-1.71088],[51.72975,-1.7095],[51.72971,-1.7084],[51.73017,-1.70617],[51.73003,-1.70582],[51.73001,-1.70555],[51.73023,-1.70509],[51.73041,-1.70493],[51.73129,-1.70467],[51.73276,-1.70464],[51.73295,-1.70455],[51.73332,-1.7042],[51.73468,-1.70399],[51.73489,-1.70425],[51.73528,-1.70535],[51.73546,-1.70567],[51.73578,-1.70596],[51.73591,-1.70626],[51.73593,-1.7072],[51.73602,-1.70753],[51.73614,-1.70768],[51.73629,-1.70782],[51.73677,-1.70795],[51.73779,-1.70868],[51.73862,-1.70915],[51.73929,-1.70994],[51.73997,-1.71043],[51.74052,-1.71052],[51.74107,-1.71012],[51.74251,-1.70827],[51.74389,-1.70833],[51.74466,-1.70812],[51.74557,-1.70806],[51.74568,-1.70812],[51.74566,-1.70858],[51.74585,-1.70922],[51.74586,-1.70958],[51.74531,-1.71069],[51.74515,-1.7109],[51.74466,-1.711],[51.74464,-1.71177],[51.74485,-1.71231],[51.74516,-1.71383],[51.74541,-1.71452],[51.74547,-1.7145],[51.7457,-1.71501],[51.74616,-1.71554],[51.74728,-1.71782],[51.74885,-1.72366],[51.74985,-1.72311],[51.75397,-1.72131],[51.75498,-1.72135],[51.75619,-1.72152],[51.7576,-1.72195],[51.75845,-1.72395],[51.75911,-1.72618],[51.75906,-1.72776],[51.75942,-1.73099],[51.7595,-1.73228],[51.7593,-1.73399],[51.75776,-1.74266],[51.75732,-1.74418],[51.7568,-1.74656],[51.75457,-1.75776],[51.754,-1.76141],[51.75368,-1.7621],[51.75325,-1.76281],[51.7481,-1.77105],[51.74714,-1.77225],[51.7463,-1.77304],[51.74572,-1.77324],[51.74508,-1.77334],[51.7451,-1.77482],[51.74523,-1.77585],[51.74596,-1.77759],[51.74613,-1.77864],[51.74602,-1.78012],[51.74572,-1.78143],[51.74518,-1.78245],[51.74514,-1.78337],[51.74523,-1.78425],[51.74572,-1.78602],[51.74579,-1.78656],[51.74576,-1.78716],[51.74557,-1.78819],[51.74548,-1.79062],[51.74519,-1.79039],[51.74314,-1.78987],[51.74299,-1.78985],[51.74287,-1.78992],[51.74257,-1.79038],[51.74179,-1.79286],[51.74165,-1.79309],[51.74139,-1.79321],[51.74119,-1.7932],[51.74108,-1.79313],[51.74082,-1.79244],[51.74055,-1.79207],[51.74037,-1.79191],[51.73972,-1.79186],[51.73891,-1.79233],[51.73706,-1.79286],[51.73671,-1.79305],[51.73622,-1.79349],[51.73441,-1.79425],[51.7337,-1.79431],[51.73288,-1.79453],[51.73047,-1.79475],[51.72969,-1.79492],[51.72857,-1.79495],[51.72745,-1.79479],[51.72622,-1.79447],[51.72514,-1.79404],[51.72408,-1.79427],[51.72162,-1.79439],[51.72058,-1.79466],[51.71916,-1.79485],[51.7183,-1.79486],[51.71783,-1.79472],[51.71324,-1.79209],[51.71029,-1.79057],[51.7085,-1.78926],[51.70672,-1.78733],[51.70699,-1.78658],[51.7073,-1.78541],[51.70792,-1.78363],[51.70809,-1.78292],[51.70804,-1.78271],[51.70773,-1.78221],[51.70738,-1.78099],[51.70695,-1.77707],[51.70701,-1.77649],[51.70716,-1.77609],[51.70784,-1.77508],[51.70823,-1.77505],[51.70834,-1.77598],[51.70848,-1.77625],[51.70974,-1.77668],[51.70942,-1.78141],[51.70822,-1.78118],[51.70771,-1.7812],[51.70748,-1.78131],[51.70773,-1.78221],[51.70804,-1.78271],[51.70809,-1.78292],[51.70792,-1.78363],[51.7073,-1.78541],[51.70699,-1.78658],[51.70672,-1.78733],[51.70857,-1.78932],[51.71029,-1.79057],[51.7114,-1.79112],[51.71088,-1.79326],[51.7114,-1.79112],[51.71007,-1.79042],[51.70857,-1.78932],[51.70806,-1.78882],[51.70603,-1.78657],[51.70542,-1.78565],[51.70456,-1.78412],[51.70391,-1.78339],[51.70301,-1.78184],[51.70271,-1.78063],[51.70257,-1.78031],[51.70163,-1.77911],[51.70067,-1.7782],[51.70051,-1.77795],[51.69893,-1.7748],[51.69815,-1.77357],[51.69657,-1.77008],[51.69578,-1.7685],[51.69541,-1.76802],[51.69343,-1.76649],[51.6931,-1.76606],[51.69282,-1.76547],[51.69263,-1.76484],[51.69256,-1.76344],[51.69245,-1.76304],[51.69102,-1.76121],[51.68944,-1.75903],[51.68886,-1.75783],[51.68832,-1.75541],[51.688,-1.75485],[51.68628,-1.75782],[51.68404,-1.76212],[51.68026,-1.76716],[51.67936,-1.76872],[51.67873,-1.76927],[51.67601,-1.77129],[51.67392,-1.77347],[51.67233,-1.7746],[51.67196,-1.77402],[51.67173,-1.77382],[51.67141,-1.77371],[51.67103,-1.77371],[51.67122,-1.77472],[51.67163,-1.77573],[51.67207,-1.77725],[51.67224,-1.7779],[51.67234,-1.77884],[51.67271,-1.78003],[51.67262,-1.78019],[51.67247,-1.78109],[51.67242,-1.78201],[51.67251,-1.78264],[51.67291,-1.78374],[51.67292,-1.78407],[51.6728,-1.78454],[51.67235,-1.78522],[51.67068,-1.78874],[51.66985,-1.79149],[51.66926,-1.79384],[51.66844,-1.79921],[51.66839,-1.80059],[51.66853,-1.8047],[51.66839,-1.80548],[51.66792,-1.80994],[51.66745,-1.81342],[51.6674,-1.81477],[51.66756,-1.81481],[51.66797,-1.81531],[51.66857,-1.81583],[51.66923,-1.81617],[51.66983,-1.81638],[51.67152,-1.81681],[51.67217,-1.81684],[51.673,-1.81673],[51.67379,-1.81645],[51.67484,-1.81629],[51.67504,-1.8162],[51.67542,-1.81568],[51.67619,-1.81425],[51.6764,-1.81414],[51.67658,-1.81418],[51.67733,-1.81514],[51.67809,-1.81586],[51.67936,-1.81654],[51.68105,-1.81785],[51.68173,-1.81828],[51.68402,-1.81963],[51.68536,-1.8203],[51.68622,-1.82081],[51.68888,-1.82309],[51.68943,-1.82364],[51.68988,-1.82435],[51.69097,-1.82691],[51.6917,-1.82843],[51.69311,-1.83055],[51.69411,-1.83185],[51.69328,-1.83258],[51.69168,-1.83358],[51.68987,-1.83535],[51.68849,-1.83692],[51.68793,-1.83783],[51.68649,-1.8397],[51.68497,-1.84151],[51.68371,-1.84327],[51.68277,-1.84433],[51.68191,-1.8451],[51.68097,-1.84579],[51.68042,-1.84608],[51.67934,-1.84651],[51.67882,-1.84693],[51.67857,-1.84727],[51.67733,-1.84946],[51.67726,-1.8506],[51.67694,-1.85147],[51.67668,-1.85179],[51.6773,-1.85256],[51.67771,-1.85285],[51.68027,-1.85379],[51.68243,-1.8545],[51.68277,-1.85465],[51.68365,-1.85537],[51.68435,-1.85567],[51.68719,-1.85658],[51.6878,-1.8567],[51.69038,-1.85646],[51.6907,-1.85648],[51.69111,-1.85663],[51.69204,-1.85711],[51.69273,-1.857],[51.69429,-1.85698],[51.695,-1.8571],[51.69688,-1.85763],[51.69706,-1.85786],[51.69741,-1.85884],[51.69759,-1.85898],[51.69783,-1.85888],[51.69855,-1.85817],[51.69896,-1.85789],[51.69953,-1.85784],[51.70105,-1.8571],[51.70126,-1.85713],[51.70221,-1.85758],[51.70332,-1.85735],[51.70448,-1.85763],[51.70522,-1.8577],[51.70604,-1.85733],[51.70696,-1.85658],[51.70718,-1.85682],[51.70733,-1.85722],[51.70775,-1.85784],[51.70793,-1.85842],[51.7081,-1.85951],[51.7081,-1.86134],[51.70832,-1.86346],[51.70963,-1.86772],[51.7103,-1.86963],[51.71073,-1.87124],[51.71113,-1.8731],[51.71109,-1.87405],[51.71039,-1.87739],[51.7102,-1.8791],[51.71023,-1.88101],[51.71055,-1.88274],[51.71089,-1.88667],[51.71113,-1.88756],[51.71268,-1.89047],[51.71309,-1.8915],[51.71342,-1.89261],[51.71384,-1.89512],[51.71392,-1.89691],[51.71371,-1.89907],[51.71369,-1.9],[51.71385,-1.90205],[51.71409,-1.90377],[51.71426,-1.90577],[51.71426,-1.90635],[51.71409,-1.90813],[51.71419,-1.90953],[51.71448,-1.91057],[51.7157,-1.91316],[51.71616,-1.91566],[51.71684,-1.91783],[51.71727,-1.92017],[51.71755,-1.92288],[51.71851,-1.92745],[51.71868,-1.92877],[51.71865,-1.93081],[51.71898,-1.93409],[51.71909,-1.94227],[51.7192,-1.94385],[51.71955,-1.94619],[51.71951,-1.94761],[51.71931,-1.94805],[51.71932,-1.9484],[51.71916,-1.94934],[51.71903,-1.95126],[51.71857,-1.95337],[51.7182,-1.95627],[51.7182,-1.95721],[51.71828,-1.95803],[51.7179,-1.95887],[51.71767,-1.95905],[51.71741,-1.95907],[51.71727,-1.95919],[51.71716,-1.9598],[51.71684,-1.96061],[51.71626,-1.96181],[51.71607,-1.96237],[51.71589,-1.96253],[51.71538,-1.96355],[51.71478,-1.96501],[51.71538,-1.96572]],[[51.71538,-1.96572],[51.71571,-1.96605],[51.71613,-1.96573],[51.71638,-1.96589],[51.71675,-1.96561],[51.71624,-1.96398],[51.71611,-1.96321],[51.71607,-1.96237],[51.71626,-1.96181],[51.71702,-1.96018],[51.71718,-1.96001],[51.71753,-1.95996],[51.71764,-1.95986],[51.7179,-1.95887],[51.71837,-1.958],[51.71822,-1.95754],[51.7182,-1.95627],[51.71857,-1.95337],[51.71903,-1.95126],[51.71916,-1.94934],[51.71926,-1.94867],[51.71958,-1.94813],[51.71951,-1.94761],[51.71955,-1.94619],[51.71919,-1.94375],[51.71909,-1.94227],[51.71898,-1.93409],[51.71865,-1.93081],[51.71868,-1.92877],[51.71851,-1.92745],[51.71755,-1.92288],[51.71727,-1.92017],[51.71684,-1.91783],[51.71616,-1.91566],[51.7157,-1.91316],[51.71448,-1.91057],[51.71419,-1.90953],[51.71409,-1.90813],[51.71426,-1.90635],[51.71426,-1.90577],[51.71409,-1.90377],[51.71385,-1.90205],[51.71369,-1.9],[51.71371,-1.89907],[51.71392,-1.89691],[51.71384,-1.89512],[51.71336,-1.89213],[51.71319,-1.89141],[51.71113,-1.88756],[51.71089,-1.88667],[51.71055,-1.88274],[51.71023,-1.88101],[51.7102,-1.8791],[51.71039,-1.87739],[51.71109,-1.87405],[51.71113,-1.8731],[51.71073,-1.87124],[51.7103,-1.86963],[51.70963,-1.86772],[51.70832,-1.86346],[51.7081,-1.86134],[51.7081,-1.85951],[51.70793,-1.85842],[51.70775,-1.85784],[51.70733,-1.85722],[51.70718,-1.85682],[51.70696,-1.85658],[51.70604,-1.85733],[51.70522,-1.8577],[51.70448,-1.85763],[51.70332,-1.85735],[51.70221,-1.85758],[51.70126,-1.85713],[51.70105,-1.8571],[51.69953,-1.85784],[51.69896,-1.85789],[51.69855,-1.85817],[51.69783,-1.85888],[51.69759,-1.85898],[51.69741,-1.85884],[51.69731,-1.85864],[51.697,-1.85775],[51.69677,-1.85759],[51.695,-1.8571],[51.69429,-1.85698],[51.69273,-1.857],[51.69204,-1.85711],[51.6907,-1.85648],[51.68983,-1.85648],[51.68797,-1.8567],[51.68719,-1.85658],[51.68385,-1.85548],[51.68353,-1.85529],[51.68277,-1.85465],[51.68243,-1.8545],[51.68027,-1.85379],[51.67771,-1.85285],[51.6773,-1.85256],[51.67692,-1.85209],[51.67684,-1.85165],[51.67726,-1.8506],[51.67733,-1.84946],[51.67857,-1.84727],[51.67882,-1.84693],[51.67934,-1.84651],[51.68042,-1.84608],[51.68097,-1.84579],[51.68191,-1.8451],[51.68277,-1.84433],[51.68371,-1.84327],[51.68497,-1.84151],[51.68649,-1.8397],[51.68793,-1.83783],[51.68849,-1.83692],[51.68987,-1.83535],[51.69168,-1.83358],[51.69328,-1.83258],[51.69411,-1.83185],[51.69311,-1.83055],[51.6917,-1.82843],[51.69097,-1.82691],[51.68988,-1.82435],[51.68943,-1.82364],[51.68888,-1.82309],[51.68622,-1.82081],[51.68536,-1.8203],[51.68402,-1.81963],[51.68173,-1.81828],[51.68105,-1.81785],[51.67936,-1.81654],[51.67809,-1.81586],[51.67733,-1.81514],[51.67658,-1.81418],[51.67633,-1.81416],[51.67609,-1.81438],[51.67542,-1.81568],[51.67504,-1.8162],[51.67484,-1.81629],[51.67379,-1.81645],[51.673,-1.81673],[51.67217,-1.81684],[51.67152,-1.81681],[51.66983,-1.81638],[51.66923,-1.81617],[51.66857,-1.81583],[51.66797,-1.81531],[51.66756,-1.81481],[51.6674,-1.81477],[51.66745,-1.81342],[51.66792,-1.80994],[51.66839,-1.80548],[51.66853,-1.8047],[51.66839,-1.80059],[51.66844,-1.79921],[51.66926,-1.79384],[51.66985,-1.79149],[51.67068,-1.78874],[51.67235,-1.78522],[51.6728,-1.78454],[51.67292,-1.78407],[51.67291,-1.78374],[51.67251,-1.78264],[51.67242,-1.78201],[51.67247,-1.78109],[51.67262,-1.78019],[51.67271,-1.78003],[51.67234,-1.77884],[51.67224,-1.7779],[51.67207,-1.77725],[51.67163,-1.77573],[51.67122,-1.77472],[51.67103,-1.77371],[51.67141,-1.77371],[51.67173,-1.77382],[51.67196,-1.77402],[51.67233,-1.7746],[51.67392,-1.77347],[51.67601,-1.77129],[51.67873,-1.76927],[51.67936,-1.76872],[51.68026,-1.76716],[51.68404,-1.76212],[51.68628,-1.75782],[51.688,-1.75485],[51.68832,-1.75541],[51.68886,-1.75783],[51.68944,-1.75903],[51.69102,-1.76121],[51.69245,-1.76304],[51.69256,-1.76344],[51.69263,-1.76484],[51.69282,-1.76547],[51.6931,-1.76606],[51.69343,-1.76649],[51.69541,-1.76802],[51.69578,-1.7685],[51.69673,-1.77042],[51.69815,-1.77357],[51.69893,-1.7748],[51.70051,-1.77795],[51.70067,-1.7782],[51.70163,-1.77911],[51.70257,-1.78031],[51.70271,-1.78063],[51.70301,-1.78184],[51.70331,-1.78242],[51.70391,-1.78339],[51.70456,-1.78412],[51.7058,-1.78625],[51.7067,-1.78737],[51.70792,-1.78363],[51.70809,-1.78292],[51.70804,-1.78271],[51.70773,-1.78221],[51.70748,-1.78131],[51.70771,-1.7812],[51.70849,-1.78122],[51.7085,-1.78039],[51.70831,-1.77968],[51.70842,-1.77649],[51.70852,-1.77628],[51.70974,-1.77668],[51.70942,-1.78141],[51.71004,-1.78352],[51.71029,-1.78464],[51.71035,-1.78507],[51.71033,-1.78581],[51.7101,-1.78703],[51.71001,-1.78716],[51.70968,-1.78725],[51.70958,-1.78735],[51.70951,-1.78764],[51.70953,-1.78813],[51.70907,-1.78967],[51.70997,-1.79035],[51.71029,-1.79057],[51.71324,-1.79209],[51.71783,-1.79472],[51.7183,-1.79486],[51.71891,-1.79487],[51.72012,-1.79473],[51.72109,-1.79456],[51.72162,-1.79439],[51.72408,-1.79427],[51.72514,-1.79404],[51.72622,-1.79447],[51.72745,-1.79479],[51.72857,-1.79495],[51.72969,-1.79492],[51.73047,-1.79475],[51.73288,-1.79453],[51.7337,-1.79431],[51.73441,-1.79425],[51.73622,-1.79349],[51.73656,-1.79317],[51.73706,-1.79286],[51.73891,-1.79233],[51.73972,-1.79186],[51.74037,-1.79191],[51.74055,-1.79207],[51.74082,-1.79244],[51.74108,-1.79313],[51.74119,-1.7932],[51.74139,-1.79321],[51.74165,-1.79309],[51.74179,-1.79286],[51.74257,-1.79038],[51.74287,-1.78992],[51.74299,-1.78985],[51.74314,-1.78987],[51.74519,-1.79039],[51.74551,-1.79026],[51.74557,-1.78819],[51.74576,-1.78716],[51.74579,-1.78656],[51.74572,-1.78602],[51.74523,-1.78425],[51.74514,-1.78337],[51.74518,-1.78245],[51.74572,-1.78143],[51.74602,-1.78012],[51.74613,-1.77864],[51.74596,-1.77759],[51.74523,-1.77585],[51.7451,-1.77482],[51.74508,-1.77334],[51.74572,-1.77324],[51.7463,-1.77304],[51.74714,-1.77225],[51.7481,-1.77105],[51.75325,-1.76281],[51.75368,-1.7621],[51.754,-1.76141],[51.75457,-1.75776],[51.7568,-1.74656],[51.75732,-1.74418],[51.75776,-1.74266],[51.7593,-1.73399],[51.7595,-1.73228],[51.75942,-1.73099],[51.75906,-1.72776],[51.75911,-1.72618],[51.75845,-1.72395],[51.7576,-1.72195],[51.75619,-1.72152],[51.75498,-1.72135],[51.75397,-1.72131],[51.74985,-1.72311],[51.74885,-1.72366],[51.74728,-1.71782],[51.74616,-1.71554],[51.7457,-1.71501],[51.74547,-1.7145],[51.74541,-1.71452],[51.74516,-1.71383],[51.74485,-1.71231],[51.74464,-1.71177],[51.74466,-1.711],[51.74515,-1.7109],[51.74531,-1.71069],[51.74586,-1.70958],[51.74585,-1.70922],[51.74566,-1.70858],[51.74568,-1.70812],[51.74557,-1.70806],[51.74466,-1.70812],[51.74389,-1.70833],[51.74251,-1.70827],[51.74107,-1.71012],[51.74052,-1.71052],[51.74018,-1.7105],[51.73976,-1.71031],[51.73945,-1.71008],[51.73862,-1.70915],[51.73779,-1.70868],[51.73677,-1.70795],[51.73629,-1.70782],[51.73614,-1.70768],[51.73602,-1.70753],[51.73593,-1.7072],[51.73591,-1.70626],[51.73578,-1.70596],[51.73546,-1.70567],[51.73528,-1.70535],[51.73489,-1.70425],[51.73468,-1.70399],[51.73332,-1.7042],[51.73295,-1.70455],[51.73276,-1.70464],[51.73129,-1.70467],[51.73041,-1.70493],[51.73023,-1.70509],[51.73001,-1.70555],[51.73003,-1.70582],[51.73017,-1.70617],[51.72971,-1.7084],[51.72975,-1.7095],[51.72999,-1.71088],[51.72993,-1.71173],[51.72979,-1.71215],[51.72928,-1.71238],[51.72897,-1.71273],[51.72885,-1.71294],[51.72854,-1.71398],[51.72855,-1.71446],[51.72836,-1.71473],[51.72812,-1.71483],[51.72766,-1.71465],[51.72718,-1.71434],[51.72639,-1.71405],[51.72399,-1.71237],[51.72355,-1.71185],[51.72286,-1.71074],[51.72203,-1.70973],[51.72036,-1.70834],[51.71948,-1.70735],[51.71933,-1.70737],[51.71926,-1.70749],[51.71865,-1.70911],[51.71857,-1.70921],[51.71847,-1.70922],[51.71543,-1.70617],[51.71531,-1.70615],[51.71506,-1.70686],[51.71346,-1.70589],[51.71317,-1.70602],[51.70959,-1.7102],[51.70905,-1.70847],[51.70863,-1.70759],[51.70787,-1.70645],[51.7075,-1.70532],[51.7068,-1.70405],[51.7059,-1.70139],[51.70503,-1.69933],[51.70425,-1.69769],[51.70397,-1.69737],[51.70273,-1.69698],[51.70254,-1.69686],[51.70234,-1.69661],[51.70177,-1.69557],[51.70097,-1.69373],[51.69987,-1.69167],[51.69957,-1.69099],[51.69915,-1.68973],[51.69767,-1.69091],[51.69646,-1.69154],[51.69592,-1.6917],[51.69558,-1.6917],[51.69449,-1.69113],[51.69428,-1.69118],[51.69412,-1.69142]]],"days":[{"key":"sat","label":"Saturday","dirs":[{"label":"To Cirencester","li":0,"trips":[{"big":"09:35","small":"At Kempsford, by Mount Pleasant 10:28","title":"The 09:35 from Lechlade, St John's Street","s":[["09:35",0,5],["09:35",1,0],["09:35",2,0],["09:36",3,0],["09:40",4,0],["09:42",5,0],["09:45",6,0],["09:47",7,1],["09:47",8,0],["09:49",9,0],["09:52",10,0],["09:54",11,1],["09:54",12,0],["10:00",13,1],["10:02",14,0],["10:03",15,0],["10:04",16,0],["10:05",17,0],["10:06",18,0],["10:07",19,5],["10:11",20,0],["10:12",21,0],["10:14",22,0],["10:15",23,1],["10:16",24,0],["10:16",25,0],["10:17",26,0],["10:20",27,0],["10:24",28,1],["10:25",29,0],["10:26",30,0],["10:27",31,0],["10:28",32,5],["10:28",33,6],["10:32",34,0],["10:33",35,0],["10:34",36,1],["10:40",37,5],["10:43",38,0],["10:45",39,1],["10:46",40,0],["10:47",41,0],["10:48",42,0],["10:49",43,1],["10:50",44,0],["10:51",45,0],["10:52",46,0],["10:53",47,0],["10:53",48,0],["10:53",49,0],["10:54",50,0],["10:55",51,0],["10:55",52,5]]}],"note":"","tt":{"rows":["Lechlade, St John's Street","Southrop, The Swan","Eastleach Turville, The","Hatherop, Willamstrip Farm","Quenington, on The Green","Fairford, Market Place","Whelford, by Pope's Court","Kempsford, by Primary School","Kempsford, by Mount Pleasant","Marston Meysey Greenleaze","Down Ampney, Broadleaze","Poulton, The Falcon","Ampney Crucis, before","Cirencester, The Forum"],"off":8,"cols":[["09:35","09:47","09:54","10:00","10:07","10:15","10:24","10:28","10:28","10:34","10:40","10:45","10:49","10:55"]]},"blind":"Cirencester","via":["via Lechlade and Southrop","via Eastleach Turville and Hatherop","via Fairford and Kempsford"]},{"label":"To Highworth","li":1,"trips":[{"big":"14:50","small":"From Kempsford, Primary School, at Lechlade, on Market Place 15:42","title":"The 14:50 from Kempsford, Primary School","s":[["14:20",52,5],["14:20",53,0],["14:21",54,0],["14:21",55,0],["14:22",56,0],["14:24",57,0],["14:26",58,0],["14:28",59,1],["14:28",60,0],["14:29",61,0],["14:31",62,1],["14:32",63,0],["14:35",64,5],["14:42",65,1],["14:43",66,0],["14:44",67,0],["14:44",68,0],["14:50",69,7],["14:50",70,0],["14:50",71,0],["14:51",72,0],["14:53",73,0],["14:55",74,1],["14:59",75,0],["15:01",76,0],["15:02",77,0],["15:03",21,0],["15:05",78,5],["15:05",79,0],["15:12",80,1],["15:12",81,0],["15:13",82,0],["15:14",83,0],["15:14",84,0],["15:17",85,1],["15:22",86,0],["15:24",87,5],["15:25",88,0],["15:29",89,0],["15:31",90,0],["15:32",91,1],["15:32",92,0],["15:35",5,0],["15:37",93,0],["15:40",94,0],["15:41",95,0],["15:41",96,0],["15:42",97,5]]}],"note":"","tt":{"rows":["Cirencester, The Forum","Ampney Crucis, Village Street","Poulton, by The Falcon","Down Ampney, after Broadleaze","Marston Meysey Greenleaze","Kempsford, Primary School","Whelford, Pope's Court","Fairford, after Market Place","Quenington, The Green","Hatherop, by Williamstrip Farm","Eastleach Turville, by The","Southrop, The Swan","Lechlade, on Market Place"],"off":-1,"cols":[["14:20","14:28","14:31","14:35","14:42","14:50","14:55","15:05","15:12","15:17","15:24","15:32","15:42"]]},"blind":"Highworth","via":["via Ampney Crucis and Poulton","via Kempsford and Fairford","via Southrop and Lechlade"]}],"none":"In the current timetable there are no 76 buses on Saturdays, so I would look at the other ways to get there on the Royal International Air Tattoo page."},{"key":"sun","label":"Sunday","dirs":[],"none":"In the current timetable there are no 76 buses on Sundays, so I would look at the other ways to get there on the Royal International Air Tattoo page."}],"start":0};
+var CFG={"sid": "60456", "num": "76", "operator": "Stagecoach West", "showName": "Royal International Air Tattoo", "showUrl": "https://www.ukairshowguide.co.uk/riat", "title": "Bus 76, Highworth to Cirencester", "blindDest": "Fairford", "blindVia": ["via Hatherop", "via Kempsford", "via Poulton"], "lead": "The 76 runs between Highworth and Cirencester. For the Royal International Air Tattoo, the closest stop is Kempsford, by Mount Pleasant, about 20 minutes from RAF Fairford. Pick a day and a time below and the map shows every stop.", "facts": [["Runs on", "Saturdays only"], ["How often", "A few buses a day"], ["Get off at", "Kempsford, by Mount Pleasant", "hl"], ["Then walk", "About 20 minutes"]], "legs": [[["A361"], "Lechlade to Hatherop", "Mostly along Hambidge Lane, Main Road and The Clock, about 8 miles."], [["A417"], "Hatherop to Fairford", "Mostly along Fairford Road, Coronation Street and Horcott Road, about 7 miles."], [[], "Fairford to Kempsford", "Mostly along Horcott Road, Whelford Road and High Street, about 4 miles."], [[], "Kempsford to Poulton", "Mostly along The Street, Broadleaze and Cricklade Street, about 7 miles."], [["A417"], "Poulton to Cirencester", "Mostly along London Road, about 5 miles."]], "tipHead": "Before you travel", "tip": "These local buses don’t run on Sundays and don’t reach the show entrances, so on show days I would use the Swindon Shuttle or a Park and Ride instead.", "tipBtn": "Back to getting to Fairford", "alt": null, "theme": {"op1": "#1D4F91", "op2": "#F58025", "op3": "#E31B23", "opink": "#FFFFFF", "ui": "#1D4F91", "onui": "#FFA45C", "acc": "#F58025", "accink": "#0F2340"}, "walkLine": "From here it’s about 20 minutes on foot to RAF Fairford.", "walkBack": "Allow about 20 minutes to walk back here from RAF Fairford, and a bit more when the crowds leave.", "target": [51.68514, -1.78647], "targetLabel": "RAF Fairford", "offTag": "Closest stop to the show", "note": "Stops and times are from Stagecoach West’s timetable on the DfT <a href=\"https://data.bus-data.dft.gov.uk/\" target=\"_blank\" rel=\"noopener\">Bus Open Data Service</a>, through <a href=\"https://bustimes.org/\" target=\"_blank\" rel=\"noopener\">bustimes.org</a>, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with Stagecoach West before you travel. Live bus positions and expected times also come from bustimes.org, when the bus company shares them. The line is drawn along the roads between the stops, so treat it as a guide. Map data © <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a> contributors."};
+var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St John's Street","1600GL2847"],["Lechlade, before Sherborne Street",51.69532,-1.69171,"Lechlade, before Sherborne","1600GLC021"],["Lechlade, after Jubilee Hall",51.69806,-1.69068,"Lechlade, after Jubilee Hall","1600GLC023"],["Lechlade, The Close",51.69937,-1.6905,"Lechlade, The Close","1600GLC033"],["Lechlade, Hambidge Lane Turn",51.70967,-1.71018,"Lechlade, Hambidge Lane Turn","1600GLC046"],["Southrop, Great Lemhill",51.71536,-1.70618,"Southrop, Great Lemhill","160000181"],["Southrop Quarry View (corner of)",51.72642,-1.71414,"Southrop Quarry View (corner","1600GLC638"],["Southrop, The Swan",51.72992,-1.71195,"Southrop, The Swan","1600GL4330"],["Southrop School",51.72982,-1.70965,"Southrop School","1600GLC048"],["Fyfield, by Baxters Barns",51.73438,-1.70406,"Fyfield, by Baxters Barns","1600GL2112"],["Eastleach Martin, by Churches",51.7456,-1.70843,"Eastleach Martin, by Churches","1600GLC050"],["Eastleach Turville, The Victoria Inn",51.74551,-1.71473,"Eastleach Turville, The","1600GL1774"],["Eastleach Turville, before Beerfulong Turn",51.74862,-1.7232,"Eastleach Turville, before","1600GLC408"],["Hatherop, Willamstrip Farm",51.75478,-1.75667,"Hatherop, Willamstrip Farm","160000498"],["Hatherop Estate",51.74504,-1.77405,"Hatherop Estate","1600GL2401"],["Hatherop, Castle School",51.74607,-1.77884,"Hatherop, Castle School","1600GLC415"],["Coln St Aldwyns, Post Office",51.74543,-1.79044,"Coln St Aldwyns, Post Office","1600GL1421"],["Coln St Aldwyns, by The New Inn",51.74357,-1.7899,"Coln St Aldwyns, by The New","1600GLC375"],["Quenington, Coneygar Road",51.73918,-1.79202,"Quenington, Coneygar Road","1600GLC053"],["Quenington, on The Green",51.73669,-1.79299,"Quenington, on The Green","160000496"],["Fairford, Mill Lane",51.70939,-1.7899,"Fairford, Mill Lane","160000139"],["Fairford, The Vortex Inn",51.70692,-1.78691,"Fairford, The Vortex Inn","1600GLC013"],["Fairford, after Leafield Road",51.70961,-1.77822,"Fairford, after Leafield Road","1600GLC016"],["Fairford, Market Place",51.70779,-1.78115,"Fairford, Market Place","1600GL1960"],["Fairford, The Garretts",51.71068,-1.7908,"Fairford, The Garretts","160000140"],["Fairford, Lakeside",51.70467,-1.78432,"Fairford, Lakeside","1600GLC479"],["Fairford, St Thomas Church",51.70246,-1.78015,"Fairford, St Thomas Church","1600GLC481"],["RAF Fairford",51.69637,-1.7696,"RAF Fairford","1600GL1955"],["Whelford, by Pope's Court",51.68735,-1.75586,"Whelford, by Pope's Court","1600GL5145"],["Kempsford, by Washpool Lane",51.68228,-1.76444,"Kempsford, by Washpool Lane","1600GLC409"],["Kempsford, by The Knoll",51.67399,-1.7733,"Kempsford, by The Knoll","1600SWA11041"],["Kempsford, by Cross Tree Crescent",51.67157,-1.77583,"Kempsford, by Cross Tree","1600GL2695"],["Kempsford, by Primary School",51.67222,-1.7786,"Kempsford, by Primary School","1600GL2699"],["Kempsford, by Mount Pleasant",51.6728,-1.78435,"Kempsford, by Mount Pleasant","160000454"],["Marston Meysey The Turn",51.66763,-1.81492,"Marston Meysey The Turn","4600SWA11038"],["Marston Meysey Stonewold House",51.67217,-1.81688,"Marston Meysey Stonewold House","4600WIA56521"],["Marston Meysey Greenleaze",51.67616,-1.81433,"Marston Meysey Greenleaze","4600WIA12851"],["Down Ampney, Broadleaze",51.67793,-1.85304,"Down Ampney, Broadleaze","1600GL1634"],["Poulton, Priory",51.69792,-1.85888,"Poulton, Priory","1600GLC036"],["Poulton, The Falcon",51.70672,-1.85684,"Poulton, The Falcon","1600GL3866"],["Ampney St Peter, Red Lion",51.71104,-1.87289,"Ampney St Peter, Red Lion","1600GLC486"],["Ampney St Peter, Village Street",51.71057,-1.88343,"Ampney St Peter, Village","1600GL116"],["Ampney Crucis, by St Mary's Church",51.71294,-1.89121,"Ampney Crucis, by St Mary's","1600GL114"],["Ampney Crucis, before Village Street",51.71414,-1.90431,"Ampney Crucis, before","1600GLC040"],["Ampney Park",51.71644,-1.91675,"Ampney Park","1600GLC042"],["Norcote House",51.71888,-1.93313,"Norcote House","1600GLC010"],["Cirencester, after Kingshill Lane",51.71914,-1.94387,"Cirencester, after Kingshill","1600GLC030"],["The Beeches Pheasant Way (corner of)",51.71898,-1.95104,"The Beeches Pheasant Way","1600GLC008"],["The Beeches Churchill Road (corner of)",51.71839,-1.9545,"The Beeches Churchill Road","1600GLC006"],["Cirencester, before Burford Road",51.71816,-1.95721,"Cirencester, before Burford","1600GLC004"],["Cirencester, by Beeches Car Park",51.71676,-1.96077,"Cirencester, by Beeches Car","1600GL1272"],["Cirencester, Bingham Close",51.71525,-1.96374,"Cirencester, Bingham Close","1600GLA06081"],["Cirencester, The Forum",51.71537,-1.96576,"Cirencester, The Forum","1600GLC002"],["Cirencester, Beeches Car Park",51.71675,-1.9609,"Cirencester, Beeches Car Park","1600GL1271"],["Cirencester Burford Road (corner of)",51.71826,-1.95729,"Cirencester Burford Road","1600GLC003"],["The Beeches, Churchill Road",51.7185,-1.95409,"The Beeches, Churchill Road","1600GLC005"],["Cirencester, before Kingshill Lane",51.71967,-1.9463,"Cirencester, before","1600GLC029"],["Norcote House (nr)",51.71896,-1.93305,"Norcote House (nr)","1600GLC009"],["Ampney Park (nr)",51.71656,-1.91664,"Ampney Park (nr)","1600GLC041"],["Ampney Crucis, Village Street",51.71428,-1.90571,"Ampney Crucis, Village Street","1600GLC039"],["Ampney Crucis, St Mary's Church",51.71317,-1.89123,"Ampney Crucis, St Mary's","1600GL113"],["Ampney St Peter, before Village Street",51.71067,-1.88342,"Ampney St Peter, before","1600GL115"],["Poulton, by The Falcon",51.7069,-1.85655,"Poulton, by The Falcon","1600GL3865"],["Poulton, by Priory",51.69786,-1.85882,"Poulton, by Priory","1600GLC035"],["Down Ampney, after Broadleaze",51.67796,-1.85293,"Down Ampney, after Broadleaze","1600GL1633"],["Marston Meysey Greenleaze",51.67606,-1.81432,"Marston Meysey Greenleaze","4600WIA12850"],["Marston Meysey Stonewold House",51.67217,-1.81676,"Marston Meysey Stonewold House","4600WIA56522"],["Marston Meysey The Turn",51.66763,-1.81479,"Marston Meysey The Turn","4600SWA11039"],["Marston Meysey Turn",51.66742,-1.81444,"Marston Meysey Turn","4600WIA64201"],["Kempsford, Primary School",51.67233,-1.77837,"Kempsford, Primary School","1600GL2700"],["Kempsford, Cross Tree Crescent",51.67161,-1.77564,"Kempsford, Cross Tree Crescent","1600GL2696"],["Kempsford, by Chapel Close",51.67133,-1.77376,"Kempsford, by Chapel Close","1600GLC484"],["Kempsford, The Knoll",51.674,-1.77342,"Kempsford, The Knoll","1600SWA11040"],["Kempsford, Washpool Lane",51.68222,-1.76465,"Kempsford, Washpool Lane","1600GLC410"],["Whelford, Pope's Court",51.68766,-1.7557,"Whelford, Pope's Court","1600GL5146"],["RAF Fairford (nr)",51.69668,-1.77047,"RAF Fairford (nr)","1600GL1956"],["Fairford, St Thomas Church",51.70279,-1.78119,"Fairford, St Thomas Church","1600GLC482"],["Fairford, by Lakeside",51.70459,-1.78436,"Fairford, by Lakeside","1600GLC480"],["Fairford, after Market Place",51.70826,-1.78128,"Fairford, after Market Place","1600GL1959"],["Fairford, before Leafield Road",51.70969,-1.77822,"Fairford, before Leafield Road","1600GLC015"],["Quenington, The Green",51.73659,-1.79328,"Quenington, The Green","1600GL3951"],["Quenington, by Coneygar Road",51.73908,-1.79238,"Quenington, by Coneygar Road","1600GLC054"],["Coln St Aldwyns, The New Inn",51.7436,-1.79012,"Coln St Aldwyns, The New Inn","1600GLC376"],["Hatherop, Castle School",51.74617,-1.77878,"Hatherop, Castle School","1600GLC416"],["Hatherop Estate",51.74515,-1.774,"Hatherop Estate","1600GL2402"],["Hatherop, by Williamstrip Farm",51.75481,-1.75667,"Hatherop, by Williamstrip Farm","160000497"],["Eastleach Turville, after Beerfulong Turn",51.74873,-1.723,"Eastleach Turville, after","1600GLC407"],["Eastleach Turville, by The Victoria Inn",51.74556,-1.71457,"Eastleach Turville, by The","1600GL1773"],["Eastleach Martin, Churches",51.74583,-1.70907,"Eastleach Martin, Churches","1600GLC049"],["Fyfield, Baxters Barns",51.73398,-1.70403,"Fyfield, Baxters Barns","1600GL2111"],["Southrop School",51.72972,-1.70973,"Southrop School","1600GLC047"],["Southrop, The Swan",51.72986,-1.71188,"Southrop, The Swan","1600GL4329"],["Southrop, Quarry View",51.72646,-1.71403,"Southrop, Quarry View","1600GLC637"],["Lechlade, by Hambidge Lane Turn",51.70973,-1.70996,"Lechlade, by Hambidge Lane","1600GLC045"],["Lechlade, after Roman Way",51.69969,-1.69104,"Lechlade, after Roman Way","160000499"],["Lechlade, Jubilee Hall",51.69679,-1.69129,"Lechlade, Jubilee Hall","1600GLC024"],["Lechlade, after Sherborne Street",51.69528,-1.69151,"Lechlade, after Sherborne","1600GLC022"],["Lechlade, on Market Place",51.69409,-1.6914,"Lechlade, on Market Place","1600GL2848"]],"lines":[[[51.69441,-1.69113],[51.69456,-1.69115],[51.69558,-1.6917],[51.69592,-1.6917],[51.69628,-1.6916],[51.69673,-1.69143],[51.69761,-1.69095],[51.69915,-1.68973],[51.69957,-1.69099],[51.69987,-1.69167],[51.70097,-1.69373],[51.70177,-1.69557],[51.70234,-1.69661],[51.70254,-1.69686],[51.70273,-1.69698],[51.70397,-1.69737],[51.70425,-1.69769],[51.70503,-1.69933],[51.7059,-1.70139],[51.7068,-1.70405],[51.7075,-1.70532],[51.70787,-1.70645],[51.70863,-1.70759],[51.70905,-1.70847],[51.70959,-1.7102],[51.71282,-1.7064],[51.71317,-1.70602],[51.71346,-1.70589],[51.71506,-1.70686],[51.71531,-1.70615],[51.71543,-1.70617],[51.71847,-1.70922],[51.71857,-1.70921],[51.71865,-1.70911],[51.71926,-1.70749],[51.71941,-1.70732],[51.72036,-1.70834],[51.72203,-1.70973],[51.72286,-1.71074],[51.72355,-1.71185],[51.72399,-1.71237],[51.72639,-1.71405],[51.72635,-1.71565],[51.72639,-1.71405],[51.72718,-1.71434],[51.72783,-1.71473],[51.72812,-1.71483],[51.72824,-1.7148],[51.72836,-1.71473],[51.72855,-1.71446],[51.72854,-1.71398],[51.72885,-1.71294],[51.72897,-1.71273],[51.72928,-1.71238],[51.72969,-1.71223],[51.72983,-1.71208],[51.72997,-1.71146],[51.72999,-1.71088],[51.72975,-1.7095],[51.72971,-1.7084],[51.73017,-1.70617],[51.73003,-1.70582],[51.73001,-1.70555],[51.73023,-1.70509],[51.73041,-1.70493],[51.73129,-1.70467],[51.73276,-1.70464],[51.73295,-1.70455],[51.73332,-1.7042],[51.73468,-1.70399],[51.73489,-1.70425],[51.73528,-1.70535],[51.73546,-1.70567],[51.73578,-1.70596],[51.73591,-1.70626],[51.73593,-1.7072],[51.73602,-1.70753],[51.73614,-1.70768],[51.73629,-1.70782],[51.73677,-1.70795],[51.73779,-1.70868],[51.73862,-1.70915],[51.73929,-1.70994],[51.73997,-1.71043],[51.74052,-1.71052],[51.74107,-1.71012],[51.74251,-1.70827],[51.74389,-1.70833],[51.74466,-1.70812],[51.74557,-1.70806],[51.74568,-1.70812],[51.74566,-1.70858],[51.74585,-1.70922],[51.74586,-1.70958],[51.74531,-1.71069],[51.74515,-1.7109],[51.74466,-1.711],[51.74464,-1.71177],[51.74485,-1.71231],[51.74516,-1.71383],[51.74541,-1.71452],[51.74547,-1.7145],[51.7457,-1.71501],[51.74616,-1.71554],[51.74728,-1.71782],[51.74885,-1.72366],[51.74985,-1.72311],[51.75397,-1.72131],[51.75498,-1.72135],[51.75619,-1.72152],[51.7576,-1.72195],[51.75845,-1.72395],[51.75911,-1.72618],[51.75906,-1.72776],[51.75942,-1.73099],[51.7595,-1.73228],[51.7593,-1.73399],[51.75776,-1.74266],[51.75732,-1.74418],[51.7568,-1.74656],[51.75457,-1.75776],[51.754,-1.76141],[51.75368,-1.7621],[51.75325,-1.76281],[51.7481,-1.77105],[51.74714,-1.77225],[51.7463,-1.77304],[51.74572,-1.77324],[51.74508,-1.77334],[51.7451,-1.77482],[51.74523,-1.77585],[51.74596,-1.77759],[51.74613,-1.77864],[51.74602,-1.78012],[51.74572,-1.78143],[51.74518,-1.78245],[51.74514,-1.78337],[51.74523,-1.78425],[51.74572,-1.78602],[51.74579,-1.78656],[51.74576,-1.78716],[51.74557,-1.78819],[51.74548,-1.79062],[51.74519,-1.79039],[51.74314,-1.78987],[51.74299,-1.78985],[51.74287,-1.78992],[51.74257,-1.79038],[51.74179,-1.79286],[51.74165,-1.79309],[51.74139,-1.79321],[51.74119,-1.7932],[51.74108,-1.79313],[51.74082,-1.79244],[51.74055,-1.79207],[51.74037,-1.79191],[51.73972,-1.79186],[51.73891,-1.79233],[51.73706,-1.79286],[51.73671,-1.79305],[51.73622,-1.79349],[51.73441,-1.79425],[51.7337,-1.79431],[51.73288,-1.79453],[51.73047,-1.79475],[51.72969,-1.79492],[51.72857,-1.79495],[51.72745,-1.79479],[51.72622,-1.79447],[51.72514,-1.79404],[51.72408,-1.79427],[51.72162,-1.79439],[51.72058,-1.79466],[51.71916,-1.79485],[51.7183,-1.79486],[51.71783,-1.79472],[51.71324,-1.79209],[51.71029,-1.79057],[51.7085,-1.78926],[51.70672,-1.78733],[51.70699,-1.78658],[51.7073,-1.78541],[51.70792,-1.78363],[51.70809,-1.78292],[51.70804,-1.78271],[51.70773,-1.78221],[51.70738,-1.78099],[51.70695,-1.77707],[51.70701,-1.77649],[51.70716,-1.77609],[51.70784,-1.77508],[51.70823,-1.77505],[51.70834,-1.77598],[51.70848,-1.77625],[51.70974,-1.77668],[51.70942,-1.78141],[51.70822,-1.78118],[51.70771,-1.7812],[51.70748,-1.78131],[51.70773,-1.78221],[51.70804,-1.78271],[51.70809,-1.78292],[51.70792,-1.78363],[51.7073,-1.78541],[51.70699,-1.78658],[51.70672,-1.78733],[51.70857,-1.78932],[51.71029,-1.79057],[51.7114,-1.79112],[51.71088,-1.79326],[51.7114,-1.79112],[51.71007,-1.79042],[51.70857,-1.78932],[51.70806,-1.78882],[51.70603,-1.78657],[51.70542,-1.78565],[51.70456,-1.78412],[51.70391,-1.78339],[51.70301,-1.78184],[51.70271,-1.78063],[51.70257,-1.78031],[51.70163,-1.77911],[51.70067,-1.7782],[51.70051,-1.77795],[51.69893,-1.7748],[51.69815,-1.77357],[51.69657,-1.77008],[51.69578,-1.7685],[51.69541,-1.76802],[51.69343,-1.76649],[51.6931,-1.76606],[51.69282,-1.76547],[51.69263,-1.76484],[51.69256,-1.76344],[51.69245,-1.76304],[51.69102,-1.76121],[51.68944,-1.75903],[51.68886,-1.75783],[51.68832,-1.75541],[51.688,-1.75485],[51.68628,-1.75782],[51.68404,-1.76212],[51.68026,-1.76716],[51.67936,-1.76872],[51.67873,-1.76927],[51.67601,-1.77129],[51.67392,-1.77347],[51.67233,-1.7746],[51.67196,-1.77402],[51.67173,-1.77382],[51.67141,-1.77371],[51.67103,-1.77371],[51.67122,-1.77472],[51.67163,-1.77573],[51.67207,-1.77725],[51.67224,-1.7779],[51.67234,-1.77884],[51.67271,-1.78003],[51.67262,-1.78019],[51.67247,-1.78109],[51.67242,-1.78201],[51.67251,-1.78264],[51.67291,-1.78374],[51.67292,-1.78407],[51.6728,-1.78454],[51.67235,-1.78522],[51.67068,-1.78874],[51.66985,-1.79149],[51.66926,-1.79384],[51.66844,-1.79921],[51.66839,-1.80059],[51.66853,-1.8047],[51.66839,-1.80548],[51.66792,-1.80994],[51.66745,-1.81342],[51.6674,-1.81477],[51.66756,-1.81481],[51.66797,-1.81531],[51.66857,-1.81583],[51.66923,-1.81617],[51.66983,-1.81638],[51.67152,-1.81681],[51.67217,-1.81684],[51.673,-1.81673],[51.67379,-1.81645],[51.67484,-1.81629],[51.67504,-1.8162],[51.67542,-1.81568],[51.67619,-1.81425],[51.6764,-1.81414],[51.67658,-1.81418],[51.67733,-1.81514],[51.67809,-1.81586],[51.67936,-1.81654],[51.68105,-1.81785],[51.68173,-1.81828],[51.68402,-1.81963],[51.68536,-1.8203],[51.68622,-1.82081],[51.68888,-1.82309],[51.68943,-1.82364],[51.68988,-1.82435],[51.69097,-1.82691],[51.6917,-1.82843],[51.69311,-1.83055],[51.69411,-1.83185],[51.69328,-1.83258],[51.69168,-1.83358],[51.68987,-1.83535],[51.68849,-1.83692],[51.68793,-1.83783],[51.68649,-1.8397],[51.68497,-1.84151],[51.68371,-1.84327],[51.68277,-1.84433],[51.68191,-1.8451],[51.68097,-1.84579],[51.68042,-1.84608],[51.67934,-1.84651],[51.67882,-1.84693],[51.67857,-1.84727],[51.67733,-1.84946],[51.67726,-1.8506],[51.67694,-1.85147],[51.67668,-1.85179],[51.6773,-1.85256],[51.67771,-1.85285],[51.68027,-1.85379],[51.68243,-1.8545],[51.68277,-1.85465],[51.68365,-1.85537],[51.68435,-1.85567],[51.68719,-1.85658],[51.6878,-1.8567],[51.69038,-1.85646],[51.6907,-1.85648],[51.69111,-1.85663],[51.69204,-1.85711],[51.69273,-1.857],[51.69429,-1.85698],[51.695,-1.8571],[51.69688,-1.85763],[51.69706,-1.85786],[51.69741,-1.85884],[51.69759,-1.85898],[51.69783,-1.85888],[51.69855,-1.85817],[51.69896,-1.85789],[51.69953,-1.85784],[51.70105,-1.8571],[51.70126,-1.85713],[51.70221,-1.85758],[51.70332,-1.85735],[51.70448,-1.85763],[51.70522,-1.8577],[51.70604,-1.85733],[51.70696,-1.85658],[51.70718,-1.85682],[51.70733,-1.85722],[51.70775,-1.85784],[51.70793,-1.85842],[51.7081,-1.85951],[51.7081,-1.86134],[51.70832,-1.86346],[51.70963,-1.86772],[51.7103,-1.86963],[51.71073,-1.87124],[51.71113,-1.8731],[51.71109,-1.87405],[51.71039,-1.87739],[51.7102,-1.8791],[51.71023,-1.88101],[51.71055,-1.88274],[51.71089,-1.88667],[51.71113,-1.88756],[51.71268,-1.89047],[51.71309,-1.8915],[51.71342,-1.89261],[51.71384,-1.89512],[51.71392,-1.89691],[51.71371,-1.89907],[51.71369,-1.9],[51.71385,-1.90205],[51.71409,-1.90377],[51.71426,-1.90577],[51.71426,-1.90635],[51.71409,-1.90813],[51.71419,-1.90953],[51.71448,-1.91057],[51.7157,-1.91316],[51.71616,-1.91566],[51.71684,-1.91783],[51.71727,-1.92017],[51.71755,-1.92288],[51.71851,-1.92745],[51.71868,-1.92877],[51.71865,-1.93081],[51.71898,-1.93409],[51.71909,-1.94227],[51.7192,-1.94385],[51.71955,-1.94619],[51.71951,-1.94761],[51.71931,-1.94805],[51.71932,-1.9484],[51.71916,-1.94934],[51.71903,-1.95126],[51.71857,-1.95337],[51.7182,-1.95627],[51.7182,-1.95721],[51.71828,-1.95803],[51.7179,-1.95887],[51.71767,-1.95905],[51.71741,-1.95907],[51.71727,-1.95919],[51.71716,-1.9598],[51.71684,-1.96061],[51.71626,-1.96181],[51.71607,-1.96237],[51.71589,-1.96253],[51.71538,-1.96355],[51.71478,-1.96501],[51.71538,-1.96572]],[[51.71538,-1.96572],[51.71571,-1.96605],[51.71613,-1.96573],[51.71638,-1.96589],[51.71675,-1.96561],[51.71624,-1.96398],[51.71611,-1.96321],[51.71607,-1.96237],[51.71626,-1.96181],[51.71702,-1.96018],[51.71718,-1.96001],[51.71753,-1.95996],[51.71764,-1.95986],[51.7179,-1.95887],[51.71837,-1.958],[51.71822,-1.95754],[51.7182,-1.95627],[51.71857,-1.95337],[51.71903,-1.95126],[51.71916,-1.94934],[51.71926,-1.94867],[51.71958,-1.94813],[51.71951,-1.94761],[51.71955,-1.94619],[51.71919,-1.94375],[51.71909,-1.94227],[51.71898,-1.93409],[51.71865,-1.93081],[51.71868,-1.92877],[51.71851,-1.92745],[51.71755,-1.92288],[51.71727,-1.92017],[51.71684,-1.91783],[51.71616,-1.91566],[51.7157,-1.91316],[51.71448,-1.91057],[51.71419,-1.90953],[51.71409,-1.90813],[51.71426,-1.90635],[51.71426,-1.90577],[51.71409,-1.90377],[51.71385,-1.90205],[51.71369,-1.9],[51.71371,-1.89907],[51.71392,-1.89691],[51.71384,-1.89512],[51.71336,-1.89213],[51.71319,-1.89141],[51.71113,-1.88756],[51.71089,-1.88667],[51.71055,-1.88274],[51.71023,-1.88101],[51.7102,-1.8791],[51.71039,-1.87739],[51.71109,-1.87405],[51.71113,-1.8731],[51.71073,-1.87124],[51.7103,-1.86963],[51.70963,-1.86772],[51.70832,-1.86346],[51.7081,-1.86134],[51.7081,-1.85951],[51.70793,-1.85842],[51.70775,-1.85784],[51.70733,-1.85722],[51.70718,-1.85682],[51.70696,-1.85658],[51.70604,-1.85733],[51.70522,-1.8577],[51.70448,-1.85763],[51.70332,-1.85735],[51.70221,-1.85758],[51.70126,-1.85713],[51.70105,-1.8571],[51.69953,-1.85784],[51.69896,-1.85789],[51.69855,-1.85817],[51.69783,-1.85888],[51.69759,-1.85898],[51.69741,-1.85884],[51.69731,-1.85864],[51.697,-1.85775],[51.69677,-1.85759],[51.695,-1.8571],[51.69429,-1.85698],[51.69273,-1.857],[51.69204,-1.85711],[51.6907,-1.85648],[51.68983,-1.85648],[51.68797,-1.8567],[51.68719,-1.85658],[51.68385,-1.85548],[51.68353,-1.85529],[51.68277,-1.85465],[51.68243,-1.8545],[51.68027,-1.85379],[51.67771,-1.85285],[51.6773,-1.85256],[51.67692,-1.85209],[51.67684,-1.85165],[51.67726,-1.8506],[51.67733,-1.84946],[51.67857,-1.84727],[51.67882,-1.84693],[51.67934,-1.84651],[51.68042,-1.84608],[51.68097,-1.84579],[51.68191,-1.8451],[51.68277,-1.84433],[51.68371,-1.84327],[51.68497,-1.84151],[51.68649,-1.8397],[51.68793,-1.83783],[51.68849,-1.83692],[51.68987,-1.83535],[51.69168,-1.83358],[51.69328,-1.83258],[51.69411,-1.83185],[51.69311,-1.83055],[51.6917,-1.82843],[51.69097,-1.82691],[51.68988,-1.82435],[51.68943,-1.82364],[51.68888,-1.82309],[51.68622,-1.82081],[51.68536,-1.8203],[51.68402,-1.81963],[51.68173,-1.81828],[51.68105,-1.81785],[51.67936,-1.81654],[51.67809,-1.81586],[51.67733,-1.81514],[51.67658,-1.81418],[51.67633,-1.81416],[51.67609,-1.81438],[51.67542,-1.81568],[51.67504,-1.8162],[51.67484,-1.81629],[51.67379,-1.81645],[51.673,-1.81673],[51.67217,-1.81684],[51.67152,-1.81681],[51.66983,-1.81638],[51.66923,-1.81617],[51.66857,-1.81583],[51.66797,-1.81531],[51.66756,-1.81481],[51.6674,-1.81477],[51.66745,-1.81342],[51.66792,-1.80994],[51.66839,-1.80548],[51.66853,-1.8047],[51.66839,-1.80059],[51.66844,-1.79921],[51.66926,-1.79384],[51.66985,-1.79149],[51.67068,-1.78874],[51.67235,-1.78522],[51.6728,-1.78454],[51.67292,-1.78407],[51.67291,-1.78374],[51.67251,-1.78264],[51.67242,-1.78201],[51.67247,-1.78109],[51.67262,-1.78019],[51.67271,-1.78003],[51.67234,-1.77884],[51.67224,-1.7779],[51.67207,-1.77725],[51.67163,-1.77573],[51.67122,-1.77472],[51.67103,-1.77371],[51.67141,-1.77371],[51.67173,-1.77382],[51.67196,-1.77402],[51.67233,-1.7746],[51.67392,-1.77347],[51.67601,-1.77129],[51.67873,-1.76927],[51.67936,-1.76872],[51.68026,-1.76716],[51.68404,-1.76212],[51.68628,-1.75782],[51.688,-1.75485],[51.68832,-1.75541],[51.68886,-1.75783],[51.68944,-1.75903],[51.69102,-1.76121],[51.69245,-1.76304],[51.69256,-1.76344],[51.69263,-1.76484],[51.69282,-1.76547],[51.6931,-1.76606],[51.69343,-1.76649],[51.69541,-1.76802],[51.69578,-1.7685],[51.69673,-1.77042],[51.69815,-1.77357],[51.69893,-1.7748],[51.70051,-1.77795],[51.70067,-1.7782],[51.70163,-1.77911],[51.70257,-1.78031],[51.70271,-1.78063],[51.70301,-1.78184],[51.70331,-1.78242],[51.70391,-1.78339],[51.70456,-1.78412],[51.7058,-1.78625],[51.7067,-1.78737],[51.70792,-1.78363],[51.70809,-1.78292],[51.70804,-1.78271],[51.70773,-1.78221],[51.70748,-1.78131],[51.70771,-1.7812],[51.70849,-1.78122],[51.7085,-1.78039],[51.70831,-1.77968],[51.70842,-1.77649],[51.70852,-1.77628],[51.70974,-1.77668],[51.70942,-1.78141],[51.71004,-1.78352],[51.71029,-1.78464],[51.71035,-1.78507],[51.71033,-1.78581],[51.7101,-1.78703],[51.71001,-1.78716],[51.70968,-1.78725],[51.70958,-1.78735],[51.70951,-1.78764],[51.70953,-1.78813],[51.70907,-1.78967],[51.70997,-1.79035],[51.71029,-1.79057],[51.71324,-1.79209],[51.71783,-1.79472],[51.7183,-1.79486],[51.71891,-1.79487],[51.72012,-1.79473],[51.72109,-1.79456],[51.72162,-1.79439],[51.72408,-1.79427],[51.72514,-1.79404],[51.72622,-1.79447],[51.72745,-1.79479],[51.72857,-1.79495],[51.72969,-1.79492],[51.73047,-1.79475],[51.73288,-1.79453],[51.7337,-1.79431],[51.73441,-1.79425],[51.73622,-1.79349],[51.73656,-1.79317],[51.73706,-1.79286],[51.73891,-1.79233],[51.73972,-1.79186],[51.74037,-1.79191],[51.74055,-1.79207],[51.74082,-1.79244],[51.74108,-1.79313],[51.74119,-1.7932],[51.74139,-1.79321],[51.74165,-1.79309],[51.74179,-1.79286],[51.74257,-1.79038],[51.74287,-1.78992],[51.74299,-1.78985],[51.74314,-1.78987],[51.74519,-1.79039],[51.74551,-1.79026],[51.74557,-1.78819],[51.74576,-1.78716],[51.74579,-1.78656],[51.74572,-1.78602],[51.74523,-1.78425],[51.74514,-1.78337],[51.74518,-1.78245],[51.74572,-1.78143],[51.74602,-1.78012],[51.74613,-1.77864],[51.74596,-1.77759],[51.74523,-1.77585],[51.7451,-1.77482],[51.74508,-1.77334],[51.74572,-1.77324],[51.7463,-1.77304],[51.74714,-1.77225],[51.7481,-1.77105],[51.75325,-1.76281],[51.75368,-1.7621],[51.754,-1.76141],[51.75457,-1.75776],[51.7568,-1.74656],[51.75732,-1.74418],[51.75776,-1.74266],[51.7593,-1.73399],[51.7595,-1.73228],[51.75942,-1.73099],[51.75906,-1.72776],[51.75911,-1.72618],[51.75845,-1.72395],[51.7576,-1.72195],[51.75619,-1.72152],[51.75498,-1.72135],[51.75397,-1.72131],[51.74985,-1.72311],[51.74885,-1.72366],[51.74728,-1.71782],[51.74616,-1.71554],[51.7457,-1.71501],[51.74547,-1.7145],[51.74541,-1.71452],[51.74516,-1.71383],[51.74485,-1.71231],[51.74464,-1.71177],[51.74466,-1.711],[51.74515,-1.7109],[51.74531,-1.71069],[51.74586,-1.70958],[51.74585,-1.70922],[51.74566,-1.70858],[51.74568,-1.70812],[51.74557,-1.70806],[51.74466,-1.70812],[51.74389,-1.70833],[51.74251,-1.70827],[51.74107,-1.71012],[51.74052,-1.71052],[51.74018,-1.7105],[51.73976,-1.71031],[51.73945,-1.71008],[51.73862,-1.70915],[51.73779,-1.70868],[51.73677,-1.70795],[51.73629,-1.70782],[51.73614,-1.70768],[51.73602,-1.70753],[51.73593,-1.7072],[51.73591,-1.70626],[51.73578,-1.70596],[51.73546,-1.70567],[51.73528,-1.70535],[51.73489,-1.70425],[51.73468,-1.70399],[51.73332,-1.7042],[51.73295,-1.70455],[51.73276,-1.70464],[51.73129,-1.70467],[51.73041,-1.70493],[51.73023,-1.70509],[51.73001,-1.70555],[51.73003,-1.70582],[51.73017,-1.70617],[51.72971,-1.7084],[51.72975,-1.7095],[51.72999,-1.71088],[51.72993,-1.71173],[51.72979,-1.71215],[51.72928,-1.71238],[51.72897,-1.71273],[51.72885,-1.71294],[51.72854,-1.71398],[51.72855,-1.71446],[51.72836,-1.71473],[51.72812,-1.71483],[51.72766,-1.71465],[51.72718,-1.71434],[51.72639,-1.71405],[51.72399,-1.71237],[51.72355,-1.71185],[51.72286,-1.71074],[51.72203,-1.70973],[51.72036,-1.70834],[51.71948,-1.70735],[51.71933,-1.70737],[51.71926,-1.70749],[51.71865,-1.70911],[51.71857,-1.70921],[51.71847,-1.70922],[51.71543,-1.70617],[51.71531,-1.70615],[51.71506,-1.70686],[51.71346,-1.70589],[51.71317,-1.70602],[51.70959,-1.7102],[51.70905,-1.70847],[51.70863,-1.70759],[51.70787,-1.70645],[51.7075,-1.70532],[51.7068,-1.70405],[51.7059,-1.70139],[51.70503,-1.69933],[51.70425,-1.69769],[51.70397,-1.69737],[51.70273,-1.69698],[51.70254,-1.69686],[51.70234,-1.69661],[51.70177,-1.69557],[51.70097,-1.69373],[51.69987,-1.69167],[51.69957,-1.69099],[51.69915,-1.68973],[51.69767,-1.69091],[51.69646,-1.69154],[51.69592,-1.6917],[51.69558,-1.6917],[51.69449,-1.69113],[51.69428,-1.69118],[51.69412,-1.69142]]],"days":[{"key":"sat","label":"Saturday","dirs":[{"label":"To Cirencester","li":0,"trips":[{"big":"09:35","small":"At Kempsford, by Mount Pleasant 10:28","title":"The 09:35 from Lechlade, St John's Street","s":[["09:35",0,5],["09:35",1,0],["09:35",2,0],["09:36",3,0],["09:40",4,0],["09:42",5,0],["09:45",6,0],["09:47",7,1],["09:47",8,0],["09:49",9,0],["09:52",10,0],["09:54",11,1],["09:54",12,0],["10:00",13,1],["10:02",14,0],["10:03",15,0],["10:04",16,0],["10:05",17,0],["10:06",18,0],["10:07",19,5],["10:11",20,0],["10:12",21,0],["10:14",22,0],["10:15",23,1],["10:16",24,0],["10:16",25,0],["10:17",26,0],["10:20",27,0],["10:24",28,1],["10:25",29,0],["10:26",30,0],["10:27",31,0],["10:28",32,5],["10:28",33,6],["10:32",34,0],["10:33",35,0],["10:34",36,1],["10:40",37,5],["10:43",38,0],["10:45",39,1],["10:46",40,0],["10:47",41,0],["10:48",42,0],["10:49",43,1],["10:50",44,0],["10:51",45,0],["10:52",46,0],["10:53",47,0],["10:53",48,0],["10:53",49,0],["10:54",50,0],["10:55",51,0],["10:55",52,5]]}],"note":"","tt":{"rows":["Lechlade, St John's Street","Southrop, The Swan","Eastleach Turville, The","Hatherop, Willamstrip Farm","Quenington, on The Green","Fairford, Market Place","Whelford, by Pope's Court","Kempsford, by Primary School","Kempsford, by Mount Pleasant","Marston Meysey Greenleaze","Down Ampney, Broadleaze","Poulton, The Falcon","Ampney Crucis, before","Cirencester, The Forum"],"off":8,"cols":[["09:35","09:47","09:54","10:00","10:07","10:15","10:24","10:28","10:28","10:34","10:40","10:45","10:49","10:55"]]},"blind":"Cirencester","via":["via Lechlade and Southrop","via Eastleach Turville and Hatherop","via Fairford and Kempsford"]},{"label":"To Highworth","li":1,"trips":[{"big":"14:50","small":"From Kempsford, Primary School, at Lechlade, on Market Place 15:42","title":"The 14:50 from Kempsford, Primary School","s":[["14:20",52,5],["14:20",53,0],["14:21",54,0],["14:21",55,0],["14:22",56,0],["14:24",57,0],["14:26",58,0],["14:28",59,1],["14:28",60,0],["14:29",61,0],["14:31",62,1],["14:32",63,0],["14:35",64,5],["14:42",65,1],["14:43",66,0],["14:44",67,0],["14:44",68,0],["14:50",69,7],["14:50",70,0],["14:50",71,0],["14:51",72,0],["14:53",73,0],["14:55",74,1],["14:59",75,0],["15:01",76,0],["15:02",77,0],["15:03",21,0],["15:05",78,5],["15:05",79,0],["15:12",80,1],["15:12",81,0],["15:13",82,0],["15:14",83,0],["15:14",84,0],["15:17",85,1],["15:22",86,0],["15:24",87,5],["15:25",88,0],["15:29",89,0],["15:31",90,0],["15:32",91,1],["15:32",92,0],["15:35",5,0],["15:37",93,0],["15:40",94,0],["15:41",95,0],["15:41",96,0],["15:42",97,5]]}],"note":"","tt":{"rows":["Cirencester, The Forum","Ampney Crucis, Village Street","Poulton, by The Falcon","Down Ampney, after Broadleaze","Marston Meysey Greenleaze","Kempsford, Primary School","Whelford, Pope's Court","Fairford, after Market Place","Quenington, The Green","Hatherop, by Williamstrip Farm","Eastleach Turville, by The","Southrop, The Swan","Lechlade, on Market Place"],"off":-1,"cols":[["14:20","14:28","14:31","14:35","14:42","14:50","14:55","15:05","15:12","15:17","15:24","15:32","15:42"]]},"blind":"Highworth","via":["via Ampney Crucis and Poulton","via Kempsford and Fairford","via Southrop and Lechlade"]}],"none":"In the current timetable there are no 76 buses on Saturdays, so I would look at the other ways to get there on the Royal International Air Tattoo page."},{"key":"sun","label":"Sunday","dirs":[],"none":"In the current timetable there are no 76 buses on Sundays, so I would look at the other ways to get there on the Royal International Air Tattoo page."}],"start":0};
 </script>
 <script>
 (function(){
@@ -426,9 +546,10 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
   var FLAG = '<svg class="flag" viewBox="0 0 18 26" aria-hidden="true"><rect x="8" y="9" width="2" height="17" fill="#13293C"/><rect x="1" y="1" width="16" height="11" rx="2" fill="#fff" stroke="#D74949" stroke-width="2"/><rect x="4.5" y="3.6" width="9" height="5.6" rx="1" fill="#D74949"/><rect x="5.6" y="4.4" width="6.8" height="2" rx=".4" fill="#fff"/></svg>';
 
   /* fixed text */
-  $('backlink').href = CFG.showUrl;
-  $('backlink').target = CFG.showTarget || '_top';
-  $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
+  $('crumbshow').href = CFG.showUrl; $('crumbshow').textContent = CFG.showName;
+  $('crumbbus').textContent = 'Bus ' + CFG.num;
+  $('morshow').href = CFG.showUrl; $('morshow').firstChild.textContent = 'Back to ' + CFG.showName;
+  $('ysintro').textContent = 'This is the stop I would get off at for the ' + CFG.showName + '. The details below follow the bus you pick further down the page.';
   $('opname').textContent = 'Run by ' + CFG.operator;
   if (CFG.theme) {
     var rs = document.documentElement.style, th = CFG.theme;
@@ -437,9 +558,14 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
     if (th.acc) rs.setProperty('--amber', th.acc);
   }
   $('bnum').textContent = CFG.num;
-  $('title').textContent = CFG.title;
+  (function(){
+    var t = CFG.title, k = t.lastIndexOf(' to ');
+    if (k < 0) { $('title').textContent = t; return; }
+    $('title').textContent = t.slice(0, k + 4);
+    var em = document.createElement('em'); em.textContent = t.slice(k + 4); $('title').appendChild(em);
+  })();
   $('lead').textContent = CFG.lead;
-  $('tiph').textContent = CFG.tipHead;
+  $('tiph').textContent = 'My advice';
   $('tip').textContent = CFG.tip;
   $('tipbtn').href = CFG.showUrl;
   $('tipbtn').target = CFG.showTarget || '_top';
@@ -453,6 +579,7 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
      and rolls over like a real blind when the direction changes */
   var vi = 0, VIA = CFG.blindVia, shownDest = null;
   function setBlind(dest, via){
+    $('nsnum').textContent = CFG.num; $('nsdest').textContent = dest;
     VIA = via && via.length ? via : CFG.blindVia; vi = 0;
     if (dest === shownDest) return;
     var first = shownDest === null; shownDest = dest;
@@ -469,13 +596,13 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
     }, 3200);
   }
 
-  $('facts').innerHTML = CFG.facts.map(function(f){
-    return '<div class="fact' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><b>' + f[1] + '</b></div>';
+  $('facts').innerHTML = CFG.facts.concat([['Run by', CFG.operator]]).map(function(f){
+    return '<div class="kv' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><span>' + f[1] + '</span></div>';
   }).join('');
 
-  $('legs').innerHTML = CFG.legs.map(function(l){
+  $('legs').innerHTML = CFG.legs.map(function(l, n){
     var signs = l[0].map(function(r){ return '<span class="sign' + (/^M\d/.test(r) ? ' m' : '') + '">' + r + '</span>'; }).join('');
-    return '<li><div class="signs">' + (signs || '<span class="sign">Local</span>') + '</div><div><b>' + l[1] + '</b><p>' + l[2] + '</p></div></li>';
+    return '<li class="way"><span class="n">' + (n + 1) + '</span><h3>' + l[1] + '</h3>' + (signs ? '<div class="signs">' + signs + '</div>' : '') + '<p>' + l[2] + '</p></li>';
   }).join('');
 
   /* map */
@@ -495,12 +622,12 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
   function fit(){
     if (!casing) return;
     var wide = window.innerWidth > 980;
-    map.fitBounds(casing.getBounds().extend(CFG.target), { paddingTopLeft: [30, 30], paddingBottomRight: [wide ? 420 : 30, 30] });
+    map.fitBounds(casing.getBounds().extend(CFG.target), { padding: [wide ? 40 : 24, wide ? 40 : 24] });
   }
 
   /* unpack journeys: [time, stop index, flags] -> [time, name, lat, lon, flags, short name] */
   DATA.days.forEach(function(dd){ dd.dirs.forEach(function(x){ x.trips.forEach(function(tr){
-    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3]]; });
+    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3], st[4]]; });
   }); }); });
   function D(){ return DATA.days[day]; }
   function DIR(){ return D().dirs[dir]; }
@@ -508,6 +635,7 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
   function segBtns(el, items, cur, onpick){
     el.innerHTML = items.map(function(t, i){ return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === cur) + '">' + t + '</button>'; }).join('');
     el.style.display = items.length > 1 ? '' : 'none';
+    if (el.parentNode.classList.contains('row')) el.parentNode.style.display = items.length > 1 ? '' : 'none';
     each(el.children, function(b){ b.addEventListener('click', function(){ onpick(+b.getAttribute('data-i')); }); });
   }
 
@@ -517,7 +645,8 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
     if (!dd.dirs.length || !dd.dirs.some(function(x){ return x.trips.length; })) {
       setBlind(CFG.blindDest, CFG.blindVia);
       $('ttbtn').parentNode.style.display = 'none';
-      $('dir').style.display = 'none'; $('board').innerHTML = ''; $('bnote').textContent = '';
+      $('dir').style.display = 'none'; $('dirrow').style.display = 'none';
+      $('cdrows').innerHTML = '<li><span>' + CFG.num + '</span><span>No buses today</span><span></span></li>'; $('board').innerHTML = ''; $('bnote').textContent = '';
       $('nobus').textContent = dd.none; $('nobus').classList.add('on'); $('stage').classList.add('off');
       return;
     }
@@ -525,7 +654,7 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
     if (!DIR().trips.length) { dir = dd.dirs.findIndex(function(x){ return x.trips.length; }); idx = 0; }
     segBtns($('dir'), dd.dirs.map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = 0; render(); runBus(); });
     var cur = DIR(); setBlind(cur.blind || CFG.blindDest, cur.via);
-    board(); drawLine(); draw(); table();
+    board(); drawLine(); draw(); table(); screen();
   }
 
   /* every time that day, at the main stops */
@@ -580,13 +709,56 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
     return -1;
   }
 
+  /* bus stop departures screen: the next few buses from the stop the picked bus leaves */
+  function screen(){
+    var d = DIR(); if (!d || !d.trips.length) { $('cdrows').innerHTML = ''; return; }
+    var tr = d.trips, cur = tr[idx], s = cur.s;
+    var fromOff = cur.big !== s[0][0];
+    var stopName = fromOff ? (s.filter(function(p){ return p[4] & OFF; })[0] || s[0])[5] : s[0][5];
+    var dest = (d.blind || CFG.blindDest);
+    $('cdstop').textContent = stopName;
+    var n = ukNow(), today = D().key === n.wd, now = n.h * 60 + n.m;
+    var stop = fromOff ? (s.filter(function(p){ return p[4] & OFF; })[0] || s[0]) : s[0];
+    function tm(x){ var a = x.split(':'); return +a[0] * 60 + +a[1]; }
+    /* which times to show: today, the next buses from the whole day's timetable; other days, from the bus you picked */
+    var list = tr.slice(idx, idx + 4).map(function(t){ return t.big; });
+    if (today && d.tt) {
+      var ri = d.tt.rows.indexOf(stop[5]); if (ri < 0) ri = fromOff ? d.tt.off : 0;
+      var all = d.tt.cols.map(function(c){ return c[ri]; }).filter(Boolean).sort(function(a, b){ return tm(a) - tm(b); });
+      var up = all.filter(function(x){ var lv = liveFor(x, stop), b = lv ? lv.exp : x; return tm(b) >= now - 1; });
+      list = up.slice(0, 4);
+      if (!list.length) list = [];
+    }
+    var anyLive = false;
+    $('cdrows').innerHTML = list.length ? list.map(function(aimed, k){
+      var lv = today ? liveFor(aimed, stop) : null;
+      var base = lv ? lv.exp : aimed, mins = tm(base) - now, show = aimed, due = false, ex = '';
+      if (lv) anyLive = true;
+      if (today && mins >= -1 && mins < 60) { show = mins <= 1 ? 'Due' : mins + ' min'; due = mins <= 1; }
+      else if (lv && lv.exp !== aimed) show = lv.exp;
+      if (lv && lv.late !== 0) ex = '<span class="ex">' + (lv.late > 0 ? lv.late + ' min late' : -lv.late + ' min early') + '</span>';
+      var bi = -1; tr.forEach(function(t, i){ if (t.big === aimed) bi = i; });
+      return '<li data-i="' + bi + '" class="' + (bi === idx ? 'on' : '') + (due ? ' due' : '') + '"><span>' + CFG.num + '</span><span>' + dest + '</span><span>' + show + ex + '</span></li>';
+    }).join('') : '<li><span>' + CFG.num + '</span><span>No more buses today</span><span></span></li>';
+    $('cdlive').classList.toggle('on', anyLive);
+    $('cdlive').lastChild.textContent = anyLive ? 'Live' : 'Timetable';
+    var mine = today ? liveFor(cur.big, stop) : null;
+    $('sumlive').classList.toggle('on', !!mine);
+    if (mine) $('sumlive').innerHTML = '<b>Live now:</b> this bus is ' + (Math.abs(mine.late) <= 1 ? 'on time' : mine.late > 0 ? 'running about ' + mine.late + ' minutes late' : 'running about ' + -mine.late + ' minutes early') + ', expected at ' + mine.stop + ' at ' + mine.exp + '.';
+    each($('cdrows').children, function(li){ li.addEventListener('click', function(){ if (!(+li.getAttribute('data-i') >= 0)) return; idx = +li.getAttribute('data-i'); board(); var sel = $('board').querySelector('[aria-pressed="true"]'); if (sel) $('board').scrollLeft = Math.max(0, sel.offsetLeft - 8); draw(); table(); screen(); }); });
+    $('cdtick').textContent = 'Route ' + CFG.num + ' to ' + dest + '     ' + D().label + ' times     Times can change, so please check with ' + CFG.operator + ' before you travel     ';
+    $('cdnote').textContent = today
+      ? (anyLive ? 'Live: the countdown uses where the buses really are right now, so it follows any delays.' : 'It’s ' + D().label + ' today. No live tracking for these buses at the moment, so the screen counts down to the timetable.')
+      : 'On a ' + D().label + ' this screen counts down to the next buses, live where the bus company shares tracking. Today it shows the timetable times.';
+  }
+
   function board(){
     var d = DIR(), nx = nextIndex();
     $('board').innerHTML = d.trips.map(function(t, i){
       return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
     }).join('');
     $('bnote').textContent = d.note || '';
-    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); var sl = $('board').scrollLeft; board(); $('board').scrollLeft = sl; draw(); table(); }); });
+    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); var sl = $('board').scrollLeft; board(); $('board').scrollLeft = sl; draw(); table(); screen(); }); });
     setTimeout(arrows, 30);
   }
 
@@ -606,6 +778,22 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
     function mm(x){ var a = x.split(':'); return +a[0] * 60 + +a[1]; }
     var ride = mm(s[s.length - 1][0]) - mm(s[0][0]);
     $('psub').textContent = s.length + ' stops, ' + s[0][0] + ' to ' + s[s.length - 1][0] + ', ' + ride + ' minutes';
+    /* the summary panel beside the times */
+    var oe = oi >= 0 ? s[oi] : null;
+    $('sumbig').textContent = s[0][0];
+    $('sumper').innerHTML = 'From <b>' + s[0][1] + '</b>. ' + (oe ? (oi === 0 ? 'Leaves <b>' + oe[1] + '</b> at ' + oe[0] + ' and gets to ' + s[s.length - 1][1] + ' at ' + s[s.length - 1][0] + '.'
+                                           : 'Gets to <b>' + oe[1] + '</b> at ' + oe[0] + '.') : '');
+    $('sumkv').innerHTML = '<div class="kv"><span>On the bus</span><span>' + ride + ' minutes</span></div>' +
+      '<div class="kv"><span>Stops</span><span>' + s.length + '</span></div>' +
+      '<div class="kv"><span>Ends at</span><span>' + s[s.length - 1][5] + ', ' + s[s.length - 1][0] + '</span></div>';
+    var end = s[s.length - 1], stopFor = oe || end;
+    $('slip').innerHTML = '<div class="sh1"><span>' + CFG.operator + '</span><span>Route ' + CFG.num + '</span></div>' +
+      '<div class="ln"><span>' + D().label + '</span><span>' + (DIR().label || '') + '</span></div>' +
+      '<div class="ln"><span>Board</span><span>' + s[0][5] + ' ' + s[0][0] + '</span></div>' +
+      '<div class="ln"><span>Off</span><span>' + stopFor[5] + ' ' + stopFor[0] + '</span></div>' +
+      '<div class="ln"><span>On the bus</span><span>' + ((function(a, b){ return (+b[0] * 60 + +b[1]) - (+a[0] * 60 + +a[1]); })(s[0][0].split(':'), stopFor[0].split(':'))) + ' min</span></div>' +
+      '<div class="bc" aria-hidden="true"></div><div class="ft">Planning slip, not a ticket</div>';
+    $('sumsave').innerHTML = oe && oi > 0 ? 'Press the bell once you pass <b>' + s[oi - 1][1] + '</b>.' : oe ? 'Wave to the driver as the bus comes in, so they know to stop.' : '';
     if (oi >= 0) {
       var o = s[oi];
       $('ysname').textContent = o[1];
@@ -716,6 +904,84 @@ var DATA={"stops":[["Lechlade, St John's Street",51.69441,-1.69121,"Lechlade, St
     new IntersectionObserver(function(es, o){ es.forEach(function(e){ if (e.isIntersecting) { setTimeout(function(){ strip.classList.add('go'); }, 300); o.disconnect(); } }); }, { threshold: .6 }).observe(strip);
   } else if (strip) strip.classList.add('go');
   if (!io) runBus();
+
+
+  /* ---------- live buses from bustimes.org ---------- */
+  var LIVE = { veh: [], trips: {}, ok: false };
+  var liveLayer = L.layerGroup().addTo(map);
+  function getJSON(u){ return fetch(u, { cache: 'no-store' }).then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); }); }
+  function addMins(hm, n){ var a = hm.split(':'), t = (+a[0] * 60 + +a[1] + n + 1440) % 1440; return ('0' + Math.floor(t / 60)).slice(-2) + ':' + ('0' + t % 60).slice(-2); }
+  /* expected time for a timetable journey at the stop the screen shows, if a live bus is running it */
+  function liveFor(aimed, stop){
+    if (!LIVE || !stop) return null;
+    var atco = stop[6];
+    for (var i = 0; i < LIVE.veh.length; i++) {
+      var v = LIVE.veh[i], tt = LIVE.trips[v.trip_id];
+      if (!tt || !tt.times || v.delay == null) continue;
+      for (var j = 0; j < tt.times.length; j++) {
+        var e = tt.times[j];
+        if (e.stop && e.stop.atco_code === atco && (e.aimed_departure_time || e.aimed_arrival_time) === aimed) {
+          if (v.progress && v.progress.sequence > j + 1) return null;
+          var late = Math.round(v.delay / 60);
+          return { exp: addMins(aimed, late), late: late, stop: stop[5] };
+        }
+      }
+    }
+    return null;
+  }
+  function drawLive(){
+    liveLayer.clearLayers();
+    var fresh = LIVE.veh.filter(function(v){ return v.coordinates && (Date.now() - new Date(v.datetime).getTime()) < 15 * 60000; });
+    fresh.forEach(function(v){
+      var late = v.delay == null ? null : Math.round(v.delay / 60);
+      var html = '<div class="lvbus' + (late > 3 ? ' late' : '') + '"><span class="hd" style="transform:rotate(' + (v.heading || 0) + 'deg)"></span><span class="body">' + CFG.num + '</span></div>';
+      var m = L.marker([v.coordinates[1], v.coordinates[0]], { icon: L.divIcon({ className: '', html: html, iconSize: [34, 34], iconAnchor: [17, 17] }), zIndexOffset: 900 }).addTo(liveLayer);
+      var d = new Date(v.datetime), seen = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+      m.bindPopup('<b>' + CFG.num + ' to ' + (v.destination || 'unknown') + '</b><br>' +
+        (late == null ? 'No timing information' : Math.abs(late) <= 1 ? 'On time' : late > 0 ? 'Running about ' + late + ' minutes late' : 'Running about ' + -late + ' minutes early') +
+        '<br>Last seen at ' + seen);
+    });
+    var b = $('livebadge');
+    b.classList.toggle('off', !fresh.length);
+    b.lastChild.textContent = !LIVE.ok ? 'Live buses unavailable' : fresh.length ? 'Live: ' + fresh.length + (fresh.length === 1 ? ' bus' : ' buses') + ' out now' : 'No buses out right now';
+  }
+  function pollLive(){
+    if (!CFG.sid || !window.fetch || document.hidden) return;
+    getJSON('https://bustimes.org/vehicles.json?service=' + CFG.sid).then(function(vs){
+      LIVE.veh = Array.isArray(vs) ? vs : []; LIVE.ok = true;
+      var need = LIVE.veh.filter(function(v){ return v.trip_id && !LIVE.trips[v.trip_id]; }).slice(0, 15);
+      return Promise.all(need.map(function(v){
+        return getJSON('https://bustimes.org/api/trips/' + v.trip_id + '/').then(function(x){ LIVE.trips[v.trip_id] = x; }).catch(function(){ LIVE.trips[v.trip_id] = { times: [] }; });
+      }));
+    }).then(function(){ drawLive(); screen(); }).catch(function(){ LIVE.ok = false; LIVE.veh = []; drawLive(); screen(); });
+  }
+  pollLive(); setInterval(pollLive, 30000);
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) pollLive(); });
+
+  /* bell push lights the bus stopping sign */
+  var bellT = 0;
+  $('bellpush').addEventListener('click', function(){
+    var b = $('bellpush'); clearTimeout(bellT);
+    b.setAttribute('aria-pressed', 'true'); $('bellled').classList.add('on');
+    var hb = document.querySelector('.panel header .bell'); if (hb) hb.classList.add('on');
+    bellT = setTimeout(function(){ b.setAttribute('aria-pressed', 'false'); $('bellled').classList.remove('on'); if (hb) hb.classList.remove('on'); }, 4000);
+  });
+
+  /* live clock on the departures screen */
+  function ukNow(){
+    try {
+      var p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+      var g = function(k){ return p.filter(function(x){ return x.type === k; })[0].value; };
+      return { wd: g('weekday').toLowerCase().slice(0, 3), h: +g('hour'), m: +g('minute') };
+    } catch (e) { var d = new Date(); return { wd: ['sun','mon','tue','wed','thu','fri','sat'][d.getDay()], h: d.getHours(), m: d.getMinutes() }; }
+  }
+  function clock(){ var n = ukNow(); $('cdclock').innerHTML = ('0' + n.h).slice(-2) + '<i>:</i>' + ('0' + n.m).slice(-2); }
+  clock(); setInterval(function(){ clock(); screen(); }, 20000);
+
+  /* highlight the section you are in */
+  var links = document.querySelectorAll('.jump a'), secs = [].map.call(links, function(a){ return document.querySelector(a.getAttribute('href')); });
+  function onScroll(){ var y = window.scrollY + 90, cur = -1; secs.forEach(function(s, i){ if (s && s.offsetTop <= y) cur = i; }); each(links, function(a, i){ a.classList.toggle('on', i === cur); }); }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 })();
 </script>
 <!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
