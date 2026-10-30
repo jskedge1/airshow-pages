@@ -267,6 +267,7 @@ The board's own collections, admin only for reading and writing:
   area, source (who logged it, for example "Claude chat" or the scheduled task name), link.
 - `AdminChecks`: one row per page: title, wixPath, pageUrl (file here), desktop, mobile, tablet (Clear, Check or
   Not checked), links, photos, lastChecked, nextCheck, notes, sort.
+Preview Studio (30 Oct 2026): `studio/index.html` (https://jskedge1.github.io/airshow-pages/studio/) is Jack's own preview site, outside Wix and not linked from the public site: every live page (the LIVE list in the file, add new pages there), every page not live yet (from `admin/unpublished.json`) and the check timetable, each page working in a desktop, tablet or phone frame. Views: #live, #not-live, #timetable.
 Two more tabs (30 Oct 2026): Not Live Yet lists every page made but not on the website, from `admin/unpublished.json` (keep it in step with the Future pages and Idea pages tabs of the site pages hub). Pages with a `file` preview inside the board at desktop, tablet or phone width; pages that only exist as Claude previews (`art`) open in a new tab. Timetable shows when each scheduled check runs next and what it looks after.
 Flight Records also lists every commit to this repository from the last six weeks (read from the public GitHub API in the
 browser, no key needed), so page changes log themselves. Commit messages read best as "Area: what changed".

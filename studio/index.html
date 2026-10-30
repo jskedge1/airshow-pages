@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview Studio | UK Airshow Guide</title>
+<!--
+  Jack's preview site for The Big Guide to UK Airshows. Every live page, every page made but not live yet,
+  and the timetable of scheduled checks, each page working inside a device frame. Runs on its own from
+  GitHub Pages, so it works while the Wix site is offline. Not linked from the public site.
+  Live pages are the LIVE list below; pages not live yet come from ../admin/unpublished.json.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#070D13;--board:#0B1A26;--panel:#13293C;--line:#1E3A52;--row:#16283A;--teal:#32B4AF;--pale:#9FE0DC;--muted:#C9D6E0;--purple:#6950A1;--red:#D74949}
+html,body{margin:0;background:var(--ink);color:#fff;font-family:Barlow,system-ui,sans-serif;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+*{box-sizing:border-box}
+button,input,select{font-family:inherit}
+a{color:var(--pale)}a:hover{color:#fff}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.top{background:var(--panel);border-bottom:4px solid var(--teal)}
+.top .in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 28px;padding:18px 24px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand .ic{width:50px;height:50px;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 50px}
+.brand b{display:block;font:800 36px/0.95 'Barlow Condensed',sans-serif;letter-spacing:.01em}
+.brand span{color:var(--pale);font-weight:500;font-size:15px}
+.views{display:flex;flex-wrap:wrap;gap:6px}
+.views a{min-height:46px;display:inline-flex;align-items:center;gap:9px;padding:0 18px;text-decoration:none;color:#fff;background:var(--board);font:800 20px 'Barlow Condensed',sans-serif;letter-spacing:.03em;transition:padding .35s ease,background .3s ease}
+.views a:hover{padding:0 24px}
+.views a.on{background:var(--teal);color:var(--board)}
+.views a .n{font:700 13px Barlow,sans-serif;padding:2px 7px;background:var(--teal);color:var(--board)}
+.views a.on .n{background:var(--board);color:#fff}
+.clock{font:800 26px 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums;color:var(--pale)}
+main{max-width:1500px;margin:0 auto;padding:22px 24px 60px}
+
+/* pages view: list on the left, working preview on the right */
+.split{display:flex;flex-wrap:wrap;background:var(--board);border:2px solid var(--line);border-top:4px solid var(--teal)}
+.list{flex:1 1 300px;max-width:380px;min-width:0;border-right:1px solid var(--row)}
+.search{padding:14px 16px;border-bottom:1px solid var(--row)}
+.search input{width:100%;min-height:44px;background:var(--ink);border:1px solid #3A5A74;color:#fff;padding:0 12px;font-size:16px}
+.g{padding:11px 16px;background:#0E2131;font:800 19px 'Barlow Condensed',sans-serif;color:var(--pale);border-top:1px solid var(--row);display:flex;justify-content:space-between}
+.it{display:block;width:100%;text-align:left;border:0;border-top:1px solid var(--row);background:transparent;color:#fff;padding:11px 16px;cursor:pointer;transition:background .25s ease,padding .3s ease}
+.it:hover{background:#0F1C27;padding-left:22px}
+.it.on{background:var(--panel);box-shadow:inset 4px 0 0 var(--teal)}
+.it b{display:block;font:700 20px/1.1 'Barlow Condensed',sans-serif}
+.it span{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+.it i{font-style:normal;font-weight:700;font-size:12px;padding:2px 7px;margin-top:6px;display:inline-block}
+.w-live{background:#1F7A55;color:#fff}.w-git{background:var(--teal);color:var(--board)}.w-art{background:var(--purple);color:#fff}.w-hold{background:#3A5A74;color:#fff}
+.pv{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;position:sticky;top:0;align-self:flex-start}
+.head{padding:16px 20px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--row)}
+.head h2{margin:0;font:800 32px/1 'Barlow Condensed',sans-serif}
+.head .goes{color:var(--pale);font-weight:600;font-size:14px;margin-top:6px}
+.head p{margin:6px 0 0;color:var(--muted);font-size:15px;line-height:1.5;max-width:72ch}
+.acts{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.acts a{min-height:40px;display:inline-flex;align-items:center;padding:0 14px;font-weight:700;font-size:14px;text-decoration:none;border:2px solid var(--teal);color:#fff}
+.acts a.pri{background:var(--teal);color:var(--board)}
+.bar{padding:10px 20px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--row)}
+.dev{display:flex;gap:4px}
+.dev button{min-height:40px;padding:0 14px;border:1px solid #3A5A74;background:transparent;color:#fff;font-weight:600;cursor:pointer}
+.dev button.on{background:var(--teal);color:var(--board);border-color:var(--teal)}
+.small{font-size:14px;color:var(--muted)}
+.stage{position:relative;height:calc(100vh - 250px);min-height:520px;overflow:hidden;background:#05090D}
+.frame{position:absolute;top:0;transform-origin:top left;border:0;background:#fff}
+.cap{padding:8px 20px;font-size:13px;color:var(--muted);border-top:1px solid var(--row)}
+.art{margin:60px auto;max-width:470px;padding:30px;background:var(--panel);border-top:4px solid var(--purple)}
+.art h3{margin:0 0 8px;font:800 26px 'Barlow Condensed',sans-serif}
+.art p{margin:0 0 16px;color:var(--muted);line-height:1.5}
+.empty{padding:22px;color:var(--muted)}
+
+/* timetable view */
+.board{background:var(--board);border:2px solid var(--line);border-top:4px solid var(--teal);margin-bottom:28px}
+.bh{padding:20px 22px 10px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;align-items:baseline}
+.bh h2{margin:0;font:800 32px 'Barlow Condensed',sans-serif;color:var(--red)}
+.bh p{margin:0;color:var(--muted);font-size:15px}
+.scroll{overflow-x:auto}
+.tr{display:grid;grid-template-columns:150px minmax(0,1fr) 200px 150px;gap:0 12px;align-items:center;padding:10px 22px;border-top:1px solid var(--row);min-width:760px}
+.tr .nx{font:800 22px 'Barlow Condensed',sans-serif;padding:6px 10px;background:linear-gradient(#16222D 0 49%,#0A1219 49% 51%,#16222D 51% 100%);font-variant-numeric:tabular-nums}
+.tr .d b{display:block;font:700 23px/1.1 'Barlow Condensed',sans-serif}.tr .d span{font-size:14px;color:var(--muted)}
+.tr .ev{font-weight:600;font-size:15px;color:var(--muted)}
+.tag{font:800 17px 'Barlow Condensed',sans-serif;padding:6px 8px;text-align:center;letter-spacing:.03em;border:1px solid #3A5A74}
+.tag.next{background:var(--teal);color:var(--board);border-color:var(--teal)}.tag.today{background:var(--purple);border-color:var(--purple)}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;background:var(--row);min-width:860px}
+.day{background:var(--board);padding:14px 12px;display:flex;flex-direction:column;gap:8px}
+.day h4{margin:0;font:800 22px 'Barlow Condensed',sans-serif}.day.now h4{color:var(--teal)}
+.blk{padding:8px 10px;font-size:14px;line-height:1.35}.blk b{display:block;font:800 18px 'Barlow Condensed',sans-serif}
+.k-m{background:var(--panel);border-left:4px solid #fff}.k-d{background:var(--purple)}.k-f{background:var(--red)}.k-s{background:var(--teal);color:var(--board)}.k-e{border:2px dashed var(--teal)}
+.cov{display:grid;grid-template-columns:200px repeat(3,minmax(0,1fr)) 140px;min-width:900px}
+.cov>div{padding:12px 14px;border-top:1px solid var(--row);font-size:15px;line-height:1.45}
+.cov .h{color:var(--pale);font-weight:700;background:#0E2131}
+.cov .w{font:700 21px/1.1 'Barlow Condensed',sans-serif}.cov .o{font:800 16px 'Barlow Condensed',sans-serif}
+.year{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:2px;background:var(--row)}
+.year div{background:var(--board);padding:16px 18px;border-top:4px solid var(--teal)}
+.year b{display:block;font:800 24px 'Barlow Condensed',sans-serif}.year span{font-size:15px;color:var(--muted);line-height:1.5}
+.foot{padding:16px 22px 20px;color:var(--muted);font-size:15px;line-height:1.5;border-top:1px solid var(--row)}
+[hidden]{display:none!important}
+@media (max-width:820px){.list{max-width:none;border-right:0;border-bottom:1px solid var(--row)}.pv{position:static}.stage{height:620px}}
+@media (prefers-reduced-motion:reduce){.views a,.it{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="in">
+    <div class="brand">
+      <span class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="#13293C" aria-hidden="true"><path d="M2.5 19h19v2h-19zM22.07 9.64c-.21-.8-1.04-1.28-1.84-1.06L14.92 10l-6.9-6.43-1.93.51 4.14 7.17-4.97 1.33-1.97-1.54-1.45.39 2.59 4.49L21 11.49c.81-.23 1.28-1.05 1.07-1.85z"></path></svg></span>
+      <div><b>PREVIEW STUDIO</b><span>Every page of the UK Airshow Guide, working, in one place</span></div>
+    </div>
+    <nav class="views" aria-label="Views">
+      <a href="#live" data-v="live">LIVE PAGES <span class="n" id="nLive">0</span></a>
+      <a href="#not-live" data-v="not-live">NOT LIVE YET <span class="n" id="nNot">0</span></a>
+      <a href="#timetable" data-v="timetable">TIMETABLE <span class="n">6</span></a>
+    </nav>
+    <span class="clock" id="clock" aria-label="UK time">00:00:00</span>
+  </div>
+</header>
+
+<main>
+  <section id="v-pages">
+    <div class="split">
+      <div class="list">
+        <div class="search"><input type="search" id="q" placeholder="Find a page, for example Duxford" aria-label="Find a page"></div>
+        <div id="list"></div>
+      </div>
+      <div class="pv" id="pv"></div>
+    </div>
+  </section>
+
+  <section id="v-timetable" hidden>
+    <div class="board">
+      <div class="bh"><h2>TIMETABLE, SITE CHECKS</h2><p>When each scheduled check runs next. Times are UK time.</p></div>
+      <div class="scroll"><div class="tr" style="color:var(--pale);font-weight:700;font-size:15px;border-top:0"><span>Next run</span><span>Check</span><span>Runs</span><span>Status</span></div><div id="ttRows"></div></div>
+    </div>
+    <div class="board">
+      <div class="bh"><h2>YOUR WEEK</h2><p>Today is lit in teal.</p></div>
+      <div class="scroll"><div class="week" id="week"></div></div>
+    </div>
+    <div class="board">
+      <div class="bh"><h2>WHAT GETS CHECKED</h2><p>Everything a visitor needs to plan a show and get there.</p></div>
+      <div class="scroll"><div class="cov" id="cov"></div></div>
+    </div>
+    <div class="board">
+      <div class="bh"><h2>THE YEAR AHEAD</h2></div>
+      <div class="year" id="year"></div>
+      <div class="foot">Every check sends your phone and email one summary when it changes something, and logs each change in Flight Records on your admin board. No changes means no message, apart from the Monday dates line. Only official sources are used, and anything a check can't confirm is held back and listed for you.</div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var $=function(s){return document.querySelector(s)};
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+  var BASE='https://jskedge1.github.io/airshow-pages/',SITE='https://www.ukairshowguide.co.uk/',ART='https://claude.ai/artifact/',REPO='https://github.com/jskedge1/airshow-pages/blob/main/';
+
+  /* every page live on the website, in menu order */
+  var LIVE=[
+    ['Home','Home page','home.html',''],
+    ['Find Your Airshow','Find Your Airshow','find-your-airshow.html','air-shows-guides'],
+    ['Find Your Airshow','Royal International Air Tattoo','camping-layout/riat.html','riat'],
+    ['Find Your Airshow','RAF Cosford Air Show','camping-layout/cosford.html','cosfordairshow'],
+    ['Find Your Airshow','Midlands Air Festival','camping-layout/midlands.html','midlandsairfestival'],
+    ['Find Your Airshow','Eastbourne Air Show','camping-layout/eastbourne.html','eastbourneairshow'],
+    ['Find Your Airshow','Clacton Air Show','camping-layout/clacton.html','clactonairshow'],
+    ['Find Your Airshow','Wales Airshow (Swansea)','camping-layout/wales.html','walesairshow'],
+    ['Find Your Airshow','Duxford Air Shows','camping-layout/duxford.html','duxfordairshows'],
+    ['Find Your Airshow','Shuttleworth Collection','camping-layout/shuttleworth.html','shuttleworthairshows'],
+    ['Find Your Airshow','Little Gransden Air Show','camping-layout/gransden.html','little-gransden-air-and-car-show'],
+    ['Find Your Airshow','Southport Air Show','camping-layout/southport.html','southport-air-show'],
+    ['Find Your Airshow','Blackpool Air Show','camping-layout/blackpool.html','blackpool-air-show'],
+    ['Find Your Airshow','International Ayr Show','camping-layout/ayr.html','international-ayr-show'],
+    ['Getting there','Bus Route Pages','bus-routes/index.html','bus-route'],
+    ['Getting there','Train to Clacton','train-routes/clacton.html','train-to-clacton'],
+    ['Getting there','Train to Eastbourne','train-routes/eastbourne.html','train-to-eastbourne'],
+    ['Getting there','Train to Cosford','train-routes/cosford.html','train-to-cosford'],
+    ['Planning Guides','Visitor Planning Guides','visitor-planning-guides.html','visitorplanningguides'],
+    ['Planning Guides','Planning Your First Airshow','planning-your-first-airshow.html','planning-your-first-airshow'],
+    ['Planning Guides','Getting There','first-airshow-getting-there.html','first-airshow-getting-there'],
+    ['Planning Guides','Where To Watch','first-airshow-where-to-watch.html','first-airshow-where-to-watch'],
+    ['Planning Guides','What To Pack','first-airshow-what-to-pack.html','first-airshow-what-to-pack'],
+    ['Planning Guides','Security And Bag Searches','airshow-security.html','airshow-security'],
+    ['Planning Guides','Food And Drink At Airshows','food-and-drink.html','foodanddrinkatairshows'],
+    ['Planning Guides','UK Airshow Calendar','uk-airshow-calendar.html','uk-airshow-calendar'],
+    ['Planning Guides','Airshow Map','airshow-map.html','airshow-map'],
+    ['Planning Guides','Airshow News','airshow-news.html','airshow-news'],
+    ['Photography','Airshow Photography Hub','photography-hub.html','airshow-photography-hub'],
+    ['Photography','Photography Equipment','photography-equipment.html','photography-equipment'],
+    ['Camping','Camping At Airshows','camping-hub.html','camping-at-airshows'],
+    ['Camping','Accommodation Near Shows','first-airshow-accommodation.html','first-airshow-accommodation'],
+    ['Community','My Airshow Hub','my-airshow-hub.html','my-airshow-hub','Shows the logged out hub here. Member parts need a Wix log in.'],
+    ['Community','Airshow Forum','forum.html','community-forum','Example posts until it is linked to real logins.'],
+    ['Community','Groups header','groups-header.html','groups','The Wix Groups list under it only shows on the website.'],
+    ['Community','YouTube Channel','youtube.html','youtube'],
+    ['Community','Airshow Traders','traders/directory.html','airshow-traders'],
+    ['Community','Trader Hub','traders/trader-hub.html','trader-hub','Trader log in, hidden from the menu.'],
+    ['Community','Contact Us','contact.html','contact-us'],
+    ['Community','Our Policies','policies.html','policies'],
+    ['Site parts','Site map footer','footer.html','','Shows at the bottom of every page.'],
+    ['Admin','Site Admin board','admin/board.html','site-admin','Example data here. Your real figures show on the website.'],
+    ['Admin','Trader Admin','traders/admin.html','trader-admin','Example data here.']
+  ].map(function(r,i){return {id:'l'+i,group:r[0],name:r[1],file:r[2],wix:r[3],note:r[4]||'',live:true}});
+
+  var NOT=[],pick={live:'l0','not-live':null},dev='desktop',view='live';
+  var DEVW={desktop:1280,tablet:768,phone:390};
+  $('#nLive').textContent=LIVE.length;
+
+  function current(){return view==='live'?LIVE:NOT}
+  function renderList(){
+    var t=$('#q').value.trim().toLowerCase(),list=current().filter(function(p){return !t||(p.name+' '+p.group).toLowerCase().indexOf(t)>-1});
+    var groups=[];list.forEach(function(p){if(groups.indexOf(p.group)<0)groups.push(p.group)});
+    $('#list').innerHTML=groups.map(function(g){
+      var items=list.filter(function(p){return p.group===g});
+      return '<div class="g"><span>'+esc(g.toUpperCase())+'</span><span>'+items.length+'</span></div>'+items.map(function(p){
+        var tag=p.live?'<i class="w-live">On the website</i>':p.file?(p.group==='On hold'?'<i class="w-hold">On hold, previews here</i>':'<i class="w-git">Previews here</i>'):'<i class="w-art">Opens in Claude</i>';
+        return '<button type="button" class="it'+(p.id===pick[view]?' on':'')+'" data-id="'+esc(p.id)+'"><b>'+esc(p.name)+'</b><span>'+esc(p.live?(p.wix?'/'+p.wix:(p.file==='home.html'?'The home page, /':'Not its own page')):p.status)+'</span>'+tag+'</button>';
+      }).join('');
+    }).join('')||'<p class="empty">No pages match that. Try a show name such as Duxford.</p>';
+  }
+  function renderPv(){
+    var p=current().filter(function(x){return x.id===pick[view]})[0];
+    if(!p){$('#pv').innerHTML='<p class="empty">'+(view==='not-live'&&!NOT.length?'Loading the pages not live yet.':'Pick a page on the left.')+'</p>';return}
+    var acts='';
+    if(p.file)acts+='<a class="pri" href="'+BASE+encodeURI(p.file)+'" target="_blank" rel="noopener">Open full page</a>';
+    if(p.live&&p.wix!=null&&p.file!=='footer.html')acts+='<a href="'+SITE+encodeURI(p.wix)+'" target="_blank" rel="noopener">On the website</a>';
+    if(p.art)acts+='<a href="'+ART+esc(p.art)+'" target="_blank" rel="noopener">Open in Claude to edit</a>';
+    if(p.file)acts+='<a href="'+REPO+encodeURI(p.file)+'" target="_blank" rel="noopener">Page code</a>';
+    var sub=p.live?(p.group+(p.wix?', page /'+p.wix:'')):('Goes in: '+p.goes+(p.wix?', page /'+p.wix:''));
+    var head='<div class="head"><div><h2>'+esc(p.name.toUpperCase())+'</h2><div class="goes">'+esc(sub)+'</div>'+(p.note?'<p>'+esc(p.note)+'</p>':'')+'</div><div class="acts">'+acts+'</div></div>';
+    if(!p.file){
+      $('#pv').innerHTML=head+'<div class="stage" style="display:flex"><div class="art"><h3>KEPT IN CLAUDE FOR NOW</h3><p>This page is one of your Claude previews, so it opens in a new tab where you can look round it, comment and ask for changes. It moves onto GitHub, and previews here, once it is ready for the website.</p><div class="acts"><a class="pri" href="'+ART+esc(p.art)+'" target="_blank" rel="noopener">Open '+esc(p.name)+'</a></div></div></div>';
+      return;
+    }
+    $('#pv').innerHTML=head+'<div class="bar"><div class="dev" id="dev">'+['desktop','tablet','phone'].map(function(d){return '<button type="button" data-dev="'+d+'" class="'+(dev===d?'on':'')+'">'+d.charAt(0).toUpperCase()+d.slice(1)+' '+DEVW[d]+'</button>'}).join('')+'</div><span class="small">Working preview: scroll, tap and use it like the real page.</span></div><div class="stage" id="stage"><iframe class="frame" id="frame" title="Preview of '+esc(p.name)+'" src="'+BASE+encodeURI(p.file)+'"></iframe></div><div class="cap" id="cap"></div>';
+    fit();
+  }
+  function fit(){
+    var st=$('#stage'),fr=$('#frame');if(!st||!fr)return;
+    var w=DEVW[dev],sc=Math.min(1,(st.clientWidth-24)/w),h=st.clientHeight;
+    fr.style.width=w+'px';fr.style.height=Math.round(h/sc)+'px';fr.style.transform='scale('+sc+')';fr.style.left=Math.round((st.clientWidth-w*sc)/2)+'px';
+    $('#cap').textContent='Showing at '+w+' px wide'+(sc<1?', scaled to '+Math.round(sc*100)+'% to fit':'')+'. The website gives pages 320 px on the smallest phones.';
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-id]');
+    if(b){pick[view]=b.dataset.id;renderList();renderPv();var pv=$('#pv');if(pv.getBoundingClientRect().top<0||window.innerWidth<=820)pv.scrollIntoView({behavior:'smooth',block:'start'});return}
+    var d=e.target.closest('[data-dev]');
+    if(d){dev=d.dataset.dev;Array.prototype.forEach.call(document.querySelectorAll('#dev button'),function(x){x.classList.toggle('on',x===d)});fit()}
+  });
+  $('#q').addEventListener('input',renderList);
+  window.addEventListener('resize',fit);
+
+  fetch('../admin/unpublished.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
+    var order=['Nearly ready','On hold','Ideas'];
+    NOT=(d.pages||[]).map(function(p){p.id='n-'+p.id;return p}).sort(function(a,b){return order.indexOf(a.group)-order.indexOf(b.group)});
+    $('#nNot').textContent=NOT.length;
+    if(!pick['not-live']&&NOT.length)pick['not-live']=NOT[0].id;
+    if(view==='not-live'){renderList();renderPv()}
+  }).catch(function(){NOT=[];if(view==='not-live')$('#list').innerHTML='<p class="empty">The pages not live yet could not load. Check your connection and reload.</p>'});
+
+  /* timetable of scheduled checks */
+  var TT=[
+    {name:'Morning show check',what:'News, show dates, times, prices, parking, aircraft line ups and run up travel',every:'Every day 09:01',h:9,mi:1,ok:function(){return true}},
+    {name:'2027 date checker',what:'Airshow calendar and featured show dates',every:'Mondays 12:17',h:12,mi:17,ok:function(y,m,d,w){return w===1}},
+    {name:'Visitor facts check',what:'Timings, tickets, costs, parking, trains, buses, taxis',every:'Wednesdays 10:37',h:10,mi:37,ok:function(y,m,d,w){return w===3}},
+    {name:'Debug and fix',what:'Every page loaded, bugs and dead links fixed, ready for the week',every:'Sundays 07:13',h:7,mi:13,ok:function(y,m,d,w){return w===0}},
+    {name:'Train to Eastbourne, monthly',what:'Times, fares and travel advice on the Eastbourne train page',every:'12th, Jan to Jun 2027, 14:23',h:14,mi:23,ok:function(y,m,d){return y===2027&&m>=1&&m<=6&&d===12}},
+    {name:'Train to Eastbourne, weekly',what:'Weekly check in the run up to Airbourne',every:'Mondays, Jul to mid Aug 2027, 14:23',h:14,mi:23,ok:function(y,m,d,w){return y===2027&&w===1&&(m===7||(m===8&&d<=16))}}
+  ];
+  var DN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function uk(){var p={};new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric',hour12:false}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value});return {y:+p.year,m:+p.month,d:+p.day,h:+p.hour%24,mi:+p.minute,s:+p.second}}
+  function two(x){return (x<10?'0':'')+x}
+  function nextRun(t,n){
+    for(var i=0;i<430;i++){
+      var dt=new Date(Date.UTC(n.y,n.m-1,n.d+i)),y=dt.getUTCFullYear(),m=dt.getUTCMonth()+1,d=dt.getUTCDate(),w=dt.getUTCDay();
+      if(!t.ok(y,m,d,w))continue;
+      if(i===0&&t.h*60+t.mi<=n.h*60+n.mi)continue;
+      return {i:i,y:y,m:m,d:d,w:w};
+    }
+    return null;
+  }
+  function renderTimetable(){
+    var n=uk();
+    var rows=TT.map(function(t){var r=nextRun(t,n);return {t:t,r:r,when:r?(r.i===0?'Today':r.i===1?'Tomorrow':DN[r.w].slice(0,3)+' '+r.d+' '+MN[r.m-1])+' '+two(t.h)+':'+two(t.mi):'Finished'}});
+    var soon=rows.filter(function(x){return x.r}).sort(function(a,b){return a.r.i-b.r.i||(a.t.h*60+a.t.mi)-(b.t.h*60+b.t.mi)})[0];
+    $('#ttRows').innerHTML=rows.map(function(x){
+      var st=!x.r?'Finished':x===soon?'Next up':x.r.i===0?'Today':x.r.i<7?'This week':'From '+MN[x.r.m-1]+(x.r.y!==n.y?' '+x.r.y:'');
+      return '<div class="tr"><span class="nx">'+esc(x.when)+'</span><div class="d"><b>'+esc(x.t.name)+'</b><span>'+esc(x.t.what)+'</span></div><span class="ev">'+esc(x.t.every)+'</span><span class="tag'+(x===soon?' next':x.r&&x.r.i===0?' today':'')+'">'+esc(st)+'</span></div>';
+    }).join('');
+    var today=new Date(Date.UTC(n.y,n.m-1,n.d)).getUTCDay(),beforeMarch=n.y<2027||(n.y===2027&&n.m<3);
+    $('#week').innerHTML=[1,2,3,4,5,6,0].map(function(w){
+      var b='<div class="blk k-m"><b>09:01</b>Morning show check'+(w===5&&beforeMarch?', plus the aircraft line ups until March':'')+'</div>';
+      if(w===1)b+='<div class="blk k-d"><b>12:17</b>2027 date checker</div><div class="blk k-e"><b>14:23</b>Train to Eastbourne, July and August</div>';
+      if(w===3)b+='<div class="blk k-f"><b>10:37</b>Visitor facts check</div>';
+      if(w===0)b='<div class="blk k-s"><b>07:13</b>Debug and fix, ready for the week</div>'+b;
+      return '<div class="day'+(w===today?' now':'')+'"><h4>'+DN[w]+(w===today?', today':'')+'</h4>'+b+'</div>';
+    }).join('');
+    var C=[
+      ['Show dates','Every featured show and whether it is confirmed','Monday: 2027 calendar and new shows','Cancellations flagged as alerts','Morning, Dates'],
+      ['Gates and flying times','Gates open, flying times, evening displays','Car park opening and every time on the pages','Last minute organiser changes','Morning, Facts'],
+      ['Tickets and costs','Adult and child prices, tickets on sale','Every price: family, parking, camping, shuttles, fees, early bird deadlines','Price rises and sell outs as news','Morning, Facts'],
+      ['Aircraft line ups','Every day from 1 March, with a photo from your Drive','Fridays until the end of February','Daily checks from March cover every show','Morning'],
+      ['Airshow news','New stories from all 12 organisers','','Travel and safety alerts marked important','Morning'],
+      ['Car parking','Parking line on each show','Car parks, booking, Blue Badge rules, park and ride','Road closures and car park changes daily','Morning, Facts'],
+      ['Trains and buses','','Stations, routes, last trains and buses. Every time refreshed weekly from March','Engineering works, strikes, extra trains, show day buses daily','Facts, Morning'],
+      ['Route pages','','54 bus routes plus Clacton and Cosford trains, rebuilt with summer times from March','Eastbourne train page monthly, then weekly in July and August','Facts, Eastbourne'],
+      ['Taxis and access','','Taxi numbers, wheelchair access, accessible parking, carer tickets','Accessible route changes','Facts'],
+      ['Stays, food, rules','','First Wednesday of each month: hotels, campsites, food, bag rules, venues','','Facts'],
+      ['Links and bugs','','Sunday: every page on desktop, tablet and phone, errors and dead links fixed','','Sunday']
+    ];
+    $('#cov').innerHTML='<div class="h">Visitor information</div><div class="h">Every day</div><div class="h">Every week</div><div class="h">Run up to a show</div><div class="h">Owner</div>'+C.map(function(r){return '<div class="w">'+esc(r[0])+'</div><div>'+esc(r[1])+'</div><div>'+esc(r[2])+'</div><div>'+esc(r[3])+'</div><div class="o">'+esc(r[4])+'</div>'}).join('');
+    var Y=[['1 January 2027','First Train to Eastbourne check on the 12th, then monthly to June'],['1 March 2027','Aircraft line ups checked every day. Summer train and bus times go in every week'],['May to October','Daily travel checks for each show from 14 days before. Duxford and Shuttleworth run seven shows each'],['July to mid August','Train to Eastbourne checked every Monday'],['Key 2027 shows','Midlands 4 to 6 June, Cosford 13 June, RIAT 16 to 18 July, Eastbourne 12 to 15 August, Clacton 26 to 27 August']];
+    $('#year').innerHTML=Y.map(function(y){return '<div><b>'+esc(y[0])+'</b><span>'+esc(y[1])+'</span></div>'}).join('');
+  }
+
+  /* views, routed on the address so each can be bookmarked */
+  function route(){
+    var h=(location.hash||'#live').slice(1);if(['live','not-live','timetable'].indexOf(h)<0)h='live';
+    view=h;
+    Array.prototype.forEach.call(document.querySelectorAll('.views a'),function(a){a.classList.toggle('on',a.dataset.v===h);if(a.dataset.v===h)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+    $('#v-pages').hidden=h==='timetable';$('#v-timetable').hidden=h!=='timetable';
+    if(h==='timetable')renderTimetable();else{$('#q').value='';renderList();renderPv()}
+  }
+  window.addEventListener('hashchange',route);
+  route();
+  function tick(){var n=uk();$('#clock').textContent=two(n.h)+':'+two(n.mi)+':'+two(n.s)}
+  tick();setInterval(tick,1000);setInterval(function(){if(view==='timetable')renderTimetable()},60000);
+})();
+</script>
+</body>
+</html>
