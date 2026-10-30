@@ -7,6 +7,52 @@ OPS = json.load(open('operators.json'))
 ENDS = json.load(open('ends.json'))
 DAYNAME = {'thu': 'Thursday', 'fri': 'Friday', 'sat': 'Saturday', 'sun': 'Sunday'}
 SITE = 'https://www.ukairshowguide.co.uk/'
+# bus company colours: [main, second, text on main]. Colours only, no logos.
+OPCOL = {
+ 'Stagecoach': ['#1D4F91', '#F58025', '#FFFFFF', '#E31B23'],
+ 'Arriva': ['#00A5A3', '#003B5C', '#FFFFFF', '#00A5A3'],
+ 'First': ['#4B2E83', '#E6007E', '#FFFFFF', '#E6007E'],
+ 'Brighton and Hove': ['#C8102E', '#F3E8CF', '#FFFFFF', '#1A1A1A'],
+ 'Blackpool Transport': ['#1A1A1A', '#FFD100', '#FFD100', '#FFD100'],
+ 'Central Connect': ['#00843D', '#7AC143', '#FFFFFF', '#00843D'],
+ 'A2B Bus and Coach': ['#1E5AA8', '#8CC63F', '#FFFFFF', '#1E5AA8'],
+ 'Cuckmere Buses': ['#2E6B30', '#F2E6B8', '#FFFFFF', '#2E6B30'],
+ 'Diamond Bus': ['#004B93', '#E30613', '#FFFFFF', '#E30613'],
+ 'Grant Palmer': ['#0B3D91', '#FFC20E', '#FFFFFF', '#FFC20E'],
+ 'Vision Bus': ['#D71920', '#1A1A1A', '#FFFFFF', '#D71920'],
+}
+def opcol(name):
+    for k, v in OPCOL.items():
+        if name.startswith(k): return v
+    return ['#13293C', '#F2B233', '#FFFFFF', '#F2B233']
+
+
+def vias(seq, locs, exclude, n=6, keep=()):
+    """Main towns a direction passes, in order, for the destination blind."""
+    count = {}
+    for a in seq:
+        t = locs.get(a, '')
+        if t: count[t] = count.get(t, 0) + 1
+    ex = [w.lower() for x in exclude for w in x.replace(',', ' ').split() if len(w) >= 3]
+    order = []
+    for a in seq:
+        t = locs.get(a, '')
+        if t and t not in order and not any(w in t.lower() for w in ex) and not re.search(r'promenade|interchange|bus station|station', t, re.I): order.append(t)
+    top = sorted(order, key=lambda t: -count[t])[:n]
+    for k in keep:
+        hit = next((t for t in order if k.lower() in t.lower() or t.lower() in k.lower()), None)
+        if hit and hit not in top: top = top[:n - 1] + [hit]
+    return [t for t in order if t in top]
+
+
+def blindlines(towns):
+    if not towns: return []
+    out, i = [], 0
+    while i < len(towns):
+        pair = towns[i:i + 2]
+        out.append('via ' + ' and '.join(pair) if len(pair) == 2 else 'via ' + pair[0])
+        i += 2
+    return out
 
 SHOWS = {
  'ayr': dict(name='International Ayr Show', slug='international-ayr-show', target=[55.45787, -4.64049], label='Low Green', town='Ayr',
@@ -36,10 +82,10 @@ SHOWS = {
 }
 
 OVERRIDE = {
- 'x77-ayr': dict(blindVia=['via Prestwick Airport', 'via Prestwick']),
+ 'x77-ayr': dict(dirvia={'Ayr': ['via Newton Mearns', 'via Prestwick Airport', 'via Prestwick'], 'Glasgow': ['via Prestwick', 'via Prestwick Airport', 'via Newton Mearns']}),
  '132-duxford': dict(
    title='Bus 132 to IWM Duxford',
-   blindVia=['via Cambridge station', 'via Addenbrooke’s', 'via Trumpington'],
+   dirvia={'Saffron Walden': ['via Addenbrooke’s and Trumpington', 'via IWM Duxford', 'via Ickleton and Great Chesterford'], 'Cambridge': ['via Great Chesterford and Ickleton', 'via IWM Duxford', 'via Trumpington and Addenbrooke’s']},
    lead='This is the bus I would look at if you’re heading to Duxford on a Sunday without a car. It picks up in Cambridge city centre and outside the railway station, then drops you right by Hangar 1.',
    offTag='Get off here for the museum',
    alt=['On Air Show weekends', 'IWM usually runs its own free shuttle from Cambridge station and Trumpington Park and Ride. That is the easier choice on a big show day, so I would suggest using that instead.'],
@@ -113,6 +159,7 @@ def pick(trips, offi, mode):
 
 def build(fn):
     raw = json.load(open(fn))
+    locs = json.load(open(fn[:-5] + '.loc.json')) if os.path.exists(fn[:-5] + '.loc.json') else {}
     r = raw['route']; rid = r['id']; show = SHOWS[r['show']]; ov = OVERRIDE.get(rid, {})
     loc = raw['loc']; target = show['target']
     lines = raw['lines']
@@ -137,7 +184,7 @@ def build(fn):
             for t in d['trips']:
                 for s in t: names[s[1]] = clean(s[2])
     offname = names.get(off, '')
-    days = []; served = []; heads = []; headways = []
+    days = []; served = []; heads = []; headways = []; usedoff = {}
     for dk in r['days']:
         dirs = []
         for di, d in enumerate(raw['days'].get(dk, [])):
@@ -159,6 +206,7 @@ def build(fn):
             out = []
             for t in sel:
                 oi = offi[id(t)]
+                usedoff[t[oi][1]] = usedoff.get(t[oi][1], 0) + 1
                 stops = []
                 keyix = [i for i, s in enumerate(t) if not s[3]]
                 lab = set([0, len(t) - 1, oi])
@@ -194,8 +242,10 @@ def build(fn):
         days.append(dict(key=dk, label=DAYNAME[dk], dirs=dirs,
                          none=f'In the current timetable there are no {r["num"]} buses on {DAYNAME[dk]}s, so I would look at the other ways to get there on the {show["name"]} page.'))
     if not served: return None, 'no buses on show days'
+    if usedoff:
+        off = max(usedoff, key=usedoff.get); offd = hav(loc[off], target); offname = names.get(off, offname)
     # a, b from first heading
-    a, b = ENDS[rid]
+    a, b = ENDS[rid]; A, B = a, b
     # facts
     if len(served) == len(r['days']): runs = andlist([DAYNAME[d] + 's' for d in served])
     else: runs = andlist([DAYNAME[d] + 's' for d in served]) + ' only'
@@ -228,7 +278,13 @@ def build(fn):
                title=ov.get('title') or f'Bus {r["num"]}, {a} to {b}',
                blindDest=(show['town'] if offd <= 3000 else b or show['town']), blindVia=ov.get('blindVia') or via,
                lead=lead, facts=facts, legs=legs, tipHead='Before you travel', tip=tip,
-               tipBtn=f'Back to getting to {show["town"]}', alt=ov.get('alt'),
+               tipBtn=f'Back to getting to {show["town"]}', alt=ov.get('alt'), theme=opcol(OPS.get(rid, '')),
+               walkLine=('You’re right by the show when you get off.' if offd < 250 else
+                         f'From here it’s {walkfact(offd).lower()} on foot to {show["label"]}.' if offd <= 3000 else
+                         f'It’s about {round(offd * 1.3 / 1609)} miles from here to {show["label"]}, so I would book a taxi for that last part.'),
+               walkBack=('The stop is right by the show, so there’s no long walk back.' if offd < 250 else
+                         f'Allow {walkfact(offd).lower()} to walk back here from {show["label"]}, and a bit more when the crowds leave.' if offd <= 3000 else
+                         f'It’s about {round(offd * 1.3 / 1609)} miles back to this stop from {show["label"]}, so book your taxi before the day.'),
                target=target, targetLabel=show['label'], offTag=ov.get('offTag', 'Closest stop to the show'),
                note=f'Stops and times are from {OPS.get(rid, "the bus company")}’s timetable on the DfT <a href="https://data.bus-data.dft.gov.uk/" target="_blank" rel="noopener">Bus Open Data Service</a>, through <a href="https://bustimes.org/" target="_blank" rel="noopener">bustimes.org</a>, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with {OPS.get(rid, "the operator")} before you travel. The line is drawn along the roads between the stops, so treat it as a guide. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.')
     stab, sidx = [], {}
@@ -245,16 +301,12 @@ def build(fn):
     for dd in days:
         for x in dd['dirs']:
             dest = x['label'][3:]
-            if x.get('fr0', 0) >= .5 and dest.split()[0].lower() in cfg['blindDest'].lower():
-                x['blind'] = None
-            elif x.get('fr0', 0) >= .5:
-                x['blind'] = dest
-                x['via'] = (['via ' + cfg['blindDest']] if x['fr0'] < .9 else []) + [v for v in cfg['blindVia'] if dest.split()[0].lower() not in v.lower()][:2]
-            else:
-                dest = x['label'][3:]
-                x['blind'] = dest
-                back = [v for v in reversed(cfg['blindVia']) if dest.split()[0].lower() not in v.lower()]
-                x['via'] = back or ['from ' + cfg['blindDest']]
+            seq = lines[x['li']]['stops']
+            toshow = x.get('fr0', 0) >= .5 and dest.split()[0].lower() in cfg['blindDest'].lower()
+            showtown = show['town'].replace('IWM ', '')
+            towns = vias(seq, locs, [dest, A, B] + ([cfg['blindDest']] if toshow else []), keep=() if toshow else (showtown,))
+            x['blind'] = None if toshow else dest
+            x['via'] = (ov.get('dirvia') or {}).get(dest) or blindlines(towns[:6]) or ['from ' + (A if dest != A else B)]
             x.pop('fr0', None)
     data = dict(stops=stab, lines=[thin(L['line']) for L in lines], days=days, start=next(i for i, d in enumerate(days) if d['key'] in served))
     html = TPL.replace('/*DATA*/', 'var CFG=' + json.dumps(cfg, ensure_ascii=False) + ';\nvar DATA=' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';')
@@ -370,7 +422,7 @@ def makelegs(L, names, off):
 
 if __name__ == '__main__':
     idx, skipped = [], []
-    for fn in sorted(glob.glob('raw/*.json')):
+    for fn in sorted(f for f in glob.glob('raw/*.json') if not f.endswith('.loc.json')):
         try:
             res, msg = build(fn)
         except Exception as e:

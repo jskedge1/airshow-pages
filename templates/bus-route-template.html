@@ -35,7 +35,7 @@ a{color:inherit}
 .blind::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.55) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
 .blind .num{font:800 92px/0.9 "Barlow Condensed",sans-serif;color:var(--amber);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
 .blind .dest{font:700 34px/1 "Barlow Condensed",sans-serif;color:var(--amber);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3)}
-.blind .via{display:block;margin-top:8px;font:600 18px/1.2 "Barlow Condensed",sans-serif;color:#f7d68f;letter-spacing:.03em;text-transform:uppercase;opacity:.85;transition:opacity .4s var(--ease)}
+.blind .via{display:block;margin-top:8px;font:600 18px/1.2 "Barlow Condensed",sans-serif;color:#FFE2A3;letter-spacing:.03em;text-transform:uppercase;opacity:1;text-shadow:0 0 10px rgba(242,178,51,.3);transition:opacity .4s var(--ease)}
 .intro h1{font:800 46px/46px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;letter-spacing:-.005em}
 .intro p{margin-top:12px;font-size:18px;line-height:29px;color:#1d2730;max-width:520px}
 
@@ -269,6 +269,47 @@ a{color:inherit}
 .ttsheet td.sel{box-shadow:inset 0 0 0 2px var(--amber)}
 .ttsheet td.no{color:#b6bec5;font-weight:500}
 .tthint{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 8px 4px;font-size:14px;line-height:19px;color:#cfdbe5}
+
+/* ---------- bus company colours (set from CFG.theme) ---------- */
+:root{--op1:#13293C;--op2:#F2B233;--opink:#fff;--op3:#F2B233}
+.livery{height:10px;margin:14px 0 0;border-radius:5px;background:linear-gradient(100deg,var(--op1) 0 58%,var(--op2) 58% 74%,var(--op3) 74% 84%,var(--op1) 84% 100%)}
+.opchip{display:inline-flex;align-items:center;gap:8px;background:var(--op1);color:var(--opink);border-radius:999px;padding:6px 14px 6px 8px;font-weight:600;font-size:15px;line-height:20px}
+.opchip i{width:22px;height:22px;border-radius:50%;background:conic-gradient(var(--op2) 0 33%,var(--op3) 0 66%,var(--opink) 0);box-shadow:0 0 0 2px var(--op1),0 0 0 3px rgba(255,255,255,.5)}
+.facts{border-top-color:var(--op1)}
+.busdot{background:var(--op2);border-color:var(--op1)}
+.busdot svg rect:first-child{fill:var(--op1)}
+.rbus .lv1{fill:var(--op1)}.rbus .lv2{fill:var(--op2)}.rbus .lv3{fill:var(--op3)}
+
+/* times row scroll buttons */
+.boardwrap{position:relative;min-width:0}
+.bscroll{position:absolute;top:50%;z-index:3;width:38px;height:38px;margin-top:-21px;border-radius:50%;border:0;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px -6px rgba(12,28,42,.7);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.bscroll:hover{transform:scale(1.08)}
+.bscroll svg{width:16px;height:16px}
+.bscroll.l{left:-12px}.bscroll.r{right:-4px}
+.bscroll[hidden]{display:none}
+.bscroll:disabled{opacity:0;pointer-events:none}
+
+/* next bus after the time now */
+.dep .nx{position:absolute;right:10px;top:6px;font:700 11px/1 "Barlow",sans-serif;background:var(--red);color:#fff;border-radius:4px;padding:3px 5px}
+
+/* your stop for the show: a red bus stop sign */
+.yourstop{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px 28px;align-items:center;margin-top:28px;background:var(--mist);border-radius:16px 16px 16px 0;padding:18px 26px 18px 18px;position:relative;overflow:hidden}
+.yourstop::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(90deg,var(--amber) 0 18px,transparent 18px 30px);opacity:.7}
+.stopsign{width:150px;height:auto;display:block;filter:drop-shadow(0 10px 14px rgba(12,28,42,.25));transform-origin:50% 100%}
+.yourstop.in .stopsign{animation:sway 1.6s cubic-bezier(.36,.07,.19,.97) .3s 1}
+@keyframes sway{0%{transform:rotate(0)}25%{transform:rotate(-2.2deg)}55%{transform:rotate(1.4deg)}80%{transform:rotate(-.6deg)}100%{transform:rotate(0)}}
+.yourstop h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
+.yourstop .sname{display:block;margin-top:6px;font:700 26px/29px "Barlow Condensed",sans-serif;color:var(--red)}
+.yourstop ul{list-style:none;margin-top:10px;display:grid;gap:8px}
+.yourstop li{display:flex;gap:10px;align-items:flex-start;font-size:16px;line-height:24px}
+.yourstop li svg{flex:0 0 22px;width:22px;height:22px;margin-top:1px}
+.yourstop li b{color:var(--navy)}
+@media (prefers-reduced-motion:reduce){.yourstop.in .stopsign{animation:none}}
+@media(max-width:560px){.yourstop{grid-template-columns:86px minmax(0,1fr);gap:6px 14px;padding:14px 14px 18px 10px}.stopsign{width:86px}.yourstop h2{font-size:24px;line-height:26px}.yourstop .sname{font-size:21px;line-height:24px}.yourstop li{font-size:15px;line-height:22px}.bscroll{display:none}}
+
+/* map marker for the stop to get off at */
+.offpin{width:30px;height:46px}
+.offpin svg{width:30px;height:46px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
 </style>
 </head>
 <body>
@@ -276,8 +317,9 @@ a{color:inherit}
 
   <nav class="strip">
     <a class="back" id="backlink" href="#" target="_top"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg><span></span></a>
-    <span class="op" id="op"></span>
+    <span class="opchip" id="op"><i aria-hidden="true"></i><span id="opname"></span></span>
   </nav>
+  <div class="livery" aria-hidden="true"></div>
 
   <header class="hero">
     <div class="blindwrap rise">
@@ -296,9 +338,28 @@ a{color:inherit}
   <div class="facts rise" id="facts"></div>
   <div class="roadstrip" aria-hidden="true">
     <span class="lane">BUS LANE</span>
-    <svg class="rbus" viewBox="0 0 96 36"><rect x="1" y="2" width="92" height="27" rx="5" fill="#13293C"/><rect x="1" y="21" width="92" height="3" fill="#F2B233"/><rect x="74" y="6" width="16" height="13" rx="2" fill="#9FD8EE"/><g fill="#9FD8EE"><rect x="8" y="6" width="12" height="10" rx="1.5"/><rect x="23" y="6" width="12" height="10" rx="1.5"/><rect x="38" y="6" width="12" height="10" rx="1.5"/><rect x="53" y="6" width="12" height="10" rx="1.5"/></g><rect x="62" y="3.5" width="10" height="3" rx="1" fill="#F2B233"/><circle cx="20" cy="30" r="5" fill="#0B0B0B"/><circle cx="20" cy="30" r="2" fill="#9AA5AE"/><circle cx="74" cy="30" r="5" fill="#0B0B0B"/><circle cx="74" cy="30" r="2" fill="#9AA5AE"/><rect x="90" y="17" width="3" height="3" rx="1" fill="#F2B233"/></svg>
+    <svg class="rbus" viewBox="0 0 96 36"><rect class="lv1" x="1" y="2" width="92" height="27" rx="5"/><rect class="lv2" x="1" y="20" width="92" height="4"/><path class="lv3" d="M40 29 L58 2 L66 2 L48 29 Z" opacity=".9"/><rect x="74" y="6" width="16" height="13" rx="2" fill="#9FD8EE"/><g fill="#9FD8EE"><rect x="8" y="6" width="12" height="10" rx="1.5"/><rect x="23" y="6" width="12" height="10" rx="1.5"/><rect x="38" y="6" width="12" height="10" rx="1.5"/><rect x="53" y="6" width="12" height="10" rx="1.5"/></g><rect x="62" y="3.5" width="10" height="3" rx="1" fill="#FFD27A"/><circle cx="20" cy="30" r="5" fill="#0B0B0B"/><circle cx="20" cy="30" r="2" fill="#9AA5AE"/><circle cx="74" cy="30" r="5" fill="#0B0B0B"/><circle cx="74" cy="30" r="2" fill="#9AA5AE"/><rect x="90" y="17" width="3" height="3" rx="1" fill="#F2B233"/></svg>
     <svg class="rstop" viewBox="0 0 26 46"><rect x="12" y="14" width="2.5" height="32" fill="#cfd6dc"/><rect x="2" y="1" width="22" height="15" rx="2.5" fill="#fff" stroke="#D74949" stroke-width="2.2"/><rect x="6.5" y="4.5" width="13" height="8" rx="1.2" fill="#D74949"/><rect x="8" y="5.6" width="10" height="2.8" rx=".5" fill="#fff"/></svg>
   </div>
+  <section class="yourstop rise" id="yourstop" aria-labelledby="ysh">
+    <svg class="stopsign" viewBox="0 0 150 250" aria-hidden="true">
+          <rect x="70" y="60" width="10" height="190" rx="3" fill="#9AA5AE"/><rect x="70" y="60" width="4" height="190" fill="#C6CED4"/>
+          <rect x="6" y="6" width="138" height="104" rx="12" fill="#D74949"/><rect x="12" y="12" width="126" height="92" rx="8" fill="none" stroke="#fff" stroke-width="3"/>
+          <g transform="translate(43 24)"><rect x="0" y="0" width="64" height="40" rx="7" fill="#fff"/><rect x="6" y="6" width="52" height="16" rx="3" fill="#D74949"/><rect x="5" y="40" width="12" height="7" rx="2" fill="#fff"/><rect x="47" y="40" width="12" height="7" rx="2" fill="#fff"/><circle cx="12" cy="31" r="3.5" fill="#D74949"/><circle cx="52" cy="31" r="3.5" fill="#D74949"/></g>
+          <text x="75" y="94" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="22" fill="#fff" letter-spacing="1">BUS STOP</text>
+          <rect x="44" y="132" width="62" height="70" rx="5" fill="#fff" stroke="#13293C" stroke-width="3"/><g fill="#C6CED4"><rect x="52" y="142" width="46" height="4" rx="2"/><rect x="52" y="152" width="38" height="4" rx="2"/><rect x="52" y="162" width="46" height="4" rx="2"/><rect x="52" y="172" width="30" height="4" rx="2"/><rect x="52" y="182" width="42" height="4" rx="2"/></g>
+          <ellipse cx="75" cy="248" rx="26" ry="3" fill="rgba(12,28,42,.18)"/>
+        </svg>
+    <div>
+      <h2 id="ysh">Your stop for the show</h2>
+      <span class="sname" id="ysname"></span>
+      <ul>
+        <li id="ysbell"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#D74949"/><path d="M11 5c-2.4 0-4 1.8-4 4.2V12l-1.5 2h11L15 12V9.2C15 6.8 13.4 5 11 5z M9.5 15.5a1.5 1.5 0 0 0 3 0z" fill="#fff"/></svg><span id="ysbelltxt"></span></li>
+        <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13293C"/><circle cx="12" cy="5.5" r="1.8" fill="#fff"/><path d="M11.5 8l-2.5 3 1.5 1.5-1 4.5M11.5 8l1.5 3.5 2.5 1M10.5 12.5l2 1.5 1 3.5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="yswalk"></span></li>
+        <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#F2B233"/><path d="M11 6v5.5l3.5 2" stroke="#13293C" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span id="ysride"></span></li>
+      </ul>
+    </div>
+  </section>
 
   <section class="planner rise" aria-labelledby="ph">
     <h2 id="ph"><svg class="hflag" viewBox="0 0 18 26" aria-hidden="true"><rect x="8" y="9" width="2" height="17" fill="#13293C"/><rect x="1" y="1" width="16" height="11" rx="2" fill="#fff" stroke="#D74949" stroke-width="2"/><rect x="4.5" y="3.6" width="9" height="5.6" rx="1" fill="#D74949"/><rect x="5.6" y="4.4" width="6.8" height="2" rx=".4" fill="#fff"/></svg>Pick your bus</h2>
@@ -306,7 +367,11 @@ a{color:inherit}
       <div class="seg" id="day" role="group" aria-label="Day"></div>
       <div class="seg" id="dir" role="group" aria-label="Direction"></div>
     </div>
-    <div class="board" id="board" role="group" aria-label="Departure times"></div>
+    <div class="boardwrap">
+      <button type="button" class="bscroll l" id="bl" aria-label="Earlier buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10 3L5 8l5 5"/></svg></button>
+      <div class="board" id="board" role="group" aria-label="Departure times"></div>
+      <button type="button" class="bscroll r" id="br" aria-label="Later buses"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 3l5 5-5 5"/></svg></button>
+    </div>
     <p class="boardnote" id="bnote"></p>
     <div class="ttwrap">
       <button type="button" class="ttbtn" id="ttbtn" aria-expanded="false" aria-controls="ttcase"><span id="ttlbl">See every time</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6l5 5 5-5"/></svg></button>
@@ -355,13 +420,20 @@ a{color:inherit}
   var each = function(list, fn){ Array.prototype.forEach.call(list, fn); };
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var KEY = 1, OFF = 2, LABEL = 4;
+  var OFFPIN = L.divIcon({ className: 'offpin', iconSize: [30, 46], iconAnchor: [15, 46],
+    html: '<svg viewBox="0 0 30 46"><rect x="13.5" y="16" width="3" height="30" fill="#5E6A72"/><rect x="1" y="1" width="28" height="22" rx="4" fill="#D74949" stroke="#fff" stroke-width="2"/><rect x="8" y="5" width="14" height="10" rx="2" fill="#fff"/><rect x="10" y="6.5" width="10" height="3.5" rx="1" fill="#D74949"/><text x="15" y="21" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="800" font-size="5.6" fill="#fff">BUS STOP</text></svg>' });
   var FLAG = '<svg class="flag" viewBox="0 0 18 26" aria-hidden="true"><rect x="8" y="9" width="2" height="17" fill="#13293C"/><rect x="1" y="1" width="16" height="11" rx="2" fill="#fff" stroke="#D74949" stroke-width="2"/><rect x="4.5" y="3.6" width="9" height="5.6" rx="1" fill="#D74949"/><rect x="5.6" y="4.4" width="6.8" height="2" rx=".4" fill="#fff"/></svg>';
 
   /* fixed text */
   $('backlink').href = CFG.showUrl;
   $('backlink').target = CFG.showTarget || '_top';
   $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
-  $('op').textContent = 'Run by ' + CFG.operator;
+  $('opname').textContent = 'Run by ' + CFG.operator;
+  if (CFG.theme) {
+    var rs = document.documentElement.style;
+    rs.setProperty('--op1', CFG.theme[0]); rs.setProperty('--op2', CFG.theme[1]);
+    rs.setProperty('--opink', CFG.theme[2]); rs.setProperty('--op3', CFG.theme[3] || CFG.theme[1]);
+  }
   $('bnum').textContent = CFG.num;
   $('title').textContent = CFG.title;
   $('lead').textContent = CFG.lead;
@@ -391,7 +463,7 @@ a{color:inherit}
     setInterval(function(){
       if (VIA.length < 2) return;
       var v = $('bvia'); v.style.opacity = 0;
-      setTimeout(function(){ vi = (vi + 1) % VIA.length; v.textContent = VIA[vi]; v.style.opacity = .85; }, 400);
+      setTimeout(function(){ vi = (vi + 1) % VIA.length; v.textContent = VIA[vi]; v.style.opacity = 1; }, 400);
     }, 3200);
   }
 
@@ -481,20 +553,46 @@ a{color:inherit}
     $('tthint').textContent = sh.scrollWidth > sh.clientWidth + 4 ? 'Swipe or scroll sideways for later buses' : 'A dot means the bus doesn’t stop there';
   }
 
+  function arrows(){
+    var b = $('board'), over = b.scrollWidth > b.clientWidth + 4;
+    $('bl').hidden = $('br').hidden = !over;
+    $('bl').disabled = b.scrollLeft < 8;
+    $('br').disabled = b.scrollLeft + b.clientWidth >= b.scrollWidth - 8;
+  }
+  $('bl').addEventListener('click', function(){ $('board').scrollBy({ left: -Math.max(240, $('board').clientWidth * .7), behavior: reduce ? 'auto' : 'smooth' }); });
+  $('br').addEventListener('click', function(){ $('board').scrollBy({ left: Math.max(240, $('board').clientWidth * .7), behavior: reduce ? 'auto' : 'smooth' }); });
+  $('board').addEventListener('scroll', arrows, { passive: true });
+  window.addEventListener('resize', arrows);
+
+  /* the next bus after the time now, when today is the picked day */
+  function nextIndex(){
+    var days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    var now = new Date();
+    try { var p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(now);
+      var wd = p.filter(function(x){ return x.type === 'weekday'; })[0].value.toLowerCase().slice(0, 3);
+      var hm = (+p.filter(function(x){ return x.type === 'hour'; })[0].value) * 60 + (+p.filter(function(x){ return x.type === 'minute'; })[0].value);
+    } catch (e) { return -1; }
+    if (D().key !== wd) return -1;
+    var tr = DIR().trips;
+    for (var i = 0; i < tr.length; i++) { var t = tr[i].big.split(':'); if (+t[0] * 60 + +t[1] >= hm) return i; }
+    return -1;
+  }
+
   function board(){
-    var d = DIR();
+    var d = DIR(), nx = nextIndex();
     $('board').innerHTML = d.trips.map(function(t, i){
-      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '"><span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
+      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
     }).join('');
     $('bnote').textContent = d.note || '';
-    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); table(); }); });
+    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); var sl = $('board').scrollLeft; board(); $('board').scrollLeft = sl; draw(); table(); }); });
+    setTimeout(arrows, 30);
   }
 
   function drawLine(){
     lineLayer.clearLayers();
     ROUTE = DATA.lines[DIR().li] || [];
     casing = L.polyline(ROUTE, { color: '#13293C', weight: 11, opacity: .18 }).addTo(lineLayer);
-    L.polyline(ROUTE, { color: '#00A6E2', weight: 5, opacity: 1 }).addTo(lineLayer);
+    L.polyline(ROUTE, { color: (CFG.theme && CFG.theme[0]) || '#00A6E2', weight: 5, opacity: 1 }).addTo(lineLayer);
     fit(); measure();
   }
 
@@ -502,18 +600,34 @@ a{color:inherit}
     layer.clearLayers();
     var trip = DIR().trips[idx], s = trip.s, ol = $('stops');
     $('ptitle').textContent = trip.title;
-    $('psub').textContent = s.length + ' stops, ' + s[0][0] + ' to ' + s[s.length - 1][0];
+    var oi = -1; s.forEach(function(p, i){ if (p[4] & OFF) oi = i; });
+    function mm(x){ var a = x.split(':'); return +a[0] * 60 + +a[1]; }
+    var ride = mm(s[s.length - 1][0]) - mm(s[0][0]);
+    $('psub').textContent = s.length + ' stops, ' + s[0][0] + ' to ' + s[s.length - 1][0] + ', ' + ride + ' minutes';
+    if (oi >= 0) {
+      var o = s[oi];
+      $('ysname').textContent = o[1];
+      if (oi > 0 && oi < s.length - 1 || oi === s.length - 1) {
+        $('ysbelltxt').innerHTML = oi > 0 ? 'Press the bell once you pass <b>' + s[oi - 1][1] + '</b>, so the driver knows to stop.' : 'This is where the bus sets off.';
+        $('yswalk').textContent = CFG.walkLine;
+        $('ysride').textContent = trip.title + ' gets here at ' + o[0] + ', ' + (mm(o[0]) - mm(s[0][0])) + ' minutes after it sets off.';
+      }
+      if (oi === 0) {
+        $('ysbelltxt').innerHTML = 'Catch the bus here after the show. Wave to the driver as it comes in, so they know to stop.';
+        $('yswalk').textContent = CFG.walkBack;
+        $('ysride').textContent = 'This bus leaves here at ' + o[0] + ' and gets to ' + s[s.length - 1][1] + ' at ' + s[s.length - 1][0] + '.';
+      }
+    }
     ol.innerHTML = '';
     var group = null, gid = 0;
     s.forEach(function(p, i){
       var isOff = p[4] & OFF, key = (p[4] & KEY) || isOff || i === 0 || i === s.length - 1;
-      var m = L.circleMarker([p[2], p[3]], {
-        radius: isOff ? 10 : (key ? 6 : 4), color: isOff ? '#D74949' : '#13293C', weight: key ? 3 : 2,
-        fillColor: isOff ? '#D74949' : '#FFFFFF', fillOpacity: 1
+      var m = isOff ? L.marker([p[2], p[3]], { icon: OFFPIN, zIndexOffset: 1000 }).addTo(layer) : L.circleMarker([p[2], p[3]], {
+        radius: key ? 6 : 4, color: '#13293C', weight: key ? 3 : 2, fillColor: '#FFFFFF', fillOpacity: 1
       }).addTo(layer);
       m.bindPopup('<b>' + p[1] + '</b><br>' + p[0] + (isOff ? '<br>' + CFG.offTag : ''));
       var small = window.innerWidth < 560 && !isOff && i !== 0 && i !== s.length - 1;
-      if ((p[4] & LABEL || isOff) && !small) m.bindTooltip(p[5] || p[1], { permanent: true, direction: 'right', offset: [10, 0], className: 'lbl' + (isOff ? ' off' : '') });
+      if ((p[4] & LABEL || isOff) && !small) m.bindTooltip(p[5] || p[1], { permanent: true, direction: 'right', offset: isOff ? [14, -26] : [10, 0], className: 'lbl' + (isOff ? ' off' : '') });
 
       if (!key) {
         if (!group) {
