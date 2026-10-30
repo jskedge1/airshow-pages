@@ -184,7 +184,91 @@ a{color:inherit}
 .dep{max-width:300px}
 .board{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);padding-right:40px}
 .dep .a{white-space:normal}
-@media(max-width:560px){.pickrow{display:grid;grid-template-columns:1fr;width:100%}.pickrow .seg{width:100%}.dep{max-width:76vw}}
+@media(max-width:560px){.blindwrap{padding:0 0 16px 14px}.roadstrip{margin-top:26px;height:48px}.roadstrip .rbus{top:7px}.roadstrip .lane{font-size:11px}.panel header b{padding-right:84px}.pickrow{display:grid;grid-template-columns:1fr;width:100%}.pickrow .seg{width:100%}.dep{max-width:76vw}}
+
+/* ---------- bus touches ---------- */
+/* seat moquette panel behind the destination blind */
+.blindwrap{position:relative;padding:0 0 22px 22px}
+.moquette{position:absolute;left:0;bottom:0;width:72%;height:78%;border-radius:12px;z-index:0;
+  background-color:#13293C;
+  background-image:
+    radial-gradient(circle at 25% 25%,#32B4AF 0 3px,transparent 3.5px),
+    radial-gradient(circle at 75% 75%,#F2B233 0 2.5px,transparent 3px),
+    linear-gradient(45deg,transparent 44%,rgba(0,166,226,.45) 44% 56%,transparent 56%),
+    linear-gradient(-45deg,transparent 44%,rgba(215,73,73,.35) 44% 56%,transparent 56%);
+  background-size:26px 26px,26px 26px,26px 26px,26px 26px}
+.blindwrap .blind{z-index:1}
+/* the blind rolls to a new destination */
+.blind .dest,.blind .via{will-change:transform,opacity}
+.blind .roll{animation:roll .55s cubic-bezier(.65,0,.35,1)}
+@keyframes roll{0%{transform:translateY(0);opacity:1}45%{transform:translateY(-120%);opacity:0}55%{transform:translateY(120%);opacity:0}100%{transform:translateY(0);opacity:1}}
+.blind .ends{display:block;margin-top:6px;font:600 14px/1.2 "Barlow",sans-serif;color:#cfdbe5;opacity:.8;position:relative;z-index:1}
+
+/* the road: tarmac strip with lane markings and a bus that drives along it */
+.roadstrip{position:relative;height:54px;margin:34px 0 0;border-radius:10px;overflow:hidden;
+  background:#2B343C;
+  background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.2px);background-size:5px 5px}
+.roadstrip::before{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;
+  background:repeating-linear-gradient(90deg,#fff 0 34px,transparent 34px 60px);opacity:.8}
+.roadstrip::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:#F2B233;box-shadow:0 -4px 0 #F2B233}
+.roadstrip .lane{position:absolute;left:18px;top:7px;font:800 13px/1 "Barlow",sans-serif;letter-spacing:.32em;color:rgba(255,255,255,.85)}
+.roadstrip .rbus{position:absolute;top:9px;left:-120px;width:96px;height:36px;transition:transform 7s cubic-bezier(.45,.05,.35,1)}
+.roadstrip.go .rbus{transform:translateX(calc(100vw + 160px))}
+.roadstrip .rstop{position:absolute;right:26px;top:4px;width:26px;height:46px}
+@media (prefers-reduced-motion:reduce){.roadstrip .rbus{left:42%;transition:none}.roadstrip.go .rbus{transform:none}.blind .roll{animation:none}}
+
+/* departure buttons as bus tickets */
+.dep{position:relative;border:0!important;background:#FBF6EA;border-radius:6px;padding:11px 16px 12px 22px;
+  box-shadow:inset 0 0 0 1px #E2D7BD;
+  -webkit-mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,transparent 6.5px,#000 7px) right/51% 100% no-repeat}
+.dep::before{content:"";position:absolute;left:12px;top:8px;bottom:8px;border-left:2px dashed #CDBF9E}
+.dep:hover{box-shadow:inset 0 0 0 1px var(--navy)}
+.dep[aria-pressed="true"]{background:var(--navy);box-shadow:none}
+.dep[aria-pressed="true"]::before{border-color:rgba(242,178,51,.55)}
+
+/* stop list header as the bus's next stop display */
+.panel header{position:relative;background:#0C1C2A;overflow:hidden}
+.panel header::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.5) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
+.panel header b{color:var(--amber);text-shadow:0 0 12px rgba(242,178,51,.35);position:relative;z-index:1}
+.panel header span{position:relative;z-index:1}
+.bell{position:absolute;right:16px;top:14px;z-index:2;display:flex;align-items:center;gap:6px;font:600 13px/1 "Barlow",sans-serif;color:#cfdbe5}
+.bell i{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(215,73,73,.25);animation:bell 2.4s ease-in-out infinite}
+@keyframes bell{0%,100%{box-shadow:0 0 0 3px rgba(215,73,73,.25)}50%{box-shadow:0 0 0 6px rgba(215,73,73,.08)}}
+@media (prefers-reduced-motion:reduce){.bell i{animation:none}}
+.panel header b{padding-right:96px}
+
+/* bus stop flag beside the stop to get off at, and on headings */
+.flag{display:inline-block;vertical-align:-3px;width:18px;height:26px;margin-right:6px}
+.stops li.off .flag{position:absolute;left:-2px;top:2px;width:18px;height:26px;margin:0}
+.stops li.off::after{display:none}
+.hflag{display:inline-block;width:22px;height:32px;margin-right:10px;vertical-align:-4px}
+.fact.hl b{display:flex;align-items:flex-start;gap:4px}
+
+/* full timetable, laid out like the case at a bus stop */
+.ttwrap{grid-column:1/-1}
+.ttbtn{display:inline-flex;align-items:center;gap:10px;border:0;background:var(--amber);color:var(--navy);border-radius:10px;padding:10px 16px;font-weight:700;font-size:15px;line-height:20px;transition:transform .3s var(--ease),background .3s var(--ease)}
+.ttbtn:hover{transform:translateY(-2px);background:#f6c35a}
+.ttbtn svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.ttbtn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.ttcase{display:none;margin-top:14px;background:var(--navy);border-radius:14px;padding:10px;box-shadow:0 18px 40px -24px rgba(12,28,42,.7)}
+.ttcase.on{display:block;animation:ttin .45s var(--ease)}
+@keyframes ttin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.tthead{display:flex;align-items:center;gap:12px;padding:6px 8px 12px;color:#fff}
+.tthead .br{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:36px;padding:0 8px;border-radius:8px;background:#0C1C2A;color:var(--amber);font:800 24px/1 "Barlow Condensed",sans-serif}
+.tthead b{display:block;font:700 21px/23px "Barlow Condensed",sans-serif;text-transform:uppercase}
+.tthead span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
+.ttsheet{background:#fff;border-radius:8px;overflow-x:auto;scrollbar-width:none;position:relative}
+.ttsheet::-webkit-scrollbar{display:none}
+.ttsheet table{border-collapse:separate;border-spacing:0;font-size:15px;line-height:20px}
+.ttsheet th{position:sticky;left:0;z-index:2;background:#fff;text-align:left;font-weight:600;color:var(--navy);padding:7px 14px 7px 12px;min-width:170px;max-width:210px;border-right:2px solid var(--navy);white-space:normal}
+.ttsheet td{padding:7px 10px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600;color:#1d2730;white-space:nowrap;border-left:1px solid #EEF2F5}
+.ttsheet tr:nth-child(even) th,.ttsheet tr:nth-child(even) td{background:#F6F8FA}
+.ttsheet tr.off th,.ttsheet tr.off td{background:#FCEDED;color:var(--red);font-weight:700}
+.ttsheet tr.off th .flag{margin-right:6px}
+.ttsheet td.sel{box-shadow:inset 0 0 0 2px var(--amber)}
+.ttsheet td.no{color:#b6bec5;font-weight:500}
+.tthint{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 8px 4px;font-size:14px;line-height:19px;color:#cfdbe5}
 </style>
 </head>
 <body>
@@ -196,9 +280,12 @@ a{color:inherit}
   </nav>
 
   <header class="hero">
-    <div class="blind rise" aria-hidden="true">
-      <div class="num" id="bnum"></div>
-      <div><div class="dest" id="bdest"></div><span class="via" id="bvia"></span></div>
+    <div class="blindwrap rise">
+      <div class="moquette" aria-hidden="true"></div>
+      <div class="blind" aria-live="polite">
+        <div class="num" id="bnum"></div>
+        <div><div class="dest" id="bdest"></div><span class="via" id="bvia" aria-hidden="true"></span></div>
+      </div>
     </div>
     <div class="intro rise">
       <h1 id="title"></h1>
@@ -207,15 +294,28 @@ a{color:inherit}
   </header>
 
   <div class="facts rise" id="facts"></div>
+  <div class="roadstrip" aria-hidden="true">
+    <span class="lane">BUS LANE</span>
+    <svg class="rbus" viewBox="0 0 96 36"><rect x="1" y="2" width="92" height="27" rx="5" fill="#13293C"/><rect x="1" y="21" width="92" height="3" fill="#F2B233"/><rect x="74" y="6" width="16" height="13" rx="2" fill="#9FD8EE"/><g fill="#9FD8EE"><rect x="8" y="6" width="12" height="10" rx="1.5"/><rect x="23" y="6" width="12" height="10" rx="1.5"/><rect x="38" y="6" width="12" height="10" rx="1.5"/><rect x="53" y="6" width="12" height="10" rx="1.5"/></g><rect x="62" y="3.5" width="10" height="3" rx="1" fill="#F2B233"/><circle cx="20" cy="30" r="5" fill="#0B0B0B"/><circle cx="20" cy="30" r="2" fill="#9AA5AE"/><circle cx="74" cy="30" r="5" fill="#0B0B0B"/><circle cx="74" cy="30" r="2" fill="#9AA5AE"/><rect x="90" y="17" width="3" height="3" rx="1" fill="#F2B233"/></svg>
+    <svg class="rstop" viewBox="0 0 26 46"><rect x="12" y="14" width="2.5" height="32" fill="#cfd6dc"/><rect x="2" y="1" width="22" height="15" rx="2.5" fill="#fff" stroke="#D74949" stroke-width="2.2"/><rect x="6.5" y="4.5" width="13" height="8" rx="1.2" fill="#D74949"/><rect x="8" y="5.6" width="10" height="2.8" rx=".5" fill="#fff"/></svg>
+  </div>
 
   <section class="planner rise" aria-labelledby="ph">
-    <h2 id="ph">Pick your bus</h2>
+    <h2 id="ph"><svg class="hflag" viewBox="0 0 18 26" aria-hidden="true"><rect x="8" y="9" width="2" height="17" fill="#13293C"/><rect x="1" y="1" width="16" height="11" rx="2" fill="#fff" stroke="#D74949" stroke-width="2"/><rect x="4.5" y="3.6" width="9" height="5.6" rx="1" fill="#D74949"/><rect x="5.6" y="4.4" width="6.8" height="2" rx=".4" fill="#fff"/></svg>Pick your bus</h2>
     <div class="pickrow">
       <div class="seg" id="day" role="group" aria-label="Day"></div>
       <div class="seg" id="dir" role="group" aria-label="Direction"></div>
     </div>
     <div class="board" id="board" role="group" aria-label="Departure times"></div>
     <p class="boardnote" id="bnote"></p>
+    <div class="ttwrap">
+      <button type="button" class="ttbtn" id="ttbtn" aria-expanded="false" aria-controls="ttcase"><span id="ttlbl">See every time</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6l5 5 5-5"/></svg></button>
+      <div class="ttcase" id="ttcase">
+        <div class="tthead"><span class="br" id="ttnum"></span><div><b id="tttitle"></b><span id="ttsub"></span></div></div>
+        <div class="ttsheet" id="ttsheet"></div>
+        <p class="tthint"><span id="tthint"></span><span>Times can change, so check before you travel</span></p>
+      </div>
+    </div>
   </section>
   <p class="nobus" id="nobus"></p>
 
@@ -225,7 +325,7 @@ a{color:inherit}
       <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
     </div>
     <aside class="panel" aria-live="polite">
-      <header><b id="ptitle"></b><span id="psub"></span></header>
+      <header><div class="bell" aria-hidden="true"><i></i>Stopping</div><b id="ptitle"></b><span id="psub"></span></header>
       <ol class="stops" id="stops"></ol>
     </aside>
   </div>
@@ -255,6 +355,7 @@ a{color:inherit}
   var each = function(list, fn){ Array.prototype.forEach.call(list, fn); };
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var KEY = 1, OFF = 2, LABEL = 4;
+  var FLAG = '<svg class="flag" viewBox="0 0 18 26" aria-hidden="true"><rect x="8" y="9" width="2" height="17" fill="#13293C"/><rect x="1" y="1" width="16" height="11" rx="2" fill="#fff" stroke="#D74949" stroke-width="2"/><rect x="4.5" y="3.6" width="9" height="5.6" rx="1" fill="#D74949"/><rect x="5.6" y="4.4" width="6.8" height="2" rx=".4" fill="#fff"/></svg>';
 
   /* fixed text */
   $('backlink').href = CFG.showUrl;
@@ -262,7 +363,6 @@ a{color:inherit}
   $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
   $('op').textContent = 'Run by ' + CFG.operator;
   $('bnum').textContent = CFG.num;
-  $('bdest').textContent = CFG.blindDest;
   $('title').textContent = CFG.title;
   $('lead').textContent = CFG.lead;
   $('tiph').textContent = CFG.tipHead;
@@ -275,13 +375,23 @@ a{color:inherit}
   if (CFG.alt) { $('alt').hidden = false; $('alth').textContent = CFG.alt[0]; $('altp').textContent = CFG.alt[1]; }
   document.title = CFG.title + ' | The Big Guide to UK Airshows';
 
-  /* destination blind cycles its "via" line */
-  var vi = 0;
-  $('bvia').textContent = CFG.blindVia[0] || '';
-  if (!reduce && CFG.blindVia.length > 1) {
+  /* destination blind: shows where the picked direction is going, cycles its "via" line,
+     and rolls over like a real blind when the direction changes */
+  var vi = 0, VIA = CFG.blindVia, shownDest = null;
+  function setBlind(dest, via){
+    VIA = via && via.length ? via : CFG.blindVia; vi = 0;
+    if (dest === shownDest) return;
+    var first = shownDest === null; shownDest = dest;
+    var d = $('bdest'), v = $('bvia');
+    if (first || reduce) { d.textContent = dest; v.textContent = VIA[0] || ''; return; }
+    [d, v].forEach(function(el){ el.classList.remove('roll'); void el.offsetWidth; el.classList.add('roll'); });
+    setTimeout(function(){ d.textContent = dest; v.textContent = VIA[0] || ''; }, 260);
+  }
+  if (!reduce) {
     setInterval(function(){
+      if (VIA.length < 2) return;
       var v = $('bvia'); v.style.opacity = 0;
-      setTimeout(function(){ vi = (vi + 1) % CFG.blindVia.length; v.textContent = CFG.blindVia[vi]; v.style.opacity = .85; }, 400);
+      setTimeout(function(){ vi = (vi + 1) % VIA.length; v.textContent = VIA[vi]; v.style.opacity = .85; }, 400);
     }, 3200);
   }
 
@@ -331,6 +441,8 @@ a{color:inherit}
     segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ day = i; dir = Math.min(dir, Math.max(0, DATA.days[i].dirs.length - 1)); idx = 0; render(); runBus(); });
     var dd = D();
     if (!dd.dirs.length || !dd.dirs.some(function(x){ return x.trips.length; })) {
+      setBlind(CFG.blindDest, CFG.blindVia);
+      $('ttbtn').parentNode.style.display = 'none';
       $('dir').style.display = 'none'; $('board').innerHTML = ''; $('bnote').textContent = '';
       $('nobus').textContent = dd.none; $('nobus').classList.add('on'); $('stage').classList.add('off');
       return;
@@ -338,7 +450,35 @@ a{color:inherit}
     $('nobus').classList.remove('on'); $('stage').classList.remove('off');
     if (!DIR().trips.length) { dir = dd.dirs.findIndex(function(x){ return x.trips.length; }); idx = 0; }
     segBtns($('dir'), dd.dirs.map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = 0; render(); runBus(); });
-    board(); drawLine(); draw();
+    var cur = DIR(); setBlind(cur.blind || CFG.blindDest, cur.via);
+    board(); drawLine(); draw(); table();
+  }
+
+  /* every time that day, at the main stops */
+  var ttOpen = false;
+  $('ttbtn').addEventListener('click', function(){
+    ttOpen = !ttOpen; $('ttbtn').setAttribute('aria-expanded', ttOpen); $('ttcase').classList.toggle('on', ttOpen); table();
+  });
+  function table(){
+    var d = DIR(), tt = d && d.tt;
+    $('ttbtn').parentNode.style.display = tt ? '' : 'none';
+    if (!tt) return;
+    $('ttlbl').textContent = (ttOpen ? 'Hide the times for ' : 'See every time on ') + D().label;
+    if (!ttOpen) return;
+    $('ttnum').textContent = CFG.num;
+    $('tttitle').textContent = d.label + ', ' + D().label;
+    $('ttsub').textContent = tt.cols.length + (tt.cols.length === 1 ? ' bus' : ' buses') + ' that day, shown at the main stops';
+    var picked = d.trips[idx] ? d.trips[idx].s[0][0] : null;
+    var html = '<table><tbody>' + tt.rows.map(function(name, r){
+      return '<tr' + (r === tt.off ? ' class="off"' : '') + '><th scope="row">' + (r === tt.off ? FLAG : '') + name + '</th>' +
+        tt.cols.map(function(c){
+          var v = c[r], sel = picked && c[0] === picked;
+          return '<td class="' + (v ? '' : 'no') + (sel ? ' sel' : '') + '">' + (v || '•') + '</td>';
+        }).join('') + '</tr>';
+    }).join('') + '</tbody></table>';
+    $('ttsheet').innerHTML = html;
+    var sh = $('ttsheet');
+    $('tthint').textContent = sh.scrollWidth > sh.clientWidth + 4 ? 'Swipe or scroll sideways for later buses' : 'A dot means the bus doesn’t stop there';
   }
 
   function board(){
@@ -347,7 +487,7 @@ a{color:inherit}
       return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '"><span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
     }).join('');
     $('bnote').textContent = d.note || '';
-    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); }); });
+    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); table(); }); });
   }
 
   function drawLine(){
@@ -388,7 +528,7 @@ a{color:inherit}
       var li = document.createElement('li');
       li.className = 'stop' + (key ? ' key' : ' minor') + (isOff ? ' off' : '');
       if (!key) li.dataset.g = group.id;
-      li.innerHTML = '<span>' + p[1] + (isOff ? '<span class="tag">' + CFG.offTag + '</span>' : '') + '</span><time>' + p[0] + '</time>';
+      li.innerHTML = (isOff ? FLAG : '') + '<span>' + p[1] + (isOff ? '<span class="tag">' + CFG.offTag + '</span>' : '') + '</span><time>' + p[0] + '</time>';
       li.addEventListener('click', function(){
         each(ol.querySelectorAll('.active'), function(x){ x.classList.remove('active'); });
         li.classList.add('active');
@@ -455,6 +595,10 @@ a{color:inherit}
     });
   }, { threshold: .15 }) : null;
   each(document.querySelectorAll('.rise'), function(el){ io ? io.observe(el) : el.classList.add('in'); });
+  var strip = document.querySelector('.roadstrip');
+  if (strip && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(es, o){ es.forEach(function(e){ if (e.isIntersecting) { setTimeout(function(){ strip.classList.add('go'); }, 300); o.disconnect(); } }); }, { threshold: .6 }).observe(strip);
+  } else if (strip) strip.classList.add('go');
   if (!io) runBus();
 })();
 </script>

@@ -75,6 +75,8 @@ Still to fill: nothing major. Full audit of every public transport detail on 29 
 
 Every numbered bus on the feature show pages has its own route page in `bus-routes/<number>-<show>.html` (49 routes), with the list of all of them in `bus-routes/index.html`. Each page shows the roads the bus takes on a map, every stop and the times for the show days, the stop closest to the show in red, how often it runs and the walk from the stop.
 
+Bus touches on each page: a seat moquette panel behind the destination blind, a bus lane strip with a bus that drives across once, departure times as bus tickets, the stop list header as the bus's next stop display, and a bus stop flag on the stop to get off at. The blind shows where the picked direction is going and rolls over when the direction changes (towards the show it shows the show town, or the end of the line "via" the show when the show is partway along). "See every time" opens that day's full timetable for the picked direction at the main stops, laid out like the case at a bus stop, with the stop for the show in red.
+
 On the show pages, `bus-routes.js` adds an amber "Route map" box with a "Show route details" button for each bus to the matching Getting There topic (the page calls `UKAG_BR.render(show, topicId)`, just under Map search). Which buses go in which topic is the `T` list in `bus-routes-src/make_map.py`.
 
 While `WIX_PAGE` in `bus-routes.js` is `null`, the buttons open the route page in a new tab. To keep visitors on the site: add a Wix page at /bus-route with one HTML embed (ID html1) set to `https://jskedge1.github.io/airshow-pages/bus-routes/index.html`, paste in `velo/page-code/bus-route.js`, then set `WIX_PAGE = 'bus-route'`.

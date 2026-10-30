@@ -36,8 +36,10 @@ SHOWS = {
 }
 
 OVERRIDE = {
+ 'x77-ayr': dict(blindVia=['via Prestwick Airport', 'via Prestwick']),
  '132-duxford': dict(
    title='Bus 132 to IWM Duxford',
+   blindVia=['via Cambridge station', 'via Addenbrooke’s', 'via Trumpington'],
    lead='This is the bus I would look at if you’re heading to Duxford on a Sunday without a car. It picks up in Cambridge city centre and outside the railway station, then drops you right by Hangar 1.',
    offTag='Get off here for the museum',
    alt=['On Air Show weekends', 'IWM usually runs its own free shuttle from Cambridge station and Trumpington Park and Ride. That is the easier choice on a big show day, so I would suggest using that instead.'],
@@ -58,6 +60,8 @@ def hav(a, b):
 
 
 def clean(n):
+    n = re.sub(r'\s+[a-z]$', '', n.strip())
+    n = re.sub(r'\s*\((?:[NSEW]{1,2}-?bound|[NSEW]{1,2})\)', '', n, flags=re.I)
     n = re.sub(r'\s*\((at|near|opp|adj|o/s|on|before|after|in|by|corner|outside)\)', '', n, flags=re.I)
     n = re.sub(r'\b(opp|adj|o/s|nr)\.?\s+', '', n, flags=re.I)
     n = n.replace(' - ', ', ').replace('–', ',').replace('—', ',').replace(' -', ',').replace('- ', ', ')
@@ -142,7 +146,7 @@ def build(fn):
             heads.append(d['head'])
             offi = {id(t): min((i for i, s in enumerate(t) if s[1] in poolset), key=lambda i: (t[i][1] != off, hav(loc[t[i][1]], target))) for t in trips}
             if not trips:
-                dirs.append(dict(label=dlabel(d, rid), li=di, trips=[]))
+                dirs.append(dict(label=dlabel(d, rid), li=di, trips=[], tt=fulltable(d, lines[di]['stops'], names, off)))
                 continue
             fr = statistics.median(offi[id(t)] / max(1, len(t) - 1) for t in trips)
             mode = 'arrive' if fr >= .6 else 'leave' if fr <= .4 else 'both'
@@ -180,9 +184,9 @@ def build(fn):
             if sampled:
                 hw = statistics.median(b - a for a, b in zip(ts, ts[1:])) if len(ts) > 2 else 0
                 note = f'Buses run about every {int(round(hw / 5) * 5) or hw} minutes, so these are a few of them spread through the {"morning" if mode == "arrive" else "afternoon and evening" if mode == "leave" else "day"}.'
-            dirs.append(dict(label=dlabel(d, rid), li=di, trips=out, note=note, fr=fr))
+            dirs.append(dict(label=dlabel(d, rid), li=di, trips=out, note=note, fr=fr, tt=fulltable(d, lines[di]['stops'], names, off)))
         dirs.sort(key=lambda x: -x.get('fr', -1))
-        for x in dirs: x.pop('fr', None)
+        for x in dirs: x['fr0'] = x.pop('fr', -1)
         has = any(x['trips'] for x in dirs)
         if has: served.append(dk)
         if not dirs:
@@ -209,7 +213,7 @@ def build(fn):
     via = []
     for leg in legs[:-1]:
         via.append('via ' + leg[1].split(' to ')[-1])
-    bad = [x.split()[0].lower() for x in (a, b, show['town'])]
+    bad = [w.lower() for x in (a, b, show['town']) for w in x.split() if len(w) >= 3]
     via = [re.sub(r'\s*\(.*?\)', '', v) for v in dict.fromkeys(via)]
     via = [v for v in via if len(v) < 28 and not any(w in v.lower() for w in bad)][:3] or ['from ' + a]
     walkp = 'which is right by' if offd < 250 else f'about {walkfact(offd).split("About ")[-1]} from' if offd <= 3000 else f'about {round(offd * 1.3 / 1609)} miles from'
@@ -222,7 +226,7 @@ def build(fn):
         tip = f'In the current timetable the {r["num"]} doesn’t run on {andlist(missing)}. ' + tip
     cfg = dict(num=r['num'], operator=OPS.get(rid, ''), showName=show['name'], showUrl=SITE + show['slug'],
                title=ov.get('title') or f'Bus {r["num"]}, {a} to {b}',
-               blindDest=(show['town'] if offd <= 3000 else b or show['town']), blindVia=via,
+               blindDest=(show['town'] if offd <= 3000 else b or show['town']), blindVia=ov.get('blindVia') or via,
                lead=lead, facts=facts, legs=legs, tipHead='Before you travel', tip=tip,
                tipBtn=f'Back to getting to {show["town"]}', alt=ov.get('alt'),
                target=target, targetLabel=show['label'], offTag=ov.get('offTag', 'Closest stop to the show'),
@@ -237,6 +241,21 @@ def build(fn):
                     if k not in sidx: sidx[k] = len(stab); stab.append(list(k))
                     packed.append([p[0], sidx[k], p[4]])
                 t['s'] = packed
+    # each direction's destination blind: towards the show keeps the show town, the other way shows where it goes
+    for dd in days:
+        for x in dd['dirs']:
+            dest = x['label'][3:]
+            if x.get('fr0', 0) >= .5 and dest.split()[0].lower() in cfg['blindDest'].lower():
+                x['blind'] = None
+            elif x.get('fr0', 0) >= .5:
+                x['blind'] = dest
+                x['via'] = (['via ' + cfg['blindDest']] if x['fr0'] < .9 else []) + [v for v in cfg['blindVia'] if dest.split()[0].lower() not in v.lower()][:2]
+            else:
+                dest = x['label'][3:]
+                x['blind'] = dest
+                back = [v for v in reversed(cfg['blindVia']) if dest.split()[0].lower() not in v.lower()]
+                x['via'] = back or ['from ' + cfg['blindDest']]
+            x.pop('fr0', None)
     data = dict(stops=stab, lines=[thin(L['line']) for L in lines], days=days, start=next(i for i, d in enumerate(days) if d['key'] in served))
     html = TPL.replace('/*DATA*/', 'var CFG=' + json.dumps(cfg, ensure_ascii=False) + ';\nvar DATA=' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';')
     html = re.sub(r'<title>.*?</title>', f'<title>{cfg["title"]} | The Big Guide to UK Airshows</title>', html, count=1)
@@ -262,6 +281,51 @@ def thin(line, tol=0.00004):
         if bi is not None and best > tol * tol:
             keep[bi] = True; stack += [(a, bi), (bi, b)]
     return [p for p, k in zip(line, keep) if k]
+
+
+def fulltable(d, seq, names, off):
+    """Every journey that day at the timing points, like the timetable at a bus stop."""
+    if not d['trips']: return None
+    tp = {s[1] for t in d['trips'] for s in t if not s[3]}
+    tp.add(off)
+    # start from the journey with most main stops, then slot each other stop in after the stop before it
+    seqs = [[x[1] for x in t if x[1] in tp] for t in d['trips']]
+    seqs.sort(key=len, reverse=True)
+    rows = []
+    for q in seqs:
+        for i, a in enumerate(q):
+            if a in rows: continue
+            prev = next((q[j] for j in range(i - 1, -1, -1) if q[j] in rows), None)
+            nxt = next((q[j] for j in range(i + 1, len(q)) if q[j] in rows), None)
+            if prev is not None: rows.insert(rows.index(prev) + 1, a)
+            elif nxt is not None: rows.insert(rows.index(nxt), a)
+            else: rows.append(a)
+    if len(rows) > 14:
+        must = {rows[0], rows[-1], off}
+        rest = [a for a in rows if a not in must]
+        pick = set(rest[round(i * (len(rest) - 1) / 10)] for i in range(11)) if rest else set()
+        rows = [a for a in rows if a in must or a in pick]
+    cols = []
+    for t in sorted(d['trips'], key=lambda t: mins(t[0][0])):
+        m = {}
+        for s in t: m[s[1]] = s[0]
+        col = [m.get(a, '') for a in rows]
+        if sum(1 for c in col if c) >= 2: cols.append(col)
+    if not cols: return None
+    keep = [i for i in range(len(rows)) if any(c[i] for c in cols)]
+    rows = [rows[i] for i in keep]; cols = [[c[i] for i in keep] for c in cols]
+    labels = [short(names.get(a, a)) for a in rows]
+    offi = rows.index(off) if off in rows else -1
+    i = 1
+    while i < len(labels):
+        if labels[i] == labels[i - 1]:
+            for c in cols:
+                c[i - 1] = c[i - 1] or c[i]; del c[i]
+            if offi == i: offi = i - 1
+            elif offi > i: offi -= 1
+            del labels[i]
+        else: i += 1
+    return dict(rows=labels, off=offi, cols=cols)
 
 
 def dlabel(d, rid):
