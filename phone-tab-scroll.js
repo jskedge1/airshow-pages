@@ -3,7 +3,7 @@
    change something off screen and look like nothing happened. After a tap on an option
    button (aria-pressed, aria-selected or role="tab"), this watches what the tap changes
    further down the page and, if that part is mostly out of view, scrolls down to it.
-   Works inside the Wix box too: the IntersectionObserver checks against the real screen. */
+   Works inside the Wix box and inside the airshow-page element's shadow root too. */
 (function(){
   if(window.UKAG_PHONE_TAB_SCROLL) return;
   window.UKAG_PHONE_TAB_SCROLL=true;
@@ -20,9 +20,10 @@
     return b.hasAttribute('aria-pressed')||b.hasAttribute('aria-selected')||b.getAttribute('role')==='tab';
   }
   /* leave room for a sticky tab bar at the top, if the page has one showing */
-  function topBar(){
-    var h=0;
-    document.querySelectorAll('.tabbar,.tabs-bar,nav,[class*="sticky"]').forEach(function(el){
+  function topBar(root){
+    var h=0, els=[].slice.call(document.querySelectorAll('header,.tabbar,.tabs-bar,nav,[class*="sticky"]'));
+    if(root&&root!==document) els=els.concat([].slice.call(root.querySelectorAll('header,.tabbar,.tabs-bar,nav,[class*="sticky"]')));
+    els.forEach(function(el){
       var cs=getComputedStyle(el);
       if(cs.position!=='sticky'&&cs.position!=='fixed') return;
       var r=el.getBoundingClientRect();
@@ -36,7 +37,10 @@
 
   document.addEventListener('click',function(e){
     if(!phone.matches) return;
-    var btn=e.target.closest&&e.target.closest('button,[role="tab"]');
+    /* the Wix airshow-page element draws the page inside a shadow root, so use the real tap target */
+    var t=e.composedPath?e.composedPath()[0]:e.target;
+    if(t&&t.nodeType!==1) t=t.parentElement;
+    var btn=t&&t.closest&&t.closest('button,[role="tab"]');
     if(!isOption(btn)) return;
     var group=groupOf(btn), changed=[];
     var scope=btn.closest('[role="tabpanel"],section,.panel,.ph-fold,.fold,article')||document.body;
@@ -46,7 +50,8 @@
         if(el&&changed.indexOf(el)<0) changed.push(el);
       });
     });
-    mo.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['hidden','aria-hidden']});
+    var root=btn.getRootNode?btn.getRootNode():document;
+    mo.observe(root===document?document.body:root,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['hidden','aria-hidden']});
     setTimeout(function(){
       mo.disconnect();
       var below=btn.getBoundingClientRect().bottom-4, best=null, bestTop=Infinity;
@@ -59,17 +64,27 @@
         if(r.top<bestTop){ best=el; bestTop=r.top; }
       });
       if(!best) return;
-      var io=new IntersectionObserver(function(es){
-        io.disconnect();
-        var x=es[0], r=x.boundingClientRect;
-        var seen=x.isIntersecting?x.intersectionRect.height:0;
-        if(seen>=Math.min(160,r.height*0.4)) return;
+      function jump(){
         var old=best.style.scrollMarginTop;
-        best.style.scrollMarginTop=topBar()+'px';
+        best.style.scrollMarginTop=topBar(root)+'px';
         best.scrollIntoView({behavior:reduce.matches?'auto':'smooth',block:'start'});
         setTimeout(function(){ best.style.scrollMarginTop=old; },900);
-      });
-      io.observe(best);
+      }
+      function needed(seen,h){ return seen<Math.min(160,h*0.4); }
+      if(window.top===window){
+        /* page drawn straight into the Wix page: measure against the screen */
+        var r=best.getBoundingClientRect();
+        var seen=Math.max(0,Math.min(r.bottom,window.innerHeight)-Math.max(r.top,topBar(root)));
+        if(needed(seen,r.height)) jump();
+      } else {
+        /* page inside a Wix HTML box: the observer measures against the real screen */
+        var io=new IntersectionObserver(function(es){
+          io.disconnect();
+          var x=es[0];
+          if(needed(x.isIntersecting?x.intersectionRect.height:0,x.boundingClientRect.height)) jump();
+        });
+        io.observe(best);
+      }
     },WATCH_MS);
   },true);
 })();
