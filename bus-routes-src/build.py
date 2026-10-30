@@ -325,7 +325,9 @@ def build(fn):
             x.pop('fr0', None)
     data = dict(stops=stab, lines=[thin(L['line']) for L in lines], days=days, start=next(i for i, d in enumerate(days) if d['key'] in served))
     html = TPL.replace('/*DATA*/', 'var CFG=' + json.dumps(cfg, ensure_ascii=False) + ';\nvar DATA=' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';')
-    html = re.sub(r'<title>.*?</title>', f'<title>{cfg["title"]} | The Big Guide to UK Airshows</title>', html, count=1)
+    _t = f'{cfg["title"]} for the {show["name"]} | The Big Guide to UK Airshows'
+    _d = f'The {r["num"]} bus to the {show["name"]}: the roads it takes, every stop, times on show days and the closest stop to the show. Run by {cfg["operator"]}.'
+    html = re.sub(r'<title>.*?</title>', lambda m: f'<title>{_t}</title>\n<!-- seo: matches the Wix page on ukairshowguide.co.uk -->\n<meta name="description" content="{_d}">\n<!-- /seo -->', html, count=1)
     open(f'out/{rid}.html', 'w').write(html)
     return dict(id=rid, show=r['show'], num=r['num'], title=cfg['title'], off=offname, offd=round(offd), served=served, days=r['days']), 'ok'
 
