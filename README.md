@@ -3,6 +3,7 @@
 The live HTML pages for The Big Guide to UK Airshows (ukairshowguide.co.uk).
 Each Wix HTML embed is set to "Website address" and points at one of these pages,
 so a change saved here shows on the Wix site within a minute or two.
+Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page and the removed Hampshire page do).
 
 | Page | Address for Wix |
 |---|---|
@@ -22,7 +23,7 @@ so a change saved here shows on the Wix site within a minute or two.
 | New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
 | UK Airshow Map (Find your Air Show page) | https://jskedge1.github.io/airshow-pages/airshow-map.html |
-| Find your Air Show (live on Wix since 19 Oct: code pasted into the top HTML embed on /air-shows-guides, photos in find-img/) | https://jskedge1.github.io/airshow-pages/find-your-airshow.html |
+| Find your Air Show (top HTML embed on /air-shows-guides, by website address since 30 Oct; photos in find-img/) | https://jskedge1.github.io/airshow-pages/find-your-airshow.html |
 | YouTube (Wix page /youtube; videos come from youtube/videos.json, refreshed every hour by .github/workflows/youtube.yml and tools-youtube.py. To move a video to another show or topic, edit it in videos.json and set "fixed": true) | https://jskedge1.github.io/airshow-pages/youtube.html |
 | Site map footer (goes in an HTML embed in the Wix footer, on every page; holds its own page list, so add new pages to it too; replaced the old About footer on 20 Oct 2026, whose pasted code stays at https://073f6961-6a1c-4313-a30e-a850cc8c3512.filesusr.com/html/a0546b_ef8a36c9e66a9c145f110a95db863b8a.html) | https://jskedge1.github.io/airshow-pages/footer.html |
 | Airshow Forum (Wix page /community-forum, example posts for now, photos in forum-img/). Opens with a Forum look switch: Clean (default, traders page style) or HUD. Visitors' choice is remembered. | https://jskedge1.github.io/airshow-pages/forum.html |
@@ -38,6 +39,19 @@ so a change saved here shows on the Wix site within a minute or two.
 | Privacy, cookies and terms (Wix page /policies, linked from the footer). Six policies in one tabbed page in the original Our Policies design (banner photos in policies-img/), built from the text files in policies-src/ by tools-policies.py. The same text is in the CMS collection "UK Air Show Guide Policy's" for the /ourpolicys list page, so change both. | https://jskedge1.github.io/airshow-pages/policies.html |
 | Airshow Security and Bag Searches (planning guide, Wix page /airshow-security, photos in security-img/) | https://jskedge1.github.io/airshow-pages/airshow-security.html |
 | Nikon D500 3D Camera Guide (photography guide; Wix page /nikon-d500-guide still to be created, then set live:true in links.js). 3D camera built with three.js from jsDelivr, every control clickable with airshow settings, set up checklist and settings by aircraft | https://jskedge1.github.io/airshow-pages/nikon-d500.html |
+| Planning guide 1, Which airshow suits you? (Wix page /first-airshow-which-show) | https://jskedge1.github.io/airshow-pages/first-airshow-which-show.html |
+| Planning guide 2, Getting there (Wix page /first-airshow-getting-there) | https://jskedge1.github.io/airshow-pages/first-airshow-getting-there.html |
+| Planning guide 4, Where to watch (Wix page /first-airshow-where-to-watch) | https://jskedge1.github.io/airshow-pages/first-airshow-where-to-watch.html |
+| Planning guide 5, On the day (Wix page /first-airshow-on-the-day) | https://jskedge1.github.io/airshow-pages/first-airshow-on-the-day.html |
+| Planning guide 6, Safety and show rules (Wix page /first-airshow-safety) | https://jskedge1.github.io/airshow-pages/first-airshow-safety.html |
+| Planning guide 7, What to pack (Wix page /first-airshow-what-to-pack) | https://jskedge1.github.io/airshow-pages/first-airshow-what-to-pack.html |
+| Planning guide 8, Where to stay (Wix page /first-airshow-accommodation) | https://jskedge1.github.io/airshow-pages/first-airshow-accommodation.html |
+| Food and Drink at Airshows (Wix page /foodanddrinkatairshows) | https://jskedge1.github.io/airshow-pages/food-and-drink.html |
+| Visitor Planning Guides (Wix page /visitorplanningguides) | https://jskedge1.github.io/airshow-pages/visitor-planning-guides.html |
+| Photography Equipment (Wix page /photography-equipment) | https://jskedge1.github.io/airshow-pages/photography-equipment.html |
+| Advertise With Us (Wix page /advertise-with-us) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
+| Landing page (Wix page /coming-soon-03) | https://jskedge1.github.io/airshow-pages/landing.html |
+| Groups page header (Wix page /groups, above the Wix Groups list) | https://jskedge1.github.io/airshow-pages/groups-header.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
@@ -117,7 +131,8 @@ nearest station, usual month, a spare photo) is in `META` at the top of the page
 Optional collection fields the page already reads: `newTag` (purple New tag), `updatedOn` (Updated tag text)
 and `lineupNews` (lines for the Line Up News strip). Members: the page code can send
 `{type:'fas-member', loggedIn, saved:[...], been:[...]}` and listen for `fas-save` / `fas-been` messages back.
-After changing the file here, paste it into that embed again in the Wix editor.
+Since 30 Oct 2026 that embed loads this file by website address, so changes here go live on their own.
+The page code messages still reach it the same way.
 
 ## Show Day Live
 
