@@ -429,6 +429,12 @@ footer a{color:#fff}
 .slip .grid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 14px;padding-top:6px}
 .slip .grid span:nth-child(odd){font-weight:500;color:#8A6A4E;font-size:13px;letter-spacing:.08em}
 .slip .grid span:nth-child(even){text-align:right}
+.buy{display:flex;align-items:stretch;justify-content:space-between;background:var(--amber);color:var(--accink);text-decoration:none;font-weight:700;font-size:16px;line-height:20px;transition:filter .3s var(--ease),transform .3s var(--ease)}
+.buy span{display:flex;flex-direction:column;padding:12px 16px}
+.buy small{font-weight:500;font-size:13px;line-height:17px;opacity:.9}
+.buy i{font-style:normal;display:flex;align-items:center;padding:0 16px;background:rgba(0,0,0,.18)}
+.buy:hover,.buy:focus-visible{filter:brightness(1.08);transform:translateY(-2px)}
+.tip a.go+a.go{margin-left:18px}
 .slip .ft{margin-top:8px;padding-top:6px;border-top:1px dashed #C8A27F;font-weight:500;font-size:12.5px;text-align:center;letter-spacing:.06em;color:#7A5E46}
 
 @media (max-width:980px){
@@ -655,6 +661,7 @@ footer a{color:#fff}
         <div class="sumkv" id="sumkv"></div>
         <div class="save" id="sumsave"></div>
         <div class="slip" id="slip" aria-label="Planning slip for this train"></div>
+        <a class="buy" id="buybtn" href="https://www.greateranglia.co.uk/" target="_blank" rel="noopener"><span>Buy tickets from Greater Anglia<small id="buysub"></small></span><i aria-hidden="true">→</i></a>
       </div>
     </div>
     <div class="ttbar">
@@ -943,7 +950,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     else save.push('I would check the fare from ' + h.name + ' on the Greater Anglia website before you go, as off-peak tickets can save you a fair bit.');
     save.push('If you’re going as a family, a Family and Friends Railcard takes a third off adult fares and 60% off children’s fares. ' + (op && op >= 30 ? 'From ' + h.name + ' it may well pay for itself on this one trip.' : 'It’s worth a look if you travel by train a few times a year.'));
     $('alth').textContent = 'Save on your tickets';
-    $('altp').innerHTML = save.map(function(p){ return '<p>' + p + '</p>'; }).join('');
+    $('altp').innerHTML = save.map(function(p){ return '<p>' + p + '</p>'; }).join('') + '<a class="go" href="https://www.greateranglia.co.uk/" target="_blank" rel="noopener">Buy tickets from Greater Anglia ›</a>';
   }
   function km(a, b){ var r = Math.PI / 180, la = (a[0] + b[0]) / 2 * r, x = (b[1] - a[1]) * r * Math.cos(la), y = (b[0] - a[0]) * r; return Math.sqrt(x * x + y * y) * 6371; }
   function segMiles(s, i, j){
@@ -1275,6 +1282,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
       : trip.split ? 'This train splits on the way, with part of it going on to <b>' + trip.split + '</b>. Listen to the announcements and check the screens on board, so you’re in the coaches for <b>Clacton-on-Sea</b>.'
       : toShow ? 'Stay on to the end of the line. <b>Clacton-on-Sea</b> is the last stop, so you can’t miss it.'
       : 'The train starts at Clacton, so it’s often waiting in the platform. I would get there a little early for a seat.';
+    $('buysub').textContent = 'For the ' + first[0] + ' from ' + first[5] + ' to ' + last[5] + ', opens their website';
     $('slip').innerHTML = '<div class="sh1"><span>' + CFG.operator + '</span><span>' + D().label + '</span></div>' +
       '<div class="grid"><span>From</span><span>' + first[5] + '</span><span>To</span><span>' + last[5] + '</span>' +
       '<span>Depart</span><span>' + first[0] + ', plat ' + (trip.plat || 'TBC') + '</span><span>Arrive</span><span>' + last[0] + '</span>' +
