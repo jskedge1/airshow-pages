@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airshow Community Header</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap">
+<style>
+/* The Big Guide to UK Airshows: community page header for a Wix HTML embed.
+   Change GROUPS_BASE in the script at the bottom if your group pages use a different address. */
+:root{
+  --navy:#13293C; --navy-deep:#0E2131; --teal:#32B4AF; --teal-dark:#0E5F5B;
+  --purple:#6950A1; --red:#D74949; --grey:#757575; --grey-light:#C6C6C6;
+  --paper:#FFFFFF; --wash:#F2F4F6; --ink:#111417; --pale:#CFE3E6;
+  --f:"Barlow","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--f)}
+a{color:inherit}
+h1,h2,h3{margin:0;text-wrap:balance;text-transform:uppercase}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Header */
+.head{background:var(--navy);color:#fff}
+.head .wrap{padding-block:40px 0}
+.headgrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:start}
+.crumb{font-weight:500;font-size:15px;color:var(--pale)}
+.crumb a{color:var(--pale);text-underline-offset:3px}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:4px 12px;margin:16px 0 14px}
+.head h1{font-weight:800;font-size:clamp(34px,5.4vw,58px);line-height:1.02;letter-spacing:.01em}
+.head h1 em{font-style:normal;color:var(--teal)}
+.lead{color:var(--pale);max-width:58ch;margin:16px 0 0;font-size:17px;line-height:1.6}
+.lead b{color:#fff}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{display:inline-block;border:2px solid transparent;padding:11px 20px;font-weight:600;font-size:15px;text-decoration:none;transition:transform .25s ease,background-color .25s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.out{background:transparent;color:#fff;border-color:#fff}
+.btn.red{background:var(--red);color:#fff}
+.info{background:var(--navy-deep);border-top:4px solid var(--teal);padding:20px 22px 22px;margin-top:6px}
+.info h2{color:var(--teal);font-size:19px;font-weight:700;margin-bottom:10px;letter-spacing:.02em}
+.row{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08);font-variant-numeric:tabular-nums}
+.row span{color:var(--pale);font-weight:500}
+.row strong{color:#fff;text-align:right}
+.row.hl strong{background:var(--red);padding:1px 8px}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-top:36px}
+.tabs a{color:#fff;text-decoration:none;padding:13px 18px;font-weight:600;font-size:15px;transition:padding .4s ease,background-color .4s ease}
+.tabs a:hover,.tabs a:focus-visible,.tabs a.on{background:var(--teal)}
+.tabs a:hover,.tabs a:focus-visible{padding-inline:28px}
+
+/* Directory */
+.main{padding-block:36px 48px}
+.sectitle{color:var(--red);font-weight:800;font-size:26px;letter-spacing:.01em}
+.intro{color:#3c454d;margin:6px 0 18px;max-width:70ch}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.filters button{background:#fff;border:1px solid var(--grey-light);padding:8px 14px;font-weight:600;font-size:14px;color:var(--navy);transition:background-color .2s ease,color .2s ease}
+.filters button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.g{border:1px solid var(--grey-light);background:#fff;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .25s ease}
+.g:hover{transform:translateY(-3px)}
+.g .gh{display:flex;align-items:center;gap:12px;background:var(--navy);color:#fff;padding:12px 14px;min-height:64px}
+.g.feature .gh{background:var(--purple)}
+.ic{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none}
+.ic svg{width:20px;height:20px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.g.feature .ic svg{stroke:var(--purple)}
+.g h3{font-size:16px;font-weight:700;letter-spacing:.02em;line-height:1.2}
+.g .gb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.g p{margin:0;font-size:15px;color:#2a3138}
+.chip{align-self:flex-start;font-size:13px;font-weight:600;padding:2px 9px}
+.chip.pin{background:var(--red);color:#fff}
+.chip.new{background:var(--purple);color:#fff}
+.chip.mod{background:#e7ecef;color:var(--navy)}
+.go{margin-top:auto;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:6px}
+.go span{color:var(--red);transition:transform .25s ease}
+.g:hover .go span{transform:translateX(4px)}
+
+/* Rules */
+.rules{background:var(--wash)}
+.rules .wrap{padding-block:36px 40px}
+.rgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.rules ol{margin:0;padding:0;list-style:none;counter-reset:r;display:grid;gap:10px}
+.rules li{counter-increment:r;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;background:#fff;border:1px solid var(--grey-light);padding:12px 14px;font-size:15px}
+.rules li::before{content:counter(r);width:30px;height:30px;background:var(--teal);color:#fff;font-weight:700;display:grid;place-items:center}
+.note{border-left:4px solid var(--purple);background:#fff;padding:14px 16px;font-size:15px}
+.note h3{font-size:17px;color:var(--purple);margin-bottom:6px}
+.note p{margin:0 0 8px}
+.sign{font-weight:600;color:var(--navy);margin-top:4px}
+.small{padding-block:18px;color:#3c454d;font-size:14px}
+
+/* Height helper, only shown when the file is opened on its own */
+.helper{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));background:var(--navy);color:#fff;border-top:3px solid var(--teal);padding:10px 14px;font-size:14px;font-weight:500;z-index:5}
+
+@media (max-width:960px){
+  .headgrid,.rgrid{grid-template-columns:minmax(0,1fr)}
+  .groups{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .groups{grid-template-columns:minmax(0,1fr)}
+  .tabs a{padding:11px 12px}
+  .head .wrap{padding-block:28px 0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style id="device-fix">
+html,body{overflow-x:clip;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+@media (max-width:760px){
+  input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}
+}
+@media (max-width:1024px) and (pointer:coarse),(max-width:760px){
+  .crumb a,nav[aria-label*=readcrumb] a,.reset,#reset,a.adlink{display:inline-flex;align-items:center;min-height:40px}
+  input[type=checkbox]{min-width:24px;min-height:24px}
+}
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div class="wrap">
+    <div class="headgrid">
+      <div>
+        <div class="crumb"><a href="https://www.ukairshowguide.co.uk/" target="_top">The Big Guide to UK Airshows</a> &rsaquo; Community</div>
+        <span class="tag">New for the 2027 season</span>
+        <h1>The airshow <em>community</em></h1>
+        <p class="lead">Share show reports, swap photography tips and ask the questions you want answered before the big day. <b>Join free, build your profile and start your own threads in any group.</b></p>
+        <div class="btns">
+          <a class="btn teal" id="joinBtn" href="#groups" target="_top">Join the community</a>
+          <a class="btn out" href="#groups">Browse the groups</a>
+          <a class="btn red" href="#rules">Read the house rules</a>
+        </div>
+      </div>
+      <aside class="info" aria-label="Community details">
+        <h2>KEY DETAILS</h2>
+        <div class="row"><span>Groups</span><strong>12</strong></div>
+        <div class="row"><span>Joining</span><strong>Free With A Profile</strong></div>
+        <div class="row"><span>Who Can Post</span><strong>All Members</strong></div>
+        <div class="row"><span>New Groups</span><strong>Suggested By Members</strong></div>
+        <div class="row hl"><span>House Rules</span><strong>Read Before Posting</strong></div>
+        <div class="row"><span>Moderated By</span><strong>The Guide Team</strong></div>
+      </aside>
+    </div>
+    <nav class="tabs" aria-label="Community sections">
+      <a class="on" href="#groups">All Groups</a>
+      <a href="#groups" data-jump="plan">Planning Your Visit</a>
+      <a href="#groups" data-jump="photo">Photography And Spotting</a>
+      <a href="#groups" data-jump="chat">Shows And Chat</a>
+      <a href="#rules">House Rules</a>
+    </nav>
+  </div>
+</header>
+
+<main class="main wrap" id="groups">
+  <h2 class="sectitle">CHOOSE A GROUP</h2>
+  <p class="intro">Each group is a topic. Open one, press Join, and you can start threads and reply straight away. If you are new to airshows, I would suggest starting in First timers and families, then saying hello in the welcome group.</p>
+  <div class="filters" role="group" aria-label="Filter groups">
+    <button type="button" class="on" data-f="all" id="f-all">All</button>
+    <button type="button" data-f="plan" id="f-plan">Planning your visit</button>
+    <button type="button" data-f="photo" id="f-photo">Photography and spotting</button>
+    <button type="button" data-f="chat" id="f-chat">Shows and chat</button>
+  </div>
+  <div class="groups" id="grid"></div>
+</main>
+
+<section class="rules" id="rules">
+  <div class="wrap">
+    <h2 class="sectitle">HOUSE RULES</h2>
+    <p class="intro">A friendly place for everyone who loves airshows, from first timers to seasoned spotters.</p>
+    <div class="rgrid">
+      <ol>
+        <li>Be kind and helpful. Everyone was a first timer once.</li>
+        <li>Keep posts in the right group so they are easy to find.</li>
+        <li>Only share photos and videos you took yourself, or have permission to share.</li>
+        <li>Do not post personal details, yours or anyone else's.</li>
+        <li>No selling outside the Kit, gear and buy and sell group, and no advertising without asking first.</li>
+        <li>Show times, line ups and parking can change. Always check the official show website before you travel.</li>
+        <li>Report anything that breaks these rules and the guide team will take a look.</li>
+      </ol>
+      <div class="note">
+        <h3>SELLING KIT</h3>
+        <p>Start your title with Selling or Wanted, add a clear photo, the price and your area, and agree the sale by private message.</p>
+        <p>I would advise meeting somewhere public, checking the item before you pay, and using a payment method with buyer protection.</p>
+        <p>Posts that break the rules may be removed, and repeat offenders may be removed from the community.</p>
+        <div class="sign">Jack Skedge, Founder and Managing Editor</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap small">The Big Guide to UK Airshows is an independent guide and is not run by any airshow. Always check the official show website before you travel.</div>
+
+<script>
+(function(){
+  // Address of your Wix group pages. Check one group's address after publishing and change this if it differs.
+  var GROUPS_BASE = "https://www.ukairshowguide.co.uk/groups/";
+
+  var icons = {
+    hello:'<path d="M4 6h16v10H8l-4 4z"/><path d="M8 10h8M8 13h5"/>',
+    family:'<circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.2"/><path d="M3 20c0-3 2.5-5 5-5s5 2 5 5M13.5 20c0-2 1.6-3.6 3.5-3.6S20.5 18 20.5 20"/>',
+    report:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/>',
+    camera:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+    jet:'<path d="M3 13l18-7-5 14-3-6z"/><path d="M13 14l-4 4"/>',
+    car:'<path d="M5 16V11l2-5h10l2 5v5z"/><circle cx="8" cy="16" r="1.6"/><circle cx="16" cy="16" r="1.6"/><path d="M5 11h14"/>',
+    tent:'<path d="M3 20L12 4l9 16z"/><path d="M12 4v16M9 20l3-6 3 6"/>',
+    access:'<circle cx="12" cy="4.5" r="1.8"/><path d="M8 9h8M12 9v6h4l2 5"/><path d="M10.5 13a5 5 0 1 0 4 7"/>',
+    bag:'<path d="M4 8h16v12H4z"/><path d="M9 8V5h6v3M4 13h16"/>',
+    news:'<path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2M8 9h6M8 13h6"/>',
+    museum:'<path d="M3 9l9-5 9 5zM5 9v9M9.5 9v9M14.5 9v9M19 9v9M3 20h18"/>',
+    meet:'<path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>'
+  };
+
+  var groups = [
+    {s:"welcome-and-introductions",t:"Welcome and introductions",f:"chat",i:"hello",feature:true,chip:["pin","Start here"],d:"Say hello, tell us your local airfield and which show you are heading to next."},
+    {s:"first-timers-and-families",t:"First timers and families",f:"plan",i:"family",chip:["new","Great for newcomers"],d:"New to airshows? Ask anything, from what to pack to how early to arrive with children."},
+    {s:"show-reports-and-reviews",t:"Show reports and reviews",f:"chat",i:"report",d:"How was the show? Share highlights, crowd levels, queues and what you would do differently."},
+    {s:"aviation-photography",t:"Aviation photography",f:"photo",i:"camera",d:"Settings, panning, prop blur, lenses and getting a sharp shot of a Red Arrows break."},
+    {s:"plane-spotting-and-line-ups",t:"Plane spotting and line ups",f:"photo",i:"jet",d:"Arrivals, departures, serials and who is confirmed for which show."},
+    {s:"getting-there-and-parking",t:"Getting there and parking",f:"plan",i:"car",d:"Car parks, park and ride, trains, buses and lift shares to the shows."},
+    {s:"camping-and-places-to-stay",t:"Camping and places to stay",f:"plan",i:"tent",d:"On site camping, local campsites, hotels and what kit to take."},
+    {s:"accessibility-at-airshows",t:"Accessibility at airshows",f:"plan",i:"access",d:"Wheelchair access, Blue Badge parking, step free routes and quieter areas."},
+    {s:"kit-gear-and-buy-and-sell",t:"Kit, gear and buy and sell",f:"photo",i:"bag",chip:["mod","Selling rules apply"],d:"Cameras, lenses, scanners, chairs and bags. Members can list kit they are selling."},
+    {s:"airshow-news-and-rumours",t:"Airshow news and rumours",f:"chat",i:"news",d:"Date announcements, display team news and the latest from the organisers."},
+    {s:"museums-and-heritage-aviation",t:"Museums and heritage aviation",f:"chat",i:"museum",d:"Duxford, Cosford, Shuttleworth and the smaller collections worth a day out."},
+    {s:"meet-ups-and-site-feedback",t:"Meet ups and site feedback",f:"chat",i:"meet",d:"Arrange to meet at a show, and tell us what you would like to see on the guide."}
+  ];
+
+  var grid = document.getElementById("grid");
+  document.getElementById("joinBtn").href = GROUPS_BASE + "welcome-and-introductions";
+
+  function render(filter){
+    grid.innerHTML = groups.filter(function(g){return filter==="all"||g.f===filter;}).map(function(g){
+      return '<a class="g'+(g.feature?' feature':'')+'" href="'+GROUPS_BASE+g.s+'" target="_top">'+
+        '<div class="gh"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24">'+icons[g.i]+'</svg></span><h3>'+g.t.toUpperCase()+'</h3></div>'+
+        '<div class="gb">'+(g.chip?'<span class="chip '+g.chip[0]+'">'+g.chip[1]+'</span>':'')+
+        '<p>'+g.d+'</p><div class="go">Open group <span aria-hidden="true">&rsaquo;</span></div></div></a>';
+    }).join("");
+  }
+
+  function setFilter(f){
+    document.querySelectorAll(".filters button").forEach(function(b){b.classList.toggle("on",b.dataset.f===f);});
+    render(f);
+  }
+  document.querySelector(".filters").addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(b) setFilter(b.dataset.f);
+  });
+  document.querySelectorAll(".tabs a").forEach(function(a){
+    a.addEventListener("click",function(){
+      document.querySelectorAll(".tabs a").forEach(function(x){x.classList.toggle("on",x===a);});
+      if(a.dataset.jump) setFilter(a.dataset.jump); else if(a.getAttribute("href")==="#groups") setFilter("all");
+    });
+  });
+  render("all");
+
+  // Page height helper for sizing the Wix embed box
+  if (window.self === window.top) {
+    var h=document.createElement("div"); h.className="helper"; document.body.appendChild(h);
+    function upd(){ h.textContent="Page height: "+document.documentElement.scrollHeight+"px at "+window.innerWidth+"px wide. Set the Wix box about 60px taller."; }
+    window.addEventListener("resize",upd); window.addEventListener("load",upd); upd();
+  }
+})();
+</script>
+</body>
+</html>

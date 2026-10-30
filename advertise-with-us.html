@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advertise With Us | The Big Guide to UK Airshows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#13293C;--navy-2:#1C3A52;--navy-3:#0C1D2B;
+  --teal:#32B4AF;--teal-dark:#0E5F5B;--teal-pale:#E3F4F3;
+  --red:#DF3336;--sky:#00A6E2;
+  --grey:#757575;--grey-line:#C6C6C6;--box:#F1F4F6;
+  --ink:#000000;--white:#FFFFFF;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--white)}
+body{color:var(--ink);font:400 16px/1.65 Barlow,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+h1,h2,h3,h4{font-family:Barlow,Arial,sans-serif;margin:0}
+h2.title{color:var(--red);font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1.12;letter-spacing:-.01em;margin-bottom:14px}
+.intro{max-width:760px;font-size:18px;line-height:1.6;margin:0 0 34px}
+section{padding:72px 0}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:12px 24px;border:2px solid transparent;border-radius:0;font:600 16px/1 Barlow,Arial,sans-serif;text-decoration:none;cursor:pointer;transition:transform .25s var(--ease),background-color .25s var(--ease),color .25s var(--ease)}
+.btn:hover{transform:translateY(-2px)}
+.btn-teal{background:var(--teal);color:var(--navy)}
+.btn-teal:hover{background:#4FC4BF}
+.btn-outline{border-color:var(--white);color:var(--white);background:transparent}
+.btn-outline:hover{background:var(--white);color:var(--navy)}
+.btn-red{background:var(--red);color:var(--white)}
+.btn-red:hover{background:#C9282B}
+.btn-navy{background:var(--navy);color:var(--white)}
+.btn-navy:hover{background:var(--navy-2)}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,.chip:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+
+/* Header */
+.header{background:var(--navy);color:var(--white);padding:56px 0 64px;position:relative;overflow:hidden}
+.header:after{content:"";position:absolute;right:-120px;top:-160px;width:520px;height:520px;border:60px solid rgba(50,180,175,.07);border-radius:50%;pointer-events:none}
+.header-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:56px;align-items:start;position:relative;z-index:1}
+.crumb{font:500 15px/1.3 Barlow,Arial,sans-serif;color:var(--teal);margin:0 0 22px}
+.crumb a{text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+.header h1{font-weight:800;font-size:clamp(38px,5.4vw,66px);line-height:1.02;letter-spacing:.005em;text-transform:uppercase;margin:0 0 16px}
+.sub{color:var(--red);font-weight:700;font-size:clamp(19px,2vw,24px);line-height:1.3;margin:0 0 20px}
+.header p.lede{font-size:18px;line-height:1.65;max-width:620px;margin:0 0 30px;color:#E8EEF2}
+.header p.lede strong{color:var(--white);font-weight:700}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+
+/* Key details box */
+.keybox{background:var(--navy-2);border:1px solid rgba(255,255,255,.08)}
+.keybox-head{background:var(--teal);color:var(--white);display:flex;align-items:center;gap:14px;padding:16px 20px}
+.keybox-head h2{font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
+.icon-round{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:var(--white);display:grid;place-items:center}
+.icon-round svg{width:22px;height:22px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rows{padding:8px 0}
+.row{display:grid;grid-template-columns:42% 58%;gap:0;margin:6px 12px;background:rgba(255,255,255,.04)}
+.row span{padding:11px 12px;font-size:15px;line-height:1.4}
+.row span:first-child{color:var(--teal);font-weight:600}
+.row span:last-child{color:var(--white)}
+.row.hot{background:var(--red)}
+.row.hot span:first-child{color:var(--white)}
+
+/* Promise strip */
+.strip{background:var(--navy-3);color:var(--white)}
+.strip .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;padding-top:18px;padding-bottom:18px}
+.tag{display:inline-block;background:var(--red);color:var(--white);font:600 14px/1 Barlow,Arial,sans-serif;padding:8px 12px}
+.strip p{margin:0;font-size:16px;color:#DCE6EB}
+
+/* Audience */
+.aud-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:start}
+.aud-lead p{font-size:18px;line-height:1.65;margin:0 0 18px}
+.aud-lead .pull{border-left:6px solid var(--teal);background:var(--teal-pale);padding:20px 22px;font-weight:500;color:var(--navy);margin-top:26px}
+.reader-list{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.reader{background:var(--box);padding:22px 22px 20px;transition:transform .3s var(--ease)}
+.reader:hover{transform:translateY(-3px)}
+.reader:nth-child(2){margin-top:28px}
+.reader:nth-child(4){margin-top:28px}
+.reader:nth-child(6){margin-top:28px}
+.reader h3{color:var(--navy);font-weight:700;font-size:20px;line-height:1.2;margin-bottom:6px}
+.reader p{margin:0;font-size:15.5px;line-height:1.55}
+
+/* Who can advertise (package card format) */
+.who{background:var(--box)}
+.who .pk-grid{gap:22px}
+.who-card.wide{grid-column:1/-1}
+.who-card .note{margin:14px 0 0;font-size:14.5px;color:var(--navy);background:#FFF1F1;border-left:4px solid var(--red);padding:10px 12px}
+.who-card .pk-foot{justify-content:flex-end}
+.who-card .for{margin-top:18px;font-size:16px}
+.pk-head{min-height:62px}
+
+/* Packages */
+.pk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.pk{display:flex;flex-direction:column;background:var(--navy);transition:transform .3s var(--ease)}
+.pk:hover{transform:translateY(-4px)}
+.pk-head{background:var(--teal);color:var(--white);display:flex;align-items:center;gap:14px;padding:16px 20px}
+.pk-head h3{font-weight:800;font-size:21px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
+.pk-head .pick{margin-left:auto;background:var(--red);color:var(--white);font:600 13.5px/1 Barlow,Arial,sans-serif;padding:7px 10px;white-space:nowrap}
+.pk .rows{padding:12px 0 6px}
+.pk .row span:first-child{color:var(--teal)}
+.pk .row.hot span:first-child{color:var(--white)}
+.price-row{display:flex;align-items:baseline;gap:12px;color:var(--white);padding:18px 24px 4px}
+.price-row strong{font-weight:800;font-size:46px;line-height:1}
+.price-row span{font-size:16px;color:#C9D6DE}
+.pk .for{color:#DCE6EB;font-size:15.5px;margin:4px 24px 10px}
+.getbox{background:var(--white);margin:12px 12px 0;padding:18px 20px}
+.getbox h4{color:var(--navy);font-weight:700;font-size:17px;margin-bottom:8px}
+.getbox ul{margin:0;padding:0;list-style:none}
+.getbox li{position:relative;padding:6px 0 6px 26px;font-size:15.5px;line-height:1.45}
+.getbox li:before{content:"";position:absolute;left:2px;top:12px;width:12px;height:7px;border-left:2.5px solid var(--teal-dark);border-bottom:2.5px solid var(--teal-dark);transform:rotate(-45deg)}
+.pk-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:18px 12px 14px;margin-top:auto}
+.more{color:var(--white);text-decoration:none;font-weight:600;font-size:15.5px;background:none;border:0;cursor:pointer;font-family:inherit;padding:8px 6px}
+.more b{color:var(--red)}
+.more:hover{text-decoration:underline}
+.pk-small{font-size:14.5px;line-height:1.55;color:var(--navy);background:var(--box);padding:18px 22px;margin-top:22px}
+
+/* Examples */
+.ex{background:var(--box)}
+.ex-layout{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.ex-col h3{color:var(--navy);font-weight:700;font-size:20px;margin-bottom:6px}
+.ex-col > p{margin:0 0 16px;font-size:15.5px}
+.ex-stack{display:flex;flex-direction:column;gap:30px}
+.where{font:500 14.5px/1.3 Barlow,Arial,sans-serif;color:var(--navy);margin-bottom:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.where em{font-style:normal;background:var(--white);padding:5px 9px}
+.adlabel{display:inline-block;background:var(--navy);color:var(--white);font:600 13px/1 Barlow,Arial,sans-serif;padding:6px 9px}
+.ad-listing{display:grid;grid-template-columns:160px 1fr;background:var(--white);border:2px solid var(--grey-line)}
+.ad-listing .pic{background:#DCEFF0;min-height:150px}
+.ad-listing .txt{padding:16px 18px}
+.ad-listing h4{color:var(--navy);font-weight:800;font-size:20px;margin:10px 0 4px}
+.ad-listing p{margin:0 0 8px;font-size:15px;line-height:1.5}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--navy);font-weight:500}
+.adlink{display:inline-block;margin-top:8px;color:var(--teal-dark);font-weight:700;font-size:15px;text-decoration:none}
+.adlink:hover{text-decoration:underline}
+.ad-featured{background:var(--white);border:3px solid var(--teal)}
+.ad-featured .pic{background:#E7E1D4;height:200px;position:relative}
+.ad-featured .pic .adlabel{position:absolute;left:14px;top:14px}
+.ad-featured .txt{padding:20px 22px 22px}
+.ad-featured h4{color:var(--navy);font-weight:800;font-size:24px;margin-bottom:6px}
+.ad-featured p{margin:0 0 12px;font-size:15.5px}
+.hl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 16px;padding:0;list-style:none}
+.hl li{background:var(--teal-pale);color:var(--teal-dark);font-weight:500;font-size:14.5px;padding:8px 10px}
+.trader{background:var(--white);border:2px solid var(--grey-line);padding:16px 18px;display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:start}
+.trader .mark{width:64px;height:64px;background:var(--navy);display:grid;place-items:center}
+.trader h4{color:var(--navy);font-weight:800;font-size:19px;margin:8px 0 4px}
+.trader p{margin:0;font-size:15px}
+.confirmed{display:inline-block;margin-top:10px;background:var(--teal-pale);color:var(--teal-dark);font-weight:600;font-size:13.5px;padding:6px 9px}
+.fict{font-size:14px;color:var(--navy);margin-top:10px}
+
+/* Placements */
+.place-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:start}
+.mock{background:var(--navy);padding:18px}
+.mock-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.mock-tabs button{font:500 14px/1 Barlow,Arial,sans-serif;background:rgba(255,255,255,.07);color:var(--white);border:0;padding:10px 12px;cursor:pointer;transition:background .2s var(--ease)}
+.mock-tabs button.ad{box-shadow:inset 0 -3px 0 var(--red)}
+.mock-tabs button[aria-selected="true"]{background:var(--teal);color:var(--navy);font-weight:600}
+.mock-panel{background:var(--white);padding:22px;min-height:250px}
+.mock-panel h3{color:var(--red);font-weight:800;font-size:22px;margin-bottom:8px}
+.mock-panel p{margin:0 0 14px;font-size:15.5px}
+.slot{border:2px dashed var(--teal);background:var(--teal-pale);padding:14px 16px;color:var(--teal-dark);font-weight:600;font-size:15px}
+.slot.none{border-color:var(--grey-line);background:var(--box);color:var(--navy)}
+.key{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--white);margin-top:12px}
+.key i{display:inline-block;width:22px;height:3px;background:var(--red)}
+.place-side h3{color:var(--navy);font-weight:700;font-size:20px;margin:0 0 8px}
+.place-side p{margin:0 0 18px;font-size:16px}
+.shows{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.shows li{background:var(--box);color:var(--navy);font-weight:500;font-size:14.5px;padding:8px 11px}
+
+/* Process */
+.process{background:var(--navy);color:var(--white)}
+.process h2.title{color:var(--red)}
+.process .intro{color:#DCE6EB}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+.step{background:var(--navy-2);padding:22px 20px 24px;position:relative;margin-right:14px}
+.step:last-child{margin-right:0}
+.step:not(:last-child):after{content:"";position:absolute;right:-14px;top:50%;width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:10px solid var(--teal);transform:translate(2px,-50%)}
+.step .icon-round{margin-bottom:14px}
+.step h3{font-weight:700;font-size:18px;line-height:1.25;margin-bottom:6px}
+.step p{margin:0;font-size:15px;line-height:1.5;color:#DCE6EB}
+.step.go{background:var(--teal)}
+.step.go h3,.step.go p{color:var(--navy)}
+.thumb{display:block;width:42px;height:42px;margin-bottom:14px}
+.thumb svg{width:42px;height:42px;fill:none;stroke:var(--navy);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Enquiry */
+.enq-grid{display:grid;grid-template-columns:1.5fr .85fr;gap:36px;align-items:start}
+.form-box{background:var(--box);padding:30px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label,.field .lab{font:600 15px/1.3 Barlow,Arial,sans-serif;color:var(--navy)}
+.field .hint{font-size:14px;color:var(--navy);font-weight:400}
+.field input,.field select,.field textarea{border:1.5px solid #A9B7C1;border-radius:0;background:var(--white);padding:12px 13px;font:400 16px/1.4 Barlow,Arial,sans-serif;color:var(--ink);width:100%;transition:border-color .2s var(--ease)}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:var(--navy)}
+.field textarea{min-height:130px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:500 14.5px/1 Barlow,Arial,sans-serif;background:var(--white);color:var(--navy);border:1.5px solid #A9B7C1;padding:10px 12px;cursor:pointer;transition:background .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease)}
+.chip:hover{transform:translateY(-1px);border-color:var(--navy)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--white)}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5}
+.check input{width:20px;height:20px;margin:2px 0 0;flex:0 0 auto;accent-color:var(--navy)}
+.form-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:22px}
+.small{font-size:14px;line-height:1.5;color:var(--navy);margin:14px 0 0}
+.result{display:none;margin-top:22px;background:var(--white);border-left:6px solid var(--teal);padding:20px}
+.result.show{display:block}
+.result h3{color:var(--navy);font-weight:700;font-size:19px;margin-bottom:6px}
+.result p{margin:0 0 12px;font-size:15.5px}
+.result pre{white-space:pre-wrap;font:400 14.5px/1.55 Barlow,Arial,sans-serif;background:var(--box);padding:14px;margin:0 0 12px;max-height:260px;overflow:auto}
+.contact-box{background:var(--navy);color:var(--white)}
+.contact-box .keybox-head h2{font-size:18px}
+.contact-box .inner{padding:22px}
+.contact-box p{margin:0 0 14px;font-size:15.5px;color:#DCE6EB}
+.contact-box a.mail{color:var(--teal);font-weight:700;font-size:18px;word-break:break-word;text-decoration:none}
+.contact-box a.mail:hover{text-decoration:underline}
+.contact-box ul{margin:0 0 16px;padding:0;list-style:none}
+.contact-box li{background:rgba(255,255,255,.05);margin-bottom:6px;padding:9px 12px;font-size:15px}
+
+/* FAQ */
+.faq{background:var(--box)}
+.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
+.faq-side p{font-size:17px;margin:0 0 18px}
+.faq-list details{background:var(--white);margin-bottom:10px}
+.faq-list summary{list-style:none;cursor:pointer;padding:18px 54px 18px 20px;position:relative;font:700 18px/1.35 Barlow,Arial,sans-serif;color:var(--navy)}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary:after{content:"";position:absolute;right:22px;top:50%;width:10px;height:10px;border-right:2.5px solid var(--red);border-bottom:2.5px solid var(--red);transform:translateY(-70%) rotate(45deg);transition:transform .3s var(--ease)}
+.faq-list details[open] summary:after{transform:translateY(-30%) rotate(225deg)}
+.faq-list details p{margin:0;padding:0 20px 20px;font-size:16px}
+
+/* Terms */
+.terms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.term{background:var(--box);padding:20px 22px}
+.term h3{color:var(--navy);font-weight:700;font-size:17px;margin-bottom:6px}
+.term p{margin:0;font-size:15px;line-height:1.55}
+.view{background:var(--navy);color:var(--white);padding:40px 0}
+.view-grid{display:grid;grid-template-columns:.5fr 1.5fr;gap:30px;align-items:start}
+.view h2{color:var(--red);font-weight:800;font-size:28px;line-height:1.15}
+.view p{margin:0;font-size:17px;line-height:1.65;color:#E8EEF2}
+.smallprint{padding:26px 0 34px;font-size:14px;line-height:1.6;color:var(--navy)}
+.smallprint p{margin:0 0 8px}
+
+/* Responsive */
+@media (max-width:1000px){
+  .header-grid,.aud-grid,.place-grid,.enq-grid,.faq-grid,.ex-layout{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .step{margin:0 14px 14px 0}
+  .step:after{display:none}
+    .terms-grid{grid-template-columns:1fr 1fr}
+  .view-grid{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 16px}
+  section{padding:50px 0}
+  .header{padding:40px 0 46px}
+  .actions .btn{flex:1 1 100%}
+  .reader-list,.pk-grid,.fields,.steps,.terms-grid,.hl{grid-template-columns:1fr}
+  .reader:nth-child(n){margin-top:0}
+  .step{margin-right:0}
+  .ad-listing{grid-template-columns:1fr}
+  .ad-listing .pic{min-height:140px}
+  .row{grid-template-columns:1fr}
+  .row span:first-child{padding-bottom:0}
+  .form-box{padding:20px}
+  .price-row strong{font-size:40px}
+}
+</style>
+<style id="device-fix">
+html,body{overflow-x:clip;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+@media (max-width:760px){
+  input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}
+}
+@media (max-width:1024px) and (pointer:coarse),(max-width:760px){
+  .crumb a,nav[aria-label*=readcrumb] a,.reset,#reset,a.adlink{display:inline-flex;align-items:center;min-height:40px}
+  input[type=checkbox]{min-width:24px;min-height:24px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="wrap header-grid">
+    <div class="reveal">
+      <p class="crumb"><a href="https://www.ukairshowguide.co.uk/" target="_top">Home</a> &gt; Advertise with us</p>
+      <h1>Advertise with us</h1>
+      <p class="sub">Put your business in front of people planning their airshow day.</p>
+      <p class="lede">The Big Guide to UK Airshows helps visitors work out where to stay, how to get there, what to bring and where to watch. <strong>Your advert sits right beside the advice they are reading, at the moment they are making plans.</strong> Every placement is clearly labelled, and the visitor guides stay free and independent.</p>
+      <div class="actions">
+        <a class="btn btn-teal jump" href="#packages" data-target="packages">See the 2027 packages</a>
+        <a class="btn btn-outline jump" href="#examples" data-target="examples">How adverts look</a>
+        <a class="btn btn-red jump" href="#enquire" data-target="enquire">Make an enquiry</a>
+      </div>
+    </div>
+    <aside class="keybox reveal" aria-label="Key details">
+      <div class="keybox-head">
+        
+        <h2>Key details</h2>
+      </div>
+      <div class="rows">
+        <div class="row"><span>Season</span><span>1 March to 31 October 2027</span></div>
+        <div class="row"><span>Packages from</span><span>£79 per season</span></div>
+        <div class="row"><span>Airshow guides</span><span>Nine major UK shows at launch</span></div>
+        <div class="row"><span>Placements</span><span>Matched to the right guide and section</span></div>
+        <div class="row"><span>Labelling</span><span>Every advert clearly marked</span></div>
+        <div class="row hot"><span>Introductory rates</span><span>Book early for the 2027 season</span></div>
+      </div>
+    </aside>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="wrap">
+    <span class="tag">Our promise</span>
+    <p>Paid placements never change our visitor advice. Adverts are labelled, kept apart from our recommendations and checked for suitability before they go live.</p>
+  </div>
+</div>
+
+<main>
+
+<section id="audience">
+  <div class="wrap aud-grid">
+    <div class="aud-lead reveal">
+      <h2 class="title">Who reads the guides</h2>
+      <p>People come to us before the big day, when they are still choosing a show, booking somewhere to stay and working out how to get there. That planning stage is exactly when a nearby hotel, a campsite or a good camera shop is most useful to them.</p>
+      <p>Our guides are written from first hand airshow experience, local knowledge and official information, so readers trust them and come back as their plans take shape.</p>
+      <div class="pull">We are building our audience for the 2027 season. We will share real figures as they come in, and we will never promise numbers we cannot show you.</div>
+    </div>
+    <div class="reader-list reveal">
+      <div class="reader"><h3>First time visitors</h3><p>Looking for clear advice on travel, parking and what to expect on the day.</p></div>
+      <div class="reader"><h3>Families</h3><p>Planning around children, meals, toilets and somewhere comfortable to stay.</p></div>
+      <div class="reader"><h3>Aviation enthusiasts</h3><p>Following line ups closely and often travelling to several shows a year.</p></div>
+      <div class="reader"><h3>Photographers</h3><p>Choosing lenses, bags and settings, and finding the best spots to shoot from.</p></div>
+      <div class="reader"><h3>Campers and weekenders</h3><p>Booking pitches, rooms and places to eat for a full airshow weekend.</p></div>
+      <div class="reader"><h3>Visitors with access needs</h3><p>Checking step free routes, accessible parking and suitable places to stay.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="who" id="who">
+  <div class="wrap">
+    <div class="reveal">
+      <h2 class="title">Businesses we work with</h2>
+      <p class="intro">If your business helps airshow visitors have a better day or a better trip, there is likely a place for you in our guides.</p>
+    </div>
+    <div class="pk-grid">
+      <article class="pk who-card">
+        <div class="pk-head"><h3>Places to stay</h3></div>
+        <p class="for">Reach visitors booking a night or a weekend near the airfield.</p>
+        <div class="getbox"><h4>Who this suits</h4><ul><li>Hotels</li><li>B&amp;Bs</li><li>Campsites</li><li>Holiday parks</li></ul></div>
+        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
+      </article>
+      <article class="pk who-card">
+        <div class="pk-head"><h3>Food and local favourites</h3></div>
+        <p class="for">Be the place people stop at on the way in or celebrate at afterwards.</p>
+        <div class="getbox"><h4>Who this suits</h4><ul><li>Cafés</li><li>Coffee shops</li><li>Restaurants</li><li>Pubs</li></ul></div>
+        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
+      </article>
+      <article class="pk who-card">
+        <div class="pk-head"><h3>Photography and video</h3></div>
+        <p class="for">Sit beside our camera guides, kit planners and settings advice.</p>
+        <div class="getbox"><h4>Who this suits</h4><ul><li>Camera retailers</li><li>Lens makers</li><li>Bags and tripods</li><li>Gimbals and memory cards</li></ul></div>
+        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
+      </article>
+      <article class="pk who-card">
+        <div class="pk-head"><h3>Attractions and travel</h3></div>
+        <p class="for">Help visitors make a full trip of it.</p>
+        <div class="getbox"><h4>Who this suits</h4><ul><li>Aviation museums</li><li>Flying experiences</li><li>Parking providers</li><li>Local transport</li></ul></div>
+        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
+      </article>
+      <article class="pk who-card wide">
+        <div class="pk-head"><h3>Traders attending the shows</h3></div>
+        <p class="for">Let visitors know you will be there before they arrive, on the guide for the show you are attending.</p>
+        <div class="getbox"><h4>Who this suits</h4><ul><li>Food and drink vendors</li><li>Aviation merchandise</li><li>Clothing and accessories</li><li>Model aircraft</li><li>Photography equipment</li><li>Aviation artists and photographers</li></ul><p class="note">We only show that a trader is attending once the trader or the event organiser has confirmed it.</p></div>
+        <div class="pk-foot"><a class="btn btn-teal jump" href="#packages" data-target="packages">See the packages</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="packages">
+  <div class="wrap">
+    <div class="reveal">
+      <h2 class="title">Advertising packages for 2027</h2>
+      <p class="intro">Every package runs for the full season, 1 March to 31 October 2027. These are introductory rates while the site grows, so the earlier you book, the better the value.</p>
+    </div>
+    <div class="pk-grid">
+      <article class="pk reveal">
+        <div class="pk-head"><h3>Business Listing</h3></div>
+        <div class="price-row"><strong>£79</strong><span>per season</span></div>
+        <p class="for">An affordable way for a small local business to be seen in one guide.</p>
+        <div class="rows">
+          <div class="row"><span>Airshow guides</span><span>One</span></div>
+          <div class="row"><span>Size</span><span>Compact listing</span></div>
+          <div class="row"><span>Best for</span><span>Smaller hotels, cafés, campsites and traders</span></div>
+        </div>
+        <div class="getbox"><h4>What you get</h4><ul><li>Business name, logo or one photo</li><li>Short description and business category</li><li>General location</li><li>Website or social media link</li><li>Placement in a relevant section of the guide</li></ul></div>
+        <div class="pk-foot"><button class="more jump" data-target="examples" type="button">More information <b>&gt;</b></button><a class="btn btn-teal choose" href="#enquire" data-package="Business Listing">Enquire about this</a></div>
+      </article>
+
+      <article class="pk reveal">
+        <div class="pk-head"><h3>Featured Partner</h3><span class="pick">Most popular</span></div>
+        <div class="price-row"><strong>£199</strong><span>per season</span></div>
+        <p class="for">More space and priority positioning, so you are the first business people see.</p>
+        <div class="rows">
+          <div class="row"><span>Airshow guides</span><span>One</span></div>
+          <div class="row"><span>Size</span><span>Large featured advert</span></div>
+          <div class="row hot"><span>Position</span><span>Priority within the section</span></div>
+        </div>
+        <div class="getbox"><h4>What you get</h4><ul><li>Larger main photograph</li><li>Expanded description and business highlights</li><li>Location, facilities and services</li><li>Website or booking link</li><li>Prominent call to action button</li></ul></div>
+        <div class="pk-foot"><button class="more jump" data-target="examples" type="button">More information <b>&gt;</b></button><a class="btn btn-teal choose" href="#enquire" data-package="Featured Partner">Enquire about this</a></div>
+      </article>
+
+      <article class="pk reveal">
+        <div class="pk-head"><h3>Regional Partner</h3></div>
+        <div class="price-row"><strong>£399</strong><span>per season</span></div>
+        <p class="for">For businesses that serve visitors to several shows.</p>
+        <div class="rows">
+          <div class="row"><span>Airshow guides</span><span>Up to three</span></div>
+          <div class="row"><span>Social media</span><span>One agreed promotion</span></div>
+          <div class="row"><span>Best for</span><span>Hotel groups, regional attractions and camera shops</span></div>
+        </div>
+        <div class="getbox"><h4>What you get</h4><ul><li>Featured placements across up to three guides</li><li>Business photography and a detailed description</li><li>Website links in every placement</li><li>One agreed social media promotion</li><li>A basic performance summary where tracking allows</li></ul></div>
+        <div class="pk-foot"><button class="more jump" data-target="placements" type="button">More information <b>&gt;</b></button><a class="btn btn-teal choose" href="#enquire" data-package="Regional Partner">Enquire about this</a></div>
+      </article>
+
+      <article class="pk reveal">
+        <div class="pk-head"><h3>Main Website Partner</h3></div>
+        <div class="price-row"><strong>From £999</strong><span>per season</span></div>
+        <p class="for">A tailored campaign for larger brands, manufacturers and retailers.</p>
+        <div class="rows">
+          <div class="row"><span>Airshow guides</span><span>Agreed with you</span></div>
+          <div class="row"><span>Homepage</span><span>Possible, by agreement</span></div>
+          <div class="row"><span>Best for</span><span>Camera brands, national retailers and aviation companies</span></div>
+        </div>
+        <div class="getbox"><h4>What you get</h4><ul><li>Tailored placements across relevant sections</li><li>Priority visibility across the site</li><li>Agreed promotional content</li><li>Possible social media and YouTube collaboration</li><li>Campaign planning, review and a bespoke proposal</li></ul></div>
+        <div class="pk-foot"><button class="more jump" data-target="placements" type="button">More information <b>&gt;</b></button><a class="btn btn-teal choose" href="#enquire" data-package="Main Website Partner">Discuss a partnership</a></div>
+      </article>
+    </div>
+    <p class="pk-small reveal">All packages are subject to available space, suitability and a confirmed booking. Any VAT that applies will be shown on your invoice. Your exact placement, start date and artwork requirements are set out in your advertiser agreement. We provide the agreed advertising space and cannot guarantee visitor numbers, clicks, enquiries, bookings or sales.</p>
+  </div>
+</section>
+
+<section class="ex" id="examples">
+  <div class="wrap">
+    <div class="reveal">
+      <h2 class="title">How your advert will look</h2>
+      <p class="intro">Adverts are designed to match the guides, so they feel helpful rather than intrusive. The businesses below are fictional examples.</p>
+    </div>
+    <div class="ex-layout">
+      <div class="ex-col reveal">
+        <h3>Business Listing, £79</h3>
+        <p>A compact listing with one photo, placed where visitors are already looking for that kind of business.</p>
+        <div class="where"><em>RAF Cosford Air Show guide</em><em>Where to stay</em></div>
+        <div class="ad-listing">
+          <div class="pic" aria-hidden="true">
+            <svg viewBox="0 0 160 150" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><rect width="160" height="150" fill="#CFE9EA"/><circle cx="124" cy="34" r="14" fill="#FFFFFF" opacity=".8"/><rect y="112" width="160" height="38" fill="#9FC9A6"/><path d="M34 112V66l38-24 38 24v46z" fill="#F4EEE2"/><path d="M28 70l44-30 44 30" fill="none" stroke="#13293C" stroke-width="5"/><rect x="62" y="88" width="20" height="24" fill="#13293C"/><rect x="44" y="76" width="12" height="12" fill="#32B4AF"/><rect x="90" y="76" width="12" height="12" fill="#32B4AF"/></svg>
+          </div>
+          <div class="txt">
+            <span class="adlabel">Advertisement</span>
+            <h4>Oakfield Country Hotel</h4>
+            <p>Planning a weekend at the air show? Comfortable rooms, a full English breakfast and free on site parking, a short drive from the airfield.</p>
+            <div class="meta"><span>Near Cosford, Shropshire</span><span>Hotel</span></div>
+            <a class="adlink" href="#examples" onclick="return false">Visit website &gt;</a>
+          </div>
+        </div>
+        <div style="margin-top:30px">
+          <h3>Trader advert</h3>
+          <p>Shown on the guide for the show you are attending, once attendance is confirmed.</p>
+          <div class="where"><em>Eastbourne Airshow guide</em><em>Food and facilities</em></div>
+          <div class="trader">
+            <div class="mark" aria-hidden="true"><svg viewBox="0 0 40 40" width="38" height="38"><path d="M4 24l14-3 6-13h4l-2 13 10 2 2 3-12 2-5 8h-3l2-8-14-2z" fill="#32B4AF"/></svg></div>
+            <div>
+              <span class="adlabel">Advertisement</span>
+              <h4>Contrail Prints</h4>
+              <p>Limited edition aviation art and framed prints of the display teams. Find us beside the main trade village.</p>
+              <span class="confirmed">Attendance confirmed by the trader</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ex-col reveal">
+        <h3>Featured Partner, £199</h3>
+        <p>A larger advert with highlights and a booking button, given priority within its section.</p>
+        <div class="where"><em>IWM Duxford guide</em><em>Food and facilities</em></div>
+        <div class="ad-featured">
+          <div class="pic" aria-hidden="true">
+            <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><rect width="400" height="200" fill="#E7E1D4"/><rect y="150" width="400" height="50" fill="#C9B79A"/><rect x="40" y="70" width="140" height="80" fill="#13293C"/><rect x="52" y="82" width="52" height="40" fill="#32B4AF"/><rect x="116" y="82" width="52" height="40" fill="#32B4AF"/><path d="M230 112h70v22a35 35 0 0 1-70 0z" fill="#FFFFFF"/><path d="M300 118h10a10 10 0 0 1 0 20h-10" fill="none" stroke="#FFFFFF" stroke-width="7"/><path d="M252 92c-6-10 6-14 0-24M272 92c-6-10 6-14 0-24" fill="none" stroke="#13293C" stroke-width="4" stroke-linecap="round"/></svg>
+            <span class="adlabel">Advertisement</span>
+          </div>
+          <div class="txt">
+            <h4>Hangar Door Coffee Co.</h4>
+            <p>Start your Duxford day properly. Freshly roasted coffee, bacon rolls from 7am and plenty of room to sit, ten minutes from the museum gates.</p>
+            <ul class="hl"><li>Open from 7am on show days</li><li>Free parking</li><li>Takeaway breakfast boxes</li><li>Dog friendly</li></ul>
+            <div class="meta" style="margin-bottom:16px"><span>Near Duxford, Cambridgeshire</span><span>Café</span></div>
+            <a class="btn btn-navy" href="#examples" onclick="return false">Pre order breakfast</a>
+          </div>
+        </div>
+        <p class="fict">Oakfield Country Hotel, Contrail Prints and Hangar Door Coffee Co. are made up to show layouts only.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="placements">
+  <div class="wrap place-grid">
+    <div class="reveal">
+      <h2 class="title">Where adverts appear</h2>
+      <p class="intro">We do not fill every page with adverts. Each one goes in the part of a guide where it is genuinely useful. Tap a tab to see what goes where.</p>
+      <div class="mock">
+        <div class="mock-tabs" role="tablist" aria-label="Guide sections">
+          <button role="tab" aria-selected="true" class="ad" data-i="0">Where to stay</button>
+          <button role="tab" aria-selected="false" class="ad" data-i="1">Getting there and parking</button>
+          <button role="tab" aria-selected="false" class="ad" data-i="2">Food and facilities</button>
+          <button role="tab" aria-selected="false" class="ad" data-i="3">Photography</button>
+          <button role="tab" aria-selected="false" data-i="4">Aircraft line up</button>
+        </div>
+        <div class="mock-panel" role="tabpanel" aria-live="polite">
+          <h3 id="mp-title">Where to stay</h3>
+          <p id="mp-text">Visitors compare hotels, B&amp;Bs and campsites within easy reach of the show.</p>
+          <div class="slot" id="mp-slot">Advert space for hotels, B&amp;Bs, campsites and holiday parks</div>
+        </div>
+        <div class="key"><i></i><span>Sections with advert space</span></div>
+      </div>
+    </div>
+    <div class="place-side reveal">
+      <h3>The guides at launch</h3>
+      <p>Choose one show, or several on the Regional and Main Website Partner packages.</p>
+      <ul class="shows">
+        <li>Royal International Air Tattoo</li><li>RAF Cosford Air Show</li><li>IWM Duxford</li><li>Shuttleworth</li><li>Eastbourne Airshow</li><li>Clacton Airshow</li><li>Wales Airshow</li><li>Little Gransden</li><li>Hampshire Air Festival</li>
+      </ul>
+      <h3 style="margin-top:30px">Photography section</h3>
+      <p>Camera, lens, bag and accessory brands can appear alongside our beginner and enthusiast guides. Any affiliate links are marked, and our kit advice is written independently.</p>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="reveal">
+      <h2 class="title">How booking works</h2>
+      <p class="intro">Simple from your first message to your advert going live.</p>
+    </div>
+    <div class="steps reveal">
+      <div class="step"><span class="icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14"/><path d="M8 10h8M8 14h5"/></svg></span><h3>Choose a package</h3><p>Pick the option that suits your business and the shows you want.</p></div>
+      <div class="step"><span class="icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></span><h3>Send your details</h3><p>Use the form below or email us about your business.</p></div>
+      <div class="step"><span class="icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><h3>Agree your placement</h3><p>We check suitability and space, then agree dates and artwork.</p></div>
+      <div class="step"><span class="icon-round" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12"/><path d="M3 10h18"/></svg></span><h3>Confirm and pay</h3><p>You receive written terms and an invoice or secure payment link.</p></div>
+      <div class="step go"><span class="thumb" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10v11H3V10z"/><path d="M7 10l4-7c1.7 0 2.6 1.2 2.2 2.8L12.6 9H19a2 2 0 0 1 2 2.3l-1.2 7.5A2.6 2.6 0 0 1 17.2 21H7"/></svg></span><h3>Go live</h3><p>Your labelled advert is published for the agreed season.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="enquire">
+  <div class="wrap">
+    <div class="reveal">
+      <h2 class="title">Make an enquiry</h2>
+      <p class="intro">Tell us about your business and where you would like to appear. We will reply with availability, a suggested package and the next steps.</p>
+    </div>
+    <div class="enq-grid">
+      <div class="form-box reveal">
+        <form id="adform" novalidate>
+          <div class="fields">
+            <div class="field"><label for="business">Business name</label><input id="business" name="business" required maxlength="120" autocomplete="organization"></div>
+            <div class="field"><label for="person">Your name</label><input id="person" name="person" required maxlength="100" autocomplete="name"></div>
+            <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" required maxlength="150" autocomplete="email"></div>
+            <div class="field"><label for="phone">Phone number <span class="hint">(optional)</span></label><input id="phone" name="phone" type="tel" maxlength="30" autocomplete="tel"></div>
+            <div class="field"><label for="website">Website or social media <span class="hint">(optional)</span></label><input id="website" name="website" maxlength="250" placeholder="www.yourbusiness.co.uk"></div>
+            <div class="field"><label for="category">Type of business</label>
+              <select id="category" name="category" required>
+                <option value="">Choose one</option>
+                <option>Hotel, B&amp;B or guest house</option>
+                <option>Campsite or holiday park</option>
+                <option>Café, restaurant or pub</option>
+                <option>Local attraction or museum</option>
+                <option>Parking or transport</option>
+                <option>Airshow trader or vendor</option>
+                <option>Photography or video equipment</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field full"><label for="package">Package</label>
+              <select id="package" name="package" required>
+                <option value="">Choose a package</option>
+                <option>Business Listing</option>
+                <option>Featured Partner</option>
+                <option>Regional Partner</option>
+                <option>Main Website Partner</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="field full"><span class="lab" id="shows-label">Which airshow guides interest you?</span>
+              <div class="chips" role="group" aria-labelledby="shows-label" id="chips">
+                <button type="button" class="chip" aria-pressed="false">Royal International Air Tattoo</button>
+                <button type="button" class="chip" aria-pressed="false">RAF Cosford</button>
+                <button type="button" class="chip" aria-pressed="false">IWM Duxford</button>
+                <button type="button" class="chip" aria-pressed="false">Shuttleworth</button>
+                <button type="button" class="chip" aria-pressed="false">Eastbourne</button>
+                <button type="button" class="chip" aria-pressed="false">Clacton</button>
+                <button type="button" class="chip" aria-pressed="false">Wales Airshow</button>
+                <button type="button" class="chip" aria-pressed="false">Little Gransden</button>
+                <button type="button" class="chip" aria-pressed="false">Hampshire Air Festival</button>
+                <button type="button" class="chip" aria-pressed="false">Photography guides</button>
+              </div>
+            </div>
+            <div class="field full"><label for="message">Tell us about your business</label><textarea id="message" name="message" required maxlength="2000" placeholder="What you offer, how far you are from the show, and what you would like to promote."></textarea></div>
+            <div class="field full"><label class="check"><input type="checkbox" id="trader" name="trader"> I am a trader and my attendance at the show is confirmed by the organiser</label></div>
+            <div class="field full"><label class="check"><input type="checkbox" id="agree" name="agree" required> I understand adverts are subject to approval, available space and an advertiser agreement</label></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-teal" type="submit">Prepare my enquiry email</button>
+          </div>
+          <p class="small" id="formmsg" role="alert">This opens your own email app with your enquiry written out, ready to send to us. Nothing is stored on this page.</p>
+          <div class="result" id="result">
+            <h3>Your enquiry is ready</h3>
+            <p>If your email app did not open, copy the message below and send it to contactus@ukairshowguide.co.uk.</p>
+            <pre id="preview"></pre>
+            <button class="btn btn-navy" type="button" id="copy">Copy message</button>
+          </div>
+        </form>
+      </div>
+      <aside class="contact-box reveal">
+        <div class="keybox-head">
+          
+          <h2>Prefer to email?</h2>
+        </div>
+        <div class="inner">
+          <p>For advertising and partnership enquiries, email us directly at</p>
+          <p><a class="mail" href="mailto:contactus@ukairshowguide.co.uk" target="_top">contactus@ukairshowguide.co.uk</a></p>
+          <p>It helps if you include</p>
+          <ul>
+            <li>Your business name and website</li>
+            <li>The airshows you want to reach</li>
+            <li>The package you are interested in</li>
+            <li>A logo or photo you would like to use</li>
+          </ul>
+          <p style="margin:0">Larger brands and camera manufacturers are welcome to ask for a tailored proposal.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap faq-grid">
+    <div class="faq-side reveal">
+      <h2 class="title">Questions businesses ask</h2>
+      <p>Cannot see your question here? Email us and we will happily talk it through.</p>
+      <a class="btn btn-red jump" href="#enquire" data-target="enquire">Ask us a question</a>
+    </div>
+    <div class="faq-list reveal">
+      <details><summary>Can I advertise on just one airshow guide?</summary><p>Yes. The Business Listing and Featured Partner packages each cover one guide, so you only pay for the show your customers are visiting.</p></details>
+      <details><summary>Can I appear on several shows?</summary><p>Yes. The Regional Partner package covers up to three guides, and the Main Website Partner package is built around the shows and sections that suit you.</p></details>
+      <details><summary>Can I use my own photos and logo?</summary><p>Yes, as long as you own them or have permission to use them. We will confirm the sizes we need before your advert is built.</p></details>
+      <details><summary>Will advertising guarantee bookings or sales?</summary><p>No. We provide the agreed advertising space for the season. We cannot guarantee visitors, clicks, enquiries, bookings or sales, and we will only share performance figures we can actually measure.</p></details>
+      <details><summary>Does paying change your recommendations?</summary><p>No. Our visitor advice is written independently. Adverts are always labelled and kept separate from our recommendations, and any affiliate links are clearly marked.</p></details>
+      <details><summary>I am a trader. Can you show that I will be at a show?</summary><p>Yes, once your attendance has been confirmed by you or the event organiser. Until then we will not list you as attending.</p></details>
+      <details><summary>When does my advert go live?</summary><p>Once your placement is agreed, your artwork approved and payment received. The 2027 season runs from 1 March to 31 October 2027.</p></details>
+      <details><summary>Are you connected to the airshow organisers?</summary><p>No. The Big Guide to UK Airshows is an independent visitor planning website. Advertising with us does not mean any airshow or event organiser endorses your business.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="terms">
+  <div class="wrap">
+    <div class="reveal">
+      <h2 class="title">Advertising terms in brief</h2>
+      <p class="intro">Your full terms will be set out in your advertiser agreement. These are the main points.</p>
+    </div>
+    <div class="terms-grid reveal">
+      <div class="term"><h3>Season and dates</h3><p>Packages run from 1 March to 31 October 2027 unless your agreement says otherwise.</p></div>
+      <div class="term"><h3>Approval</h3><p>All adverts are reviewed for suitability and relevance. We may decline an advert that does not fit the guides.</p></div>
+      <div class="term"><h3>Your content</h3><p>You confirm that your text, images and logos are accurate and that you have the right to use them.</p></div>
+      <div class="term"><h3>Labelling</h3><p>Every paid placement is marked as an advertisement and kept apart from our independent advice.</p></div>
+      <div class="term"><h3>Payment</h3><p>Adverts go live once payment is received. Any VAT that applies will be shown on your invoice.</p></div>
+      <div class="term"><h3>No guarantees</h3><p>We provide the agreed space. We do not guarantee traffic, clicks, enquiries, bookings or sales.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="view">
+  <div class="wrap view-grid">
+    <h2>Our view</h2>
+    <p>The guides will always stay free for visitors. Advertising is what keeps them that way, so we want it to work for you and for our readers. If your business makes an airshow trip easier, better or more memorable, we would love to hear from you.</p>
+  </div>
+</div>
+
+<div class="smallprint">
+  <div class="wrap">
+    <p>The Big Guide to UK Airshows is an independent visitor planning website and is not connected to any airshow organiser or event operator. Advertising does not imply endorsement by any organiser.</p>
+    <p>Prices shown are introductory rates for the 2027 season and may be reviewed for future seasons. Contact: contactus@ukairshowguide.co.uk</p>
+  </div>
+</div>
+
+</main>
+
+<script>
+(function(){
+  // Gentle reveal on scroll
+  var els=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
+    els.forEach(function(el){io.observe(el);});
+  } else { els.forEach(function(el){el.classList.add('in');}); }
+  // Safety net so nothing stays hidden inside a Wix embed
+  setTimeout(function(){els.forEach(function(el){el.classList.add('in');});},2500);
+
+  function go(id){var t=document.getElementById(id);if(t){t.scrollIntoView({behavior:'smooth',block:'start'});}}
+  document.querySelectorAll('.jump').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(a.dataset.target);});});
+  document.querySelectorAll('.choose').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();document.getElementById('package').value=a.dataset.package;go('enquire');});});
+
+  // Placement tabs
+  var data=[
+    ['Where to stay','Visitors compare hotels, B&Bs and campsites within easy reach of the show.','Advert space for hotels, B&Bs, campsites and holiday parks',true],
+    ['Getting there and parking','Visitors plan their route, parking and public transport for the day.','Advert space for parking providers, taxis and local transport',true],
+    ['Food and facilities','Visitors look for breakfast on the way in and somewhere to eat afterwards, plus who is trading on site.','Advert space for cafés, restaurants, pubs and confirmed show traders',true],
+    ['Photography','Readers choose lenses, bags, tripods and settings before the show.','Advert space for camera retailers, equipment brands and accessories',true],
+    ['Aircraft line up','Visitors check which aircraft are booked to display.','No adverts here. The line up stays clear and easy to read.',false]
+  ];
+  var tabs=document.querySelectorAll('.mock-tabs button');
+  tabs.forEach(function(b){b.addEventListener('click',function(){
+    tabs.forEach(function(x){x.setAttribute('aria-selected','false');});
+    b.setAttribute('aria-selected','true');
+    var d=data[+b.dataset.i];
+    document.getElementById('mp-title').textContent=d[0];
+    document.getElementById('mp-text').textContent=d[1];
+    var s=document.getElementById('mp-slot');s.textContent=d[2];s.className=d[3]?'slot':'slot none';
+  });});
+
+  // Show chips
+  document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true');});});
+
+  // Enquiry email
+  var form=document.getElementById('adform'),msg=document.getElementById('formmsg');
+  function v(id){return document.getElementById(id).value.trim();}
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var missing=[];
+    [['business','business name'],['person','your name'],['email','email address'],['category','type of business'],['package','package'],['message','a few words about your business']].forEach(function(f){if(!v(f[0]))missing.push(f[1]);});
+    var em=v('email');if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))missing.push('a valid email address');
+    if(!document.getElementById('agree').checked)missing.push('the approval box');
+    if(missing.length){msg.textContent='Please add '+missing.join(', ')+'.';msg.style.color='#DF3336';return;}
+    msg.style.color='';msg.textContent='This opens your own email app with your enquiry written out, ready to send to us. Nothing is stored on this page.';
+    var shows=[].map.call(document.querySelectorAll('.chip[aria-pressed="true"]'),function(c){return c.textContent;});
+    var body=['Advertising enquiry for the 2027 season','',
+      'Business: '+v('business'),'Contact: '+v('person'),'Email: '+em,
+      'Phone: '+(v('phone')||'Not given'),'Website: '+(v('website')||'Not given'),
+      'Type of business: '+v('category'),'Package: '+v('package'),
+      'Airshow guides: '+(shows.length?shows.join(', '):'Not chosen yet'),
+      'Confirmed trader: '+(document.getElementById('trader').checked?'Yes':'No'),
+      '','About the business:',v('message')].join('\n');
+    document.getElementById('preview').textContent=body;
+    document.getElementById('result').classList.add('show');
+    var url='mailto:contactus@ukairshowguide.co.uk?subject='+encodeURIComponent('Advertising enquiry: '+v('business'))+'&body='+encodeURIComponent(body);
+    var a=document.createElement('a');a.href=url;a.target='_top';document.body.appendChild(a);
+    try{a.click();}catch(err){try{window.open(url,'_blank');}catch(e2){}}
+    a.remove();
+  });
+  document.getElementById('copy').addEventListener('click',function(){
+    var t=document.getElementById('preview').textContent,b=this;
+    function done(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy message';},2000);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fallback);}else{fallback();}
+    function fallback(){var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();}
+  });
+})();
+</script>
+</body>
+</html>
