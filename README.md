@@ -188,7 +188,11 @@ and, since 30 Oct 2026, boxes pointing at the GitHub pages listed in `AE_GH_PAGE
 When a new full-page guide is added to Wix by website address, add its path to `AE_GH_PAGES` too,
 or it will sit in a fixed-height box and won't scroll properly on phones. Changes to the element go live when the site is published.
 Planning your first airshow, Airshow Security, Weather and will it fly and Headcorn were added to the list on 30 Oct 2026 (evening).
-The train route pages do not work loaded into the page (their scripts half run), so they stay as boxes.
+The train route pages (Clacton, Eastbourne) were added on 30 Oct 2026 late evening, after the element was changed to run neighbouring
+inline scripts together (so `var CFG` from one script reaches the next) and to copy non-font stylesheets inside the guide.
+The template passes the map element to Leaflet (`L.map(document.getElementById('map'), ...)`), which is needed for that. New train pages
+(Cosford, Wales, RIAT) only need their path adding to `AE_GH_PAGES` once they have a Wix page.
+If a guide cannot load (an error, or longer than 15 seconds), the element leaves the normal HTML box in place.
 The full-width check compares each box with its own section as well as the window, because an iPad can zoom the page out.
 The site footer box (comp-mvf3v9rt) must stay stretched to the screen: when it was a fixed 1878px it made pages 1445px wide on iPads.
 
