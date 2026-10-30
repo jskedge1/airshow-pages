@@ -69,6 +69,16 @@ Every page ends with the `mobile-fit` block (between the `<!-- mobile-fit` comme
 It keeps the page inside the screen down to 320px wide, which is the width Wix gives an HTML box on phones.
 Keep it when copying a template to make a new show page.
 
+## Site search (30 Oct 2026)
+
+A search button sits in the header menu on every page (the magnifier between Community and Airshow Forum, and beside Menu on phones and tablets). It opens a search bar that drops down under the header. The home page has its own search bar in the photo header, under the intro. Both use the same results.
+
+- `search/index.js` is the search itself: the page list plus the engine. Built by `python3 tools-search.py` from the `PAGES` list in that file and the headings on each page, so a search for "toilets" or "park and ride" lands on the page that covers it, with the matching heading shown under the result. Do not edit index.js by hand.
+- `search/engine.js` is the matching (words that mean the same, such as rail and train, kids and children, are in `SAME`). tools-search.py joins it onto the page list.
+- `search/header-search.js` adds the header button and drop down bar. It is loaded by the Wix custom code block "UK Airshow Guide header search" (body end, every page), so changes here go live without touching Wix.
+- When a new page goes live, add a row to `PAGES` in tools-search.py and run it again. Run it after big heading changes too.
+- Shortcut keys in the header search: / or Ctrl K to open, arrow keys to move, Enter to open the page, Esc to close.
+
 ## Scheduled tasks (set 30 Oct 2026)
 
 Each task has one job, so no two tasks change the same thing.
