@@ -144,6 +144,33 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
 .tt-year b{display:block;font:800 24px 'Barlow Condensed',sans-serif}.tt-year span{font-size:15px;color:var(--muted);line-height:1.5}
 .tt-sub{padding:22px 22px 10px;font:800 24px 'Barlow Condensed',sans-serif;color:var(--pale);border-top:1px solid var(--row)}
 .tt-foot{padding:16px 22px 22px;font-size:15px;color:var(--muted);line-height:1.5;border-top:1px solid var(--row)}
+.sb{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--row)}
+.sb-list{flex:1 1 300px;max-width:400px;min-width:0;border-right:1px solid var(--row)}
+.sb-pv{flex:999 1 520px;min-width:0;display:flex;flex-direction:column;position:sticky;top:0;align-self:flex-start}
+.sb-g{padding:12px 18px;background:#0E2131;font:800 19px 'Barlow Condensed',sans-serif;color:var(--pale);border-top:1px solid var(--row);display:flex;justify-content:space-between}
+.sb-i{display:block;width:100%;text-align:left;border:0;border-top:1px solid var(--row);background:transparent;color:#fff;padding:12px 18px;cursor:pointer;font-family:inherit;transition:background .25s ease,padding .3s ease}
+.sb-i:hover{background:#0F1C27;padding-left:24px}
+.sb-i.on{background:var(--panel);box-shadow:inset 4px 0 0 var(--teal)}
+.sb-i b{display:block;font:700 21px/1.1 'Barlow Condensed',sans-serif}
+.sb-i span{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+.sb-i i{font-style:normal;font-weight:700;font-size:12px;padding:2px 7px;margin-top:6px;display:inline-block}
+.w-git{background:var(--teal);color:var(--board)}.w-art{background:var(--purple);color:#fff}
+.sb-top{padding:16px 20px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--row)}
+.sb-top h3{margin:0;font:800 30px/1 'Barlow Condensed',sans-serif}
+.sb-top p{margin:6px 0 0;color:var(--muted);font-size:15px;line-height:1.5;max-width:70ch}
+.sb-top .goes{color:var(--pale);font-weight:600;font-size:14px}
+.sb-acts{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sb-acts a{min-height:40px;display:inline-flex;align-items:center;padding:0 14px;font-weight:700;font-size:14px;text-decoration:none;border:2px solid var(--teal);color:#fff}
+.sb-acts a.pri{background:var(--teal);color:var(--board)}
+.dev{display:flex;gap:4px}
+.dev button{min-height:40px;padding:0 14px;border:1px solid #3A5A74;background:transparent;color:#fff;font-weight:600;cursor:pointer}
+.dev button.on{background:var(--teal);color:var(--board);border-color:var(--teal)}
+.sb-stage{position:relative;height:760px;overflow:hidden;background:#05090D;display:flex;justify-content:center}
+.sb-frame{position:absolute;top:0;transform-origin:top left;border:0;background:#fff}
+.sb-cap{padding:8px 20px;font-size:13px;color:var(--muted);border-top:1px solid var(--row)}
+.sb-art{margin:auto;max-width:460px;padding:30px;background:var(--panel);border-top:4px solid var(--purple)}
+.sb-art h4{margin:0 0 8px;font:800 26px 'Barlow Condensed',sans-serif}
+.sb-art p{margin:0 0 16px;color:var(--muted);line-height:1.5}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.ticker .run{animation:none}nav.tabs button,.dep,.lrow{transition:none}}
 </style>
@@ -193,6 +220,7 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
     <button type="button" data-tab="log">FLIGHT RECORDS <span class="n" id="nLog">0</span></button>
     <button type="button" data-tab="hangar">HANGAR <span class="n" id="nHangar">0</span></button>
     <button type="button" data-tab="gates">GATE CHECKS <span class="n" id="nGates">0</span></button>
+    <button type="button" data-tab="standby">NOT LIVE YET <span class="n" id="nStandby">0</span></button>
     <button type="button" data-tab="sched">TIMETABLE <span class="n" id="nSched">6</span></button>
   </nav>
 
@@ -255,6 +283,14 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
       <div class="gh"><span>Page</span><span>Desktop</span><span>Mobile</span><span>Tablet</span><span>Links and photos</span><span>Last checked</span></div>
       <div id="gateRows"></div>
     </div></div>
+  </section>
+
+  <section class="board" id="p-standby" hidden>
+    <div class="bh"><h2>NOT LIVE YET, PAGES ON STANDBY</h2><p id="sbNote">Pages made but not on the website yet. Pick one to preview it.</p></div>
+    <div class="sb">
+      <div class="sb-list" id="sbList"></div>
+      <div class="sb-pv" id="sbPv"></div>
+    </div>
   </section>
 
   <section class="board" id="p-sched" hidden>
@@ -598,11 +634,60 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
     return soon;
   }
 
+
+  /* ---------- pages made but not live yet, with a working preview ---------- */
+  var PAGES_BASE='https://jskedge1.github.io/airshow-pages/',ART='https://claude.ai/artifact/';
+  var sb={list:[],pick:null,dev:'desktop',loaded:false};
+  var DEVW={desktop:1280,tablet:768,phone:390};
+  function loadStandby(){
+    var url=new URL('unpublished.json',location.href.indexOf('http')===0?location.href:PAGES_BASE+'admin/board.html').href;
+    fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
+      sb.list=d.pages||[];sb.loaded=true;
+      $('#sbNote').textContent='Pages made but not on the website yet, as of '+d.updated.split('-').reverse().join('/')+'. Pick one to preview it.';
+      if(!sb.pick&&sb.list.length)sb.pick=sb.list[0].id;renderStandby();
+    }).catch(function(){sb.loaded=true;$('#sbList').innerHTML='<p class="empty">The list of pages could not load. Check your connection and open this tab again.</p>'});
+  }
+  function renderStandby(){
+    $('#nStandby').textContent=sb.list.length;
+    var groups=['Nearly ready','On hold','Ideas'];
+    $('#sbList').innerHTML=groups.map(function(g){
+      var items=sb.list.filter(function(p){return p.group===g});if(!items.length)return '';
+      return '<div class="sb-g"><span>'+esc(g.toUpperCase())+'</span><span>'+items.length+'</span></div>'+items.map(function(p){
+        return '<button type="button" class="sb-i'+(p.id===sb.pick?' on':'')+'" data-sb="'+esc(p.id)+'"><b>'+esc(p.name)+'</b><span>'+esc(p.status)+'</span><i class="'+(p.file?'w-git':'w-art')+'">'+(p.file?'Previews here':'Opens in Claude')+'</i></button>';
+      }).join('');
+    }).join('');
+    var p=sb.list.filter(function(x){return x.id===sb.pick})[0];
+    if(!p){$('#sbPv').innerHTML='<p class="empty">Pick a page on the left.</p>';return}
+    var acts='';
+    if(p.file)acts+='<a class="pri" href="'+PAGES_BASE+encodeURI(p.file)+'" target="_blank" rel="noopener">Open full page</a>';
+    if(p.art)acts+='<a href="'+ART+esc(p.art)+'" target="_blank" rel="noopener">Open in Claude to edit</a>';
+    if(p.file)acts+='<a href="'+REPO+'/blob/main/'+encodeURI(p.file)+'" target="_blank" rel="noopener">Page code</a>';
+    var top='<div class="sb-top"><div><h3>'+esc(p.name.toUpperCase())+'</h3><div class="goes">Goes in: '+esc(p.goes)+(p.wix?', page /'+esc(p.wix):'')+'</div><p>'+esc(p.note)+'</p></div><div class="sb-acts">'+acts+'</div></div>';
+    if(!p.file){
+      $('#sbPv').innerHTML=top+'<div class="sb-stage" style="align-items:center"><div class="sb-art"><h4>KEPT IN CLAUDE FOR NOW</h4><p>This page is one of your Claude previews, so it opens in a new tab where you can look round it, comment and ask for changes. It goes on GitHub, and previews here, once it is ready for the website.</p><div class="sb-acts"><a class="pri" href="'+ART+esc(p.art)+'" target="_blank" rel="noopener">Open '+esc(p.name)+'</a></div></div></div>';
+      return;
+    }
+    $('#sbPv').innerHTML=top+'<div class="sb-top" style="padding:10px 20px"><div class="dev" id="sbDev">'+['desktop','tablet','phone'].map(function(d){return '<button type="button" data-dev="'+d+'" class="'+(sb.dev===d?'on':'')+'">'+d.charAt(0).toUpperCase()+d.slice(1)+' '+DEVW[d]+'</button>'}).join('')+'</div><span class="small">Working preview: scroll, tap and use it like the real page.</span></div><div class="sb-stage" id="sbStage"><iframe class="sb-frame" id="sbFrame" title="Preview of '+esc(p.name)+'" src="'+PAGES_BASE+encodeURI(p.file)+'"></iframe></div><div class="sb-cap" id="sbCap"></div>';
+    fitFrame();
+  }
+  function fitFrame(){
+    var st=$('#sbStage'),fr=$('#sbFrame');if(!st||!fr)return;
+    var w=DEVW[sb.dev],avail=st.clientWidth-24,sc=Math.min(1,avail/w),h=st.clientHeight;
+    fr.style.width=w+'px';fr.style.height=Math.round(h/sc)+'px';fr.style.transform='scale('+sc+')';fr.style.left=Math.round((st.clientWidth-w*sc)/2)+'px';
+    $('#sbCap').textContent='Showing at '+w+' px wide'+(sc<1?', scaled to '+Math.round(sc*100)+'% to fit':'')+'. Phone 390 is a typical phone; the website gives pages 320 on the smallest phones.';
+  }
+  $('#p-standby').addEventListener('click',function(e){
+    var b=e.target.closest('[data-sb]');if(b){sb.pick=b.dataset.sb;renderStandby();if($('#sbPv').getBoundingClientRect().top<0||$('#sbList').offsetWidth>=$('#p-standby').offsetWidth-40)$('#sbPv').scrollIntoView({behavior:'smooth',block:'start'});return}
+    var d=e.target.closest('[data-dev]');if(d){sb.dev=d.dataset.dev;Array.prototype.forEach.call(document.querySelectorAll('#sbDev button'),function(x){x.classList.toggle('on',x===d)});fitFrame()}
+  });
+  window.addEventListener('resize',fitFrame);
+
   /* ---------- tabs ---------- */
   $('#tabs').addEventListener('click',function(e){
     var b=e.target.closest('button');if(!b)return;state.tab=b.dataset.tab;
     Array.prototype.forEach.call(document.querySelectorAll('#tabs button'),function(x){x.classList.toggle('on',x===b)});
-    ['dep','arr','log','hangar','gates','sched'].forEach(function(t){$('#p-'+t).hidden=t!==state.tab});
+    ['dep','arr','log','hangar','gates','standby','sched'].forEach(function(t){$('#p-'+t).hidden=t!==state.tab});
+    if(state.tab==='standby'){if(!sb.loaded)loadStandby();else fitFrame()}
   });
 
   /* ---------- publish ---------- */
@@ -652,6 +737,7 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
     checks:[{id:'c1',page:'Royal International Air Tattoo',wixPath:'/riat',desktop:'Not checked',mobile:'Not checked',tablet:'Not checked',links:'',photos:'',lastChecked:'',notes:''}]};
 
   if(!IN_WIX)$('#demoStrip').hidden=false;
+  loadStandby();
   load();
 })();
 </script>
