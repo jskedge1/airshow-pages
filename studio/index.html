@@ -6,154 +6,218 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Preview Studio | UK Airshow Guide</title>
 <!--
-  Jack's preview site for The Big Guide to UK Airshows. Every live page, every page made but not live yet,
-  and the timetable of scheduled checks, each page working inside a device frame. Runs on its own from
-  GitHub Pages, so it works while the Wix site is offline. Not linked from the public site.
+  Jack's preview studio for The Big Guide to UK Airshows. Shown on a members only page of The Big Guide to RIAT
+  that only Jack's account can open, and works on its own too. Every live page, every page made but not live yet,
+  the timetable of scheduled checks and recent changes, each page working inside a device frame.
   Live pages are the LIVE list below; pages not live yet come from ../admin/unpublished.json.
+  Recent changes come from the public GitHub API (no key). Notes and go-live ticks are kept in this browser only.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#070D13;--board:#0B1A26;--panel:#13293C;--line:#1E3A52;--row:#16283A;--teal:#32B4AF;--pale:#9FE0DC;--muted:#C9D6E0;--purple:#6950A1;--red:#D74949}
-html,body{margin:0;background:var(--ink);color:#fff;font-family:Barlow,system-ui,sans-serif;scrollbar-width:none}
+:root{--navy:#13293C;--navy2:#0E2131;--teal:#32B4AF;--tealtext:#1F7F7B;--red:#D74949;--purple:#6950A1;--bg:#F2F4F5;--card:#FFFFFF;--line:#D7E1E8;--soft:#4A6074;--chip:#E6F4F3}
+html,body{margin:0;background:var(--bg);color:var(--navy);font-family:Barlow,system-ui,sans-serif;font-size:16px;line-height:1.5;scrollbar-width:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 *{box-sizing:border-box}
-button,input,select{font-family:inherit}
-a{color:var(--pale)}a:hover{color:#fff}
+button,input,textarea{font-family:inherit;font-size:inherit}
+a{color:var(--tealtext)}a:hover{color:var(--navy)}
 :focus-visible{outline:3px solid var(--red);outline-offset:2px}
-.top{background:var(--panel);border-bottom:4px solid var(--teal)}
-.top .in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 28px;padding:18px 24px}
-.brand{display:flex;align-items:center;gap:14px}
-.brand .ic{width:50px;height:50px;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 50px}
-.brand b{display:block;font:800 36px/0.95 'Barlow Condensed',sans-serif;letter-spacing:.01em}
-.brand span{color:var(--pale);font-weight:500;font-size:15px}
-.views{display:flex;flex-wrap:wrap;gap:6px}
-.views a{min-height:46px;display:inline-flex;align-items:center;gap:9px;padding:0 18px;text-decoration:none;color:#fff;background:var(--board);font:800 20px 'Barlow Condensed',sans-serif;letter-spacing:.03em;transition:padding .35s ease,background .3s ease}
-.views a:hover{padding:0 24px}
-.views a.on{background:var(--teal);color:var(--board)}
-.views a .n{font:700 13px Barlow,sans-serif;padding:2px 7px;background:var(--teal);color:var(--board)}
-.views a.on .n{background:var(--board);color:#fff}
-.clock{font:800 26px 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums;color:var(--pale)}
-main{max-width:1500px;margin:0 auto;padding:22px 24px 60px}
 
-/* pages view: list on the left, working preview on the right */
-.split{display:flex;flex-wrap:wrap;background:var(--board);border:2px solid var(--line);border-top:4px solid var(--teal)}
-.list{flex:1 1 300px;max-width:380px;min-width:0;border-right:1px solid var(--row)}
-.search{padding:14px 16px;border-bottom:1px solid var(--row)}
-.search input{width:100%;min-height:44px;background:var(--ink);border:1px solid #3A5A74;color:#fff;padding:0 12px;font-size:16px}
-.g{padding:11px 16px;background:#0E2131;font:800 19px 'Barlow Condensed',sans-serif;color:var(--pale);border-top:1px solid var(--row);display:flex;justify-content:space-between}
-.it{display:block;width:100%;text-align:left;border:0;border-top:1px solid var(--row);background:transparent;color:#fff;padding:11px 16px;cursor:pointer;transition:background .25s ease,padding .3s ease}
-.it:hover{background:#0F1C27;padding-left:22px}
-.it.on{background:var(--panel);box-shadow:inset 4px 0 0 var(--teal)}
-.it b{display:block;font:700 20px/1.1 'Barlow Condensed',sans-serif}
-.it span{display:block;font-size:13px;color:var(--muted);margin-top:3px}
-.it i{font-style:normal;font-weight:700;font-size:12px;padding:2px 7px;margin-top:6px;display:inline-block}
-.w-live{background:#1F7A55;color:#fff}.w-git{background:var(--teal);color:var(--board)}.w-art{background:var(--purple);color:#fff}.w-hold{background:#3A5A74;color:#fff}
-.pv{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;position:sticky;top:0;align-self:flex-start}
-.head{padding:16px 20px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--row)}
-.head h2{margin:0;font:800 32px/1 'Barlow Condensed',sans-serif}
-.head .goes{color:var(--pale);font-weight:600;font-size:14px;margin-top:6px}
-.head p{margin:6px 0 0;color:var(--muted);font-size:15px;line-height:1.5;max-width:72ch}
+header{background:var(--navy);color:#fff}
+.hin{max-width:1480px;margin:0 auto;padding:26px 24px 0}
+.hrow{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 30px}
+.tagline{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:14px;padding:4px 12px}
+h1{margin:12px 0 4px;font:800 54px/0.95 'Barlow Condensed',sans-serif;letter-spacing:.005em}
+h1 span{color:var(--teal)}
+.sub{margin:0;color:#C9D6E0;max-width:62ch}
+.now{text-align:right;color:#C9D6E0;font-size:15px}
+.now b{display:block;color:#fff;font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+nav.views{display:flex;flex-wrap:wrap;gap:4px;margin-top:22px}
+nav.views a{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 18px;color:#fff;text-decoration:none;font-weight:600;font-size:17px;transition:padding .35s ease,background .3s ease}
+nav.views a:hover{background:#1B3A52;padding:0 24px}
+nav.views a.on{background:var(--bg);color:var(--navy)}
+nav.views a .n{font-size:13px;font-weight:700;padding:1px 8px;background:var(--teal);color:var(--navy)}
+main{max-width:1480px;margin:0 auto;padding:28px 24px 70px}
+
+.st{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 18px;margin:0 0 14px}
+.st h2{margin:0;font:800 32px/1 'Barlow Condensed',sans-serif;color:var(--red);border-left:5px solid var(--red);padding-left:12px}
+.st p{margin:0;color:var(--soft)}
+.card{background:var(--card);border:1px solid var(--line)}
+.grid{display:grid;gap:18px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(520px,1fr))}
+.stat{padding:18px 20px;border-top:5px solid var(--navy)}
+.stat small{display:block;font-weight:600;color:var(--soft)}
+.stat b{display:block;font:800 46px/1.05 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;color:var(--soft)}
+.c-teal{border-top-color:var(--teal)}.c-purple{border-top-color:var(--purple)}.c-red{border-top-color:var(--red)}
+.box{padding:20px 22px}
+.box h3{margin:0 0 12px;font-size:20px;font-weight:700}
+.row{display:flex;align-items:center;gap:14px;padding:10px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.row .d{flex:0 0 76px;text-align:center;background:var(--navy);color:#fff;padding:6px 4px}
+.row .d b{display:block;font:800 26px/1 'Barlow Condensed',sans-serif}.row .d i{font-style:normal;font-size:12px}
+.row .t{flex:1;min-width:0}.row .t b{display:block;font-weight:600}.row .t span{font-size:14px;color:var(--soft)}
+.pill{font-style:normal;font-size:12px;font-weight:700;padding:2px 8px;white-space:nowrap}
+.p-conf{background:var(--chip);color:var(--tealtext)}.p-exp{background:#EFEBF7;color:#5A4290}
+.meter{height:8px;background:#E3E9EE;margin-top:6px}.meter i{display:block;height:8px;background:var(--teal)}
+.cm{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:15px}
+.cm:first-of-type{border-top:0}
+.cm .when{flex:0 0 92px;color:var(--soft);font-size:14px}
+.cm a{color:var(--navy);text-decoration:none}.cm a:hover{color:var(--tealtext);text-decoration:underline}
+
+/* pages: list left, working preview right */
+.split{display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px}
+.list{flex:1 1 290px;max-width:360px;min-width:0}
+.find{padding:12px;border-bottom:1px solid var(--line)}
+.find input{width:100%;min-height:44px;border:1px solid var(--line);padding:0 12px;background:#fff}
+.g{padding:10px 14px;background:var(--bg);font-weight:700;font-size:15px;display:flex;justify-content:space-between;border-top:1px solid var(--line)}
+.it{display:block;width:100%;text-align:left;border:0;border-top:1px solid var(--line);background:#fff;color:var(--navy);padding:10px 14px;cursor:pointer;transition:background .25s ease,padding .3s ease}
+.it:hover{background:#F7FAFB;padding-left:20px}
+.it.on{background:var(--chip);box-shadow:inset 4px 0 0 var(--teal)}
+.it b{display:block;font-weight:600}
+.it span{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--soft);margin-top:2px}
+.t-live{background:#E3F3EC;color:#21704D}.t-git{background:var(--chip);color:var(--tealtext)}.t-art{background:#EFEBF7;color:#5A4290}.t-hold{background:#E3E9EE;color:var(--soft)}
+.pv{flex:999 1 560px;min-width:0}
+.ph{padding:18px 20px;display:flex;flex-wrap:wrap;gap:10px 18px;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line)}
+.ph h2{margin:0;font:800 34px/1 'Barlow Condensed',sans-serif}
+.ph .goes{margin-top:6px;font-weight:600;color:var(--tealtext);font-size:15px}
+.ph p{margin:6px 0 0;color:var(--soft);font-size:15px;max-width:74ch}
 .acts{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.acts a{min-height:40px;display:inline-flex;align-items:center;padding:0 14px;font-weight:700;font-size:14px;text-decoration:none;border:2px solid var(--teal);color:#fff}
-.acts a.pri{background:var(--teal);color:var(--board)}
-.bar{padding:10px 20px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--row)}
-.dev{display:flex;gap:4px}
-.dev button{min-height:40px;padding:0 14px;border:1px solid #3A5A74;background:transparent;color:#fff;font-weight:600;cursor:pointer}
-.dev button.on{background:var(--teal);color:var(--board);border-color:var(--teal)}
-.small{font-size:14px;color:var(--muted)}
-.stage{position:relative;height:calc(100vh - 250px);min-height:520px;overflow:hidden;background:#05090D}
-.frame{position:absolute;top:0;transform-origin:top left;border:0;background:#fff}
-.cap{padding:8px 20px;font-size:13px;color:var(--muted);border-top:1px solid var(--row)}
-.art{margin:60px auto;max-width:470px;padding:30px;background:var(--panel);border-top:4px solid var(--purple)}
-.art h3{margin:0 0 8px;font:800 26px 'Barlow Condensed',sans-serif}
-.art p{margin:0 0 16px;color:var(--muted);line-height:1.5}
-.empty{padding:22px;color:var(--muted)}
+.btn{min-height:42px;display:inline-flex;align-items:center;padding:0 14px;font-weight:600;font-size:15px;text-decoration:none;border:2px solid var(--navy);color:var(--navy);background:#fff;cursor:pointer;transition:background .2s ease,color .2s ease}
+.btn:hover{background:var(--navy);color:#fff}
+.btn.pri{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.btn.pri:hover{background:#4CC8C3;color:var(--navy)}
+.bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--line);background:#FAFBFC}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{min-height:40px;padding:0 13px;border:1px solid var(--line);background:#fff;color:var(--navy);font-weight:600;cursor:pointer}
+.seg button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stage{position:relative;height:640px;overflow:hidden;background:#E3E9EE}
+.frame{position:absolute;top:12px;transform-origin:top left;border:0;background:#fff;box-shadow:0 6px 24px rgba(19,41,60,.18)}
+.flabel{position:absolute;font-size:13px;font-weight:600;color:var(--soft)}
+.cap{padding:8px 20px;font-size:13px;color:var(--soft);border-top:1px solid var(--line)}
+.kept{margin:70px auto;max-width:470px;padding:28px;background:#fff;border-top:5px solid var(--purple)}
+.kept h3{margin:0 0 8px;font-size:22px}
+.kept p{margin:0 0 16px;color:var(--soft)}
+.tools{display:flex;flex-wrap:wrap;border-top:1px solid var(--line)}
+.tools>div{flex:1 1 300px;min-width:0;padding:18px 20px;border-right:1px solid var(--line)}
+.tools>div:last-child{border-right:0}
+.tools h3{margin:0 0 10px;font-size:18px}
+.ck{display:flex;gap:10px;align-items:flex-start;padding:7px 0;cursor:pointer;font-size:15px}
+.ck input{width:20px;height:20px;accent-color:var(--teal);margin-top:2px;flex:0 0 20px}
+.ck.done span{text-decoration:line-through;color:var(--soft)}
+textarea{width:100%;min-height:96px;border:1px solid var(--line);padding:10px 12px;resize:vertical}
+.hint{font-size:13px;color:var(--soft);margin-top:6px}
+.empty{padding:20px;color:var(--soft)}
 
-/* timetable view */
-.board{background:var(--board);border:2px solid var(--line);border-top:4px solid var(--teal);margin-bottom:28px}
-.bh{padding:20px 22px 10px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;align-items:baseline}
-.bh h2{margin:0;font:800 32px 'Barlow Condensed',sans-serif;color:var(--red)}
-.bh p{margin:0;color:var(--muted);font-size:15px}
+/* timetable and activity */
+.tt{display:grid;grid-template-columns:170px minmax(0,1fr) 210px 120px;gap:0 14px;align-items:center;padding:12px 20px;border-top:1px solid var(--line);min-width:760px}
+.tt .nx{font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
+.tt .w b{display:block;font-weight:700}.tt .w span{font-size:14px;color:var(--soft)}
+.tt .ev{font-size:15px;color:var(--soft)}
 .scroll{overflow-x:auto}
-.tr{display:grid;grid-template-columns:150px minmax(0,1fr) 200px 150px;gap:0 12px;align-items:center;padding:10px 22px;border-top:1px solid var(--row);min-width:760px}
-.tr .nx{font:800 22px 'Barlow Condensed',sans-serif;padding:6px 10px;background:linear-gradient(#16222D 0 49%,#0A1219 49% 51%,#16222D 51% 100%);font-variant-numeric:tabular-nums}
-.tr .d b{display:block;font:700 23px/1.1 'Barlow Condensed',sans-serif}.tr .d span{font-size:14px;color:var(--muted)}
-.tr .ev{font-weight:600;font-size:15px;color:var(--muted)}
-.tag{font:800 17px 'Barlow Condensed',sans-serif;padding:6px 8px;text-align:center;letter-spacing:.03em;border:1px solid #3A5A74}
-.tag.next{background:var(--teal);color:var(--board);border-color:var(--teal)}.tag.today{background:var(--purple);border-color:var(--purple)}
-.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;background:var(--row);min-width:860px}
-.day{background:var(--board);padding:14px 12px;display:flex;flex-direction:column;gap:8px}
-.day h4{margin:0;font:800 22px 'Barlow Condensed',sans-serif}.day.now h4{color:var(--teal)}
-.blk{padding:8px 10px;font-size:14px;line-height:1.35}.blk b{display:block;font:800 18px 'Barlow Condensed',sans-serif}
-.k-m{background:var(--panel);border-left:4px solid #fff}.k-d{background:var(--purple)}.k-f{background:var(--red)}.k-s{background:var(--teal);color:var(--board)}.k-e{border:2px dashed var(--teal)}
-.cov{display:grid;grid-template-columns:200px repeat(3,minmax(0,1fr)) 140px;min-width:900px}
-.cov>div{padding:12px 14px;border-top:1px solid var(--row);font-size:15px;line-height:1.45}
-.cov .h{color:var(--pale);font-weight:700;background:#0E2131}
-.cov .w{font:700 21px/1.1 'Barlow Condensed',sans-serif}.cov .o{font:800 16px 'Barlow Condensed',sans-serif}
-.year{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:2px;background:var(--row)}
-.year div{background:var(--board);padding:16px 18px;border-top:4px solid var(--teal)}
-.year b{display:block;font:800 24px 'Barlow Condensed',sans-serif}.year span{font-size:15px;color:var(--muted);line-height:1.5}
-.foot{padding:16px 22px 20px;color:var(--muted);font-size:15px;line-height:1.5;border-top:1px solid var(--row)}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;min-width:880px}
+.day{background:#fff;border:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px}
+.day h4{margin:0;font-size:17px}.day.today{border-color:var(--teal);box-shadow:inset 0 4px 0 var(--teal)}
+.blk{padding:8px 10px;font-size:14px;line-height:1.35}.blk b{display:block}
+.k-m{background:var(--navy);color:#fff}.k-d{background:var(--purple);color:#fff}.k-f{background:var(--red);color:#fff}.k-s{background:var(--teal);color:var(--navy)}.k-e{border:2px dashed var(--teal)}
+.cov{display:grid;grid-template-columns:190px repeat(3,minmax(0,1fr)) 130px;min-width:900px}
+.cov>div{padding:11px 14px;border-top:1px solid var(--line);font-size:15px}
+.cov .h{background:var(--navy);color:#fff;font-weight:600;border-top:0}
+.cov .w{font-weight:700}
+.act-f{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.act-f input{flex:1 1 260px;min-height:44px;border:1px solid var(--line);padding:0 12px;background:#fff}
+.dayh{padding:10px 20px;background:var(--bg);font-weight:700;border-top:1px solid var(--line)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;font-weight:600;opacity:0;transition:opacity .3s ease;pointer-events:none;max-width:90vw;border-top:3px solid var(--teal)}
+.toast.on{opacity:1}
 [hidden]{display:none!important}
-@media (max-width:820px){.list{max-width:none;border-right:0;border-bottom:1px solid var(--row)}.pv{position:static}.stage{height:620px}}
-@media (prefers-reduced-motion:reduce){.views a,.it{transition:none}}
+@media (max-width:860px){h1{font-size:42px}.now{text-align:left}.list{max-width:none}.stage{height:560px}.g2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){nav.views a,.it,.btn{transition:none}}
 </style>
 </head>
 <body>
-<header class="top">
-  <div class="in">
-    <div class="brand">
-      <span class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="#13293C" aria-hidden="true"><path d="M2.5 19h19v2h-19zM22.07 9.64c-.21-.8-1.04-1.28-1.84-1.06L14.92 10l-6.9-6.43-1.93.51 4.14 7.17-4.97 1.33-1.97-1.54-1.45.39 2.59 4.49L21 11.49c.81-.23 1.28-1.05 1.07-1.85z"></path></svg></span>
-      <div><b>PREVIEW STUDIO</b><span>Every page of the UK Airshow Guide, working, in one place</span></div>
+<header>
+  <div class="hin">
+    <div class="hrow">
+      <div>
+        <span class="tagline">Only you can see this</span>
+        <h1>PREVIEW <span>STUDIO</span></h1>
+        <p class="sub">Every page of the UK Airshow Guide, working, in one place. Check how each one looks before it goes live, and keep track of what has changed.</p>
+      </div>
+      <div class="now"><b id="clock">00:00</b><span id="today">UK time</span></div>
     </div>
     <nav class="views" aria-label="Views">
-      <a href="#live" data-v="live">LIVE PAGES <span class="n" id="nLive">0</span></a>
-      <a href="#not-live" data-v="not-live">NOT LIVE YET <span class="n" id="nNot">0</span></a>
-      <a href="#timetable" data-v="timetable">TIMETABLE <span class="n">6</span></a>
+      <a href="#overview" data-v="overview">Overview</a>
+      <a href="#live" data-v="live">Live pages <span class="n" id="nLive">0</span></a>
+      <a href="#not-live" data-v="not-live">Not live yet <span class="n" id="nNot">0</span></a>
+      <a href="#timetable" data-v="timetable">Check timetable</a>
+      <a href="#activity" data-v="activity">Recent changes</a>
     </nav>
-    <span class="clock" id="clock" aria-label="UK time">00:00:00</span>
   </div>
 </header>
 
 <main>
-  <section id="v-pages">
+  <section id="v-overview">
+    <div class="grid g4" style="margin-bottom:28px">
+      <div class="card stat"><small>Live pages</small><b id="oLive">0</b><span>On the website and checked each week</span></div>
+      <div class="card stat c-purple"><small>Not live yet</small><b id="oNot">0</b><span id="oNotSub">Pages waiting to go on</span></div>
+      <div class="card stat c-teal"><small>Next check</small><b id="oNext" style="font-size:30px;line-height:1.2;padding:8px 0">...</b><span id="oNextSub"></span></div>
+      <div class="card stat c-red"><small>Changes this week</small><b id="oWeek">...</b><span>Page updates on GitHub, last 7 days</span></div>
+    </div>
+    <div class="grid g2">
+      <div class="card box">
+        <div class="st"><h2>DAYS TO GO</h2><p>The 2027 featured shows, soonest first.</p></div>
+        <div id="count"></div>
+      </div>
+      <div class="card box">
+        <div class="st"><h2>READY TO GO LIVE</h2><p>Your go live ticks for each nearly ready page.</p></div>
+        <div id="ready"></div>
+      </div>
+      <div class="card box" style="grid-column:1/-1">
+        <div class="st"><h2>LATEST CHANGES</h2><p>The last updates made to the site pages.</p></div>
+        <div id="latest"><p class="empty">Loading the latest changes.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-pages" hidden>
     <div class="split">
-      <div class="list">
-        <div class="search"><input type="search" id="q" placeholder="Find a page, for example Duxford" aria-label="Find a page"></div>
+      <div class="card list">
+        <div class="find"><input type="search" id="q" placeholder="Find a page, for example Duxford" aria-label="Find a page"></div>
         <div id="list"></div>
       </div>
-      <div class="pv" id="pv"></div>
+      <div class="card pv" id="pv"></div>
     </div>
   </section>
 
   <section id="v-timetable" hidden>
-    <div class="board">
-      <div class="bh"><h2>TIMETABLE, SITE CHECKS</h2><p>When each scheduled check runs next. Times are UK time.</p></div>
-      <div class="scroll"><div class="tr" style="color:var(--pale);font-weight:700;font-size:15px;border-top:0"><span>Next run</span><span>Check</span><span>Runs</span><span>Status</span></div><div id="ttRows"></div></div>
-    </div>
-    <div class="board">
-      <div class="bh"><h2>YOUR WEEK</h2><p>Today is lit in teal.</p></div>
-      <div class="scroll"><div class="week" id="week"></div></div>
-    </div>
-    <div class="board">
-      <div class="bh"><h2>WHAT GETS CHECKED</h2><p>Everything a visitor needs to plan a show and get there.</p></div>
-      <div class="scroll"><div class="cov" id="cov"></div></div>
-    </div>
-    <div class="board">
-      <div class="bh"><h2>THE YEAR AHEAD</h2></div>
-      <div class="year" id="year"></div>
-      <div class="foot">Every check sends your phone and email one summary when it changes something, and logs each change in Flight Records on your admin board. No changes means no message, apart from the Monday dates line. Only official sources are used, and anything a check can't confirm is held back and listed for you.</div>
-    </div>
+    <div class="st"><h2>NEXT RUNS</h2><p>When each scheduled check runs next, worked out from the UK clock.</p></div>
+    <div class="card scroll" style="margin-bottom:28px"><div id="ttRows"></div></div>
+    <div class="st"><h2>YOUR WEEK</h2><p>Today has the teal edge.</p></div>
+    <div class="scroll" style="margin-bottom:28px"><div class="week" id="week"></div></div>
+    <div class="st"><h2>WHAT GETS CHECKED</h2><p>Everything a visitor needs to plan a show and get there.</p></div>
+    <div class="card scroll" style="margin-bottom:28px"><div class="cov" id="cov"></div></div>
+    <p class="hint" style="font-size:15px">Every check sends your phone and email one summary when it changes something, and logs it in Flight Records on your admin board. No changes means no message, apart from the Monday dates line.</p>
+  </section>
+
+  <section id="v-activity" hidden>
+    <div class="st"><h2>RECENT CHANGES</h2><p>Every update to the site pages, newest first.</p></div>
+    <div class="act-f"><input type="search" id="aq" placeholder="Search changes, for example Clacton or Sunday" aria-label="Search changes"></div>
+    <div class="card" id="acts"><p class="empty">Loading the latest changes.</p></div>
   </section>
 </main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function(){
   'use strict';
   var $=function(s){return document.querySelector(s)};
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
-  var BASE='https://jskedge1.github.io/airshow-pages/',SITE='https://www.ukairshowguide.co.uk/',ART='https://claude.ai/artifact/',REPO='https://github.com/jskedge1/airshow-pages/blob/main/';
+  var BASE='https://jskedge1.github.io/airshow-pages/',SITE='https://www.ukairshowguide.co.uk/',ART='https://claude.ai/artifact/';
+  var GH='https://github.com/jskedge1/airshow-pages/',API='https://api.github.com/repos/jskedge1/airshow-pages/commits';
+
+  function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem('studio:'+k)||'null');localStorage.setItem('studio:'+k,JSON.stringify(v))}catch(_){return null}}
+  var tt;function toast(m){var el=$('#toast');el.textContent=m;el.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){el.classList.remove('on')},3200)}
 
   /* every page live on the website, in menu order */
   var LIVE=[
@@ -175,6 +239,8 @@ main{max-width:1500px;margin:0 auto;padding:22px 24px 60px}
     ['Getting there','Train to Clacton','train-routes/clacton.html','train-to-clacton'],
     ['Getting there','Train to Eastbourne','train-routes/eastbourne.html','train-to-eastbourne'],
     ['Getting there','Train to Cosford','train-routes/cosford.html','train-to-cosford'],
+    ['Getting there','Train to Swansea','train-routes/wales.html','train-to-swansea'],
+    ['Getting there','Public Transport To UK Airshows','public-transport.html','airshow-public-transport'],
     ['Planning Guides','Visitor Planning Guides','visitor-planning-guides.html','visitorplanningguides'],
     ['Planning Guides','Planning Your First Airshow','planning-your-first-airshow.html','planning-your-first-airshow'],
     ['Planning Guides','Getting There','first-airshow-getting-there.html','first-airshow-getting-there'],
@@ -189,7 +255,7 @@ main{max-width:1500px;margin:0 auto;padding:22px 24px 60px}
     ['Photography','Photography Equipment','photography-equipment.html','photography-equipment'],
     ['Camping','Camping At Airshows','camping-hub.html','camping-at-airshows'],
     ['Camping','Accommodation Near Shows','first-airshow-accommodation.html','first-airshow-accommodation'],
-    ['Community','My Airshow Hub','my-airshow-hub.html','my-airshow-hub','Shows the logged out hub here. Member parts need a Wix log in.'],
+    ['Community','My Airshow Hub','my-airshow-hub.html','my-airshow-hub','Shows the logged out hub here. Member parts need a log in on the website.'],
     ['Community','Airshow Forum','forum.html','community-forum','Example posts until it is linked to real logins.'],
     ['Community','Groups header','groups-header.html','groups','The Wix Groups list under it only shows on the website.'],
     ['Community','YouTube Channel','youtube.html','youtube'],
@@ -201,64 +267,27 @@ main{max-width:1500px;margin:0 auto;padding:22px 24px 60px}
     ['Admin','Site Admin board','admin/board.html','site-admin','Example data here. Your real figures show on the website.'],
     ['Admin','Trader Admin','traders/admin.html','trader-admin','Example data here.']
   ].map(function(r,i){return {id:'l'+i,group:r[0],name:r[1],file:r[2],wix:r[3],note:r[4]||'',live:true}});
+  var NOT=[],COMMITS=null;
+  var CHECKS=['Page finished and checked by me','Phone and tablet look right','Wix page made and its box pointed at the page','Page title and description set for search','Added to the menu or linked from its parent page','Site published with the page on it'];
 
-  var NOT=[],pick={live:'l0','not-live':null},dev='desktop',view='live';
-  var DEVW={desktop:1280,tablet:768,phone:390};
-  $('#nLive').textContent=LIVE.length;
+  /* 2027 shows for the countdown */
+  var SHOWS=[
+    ['Duxford Flying Day: VE Day','2027-05-08',1],['Shuttleworth Season Premiere','2027-05-09',1],
+    ['Midlands Air Festival','2027-06-04',1],['RAF Cosford Air Show','2027-06-13',0],
+    ['Duxford Summer Air Show','2027-06-19',1],['Shuttleworth Festival of Flight','2027-06-26',1],
+    ['Royal International Air Tattoo','2027-07-16',1],['Wales Airshow','2027-07-24',0],
+    ['Eastbourne, Airbourne','2027-08-12',1],['Clacton Airshow','2027-08-26',1],
+    ['Duxford Battle of Britain Air Show','2027-09-11',1]
+  ];
 
-  function current(){return view==='live'?LIVE:NOT}
-  function renderList(){
-    var t=$('#q').value.trim().toLowerCase(),list=current().filter(function(p){return !t||(p.name+' '+p.group).toLowerCase().indexOf(t)>-1});
-    var groups=[];list.forEach(function(p){if(groups.indexOf(p.group)<0)groups.push(p.group)});
-    $('#list').innerHTML=groups.map(function(g){
-      var items=list.filter(function(p){return p.group===g});
-      return '<div class="g"><span>'+esc(g.toUpperCase())+'</span><span>'+items.length+'</span></div>'+items.map(function(p){
-        var tag=p.live?'<i class="w-live">On the website</i>':p.file?(p.group==='On hold'?'<i class="w-hold">On hold, previews here</i>':'<i class="w-git">Previews here</i>'):'<i class="w-art">Opens in Claude</i>';
-        return '<button type="button" class="it'+(p.id===pick[view]?' on':'')+'" data-id="'+esc(p.id)+'"><b>'+esc(p.name)+'</b><span>'+esc(p.live?(p.wix?'/'+p.wix:(p.file==='home.html'?'The home page, /':'Not its own page')):p.status)+'</span>'+tag+'</button>';
-      }).join('');
-    }).join('')||'<p class="empty">No pages match that. Try a show name such as Duxford.</p>';
-  }
-  function renderPv(){
-    var p=current().filter(function(x){return x.id===pick[view]})[0];
-    if(!p){$('#pv').innerHTML='<p class="empty">'+(view==='not-live'&&!NOT.length?'Loading the pages not live yet.':'Pick a page on the left.')+'</p>';return}
-    var acts='';
-    if(p.file)acts+='<a class="pri" href="'+BASE+encodeURI(p.file)+'" target="_blank" rel="noopener">Open full page</a>';
-    if(p.live&&p.wix!=null&&p.file!=='footer.html')acts+='<a href="'+SITE+encodeURI(p.wix)+'" target="_blank" rel="noopener">On the website</a>';
-    if(p.art)acts+='<a href="'+ART+esc(p.art)+'" target="_blank" rel="noopener">Open in Claude to edit</a>';
-    if(p.file)acts+='<a href="'+REPO+encodeURI(p.file)+'" target="_blank" rel="noopener">Page code</a>';
-    var sub=p.live?(p.group+(p.wix?', page /'+p.wix:'')):('Goes in: '+p.goes+(p.wix?', page /'+p.wix:''));
-    var head='<div class="head"><div><h2>'+esc(p.name.toUpperCase())+'</h2><div class="goes">'+esc(sub)+'</div>'+(p.note?'<p>'+esc(p.note)+'</p>':'')+'</div><div class="acts">'+acts+'</div></div>';
-    if(!p.file){
-      $('#pv').innerHTML=head+'<div class="stage" style="display:flex"><div class="art"><h3>KEPT IN CLAUDE FOR NOW</h3><p>This page is one of your Claude previews, so it opens in a new tab where you can look round it, comment and ask for changes. It moves onto GitHub, and previews here, once it is ready for the website.</p><div class="acts"><a class="pri" href="'+ART+esc(p.art)+'" target="_blank" rel="noopener">Open '+esc(p.name)+'</a></div></div></div>';
-      return;
-    }
-    $('#pv').innerHTML=head+'<div class="bar"><div class="dev" id="dev">'+['desktop','tablet','phone'].map(function(d){return '<button type="button" data-dev="'+d+'" class="'+(dev===d?'on':'')+'">'+d.charAt(0).toUpperCase()+d.slice(1)+' '+DEVW[d]+'</button>'}).join('')+'</div><span class="small">Working preview: scroll, tap and use it like the real page.</span></div><div class="stage" id="stage"><iframe class="frame" id="frame" title="Preview of '+esc(p.name)+'" src="'+BASE+encodeURI(p.file)+'"></iframe></div><div class="cap" id="cap"></div>';
-    fit();
-  }
-  function fit(){
-    var st=$('#stage'),fr=$('#frame');if(!st||!fr)return;
-    var w=DEVW[dev],sc=Math.min(1,(st.clientWidth-24)/w),h=st.clientHeight;
-    fr.style.width=w+'px';fr.style.height=Math.round(h/sc)+'px';fr.style.transform='scale('+sc+')';fr.style.left=Math.round((st.clientWidth-w*sc)/2)+'px';
-    $('#cap').textContent='Showing at '+w+' px wide'+(sc<1?', scaled to '+Math.round(sc*100)+'% to fit':'')+'. The website gives pages 320 px on the smallest phones.';
-  }
-  document.addEventListener('click',function(e){
-    var b=e.target.closest('[data-id]');
-    if(b){pick[view]=b.dataset.id;renderList();renderPv();var pv=$('#pv');if(pv.getBoundingClientRect().top<0||window.innerWidth<=820)pv.scrollIntoView({behavior:'smooth',block:'start'});return}
-    var d=e.target.closest('[data-dev]');
-    if(d){dev=d.dataset.dev;Array.prototype.forEach.call(document.querySelectorAll('#dev button'),function(x){x.classList.toggle('on',x===d)});fit()}
-  });
-  $('#q').addEventListener('input',renderList);
-  window.addEventListener('resize',fit);
+  /* time in the UK */
+  function uk(){var p={};new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',weekday:'long',hour12:false}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value});return {y:+p.year,m:+p.month,d:+p.day,h:+p.hour%24,mi:+p.minute,wd:p.weekday}}
+  function two(x){return (x<10?'0':'')+x}
+  var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  function daysTo(iso){var n=uk(),a=Date.UTC(n.y,n.m-1,n.d),p=iso.split('-');return Math.round((Date.UTC(+p[0],+p[1]-1,+p[2])-a)/864e5)}
+  function niceDate(iso){var d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',timeZone:'Europe/London'})+', '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'})}
 
-  fetch('../admin/unpublished.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
-    var order=['Nearly ready','On hold','Ideas'];
-    NOT=(d.pages||[]).map(function(p){p.id='n-'+p.id;return p}).sort(function(a,b){return order.indexOf(a.group)-order.indexOf(b.group)});
-    $('#nNot').textContent=NOT.length;
-    if(!pick['not-live']&&NOT.length)pick['not-live']=NOT[0].id;
-    if(view==='not-live'){renderList();renderPv()}
-  }).catch(function(){NOT=[];if(view==='not-live')$('#list').innerHTML='<p class="empty">The pages not live yet could not load. Check your connection and reload.</p>'});
-
-  /* timetable of scheduled checks */
+  /* scheduled checks */
   var TT=[
     {name:'Morning show check',what:'News, show dates, times, prices, parking, aircraft line ups and run up travel',every:'Every day 09:01',h:9,mi:1,ok:function(){return true}},
     {name:'2027 date checker',what:'Airshow calendar and featured show dates',every:'Mondays 12:17',h:12,mi:17,ok:function(y,m,d,w){return w===1}},
@@ -267,25 +296,153 @@ main{max-width:1500px;margin:0 auto;padding:22px 24px 60px}
     {name:'Train to Eastbourne, monthly',what:'Times, fares and travel advice on the Eastbourne train page',every:'12th, Jan to Jun 2027, 14:23',h:14,mi:23,ok:function(y,m,d){return y===2027&&m>=1&&m<=6&&d===12}},
     {name:'Train to Eastbourne, weekly',what:'Weekly check in the run up to Airbourne',every:'Mondays, Jul to mid Aug 2027, 14:23',h:14,mi:23,ok:function(y,m,d,w){return y===2027&&w===1&&(m===7||(m===8&&d<=16))}}
   ];
-  var DN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  function uk(){var p={};new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric',hour12:false}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value});return {y:+p.year,m:+p.month,d:+p.day,h:+p.hour%24,mi:+p.minute,s:+p.second}}
-  function two(x){return (x<10?'0':'')+x}
   function nextRun(t,n){
     for(var i=0;i<430;i++){
       var dt=new Date(Date.UTC(n.y,n.m-1,n.d+i)),y=dt.getUTCFullYear(),m=dt.getUTCMonth()+1,d=dt.getUTCDate(),w=dt.getUTCDay();
       if(!t.ok(y,m,d,w))continue;
       if(i===0&&t.h*60+t.mi<=n.h*60+n.mi)continue;
-      return {i:i,y:y,m:m,d:d,w:w};
+      return {i:i,y:y,m:m,d:d,w:w,when:(i===0?'Today':i===1?'Tomorrow':DN[w].slice(0,3)+' '+d+' '+MN[m-1])+' at '+two(t.h)+':'+two(t.mi)};
     }
     return null;
   }
+  function runs(){var n=uk();return TT.map(function(t){return {t:t,r:nextRun(t,n)}})}
+  function soonest(){return runs().filter(function(x){return x.r}).sort(function(a,b){return a.r.i-b.r.i||(a.t.h*60+a.t.mi)-(b.t.h*60+b.t.mi)})[0]}
+
+  /* recent changes from GitHub */
+  function loadCommits(){
+    if(COMMITS)return Promise.resolve(COMMITS);
+    return fetch(API+'?per_page=100').then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(list){
+      COMMITS=list.map(function(c){return {sha:c.sha,msg:(c.commit.message||'').split('\n')[0],date:c.commit.author.date,url:c.html_url}});return COMMITS;
+    });
+  }
+  function commitRow(c){return '<div class="cm"><span class="when">'+esc(niceDate(c.date))+'</span><a href="'+esc(c.url)+'" target="_blank" rel="noopener">'+esc(c.msg)+'</a></div>'}
+
+  /* overview */
+  function renderOverview(){
+    $('#oLive').textContent=LIVE.length;$('#oNot').textContent=NOT.length||'...';
+    var near=NOT.filter(function(p){return p.group==='Nearly ready'}).length;$('#oNotSub').textContent=near?near+' of them nearly ready':'Pages waiting to go on';
+    var s=soonest();if(s){$('#oNext').textContent=s.r.when;$('#oNextSub').textContent=s.t.name}
+    $('#count').innerHTML=SHOWS.map(function(s){return {n:s[0],d:s[1],c:s[2],left:daysTo(s[1])}}).filter(function(s){return s.left>=0}).slice(0,7).map(function(s){
+      var p=s.d.split('-');
+      return '<div class="row"><div class="d"><b>'+s.left+'</b><i>days</i></div><div class="t"><b>'+esc(s.n)+'</b><span>'+(+p[2])+' '+MN[+p[1]-1]+' '+p[0]+'</span></div><span class="pill '+(s.c?'p-conf':'p-exp')+'">'+(s.c?'Confirmed':'Expected')+'</span></div>';
+    }).join('');
+    var ready=NOT.filter(function(p){return p.group==='Nearly ready'});
+    $('#ready').innerHTML=ready.length?ready.map(function(p){
+      var ticks=store('ck:'+p.id)||[],done=ticks.filter(Boolean).length;
+      return '<div class="row"><div class="t"><b><a href="#not-live" data-goto="'+esc(p.id)+'">'+esc(p.name)+'</a></b><span>'+done+' of '+CHECKS.length+' go live steps ticked</span><div class="meter"><i style="width:'+Math.round(done/CHECKS.length*100)+'%"></i></div></div></div>';
+    }).join(''):'<p class="empty">Loading the pages not live yet.</p>';
+    loadCommits().then(function(cs){
+      var wk=Date.now()-7*864e5,nw=cs.filter(function(c){return new Date(c.date).getTime()>wk}).length;$('#oWeek').textContent=nw>=cs.length?nw+'+':nw;
+      $('#latest').innerHTML=cs.slice(0,8).map(commitRow).join('');
+    }).catch(function(){$('#oWeek').textContent='?';$('#latest').innerHTML='<p class="empty">The latest changes could not load just now. Try again in a few minutes.</p>'});
+  }
+
+  /* pages */
+  var view='overview',pick={live:'l0','not-live':null},dev=store('dev')||'desktop';
+  var DEVW={desktop:1280,tablet:768,phone:390};
+  function current(){return view==='live'?LIVE:NOT}
+  function renderList(){
+    var t=$('#q').value.trim().toLowerCase(),list=current().filter(function(p){return !t||(p.name+' '+p.group).toLowerCase().indexOf(t)>-1});
+    var groups=[];list.forEach(function(p){if(groups.indexOf(p.group)<0)groups.push(p.group)});
+    $('#list').innerHTML=groups.map(function(g){
+      var items=list.filter(function(p){return p.group===g});
+      return '<div class="g"><span>'+esc(g)+'</span><span>'+items.length+'</span></div>'+items.map(function(p){
+        var tag=p.live?'<i class="pill t-live">On the website</i>':!p.file?'<i class="pill t-art">Opens in Claude</i>':p.group==='On hold'?'<i class="pill t-hold">On hold</i>':'<i class="pill t-git">Previews here</i>';
+        var sub=p.live?(p.wix?'/'+p.wix:(p.file==='home.html'?'Home page':'Part of every page')):p.status;
+        return '<button type="button" class="it'+(p.id===pick[view]?' on':'')+'" data-id="'+esc(p.id)+'"><b>'+esc(p.name)+'</b><span>'+esc(sub)+' '+tag+'</span></button>';
+      }).join('');
+    }).join('')||'<p class="empty">No pages match that. Try a show name such as Duxford.</p>';
+  }
+  function chosen(){return current().filter(function(x){return x.id===pick[view]})[0]}
+  function renderPv(){
+    var p=chosen();
+    if(!p){$('#pv').innerHTML='<p class="empty">'+(view==='not-live'&&!NOT.length?'Loading the pages not live yet.':'Pick a page on the left.')+'</p>';return}
+    var acts='';
+    if(p.file)acts+='<a class="btn pri" href="'+BASE+encodeURI(p.file)+'" target="_blank" rel="noopener">Open full page</a>';
+    if(p.live&&p.wix&&p.file!=='footer.html')acts+='<a class="btn" href="'+SITE+encodeURI(p.wix)+'" target="_blank" rel="noopener">On the website</a>';
+    if(p.live&&p.file==='home.html')acts+='<a class="btn" href="'+SITE+'" target="_blank" rel="noopener">On the website</a>';
+    if(p.art)acts+='<a class="btn" href="'+ART+esc(p.art)+'" target="_blank" rel="noopener">Open in Claude</a>';
+    if(p.file)acts+='<a class="btn" href="'+GH+'blob/main/'+encodeURI(p.file)+'" target="_blank" rel="noopener">Page code</a>';
+    var sub=p.live?(p.group+(p.wix?', page /'+p.wix:'')):('Goes in '+p.goes+(p.wix?', page /'+p.wix:''));
+    var html='<div class="ph"><div><h2>'+esc(p.name.toUpperCase())+'</h2><div class="goes">'+esc(sub)+'</div>'+(p.note?'<p>'+esc(p.note)+'</p>':'')+'</div><div class="acts">'+acts+'</div></div>';
+    if(p.file){
+      html+='<div class="bar"><div class="seg" id="dev">'+[['desktop','Desktop'],['tablet','Tablet'],['phone','Phone'],['all','All three']].map(function(d){return '<button type="button" data-dev="'+d[0]+'" class="'+(dev===d[0]?'on':'')+'">'+d[1]+'</button>'}).join('')+'</div><div class="seg"><button type="button" data-act="reload">Reload</button><button type="button" data-act="copy">Copy link</button></div></div><div class="stage" id="stage"></div><div class="cap" id="cap"></div>';
+    }else{
+      html+='<div class="stage" style="display:flex;background:var(--bg)"><div class="kept"><h3>Kept in Claude for now</h3><p>This page is one of your Claude previews, so it opens in a new tab where you can look round it, comment and ask for changes. It moves onto GitHub, and previews here, once it is ready for the website.</p><a class="btn pri" href="'+ART+esc(p.art)+'" target="_blank" rel="noopener">Open '+esc(p.name)+'</a></div></div>';
+    }
+    html+='<div class="tools">';
+    if(!p.live){
+      var ticks=store('ck:'+p.id)||[];
+      html+='<div><h3>Go live checklist</h3>'+CHECKS.map(function(c,i){return '<label class="ck'+(ticks[i]?' done':'')+'"><input type="checkbox" data-ck="'+i+'"'+(ticks[i]?' checked':'')+'><span>'+esc(c)+'</span></label>'}).join('')+'<p class="hint">Your ticks stay in this browser.</p></div>';
+    }
+    html+='<div><h3>Recent changes to this page</h3><div id="pageLog">'+(p.file?'<p class="hint">Loading.</p>':'<p class="hint">Changes to Claude previews show in Claude.</p>')+'</div></div>';
+    html+='<div><h3>Ask Claude for a change</h3><textarea id="ask" placeholder="For example: move the parking section above the trains, and use a Red Arrows photo at the top"></textarea><div class="acts" style="margin-top:8px"><button type="button" class="btn pri" data-act="ask">Open in Claude</button></div><p class="hint">Opens a new Claude chat with your request filled in. Press send there.</p></div>';
+    html+='<div><h3>My notes</h3><textarea id="note" placeholder="Anything to remember about this page">'+esc(store('note:'+p.id)||'')+'</textarea><p class="hint">Saved as you type, in this browser only.</p></div>';
+    html+='</div>';
+    $('#pv').innerHTML=html;
+    if(p.file){buildStage(p);pageLog(p)}
+  }
+  function buildStage(p){
+    var st=$('#stage');if(!st)return;
+    var devs=dev==='all'?['desktop','tablet','phone']:[dev];
+    st.innerHTML=devs.map(function(d){return '<span class="flabel" data-for="'+d+'"></span><iframe class="frame" data-d="'+d+'" title="'+esc(p.name)+' at '+d+' width" src="'+BASE+encodeURI(p.file)+'" loading="lazy"></iframe>'}).join('');
+    fit();
+  }
+  function fit(){
+    var st=$('#stage');if(!st)return;
+    var frames=st.querySelectorAll('iframe'),gap=16,tot=0;
+    Array.prototype.forEach.call(frames,function(f){tot+=DEVW[f.dataset.d]});
+    var avail=st.clientWidth-24-gap*(frames.length-1),sc=Math.min(1,avail/tot),h=st.clientHeight-(frames.length>1?44:24),x=Math.max(12,(st.clientWidth-tot*sc-gap*(frames.length-1))/2);
+    Array.prototype.forEach.call(frames,function(f){
+      var w=DEVW[f.dataset.d];
+      f.style.width=w+'px';f.style.height=Math.round(h/sc)+'px';f.style.transform='scale('+sc+')';f.style.left=Math.round(x)+'px';f.style.top=(frames.length>1?32:12)+'px';
+      var lab=st.querySelector('[data-for="'+f.dataset.d+'"]');
+      if(frames.length>1){lab.textContent=f.dataset.d.charAt(0).toUpperCase()+f.dataset.d.slice(1)+' '+w;lab.style.left=Math.round(x)+'px';lab.style.top='8px'}
+      x+=w*sc+gap;
+    });
+    var cap=$('#cap');if(cap)cap.textContent=(frames.length>1?'Desktop 1280, tablet 768 and phone 390 side by side':'Showing at '+DEVW[dev]+' px wide')+(sc<1?', scaled to '+Math.round(sc*100)+'% to fit':'')+'. Scroll, tap and use it like the real page. The website gives pages 320 px on the smallest phones.';
+  }
+  function pageLog(p){
+    fetch(API+'?per_page=5&path='+encodeURIComponent(p.file)).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(list){
+      var el=$('#pageLog');if(!el||chosen()!==p)return;
+      el.innerHTML=list.length?list.map(function(c){return commitRow({msg:(c.commit.message||'').split('\n')[0],date:c.commit.author.date,url:c.html_url})}).join(''):'<p class="hint">No changes found.</p>';
+    }).catch(function(){var el=$('#pageLog');if(el)el.innerHTML='<p class="hint">Could not load the changes just now.</p>'});
+  }
+  document.addEventListener('click',function(e){
+    var g=e.target.closest('[data-goto]');if(g){pick['not-live']=g.dataset.goto;return}
+    var b=e.target.closest('[data-id]');
+    if(b){pick[view]=b.dataset.id;renderList();renderPv();var pv=$('#pv');if(pv.getBoundingClientRect().top<0||window.innerWidth<=860)pv.scrollIntoView({behavior:'smooth',block:'start'});return}
+    var d=e.target.closest('[data-dev]');
+    if(d){dev=d.dataset.dev;store('dev',dev);Array.prototype.forEach.call(document.querySelectorAll('#dev button'),function(x){x.classList.toggle('on',x===d)});var p=chosen();if(p&&p.file)buildStage(p);return}
+    var a=e.target.closest('[data-act]');if(!a)return;
+    var p=chosen();if(!p)return;
+    if(a.dataset.act==='reload'){buildStage(p);toast('Preview reloaded.')}
+    if(a.dataset.act==='copy'){var link=p.file?BASE+p.file:ART+p.art;try{navigator.clipboard.writeText(link).then(function(){toast('Link copied.')},function(){toast(link)})}catch(_){toast(link)}}
+    if(a.dataset.act==='ask'){
+      var text=($('#ask').value||'').trim();if(!text){toast('Type what you would like changed first.');return}
+      var msg='Edit the '+p.name+' page'+(p.file?' ('+p.file+(p.wix?', /'+p.wix:'')+')':'')+': '+text+(/[.?]$/.test(text)?'':'.')+' Update its phone and tablet views, any other pages it affects, and my site pages hub.'+(p.file?' The page code is in the GitHub repo jskedge1/airshow-pages ('+p.file+'), and the Wix site is The Big Guide to UK Airshows.':' It is my Claude preview '+ART+p.art+'.');
+      var w=window.open('https://claude.ai/new?q='+encodeURIComponent(msg),'_blank','noopener');
+      if(!w){try{navigator.clipboard.writeText(msg);toast('Copied. Paste it into a new Claude chat.')}catch(_){toast(msg)}}
+      $('#ask').value='';
+    }
+  });
+  document.addEventListener('change',function(e){
+    var c=e.target.closest('[data-ck]');if(!c)return;var p=chosen();if(!p)return;
+    var ticks=store('ck:'+p.id)||[];ticks[+c.dataset.ck]=c.checked;store('ck:'+p.id,ticks);
+    c.closest('.ck').classList.toggle('done',c.checked);
+    var done=ticks.filter(Boolean).length;if(done===CHECKS.length)toast(p.name+' is ready to go live.');
+  });
+  document.addEventListener('input',function(e){if(e.target.id==='note'){var p=chosen();if(p)store('note:'+p.id,e.target.value)}});
+  $('#q').addEventListener('input',renderList);
+  window.addEventListener('resize',fit);
+
+  /* timetable */
   function renderTimetable(){
-    var n=uk();
-    var rows=TT.map(function(t){var r=nextRun(t,n);return {t:t,r:r,when:r?(r.i===0?'Today':r.i===1?'Tomorrow':DN[r.w].slice(0,3)+' '+r.d+' '+MN[r.m-1])+' '+two(t.h)+':'+two(t.mi):'Finished'}});
-    var soon=rows.filter(function(x){return x.r}).sort(function(a,b){return a.r.i-b.r.i||(a.t.h*60+a.t.mi)-(b.t.h*60+b.t.mi)})[0];
-    $('#ttRows').innerHTML=rows.map(function(x){
-      var st=!x.r?'Finished':x===soon?'Next up':x.r.i===0?'Today':x.r.i<7?'This week':'From '+MN[x.r.m-1]+(x.r.y!==n.y?' '+x.r.y:'');
-      return '<div class="tr"><span class="nx">'+esc(x.when)+'</span><div class="d"><b>'+esc(x.t.name)+'</b><span>'+esc(x.t.what)+'</span></div><span class="ev">'+esc(x.t.every)+'</span><span class="tag'+(x===soon?' next':x.r&&x.r.i===0?' today':'')+'">'+esc(st)+'</span></div>';
+    var n=uk(),s=soonest();
+    $('#ttRows').innerHTML='<div class="tt" style="background:var(--navy);color:#fff;font-weight:600;border-top:0"><span>Next run</span><span>Check</span><span>Runs</span><span>Status</span></div>'+runs().map(function(x){
+      var st=!x.r?'Finished':x===s||(s&&x.t===s.t)?'Next up':x.r.i===0?'Today':x.r.i<7?'This week':'From '+MN[x.r.m-1]+(x.r.y!==n.y?' '+x.r.y:'');
+      var cls=st==='Next up'?'p-conf':'p-exp';
+      return '<div class="tt"><span class="nx">'+esc(x.r?x.r.when:'Finished')+'</span><div class="w"><b>'+esc(x.t.name)+'</b><span>'+esc(x.t.what)+'</span></div><span class="ev">'+esc(x.t.every)+'</span><span class="pill '+cls+'" style="text-align:center">'+esc(st)+'</span></div>';
     }).join('');
     var today=new Date(Date.UTC(n.y,n.m-1,n.d)).getUTCDay(),beforeMarch=n.y<2027||(n.y===2027&&n.m<3);
     $('#week').innerHTML=[1,2,3,4,5,6,0].map(function(w){
@@ -293,7 +450,7 @@ main{max-width:1500px;margin:0 auto;padding:22px 24px 60px}
       if(w===1)b+='<div class="blk k-d"><b>12:17</b>2027 date checker</div><div class="blk k-e"><b>14:23</b>Train to Eastbourne, July and August</div>';
       if(w===3)b+='<div class="blk k-f"><b>10:37</b>Visitor facts check</div>';
       if(w===0)b='<div class="blk k-s"><b>07:13</b>Debug and fix, ready for the week</div>'+b;
-      return '<div class="day'+(w===today?' now':'')+'"><h4>'+DN[w]+(w===today?', today':'')+'</h4>'+b+'</div>';
+      return '<div class="day'+(w===today?' today':'')+'"><h4>'+DN[w]+(w===today?', today':'')+'</h4>'+b+'</div>';
     }).join('');
     var C=[
       ['Show dates','Every featured show and whether it is confirmed','Monday: 2027 calendar and new shows','Cancellations flagged as alerts','Morning, Dates'],
@@ -308,23 +465,46 @@ main{max-width:1500px;margin:0 auto;padding:22px 24px 60px}
       ['Stays, food, rules','','First Wednesday of each month: hotels, campsites, food, bag rules, venues','','Facts'],
       ['Links and bugs','','Sunday: every page on desktop, tablet and phone, errors and dead links fixed','','Sunday']
     ];
-    $('#cov').innerHTML='<div class="h">Visitor information</div><div class="h">Every day</div><div class="h">Every week</div><div class="h">Run up to a show</div><div class="h">Owner</div>'+C.map(function(r){return '<div class="w">'+esc(r[0])+'</div><div>'+esc(r[1])+'</div><div>'+esc(r[2])+'</div><div>'+esc(r[3])+'</div><div class="o">'+esc(r[4])+'</div>'}).join('');
-    var Y=[['1 January 2027','First Train to Eastbourne check on the 12th, then monthly to June'],['1 March 2027','Aircraft line ups checked every day. Summer train and bus times go in every week'],['May to October','Daily travel checks for each show from 14 days before. Duxford and Shuttleworth run seven shows each'],['July to mid August','Train to Eastbourne checked every Monday'],['Key 2027 shows','Midlands 4 to 6 June, Cosford 13 June, RIAT 16 to 18 July, Eastbourne 12 to 15 August, Clacton 26 to 27 August']];
-    $('#year').innerHTML=Y.map(function(y){return '<div><b>'+esc(y[0])+'</b><span>'+esc(y[1])+'</span></div>'}).join('');
+    $('#cov').innerHTML='<div class="h">Visitor information</div><div class="h">Every day</div><div class="h">Every week</div><div class="h">Run up to a show</div><div class="h">Owner</div>'+C.map(function(r){return '<div class="w">'+esc(r[0])+'</div><div>'+esc(r[1])+'</div><div>'+esc(r[2])+'</div><div>'+esc(r[3])+'</div><div>'+esc(r[4])+'</div>'}).join('');
   }
 
+  /* recent changes */
+  function renderActivity(){
+    loadCommits().then(function(cs){
+      var q=($('#aq').value||'').trim().toLowerCase(),list=cs.filter(function(c){return !q||c.msg.toLowerCase().indexOf(q)>-1}),last='',html='';
+      list.forEach(function(c){var day=new Date(c.date).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',timeZone:'Europe/London'});if(day!==last){html+='<div class="dayh">'+esc(day)+'</div>';last=day}html+='<div style="padding:0 20px">'+commitRow(c)+'</div>'});
+      $('#acts').innerHTML=html||'<p class="empty">No changes match that.</p>';
+    }).catch(function(){$('#acts').innerHTML='<p class="empty">The changes could not load just now. Try again in a few minutes.</p>'});
+  }
+  $('#aq').addEventListener('input',renderActivity);
+
+  /* pages not live yet */
+  fetch('../admin/unpublished.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
+    var order=['Nearly ready','On hold','Ideas'];
+    NOT=(d.pages||[]).map(function(p){p.id='n-'+p.id;return p}).sort(function(a,b){return order.indexOf(a.group)-order.indexOf(b.group)});
+    $('#nNot').textContent=NOT.length;
+    if(!pick['not-live']&&NOT.length)pick['not-live']=NOT[0].id;
+    if(view==='not-live'){renderList();renderPv()}
+    if(view==='overview')renderOverview();
+  }).catch(function(){if(view==='not-live')$('#list').innerHTML='<p class="empty">The pages not live yet could not load. Reload to try again.</p>'});
+
   /* views, routed on the address so each can be bookmarked */
+  var VIEWS=['overview','live','not-live','timetable','activity'];
   function route(){
-    var h=(location.hash||'#live').slice(1);if(['live','not-live','timetable'].indexOf(h)<0)h='live';
+    var h=(location.hash||'#overview').slice(1);if(VIEWS.indexOf(h)<0)h='overview';
     view=h;
-    Array.prototype.forEach.call(document.querySelectorAll('.views a'),function(a){a.classList.toggle('on',a.dataset.v===h);if(a.dataset.v===h)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
-    $('#v-pages').hidden=h==='timetable';$('#v-timetable').hidden=h!=='timetable';
-    if(h==='timetable')renderTimetable();else{$('#q').value='';renderList();renderPv()}
+    Array.prototype.forEach.call(document.querySelectorAll('nav.views a'),function(a){var on=a.dataset.v===h;a.classList.toggle('on',on);if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+    $('#v-overview').hidden=h!=='overview';$('#v-pages').hidden=h!=='live'&&h!=='not-live';$('#v-timetable').hidden=h!=='timetable';$('#v-activity').hidden=h!=='activity';
+    if(h==='overview')renderOverview();
+    else if(h==='timetable')renderTimetable();
+    else if(h==='activity')renderActivity();
+    else{$('#q').value='';renderList();renderPv()}
   }
   window.addEventListener('hashchange',route);
+  $('#nLive').textContent=LIVE.length;
   route();
-  function tick(){var n=uk();$('#clock').textContent=two(n.h)+':'+two(n.mi)+':'+two(n.s)}
-  tick();setInterval(tick,1000);setInterval(function(){if(view==='timetable')renderTimetable()},60000);
+  function tick(){var n=uk();$('#clock').textContent=two(n.h)+':'+two(n.mi);$('#today').textContent=n.wd+' '+n.d+' '+MN[n.m-1]+' '+n.y+', UK time'}
+  tick();setInterval(tick,15000);setInterval(function(){if(view==='timetable')renderTimetable();if(view==='overview'){var s=soonest();if(s){$('#oNext').textContent=s.r.when;$('#oNextSub').textContent=s.t.name}}},60000);
 })();
 </script>
 </body>
