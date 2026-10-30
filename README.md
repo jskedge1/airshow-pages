@@ -68,10 +68,20 @@ Every page ends with the `mobile-fit` block (between the `<!-- mobile-fit` comme
 It keeps the page inside the screen down to 320px wide, which is the width Wix gives an HTML box on phones.
 Keep it when copying a template to make a new show page.
 
+## Scheduled tasks (set 30 Oct 2026)
+
+Each task has one job, so no two tasks change the same thing.
+- Morning show check, daily 09:01: news (AirshowNews), show details (ShowInfo: dates, gates, flying times, prices, parking) and aircraft line-ups (AircraftParticipation; Fridays only until 28 February 2027, every day from 1 March 2027). In the 14 days before each show it also checks road closures, engineering works, strikes, extra trains, show day buses and car park changes, and fixes that show's page and transport-times.js.
+- UK airshow 2027 date checker, Mondays 12:17: dates in uk-airshow-calendar.html and the FeaturedAirshows dates field.
+- Weekly visitor facts check, Wednesdays 10:37: timings, tickets, costs, parking, trains, buses, taxis and accessible travel on the pages, bus route pages and the Clacton and Cosford train pages. Accommodation, food, bag rules and venue details on the first Wednesday of each month.
+- Weekly debug and fix, Sundays 07:13: script errors, pages that fail to load, phone overflow, dead links and Jack's page rules. Fills AdminChecks. Never changes facts.
+- Train to Eastbourne checks, 14:23 on the 12th, January to June 2027, then Mondays in July and August: the Eastbourne train page.
+Every task adds a row to AdminLog for each change. Pull with rebase before pushing, as several tasks push to this repository.
+
 ## Train and bus times (29 Oct 2026)
 
 `transport-times.js` holds the train and bus timetable tables for every feature show page (camping-layout/<show>.html, both Midlands versions included). Each page loads it in its head and shows the tables inside the matching Getting There topic (the topic ids, such as `rail` or `bus-74`, are the keys). Edit only the `DATA` block: one entry per show, `checked` date, then per topic a list of tables `{title, rows:[[time, service, details]], note, source:[name, url]}`. No dashes in text, 24 hour times.
-Times come from official operator, Network Rail, Traveline and Bus Open Data (DfT) sources. The first set (29 Oct 2026) uses the timetables current now, so they are a guide only: summer 2027 shows fall in the May 2027 timetable, published around March 2027. The weekly "Feature page checker" scheduled task (Wednesdays) checks dates, news, prices, parking, taxi numbers and transport details on the feature pages and refreshes these times, with a full timetable refresh from March 2027.
+Times come from official operator, Network Rail, Traveline and Bus Open Data (DfT) sources. The first set (29 Oct 2026) uses the timetables current now, so they are a guide only: summer 2027 shows fall in the May 2027 timetable, published around March 2027. The Wednesday "Weekly visitor facts check" scheduled task checks timings, tickets, costs, parking, taxis, trains and buses on the feature pages and refreshes these times, with a full timetable refresh every week from March 2027.
 Still to fill: nothing major. Full audit of every public transport detail on 29 Oct 2026 (stations, operators, routes, days, stops, links, times). Times still come from the May to December 2026 and December 2026 timetables; replace them with the May 2027 timetables when published. Unconfirmed items are listed in the weekly task report.
 
 ## Bus route maps (30 Oct 2026)
@@ -259,8 +269,8 @@ The board's own collections, admin only for reading and writing:
 Flight Records also lists every commit to this repository from the last six weeks (read from the public GitHub API in the
 browser, no key needed), so page changes log themselves. Commit messages read best as "Area: what changed".
 
-Scheduled tasks and Claude chats add a row to AdminLog whenever they change something on the site, and the weekly
-whole site checker fills in AdminChecks. The Friday 14:19 weekly report is written from the same collections.
+Scheduled tasks and Claude chats add a row to AdminLog whenever they change something on the site, and the Sunday
+"Weekly debug and fix" task fills in AdminChecks. The Friday 14:19 weekly report is written from the same collections.
 
 Optional secrets in the Wix Secrets Manager: `ukagApiKey` (a Wix API key with site permissions) turns on the site status,
 form sign up counts and the Publish button; `ukagAccountId` (the Wix account ID) is also needed for Take offline.
