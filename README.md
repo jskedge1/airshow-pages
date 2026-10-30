@@ -37,6 +37,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Trader admin, Jack only (Wix page /trader-admin, members only, page code velo/page-code/trader-admin.js) | https://jskedge1.github.io/airshow-pages/traders/admin.html |
 | Admin board, Jack only (Wix page /site-admin, members only, page code velo/page-code/site-admin.js) | https://jskedge1.github.io/airshow-pages/admin/board.html |
 | Privacy, cookies and terms (Wix page /policies, linked from the footer). Six policies in one tabbed page in the original Our Policies design (banner photos in policies-img/), built from the text files in policies-src/ by tools-policies.py. The same text is in the CMS collection "UK Air Show Guide Policy's" for the /ourpolicys list page, so change both. | https://jskedge1.github.io/airshow-pages/policies.html |
+| Train to Clacton, Greater Anglia train route page (opened by the "Train route details" button in the Clacton page's By train topic; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/clacton.html |
 | Airshow Security and Bag Searches (planning guide, Wix page /airshow-security, photos in security-img/) | https://jskedge1.github.io/airshow-pages/airshow-security.html |
 | Nikon D500 3D Camera Guide (photography guide; Wix page /nikon-d500-guide still to be created, then set live:true in links.js). 3D camera built with three.js from jsDelivr, every control clickable with airshow settings, set up checklist and settings by aircraft | https://jskedge1.github.io/airshow-pages/nikon-d500.html |
 | Planning guide 1, Which airshow suits you? (Wix page /first-airshow-which-show) | https://jskedge1.github.io/airshow-pages/first-airshow-which-show.html |
@@ -259,3 +260,13 @@ velo/page-code/site-admin.js; backend web module admin.web.js from velo/backend/
 
 
 To rebuild only some routes: in bus-routes-src, `template.html` is a copy of any built route page with its `var CFG=...;var DATA=...;` swapped for `/*DATA*/` (every route page is identical apart from that). Run `python3 collect.py <ids>`, `python3 stops_loc.py`, `python3 build.py`, then copy `out/<id>.html` into bus-routes/ and add the show to `MAP` in bus-routes.js and to bus-routes/index.html (make_map.py rewrites both from raw/, so only run it once every route's raw data is there).
+
+## Train route page (Clacton)
+
+`train-routes/clacton.html` is the train version of the bus route pages, in Greater Anglia colours (colours only, no logos). It covers Greater Anglia trains only, from eight hub stations (London Liverpool Street, Stratford, Chelmsford, Colchester, Ipswich, Norwich, Cambridge and Southend Victoria), to Clacton and back, Thursday and Friday, with any changes. Parts: a live departure board with an Arrivals at Clacton tab, the railway strip (stations of the picked journey, six UK four aspect signals, doors opening at each stop), the Your journey line with live times at each station, station cards, the planner, the route map along the real track, The line it takes, and Before you travel (last train home and fares for the picked station).
+
+Live times come from the public National Rail live boards through huxley2.azurewebsites.net (national-rail-api.davwheat.dev as a spare). No key is needed. When neither answers, the board and the journey line show the timetable.
+
+To rebuild after a change: edit `train-routes-src/template.html`, `clacton-cfg.json` (text, colours, fares) or `clacton-data.json` (stations, line shapes, journeys), then run `python3 build.py` in `train-routes-src/`. The times are the November 2026 timetable; refresh them when the summer 2027 times are out.
+
+The Clacton page (`camping-layout/clacton.html`) shows the "Train route details" button in the By train topic. It opens the page in a new tab, like the bus route buttons.
