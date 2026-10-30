@@ -491,6 +491,8 @@ footer a{color:#fff}
   .rs-st{width:78px;margin-left:-39px}.rs-st b{font-size:10.5px;max-width:84px;padding:2px 4px 1px}.rs-st i{width:78px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}.cdtick span{padding-left:0}}
+/* the day picker fits all the show days on a phone, up to four */
+@media (max-width:680px){#day{display:grid;grid-template-columns:1fr 1fr;width:100%}#day button{padding:9px 6px;text-align:center}}
 </style>
 <!-- seo: matches the Wix page on ukairshowguide.co.uk -->
 <meta name="description" content="Greater Anglia trains to Clacton on Sea for Clacton Airshow: pick your station and train, see the route map, and the walk from the station to the seafront.">
@@ -563,7 +565,7 @@ footer a{color:#fff}
           <rect x="262" y="104" width="6" height="40" fill="#4A5258"/><rect x="398" y="104" width="6" height="40" fill="#4A5258"/>
           <rect x="250" y="138" width="166" height="54" fill="#fff" stroke="#15181B" stroke-width="3"/>
           <rect x="252" y="180" width="162" height="10" fill="#D2232A"/>
-          <text x="333" y="168" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="25" fill="#15181B">CLACTON-ON-SEA</text>
+          <text x="333" y="168" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="25" fill="#15181B" id="ysplat">CLACTON-ON-SEA</text>
           <!-- way out sign pointing to the town and the sea -->
           <rect x="300" y="214" width="96" height="26" fill="#15181B"/>
           <text x="312" y="232" font-family="Barlow, sans-serif" font-weight="700" font-size="13" fill="#F4C21B">Way out</text>
@@ -591,7 +593,7 @@ footer a{color:#fff}
           <li><i>2</i><div><b class="h" id="ysh2">Where to get off</b><span id="ysbelltxt"></span></div></li>
           <li><i>3</i><div><b class="h" id="ysh3">Walk to the show</b><span id="yswalk"></span></div></li>
         </ol>
-        <div class="ys-walk" aria-hidden="true"><em>Station</em><s></s><em>Town centre</em><s></s><em>Seafront</em><s></s><em class="end">West Greensward</em></div>
+        <div class="ys-walk" aria-hidden="true"><em>Station</em><s></s><em>Town centre</em><s></s><em>Seafront</em><s></s><em class="end" id="ysend">West Greensward</em></div>
       </div>
       <div class="ys-doors">
         <button type="button" class="doorpush" id="doorpush" aria-pressed="false"><span class="bp" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M8 5L3 10l5 5M12 5l5 5-5 5" fill="none" stroke="#C9D0D5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Open the doors</button>
@@ -611,7 +613,7 @@ footer a{color:#fff}
         <p class="gaonly"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#D2232A"/><rect x="10" y="9.5" width="2" height="7" fill="#fff"/><rect x="10" y="5.5" width="2" height="2.2" fill="#fff"/></svg><span id="gaonly"></span></p>
       </div>
       <div>
-        <div class="cdtabs" role="group" aria-label="Board"><button type="button" id="cdtDep" aria-pressed="true">Departures</button><button type="button" id="cdtArr" aria-pressed="false">Arrivals at Clacton</button><span class="cdlive" id="cdlive"><i></i><span>Timetable</span></span></div>
+        <div class="cdtabs" role="group" aria-label="Board"><button type="button" id="cdtDep" aria-pressed="true">Departures</button><button type="button" id="cdtArr" aria-pressed="false">Arrivals</button><span class="cdlive" id="cdlive"><i></i><span>Timetable</span></span></div>
         <div class="cdscreen" aria-label="Departure board">
           <div class="cdin">
             <div class="cdtop"><span id="cdstop"></span><span id="cdclock"></span></div>
@@ -653,7 +655,7 @@ footer a{color:#fff}
     </div>
     <div class="planner rise">
       <div class="pin">
-        <div class="row full" id="hubrow"><div class="lb">Your station<small>Greater Anglia’s main stations. Pick the one you’re starting from, or heading home to.</small></div><div class="hubs" id="hub" role="group" aria-label="Station"></div></div>
+        <div class="row full" id="hubrow"><div class="lb">Your station<small id="hubsub"></small></div><div class="hubs" id="hub" role="group" aria-label="Station"></div></div>
         <div class="row" id="dayrow"><div class="lb">Day<small>The days the show runs</small></div><div class="seg" id="day" role="group" aria-label="Day"></div></div>
         <div class="row" id="dirrow"><div class="lb">Direction<small>To the show, or home again</small></div><div class="seg" id="dir" role="group" aria-label="Direction"></div></div>
         <div class="row full">
@@ -673,7 +675,7 @@ footer a{color:#fff}
         <div class="sumkv" id="sumkv"></div>
         <div class="save" id="sumsave"></div>
         <div class="slip" id="slip" aria-label="Planning slip for this train"></div>
-        <a class="buy" id="buybtn" href="https://www.greateranglia.co.uk/" target="_blank" rel="noopener"><span>Buy tickets from Greater Anglia<small id="buysub"></small></span><i aria-hidden="true">→</i></a>
+        <a class="buy" id="buybtn" href="#" target="_blank" rel="noopener"><span id="buytxt"><small id="buysub"></small></span><i aria-hidden="true">→</i></a>
       </div>
     </div>
     <div class="ttbar">
@@ -775,6 +777,33 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   })();
   $('lead').textContent = CFG.lead;
   $('gaonly').innerHTML = CFG.gaOnly;
+  /* everything that names the operator or the station for the show, so one template serves every page */
+  var X = (function(){
+    var x = { dest: 'Clacton-on-Sea', destShort: 'Clacton', destCrs: 'CLT', opCodes: ['LE'], opShort: 'GA', opName: CFG.operator,
+      buyUrl: 'https://www.greateranglia.co.uk/', hubSub: 'Greater Anglia’s main stations. Pick the one you’re starting from, or heading home to.',
+      endOfLine: true, labelLeftLon: 1.05, crs: {}, arrFrom: { 'Colchester': 'London Liverpool Street' },
+      arrTick: 'Greater Anglia trains into Clacton-on-Sea on a {day}. Every train from London calls at Stratford, Chelmsford and Colchester on the way.',
+      liveArr: 'Live arrivals into Clacton-on-Sea from across the Greater Anglia network. It updates every minute.',
+      lastTrain: 'On the Thursday there’s the twilight display. In the current timetable the last train back to {hub} leaves Clacton at {last}{chg}{gets}. I would check this before the twilight display starts.',
+      extraTrains: 'Greater Anglia usually adds extra trains on airshow days, and the summer 2027 times come out nearer the show, so please check before you travel.',
+      backNote: 'Times from Clacton-on-Sea. The Thursday has the twilight display, so look at the later trains.' };
+    var c = CFG.x || {}; for (var k in c) x[k] = c[k];
+    return x;
+  })();
+  $('cdtArr').textContent = 'Arrivals at ' + X.destShort;
+  $('ysplat').textContent = X.dest.toUpperCase();
+  (function(){ var sp = $('ysplat'); if (X.dest.length > 14) sp.setAttribute('textLength', 230); })();
+  $('ysend').textContent = CFG.targetLabel;
+  if (X.walkSteps) { var ws = document.querySelectorAll('.ys-walk em'); X.walkSteps.forEach(function(t, i){ if (ws[i] && i < ws.length - 1) ws[i].textContent = t; }); }
+  $('hubsub').textContent = X.hubSub;
+  $('buybtn').href = X.buyUrl; $('buytxt').insertBefore(document.createTextNode('Buy tickets from ' + X.opName), $('buysub'));
+  function isOp(code){ return X.opCodes.indexOf(code) >= 0; }
+  /* for a station partway along a line: does the last train you're on end there, or carry on? */
+  function lastTo(trip){ return trip.changes.length ? trip.changes[trip.changes.length - 1].to : trip.dest; }
+  function endsHere(trip){ return X.endOfLine || lastTo(trip) === X.dest; }
+  X.stayOn = function(trip){ return endsHere(trip) ? 'This train ends at <b>' + X.dest + '</b>, so you can’t miss it.' : 'Get off at <b>' + X.dest + '</b>. This train carries on to ' + lastTo(trip) + ', so listen out for the announcement as you come in.'; };
+  X.backOn = function(trip){ return 'Some trains start at ' + X.destShort + ' and are waiting in the platform, others are passing through, so check the screens for your platform. I would get there a little early for a seat.'; };
+  X.bell = function(trip, chn){ return (trip.changes.length ? 'Change at <b>' + chn + '</b> for the ' + X.destShort + ' train. ' : '') + (endsHere(trip) ? 'That train ends at <b>' + X.dest + '</b>, so there’s no chance of missing it.' : 'Get off at <b>' + X.dest + '</b>. The train carries on to ' + lastTo(trip) + ', so listen out for the announcement as you come in.'); };
   $('tip').innerHTML = CFG.tip.map(function(p){ return '<p>' + p + '</p>'; }).join('');
   $('tipbtn').href = CFG.showUrl;
   $('tipbtn').textContent = CFG.tipBtn + ' ›';
@@ -790,16 +819,16 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
 
   /* "The line it takes" follows the journey you pick: it splits the route into stretches by line,
      at main stations and wherever you change trains */
-  var LINE = {}, GEML = 'Great Eastern Main Line', SCL = 'Sunshine Coast Line', SOU = 'Southend line', ICL = 'Ipswich to Cambridge line', WAML = 'West Anglia Main Line';
-  [[['London Liverpool Street','Stratford','Romford','Shenfield','Ingatestone','Chelmsford','Beaulieu Park','Hatfield Peverel','Witham','Kelvedon','Marks Tey','Colchester','Manningtree','Ipswich','Needham Market','Stowmarket','Diss','Norwich'], GEML],
-  [['Hythe','Wivenhoe','Alresford','Great Bentley','Weeley','Thorpe-le-Soken','Clacton-on-Sea'], SCL],
-  [['Billericay','Wickford','Rayleigh','Hockley','Rochford','Southend Airport','Prittlewell','Southend Victoria'], SOU],
-  [['Dullingham','Newmarket','Kennett','Bury St Edmunds','Thurston','Elmswell'], ICL],
-  [['Cambridge','Cambridge South','Whittlesford Parkway','Audley End','Bishops Stortford','Sawbridgeworth','Harlow Mill','Harlow Town','Roydon','Broxbourne','Cheshunt','Waltham Cross','Enfield Lock','Tottenham Hale','Northumberland Park','Lea Bridge'], WAML]
-  ].forEach(function(g){ g[0].forEach(function(n){ LINE[n] = g[1]; }); });
-  var BREAK = { 'Shenfield': 1, 'Chelmsford': 1, 'Colchester': 1, 'Ipswich': 1, 'Stowmarket': 1, 'Thorpe-le-Soken': 1, 'Bishops Stortford': 1, 'Tottenham Hale': 1, 'Bury St Edmunds': 1 };
-  /* a line or two about each stretch, worded so it reads either way */
-  var ABOUT = {
+  var LN = CFG.lines || {
+    main: 'Great Eastern Main Line',
+    groups: [[['London Liverpool Street','Stratford','Romford','Shenfield','Ingatestone','Chelmsford','Beaulieu Park','Hatfield Peverel','Witham','Kelvedon','Marks Tey','Colchester','Manningtree','Ipswich','Needham Market','Stowmarket','Diss','Norwich'], 'Great Eastern Main Line'],
+      [['Hythe','Wivenhoe','Alresford','Great Bentley','Weeley','Thorpe-le-Soken','Clacton-on-Sea'], 'Sunshine Coast Line'],
+      [['Billericay','Wickford','Rayleigh','Hockley','Rochford','Southend Airport','Prittlewell','Southend Victoria'], 'Southend line'],
+      [['Dullingham','Newmarket','Kennett','Bury St Edmunds','Thurston','Elmswell'], 'Ipswich to Cambridge line'],
+      [['Cambridge','Cambridge South','Whittlesford Parkway','Audley End','Bishops Stortford','Sawbridgeworth','Harlow Mill','Harlow Town','Roydon','Broxbourne','Cheshunt','Waltham Cross','Enfield Lock','Tottenham Hale','Northumberland Park','Lea Bridge'], 'West Anglia Main Line']],
+    breaks: ['Shenfield', 'Chelmsford', 'Colchester', 'Ipswich', 'Stowmarket', 'Thorpe-le-Soken', 'Bishops Stortford', 'Tottenham Hale', 'Bury St Edmunds'],
+    force: { 'Thorpe-le-Soken': 'Sunshine Coast Line' },
+    about: {
     'London Liverpool Street|Shenfield': 'Past Bethnal Green and through Stratford. You run alongside the Elizabeth line most of the way, so it’s one of the busiest bits of railway in the country.',
     'Stratford|Shenfield': 'You run alongside the Elizabeth line most of the way, so it’s one of the busiest bits of railway in the country.',
     'Shenfield|Chelmsford': 'This is where it opens out into the Essex countryside, with Ingatestone in between.',
@@ -816,8 +845,11 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     'Cambridge|Bishops Stortford': 'Past Whittlesford and Audley End, near Saffron Walden.',
     'Bishops Stortford|Tottenham Hale': 'Along the Lea Valley, past Harlow, Broxbourne and Cheshunt.',
     'Tottenham Hale|London Liverpool Street': 'The last few miles in and out of Liverpool Street.',
-    'Tottenham Hale|Stratford': 'Across the Lea Valley to Stratford.'
+    'Tottenham Hale|Stratford': 'Across the Lea Valley to Stratford.' }
   };
+  var LINE = {}, BREAK = {}, ABOUT = LN.about, MAINL = LN.main;
+  LN.groups.forEach(function(g){ g[0].forEach(function(n){ LINE[n] = g[1]; }); });
+  LN.breaks.forEach(function(n){ BREAK[n] = 1; });
   /* the railway strip: the stations of the picked journey (start, any changes, then the end), four
      UK four-aspect colour light signals, and a train that runs the line, stopping at each change.
      Behind the train the signals step back: red, single yellow, double yellow, then green. */
@@ -833,14 +865,14 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     var strip = $('railstrip'), trip = DIR().trips[idx], s = trip.s;
     var stops = [s[0]].concat(s.filter(function(p){ return p[4] & CHG; })).concat([s[s.length - 1]]);
     var W = strip.clientWidth, edge = W < 560 ? 44 : 72, x0 = edge, x1 = W - edge, up = dir === 1;
-    /* stations always read left to right with Clacton on the right; heading home the train runs right to left */
+    /* stations always read left to right with the show's station on the right; heading home the train runs right to left */
     var shown = up ? stops.slice().reverse() : stops;
     var xs = shown.map(function(p, k){ return x0 + (x1 - x0) * k / (shown.length - 1); });
     $('lanelbl').textContent = up ? 'UP LINE' : 'DOWN LINE';
     $('rsStations').innerHTML = shown.map(function(p, k){
       return '<div class="rs-st' + (k === shown.length - 1 ? ' end' : '') + '" style="left:' + xs[k] + 'px"><b>' + p[5] + '</b>' + ((p[4] & CHG) ? '<em>Change</em>' : '') + '<i></i></div>';
     }).join('');
-    /* signals: one at the end of the first platform, four along the line, one at the Clacton end of the platform there */
+    /* signals: one at the end of the first platform, four along the line, one at the far end of the platform there */
     var half = W < 560 ? 39 : 55;
     var sA = x0 + half + 8, sB = x1 - half - 8;
     var pos = [sA].concat([1, 2, 3, 4].map(function(k){ return sA + (sB - sA) * k / 5; })).concat([sB]);
@@ -857,7 +889,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     function doors(state, x){
       tr.classList.toggle('open', state === 'open' || state === 'end');
       tag.classList.toggle('on', !!state); tag.classList.toggle('amber', state === 'closing');
-      tag.textContent = state === 'open' ? 'Doors open' : state === 'closing' ? 'Doors closing' : state === 'end' ? (up ? 'Doors open' : 'This train terminates here') : '';
+      tag.textContent = state === 'open' ? 'Doors open' : state === 'closing' ? 'Doors closing' : state === 'end' ? (up || !endsHere(trip) ? 'Doors open' : 'This train terminates here') : '';
       if (x != null) { var mid = up ? x + TW / 2 : x - TW / 2; tag.style.left = Math.min(W - 110, Math.max(80, mid)) + 'px'; }
     }
     cancelAnimationFrame(railRaf);
@@ -911,11 +943,12 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   }
 
   /* live times on the journey line: the first train at your start station, each connection, and the arrival,
-     matched by their timetabled times against today's live boards (Greater Anglia trains only) */
+     matched by their timetabled times against today's live boards (the page's own operators only) */
   var CRS = { 'London Liverpool Street': 'LST', 'Stratford': 'SRA', 'Chelmsford': 'CHM', 'Colchester': 'COL', 'Ipswich': 'IPS', 'Norwich': 'NRW', 'Cambridge': 'CBG', 'Southend Victoria': 'SOV', 'Shenfield': 'SNF', 'Stowmarket': 'SMK', 'Thorpe-le-Soken': 'TLS', 'Clacton-on-Sea': 'CLT', 'Manningtree': 'MNG', 'Witham': 'WTM', 'Bury St Edmunds': 'BSE', 'Tottenham Hale': 'TOM', 'Bishops Stortford': 'BIS', 'Wickford': 'WIC' };
+  for (var ck in X.crs) CRS[ck] = X.crs[ck];
   function findLive(key, time, arr){
     var L = live[key]; if (!L || !L.ok) return null;
-    var hit = (L.js.trainServices || []).filter(function(sv){ return sv.operatorCode === 'LE' && (arr ? sv.sta : sv.std) === time; })[0];
+    var hit = (L.js.trainServices || []).filter(function(sv){ return isOp(sv.operatorCode) && (arr ? sv.sta : sv.std) === time; })[0];
     if (!hit) return { none: true };
     var e = arr ? hit.eta : hit.etd;
     return { status: hit.isCancelled ? 'Cancelled' : e === 'On time' ? 'On time' : e === 'Delayed' ? 'Delayed' : 'Expected ' + e, late: hit.isCancelled || e !== 'On time', plat: hit.platform || '' };
@@ -945,24 +978,24 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   /* "Before you travel" follows the station and train you pick */
   function money(v){ return '£' + v.toFixed(2); }
   function travel(trip){
-    var h = H(), back = h.dirs[1].trips, last = back[back.length - 1], lastEnd = last.s[last.s.length - 1][0];
+    var h = H(), back = HD(h)[1].trips, last = back[back.length - 1], lastEnd = last.s[last.s.length - 1][0];
     var late = mm(lastEnd) < mm(last.big);
     var tip = ['Trains are very busy straight after the flying, as everyone heads for the station at once. I would either leave a little early, or stay in town for something to eat and catch a later train.',
-      'On the Thursday there’s the twilight display. In the current timetable the last train back to ' + h.name + ' leaves Clacton at ' + last.big + (last.changes.length ? ', with a change at ' + names(last.changes.map(function(c){ return c.at; })) : '') + (late ? ', and doesn’t get in until ' + lastEnd : ', and gets in at ' + lastEnd) + '. I would check this before the twilight display starts.'];
+      X.lastTrain.replace('{hub}', h.name).replace('{last}', last.big).replace('{day}', D().label).replace('{chg}', last.changes.length ? ', with a change at ' + names(last.changes.map(function(c){ return c.at; })) : '').replace('{gets}', late ? ', and doesn’t get in until ' + lastEnd : ', and gets in at ' + lastEnd)];
     if (trip.changes.length) {
       var c0 = trip.changes.reduce(function(a, c){ return c.wait < a.wait ? c : a; });
       tip.push('Your ' + trip.big + ' has a change at ' + names(trip.changes.map(function(c){ return c.at; })) + (c0.wait <= 6 ? ', and at ' + c0.at + ' you only have ' + c0.wait + ' minutes, so sit near the doors. ' : '. ') + 'If a late train means you miss your connection, you can normally take the next train, so I wouldn’t panic. Just let the staff know.');
     }
-    if (trip.split) tip.push('Your train splits on the way, with part of it going to ' + trip.split + '. Listen out for the announcements so you’re in the Clacton coaches.');
-    tip.push('Greater Anglia usually adds extra trains on airshow days, and the summer 2027 times come out nearer the show, so please check before you travel.');
+    if (trip.split) tip.push('Your train splits on the way, with part of it going to ' + trip.split + '. Listen out for the announcements so you’re in the ' + X.destShort + ' coaches.');
+    tip.push(X.extraTrains);
     $('tip').innerHTML = tip.map(function(p){ return '<p>' + p + '</p>'; }).join('');
     var f = (CFG.fares || {})[h.code] || {}, op = f['Off-Peak Day Return'], sop = f['Super Off-Peak Day Return'];
     var save = [];
-    if (op) save.push('When I last checked, an off-peak day return from ' + h.name + ' to Clacton was ' + money(op) + (sop && sop < op ? ', or ' + money(sop) + ' super off-peak on trains from about midday' : '') + '.');
-    else save.push('I would check the fare from ' + h.name + ' on the Greater Anglia website before you go, as off-peak tickets can save you a fair bit.');
+    if (op) save.push('When I last checked, an off-peak day return from ' + h.name + ' to ' + X.destShort + ' was ' + money(op) + (sop && sop < op ? ', or ' + money(sop) + ' super off-peak on trains from about midday' : '') + '.');
+    else save.push('I would check the fare from ' + h.name + ' on the ' + X.opName + ' website before you go, as off-peak tickets can save you a fair bit.');
     save.push('If you’re going as a family, a Family and Friends Railcard takes a third off adult fares and 60% off children’s fares. ' + (op && op >= 30 ? 'From ' + h.name + ' it may well pay for itself on this one trip.' : 'It’s worth a look if you travel by train a few times a year.'));
     $('alth').textContent = 'Save on your tickets';
-    $('altp').innerHTML = save.map(function(p){ return '<p>' + p + '</p>'; }).join('') + '<a class="go" href="https://www.greateranglia.co.uk/" target="_blank" rel="noopener">Buy tickets from Greater Anglia ›</a>';
+    $('altp').innerHTML = save.map(function(p){ return '<p>' + p + '</p>'; }).join('') + '<a class="go" href="' + X.buyUrl + '" target="_blank" rel="noopener">Buy tickets from ' + X.opName + ' ›</a>';
   }
   function km(a, b){ var r = Math.PI / 180, la = (a[0] + b[0]) / 2 * r, x = (b[1] - a[1]) * r * Math.cos(la), y = (b[0] - a[0]) * r; return Math.sqrt(x * x + y * y) * 6371; }
   function segMiles(s, i, j){
@@ -984,8 +1017,8 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     for (var c = 1; c < cuts.length; c++) {
       var i0 = cuts[c - 1], i1 = cuts[c], a = s[i0][1], b = s[i1][1];
       var inner = s.slice(i0 + 1, i1).map(function(p){ return LINE[p[1]]; }).filter(Boolean);
-      var line = inner[0] || (LINE[b] === GEML && !BREAK[a] ? GEML : null) || (BREAK[b] ? LINE[a] : LINE[b]) || GEML;
-      if (a === 'Thorpe-le-Soken' || b === 'Thorpe-le-Soken') line = SCL;
+      var line = inner[0] || (LINE[b] === MAINL && !BREAK[a] ? MAINL : null) || (BREAK[b] ? LINE[a] : LINE[b]) || MAINL;
+      if ((LN.force || {})[a] || (LN.force || {})[b]) line = LN.force[a] || LN.force[b];
       var mids = s.slice(i0 + 1, i1).map(function(p){ return p[1]; });
       var about = ABOUT[a + '|' + b] || ABOUT[b + '|' + a] || '';
       var stops = mids.length ? 'This train calls at ' + names(mids) + '.' : 'This train runs non-stop between the two.';
@@ -1029,7 +1062,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   var lineLayer = L.layerGroup().addTo(map), layer = L.layerGroup().addTo(map);
   L.circleMarker(CFG.target, { radius: 6, color: '#D74949', weight: 2, fillColor: '#fff', fillOpacity: 1, dashArray: '3 3' })
     .bindTooltip(CFG.targetLabel, { direction: 'bottom', offset: [0, 8], className: 'mlbl off' }).addTo(map);
-  L.polyline([DATA.stops.filter(function(x){ return x[0] === 'Clacton-on-Sea'; })[0].slice(1, 3), CFG.target], { color: '#D74949', weight: 3, dashArray: '2 7', lineCap: 'round' }).addTo(map);
+  L.polyline([DATA.stops.filter(function(x){ return x[0] === X.dest; })[0].slice(1, 3), CFG.target], { color: '#D74949', weight: 3, dashArray: '2 7', lineCap: 'round' }).addTo(map);
 
   var day = 0, dir = 0, idx = 0, hub = 0, ROUTE = [], casing = null;
   window.addEventListener('resize', function(){ map.invalidateSize(); fit(); });
@@ -1041,12 +1074,15 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   }
 
   /* unpack journeys: [time, station index, flags, arrival at a change] -> [time, name, lat, lon, flags, short name, index, arrival] */
-  DATA.hubs.forEach(function(h){ h.dirs.forEach(function(x){ x.trips.forEach(function(tr){
+  function allDirs(h){ var out = h.dirs.slice(); for (var k in (h.days || {})) out = out.concat(h.days[k]); return out; }
+  DATA.hubs.forEach(function(h){ allDirs(h).forEach(function(x){ x.trips.forEach(function(tr){
     tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3], p[1], p[3] || '']; });
   }); }); });
   function D(){ return DATA.days[day]; }
   function H(){ return DATA.hubs[hub]; }
-  function DIR(){ return H().dirs[dir]; }
+  /* a station's journeys for the picked day: weekend timetables can differ */
+  function HD(h){ return (h.days && h.days[D().key]) || h.dirs; }
+  function DIR(){ return HD(H())[dir]; }
   function names(list){ return list.length < 2 ? list.join('') : list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1]; }
   function callingList(tr){
     var n = tr.calls.slice();
@@ -1067,7 +1103,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   function render(){
     $('hub').innerHTML = DATA.hubs.map(function(h, i){
       /* the number of changes most trains that day need, and the quickest of those */
-      var tr = h.dirs[0].trips, count = {};
+      var tr = HD(h)[0].trips, count = {};
       tr.forEach(function(x){ count[x.changes.length] = (count[x.changes.length] || 0) + 1; });
       var fewest = +Object.keys(count).sort(function(p, q){ return count[q] - count[p] || p - q; })[0];
       var best = Math.min.apply(null, tr.filter(function(x){ return x.changes.length === fewest; }).map(function(x){ return x.ride; }));
@@ -1075,8 +1111,8 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
       return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
     }).join('');
     each($('hub').children, function(b){ b.addEventListener('click', function(){ hub = +b.getAttribute('data-i'); idx = pickDefault(); render(); runTrain(); }); });
-    segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ day = i; render(); runTrain(); });
-    segBtns($('dir'), H().dirs.map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = pickDefault(); render(); runTrain(); });
+    segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ var was = DIR().trips[idx] ? mm(DIR().trips[idx].big) : 0; day = i; var tr = DIR().trips; idx = 0; for (var q = 0; q < tr.length; q++) if (mm(tr[q].big) >= was) { idx = q; break; } render(); runTrain(); });
+    segBtns($('dir'), HD(H()).map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = pickDefault(); render(); runTrain(); });
     if (idx >= DIR().trips.length) idx = 0;
     board(); draw(); table(); screen();
   }
@@ -1096,8 +1132,8 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     var d = DIR(), tt = d.tt;
     $('ttlbl').textContent = (ttOpen ? 'Hide the times for ' : 'See every train on ') + D().label;
     if (!ttOpen) return;
-    $('ttnum').textContent = 'GA';
-    $('tttitle').textContent = (dir === 0 ? H().name + ' to Clacton' : 'Clacton to ' + H().name) + ', ' + D().label;
+    $('ttnum').textContent = X.opShort;
+    $('tttitle').textContent = (dir === 0 ? H().name + ' to ' + X.destShort : X.destShort + ' to ' + H().name) + ', ' + D().label;
     $('ttsub').textContent = tt.cols.length + ' journeys that day, ' + (tt.wide ? 'with where you change' : 'shown at the main stations');
     $('ttsheet').classList.toggle('wide', !!tt.wide);
     var picked = d.trips[idx] ? d.trips[idx].big : null;
@@ -1139,11 +1175,11 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
 
   /* station departure board: the next few trains from the station the picked train leaves */
   var ORD = ['1st', '2nd', '3rd', '4th'];
-  /* live board: departures from the picked station and arrivals at Clacton, Greater Anglia trains only,
+  /* live board: departures from the picked station and arrivals at the show's station, the page's operators only,
      from the public National Rail live departure boards. When it can't be reached the board shows the timetable. */
   var LIVE_HOSTS = ['https://huxley2.azurewebsites.net', 'https://national-rail-api.davwheat.dev'];
   var mode = 'dep', live = {}, liveBusy = {};
-  function liveKey(){ return mode === 'arr' ? 'arr|CLT' : 'dep|' + (dir === 0 ? H().code : 'CLT'); }
+  function liveKey(){ return mode === 'arr' ? 'arr|' + X.destCrs : 'dep|' + (dir === 0 ? H().code : X.destCrs); }
   function getLive(key){
     if (liveBusy[key] || (live[key] && Date.now() - live[key].at < 55000)) return;
     liveBusy[key] = true;
@@ -1158,9 +1194,9 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   function cleanName(n){ return (n || '').replace(/\s*\(.*?\)/, ''); }
   function liveRows(key){
     var L = live[key]; if (!L || !L.ok) return null;
-    var list = (L.js.trainServices || []).filter(function(s){ return s.operatorCode === 'LE'; });
+    var list = (L.js.trainServices || []).filter(function(s){ return isOp(s.operatorCode); });
     var arr = key.indexOf('arr') === 0, cur = DIR().trips[idx];
-    var target = dir === 0 ? (cur.changes.length ? cur.changes[0].at : 'Clacton-on-Sea') : (cur.changes.length ? cur.changes[0].at : H().name);
+    var target = dir === 0 ? (cur.changes.length ? cur.changes[0].at : X.dest) : (cur.changes.length ? cur.changes[0].at : H().name);
     return list.map(function(s){
       var calls = ((s.subsequentCallingPoints || [])[0] || {}).callingPoint || [];
       var names = calls.map(function(c){ return cleanName(c.locationName); });
@@ -1172,36 +1208,38 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   }
   function setTabs(){
     $('cdtDep').setAttribute('aria-pressed', mode === 'dep'); $('cdtArr').setAttribute('aria-pressed', mode === 'arr');
-    $('cdtDep').textContent = 'Departures from ' + (dir === 0 ? H().name : 'Clacton');
+    $('cdtDep').textContent = 'Departures from ' + (dir === 0 ? H().name : X.destShort);
   }
   $('cdtDep').addEventListener('click', function(){ mode = 'dep'; screen(); });
   $('cdtArr').addEventListener('click', function(){ mode = 'arr'; screen(); });
 
-  /* arrivals at Clacton from the timetable, for when live times can't be reached */
-  var ARR = (function(){
+  /* arrivals at the show's station from the timetable, for when live times can't be reached */
+  var ARRC = {};
+  function arrList(){
+    var dk = D().key; if (ARRC[dk]) return ARRC[dk];
     var seen = {}, out = [];
-    DATA.hubs.forEach(function(h){ h.dirs[0].trips.forEach(function(tr){
+    DATA.hubs.forEach(function(h){ HD(h)[0].trips.forEach(function(tr){
       var a = tr.s[tr.s.length - 1][0];
       if (seen[a]) return;
       var lastLegFrom = tr.changes.length ? tr.changes[tr.changes.length - 1].at : tr.s[0][1];
-      seen[a] = 1; out.push({ t: a, from: h.code === 'LST' ? 'London Liverpool Street' : lastLegFrom === 'Colchester' ? 'London Liverpool Street' : lastLegFrom });
+      seen[a] = 1; out.push({ t: a, from: tr.lorig || (h.code === 'LST' ? 'London Liverpool Street' : X.arrFrom[lastLegFrom] || lastLegFrom) });
     }); });
-    return out.sort(function(x, y){ return (mm(x.t) < 240 ? mm(x.t) + 1440 : mm(x.t)) - (mm(y.t) < 240 ? mm(y.t) + 1440 : mm(y.t)); });
-  })();
+    return (ARRC[dk] = out.sort(function(x, y){ return (mm(x.t) < 240 ? mm(x.t) + 1440 : mm(x.t)) - (mm(y.t) < 240 ? mm(y.t) + 1440 : mm(y.t)); }));
+  }
   function arrTimetable(){
     var n = ukNow(), today = D().key === n.wd, now = n.h * 60 + n.m;
     var from = dir === 0 ? mm(DIR().trips[idx].s[DIR().trips[idx].s.length - 1][0]) : (today ? now : 600);
-    var start = ARR.findIndex(function(a){ return mm(a.t) >= from && mm(a.t) >= 240; });
+    var ARR = arrList(), start = ARR.findIndex(function(a){ return mm(a.t) >= from && mm(a.t) >= 240; });
     if (start < 0) start = 0;
     var rows = ARR.slice(start, start + 4);
-    $('cdstop').textContent = 'Arrivals, Clacton-on-Sea';
+    $('cdstop').textContent = 'Arrivals, ' + X.dest;
     $('cdrows').innerHTML = rows.map(function(r, k){
       var mins = mm(r.t) - now, right = today && mins >= 0 && mins < 60 ? (mins <= 1 ? 'Due' : mins + ' min') : '';
       return '<li class="lv' + (k === 0 ? ' on' : '') + '"><span>' + ORD[k] + '</span><span>' + r.t + '</span><span>' + r.from + '</span><span></span><span>' + right + '</span></li>';
     }).join('');
-    $('cdtick').textContent = 'Greater Anglia trains into Clacton-on-Sea on a ' + D().label + '. Every train from London calls at Stratford, Chelmsford and Colchester on the way.     ';
+    $('cdtick').textContent = X.arrTick.replace('{day}', D().label) + '     ';
     var L = live[liveKey()];
-    $('cdnote').textContent = (L && !L.ok ? 'Live times can’t be reached right now, so this shows the timetable. ' : '') + 'Arrivals into Clacton-on-Sea on a ' + D().label + (dir === 0 ? ', starting from the train you picked.' : '.');
+    $('cdnote').textContent = (L && !L.ok ? 'Live times can’t be reached right now, so this shows the timetable. ' : '') + 'Arrivals into ' + X.dest + ' on a ' + D().label + (dir === 0 ? ', starting from the train you picked.' : '.');
   }
   function screen(){
     setTabs();
@@ -1210,17 +1248,17 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     lv.classList.toggle('on', !!rows); lv.lastChild.textContent = rows ? 'Live' : 'Timetable';
     if (rows) {
       var arr = mode === 'arr';
-      $('cdstop').textContent = arr ? 'Arrivals, Clacton-on-Sea' : (dir === 0 ? H().name : 'Clacton-on-Sea');
+      $('cdstop').textContent = arr ? 'Arrivals, ' + X.dest : (dir === 0 ? H().name : X.dest);
       var pick = arr ? rows : rows.filter(function(r){ return r.mine; });
       if (!pick.length) pick = rows;
       pick = pick.slice(0, 4);
       $('cdrows').innerHTML = pick.length ? pick.map(function(r, k){
         return '<li class="lv' + (k === 0 ? ' on' : '') + (r.late ? ' late' : '') + (r.mine ? ' mine' : '') + '"><span>' + ORD[k] + '</span><span>' + r.t + '</span><span>' + r.place + '</span><span>Plat ' + (r.plat || 'TBC') + '</span><span>' + r.exp + '</span></li>';
-      }).join('') : '<li><span></span><span></span><span>No Greater Anglia trains due</span><span></span><span></span></li>';
+      }).join('') : '<li><span></span><span></span><span>No ' + X.opName + ' trains due</span><span></span><span></span></li>';
       var f = pick[0];
-      $('cdtick').textContent = f ? (arr ? 'The ' + f.t + ' from ' + f.place + ' is ' + f.exp.toLowerCase().replace('exp', 'expected at') + '.     ' : 'Calling at: ' + f.calls.join(', ') + '.     ') + (f.reason ? f.reason + '.     ' : '') + 'Greater Anglia trains only.     ' : 'Greater Anglia trains only.     ';
-      $('cdnote').textContent = arr ? 'Live arrivals into Clacton-on-Sea from across the Greater Anglia network. It updates every minute.'
-        : 'Live departures that get you towards ' + (dir === 0 ? 'Clacton' : H().name) + '. It updates every minute, so tap Arrivals to see what’s coming into Clacton.';
+      $('cdtick').textContent = f ? (arr ? 'The ' + f.t + ' from ' + f.place + ' is ' + f.exp.toLowerCase().replace('exp', 'expected at') + '.     ' : 'Calling at: ' + f.calls.join(', ') + '.     ') + (f.reason ? f.reason + '.     ' : '') + X.opName + ' trains only.     ' : X.opName + ' trains only.     ';
+      $('cdnote').textContent = arr ? X.liveArr
+        : 'Live departures that get you towards ' + (dir === 0 ? X.destShort : H().name) + '. It updates every minute, so tap Arrivals to see what’s coming into ' + X.destShort + '.';
       return;
     }
     if (mode === 'arr') { arrTimetable(); return; }
@@ -1233,8 +1271,8 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
       return '<li data-i="' + (idx + k) + '" class="' + (k === 0 ? 'on' : '') + (due ? ' due' : '') + '"><span>' + ORD[k] + '</span><span>' + t.big + '</span><span>' + (t.split ? t.dest + ' & ' + t.split : t.dest) + '</span><span>Plat ' + (t.plat || 'TBC') + '</span><span>' + right + '</span></li>';
     }).join('');
     each($('cdrows').children, function(li){ li.addEventListener('click', function(){ idx = +li.getAttribute('data-i'); board(); var sel = $('board').querySelector('[aria-pressed="true"]'); if (sel) $('board').scrollLeft = Math.max(0, sel.offsetLeft - 8); draw(); table(); screen(); }); });
-    var goal = dir === 0 ? 'Clacton-on-Sea' : H().name;
-    $('cdtick').textContent = 'Calling at: ' + callingList(cur).join(', ') + '.     ' + (cur.changes.length ? 'Change at ' + names(cur.changes.map(function(c){ return c.at; })) + ' for ' + goal + '.     ' : '') + (cur.split ? 'This train splits on the way, so check which coaches go to Clacton-on-Sea.     ' : '') + 'Platforms can change on the day, so check the screens at the station.     ';
+    var goal = dir === 0 ? X.dest : H().name;
+    $('cdtick').textContent = 'Calling at: ' + callingList(cur).join(', ') + '.     ' + (cur.changes.length ? 'Change at ' + names(cur.changes.map(function(c){ return c.at; })) + ' for ' + goal + '.     ' : '') + (cur.split ? 'This train splits on the way, so check which coaches go to ' + X.dest + '.     ' : '') + 'Platforms can change on the day, so check the screens at the station.     ';
     var noLive = live[liveKey()] && !live[liveKey()].ok;
     $('cdnote').textContent = noLive ? 'Live times can’t be reached right now, so the board shows the timetable for ' + D().label + '.' : today ? 'It’s ' + D().label + ' today, so the board counts down to the next trains.' : 'On a ' + D().label + ' this board counts down to the next trains. Today it shows when they arrive.';
   }
@@ -1290,10 +1328,10 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     save.innerHTML = ch.length ? ch.map(function(c){
         return 'Change at <b>' + c.at + '</b>. You get in at ' + c.arr + (c.ap ? ' on platform ' + c.ap : '') + ' and the ' + c.dep + ' to ' + c.to + ' leaves' + (c.dp ? ' from platform ' + c.dp : '') + ', so you have ' + c.wait + ' minutes.' +
           (c.wait <= 6 ? ' That’s a quick change, so I would sit near the doors and have your bags ready.' : c.wait >= 30 ? ' That’s a fair wait, so there’s time to grab a drink at the station.' : '');
-      }).join('<br><br>') + (trip.split ? '<br><br>The last train splits on the way, so check you’re in the coaches for <b>Clacton-on-Sea</b>.' : '')
-      : trip.split ? 'This train splits on the way, with part of it going on to <b>' + trip.split + '</b>. Listen to the announcements and check the screens on board, so you’re in the coaches for <b>Clacton-on-Sea</b>.'
-      : toShow ? 'Stay on to the end of the line. <b>Clacton-on-Sea</b> is the last stop, so you can’t miss it.'
-      : 'The train starts at Clacton, so it’s often waiting in the platform. I would get there a little early for a seat.';
+      }).join('<br><br>') + (trip.split ? '<br><br>The last train splits on the way, so check you’re in the coaches for <b>' + X.dest + '</b>.' : '')
+      : trip.split ? 'This train splits on the way, with part of it going on to <b>' + trip.split + '</b>. Listen to the announcements and check the screens on board, so you’re in the coaches for <b>' + X.dest + '</b>.'
+      : toShow ? (X.endOfLine ? 'Stay on to the end of the line. <b>' + X.dest + '</b> is the last stop, so you can’t miss it.' : X.stayOn(trip))
+      : X.endOfLine ? 'The train starts at ' + X.destShort + ', so it’s often waiting in the platform. I would get there a little early for a seat.' : X.backOn(trip);
     $('buysub').textContent = 'For the ' + first[0] + ' from ' + first[5] + ' to ' + last[5] + ', opens their website';
     $('slip').innerHTML = '<div class="sh1"><span>' + CFG.operator + '</span><span>' + D().label + '</span></div>' +
       '<div class="grid"><span>From</span><span>' + first[5] + '</span><span>To</span><span>' + last[5] + '</span>' +
@@ -1303,11 +1341,11 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
       '<div class="ft">Planning slip, not a ticket</div>';
 
     /* your station for the show follows the picked train */
-    $('ysname').textContent = 'Clacton-on-Sea';
+    $('ysname').textContent = X.dest;
     if (toShow) {
       $('yslbl').textContent = 'Get off here';
       $('ysh1').textContent = 'On the train'; $('ysh2').textContent = 'Where to get off'; $('ysh3').textContent = 'Walk to the show';
-      $('ysbelltxt').innerHTML = ch.length ? 'Change at <b>' + chn + '</b> for the Clacton train, then stay on to the end of the line. <b>Clacton-on-Sea</b> is the last stop.' : trip.split ? 'This one splits on the way, so make sure you’re in the <b>Clacton coaches</b>. Clacton-on-Sea is the end of the line for that part.' : 'Stay on until the end of the line. <b>Clacton-on-Sea</b> is the last stop, so there’s no chance of missing it.';
+      $('ysbelltxt').innerHTML = !X.endOfLine ? X.bell(trip, chn) : ch.length ? 'Change at <b>' + chn + '</b> for the ' + X.destShort + ' train, then stay on to the end of the line. <b>' + X.dest + '</b> is the last stop.' : trip.split ? 'This one splits on the way, so make sure you’re in the <b>' + X.destShort + ' coaches</b>. ' + X.dest + ' is the end of the line for that part.' : 'Stay on until the end of the line. <b>' + X.dest + '</b> is the last stop, so there’s no chance of missing it.';
       $('yswalk').textContent = CFG.walkLine;
       $('ysride').textContent = trip.title + ' gets here at ' + last[0] + ', ' + hmLong(trip.ride) + ' after it sets off.';
     } else {
@@ -1327,7 +1365,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
       }).addTo(layer);
       m.bindPopup('<b>' + p[1] + '</b><br>' + (isChg ? 'Change here. Arrive ' + p[7] + ', leave ' + p[0] : p[0]) + (isOff ? '<br>' + CFG.offTag : ''));
       var small = window.innerWidth < 560 && !isOff && i !== 0 && i !== s.length - 1;
-      if ((p[4] & LABEL || isOff) && !small) { var east = p[3] > 1.05; m.bindTooltip(p[5], { permanent: true, direction: east ? 'left' : 'right', offset: isOff ? [-16, -8] : [east ? -10 : 10, 0], className: 'mlbl' + (isOff ? ' off' : '') }); }
+      if ((p[4] & LABEL || isOff) && !small) { var east = p[3] > X.labelLeftLon; m.bindTooltip(p[5], { permanent: true, direction: east ? 'left' : 'right', offset: isOff ? [-16, -8] : [east ? -10 : 10, 0], className: 'mlbl' + (isOff ? ' off' : '') }); }
       if (!key) {
         if (!group) {
           group = { id: 'g' + (gid++), items: [] };
@@ -1434,7 +1472,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     var b = $('doorpush'), led = $('doorled'), pd = $('paneldoors'); clearTimeout(doorT);
     if (b.getAttribute('aria-pressed') !== 'true') beeps(3, 420, 880);
     b.setAttribute('aria-pressed', 'true'); led.classList.add('on'); pd.classList.add('on');
-    led.textContent = dir === 0 ? 'Clacton-on-Sea, this train terminates here' : 'Mind the gap';
+    led.textContent = dir === 0 ? X.dest + (endsHere(DIR().trips[idx]) ? ', this train terminates here' : ', mind the gap') : 'Mind the gap';
     doorT = setTimeout(function(){
       beeps(6, 220, 1040);
       led.textContent = 'Doors closing';
