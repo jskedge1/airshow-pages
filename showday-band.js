@@ -53,3 +53,13 @@
   function start(){setTimeout(go,50);}
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
+
+/* Every show page loads this file, so it also brings in the phone tab scroll helper
+   (phone-tab-scroll.js): on phones, tapping an option scrolls down to what it opened. */
+(function(){
+  if(window.UKAG_PHONE_TAB_SCROLL) return;
+  var s=document.createElement('script');
+  s.src='https://jskedge1.github.io/airshow-pages/phone-tab-scroll.js';
+  s.async=true;
+  document.head.appendChild(s);
+})();
