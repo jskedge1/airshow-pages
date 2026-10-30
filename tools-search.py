@@ -61,6 +61,8 @@ PAGES = [
     ('/first-airshow-accommodation', 'first-airshow-accommodation.html', STAY, 'Where To Stay For An Airshow', 'Hotels, B&Bs and when to book.', 'accommodation hotel stay overnight book'),
 
     ('/bus-route', 'bus-routes/index.html', TRAVEL, 'Bus Route Maps', 'Every bus to the shows, with the roads it takes and where to get off.', 'bus buses route map timetable stop'),
+    ('/airshow-public-transport', 'public-transport.html', TRAVEL, 'Public Transport To UK Airshows', 'Every bus and train route page, sorted by show, with a town search.', 'public transport bus train route town no car'),
+    ('/train-to-swansea', 'train-routes/wales.html', TRAVEL, 'Train To Swansea', 'Transport for Wales and GWR trains to Swansea for the Wales Airshow.', 'train rail Swansea Wales GWR Transport for Wales station'),
     ('/train-to-clacton', 'train-routes/clacton.html', TRAVEL, 'Train To Clacton', 'Greater Anglia trains to Clacton for the air show.', 'train rail Clacton Greater Anglia station'),
     ('/train-to-eastbourne', 'train-routes/eastbourne.html', TRAVEL, 'Train To Eastbourne', 'Southern trains to Eastbourne for Airbourne.', 'train rail Eastbourne Southern station Airbourne'),
     ('/train-to-cosford', 'train-routes/cosford.html', TRAVEL, 'Train To Cosford', 'West Midlands Railway trains to Cosford for the air show.', 'train rail Cosford West Midlands Railway station'),
