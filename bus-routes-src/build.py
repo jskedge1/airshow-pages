@@ -226,7 +226,7 @@ def build(fn):
                lead=lead, facts=facts, legs=legs, tipHead='Before you travel', tip=tip,
                tipBtn=f'Back to getting to {show["town"]}', alt=ov.get('alt'),
                target=target, targetLabel=show['label'], offTag=ov.get('offTag', 'Closest stop to the show'),
-               note=f'Stops and times are from the current timetable, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with {OPS.get(rid, "the operator")} before you travel. The line is drawn along the roads between the stops, so treat it as a guide.')
+               note=f'Stops and times are from {OPS.get(rid, "the bus company")}’s timetable on the DfT <a href="https://data.bus-data.dft.gov.uk/" target="_blank" rel="noopener">Bus Open Data Service</a>, through <a href="https://bustimes.org/" target="_blank" rel="noopener">bustimes.org</a>, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with {OPS.get(rid, "the operator")} before you travel. The line is drawn along the roads between the stops, so treat it as a guide. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.')
     stab, sidx = [], {}
     for dd in days:
         for x in dd['dirs']:

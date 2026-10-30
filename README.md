@@ -81,6 +81,7 @@ While `WIX_PAGE` in `bus-routes.js` is `null`, the buttons open the route page i
 
 To rebuild after a timetable change (from `bus-routes-src/`): `python3 collect.py` gets stops, times and road lines into `raw/` (delete a route's raw file first to fetch it again), `python3 build.py` makes the pages from `templates/bus-route-template.html` (copied in as template.html), and `python3 make_map.py` remakes `bus-routes.js` and the list page. Routes are in `routes.json`, end names in `ends.json`, bus companies in `operators.json`; show points and advice are `SHOWS` in build.py.
 Times use the current timetable (November 2026 dates for each show's days), so replace them with the summer 2027 timetables when they come out in the spring.
+The note at the bottom of each route page names the timetable source (Bus Open Data Service through bustimes.org) and OpenStreetMap, as Jack asked on 30 Oct 2026.
 No page yet (no buses on any show day in the current timetable): 1 Blackpool, 18 Little Gransden, 7A Duxford, 891 Cosford, 97 Ayr (summer only). Wales has no numbered routes on its page, so no buttons there.
 
 ## Seafront Information map and tides (27 Oct 2026)
