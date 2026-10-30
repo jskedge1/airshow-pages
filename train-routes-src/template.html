@@ -493,6 +493,63 @@ footer a{color:#fff}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}.cdtick span{padding-left:0}}
 /* the day picker fits all the show days on a phone, up to four */
 @media (max-width:680px){#day{display:grid;grid-template-columns:1fr 1fr;width:100%}#day button{padding:9px 6px;text-align:center}}
+
+/* ---------- shuttle bus (only on pages with CFG.bus): drawn as a road, never as railway ---------- */
+.bussec[hidden]{display:none}
+.bussec{--bus:#F7C51E;--busink:#17181A}
+.bus-stage{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);border:1px solid var(--line);box-shadow:0 24px 40px -30px rgba(19,41,60,.5);background:#fff}
+.bus-road{position:relative;background:#3A3F44;min-height:330px;overflow:hidden}
+.bus-road .verge{position:absolute;left:0;right:0;height:46px;background:#6E8B4E;background-image:radial-gradient(rgba(0,0,0,.14) 1px,transparent 1.5px);background-size:7px 7px}
+.bus-road .verge.t{top:0}.bus-road .verge.b{bottom:0}
+.bus-road .kerb{position:absolute;left:0;right:0;height:6px;background:repeating-linear-gradient(90deg,#D9D9D4 0 18px,#B7B7B1 18px 36px)}
+.bus-road .kerb.t{top:46px}.bus-road .kerb.b{bottom:46px}
+.bus-road .tarmac{position:absolute;left:0;right:0;top:52px;bottom:52px;background:#2E3236;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.4px);background-size:5px 5px}
+.bus-road .cl{position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,#F1F1EC 0 34px,transparent 34px 64px)}
+.bus-road .yl{position:absolute;left:0;right:0;height:3px;background:var(--bus);opacity:.85}
+.bus-road .yl.t{top:60px}.bus-road .yl.b{bottom:60px}
+.bus-flag{position:absolute;top:8px;z-index:3;display:flex;flex-direction:column;align-items:center;transform:translateX(-50%)}
+.bus-flag b{display:block;background:#fff;border:2px solid #17181A;padding:3px 8px 2px;font:800 13px/1.15 var(--c);text-transform:uppercase;letter-spacing:.02em;color:#17181A;white-space:nowrap;box-shadow:inset 0 -4px 0 var(--bus)}
+.bus-flag i{display:block;width:3px;height:22px;background:#17181A}
+.bus-flag.end b{background:var(--bus);box-shadow:none}
+.bus-veh{position:absolute;left:0;top:50%;width:150px;height:62px;margin-top:-58px;z-index:2;transform:translateX(-170px);will-change:transform}
+.bus-veh.go{transition:transform 3.4s cubic-bezier(.45,.05,.25,1)}
+.bus-veh svg{width:150px;height:62px;display:block;filter:drop-shadow(0 6px 6px rgba(0,0,0,.35))}
+.bus-blind{position:absolute;left:18px;bottom:66px;z-index:3;background:#050607;border:4px solid #23292E;padding:8px 12px 7px;display:flex;align-items:baseline;gap:12px;box-shadow:0 10px 20px -12px rgba(0,0,0,.7);max-width:calc(100% - 36px)}
+.bus-blind::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.6) 1px,transparent 1.3px);background-size:3px 3px;pointer-events:none}
+.bus-blind b{font:800 34px/.9 var(--c);color:#FFB21E;text-shadow:0 0 14px rgba(255,178,30,.45)}
+.bus-blind span{font:700 20px/1.05 var(--c);color:#FFB21E;text-transform:uppercase;letter-spacing:.03em;text-shadow:0 0 10px rgba(255,178,30,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bus-conn{padding:24px 26px 22px;display:flex;flex-direction:column;gap:12px;min-width:0;border-left:6px solid var(--bus)}
+.bus-conn .lbl{align-self:flex-start;background:var(--bus);color:var(--busink);font-weight:700;font-size:14px;padding:4px 10px}
+.bus-conn .bt{font:800 clamp(46px,5.4vw,66px)/.9 var(--c);color:var(--navy);font-variant-numeric:tabular-nums}
+.bus-conn .bt small{font-size:.36em;margin-left:8px;color:var(--muted);letter-spacing:.02em}
+.bus-conn .bp{color:var(--ink);font-weight:500}
+.bus-steps{list-style:none;position:relative;margin:2px 0 0;padding:0}
+.bus-steps::before{content:"";position:absolute;left:8px;top:10px;bottom:10px;width:3px;background:repeating-linear-gradient(var(--busink) 0 6px,transparent 6px 11px)}
+.bus-steps li{position:relative;display:flex;justify-content:space-between;gap:12px;padding:6px 0 6px 30px;font-size:15.5px;line-height:1.35}
+.bus-steps li::before{content:"";position:absolute;left:1px;top:9px;width:17px;height:17px;background:#fff;border:3px solid var(--busink)}
+.bus-steps li.tr::before{border-radius:50%;border-color:var(--op1)}
+.bus-steps li.bs::before{background:var(--bus)}
+.bus-steps li.end::before{background:var(--red);border-color:var(--red);border-radius:50%}
+.bus-steps time{font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bus-warn{background:#FFF4CC;border-left:5px solid var(--bus);padding:10px 14px;font-size:15px;line-height:1.5}
+.bus-warn.bad{background:#FCEDED;border-left-color:var(--red)}
+.bus-tt{margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.bus-tt h3{font:800 22px/1 var(--c);text-transform:uppercase;color:var(--navy);margin-bottom:8px}
+.bus-chips{display:flex;flex-wrap:wrap;gap:6px}
+.bus-chips span{font-weight:700;font-size:14.5px;font-variant-numeric:tabular-nums;padding:5px 9px;background:#F4F5F2;box-shadow:inset 0 -3px 0 var(--bus);color:var(--busink)}
+.bus-chips span.on{background:var(--busink);color:var(--bus);box-shadow:none}
+.bus-notes{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:16px;margin-top:18px}
+.bus-notes .tip{border-left-color:var(--bus)}
+.jl-leg.bus::before{background:repeating-linear-gradient(90deg,var(--bus,#F7C51E) 0 12px,transparent 12px 18px)}
+.jl-node.bus .dot{border-radius:3px;background:#F7C51E;box-shadow:0 0 0 5px #fff}
+.dep .bs{display:block;margin-top:2px;font-weight:600;font-size:13px;line-height:17px;color:#7A5B00}
+.dep .bs.no{color:var(--red)}
+.dep[aria-pressed="true"] .bs{color:#F7C51E}
+.stops li.busrow{color:#3F3200}
+.stops li.busrow::before{background:repeating-linear-gradient(#F7C51E 0 5px,transparent 5px 9px)}
+.stops li.busrow::after{border-radius:2px;border-color:#17181A;background:#F7C51E}
+@media (max-width:860px){.bus-stage,.bus-notes{grid-template-columns:minmax(0,1fr)}.bus-road{min-height:250px}.bus-conn{border-left:0;border-top:6px solid var(--bus)}}
+@media (max-width:680px){.jl-node.bus .dot{border-radius:3px}}
 </style>
 <!-- seo: matches the Wix page on ukairshowguide.co.uk -->
 <meta name="robots" content="noindex, nofollow">
@@ -525,6 +582,7 @@ footer a{color:#fff}
   <div class="wrap">
     <a href="#stop">Your station</a>
     <a href="#times">Pick your train</a>
+    <a href="#bus" id="jumpbus" hidden>The shuttle</a>
     <a href="#route">Route map</a>
     <a href="#roads">The line it takes</a>
     <a href="#travel">Before you travel</a>
@@ -681,6 +739,32 @@ footer a{color:#fff}
   </div>
 </section>
 
+<section class="s bussec" id="bus" hidden>
+  <div class="wrap">
+    <div class="sh rise"><h2 class="t" id="bustitle">The shuttle bus</h2><p id="busintro"></p></div>
+    <div class="bus-stage rise">
+      <div class="bus-road" id="busroad" aria-hidden="true">
+        <div class="verge t"></div><div class="kerb t"></div><div class="tarmac"></div><div class="yl t"></div><div class="cl"></div><div class="yl b"></div><div class="kerb b"></div><div class="verge b"></div>
+        <div class="bus-flag" style="left:16%"><b id="busfrom"></b><i></i></div>
+        <div class="bus-flag end" style="left:84%"><b id="busto"></b><i></i></div>
+        <div class="bus-veh" id="busveh"><svg viewBox="0 0 150 62"><rect x="4" y="6" width="140" height="44" rx="7" fill="#F7C51E" stroke="#17181A" stroke-width="2.5"/><rect x="128" y="11" width="13" height="22" rx="2" fill="#2A3138"/><rect x="12" y="12" width="20" height="16" rx="2" fill="#2A3138"/><rect x="36" y="12" width="20" height="16" rx="2" fill="#2A3138"/><rect x="60" y="12" width="20" height="16" rx="2" fill="#2A3138"/><rect x="84" y="12" width="20" height="16" rx="2" fill="#2A3138"/><rect x="108" y="12" width="16" height="30" rx="2" fill="#2A3138" stroke="#17181A"/><rect x="4" y="36" width="140" height="5" fill="#17181A" opacity=".85"/><rect x="138" y="40" width="6" height="4" fill="#FFF3B0"/><circle cx="30" cy="51" r="8" fill="#17181A"/><circle cx="30" cy="51" r="3" fill="#9AA0A6"/><circle cx="116" cy="51" r="8" fill="#17181A"/><circle cx="116" cy="51" r="3" fill="#9AA0A6"/></svg></div>
+        <div class="bus-blind"><b id="busnum"></b><span id="busdest"></span></div>
+      </div>
+      <div class="bus-conn" aria-live="polite">
+        <span class="lbl" id="buslbl">Your shuttle</span>
+        <div class="bt" id="busbig"></div>
+        <div class="bp" id="busper"></div>
+        <ol class="bus-steps" id="bussteps"></ol>
+        <div class="bus-warn" id="buswarn" hidden></div>
+      </div>
+    </div>
+    <div class="bus-tt rise">
+      <div><h3 id="busthh">To the show</h3><div class="bus-chips" id="busthere"></div></div>
+      <div><h3 id="busbkh">Back to the station</h3><div class="bus-chips" id="busback"></div></div>
+    </div>
+    <div class="bus-notes rise"><div class="tip"><b id="busn1h"></b><div id="busn1"></div></div><div class="tip"><b id="busn2h"></b><div id="busn2"></div></div></div>
+  </div>
+</section>
 <section class="s" id="route">
   <div class="wrap">
     <div class="sh rise"><h2 class="t">Route map</h2><p>Every station on the train you picked. Tap a station in the list to find it on the map. The red sign is where you get off for the show.</p></div>
@@ -747,6 +831,7 @@ var DATA=__DATA__;
   var FLAG = '<svg class="flag" viewBox="0 0 20 24" aria-hidden="true"><rect x="9" y="12" width="2" height="12" fill="#13293C"/><rect x="1" y="1" width="18" height="13" rx="2" fill="#D74949"/><rect x="6" y="3" width="8" height="8" rx="1.5" fill="#fff"/><rect x="7.2" y="4.2" width="5.6" height="2.8" fill="#D74949"/></svg>';
   function mm(x){ var a = x.split(':'); return +a[0] * 60 + +a[1]; }
   function gap(a, b){ var d = mm(b) - mm(a); return d < 0 ? d + 1440 : d; }
+  function hmAdd(t, m){ var x = (mm(t) + m + 1440) % 1440; return ('0' + Math.floor(x / 60)).slice(-2) + ':' + ('0' + (x % 60)).slice(-2); }
   function hm(m){ return m >= 60 ? Math.floor(m / 60) + 'h ' + ('0' + (m % 60)).slice(-2) + 'm' : m + ' min'; }
   function hmLong(m){ var h = Math.floor(m / 60), r = m % 60; return (h ? h + (h === 1 ? ' hour ' : ' hours ') : '') + (r ? r + ' minutes' : ''); }
 
@@ -920,7 +1005,7 @@ var DATA=__DATA__;
     var s = trip.s, ch = trip.changes, first = s[0], last = s[s.length - 1];
     var nodes = [{ n: first[1], t: 'Leave ' + first[0] + (trip.plat ? ', platform ' + trip.plat : '') }];
     ch.forEach(function(c){ nodes.push({ n: c.at, t: 'Arrive ' + c.arr + (c.ap ? ', platform ' + c.ap : '') + '<br>Leave ' + c.dep + (c.dp ? ', platform ' + c.dp : ''), chg: c.wait }); });
-    nodes.push({ n: last[1], t: 'Arrive ' + last[0], end: dir === 0 });
+    nodes.push({ n: last[1], t: 'Arrive ' + last[0], end: dir === 0 && !BUS });
     var legsInfo = [], from = first[0], dest = trip.dest;
     ch.forEach(function(c){ legsInfo.push({ to: dest, mins: gap(from, c.arr) }); from = c.dep; dest = c.to; });
     legsInfo.push({ to: dest, mins: gap(from, last[0]) });
@@ -929,6 +1014,11 @@ var DATA=__DATA__;
       html += '<li class="jl-node' + (nd.chg != null ? ' chg' : '') + (nd.end ? ' end' : '') + '"><span class="dot" aria-hidden="true"></span><div><b>' + nd.n + '</b><small>' + nd.t + '</small>' + (nd.chg != null ? '<em>Change trains, ' + nd.chg + ' min</em>' : '') + '</div></li>';
       if (k < legsInfo.length) html += '<li class="jl-leg" aria-hidden="true"><span>Train to ' + legsInfo[k].to + '<br>' + hm(legsInfo[k].mins) + '</span></li>';
     });
+    if (BUS) {
+      var bc = busConn(trip), bleg = '<li class="jl-leg bus" aria-hidden="true"><span>Walk and ' + BUS.name + '<br>' + hm(BUS.walk + BUS.ride) + ' plus the wait</span></li>';
+      if (dir === 0) html += bleg + '<li class="jl-node bus end"><span class="dot" aria-hidden="true"></span><div><b>' + BUS.to + '</b><small>' + (bc.ok ? 'Shuttle ' + bc.dep + ', arrive about ' + bc.arr : 'No shuttle at this time') + '</small></div></li>';
+      else html = '<li class="jl-node bus"><span class="dot" aria-hidden="true"></span><div><b>' + BUS.to + '</b><small>' + (bc.ok ? 'Shuttle by ' + bc.dep : 'No shuttle in time') + '</small></div></li>' + bleg + html;
+    }
     $('jlline').innerHTML = html;
     jlLive(trip);
     $('jlsum').textContent = trip.big + ' ' + D().label + ', ' + first[1] + ' to ' + last[1] + '. ' + hm(trip.ride) + ', ' + (ch.length ? ch.length + (ch.length === 1 ? ' change' : ' changes') : 'direct') + '.';
@@ -979,6 +1069,7 @@ var DATA=__DATA__;
       tip.push('Your ' + trip.big + ' has a change at ' + names(trip.changes.map(function(c){ return c.at; })) + (c0.wait <= 6 ? ', and at ' + c0.at + ' you only have ' + c0.wait + ' minutes, so sit near the doors. ' : '. ') + 'If a late train means you miss your connection, you can normally take the next train, so I wouldn’t panic. Just let the staff know.');
     }
     if (trip.split) tip.push('Your train splits on the way, with part of it going to ' + trip.split + '. Listen out for the announcements so you’re in the ' + X.destShort + ' coaches.');
+    if (BUS && BUS.tip) tip.push(BUS.tip);
     tip.push(X.extraTrains);
     $('tip').innerHTML = tip.map(function(p){ return '<p>' + p + '</p>'; }).join('');
     var f = (CFG.fares || {})[h.code] || {}, op = f['Off-Peak Day Return'], sop = f['Super Off-Peak Day Return'];
@@ -1054,7 +1145,16 @@ var DATA=__DATA__;
   var lineLayer = L.layerGroup().addTo(map), layer = L.layerGroup().addTo(map);
   L.circleMarker(CFG.target, { radius: 6, color: '#D74949', weight: 2, fillColor: '#fff', fillOpacity: 1, dashArray: '3 3' })
     .bindTooltip(CFG.targetLabel, { direction: 'bottom', offset: [0, 8], className: 'mlbl off' }).addTo(map);
-  L.polyline([DATA.stops.filter(function(x){ return x[0] === X.dest; })[0].slice(1, 3), CFG.target], { color: '#D74949', weight: 3, dashArray: '2 7', lineCap: 'round' }).addTo(map);
+  var BUS = CFG.bus || null, busLine = null;
+  if (BUS && BUS.path) {
+    L.polyline(BUS.path, { color: '#17181A', weight: 8, opacity: .85 }).addTo(map);
+    busLine = L.polyline(BUS.path, { color: '#F7C51E', weight: 5, opacity: 1, dashArray: '12 8' }).addTo(map);
+    L.marker(BUS.path[0], { icon: L.divIcon({ className: '', iconSize: [26, 26], iconAnchor: [13, 13], html: '<div style="width:26px;height:26px;background:#F7C51E;border:2px solid #17181A;display:flex;align-items:center;justify-content:center;font:800 13px/1 Barlow,sans-serif;color:#17181A">B</div>' }) })
+      .bindTooltip(BUS.from, { direction: 'left', offset: [-12, 0], className: 'mlbl' }).addTo(map);
+    var lg = document.querySelector('.leg'); if (lg) lg.insertAdjacentHTML('beforeend', '<span><i style="width:22px;height:6px;border:0;border-radius:0;background:repeating-linear-gradient(90deg,#F7C51E 0 8px,#17181A 8px 11px)"></i>' + BUS.name + '</span>');
+  } else {
+    L.polyline([DATA.stops.filter(function(x){ return x[0] === X.dest; })[0].slice(1, 3), CFG.target], { color: '#D74949', weight: 3, dashArray: '2 7', lineCap: 'round' }).addTo(map);
+  }
 
   var day = 0, dir = 0, idx = 0, hub = 0, ROUTE = [], casing = null;
   window.addEventListener('resize', function(){ map.invalidateSize(); fit(); });
@@ -1062,7 +1162,7 @@ var DATA=__DATA__;
   function fit(){
     if (!casing) return;
     var wide = window.innerWidth > 980;
-    map.fitBounds(casing.getBounds().extend(CFG.target), wide ? { padding: [36, 36] } : { paddingTopLeft: [20, 48], paddingBottomRight: [20, 28] });
+    map.fitBounds((busLine ? casing.getBounds().extend(busLine.getBounds()) : casing.getBounds()).extend(CFG.target), wide ? { padding: [36, 36] } : { paddingTopLeft: [20, 48], paddingBottomRight: [20, 28] });
   }
 
   /* unpack journeys: [time, station index, flags, arrival at a change] -> [time, name, lat, lon, flags, short name, index, arrival] */
@@ -1269,10 +1369,65 @@ var DATA=__DATA__;
     $('cdnote').textContent = noLive ? 'Live times can’t be reached right now, so the board shows the timetable for ' + D().label + '.' : today ? 'It’s ' + D().label + ' today, so the board counts down to the next trains.' : 'On a ' + D().label + ' this board counts down to the next trains. Today it shows when they arrive.';
   }
 
+  /* the shuttle bus: worked out from the picked train, in its own road styled section */
+  function busList(span){ var out = [], a = mm(span[0]), b = mm(span[1]), step = BUS.every; for (var x = a; x <= b; x += step) out.push(hmAdd('00:00', x)); return out; }
+  function busBack(){ var k = D().key; return busList((BUS.back[k] || BUS.back.all)); }
+  function busConn(trip){
+    var s = trip.s;
+    if (dir === 0) {
+      var ready = mm(s[s.length - 1][0]) + BUS.walk, list = busList(BUS.there);
+      for (var i = 0; i < list.length; i++) if (mm(list[i]) >= ready) return { ok: true, dep: list[i], arr: hmAdd(list[i], BUS.ride), wait: mm(list[i]) - ready, i: i };
+      return { ok: false };
+    }
+    var need = mm(s[0][0]) - BUS.walk - BUS.buffer - BUS.ride, back = busBack(), pick = -1;
+    for (var j = 0; j < back.length; j++) if (mm(back[j]) <= need) pick = j;
+    return pick < 0 ? { ok: false } : { ok: true, dep: back[pick], arr: hmAdd(back[pick], BUS.ride), i: pick };
+  }
+  var busFirst = true;
+  function busPanel(trip, bc){
+    var s = trip.s, toShow = dir === 0, there = busList(BUS.there), back = busBack();
+    $('busnum').textContent = BUS.num; $('busdest').textContent = toShow ? BUS.toShort : BUS.fromShort;
+    $('buslbl').textContent = toShow ? 'Your shuttle' : 'Your shuttle back';
+    var w = $('buswarn');
+    if (bc.ok) {
+      $('busbig').innerHTML = bc.dep + '<small>' + (toShow ? 'from ' + BUS.stop : 'from ' + BUS.toShort) + '</small>';
+      $('busper').innerHTML = toShow ? 'The <b>' + trip.big + '</b> gets to ' + X.destShort + ' at ' + s[s.length - 1][0] + '. Walk to the bus station and the next shuttle you’re likely to get is the ' + bc.dep + '.' : 'To catch the <b>' + trip.big + '</b> home from ' + X.destShort + ', I would be on the ' + bc.dep + ' shuttle at the latest.';
+      $('bussteps').innerHTML = toShow
+        ? '<li class="tr"><span>Train gets in at ' + X.destShort + '</span><time>' + s[s.length - 1][0] + '</time></li><li><span>Walk to ' + BUS.stop + ', about ' + BUS.walk + ' min</span><time>' + hmAdd(s[s.length - 1][0], BUS.walk) + '</time></li><li class="bs"><span>' + BUS.name + ' leaves</span><time>' + bc.dep + '</time></li><li class="end"><span>' + BUS.to + '</span><time>about ' + bc.arr + '</time></li>'
+        : '<li class="bs"><span>' + BUS.name + ' leaves ' + BUS.toShort + '</span><time>' + bc.dep + '</time></li><li><span>Back at ' + BUS.stop + '</span><time>about ' + bc.arr + '</time></li><li><span>Walk to the station, about ' + BUS.walk + ' min</span><time>' + hmAdd(bc.arr, BUS.walk) + '</time></li><li class="tr end"><span>Your train home</span><time>' + s[0][0] + '</time></li>';
+      var qn = toShow ? BUS.queue : (BUS.queueBack || ''); w.hidden = !(toShow && bc.wait >= 15) && !qn;
+      w.className = 'bus-warn';
+      w.innerHTML = (toShow && bc.wait >= 15 ? 'That’s a ' + bc.wait + ' minute wait for the shuttle, so there’s time for a coffee. ' : '') + qn;
+    } else {
+      $('busbig').innerHTML = toShow ? 'No shuttle' : 'Too early';
+      $('busper').innerHTML = toShow ? 'The <b>' + trip.big + '</b> gets to ' + X.destShort + ' at ' + s[s.length - 1][0] + ', after the last shuttle to the show at ' + there[there.length - 1] + '.' : 'The first shuttle back leaves ' + BUS.toShort + ' at ' + back[0] + ', so it won’t get you to the <b>' + trip.big + '</b>.';
+      $('bussteps').innerHTML = '';
+      w.hidden = false; w.className = 'bus-warn bad';
+      w.innerHTML = toShow ? 'I would pick an earlier train, so you’re at ' + BUS.stop + ' by ' + there[there.length - 1] + '.' : 'I would pick a later train. The shuttles back run every ' + BUS.every + ' minutes from ' + back[0] + ' until ' + back[back.length - 1] + ' on a ' + D().label + '.';
+    }
+    $('busthere').innerHTML = there.map(function(x, i){ return '<span' + (toShow && bc.ok && bc.i === i ? ' class="on"' : '') + '>' + x + '</span>'; }).join('');
+    $('busback').innerHTML = back.map(function(x, i){ return '<span' + (!toShow && bc.ok && bc.i === i ? ' class="on"' : '') + '>' + x + '</span>'; }).join('');
+    $('busbkh').textContent = 'Back to ' + X.destShort + ' on a ' + D().label;
+    var v = $('busveh');
+    if (reduce) { v.style.transform = 'translateX(' + (toShow ? '62%' : '8%') + ')'; return; }
+    v.classList.remove('go'); v.style.transform = toShow ? 'translateX(-170px)' : 'translateX(calc(' + $('busroad').clientWidth + 'px + 10px))';
+    void v.offsetWidth; v.classList.add('go');
+    var rw = $('busroad').clientWidth; v.style.transform = 'translateX(' + Math.round(toShow ? Math.min(rw * .62, rw - 160) : rw * .08) + 'px)';
+    busFirst = false;
+  }
+  if (BUS) {
+    $('bus').hidden = false; $('jumpbus').hidden = false;
+    $('bustitle').textContent = BUS.title; $('busintro').textContent = BUS.intro;
+    $('busfrom').textContent = BUS.stop; $('busto').textContent = BUS.toShort;
+    $('busthh').textContent = 'To the show, every ' + BUS.every + ' minutes';
+    $('busn1h').textContent = BUS.notes[0][0]; $('busn1').innerHTML = BUS.notes[0][1].map(function(p){ return '<p>' + p + '</p>'; }).join('');
+    $('busn2h').textContent = BUS.notes[1][0]; $('busn2').innerHTML = BUS.notes[1][1].map(function(p){ return '<p>' + p + '</p>'; }).join('');
+  }
+
   function board(){
     var d = DIR(), nx = nextIndex();
     $('board').innerHTML = d.trips.map(function(t, i){
-      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + (t.split ? '<span class="sp">Splits</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span>' + (t.changes.length ? '<span class="cg">Change at ' + names(t.changes.map(function(c){ return c.at; })) + '</span>' : '<span class="cg">Direct</span>') + '</button>';
+      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + (t.split ? '<span class="sp">Splits</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span>' + (t.changes.length ? '<span class="cg">Change at ' + names(t.changes.map(function(c){ return c.at; })) + '</span>' : '<span class="cg">Direct</span>') + (BUS ? (function(){ var bc = busConn(t); return '<span class="bs' + (bc.ok ? '' : ' no') + '">' + (bc.ok ? (dir === 0 ? 'Shuttle ' + bc.dep : 'Shuttle by ' + bc.dep) : (dir === 0 ? 'Misses the shuttle' : 'No shuttle in time')) + '</span>'; })() : '') + '</button>';
     }).join('');
     $('bnote').textContent = d.note || '';
     each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); var sl = $('board').scrollLeft; board(); $('board').scrollLeft = sl; draw(); table(); screen(); }); });
@@ -1314,7 +1469,8 @@ var DATA=__DATA__;
     $('sumper').innerHTML = 'From <b>' + first[1] + '</b>. Gets to <b>' + last[1] + '</b> at ' + last[0] + '.';
     $('sumkv').innerHTML = '<div class="kv"><span>Journey time</span><span>' + hm(trip.ride) + '</span></div>' +
       '<div class="kv"><span>Stations</span><span>' + s.length + '</span></div>' +
-      '<div class="kv"><span>Changes</span><span>' + (ch.length ? ch.length + ', at ' + chn : 'None, it’s direct') + '</span></div>';
+      '<div class="kv"><span>Changes</span><span>' + (ch.length ? ch.length + ', at ' + chn : 'None, it’s direct') + '</span></div>' +
+      (BUS ? (function(){ var bc = busConn(trip); return '<div class="kv' + (bc.ok ? '' : ' hl') + '"><span>' + BUS.name + '</span><span>' + (bc.ok ? (toShow ? bc.dep + ', at ' + BUS.toShort + ' about ' + bc.arr : 'Leave ' + BUS.toShort + ' by ' + bc.dep) : (toShow ? 'Too late for it' : 'None in time')) + '</span></div>'; })() : '');
     var save = $('sumsave');
     save.classList.toggle('warn', !!trip.split || ch.some(function(c){ return c.wait <= 6; }));
     save.innerHTML = ch.length ? ch.map(function(c){
@@ -1336,13 +1492,13 @@ var DATA=__DATA__;
     $('ysname').textContent = X.dest;
     if (toShow) {
       $('yslbl').textContent = 'Get off here';
-      $('ysh1').textContent = 'On the train'; $('ysh2').textContent = 'Where to get off'; $('ysh3').textContent = 'Walk to the show';
+      $('ysh1').textContent = 'On the train'; $('ysh2').textContent = 'Where to get off'; $('ysh3').textContent = CFG.ysh3 || 'Walk to the show';
       $('ysbelltxt').innerHTML = !X.endOfLine ? X.bell(trip, chn) : ch.length ? 'Change at <b>' + chn + '</b> for the ' + X.destShort + ' train, then stay on to the end of the line. <b>' + X.dest + '</b> is the last stop.' : trip.split ? 'This one splits on the way, so make sure you’re in the <b>' + X.destShort + ' coaches</b>. ' + X.dest + ' is the end of the line for that part.' : 'Stay on until the end of the line. <b>' + X.dest + '</b> is the last stop, so there’s no chance of missing it.';
       $('yswalk').textContent = CFG.walkLine;
       $('ysride').textContent = trip.title + ' gets here at ' + last[0] + ', ' + hmLong(trip.ride) + ' after it sets off.';
     } else {
       $('yslbl').textContent = 'Get on here';
-      $('ysh1').textContent = 'Your train home'; $('ysh2').textContent = 'Where to get on'; $('ysh3').textContent = 'Walk back to the station';
+      $('ysh1').textContent = 'Your train home'; $('ysh2').textContent = 'Where to get on'; $('ysh3').textContent = CFG.ysh3b || 'Walk back to the station';
       $('ysbelltxt').innerHTML = 'Catch the train home from here. Everyone heads for the same train once the flying finishes, so I would allow a bit of extra time.' + (ch.length ? ' You change at <b>' + chn + '</b> on the way.' : '');
       $('yswalk').textContent = CFG.walkBack;
       $('ysride').textContent = 'This train leaves at ' + first[0] + ' and gets to ' + last[1] + ' at ' + last[0] + '.';
@@ -1379,6 +1535,15 @@ var DATA=__DATA__;
       ol.appendChild(li);
     });
     closeGroup();
+    if (BUS) {
+      var bc0 = busConn(trip), rows = dir === 0
+        ? [['Walk to ' + BUS.from, hmAdd(last[0], BUS.walk)], [BUS.name + (bc0.ok ? ' leaves' : ', none at this time'), bc0.ok ? bc0.dep : ''], [BUS.to, bc0.ok ? 'about ' + bc0.arr : '']]
+        : [[BUS.name + ' from ' + BUS.to + (bc0.ok ? '' : ', none in time'), bc0.ok ? 'by ' + bc0.dep : ''], ['Off at ' + BUS.from + ', walk to the station', bc0.ok ? 'about ' + hmAdd(bc0.dep, BUS.ride) : '']];
+      var frag = document.createDocumentFragment();
+      rows.forEach(function(r){ var li = document.createElement('li'); li.className = 'busrow key'; li.innerHTML = '<span>' + r[0] + '</span><time>' + r[1] + '</time>'; frag.appendChild(li); });
+      if (dir === 0) ol.appendChild(frag); else ol.insertBefore(frag, ol.firstChild);
+      busPanel(trip, bc0);
+    }
     function closeGroup(){
       if (!group) return;
       var g = group, n = g.items.length, btn = g.fold.firstChild;
