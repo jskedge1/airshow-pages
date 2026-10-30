@@ -97,6 +97,18 @@ button{font-family:var(--font)}
 .tile.wide .ph{left:42%;top:0;right:0;bottom:0;height:auto;-webkit-mask-image:linear-gradient(90deg,transparent,#000 55%);mask-image:linear-gradient(90deg,transparent,#000 55%)}
 .tile.wide .tx{right:40%;top:0;display:flex;flex-direction:column;justify-content:center}
 .tile.wide b,.tile.wide .sub{color:#fff}.tile.wide .go{color:#fff}
+.tile.d5tile{background:#0E2131;border-color:#0E2131;min-height:280px}
+.tile.d5tile .ph{left:36%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 38%);mask-image:linear-gradient(90deg,transparent,#000 38%)}
+.tile.d5tile .tx{right:46%;padding:22px 26px}
+.tile.d5tile b{font-size:clamp(26px,3vw,38px)}
+.tile.d5tile .sub{color:#DCE6EE;max-width:46ch}
+.tile.d5tile .go{color:#32B4AF}
+.d5new{display:inline-block;align-self:flex-start;background:#6950A1;color:#fff;font-weight:600;font-size:14px;padding:3px 9px;margin-bottom:10px}
+.d5bar{padding-top:14px;padding-bottom:14px}
+.d5back{font-family:inherit;font-weight:600;font-size:16px;line-height:1;background:#13293C;color:#fff;border:0;border-top:3px solid #32B4AF;padding:12px 16px;cursor:pointer;transition:background .3s,padding .3s}
+.d5back::before{content:"\2190  "}
+.d5back:hover{background:#32B4AF;padding-left:22px}
+@media(max-width:760px){.tile.d5tile{min-height:420px}.tile.d5tile .ph{left:0;top:0;bottom:auto;height:58%;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}.tile.d5tile .tx{right:0;top:auto;padding:16px 18px 18px}}
 .ph.none{display:grid;place-items:center;background:linear-gradient(180deg,var(--c1),var(--c2))}
 .ph.none svg{width:42%;max-width:130px;opacity:.9}
 
@@ -1192,6 +1204,7 @@ function hubView(){
  h+='<section class="topo"><div class="in"><div class="block" style="padding-top:20px"><h2 class="stitle">Choose A Photography Guide</h2><p class="sintro">Each guide opens on its own page and links back here.</p><div class="bento">';
  var cls={settings:'s7',start:'s5',kit:'s5',lab:'s8 wide',learn:'s4'};
  ['settings','start','kit','aircraft','light','tips','pack','shows','shots','lab','learn'].forEach(function(k){var t=T[idx(k)];h+='<button class="tile '+(cls[k]||'s4')+'" data-go="'+k+'">'+ph(k)+'<div class="tx"><b>'+t.n+'</b><span class="sub">'+t.s+'</span><span class="go">Open this guide</span></div></button>'});
+ h+='<button class="tile s12 wide d5tile" data-go="d500"><div class="ph" style="background-image:url(https://jskedge1.github.io/airshow-pages/photography-hub-img/d500-camera.jpg);background-position:50% 50%"></div><div class="tx"><span class="d5new">New</span><b>Nikon D500 3D camera guide</b><span class="sub">Turn the camera round, tap any button and I will show you what it does, how to set it up the night before and where I would start for jets, props and helicopters.</span><span class="go">Open the 3D camera</span></div></button>';
  h+='</div></div></div></section>';
  h+='<section class="howto"><div class="in howto-grid"><div class="ht-text"><h2 class="stitle">How To, Step By Step</h2><p class="sintro">The two techniques beginners ask me about most. Making propellers look alive, and panning smoothly enough to keep the aircraft sharp.</p></div><div class="htcards"><button class="htcard" data-go="settings" data-to="prop"><div class="ht-img" style="background-image:url(https://jskedge1.github.io/airshow-pages/photography-hub-img/prop-runway.jpg)"></div><div class="ht-cap"><b>Propeller Blur</b><span class="btn red sm">Read The Guide</span></div></button><button class="htcard" data-go="aircraft" data-to="panning"><div class="ht-img" style="background-image:url(https://jskedge1.github.io/airshow-pages/photography-hub-img/typhoon-pan.jpg)"></div><div class="ht-cap"><b>Panning For Movement</b><span class="btn red sm">Read The Guide</span></div></button></div></div></section>';
  h+='<div class="in"><div class="block"><h2 class="stitle">Start Simple, Build Up</h2><p class="sintro">Every guide works the same way. Get the safe, sharp shot first, then add reach, then the extras once you know what held you back.</p><div class="stairs"><div class="stair a"><span class="tg">Level 1</span><b>Beginner</b><p>The camera you own, a 70 to 300mm and shutter priority. Enough for a great first season.</p></div><div class="stair b"><span class="tg">Level 2</span><b>Improver</b><p>A 100 to 400mm or 150 to 600mm class zoom, spare batteries, fast cards and continuous autofocus.</p></div><div class="stair c"><span class="tg">Level 3</span><b>Enthusiast</b><p>Two bodies, one long and one wide, manual with Auto ISO and a prime for the static park.</p></div></div></div></div>';
@@ -1217,7 +1230,12 @@ function watch(){if(spy)spy.disconnect();if(!('IntersectionObserver' in window))
  [].forEach.call(document.querySelectorAll('section.ch'),function(s){spy.observe(s)})}
 function reveal(){if(!('IntersectionObserver' in window))return;[].forEach.call(document.querySelectorAll('.stairs:not(.grow)'),function(s){if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;s.classList.add('wait');var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){s.classList.remove('wait');s.classList.add('grow');o.disconnect()}})},{rootMargin:'0px 0px -10% 0px'});o.observe(s)});var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});[].forEach.call(document.querySelectorAll('.ch-head,.print,.tip,.facts,.cols'),function(el){el.classList.add('reveal');io.observe(el)})}
 window.addEventListener('scroll',function(){var b=$('readbar'),y=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;if(b)b.style.width=(h>0?Math.min(100,y/h*100):0)+'%';var t=$('totop');if(t)t.classList.toggle('show',y>900)},{passive:true});
-function go(k,to){$('app').innerHTML=(k==='hub'?hubView():guideView(k));
+function d500View(){return '<section class="d5v"><div class="in d5bar"><button type="button" class="d5back" data-go="hub">Back to the photography hub</button></div><iframe id="d5frame" src="https://jskedge1.github.io/airshow-pages/nikon-d500.html?in=hub" title="Nikon D500 3D camera guide" style="display:block;width:100%;height:1700px;border:0;background:#091826"></iframe></section>'+foot()}
+window.addEventListener('message',function(e){if(e.origin!=='https://jskedge1.github.io')return;var d=e.data;if(!d||typeof d!=='object')return;
+ if(d.type==='d500-height'){var f=document.getElementById('d5frame');if(f&&d.h>300)f.style.height=Math.ceil(d.h)+'px'}
+ else if(d.type==='d500-hub'){go('hub')}});
+function go(k,to){if(k==='d500'){$('app').innerHTML=d500View();window.scrollTo(0,0);return}
+ $('app').innerHTML=(k==='hub'?hubView():guideView(k));
  renderQuick();drawProp();renderCalc();renderKit();renderReach();renderShots();renderShowList();renderPrices();paintPick('pk','phone');paintPick('fx','blur');watch();reveal();
  var el=to&&$('s-'+to);if(el){setTimeout(function(){el.scrollIntoView({block:'start'})},30)}else window.scrollTo(0,0)}
 document.addEventListener('input',function(e){var id=e.target.id;if(id==='psRange')drawProp();if(id==='rD')renderReach()});

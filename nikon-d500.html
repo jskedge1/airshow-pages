@@ -1085,6 +1085,17 @@ document.querySelectorAll('#cmp th[data-id]').forEach(t=>{ const go=()=>{ preset
 setPreset('jets'); setMode('learn');
 window.__v=V;
 </script>
+<script>
+// When shown inside the Photography Hub, tell the hub how tall the page is and send hub links back to it
+(function(){
+  if(window.parent===window) return;
+  document.documentElement.classList.add('in-hub');
+  function send(){ parent.postMessage({type:'d500-height',h:document.documentElement.scrollHeight},'*'); }
+  addEventListener('load',send); setTimeout(send,600);
+  if(window.ResizeObserver) new ResizeObserver(send).observe(document.body);
+  document.addEventListener('click',function(e){ var a=e.target.closest('a[href*="airshow-photography-hub"]'); if(!a) return; e.preventDefault(); parent.postMessage({type:'d500-hub'},'*'); });
+})();
+</script>
 <!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
 <style id="mobile-fit">
   img,video,iframe,canvas{max-width:100%}
