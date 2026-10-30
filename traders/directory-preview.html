@@ -597,6 +597,28 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
 #traders .adv{margin-top:0;border-left-color:var(--teal)}
 #traders .adv-go{background:var(--teal);color:var(--navy)}
 .hero-photo{background-image:url("../home-img/day-1330.webp");background-position:30% 62%;opacity:.75}
+
+/* filter bar, tidier */
+.filterbar{grid-template-columns:minmax(240px,320px) minmax(0,1fr);gap:16px 28px;padding:18px 22px 18px;border-bottom:3px solid var(--navy)}
+.fb-search{position:relative;display:block}
+.fb-search svg{position:absolute;left:14px;top:50%;width:18px;height:18px;margin-top:-9px;fill:none;stroke:var(--navy);stroke-width:2.2;stroke-linecap:round;pointer-events:none}
+.fb-search .search{height:48px;padding:0 14px 0 42px;border:1px solid #AEB9C1;font-size:15.5px;background:#FAFBFB}
+.fb-search .search:focus{background:#fff}
+.fb-cats{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.fb-l{font-weight:500;font-size:15px;color:var(--navy);white-space:nowrap}
+.filterbar .chips{gap:8px}
+.filterbar .chip{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 12px;border:1px solid #C9D2D8;background:#fff;color:var(--navy);font-weight:600;font-size:14px;transition:border-color .3s var(--ease),background .3s var(--ease),color .3s var(--ease),transform .35s var(--ease)}
+.filterbar .chip i{width:10px;height:10px;background:var(--cc);flex:none}
+.filterbar .chip .cn{min-width:22px;height:22px;padding:0 6px;display:grid;place-items:center;background:var(--page);color:#4E5D68;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.filterbar .chip:hover{border-color:var(--navy);transform:translateY(-1px)}
+.filterbar .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.filterbar .chip.on i{outline:2px solid #fff;outline-offset:1px}
+.filterbar .chip.on .cn{background:var(--teal);color:var(--navy)}
+.filterbar .chip.none{opacity:.55}
+@media (max-width:1020px){.filterbar{grid-template-columns:1fr;padding:16px}}
+.fb-cats{flex-direction:column;align-items:flex-start;gap:8px}
+.fb-cats .chips{width:100%}
+@media (max-width:620px){.fb-cats{gap:8px}.filterbar .chips{gap:6px}.filterbar .chip{height:38px;font-size:13.5px;padding:0 7px 0 9px;gap:6px}}
 </style>
 <style id="device-fix">
 @media (max-width:1024px) and (pointer:coarse),(max-width:760px){
@@ -679,8 +701,8 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
       <div class="flags" id="flags"></div>
     </div>
     <div class="filterbar">
-      <input class="search" id="q" type="search" placeholder="Search by name, product or town" autocomplete="off" aria-label="Search traders">
-      <div class="chips" id="cats" aria-label="Type of stall"></div>
+      <label class="fb-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><input class="search" id="q" type="search" placeholder="Search by name, product or town" autocomplete="off" aria-label="Search traders"></label>
+      <div class="fb-cats"><span class="fb-l" id="catsLabel">Type of stall</span><div class="chips" id="cats" role="group" aria-labelledby="catsLabel"></div></div>
       <select id="showSel" hidden aria-hidden="true" tabindex="-1"><option value="">All airshows</option></select>
     </div>
     <div class="results-bar">
@@ -876,12 +898,13 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   const showSel = document.getElementById('showSel');
   const catsEl = document.getElementById('cats');
   SHOWS.forEach(s=>showSel.insertAdjacentHTML('beforeend',`<option value="${s.id}">${esc(s.name)}</option>`));
-  CATS.forEach(c=>catsEl.insertAdjacentHTML('beforeend',`<button type="button" class="chip" data-cat="${c.id}" aria-pressed="false">${esc(c.name)}</button>`));
+  CATS.forEach(c=>catsEl.insertAdjacentHTML('beforeend',`<button type="button" class="chip" data-cat="${c.id}" aria-pressed="false" style="--cc:${c.col}"><i aria-hidden="true"></i>${esc(c.name)}<b class="cn">0</b></button>`));
 
   function stats(){
     document.getElementById('kTraders').textContent = TRADERS.length;
     document.getElementById('kShows').textContent = SHOWS.length;
     document.getElementById('kStops').textContent = TRADERS.reduce((a,t)=>a+t.stops.filter(s=>!s[2]).length,0);
+    catsEl.querySelectorAll('.chip').forEach(ch=>{const n=TRADERS.filter(t=>t.cat===ch.dataset.cat).length;ch.querySelector('.cn').textContent=n;ch.classList.toggle('none',!n)});
   }
 
   let io;
