@@ -7,24 +7,29 @@ OPS = json.load(open('operators.json'))
 ENDS = json.load(open('ends.json'))
 DAYNAME = {'thu': 'Thursday', 'fri': 'Friday', 'sat': 'Saturday', 'sun': 'Sunday'}
 SITE = 'https://www.ukairshowguide.co.uk/'
-# bus company colours: [main, second, text on main]. Colours only, no logos.
+# bus company colours. Colours only, no logos.
+# op1/op2/op3: livery colours (badge, stripe, bus, map line). opink: text on op1.
+# ui: replaces the site navy for headings, tabs, tickets and panels (dark enough to read on white).
+# onui: highlight text on ui. acc: replaces the site amber for buttons, accink: text on acc.
+def _t(op1, op2, op3, opink, ui, onui, acc, accink):
+    return dict(op1=op1, op2=op2, op3=op3, opink=opink, ui=ui, onui=onui, acc=acc, accink=accink)
 OPCOL = {
- 'Stagecoach': ['#1D4F91', '#F58025', '#FFFFFF', '#E31B23'],
- 'Arriva': ['#00A5A3', '#003B5C', '#FFFFFF', '#00A5A3'],
- 'First': ['#4B2E83', '#E6007E', '#FFFFFF', '#E6007E'],
- 'Brighton and Hove': ['#C8102E', '#F3E8CF', '#FFFFFF', '#1A1A1A'],
- 'Blackpool Transport': ['#1A1A1A', '#FFD100', '#FFD100', '#FFD100'],
- 'Central Connect': ['#00843D', '#7AC143', '#FFFFFF', '#00843D'],
- 'A2B Bus and Coach': ['#1E5AA8', '#8CC63F', '#FFFFFF', '#1E5AA8'],
- 'Cuckmere Buses': ['#2E6B30', '#F2E6B8', '#FFFFFF', '#2E6B30'],
- 'Diamond Bus': ['#004B93', '#E30613', '#FFFFFF', '#E30613'],
- 'Grant Palmer': ['#0B3D91', '#FFC20E', '#FFFFFF', '#FFC20E'],
- 'Vision Bus': ['#D71920', '#1A1A1A', '#FFFFFF', '#D71920'],
+ 'Stagecoach': _t('#1D4F91', '#F58025', '#E31B23', '#FFFFFF', '#1D4F91', '#FFA45C', '#F58025', '#0F2340'),
+ 'Arriva': _t('#00A5A3', '#003B5C', '#00A5A3', '#FFFFFF', '#00706E', '#FFFFFF', '#8EDDD9', '#003B5C'),
+ 'First': _t('#4B2E83', '#E6007E', '#E6007E', '#FFFFFF', '#4B2E83', '#FF9BD2', '#E6007E', '#FFFFFF'),
+ 'Brighton and Hove': _t('#C8102E', '#F3E8CF', '#1A1A1A', '#FFFFFF', '#A10D25', '#F3E8CF', '#F3E8CF', '#A10D25'),
+ 'Blackpool Transport': _t('#1A1A1A', '#FFD100', '#FFD100', '#FFD100', '#1A1A1A', '#FFD100', '#FFD100', '#1A1A1A'),
+ 'Central Connect': _t('#00843D', '#7AC143', '#00843D', '#FFFFFF', '#006B32', '#D6F0B8', '#7AC143', '#0F2A16'),
+ 'A2B Bus and Coach': _t('#1E5AA8', '#8CC63F', '#1E5AA8', '#FFFFFF', '#1E5AA8', '#CDEB9F', '#8CC63F', '#10233F'),
+ 'Cuckmere Buses': _t('#2E6B30', '#F2E6B8', '#2E6B30', '#FFFFFF', '#2E6B30', '#F2E6B8', '#F2E6B8', '#2E6B30'),
+ 'Diamond Bus': _t('#004B93', '#E30613', '#E30613', '#FFFFFF', '#004B93', '#FFFFFF', '#E30613', '#FFFFFF'),
+ 'Grant Palmer': _t('#0B3D91', '#FFC20E', '#FFC20E', '#FFFFFF', '#0B3D91', '#FFC20E', '#FFC20E', '#0B3D91'),
+ 'Vision Bus': _t('#D71920', '#1A1A1A', '#D71920', '#FFFFFF', '#B3151B', '#FFD6D6', '#1A1A1A', '#FFFFFF'),
 }
 def opcol(name):
     for k, v in OPCOL.items():
         if name.startswith(k): return v
-    return ['#13293C', '#F2B233', '#FFFFFF', '#F2B233']
+    return None
 
 
 def vias(seq, locs, exclude, n=6, keep=()):
