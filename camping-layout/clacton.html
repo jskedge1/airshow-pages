@@ -1550,6 +1550,7 @@ h3{font-weight:700}
 }
 </style>
 <script src="https://jskedge1.github.io/airshow-pages/transport-times.js"></script>
+<script src="https://jskedge1.github.io/airshow-pages/bus-routes.js"></script>
 </head>
 <body>
 <script>window.PHOTO={"formation": "https://jskedge1.github.io/airshow-pages/camping-layout/img/19d94005ffd0de48.webp", "dakota": "https://jskedge1.github.io/airshow-pages/camping-layout/img/2e25b1fa66371c04.webp", "spitfire": "https://jskedge1.github.io/airshow-pages/camping-layout/img/9a24cdcaaabbb8c7.webp", "tracker": "https://jskedge1.github.io/airshow-pages/camping-layout/img/35b53c4d74dbe68c.webp", "redarrows": "https://jskedge1.github.io/airshow-pages/camping-layout/img/e922c0b67e17465e.webp", "redsmoke": "https://jskedge1.github.io/airshow-pages/camping-layout/img/76dae78068b35a33.webp", "p40": "https://jskedge1.github.io/airshow-pages/camping-layout/img/968673c4873e54e8.webp"};window.PHOTO_ALT={"formation": "Battle of Britain Memorial Flight Dakota flanked by two Spitfires", "dakota": "Battle of Britain Memorial Flight Dakota passing the crowd", "spitfire": "Battle of Britain Memorial Flight Spitfire banking overhead", "tracker": "French Securite Civile Tracker trailing smoke", "redarrows": "Red Arrows Hawk banking with its red, white and blue roundels on show", "redsmoke": "Red Arrows Hawk trailing blue smoke", "p40": "Historic propeller fighter banking against a pale sky"};
@@ -3542,6 +3543,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
     var idx=items.indexOf(t)+1, q=encodeURIComponent(t.place);
     pd.innerHTML='<h3>'+esc(t.title)+'</h3><p class="lead">'+esc(t.text)+'</p>'
       +'<p class="on-map"><b>Map search</b>'+esc(t.place)+'</p>'
+      +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('clacton',t.id):'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
           var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train'}[r[0]];
           var links=(r[3]||[]).map(function(l){return '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(l[1])+'&destination='+encodeURIComponent(l[2])+'&travelmode=walking">'+esc(l[0])+' ↗</a>';}).join('');

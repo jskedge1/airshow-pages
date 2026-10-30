@@ -173,6 +173,18 @@ a{color:inherit}
   .seg button{flex:1;padding:10px 8px;font-size:15px}
   .dep{min-width:128px}
 }
+
+.pickrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.nobus{display:none;margin-top:14px;background:var(--mist);border-left:5px solid var(--red);border-radius:0 12px 12px 0;padding:14px 18px;font-size:16px;line-height:25px}
+.nobus.on{display:block}
+.boardnote{grid-column:1/-1;font-size:15px;line-height:22px;color:#3d4a55;margin-top:-6px}
+.stage.off{opacity:.45;pointer-events:none}
+
+.seg button{white-space:nowrap}
+.dep{max-width:300px}
+.board{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);padding-right:40px}
+.dep .a{white-space:normal}
+@media(max-width:560px){.pickrow{display:grid;grid-template-columns:1fr;width:100%}.pickrow .seg{width:100%}.dep{max-width:76vw}}
 </style>
 </head>
 <body>
@@ -198,11 +210,16 @@ a{color:inherit}
 
   <section class="planner rise" aria-labelledby="ph">
     <h2 id="ph">Pick your bus</h2>
-    <div class="seg" id="dir" role="group" aria-label="Direction"></div>
+    <div class="pickrow">
+      <div class="seg" id="day" role="group" aria-label="Day"></div>
+      <div class="seg" id="dir" role="group" aria-label="Direction"></div>
+    </div>
     <div class="board" id="board" role="group" aria-label="Departure times"></div>
+    <p class="boardnote" id="bnote"></p>
   </section>
+  <p class="nobus" id="nobus"></p>
 
-  <div class="stage rise">
+  <div class="stage rise" id="stage">
     <div class="mapbox">
       <div id="map" role="img"></div>
       <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
@@ -229,52 +246,19 @@ a{color:inherit}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-/* ---------- route data (one block per route page) ---------- */
-var CFG = {
-  num: '132',
-  operator: 'A2B Bus and Coach',
-  showName: 'Duxford Air Shows',
-  showUrl: 'https://www.ukairshowguide.co.uk/duxfordairshows',
-  title: 'Bus 132 to IWM Duxford',
-  blindDest: 'IWM Duxford',
-  blindVia: ['via Cambridge station', 'via Addenbrooke’s', 'then Saffron Walden'],
-  lead: 'This is the bus I would look at if you’re heading to Duxford on a Sunday without a car. It picks up in Cambridge city centre and outside the railway station, then drops you right by Hangar 1. Pick a time below and the map shows every stop.',
-  dirs: { to: 'To IWM Duxford', back: 'Back to Cambridge' },
-  offStop: 'Imperial War Museum Hangar 1',
-  boardFrom: 'Railway Station',
-  facts: [
-    ['Runs on', 'Sundays and bank holidays'],
-    ['How often', 'About every 2 hours'],
-    ['Station to museum', '{ride} minutes'],
-    ['Get off at', 'Hangar 1, by the museum', 'hl']
-  ],
-  legs: [
-    [['A1307'], 'Cambridge city centre', 'Out of Drummer Street bus station, down Regent Street and Hills Road, stopping right outside the railway station.'],
-    [['A1134'], 'Addenbrooke’s', 'Along Long Road to the hospital bus station, then Robinson Way and through Trumpington.'],
-    [['A1309'], 'Trumpington Park and Ride', 'Hauxton Road to the Park and Ride. Handy if you’d rather leave the car here.'],
-    [['M11', 'A505'], 'Down to Duxford', 'South on the M11 to junction 10, then the A505 to the museum stop by Hangar 1.'],
-    [['B1383'], 'On to Saffron Walden', 'After the museum it carries on through Duxford, Ickleton and Great Chesterford to Saffron Walden.']
-  ],
-  tipHead: 'Before you travel',
-  tip: 'I would advise checking the times on the day. The 132 doesn’t run on Saturdays, and the last bus back leaves the museum at 17:41, which may be before the flying finishes.',
-  tipBtn: 'Back to getting to Duxford',
-  alt: ['On Air Show weekends', 'IWM usually runs its own free shuttle from Cambridge station and Trumpington Park and Ride. That is the easier choice on a big show day, so I would suggest using that instead.'],
-  note: 'Stops and times are from the operator’s timetable on the DfT Bus Open Data Service (Sundays and bank holidays, valid 22 October 2026 to 22 July 2027). Times can change, so treat them as a guide and check with the operator before you travel. The line is drawn along the roads between the official stops. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.'
-};
 /*DATA*/
 </script>
 <script>
 (function(){
   'use strict';
   var $ = function(id){ return document.getElementById(id); };
+  var each = function(list, fn){ Array.prototype.forEach.call(list, fn); };
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function nice(n){ return NICE[n] || n; }
-  function mins(t){ var p = t.split(':'); return +p[0] * 60 + +p[1]; }
-  function find(trip, name){ return trip.filter(function(s){ return s[1] === name; })[0]; }
+  var KEY = 1, OFF = 2, LABEL = 4;
 
   /* fixed text */
   $('backlink').href = CFG.showUrl;
+  $('backlink').target = CFG.showTarget || '_top';
   $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
   $('op').textContent = 'Run by ' + CFG.operator;
   $('bnum').textContent = CFG.num;
@@ -284,14 +268,16 @@ var CFG = {
   $('tiph').textContent = CFG.tipHead;
   $('tip').textContent = CFG.tip;
   $('tipbtn').href = CFG.showUrl;
+  $('tipbtn').target = CFG.showTarget || '_top';
   $('tipbtn').textContent = CFG.tipBtn + ' ›';
   $('note').innerHTML = CFG.note;
   $('map').setAttribute('aria-label', 'Map of the bus ' + CFG.num + ' route');
   if (CFG.alt) { $('alt').hidden = false; $('alth').textContent = CFG.alt[0]; $('altp').textContent = CFG.alt[1]; }
+  document.title = CFG.title + ' | The Big Guide to UK Airshows';
 
-  /* destination blind cycles its "via" line, like the real thing */
+  /* destination blind cycles its "via" line */
   var vi = 0;
-  $('bvia').textContent = CFG.blindVia[0];
+  $('bvia').textContent = CFG.blindVia[0] || '';
   if (!reduce && CFG.blindVia.length > 1) {
     setInterval(function(){
       var v = $('bvia'); v.style.opacity = 0;
@@ -299,17 +285,13 @@ var CFG = {
     }, 3200);
   }
 
-  /* facts */
-  var first = TRIPS.to[0];
-  var ride = mins(find(first, CFG.offStop)[0]) - mins(find(first, CFG.boardFrom)[0]);
   $('facts').innerHTML = CFG.facts.map(function(f){
-    return '<div class="fact' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><b>' + f[1].replace('{ride}', ride) + '</b></div>';
+    return '<div class="fact' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><b>' + f[1] + '</b></div>';
   }).join('');
 
-  /* roads */
   $('legs').innerHTML = CFG.legs.map(function(l){
-    var signs = l[0].map(function(r){ return '<span class="sign' + (/^M/.test(r) ? ' m' : '') + '">' + r + '</span>'; }).join('');
-    return '<li><div class="signs">' + signs + '</div><div><b>' + l[1] + '</b><p>' + l[2] + '</p></div></li>';
+    var signs = l[0].map(function(r){ return '<span class="sign' + (/^M\d/.test(r) ? ' m' : '') + '">' + r + '</span>'; }).join('');
+    return '<li><div class="signs">' + (signs || '<span class="sign">Local</span>') + '</div><div><b>' + l[1] + '</b><p>' + l[2] + '</p></div></li>';
   }).join('');
 
   /* map */
@@ -318,82 +300,99 @@ var CFG = {
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
-  var casing = L.polyline(ROUTE, { color: '#13293C', weight: 11, opacity: .18 }).addTo(map);
-  L.polyline(ROUTE, { color: '#00A6E2', weight: 5, opacity: 1 }).addTo(map);
+  map.setView(CFG.target, 11);
+  var lineLayer = L.layerGroup().addTo(map), layer = L.layerGroup().addTo(map);
+  var showPin = L.circleMarker(CFG.target, { radius: 6, color: '#D74949', weight: 2, fillColor: '#fff', fillOpacity: 1, dashArray: '3 3' })
+    .bindTooltip(CFG.targetLabel, { direction: 'top', offset: [0, -6], className: 'lbl off' }).addTo(map);
 
-  function fit(){
-    var wide = window.innerWidth > 980;
-    map.fitBounds(casing.getBounds(), { paddingTopLeft: [30, 30], paddingBottomRight: [wide ? 420 : 30, 30] });
-  }
-  fit();
+  var day = DATA.start || 0, dir = 0, idx = 0, ROUTE = [], casing = null;
   window.addEventListener('resize', function(){ map.invalidateSize(); });
 
-  var layer = L.layerGroup().addTo(map);
-  var dir = 'to', idx = 0;
+  function fit(){
+    if (!casing) return;
+    var wide = window.innerWidth > 980;
+    map.fitBounds(casing.getBounds().extend(CFG.target), { paddingTopLeft: [30, 30], paddingBottomRight: [wide ? 420 : 30, 30] });
+  }
 
-  /* direction buttons */
-  $('dir').innerHTML = Object.keys(CFG.dirs).map(function(d){
-    return '<button type="button" data-d="' + d + '" aria-pressed="' + (d === dir) + '">' + CFG.dirs[d] + '</button>';
-  }).join('');
-  Array.prototype.forEach.call($('dir').children, function(b){
-    b.addEventListener('click', function(){
-      dir = b.getAttribute('data-d'); idx = 0;
-      Array.prototype.forEach.call($('dir').children, function(x){ x.setAttribute('aria-pressed', x === b); });
-      board(); draw(); runBus();
-    });
-  });
+  /* unpack journeys: [time, stop index, flags] -> [time, name, lat, lon, flags, short name] */
+  DATA.days.forEach(function(dd){ dd.dirs.forEach(function(x){ x.trips.forEach(function(tr){
+    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3]]; });
+  }); }); });
+  function D(){ return DATA.days[day]; }
+  function DIR(){ return D().dirs[dir]; }
+
+  function segBtns(el, items, cur, onpick){
+    el.innerHTML = items.map(function(t, i){ return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === cur) + '">' + t + '</button>'; }).join('');
+    el.style.display = items.length > 1 ? '' : 'none';
+    each(el.children, function(b){ b.addEventListener('click', function(){ onpick(+b.getAttribute('data-i')); }); });
+  }
+
+  function render(){
+    segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ day = i; dir = Math.min(dir, Math.max(0, DATA.days[i].dirs.length - 1)); idx = 0; render(); runBus(); });
+    var dd = D();
+    if (!dd.dirs.length || !dd.dirs.some(function(x){ return x.trips.length; })) {
+      $('dir').style.display = 'none'; $('board').innerHTML = ''; $('bnote').textContent = '';
+      $('nobus').textContent = dd.none; $('nobus').classList.add('on'); $('stage').classList.add('off');
+      return;
+    }
+    $('nobus').classList.remove('on'); $('stage').classList.remove('off');
+    if (!DIR().trips.length) { dir = dd.dirs.findIndex(function(x){ return x.trips.length; }); idx = 0; }
+    segBtns($('dir'), dd.dirs.map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = 0; render(); runBus(); });
+    board(); drawLine(); draw();
+  }
 
   function board(){
-    $('board').innerHTML = TRIPS[dir].map(function(t, i){
-      var off = find(t, CFG.offStop);
-      var main = dir === 'to'
-        ? [t[0][0], 'At the museum ' + off[0]]
-        : [off[0], 'From the museum, in Cambridge ' + (find(t, CFG.boardFrom) || t[t.length - 1])[0]];
-      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '"><span class="t">' + main[0] + '</span><span class="a">' + main[1] + '</span></button>';
+    var d = DIR();
+    $('board').innerHTML = d.trips.map(function(t, i){
+      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '"><span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
     }).join('');
-    Array.prototype.forEach.call($('board').children, function(b){
-      b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); });
-    });
+    $('bnote').textContent = d.note || '';
+    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); }); });
+  }
+
+  function drawLine(){
+    lineLayer.clearLayers();
+    ROUTE = DATA.lines[DIR().li] || [];
+    casing = L.polyline(ROUTE, { color: '#13293C', weight: 11, opacity: .18 }).addTo(lineLayer);
+    L.polyline(ROUTE, { color: '#00A6E2', weight: 5, opacity: 1 }).addTo(lineLayer);
+    fit(); measure();
   }
 
   function draw(){
     layer.clearLayers();
-    var trip = TRIPS[dir][idx], ol = $('stops'), marks = [];
-    var off = find(trip, CFG.offStop);
-    $('ptitle').textContent = dir === 'to' ? 'The ' + trip[0][0] + ' to the museum' : 'The ' + off[0] + ' back to Cambridge';
-    $('psub').textContent = trip.length + ' stops, ' + trip[0][0] + ' to ' + trip[trip.length - 1][0];
+    var trip = DIR().trips[idx], s = trip.s, ol = $('stops');
+    $('ptitle').textContent = trip.title;
+    $('psub').textContent = s.length + ' stops, ' + s[0][0] + ' to ' + s[s.length - 1][0];
     ol.innerHTML = '';
-
     var group = null, gid = 0;
-    trip.forEach(function(s, i){
-      var isOff = s[1] === CFG.offStop, key = !!KEY[s[1]] || i === 0 || i === trip.length - 1;
-      var m = L.circleMarker([s[2], s[3]], {
-        radius: isOff ? 10 : (key ? 7 : 4), color: isOff ? '#D74949' : '#13293C', weight: key ? 3 : 2,
+    s.forEach(function(p, i){
+      var isOff = p[4] & OFF, key = (p[4] & KEY) || isOff || i === 0 || i === s.length - 1;
+      var m = L.circleMarker([p[2], p[3]], {
+        radius: isOff ? 10 : (key ? 6 : 4), color: isOff ? '#D74949' : '#13293C', weight: key ? 3 : 2,
         fillColor: isOff ? '#D74949' : '#FFFFFF', fillOpacity: 1
       }).addTo(layer);
-      m.bindPopup('<b>' + nice(s[1]) + '</b><br>' + s[0] + (isOff ? '<br>Get off here for the museum' : ''));
-      var small = window.innerWidth < 560 && !isOff && i !== 0 && i !== trip.length - 1;
-      if (KEY[s[1]] && !small) m.bindTooltip(KEY[s[1]], { permanent: true, direction: 'right', offset: [10, 0], className: 'lbl' + (isOff ? ' off' : '') });
-      marks.push(m);
+      m.bindPopup('<b>' + p[1] + '</b><br>' + p[0] + (isOff ? '<br>' + CFG.offTag : ''));
+      var small = window.innerWidth < 560 && !isOff && i !== 0 && i !== s.length - 1;
+      if ((p[4] & LABEL || isOff) && !small) m.bindTooltip(p[5] || p[1], { permanent: true, direction: 'right', offset: [10, 0], className: 'lbl' + (isOff ? ' off' : '') });
 
       if (!key) {
         if (!group) {
           group = { id: 'g' + (gid++), items: [] };
           var fl = document.createElement('li'); fl.className = 'fold';
           fl.innerHTML = '<button type="button" aria-expanded="false"></button>';
-          fl.dataset.g = group.id; ol.appendChild(fl); group.fold = fl;
+          ol.appendChild(fl); group.fold = fl;
         }
-        group.items.push(s);
+        group.items.push(p);
       } else { closeGroup(); }
 
       var li = document.createElement('li');
       li.className = 'stop' + (key ? ' key' : ' minor') + (isOff ? ' off' : '');
       if (!key) li.dataset.g = group.id;
-      li.innerHTML = '<span>' + nice(s[1]) + (isOff ? '<span class="tag">Get off here for the museum</span>' : '') + '</span><time>' + s[0] + '</time>';
+      li.innerHTML = '<span>' + p[1] + (isOff ? '<span class="tag">' + CFG.offTag + '</span>' : '') + '</span><time>' + p[0] + '</time>';
       li.addEventListener('click', function(){
-        Array.prototype.forEach.call(ol.querySelectorAll('.active'), function(x){ x.classList.remove('active'); });
+        each(ol.querySelectorAll('.active'), function(x){ x.classList.remove('active'); });
         li.classList.add('active');
-        map.setView([s[2], s[3]], 15, { animate: !reduce }); m.openPopup();
+        map.setView([p[2], p[3]], 15, { animate: !reduce }); m.openPopup();
       });
       ol.appendChild(li);
     });
@@ -402,24 +401,26 @@ var CFG = {
     function closeGroup(){
       if (!group) return;
       var g = group, n = g.items.length, btn = g.fold.firstChild;
-      var label = n === 1 ? nice(g.items[0][1]) + ', 1 smaller stop' : nice(g.items[0][1]) + ' and ' + (n - 1) + ' more stops';
+      var label = n === 1 ? g.items[0][1] : g.items[0][1] + ' and ' + (n - 1) + ' more stops';
       btn.textContent = label;
       btn.addEventListener('click', function(){
         var open = btn.getAttribute('aria-expanded') !== 'true';
         btn.setAttribute('aria-expanded', open);
         btn.textContent = open ? 'Hide the smaller stops' : label;
-        Array.prototype.forEach.call(ol.querySelectorAll('li.minor[data-g="' + g.id + '"]'), function(x){ x.classList.toggle('open', open); });
+        each(ol.querySelectorAll('li.minor[data-g="' + g.id + '"]'), function(x){ x.classList.toggle('open', open); });
       });
       group = null;
     }
   }
 
   /* a small bus runs the route once, then fades */
-  var bus = null, raf = 0;
+  var bus = null, raf = 0, cum = [0];
   var busIcon = L.divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 15],
     html: '<div class="busdot"><svg viewBox="0 0 16 16" fill="#13293C"><rect x="2" y="1.5" width="12" height="11" rx="2"/><rect x="3.5" y="3" width="9" height="4" rx=".6" fill="#F2B233"/><circle cx="5" cy="10" r="1" fill="#F2B233"/><circle cx="11" cy="10" r="1" fill="#F2B233"/><rect x="3" y="12.5" width="2.4" height="2" rx=".5"/><rect x="10.6" y="12.5" width="2.4" height="2" rx=".5"/></svg></div>' });
-  var cum = [0];
-  for (var k = 1; k < ROUTE.length; k++) cum.push(cum[k - 1] + map.distance(ROUTE[k - 1], ROUTE[k]));
+  function measure(){
+    cum = [0];
+    for (var k = 1; k < ROUTE.length; k++) cum.push(cum[k - 1] + map.distance(ROUTE[k - 1], ROUTE[k]));
+  }
   function at(d){
     var lo = 0, hi = cum.length - 1;
     while (lo < hi - 1) { var mid = (lo + hi) >> 1; if (cum[mid] < d) lo = mid; else hi = mid; }
@@ -427,35 +428,132 @@ var CFG = {
     return [ROUTE[lo][0] + (ROUTE[hi][0] - ROUTE[lo][0]) * f, ROUTE[lo][1] + (ROUTE[hi][1] - ROUTE[lo][1]) * f];
   }
   function runBus(){
-    if (reduce) return;
+    if (reduce || ROUTE.length < 2) return;
     cancelAnimationFrame(raf);
-    if (bus) map.removeLayer(bus);
+    if (bus) { map.removeLayer(bus); bus = null; }
     var total = cum[cum.length - 1], start = null, dur = 7000;
-    bus = L.marker(at(dir === 'to' ? 0 : total), { icon: busIcon, interactive: false, keyboard: false }).addTo(map);
+    bus = L.marker(ROUTE[0], { icon: busIcon, interactive: false, keyboard: false }).addTo(map);
     function step(ts){
+      if (!bus) return;
       if (!start) start = ts;
       var p = Math.min((ts - start) / dur, 1), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-      bus.setLatLng(at((dir === 'to' ? e : 1 - e) * total));
+      bus.setLatLng(at(e * total));
       if (p < 1) raf = requestAnimationFrame(step);
       else { var el = bus.getElement(); if (el) el.firstChild.style.opacity = 0; var b = bus; setTimeout(function(){ map.removeLayer(b); }, 700); bus = null; }
     }
     raf = requestAnimationFrame(step);
   }
 
-  board(); draw();
+  render();
 
-  /* reveal on scroll, and start the bus when the map is in view */
   var started = false;
   var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
     es.forEach(function(e){
       if (!e.isIntersecting) return;
       e.target.classList.add('in'); io.unobserve(e.target);
-      if (!started && e.target.classList.contains('stage')) { started = true; setTimeout(runBus, 500); }
+      if (!started && e.target.id === 'stage') { started = true; setTimeout(runBus, 500); }
     });
   }, { threshold: .15 }) : null;
-  Array.prototype.forEach.call(document.querySelectorAll('.rise'), function(el){ io ? io.observe(el) : el.classList.add('in'); });
+  each(document.querySelectorAll('.rise'), function(el){ io ? io.observe(el) : el.classList.add('in'); });
   if (!io) runBus();
 })();
 </script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
 </body>
 </html>

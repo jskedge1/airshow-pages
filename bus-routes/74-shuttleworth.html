@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bus 74, Bedford to Hitchin | The Big Guide to UK Airshows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --navy:#13293C;--navy-2:#1C3850;--navy-3:#0C1C2A;
+  --sky:#00A6E2;--sky-ink:#006F99;--teal:#32B4AF;--teal-ink:#0E5F5B;
+  --red:#D74949;--amber:#F2B233;--line:#C6C6C6;--mist:#EEF2F5;--paper:#FFFFFF;--ink:#0B0B0B;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:17px;line-height:27px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* top strip */
+.strip{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 0;font-weight:500;font-size:15px}
+.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy);padding:6px 0;border-bottom:2px solid transparent;transition:border-color .3s var(--ease)}
+.back:hover{border-color:var(--sky)}
+.back svg{width:16px;height:16px}
+.op{color:#3d4a55}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 48px;align-items:end;padding:26px 0 0}
+.blind{position:relative;background:var(--navy-3);border-radius:14px 14px 14px 0;padding:22px 26px 24px;display:flex;align-items:center;gap:22px;overflow:hidden;box-shadow:0 18px 40px -22px rgba(12,28,42,.7)}
+.blind::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.55) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
+.blind .num{font:800 92px/0.9 "Barlow Condensed",sans-serif;color:var(--amber);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
+.blind .dest{font:700 34px/1 "Barlow Condensed",sans-serif;color:var(--amber);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3)}
+.blind .via{display:block;margin-top:8px;font:600 18px/1.2 "Barlow Condensed",sans-serif;color:#f7d68f;letter-spacing:.03em;text-transform:uppercase;opacity:.85;transition:opacity .4s var(--ease)}
+.intro h1{font:800 46px/46px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;letter-spacing:-.005em}
+.intro p{margin-top:12px;font-size:18px;line-height:29px;color:#1d2730;max-width:520px}
+
+/* facts */
+.facts{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.2fr;margin:34px 0 0;border-top:3px solid var(--navy)}
+.fact{padding:14px 18px 16px 0;border-right:1px solid var(--line)}
+.fact+.fact{padding-left:18px}
+.fact:last-child{border-right:0}
+.fact span{display:block;font-weight:500;font-size:15px;line-height:20px;color:var(--navy)}
+.fact b{display:block;margin-top:4px;font:700 25px/28px "Barlow Condensed",sans-serif;color:var(--navy)}
+.fact.hl b{color:var(--red)}
+
+/* planner */
+.planner{margin-top:38px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px 28px;align-items:start}
+.planner h2,.sec h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;grid-column:1/-1}
+.seg{display:inline-flex;background:var(--mist);border-radius:12px;padding:5px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:10px 16px;font-weight:600;font-size:16px;color:var(--navy);transition:background .3s var(--ease),color .3s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.board{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.board::-webkit-scrollbar{display:none}
+.dep{flex:0 0 auto;min-width:150px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px 11px;transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
+.dep:hover{border-color:var(--navy);transform:translateY(-2px)}
+.dep .t{font:700 28px/30px "Barlow Condensed",sans-serif;color:var(--navy);font-variant-numeric:tabular-nums}
+.dep .a{display:block;font-weight:500;font-size:14px;line-height:19px;color:#3d4a55}
+.dep[aria-pressed="true"]{background:var(--navy);border-color:var(--navy)}
+.dep[aria-pressed="true"] .t{color:var(--amber)}
+.dep[aria-pressed="true"] .a{color:#dfe7ee}
+
+/* map stage */
+.stage{position:relative;margin-top:20px}
+.mapbox{position:relative}
+#map{height:640px;border-radius:16px;z-index:0;background:#dfe6ea}
+#map .leaflet-tile-pane{filter:saturate(.55) contrast(.95) brightness(1.04)}
+.leg{position:absolute;left:16px;bottom:16px;z-index:5;background:#fff;border-radius:10px;padding:8px 12px;display:flex;gap:14px;font-weight:500;font-size:14px;line-height:18px;box-shadow:0 6px 18px -8px rgba(12,28,42,.45)}
+.leg i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:2px solid var(--navy);background:#fff}
+.leg i.r{background:var(--red);border-color:var(--red)}
+.leg i.l{width:22px;height:5px;border:0;border-radius:3px;background:var(--sky)}
+.panel{position:absolute;top:18px;right:18px;max-height:calc(100% - 36px);width:372px;z-index:5;background:#fff;border-radius:14px;box-shadow:0 22px 44px -20px rgba(12,28,42,.55);display:flex;flex-direction:column;overflow:hidden}
+.panel header{background:var(--navy);color:#fff;padding:14px 18px 13px}
+.panel header b{display:block;font:700 22px/24px "Barlow Condensed",sans-serif;text-transform:uppercase}
+.panel header span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
+.stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px}
+.stops::-webkit-scrollbar{display:none}
+.stops li{position:relative;padding:5px 0 5px 28px;display:flex;justify-content:space-between;gap:12px;font-size:15px;line-height:21px}
+.stops li::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:3px;background:var(--sky)}
+.stops li:first-child::before{top:14px}
+.stops li:last-child::before{bottom:calc(100% - 14px)}
+.stops li::after{content:"";position:absolute;left:2px;top:10px;width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid var(--sky)}
+.stops li.key{font-weight:700;color:var(--navy);padding-top:8px;padding-bottom:8px}
+.stops li.key::after{top:12px;left:0;width:15px;height:15px;border:3px solid var(--navy)}
+.stops li.off{color:var(--red)}
+.stops li.off::after{background:var(--red);border-color:var(--red)}
+.stops li.off .tag{display:block;font-weight:500;font-size:13px;line-height:17px;color:var(--red)}
+.stops li.stop{cursor:pointer}
+.stops li.stop:hover span:first-child,.stops li.active span:first-child{text-decoration:underline;text-decoration-color:var(--sky);text-underline-offset:3px}
+.stops li.minor{display:none;color:#2c3944}
+.stops li.minor.open{display:flex}
+.stops time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--sky-ink);white-space:nowrap}
+.stops li.key time{color:var(--navy)}
+.stops li.off time{color:var(--red)}
+.stops li.fold{padding-top:2px;padding-bottom:2px}
+.stops li.fold::after{display:none}
+.stops li.fold::before{background:repeating-linear-gradient(var(--sky) 0 4px,transparent 4px 8px)}
+.stops li.fold button{border:0;background:none;padding:2px 0;font-weight:600;font-size:14px;color:var(--sky-ink);text-align:left}
+.stops li.fold button:hover{color:var(--navy)}
+
+/* map bits */
+.lbl{background:var(--navy);color:#fff;border:0;border-radius:6px;font:600 13px "Barlow",sans-serif;padding:3px 8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
+.lbl.off{background:var(--red)}
+.lbl::before{display:none}
+.busdot{width:30px;height:30px;border-radius:50%;background:var(--amber);border:3px solid var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
+.busdot svg{width:15px;height:15px}
+.leaflet-popup-content{font:500 15px/21px "Barlow",sans-serif;margin:10px 14px}
+.leaflet-popup-content b{color:var(--navy)}
+
+/* roads */
+.sec{margin-top:56px}
+.journey{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:34px;align-items:start;margin-top:18px}
+.legs{list-style:none;counter-reset:none}
+.legs li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.legs li:last-child{border-bottom:1px solid var(--line)}
+.signs{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.sign{display:inline-block;font:700 16px/1 "Barlow",sans-serif;padding:5px 7px 4px;border-radius:4px;border:2px solid #111;background:#fff;color:#111;letter-spacing:.01em}
+.sign.m{background:#1D5FAD;border-color:#fff;color:#fff;box-shadow:0 0 0 1px #1D5FAD}
+.legs b{display:block;font:700 21px/24px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
+.legs p{margin-top:3px;font-size:16px;line-height:25px;color:#1d2730}
+.side{position:relative;top:-64px}
+.advice{background:var(--navy);color:#fff;border-radius:16px 16px 16px 0;padding:24px 24px 22px}
+.advice h3{font:700 24px/26px "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--amber)}
+.advice p{margin-top:10px;font-size:16px;line-height:25px;color:#e6edf3}
+.advice a.btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--amber);color:var(--navy);text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:10px;transition:transform .3s var(--ease),background .3s var(--ease)}
+.advice a.btn:hover{transform:translateX(3px);background:#f6c35a}
+.alt{margin-top:14px;border:2px solid var(--teal);border-radius:14px;padding:16px 18px}
+.alt b{display:block;font:700 20px/22px "Barlow Condensed",sans-serif;color:var(--teal-ink);text-transform:uppercase}
+.alt p{margin-top:6px;font-size:15px;line-height:23px}
+
+.note{margin:44px 0 40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;line-height:21px;color:#3d4a55;max-width:820px}
+.note a{color:var(--sky-ink)}
+
+.rise{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rise.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none;transition:none}.dep,.advice a.btn{transition:none}}
+
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;gap:22px}
+  .facts{grid-template-columns:1fr 1fr}
+  .fact:nth-child(2){border-right:0}
+  .fact:nth-child(3){padding-left:0}
+  .fact:nth-child(n+3){border-top:1px solid var(--line)}
+  .planner{grid-template-columns:1fr}
+  #map{height:460px}
+  .panel{position:static;width:auto;margin-top:14px;box-shadow:none;border:1px solid var(--line)}
+  .stops{max-height:none}
+  .journey{grid-template-columns:1fr}
+  .side{top:0}
+}
+@media(max-width:560px){
+  .wrap{padding:0 16px}
+  .strip{flex-direction:column;align-items:flex-start;gap:0;font-size:14px}
+  .op{padding-left:24px;margin-top:-4px}
+  .blind{padding:16px 18px;gap:14px}
+  .blind .num{font-size:64px}
+  .blind .dest{font-size:26px}
+  .blind .via{font-size:15px}
+  .intro h1{font-size:34px;line-height:36px}
+  .intro p{font-size:17px;line-height:27px}
+  .fact{padding-right:10px}
+  .fact+.fact{padding-left:10px}
+  .fact:nth-child(3){padding-left:0}
+  .fact b{font-size:21px;line-height:24px}
+  #map{height:360px;border-radius:12px}
+  .leg{left:auto;right:8px;bottom:auto;top:8px;gap:8px;font-size:12px;padding:6px 8px}
+  .legs li{grid-template-columns:1fr;gap:8px}
+  .seg{display:flex}
+  .seg button{flex:1;padding:10px 8px;font-size:15px}
+  .dep{min-width:128px}
+}
+
+.pickrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.nobus{display:none;margin-top:14px;background:var(--mist);border-left:5px solid var(--red);border-radius:0 12px 12px 0;padding:14px 18px;font-size:16px;line-height:25px}
+.nobus.on{display:block}
+.boardnote{grid-column:1/-1;font-size:15px;line-height:22px;color:#3d4a55;margin-top:-6px}
+.stage.off{opacity:.45;pointer-events:none}
+
+.seg button{white-space:nowrap}
+.dep{max-width:300px}
+.board{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);padding-right:40px}
+.dep .a{white-space:normal}
+@media(max-width:560px){.pickrow{display:grid;grid-template-columns:1fr;width:100%}.pickrow .seg{width:100%}.dep{max-width:76vw}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="strip">
+    <a class="back" id="backlink" href="#" target="_top"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg><span></span></a>
+    <span class="op" id="op"></span>
+  </nav>
+
+  <header class="hero">
+    <div class="blind rise" aria-hidden="true">
+      <div class="num" id="bnum"></div>
+      <div><div class="dest" id="bdest"></div><span class="via" id="bvia"></span></div>
+    </div>
+    <div class="intro rise">
+      <h1 id="title"></h1>
+      <p id="lead"></p>
+    </div>
+  </header>
+
+  <div class="facts rise" id="facts"></div>
+
+  <section class="planner rise" aria-labelledby="ph">
+    <h2 id="ph">Pick your bus</h2>
+    <div class="pickrow">
+      <div class="seg" id="day" role="group" aria-label="Day"></div>
+      <div class="seg" id="dir" role="group" aria-label="Direction"></div>
+    </div>
+    <div class="board" id="board" role="group" aria-label="Departure times"></div>
+    <p class="boardnote" id="bnote"></p>
+  </section>
+  <p class="nobus" id="nobus"></p>
+
+  <div class="stage rise" id="stage">
+    <div class="mapbox">
+      <div id="map" role="img"></div>
+      <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
+    </div>
+    <aside class="panel" aria-live="polite">
+      <header><b id="ptitle"></b><span id="psub"></span></header>
+      <ol class="stops" id="stops"></ol>
+    </aside>
+  </div>
+
+  <section class="sec rise" aria-labelledby="rh">
+    <h2 id="rh">The roads it takes</h2>
+    <div class="journey">
+      <ol class="legs" id="legs"></ol>
+      <div class="side">
+        <div class="advice"><h3 id="tiph"></h3><p id="tip"></p><a class="btn" id="tipbtn" href="#" target="_top"></a></div>
+        <div class="alt" id="alt" hidden><b id="alth"></b><p id="altp"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="note" id="note"></p>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var CFG={"num": "74", "operator": "Grant Palmer", "showName": "Shuttleworth Air Shows", "showUrl": "https://www.ukairshowguide.co.uk/shuttleworthairshows", "title": "Bus 74, Bedford to Hitchin", "blindDest": "Old Warden", "blindVia": ["via Northill", "via Upper Caldecote", "via Holme Mills"], "lead": "The 74 runs between Bedford and Hitchin. For the Shuttleworth Air Shows, the closest stop is Upper Caldecote, G&M Growers, about 25 minutes from Old Warden Aerodrome. Pick a day and a time below and the map shows every stop.", "facts": [["Runs on", "Saturdays only"], ["How often", "About hourly"], ["Get off at", "Upper Caldecote, G&M Growers", "hl"], ["Then walk", "About 25 minutes"]], "legs": [[["A603", "A600"], "Bedford Bus Station to Northill", "Mostly along Northill Road, Cardington Road and Bedford Road, about 9 miles."], [[], "Northill to Upper Caldecote", "Mostly along Ickwell Road, Caldecote Road and Hitchin Road, about 2 miles."], [["B659", "B658", "A6001"], "Upper Caldecote to Holme Mills", "Mostly along Hill Lane, Langford Road and Shortmead Street, about 5 miles."], [["B659"], "Holme Mills to Henlow", "Mostly along Langford Road, Church Street and Station Road, about 4 miles."], [["A600", "B659", "A505"], "Henlow to Hitchin Bancroft", "Mostly along Bedford Road and Hitchin Road, about 6 miles."]], "tipHead": "Before you travel", "tip": "In the current timetable the 74 doesn’t run on Sundays. There’s no bus to the aerodrome itself, and the nearest stops are a fair walk away. I would use the shuttle bus from Biggleswade station instead if you can.", "tipBtn": "Back to getting to Old Warden", "alt": null, "target": [52.08544, -0.31984], "targetLabel": "Old Warden Aerodrome", "offTag": "Closest stop to the show", "note": "Stops and times are from the current timetable, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with Grant Palmer before you travel. The line is drawn along the roads between the stops, so treat it as a guide."};
+var DATA={"stops":[["Biggleswade Bus Station (Stop B)",52.08648,-0.26496,"Biggleswade Bus Station"],["Biggleswade, Ivel Gardens",52.08772,-0.26681,"Biggleswade, Ivel Gardens"],["Biggleswade, Ivel Bury",52.0913,-0.26791,"Biggleswade, Ivel Bury"],["Biggleswade, Sainsbury's",52.09252,-0.27161,"Biggleswade, Sainsbury's"],["Upper Caldecote, G&M Growers",52.09263,-0.29965,"Upper Caldecote, G&M Growers"],["Upper Caldecote, Swallowfield",52.09948,-0.28536,"Upper Caldecote, Swallowfield"],["Upper Caldecote, The Pastures",52.09946,-0.29095,"Upper Caldecote, The Pastures"],["Ickwell Green",52.09684,-0.32207,"Ickwell Green"],["Ickwell, The Stables",52.10024,-0.32281,"Ickwell, The Stables"],["Northill, Cookes Meadow",52.10251,-0.32258,"Northill, Cookes Meadow"],["Northill St Mary's Church (N-bound)",52.10533,-0.32316,"Northill St Mary's Church"],["Northill Lower School",52.1056,-0.3244,"Northill Lower School"],["Cople, All Saints Church",52.12322,-0.38932,"Cople, All Saints Church"],["Cople, Grange Farm",52.12323,-0.39371,"Cople, Grange Farm"],["Cardington, Chapel Lane",52.12064,-0.40488,"Cardington, Chapel Lane"],["Cardington, Cottage Farm Nursery",52.11879,-0.40944,"Cardington, Cottage Farm"],["Cardington, The Kings Arms",52.11746,-0.41319,"Cardington, The Kings Arms"],["Cardington, St Marys Church",52.1182,-0.4148,"Cardington, St Marys Church"],["Cardington, The Vicarage",52.11962,-0.41635,"Cardington, The Vicarage"],["Eastcotts, Priory Business Park",52.12452,-0.4231,"Eastcotts, Priory Business"],["The Fenlake Anchor",52.12496,-0.44176,"The Fenlake Anchor"],["Fenlake, Tesco Cardington",52.12874,-0.45286,"Fenlake, Tesco Cardington"],["Bedford, St Johns Centre",52.13054,-0.46283,"Bedford, St Johns Centre"],["Cauldwell, Kingsway Link",52.13074,-0.46601,"Cauldwell, Kingsway Link"],["Cauldwell, Bedford College",52.1327,-0.46654,"Cauldwell, Bedford College"],["Bedford St Paul's Square (south side)",52.13519,-0.46789,"Bedford St Paul's Square"],["Bedford Bus Station (Stand B)",52.13731,-0.47115,"Bedford Bus Station"],["Hitchin Bancroft (Stop E)",51.94949,-0.27754,"Hitchin Bancroft"],["Hitchin, Bunyan Road",51.95315,-0.27546,"Hitchin, Bunyan Road"],["Hitchin, Football Club",51.95364,-0.28377,"Hitchin, Football Club"],["Hitchin, Fishponds Road",51.9551,-0.28533,"Hitchin, Fishponds Road"],["Westmill Estate, Angel's Reply PH",51.9576,-0.28612,"Westmill Estate, Angel's"],["Westmill Estate, Wellingham Avenue",51.96032,-0.28647,"Westmill Estate, Wellingham"],["Westmill Estate, Burford Way",51.96405,-0.28618,"Westmill Estate, Burford Way"],["Ickleford, Ryder Avenue",51.96795,-0.28734,"Ickleford, Ryder Avenue"],["Holwell Turn",51.986,-0.29044,"Holwell Turn"],["Holwell, Ramerick Cottages",51.99881,-0.29815,"Holwell, Ramerick Cottages"],["Henlow Camp, Three Star Park",52.00332,-0.302,"Henlow Camp, Three Star Park"],["Henlow Camp, Borton Avenue",52.00851,-0.3024,"Henlow Camp, Borton Avenue"],["Henlow Camp, Oldfield Farm Road",52.00984,-0.29982,"Henlow Camp, Oldfield Farm"],["Henlow, The Crown, North",52.02807,-0.28607,"Henlow, The Crown, North"],["Henlow, Park Lane",52.03068,-0.28594,"Henlow, Park Lane"],["Henlow, War Memorial",52.03189,-0.28583,"Henlow, War Memorial"],["Henlow, The Five Bells",52.03427,-0.28635,"Henlow, The Five Bells"],["Henlow Newtown (N-bound)",52.03817,-0.28558,"Henlow Newtown (N-bound)"],["Henlow Langford Road (107)",52.04214,-0.2847,"Henlow Langford Road (107)"],["Langford, Riverside Gardens",52.04726,-0.27575,"Langford, Riverside Gardens"],["Langford, Common Road",52.04732,-0.27317,"Langford, Common Road"],["Langford, Southland Rise",52.0472,-0.27059,"Langford, Southland Rise"],["Langford, Flexmore Way",52.04845,-0.26691,"Langford, Flexmore Way"],["Langford, Bentley Close",52.05002,-0.26768,"Langford, Bentley Close"],["Langford, Jubilee Lane",52.0516,-0.2685,"Langford, Jubilee Lane"],["Langford, Windsor Way",52.05238,-0.26943,"Langford, Windsor Way"],["Langford, Prospect Road",52.05412,-0.27113,"Langford, Prospect Road"],["Langford, Pound Close",52.05575,-0.27232,"Langford, Pound Close"],["Langford Village Academy",52.05854,-0.27129,"Langford Village Academy"],["Langford, East Road",52.0617,-0.27058,"Langford, East Road"],["Holme Mills, Langford Road Farm",52.06662,-0.26981,"Holme Mills, Langford Road"],["Holme Mills, Greenacres",52.06734,-0.26968,"Holme Mills, Greenacres"],["Bedford St Paul's Square (Stop P2)",52.13584,-0.46728,"Bedford St Paul's Square"],["Bedford St John's Street (S-bound)",52.13188,-0.4653,"Bedford St John's Street"],["Bedford, St Johns Centre",52.13088,-0.4597,"Bedford, St Johns Centre"],["Fenlake, Tesco Cardington",52.12862,-0.45169,"Fenlake, Tesco Cardington"],["Fenlake, Cardington Road",52.12744,-0.44791,"Fenlake, Cardington Road"],["Eastcotts, Priory Business Park",52.12473,-0.42162,"Eastcotts, Priory Business"],["Cardington, The Vicarage",52.11953,-0.41605,"Cardington, The Vicarage"],["Cardington, St Marys Church",52.11818,-0.41456,"Cardington, St Marys Church"],["Cardington, The Kings Arms",52.11752,-0.41301,"Cardington, The Kings Arms"],["Cardington, Cottage Farm Nursery",52.11927,-0.40861,"Cardington, Cottage Farm"],["Cardington, Chapel Lane",52.12076,-0.40484,"Cardington, Chapel Lane"],["Cople, Grange Farm",52.12331,-0.39431,"Cople, Grange Farm"],["Cople, All Saints Church",52.12339,-0.38954,"Cople, All Saints Church"],["Northill Lower School",52.10568,-0.32433,"Northill Lower School"],["Northill, St Mary's Church",52.10534,-0.32301,"Northill, St Mary's Church"],["Northill, Cookes Meadow",52.10227,-0.3224,"Northill, Cookes Meadow"],["Ickwell, The Stables",52.10023,-0.32268,"Ickwell, The Stables"],["Ickwell Green",52.0971,-0.32151,"Ickwell Green"],["Upper Caldecote, Post Office",52.09857,-0.29988,"Upper Caldecote, Post Office"],["Upper Caldecote, The Green",52.09637,-0.3,"Upper Caldecote, The Green"],["Biggleswade, Sainsbury's",52.09248,-0.27253,"Biggleswade, Sainsbury's"],["Biggleswade, Ivel Bury",52.09125,-0.26778,"Biggleswade, Ivel Bury"],["Biggleswade, Ivel Gardens",52.08798,-0.26677,"Biggleswade, Ivel Gardens"],["Holme Mills, Greenacres",52.0674,-0.26955,"Holme Mills, Greenacres"],["Holme Mills, Langford Road Farm",52.06658,-0.26971,"Holme Mills, Langford Road"],["Langford Ivel Cottages (S-bound)",52.06365,-0.27026,"Langford Ivel Cottages"],["Langford, East Road",52.06018,-0.27028,"Langford, East Road"],["Langford, Pound Close",52.05667,-0.27192,"Langford, Pound Close"],["Langford, Prospect Road",52.05419,-0.27106,"Langford, Prospect Road"],["Langford, Windsor Way",52.05289,-0.26976,"Langford, Windsor Way"],["Langford, Jubilee Lane",52.05153,-0.26831,"Langford, Jubilee Lane"],["Langford, Bentley Close",52.05035,-0.2677,"Langford, Bentley Close"],["Langford, Flexmore Way",52.04832,-0.26673,"Langford, Flexmore Way"],["Langford, Southland Rise",52.04715,-0.27085,"Langford, Southland Rise"],["Langford, Common Road",52.04722,-0.27368,"Langford, Common Road"],["Langford, Riverside Gardens",52.04722,-0.27507,"Langford, Riverside Gardens"],["Henlow Langford Road (111)",52.04223,-0.28455,"Henlow Langford Road (111)"],["Henlow Newtown (S-bound)",52.03731,-0.28557,"Henlow Newtown (S-bound)"],["Henlow, The Five Bells",52.03425,-0.28621,"Henlow, The Five Bells"],["Henlow, War Memorial",52.03167,-0.28574,"Henlow, War Memorial"],["Henlow, Park Lane",52.03019,-0.28578,"Henlow, Park Lane"],["Henlow, The Crown, North",52.02824,-0.2858,"Henlow, The Crown, North"],["Henlow Camp, Oldfield Farm Road",52.00959,-0.29968,"Henlow Camp, Oldfield Farm"],["Henlow Camp, Borton Avenue",52.00835,-0.30261,"Henlow Camp, Borton Avenue"],["Henlow Camp Bird In Hand (SE-bound)",52.00725,-0.30413,"Henlow Camp Bird In Hand"],["Henlow Camp, Three Star Park",52.00428,-0.30229,"Henlow Camp, Three Star Park"],["Holwell, Ramerick Cottages",51.99886,-0.298,"Holwell, Ramerick Cottages"],["Holwell Turn",51.98556,-0.29012,"Holwell Turn"],["Ickleford, Burford Grange",51.96652,-0.28673,"Ickleford, Burford Grange"],["Westmill Estate, Burford Way",51.963,-0.2857,"Westmill Estate, Burford Way"],["Westmill Estate, Wellingham Avenue",51.96025,-0.28625,"Westmill Estate, Wellingham"],["Westmill Estate, Angel's Reply PH",51.95808,-0.28603,"Westmill Estate, Angel's"],["Hitchin, Fishponds Road",51.95464,-0.28501,"Hitchin, Fishponds Road"],["Hitchin, Waitrose",51.9507,-0.2825,"Hitchin, Waitrose"],["Hitchin, Grammar School Walk",51.94981,-0.28042,"Hitchin, Grammar School Walk"]],"lines":[[[52.13692,-0.47131],[52.13681,-0.472],[52.13715,-0.47218],[52.13735,-0.47266],[52.13747,-0.4728],[52.13763,-0.47274],[52.13781,-0.47249],[52.13805,-0.4723],[52.13834,-0.47226],[52.13898,-0.47191],[52.13868,-0.47063],[52.13864,-0.46862],[52.14007,-0.4686],[52.14003,-0.4683],[52.13981,-0.46768],[52.13957,-0.46724],[52.13936,-0.46704],[52.13907,-0.4669],[52.13864,-0.46682],[52.13691,-0.46672],[52.13582,-0.46631],[52.13547,-0.46626],[52.13527,-0.46632],[52.13518,-0.46651],[52.13523,-0.46778],[52.13528,-0.46791],[52.13552,-0.4681],[52.13558,-0.46823],[52.13536,-0.4692],[52.13542,-0.46925],[52.13574,-0.468],[52.13585,-0.46653],[52.13582,-0.46631],[52.1349,-0.4662],[52.13375,-0.46619],[52.13324,-0.46602],[52.13252,-0.46565],[52.13126,-0.4652],[52.1307,-0.46492],[52.13059,-0.4647],[52.13058,-0.46304],[52.13081,-0.45968],[52.13094,-0.45876],[52.13105,-0.45853],[52.1314,-0.45829],[52.13145,-0.45815],[52.13142,-0.45787],[52.13134,-0.45776],[52.13113,-0.45766],[52.13101,-0.45749],[52.13047,-0.45608],[52.12983,-0.45492],[52.12913,-0.45336],[52.12878,-0.4524],[52.12847,-0.45129],[52.12846,-0.45085],[52.12865,-0.45044],[52.12859,-0.45019],[52.12822,-0.45004],[52.12792,-0.44957],[52.127,-0.44687],[52.12581,-0.44479],[52.12528,-0.44332],[52.12502,-0.44206],[52.12495,-0.44137],[52.12495,-0.4401],[52.1248,-0.43758],[52.12478,-0.43632],[52.12492,-0.43351],[52.12491,-0.43196],[52.12466,-0.42863],[52.12449,-0.42741],[52.12459,-0.42734],[52.12468,-0.42703],[52.12458,-0.42675],[52.12442,-0.42668],[52.12439,-0.42627],[52.12438,-0.42528],[52.12464,-0.42233],[52.12459,-0.42097],[52.12482,-0.42033],[52.12473,-0.41986],[52.12422,-0.41891],[52.12401,-0.41889],[52.12363,-0.41909],[52.12337,-0.4191],[52.12205,-0.41808],[52.12104,-0.41751],[52.1203,-0.41693],[52.11817,-0.41468],[52.11773,-0.41379],[52.11734,-0.41268],[52.11961,-0.40775],[52.12056,-0.40538],[52.12097,-0.40395],[52.12149,-0.40144],[52.12176,-0.40043],[52.12236,-0.39736],[52.12324,-0.39499],[52.12329,-0.39099],[52.12337,-0.38924],[52.12255,-0.38894],[52.12164,-0.38826],[52.12078,-0.3872],[52.11976,-0.38568],[52.11704,-0.37905],[52.11357,-0.37153],[52.11266,-0.36973],[52.11241,-0.36895],[52.11149,-0.36732],[52.11134,-0.36668],[52.11139,-0.36592],[52.11049,-0.3637],[52.11007,-0.36301],[52.10927,-0.36196],[52.10898,-0.3613],[52.10873,-0.3605],[52.10845,-0.35913],[52.10812,-0.3565],[52.10745,-0.35561],[52.10708,-0.35493],[52.10641,-0.35332],[52.10654,-0.34025],[52.10658,-0.33918],[52.10692,-0.33634],[52.10695,-0.33539],[52.10687,-0.33443],[52.10708,-0.33134],[52.10731,-0.32936],[52.10728,-0.32875],[52.10661,-0.32711],[52.10622,-0.32636],[52.10578,-0.32572],[52.10567,-0.32536],[52.10562,-0.32486],[52.10567,-0.32306],[52.10492,-0.32304],[52.10446,-0.3229],[52.10297,-0.32267],[52.10244,-0.32249],[52.10171,-0.32237],[52.10116,-0.3224],[52.10048,-0.32268],[52.09939,-0.32288],[52.09837,-0.32265],[52.09774,-0.32241],[52.09679,-0.32257],[52.09773,-0.3186],[52.09795,-0.31273],[52.09813,-0.31094],[52.09866,-0.30773],[52.09897,-0.30137],[52.09916,-0.30003],[52.09857,-0.29993],[52.09676,-0.30001],[52.09652,-0.29938],[52.09636,-0.3001],[52.09594,-0.30023],[52.09511,-0.30032],[52.09375,-0.30003],[52.09297,-0.29994],[52.09144,-0.2999],[52.09119,-0.29976],[52.09102,-0.29929],[52.091,-0.29831],[52.0914,-0.28986],[52.09134,-0.28746],[52.09157,-0.28554],[52.0916,-0.28294],[52.09168,-0.28167],[52.09211,-0.27806],[52.09219,-0.27704],[52.09221,-0.27504],[52.0925,-0.2742],[52.09231,-0.27328],[52.09248,-0.27214],[52.09277,-0.27176],[52.09263,-0.27132],[52.09282,-0.26994],[52.09283,-0.26931],[52.09269,-0.26873],[52.09248,-0.26841],[52.09183,-0.26801],[52.08921,-0.26733],[52.08701,-0.26639],[52.08689,-0.26626],[52.08687,-0.26612],[52.08687,-0.26514],[52.08642,-0.26513],[52.0864,-0.265],[52.08668,-0.26322],[52.08592,-0.26306],[52.08486,-0.26231],[52.08479,-0.26244],[52.08447,-0.26425],[52.08425,-0.26462],[52.08378,-0.26484],[52.08368,-0.26552],[52.08262,-0.26586],[52.08222,-0.2659],[52.08051,-0.26508],[52.08035,-0.26483],[52.08026,-0.26497],[52.07983,-0.26492],[52.0794,-0.26474],[52.07937,-0.2646],[52.07929,-0.26455],[52.0792,-0.26476],[52.07851,-0.26518],[52.07823,-0.26528],[52.07684,-0.26547],[52.07547,-0.26583],[52.07445,-0.26582],[52.07381,-0.26599],[52.07347,-0.26615],[52.07273,-0.26678],[52.07205,-0.26761],[52.07184,-0.26776],[52.06849,-0.26934],[52.06585,-0.26987],[52.06463,-0.27025],[52.06396,-0.27027],[52.06312,-0.2704],[52.06235,-0.27063],[52.06173,-0.27046],[52.06117,-0.27008],[52.06097,-0.27002],[52.06068,-0.27007],[52.06029,-0.27022],[52.0599,-0.27052],[52.05999,-0.27122],[52.0599,-0.27052],[52.06029,-0.27022],[52.06068,-0.27007],[52.06097,-0.27002],[52.06117,-0.27008],[52.06173,-0.27046],[52.06235,-0.27063],[52.06312,-0.2704],[52.06396,-0.27027],[52.06463,-0.27025],[52.06585,-0.26987],[52.06859,-0.2693],[52.0686,-0.26938],[52.06859,-0.2693],[52.06585,-0.26987],[52.06463,-0.27025],[52.06396,-0.27027],[52.06312,-0.2704],[52.06235,-0.27063],[52.06173,-0.27046],[52.06117,-0.27008],[52.06097,-0.27002],[52.06068,-0.27007],[52.06029,-0.27022],[52.05983,-0.27057],[52.05923,-0.27089],[52.05678,-0.27191],[52.0558,-0.27218],[52.05551,-0.27213],[52.05479,-0.27168],[52.05437,-0.27162],[52.05416,-0.2711],[52.05394,-0.27079],[52.0522,-0.26917],[52.05153,-0.26832],[52.04909,-0.2671],[52.04726,-0.26643],[52.04715,-0.26984],[52.04727,-0.2741],[52.04747,-0.27456],[52.04725,-0.27514],[52.04716,-0.27597],[52.04728,-0.2771],[52.04782,-0.27908],[52.04795,-0.27986],[52.04798,-0.28164],[52.04778,-0.28208],[52.04755,-0.28225],[52.04513,-0.28333],[52.04136,-0.28494],[52.04049,-0.28516],[52.03764,-0.28563],[52.03687,-0.28569],[52.03529,-0.28624],[52.03423,-0.28625],[52.03239,-0.28575],[52.03091,-0.28587],[52.02871,-0.28571],[52.02836,-0.2858],[52.02794,-0.28601],[52.02767,-0.28602],[52.02743,-0.28641],[52.02701,-0.28674],[52.02663,-0.28678],[52.02642,-0.28717],[52.02567,-0.28791],[52.02389,-0.28936],[52.0222,-0.291],[52.02161,-0.29138],[52.02029,-0.29199],[52.01974,-0.29238],[52.01719,-0.29563],[52.01577,-0.29715],[52.01538,-0.29749],[52.01491,-0.29775],[52.01441,-0.29793],[52.01269,-0.29841],[52.01201,-0.29866],[52.01029,-0.29941],[52.00963,-0.29981],[52.00937,-0.30004],[52.00911,-0.30045],[52.00788,-0.30411],[52.00779,-0.30427],[52.00761,-0.30441],[52.00732,-0.30428],[52.00521,-0.3028],[52.00315,-0.30176],[52.00288,-0.30117],[52.00241,-0.30122],[52.00143,-0.30056],[52.00078,-0.30002],[51.99882,-0.29803],[51.99697,-0.29641],[51.9944,-0.29461],[51.99248,-0.29343],[51.99126,-0.29256],[51.99066,-0.2922],[51.98918,-0.29171],[51.98574,-0.29022],[51.98401,-0.28974],[51.98347,-0.28967],[51.98189,-0.28987],[51.98017,-0.29023],[51.97937,-0.29025],[51.97772,-0.28978],[51.97623,-0.28914],[51.97587,-0.28918],[51.97558,-0.2893],[51.97454,-0.29004],[51.97432,-0.29015],[51.97393,-0.29021],[51.97345,-0.29004],[51.97235,-0.28887],[51.97172,-0.28831],[51.97101,-0.28796],[51.9691,-0.28758],[51.96298,-0.28572],[51.96228,-0.28565],[51.96176,-0.28576],[51.95999,-0.2864],[51.95938,-0.28645],[51.95722,-0.28592],[51.95703,-0.28581],[51.95698,-0.28565],[51.95691,-0.28578],[51.9567,-0.28581],[51.95656,-0.28571],[51.95587,-0.28548],[51.95582,-0.28532],[51.95572,-0.28542],[51.95394,-0.28483],[51.95381,-0.2847],[51.95376,-0.28449],[51.95367,-0.28455],[51.95366,-0.28468],[51.95348,-0.28468],[51.95238,-0.28441],[51.95178,-0.28415],[51.9513,-0.28391],[51.95104,-0.28362],[51.95088,-0.28329],[51.95028,-0.28145],[51.94975,-0.28043],[51.94986,-0.2803],[51.95,-0.28054],[51.9501,-0.28042],[51.94995,-0.28009],[51.94972,-0.28039],[51.94923,-0.27956],[51.94876,-0.27838],[51.94872,-0.27812],[51.94878,-0.27802],[51.94946,-0.27745]],[[51.94946,-0.27745],[51.95054,-0.2767],[51.95176,-0.27632],[51.95215,-0.27614],[51.95275,-0.27573],[51.9533,-0.27521],[51.95336,-0.27517],[51.95341,-0.27525],[51.95347,-0.27524],[51.95377,-0.27614],[51.9539,-0.27795],[51.95363,-0.28054],[51.95362,-0.28263],[51.95377,-0.28427],[51.95376,-0.28449],[51.95367,-0.28455],[51.95366,-0.28468],[51.95374,-0.28477],[51.95381,-0.2847],[51.95408,-0.28489],[51.95572,-0.28542],[51.95578,-0.28558],[51.95587,-0.28548],[51.95656,-0.28571],[51.9567,-0.28581],[51.95691,-0.28578],[51.95696,-0.28586],[51.95703,-0.28581],[51.95722,-0.28592],[51.95938,-0.28645],[51.95999,-0.2864],[51.96176,-0.28576],[51.96228,-0.28565],[51.96298,-0.28572],[51.9691,-0.28758],[51.97101,-0.28796],[51.97172,-0.28831],[51.97235,-0.28887],[51.97345,-0.29004],[51.97393,-0.29021],[51.97432,-0.29015],[51.97454,-0.29004],[51.97558,-0.2893],[51.97587,-0.28918],[51.97623,-0.28914],[51.97772,-0.28978],[51.97937,-0.29025],[51.98017,-0.29023],[51.98189,-0.28987],[51.98347,-0.28967],[51.98401,-0.28974],[51.98574,-0.29022],[51.98918,-0.29171],[51.99066,-0.2922],[51.99248,-0.29343],[51.9944,-0.29461],[51.99753,-0.29686],[51.99882,-0.29803],[52.00103,-0.30025],[52.00241,-0.30122],[52.00269,-0.30149],[52.00274,-0.30181],[52.00348,-0.30222],[52.00274,-0.30181],[52.00285,-0.30166],[52.00299,-0.30168],[52.00521,-0.3028],[52.00743,-0.30435],[52.00759,-0.30476],[52.00772,-0.30484],[52.00784,-0.30471],[52.00788,-0.30411],[52.00902,-0.3007],[52.00921,-0.30023],[52.00937,-0.30004],[52.01029,-0.29941],[52.01201,-0.29866],[52.01269,-0.29841],[52.01441,-0.29793],[52.01491,-0.29775],[52.01538,-0.29749],[52.01577,-0.29715],[52.01719,-0.29563],[52.01974,-0.29238],[52.02029,-0.29199],[52.02161,-0.29138],[52.0222,-0.291],[52.02389,-0.28936],[52.02548,-0.28808],[52.02642,-0.28717],[52.02661,-0.28709],[52.02667,-0.28716],[52.02678,-0.28714],[52.02701,-0.28674],[52.02743,-0.28641],[52.02777,-0.28633],[52.02782,-0.28616],[52.02804,-0.28595],[52.02871,-0.28571],[52.03091,-0.28587],[52.03239,-0.28575],[52.03423,-0.28625],[52.03529,-0.28624],[52.03687,-0.28569],[52.03764,-0.28563],[52.04049,-0.28516],[52.04136,-0.28494],[52.04513,-0.28333],[52.04755,-0.28225],[52.04778,-0.28208],[52.04798,-0.28164],[52.04795,-0.27986],[52.04782,-0.27908],[52.04728,-0.2771],[52.04716,-0.27597],[52.04725,-0.27514],[52.04747,-0.27456],[52.04727,-0.2741],[52.04715,-0.26984],[52.04726,-0.26643],[52.04877,-0.26696],[52.04998,-0.26755],[52.04991,-0.26804],[52.0498,-0.26803],[52.04991,-0.26804],[52.04998,-0.26755],[52.05145,-0.26827],[52.0517,-0.2685],[52.0522,-0.26917],[52.05394,-0.27079],[52.05413,-0.27105],[52.05437,-0.27162],[52.05493,-0.27174],[52.05529,-0.27201],[52.05567,-0.27218],[52.05603,-0.27215],[52.05746,-0.27165],[52.05923,-0.27089],[52.05983,-0.27057],[52.06029,-0.27022],[52.06068,-0.27007],[52.06097,-0.27002],[52.06117,-0.27008],[52.06173,-0.27046],[52.06235,-0.27063],[52.06312,-0.2704],[52.06396,-0.27027],[52.06463,-0.27025],[52.06585,-0.26987],[52.06849,-0.26934],[52.07184,-0.26776],[52.07205,-0.26761],[52.07273,-0.26678],[52.07347,-0.26615],[52.07381,-0.26599],[52.07445,-0.26582],[52.07547,-0.26583],[52.07684,-0.26547],[52.07823,-0.26528],[52.07851,-0.26518],[52.0792,-0.26476],[52.07926,-0.26488],[52.07933,-0.26488],[52.0794,-0.26474],[52.07983,-0.26492],[52.08026,-0.26497],[52.08033,-0.26512],[52.08044,-0.26503],[52.08222,-0.2659],[52.08262,-0.26586],[52.08368,-0.26552],[52.0838,-0.26621],[52.08404,-0.26649],[52.08417,-0.26655],[52.08537,-0.26657],[52.08674,-0.26634],[52.08689,-0.26626],[52.08687,-0.26514],[52.08642,-0.26513],[52.0864,-0.265],[52.08668,-0.26322],[52.08683,-0.26324],[52.08687,-0.26612],[52.08689,-0.26626],[52.08701,-0.26639],[52.08921,-0.26733],[52.09183,-0.26801],[52.09248,-0.26841],[52.09267,-0.26869],[52.09278,-0.269],[52.09284,-0.26961],[52.09231,-0.27328],[52.09195,-0.27411],[52.09197,-0.27439],[52.09221,-0.27504],[52.09219,-0.27704],[52.09203,-0.27906],[52.09168,-0.28167],[52.0916,-0.28294],[52.09157,-0.28554],[52.09134,-0.28746],[52.0914,-0.28986],[52.091,-0.29831],[52.09102,-0.29929],[52.09092,-0.29995],[52.091,-0.30008],[52.09109,-0.3001],[52.09144,-0.2999],[52.09297,-0.29994],[52.09375,-0.30003],[52.09511,-0.30032],[52.09548,-0.30031],[52.09676,-0.30001],[52.09719,-0.29997],[52.09851,-0.29993],[52.09909,-0.30001],[52.09927,-0.29828],[52.09936,-0.29606],[52.09959,-0.29449],[52.09951,-0.29076],[52.09972,-0.28727],[52.09953,-0.28522],[52.09956,-0.28463],[52.09975,-0.28467],[52.09992,-0.28514],[52.09975,-0.28467],[52.09956,-0.28463],[52.09953,-0.28522],[52.09972,-0.28727],[52.09951,-0.29076],[52.09959,-0.29449],[52.09936,-0.29606],[52.09927,-0.29828],[52.09909,-0.30001],[52.09916,-0.30003],[52.09897,-0.30137],[52.09866,-0.30773],[52.09813,-0.31094],[52.09795,-0.31273],[52.09773,-0.3186],[52.09679,-0.32257],[52.09774,-0.32241],[52.09837,-0.32265],[52.09939,-0.32288],[52.10048,-0.32268],[52.10116,-0.3224],[52.10171,-0.32237],[52.10244,-0.32249],[52.10297,-0.32267],[52.10446,-0.3229],[52.10492,-0.32304],[52.10567,-0.32306],[52.10562,-0.32456],[52.10567,-0.32536],[52.10578,-0.32572],[52.10622,-0.32636],[52.10661,-0.32711],[52.10728,-0.32875],[52.10731,-0.32936],[52.10708,-0.33134],[52.10687,-0.33443],[52.10695,-0.33539],[52.10692,-0.33634],[52.10658,-0.33918],[52.10654,-0.34025],[52.10641,-0.35332],[52.10708,-0.35493],[52.10745,-0.35561],[52.10812,-0.3565],[52.10845,-0.35913],[52.10873,-0.3605],[52.10898,-0.3613],[52.10927,-0.36196],[52.11007,-0.36301],[52.11049,-0.3637],[52.11139,-0.36592],[52.11134,-0.36668],[52.11149,-0.36732],[52.11241,-0.36895],[52.11266,-0.36973],[52.11357,-0.37153],[52.11704,-0.37905],[52.11976,-0.38568],[52.12078,-0.3872],[52.12164,-0.38826],[52.12255,-0.38894],[52.12337,-0.38924],[52.12329,-0.39099],[52.12324,-0.39499],[52.12236,-0.39736],[52.12176,-0.40043],[52.12149,-0.40144],[52.12097,-0.40395],[52.12056,-0.40538],[52.11961,-0.40775],[52.11734,-0.41268],[52.11773,-0.41379],[52.11822,-0.41476],[52.1203,-0.41693],[52.12104,-0.41751],[52.12205,-0.41808],[52.12337,-0.4191],[52.12365,-0.41949],[52.12378,-0.42001],[52.12413,-0.4207],[52.12446,-0.42101],[52.12459,-0.42132],[52.12464,-0.42233],[52.12438,-0.42528],[52.12442,-0.42668],[52.12428,-0.4268],[52.12422,-0.42704],[52.12429,-0.42731],[52.12438,-0.4274],[52.12449,-0.42741],[52.12459,-0.42807],[52.12491,-0.43196],[52.12492,-0.43351],[52.12478,-0.43688],[52.12502,-0.44206],[52.12528,-0.44332],[52.12568,-0.4445],[52.12604,-0.44526],[52.127,-0.44687],[52.12792,-0.44957],[52.12836,-0.45022],[52.12831,-0.45044],[52.12838,-0.45132],[52.12877,-0.45268],[52.12816,-0.45332],[52.12933,-0.45641],[52.12986,-0.45578],[52.12961,-0.45538],[52.12961,-0.45522],[52.12974,-0.455],[52.13041,-0.45618],[52.13099,-0.45771],[52.13104,-0.45801],[52.13064,-0.46115],[52.13059,-0.46379],[52.13049,-0.46419],[52.13012,-0.46454],[52.1301,-0.46488],[52.13016,-0.46503],[52.13045,-0.46521],[52.13056,-0.46536],[52.13109,-0.46683],[52.13173,-0.46835],[52.13189,-0.46867],[52.13205,-0.46877],[52.13222,-0.4687],[52.13235,-0.46831],[52.13256,-0.46731],[52.13267,-0.46624],[52.13275,-0.46598],[52.13285,-0.46589],[52.13294,-0.46587],[52.13375,-0.46619],[52.1349,-0.4662],[52.13511,-0.46631],[52.13518,-0.46651],[52.13523,-0.46778],[52.13536,-0.46801],[52.13555,-0.46814],[52.13558,-0.46829],[52.13535,-0.4694],[52.13496,-0.47039],[52.13486,-0.47051],[52.13486,-0.47065],[52.13609,-0.47154],[52.13618,-0.47171],[52.13681,-0.472],[52.13692,-0.47131]]],"days":[{"key":"sat","label":"Saturday","dirs":[{"label":"To Bedford","li":1,"trips":[{"big":"08:32","small":"At Upper Caldecote, G&M Growers 08:37","title":"The 08:32 from Biggleswade Bus Station","s":[["08:32",0,5],["08:32",1,0],["08:33",2,0],["08:34",3,0],["08:37",4,6],["08:38",5,0],["08:39",6,1],["08:42",7,1],["08:43",8,0],["08:44",9,0],["08:44",10,0],["08:44",11,5],["08:52",12,5],["08:52",13,0],["08:53",14,0],["08:54",15,0],["08:54",16,5],["08:55",17,0],["08:55",18,0],["08:56",19,0],["08:58",20,0],["08:59",21,1],["09:00",22,0],["09:02",23,0],["09:03",24,0],["09:05",25,0],["09:07",26,5]]},{"big":"08:53","small":"At Upper Caldecote, G&M Growers 09:37","title":"The 08:53 from Hitchin Bancroft","s":[["08:53",27,5],["08:53",28,0],["08:54",29,0],["08:54",30,0],["08:55",31,0],["08:55",32,0],["08:56",33,0],["08:56",34,0],["09:00",35,1],["09:01",36,0],["09:02",37,0],["09:03",38,1],["09:03",39,0],["09:07",40,1],["09:07",41,0],["09:07",42,0],["09:08",43,0],["09:09",44,5],["09:09",45,0],["09:11",46,1],["09:11",47,0],["09:11",48,0],["09:12",49,0],["09:12",50,0],["09:12",51,0],["09:13",52,0],["09:13",53,0],["09:13",54,0],["09:14",55,0],["09:14",56,0],["09:15",57,0],["09:16",58,1],["09:32",0,5],["09:32",1,0],["09:33",2,0],["09:34",3,0],["09:37",4,6],["09:38",5,0],["09:39",6,1],["09:42",7,1],["09:43",8,0],["09:44",9,0],["09:44",10,0],["09:44",11,1],["09:52",12,5],["09:52",13,0],["09:53",14,0],["09:54",15,0],["09:54",16,1],["09:55",17,0],["09:55",18,0],["09:56",19,0],["09:58",20,0],["09:59",21,1],["10:00",22,0],["10:02",23,0],["10:03",24,0],["10:05",25,0],["10:07",26,5]]},{"big":"09:48","small":"At Upper Caldecote, G&M Growers 10:32","title":"The 09:48 from Hitchin Bancroft","s":[["09:48",27,5],["09:48",28,0],["09:49",29,0],["09:49",30,0],["09:50",31,0],["09:50",32,0],["09:51",33,0],["09:51",34,0],["09:55",35,1],["09:56",36,0],["09:57",37,0],["09:58",38,1],["09:58",39,0],["10:02",40,1],["10:02",41,0],["10:02",42,0],["10:03",43,0],["10:04",44,5],["10:04",45,0],["10:06",46,1],["10:06",47,0],["10:06",48,0],["10:07",49,0],["10:07",50,0],["10:07",51,0],["10:08",52,0],["10:08",53,0],["10:08",54,0],["10:09",55,0],["10:09",56,0],["10:10",57,0],["10:11",58,1],["10:27",0,5],["10:27",1,0],["10:28",2,0],["10:29",3,0],["10:32",4,6],["10:33",5,0],["10:34",6,1],["10:37",7,1],["10:38",8,0],["10:39",9,0],["10:39",10,0],["10:39",11,1],["10:47",12,5],["10:47",13,0],["10:48",14,0],["10:49",15,0],["10:49",16,1],["10:50",17,0],["10:50",18,0],["10:51",19,0],["10:53",20,0],["10:54",21,1],["10:55",22,0],["10:57",23,0],["10:58",24,0],["11:00",25,0],["11:02",26,5]]},{"big":"10:48","small":"At Upper Caldecote, G&M Growers 11:32","title":"The 10:48 from Hitchin Bancroft","s":[["10:48",27,5],["10:48",28,0],["10:49",29,0],["10:49",30,0],["10:50",31,0],["10:50",32,0],["10:51",33,0],["10:51",34,0],["10:55",35,1],["10:56",36,0],["10:57",37,0],["10:58",38,1],["10:58",39,0],["11:02",40,1],["11:02",41,0],["11:02",42,0],["11:03",43,0],["11:04",44,5],["11:04",45,0],["11:06",46,1],["11:06",47,0],["11:06",48,0],["11:07",49,0],["11:07",50,0],["11:07",51,0],["11:08",52,0],["11:08",53,0],["11:08",54,0],["11:09",55,0],["11:09",56,0],["11:10",57,0],["11:11",58,1],["11:27",0,5],["11:27",1,0],["11:28",2,0],["11:29",3,0],["11:32",4,6],["11:33",5,0],["11:34",6,1],["11:37",7,1],["11:38",8,0],["11:39",9,0],["11:39",10,0],["11:39",11,1],["11:47",12,5],["11:47",13,0],["11:48",14,0],["11:49",15,0],["11:49",16,1],["11:50",17,0],["11:50",18,0],["11:51",19,0],["11:53",20,0],["11:54",21,1],["11:55",22,0],["11:57",23,0],["11:58",24,0],["12:00",25,0],["12:02",26,5]]},{"big":"11:48","small":"At Upper Caldecote, G&M Growers 12:32","title":"The 11:48 from Hitchin Bancroft","s":[["11:48",27,5],["11:48",28,0],["11:49",29,0],["11:49",30,0],["11:50",31,0],["11:50",32,0],["11:51",33,0],["11:51",34,0],["11:55",35,1],["11:56",36,0],["11:57",37,0],["11:58",38,1],["11:58",39,0],["12:02",40,1],["12:02",41,0],["12:02",42,0],["12:03",43,0],["12:04",44,5],["12:04",45,0],["12:06",46,1],["12:06",47,0],["12:06",48,0],["12:07",49,0],["12:07",50,0],["12:07",51,0],["12:08",52,0],["12:08",53,0],["12:08",54,0],["12:09",55,0],["12:09",56,0],["12:10",57,0],["12:11",58,1],["12:27",0,5],["12:27",1,0],["12:28",2,0],["12:29",3,0],["12:32",4,6],["12:33",5,0],["12:34",6,1],["12:37",7,1],["12:38",8,0],["12:39",9,0],["12:39",10,0],["12:39",11,1],["12:47",12,5],["12:47",13,0],["12:48",14,0],["12:49",15,0],["12:49",16,1],["12:50",17,0],["12:50",18,0],["12:51",19,0],["12:53",20,0],["12:54",21,1],["12:55",22,0],["12:57",23,0],["12:58",24,0],["13:00",25,0],["13:02",26,5]]}],"note":""},{"label":"To Hitchin","li":0,"trips":[{"big":"14:05","small":"From Upper Caldecote, G&M Growers, at Henlow Camp, Borton Avenue 14:44","title":"The 14:05 from Upper Caldecote, G&M Growers","s":[["13:40",26,5],["13:40",59,0],["13:42",60,0],["13:43",61,0],["13:45",62,1],["13:45",63,0],["13:47",64,0],["13:48",65,0],["13:48",66,0],["13:49",67,1],["13:49",68,0],["13:50",69,0],["13:51",70,0],["13:52",71,1],["13:59",72,5],["13:59",73,0],["13:59",74,0],["14:00",75,0],["14:01",76,1],["14:03",77,0],["14:04",78,1],["14:05",4,6],["14:10",79,0],["14:11",80,0],["14:12",81,0],["14:18",0,5],["14:30",82,1],["14:30",83,0],["14:31",84,0],["14:31",85,0],["14:32",83,0],["14:32",86,0],["14:32",87,0],["14:33",88,0],["14:33",89,0],["14:33",90,0],["14:34",91,0],["14:34",92,0],["14:34",93,0],["14:35",94,5],["14:36",95,0],["14:37",96,1],["14:37",97,0],["14:38",98,0],["14:38",99,0],["14:39",100,1],["14:43",101,0],["14:44",102,5]]},{"big":"15:05","small":"From Upper Caldecote, G&M Growers, at Hitchin Bancroft 15:55","title":"The 15:05 from Upper Caldecote, G&M Growers","s":[["14:40",26,5],["14:40",59,0],["14:42",60,0],["14:43",61,0],["14:45",62,1],["14:45",63,0],["14:47",64,0],["14:48",65,0],["14:48",66,0],["14:49",67,1],["14:49",68,0],["14:50",69,0],["14:51",70,0],["14:52",71,1],["14:59",72,5],["14:59",73,0],["14:59",74,0],["15:00",75,0],["15:01",76,1],["15:03",77,0],["15:04",78,1],["15:05",4,6],["15:10",79,0],["15:11",80,0],["15:12",81,0],["15:18",0,5],["15:30",82,1],["15:30",83,0],["15:31",84,0],["15:31",85,0],["15:32",83,0],["15:32",86,0],["15:32",87,0],["15:33",88,0],["15:33",89,0],["15:33",90,0],["15:34",91,0],["15:34",92,0],["15:34",93,0],["15:35",94,1],["15:36",95,0],["15:37",96,1],["15:37",97,0],["15:38",98,0],["15:38",99,0],["15:39",100,5],["15:43",101,0],["15:44",102,1],["15:44",103,0],["15:44",104,0],["15:44",105,0],["15:46",106,1],["15:50",107,0],["15:51",108,0],["15:52",109,0],["15:52",110,0],["15:53",111,0],["15:53",112,0],["15:54",113,0],["15:55",27,5]]},{"big":"16:05","small":"From Upper Caldecote, G&M Growers, at Hitchin Bancroft 16:55","title":"The 16:05 from Upper Caldecote, G&M Growers","s":[["15:40",26,5],["15:40",59,0],["15:42",60,0],["15:43",61,0],["15:45",62,1],["15:45",63,0],["15:47",64,0],["15:48",65,0],["15:48",66,0],["15:49",67,1],["15:49",68,0],["15:50",69,0],["15:51",70,0],["15:52",71,1],["15:59",72,5],["15:59",73,0],["15:59",74,0],["16:00",75,0],["16:01",76,1],["16:03",77,0],["16:04",78,1],["16:05",4,6],["16:10",79,0],["16:11",80,0],["16:12",81,0],["16:18",0,5],["16:30",82,1],["16:30",83,0],["16:31",84,0],["16:31",85,0],["16:32",83,0],["16:32",86,0],["16:32",87,0],["16:33",88,0],["16:33",89,0],["16:33",90,0],["16:34",91,0],["16:34",92,0],["16:34",93,0],["16:35",94,1],["16:36",95,0],["16:37",96,1],["16:37",97,0],["16:38",98,0],["16:38",99,0],["16:39",100,5],["16:43",101,0],["16:44",102,1],["16:44",103,0],["16:44",104,0],["16:44",105,0],["16:46",106,1],["16:50",107,0],["16:51",108,0],["16:52",109,0],["16:52",110,0],["16:53",111,0],["16:53",112,0],["16:54",113,0],["16:55",27,5]]},{"big":"17:05","small":"From Upper Caldecote, G&M Growers, at Hitchin Bancroft 17:55","title":"The 17:05 from Upper Caldecote, G&M Growers","s":[["16:40",26,5],["16:40",59,0],["16:42",60,0],["16:43",61,0],["16:45",62,1],["16:45",63,0],["16:47",64,0],["16:48",65,0],["16:48",66,0],["16:49",67,1],["16:49",68,0],["16:50",69,0],["16:51",70,0],["16:52",71,1],["16:59",72,5],["16:59",73,0],["16:59",74,0],["17:00",75,0],["17:01",76,1],["17:03",77,0],["17:04",78,1],["17:05",4,6],["17:10",79,0],["17:11",80,0],["17:12",81,0],["17:18",0,5],["17:30",82,1],["17:30",83,0],["17:31",84,0],["17:31",85,0],["17:32",83,0],["17:32",86,0],["17:32",87,0],["17:33",88,0],["17:33",89,0],["17:33",90,0],["17:34",91,0],["17:34",92,0],["17:34",93,0],["17:35",94,1],["17:36",95,0],["17:37",96,1],["17:37",97,0],["17:38",98,0],["17:38",99,0],["17:39",100,5],["17:43",101,0],["17:44",102,1],["17:44",103,0],["17:44",104,0],["17:44",105,0],["17:46",106,1],["17:50",107,0],["17:51",108,0],["17:52",109,0],["17:52",110,0],["17:53",111,0],["17:53",112,0],["17:54",113,0],["17:55",27,5]]},{"big":"18:20","small":"From Upper Caldecote, G&M Growers, at Henlow Camp, Borton Avenue 18:59","title":"The 18:20 from Upper Caldecote, G&M Growers","s":[["17:55",26,5],["17:55",59,0],["17:57",60,0],["17:58",61,0],["18:00",62,1],["18:00",63,0],["18:02",64,0],["18:03",65,0],["18:03",66,0],["18:04",67,1],["18:04",68,0],["18:05",69,0],["18:06",70,0],["18:07",71,1],["18:14",72,5],["18:14",73,0],["18:14",74,0],["18:15",75,0],["18:16",76,1],["18:18",77,0],["18:19",78,1],["18:20",4,6],["18:25",79,0],["18:26",80,0],["18:27",81,0],["18:33",0,5],["18:45",82,1],["18:45",83,0],["18:46",84,0],["18:46",85,0],["18:47",83,0],["18:47",86,0],["18:47",87,0],["18:48",88,0],["18:48",89,0],["18:48",90,0],["18:49",91,0],["18:49",92,0],["18:49",93,0],["18:50",94,5],["18:51",95,0],["18:52",96,1],["18:52",97,0],["18:53",98,0],["18:53",99,0],["18:54",100,1],["18:58",101,0],["18:59",102,5]]}],"note":""}],"none":"In the current timetable there are no 74 buses on Saturdays, so I would look at the other ways to get there on the Shuttleworth Air Shows page."},{"key":"sun","label":"Sunday","dirs":[],"none":"In the current timetable there are no 74 buses on Sundays, so I would look at the other ways to get there on the Shuttleworth Air Shows page."}],"start":0};
+</script>
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var each = function(list, fn){ Array.prototype.forEach.call(list, fn); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var KEY = 1, OFF = 2, LABEL = 4;
+
+  /* fixed text */
+  $('backlink').href = CFG.showUrl;
+  $('backlink').target = CFG.showTarget || '_top';
+  $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
+  $('op').textContent = 'Run by ' + CFG.operator;
+  $('bnum').textContent = CFG.num;
+  $('bdest').textContent = CFG.blindDest;
+  $('title').textContent = CFG.title;
+  $('lead').textContent = CFG.lead;
+  $('tiph').textContent = CFG.tipHead;
+  $('tip').textContent = CFG.tip;
+  $('tipbtn').href = CFG.showUrl;
+  $('tipbtn').target = CFG.showTarget || '_top';
+  $('tipbtn').textContent = CFG.tipBtn + ' ›';
+  $('note').innerHTML = CFG.note;
+  $('map').setAttribute('aria-label', 'Map of the bus ' + CFG.num + ' route');
+  if (CFG.alt) { $('alt').hidden = false; $('alth').textContent = CFG.alt[0]; $('altp').textContent = CFG.alt[1]; }
+  document.title = CFG.title + ' | The Big Guide to UK Airshows';
+
+  /* destination blind cycles its "via" line */
+  var vi = 0;
+  $('bvia').textContent = CFG.blindVia[0] || '';
+  if (!reduce && CFG.blindVia.length > 1) {
+    setInterval(function(){
+      var v = $('bvia'); v.style.opacity = 0;
+      setTimeout(function(){ vi = (vi + 1) % CFG.blindVia.length; v.textContent = CFG.blindVia[vi]; v.style.opacity = .85; }, 400);
+    }, 3200);
+  }
+
+  $('facts').innerHTML = CFG.facts.map(function(f){
+    return '<div class="fact' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><b>' + f[1] + '</b></div>';
+  }).join('');
+
+  $('legs').innerHTML = CFG.legs.map(function(l){
+    var signs = l[0].map(function(r){ return '<span class="sign' + (/^M\d/.test(r) ? ' m' : '') + '">' + r + '</span>'; }).join('');
+    return '<li><div class="signs">' + (signs || '<span class="sign">Local</span>') + '</div><div><b>' + l[1] + '</b><p>' + l[2] + '</p></div></li>';
+  }).join('');
+
+  /* map */
+  var map = L.map('map', { scrollWheelZoom: false, zoomControl: false });
+  L.control.zoom({ position: 'topleft' }).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  map.setView(CFG.target, 11);
+  var lineLayer = L.layerGroup().addTo(map), layer = L.layerGroup().addTo(map);
+  var showPin = L.circleMarker(CFG.target, { radius: 6, color: '#D74949', weight: 2, fillColor: '#fff', fillOpacity: 1, dashArray: '3 3' })
+    .bindTooltip(CFG.targetLabel, { direction: 'top', offset: [0, -6], className: 'lbl off' }).addTo(map);
+
+  var day = DATA.start || 0, dir = 0, idx = 0, ROUTE = [], casing = null;
+  window.addEventListener('resize', function(){ map.invalidateSize(); });
+
+  function fit(){
+    if (!casing) return;
+    var wide = window.innerWidth > 980;
+    map.fitBounds(casing.getBounds().extend(CFG.target), { paddingTopLeft: [30, 30], paddingBottomRight: [wide ? 420 : 30, 30] });
+  }
+
+  /* unpack journeys: [time, stop index, flags] -> [time, name, lat, lon, flags, short name] */
+  DATA.days.forEach(function(dd){ dd.dirs.forEach(function(x){ x.trips.forEach(function(tr){
+    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3]]; });
+  }); }); });
+  function D(){ return DATA.days[day]; }
+  function DIR(){ return D().dirs[dir]; }
+
+  function segBtns(el, items, cur, onpick){
+    el.innerHTML = items.map(function(t, i){ return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === cur) + '">' + t + '</button>'; }).join('');
+    el.style.display = items.length > 1 ? '' : 'none';
+    each(el.children, function(b){ b.addEventListener('click', function(){ onpick(+b.getAttribute('data-i')); }); });
+  }
+
+  function render(){
+    segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ day = i; dir = Math.min(dir, Math.max(0, DATA.days[i].dirs.length - 1)); idx = 0; render(); runBus(); });
+    var dd = D();
+    if (!dd.dirs.length || !dd.dirs.some(function(x){ return x.trips.length; })) {
+      $('dir').style.display = 'none'; $('board').innerHTML = ''; $('bnote').textContent = '';
+      $('nobus').textContent = dd.none; $('nobus').classList.add('on'); $('stage').classList.add('off');
+      return;
+    }
+    $('nobus').classList.remove('on'); $('stage').classList.remove('off');
+    if (!DIR().trips.length) { dir = dd.dirs.findIndex(function(x){ return x.trips.length; }); idx = 0; }
+    segBtns($('dir'), dd.dirs.map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = 0; render(); runBus(); });
+    board(); drawLine(); draw();
+  }
+
+  function board(){
+    var d = DIR();
+    $('board').innerHTML = d.trips.map(function(t, i){
+      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '"><span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
+    }).join('');
+    $('bnote').textContent = d.note || '';
+    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); }); });
+  }
+
+  function drawLine(){
+    lineLayer.clearLayers();
+    ROUTE = DATA.lines[DIR().li] || [];
+    casing = L.polyline(ROUTE, { color: '#13293C', weight: 11, opacity: .18 }).addTo(lineLayer);
+    L.polyline(ROUTE, { color: '#00A6E2', weight: 5, opacity: 1 }).addTo(lineLayer);
+    fit(); measure();
+  }
+
+  function draw(){
+    layer.clearLayers();
+    var trip = DIR().trips[idx], s = trip.s, ol = $('stops');
+    $('ptitle').textContent = trip.title;
+    $('psub').textContent = s.length + ' stops, ' + s[0][0] + ' to ' + s[s.length - 1][0];
+    ol.innerHTML = '';
+    var group = null, gid = 0;
+    s.forEach(function(p, i){
+      var isOff = p[4] & OFF, key = (p[4] & KEY) || isOff || i === 0 || i === s.length - 1;
+      var m = L.circleMarker([p[2], p[3]], {
+        radius: isOff ? 10 : (key ? 6 : 4), color: isOff ? '#D74949' : '#13293C', weight: key ? 3 : 2,
+        fillColor: isOff ? '#D74949' : '#FFFFFF', fillOpacity: 1
+      }).addTo(layer);
+      m.bindPopup('<b>' + p[1] + '</b><br>' + p[0] + (isOff ? '<br>' + CFG.offTag : ''));
+      var small = window.innerWidth < 560 && !isOff && i !== 0 && i !== s.length - 1;
+      if ((p[4] & LABEL || isOff) && !small) m.bindTooltip(p[5] || p[1], { permanent: true, direction: 'right', offset: [10, 0], className: 'lbl' + (isOff ? ' off' : '') });
+
+      if (!key) {
+        if (!group) {
+          group = { id: 'g' + (gid++), items: [] };
+          var fl = document.createElement('li'); fl.className = 'fold';
+          fl.innerHTML = '<button type="button" aria-expanded="false"></button>';
+          ol.appendChild(fl); group.fold = fl;
+        }
+        group.items.push(p);
+      } else { closeGroup(); }
+
+      var li = document.createElement('li');
+      li.className = 'stop' + (key ? ' key' : ' minor') + (isOff ? ' off' : '');
+      if (!key) li.dataset.g = group.id;
+      li.innerHTML = '<span>' + p[1] + (isOff ? '<span class="tag">' + CFG.offTag + '</span>' : '') + '</span><time>' + p[0] + '</time>';
+      li.addEventListener('click', function(){
+        each(ol.querySelectorAll('.active'), function(x){ x.classList.remove('active'); });
+        li.classList.add('active');
+        map.setView([p[2], p[3]], 15, { animate: !reduce }); m.openPopup();
+      });
+      ol.appendChild(li);
+    });
+    closeGroup();
+
+    function closeGroup(){
+      if (!group) return;
+      var g = group, n = g.items.length, btn = g.fold.firstChild;
+      var label = n === 1 ? g.items[0][1] : g.items[0][1] + ' and ' + (n - 1) + ' more stops';
+      btn.textContent = label;
+      btn.addEventListener('click', function(){
+        var open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', open);
+        btn.textContent = open ? 'Hide the smaller stops' : label;
+        each(ol.querySelectorAll('li.minor[data-g="' + g.id + '"]'), function(x){ x.classList.toggle('open', open); });
+      });
+      group = null;
+    }
+  }
+
+  /* a small bus runs the route once, then fades */
+  var bus = null, raf = 0, cum = [0];
+  var busIcon = L.divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 15],
+    html: '<div class="busdot"><svg viewBox="0 0 16 16" fill="#13293C"><rect x="2" y="1.5" width="12" height="11" rx="2"/><rect x="3.5" y="3" width="9" height="4" rx=".6" fill="#F2B233"/><circle cx="5" cy="10" r="1" fill="#F2B233"/><circle cx="11" cy="10" r="1" fill="#F2B233"/><rect x="3" y="12.5" width="2.4" height="2" rx=".5"/><rect x="10.6" y="12.5" width="2.4" height="2" rx=".5"/></svg></div>' });
+  function measure(){
+    cum = [0];
+    for (var k = 1; k < ROUTE.length; k++) cum.push(cum[k - 1] + map.distance(ROUTE[k - 1], ROUTE[k]));
+  }
+  function at(d){
+    var lo = 0, hi = cum.length - 1;
+    while (lo < hi - 1) { var mid = (lo + hi) >> 1; if (cum[mid] < d) lo = mid; else hi = mid; }
+    var f = (d - cum[lo]) / ((cum[hi] - cum[lo]) || 1);
+    return [ROUTE[lo][0] + (ROUTE[hi][0] - ROUTE[lo][0]) * f, ROUTE[lo][1] + (ROUTE[hi][1] - ROUTE[lo][1]) * f];
+  }
+  function runBus(){
+    if (reduce || ROUTE.length < 2) return;
+    cancelAnimationFrame(raf);
+    if (bus) { map.removeLayer(bus); bus = null; }
+    var total = cum[cum.length - 1], start = null, dur = 7000;
+    bus = L.marker(ROUTE[0], { icon: busIcon, interactive: false, keyboard: false }).addTo(map);
+    function step(ts){
+      if (!bus) return;
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      bus.setLatLng(at(e * total));
+      if (p < 1) raf = requestAnimationFrame(step);
+      else { var el = bus.getElement(); if (el) el.firstChild.style.opacity = 0; var b = bus; setTimeout(function(){ map.removeLayer(b); }, 700); bus = null; }
+    }
+    raf = requestAnimationFrame(step);
+  }
+
+  render();
+
+  var started = false;
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in'); io.unobserve(e.target);
+      if (!started && e.target.id === 'stage') { started = true; setTimeout(runBus, 500); }
+    });
+  }, { threshold: .15 }) : null;
+  each(document.querySelectorAll('.rise'), function(el){ io ? io.observe(el) : el.classList.add('in'); });
+  if (!io) runBus();
+})();
+</script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
+</body>
+</html>

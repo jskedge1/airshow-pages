@@ -1709,6 +1709,7 @@ img.photo{display:block;width:100%;height:100%;object-fit:cover;pointer-events:n
 }
 </style>
 <script src="https://jskedge1.github.io/airshow-pages/transport-times.js"></script>
+<script src="https://jskedge1.github.io/airshow-pages/bus-routes.js"></script>
 </head>
 <body>
 <script>window.PHOTO={};window.PHOTO_ALT={};
@@ -3840,6 +3841,7 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
     var q=encodeURIComponent(t.place);
     pd.innerHTML='<h3>'+esc(t.title)+'</h3><p class="lead">'+esc(t.text)+'</p>'
       +'<p class="on-map"><b>Map search</b>'+esc(t.place)+'</p>'
+      +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('headcorn',t.id):'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
           var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive'}[r[0]];
           return '<li class="r-'+(r[0]==='car'?'bus':r[0])+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p></div></li>';

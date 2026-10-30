@@ -1,0 +1,318 @@
+"""Build bus route pages from raw/<id>.json into out/<id>.html, plus routes-index.json."""
+import json, math, os, re, statistics, glob
+
+os.makedirs('out', exist_ok=True)
+TPL = open('template.html').read()
+OPS = json.load(open('operators.json'))
+ENDS = json.load(open('ends.json'))
+DAYNAME = {'thu': 'Thursday', 'fri': 'Friday', 'sat': 'Saturday', 'sun': 'Sunday'}
+SITE = 'https://www.ukairshowguide.co.uk/'
+
+SHOWS = {
+ 'ayr': dict(name='International Ayr Show', slug='international-ayr-show', target=[55.45787, -4.64049], label='Low Green', town='Ayr',
+   tip='Roads along the seafront close on show days, so I would get off in the town centre and walk down to the Low Green. Buses get busy after the flying, so you could leave a little early or grab some food in town first.'),
+ 'blackpool': dict(name='Blackpool Air Show', slug='blackpool-air-show', target=[53.81005, -3.05572], label='Central Pier', town='Blackpool',
+   tip='Buses are moved away from the promenade on show days, so I would get off in the town centre and walk down to the front. Allow extra time to get home, as everyone leaves at once.'),
+ 'clacton': dict(name='Clacton Air Show', slug='clactonairshow', target=[51.7848, 1.1480], label='West Greensward', town='Clacton',
+   tip='Roads around the seafront close for the show, so I would check where your stop is on the day. Leave plenty of time for the journey home, as buses fill up straight after the flying.'),
+ 'cosford': dict(name='RAF Cosford Air Show', slug='cosfordairshow', target=[52.6395, -2.31012], label='RAF Cosford', town='Cosford',
+   tip='The show is on a Sunday, so this bus won’t help on the day. I would take the train to Cosford station instead, which is right by the showground.'),
+ 'duxford': dict(name='Duxford Air Shows', slug='duxfordairshows', target=[52.0965, 0.1350], label='IWM Duxford', town='IWM Duxford',
+   tip='Local buses are few and far between, so I would check the times before you travel and plan how you’re getting home.'),
+ 'eastbourne': dict(name='Eastbourne Airshow', slug='eastbourneairshow', target=[50.76006, 0.284433], label='Western Lawns', town='Eastbourne',
+   tip='The seafront roads close during the show and buses are diverted, so I would check where your stop is before you set off. Buses back fill up quickly after the flying.'),
+ 'gransden': dict(name='Little Gransden Air and Car Show', slug='little-gransden-air-and-car-show', target=[52.18031, -0.11265], label='The airfield', town='Gransden',
+   tip='There’s no Sunday bus and none stops at the airfield, so on show day I would take a taxi from St Neots station instead.'),
+ 'headcorn': dict(name='Headcorn Airshow', slug='headcorn-air-show', target=[51.15559, 0.635093], label='Headcorn Aerodrome', town='Headcorn',
+   tip='The Aerodrome stop is on the A274, a short walk from the entrance. I would check the times before you go, as the buses are roughly hourly.'),
+ 'midlands': dict(name='Midlands Air Festival', slug='midlandsairfestival', target=[52.19803, -1.89610], label='Ragley Hall', town='Ragley',
+   tip='The 247 stops by the Ragley Hall main entrance, which makes it handy. I would check the last bus back before the evening displays start.'),
+ 'riat': dict(name='Royal International Air Tattoo', slug='riat', target=[51.68514, -1.78647], label='RAF Fairford', town='Fairford',
+   tip='These local buses don’t run on Sundays and don’t reach the show entrances, so on show days I would use the Swindon Shuttle or a Park and Ride instead.'),
+ 'shuttleworth': dict(name='Shuttleworth Air Shows', slug='shuttleworthairshows', target=[52.08544, -0.31984], label='Old Warden Aerodrome', town='Old Warden',
+   tip='There’s no bus to the aerodrome itself, and the nearest stops are a fair walk away. I would use the shuttle bus from Biggleswade station instead if you can.'),
+ 'southport': dict(name='Southport Air Show', slug='southport-air-show', target=[53.65326, -3.01540], label='Southport Pier', town='Southport',
+   tip='The town centre stops on Lord Street are the closest. From there it’s a walk through town to the Promenade and Marine Drive. Buses fill up after the flying, so allow extra time.'),
+}
+
+OVERRIDE = {
+ '132-duxford': dict(
+   title='Bus 132 to IWM Duxford',
+   lead='This is the bus I would look at if you’re heading to Duxford on a Sunday without a car. It picks up in Cambridge city centre and outside the railway station, then drops you right by Hangar 1.',
+   offTag='Get off here for the museum',
+   alt=['On Air Show weekends', 'IWM usually runs its own free shuttle from Cambridge station and Trumpington Park and Ride. That is the easier choice on a big show day, so I would suggest using that instead.'],
+   legs=[[['A1307'], 'Cambridge city centre', 'Out of Drummer Street bus station, down Regent Street and Hills Road, stopping right outside the railway station.'],
+         [['A1134'], 'Addenbrooke’s', 'Along Long Road to the hospital bus station, then Robinson Way and through Trumpington.'],
+         [['A1309'], 'Trumpington Park and Ride', 'Hauxton Road to the Park and Ride. Handy if you’d rather leave the car here.'],
+         [['M11', 'A505'], 'Down to Duxford', 'South on the M11 to junction 10, then the A505 to the museum stop by Hangar 1.'],
+         [['B1383'], 'On to Saffron Walden', 'After the museum it carries on through Duxford, Ickleton and Great Chesterford to Saffron Walden.']]),
+}
+
+
+def hav(a, b):
+    R = 6371000
+    p1, p2 = math.radians(a[0]), math.radians(b[0])
+    dp, dl = p2 - p1, math.radians(b[1] - a[1])
+    x = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * R * math.asin(math.sqrt(x))
+
+
+def clean(n):
+    n = re.sub(r'\s*\((at|near|opp|adj|o/s|on|before|after|in|by|corner|outside)\)', '', n, flags=re.I)
+    n = re.sub(r'\b(opp|adj|o/s|nr)\.?\s+', '', n, flags=re.I)
+    n = n.replace(' - ', ', ').replace('–', ',').replace('—', ',').replace(' -', ',').replace('- ', ', ')
+    return re.sub(r'\s{2,}', ' ', n).strip(' ,')
+
+
+def short(n):
+    n = clean(n)
+    n = re.sub(r'\s*\((Stand|Stop|Bay|Stance)[^)]*\)', '', n, flags=re.I)
+    return n if len(n) <= 30 else n[:29].rsplit(' ', 1)[0]
+
+
+def mins(t):
+    h, m = t.split(':')
+    return int(h) * 60 + int(m)
+
+
+def ends(head):
+    h = head.replace('–', '-')
+    parts = re.split(r'\s+to\s+|\s*-\s*', h, maxsplit=1)
+    return (parts[0].strip(), parts[1].strip()) if len(parts) == 2 else (h, '')
+
+
+def andlist(xs):
+    xs = [x for x in xs if x]
+    return xs[0] if len(xs) == 1 else ', '.join(xs[:-1]) + ' and ' + xs[-1] if xs else ''
+
+
+def walkfact(m):
+    if m < 250: return 'Right by the show'
+    if m <= 3000:
+        return f'About {max(2, round(m * 1.3 / 80 / 5) * 5 if m * 1.3 / 80 > 7 else round(m * 1.3 / 80))} minutes'
+    return f'About {round(m * 1.3 / 1609)} miles'
+
+
+def pick(trips, offi, mode):
+    def ot(t): return mins(t[offi[id(t)]][0])
+    if mode == 'arrive': lo, hi = 8 * 60, 13 * 60 + 30
+    elif mode == 'leave': lo, hi = 13 * 60 + 30, 21 * 60
+    else: lo, hi = 7 * 60, 21 * 60
+    sel = sorted([t for t in trips if lo <= ot(t) <= hi] or trips, key=ot)
+    sampled = False
+    if len(sel) > 10:
+        step = (len(sel) - 1) / 9
+        sel = [sel[round(i * step)] for i in range(10)]
+        sampled = True
+    return sel, sampled
+
+
+def build(fn):
+    raw = json.load(open(fn))
+    r = raw['route']; rid = r['id']; show = SHOWS[r['show']]; ov = OVERRIDE.get(rid, {})
+    loc = raw['loc']; target = show['target']
+    lines = raw['lines']
+    if not lines: return None, 'no timetable'
+    # off stop: nearest stop to the show on direction 0's line (any stop seen)
+    cover, total = {}, 0
+    for v in raw['days'].values():
+        for d in v:
+            for t in d['trips']:
+                total += 1
+                for a in {s[1] for s in t}: cover[a] = cover.get(a, 0) + 1
+    allstops = {a for a in cover if a in loc}
+    near = sorted(allstops, key=lambda a: hav(loc[a], target))
+    pool = [a for a in near if hav(loc[a], target) <= hav(loc[near[0]], target) + 900]
+    best = max(cover[a] for a in pool)
+    off = next(a for a in pool if cover[a] >= .75 * best)
+    poolset = set(a for a in pool if hav(loc[a], target) <= max(1200, hav(loc[off], target) + 400))
+    offd = hav(loc[off], target)
+    names = {}
+    for v in raw['days'].values():
+        for d in v:
+            for t in d['trips']:
+                for s in t: names[s[1]] = clean(s[2])
+    offname = names.get(off, '')
+    days = []; served = []; heads = []; headways = []
+    for dk in r['days']:
+        dirs = []
+        for di, d in enumerate(raw['days'].get(dk, [])):
+            if di >= len(lines): continue
+            trips = [t for t in d['trips'] if any(s[1] in poolset for s in t)]
+            heads.append(d['head'])
+            offi = {id(t): min((i for i, s in enumerate(t) if s[1] in poolset), key=lambda i: (t[i][1] != off, hav(loc[t[i][1]], target))) for t in trips}
+            if not trips:
+                dirs.append(dict(label=dlabel(d, rid), li=di, trips=[]))
+                continue
+            fr = statistics.median(offi[id(t)] / max(1, len(t) - 1) for t in trips)
+            mode = 'arrive' if fr >= .6 else 'leave' if fr <= .4 else 'both'
+            ts = sorted(mins(t[offi[id(t)]][0]) for t in trips)
+            day_ts = [x for x in ts if 9 * 60 <= x <= 17 * 60]
+            if len(day_ts) >= 3: headways.append(statistics.median(b - a for a, b in zip(day_ts, day_ts[1:])))
+            elif len(ts) >= 2: headways.append(statistics.median(b - a for a, b in zip(ts, ts[1:])))
+            sel, sampled = pick(trips, offi, mode)
+            seq = lines[di]['stops']
+            out = []
+            for t in sel:
+                oi = offi[id(t)]
+                stops = []
+                keyix = [i for i, s in enumerate(t) if not s[3]]
+                lab = set([0, len(t) - 1, oi])
+                inner = [i for i in keyix if i not in lab]
+                for k in range(1, 4):
+                    if inner: lab.add(inner[min(len(inner) - 1, round(k * len(inner) / 4))])
+                for i, s in enumerate(t):
+                    if s[1] not in loc: continue
+                    f = (1 if not s[3] else 0) | (2 if i == oi else 0) | (4 if i in lab else 0)
+                    stops.append([s[0], names[s[1]], round(loc[s[1]][0], 5), round(loc[s[1]][1], 5), f, short(s[2])])
+                first, last = t[0], t[-1]
+                if mode == 'arrive':
+                    big, small = first[0], f'At {short(t[oi][2])} {t[oi][0]}'
+                    title = f'The {first[0]} from {short(first[2])}'
+                elif mode == 'leave':
+                    big, small = t[oi][0], f'From {short(t[oi][2])}, at {short(last[2])} {last[0]}'
+                    title = f'The {t[oi][0]} from {short(t[oi][2])}'
+                else:
+                    big, small = t[oi][0], f'At {short(t[oi][2])}, from {short(first[2])} {first[0]}'
+                    title = f'The {first[0]} from {short(first[2])}'
+                out.append(dict(big=big, small=small, title=title, s=stops))
+            note = ''
+            if sampled:
+                hw = statistics.median(b - a for a, b in zip(ts, ts[1:])) if len(ts) > 2 else 0
+                note = f'Buses run about every {int(round(hw / 5) * 5) or hw} minutes, so these are a few of them spread through the {"morning" if mode == "arrive" else "afternoon and evening" if mode == "leave" else "day"}.'
+            dirs.append(dict(label=dlabel(d, rid), li=di, trips=out, note=note, fr=fr))
+        dirs.sort(key=lambda x: -x.get('fr', -1))
+        for x in dirs: x.pop('fr', None)
+        has = any(x['trips'] for x in dirs)
+        if has: served.append(dk)
+        if not dirs:
+            dirs = []
+        days.append(dict(key=dk, label=DAYNAME[dk], dirs=dirs,
+                         none=f'In the current timetable there are no {r["num"]} buses on {DAYNAME[dk]}s, so I would look at the other ways to get there on the {show["name"]} page.'))
+    if not served: return None, 'no buses on show days'
+    # a, b from first heading
+    a, b = ENDS[rid]
+    # facts
+    if len(served) == len(r['days']): runs = andlist([DAYNAME[d] + 's' for d in served])
+    else: runs = andlist([DAYNAME[d] + 's' for d in served]) + ' only'
+    hw = min(headways) if headways else None
+    ntr = max(len(x['trips']) for dd in days for x in dd['dirs']) if days else 0
+    if hw is None or hw > 150: often = 'A few buses a day'
+    elif hw >= 100: often = 'About every 2 hours'
+    elif hw >= 50: often = 'About hourly'
+    else: often = f'About every {max(5, int(round(hw / 5) * 5))} minutes'
+    facts = [['Runs on', runs], ['How often', often], ['Get off at', short(offname), 'hl'], ['Then walk', walkfact(offd)]]
+    if offd > 3000: facts[3] = ['To the show', walkfact(offd)]
+    # legs from road steps, direction 0
+    legs = ov.get('legs') or makelegs(lines[0], names, off)
+    towns = [x for x in dict.fromkeys(short(names[s]).split(',')[0] for s in lines[0]['stops'][1:-1] if s in names)]
+    via = []
+    for leg in legs[:-1]:
+        via.append('via ' + leg[1].split(' to ')[-1])
+    bad = [x.split()[0].lower() for x in (a, b, show['town'])]
+    via = [re.sub(r'\s*\(.*?\)', '', v) for v in dict.fromkeys(via)]
+    via = [v for v in via if len(v) < 28 and not any(w in v.lower() for w in bad)][:3] or ['from ' + a]
+    walkp = 'which is right by' if offd < 250 else f'about {walkfact(offd).split("About ")[-1]} from' if offd <= 3000 else f'about {round(offd * 1.3 / 1609)} miles from'
+    lead = ov.get('lead') or ((f'The {r["num"]} runs between {a} and {b}. For the {show["name"]}, the closest stop is {offname}, {walkp} {show["label"]}.' if offd >= 250 else f'The {r["num"]} runs between {a} and {b}. For the {show["name"]}, I would get off at {offname}, which is right by the show.')
+                              + (' That’s a long way to walk, so I would add a taxi for the last part.' if offd > 3000 else ''))
+    lead += ' Pick a day and a time below and the map shows every stop.'
+    tip = show['tip']
+    missing = [DAYNAME[d] + 's' for d in r['days'] if d not in served]
+    if missing and r['show'] not in ('cosford', 'gransden', 'riat'):
+        tip = f'In the current timetable the {r["num"]} doesn’t run on {andlist(missing)}. ' + tip
+    cfg = dict(num=r['num'], operator=OPS.get(rid, ''), showName=show['name'], showUrl=SITE + show['slug'],
+               title=ov.get('title') or f'Bus {r["num"]}, {a} to {b}',
+               blindDest=(show['town'] if offd <= 3000 else b or show['town']), blindVia=via,
+               lead=lead, facts=facts, legs=legs, tipHead='Before you travel', tip=tip,
+               tipBtn=f'Back to getting to {show["town"]}', alt=ov.get('alt'),
+               target=target, targetLabel=show['label'], offTag=ov.get('offTag', 'Closest stop to the show'),
+               note=f'Stops and times are from the current timetable, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with {OPS.get(rid, "the operator")} before you travel. The line is drawn along the roads between the stops, so treat it as a guide.')
+    stab, sidx = [], {}
+    for dd in days:
+        for x in dd['dirs']:
+            for t in x['trips']:
+                packed = []
+                for p in t['s']:
+                    k = (p[1], p[2], p[3], p[5])
+                    if k not in sidx: sidx[k] = len(stab); stab.append(list(k))
+                    packed.append([p[0], sidx[k], p[4]])
+                t['s'] = packed
+    data = dict(stops=stab, lines=[thin(L['line']) for L in lines], days=days, start=next(i for i, d in enumerate(days) if d['key'] in served))
+    html = TPL.replace('/*DATA*/', 'var CFG=' + json.dumps(cfg, ensure_ascii=False) + ';\nvar DATA=' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';')
+    html = re.sub(r'<title>.*?</title>', f'<title>{cfg["title"]} | The Big Guide to UK Airshows</title>', html, count=1)
+    open(f'out/{rid}.html', 'w').write(html)
+    return dict(id=rid, show=r['show'], num=r['num'], title=cfg['title'], off=offname, offd=round(offd), served=served, days=r['days']), 'ok'
+
+
+def thin(line, tol=0.00004):
+    # drop points that sit on a straight run (Douglas Peucker style, iterative)
+    if len(line) < 3: return line
+    keep = [False] * len(line); keep[0] = keep[-1] = True
+    stack = [(0, len(line) - 1)]
+    while stack:
+        a, b = stack.pop()
+        (y1, x1), (y2, x2) = line[a], line[b]
+        dx, dy = x2 - x1, y2 - y1; L2 = dx * dx + dy * dy or 1e-12
+        best, bi = 0, None
+        for i in range(a + 1, b):
+            y, x = line[i]
+            t = max(0, min(1, ((x - x1) * dx + (y - y1) * dy) / L2))
+            d = (x1 + t * dx - x) ** 2 + (y1 + t * dy - y) ** 2
+            if d > best: best, bi = d, i
+        if bi is not None and best > tol * tol:
+            keep[bi] = True; stack += [(a, bi), (bi, b)]
+    return [p for p, k in zip(line, keep) if k]
+
+
+def dlabel(d, rid):
+    A, B = ENDS[rid]
+    lasts = [t[-1][2] for t in d['trips']]
+    firsts = [t[0][2] for t in d['trips']]
+    def hits(names, place): return sum(place.split()[0].lower() in n.lower() for n in names)
+    if hits(lasts, B) >= hits(lasts, A) and hits(lasts, B) > 0: return 'To ' + B
+    if hits(lasts, A) > 0: return 'To ' + A
+    return 'To ' + (A if hits(firsts, B) >= hits(firsts, A) else B)
+
+
+def makelegs(L, names, off):
+    seq = [s for s in L['stops']]
+    n = len(seq)
+    if n < 2: return []
+    oi = seq.index(off) if off in seq else n - 1
+    cand = sorted(set([0, n - 1, oi] + [round(k * (n - 1) / 4) for k in range(1, 4)]))
+    # drop milestones too close together
+    ms = [cand[0]]
+    for c in cand[1:]:
+        if c - ms[-1] >= 2 or c in (oi, n - 1): ms.append(c)
+    legs = []
+    for x, y in zip(ms, ms[1:]):
+        if y <= x: continue
+        st = [s for s in L['steps'] if x <= s['leg'] < y]
+        dist = sum(s['d'] for s in st)
+        refs, nm = {}, {}
+        for s in st:
+            for rf in (s['ref'] or '').split(';'):
+                rf = rf.strip()
+                if re.fullmatch(r'[MAB]\d+[MA]?(\(M\))?', rf): refs[rf] = refs.get(rf, 0) + s['d']
+            if s['name']: nm[s['name']] = nm.get(s['name'], 0) + s['d']
+        r2 = [k for k, v in sorted(refs.items(), key=lambda kv: -kv[1]) if v > 500][:3]
+        n2 = [k for k, v in sorted(nm.items(), key=lambda kv: -kv[1]) if v > 300][:3]
+        A, B = short(names.get(seq[x], '')).split(',')[0], short(names.get(seq[y], '')).split(',')[0]
+        miles = dist / 1609
+        txt = (f'Mostly along {andlist(n2)}' if n2 else 'Through local streets') + (f', about {round(miles)} miles.' if miles >= 1.5 else ', under a couple of miles.' if miles >= .6 else ', a short hop.')
+        legs.append([r2, f'{A} to {B}', txt])
+    return legs
+
+
+if __name__ == '__main__':
+    idx, skipped = [], []
+    for fn in sorted(glob.glob('raw/*.json')):
+        try:
+            res, msg = build(fn)
+        except Exception as e:
+            import traceback; traceback.print_exc()
+            res, msg = None, 'ERROR ' + repr(e)[:120]
+        if res: idx.append(res)
+        else: skipped.append((os.path.basename(fn)[:-5], msg))
+        print(os.path.basename(fn), msg)
+    json.dump(dict(built=idx, skipped=skipped), open('index.json', 'w'), indent=1)

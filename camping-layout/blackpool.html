@@ -1549,6 +1549,7 @@ h3{font-weight:700}
 }
 </style>
 <script src="https://jskedge1.github.io/airshow-pages/transport-times.js"></script>
+<script src="https://jskedge1.github.io/airshow-pages/bus-routes.js"></script>
 </head>
 <body>
 <script>window.PHOTO={"bbmf": "https://jskedge1.github.io/airshow-pages/camping-layout/img/b30bbc52cb62ae05.webp", "typhoon": "https://jskedge1.github.io/airshow-pages/camping-layout/img/631d94c8d1c1b002.webp", "mig17": "https://jskedge1.github.io/airshow-pages/camping-layout/img/06c54e8d62faef95.webp", "spitfire": "https://jskedge1.github.io/airshow-pages/camping-layout/img/ca43bf7c21d40d50.webp", "pitts": "https://jskedge1.github.io/airshow-pages/camping-layout/img/217e79a0fa7f6267.webp", "wingwalkers": "https://jskedge1.github.io/airshow-pages/camping-layout/img/3e48b45226de3bc5.webp", "raven": "https://jskedge1.github.io/airshow-pages/camping-layout/img/828fe5bd3cefa5dc.webp"};
@@ -3510,6 +3511,7 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Dakota, Spitfire an
     var idx=items.indexOf(t)+1, q=encodeURIComponent(t.place);
     pd.innerHTML='<h3>'+esc(t.title)+'</h3><p class="lead">'+esc(t.text)+'</p>'
       +'<p class="on-map"><b>Map search</b>'+esc(t.place)+'</p>'
+      +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('blackpool',t.id):'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
           var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train'}[r[0]];
           var links=(r[3]||[]).map(function(l){return '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(l[1])+'&destination='+encodeURIComponent(l[2])+'&travelmode=walking">'+esc(l[0])+' ↗</a>';}).join('');

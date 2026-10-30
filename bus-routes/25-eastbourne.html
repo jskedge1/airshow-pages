@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bus 25, Lewes to Eastbourne | The Big Guide to UK Airshows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --navy:#13293C;--navy-2:#1C3850;--navy-3:#0C1C2A;
+  --sky:#00A6E2;--sky-ink:#006F99;--teal:#32B4AF;--teal-ink:#0E5F5B;
+  --red:#D74949;--amber:#F2B233;--line:#C6C6C6;--mist:#EEF2F5;--paper:#FFFFFF;--ink:#0B0B0B;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:17px;line-height:27px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* top strip */
+.strip{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 0;font-weight:500;font-size:15px}
+.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy);padding:6px 0;border-bottom:2px solid transparent;transition:border-color .3s var(--ease)}
+.back:hover{border-color:var(--sky)}
+.back svg{width:16px;height:16px}
+.op{color:#3d4a55}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 48px;align-items:end;padding:26px 0 0}
+.blind{position:relative;background:var(--navy-3);border-radius:14px 14px 14px 0;padding:22px 26px 24px;display:flex;align-items:center;gap:22px;overflow:hidden;box-shadow:0 18px 40px -22px rgba(12,28,42,.7)}
+.blind::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.55) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
+.blind .num{font:800 92px/0.9 "Barlow Condensed",sans-serif;color:var(--amber);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
+.blind .dest{font:700 34px/1 "Barlow Condensed",sans-serif;color:var(--amber);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3)}
+.blind .via{display:block;margin-top:8px;font:600 18px/1.2 "Barlow Condensed",sans-serif;color:#f7d68f;letter-spacing:.03em;text-transform:uppercase;opacity:.85;transition:opacity .4s var(--ease)}
+.intro h1{font:800 46px/46px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;letter-spacing:-.005em}
+.intro p{margin-top:12px;font-size:18px;line-height:29px;color:#1d2730;max-width:520px}
+
+/* facts */
+.facts{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.2fr;margin:34px 0 0;border-top:3px solid var(--navy)}
+.fact{padding:14px 18px 16px 0;border-right:1px solid var(--line)}
+.fact+.fact{padding-left:18px}
+.fact:last-child{border-right:0}
+.fact span{display:block;font-weight:500;font-size:15px;line-height:20px;color:var(--navy)}
+.fact b{display:block;margin-top:4px;font:700 25px/28px "Barlow Condensed",sans-serif;color:var(--navy)}
+.fact.hl b{color:var(--red)}
+
+/* planner */
+.planner{margin-top:38px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px 28px;align-items:start}
+.planner h2,.sec h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;grid-column:1/-1}
+.seg{display:inline-flex;background:var(--mist);border-radius:12px;padding:5px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:10px 16px;font-weight:600;font-size:16px;color:var(--navy);transition:background .3s var(--ease),color .3s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.board{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.board::-webkit-scrollbar{display:none}
+.dep{flex:0 0 auto;min-width:150px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px 11px;transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
+.dep:hover{border-color:var(--navy);transform:translateY(-2px)}
+.dep .t{font:700 28px/30px "Barlow Condensed",sans-serif;color:var(--navy);font-variant-numeric:tabular-nums}
+.dep .a{display:block;font-weight:500;font-size:14px;line-height:19px;color:#3d4a55}
+.dep[aria-pressed="true"]{background:var(--navy);border-color:var(--navy)}
+.dep[aria-pressed="true"] .t{color:var(--amber)}
+.dep[aria-pressed="true"] .a{color:#dfe7ee}
+
+/* map stage */
+.stage{position:relative;margin-top:20px}
+.mapbox{position:relative}
+#map{height:640px;border-radius:16px;z-index:0;background:#dfe6ea}
+#map .leaflet-tile-pane{filter:saturate(.55) contrast(.95) brightness(1.04)}
+.leg{position:absolute;left:16px;bottom:16px;z-index:5;background:#fff;border-radius:10px;padding:8px 12px;display:flex;gap:14px;font-weight:500;font-size:14px;line-height:18px;box-shadow:0 6px 18px -8px rgba(12,28,42,.45)}
+.leg i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:2px solid var(--navy);background:#fff}
+.leg i.r{background:var(--red);border-color:var(--red)}
+.leg i.l{width:22px;height:5px;border:0;border-radius:3px;background:var(--sky)}
+.panel{position:absolute;top:18px;right:18px;max-height:calc(100% - 36px);width:372px;z-index:5;background:#fff;border-radius:14px;box-shadow:0 22px 44px -20px rgba(12,28,42,.55);display:flex;flex-direction:column;overflow:hidden}
+.panel header{background:var(--navy);color:#fff;padding:14px 18px 13px}
+.panel header b{display:block;font:700 22px/24px "Barlow Condensed",sans-serif;text-transform:uppercase}
+.panel header span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
+.stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px}
+.stops::-webkit-scrollbar{display:none}
+.stops li{position:relative;padding:5px 0 5px 28px;display:flex;justify-content:space-between;gap:12px;font-size:15px;line-height:21px}
+.stops li::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:3px;background:var(--sky)}
+.stops li:first-child::before{top:14px}
+.stops li:last-child::before{bottom:calc(100% - 14px)}
+.stops li::after{content:"";position:absolute;left:2px;top:10px;width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid var(--sky)}
+.stops li.key{font-weight:700;color:var(--navy);padding-top:8px;padding-bottom:8px}
+.stops li.key::after{top:12px;left:0;width:15px;height:15px;border:3px solid var(--navy)}
+.stops li.off{color:var(--red)}
+.stops li.off::after{background:var(--red);border-color:var(--red)}
+.stops li.off .tag{display:block;font-weight:500;font-size:13px;line-height:17px;color:var(--red)}
+.stops li.stop{cursor:pointer}
+.stops li.stop:hover span:first-child,.stops li.active span:first-child{text-decoration:underline;text-decoration-color:var(--sky);text-underline-offset:3px}
+.stops li.minor{display:none;color:#2c3944}
+.stops li.minor.open{display:flex}
+.stops time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--sky-ink);white-space:nowrap}
+.stops li.key time{color:var(--navy)}
+.stops li.off time{color:var(--red)}
+.stops li.fold{padding-top:2px;padding-bottom:2px}
+.stops li.fold::after{display:none}
+.stops li.fold::before{background:repeating-linear-gradient(var(--sky) 0 4px,transparent 4px 8px)}
+.stops li.fold button{border:0;background:none;padding:2px 0;font-weight:600;font-size:14px;color:var(--sky-ink);text-align:left}
+.stops li.fold button:hover{color:var(--navy)}
+
+/* map bits */
+.lbl{background:var(--navy);color:#fff;border:0;border-radius:6px;font:600 13px "Barlow",sans-serif;padding:3px 8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
+.lbl.off{background:var(--red)}
+.lbl::before{display:none}
+.busdot{width:30px;height:30px;border-radius:50%;background:var(--amber);border:3px solid var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
+.busdot svg{width:15px;height:15px}
+.leaflet-popup-content{font:500 15px/21px "Barlow",sans-serif;margin:10px 14px}
+.leaflet-popup-content b{color:var(--navy)}
+
+/* roads */
+.sec{margin-top:56px}
+.journey{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:34px;align-items:start;margin-top:18px}
+.legs{list-style:none;counter-reset:none}
+.legs li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.legs li:last-child{border-bottom:1px solid var(--line)}
+.signs{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.sign{display:inline-block;font:700 16px/1 "Barlow",sans-serif;padding:5px 7px 4px;border-radius:4px;border:2px solid #111;background:#fff;color:#111;letter-spacing:.01em}
+.sign.m{background:#1D5FAD;border-color:#fff;color:#fff;box-shadow:0 0 0 1px #1D5FAD}
+.legs b{display:block;font:700 21px/24px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
+.legs p{margin-top:3px;font-size:16px;line-height:25px;color:#1d2730}
+.side{position:relative;top:-64px}
+.advice{background:var(--navy);color:#fff;border-radius:16px 16px 16px 0;padding:24px 24px 22px}
+.advice h3{font:700 24px/26px "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--amber)}
+.advice p{margin-top:10px;font-size:16px;line-height:25px;color:#e6edf3}
+.advice a.btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--amber);color:var(--navy);text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:10px;transition:transform .3s var(--ease),background .3s var(--ease)}
+.advice a.btn:hover{transform:translateX(3px);background:#f6c35a}
+.alt{margin-top:14px;border:2px solid var(--teal);border-radius:14px;padding:16px 18px}
+.alt b{display:block;font:700 20px/22px "Barlow Condensed",sans-serif;color:var(--teal-ink);text-transform:uppercase}
+.alt p{margin-top:6px;font-size:15px;line-height:23px}
+
+.note{margin:44px 0 40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;line-height:21px;color:#3d4a55;max-width:820px}
+.note a{color:var(--sky-ink)}
+
+.rise{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rise.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none;transition:none}.dep,.advice a.btn{transition:none}}
+
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;gap:22px}
+  .facts{grid-template-columns:1fr 1fr}
+  .fact:nth-child(2){border-right:0}
+  .fact:nth-child(3){padding-left:0}
+  .fact:nth-child(n+3){border-top:1px solid var(--line)}
+  .planner{grid-template-columns:1fr}
+  #map{height:460px}
+  .panel{position:static;width:auto;margin-top:14px;box-shadow:none;border:1px solid var(--line)}
+  .stops{max-height:none}
+  .journey{grid-template-columns:1fr}
+  .side{top:0}
+}
+@media(max-width:560px){
+  .wrap{padding:0 16px}
+  .strip{flex-direction:column;align-items:flex-start;gap:0;font-size:14px}
+  .op{padding-left:24px;margin-top:-4px}
+  .blind{padding:16px 18px;gap:14px}
+  .blind .num{font-size:64px}
+  .blind .dest{font-size:26px}
+  .blind .via{font-size:15px}
+  .intro h1{font-size:34px;line-height:36px}
+  .intro p{font-size:17px;line-height:27px}
+  .fact{padding-right:10px}
+  .fact+.fact{padding-left:10px}
+  .fact:nth-child(3){padding-left:0}
+  .fact b{font-size:21px;line-height:24px}
+  #map{height:360px;border-radius:12px}
+  .leg{left:auto;right:8px;bottom:auto;top:8px;gap:8px;font-size:12px;padding:6px 8px}
+  .legs li{grid-template-columns:1fr;gap:8px}
+  .seg{display:flex}
+  .seg button{flex:1;padding:10px 8px;font-size:15px}
+  .dep{min-width:128px}
+}
+
+.pickrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.nobus{display:none;margin-top:14px;background:var(--mist);border-left:5px solid var(--red);border-radius:0 12px 12px 0;padding:14px 18px;font-size:16px;line-height:25px}
+.nobus.on{display:block}
+.boardnote{grid-column:1/-1;font-size:15px;line-height:22px;color:#3d4a55;margin-top:-6px}
+.stage.off{opacity:.45;pointer-events:none}
+
+.seg button{white-space:nowrap}
+.dep{max-width:300px}
+.board{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);padding-right:40px}
+.dep .a{white-space:normal}
+@media(max-width:560px){.pickrow{display:grid;grid-template-columns:1fr;width:100%}.pickrow .seg{width:100%}.dep{max-width:76vw}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="strip">
+    <a class="back" id="backlink" href="#" target="_top"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg><span></span></a>
+    <span class="op" id="op"></span>
+  </nav>
+
+  <header class="hero">
+    <div class="blind rise" aria-hidden="true">
+      <div class="num" id="bnum"></div>
+      <div><div class="dest" id="bdest"></div><span class="via" id="bvia"></span></div>
+    </div>
+    <div class="intro rise">
+      <h1 id="title"></h1>
+      <p id="lead"></p>
+    </div>
+  </header>
+
+  <div class="facts rise" id="facts"></div>
+
+  <section class="planner rise" aria-labelledby="ph">
+    <h2 id="ph">Pick your bus</h2>
+    <div class="pickrow">
+      <div class="seg" id="day" role="group" aria-label="Day"></div>
+      <div class="seg" id="dir" role="group" aria-label="Direction"></div>
+    </div>
+    <div class="board" id="board" role="group" aria-label="Departure times"></div>
+    <p class="boardnote" id="bnote"></p>
+  </section>
+  <p class="nobus" id="nobus"></p>
+
+  <div class="stage rise" id="stage">
+    <div class="mapbox">
+      <div id="map" role="img"></div>
+      <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
+    </div>
+    <aside class="panel" aria-live="polite">
+      <header><b id="ptitle"></b><span id="psub"></span></header>
+      <ol class="stops" id="stops"></ol>
+    </aside>
+  </div>
+
+  <section class="sec rise" aria-labelledby="rh">
+    <h2 id="rh">The roads it takes</h2>
+    <div class="journey">
+      <ol class="legs" id="legs"></ol>
+      <div class="side">
+        <div class="advice"><h3 id="tiph"></h3><p id="tip"></p><a class="btn" id="tipbtn" href="#" target="_top"></a></div>
+        <div class="alt" id="alt" hidden><b id="alth"></b><p id="altp"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="note" id="note"></p>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var CFG={"num": "25", "operator": "Cuckmere Buses", "showName": "Eastbourne Airshow", "showUrl": "https://www.ukairshowguide.co.uk/eastbourneairshow", "title": "Bus 25, Lewes to Eastbourne", "blindDest": "Eastbourne", "blindVia": ["via Willingdon", "via Polegate", "via Firle Park Gates"], "lead": "The 25 runs between Lewes and Eastbourne. For the Eastbourne Airshow, the closest stop is Eastbourne Cornfield Road (Stop C1), about 15 minutes from Western Lawns. Pick a day and a time below and the map shows every stop.", "facts": [["Runs on", "Thursdays and Saturdays only"], ["How often", "A few buses a day"], ["Get off at", "Eastbourne Cornfield Road", "hl"], ["Then walk", "About 15 minutes"]], "legs": [[["A2021"], "Eastbourne Gildredge Road to Willingdon", "Mostly along King's Drive, The Avenue and Wish Hill, about 3 miles."], [["A27", "B2247"], "Willingdon to Polegate", "Mostly along Eastbourne Road, Wannock Road and Hailsham Road, about 4 miles."], [["A27"], "Polegate to Firle Park Gates", "Mostly along Lewes Road, Alfriston Road and The Village, about 12 miles."], [["B2192", "A26", "A27"], "Firle Park Gates to Lewes", "Mostly along New Road, Lacys Hill and Station Road, about 6 miles."]], "tipHead": "Before you travel", "tip": "In the current timetable the 25 doesn’t run on Sundays. The seafront roads close during the show and buses are diverted, so I would check where your stop is before you set off. Buses back fill up quickly after the flying.", "tipBtn": "Back to getting to Eastbourne", "alt": null, "target": [50.76006, 0.284433], "targetLabel": "Western Lawns", "offTag": "Closest stop to the show", "note": "Stops and times are from the current timetable, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with Cuckmere Buses before you travel. The line is drawn along the roads between the stops, so treat it as a guide."};
+var DATA={"stops":[["Berwick Drusillas Roundabout (N-bound)",50.82602,0.16244,"Berwick Drusillas Roundabout"],["Milton Street",50.82446,0.18302,"Milton Street"],["Wilmington, Thornwell Road",50.82266,0.19541,"Wilmington, Thornwell Road"],["Polegate, Folkington Road",50.82146,0.22571,"Polegate, Folkington Road"],["Polegate, Gainsborough Lane",50.82106,0.2355,"Polegate, Gainsborough Lane"],["Polegate, Brown Jack Avenue",50.82073,0.23753,"Polegate, Brown Jack Avenue"],["Polegate Cophall Roundabout (N-bound)",50.82649,0.23848,"Polegate Cophall Roundabout"],["Polegate, Victoria Road",50.82553,0.2412,"Polegate, Victoria Road"],["Polegate, High Street",50.82399,0.24392,"Polegate, High Street"],["Polegate, Railway Station",50.82142,0.24423,"Polegate, Railway Station"],["Polegate, Wannock Road Recreation Ground",50.81799,0.24065,"Polegate, Wannock Road"],["Polegate, Farmlands Way",50.81524,0.23706,"Polegate, Farmlands Way"],["Wannock, Glen Close",50.8112,0.2356,"Wannock, Glen Close"],["Willingdon Community School",50.81086,0.24057,"Willingdon Community School"],["Lower Willingdon, Tott Yew Road",50.81036,0.24504,"Lower Willingdon, Tott Yew"],["Lower Willingdon, Post Office",50.80796,0.24753,"Lower Willingdon, Post Office"],["Willingdon Coopers Hill (S-bound)",50.80317,0.25026,"Willingdon Coopers Hill"],["Willingdon, Chalk Farm Hotel",50.8002,0.25029,"Willingdon, Chalk Farm Hotel"],["Willingdon, Wish Hill Post Office",50.79841,0.25117,"Willingdon, Wish Hill Post"],["Willingdon, Wedderburn Road",50.79599,0.25338,"Willingdon, Wedderburn Road"],["Willingdon, Walnut Tree Walk",50.79333,0.25558,"Willingdon, Walnut Tree Walk"],["Willingdon, Wish Hill",50.79365,0.25628,"Willingdon, Wish Hill"],["Willingdon, Woodland Avenue",50.79443,0.25875,"Willingdon, Woodland Avenue"],["Upperton, Selmeston Road",50.78979,0.26612,"Upperton, Selmeston Road"],["Upperton, District General Hospital",50.78577,0.26767,"Upperton, District General"],["Upperton, Burton Road",50.78151,0.2709,"Upperton, Burton Road"],["Upperton, King's Avenue",50.7808,0.27362,"Upperton, King's Avenue"],["Upperton, St Thomas A Becket School",50.77862,0.27839,"Upperton, St Thomas A Becket"],["Upperton Enys Road (S-bound)",50.77645,0.28136,"Upperton Enys Road (S-bound)"],["Upperton, The Hawthorns",50.77473,0.28171,"Upperton, The Hawthorns"],["Eastbourne Eversfield Road (SW-bound)",50.77285,0.28217,"Eastbourne Eversfield Road"],["Eastbourne, Upperton Gardens",50.77085,0.27955,"Eastbourne, Upperton Gardens"],["Eastbourne Railway Station (Stop R2)",50.76934,0.28025,"Eastbourne Railway Station"],["Eastbourne Cornfield Road (Stop C1)",50.76807,0.28415,"Eastbourne Cornfield Road"],["Lewes, Railway Station",50.87007,0.01058,"Lewes, Railway Station"],["Lewes, Southover Road",50.87218,0.01107,"Lewes, Southover Road"],["Lewes Fisher Street (N-bound)",50.87362,0.00988,"Lewes Fisher Street (N-bound)"],["Lewes West Street (E-bound)",50.87448,0.01061,"Lewes West Street (E-bound)"],["Lewes School Hill Bottom (Stand D)",50.87392,0.01366,"Lewes School Hill Bottom"],["Lewes Phoenix Causeway (E-bound)",50.87579,0.01711,"Lewes Phoenix Causeway"],["South Malling, The Spinneys",50.87865,0.02136,"South Malling, The Spinneys"],["South Malling, Church Lane",50.88271,0.01842,"South Malling, Church Lane"],["South Malling Malling Down (NE-bound)",50.88373,0.02013,"South Malling Malling Down"],["Glyndebourne, Opera House",50.87715,0.06254,"Glyndebourne, Opera House"],["Glynde, Post Office",50.86233,0.06865,"Glynde, Post Office"],["Glynde, Railway Station",50.8585,0.07008,"Glynde, Railway Station"],["Glynde Lacys Hill (S-bound)",50.85432,0.06973,"Glynde Lacys Hill (S-bound)"],["Beddingham, Preston Court Farm",50.85315,0.07097,"Beddingham, Preston Court Farm"],["Firle Park Gates",50.85165,0.08249,"Firle Park Gates"],["Firle Road",50.85242,0.10808,"Firle Road"],["Selmeston, Charleston Farmhouse",50.84199,0.11863,"Selmeston, Charleston"],["Selmeston, Charleston",50.8474,0.12183,"Selmeston, Charleston"],["Selmeston, The Barley Mow",50.84037,0.13796,"Selmeston, The Barley Mow"],["Alciston Road",50.83638,0.14022,"Alciston Road"],["Berwick, The Village",50.82756,0.15881,"Berwick, The Village"],["Berwick, in Drusillas Zoo Park",50.82438,0.16325,"Berwick, in Drusillas Zoo Park"],["Alfriston, Coach Park",50.80898,0.15822,"Alfriston, Coach Park"],["Eastbourne Gildredge Road (Stop G2)",50.76788,0.28135,"Eastbourne Gildredge Road"],["Eastbourne, Upperton Gardens",50.7707,0.27906,"Eastbourne, Upperton Gardens"],["Eastbourne Eversfield Road (NE-bound)",50.7725,0.2814,"Eastbourne Eversfield Road"],["Upperton, The Hawthorns",50.77476,0.28131,"Upperton, The Hawthorns"],["Upperton Enys Road (NE-bound)",50.77572,0.28038,"Upperton Enys Road (NE-bound)"],["Upperton, St Thomas A Becket School",50.77861,0.27812,"Upperton, St Thomas A Becket"],["Upperton, King's Avenue",50.78061,0.27428,"Upperton, King's Avenue"],["Upperton, Burton Road",50.78168,0.27053,"Upperton, Burton Road"],["Upperton, District General Hospital",50.78637,0.26709,"Upperton, District General"],["Upperton, Selmeston Road",50.78913,0.2661,"Upperton, Selmeston Road"],["Upperton, Park Avenue",50.79077,0.26557,"Upperton, Park Avenue"],["Willingdon, Woodland Avenue",50.7934,0.26046,"Willingdon, Woodland Avenue"],["Willingdon, Wish Hill",50.79373,0.25654,"Willingdon, Wish Hill"],["Willingdon, Walnut Tree Walk",50.79307,0.2555,"Willingdon, Walnut Tree Walk"],["Willingdon, Wedderburn Road",50.79601,0.25297,"Willingdon, Wedderburn Road"],["Willingdon, Wish Hill Post Office",50.79877,0.25046,"Willingdon, Wish Hill Post"],["Willingdon, Chalk Farm Hotel",50.80032,0.25,"Willingdon, Chalk Farm Hotel"],["Willingdon Coopers Hill (N-bound)",50.80352,0.24984,"Willingdon Coopers Hill"],["Lower Willingdon, Post Office",50.80805,0.24722,"Lower Willingdon, Post Office"],["Lower Willingdon, Tott Yew Road",50.80986,0.2456,"Lower Willingdon, Tott Yew"],["Lower Willingdon Broad Road (NW-bound)",50.81157,0.24232,"Lower Willingdon Broad Road"],["Wannock, Glen Close",50.81132,0.23534,"Wannock, Glen Close"],["Polegate, Farmlands Way",50.81521,0.23683,"Polegate, Farmlands Way"],["Polegate, Wannock Road Recreation Ground",50.81807,0.24049,"Polegate, Wannock Road"],["Polegate, Railway Station",50.82277,0.24418,"Polegate, Railway Station"],["Polegate, High Street",50.82389,0.24379,"Polegate, High Street"],["Polegate, Victoria Road",50.8251,0.24155,"Polegate, Victoria Road"],["Polegate Cophall Roundabout (S-bound)",50.82646,0.23866,"Polegate Cophall Roundabout"],["Polegate, Brown Jack Avenue",50.82062,0.23736,"Polegate, Brown Jack Avenue"],["Polegate, Gainsborough Lane",50.82119,0.23301,"Polegate, Gainsborough Lane"],["Polegate, Folkington Road",50.82134,0.22478,"Polegate, Folkington Road"],["Wilmington, Thornwell Road",50.82253,0.19541,"Wilmington, Thornwell Road"],["Milton Street",50.82425,0.18369,"Milton Street"],["Berwick, The Village",50.82779,0.15782,"Berwick, The Village"],["Alciston Road",50.83482,0.14082,"Alciston Road"],["Selmeston, The Barley Mow",50.84033,0.13765,"Selmeston, The Barley Mow"],["Selmeston, Charleston",50.84721,0.122,"Selmeston, Charleston"],["Firle Road",50.85277,0.1057,"Firle Road"],["Firle Park Gates",50.85164,0.08273,"Firle Park Gates"],["Firle Bostal",50.85384,0.08183,"Firle Bostal"],["Beddingham, Preston Court Farm",50.85291,0.07033,"Beddingham, Preston Court Farm"],["Glynde Lacys Hill (N-bound)",50.85396,0.06958,"Glynde Lacys Hill (N-bound)"],["Glynde, Railway Station",50.85868,0.07004,"Glynde, Railway Station"],["Glynde, Post Office",50.86181,0.06887,"Glynde, Post Office"],["Glyndebourne, Opera House",50.87694,0.06258,"Glyndebourne, Opera House"],["Ringmer, New Road",50.88661,0.04746,"Ringmer, New Road"],["South Malling Malling Down (SW-bound)",50.88335,0.01983,"South Malling Malling Down"],["South Malling, Church Lane",50.88213,0.01862,"South Malling, Church Lane"],["South Malling, The Spinneys",50.87769,0.02157,"South Malling, The Spinneys"],["Lewes, Brooks Road",50.87565,0.01817,"Lewes, Brooks Road"],["Lewes Phoenix Causeway (W-bound)",50.87565,0.01712,"Lewes Phoenix Causeway"],["Lewes, Friars' Walk",50.87398,0.01408,"Lewes, Friars' Walk"],["Berwick, Railway Station",50.83956,0.16571,"Berwick, Railway Station"]],"lines":[[[50.76789,0.28149],[50.76892,0.2814],[50.76907,0.28125],[50.76917,0.28072],[50.76915,0.27984],[50.76933,0.27967],[50.76972,0.27886],[50.77005,0.27841],[50.77306,0.28234],[50.77313,0.28252],[50.77327,0.28247],[50.77367,0.28254],[50.77389,0.2825],[50.7743,0.28224],[50.77451,0.28197],[50.77544,0.28026],[50.77631,0.28126],[50.77667,0.28135],[50.77675,0.28146],[50.77689,0.28132],[50.77742,0.2807],[50.77843,0.27858],[50.77862,0.27829],[50.77899,0.27793],[50.77966,0.27753],[50.78004,0.27715],[50.78031,0.27672],[50.78054,0.27595],[50.78088,0.27199],[50.78103,0.27143],[50.78124,0.27107],[50.78159,0.27074],[50.78316,0.26955],[50.78351,0.26942],[50.78375,0.26915],[50.78382,0.26898],[50.78408,0.26885],[50.78613,0.26735],[50.78844,0.26646],[50.7905,0.26582],[50.79136,0.26547],[50.79165,0.26533],[50.79202,0.26491],[50.79303,0.26277],[50.7935,0.26029],[50.79368,0.2597],[50.79392,0.25928],[50.7945,0.25853],[50.79486,0.25791],[50.79491,0.25771],[50.79487,0.2574],[50.7945,0.25691],[50.79346,0.25633],[50.79282,0.25614],[50.79289,0.25571],[50.79462,0.25476],[50.79558,0.25406],[50.79574,0.25388],[50.79622,0.25266],[50.79659,0.25229],[50.79823,0.25141],[50.79854,0.25075],[50.79872,0.25063],[50.79942,0.25063],[50.80043,0.2501],[50.80101,0.24996],[50.80147,0.24996],[50.80219,0.25028],[50.80247,0.25031],[50.80295,0.25025],[50.80346,0.25003],[50.80363,0.25012],[50.80434,0.24963],[50.80499,0.24934],[50.80655,0.24904],[50.80672,0.24878],[50.80725,0.24838],[50.80725,0.24826],[50.80754,0.24783],[50.80958,0.24604],[50.81012,0.24548],[50.81041,0.24433],[50.8107,0.24378],[50.8117,0.24236],[50.81056,0.24023],[50.80913,0.23716],[50.81022,0.23604],[50.81067,0.23573],[50.81147,0.23546],[50.81221,0.23505],[50.81259,0.23508],[50.81289,0.23523],[50.81613,0.23775],[50.81751,0.23975],[50.81776,0.23947],[50.81779,0.23983],[50.81799,0.24023],[50.81827,0.24058],[50.81844,0.24067],[50.81861,0.24064],[50.81876,0.24047],[50.81885,0.24019],[50.81876,0.24047],[50.81861,0.24064],[50.81844,0.24067],[50.81827,0.24058],[50.81799,0.24023],[50.81779,0.23983],[50.81776,0.23947],[50.81751,0.23975],[50.81804,0.24063],[50.81898,0.24175],[50.81979,0.24305],[50.8201,0.24343],[50.8203,0.24361],[50.8211,0.24408],[50.82165,0.24424],[50.8235,0.24436],[50.82368,0.24441],[50.82371,0.24449],[50.8244,0.24282],[50.82503,0.2418],[50.82498,0.24148],[50.82519,0.24156],[50.8263,0.24003],[50.82659,0.23978],[50.82707,0.23976],[50.8278,0.23987],[50.82796,0.23977],[50.828,0.23946],[50.82784,0.23923],[50.82758,0.239],[50.82708,0.23874],[50.82248,0.23791],[50.82189,0.23802],[50.82147,0.23822],[50.82064,0.23891],[50.82051,0.23888],[50.82045,0.23867],[50.82049,0.23806],[50.82109,0.23493],[50.82123,0.23321],[50.82144,0.22218],[50.82137,0.22074],[50.82109,0.21828],[50.821,0.21678],[50.82206,0.2005],[50.8226,0.19506],[50.82431,0.18395],[50.82441,0.18249],[50.8243,0.17961],[50.8243,0.17796],[50.82439,0.17657],[50.82455,0.17525],[50.82622,0.16478],[50.82658,0.16324],[50.82657,0.16288],[50.82649,0.16272],[50.82623,0.16259],[50.82418,0.16254],[50.82416,0.16274],[50.82435,0.1628],[50.82431,0.16325],[50.82446,0.16332],[50.82451,0.16284],[50.82416,0.16274],[50.82418,0.16254],[50.82281,0.16218],[50.8222,0.16232],[50.8217,0.16255],[50.8209,0.16278],[50.81885,0.16279],[50.81746,0.16219],[50.81647,0.16153],[50.81617,0.1614],[50.81482,0.16132],[50.81428,0.16118],[50.81351,0.1607],[50.81215,0.16023],[50.8117,0.15993],[50.81109,0.15918],[50.81039,0.15892],[50.80998,0.15862],[50.80984,0.1585],[50.80953,0.15799],[50.80921,0.15832],[50.80903,0.15833],[50.80896,0.15816],[50.80911,0.15799],[50.80896,0.15816],[50.80903,0.15833],[50.80921,0.15832],[50.80953,0.15799],[50.80984,0.1585],[50.80998,0.15862],[50.81039,0.15892],[50.81109,0.15918],[50.8117,0.15993],[50.81215,0.16023],[50.81351,0.1607],[50.81428,0.16118],[50.81482,0.16132],[50.81617,0.1614],[50.81647,0.16153],[50.81746,0.16219],[50.81885,0.16279],[50.8209,0.16278],[50.8217,0.16255],[50.8222,0.16232],[50.82281,0.16218],[50.82418,0.16254],[50.82623,0.16259],[50.82638,0.16252],[50.82648,0.16238],[50.82661,0.16201],[50.82688,0.16049],[50.82737,0.15904],[50.83358,0.14339],[50.83412,0.14218],[50.83485,0.14091],[50.83432,0.14106],[50.83416,0.14103],[50.83354,0.14049],[50.83299,0.14028],[50.83183,0.13879],[50.8312,0.13761],[50.83068,0.1365],[50.83079,0.13633],[50.83084,0.1359],[50.83079,0.13633],[50.83068,0.1365],[50.83183,0.13879],[50.83299,0.14028],[50.83354,0.14049],[50.83416,0.14103],[50.83432,0.14106],[50.83485,0.14091],[50.83512,0.14064],[50.8358,0.14025],[50.83756,0.13997],[50.8384,0.13975],[50.83908,0.13941],[50.83969,0.13902],[50.83985,0.13883],[50.84011,0.13841],[50.84083,0.13683],[50.84128,0.13608],[50.84218,0.13462],[50.84325,0.13341],[50.84365,0.13259],[50.84417,0.13097],[50.84532,0.12693],[50.84682,0.12323],[50.84743,0.12135],[50.84726,0.12122],[50.84648,0.12145],[50.84595,0.12152],[50.84553,0.12148],[50.84521,0.12136],[50.84355,0.11962],[50.84188,0.11884],[50.84246,0.11625],[50.84263,0.11651],[50.84302,0.11675],[50.84306,0.11683],[50.84258,0.11917],[50.84355,0.11962],[50.84521,0.12136],[50.84553,0.12148],[50.84595,0.12152],[50.84648,0.12145],[50.84726,0.12122],[50.84743,0.12135],[50.84879,0.11755],[50.84968,0.11483],[50.85119,0.11137],[50.85189,0.10958],[50.85224,0.1085],[50.85279,0.10602],[50.85306,0.10404],[50.85345,0.09428],[50.85314,0.0942],[50.853,0.09389],[50.85295,0.09297],[50.85315,0.09035],[50.85254,0.08745],[50.85238,0.08626],[50.85196,0.08529],[50.85167,0.08252],[50.85214,0.08246],[50.85333,0.08249],[50.85388,0.08237],[50.85404,0.07791],[50.85386,0.07568],[50.85301,0.07111],[50.85294,0.07008],[50.85299,0.06993],[50.85304,0.06985],[50.85405,0.06968],[50.85484,0.06966],[50.85515,0.06978],[50.8561,0.06936],[50.85643,0.06929],[50.85681,0.0693],[50.85808,0.06957],[50.85828,0.06967],[50.85869,0.07029],[50.85889,0.07073],[50.85898,0.07078],[50.86004,0.07003],[50.86154,0.0692],[50.86215,0.06863],[50.86306,0.06839],[50.86527,0.06691],[50.86603,0.06663],[50.86718,0.06659],[50.86792,0.06642],[50.86856,0.06618],[50.86933,0.06584],[50.87052,0.06481],[50.87123,0.06451],[50.87141,0.06454],[50.87155,0.0647],[50.87342,0.06735],[50.87367,0.06747],[50.87399,0.0675],[50.87418,0.0675],[50.87447,0.06738],[50.87491,0.06703],[50.87517,0.06669],[50.87598,0.06526],[50.87656,0.06344],[50.87709,0.06251],[50.87742,0.06224],[50.87801,0.06202],[50.87838,0.06177],[50.87872,0.06143],[50.87948,0.0603],[50.88057,0.05894],[50.88084,0.05829],[50.88145,0.05754],[50.88162,0.05717],[50.8822,0.05443],[50.88252,0.05372],[50.88374,0.05176],[50.88666,0.04809],[50.88674,0.04773],[50.88624,0.04523],[50.88612,0.0441],[50.88604,0.0424],[50.88609,0.03935],[50.88594,0.03864],[50.8853,0.03653],[50.88515,0.03569],[50.88537,0.03211],[50.88538,0.03098],[50.8848,0.02404],[50.88436,0.02204],[50.8843,0.02141],[50.88283,0.01878],[50.88253,0.01851],[50.88224,0.01844],[50.88208,0.01848],[50.88179,0.01871],[50.88072,0.02031],[50.88041,0.02068],[50.87964,0.02119],[50.87861,0.02148],[50.87775,0.02149],[50.87728,0.02137],[50.87682,0.02107],[50.87644,0.02072],[50.87599,0.01982],[50.87584,0.01972],[50.87576,0.0184],[50.87565,0.01785],[50.87569,0.01711],[50.87559,0.01549],[50.87547,0.01432],[50.87533,0.01394],[50.87522,0.01381],[50.87494,0.01375],[50.87447,0.01424],[50.8741,0.01446],[50.87394,0.01344],[50.87335,0.01097],[50.87192,0.01219],[50.87182,0.01137],[50.87057,0.01111],[50.87027,0.01097],[50.87001,0.01072]],[[50.87001,0.01072],[50.87027,0.01097],[50.87057,0.01111],[50.87147,0.01133],[50.87197,0.01137],[50.87384,0.00983],[50.87397,0.00978],[50.87452,0.00986],[50.87431,0.01139],[50.87445,0.01154],[50.87487,0.01165],[50.87501,0.01182],[50.87524,0.01339],[50.87504,0.01372],[50.87482,0.01384],[50.87447,0.01424],[50.8741,0.01446],[50.87385,0.01303],[50.87465,0.01273],[50.87456,0.01171],[50.87461,0.0116],[50.87487,0.01165],[50.87504,0.01191],[50.87524,0.01339],[50.87547,0.01432],[50.87569,0.01717],[50.87586,0.01779],[50.87583,0.01835],[50.87596,0.01929],[50.87638,0.02039],[50.87667,0.02093],[50.87696,0.02117],[50.87728,0.02137],[50.87761,0.02147],[50.87861,0.02148],[50.87964,0.02119],[50.8802,0.02084],[50.88072,0.02031],[50.88179,0.01871],[50.88208,0.01848],[50.88224,0.01844],[50.88224,0.01748],[50.88255,0.01749],[50.88261,0.01805],[50.88287,0.01841],[50.88411,0.0207],[50.88287,0.01841],[50.88261,0.01805],[50.88255,0.01749],[50.88224,0.01748],[50.88224,0.01844],[50.88253,0.01851],[50.88283,0.01878],[50.8843,0.02141],[50.88436,0.02204],[50.8848,0.02404],[50.88538,0.03098],[50.88537,0.03211],[50.88515,0.03569],[50.8853,0.03653],[50.88594,0.03864],[50.88609,0.03935],[50.88604,0.0424],[50.88612,0.0441],[50.88624,0.04523],[50.88674,0.04773],[50.88666,0.04809],[50.88374,0.05176],[50.88252,0.05372],[50.8822,0.05443],[50.88162,0.05717],[50.88145,0.05754],[50.88084,0.05829],[50.88057,0.05894],[50.87948,0.0603],[50.87872,0.06143],[50.87838,0.06177],[50.87801,0.06202],[50.87742,0.06224],[50.87709,0.06251],[50.87716,0.06272],[50.87748,0.06312],[50.87752,0.06344],[50.87748,0.06312],[50.87716,0.06272],[50.87709,0.06251],[50.87656,0.06344],[50.87598,0.06526],[50.87517,0.06669],[50.87491,0.06703],[50.87447,0.06738],[50.87418,0.0675],[50.87399,0.0675],[50.87367,0.06747],[50.87342,0.06735],[50.87155,0.0647],[50.87141,0.06454],[50.87123,0.06451],[50.87052,0.06481],[50.86933,0.06584],[50.86856,0.06618],[50.86792,0.06642],[50.86718,0.06659],[50.86603,0.06663],[50.86527,0.06691],[50.86306,0.06839],[50.86215,0.06863],[50.86154,0.0692],[50.86004,0.07003],[50.85898,0.07078],[50.85889,0.07073],[50.85869,0.07029],[50.85828,0.06967],[50.85808,0.06957],[50.85681,0.0693],[50.85643,0.06929],[50.8561,0.06936],[50.85515,0.06978],[50.85484,0.06966],[50.85432,0.06966],[50.85304,0.06985],[50.85319,0.07199],[50.85386,0.07568],[50.854,0.07701],[50.85404,0.07791],[50.85387,0.08257],[50.85359,0.08246],[50.85214,0.08246],[50.85153,0.08252],[50.84962,0.08183],[50.84952,0.08185],[50.84875,0.08149],[50.84837,0.08292],[50.84875,0.08149],[50.84952,0.08185],[50.84962,0.08183],[50.85153,0.08252],[50.85214,0.08246],[50.85333,0.08249],[50.85388,0.08237],[50.85338,0.09695],[50.85306,0.10404],[50.85279,0.10602],[50.85224,0.1085],[50.85189,0.10958],[50.85119,0.11137],[50.84968,0.11483],[50.84879,0.11755],[50.84743,0.12135],[50.84726,0.12122],[50.84648,0.12145],[50.84595,0.12152],[50.84553,0.12148],[50.84521,0.12136],[50.84355,0.11962],[50.84188,0.11884],[50.84246,0.11625],[50.84263,0.11651],[50.84302,0.11675],[50.84306,0.11683],[50.84258,0.11917],[50.84355,0.11962],[50.84521,0.12136],[50.84553,0.12148],[50.84595,0.12152],[50.84648,0.12145],[50.84726,0.12122],[50.84743,0.12135],[50.84682,0.12323],[50.84532,0.12693],[50.84417,0.13097],[50.84365,0.13259],[50.84325,0.13341],[50.84218,0.13462],[50.84128,0.13608],[50.84083,0.13683],[50.84011,0.13841],[50.83985,0.13883],[50.83969,0.13902],[50.83908,0.13941],[50.8384,0.13975],[50.83756,0.13997],[50.8358,0.14025],[50.8354,0.14046],[50.83485,0.14091],[50.83412,0.14218],[50.83358,0.14339],[50.8271,0.15979],[50.82688,0.16049],[50.82673,0.16136],[50.82669,0.16201],[50.82684,0.16252],[50.82678,0.16276],[50.82671,0.16283],[50.82659,0.16283],[50.82623,0.16259],[50.82418,0.16254],[50.82416,0.16274],[50.82435,0.1628],[50.82431,0.16325],[50.82446,0.16332],[50.82451,0.16284],[50.82416,0.16274],[50.82418,0.16254],[50.82281,0.16218],[50.8222,0.16232],[50.8217,0.16255],[50.8209,0.16278],[50.81885,0.16279],[50.81746,0.16219],[50.81647,0.16153],[50.81617,0.1614],[50.81482,0.16132],[50.81428,0.16118],[50.81351,0.1607],[50.81215,0.16023],[50.8117,0.15993],[50.81109,0.15918],[50.81039,0.15892],[50.80998,0.15862],[50.80984,0.1585],[50.80953,0.15799],[50.80921,0.15832],[50.80903,0.15833],[50.80896,0.15816],[50.80911,0.15799],[50.80896,0.15816],[50.80903,0.15833],[50.80921,0.15832],[50.80953,0.15799],[50.80984,0.1585],[50.80998,0.15862],[50.81039,0.15892],[50.81109,0.15918],[50.8117,0.15993],[50.81215,0.16023],[50.81351,0.1607],[50.81428,0.16118],[50.81482,0.16132],[50.81617,0.1614],[50.81647,0.16153],[50.81746,0.16219],[50.81885,0.16279],[50.8209,0.16278],[50.8217,0.16255],[50.8222,0.16232],[50.82281,0.16218],[50.82418,0.16254],[50.82623,0.16259],[50.82638,0.16252],[50.82663,0.16224],[50.82676,0.16229],[50.82682,0.1624],[50.82683,0.16265],[50.82658,0.16324],[50.82622,0.16478],[50.82455,0.17525],[50.8243,0.17796],[50.8243,0.17961],[50.82441,0.18249],[50.82431,0.18395],[50.8226,0.19506],[50.82206,0.2005],[50.821,0.21678],[50.82109,0.21828],[50.82137,0.22074],[50.82144,0.22218],[50.8214,0.22538],[50.82117,0.23436],[50.82078,0.23668],[50.82077,0.23736],[50.82061,0.23839],[50.82064,0.23855],[50.82078,0.23866],[50.82189,0.23802],[50.82272,0.23786],[50.82309,0.23789],[50.82699,0.23855],[50.82785,0.23898],[50.82802,0.23885],[50.82813,0.23854],[50.82831,0.23831],[50.82864,0.23819],[50.82887,0.23827],[50.82914,0.23862],[50.82925,0.23913],[50.82916,0.23972],[50.82894,0.24006],[50.82864,0.2402],[50.8278,0.23987],[50.82707,0.23976],[50.82659,0.23978],[50.82649,0.23985],[50.82571,0.24079],[50.82454,0.24255],[50.82403,0.24364],[50.82371,0.24449],[50.82344,0.24438],[50.82165,0.24424],[50.8211,0.24408],[50.82044,0.2437],[50.8199,0.2432],[50.81898,0.24175],[50.81804,0.24063],[50.81744,0.23961],[50.81613,0.23775],[50.81289,0.23523],[50.81259,0.23508],[50.81221,0.23505],[50.81147,0.23546],[50.81067,0.23573],[50.81022,0.23604],[50.80913,0.23716],[50.81056,0.24023],[50.8117,0.24236],[50.8107,0.24378],[50.81041,0.24433],[50.81012,0.24548],[50.80958,0.24604],[50.80754,0.24783],[50.80725,0.24826],[50.80725,0.24838],[50.80672,0.24878],[50.80655,0.24904],[50.80499,0.24934],[50.80434,0.24963],[50.80363,0.25012],[50.80346,0.25003],[50.80295,0.25025],[50.80247,0.25031],[50.80219,0.25028],[50.80147,0.24996],[50.80101,0.24996],[50.80043,0.2501],[50.79942,0.25063],[50.79872,0.25063],[50.79854,0.25075],[50.79823,0.25141],[50.79659,0.25229],[50.79622,0.25266],[50.79574,0.25388],[50.79558,0.25406],[50.79462,0.25476],[50.79289,0.25571],[50.79282,0.25614],[50.79346,0.25633],[50.7945,0.25691],[50.79509,0.2569],[50.79537,0.25708],[50.79546,0.25732],[50.79539,0.25745],[50.79515,0.25757],[50.79486,0.25791],[50.7945,0.25853],[50.79392,0.25928],[50.79368,0.2597],[50.7935,0.26029],[50.79303,0.26277],[50.79202,0.26491],[50.79165,0.26533],[50.79136,0.26547],[50.7905,0.26582],[50.78844,0.26646],[50.78613,0.26735],[50.78424,0.26873],[50.784,0.26943],[50.78351,0.26942],[50.78316,0.26955],[50.78159,0.27074],[50.78124,0.27107],[50.78103,0.27143],[50.78088,0.27199],[50.78054,0.27595],[50.78031,0.27672],[50.78004,0.27715],[50.77966,0.27753],[50.77899,0.27793],[50.77862,0.27829],[50.77843,0.27858],[50.77742,0.2807],[50.77675,0.28146],[50.77667,0.28135],[50.77631,0.28126],[50.77544,0.28026],[50.77451,0.28197],[50.7743,0.28224],[50.77389,0.2825],[50.77367,0.28254],[50.77327,0.28247],[50.77313,0.28252],[50.77306,0.28234],[50.7701,0.27849],[50.76956,0.27934],[50.7693,0.27998],[50.76924,0.28049],[50.76917,0.28045],[50.76918,0.28006],[50.76906,0.27973],[50.76887,0.27964],[50.76854,0.27972],[50.76828,0.2796],[50.76718,0.27858],[50.76669,0.27824],[50.76645,0.27819],[50.7664,0.28],[50.76621,0.28132],[50.76629,0.28143],[50.76684,0.2815],[50.76732,0.28449],[50.76805,0.28407]]],"days":[{"key":"thu","label":"Thursday","dirs":[{"label":"To Eastbourne","li":1,"trips":[{"big":"08:23","small":"At Eastbourne Cornfield Road 08:52","title":"The 08:23 from Berwick Drusillas Roundabout","s":[["08:23",0,5],["08:25",1,0],["08:26",2,1],["08:26",3,0],["08:26",4,0],["08:26",5,0],["08:27",6,0],["08:27",7,0],["08:28",8,0],["08:32",9,1],["08:32",10,0],["08:32",11,0],["08:36",12,5],["08:36",13,0],["08:36",14,0],["08:39",15,1],["08:39",16,0],["08:39",17,0],["08:41",18,5],["08:41",19,0],["08:41",20,0],["08:41",21,0],["08:43",22,5],["08:43",23,0],["08:46",24,1],["08:46",25,0],["08:46",26,0],["08:47",27,0],["08:48",28,0],["08:48",29,0],["08:48",30,0],["08:49",31,0],["08:49",32,0],["08:52",33,7]]},{"big":"10:30","small":"At Eastbourne Cornfield Road 11:41","title":"The 10:30 from Lewes, Railway Station","s":[["10:30",34,5],["10:32",35,0],["10:33",36,0],["10:33",37,0],["10:35",38,0],["10:35",39,0],["10:35",40,0],["10:35",41,0],["10:36",42,0],["10:43",43,1],["10:46",44,1],["10:46",45,0],["10:46",46,0],["10:46",47,0],["10:49",48,1],["10:52",49,1],["10:56",50,0],["10:59",51,5],["11:02",52,0],["11:02",53,0],["11:02",54,0],["11:05",55,0],["11:08",56,1],["11:12",0,1],["11:14",1,0],["11:15",2,5],["11:15",3,0],["11:15",4,0],["11:15",5,0],["11:16",6,0],["11:16",7,0],["11:17",8,0],["11:21",9,1],["11:21",10,0],["11:21",11,0],["11:25",12,1],["11:25",13,0],["11:25",14,0],["11:28",15,5],["11:28",16,0],["11:28",17,0],["11:30",18,1],["11:30",19,0],["11:30",20,0],["11:30",21,0],["11:32",22,1],["11:32",23,0],["11:35",24,1],["11:35",25,0],["11:35",26,0],["11:36",27,0],["11:37",28,0],["11:37",29,0],["11:37",30,0],["11:37",31,0],["11:38",32,0],["11:41",33,7]]}],"note":""},{"label":"To Lewes","li":0,"trips":[{"big":"15:00","small":"From Eastbourne Gildredge Road, at Lewes, Railway Station 16:11","title":"The 15:00 from Eastbourne Gildredge Road","s":[["15:00",57,7],["15:03",58,0],["15:03",59,0],["15:03",60,0],["15:03",61,0],["15:04",62,0],["15:04",63,0],["15:05",64,0],["15:06",65,1],["15:06",66,0],["15:06",67,0],["15:07",68,0],["15:09",69,1],["15:09",70,0],["15:09",71,0],["15:11",72,1],["15:11",73,0],["15:11",74,0],["15:13",75,1],["15:13",76,0],["15:14",77,0],["15:16",78,5],["15:16",79,0],["15:17",80,0],["15:20",81,1],["15:20",82,0],["15:20",83,0],["15:21",84,0],["15:21",85,0],["15:22",86,0],["15:22",87,0],["15:26",88,1],["15:27",89,0],["15:29",55,0],["15:32",56,1],["15:38",0,5],["15:38",90,0],["15:38",91,0],["15:41",92,1],["15:42",93,1],["15:47",50,0],["15:51",94,5],["15:54",95,1],["15:54",96,0],["15:55",97,0],["15:55",98,0],["15:55",99,0],["15:57",100,1],["16:00",101,1],["16:00",102,0],["16:01",103,0],["16:02",104,0],["16:03",105,0],["16:03",106,0],["16:06",107,0],["16:08",108,0],["16:11",34,5]]},{"big":"18:00","small":"From Eastbourne Gildredge Road, at Berwick, Railway Station 18:38","title":"The 18:00 from Eastbourne Gildredge Road","s":[["18:00",57,7],["18:03",58,0],["18:03",59,0],["18:03",60,0],["18:04",61,0],["18:04",62,0],["18:04",63,0],["18:05",64,0],["18:06",65,1],["18:06",66,0],["18:06",67,0],["18:07",68,0],["18:09",69,1],["18:09",70,0],["18:09",71,0],["18:11",72,5],["18:11",73,0],["18:11",74,0],["18:13",75,1],["18:13",76,0],["18:14",77,0],["18:16",78,5],["18:16",79,0],["18:17",80,0],["18:20",81,5],["18:20",82,0],["18:20",83,0],["18:21",84,0],["18:21",85,0],["18:22",86,0],["18:22",87,0],["18:26",88,1],["18:27",89,0],["18:38",109,5]]}],"note":""}],"none":"In the current timetable there are no 25 buses on Thursdays, so I would look at the other ways to get there on the Eastbourne Airshow page."},{"key":"sat","label":"Saturday","dirs":[{"label":"To Eastbourne","li":1,"trips":[{"big":"08:23","small":"At Eastbourne Cornfield Road 08:52","title":"The 08:23 from Berwick Drusillas Roundabout","s":[["08:23",0,5],["08:25",1,0],["08:26",2,1],["08:26",3,0],["08:26",4,0],["08:26",5,0],["08:27",6,0],["08:27",7,0],["08:28",8,0],["08:32",9,1],["08:32",10,0],["08:32",11,0],["08:36",12,5],["08:36",13,0],["08:36",14,0],["08:39",15,1],["08:39",16,0],["08:39",17,0],["08:41",18,5],["08:41",19,0],["08:41",20,0],["08:41",21,0],["08:43",22,5],["08:43",23,0],["08:46",24,1],["08:46",25,0],["08:46",26,0],["08:47",27,0],["08:48",28,0],["08:48",29,0],["08:48",30,0],["08:49",31,0],["08:49",32,0],["08:52",33,7]]},{"big":"10:30","small":"At Eastbourne Cornfield Road 11:41","title":"The 10:30 from Lewes, Railway Station","s":[["10:30",34,5],["10:32",35,0],["10:33",36,0],["10:33",37,0],["10:35",38,0],["10:35",39,0],["10:35",40,0],["10:35",41,0],["10:36",42,0],["10:43",43,1],["10:46",44,1],["10:46",45,0],["10:46",46,0],["10:46",47,0],["10:49",48,1],["10:52",49,1],["10:56",50,0],["10:59",51,5],["11:02",52,0],["11:02",53,0],["11:02",54,0],["11:05",55,0],["11:08",56,1],["11:12",0,1],["11:14",1,0],["11:15",2,5],["11:15",3,0],["11:15",4,0],["11:15",5,0],["11:16",6,0],["11:16",7,0],["11:17",8,0],["11:21",9,1],["11:21",10,0],["11:21",11,0],["11:25",12,1],["11:25",13,0],["11:25",14,0],["11:28",15,5],["11:28",16,0],["11:28",17,0],["11:30",18,1],["11:30",19,0],["11:30",20,0],["11:30",21,0],["11:32",22,1],["11:32",23,0],["11:35",24,1],["11:35",25,0],["11:35",26,0],["11:36",27,0],["11:37",28,0],["11:37",29,0],["11:37",30,0],["11:37",31,0],["11:38",32,0],["11:41",33,7]]}],"note":""},{"label":"To Lewes","li":0,"trips":[{"big":"15:00","small":"From Eastbourne Gildredge Road, at Lewes, Railway Station 16:11","title":"The 15:00 from Eastbourne Gildredge Road","s":[["15:00",57,7],["15:03",58,0],["15:03",59,0],["15:03",60,0],["15:03",61,0],["15:04",62,0],["15:04",63,0],["15:05",64,0],["15:06",65,1],["15:06",66,0],["15:06",67,0],["15:07",68,0],["15:09",69,1],["15:09",70,0],["15:09",71,0],["15:11",72,1],["15:11",73,0],["15:11",74,0],["15:13",75,1],["15:13",76,0],["15:14",77,0],["15:16",78,5],["15:16",79,0],["15:17",80,0],["15:20",81,1],["15:20",82,0],["15:20",83,0],["15:21",84,0],["15:21",85,0],["15:22",86,0],["15:22",87,0],["15:26",88,1],["15:27",89,0],["15:29",55,0],["15:32",56,1],["15:38",0,5],["15:38",90,0],["15:38",91,0],["15:41",92,1],["15:42",93,1],["15:47",50,0],["15:51",94,5],["15:54",95,1],["15:54",96,0],["15:55",97,0],["15:55",98,0],["15:55",99,0],["15:57",100,1],["16:00",101,1],["16:00",102,0],["16:01",103,0],["16:02",104,0],["16:03",105,0],["16:03",106,0],["16:06",107,0],["16:08",108,0],["16:11",34,5]]},{"big":"18:00","small":"From Eastbourne Gildredge Road, at Berwick, Railway Station 18:38","title":"The 18:00 from Eastbourne Gildredge Road","s":[["18:00",57,7],["18:03",58,0],["18:03",59,0],["18:03",60,0],["18:04",61,0],["18:04",62,0],["18:04",63,0],["18:05",64,0],["18:06",65,1],["18:06",66,0],["18:06",67,0],["18:07",68,0],["18:09",69,1],["18:09",70,0],["18:09",71,0],["18:11",72,5],["18:11",73,0],["18:11",74,0],["18:13",75,1],["18:13",76,0],["18:14",77,0],["18:16",78,5],["18:16",79,0],["18:17",80,0],["18:20",81,5],["18:20",82,0],["18:20",83,0],["18:21",84,0],["18:21",85,0],["18:22",86,0],["18:22",87,0],["18:26",88,1],["18:27",89,0],["18:38",109,5]]}],"note":""}],"none":"In the current timetable there are no 25 buses on Saturdays, so I would look at the other ways to get there on the Eastbourne Airshow page."},{"key":"sun","label":"Sunday","dirs":[],"none":"In the current timetable there are no 25 buses on Sundays, so I would look at the other ways to get there on the Eastbourne Airshow page."}],"start":0};
+</script>
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var each = function(list, fn){ Array.prototype.forEach.call(list, fn); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var KEY = 1, OFF = 2, LABEL = 4;
+
+  /* fixed text */
+  $('backlink').href = CFG.showUrl;
+  $('backlink').target = CFG.showTarget || '_top';
+  $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
+  $('op').textContent = 'Run by ' + CFG.operator;
+  $('bnum').textContent = CFG.num;
+  $('bdest').textContent = CFG.blindDest;
+  $('title').textContent = CFG.title;
+  $('lead').textContent = CFG.lead;
+  $('tiph').textContent = CFG.tipHead;
+  $('tip').textContent = CFG.tip;
+  $('tipbtn').href = CFG.showUrl;
+  $('tipbtn').target = CFG.showTarget || '_top';
+  $('tipbtn').textContent = CFG.tipBtn + ' ›';
+  $('note').innerHTML = CFG.note;
+  $('map').setAttribute('aria-label', 'Map of the bus ' + CFG.num + ' route');
+  if (CFG.alt) { $('alt').hidden = false; $('alth').textContent = CFG.alt[0]; $('altp').textContent = CFG.alt[1]; }
+  document.title = CFG.title + ' | The Big Guide to UK Airshows';
+
+  /* destination blind cycles its "via" line */
+  var vi = 0;
+  $('bvia').textContent = CFG.blindVia[0] || '';
+  if (!reduce && CFG.blindVia.length > 1) {
+    setInterval(function(){
+      var v = $('bvia'); v.style.opacity = 0;
+      setTimeout(function(){ vi = (vi + 1) % CFG.blindVia.length; v.textContent = CFG.blindVia[vi]; v.style.opacity = .85; }, 400);
+    }, 3200);
+  }
+
+  $('facts').innerHTML = CFG.facts.map(function(f){
+    return '<div class="fact' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><b>' + f[1] + '</b></div>';
+  }).join('');
+
+  $('legs').innerHTML = CFG.legs.map(function(l){
+    var signs = l[0].map(function(r){ return '<span class="sign' + (/^M\d/.test(r) ? ' m' : '') + '">' + r + '</span>'; }).join('');
+    return '<li><div class="signs">' + (signs || '<span class="sign">Local</span>') + '</div><div><b>' + l[1] + '</b><p>' + l[2] + '</p></div></li>';
+  }).join('');
+
+  /* map */
+  var map = L.map('map', { scrollWheelZoom: false, zoomControl: false });
+  L.control.zoom({ position: 'topleft' }).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  map.setView(CFG.target, 11);
+  var lineLayer = L.layerGroup().addTo(map), layer = L.layerGroup().addTo(map);
+  var showPin = L.circleMarker(CFG.target, { radius: 6, color: '#D74949', weight: 2, fillColor: '#fff', fillOpacity: 1, dashArray: '3 3' })
+    .bindTooltip(CFG.targetLabel, { direction: 'top', offset: [0, -6], className: 'lbl off' }).addTo(map);
+
+  var day = DATA.start || 0, dir = 0, idx = 0, ROUTE = [], casing = null;
+  window.addEventListener('resize', function(){ map.invalidateSize(); });
+
+  function fit(){
+    if (!casing) return;
+    var wide = window.innerWidth > 980;
+    map.fitBounds(casing.getBounds().extend(CFG.target), { paddingTopLeft: [30, 30], paddingBottomRight: [wide ? 420 : 30, 30] });
+  }
+
+  /* unpack journeys: [time, stop index, flags] -> [time, name, lat, lon, flags, short name] */
+  DATA.days.forEach(function(dd){ dd.dirs.forEach(function(x){ x.trips.forEach(function(tr){
+    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3]]; });
+  }); }); });
+  function D(){ return DATA.days[day]; }
+  function DIR(){ return D().dirs[dir]; }
+
+  function segBtns(el, items, cur, onpick){
+    el.innerHTML = items.map(function(t, i){ return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === cur) + '">' + t + '</button>'; }).join('');
+    el.style.display = items.length > 1 ? '' : 'none';
+    each(el.children, function(b){ b.addEventListener('click', function(){ onpick(+b.getAttribute('data-i')); }); });
+  }
+
+  function render(){
+    segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ day = i; dir = Math.min(dir, Math.max(0, DATA.days[i].dirs.length - 1)); idx = 0; render(); runBus(); });
+    var dd = D();
+    if (!dd.dirs.length || !dd.dirs.some(function(x){ return x.trips.length; })) {
+      $('dir').style.display = 'none'; $('board').innerHTML = ''; $('bnote').textContent = '';
+      $('nobus').textContent = dd.none; $('nobus').classList.add('on'); $('stage').classList.add('off');
+      return;
+    }
+    $('nobus').classList.remove('on'); $('stage').classList.remove('off');
+    if (!DIR().trips.length) { dir = dd.dirs.findIndex(function(x){ return x.trips.length; }); idx = 0; }
+    segBtns($('dir'), dd.dirs.map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = 0; render(); runBus(); });
+    board(); drawLine(); draw();
+  }
+
+  function board(){
+    var d = DIR();
+    $('board').innerHTML = d.trips.map(function(t, i){
+      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '"><span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
+    }).join('');
+    $('bnote').textContent = d.note || '';
+    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); }); });
+  }
+
+  function drawLine(){
+    lineLayer.clearLayers();
+    ROUTE = DATA.lines[DIR().li] || [];
+    casing = L.polyline(ROUTE, { color: '#13293C', weight: 11, opacity: .18 }).addTo(lineLayer);
+    L.polyline(ROUTE, { color: '#00A6E2', weight: 5, opacity: 1 }).addTo(lineLayer);
+    fit(); measure();
+  }
+
+  function draw(){
+    layer.clearLayers();
+    var trip = DIR().trips[idx], s = trip.s, ol = $('stops');
+    $('ptitle').textContent = trip.title;
+    $('psub').textContent = s.length + ' stops, ' + s[0][0] + ' to ' + s[s.length - 1][0];
+    ol.innerHTML = '';
+    var group = null, gid = 0;
+    s.forEach(function(p, i){
+      var isOff = p[4] & OFF, key = (p[4] & KEY) || isOff || i === 0 || i === s.length - 1;
+      var m = L.circleMarker([p[2], p[3]], {
+        radius: isOff ? 10 : (key ? 6 : 4), color: isOff ? '#D74949' : '#13293C', weight: key ? 3 : 2,
+        fillColor: isOff ? '#D74949' : '#FFFFFF', fillOpacity: 1
+      }).addTo(layer);
+      m.bindPopup('<b>' + p[1] + '</b><br>' + p[0] + (isOff ? '<br>' + CFG.offTag : ''));
+      var small = window.innerWidth < 560 && !isOff && i !== 0 && i !== s.length - 1;
+      if ((p[4] & LABEL || isOff) && !small) m.bindTooltip(p[5] || p[1], { permanent: true, direction: 'right', offset: [10, 0], className: 'lbl' + (isOff ? ' off' : '') });
+
+      if (!key) {
+        if (!group) {
+          group = { id: 'g' + (gid++), items: [] };
+          var fl = document.createElement('li'); fl.className = 'fold';
+          fl.innerHTML = '<button type="button" aria-expanded="false"></button>';
+          ol.appendChild(fl); group.fold = fl;
+        }
+        group.items.push(p);
+      } else { closeGroup(); }
+
+      var li = document.createElement('li');
+      li.className = 'stop' + (key ? ' key' : ' minor') + (isOff ? ' off' : '');
+      if (!key) li.dataset.g = group.id;
+      li.innerHTML = '<span>' + p[1] + (isOff ? '<span class="tag">' + CFG.offTag + '</span>' : '') + '</span><time>' + p[0] + '</time>';
+      li.addEventListener('click', function(){
+        each(ol.querySelectorAll('.active'), function(x){ x.classList.remove('active'); });
+        li.classList.add('active');
+        map.setView([p[2], p[3]], 15, { animate: !reduce }); m.openPopup();
+      });
+      ol.appendChild(li);
+    });
+    closeGroup();
+
+    function closeGroup(){
+      if (!group) return;
+      var g = group, n = g.items.length, btn = g.fold.firstChild;
+      var label = n === 1 ? g.items[0][1] : g.items[0][1] + ' and ' + (n - 1) + ' more stops';
+      btn.textContent = label;
+      btn.addEventListener('click', function(){
+        var open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', open);
+        btn.textContent = open ? 'Hide the smaller stops' : label;
+        each(ol.querySelectorAll('li.minor[data-g="' + g.id + '"]'), function(x){ x.classList.toggle('open', open); });
+      });
+      group = null;
+    }
+  }
+
+  /* a small bus runs the route once, then fades */
+  var bus = null, raf = 0, cum = [0];
+  var busIcon = L.divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 15],
+    html: '<div class="busdot"><svg viewBox="0 0 16 16" fill="#13293C"><rect x="2" y="1.5" width="12" height="11" rx="2"/><rect x="3.5" y="3" width="9" height="4" rx=".6" fill="#F2B233"/><circle cx="5" cy="10" r="1" fill="#F2B233"/><circle cx="11" cy="10" r="1" fill="#F2B233"/><rect x="3" y="12.5" width="2.4" height="2" rx=".5"/><rect x="10.6" y="12.5" width="2.4" height="2" rx=".5"/></svg></div>' });
+  function measure(){
+    cum = [0];
+    for (var k = 1; k < ROUTE.length; k++) cum.push(cum[k - 1] + map.distance(ROUTE[k - 1], ROUTE[k]));
+  }
+  function at(d){
+    var lo = 0, hi = cum.length - 1;
+    while (lo < hi - 1) { var mid = (lo + hi) >> 1; if (cum[mid] < d) lo = mid; else hi = mid; }
+    var f = (d - cum[lo]) / ((cum[hi] - cum[lo]) || 1);
+    return [ROUTE[lo][0] + (ROUTE[hi][0] - ROUTE[lo][0]) * f, ROUTE[lo][1] + (ROUTE[hi][1] - ROUTE[lo][1]) * f];
+  }
+  function runBus(){
+    if (reduce || ROUTE.length < 2) return;
+    cancelAnimationFrame(raf);
+    if (bus) { map.removeLayer(bus); bus = null; }
+    var total = cum[cum.length - 1], start = null, dur = 7000;
+    bus = L.marker(ROUTE[0], { icon: busIcon, interactive: false, keyboard: false }).addTo(map);
+    function step(ts){
+      if (!bus) return;
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      bus.setLatLng(at(e * total));
+      if (p < 1) raf = requestAnimationFrame(step);
+      else { var el = bus.getElement(); if (el) el.firstChild.style.opacity = 0; var b = bus; setTimeout(function(){ map.removeLayer(b); }, 700); bus = null; }
+    }
+    raf = requestAnimationFrame(step);
+  }
+
+  render();
+
+  var started = false;
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in'); io.unobserve(e.target);
+      if (!started && e.target.id === 'stage') { started = true; setTimeout(runBus, 500); }
+    });
+  }, { threshold: .15 }) : null;
+  each(document.querySelectorAll('.rise'), function(el){ io ? io.observe(el) : el.classList.add('in'); });
+  if (!io) runBus();
+})();
+</script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
+</body>
+</html>

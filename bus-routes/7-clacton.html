@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bus 7, Walton to Clacton | The Big Guide to UK Airshows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --navy:#13293C;--navy-2:#1C3850;--navy-3:#0C1C2A;
+  --sky:#00A6E2;--sky-ink:#006F99;--teal:#32B4AF;--teal-ink:#0E5F5B;
+  --red:#D74949;--amber:#F2B233;--line:#C6C6C6;--mist:#EEF2F5;--paper:#FFFFFF;--ink:#0B0B0B;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:17px;line-height:27px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* top strip */
+.strip{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 0;font-weight:500;font-size:15px}
+.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy);padding:6px 0;border-bottom:2px solid transparent;transition:border-color .3s var(--ease)}
+.back:hover{border-color:var(--sky)}
+.back svg{width:16px;height:16px}
+.op{color:#3d4a55}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 48px;align-items:end;padding:26px 0 0}
+.blind{position:relative;background:var(--navy-3);border-radius:14px 14px 14px 0;padding:22px 26px 24px;display:flex;align-items:center;gap:22px;overflow:hidden;box-shadow:0 18px 40px -22px rgba(12,28,42,.7)}
+.blind::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.55) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
+.blind .num{font:800 92px/0.9 "Barlow Condensed",sans-serif;color:var(--amber);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
+.blind .dest{font:700 34px/1 "Barlow Condensed",sans-serif;color:var(--amber);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3)}
+.blind .via{display:block;margin-top:8px;font:600 18px/1.2 "Barlow Condensed",sans-serif;color:#f7d68f;letter-spacing:.03em;text-transform:uppercase;opacity:.85;transition:opacity .4s var(--ease)}
+.intro h1{font:800 46px/46px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;letter-spacing:-.005em}
+.intro p{margin-top:12px;font-size:18px;line-height:29px;color:#1d2730;max-width:520px}
+
+/* facts */
+.facts{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.2fr;margin:34px 0 0;border-top:3px solid var(--navy)}
+.fact{padding:14px 18px 16px 0;border-right:1px solid var(--line)}
+.fact+.fact{padding-left:18px}
+.fact:last-child{border-right:0}
+.fact span{display:block;font-weight:500;font-size:15px;line-height:20px;color:var(--navy)}
+.fact b{display:block;margin-top:4px;font:700 25px/28px "Barlow Condensed",sans-serif;color:var(--navy)}
+.fact.hl b{color:var(--red)}
+
+/* planner */
+.planner{margin-top:38px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px 28px;align-items:start}
+.planner h2,.sec h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;grid-column:1/-1}
+.seg{display:inline-flex;background:var(--mist);border-radius:12px;padding:5px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:10px 16px;font-weight:600;font-size:16px;color:var(--navy);transition:background .3s var(--ease),color .3s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.board{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.board::-webkit-scrollbar{display:none}
+.dep{flex:0 0 auto;min-width:150px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px 11px;transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
+.dep:hover{border-color:var(--navy);transform:translateY(-2px)}
+.dep .t{font:700 28px/30px "Barlow Condensed",sans-serif;color:var(--navy);font-variant-numeric:tabular-nums}
+.dep .a{display:block;font-weight:500;font-size:14px;line-height:19px;color:#3d4a55}
+.dep[aria-pressed="true"]{background:var(--navy);border-color:var(--navy)}
+.dep[aria-pressed="true"] .t{color:var(--amber)}
+.dep[aria-pressed="true"] .a{color:#dfe7ee}
+
+/* map stage */
+.stage{position:relative;margin-top:20px}
+.mapbox{position:relative}
+#map{height:640px;border-radius:16px;z-index:0;background:#dfe6ea}
+#map .leaflet-tile-pane{filter:saturate(.55) contrast(.95) brightness(1.04)}
+.leg{position:absolute;left:16px;bottom:16px;z-index:5;background:#fff;border-radius:10px;padding:8px 12px;display:flex;gap:14px;font-weight:500;font-size:14px;line-height:18px;box-shadow:0 6px 18px -8px rgba(12,28,42,.45)}
+.leg i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:2px solid var(--navy);background:#fff}
+.leg i.r{background:var(--red);border-color:var(--red)}
+.leg i.l{width:22px;height:5px;border:0;border-radius:3px;background:var(--sky)}
+.panel{position:absolute;top:18px;right:18px;max-height:calc(100% - 36px);width:372px;z-index:5;background:#fff;border-radius:14px;box-shadow:0 22px 44px -20px rgba(12,28,42,.55);display:flex;flex-direction:column;overflow:hidden}
+.panel header{background:var(--navy);color:#fff;padding:14px 18px 13px}
+.panel header b{display:block;font:700 22px/24px "Barlow Condensed",sans-serif;text-transform:uppercase}
+.panel header span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
+.stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px}
+.stops::-webkit-scrollbar{display:none}
+.stops li{position:relative;padding:5px 0 5px 28px;display:flex;justify-content:space-between;gap:12px;font-size:15px;line-height:21px}
+.stops li::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:3px;background:var(--sky)}
+.stops li:first-child::before{top:14px}
+.stops li:last-child::before{bottom:calc(100% - 14px)}
+.stops li::after{content:"";position:absolute;left:2px;top:10px;width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid var(--sky)}
+.stops li.key{font-weight:700;color:var(--navy);padding-top:8px;padding-bottom:8px}
+.stops li.key::after{top:12px;left:0;width:15px;height:15px;border:3px solid var(--navy)}
+.stops li.off{color:var(--red)}
+.stops li.off::after{background:var(--red);border-color:var(--red)}
+.stops li.off .tag{display:block;font-weight:500;font-size:13px;line-height:17px;color:var(--red)}
+.stops li.stop{cursor:pointer}
+.stops li.stop:hover span:first-child,.stops li.active span:first-child{text-decoration:underline;text-decoration-color:var(--sky);text-underline-offset:3px}
+.stops li.minor{display:none;color:#2c3944}
+.stops li.minor.open{display:flex}
+.stops time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--sky-ink);white-space:nowrap}
+.stops li.key time{color:var(--navy)}
+.stops li.off time{color:var(--red)}
+.stops li.fold{padding-top:2px;padding-bottom:2px}
+.stops li.fold::after{display:none}
+.stops li.fold::before{background:repeating-linear-gradient(var(--sky) 0 4px,transparent 4px 8px)}
+.stops li.fold button{border:0;background:none;padding:2px 0;font-weight:600;font-size:14px;color:var(--sky-ink);text-align:left}
+.stops li.fold button:hover{color:var(--navy)}
+
+/* map bits */
+.lbl{background:var(--navy);color:#fff;border:0;border-radius:6px;font:600 13px "Barlow",sans-serif;padding:3px 8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
+.lbl.off{background:var(--red)}
+.lbl::before{display:none}
+.busdot{width:30px;height:30px;border-radius:50%;background:var(--amber);border:3px solid var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
+.busdot svg{width:15px;height:15px}
+.leaflet-popup-content{font:500 15px/21px "Barlow",sans-serif;margin:10px 14px}
+.leaflet-popup-content b{color:var(--navy)}
+
+/* roads */
+.sec{margin-top:56px}
+.journey{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:34px;align-items:start;margin-top:18px}
+.legs{list-style:none;counter-reset:none}
+.legs li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.legs li:last-child{border-bottom:1px solid var(--line)}
+.signs{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.sign{display:inline-block;font:700 16px/1 "Barlow",sans-serif;padding:5px 7px 4px;border-radius:4px;border:2px solid #111;background:#fff;color:#111;letter-spacing:.01em}
+.sign.m{background:#1D5FAD;border-color:#fff;color:#fff;box-shadow:0 0 0 1px #1D5FAD}
+.legs b{display:block;font:700 21px/24px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
+.legs p{margin-top:3px;font-size:16px;line-height:25px;color:#1d2730}
+.side{position:relative;top:-64px}
+.advice{background:var(--navy);color:#fff;border-radius:16px 16px 16px 0;padding:24px 24px 22px}
+.advice h3{font:700 24px/26px "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--amber)}
+.advice p{margin-top:10px;font-size:16px;line-height:25px;color:#e6edf3}
+.advice a.btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--amber);color:var(--navy);text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:10px;transition:transform .3s var(--ease),background .3s var(--ease)}
+.advice a.btn:hover{transform:translateX(3px);background:#f6c35a}
+.alt{margin-top:14px;border:2px solid var(--teal);border-radius:14px;padding:16px 18px}
+.alt b{display:block;font:700 20px/22px "Barlow Condensed",sans-serif;color:var(--teal-ink);text-transform:uppercase}
+.alt p{margin-top:6px;font-size:15px;line-height:23px}
+
+.note{margin:44px 0 40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;line-height:21px;color:#3d4a55;max-width:820px}
+.note a{color:var(--sky-ink)}
+
+.rise{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rise.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none;transition:none}.dep,.advice a.btn{transition:none}}
+
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;gap:22px}
+  .facts{grid-template-columns:1fr 1fr}
+  .fact:nth-child(2){border-right:0}
+  .fact:nth-child(3){padding-left:0}
+  .fact:nth-child(n+3){border-top:1px solid var(--line)}
+  .planner{grid-template-columns:1fr}
+  #map{height:460px}
+  .panel{position:static;width:auto;margin-top:14px;box-shadow:none;border:1px solid var(--line)}
+  .stops{max-height:none}
+  .journey{grid-template-columns:1fr}
+  .side{top:0}
+}
+@media(max-width:560px){
+  .wrap{padding:0 16px}
+  .strip{flex-direction:column;align-items:flex-start;gap:0;font-size:14px}
+  .op{padding-left:24px;margin-top:-4px}
+  .blind{padding:16px 18px;gap:14px}
+  .blind .num{font-size:64px}
+  .blind .dest{font-size:26px}
+  .blind .via{font-size:15px}
+  .intro h1{font-size:34px;line-height:36px}
+  .intro p{font-size:17px;line-height:27px}
+  .fact{padding-right:10px}
+  .fact+.fact{padding-left:10px}
+  .fact:nth-child(3){padding-left:0}
+  .fact b{font-size:21px;line-height:24px}
+  #map{height:360px;border-radius:12px}
+  .leg{left:auto;right:8px;bottom:auto;top:8px;gap:8px;font-size:12px;padding:6px 8px}
+  .legs li{grid-template-columns:1fr;gap:8px}
+  .seg{display:flex}
+  .seg button{flex:1;padding:10px 8px;font-size:15px}
+  .dep{min-width:128px}
+}
+
+.pickrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.nobus{display:none;margin-top:14px;background:var(--mist);border-left:5px solid var(--red);border-radius:0 12px 12px 0;padding:14px 18px;font-size:16px;line-height:25px}
+.nobus.on{display:block}
+.boardnote{grid-column:1/-1;font-size:15px;line-height:22px;color:#3d4a55;margin-top:-6px}
+.stage.off{opacity:.45;pointer-events:none}
+
+.seg button{white-space:nowrap}
+.dep{max-width:300px}
+.board{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);padding-right:40px}
+.dep .a{white-space:normal}
+@media(max-width:560px){.pickrow{display:grid;grid-template-columns:1fr;width:100%}.pickrow .seg{width:100%}.dep{max-width:76vw}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="strip">
+    <a class="back" id="backlink" href="#" target="_top"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg><span></span></a>
+    <span class="op" id="op"></span>
+  </nav>
+
+  <header class="hero">
+    <div class="blind rise" aria-hidden="true">
+      <div class="num" id="bnum"></div>
+      <div><div class="dest" id="bdest"></div><span class="via" id="bvia"></span></div>
+    </div>
+    <div class="intro rise">
+      <h1 id="title"></h1>
+      <p id="lead"></p>
+    </div>
+  </header>
+
+  <div class="facts rise" id="facts"></div>
+
+  <section class="planner rise" aria-labelledby="ph">
+    <h2 id="ph">Pick your bus</h2>
+    <div class="pickrow">
+      <div class="seg" id="day" role="group" aria-label="Day"></div>
+      <div class="seg" id="dir" role="group" aria-label="Direction"></div>
+    </div>
+    <div class="board" id="board" role="group" aria-label="Departure times"></div>
+    <p class="boardnote" id="bnote"></p>
+  </section>
+  <p class="nobus" id="nobus"></p>
+
+  <div class="stage rise" id="stage">
+    <div class="mapbox">
+      <div id="map" role="img"></div>
+      <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
+    </div>
+    <aside class="panel" aria-live="polite">
+      <header><b id="ptitle"></b><span id="psub"></span></header>
+      <ol class="stops" id="stops"></ol>
+    </aside>
+  </div>
+
+  <section class="sec rise" aria-labelledby="rh">
+    <h2 id="rh">The roads it takes</h2>
+    <div class="journey">
+      <ol class="legs" id="legs"></ol>
+      <div class="side">
+        <div class="advice"><h3 id="tiph"></h3><p id="tip"></p><a class="btn" id="tipbtn" href="#" target="_top"></a></div>
+        <div class="alt" id="alt" hidden><b id="alth"></b><p id="altp"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="note" id="note"></p>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var CFG={"num": "7", "operator": "Central Connect", "showName": "Clacton Air Show", "showUrl": "https://www.ukairshowguide.co.uk/clactonairshow", "title": "Bus 7, Walton to Clacton", "blindDest": "Clacton", "blindVia": ["via Holland-on-Sea", "via Kirby Cross Holland Rd"], "lead": "The 7 runs between Walton and Clacton. For the Clacton Air Show, the closest stop is Clacton Pier Avenue (Stand B), about 10 minutes from West Greensward. Pick a day and a time below and the map shows every stop.", "facts": [["Runs on", "Thursdays and Fridays"], ["How often", "About every 30 minutes"], ["Get off at", "Clacton Pier Avenue", "hl"], ["Then walk", "About 10 minutes"]], "legs": [[["B1032"], "Clacton Pier Avenue to Holland-on-Sea", "Mostly along Holland Road, Frinton Road and Skelmersdale Road, about 2 miles."], [["B1032"], "Holland-on-Sea to Kirby Cross Holland Rd", "Mostly along Clacton Road, Frinton Road and Kirby Road, about 3 miles."], [["B1033"], "Kirby Cross Holland Rd to Walton-on-the-Naze", "Mostly along Frinton Road, Rochford Way and Elm Tree Avenue, about 3 miles."], [["B1034"], "Walton-on-the-Naze to Walton-on-the-Naze", "Mostly along Kirby Road, Hall Lane and High Street, about 2 miles."]], "tipHead": "Before you travel", "tip": "Roads around the seafront close for the show, so I would check where your stop is on the day. Leave plenty of time for the journey home, as buses fill up straight after the flying.", "tipBtn": "Back to getting to Clacton", "alt": null, "target": [51.7848, 1.148], "targetLabel": "West Greensward", "offTag": "Closest stop to the show", "note": "Stops and times are from the current timetable, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with Central Connect before you travel. The line is drawn along the roads between the stops, so treat it as a guide."};
+var DATA={"stops":[["Walton-on-the-Naze, The Naze",51.86064,1.28577,"Walton-on-the-Naze, The Naze"],["Walton-on-the-Naze, First Avenue",51.85926,1.28117,"Walton-on-the-Naze, First"],["Walton-on-the-Naze, Baptist Church",51.85742,1.27858,"Walton-on-the-Naze, Baptist"],["Walton-on-the-Naze Coastguard Cotts (S-bound)",51.85511,1.27908,"Walton-on-the-Naze"],["Walton-on-the-Naze, Bath House Meadow",51.85196,1.27656,"Walton-on-the-Naze, Bath"],["Walton-on-the-Naze, Kino Road",51.85043,1.27473,"Walton-on-the-Naze, Kino Road"],["Walton Church",51.84832,1.26838,"Walton Church"],["Walton-on-the-Naze, Arthur Ransome Way",51.84878,1.26418,"Walton-on-the-Naze, Arthur"],["Walton-on-the-Naze, Gouldings Ave",51.84888,1.26152,"Walton-on-the-Naze,"],["Walton-on-the-Naze, Titchmarsh Marina",51.84975,1.25631,"Walton-on-the-Naze,"],["Walton-on-the-Naze, Hanover Court",51.84833,1.25404,"Walton-on-the-Naze, Hanover"],["Walton-on-the-Naze Valley Walk",51.84548,1.25613,"Walton-on-the-Naze Valley Walk"],["Walton-on-the-Naze, Norwood Way",51.84472,1.25342,"Walton-on-the-Naze, Norwood"],["Frinton-on-Sea, Triangle Shopping Centre",51.84347,1.24906,"Frinton-on-Sea, Triangle"],["Frinton-on-Sea, Frietuna Road",51.84201,1.24687,"Frinton-on-Sea, Frietuna Road"],["Frinton-on-Sea Elm Tree Avenue (S-bound)",51.84024,1.24546,"Frinton-on-Sea Elm Tree"],["Frinton-on-Sea, The Oaks",51.83846,1.2449,"Frinton-on-Sea, The Oaks"],["Frinton Rail Gates",51.83786,1.24327,"Frinton Rail Gates"],["Frinton-on-Sea, Laburnum Crescent",51.84002,1.23789,"Frinton-on-Sea, Laburnum"],["Frinton Road Nurseries",51.84138,1.23551,"Frinton Road Nurseries"],["Frinton-on-Sea, Village Way",51.84139,1.23169,"Frinton-on-Sea, Village Way"],["Kirby Cross, Elm Grove",51.84141,1.22776,"Kirby Cross, Elm Grove"],["Kirby Cross Coronation Garage",51.8419,1.223,"Kirby Cross Coronation Garage"],["Kirby Cross (S-bound)",51.84125,1.21879,"Kirby Cross (S-bound)"],["Kirby Cross Holland Rd (S-bound)",51.84018,1.21846,"Kirby Cross Holland Rd"],["Great Holland, Prospect Park",51.83676,1.21428,"Great Holland, Prospect Park"],["Great Holland, Westbury Road",51.83536,1.21262,"Great Holland, Westbury Road"],["Great Holland Green (S-bound)",51.83151,1.20954,"Great Holland Green (S-bound)"],["Great Holland, Baptist Church",51.82997,1.21035,"Great Holland, Baptist Church"],["Great Holland, Manor Rd",51.82746,1.20876,"Great Holland, Manor Rd"],["Holland-on-Sea, Haven Avenue",51.80581,1.20365,"Holland-on-Sea, Haven Avenue"],["Holland-on-Sea, Viking Way",51.80476,1.20073,"Holland-on-Sea, Viking Way"],["Holland-on-Sea, Brighton Road",51.80582,1.19782,"Holland-on-Sea, Brighton Road"],["Holland-on-Sea, The Oakwood",51.8061,1.19305,"Holland-on-Sea, The Oakwood"],["Holland-on-Sea, York Road",51.8051,1.18811,"Holland-on-Sea, York Road"],["Holland-on-Sea, Queensway",51.80397,1.18482,"Holland-on-Sea, Queensway"],["Holland-on-Sea, Roaring Donkey",51.80273,1.18105,"Holland-on-Sea, Roaring Donkey"],["Holland-on-Sea, Sladbury's Lane",51.80253,1.17565,"Holland-on-Sea, Sladbury's"],["Clacton, Holland Road School",51.80089,1.17173,"Clacton, Holland Road School"],["Clacton, Shorefields School",51.79776,1.16961,"Clacton, Shorefields School"],["Clacton, Victoria Road",51.79573,1.16421,"Clacton, Victoria Road"],["Clacton, Avondale Road",51.79397,1.16099,"Clacton, Avondale Road"],["Clacton Thoroughgood Road (W-bound)",51.79387,1.15883,"Clacton Thoroughgood Road"],["Clacton Railway Station (Stop 3)",51.79327,1.15434,"Clacton Railway Station"],["Clacton Station Road (S-bound)",51.79075,1.15373,"Clacton Station Road (S-bound)"],["Clacton Pier Avenue (Stand B)",51.78882,1.15235,"Clacton Pier Avenue"],["Clacton Station Road (N-bound)",51.79031,1.15351,"Clacton Station Road (N-bound)"],["Clacton Railway Station (Stop 1)",51.79376,1.15481,"Clacton Railway Station"],["Clacton Thoroughgood Road (E-bound)",51.79388,1.15785,"Clacton Thoroughgood Road"],["Clacton, Avondale Road",51.79405,1.16117,"Clacton, Avondale Road"],["Clacton, Lancaster Gardens",51.79618,1.16546,"Clacton, Lancaster Gardens"],["Clacton, Shorefields School",51.79763,1.16936,"Clacton, Shorefields School"],["Clacton, Holland Road School",51.80062,1.17158,"Clacton, Holland Road School"],["Holland-on-Sea, Sladbury's Lane",51.80268,1.17621,"Holland-on-Sea, Sladbury's"],["Holland-on-Sea, Roaring Donkey",51.80281,1.18078,"Holland-on-Sea, Roaring Donkey"],["Holland-on-Sea, Queensway",51.80418,1.1852,"Holland-on-Sea, Queensway"],["Holland-on-Sea, York Road",51.80551,1.18979,"Holland-on-Sea, York Road"],["Holland-on-Sea, The Oakwood",51.80626,1.19345,"Holland-on-Sea, The Oakwood"],["Holland-on-Sea, Aylesbury Drive",51.80626,1.19676,"Holland-on-Sea, Aylesbury"],["Holland-on-Sea, Brighton Road",51.80565,1.19856,"Holland-on-Sea, Brighton Road"],["Holland-on-Sea, Viking Way",51.80467,1.20241,"Holland-on-Sea, Viking Way"],["Holland-on-Sea, Haven Avenue",51.80607,1.20363,"Holland-on-Sea, Haven Avenue"],["Great Holland, Manor Rd",51.8275,1.20868,"Great Holland, Manor Rd"],["Great Holland, Baptist Church",51.83001,1.21023,"Great Holland, Baptist Church"],["Great Holland Green (NE-bound)",51.83278,1.20967,"Great Holland Green (NE-bound)"],["Great Holland, Westbury Road",51.83518,1.21224,"Great Holland, Westbury Road"],["Great Holland, Prospect Park",51.83706,1.21445,"Great Holland, Prospect Park"],["Kirby Cross Holland Rd (N-bound)",51.84009,1.21828,"Kirby Cross Holland Rd"],["Kirby Cross (E-bound)",51.84214,1.22098,"Kirby Cross (E-bound)"],["Kirby Cross, Chestnut Ave",51.84186,1.22647,"Kirby Cross, Chestnut Ave"],["Frinton-on-Sea, Village Way",51.84155,1.23225,"Frinton-on-Sea, Village Way"],["Frinton Road Nurseries",51.84115,1.2368,"Frinton Road Nurseries"],["Frinton-on-Sea, Laburnum Crescent",51.83967,1.23857,"Frinton-on-Sea, Laburnum"],["Frinton Rail Gates",51.83793,1.24389,"Frinton Rail Gates"],["Frinton-on-Sea, The Oaks",51.83852,1.24474,"Frinton-on-Sea, The Oaks"],["Frinton-on-Sea Elm Tree Avenue (NE-bound)",51.84122,1.24585,"Frinton-on-Sea Elm Tree"],["Frinton-on-Sea, Triangle Shopping Centre",51.84354,1.24975,"Frinton-on-Sea, Triangle"],["Walton-on-the-Naze, Norwood Way",51.84454,1.25219,"Walton-on-the-Naze, Norwood"],["Walton-on-the-Naze, Ockendon Way",51.84689,1.25539,"Walton-on-the-Naze, Ockendon"],["Walton-on-the-Naze, Hanover Court",51.84834,1.25389,"Walton-on-the-Naze, Hanover"],["Walton-on-the-Naze, Titchmarsh Marina",51.84979,1.25653,"Walton-on-the-Naze,"],["Walton-on-the-Naze, Gouldings Ave",51.84888,1.26196,"Walton-on-the-Naze,"],["Walton-on-the-Naze, Arthur Ransome Way",51.849,1.26513,"Walton-on-the-Naze, Arthur"],["Walton Church",51.84844,1.26779,"Walton Church"],["Walton Post Office",51.84942,1.27216,"Walton Post Office"],["Walton-on-the-Naze, Kino Road",51.85025,1.27441,"Walton-on-the-Naze, Kino Road"],["Walton-on-the-Naze, Bath House Meadow",51.8526,1.27718,"Walton-on-the-Naze, Bath"],["Walton-on-the-Naze Coastguard Cotts (NE-bound)",51.85442,1.27851,"Walton-on-the-Naze"],["Walton-on-the-Naze, Baptist Church",51.85777,1.2784,"Walton-on-the-Naze, Baptist"],["Walton-on-the-Naze, First Avenue",51.85927,1.28049,"Walton-on-the-Naze, First"],["Walton-on-the-Naze, The Naze",51.86088,1.28578,"Walton-on-the-Naze, The Naze"]],"lines":[[[51.78884,1.1524],[51.78989,1.15129],[51.79001,1.15136],[51.79004,1.15151],[51.79004,1.15176],[51.78979,1.15303],[51.7898,1.15332],[51.78991,1.15349],[51.79259,1.15414],[51.79273,1.15431],[51.79364,1.15332],[51.79405,1.16158],[51.79401,1.16188],[51.7955,1.16382],[51.79596,1.16453],[51.79634,1.16693],[51.79669,1.16832],[51.79708,1.16892],[51.79809,1.16988],[51.79885,1.1707],[51.79935,1.17138],[51.79959,1.17158],[51.80107,1.17172],[51.80199,1.17141],[51.80219,1.17148],[51.80223,1.1716],[51.8023,1.1719],[51.80244,1.17443],[51.8029,1.17798],[51.80274,1.17951],[51.80279,1.18147],[51.80318,1.183],[51.80395,1.18459],[51.80529,1.18853],[51.80559,1.1905],[51.80594,1.19194],[51.80637,1.19421],[51.80632,1.19616],[51.80622,1.19673],[51.80565,1.19853],[51.80498,1.20018],[51.80468,1.20125],[51.80461,1.20249],[51.80466,1.2029],[51.80477,1.20311],[51.80511,1.20335],[51.80736,1.20426],[51.8096,1.20474],[51.81021,1.20476],[51.8106,1.20469],[51.81147,1.20419],[51.81166,1.20416],[51.81203,1.20428],[51.81235,1.20447],[51.81249,1.20467],[51.81358,1.20701],[51.81374,1.20716],[51.81398,1.20724],[51.81426,1.20714],[51.81557,1.20592],[51.81576,1.20581],[51.81596,1.20579],[51.81634,1.20594],[51.81711,1.20688],[51.81727,1.20696],[51.81742,1.20699],[51.81818,1.20676],[51.81854,1.20672],[51.81892,1.20676],[51.81939,1.20706],[51.8206,1.20804],[51.82114,1.20841],[51.8214,1.2085],[51.82189,1.20845],[51.82347,1.20788],[51.8243,1.20768],[51.82494,1.20761],[51.8258,1.2077],[51.82704,1.20825],[51.82812,1.20951],[51.82851,1.20988],[51.82902,1.21019],[51.82931,1.21029],[51.82971,1.21033],[51.8302,1.21025],[51.83185,1.20933],[51.83199,1.20927],[51.83224,1.2093],[51.834,1.21079],[51.83546,1.21275],[51.8364,1.2139],[51.83763,1.21505],[51.83824,1.21549],[51.83862,1.21616],[51.83883,1.21718],[51.83904,1.21762],[51.84009,1.21832],[51.84073,1.21861],[51.84132,1.21879],[51.84169,1.21884],[51.84181,1.2188],[51.84206,1.21973],[51.84215,1.22157],[51.8419,1.22336],[51.84196,1.22551],[51.84179,1.2266],[51.84097,1.22954],[51.84099,1.23001],[51.84132,1.231],[51.84149,1.23206],[51.84161,1.23386],[51.84155,1.23499],[51.84119,1.23661],[51.84095,1.237],[51.83999,1.23802],[51.83905,1.23917],[51.83966,1.24031],[51.8401,1.23961],[51.84029,1.2398],[51.84052,1.23988],[51.84087,1.23973],[51.84103,1.23951],[51.84116,1.23908],[51.84114,1.23848],[51.84075,1.23746],[51.83966,1.23869],[51.8401,1.23961],[51.83966,1.24031],[51.83905,1.23917],[51.83839,1.2399],[51.83818,1.24047],[51.83808,1.2414],[51.83788,1.24394],[51.83795,1.2448],[51.83936,1.24507],[51.84049,1.24542],[51.84109,1.24586],[51.84239,1.24703],[51.8438,1.2478],[51.84351,1.24928],[51.84354,1.25021],[51.84374,1.25088],[51.84448,1.25209],[51.84457,1.25234],[51.84471,1.25299],[51.84494,1.25503],[51.8451,1.2555],[51.84537,1.25593],[51.84555,1.25607],[51.84592,1.25622],[51.84616,1.25621],[51.84639,1.25612],[51.84679,1.25571],[51.8472,1.2547],[51.84744,1.25435],[51.84801,1.25406],[51.84954,1.25348],[51.84975,1.25489],[51.84976,1.25668],[51.84961,1.25776],[51.84907,1.26026],[51.84873,1.26281],[51.84875,1.26346],[51.84907,1.26635],[51.84893,1.26698],[51.84831,1.26792],[51.84854,1.26974],[51.84945,1.27233],[51.84989,1.27405],[51.85004,1.27445],[51.85014,1.27438],[51.85033,1.27452],[51.85143,1.27576],[51.85277,1.27749],[51.85303,1.27768],[51.85359,1.2779],[51.85486,1.27896],[51.85512,1.27904],[51.85598,1.27877],[51.85777,1.2785],[51.85858,1.27848],[51.85879,1.27853],[51.85895,1.2788],[51.85996,1.28489],[51.86011,1.28519],[51.86087,1.28586]],[[51.86066,1.28571],[51.86011,1.28519],[51.85998,1.28496],[51.85934,1.28122],[51.85913,1.2813],[51.85899,1.28117],[51.85913,1.2813],[51.85934,1.28122],[51.85895,1.2788],[51.85879,1.27853],[51.85858,1.27848],[51.85777,1.2785],[51.85598,1.27877],[51.85512,1.27904],[51.85486,1.27896],[51.85359,1.2779],[51.85303,1.27768],[51.85277,1.27749],[51.85143,1.27576],[51.85033,1.27452],[51.85014,1.27438],[51.8499,1.27446],[51.8492,1.27374],[51.84866,1.27271],[51.84831,1.27241],[51.84871,1.27032],[51.84854,1.26974],[51.84825,1.26755],[51.84846,1.26768],[51.84864,1.26747],[51.84893,1.26698],[51.84905,1.26655],[51.84906,1.26619],[51.84875,1.26346],[51.84873,1.26281],[51.84907,1.26026],[51.84961,1.25776],[51.84979,1.25632],[51.84975,1.25489],[51.84954,1.25348],[51.84801,1.25406],[51.84744,1.25435],[51.8472,1.2547],[51.84679,1.25571],[51.84639,1.25612],[51.84616,1.25621],[51.84592,1.25622],[51.84555,1.25607],[51.84537,1.25593],[51.8451,1.2555],[51.84494,1.25503],[51.84471,1.25299],[51.84457,1.25234],[51.84448,1.25209],[51.84374,1.25088],[51.84354,1.25021],[51.84351,1.24928],[51.8438,1.2478],[51.84239,1.24703],[51.84073,1.24559],[51.8397,1.24522],[51.83968,1.24515],[51.83795,1.2448],[51.83788,1.24394],[51.83814,1.24077],[51.83829,1.24008],[51.8386,1.23961],[51.83905,1.23917],[51.84005,1.23795],[51.84095,1.237],[51.84119,1.23661],[51.84155,1.23499],[51.84161,1.23386],[51.84149,1.23206],[51.84132,1.231],[51.84099,1.23001],[51.84097,1.22954],[51.84179,1.2266],[51.84196,1.22551],[51.8419,1.22336],[51.84215,1.22157],[51.84206,1.21973],[51.84195,1.21923],[51.84179,1.21889],[51.84173,1.21883],[51.84132,1.21879],[51.84081,1.21864],[51.84025,1.2184],[51.83955,1.218],[51.83904,1.21762],[51.83883,1.21718],[51.83862,1.21616],[51.83824,1.21549],[51.83763,1.21505],[51.8364,1.2139],[51.83546,1.21275],[51.834,1.21079],[51.83224,1.2093],[51.83199,1.20927],[51.83185,1.20933],[51.8302,1.21025],[51.82971,1.21033],[51.82931,1.21029],[51.82902,1.21019],[51.82851,1.20988],[51.82812,1.20951],[51.82704,1.20825],[51.8258,1.2077],[51.82494,1.20761],[51.8243,1.20768],[51.82347,1.20788],[51.82189,1.20845],[51.8214,1.2085],[51.82114,1.20841],[51.8206,1.20804],[51.81939,1.20706],[51.81892,1.20676],[51.81875,1.20672],[51.81818,1.20676],[51.81742,1.20699],[51.81727,1.20696],[51.81711,1.20688],[51.81634,1.20594],[51.81596,1.20579],[51.81576,1.20581],[51.81557,1.20592],[51.81426,1.20714],[51.81398,1.20724],[51.81374,1.20716],[51.81358,1.20701],[51.81249,1.20467],[51.81235,1.20447],[51.81203,1.20428],[51.81166,1.20416],[51.81147,1.20419],[51.8106,1.20469],[51.81021,1.20476],[51.8096,1.20474],[51.80736,1.20426],[51.80511,1.20335],[51.80477,1.20311],[51.80452,1.20307],[51.80447,1.2029],[51.80461,1.20249],[51.80465,1.20147],[51.80476,1.2009],[51.80515,1.19972],[51.80565,1.19853],[51.80627,1.19651],[51.80636,1.19544],[51.80637,1.19421],[51.80594,1.19194],[51.80559,1.1905],[51.80529,1.18853],[51.80395,1.18459],[51.80318,1.183],[51.80279,1.18147],[51.80274,1.17951],[51.8029,1.17798],[51.80244,1.17443],[51.8023,1.1719],[51.80223,1.1716],[51.80219,1.17148],[51.80199,1.17141],[51.80107,1.17172],[51.79959,1.17158],[51.79935,1.17138],[51.79885,1.1707],[51.79809,1.16988],[51.79708,1.16892],[51.79669,1.16832],[51.79634,1.16693],[51.79596,1.16453],[51.7955,1.16382],[51.79401,1.16188],[51.79405,1.16158],[51.79372,1.15464],[51.79365,1.15449],[51.7936,1.15442],[51.79323,1.15432],[51.79298,1.15403],[51.79273,1.15431],[51.79259,1.15414],[51.78862,1.15315],[51.78855,1.15278],[51.78884,1.1524]]],"days":[{"key":"thu","label":"Thursday","dirs":[{"label":"To Clacton","li":1,"trips":[{"big":"07:42","small":"At Clacton Pier Avenue 08:22","title":"The 07:42 from Walton-on-the-Naze, The Naze","s":[["07:42",0,5],["07:43",1,0],["07:44",2,0],["07:45",3,0],["07:46",4,0],["07:47",5,0],["07:49",6,1],["07:49",7,0],["07:50",8,0],["07:51",9,0],["07:52",10,0],["07:53",11,0],["07:53",12,0],["07:55",13,1],["07:55",14,0],["07:55",15,0],["07:55",16,0],["07:56",17,5],["07:57",18,0],["07:58",19,0],["07:58",20,0],["07:59",21,0],["08:00",22,0],["08:02",23,5],["08:02",24,0],["08:02",25,0],["08:03",26,0],["08:04",27,0],["08:04",28,0],["08:04",29,0],["08:09",30,0],["08:09",31,0],["08:09",32,0],["08:10",33,0],["08:11",34,0],["08:11",35,0],["08:12",36,5],["08:12",37,0],["08:14",38,0],["08:14",39,0],["08:15",40,0],["08:16",41,0],["08:17",42,0],["08:18",43,1],["08:19",44,0],["08:22",45,7]]},{"big":"08:12","small":"At Clacton Pier Avenue 08:52","title":"The 08:12 from Walton-on-the-Naze, The Naze","s":[["08:12",0,5],["08:13",1,0],["08:14",2,0],["08:15",3,0],["08:16",4,0],["08:17",5,0],["08:19",6,1],["08:19",7,0],["08:20",8,0],["08:21",9,0],["08:22",10,0],["08:23",11,0],["08:23",12,0],["08:25",13,1],["08:25",14,0],["08:25",15,0],["08:25",16,0],["08:26",17,5],["08:27",18,0],["08:28",19,0],["08:28",20,0],["08:29",21,0],["08:30",22,0],["08:32",23,5],["08:32",24,0],["08:32",25,0],["08:33",26,0],["08:34",27,0],["08:34",28,0],["08:34",29,0],["08:39",30,0],["08:39",31,0],["08:39",32,0],["08:40",33,0],["08:41",34,0],["08:41",35,0],["08:42",36,5],["08:42",37,0],["08:44",38,0],["08:44",39,0],["08:45",40,0],["08:46",41,0],["08:47",42,0],["08:48",43,1],["08:49",44,0],["08:52",45,7]]},{"big":"08:42","small":"At Clacton Pier Avenue 09:22","title":"The 08:42 from Walton-on-the-Naze, The Naze","s":[["08:42",0,5],["08:43",1,0],["08:44",2,0],["08:45",3,0],["08:46",4,0],["08:47",5,0],["08:49",6,1],["08:49",7,0],["08:50",8,0],["08:51",9,0],["08:52",10,0],["08:53",11,0],["08:53",12,0],["08:55",13,1],["08:55",14,0],["08:55",15,0],["08:55",16,0],["08:56",17,5],["08:57",18,0],["08:58",19,0],["08:58",20,0],["08:59",21,0],["09:00",22,0],["09:02",23,5],["09:02",24,0],["09:02",25,0],["09:03",26,0],["09:04",27,0],["09:04",28,0],["09:04",29,0],["09:09",30,0],["09:09",31,0],["09:09",32,0],["09:10",33,0],["09:11",34,0],["09:11",35,0],["09:12",36,5],["09:12",37,0],["09:14",38,0],["09:14",39,0],["09:15",40,0],["09:16",41,0],["09:17",42,0],["09:18",43,1],["09:19",44,0],["09:22",45,7]]},{"big":"09:12","small":"At Clacton Pier Avenue 09:49","title":"The 09:12 from Walton-on-the-Naze, The Naze","s":[["09:12",0,5],["09:13",1,0],["09:13",2,0],["09:14",3,0],["09:15",4,0],["09:16",5,0],["09:18",6,1],["09:18",7,0],["09:19",8,0],["09:20",9,0],["09:21",10,0],["09:22",11,0],["09:22",12,0],["09:24",13,1],["09:24",14,0],["09:24",15,0],["09:24",16,0],["09:25",17,5],["09:26",18,0],["09:27",19,0],["09:27",20,0],["09:28",21,0],["09:29",22,0],["09:31",23,5],["09:31",24,0],["09:31",25,0],["09:32",26,0],["09:32",27,0],["09:33",28,0],["09:33",29,0],["09:37",30,0],["09:37",31,0],["09:38",32,0],["09:38",33,0],["09:39",34,0],["09:39",35,0],["09:40",36,5],["09:40",37,0],["09:42",38,0],["09:42",39,0],["09:43",40,0],["09:44",41,0],["09:45",42,0],["09:46",43,1],["09:47",44,0],["09:49",45,7]]},{"big":"09:42","small":"At Clacton Pier Avenue 10:19","title":"The 09:42 from Walton-on-the-Naze, The Naze","s":[["09:42",0,5],["09:43",1,0],["09:43",2,0],["09:44",3,0],["09:45",4,0],["09:46",5,0],["09:48",6,1],["09:48",7,0],["09:49",8,0],["09:50",9,0],["09:51",10,0],["09:52",11,0],["09:52",12,0],["09:54",13,1],["09:54",14,0],["09:54",15,0],["09:54",16,0],["09:55",17,5],["09:56",18,0],["09:57",19,0],["09:57",20,0],["09:58",21,0],["09:59",22,0],["10:01",23,5],["10:01",24,0],["10:01",25,0],["10:02",26,0],["10:02",27,0],["10:03",28,0],["10:03",29,0],["10:07",30,0],["10:07",31,0],["10:08",32,0],["10:08",33,0],["10:09",34,0],["10:09",35,0],["10:10",36,5],["10:10",37,0],["10:12",38,0],["10:12",39,0],["10:13",40,0],["10:14",41,0],["10:15",42,0],["10:16",43,1],["10:17",44,0],["10:19",45,7]]},{"big":"10:42","small":"At Clacton Pier Avenue 11:19","title":"The 10:42 from Walton-on-the-Naze, The Naze","s":[["10:42",0,5],["10:43",1,0],["10:43",2,0],["10:44",3,0],["10:45",4,0],["10:46",5,0],["10:48",6,1],["10:48",7,0],["10:49",8,0],["10:50",9,0],["10:51",10,0],["10:52",11,0],["10:52",12,0],["10:54",13,1],["10:54",14,0],["10:54",15,0],["10:54",16,0],["10:55",17,5],["10:56",18,0],["10:57",19,0],["10:57",20,0],["10:58",21,0],["10:59",22,0],["11:01",23,5],["11:01",24,0],["11:01",25,0],["11:02",26,0],["11:02",27,0],["11:03",28,0],["11:03",29,0],["11:07",30,0],["11:07",31,0],["11:08",32,0],["11:08",33,0],["11:09",34,0],["11:09",35,0],["11:10",36,5],["11:10",37,0],["11:12",38,0],["11:12",39,0],["11:13",40,0],["11:14",41,0],["11:15",42,0],["11:16",43,1],["11:17",44,0],["11:19",45,7]]},{"big":"11:12","small":"At Clacton Pier Avenue 11:49","title":"The 11:12 from Walton-on-the-Naze, The Naze","s":[["11:12",0,5],["11:13",1,0],["11:13",2,0],["11:14",3,0],["11:15",4,0],["11:16",5,0],["11:18",6,1],["11:18",7,0],["11:19",8,0],["11:20",9,0],["11:21",10,0],["11:22",11,0],["11:22",12,0],["11:24",13,1],["11:24",14,0],["11:24",15,0],["11:24",16,0],["11:25",17,5],["11:26",18,0],["11:27",19,0],["11:27",20,0],["11:28",21,0],["11:29",22,0],["11:31",23,5],["11:31",24,0],["11:31",25,0],["11:32",26,0],["11:32",27,0],["11:33",28,0],["11:33",29,0],["11:37",30,0],["11:37",31,0],["11:38",32,0],["11:38",33,0],["11:39",34,0],["11:39",35,0],["11:40",36,5],["11:40",37,0],["11:42",38,0],["11:42",39,0],["11:43",40,0],["11:44",41,0],["11:45",42,0],["11:46",43,1],["11:47",44,0],["11:49",45,7]]},{"big":"11:42","small":"At Clacton Pier Avenue 12:19","title":"The 11:42 from Walton-on-the-Naze, The Naze","s":[["11:42",0,5],["11:43",1,0],["11:43",2,0],["11:44",3,0],["11:45",4,0],["11:46",5,0],["11:48",6,1],["11:48",7,0],["11:49",8,0],["11:50",9,0],["11:51",10,0],["11:52",11,0],["11:52",12,0],["11:54",13,1],["11:54",14,0],["11:54",15,0],["11:54",16,0],["11:55",17,5],["11:56",18,0],["11:57",19,0],["11:57",20,0],["11:58",21,0],["11:59",22,0],["12:01",23,5],["12:01",24,0],["12:01",25,0],["12:02",26,0],["12:02",27,0],["12:03",28,0],["12:03",29,0],["12:07",30,0],["12:07",31,0],["12:08",32,0],["12:08",33,0],["12:09",34,0],["12:09",35,0],["12:10",36,5],["12:10",37,0],["12:12",38,0],["12:12",39,0],["12:13",40,0],["12:14",41,0],["12:15",42,0],["12:16",43,1],["12:17",44,0],["12:19",45,7]]},{"big":"12:12","small":"At Clacton Pier Avenue 12:49","title":"The 12:12 from Walton-on-the-Naze, The Naze","s":[["12:12",0,5],["12:13",1,0],["12:13",2,0],["12:14",3,0],["12:15",4,0],["12:16",5,0],["12:18",6,1],["12:18",7,0],["12:19",8,0],["12:20",9,0],["12:21",10,0],["12:22",11,0],["12:22",12,0],["12:24",13,1],["12:24",14,0],["12:24",15,0],["12:24",16,0],["12:25",17,5],["12:26",18,0],["12:27",19,0],["12:27",20,0],["12:28",21,0],["12:29",22,0],["12:31",23,5],["12:31",24,0],["12:31",25,0],["12:32",26,0],["12:32",27,0],["12:33",28,0],["12:33",29,0],["12:37",30,0],["12:37",31,0],["12:38",32,0],["12:38",33,0],["12:39",34,0],["12:39",35,0],["12:40",36,5],["12:40",37,0],["12:42",38,0],["12:42",39,0],["12:43",40,0],["12:44",41,0],["12:45",42,0],["12:46",43,1],["12:47",44,0],["12:49",45,7]]},{"big":"12:42","small":"At Clacton Pier Avenue 13:19","title":"The 12:42 from Walton-on-the-Naze, The Naze","s":[["12:42",0,5],["12:43",1,0],["12:43",2,0],["12:44",3,0],["12:45",4,0],["12:46",5,0],["12:48",6,1],["12:48",7,0],["12:49",8,0],["12:50",9,0],["12:51",10,0],["12:52",11,0],["12:52",12,0],["12:54",13,1],["12:54",14,0],["12:54",15,0],["12:54",16,0],["12:55",17,5],["12:56",18,0],["12:57",19,0],["12:57",20,0],["12:58",21,0],["12:59",22,0],["13:01",23,5],["13:01",24,0],["13:01",25,0],["13:02",26,0],["13:02",27,0],["13:03",28,0],["13:03",29,0],["13:07",30,0],["13:07",31,0],["13:08",32,0],["13:08",33,0],["13:09",34,0],["13:09",35,0],["13:10",36,5],["13:10",37,0],["13:12",38,0],["13:12",39,0],["13:13",40,0],["13:14",41,0],["13:15",42,0],["13:16",43,1],["13:17",44,0],["13:19",45,7]]}],"note":"Buses run about every 30 minutes, so these are a few of them spread through the morning."},{"label":"To Walton","li":0,"trips":[{"big":"13:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 14:08","title":"The 13:30 from Clacton Pier Avenue","s":[["13:30",45,7],["13:31",46,0],["13:33",47,1],["13:33",48,0],["13:33",49,0],["13:34",50,0],["13:35",51,0],["13:36",52,0],["13:37",53,0],["13:38",54,1],["13:38",55,0],["13:39",56,0],["13:39",57,0],["13:40",58,0],["13:40",59,0],["13:41",60,0],["13:41",61,0],["13:46",62,0],["13:46",63,0],["13:47",64,0],["13:48",65,0],["13:48",66,0],["13:49",67,0],["13:50",68,5],["13:50",69,0],["13:51",70,0],["13:51",71,0],["13:52",72,0],["13:52",73,0],["13:53",74,5],["13:54",75,0],["13:56",76,5],["13:56",77,0],["13:57",78,0],["13:58",79,0],["13:59",80,0],["14:00",81,0],["14:00",82,0],["14:01",83,0],["14:02",84,1],["14:02",85,0],["14:03",86,0],["14:04",87,0],["14:05",88,0],["14:06",89,0],["14:08",90,5]]},{"big":"14:00","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 14:38","title":"The 14:00 from Clacton Pier Avenue","s":[["14:00",45,7],["14:01",46,0],["14:03",47,1],["14:03",48,0],["14:03",49,0],["14:04",50,0],["14:05",51,0],["14:06",52,0],["14:07",53,0],["14:08",54,1],["14:08",55,0],["14:09",56,0],["14:09",57,0],["14:10",58,0],["14:10",59,0],["14:11",60,0],["14:11",61,0],["14:16",62,0],["14:16",63,0],["14:17",64,0],["14:18",65,0],["14:18",66,0],["14:19",67,0],["14:20",68,5],["14:20",69,0],["14:21",70,0],["14:21",71,0],["14:22",72,0],["14:22",73,0],["14:23",74,5],["14:24",75,0],["14:26",76,5],["14:26",77,0],["14:27",78,0],["14:28",79,0],["14:29",80,0],["14:30",81,0],["14:30",82,0],["14:31",83,0],["14:32",84,1],["14:32",85,0],["14:33",86,0],["14:34",87,0],["14:35",88,0],["14:36",89,0],["14:38",90,5]]},{"big":"14:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 15:08","title":"The 14:30 from Clacton Pier Avenue","s":[["14:30",45,7],["14:31",46,0],["14:33",47,1],["14:33",48,0],["14:33",49,0],["14:34",50,0],["14:35",51,0],["14:36",52,0],["14:37",53,0],["14:38",54,1],["14:38",55,0],["14:39",56,0],["14:39",57,0],["14:40",58,0],["14:40",59,0],["14:41",60,0],["14:41",61,0],["14:46",62,0],["14:46",63,0],["14:47",64,0],["14:48",65,0],["14:48",66,0],["14:49",67,0],["14:50",68,5],["14:50",69,0],["14:51",70,0],["14:51",71,0],["14:52",72,0],["14:52",73,0],["14:53",74,5],["14:54",75,0],["14:56",76,5],["14:56",77,0],["14:57",78,0],["14:58",79,0],["14:59",80,0],["15:00",81,0],["15:00",82,0],["15:01",83,0],["15:02",84,1],["15:02",85,0],["15:03",86,0],["15:04",87,0],["15:05",88,0],["15:06",89,0],["15:08",90,5]]},{"big":"15:00","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 15:42","title":"The 15:00 from Clacton Pier Avenue","s":[["15:00",45,7],["15:01",46,0],["15:03",47,1],["15:03",48,0],["15:03",49,0],["15:04",50,0],["15:05",51,0],["15:06",52,0],["15:07",53,0],["15:08",54,1],["15:08",55,0],["15:09",56,0],["15:10",57,0],["15:10",58,0],["15:10",59,0],["15:11",60,0],["15:11",61,0],["15:17",62,0],["15:18",63,0],["15:18",64,0],["15:19",65,0],["15:20",66,0],["15:21",67,0],["15:22",68,5],["15:22",69,0],["15:24",70,0],["15:24",71,0],["15:25",72,0],["15:26",73,0],["15:27",74,5],["15:28",75,0],["15:30",76,5],["15:30",77,0],["15:31",78,0],["15:32",79,0],["15:33",80,0],["15:34",81,0],["15:34",82,0],["15:35",83,0],["15:36",84,1],["15:36",85,0],["15:37",86,0],["15:38",87,0],["15:39",88,0],["15:40",89,0],["15:42",90,5]]},{"big":"15:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 16:12","title":"The 15:30 from Clacton Pier Avenue","s":[["15:30",45,7],["15:31",46,0],["15:33",47,1],["15:33",48,0],["15:33",49,0],["15:34",50,0],["15:35",51,0],["15:36",52,0],["15:37",53,0],["15:38",54,1],["15:38",55,0],["15:39",56,0],["15:40",57,0],["15:40",58,0],["15:40",59,0],["15:41",60,0],["15:41",61,0],["15:47",62,0],["15:48",63,0],["15:48",64,0],["15:49",65,0],["15:50",66,0],["15:51",67,0],["15:52",68,5],["15:52",69,0],["15:54",70,0],["15:54",71,0],["15:55",72,0],["15:56",73,0],["15:57",74,5],["15:58",75,0],["16:00",76,5],["16:00",77,0],["16:01",78,0],["16:02",79,0],["16:03",80,0],["16:04",81,0],["16:04",82,0],["16:05",83,0],["16:06",84,1],["16:06",85,0],["16:07",86,0],["16:08",87,0],["16:09",88,0],["16:10",89,0],["16:12",90,5]]},{"big":"16:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 17:12","title":"The 16:30 from Clacton Pier Avenue","s":[["16:30",45,7],["16:31",46,0],["16:33",47,1],["16:33",48,0],["16:33",49,0],["16:34",50,0],["16:35",51,0],["16:36",52,0],["16:37",53,0],["16:38",54,1],["16:38",55,0],["16:39",56,0],["16:40",57,0],["16:40",58,0],["16:40",59,0],["16:41",60,0],["16:41",61,0],["16:47",62,0],["16:48",63,0],["16:48",64,0],["16:49",65,0],["16:50",66,0],["16:51",67,0],["16:52",68,5],["16:52",69,0],["16:54",70,0],["16:54",71,0],["16:55",72,0],["16:56",73,0],["16:57",74,5],["16:58",75,0],["17:00",76,5],["17:00",77,0],["17:01",78,0],["17:02",79,0],["17:03",80,0],["17:04",81,0],["17:04",82,0],["17:05",83,0],["17:06",84,1],["17:06",85,0],["17:07",86,0],["17:08",87,0],["17:09",88,0],["17:10",89,0],["17:12",90,5]]},{"big":"17:00","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 17:42","title":"The 17:00 from Clacton Pier Avenue","s":[["17:00",45,7],["17:01",46,0],["17:03",47,1],["17:03",48,0],["17:03",49,0],["17:04",50,0],["17:05",51,0],["17:06",52,0],["17:07",53,0],["17:08",54,1],["17:08",55,0],["17:09",56,0],["17:10",57,0],["17:10",58,0],["17:10",59,0],["17:11",60,0],["17:11",61,0],["17:17",62,0],["17:18",63,0],["17:18",64,0],["17:19",65,0],["17:20",66,0],["17:21",67,0],["17:22",68,5],["17:22",69,0],["17:24",70,0],["17:24",71,0],["17:25",72,0],["17:26",73,0],["17:27",74,5],["17:28",75,0],["17:30",76,5],["17:30",77,0],["17:31",78,0],["17:32",79,0],["17:33",80,0],["17:34",81,0],["17:34",82,0],["17:35",83,0],["17:36",84,1],["17:36",85,0],["17:37",86,0],["17:38",87,0],["17:39",88,0],["17:40",89,0],["17:42",90,5]]},{"big":"17:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 18:12","title":"The 17:30 from Clacton Pier Avenue","s":[["17:30",45,7],["17:31",46,0],["17:33",47,1],["17:33",48,0],["17:33",49,0],["17:34",50,0],["17:35",51,0],["17:36",52,0],["17:37",53,0],["17:38",54,1],["17:38",55,0],["17:39",56,0],["17:40",57,0],["17:40",58,0],["17:40",59,0],["17:41",60,0],["17:41",61,0],["17:47",62,0],["17:48",63,0],["17:48",64,0],["17:49",65,0],["17:50",66,0],["17:51",67,0],["17:52",68,5],["17:52",69,0],["17:54",70,0],["17:54",71,0],["17:55",72,0],["17:56",73,0],["17:57",74,5],["17:58",75,0],["18:00",76,5],["18:00",77,0],["18:01",78,0],["18:02",79,0],["18:03",80,0],["18:04",81,0],["18:04",82,0],["18:05",83,0],["18:06",84,1],["18:06",85,0],["18:07",86,0],["18:08",87,0],["18:09",88,0],["18:10",89,0],["18:12",90,5]]},{"big":"18:15","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 18:52","title":"The 18:15 from Clacton Pier Avenue","s":[["18:15",45,7],["18:16",46,0],["18:18",47,1],["18:18",48,0],["18:18",49,0],["18:19",50,0],["18:20",51,0],["18:21",52,0],["18:22",53,0],["18:23",54,1],["18:23",55,0],["18:24",56,0],["18:24",57,0],["18:25",58,0],["18:25",59,0],["18:26",60,0],["18:26",61,0],["18:31",62,0],["18:31",63,0],["18:32",64,0],["18:33",65,0],["18:33",66,0],["18:34",67,0],["18:35",68,5],["18:35",69,0],["18:36",70,0],["18:36",71,0],["18:37",72,0],["18:37",73,0],["18:38",74,5],["18:39",75,0],["18:41",76,5],["18:41",77,0],["18:42",78,0],["18:43",79,0],["18:43",80,0],["18:44",81,0],["18:44",82,0],["18:45",83,0],["18:46",84,1],["18:46",85,0],["18:47",86,0],["18:48",87,0],["18:49",88,0],["18:50",89,0],["18:52",90,5]]},{"big":"18:45","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 19:22","title":"The 18:45 from Clacton Pier Avenue","s":[["18:45",45,7],["18:46",46,0],["18:48",47,1],["18:48",48,0],["18:48",49,0],["18:49",50,0],["18:50",51,0],["18:51",52,0],["18:52",53,0],["18:53",54,1],["18:53",55,0],["18:54",56,0],["18:54",57,0],["18:55",58,0],["18:55",59,0],["18:56",60,0],["18:56",61,0],["19:01",62,0],["19:01",63,0],["19:02",64,0],["19:03",65,0],["19:03",66,0],["19:04",67,0],["19:05",68,5],["19:05",69,0],["19:06",70,0],["19:06",71,0],["19:07",72,0],["19:07",73,0],["19:08",74,5],["19:09",75,0],["19:11",76,5],["19:11",77,0],["19:12",78,0],["19:13",79,0],["19:13",80,0],["19:14",81,0],["19:14",82,0],["19:15",83,0],["19:16",84,1],["19:16",85,0],["19:17",86,0],["19:18",87,0],["19:19",88,0],["19:20",89,0],["19:22",90,5]]}],"note":"Buses run about every 30 minutes, so these are a few of them spread through the afternoon and evening."}],"none":"In the current timetable there are no 7 buses on Thursdays, so I would look at the other ways to get there on the Clacton Air Show page."},{"key":"fri","label":"Friday","dirs":[{"label":"To Clacton","li":1,"trips":[{"big":"07:42","small":"At Clacton Pier Avenue 08:22","title":"The 07:42 from Walton-on-the-Naze, The Naze","s":[["07:42",0,5],["07:43",1,0],["07:44",2,0],["07:45",3,0],["07:46",4,0],["07:47",5,0],["07:49",6,1],["07:49",7,0],["07:50",8,0],["07:51",9,0],["07:52",10,0],["07:53",11,0],["07:53",12,0],["07:55",13,1],["07:55",14,0],["07:55",15,0],["07:55",16,0],["07:56",17,5],["07:57",18,0],["07:58",19,0],["07:58",20,0],["07:59",21,0],["08:00",22,0],["08:02",23,5],["08:02",24,0],["08:02",25,0],["08:03",26,0],["08:04",27,0],["08:04",28,0],["08:04",29,0],["08:09",30,0],["08:09",31,0],["08:09",32,0],["08:10",33,0],["08:11",34,0],["08:11",35,0],["08:12",36,5],["08:12",37,0],["08:14",38,0],["08:14",39,0],["08:15",40,0],["08:16",41,0],["08:17",42,0],["08:18",43,1],["08:19",44,0],["08:22",45,7]]},{"big":"08:12","small":"At Clacton Pier Avenue 08:52","title":"The 08:12 from Walton-on-the-Naze, The Naze","s":[["08:12",0,5],["08:13",1,0],["08:14",2,0],["08:15",3,0],["08:16",4,0],["08:17",5,0],["08:19",6,1],["08:19",7,0],["08:20",8,0],["08:21",9,0],["08:22",10,0],["08:23",11,0],["08:23",12,0],["08:25",13,1],["08:25",14,0],["08:25",15,0],["08:25",16,0],["08:26",17,5],["08:27",18,0],["08:28",19,0],["08:28",20,0],["08:29",21,0],["08:30",22,0],["08:32",23,5],["08:32",24,0],["08:32",25,0],["08:33",26,0],["08:34",27,0],["08:34",28,0],["08:34",29,0],["08:39",30,0],["08:39",31,0],["08:39",32,0],["08:40",33,0],["08:41",34,0],["08:41",35,0],["08:42",36,5],["08:42",37,0],["08:44",38,0],["08:44",39,0],["08:45",40,0],["08:46",41,0],["08:47",42,0],["08:48",43,1],["08:49",44,0],["08:52",45,7]]},{"big":"08:42","small":"At Clacton Pier Avenue 09:22","title":"The 08:42 from Walton-on-the-Naze, The Naze","s":[["08:42",0,5],["08:43",1,0],["08:44",2,0],["08:45",3,0],["08:46",4,0],["08:47",5,0],["08:49",6,1],["08:49",7,0],["08:50",8,0],["08:51",9,0],["08:52",10,0],["08:53",11,0],["08:53",12,0],["08:55",13,1],["08:55",14,0],["08:55",15,0],["08:55",16,0],["08:56",17,5],["08:57",18,0],["08:58",19,0],["08:58",20,0],["08:59",21,0],["09:00",22,0],["09:02",23,5],["09:02",24,0],["09:02",25,0],["09:03",26,0],["09:04",27,0],["09:04",28,0],["09:04",29,0],["09:09",30,0],["09:09",31,0],["09:09",32,0],["09:10",33,0],["09:11",34,0],["09:11",35,0],["09:12",36,5],["09:12",37,0],["09:14",38,0],["09:14",39,0],["09:15",40,0],["09:16",41,0],["09:17",42,0],["09:18",43,1],["09:19",44,0],["09:22",45,7]]},{"big":"09:12","small":"At Clacton Pier Avenue 09:49","title":"The 09:12 from Walton-on-the-Naze, The Naze","s":[["09:12",0,5],["09:13",1,0],["09:13",2,0],["09:14",3,0],["09:15",4,0],["09:16",5,0],["09:18",6,1],["09:18",7,0],["09:19",8,0],["09:20",9,0],["09:21",10,0],["09:22",11,0],["09:22",12,0],["09:24",13,1],["09:24",14,0],["09:24",15,0],["09:24",16,0],["09:25",17,5],["09:26",18,0],["09:27",19,0],["09:27",20,0],["09:28",21,0],["09:29",22,0],["09:31",23,5],["09:31",24,0],["09:31",25,0],["09:32",26,0],["09:32",27,0],["09:33",28,0],["09:33",29,0],["09:37",30,0],["09:37",31,0],["09:38",32,0],["09:38",33,0],["09:39",34,0],["09:39",35,0],["09:40",36,5],["09:40",37,0],["09:42",38,0],["09:42",39,0],["09:43",40,0],["09:44",41,0],["09:45",42,0],["09:46",43,1],["09:47",44,0],["09:49",45,7]]},{"big":"09:42","small":"At Clacton Pier Avenue 10:19","title":"The 09:42 from Walton-on-the-Naze, The Naze","s":[["09:42",0,5],["09:43",1,0],["09:43",2,0],["09:44",3,0],["09:45",4,0],["09:46",5,0],["09:48",6,1],["09:48",7,0],["09:49",8,0],["09:50",9,0],["09:51",10,0],["09:52",11,0],["09:52",12,0],["09:54",13,1],["09:54",14,0],["09:54",15,0],["09:54",16,0],["09:55",17,5],["09:56",18,0],["09:57",19,0],["09:57",20,0],["09:58",21,0],["09:59",22,0],["10:01",23,5],["10:01",24,0],["10:01",25,0],["10:02",26,0],["10:02",27,0],["10:03",28,0],["10:03",29,0],["10:07",30,0],["10:07",31,0],["10:08",32,0],["10:08",33,0],["10:09",34,0],["10:09",35,0],["10:10",36,5],["10:10",37,0],["10:12",38,0],["10:12",39,0],["10:13",40,0],["10:14",41,0],["10:15",42,0],["10:16",43,1],["10:17",44,0],["10:19",45,7]]},{"big":"10:42","small":"At Clacton Pier Avenue 11:19","title":"The 10:42 from Walton-on-the-Naze, The Naze","s":[["10:42",0,5],["10:43",1,0],["10:43",2,0],["10:44",3,0],["10:45",4,0],["10:46",5,0],["10:48",6,1],["10:48",7,0],["10:49",8,0],["10:50",9,0],["10:51",10,0],["10:52",11,0],["10:52",12,0],["10:54",13,1],["10:54",14,0],["10:54",15,0],["10:54",16,0],["10:55",17,5],["10:56",18,0],["10:57",19,0],["10:57",20,0],["10:58",21,0],["10:59",22,0],["11:01",23,5],["11:01",24,0],["11:01",25,0],["11:02",26,0],["11:02",27,0],["11:03",28,0],["11:03",29,0],["11:07",30,0],["11:07",31,0],["11:08",32,0],["11:08",33,0],["11:09",34,0],["11:09",35,0],["11:10",36,5],["11:10",37,0],["11:12",38,0],["11:12",39,0],["11:13",40,0],["11:14",41,0],["11:15",42,0],["11:16",43,1],["11:17",44,0],["11:19",45,7]]},{"big":"11:12","small":"At Clacton Pier Avenue 11:49","title":"The 11:12 from Walton-on-the-Naze, The Naze","s":[["11:12",0,5],["11:13",1,0],["11:13",2,0],["11:14",3,0],["11:15",4,0],["11:16",5,0],["11:18",6,1],["11:18",7,0],["11:19",8,0],["11:20",9,0],["11:21",10,0],["11:22",11,0],["11:22",12,0],["11:24",13,1],["11:24",14,0],["11:24",15,0],["11:24",16,0],["11:25",17,5],["11:26",18,0],["11:27",19,0],["11:27",20,0],["11:28",21,0],["11:29",22,0],["11:31",23,5],["11:31",24,0],["11:31",25,0],["11:32",26,0],["11:32",27,0],["11:33",28,0],["11:33",29,0],["11:37",30,0],["11:37",31,0],["11:38",32,0],["11:38",33,0],["11:39",34,0],["11:39",35,0],["11:40",36,5],["11:40",37,0],["11:42",38,0],["11:42",39,0],["11:43",40,0],["11:44",41,0],["11:45",42,0],["11:46",43,1],["11:47",44,0],["11:49",45,7]]},{"big":"11:42","small":"At Clacton Pier Avenue 12:19","title":"The 11:42 from Walton-on-the-Naze, The Naze","s":[["11:42",0,5],["11:43",1,0],["11:43",2,0],["11:44",3,0],["11:45",4,0],["11:46",5,0],["11:48",6,1],["11:48",7,0],["11:49",8,0],["11:50",9,0],["11:51",10,0],["11:52",11,0],["11:52",12,0],["11:54",13,1],["11:54",14,0],["11:54",15,0],["11:54",16,0],["11:55",17,5],["11:56",18,0],["11:57",19,0],["11:57",20,0],["11:58",21,0],["11:59",22,0],["12:01",23,5],["12:01",24,0],["12:01",25,0],["12:02",26,0],["12:02",27,0],["12:03",28,0],["12:03",29,0],["12:07",30,0],["12:07",31,0],["12:08",32,0],["12:08",33,0],["12:09",34,0],["12:09",35,0],["12:10",36,5],["12:10",37,0],["12:12",38,0],["12:12",39,0],["12:13",40,0],["12:14",41,0],["12:15",42,0],["12:16",43,1],["12:17",44,0],["12:19",45,7]]},{"big":"12:12","small":"At Clacton Pier Avenue 12:49","title":"The 12:12 from Walton-on-the-Naze, The Naze","s":[["12:12",0,5],["12:13",1,0],["12:13",2,0],["12:14",3,0],["12:15",4,0],["12:16",5,0],["12:18",6,1],["12:18",7,0],["12:19",8,0],["12:20",9,0],["12:21",10,0],["12:22",11,0],["12:22",12,0],["12:24",13,1],["12:24",14,0],["12:24",15,0],["12:24",16,0],["12:25",17,5],["12:26",18,0],["12:27",19,0],["12:27",20,0],["12:28",21,0],["12:29",22,0],["12:31",23,5],["12:31",24,0],["12:31",25,0],["12:32",26,0],["12:32",27,0],["12:33",28,0],["12:33",29,0],["12:37",30,0],["12:37",31,0],["12:38",32,0],["12:38",33,0],["12:39",34,0],["12:39",35,0],["12:40",36,5],["12:40",37,0],["12:42",38,0],["12:42",39,0],["12:43",40,0],["12:44",41,0],["12:45",42,0],["12:46",43,1],["12:47",44,0],["12:49",45,7]]},{"big":"12:42","small":"At Clacton Pier Avenue 13:19","title":"The 12:42 from Walton-on-the-Naze, The Naze","s":[["12:42",0,5],["12:43",1,0],["12:43",2,0],["12:44",3,0],["12:45",4,0],["12:46",5,0],["12:48",6,1],["12:48",7,0],["12:49",8,0],["12:50",9,0],["12:51",10,0],["12:52",11,0],["12:52",12,0],["12:54",13,1],["12:54",14,0],["12:54",15,0],["12:54",16,0],["12:55",17,5],["12:56",18,0],["12:57",19,0],["12:57",20,0],["12:58",21,0],["12:59",22,0],["13:01",23,5],["13:01",24,0],["13:01",25,0],["13:02",26,0],["13:02",27,0],["13:03",28,0],["13:03",29,0],["13:07",30,0],["13:07",31,0],["13:08",32,0],["13:08",33,0],["13:09",34,0],["13:09",35,0],["13:10",36,5],["13:10",37,0],["13:12",38,0],["13:12",39,0],["13:13",40,0],["13:14",41,0],["13:15",42,0],["13:16",43,1],["13:17",44,0],["13:19",45,7]]}],"note":"Buses run about every 30 minutes, so these are a few of them spread through the morning."},{"label":"To Walton","li":0,"trips":[{"big":"13:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 14:08","title":"The 13:30 from Clacton Pier Avenue","s":[["13:30",45,7],["13:31",46,0],["13:33",47,1],["13:33",48,0],["13:33",49,0],["13:34",50,0],["13:35",51,0],["13:36",52,0],["13:37",53,0],["13:38",54,1],["13:38",55,0],["13:39",56,0],["13:39",57,0],["13:40",58,0],["13:40",59,0],["13:41",60,0],["13:41",61,0],["13:46",62,0],["13:46",63,0],["13:47",64,0],["13:48",65,0],["13:48",66,0],["13:49",67,0],["13:50",68,5],["13:50",69,0],["13:51",70,0],["13:51",71,0],["13:52",72,0],["13:52",73,0],["13:53",74,5],["13:54",75,0],["13:56",76,5],["13:56",77,0],["13:57",78,0],["13:58",79,0],["13:59",80,0],["14:00",81,0],["14:00",82,0],["14:01",83,0],["14:02",84,1],["14:02",85,0],["14:03",86,0],["14:04",87,0],["14:05",88,0],["14:06",89,0],["14:08",90,5]]},{"big":"14:00","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 14:38","title":"The 14:00 from Clacton Pier Avenue","s":[["14:00",45,7],["14:01",46,0],["14:03",47,1],["14:03",48,0],["14:03",49,0],["14:04",50,0],["14:05",51,0],["14:06",52,0],["14:07",53,0],["14:08",54,1],["14:08",55,0],["14:09",56,0],["14:09",57,0],["14:10",58,0],["14:10",59,0],["14:11",60,0],["14:11",61,0],["14:16",62,0],["14:16",63,0],["14:17",64,0],["14:18",65,0],["14:18",66,0],["14:19",67,0],["14:20",68,5],["14:20",69,0],["14:21",70,0],["14:21",71,0],["14:22",72,0],["14:22",73,0],["14:23",74,5],["14:24",75,0],["14:26",76,5],["14:26",77,0],["14:27",78,0],["14:28",79,0],["14:29",80,0],["14:30",81,0],["14:30",82,0],["14:31",83,0],["14:32",84,1],["14:32",85,0],["14:33",86,0],["14:34",87,0],["14:35",88,0],["14:36",89,0],["14:38",90,5]]},{"big":"14:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 15:08","title":"The 14:30 from Clacton Pier Avenue","s":[["14:30",45,7],["14:31",46,0],["14:33",47,1],["14:33",48,0],["14:33",49,0],["14:34",50,0],["14:35",51,0],["14:36",52,0],["14:37",53,0],["14:38",54,1],["14:38",55,0],["14:39",56,0],["14:39",57,0],["14:40",58,0],["14:40",59,0],["14:41",60,0],["14:41",61,0],["14:46",62,0],["14:46",63,0],["14:47",64,0],["14:48",65,0],["14:48",66,0],["14:49",67,0],["14:50",68,5],["14:50",69,0],["14:51",70,0],["14:51",71,0],["14:52",72,0],["14:52",73,0],["14:53",74,5],["14:54",75,0],["14:56",76,5],["14:56",77,0],["14:57",78,0],["14:58",79,0],["14:59",80,0],["15:00",81,0],["15:00",82,0],["15:01",83,0],["15:02",84,1],["15:02",85,0],["15:03",86,0],["15:04",87,0],["15:05",88,0],["15:06",89,0],["15:08",90,5]]},{"big":"15:00","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 15:42","title":"The 15:00 from Clacton Pier Avenue","s":[["15:00",45,7],["15:01",46,0],["15:03",47,1],["15:03",48,0],["15:03",49,0],["15:04",50,0],["15:05",51,0],["15:06",52,0],["15:07",53,0],["15:08",54,1],["15:08",55,0],["15:09",56,0],["15:10",57,0],["15:10",58,0],["15:10",59,0],["15:11",60,0],["15:11",61,0],["15:17",62,0],["15:18",63,0],["15:18",64,0],["15:19",65,0],["15:20",66,0],["15:21",67,0],["15:22",68,5],["15:22",69,0],["15:24",70,0],["15:24",71,0],["15:25",72,0],["15:26",73,0],["15:27",74,5],["15:28",75,0],["15:30",76,5],["15:30",77,0],["15:31",78,0],["15:32",79,0],["15:33",80,0],["15:34",81,0],["15:34",82,0],["15:35",83,0],["15:36",84,1],["15:36",85,0],["15:37",86,0],["15:38",87,0],["15:39",88,0],["15:40",89,0],["15:42",90,5]]},{"big":"15:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 16:12","title":"The 15:30 from Clacton Pier Avenue","s":[["15:30",45,7],["15:31",46,0],["15:33",47,1],["15:33",48,0],["15:33",49,0],["15:34",50,0],["15:35",51,0],["15:36",52,0],["15:37",53,0],["15:38",54,1],["15:38",55,0],["15:39",56,0],["15:40",57,0],["15:40",58,0],["15:40",59,0],["15:41",60,0],["15:41",61,0],["15:47",62,0],["15:48",63,0],["15:48",64,0],["15:49",65,0],["15:50",66,0],["15:51",67,0],["15:52",68,5],["15:52",69,0],["15:54",70,0],["15:54",71,0],["15:55",72,0],["15:56",73,0],["15:57",74,5],["15:58",75,0],["16:00",76,5],["16:00",77,0],["16:01",78,0],["16:02",79,0],["16:03",80,0],["16:04",81,0],["16:04",82,0],["16:05",83,0],["16:06",84,1],["16:06",85,0],["16:07",86,0],["16:08",87,0],["16:09",88,0],["16:10",89,0],["16:12",90,5]]},{"big":"16:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 17:12","title":"The 16:30 from Clacton Pier Avenue","s":[["16:30",45,7],["16:31",46,0],["16:33",47,1],["16:33",48,0],["16:33",49,0],["16:34",50,0],["16:35",51,0],["16:36",52,0],["16:37",53,0],["16:38",54,1],["16:38",55,0],["16:39",56,0],["16:40",57,0],["16:40",58,0],["16:40",59,0],["16:41",60,0],["16:41",61,0],["16:47",62,0],["16:48",63,0],["16:48",64,0],["16:49",65,0],["16:50",66,0],["16:51",67,0],["16:52",68,5],["16:52",69,0],["16:54",70,0],["16:54",71,0],["16:55",72,0],["16:56",73,0],["16:57",74,5],["16:58",75,0],["17:00",76,5],["17:00",77,0],["17:01",78,0],["17:02",79,0],["17:03",80,0],["17:04",81,0],["17:04",82,0],["17:05",83,0],["17:06",84,1],["17:06",85,0],["17:07",86,0],["17:08",87,0],["17:09",88,0],["17:10",89,0],["17:12",90,5]]},{"big":"17:00","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 17:42","title":"The 17:00 from Clacton Pier Avenue","s":[["17:00",45,7],["17:01",46,0],["17:03",47,1],["17:03",48,0],["17:03",49,0],["17:04",50,0],["17:05",51,0],["17:06",52,0],["17:07",53,0],["17:08",54,1],["17:08",55,0],["17:09",56,0],["17:10",57,0],["17:10",58,0],["17:10",59,0],["17:11",60,0],["17:11",61,0],["17:17",62,0],["17:18",63,0],["17:18",64,0],["17:19",65,0],["17:20",66,0],["17:21",67,0],["17:22",68,5],["17:22",69,0],["17:24",70,0],["17:24",71,0],["17:25",72,0],["17:26",73,0],["17:27",74,5],["17:28",75,0],["17:30",76,5],["17:30",77,0],["17:31",78,0],["17:32",79,0],["17:33",80,0],["17:34",81,0],["17:34",82,0],["17:35",83,0],["17:36",84,1],["17:36",85,0],["17:37",86,0],["17:38",87,0],["17:39",88,0],["17:40",89,0],["17:42",90,5]]},{"big":"17:30","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 18:12","title":"The 17:30 from Clacton Pier Avenue","s":[["17:30",45,7],["17:31",46,0],["17:33",47,1],["17:33",48,0],["17:33",49,0],["17:34",50,0],["17:35",51,0],["17:36",52,0],["17:37",53,0],["17:38",54,1],["17:38",55,0],["17:39",56,0],["17:40",57,0],["17:40",58,0],["17:40",59,0],["17:41",60,0],["17:41",61,0],["17:47",62,0],["17:48",63,0],["17:48",64,0],["17:49",65,0],["17:50",66,0],["17:51",67,0],["17:52",68,5],["17:52",69,0],["17:54",70,0],["17:54",71,0],["17:55",72,0],["17:56",73,0],["17:57",74,5],["17:58",75,0],["18:00",76,5],["18:00",77,0],["18:01",78,0],["18:02",79,0],["18:03",80,0],["18:04",81,0],["18:04",82,0],["18:05",83,0],["18:06",84,1],["18:06",85,0],["18:07",86,0],["18:08",87,0],["18:09",88,0],["18:10",89,0],["18:12",90,5]]},{"big":"18:15","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 18:52","title":"The 18:15 from Clacton Pier Avenue","s":[["18:15",45,7],["18:16",46,0],["18:18",47,1],["18:18",48,0],["18:18",49,0],["18:19",50,0],["18:20",51,0],["18:21",52,0],["18:22",53,0],["18:23",54,1],["18:23",55,0],["18:24",56,0],["18:24",57,0],["18:25",58,0],["18:25",59,0],["18:26",60,0],["18:26",61,0],["18:31",62,0],["18:31",63,0],["18:32",64,0],["18:33",65,0],["18:33",66,0],["18:34",67,0],["18:35",68,5],["18:35",69,0],["18:36",70,0],["18:36",71,0],["18:37",72,0],["18:37",73,0],["18:38",74,5],["18:39",75,0],["18:41",76,5],["18:41",77,0],["18:42",78,0],["18:43",79,0],["18:43",80,0],["18:44",81,0],["18:44",82,0],["18:45",83,0],["18:46",84,1],["18:46",85,0],["18:47",86,0],["18:48",87,0],["18:49",88,0],["18:50",89,0],["18:52",90,5]]},{"big":"18:45","small":"From Clacton Pier Avenue, at Walton-on-the-Naze, The Naze 19:22","title":"The 18:45 from Clacton Pier Avenue","s":[["18:45",45,7],["18:46",46,0],["18:48",47,1],["18:48",48,0],["18:48",49,0],["18:49",50,0],["18:50",51,0],["18:51",52,0],["18:52",53,0],["18:53",54,1],["18:53",55,0],["18:54",56,0],["18:54",57,0],["18:55",58,0],["18:55",59,0],["18:56",60,0],["18:56",61,0],["19:01",62,0],["19:01",63,0],["19:02",64,0],["19:03",65,0],["19:03",66,0],["19:04",67,0],["19:05",68,5],["19:05",69,0],["19:06",70,0],["19:06",71,0],["19:07",72,0],["19:07",73,0],["19:08",74,5],["19:09",75,0],["19:11",76,5],["19:11",77,0],["19:12",78,0],["19:13",79,0],["19:13",80,0],["19:14",81,0],["19:14",82,0],["19:15",83,0],["19:16",84,1],["19:16",85,0],["19:17",86,0],["19:18",87,0],["19:19",88,0],["19:20",89,0],["19:22",90,5]]}],"note":"Buses run about every 30 minutes, so these are a few of them spread through the afternoon and evening."}],"none":"In the current timetable there are no 7 buses on Fridays, so I would look at the other ways to get there on the Clacton Air Show page."}],"start":0};
+</script>
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var each = function(list, fn){ Array.prototype.forEach.call(list, fn); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var KEY = 1, OFF = 2, LABEL = 4;
+
+  /* fixed text */
+  $('backlink').href = CFG.showUrl;
+  $('backlink').target = CFG.showTarget || '_top';
+  $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
+  $('op').textContent = 'Run by ' + CFG.operator;
+  $('bnum').textContent = CFG.num;
+  $('bdest').textContent = CFG.blindDest;
+  $('title').textContent = CFG.title;
+  $('lead').textContent = CFG.lead;
+  $('tiph').textContent = CFG.tipHead;
+  $('tip').textContent = CFG.tip;
+  $('tipbtn').href = CFG.showUrl;
+  $('tipbtn').target = CFG.showTarget || '_top';
+  $('tipbtn').textContent = CFG.tipBtn + ' ›';
+  $('note').innerHTML = CFG.note;
+  $('map').setAttribute('aria-label', 'Map of the bus ' + CFG.num + ' route');
+  if (CFG.alt) { $('alt').hidden = false; $('alth').textContent = CFG.alt[0]; $('altp').textContent = CFG.alt[1]; }
+  document.title = CFG.title + ' | The Big Guide to UK Airshows';
+
+  /* destination blind cycles its "via" line */
+  var vi = 0;
+  $('bvia').textContent = CFG.blindVia[0] || '';
+  if (!reduce && CFG.blindVia.length > 1) {
+    setInterval(function(){
+      var v = $('bvia'); v.style.opacity = 0;
+      setTimeout(function(){ vi = (vi + 1) % CFG.blindVia.length; v.textContent = CFG.blindVia[vi]; v.style.opacity = .85; }, 400);
+    }, 3200);
+  }
+
+  $('facts').innerHTML = CFG.facts.map(function(f){
+    return '<div class="fact' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><b>' + f[1] + '</b></div>';
+  }).join('');
+
+  $('legs').innerHTML = CFG.legs.map(function(l){
+    var signs = l[0].map(function(r){ return '<span class="sign' + (/^M\d/.test(r) ? ' m' : '') + '">' + r + '</span>'; }).join('');
+    return '<li><div class="signs">' + (signs || '<span class="sign">Local</span>') + '</div><div><b>' + l[1] + '</b><p>' + l[2] + '</p></div></li>';
+  }).join('');
+
+  /* map */
+  var map = L.map('map', { scrollWheelZoom: false, zoomControl: false });
+  L.control.zoom({ position: 'topleft' }).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  map.setView(CFG.target, 11);
+  var lineLayer = L.layerGroup().addTo(map), layer = L.layerGroup().addTo(map);
+  var showPin = L.circleMarker(CFG.target, { radius: 6, color: '#D74949', weight: 2, fillColor: '#fff', fillOpacity: 1, dashArray: '3 3' })
+    .bindTooltip(CFG.targetLabel, { direction: 'top', offset: [0, -6], className: 'lbl off' }).addTo(map);
+
+  var day = DATA.start || 0, dir = 0, idx = 0, ROUTE = [], casing = null;
+  window.addEventListener('resize', function(){ map.invalidateSize(); });
+
+  function fit(){
+    if (!casing) return;
+    var wide = window.innerWidth > 980;
+    map.fitBounds(casing.getBounds().extend(CFG.target), { paddingTopLeft: [30, 30], paddingBottomRight: [wide ? 420 : 30, 30] });
+  }
+
+  /* unpack journeys: [time, stop index, flags] -> [time, name, lat, lon, flags, short name] */
+  DATA.days.forEach(function(dd){ dd.dirs.forEach(function(x){ x.trips.forEach(function(tr){
+    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3]]; });
+  }); }); });
+  function D(){ return DATA.days[day]; }
+  function DIR(){ return D().dirs[dir]; }
+
+  function segBtns(el, items, cur, onpick){
+    el.innerHTML = items.map(function(t, i){ return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === cur) + '">' + t + '</button>'; }).join('');
+    el.style.display = items.length > 1 ? '' : 'none';
+    each(el.children, function(b){ b.addEventListener('click', function(){ onpick(+b.getAttribute('data-i')); }); });
+  }
+
+  function render(){
+    segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ day = i; dir = Math.min(dir, Math.max(0, DATA.days[i].dirs.length - 1)); idx = 0; render(); runBus(); });
+    var dd = D();
+    if (!dd.dirs.length || !dd.dirs.some(function(x){ return x.trips.length; })) {
+      $('dir').style.display = 'none'; $('board').innerHTML = ''; $('bnote').textContent = '';
+      $('nobus').textContent = dd.none; $('nobus').classList.add('on'); $('stage').classList.add('off');
+      return;
+    }
+    $('nobus').classList.remove('on'); $('stage').classList.remove('off');
+    if (!DIR().trips.length) { dir = dd.dirs.findIndex(function(x){ return x.trips.length; }); idx = 0; }
+    segBtns($('dir'), dd.dirs.map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = 0; render(); runBus(); });
+    board(); drawLine(); draw();
+  }
+
+  function board(){
+    var d = DIR();
+    $('board').innerHTML = d.trips.map(function(t, i){
+      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '"><span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
+    }).join('');
+    $('bnote').textContent = d.note || '';
+    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); }); });
+  }
+
+  function drawLine(){
+    lineLayer.clearLayers();
+    ROUTE = DATA.lines[DIR().li] || [];
+    casing = L.polyline(ROUTE, { color: '#13293C', weight: 11, opacity: .18 }).addTo(lineLayer);
+    L.polyline(ROUTE, { color: '#00A6E2', weight: 5, opacity: 1 }).addTo(lineLayer);
+    fit(); measure();
+  }
+
+  function draw(){
+    layer.clearLayers();
+    var trip = DIR().trips[idx], s = trip.s, ol = $('stops');
+    $('ptitle').textContent = trip.title;
+    $('psub').textContent = s.length + ' stops, ' + s[0][0] + ' to ' + s[s.length - 1][0];
+    ol.innerHTML = '';
+    var group = null, gid = 0;
+    s.forEach(function(p, i){
+      var isOff = p[4] & OFF, key = (p[4] & KEY) || isOff || i === 0 || i === s.length - 1;
+      var m = L.circleMarker([p[2], p[3]], {
+        radius: isOff ? 10 : (key ? 6 : 4), color: isOff ? '#D74949' : '#13293C', weight: key ? 3 : 2,
+        fillColor: isOff ? '#D74949' : '#FFFFFF', fillOpacity: 1
+      }).addTo(layer);
+      m.bindPopup('<b>' + p[1] + '</b><br>' + p[0] + (isOff ? '<br>' + CFG.offTag : ''));
+      var small = window.innerWidth < 560 && !isOff && i !== 0 && i !== s.length - 1;
+      if ((p[4] & LABEL || isOff) && !small) m.bindTooltip(p[5] || p[1], { permanent: true, direction: 'right', offset: [10, 0], className: 'lbl' + (isOff ? ' off' : '') });
+
+      if (!key) {
+        if (!group) {
+          group = { id: 'g' + (gid++), items: [] };
+          var fl = document.createElement('li'); fl.className = 'fold';
+          fl.innerHTML = '<button type="button" aria-expanded="false"></button>';
+          ol.appendChild(fl); group.fold = fl;
+        }
+        group.items.push(p);
+      } else { closeGroup(); }
+
+      var li = document.createElement('li');
+      li.className = 'stop' + (key ? ' key' : ' minor') + (isOff ? ' off' : '');
+      if (!key) li.dataset.g = group.id;
+      li.innerHTML = '<span>' + p[1] + (isOff ? '<span class="tag">' + CFG.offTag + '</span>' : '') + '</span><time>' + p[0] + '</time>';
+      li.addEventListener('click', function(){
+        each(ol.querySelectorAll('.active'), function(x){ x.classList.remove('active'); });
+        li.classList.add('active');
+        map.setView([p[2], p[3]], 15, { animate: !reduce }); m.openPopup();
+      });
+      ol.appendChild(li);
+    });
+    closeGroup();
+
+    function closeGroup(){
+      if (!group) return;
+      var g = group, n = g.items.length, btn = g.fold.firstChild;
+      var label = n === 1 ? g.items[0][1] : g.items[0][1] + ' and ' + (n - 1) + ' more stops';
+      btn.textContent = label;
+      btn.addEventListener('click', function(){
+        var open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', open);
+        btn.textContent = open ? 'Hide the smaller stops' : label;
+        each(ol.querySelectorAll('li.minor[data-g="' + g.id + '"]'), function(x){ x.classList.toggle('open', open); });
+      });
+      group = null;
+    }
+  }
+
+  /* a small bus runs the route once, then fades */
+  var bus = null, raf = 0, cum = [0];
+  var busIcon = L.divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 15],
+    html: '<div class="busdot"><svg viewBox="0 0 16 16" fill="#13293C"><rect x="2" y="1.5" width="12" height="11" rx="2"/><rect x="3.5" y="3" width="9" height="4" rx=".6" fill="#F2B233"/><circle cx="5" cy="10" r="1" fill="#F2B233"/><circle cx="11" cy="10" r="1" fill="#F2B233"/><rect x="3" y="12.5" width="2.4" height="2" rx=".5"/><rect x="10.6" y="12.5" width="2.4" height="2" rx=".5"/></svg></div>' });
+  function measure(){
+    cum = [0];
+    for (var k = 1; k < ROUTE.length; k++) cum.push(cum[k - 1] + map.distance(ROUTE[k - 1], ROUTE[k]));
+  }
+  function at(d){
+    var lo = 0, hi = cum.length - 1;
+    while (lo < hi - 1) { var mid = (lo + hi) >> 1; if (cum[mid] < d) lo = mid; else hi = mid; }
+    var f = (d - cum[lo]) / ((cum[hi] - cum[lo]) || 1);
+    return [ROUTE[lo][0] + (ROUTE[hi][0] - ROUTE[lo][0]) * f, ROUTE[lo][1] + (ROUTE[hi][1] - ROUTE[lo][1]) * f];
+  }
+  function runBus(){
+    if (reduce || ROUTE.length < 2) return;
+    cancelAnimationFrame(raf);
+    if (bus) { map.removeLayer(bus); bus = null; }
+    var total = cum[cum.length - 1], start = null, dur = 7000;
+    bus = L.marker(ROUTE[0], { icon: busIcon, interactive: false, keyboard: false }).addTo(map);
+    function step(ts){
+      if (!bus) return;
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      bus.setLatLng(at(e * total));
+      if (p < 1) raf = requestAnimationFrame(step);
+      else { var el = bus.getElement(); if (el) el.firstChild.style.opacity = 0; var b = bus; setTimeout(function(){ map.removeLayer(b); }, 700); bus = null; }
+    }
+    raf = requestAnimationFrame(step);
+  }
+
+  render();
+
+  var started = false;
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in'); io.unobserve(e.target);
+      if (!started && e.target.id === 'stage') { started = true; setTimeout(runBus, 500); }
+    });
+  }, { threshold: .15 }) : null;
+  each(document.querySelectorAll('.rise'), function(el){ io ? io.observe(el) : el.classList.add('in'); });
+  if (!io) runBus();
+})();
+</script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
+</body>
+</html>

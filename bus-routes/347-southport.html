@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bus 347, Chorley to Southport | The Big Guide to UK Airshows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --navy:#13293C;--navy-2:#1C3850;--navy-3:#0C1C2A;
+  --sky:#00A6E2;--sky-ink:#006F99;--teal:#32B4AF;--teal-ink:#0E5F5B;
+  --red:#D74949;--amber:#F2B233;--line:#C6C6C6;--mist:#EEF2F5;--paper:#FFFFFF;--ink:#0B0B0B;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:17px;line-height:27px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* top strip */
+.strip{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 0;font-weight:500;font-size:15px}
+.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy);padding:6px 0;border-bottom:2px solid transparent;transition:border-color .3s var(--ease)}
+.back:hover{border-color:var(--sky)}
+.back svg{width:16px;height:16px}
+.op{color:#3d4a55}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 48px;align-items:end;padding:26px 0 0}
+.blind{position:relative;background:var(--navy-3);border-radius:14px 14px 14px 0;padding:22px 26px 24px;display:flex;align-items:center;gap:22px;overflow:hidden;box-shadow:0 18px 40px -22px rgba(12,28,42,.7)}
+.blind::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.55) 1px,transparent 1.3px);background-size:4px 4px;pointer-events:none}
+.blind .num{font:800 92px/0.9 "Barlow Condensed",sans-serif;color:var(--amber);letter-spacing:-.01em;text-shadow:0 0 18px rgba(242,178,51,.35)}
+.blind .dest{font:700 34px/1 "Barlow Condensed",sans-serif;color:var(--amber);text-transform:uppercase;letter-spacing:.02em;text-shadow:0 0 14px rgba(242,178,51,.3)}
+.blind .via{display:block;margin-top:8px;font:600 18px/1.2 "Barlow Condensed",sans-serif;color:#f7d68f;letter-spacing:.03em;text-transform:uppercase;opacity:.85;transition:opacity .4s var(--ease)}
+.intro h1{font:800 46px/46px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;letter-spacing:-.005em}
+.intro p{margin-top:12px;font-size:18px;line-height:29px;color:#1d2730;max-width:520px}
+
+/* facts */
+.facts{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.2fr;margin:34px 0 0;border-top:3px solid var(--navy)}
+.fact{padding:14px 18px 16px 0;border-right:1px solid var(--line)}
+.fact+.fact{padding-left:18px}
+.fact:last-child{border-right:0}
+.fact span{display:block;font-weight:500;font-size:15px;line-height:20px;color:var(--navy)}
+.fact b{display:block;margin-top:4px;font:700 25px/28px "Barlow Condensed",sans-serif;color:var(--navy)}
+.fact.hl b{color:var(--red)}
+
+/* planner */
+.planner{margin-top:38px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px 28px;align-items:start}
+.planner h2,.sec h2{font:800 30px/32px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase;grid-column:1/-1}
+.seg{display:inline-flex;background:var(--mist);border-radius:12px;padding:5px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:10px 16px;font-weight:600;font-size:16px;color:var(--navy);transition:background .3s var(--ease),color .3s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.board{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.board::-webkit-scrollbar{display:none}
+.dep{flex:0 0 auto;min-width:150px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px 11px;transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
+.dep:hover{border-color:var(--navy);transform:translateY(-2px)}
+.dep .t{font:700 28px/30px "Barlow Condensed",sans-serif;color:var(--navy);font-variant-numeric:tabular-nums}
+.dep .a{display:block;font-weight:500;font-size:14px;line-height:19px;color:#3d4a55}
+.dep[aria-pressed="true"]{background:var(--navy);border-color:var(--navy)}
+.dep[aria-pressed="true"] .t{color:var(--amber)}
+.dep[aria-pressed="true"] .a{color:#dfe7ee}
+
+/* map stage */
+.stage{position:relative;margin-top:20px}
+.mapbox{position:relative}
+#map{height:640px;border-radius:16px;z-index:0;background:#dfe6ea}
+#map .leaflet-tile-pane{filter:saturate(.55) contrast(.95) brightness(1.04)}
+.leg{position:absolute;left:16px;bottom:16px;z-index:5;background:#fff;border-radius:10px;padding:8px 12px;display:flex;gap:14px;font-weight:500;font-size:14px;line-height:18px;box-shadow:0 6px 18px -8px rgba(12,28,42,.45)}
+.leg i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:2px solid var(--navy);background:#fff}
+.leg i.r{background:var(--red);border-color:var(--red)}
+.leg i.l{width:22px;height:5px;border:0;border-radius:3px;background:var(--sky)}
+.panel{position:absolute;top:18px;right:18px;max-height:calc(100% - 36px);width:372px;z-index:5;background:#fff;border-radius:14px;box-shadow:0 22px 44px -20px rgba(12,28,42,.55);display:flex;flex-direction:column;overflow:hidden}
+.panel header{background:var(--navy);color:#fff;padding:14px 18px 13px}
+.panel header b{display:block;font:700 22px/24px "Barlow Condensed",sans-serif;text-transform:uppercase}
+.panel header span{font-weight:500;font-size:14px;line-height:19px;color:#cfdbe5}
+.stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px}
+.stops::-webkit-scrollbar{display:none}
+.stops li{position:relative;padding:5px 0 5px 28px;display:flex;justify-content:space-between;gap:12px;font-size:15px;line-height:21px}
+.stops li::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:3px;background:var(--sky)}
+.stops li:first-child::before{top:14px}
+.stops li:last-child::before{bottom:calc(100% - 14px)}
+.stops li::after{content:"";position:absolute;left:2px;top:10px;width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid var(--sky)}
+.stops li.key{font-weight:700;color:var(--navy);padding-top:8px;padding-bottom:8px}
+.stops li.key::after{top:12px;left:0;width:15px;height:15px;border:3px solid var(--navy)}
+.stops li.off{color:var(--red)}
+.stops li.off::after{background:var(--red);border-color:var(--red)}
+.stops li.off .tag{display:block;font-weight:500;font-size:13px;line-height:17px;color:var(--red)}
+.stops li.stop{cursor:pointer}
+.stops li.stop:hover span:first-child,.stops li.active span:first-child{text-decoration:underline;text-decoration-color:var(--sky);text-underline-offset:3px}
+.stops li.minor{display:none;color:#2c3944}
+.stops li.minor.open{display:flex}
+.stops time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--sky-ink);white-space:nowrap}
+.stops li.key time{color:var(--navy)}
+.stops li.off time{color:var(--red)}
+.stops li.fold{padding-top:2px;padding-bottom:2px}
+.stops li.fold::after{display:none}
+.stops li.fold::before{background:repeating-linear-gradient(var(--sky) 0 4px,transparent 4px 8px)}
+.stops li.fold button{border:0;background:none;padding:2px 0;font-weight:600;font-size:14px;color:var(--sky-ink);text-align:left}
+.stops li.fold button:hover{color:var(--navy)}
+
+/* map bits */
+.lbl{background:var(--navy);color:#fff;border:0;border-radius:6px;font:600 13px "Barlow",sans-serif;padding:3px 8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
+.lbl.off{background:var(--red)}
+.lbl::before{display:none}
+.busdot{width:30px;height:30px;border-radius:50%;background:var(--amber);border:3px solid var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
+.busdot svg{width:15px;height:15px}
+.leaflet-popup-content{font:500 15px/21px "Barlow",sans-serif;margin:10px 14px}
+.leaflet-popup-content b{color:var(--navy)}
+
+/* roads */
+.sec{margin-top:56px}
+.journey{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:34px;align-items:start;margin-top:18px}
+.legs{list-style:none;counter-reset:none}
+.legs li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.legs li:last-child{border-bottom:1px solid var(--line)}
+.signs{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.sign{display:inline-block;font:700 16px/1 "Barlow",sans-serif;padding:5px 7px 4px;border-radius:4px;border:2px solid #111;background:#fff;color:#111;letter-spacing:.01em}
+.sign.m{background:#1D5FAD;border-color:#fff;color:#fff;box-shadow:0 0 0 1px #1D5FAD}
+.legs b{display:block;font:700 21px/24px "Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
+.legs p{margin-top:3px;font-size:16px;line-height:25px;color:#1d2730}
+.side{position:relative;top:-64px}
+.advice{background:var(--navy);color:#fff;border-radius:16px 16px 16px 0;padding:24px 24px 22px}
+.advice h3{font:700 24px/26px "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--amber)}
+.advice p{margin-top:10px;font-size:16px;line-height:25px;color:#e6edf3}
+.advice a.btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--amber);color:var(--navy);text-decoration:none;font-weight:700;font-size:15px;padding:10px 16px;border-radius:10px;transition:transform .3s var(--ease),background .3s var(--ease)}
+.advice a.btn:hover{transform:translateX(3px);background:#f6c35a}
+.alt{margin-top:14px;border:2px solid var(--teal);border-radius:14px;padding:16px 18px}
+.alt b{display:block;font:700 20px/22px "Barlow Condensed",sans-serif;color:var(--teal-ink);text-transform:uppercase}
+.alt p{margin-top:6px;font-size:15px;line-height:23px}
+
+.note{margin:44px 0 40px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;line-height:21px;color:#3d4a55;max-width:820px}
+.note a{color:var(--sky-ink)}
+
+.rise{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rise.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none;transition:none}.dep,.advice a.btn{transition:none}}
+
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;gap:22px}
+  .facts{grid-template-columns:1fr 1fr}
+  .fact:nth-child(2){border-right:0}
+  .fact:nth-child(3){padding-left:0}
+  .fact:nth-child(n+3){border-top:1px solid var(--line)}
+  .planner{grid-template-columns:1fr}
+  #map{height:460px}
+  .panel{position:static;width:auto;margin-top:14px;box-shadow:none;border:1px solid var(--line)}
+  .stops{max-height:none}
+  .journey{grid-template-columns:1fr}
+  .side{top:0}
+}
+@media(max-width:560px){
+  .wrap{padding:0 16px}
+  .strip{flex-direction:column;align-items:flex-start;gap:0;font-size:14px}
+  .op{padding-left:24px;margin-top:-4px}
+  .blind{padding:16px 18px;gap:14px}
+  .blind .num{font-size:64px}
+  .blind .dest{font-size:26px}
+  .blind .via{font-size:15px}
+  .intro h1{font-size:34px;line-height:36px}
+  .intro p{font-size:17px;line-height:27px}
+  .fact{padding-right:10px}
+  .fact+.fact{padding-left:10px}
+  .fact:nth-child(3){padding-left:0}
+  .fact b{font-size:21px;line-height:24px}
+  #map{height:360px;border-radius:12px}
+  .leg{left:auto;right:8px;bottom:auto;top:8px;gap:8px;font-size:12px;padding:6px 8px}
+  .legs li{grid-template-columns:1fr;gap:8px}
+  .seg{display:flex}
+  .seg button{flex:1;padding:10px 8px;font-size:15px}
+  .dep{min-width:128px}
+}
+
+.pickrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.nobus{display:none;margin-top:14px;background:var(--mist);border-left:5px solid var(--red);border-radius:0 12px 12px 0;padding:14px 18px;font-size:16px;line-height:25px}
+.nobus.on{display:block}
+.boardnote{grid-column:1/-1;font-size:15px;line-height:22px;color:#3d4a55;margin-top:-6px}
+.stage.off{opacity:.45;pointer-events:none}
+
+.seg button{white-space:nowrap}
+.dep{max-width:300px}
+.board{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);padding-right:40px}
+.dep .a{white-space:normal}
+@media(max-width:560px){.pickrow{display:grid;grid-template-columns:1fr;width:100%}.pickrow .seg{width:100%}.dep{max-width:76vw}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="strip">
+    <a class="back" id="backlink" href="#" target="_top"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg><span></span></a>
+    <span class="op" id="op"></span>
+  </nav>
+
+  <header class="hero">
+    <div class="blind rise" aria-hidden="true">
+      <div class="num" id="bnum"></div>
+      <div><div class="dest" id="bdest"></div><span class="via" id="bvia"></span></div>
+    </div>
+    <div class="intro rise">
+      <h1 id="title"></h1>
+      <p id="lead"></p>
+    </div>
+  </header>
+
+  <div class="facts rise" id="facts"></div>
+
+  <section class="planner rise" aria-labelledby="ph">
+    <h2 id="ph">Pick your bus</h2>
+    <div class="pickrow">
+      <div class="seg" id="day" role="group" aria-label="Day"></div>
+      <div class="seg" id="dir" role="group" aria-label="Direction"></div>
+    </div>
+    <div class="board" id="board" role="group" aria-label="Departure times"></div>
+    <p class="boardnote" id="bnote"></p>
+  </section>
+  <p class="nobus" id="nobus"></p>
+
+  <div class="stage rise" id="stage">
+    <div class="mapbox">
+      <div id="map" role="img"></div>
+      <div class="leg" aria-hidden="true"><span><i class="l"></i>Bus route</span><span><i></i>Main stops</span><span><i class="r"></i>Get off here</span></div>
+    </div>
+    <aside class="panel" aria-live="polite">
+      <header><b id="ptitle"></b><span id="psub"></span></header>
+      <ol class="stops" id="stops"></ol>
+    </aside>
+  </div>
+
+  <section class="sec rise" aria-labelledby="rh">
+    <h2 id="rh">The roads it takes</h2>
+    <div class="journey">
+      <ol class="legs" id="legs"></ol>
+      <div class="side">
+        <div class="advice"><h3 id="tiph"></h3><p id="tip"></p><a class="btn" id="tipbtn" href="#" target="_top"></a></div>
+        <div class="alt" id="alt" hidden><b id="alth"></b><p id="altp"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="note" id="note"></p>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var CFG={"num": "347", "operator": "Vision Bus", "showName": "Southport Air Show", "showUrl": "https://www.ukairshowguide.co.uk/southport-air-show", "title": "Bus 347, Chorley to Southport", "blindDest": "Southport", "blindVia": ["via Eccleston Green", "via Mawdesley", "via Banks"], "lead": "The 347 runs between Chorley and Southport. For the Southport Air Show, the closest stop is Southport Interchange (Stop CB), about 15 minutes from Southport Pier. Pick a day and a time below and the map shows every stop.", "facts": [["Runs on", "Saturdays only"], ["How often", "About every 2 hours"], ["Get off at", "Southport Interchange", "hl"], ["Then walk", "About 15 minutes"]], "legs": [[["B5252", "A581", "B5250"], "Chorley Bus Station to Eccleston Green", "Mostly along Yarrow Valley Way, Chorley Lane and Park Hall Road, about 6 miles."], [["B5250", "A581", "B5249"], "Eccleston Green to Mawdesley", "Mostly along Southport Road, Moor Road and Syd Brook Lane, about 9 miles."], [["B5246", "A565"], "Mawdesley to Banks", "Mostly along Holmeswood Road, The Marshes Lane and Gravel Lane, about 9 miles."], [["A565"], "Banks to Southport Duke Street", "Mostly along Preston New Road, Cambridge Road and Lord Street, about 5 miles."]], "tipHead": "Before you travel", "tip": "In the current timetable the 347 doesn’t run on Sundays. The town centre stops on Lord Street are the closest. From there it’s a walk through town to the Promenade and Marine Drive. Buses fill up after the flying, so allow extra time.", "tipBtn": "Back to getting to Southport", "alt": null, "target": [53.65326, -3.0154], "targetLabel": "Southport Pier", "offTag": "Closest stop to the show", "note": "Stops and times are from the current timetable, checked on 30 October 2026. Times for summer 2027 usually come out in the spring, so please check with Vision Bus before you travel. The line is drawn along the roads between the stops, so treat it as a guide."};
+var DATA={"stops":[["Chorley Bus Station (Stand L)",53.65274,-2.62802,"Chorley Bus Station"],["Chorley, by Booths",53.65437,-2.63082,"Chorley, by Booths"],["Southport Road, Woodville Road",53.65352,-2.63584,"Southport Road, Woodville Road"],["Southport Road, Parklands HS",53.65486,-2.64375,"Southport Road, Parklands HS"],["Southport Road, by Lancashire College",53.65561,-2.64998,"Southport Road, by"],["Southport Road, Ackhurst Road",53.6513,-2.65319,"Southport Road, Ackhurst Road"],["Gillibrand, by Burghwood Way",53.64604,-2.65435,"Gillibrand, by Burghwood Way"],["Gillibrand, by Nightingale Way",53.64076,-2.65574,"Gillibrand, by Nightingale Way"],["Gillibrand, Butterworth Brow",53.63919,-2.65142,"Gillibrand, Butterworth Brow"],["Birkacre, Plymouth Cottages",53.63788,-2.65311,"Birkacre, Plymouth Cottages"],["Charnock Richard, Church Lane",53.63537,-2.66143,"Charnock Richard, Church Lane"],["Charnock Richard, Dog & Partridge",53.63438,-2.6652,"Charnock Richard, Dog &"],["Charnock Richard, Leeson Avenue",53.63327,-2.66793,"Charnock Richard, Leeson"],["Charnock Richard, Charter Lane",53.63006,-2.67216,"Charnock Richard, Charter Lane"],["Charnock Richard, Hinds Head",53.62627,-2.67895,"Charnock Richard, Hinds Head"],["Charnock Richard, Services East",53.62933,-2.68849,"Charnock Richard, Services"],["Charnock Richard, Services West",53.62931,-2.69156,"Charnock Richard, Services"],["Charnock Richard, Park Hall Entrance",53.6311,-2.69515,"Charnock Richard, Park Hall"],["Eccleston Green, by The Warings",53.63533,-2.71149,"Eccleston Green, by The"],["Eccleston Green, Whalley Road",53.63764,-2.71502,"Eccleston Green, Whalley Road"],["Eccleston Green, by Old Mill",53.64054,-2.71823,"Eccleston Green, by Old Mill"],["Eccleston Green, by Enfield Close",53.64257,-2.72163,"Eccleston Green, by Enfield"],["Eccleston Green, Institute",53.64403,-2.72419,"Eccleston Green, Institute"],["Eccleston, by Doctors Lane",53.64753,-2.72666,"Eccleston, by Doctors Lane"],["Eccleston, by Towngate",53.6493,-2.72876,"Eccleston, by Towngate"],["Eccleston, Tincklers Lane",53.6512,-2.73336,"Eccleston, Tincklers Lane"],["Eccleston, St Marys Church",53.6534,-2.73491,"Eccleston, St Marys Church"],["Eccleston, by Lydiate Farm",53.66083,-2.73068,"Eccleston, by Lydiate Farm"],["Ulnes Walton, by New Lane",53.66317,-2.73993,"Ulnes Walton, by New Lane"],["Ulnes Walton Lane",53.66287,-2.74345,"Ulnes Walton Lane"],["Croston, Garden Centre",53.66332,-2.74907,"Croston, Garden Centre"],["Croston, The Mill Hotel",53.66527,-2.75407,"Croston, The Mill Hotel"],["Croston, Moor Road",53.66777,-2.77227,"Croston, Moor Road"],["Croston, Railway Station",53.66701,-2.77674,"Croston, Railway Station"],["Croston, by School Close",53.66301,-2.77529,"Croston, by School Close"],["Croston Park",53.66022,-2.77223,"Croston Park"],["Mawdesley, Nook Lane",53.6395,-2.74906,"Mawdesley, Nook Lane"],["Four Lane Ends, Post Office",53.62862,-2.76755,"Four Lane Ends, Post Office"],["Mawdesley, Smithy Street",53.62639,-2.76986,"Mawdesley, Smithy Street"],["Mawdesley, by Methodist Church",53.62618,-2.77126,"Mawdesley, by Methodist Church"],["Mawdesley, by Blackmoor Road",53.62731,-2.78206,"Mawdesley, by Blackmoor Road"],["Rufford Station",53.63462,-2.80943,"Rufford Station"],["Rufford, Church Road",53.63482,-2.81418,"Rufford, Church Road"],["Rufford, Hesketh Arms",53.63382,-2.81598,"Rufford, Hesketh Arms"],["Rufford, The Paddock",53.63358,-2.8184,"Rufford, The Paddock"],["Rufford, by Brick Kiln Farm",53.63237,-2.82199,"Rufford, by Brick Kiln Farm"],["Rufford, by Highsands Avenue",53.63106,-2.82822,"Rufford, by Highsands Avenue"],["Rufford, by Mere Sands Wood",53.63925,-2.83484,"Rufford, by Mere Sands Wood"],["Holmeswood, by Sandy Lane",53.64129,-2.85017,"Holmeswood, by Sandy Lane"],["Holmeswood, Smithy Lane",53.64465,-2.86178,"Holmeswood, Smithy Lane"],["Holmeswood, by Woodlands Caravan Park",53.65205,-2.87672,"Holmeswood, by Woodlands"],["Mere Brow, by Legh Arms",53.66191,-2.88167,"Mere Brow, by Legh Arms"],["Mere Brow, Primary School",53.66244,-2.88681,"Mere Brow, Primary School"],["Banks, Brooklyn Country Club",53.66764,-2.90173,"Banks, Brooklyn Country Club"],["Banks, by Brooklyn Caravan Park",53.66945,-2.92005,"Banks, by Brooklyn Caravan"],["Banks, Guinea Hall Avenue",53.6747,-2.92231,"Banks, Guinea Hall Avenue"],["Banks, Guinea Hall Mews",53.6761,-2.92252,"Banks, Guinea Hall Mews"],["Banks, Schwartzman Drive",53.67873,-2.92375,"Banks, Schwartzman Drive"],["Banks, Church Road",53.68064,-2.92461,"Banks, Church Road"],["Banks, St Stephens Church",53.68097,-2.92701,"Banks, St Stephens Church"],["Banks, by Church Road",53.68083,-2.9297,"Banks, by Church Road"],["Fiddler’s Ferry, by Ralph Wifes Lane",53.67949,-2.94293,"Fiddler’s Ferry, by Ralph"],["Marshside, Neales Fold",53.67678,-2.94661,"Marshside, Neales Fold"],["Crossens, Rufford Road",53.67555,-2.94894,"Crossens, Rufford Road"],["Crossens, Fylde Road",53.6732,-2.9541,"Crossens, Fylde Road"],["Crossens, North Road",53.66894,-2.95845,"Crossens, North Road"],["Crossens, Rathmore Crescent",53.66696,-2.96039,"Crossens, Rathmore Crescent"],["Crossens, Larkfield Primary School",53.665,-2.9624,"Crossens, Larkfield Primary"],["Churchtown, Preston New Road",53.66169,-2.96694,"Churchtown, Preston New Road"],["Churchtown, Bibby Road",53.66056,-2.97058,"Churchtown, Bibby Road"],["Churchtown, Emmanuel Road",53.66033,-2.97428,"Churchtown, Emmanuel Road"],["Churchtown, Cockle Dicks Lane",53.65999,-2.97735,"Churchtown, Cockle Dicks Lane"],["Southport, Allerton Road",53.65719,-2.98259,"Southport, Allerton Road"],["Southport, Park Crescent",53.65803,-2.98795,"Southport, Park Crescent"],["Southport, Park Road",53.65566,-2.99227,"Southport, Park Road"],["Southport, Alexandra Road",53.65387,-2.99548,"Southport, Alexandra Road"],["Southport Interchange (Stop GB)",53.65137,-2.99998,"Southport Interchange"],["Southport Interchange (Stop CF)",53.64859,-3.00489,"Southport Interchange"],["Southport Interchange (Stop BC)",53.64707,-3.0077,"Southport Interchange"],["Southport Duke Street (Stop AB)",53.64479,-3.0118,"Southport Duke Street"],["Southport Duke Street (Stop AA)",53.64483,-3.01183,"Southport Duke Street"],["Southport Interchange (Stop CB)",53.64829,-3.00567,"Southport Interchange"],["Southport Interchange (Stop FA)",53.65045,-3.00177,"Southport Interchange"],["Southport Interchange (Stop GA)",53.65183,-2.99929,"Southport Interchange"],["Southport, Albany Road",53.65428,-2.99484,"Southport, Albany Road"],["Southport, Park Road West",53.65684,-2.99027,"Southport, Park Road West"],["Southport, Argyle Road",53.65836,-2.98624,"Southport, Argyle Road"],["Southport, Brocklebank Road",53.65755,-2.98422,"Southport, Brocklebank Road"],["Southport, Brunlees Court",53.65856,-2.98063,"Southport, Brunlees Court"],["Marshside, Cockle Dicks Lane",53.66016,-2.97688,"Marshside, Cockle Dicks Lane"],["Marshside, Emmanuel Road",53.6604,-2.97383,"Marshside, Emmanuel Road"],["Marshside, Cambridge Avenue",53.66082,-2.96998,"Marshside, Cambridge Avenue"],["Churchtown, Marshside Road",53.66243,-2.9653,"Churchtown, Marshside Road"],["Crossens, Larkfield Primary School",53.66479,-2.96285,"Crossens, Larkfield Primary"],["Crossens, Lexton Drive",53.66677,-2.96084,"Crossens, Lexton Drive"],["Crossens, Fairhaven Road",53.67064,-2.95692,"Crossens, Fairhaven Road"],["Crossens, Fylde Road",53.67291,-2.95456,"Crossens, Fylde Road"],["Crossens, Bridge Wills Lane",53.67553,-2.94982,"Crossens, Bridge Wills Lane"],["Marshside, Harrogate Way",53.67657,-2.94686,"Marshside, Harrogate Way"],["Fiddler’s Ferry, Ralph Wifes Lane",53.67991,-2.94223,"Fiddler’s Ferry, Ralph Wifes"],["Banks, Church Road",53.68098,-2.9287,"Banks, Church Road"],["Banks, by Church Road",53.68073,-2.92449,"Banks, by Church Road"],["Banks, by Schwartzman Drive",53.67877,-2.9236,"Banks, by Schwartzman Drive"],["Banks, by Guinea Hall Mews",53.67677,-2.92251,"Banks, by Guinea Hall Mews"],["Banks, Brooklyn Caravan Park",53.66946,-2.91991,"Banks, Brooklyn Caravan Park"],["Banks, Riverside Caravan Park",53.66696,-2.89924,"Banks, Riverside Caravan Park"],["Mere Brow, by Southport New Road",53.66319,-2.88884,"Mere Brow, by Southport New"],["Mere Brow, Primary School",53.66249,-2.88657,"Mere Brow, Primary School"],["Mere Brow, Legh Arms",53.66197,-2.88264,"Mere Brow, Legh Arms"],["Holmeswood, Woodlands Caravan Park",53.65209,-2.87663,"Holmeswood, Woodlands"],["Holmeswood, by Smithy Lane",53.6447,-2.86171,"Holmeswood, by Smithy Lane"],["Holmeswood, Sandy Lane",53.64134,-2.84993,"Holmeswood, Sandy Lane"],["Rufford, Mere Sands Wood",53.63933,-2.83478,"Rufford, Mere Sands Wood"],["Rufford, Cousins Lane",53.63437,-2.82222,"Rufford, Cousins Lane"],["Rufford, The Paddock",53.63353,-2.81755,"Rufford, The Paddock"],["Rufford, Church Road",53.6349,-2.81411,"Rufford, Church Road"],["Rufford, Station",53.63468,-2.80999,"Rufford, Station"],["Mawdesley, by Smithy Lane",53.62815,-2.77445,"Mawdesley, by Smithy Lane"],["Mawdesley, Methodist Church",53.62623,-2.771,"Mawdesley, Methodist Church"],["Mawdesley, by Smithy Street",53.6265,-2.76984,"Mawdesley, by Smithy Street"],["Mawdesley, by Post Office",53.62874,-2.76763,"Mawdesley, by Post Office"],["Andertons Mill, Black Bull",53.63002,-2.75994,"Andertons Mill, Black Bull"],["Mawdesley, by Robin Hood",53.64099,-2.74902,"Mawdesley, by Robin Hood"],["Croston Park",53.66013,-2.77221,"Croston Park"],["Croston, by Westhead Road",53.66202,-2.77527,"Croston, by Westhead Road"],["Croston, by The Crown",53.66398,-2.77573,"Croston, by The Crown"],["Croston, by Railway Station",53.66653,-2.77655,"Croston, by Railway Station"],["Croston, by Moor Road",53.66783,-2.77273,"Croston, by Moor Road"],["Croston, Ridley Lane",53.66674,-2.76139,"Croston, Ridley Lane"],["Croston, by The Mill Hotel",53.66531,-2.75399,"Croston, by The Mill Hotel"],["Croston, by Garden Centre",53.66342,-2.74898,"Croston, by Garden Centre"],["Ulnes Walton Lane",53.66297,-2.74348,"Ulnes Walton Lane"],["Ulnes Walton, New Lane",53.66327,-2.73956,"Ulnes Walton, New Lane"],["Eccleston, Lydiate Farm",53.66122,-2.73045,"Eccleston, Lydiate Farm"],["Eccleston, by St Marys Church",53.65372,-2.73471,"Eccleston, by St Marys Church"],["Eccleston, Tincklers Lane",53.65123,-2.73324,"Eccleston, Tincklers Lane"],["Eccleston, Towngate",53.6495,-2.72882,"Eccleston, Towngate"],["Eccleston, by Lawrence Lane",53.64759,-2.72648,"Eccleston, by Lawrence Lane"],["Eccleston Green, Institute",53.64392,-2.72395,"Eccleston Green, Institute"],["Eccleston Green, by Park Street",53.64293,-2.72184,"Eccleston Green, by Park"],["Eccleston Green, Church",53.64077,-2.71839,"Eccleston Green, Church"],["Eccleston Green, by Whalley Road",53.63737,-2.7147,"Eccleston Green, by Whalley"],["Eccleston Green, The Warings",53.63519,-2.71082,"Eccleston Green, The Warings"],["Charnock Richard, by Park Hall Entrance",53.63094,-2.69475,"Charnock Richard, by Park"],["Charnock Richard, by Services West",53.62938,-2.69164,"Charnock Richard, by"],["Charnock Richard, by Services East",53.62944,-2.68831,"Charnock Richard, by"],["Charnock Richard, Hinds Head",53.62625,-2.67925,"Charnock Richard, Hinds Head"],["Charnock Richard, by Charter Lane",53.63011,-2.67227,"Charnock Richard, by Charter"],["Charnock Richard, by Leeson Avenue",53.63331,-2.6681,"Charnock Richard, by Leeson"],["Charnock Richard, by Dog and Partridge",53.63482,-2.66442,"Charnock Richard, by Dog and"],["Charnock Richard, Church Lane",53.63544,-2.66142,"Charnock Richard, Church Lane"],["Birkacre, Plymouth Cottages",53.63807,-2.65261,"Birkacre, Plymouth Cottages"],["Gillibrand, Nightingale Way",53.64267,-2.65543,"Gillibrand, Nightingale Way"],["Gillibrand, Burghwood Way",53.64675,-2.65483,"Gillibrand, Burghwood Way"],["Gillibrand, by Ackhurst Road",53.65308,-2.65373,"Gillibrand, by Ackhurst Road"],["Southport Road, Lancashire College",53.65563,-2.64857,"Southport Road, Lancashire"],["Southport Road, by Parklands HS",53.65529,-2.64537,"Southport Road, by Parklands"],["Southport Road, by Woodville Road",53.65365,-2.63566,"Southport Road, by Woodville"],["Chorley, Booths",53.65449,-2.63065,"Chorley, Booths"]],"lines":[[[53.6527,-2.62838],[53.65283,-2.62844],[53.65287,-2.62874],[53.65342,-2.62842],[53.65355,-2.62798],[53.65452,-2.62821],[53.65479,-2.62844],[53.6544,-2.63095],[53.65437,-2.63289],[53.65403,-2.63268],[53.65388,-2.63264],[53.65385,-2.63268],[53.65343,-2.63748],[53.65344,-2.63898],[53.65366,-2.63992],[53.65486,-2.64343],[53.65506,-2.64436],[53.65541,-2.64683],[53.65571,-2.65006],[53.65577,-2.65225],[53.65587,-2.65301],[53.65602,-2.65348],[53.65585,-2.65373],[53.6553,-2.65399],[53.65496,-2.65403],[53.65464,-2.6543],[53.65434,-2.65394],[53.65413,-2.65383],[53.65367,-2.6537],[53.65257,-2.65355],[53.65228,-2.65346],[53.65204,-2.6532],[53.65147,-2.65337],[53.65072,-2.65336],[53.64935,-2.65386],[53.64797,-2.65463],[53.64748,-2.65474],[53.64683,-2.65476],[53.64653,-2.65469],[53.64593,-2.6544],[53.6457,-2.65407],[53.64528,-2.65412],[53.64432,-2.65404],[53.64404,-2.65411],[53.64356,-2.65438],[53.6428,-2.65519],[53.64222,-2.65563],[53.64191,-2.65576],[53.64168,-2.65564],[53.64158,-2.65574],[53.64102,-2.65591],[53.64036,-2.65573],[53.63986,-2.65525],[53.63962,-2.65486],[53.63936,-2.6541],[53.63929,-2.6537],[53.63914,-2.65145],[53.63901,-2.65087],[53.63872,-2.65106],[53.63845,-2.65133],[53.6383,-2.6516],[53.63814,-2.65215],[53.6377,-2.65437],[53.6377,-2.65596],[53.63758,-2.65644],[53.63739,-2.65675],[53.63669,-2.65713],[53.63635,-2.65758],[53.63584,-2.65853],[53.63548,-2.65956],[53.63533,-2.66028],[53.63543,-2.66172],[53.63535,-2.66235],[53.63506,-2.66355],[53.63442,-2.66524],[53.63379,-2.66728],[53.63058,-2.67166],[53.62989,-2.67245],[53.6292,-2.6737],[53.62914,-2.67447],[53.62814,-2.67565],[53.62738,-2.67775],[53.62702,-2.67836],[53.62631,-2.67905],[53.62604,-2.67974],[53.62655,-2.68012],[53.62706,-2.68075],[53.62757,-2.68161],[53.62816,-2.68278],[53.62923,-2.68549],[53.62936,-2.68702],[53.62939,-2.68884],[53.62938,-2.69142],[53.62923,-2.69278],[53.63111,-2.69513],[53.63172,-2.69604],[53.6322,-2.69721],[53.63274,-2.69938],[53.63324,-2.70182],[53.63369,-2.70546],[53.63394,-2.70649],[53.63433,-2.70766],[53.63437,-2.70867],[53.63537,-2.71145],[53.63602,-2.71365],[53.63614,-2.71387],[53.63662,-2.71436],[53.63861,-2.71546],[53.63951,-2.71624],[53.64008,-2.71716],[53.64044,-2.71795],[53.6412,-2.71917],[53.64178,-2.72056],[53.64326,-2.72239],[53.64356,-2.72378],[53.64685,-2.72585],[53.64893,-2.72795],[53.64965,-2.72922],[53.64986,-2.72986],[53.65032,-2.732],[53.65044,-2.73231],[53.65126,-2.73334],[53.65207,-2.73418],[53.65244,-2.73476],[53.65283,-2.73489],[53.65375,-2.73481],[53.65416,-2.73484],[53.6544,-2.73491],[53.65467,-2.73512],[53.65518,-2.73497],[53.65559,-2.7347],[53.65756,-2.73208],[53.65846,-2.73129],[53.65864,-2.7312],[53.65975,-2.73117],[53.66,-2.73109],[53.66056,-2.7307],[53.66193,-2.73035],[53.66247,-2.73001],[53.66338,-2.73321],[53.66345,-2.73391],[53.66338,-2.7372],[53.66326,-2.73959],[53.66273,-2.7454],[53.66276,-2.74589],[53.66317,-2.74818],[53.6641,-2.7523],[53.66467,-2.75328],[53.66508,-2.75366],[53.66533,-2.75405],[53.66492,-2.7545],[53.66466,-2.75467],[53.6646,-2.75461],[53.66463,-2.75446],[53.6647,-2.75445],[53.66461,-2.75449],[53.6646,-2.75461],[53.66466,-2.75467],[53.66492,-2.7545],[53.66533,-2.75405],[53.66579,-2.75486],[53.66605,-2.75548],[53.66656,-2.75747],[53.66667,-2.75829],[53.66668,-2.76083],[53.6669,-2.76487],[53.66714,-2.76688],[53.66771,-2.76967],[53.6678,-2.77053],[53.66783,-2.77136],[53.66769,-2.77695],[53.66763,-2.7773],[53.66673,-2.77661],[53.66555,-2.77597],[53.66449,-2.77571],[53.66329,-2.77553],[53.66263,-2.77509],[53.66236,-2.77512],[53.66227,-2.7752],[53.66165,-2.77527],[53.66087,-2.77457],[53.66027,-2.77341],[53.66019,-2.77279],[53.6602,-2.77146],[53.65996,-2.77066],[53.65977,-2.77025],[53.65965,-2.7701],[53.65903,-2.77006],[53.65874,-2.76977],[53.65832,-2.76919],[53.65744,-2.76886],[53.65721,-2.76859],[53.65663,-2.76626],[53.65646,-2.76518],[53.65646,-2.76408],[53.65655,-2.76342],[53.65605,-2.76201],[53.6558,-2.76182],[53.65514,-2.76183],[53.65502,-2.7617],[53.65425,-2.76033],[53.6538,-2.7588],[53.65361,-2.75838],[53.6518,-2.75678],[53.65093,-2.7561],[53.64885,-2.75508],[53.64746,-2.75448],[53.64689,-2.75415],[53.64623,-2.75343],[53.64608,-2.75318],[53.64481,-2.75198],[53.64373,-2.75075],[53.64334,-2.75042],[53.64265,-2.75003],[53.64225,-2.74962],[53.64192,-2.74905],[53.64165,-2.74873],[53.6412,-2.74863],[53.64106,-2.74882],[53.64059,-2.74912],[53.63957,-2.74913],[53.63832,-2.74891],[53.63722,-2.74931],[53.63566,-2.74969],[53.63461,-2.75004],[53.63371,-2.75051],[53.63278,-2.75089],[53.63194,-2.75161],[53.63166,-2.75168],[53.63092,-2.75168],[53.63083,-2.75177],[53.63072,-2.75221],[53.63067,-2.75326],[53.63071,-2.7544],[53.63024,-2.75666],[53.63003,-2.75848],[53.62992,-2.76016],[53.62969,-2.76144],[53.62976,-2.76211],[53.63013,-2.76401],[53.63013,-2.76464],[53.62986,-2.76569],[53.62971,-2.76692],[53.62966,-2.76706],[53.62954,-2.76716],[53.6282,-2.76781],[53.62738,-2.76832],[53.62686,-2.76902],[53.62599,-2.77073],[53.62626,-2.77111],[53.62738,-2.7732],[53.62797,-2.77413],[53.62812,-2.77452],[53.62812,-2.77535],[53.62791,-2.77643],[53.6279,-2.77799],[53.62739,-2.78155],[53.62732,-2.78461],[53.62774,-2.78791],[53.62774,-2.79256],[53.62827,-2.79623],[53.62825,-2.7965],[53.6281,-2.79691],[53.62779,-2.79752],[53.62752,-2.79884],[53.62786,-2.79918],[53.6286,-2.79971],[53.62962,-2.80145],[53.63045,-2.8026],[53.63128,-2.80359],[53.63287,-2.80481],[53.63464,-2.8059],[53.63473,-2.80602],[53.63465,-2.81075],[53.63481,-2.812],[53.63491,-2.81353],[53.63484,-2.81456],[53.63487,-2.81494],[53.63465,-2.81509],[53.63429,-2.81549],[53.63336,-2.81703],[53.6335,-2.8175],[53.63369,-2.81883],[53.63361,-2.82066],[53.63347,-2.82072],[53.63205,-2.82252],[53.63156,-2.82298],[53.63132,-2.8234],[53.63052,-2.82576],[53.62981,-2.82812],[53.62981,-2.82852],[53.62986,-2.8288],[53.63009,-2.82931],[53.63166,-2.82728],[53.63278,-2.82596],[53.63424,-2.82369],[53.6347,-2.82278],[53.63509,-2.82338],[53.63699,-2.82679],[53.63771,-2.82828],[53.63873,-2.82999],[53.64038,-2.84411],[53.64117,-2.84883],[53.64136,-2.85033],[53.64151,-2.85062],[53.6417,-2.8507],[53.64284,-2.85079],[53.64333,-2.8511],[53.64375,-2.85158],[53.64411,-2.85254],[53.64412,-2.85281],[53.6439,-2.85424],[53.64388,-2.85522],[53.64407,-2.85566],[53.64459,-2.85644],[53.64465,-2.85662],[53.64463,-2.86145],[53.64476,-2.8621],[53.64557,-2.86466],[53.6475,-2.86895],[53.64769,-2.86955],[53.64782,-2.8704],[53.64858,-2.87247],[53.65011,-2.87456],[53.65155,-2.8758],[53.65222,-2.87686],[53.65268,-2.87738],[53.65319,-2.87762],[53.65354,-2.87797],[53.65517,-2.87835],[53.65566,-2.87878],[53.6579,-2.87898],[53.65838,-2.87913],[53.65946,-2.87893],[53.65982,-2.87898],[53.66165,-2.87957],[53.66196,-2.87962],[53.6622,-2.87973],[53.66241,-2.87992],[53.66241,-2.88013],[53.66206,-2.88069],[53.662,-2.88096],[53.6619,-2.88331],[53.66261,-2.88747],[53.66275,-2.88777],[53.66292,-2.88795],[53.66298,-2.88951],[53.66322,-2.89115],[53.66344,-2.8919],[53.66404,-2.89335],[53.66701,-2.89996],[53.66771,-2.90165],[53.66858,-2.90422],[53.66918,-2.9065],[53.66658,-2.9103],[53.6664,-2.9109],[53.66616,-2.91858],[53.6662,-2.91883],[53.66632,-2.91899],[53.66676,-2.91916],[53.66913,-2.91987],[53.67032,-2.92035],[53.67167,-2.92138],[53.67256,-2.92196],[53.67278,-2.92219],[53.6729,-2.92252],[53.67301,-2.92264],[53.67314,-2.92265],[53.67327,-2.92254],[53.67353,-2.92194],[53.67375,-2.92213],[53.67396,-2.92218],[53.67512,-2.92229],[53.67716,-2.9226],[53.67806,-2.9236],[53.67914,-2.92373],[53.67997,-2.92423],[53.68124,-2.92471],[53.68089,-2.92981],[53.68115,-2.93303],[53.68056,-2.93556],[53.68081,-2.93801],[53.68078,-2.93993],[53.68068,-2.94039],[53.67967,-2.94265],[53.67923,-2.94394],[53.67871,-2.9447],[53.6775,-2.94637],[53.67695,-2.94654],[53.67661,-2.94674],[53.67597,-2.9472],[53.67579,-2.94747],[53.67564,-2.94757],[53.67561,-2.94777],[53.67569,-2.9481],[53.67545,-2.95039],[53.67524,-2.95132],[53.67479,-2.95242],[53.6742,-2.9532],[53.66257,-2.965],[53.662,-2.96602],[53.66143,-2.96807],[53.66089,-2.96951],[53.66056,-2.9709],[53.66044,-2.9717],[53.66024,-2.97617],[53.65987,-2.97792],[53.65959,-2.97871],[53.65889,-2.98019],[53.65751,-2.98209],[53.65668,-2.98396],[53.65676,-2.9841],[53.65702,-2.98409],[53.65743,-2.98419],[53.65781,-2.98452],[53.65802,-2.98488],[53.6583,-2.98585],[53.65832,-2.98679],[53.65814,-2.98775],[53.65243,-2.99811],[53.65232,-2.99821],[53.6521,-2.99826],[53.65201,-2.99837],[53.65197,-2.99886],[53.65181,-2.99926],[53.64614,-3.00944],[53.64563,-3.01026],[53.64481,-3.01183]],[[53.64482,-3.01181],[53.64588,-3.01],[53.64757,-3.00684],[53.6519,-2.99909],[53.65207,-2.99888],[53.65229,-2.99874],[53.65242,-2.99812],[53.65814,-2.98775],[53.65827,-2.98721],[53.65832,-2.98624],[53.6583,-2.98585],[53.65813,-2.98518],[53.65793,-2.98468],[53.65763,-2.98434],[53.65743,-2.98419],[53.65702,-2.98409],[53.65684,-2.98393],[53.65686,-2.98363],[53.65751,-2.98209],[53.65889,-2.98019],[53.65959,-2.97871],[53.65987,-2.97792],[53.66024,-2.97617],[53.66044,-2.9717],[53.66056,-2.9709],[53.66089,-2.96951],[53.66143,-2.96807],[53.662,-2.96602],[53.66257,-2.965],[53.6742,-2.9532],[53.67479,-2.95242],[53.67505,-2.95184],[53.67536,-2.95089],[53.67564,-2.94841],[53.67592,-2.94776],[53.67591,-2.94728],[53.67695,-2.94654],[53.6775,-2.94637],[53.67871,-2.9447],[53.67923,-2.94394],[53.67967,-2.94265],[53.68068,-2.94039],[53.68078,-2.93993],[53.68081,-2.93801],[53.68056,-2.93556],[53.68115,-2.93303],[53.68089,-2.92981],[53.68124,-2.92471],[53.67997,-2.92423],[53.67914,-2.92373],[53.67806,-2.9236],[53.67716,-2.9226],[53.67406,-2.92217],[53.67379,-2.9218],[53.67347,-2.92196],[53.67311,-2.92179],[53.67279,-2.922],[53.67256,-2.92196],[53.67167,-2.92138],[53.67032,-2.92035],[53.66913,-2.91987],[53.66676,-2.91916],[53.66632,-2.91899],[53.6662,-2.91883],[53.66616,-2.91858],[53.6664,-2.9109],[53.66658,-2.9103],[53.66913,-2.9066],[53.66929,-2.90627],[53.66853,-2.90356],[53.66786,-2.90165],[53.66736,-2.9004],[53.6638,-2.89241],[53.66334,-2.89097],[53.66304,-2.88842],[53.6631,-2.88811],[53.66321,-2.88795],[53.66321,-2.88779],[53.66307,-2.8876],[53.66279,-2.88773],[53.66263,-2.88756],[53.6619,-2.88331],[53.662,-2.88096],[53.66206,-2.88069],[53.66241,-2.88013],[53.66241,-2.87992],[53.66229,-2.87979],[53.66196,-2.87962],[53.66165,-2.87957],[53.65982,-2.87898],[53.65946,-2.87893],[53.65838,-2.87913],[53.6579,-2.87898],[53.65566,-2.87878],[53.65517,-2.87835],[53.65354,-2.87797],[53.65319,-2.87762],[53.65268,-2.87738],[53.65222,-2.87686],[53.65155,-2.8758],[53.65011,-2.87456],[53.64858,-2.87247],[53.64782,-2.8704],[53.64769,-2.86955],[53.6475,-2.86895],[53.64557,-2.86466],[53.64476,-2.8621],[53.64463,-2.86145],[53.64465,-2.85662],[53.64459,-2.85644],[53.64407,-2.85566],[53.64388,-2.85522],[53.6439,-2.85424],[53.64412,-2.85281],[53.64411,-2.85254],[53.64375,-2.85158],[53.64333,-2.8511],[53.64284,-2.85079],[53.6417,-2.8507],[53.64151,-2.85062],[53.64136,-2.85033],[53.64117,-2.84883],[53.64038,-2.84411],[53.63873,-2.82999],[53.63771,-2.82828],[53.63699,-2.82679],[53.63509,-2.82338],[53.63388,-2.82166],[53.6337,-2.8212],[53.63361,-2.82066],[53.63347,-2.82072],[53.63205,-2.82252],[53.63156,-2.82298],[53.63132,-2.8234],[53.63052,-2.82576],[53.62981,-2.82812],[53.62981,-2.82852],[53.62986,-2.8288],[53.63009,-2.82931],[53.63166,-2.82728],[53.63278,-2.82596],[53.63424,-2.82369],[53.6347,-2.82278],[53.63388,-2.82166],[53.6337,-2.8212],[53.6336,-2.82048],[53.63368,-2.81869],[53.6335,-2.8175],[53.63336,-2.81703],[53.63429,-2.81549],[53.63465,-2.81509],[53.63487,-2.81494],[53.63484,-2.81456],[53.63491,-2.81353],[53.63481,-2.812],[53.63465,-2.81075],[53.63473,-2.80602],[53.63464,-2.8059],[53.63287,-2.80481],[53.63128,-2.80359],[53.63045,-2.8026],[53.62962,-2.80145],[53.6286,-2.79971],[53.62786,-2.79918],[53.62752,-2.79884],[53.62779,-2.79752],[53.6281,-2.79691],[53.62825,-2.7965],[53.62827,-2.79623],[53.62774,-2.79256],[53.62774,-2.78791],[53.62732,-2.78461],[53.62739,-2.78155],[53.6279,-2.77799],[53.62791,-2.77643],[53.62812,-2.77535],[53.62812,-2.77452],[53.62797,-2.77413],[53.62738,-2.7732],[53.62626,-2.77111],[53.62599,-2.77073],[53.62686,-2.76902],[53.62738,-2.76832],[53.6282,-2.76781],[53.62954,-2.76716],[53.62966,-2.76706],[53.62971,-2.76692],[53.62986,-2.76569],[53.63013,-2.76464],[53.63013,-2.76401],[53.62976,-2.76211],[53.62969,-2.76144],[53.62995,-2.75992],[53.63003,-2.75848],[53.63024,-2.75666],[53.63071,-2.7544],[53.63067,-2.75326],[53.63072,-2.75221],[53.63083,-2.75177],[53.63092,-2.75168],[53.63166,-2.75168],[53.63194,-2.75161],[53.63278,-2.75089],[53.63371,-2.75051],[53.63461,-2.75004],[53.63566,-2.74969],[53.63722,-2.74931],[53.63832,-2.74891],[53.63957,-2.74913],[53.64059,-2.74912],[53.64106,-2.74882],[53.6412,-2.74863],[53.64165,-2.74873],[53.64192,-2.74905],[53.64225,-2.74962],[53.64265,-2.75003],[53.64334,-2.75042],[53.64373,-2.75075],[53.64481,-2.75198],[53.64608,-2.75318],[53.64623,-2.75343],[53.64689,-2.75415],[53.64746,-2.75448],[53.64885,-2.75508],[53.65093,-2.7561],[53.6518,-2.75678],[53.65361,-2.75838],[53.6538,-2.7588],[53.65425,-2.76033],[53.65502,-2.7617],[53.65514,-2.76183],[53.6558,-2.76182],[53.65605,-2.76201],[53.65655,-2.76342],[53.65646,-2.76408],[53.65646,-2.76518],[53.65663,-2.76626],[53.65721,-2.76859],[53.65744,-2.76886],[53.65832,-2.76919],[53.65874,-2.76977],[53.65903,-2.77006],[53.65965,-2.7701],[53.65977,-2.77025],[53.65996,-2.77066],[53.6602,-2.77146],[53.66019,-2.77279],[53.66027,-2.77341],[53.66087,-2.77457],[53.66165,-2.77527],[53.66227,-2.7752],[53.66236,-2.77512],[53.66263,-2.77509],[53.66329,-2.77553],[53.66449,-2.77571],[53.66555,-2.77597],[53.66673,-2.77661],[53.66763,-2.7773],[53.66769,-2.77695],[53.66783,-2.77136],[53.6678,-2.77053],[53.66771,-2.76967],[53.66714,-2.76688],[53.6669,-2.76487],[53.66668,-2.76083],[53.66667,-2.75829],[53.66656,-2.75747],[53.66605,-2.75548],[53.66579,-2.75486],[53.66512,-2.75372],[53.66467,-2.75328],[53.6641,-2.7523],[53.66333,-2.74893],[53.6635,-2.74884],[53.66362,-2.74949],[53.6635,-2.74884],[53.66333,-2.74893],[53.66276,-2.74589],[53.66273,-2.7454],[53.66326,-2.73959],[53.66338,-2.7372],[53.66345,-2.73391],[53.66338,-2.73321],[53.66247,-2.73001],[53.66193,-2.73035],[53.66056,-2.7307],[53.66,-2.73109],[53.65975,-2.73117],[53.65864,-2.7312],[53.65846,-2.73129],[53.65756,-2.73208],[53.65559,-2.7347],[53.65518,-2.73497],[53.65467,-2.73512],[53.6544,-2.73491],[53.65416,-2.73484],[53.65372,-2.73481],[53.65283,-2.73489],[53.65244,-2.73476],[53.65207,-2.73418],[53.65126,-2.73334],[53.65044,-2.73231],[53.65032,-2.732],[53.64986,-2.72986],[53.64965,-2.72922],[53.64893,-2.72795],[53.64685,-2.72585],[53.64356,-2.72378],[53.64326,-2.72239],[53.64178,-2.72056],[53.6412,-2.71917],[53.64044,-2.71795],[53.64008,-2.71716],[53.63951,-2.71624],[53.63861,-2.71546],[53.63662,-2.71436],[53.63614,-2.71387],[53.63602,-2.71365],[53.63569,-2.71241],[53.63488,-2.71002],[53.63437,-2.70867],[53.63433,-2.70766],[53.63394,-2.70649],[53.63369,-2.70546],[53.63324,-2.70182],[53.63274,-2.69938],[53.6322,-2.69721],[53.63172,-2.69604],[53.6309,-2.69483],[53.62923,-2.69278],[53.62939,-2.69091],[53.62937,-2.68732],[53.62923,-2.68549],[53.62816,-2.68278],[53.62757,-2.68161],[53.62706,-2.68075],[53.62655,-2.68012],[53.62604,-2.67974],[53.62631,-2.67905],[53.62702,-2.67836],[53.62738,-2.67775],[53.62814,-2.67565],[53.62914,-2.67447],[53.6292,-2.6737],[53.62989,-2.67245],[53.63058,-2.67166],[53.63379,-2.66728],[53.63442,-2.66525],[53.63506,-2.66355],[53.63535,-2.66235],[53.63543,-2.66172],[53.63533,-2.66028],[53.63548,-2.65956],[53.63584,-2.65853],[53.63635,-2.65758],[53.63669,-2.65713],[53.63739,-2.65675],[53.63758,-2.65644],[53.6377,-2.65596],[53.6377,-2.65437],[53.63814,-2.65215],[53.6383,-2.6516],[53.63845,-2.65133],[53.63872,-2.65106],[53.63901,-2.65087],[53.63914,-2.65147],[53.63929,-2.6537],[53.63936,-2.6541],[53.63962,-2.65486],[53.63986,-2.65525],[53.64036,-2.65573],[53.64102,-2.65591],[53.64148,-2.65592],[53.64169,-2.6561],[53.6428,-2.65519],[53.64356,-2.65438],[53.64404,-2.65411],[53.64432,-2.65404],[53.64528,-2.65412],[53.64547,-2.65422],[53.64566,-2.65451],[53.64608,-2.65451],[53.64653,-2.65469],[53.64702,-2.65476],[53.64748,-2.65474],[53.64797,-2.65463],[53.64935,-2.65386],[53.65072,-2.65336],[53.65147,-2.65337],[53.65177,-2.65345],[53.65201,-2.65374],[53.65228,-2.6536],[53.65257,-2.65355],[53.65367,-2.6537],[53.65434,-2.65394],[53.65464,-2.6543],[53.65496,-2.65403],[53.6553,-2.65399],[53.65608,-2.65362],[53.65587,-2.65301],[53.65577,-2.65225],[53.65571,-2.65006],[53.65541,-2.64683],[53.65506,-2.64436],[53.65486,-2.64343],[53.65366,-2.63992],[53.65344,-2.63898],[53.65343,-2.63748],[53.65382,-2.63295],[53.65391,-2.63278],[53.65432,-2.63294],[53.65437,-2.63289],[53.6544,-2.63095],[53.65473,-2.62872],[53.65479,-2.62844],[53.65487,-2.62841],[53.65491,-2.62826],[53.65483,-2.62812],[53.65375,-2.62783],[53.6535,-2.62759],[53.65338,-2.62775],[53.65343,-2.62817],[53.65335,-2.62844],[53.65252,-2.62891],[53.65247,-2.62847],[53.6527,-2.62838]]],"days":[{"key":"sat","label":"Saturday","dirs":[{"label":"To Southport","li":0,"trips":[{"big":"08:20","small":"At Southport Interchange 09:48","title":"The 08:20 from Chorley Bus Station","s":[["08:20",0,5],["08:21",1,0],["08:22",2,0],["08:23",3,0],["08:24",4,0],["08:26",5,0],["08:28",6,1],["08:29",7,0],["08:29",8,0],["08:30",9,0],["08:31",10,0],["08:32",11,1],["08:32",12,0],["08:33",13,0],["08:34",14,0],["08:35",15,0],["08:35",16,0],["08:36",17,0],["08:38",18,0],["08:39",19,0],["08:39",20,0],["08:40",21,0],["08:41",22,5],["08:41",23,0],["08:42",24,0],["08:42",25,0],["08:43",26,0],["08:44",27,0],["08:45",28,0],["08:46",29,0],["08:46",30,0],["08:47",31,0],["08:49",32,0],["08:50",33,1],["08:50",34,0],["08:51",35,0],["08:56",36,0],["09:00",37,1],["09:00",38,0],["09:00",39,0],["09:02",40,0],["09:06",41,0],["09:06",42,0],["09:07",43,5],["09:07",44,0],["09:07",45,0],["09:08",46,0],["09:11",47,0],["09:12",48,0],["09:14",49,0],["09:16",50,0],["09:18",51,1],["09:18",52,0],["09:20",53,0],["09:24",54,0],["09:25",55,0],["09:25",56,0],["09:26",57,0],["09:27",58,1],["09:27",59,0],["09:28",60,0],["09:31",61,0],["09:32",62,0],["09:33",63,5],["09:34",64,0],["09:35",65,0],["09:36",66,0],["09:37",67,0],["09:38",68,0],["09:39",69,0],["09:40",70,1],["09:40",71,0],["09:42",72,0],["09:43",73,0],["09:44",74,0],["09:45",75,0],["09:46",76,0],["09:48",77,0],["09:48",78,6],["09:50",79,5]]},{"big":"10:20","small":"At Southport Interchange 11:48","title":"The 10:20 from Chorley Bus Station","s":[["10:20",0,5],["10:21",1,0],["10:22",2,0],["10:23",3,0],["10:24",4,0],["10:26",5,0],["10:28",6,1],["10:29",7,0],["10:29",8,0],["10:30",9,0],["10:31",10,0],["10:32",11,1],["10:32",12,0],["10:33",13,0],["10:34",14,0],["10:35",15,0],["10:35",16,0],["10:36",17,0],["10:38",18,0],["10:39",19,0],["10:39",20,0],["10:40",21,0],["10:41",22,5],["10:41",23,0],["10:42",24,0],["10:42",25,0],["10:43",26,0],["10:44",27,0],["10:45",28,0],["10:46",29,0],["10:46",30,0],["10:47",31,0],["10:49",32,0],["10:50",33,1],["10:50",34,0],["10:51",35,0],["10:56",36,0],["11:00",37,1],["11:00",38,0],["11:00",39,0],["11:02",40,0],["11:06",41,0],["11:06",42,0],["11:07",43,5],["11:07",44,0],["11:07",45,0],["11:08",46,0],["11:11",47,0],["11:12",48,0],["11:14",49,0],["11:16",50,0],["11:18",51,1],["11:18",52,0],["11:20",53,0],["11:24",54,0],["11:25",55,0],["11:25",56,0],["11:26",57,0],["11:27",58,1],["11:27",59,0],["11:28",60,0],["11:31",61,0],["11:32",62,0],["11:33",63,5],["11:34",64,0],["11:35",65,0],["11:36",66,0],["11:37",67,0],["11:38",68,0],["11:39",69,0],["11:40",70,1],["11:40",71,0],["11:42",72,0],["11:43",73,0],["11:44",74,0],["11:45",75,0],["11:46",76,0],["11:48",77,0],["11:48",78,6],["11:50",79,5]]}],"note":""},{"label":"To Chorley","li":1,"trips":[{"big":"14:01","small":"From Southport Interchange, at Chorley Bus Station 15:24","title":"The 14:01 from Southport Interchange","s":[["14:00",80,5],["14:01",81,6],["14:01",82,0],["14:02",83,0],["14:03",84,0],["14:03",85,0],["14:04",86,0],["14:04",87,0],["14:05",88,0],["14:06",89,0],["14:06",90,0],["14:07",91,0],["14:08",92,1],["14:08",93,0],["14:09",94,0],["14:10",95,0],["14:11",96,0],["14:13",97,1],["14:13",98,0],["14:14",99,0],["14:17",100,0],["14:18",101,5],["14:18",102,0],["14:18",103,0],["14:20",104,0],["14:23",105,0],["14:25",106,0],["14:25",107,0],["14:26",108,1],["14:27",109,0],["14:29",110,0],["14:30",111,0],["14:31",112,0],["14:32",113,0],["14:33",45,0],["14:33",46,0],["14:35",114,1],["14:35",115,0],["14:35",116,0],["14:40",117,0],["14:41",118,0],["14:41",119,0],["14:42",120,5],["14:43",121,0],["14:45",122,0],["14:50",123,0],["14:51",124,0],["14:51",125,0],["14:52",126,1],["14:52",127,0],["14:53",128,0],["14:54",129,0],["14:55",130,0],["14:55",131,0],["14:56",132,0],["14:57",133,0],["14:58",134,0],["14:59",135,0],["14:59",136,0],["15:00",137,0],["15:01",138,1],["15:01",139,0],["15:01",140,0],["15:02",141,0],["15:03",142,0],["15:05",143,0],["15:06",144,0],["15:06",145,0],["15:07",146,0],["15:08",147,0],["15:09",148,0],["15:10",149,5],["15:10",150,0],["15:11",151,0],["15:13",152,0],["15:14",153,1],["15:16",154,0],["15:18",155,0],["15:18",156,0],["15:20",157,0],["15:21",158,0],["15:24",0,5]]},{"big":"16:01","small":"From Southport Interchange, at Chorley Bus Station 17:24","title":"The 16:01 from Southport Interchange","s":[["16:00",80,5],["16:01",81,6],["16:01",82,0],["16:02",83,0],["16:03",84,0],["16:03",85,0],["16:04",86,0],["16:04",87,0],["16:05",88,0],["16:06",89,0],["16:06",90,0],["16:07",91,0],["16:08",92,1],["16:08",93,0],["16:09",94,0],["16:10",95,0],["16:11",96,0],["16:13",97,1],["16:13",98,0],["16:14",99,0],["16:17",100,0],["16:18",101,5],["16:18",102,0],["16:18",103,0],["16:20",104,0],["16:23",105,0],["16:25",106,0],["16:25",107,0],["16:26",108,1],["16:27",109,0],["16:29",110,0],["16:30",111,0],["16:31",112,0],["16:32",113,0],["16:33",45,0],["16:33",46,0],["16:35",114,1],["16:35",115,0],["16:35",116,0],["16:40",117,0],["16:41",118,0],["16:41",119,0],["16:42",120,5],["16:43",121,0],["16:45",122,0],["16:50",123,0],["16:51",124,0],["16:51",125,0],["16:52",126,1],["16:52",127,0],["16:53",128,0],["16:54",129,0],["16:55",130,0],["16:55",131,0],["16:56",132,0],["16:57",133,0],["16:58",134,0],["16:59",135,0],["16:59",136,0],["17:00",137,0],["17:01",138,1],["17:01",139,0],["17:01",140,0],["17:02",141,0],["17:03",142,0],["17:05",143,0],["17:06",144,0],["17:06",145,0],["17:07",146,0],["17:08",147,0],["17:09",148,0],["17:10",149,5],["17:10",150,0],["17:11",151,0],["17:13",152,0],["17:14",153,1],["17:16",154,0],["17:18",155,0],["17:18",156,0],["17:20",157,0],["17:21",158,0],["17:24",0,5]]},{"big":"18:01","small":"From Southport Interchange, at Chorley Bus Station 19:21","title":"The 18:01 from Southport Interchange","s":[["18:00",80,5],["18:01",81,6],["18:01",82,0],["18:02",83,0],["18:03",84,0],["18:03",85,0],["18:04",86,0],["18:04",87,0],["18:05",88,0],["18:06",89,0],["18:06",90,0],["18:07",91,0],["18:08",92,1],["18:08",93,0],["18:09",94,0],["18:10",95,0],["18:11",96,0],["18:13",97,1],["18:13",98,0],["18:14",99,0],["18:17",100,0],["18:18",101,5],["18:18",102,0],["18:18",103,0],["18:20",104,0],["18:23",105,0],["18:25",106,0],["18:25",107,0],["18:26",108,1],["18:27",109,0],["18:29",110,0],["18:30",111,0],["18:31",112,0],["18:32",113,0],["18:33",45,0],["18:33",46,0],["18:35",114,1],["18:35",115,0],["18:35",116,0],["18:40",117,0],["18:41",118,0],["18:41",119,0],["18:42",120,5],["18:43",121,0],["18:45",122,0],["18:50",123,0],["18:51",124,0],["18:51",125,0],["18:52",126,1],["18:52",127,0],["18:53",128,0],["18:54",129,0],["18:54",130,0],["18:55",131,0],["18:55",132,0],["18:56",133,0],["18:58",134,0],["18:58",135,0],["18:58",136,0],["18:59",137,0],["19:00",138,1],["19:00",139,0],["19:00",140,0],["19:01",141,0],["19:01",142,0],["19:03",143,0],["19:03",144,0],["19:04",145,0],["19:05",146,0],["19:05",147,0],["19:06",148,0],["19:07",149,5],["19:07",150,0],["19:08",151,0],["19:10",152,0],["19:11",153,1],["19:13",154,0],["19:15",155,0],["19:15",156,0],["19:17",157,0],["19:18",158,0],["19:21",0,5]]}],"note":""}],"none":"In the current timetable there are no 347 buses on Saturdays, so I would look at the other ways to get there on the Southport Air Show page."},{"key":"sun","label":"Sunday","dirs":[{"label":"To Southport","li":0,"trips":[]},{"label":"To Chorley","li":1,"trips":[]}],"none":"In the current timetable there are no 347 buses on Sundays, so I would look at the other ways to get there on the Southport Air Show page."}],"start":0};
+</script>
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var each = function(list, fn){ Array.prototype.forEach.call(list, fn); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var KEY = 1, OFF = 2, LABEL = 4;
+
+  /* fixed text */
+  $('backlink').href = CFG.showUrl;
+  $('backlink').target = CFG.showTarget || '_top';
+  $('backlink').querySelector('span').textContent = 'Back to ' + CFG.showName;
+  $('op').textContent = 'Run by ' + CFG.operator;
+  $('bnum').textContent = CFG.num;
+  $('bdest').textContent = CFG.blindDest;
+  $('title').textContent = CFG.title;
+  $('lead').textContent = CFG.lead;
+  $('tiph').textContent = CFG.tipHead;
+  $('tip').textContent = CFG.tip;
+  $('tipbtn').href = CFG.showUrl;
+  $('tipbtn').target = CFG.showTarget || '_top';
+  $('tipbtn').textContent = CFG.tipBtn + ' ›';
+  $('note').innerHTML = CFG.note;
+  $('map').setAttribute('aria-label', 'Map of the bus ' + CFG.num + ' route');
+  if (CFG.alt) { $('alt').hidden = false; $('alth').textContent = CFG.alt[0]; $('altp').textContent = CFG.alt[1]; }
+  document.title = CFG.title + ' | The Big Guide to UK Airshows';
+
+  /* destination blind cycles its "via" line */
+  var vi = 0;
+  $('bvia').textContent = CFG.blindVia[0] || '';
+  if (!reduce && CFG.blindVia.length > 1) {
+    setInterval(function(){
+      var v = $('bvia'); v.style.opacity = 0;
+      setTimeout(function(){ vi = (vi + 1) % CFG.blindVia.length; v.textContent = CFG.blindVia[vi]; v.style.opacity = .85; }, 400);
+    }, 3200);
+  }
+
+  $('facts').innerHTML = CFG.facts.map(function(f){
+    return '<div class="fact' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><b>' + f[1] + '</b></div>';
+  }).join('');
+
+  $('legs').innerHTML = CFG.legs.map(function(l){
+    var signs = l[0].map(function(r){ return '<span class="sign' + (/^M\d/.test(r) ? ' m' : '') + '">' + r + '</span>'; }).join('');
+    return '<li><div class="signs">' + (signs || '<span class="sign">Local</span>') + '</div><div><b>' + l[1] + '</b><p>' + l[2] + '</p></div></li>';
+  }).join('');
+
+  /* map */
+  var map = L.map('map', { scrollWheelZoom: false, zoomControl: false });
+  L.control.zoom({ position: 'topleft' }).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  map.setView(CFG.target, 11);
+  var lineLayer = L.layerGroup().addTo(map), layer = L.layerGroup().addTo(map);
+  var showPin = L.circleMarker(CFG.target, { radius: 6, color: '#D74949', weight: 2, fillColor: '#fff', fillOpacity: 1, dashArray: '3 3' })
+    .bindTooltip(CFG.targetLabel, { direction: 'top', offset: [0, -6], className: 'lbl off' }).addTo(map);
+
+  var day = DATA.start || 0, dir = 0, idx = 0, ROUTE = [], casing = null;
+  window.addEventListener('resize', function(){ map.invalidateSize(); });
+
+  function fit(){
+    if (!casing) return;
+    var wide = window.innerWidth > 980;
+    map.fitBounds(casing.getBounds().extend(CFG.target), { paddingTopLeft: [30, 30], paddingBottomRight: [wide ? 420 : 30, 30] });
+  }
+
+  /* unpack journeys: [time, stop index, flags] -> [time, name, lat, lon, flags, short name] */
+  DATA.days.forEach(function(dd){ dd.dirs.forEach(function(x){ x.trips.forEach(function(tr){
+    tr.s = tr.s.map(function(p){ var st = DATA.stops[p[1]]; return [p[0], st[0], st[1], st[2], p[2], st[3]]; });
+  }); }); });
+  function D(){ return DATA.days[day]; }
+  function DIR(){ return D().dirs[dir]; }
+
+  function segBtns(el, items, cur, onpick){
+    el.innerHTML = items.map(function(t, i){ return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === cur) + '">' + t + '</button>'; }).join('');
+    el.style.display = items.length > 1 ? '' : 'none';
+    each(el.children, function(b){ b.addEventListener('click', function(){ onpick(+b.getAttribute('data-i')); }); });
+  }
+
+  function render(){
+    segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ day = i; dir = Math.min(dir, Math.max(0, DATA.days[i].dirs.length - 1)); idx = 0; render(); runBus(); });
+    var dd = D();
+    if (!dd.dirs.length || !dd.dirs.some(function(x){ return x.trips.length; })) {
+      $('dir').style.display = 'none'; $('board').innerHTML = ''; $('bnote').textContent = '';
+      $('nobus').textContent = dd.none; $('nobus').classList.add('on'); $('stage').classList.add('off');
+      return;
+    }
+    $('nobus').classList.remove('on'); $('stage').classList.remove('off');
+    if (!DIR().trips.length) { dir = dd.dirs.findIndex(function(x){ return x.trips.length; }); idx = 0; }
+    segBtns($('dir'), dd.dirs.map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = 0; render(); runBus(); });
+    board(); drawLine(); draw();
+  }
+
+  function board(){
+    var d = DIR();
+    $('board').innerHTML = d.trips.map(function(t, i){
+      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '"><span class="t">' + t.big + '</span><span class="a">' + t.small + '</span></button>';
+    }).join('');
+    $('bnote').textContent = d.note || '';
+    each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); board(); draw(); }); });
+  }
+
+  function drawLine(){
+    lineLayer.clearLayers();
+    ROUTE = DATA.lines[DIR().li] || [];
+    casing = L.polyline(ROUTE, { color: '#13293C', weight: 11, opacity: .18 }).addTo(lineLayer);
+    L.polyline(ROUTE, { color: '#00A6E2', weight: 5, opacity: 1 }).addTo(lineLayer);
+    fit(); measure();
+  }
+
+  function draw(){
+    layer.clearLayers();
+    var trip = DIR().trips[idx], s = trip.s, ol = $('stops');
+    $('ptitle').textContent = trip.title;
+    $('psub').textContent = s.length + ' stops, ' + s[0][0] + ' to ' + s[s.length - 1][0];
+    ol.innerHTML = '';
+    var group = null, gid = 0;
+    s.forEach(function(p, i){
+      var isOff = p[4] & OFF, key = (p[4] & KEY) || isOff || i === 0 || i === s.length - 1;
+      var m = L.circleMarker([p[2], p[3]], {
+        radius: isOff ? 10 : (key ? 6 : 4), color: isOff ? '#D74949' : '#13293C', weight: key ? 3 : 2,
+        fillColor: isOff ? '#D74949' : '#FFFFFF', fillOpacity: 1
+      }).addTo(layer);
+      m.bindPopup('<b>' + p[1] + '</b><br>' + p[0] + (isOff ? '<br>' + CFG.offTag : ''));
+      var small = window.innerWidth < 560 && !isOff && i !== 0 && i !== s.length - 1;
+      if ((p[4] & LABEL || isOff) && !small) m.bindTooltip(p[5] || p[1], { permanent: true, direction: 'right', offset: [10, 0], className: 'lbl' + (isOff ? ' off' : '') });
+
+      if (!key) {
+        if (!group) {
+          group = { id: 'g' + (gid++), items: [] };
+          var fl = document.createElement('li'); fl.className = 'fold';
+          fl.innerHTML = '<button type="button" aria-expanded="false"></button>';
+          ol.appendChild(fl); group.fold = fl;
+        }
+        group.items.push(p);
+      } else { closeGroup(); }
+
+      var li = document.createElement('li');
+      li.className = 'stop' + (key ? ' key' : ' minor') + (isOff ? ' off' : '');
+      if (!key) li.dataset.g = group.id;
+      li.innerHTML = '<span>' + p[1] + (isOff ? '<span class="tag">' + CFG.offTag + '</span>' : '') + '</span><time>' + p[0] + '</time>';
+      li.addEventListener('click', function(){
+        each(ol.querySelectorAll('.active'), function(x){ x.classList.remove('active'); });
+        li.classList.add('active');
+        map.setView([p[2], p[3]], 15, { animate: !reduce }); m.openPopup();
+      });
+      ol.appendChild(li);
+    });
+    closeGroup();
+
+    function closeGroup(){
+      if (!group) return;
+      var g = group, n = g.items.length, btn = g.fold.firstChild;
+      var label = n === 1 ? g.items[0][1] : g.items[0][1] + ' and ' + (n - 1) + ' more stops';
+      btn.textContent = label;
+      btn.addEventListener('click', function(){
+        var open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', open);
+        btn.textContent = open ? 'Hide the smaller stops' : label;
+        each(ol.querySelectorAll('li.minor[data-g="' + g.id + '"]'), function(x){ x.classList.toggle('open', open); });
+      });
+      group = null;
+    }
+  }
+
+  /* a small bus runs the route once, then fades */
+  var bus = null, raf = 0, cum = [0];
+  var busIcon = L.divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 15],
+    html: '<div class="busdot"><svg viewBox="0 0 16 16" fill="#13293C"><rect x="2" y="1.5" width="12" height="11" rx="2"/><rect x="3.5" y="3" width="9" height="4" rx=".6" fill="#F2B233"/><circle cx="5" cy="10" r="1" fill="#F2B233"/><circle cx="11" cy="10" r="1" fill="#F2B233"/><rect x="3" y="12.5" width="2.4" height="2" rx=".5"/><rect x="10.6" y="12.5" width="2.4" height="2" rx=".5"/></svg></div>' });
+  function measure(){
+    cum = [0];
+    for (var k = 1; k < ROUTE.length; k++) cum.push(cum[k - 1] + map.distance(ROUTE[k - 1], ROUTE[k]));
+  }
+  function at(d){
+    var lo = 0, hi = cum.length - 1;
+    while (lo < hi - 1) { var mid = (lo + hi) >> 1; if (cum[mid] < d) lo = mid; else hi = mid; }
+    var f = (d - cum[lo]) / ((cum[hi] - cum[lo]) || 1);
+    return [ROUTE[lo][0] + (ROUTE[hi][0] - ROUTE[lo][0]) * f, ROUTE[lo][1] + (ROUTE[hi][1] - ROUTE[lo][1]) * f];
+  }
+  function runBus(){
+    if (reduce || ROUTE.length < 2) return;
+    cancelAnimationFrame(raf);
+    if (bus) { map.removeLayer(bus); bus = null; }
+    var total = cum[cum.length - 1], start = null, dur = 7000;
+    bus = L.marker(ROUTE[0], { icon: busIcon, interactive: false, keyboard: false }).addTo(map);
+    function step(ts){
+      if (!bus) return;
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      bus.setLatLng(at(e * total));
+      if (p < 1) raf = requestAnimationFrame(step);
+      else { var el = bus.getElement(); if (el) el.firstChild.style.opacity = 0; var b = bus; setTimeout(function(){ map.removeLayer(b); }, 700); bus = null; }
+    }
+    raf = requestAnimationFrame(step);
+  }
+
+  render();
+
+  var started = false;
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in'); io.unobserve(e.target);
+      if (!started && e.target.id === 'stage') { started = true; setTimeout(runBus, 500); }
+    });
+  }, { threshold: .15 }) : null;
+  each(document.querySelectorAll('.rise'), function(el){ io ? io.observe(el) : el.classList.add('in'); });
+  if (!io) runBus();
+})();
+</script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
+</body>
+</html>

@@ -52,6 +52,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Advertise With Us (Wix page /advertise-with-us) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
 | Landing page (Wix page /coming-soon-03) | https://jskedge1.github.io/airshow-pages/landing.html |
 | Groups page header (Wix page /groups, above the Wix Groups list) | https://jskedge1.github.io/airshow-pages/groups-header.html |
+| Bus route maps, every route by show (Wix page /bus-route still to be created) | https://jskedge1.github.io/airshow-pages/bus-routes/index.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
@@ -69,6 +70,18 @@ Keep it when copying a template to make a new show page.
 `transport-times.js` holds the train and bus timetable tables for every feature show page (camping-layout/<show>.html, both Midlands versions included). Each page loads it in its head and shows the tables inside the matching Getting There topic (the topic ids, such as `rail` or `bus-74`, are the keys). Edit only the `DATA` block: one entry per show, `checked` date, then per topic a list of tables `{title, rows:[[time, service, details]], note, source:[name, url]}`. No dashes in text, 24 hour times.
 Times come from official operator, Network Rail, Traveline and Bus Open Data (DfT) sources. The first set (29 Oct 2026) uses the timetables current now, so they are a guide only: summer 2027 shows fall in the May 2027 timetable, published around March 2027. The weekly "Feature page checker" scheduled task (Wednesdays) checks dates, news, prices, parking, taxi numbers and transport details on the feature pages and refreshes these times, with a full timetable refresh from March 2027.
 Still to fill: nothing major. Full audit of every public transport detail on 29 Oct 2026 (stations, operators, routes, days, stops, links, times). Times still come from the May to December 2026 and December 2026 timetables; replace them with the May 2027 timetables when published. Unconfirmed items are listed in the weekly task report.
+
+## Bus route maps (30 Oct 2026)
+
+Every numbered bus on the feature show pages has its own route page in `bus-routes/<number>-<show>.html` (49 routes), with the list of all of them in `bus-routes/index.html`. Each page shows the roads the bus takes on a map, every stop and the times for the show days, the stop closest to the show in red, how often it runs and the walk from the stop.
+
+On the show pages, `bus-routes.js` adds an amber "Route map" box with a "Show route details" button for each bus to the matching Getting There topic (the page calls `UKAG_BR.render(show, topicId)`, just under Map search). Which buses go in which topic is the `T` list in `bus-routes-src/make_map.py`.
+
+While `WIX_PAGE` in `bus-routes.js` is `null`, the buttons open the route page in a new tab. To keep visitors on the site: add a Wix page at /bus-route with one HTML embed (ID html1) set to `https://jskedge1.github.io/airshow-pages/bus-routes/index.html`, paste in `velo/page-code/bus-route.js`, then set `WIX_PAGE = 'bus-route'`.
+
+To rebuild after a timetable change (from `bus-routes-src/`): `python3 collect.py` gets stops, times and road lines into `raw/` (delete a route's raw file first to fetch it again), `python3 build.py` makes the pages from `templates/bus-route-template.html` (copied in as template.html), and `python3 make_map.py` remakes `bus-routes.js` and the list page. Routes are in `routes.json`, end names in `ends.json`, bus companies in `operators.json`; show points and advice are `SHOWS` in build.py.
+Times use the current timetable (November 2026 dates for each show's days), so replace them with the summer 2027 timetables when they come out in the spring.
+No page yet (no buses on any show day in the current timetable): 1 Blackpool, 18 Little Gransden, 7A Duxford, 891 Cosford, 97 Ayr (summer only). Wales has no numbered routes on its page, so no buttons there.
 
 ## Seafront Information map and tides (27 Oct 2026)
 
