@@ -32,7 +32,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Show Day Live (Show Day page, every show with a running order plus the member upload bay) | https://jskedge1.github.io/airshow-pages/show-day.html |
 | Show Day Live, one show (Show Day section of a feature show page, change the show at the end) | https://jskedge1.github.io/airshow-pages/show-day.html?show=eastbourne |
 | Show Day Live, member's saved shows (My Airshow Hub) | https://jskedge1.github.io/airshow-pages/show-day.html?mode=hub |
-| Airshow traders directory, the visitor side: trader finder, tips and a link to the trader plans (Wix page /airshow-traders, page code velo/page-code/airshow-traders.js; new layout live 30 Oct 2026, about 4900px tall on desktop, 7500px on tablets and 9500px on phones) | https://jskedge1.github.io/airshow-pages/traders/directory.html |
+| Airshow traders directory, the visitor side: trader finder, tips and a link to the trader plans (Wix page /airshow-traders, page code velo/page-code/airshow-traders.js; new layout live 30 Oct 2026, shown by the header element since 30 Oct 2026, so it grows with the page; messages go through #airshowAuto) | https://jskedge1.github.io/airshow-pages/traders/directory.html |
 | Trader Hub, trader log in and dashboard (Wix page /trader-hub, page code velo/page-code/trader-hub.js) | https://jskedge1.github.io/airshow-pages/traders/trader-hub.html |
 | Trader admin, Jack only (Wix page /trader-admin, members only, page code velo/page-code/trader-admin.js) | https://jskedge1.github.io/airshow-pages/traders/admin.html |
 | Admin board, Jack only (Wix page /site-admin, members only, page code velo/page-code/site-admin.js) | https://jskedge1.github.io/airshow-pages/admin/board.html |
@@ -54,7 +54,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Food and Drink at Airshows (Wix page /foodanddrinkatairshows) | https://jskedge1.github.io/airshow-pages/food-and-drink.html |
 | Visitor Planning Guides (Wix page /visitorplanningguides) | https://jskedge1.github.io/airshow-pages/visitor-planning-guides.html |
 | Photography Equipment (Wix page /photography-equipment) | https://jskedge1.github.io/airshow-pages/photography-equipment.html |
-| Advertise With Us, the one hub for businesses (30 Oct 2026): trader plans ladder, founding places, trader sign up form, advert packages for businesses near the shows, enquiry form (Wix page /advertise-with-us; needs page code velo/page-code/advertise-with-us.js for the trader sign up form; about 14100px tall on desktop, 19700px on tablets and 28200px on phones) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
+| Advertise With Us, the one hub for businesses (30 Oct 2026): trader plans ladder, founding places, trader sign up form, advert packages for businesses near the shows, enquiry form (Wix page /advertise-with-us; shown by the header element, so it grows with the page; page code velo/page-code/advertise-with-us.js answers the trader sign up form through #airshowAuto) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
 | Landing page (Wix page /coming-soon-03) | https://jskedge1.github.io/airshow-pages/landing.html |
 | Groups page header (Wix page /groups, above the Wix Groups list) | https://jskedge1.github.io/airshow-pages/groups-header.html |
 | Public transport to UK airshows, every bus and train route page by show in tabs, with a town search (Wix page /airshow-public-transport made 30 Oct 2026 by copying Train to Clacton, hidden from the menu, embed html12, path added to AE_GH_PAGES; linked from the Public transport section of Getting there; Airshows on a Budget layout; built by public-transport-src/build.py from the bus and train route pages) | https://jskedge1.github.io/airshow-pages/public-transport.html |
@@ -184,6 +184,7 @@ Addresses checked against the live site on 19 Oct 2026.
 A custom element in the site header turns every full-width guide box into normal page content, so the page
 grows with the guide and scrolls like the rest of the site on phones. It converts boxes holding pasted code
 and, since 30 Oct 2026, boxes pointing at the GitHub pages listed in `AE_GH_PAGES` inside that file.
+`traders/directory.html` was added to `AE_GH_PAGES` on 30 Oct 2026. Pages shown this way talk to page code through the header element (#airshowAuto: `on('pagemessage')` in, `setAttribute('message', JSON)` out), not through the HTML box.
 When a new full-page guide is added to Wix by website address, add its path to `AE_GH_PAGES` too,
 or it will sit in a fixed-height box and won't scroll properly on phones. Changes to the element go live when the site is published.
 
