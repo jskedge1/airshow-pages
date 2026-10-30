@@ -571,6 +571,28 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
 .hero-cap{position:absolute;right:18px;top:14px;z-index:1;margin:0;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.75);background:rgba(14,33,49,.55);padding:3px 8px}
 @media (prefers-reduced-motion:reduce){.hero-photo{animation:none}}
 @media (max-width:1020px){.hero-photo{opacity:.35;background-position:60% 30%}.hero-photo::after{background:linear-gradient(180deg,rgba(19,41,60,.55) 0%,var(--navy) 70%)}}
+
+/* boost and promises as tabs */
+.ptabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;align-items:end}
+.pt{position:relative;display:flex;flex-direction:column;padding:18px 16px 16px;color:#fff;transition:min-height .55s cubic-bezier(.22,1,.36,1),clip-path 1s cubic-bezier(.22,1,.36,1),box-shadow .45s ease}
+.ptabs.wait .pt{clip-path:inset(100% 0 0 0)}
+.ptabs.grow .pt{clip-path:inset(0 0 0 0)}
+.ptabs.grow .p2{transition-delay:0s,.18s,0s}.ptabs.grow .p3{transition-delay:0s,.36s,0s}.ptabs.grow .p4{transition-delay:0s,.54s,0s}
+.p1{background:var(--teal);min-height:300px}.p2{background:var(--purple);min-height:340px}.p3{background:var(--navy);min-height:380px}.p4{background:var(--red);min-height:420px}
+.p1:hover,.p1:active{min-height:345px}.p2:hover,.p2:active{min-height:385px}.p3:hover,.p3:active{min-height:425px}.p4:hover,.p4:active{min-height:465px}
+.pt:hover,.pt:active{box-shadow:0 -10px 24px -14px rgba(19,41,60,.45);z-index:2}
+.pt .tg{align-self:flex-start;background:rgba(0,0,0,.25);padding:3px 8px;font-weight:600;font-size:13.5px;margin-bottom:10px;transition:background .3s ease}
+.pt:hover .tg{background:rgba(0,0,0,.4)}
+.pt b{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:25px;line-height:1}
+.p3 b{color:var(--teal)}
+.pt .pp{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;line-height:1;margin-top:6px}
+.pt .pp small{font-family:'Barlow',sans-serif;font-weight:500;font-size:13px;margin-left:5px;color:rgba(255,255,255,.88)}
+.pt p{margin-top:8px;font-size:14.5px;line-height:1.45;color:#EAF1F6}
+.pt .rbtn{align-self:flex-start;margin-top:auto;padding:9px 13px;font-size:14.5px}
+.pe-r .compare{margin-top:20px}
+@media (prefers-reduced-motion:reduce){.pt{transition:none}.ptabs.wait .pt{clip-path:none}}
+@media (max-width:1020px){.ptabs{grid-template-columns:1fr 1fr}.pt,.p1,.p2,.p3,.p4,.pt:hover{min-height:0}.pt .rbtn{margin-top:12px}}
+@media (max-width:620px){.ptabs{grid-template-columns:1fr}}
 </style>
 <style id="device-fix">
 @media (max-width:1024px) and (pointer:coarse),(max-width:760px){
@@ -750,16 +772,16 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
         <a class="btn btn-teal" href="#list">Claim a founding place <span class="arr">→</span></a>
       </aside>
       <div class="pe-r">
-        <div class="boost">
-          <div class="p">£9<small>a show</small></div>
-          <div><b>Show boost.</b> Only doing one or two big shows? Boost your card to the top of that airshow's trader list for the show weekend, without taking a season plan.</div>
-          <a class="btn btn-out" href="#list" style="border-color:var(--purple);color:var(--purple)">Add a boost</a>
+<div class="ptabs">
+          <div class="pt p1"><span class="tg">Doing one big show?</span><b>Show boost</b><div class="pp">£9<small>a show</small></div><p>Boost your card to the top of that airshow's trader list for the show weekend, without taking a season plan.</p><a class="rbtn" href="#list">Add a boost <span aria-hidden="true">→</span></a></div>
+          <div class="pt p2"><span class="tg">Peace of mind</span><b>Money back</b><p>Change your mind before your first show and you get your money back.</p></div>
+          <div class="pt p3"><span class="tg">No tie in</span><b>No contracts</b><p>You pay once a season, by card. There is no contract to sign and nothing to cancel.</p></div>
+          <div class="pt p4"><span class="tg">Only once you're live</span><b>Nothing charged yet</b><p>Nothing is taken until your listing is checked and live on the site.</p></div>
         </div>
         <details class="compare">
           <summary>Compare every feature <span>+</span></summary>
           <div style="overflow-x:auto"><table class="ctable" id="ctable"></table></div>
         </details>
-        <div class="promise"><span>Money back if you cancel before your first show</span><span>No contracts</span><span>Pay once a season, by card</span><span>Nothing is charged until your listing is live</span></div>
       </div>
     </div>
     <a class="adv" href="https://www.ukairshowguide.co.uk/advertise-with-us" target="_top">
@@ -915,7 +937,7 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   const pendingCalls = {}; let seq = 0;
   function call(action, payload, wait){
     // tips and advert packages rise like the Start Simple, Build Up steps
-  document.querySelectorAll('.notes,.ladder').forEach(n=>{if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  document.querySelectorAll('.notes,.ladder,.ptabs').forEach(n=>{if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
     n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)});
   (function(){return;const n=document.querySelector('.notes');if(!n||!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
     n.classList.add('wait');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){n.classList.remove('wait');n.classList.add('grow');o.disconnect()}}),{rootMargin:'0px 0px -10% 0px'});o.observe(n)})();
