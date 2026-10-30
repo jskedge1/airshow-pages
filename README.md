@@ -88,6 +88,8 @@ Site menu: each route page (and the route list) starts with the same menu as the
 
 Getting There buttons: on the show pages each "Show route details" button is in its bus company's colours with the company name, square cornered, inside a white box with an amber edge.
 
+Page layout (30 Oct 2026, final): site menu, a blue top band (destination blind, title, Plan your trip and route map buttons, the live departures screen), the key facts strip and the bus lane, then the feature page section bar (deep navy, sticky, tab widens in the company accent colour on hover and stays lit for the section in view, red reading line with a small bus in the company colours) and six folding sections like the feature pages: Plan your trip (open to start), Route map, Every time, Your stop for the show, The roads it takes, Before you go, with "1 of 6 sections open" and Open all or Close all. Template: templates/bus-route-template.html (earlier designs kept as -v2, -v3 and -v4 files).
+
 Live data: each page asks bustimes.org every 30 seconds for the buses out on that route right now (`vehicles.json?service=<sid>`) and their stop times (`/api/trips/<id>/`). The live buses show on the map, and when today is the picked day the departures screen counts down to the next buses using their real expected times, with minutes late or early. With no live data it counts down to the timetable. Nothing needs a key.
 
 Timetables: collect.py fetches the timetables in force on the next Thursday to Sunday from the day it runs, and the pages say the date they were checked. Rerun the steps below every so often (or ask Claude to) to keep them current.
