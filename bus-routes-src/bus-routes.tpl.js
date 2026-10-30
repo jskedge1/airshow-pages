@@ -9,7 +9,7 @@
 (function(){
   var BASE = 'https://jskedge1.github.io/airshow-pages/bus-routes/';
   var SITE = 'https://www.ukairshowguide.co.uk/';
-  var WIX_PAGE = null;
+  var WIX_PAGE = 'bus-route';
 
   /* show -> topic id -> list of [bus number, route page id, bus company colours, bus company] */
   var MAP = /*MAP*/;

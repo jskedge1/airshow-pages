@@ -9,7 +9,7 @@
 (function(){
   var BASE = 'https://jskedge1.github.io/airshow-pages/bus-routes/';
   var SITE = 'https://www.ukairshowguide.co.uk/';
-  var WIX_PAGE = null;
+  var WIX_PAGE = 'bus-route';
 
   /* show -> topic id -> list of [bus number, route page id, bus company colours, bus company] */
   var MAP = {"ayr":{"bus":[["X77","x77-ayr",{"op1":"#1D4F91","op2":"#F58025","opink":"#FFFFFF"},

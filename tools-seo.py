@@ -106,7 +106,7 @@ for fn, path in MAP.items():
 for fn in NOINDEX:
     s = open(fn).read(); m = re.search(r'<title>(.*?)</title>', s[:max(s.lower().find('</head>'), 0) or len(s)], re.S)
     done[fn] = apply(fn, html.unescape(m.group(1)) if m else None, None, None, robots='noindex, nofollow')
-# bus route pages: no Wix page yet, keep their own address, add a description from the page lead
+# bus route pages: shown on the Wix page /bus-route?r=<id> (live 30 Oct 2026)
 for fn in sorted(glob.glob('bus-routes/*.html')):
     s = open(fn).read()
     if fn.endswith('index.html'):
@@ -116,6 +116,7 @@ for fn in sorted(glob.glob('bus-routes/*.html')):
         c = json.loads(re.search(r'var CFG=(\{.*?\});\nvar DATA', s, re.S).group(1))
         t = f'{c["title"]} for the {c["showName"]} | The Big Guide to UK Airshows'
         d = f'The {c["num"]} bus to the {c["showName"]}: the roads it takes, every stop, times on show days and the closest stop to the show. Run by {c["operator"]}.'
-    done[fn] = apply(fn, t, d, None)
+    rid = fn.split('/')[-1][:-5]
+    done[fn] = apply(fn, t, d, SITE + '/bus-route' + ('' if rid == 'index' else '?r=' + rid))
 bad = {k: v for k, v in done.items() if v != 'ok'}
 print(len(done), 'files', bad)
