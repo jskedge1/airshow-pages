@@ -102,9 +102,14 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
 .results-bar strong{color:var(--navy);font-weight:700}
 .results-bar select{width:auto;min-width:190px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-.card{position:relative;display:grid;grid-template-columns:62px minmax(0,1fr);background:#fff;border:1px solid var(--line);transition:transform .45s var(--ease),box-shadow .45s var(--ease);opacity:0;transform:translateY(14px)}
-.card.in{opacity:1;transform:none}
-.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(19,41,60,.12)}
+.card{position:relative;display:grid;grid-template-columns:62px minmax(0,1fr);background:#fff;border:1px solid var(--line);transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .45s ease,border-color .3s ease .5s,background .3s ease .5s}
+.card:not(.in){background:transparent;border-color:transparent;transition:none}
+.card>*{clip-path:inset(100% 0 0 0);transition:clip-path 1s cubic-bezier(.22,1,.36,1),padding .55s cubic-bezier(.22,1,.36,1);transition-delay:inherit}
+.card.in>*{clip-path:inset(0 0 0 0)}
+.card:hover,.card:active{transform:translateY(-6px);box-shadow:0 -10px 24px -14px rgba(19,41,60,.45),0 18px 34px -18px rgba(19,41,60,.35);z-index:2}
+.card:hover .strip{padding-top:26px}
+.card:hover .badge{filter:brightness(.8)}
+@media (prefers-reduced-motion:reduce){.card>*{clip-path:none!important;transition:none}.card:hover{transform:none}}
 .card::before{content:"";position:absolute;top:-1px;left:-1px;height:3px;width:0;background:var(--teal);transition:width .5s var(--ease)}
 .card:hover::before{width:calc(100% + 2px)}
 .card.featured{grid-column:span 2;grid-template-columns:62px minmax(0,1.1fr) minmax(0,.9fr)}
@@ -191,7 +196,8 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .previewbox{position:sticky;top:16px}
 .previewbox .lead{color:#33424D;margin-bottom:14px}
-.previewbox .card{opacity:1;transform:none}
+.previewbox .card{background:#fff;border-color:var(--line)}
+.previewbox .card>*{clip-path:none}
 .perks{margin-top:20px;background:var(--navy);color:#fff;padding:22px 24px;border-top:4px solid var(--teal)}
 .perks h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;color:var(--teal);font-size:21px;margin-bottom:8px}
 .perks ul{list-style:none}
@@ -736,7 +742,8 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
   function prep(){TRADERS.forEach(t=>{t.stops.sort((a,b)=>key(a[1])-key(b[1]))})}
 
   // ---------- talking to the Wix page code ----------
-  const IN_WIX = window.parent !== window;
+  const HOST = (location.ancestorOrigins && location.ancestorOrigins.length ? location.ancestorOrigins[0] : document.referrer) || '';
+  const IN_WIX = window.parent !== window && /ukairshowguide|wix|filesusr/i.test(HOST);
   const SITE = 'https://www.ukairshowguide.co.uk/';
   const pendingCalls = {}; let seq = 0;
   function call(action, payload, wait){
@@ -827,7 +834,7 @@ select{width:100%;border:1px solid var(--grey-l);padding:11px 12px;background:#f
     if(!('IntersectionObserver' in window)){cards.forEach(c=>c.classList.add('in'));return}
     io && io.disconnect();
     io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
-    cards.forEach((c,i)=>{c.style.transitionDelay=(Math.min(i,6)*60)+'ms';io.observe(c);setTimeout(()=>c.style.transitionDelay='',900)});
+    cards.forEach((c,i)=>{const d=Math.min(i,5)*180;[...c.children].forEach((ch,k)=>ch.style.transitionDelay=(d+k*120)+'ms,0ms');io.observe(c);setTimeout(()=>{[...c.children].forEach(ch=>ch.style.transitionDelay='')},2600)});
   }
 
   function render(){
