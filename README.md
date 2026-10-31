@@ -58,6 +58,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Advertise With Us, the one hub for businesses (30 Oct 2026): trader plans ladder, founding places, trader sign up form, advert packages for businesses near the shows, enquiry form (Wix page /advertise-with-us; shown by the header element, so it grows with the page; page code velo/page-code/advertise-with-us.js answers the trader sign up form through #airshowAuto) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
 | Landing page (Wix page /coming-soon-03) | https://jskedge1.github.io/airshow-pages/landing.html |
 | Groups page header (Wix page /groups, above the Wix Groups list) | https://jskedge1.github.io/airshow-pages/groups-header.html |
+| Build Your Kit Calculator, four lists (photography by camera brand, camping, food and drink, tickets and travel) each with a budget calculator (Wix page /build-your-kit-calculator made 31 Oct 2026 by copying Questions and Answers, under Visitor Planning Guides in the Site Menu so it shows in the Planning Guides tab, embed html12, path added to AE_GH_PAGES; photos in kit-calculator-img/; `?list=photography`, `camping`, `food-and-drink` or `tickets-and-travel` opens a list; prices are examples to type over) | https://jskedge1.github.io/airshow-pages/kit-calculator.html |
 | Public transport to UK airshows, every bus and train route page by show in tabs, with a town search (Wix page /airshow-public-transport made 30 Oct 2026 by copying Train to Clacton, hidden from the menu, embed html12, path added to AE_GH_PAGES; linked from the Public transport section of Getting there; Airshows on a Budget layout; built by public-transport-src/build.py from the bus and train route pages) | https://jskedge1.github.io/airshow-pages/public-transport.html |
 | Bus route maps, every route by show (Wix page /bus-route made 30 Oct 2026, hidden from the menu, embed ID html12, page code velo/page-code/bus-route.js; live since 30 Oct 2026, 2800px tall on desktop and 4700px on phones) | https://jskedge1.github.io/airshow-pages/bus-routes/index.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
@@ -147,6 +148,10 @@ To add a photo for a newly confirmed aircraft, do it once in `lineup-photos.js` 
 3. Add a line to `window.LU_EXTRA`: pattern, photo address, alt text, credit ("" for Jack's own).
 
 Added 27 Oct 2026: Westland Lysander (Jack's photo of the Lysander on display at Old Warden, IMG_9128 on Jacks Drive). Still needed: Hawker Fury (Midlands Air Festival), no photo found yet.
+
+## Kit calculator link cards (31 Oct 2026)
+
+`kit-link.js` draws a `<ukag-kit-link data-list="...">` card (shadow DOM) that opens the Build Your Kit Calculator on the matching list. It sits on the Photography Hub and Camping hub (above Where To Buy Your Kit), Food and Drink (above Your Flight Plan), Getting There and Accommodation (above Our view), Planning your first airshow (above Keep Reading) and Visitor Planning Guides (above Good to know). The home page has its own Kit Calculator tab and band (`#kit`).
 
 ## Links between pages
 
