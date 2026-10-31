@@ -1,20 +1,67 @@
-"""Build the public transport hub preview from the bus/train route pages already made."""
-import json, re, html
+"""Build public-transport.html: the Getting there section of every featured show page,
+public transport topics only, one show at a time, in the Clacton transport design.
 
-ROUTES = {r['id']: r for r in json.load(open('routes_extract.json'))}
+Run from the repo root:  python3 public-transport-src/build.py
+It reads the topics straight out of camping-layout/<show>.html (via extract.js, needs node),
+the train boxes from the same pages, and the bus route list from bus-routes/*.html.
+The look comes from the Clacton page's styles plus explore-designs.js ('mix'), loaded live.
+"""
+import json, os, re, subprocess, glob
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
 SITE = 'https://www.ukairshowguide.co.uk/'
+os.chdir(ROOT)
 
-COL = {  # op1 (badge), op2 (stripe), ink on op1. Same livery colours as the route pages.
-    'Stagecoach': ('#1D4F91', '#F58025', '#FFFFFF'),
-    'Arriva': ('#00A5A3', '#003B5C', '#FFFFFF'),
-    'First': ('#4B2E83', '#E6007E', '#FFFFFF'),
-    'Brighton and Hove': ('#C8102E', '#F3E8CF', '#FFFFFF'),
-    'Blackpool Transport': ('#1A1A1A', '#FFD100', '#FFD100'),
-    'Central Connect': ('#00843D', '#7AC143', '#FFFFFF'),
-    'A2B Bus and Coach': ('#1E5AA8', '#8CC63F', '#FFFFFF'),
-    'Cuckmere Buses': ('#2E6B30', '#F2E6B8', '#FFFFFF'),
-    'Diamond Bus': ('#004B93', '#E30613', '#FFFFFF'),
-    'Grant Palmer': ('#0B3D91', '#FFC20E', '#FFFFFF'),
+SHOWS = [
+    ('riat', 'RIAT', 'Royal International Air Tattoo', 'RAF Fairford, Gloucestershire', 'riat',
+     'Fairford is out in the Cotswolds, so this one takes a bit of planning. I would look at the train to Swindon and the free Swindon Shuttle first, which you book with your ticket. The Park and Ride buses work well too.'),
+    ('cosford', 'Cosford', 'RAF Cosford Air Show', 'RAF Cosford, Shropshire', 'cosfordairshow',
+     'Cosford is the easy one for the train. The station is under 300 metres from the entrance, with a train an hour each way on the Birmingham to Shrewsbury line. There are no Sunday buses, so the train really is the way in.'),
+    ('midlands', 'Midlands', 'Midlands Air Festival', 'Ragley Hall, Alcester', 'midlandsairfestival',
+     'Redditch is the station I would use, then the Diamond 247 bus, which stops right by the Ragley Hall main entrance. Please check the bus times first, as there is no Sunday service.'),
+    ('eastbourne', 'Eastbourne', 'Eastbourne Airshow', 'Western Lawns, Eastbourne', 'eastbourneairshow',
+     'This is one of the easiest shows to get to without a car. The train drops you in the town centre, and buses come in from Brighton, Lewes and Hastings. If you want the shortest walk, the 3 takes you right down to Meads.'),
+    ('clacton', 'Clacton', 'Clacton Air Show', 'West Greensward, Clacton', 'clactonairshow',
+     'Clacton has a direct train from London every hour, Central Connect buses from all round Tendring and Colchester, and National Express coaches into Colchester. Pick the one from your nearest town and you won’t need to worry about seafront parking.'),
+    ('wales', 'Wales', 'Wales Airshow', 'Swansea Bay', 'walesairshow',
+     'Please read this one before you travel. The seafront roads close on Airshow weekend, so the buses don’t always stop where they normally would. The train to Swansea and the Park and Ride from Fabian Way are the ones I would look at first.'),
+    ('duxford', 'Duxford', 'Duxford Air Shows', 'IWM Duxford, Cambridgeshire', 'duxfordairshows',
+     'For the big Air Shows there is a free shuttle bus from Cambridge station, and that is the one I would use. Whittlesford Parkway and Royston are closer stations, and the 132 bus runs from Cambridge too.'),
+    ('shuttleworth', 'Shuttleworth', 'Shuttleworth Air Shows', 'Old Warden, Bedfordshire', 'shuttleworthairshows',
+     'Old Warden is a small village. On show days a shuttle bus runs from Biggleswade station, which I would suggest over the 74 bus, as that stops about 25 minutes’ walk away and doesn’t run on Sundays.'),
+    ('gransden', 'Little Gransden', 'Little Gransden Air & Car Show', 'Little Gransden Airfield', 'little-gransden-air-and-car-show',
+     'The airfield is out in the countryside. St Neots is the nearest station and the Whippet 18 runs on weekdays and Saturdays, so for a Sunday show I would think about a taxi from the station or sharing a lift.'),
+    ('southport', 'Southport', 'Southport Air Show', 'Southport beach and pier', 'southport-air-show',
+     'Merseyrail from Liverpool is the easy way in, about 10 minutes’ walk from the seafront. Lots of buses come in from Liverpool, Preston, Wigan and St Helens too.'),
+    ('blackpool', 'Blackpool', 'Blackpool Air Show', 'Central Pier, Blackpool', 'blackpool-air-show',
+     'Blackpool North is the station I would use, about 15 minutes from the Tower. The trams run along the front, and most buses finish in the town centre, between 5 and 15 minutes from Central Pier.'),
+    ('ayr', 'Ayr', 'International Ayr Show', 'Low Green, Ayr', 'international-ayr-show',
+     'The train to Ayr leaves you about 15 to 20 minutes’ walk from the Low Green. In 2026 there were park and ride shuttles too, and buses come in from Glasgow and round Ayrshire.'),
+]
+GROUP_ORDER = ['By train', 'By bus', 'By coach', 'Park and Ride']
+
+def group_of(tid):
+    if tid.startswith('rail') or tid == 'kemble': return 'By train'
+    if tid in ('pr', 'chelt'): return 'Park and Ride'
+    if tid == 'nx-coach': return 'By coach'
+    if tid.startswith('bus') or tid in ('tram', 'shuttle', 'beachy-bus'): return 'By bus'
+    return None
+
+FAQ = [
+    ['Do bus passes work on show days?', 'In England the free bus pass usually works after 09:30 on weekdays and all day at weekends and on bank holidays. Airshow shuttles and Park and Ride buses are often run separately, and some don’t take passes at all, so I would check the rules for your show before you rely on it. Scotland and Wales have their own pass rules.'],
+    ['Can I take a camping chair on the bus?', 'Folding chairs are usually fine, but it’s down to the driver, and space goes quickly on show days. I would keep it folded and small, and leave the big cool box at home if you’re coming by bus.'],
+    ['What if I miss the last bus or train?', 'This is the one I see catch people out. Take a screenshot of the last times before you leave home, and have a local taxi number saved. Each option above has the times for the way home where I have them.'],
+    ['Are these the 2027 times?', 'Not yet. They are this winter’s timetables, which are a good guide to how often things run. The summer 2027 times usually come out in the spring, and I will update the pages then.'],
+    ['Why is there no train route page for my show?', 'So far I have built train route pages for Clacton, Eastbourne, Cosford, RIAT and Wales. For the other shows, the train options above still tell you which station I would use and how to get from there to the show.'],
+]
+
+COL = {
+    'Stagecoach': ('#1D4F91', '#F58025', '#FFFFFF'), 'Arriva': ('#00A5A3', '#003B5C', '#FFFFFF'),
+    'First': ('#4B2E83', '#E6007E', '#FFFFFF'), 'Brighton and Hove': ('#C8102E', '#F3E8CF', '#FFFFFF'),
+    'Blackpool Transport': ('#1A1A1A', '#FFD100', '#FFD100'), 'Central Connect': ('#00843D', '#7AC143', '#FFFFFF'),
+    'A2B Bus and Coach': ('#1E5AA8', '#8CC63F', '#FFFFFF'), 'Cuckmere Buses': ('#2E6B30', '#F2E6B8', '#FFFFFF'),
+    'Diamond Bus': ('#004B93', '#E30613', '#FFFFFF'), 'Grant Palmer': ('#0B3D91', '#FFC20E', '#FFFFFF'),
     'Vision Bus': ('#D71920', '#1A1A1A', '#FFFFFF'),
 }
 def col(op):
@@ -22,94 +69,90 @@ def col(op):
         if op.startswith(k): return v
     return ('#13293C', '#32B4AF', '#FFFFFF')
 
-SHOWS = [
-    dict(k='riat', name='RIAT', full='Royal International Air Tattoo', place='RAF Fairford, Gloucestershire', url='riat',
-         intro='Fairford is out in the Cotswolds, so getting here by bus takes a bit of planning. Both buses run between Highworth and Cirencester, and neither drops you at the gate. I would check the last bus back before you commit to it.',
-         buses=['76-riat', '77-riat']),
-    dict(k='cosford', name='Cosford', full='RAF Cosford Air Show', place='RAF Cosford, Shropshire', url='cosfordairshow',
-         intro='Cosford is the easy one for the train. The station sits right next to the airfield, about 300 metres from the show, and there are no show day buses to worry about. Just plan around the one train an hour each way.',
-         trains=[('Train to Cosford', 'West Midlands Railway', 'train-to-cosford', 'Birmingham to Shrewsbury trains stop at Cosford once an hour each way. About 18 minutes from Wolverhampton, with connections from London, Leeds, Cardiff and Manchester.', 'Cosford', 'About 5 to 10 minutes')],
-         buses=[]),
-    dict(k='midlands', name='Midlands', full='Midlands Air Festival', place='Ragley Hall, Warwickshire', url='midlandsairfestival',
-         intro='Ragley Hall is between Redditch and Evesham, which is exactly where the 247 runs. You get off by the estate and it’s about 15 minutes on foot from there.',
-         buses=['247-midlands']),
-    dict(k='eastbourne', name='Eastbourne', full='Eastbourne Airshow', place='Western Lawns, Eastbourne', url='eastbourneairshow',
-         intro='This is one of the easiest shows to get to without a car. The train drops you in the town centre, and buses come in from Brighton, Lewes and Hastings. If you want the shortest walk, the 3 takes you right down to Meads.',
-         trains=[('Trains to Eastbourne', 'Southern', 'train-to-eastbourne', 'From London Victoria every 30 minutes, about 1 hour 25 minutes. Coast trains come in from Brighton and Hastings too.', 'Eastbourne', '10 to 15 minutes')],
-         buses=['3-eastbourne', '12-eastbourne', '12x-eastbourne', '13x-eastbourne', '28-eastbourne', '25-eastbourne', '99-eastbourne']),
-    dict(k='clacton', name='Clacton', full='Clacton Air Show', place='West Greensward, Clacton', url='clactonairshow',
-         intro='Clacton has a direct train from London every hour, and Central Connect buses come in from all round Tendring and Colchester. Pick the bus from your nearest town and you won’t need to worry about parking on the seafront.',
-         trains=[('Train to Clacton', 'Greater Anglia', 'train-to-clacton', 'Direct from London Liverpool Street every hour, about 1 hour 26 minutes. Change at Colchester or Shenfield from other stations.', 'Clacton-on-Sea', '10 to 15 minutes')],
-         buses=['74-clacton', '74b-clacton', '76-clacton', '78-clacton', '2-clacton', '2a-clacton', '3-clacton', '4-clacton', '6-clacton', '6a-clacton', '7-clacton', '9-clacton', '9a-clacton', '98a-clacton']),
-    dict(k='wales', name='Wales', full='Wales Airshow', place='Swansea Bay', url='walesairshow',
-         intro='Please read this one before you travel. The seafront roads close on Airshow weekend, so these buses don’t always stop where they normally would. Each route page has my note on where to get off instead.',
-         buses=['1-wales', '2-wales', '2a-wales', '3a-wales', 'x1-wales']),
-    dict(k='duxford', name='Duxford', full='Duxford Air Shows', place='IWM Duxford, Cambridgeshire', url='duxfordairshows',
-         intro='The 132 is the one I would look at if you’re coming without a car. It picks up in Cambridge city centre and outside the railway station, then drops you right by Hangar 1.',
-         buses=['132-duxford']),
-    dict(k='headcorn', name='Headcorn', full='Headcorn Air Show', place='Headcorn Aerodrome, Kent', url='headcorn-air-show',
-         intro='Nice and simple. The 12 stops at the aerodrome itself, so you’re right by the show when you get off.',
-         buses=['12-headcorn']),
-    dict(k='shuttleworth', name='Shuttleworth', full='Shuttleworth Air Shows', place='Old Warden, Bedfordshire', url='shuttleworthairshows',
-         intro='Old Warden is a small village and no bus goes to the door. The 74 gets you closest, but it’s still about a 25 minute walk along country roads. That might work for you, but I would think about it with young children.',
-         buses=['74-shuttleworth']),
-    dict(k='gransden', name='Little Gransden', full='Little Gransden Air & Car Show', place='Little Gransden, Cambridgeshire', url='little-gransden-air-and-car-show',
-         intro='No route pages for this one. The airfield is out in the countryside with very few buses, so I would suggest driving or sharing a lift with others going. The forum is a good place to ask.',
-         buses=[]),
-    dict(k='southport', name='Southport', full='Southport Air Show', place='Southport beach and pier', url='southport-air-show',
-         intro='Lots of buses come into Southport from Liverpool, Preston, Wigan and St Helens. Most finish in the town centre, about 15 minutes on foot from the pier.',
-         buses=['47-southport', '300-southport', '44-southport', 'x2-southport', '2-southport', '347-southport', '375-southport', '385-southport', 'x37-southport', '37a-southport']),
-    dict(k='blackpool', name='Blackpool', full='Blackpool Air Show', place='Central Pier, Blackpool', url='blackpool-air-show',
-         intro='Most buses finish in the town centre, somewhere between 5 and 15 minutes from Central Pier. The 10 gets you closest, from the Central coach station.',
-         buses=['10-blackpool', '11-blackpool', '14-blackpool', '5c-blackpool', '61-blackpool', '68-blackpool', '42-blackpool']),
-    dict(k='ayr', name='Ayr', full='International Ayr Show', place='Low Green, Ayr', url='international-ayr-show',
-         intro='Buses come in from Glasgow and from round Ayrshire. The 9, 42 and X42 stop closest, about 6 minutes from Low Green.',
-         buses=['x77-ayr', '4-ayr', '9-ayr', '42-ayr', 'x42-ayr']),
-]
+# ---- topics, straight from the show pages
+topics = json.loads(subprocess.check_output(['node', os.path.join(HERE, 'extract.js'), ROOT]).decode())
 
-def e(s): return html.escape(s, quote=True)
-
-def stop_of(r):
-    lead = r['lead']
-    m = re.search(r'closest stop is (.+?), about', lead) or re.search(r'get off at (.+?), which', lead)
-    if r['id'].endswith('-wales'): return 'Check my note first'
-    if r['id'] == '132-duxford': return 'Right by Hangar 1'
-    return m.group(1) if m else r['targetLabel']
-
-def walk_of(r):
-    m = re.search(r'about (\d+) minutes', r['walk'])
-    return f'About {m.group(1)} minutes' if m else 'Right by the show'
-
-def from_to(r):
-    t = r['title']
-    m = re.match(r'Bus \S+, (.+?) for the', t)
-    if m: return m.group(1)
-    m = re.match(r'Bus \S+ (to .+?) for the', t)
-    return m.group(1)[0].upper() + m.group(1)[1:] if m else ''
+# ---- bus route buttons per show (counts) and the town search list
+brjs = open('bus-routes.js', encoding='utf8').read()
+BR = json.loads(re.search(r'var MAP = (\{.*?\});\n', brjs, re.S).group(1))
+SHOWNAME = {s[0]: s[1] for s in SHOWS}
+find = []
+for f in sorted(glob.glob('bus-routes/*.html')):
+    rid = os.path.basename(f)[:-5]
+    if rid == 'index': continue
+    show = rid.split('-', 1)[1]
+    if show not in SHOWNAME: continue
+    h = open(f, encoding='utf8').read()
+    g = lambda k: (re.search(r'"%s"\s*:\s*"((?:[^"\\]|\\.)*)"' % k, h) or [None, ''])[1]
+    title = re.search(r'<title>([^<|]*)', h).group(1).strip()
+    m = re.match(r'Bus \S+, (.+?) for the', title) or re.match(r'Bus \S+ (to .+?) for the', title)
+    ft = m.group(1) if m else ''
+    ft = ft[0].upper() + ft[1:] if ft else ''
+    lead = g('lead')
+    sm = re.search(r'closest stop is (.+?), about', lead) or re.search(r'get off at (.+?), which', lead)
+    op = g('operator'); c = col(op)
+    find.append(dict(id=rid, num=g('num'), ft=ft, op=op, stop=sm.group(1) if sm else '', show=SHOWNAME[show], c1=c[0], c2=c[1], ink=c[2]))
 
 data = []
-for s in SHOWS:
-    buses = []
-    for bid in s['buses']:
-        r = ROUTES[bid]
-        c = col(r['op'])
-        buses.append(dict(id=bid, num=r['num'], ft=from_to(r), op=r['op'], stop=stop_of(r), walk=walk_of(r),
-                          to=r['targetLabel'], c1=c[0], c2=c[1], ink=c[2]))
-    trains = [dict(t=t[0], op=t[1], url=SITE + t[2], blurb=t[3], st=t[4], walk=t[5]) for t in s.get('trains', [])]
-    data.append(dict(k=s['k'], name=s['name'], full=s['full'], place=s['place'], url=SITE + s['url'],
-                     intro=s['intro'], buses=buses, trains=trains))
+for k, name, full, place, slug, intro in SHOWS:
+    page = open('camping-layout/%s.html' % k, encoding='utf8').read()
+    tb = re.search(r"t\.id==='([a-z-]+)'\?'(<div class=\"tr-box\">.*?</a></div>)':''", page)
+    train_page = ''
+    if tb:
+        train_page = re.search(r'ukairshowguide\.co\.uk/([a-z-]+)', tb.group(2)).group(1)
+    items = []
+    for t in topics.get(k, []):
+        if not t.get('id'): continue
+        g = group_of(t['id'])
+        if not g: continue
+        it = {x: t[x] for x in ('id', 'name', 'sub', 'title', 'text', 'place', 'route', 'areas', 'areasTitle', 'warn', 'arrive', 'walk', 'meta', 'off', 'opt') if t.get(x)}
+        it['g'] = g
+        if tb and t['id'] == tb.group(1):
+            it['train'] = tb.group(2).replace("\\'", "'")
+        items.append(it)
+    items.sort(key=lambda t: GROUP_ORDER.index(t['g']))
+    groups = []
+    for gname in GROUP_ORDER:
+        gi = [{'id': t['id']} for t in items if t['g'] == gname]
+        if gi: groups.append({'name': gname, 'items': [t for t in items if t['g'] == gname]})
+    buses = sorted({b[1] for lst in BR.get(k, {}).values() for b in lst})
+    ops = sorted({b[3] for lst in BR.get(k, {}).values() for b in lst})
+    station = ''
+    for t in items:
+        if t['g'] == 'By train':
+            station = next((m[1] for m in t.get('meta', []) if m[0].lower() == 'station'), '') or re.sub(r'^Train to ', '', t['name'])
+            break
+    facts = [['Showground', place, 'By road']]
+    if station: facts.append(['Nearest station', station, 'By train'])
+    facts.append(['Bus route pages', ('%d buses' % len(buses)) if buses else 'None for this show', 'By bus'])
+    if ops: facts.append(['Bus companies', ', '.join(ops) if len(ops) < 3 else '%d companies' % len(ops), 'By bus'])
+    facts.append(['Train route page', 'Yes, with live times' if train_page else 'Not yet', 'By train'])
+    if any(t['g'] == 'Park and Ride' for t in items):
+        pr = [t for t in items if t['g'] == 'Park and Ride'][0]
+        facts.append(['Park and Ride', pr['sub'], 'Park and Ride'])
+    data.append(dict(k=k, name=name, full=full, place=place, url=SITE + slug, intro=intro, trainPage=train_page,
+                     count=len(items), items=items,
+                     groups=groups, facts=facts[:5],
+                     tag='Before you go',
+                     status='<b>I would always check the last bus or train home before you set off.</b> Roads near the show can close on the day, so stops may move. Each option below says where I would get off, and the route pages show every stop.',
+                     note='I have only listed trains, buses and coaches here. Driving, parking and taxis are on the full show guide.'))
 
-nb = sum(len(s['buses']) for s in data)
-nt = sum(len(s['trains']) for s in data)
-nshow = sum(1 for s in data if s['buses'] or s['trains'])
-ops = sorted({b['op'] for s in data for b in s['buses']})
-
-import sys
-OUT = sys.argv[1] if len(sys.argv) > 1 else 'index.html'
-tpl = open('template.html').read()
-out = (tpl.replace('__DATA__', json.dumps(data, ensure_ascii=False))
-          .replace('__NB__', str(nb)).replace('__NT__', str(nt)).replace('__NSHOW__', str(nshow))
-          .replace('__NOPS__', str(len(ops)))
-          .replace('__IMG__', sys.argv[2] if len(sys.argv) > 2 else 'img/seafront-crowd.webp'))
-open(OUT, 'w').write(out)
-print(nb, nt, nshow, len(ops))
+# ---- page
+parts = os.path.join(HERE, 'parts')
+rd = lambda n: open(os.path.join(parts, n), encoding='utf8').read()
+tpl = open(os.path.join(HERE, 'template.html'), encoding='utf8').read()
+nb = len(find)
+nt = sum(1 for s in data if s['trainPage'])
+out = (tpl.replace('__MAIN_CSS__', rd('main1.css') + '\n' + rd('main2.css'))
+          .replace('__MC__', rd('mc.html')).replace('__CL__', rd('cl.html'))
+          .replace('__DL__', rd('dl.html')).replace('__AR__', rd('ar.html')).replace('__RICON__', rd('ricon.js'))
+          .replace('__SHOWS__', json.dumps(data, ensure_ascii=False).replace('</', '<\\/'))
+          .replace('__FIND__', json.dumps(find, ensure_ascii=False))
+          .replace('__FAQ__', json.dumps(FAQ, ensure_ascii=False))
+          .replace('__NSHOW__', str(len(data))).replace('__NB__', str(nb)).replace('__NT__', str(nt))
+          .replace('__IMG__', 'public-transport-img/seafront-crowd.webp'))
+mf = re.search(r'<!-- mobile-fit.*?<!-- /mobile-fit -->', open('airshow-security.html', encoding='utf8').read(), re.S)
+if mf: out = out.replace('</body>', mf.group(0) + '\n</body>')
+open('public-transport.html', 'w', encoding='utf8').write(out)
+print('shows', len(data), 'topics', sum(s['count'] for s in data), 'buses', nb, 'train pages', nt)
+for s in data: print(' ', s['k'], s['count'], [g['name'] for g in s['groups']], s['trainPage'])
