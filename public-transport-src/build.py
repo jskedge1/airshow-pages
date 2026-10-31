@@ -138,21 +138,22 @@ for k, name, full, place, slug, intro in SHOWS:
                      note='I have only listed trains, buses and coaches here. Driving, parking and taxis are on the full show guide.'))
 
 # ---- page
-parts = os.path.join(HERE, 'parts')
-rd = lambda n: open(os.path.join(parts, n), encoding='utf8').read()
+LINE = ['#D74949', '#00A6E2', '#2BA84A', '#F2B233', '#6950A1', '#32B4AF', '#C2255C', '#1D4F91', '#E07A1F', '#0E5F5B', '#8A6D3B', '#13293C']
+for i, s in enumerate(data): s['lc'] = LINE[i % len(LINE)]
+SVG = lambda d: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' + d + '</svg>'
 tpl = open(os.path.join(HERE, 'template.html'), encoding='utf8').read()
 nb = len(find)
 nt = sum(1 for s in data if s['trainPage'])
-out = (tpl.replace('__MAIN_CSS__', rd('main1.css') + '\n' + rd('main2.css'))
-          .replace('__MC__', rd('mc.html')).replace('__CL__', rd('cl.html'))
-          .replace('__DL__', rd('dl.html')).replace('__AR__', rd('ar.html')).replace('__RICON__', rd('ricon.js'))
-          .replace('__SHOWS__', json.dumps(data, ensure_ascii=False).replace('</', '<\\/'))
+out = (tpl.replace('__SHOWS__', json.dumps(data, ensure_ascii=False).replace('</', '<\\/'))
           .replace('__FIND__', json.dumps(find, ensure_ascii=False))
           .replace('__FAQ__', json.dumps(FAQ, ensure_ascii=False))
           .replace('__NSHOW__', str(len(data))).replace('__NB__', str(nb)).replace('__NT__', str(nt))
+          .replace('__ICON_PLAN__', SVG('<circle cx="6" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.5" fill="#D74949"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 2"/>'))
+          .replace('__ICON_TICKET__', SVG('<path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 5v14" stroke="currentColor" stroke-width="2" stroke-dasharray="2 2"/>'))
+          .replace('__ICON_PIN__', SVG('<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/>'))
           .replace('__IMG__', 'public-transport-img/seafront-crowd.webp'))
 mf = re.search(r'<!-- mobile-fit.*?<!-- /mobile-fit -->', open('airshow-security.html', encoding='utf8').read(), re.S)
 if mf: out = out.replace('</body>', mf.group(0) + '\n</body>')
 open('public-transport.html', 'w', encoding='utf8').write(out)
 print('shows', len(data), 'topics', sum(s['count'] for s in data), 'buses', nb, 'train pages', nt)
-for s in data: print(' ', s['k'], s['count'], [g['name'] for g in s['groups']], s['trainPage'])
+

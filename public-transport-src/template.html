@@ -15,269 +15,559 @@
 <meta name="twitter:card" content="summary_large_image">
 <!-- /seo -->
 <!--
-  PUBLIC TRANSPORT TO UK AIRSHOWS
-  Built by public-transport-src/build.py. The Getting there section of every featured show page,
-  public transport topics only, one show at a time, in the Clacton transport design (explore-designs.js, 'mix').
-  Topics, bus route buttons (bus-routes.js), times (transport-times.js) and train boxes come from the show pages,
-  so a rebuild picks up any change made there.
+  PUBLIC TRANSPORT TO UK AIRSHOWS: journey planner layout (31 Oct 2026).
+  Built by public-transport-src/build.py. Topics come from each show page's Getting there section,
+  route buttons from bus-routes.js and times from transport-times.js, so a rebuild picks up changes.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-__MAIN_CSS__
-</style>
-__MC__
-__CL__
-<style id="pt-css">
-html,body{scrollbar-width:none;-ms-overflow-style:none}
+:root{
+  --navy:#13293C;--navy-2:#1C3850;--deep:#0B1A27;--ink:#14212C;--soft:#4A5C6B;--line:#DCE4EA;--mist:#F3F6F8;--paper:#fff;
+  --teal:#32B4AF;--teal-ink:#0E5F5B;--sky:#00A6E2;--sky-ink:#006F99;--red:#D74949;--amber:#F2B233;--purple:#6950A1;
+  --train:#D74949;--bus:#00A6E2;--coach:#C2255C;--pr:#2BA84A;--walk:#6B7C89;
+  --r:14px;--r-s:10px;--ease:cubic-bezier(.22,.61,.36,1);
+  --f:"Barlow",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--c:"Barlow Condensed","Barlow",Arial Narrow,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
-body .panel#travel{display:block}
-.cg-bg img.photo{pointer-events:none}
-/* show tabs: the feature page chapter bar, one tab per show */
-body .tabbar .tab small{display:inline-block;margin-left:8px;font:700 12px/1 "Barlow",sans-serif;background:rgba(255,255,255,.12);color:#8FDCD8;padding:3px 7px;transition:background .3s,color .3s}
-body .tabbar .tab[aria-selected="true"]{background:var(--teal)!important;padding-left:22px!important;padding-right:22px!important}
-body .tabbar .tab[aria-selected="true"] small{background:#13293C;color:#fff}
-@media(min-width:1101px){body .tabbar .tablist{flex-wrap:wrap;overflow:visible}}
-/* find your bus by town */
-.pt-find{background:#fff;padding:44px 0 6px}
-.pt-find .fbar{border-left:5px solid var(--sky);margin:0}
-.pt-find label b{display:block;font:700 19px/1.2 "Barlow",sans-serif;color:var(--navy)}
-.pt-find label small{display:block;font:500 15px/1.4 "Barlow",sans-serif;color:#41586B;margin-top:2px}
-.pt-find .pt-box{display:flex;align-items:center;background:#fff;border:2px solid var(--navy);min-width:min(360px,100%)}
-.pt-find input{flex:1;min-width:0;border:0;padding:11px 12px;font:500 16px "Barlow",sans-serif;color:var(--navy);background:transparent}
-.pt-find input:focus{outline:none}
-.pt-find .pt-box:focus-within{outline:3px solid var(--sky);outline-offset:2px}
-.pt-find input::-webkit-search-cancel-button{display:none}
-.pt-find .pt-clear{all:unset;cursor:pointer;padding:0 12px;font:600 15px "Barlow",sans-serif;color:var(--sky-ink)}
-.pt-res{margin-top:10px}
-.pt-res[hidden]{display:none}
-.pt-res .pt-res-h{font:600 15px/1.4 "Barlow",sans-serif;color:var(--navy);margin:0 0 8px}
-.pt-res .br-btn .pt-show{display:block;font-weight:500;font-size:12px;opacity:.85}
-/* ways to arrive header + FAQ */
-#travel .options{padding-bottom:0}
-#travel .acc{margin-bottom:72px}
-.pt-end{background:var(--pale);padding:56px 0 72px}
-.pt-end h2{font:800 clamp(34px,4vw,52px)/.95 var(--cond)!important;color:var(--red);margin-bottom:22px}
-.pt-more{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap)}
-.pt-more a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px;background:#fff;text-decoration:none;font:700 17px/1.25 "Barlow",sans-serif;color:var(--navy);border-left:5px solid var(--teal);transition:background .3s var(--ease),padding .3s var(--ease)}
-.pt-more a:hover{background:var(--teal-wash);padding-left:24px}
-.pt-more a i{font-style:normal;color:var(--teal-ink)}
-@media(max-width:900px){.pt-more{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.pt-more{grid-template-columns:1fr}.pt-find .fbar{flex-direction:column;align-items:stretch}}
-.pt-foot{background:var(--navy-deep);color:#C9D6E0;font:500 15px/1.6 "Barlow",sans-serif;padding:24px 0}
-.pt-foot a{color:#fff}
+html{scroll-behavior:smooth;background:var(--mist)}
+body{font-family:var(--f);font-size:17px;line-height:1.6;color:var(--ink);background:var(--mist);-webkit-font-smoothing:antialiased;overflow-x:clip}
+h1,h2,h3,h4,p,ol,ul{margin:0}
+a{color:inherit}
+img{display:block;max-width:100%;pointer-events:none;user-select:none}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-left,0px))}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+svg.i{width:1em;height:1em;flex:none}
+
+/* ---------- top strip ---------- */
+.topbar{background:var(--navy);color:#fff}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;font-weight:600;font-size:15px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.roundel{width:30px;height:30px;border-radius:50%;border:5px solid var(--red);position:relative;flex:none}
+.roundel:after{content:"";position:absolute;left:-9px;right:-9px;top:50%;height:7px;margin-top:-3.5px;background:var(--sky);border-radius:2px}
+.brand b{font-family:var(--c);font-size:21px;letter-spacing:.01em}
+.brand span{color:#9FC3D6;font-weight:500}
+.crumb{display:flex;gap:8px;align-items:center;color:#C9D8E3;font-weight:500}
+.crumb a{color:#fff;text-underline-offset:4px}
+@media(max-width:640px){.crumb{display:none}.brand span:not(.roundel){display:none}}
+
+/* ---------- hero with planner ---------- */
+.hero{position:relative;overflow:hidden;background:var(--navy);color:#fff;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%;z-index:-2}
+.hero:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,rgba(11,26,39,.92) 0%,rgba(11,26,39,.72) 46%,rgba(11,26,39,.25) 100%)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:36px 56px;align-items:center;padding-top:64px;padding-bottom:72px}
+.hero h1{font-family:var(--c);font-weight:800;font-size:clamp(44px,6vw,76px);line-height:.95;letter-spacing:.005em}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.hero .sub{margin-top:18px;font-size:19px;line-height:1.55;color:#E3ECF2;max-width:52ch}
+.hero .stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.hero .stats span{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 14px;font-weight:600;font-size:15px;backdrop-filter:blur(4px)}
+.hero .stats i{width:10px;height:10px;border-radius:50%;background:var(--c1)}
+
+.planner{background:#fff;color:var(--ink);border-radius:var(--r);box-shadow:0 26px 60px -24px rgba(0,0,0,.55);overflow:hidden}
+.planner-h{display:flex;align-items:center;gap:12px;padding:18px 22px;background:var(--mist);border-bottom:1px solid var(--line)}
+.planner-h .ic{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:20px}
+.planner-h b{display:block;font-size:20px;line-height:1.2}
+.planner-h small{display:block;color:var(--soft);font-weight:500;font-size:14.5px}
+.pform{padding:20px 22px 22px;display:grid;gap:16px}
+.field label,.field .lb{display:block;font-weight:600;font-size:15px;color:var(--navy);margin-bottom:6px}
+.inp{display:flex;align-items:center;gap:10px;border:2px solid #C3D1DB;border-radius:var(--r-s);padding:0 12px;background:#fff;transition:border-color .2s}
+.inp:focus-within{border-color:var(--navy)}
+.inp .dot{width:12px;height:12px;border-radius:50%;flex:none;border:3px solid var(--navy)}
+.inp .dot.to{background:var(--red);border-color:var(--red)}
+.inp select,.inp input{flex:1;min-width:0;border:0;background:transparent;padding:12px 0;font-size:17px;font-weight:600;outline:none;appearance:none;-webkit-appearance:none}
+.inp input::-webkit-search-cancel-button,.inp input::-webkit-calendar-picker-indicator{display:none!important;-webkit-appearance:none}
+.inp input::placeholder{color:#7D8F9C;font-weight:500}
+.inp .chev{color:var(--soft)}
+.inp button{all:unset;cursor:pointer;color:var(--sky-ink);font-weight:600;font-size:14px}
+.inp button[hidden]{display:none}
+.modes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.modes button{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;border:2px solid var(--line);border-radius:var(--r-s);padding:8px 4px 7px;font-weight:600;font-size:13.5px;line-height:1.2;color:var(--navy);transition:border-color .2s,background .2s,color .2s}
+.modes button .mi{display:grid;place-items:center;width:30px;height:30px;margin:0 auto 4px;border-radius:50%;background:var(--mist);color:var(--m,#13293C);font-size:17px;transition:background .2s,color .2s}
+.modes button:hover{border-color:#B8C7D2}
+.modes button[aria-pressed="true"]{border-color:var(--m,#13293C);background:color-mix(in srgb,var(--m,#13293C) 8%,#fff)}
+.modes button[aria-pressed="true"] .mi{background:var(--m,#13293C);color:#fff}
+.go{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--red);color:#fff;border-radius:var(--r-s);padding:14px 18px;font-weight:700;font-size:18px;transition:background .2s,transform .2s}
+.go:hover{background:#BF3B3B;transform:translateY(-1px)}
+.pnote{font-size:14px;color:var(--soft);font-weight:500;margin-top:-4px}
+
+/* ---------- show status board (TfL style) ---------- */
+.board{margin-top:-34px;position:relative;z-index:2}
+.board-in{background:#fff;border-radius:var(--r);box-shadow:0 14px 34px -22px rgba(19,41,60,.45);padding:18px 18px 14px}
+.board-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:0 4px 12px}
+.board-h h2{font-size:20px;color:var(--navy)}
+.board-h p{font-size:15px;color:var(--soft);font-weight:500}
+.lines{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.line{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:8px minmax(0,1fr) auto;align-items:center;gap:0 12px;border:1px solid var(--line);border-radius:var(--r-s);overflow:hidden;background:#fff;transition:box-shadow .25s var(--ease),transform .25s var(--ease),background .2s}
+.line .bar{align-self:stretch;background:var(--lc)}
+.line .nm{padding:10px 0}
+.line .nm b{display:block;font-size:16.5px;line-height:1.2}
+.line .nm small{display:flex;gap:5px;align-items:center;margin-top:4px;color:var(--soft);font-size:13px;font-weight:500}
+.line .md{width:9px;height:9px;border-radius:50%;display:inline-block}
+.line .ct{margin-right:12px;min-width:30px;height:30px;border-radius:999px;background:var(--mist);display:grid;place-items:center;font-weight:700;font-size:14px;color:var(--navy)}
+.line:hover{box-shadow:0 10px 22px -16px rgba(19,41,60,.6);transform:translateY(-2px)}
+.line[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.line[aria-pressed="true"] small{color:#B9CEDC}
+.line[aria-pressed="true"] .ct{background:var(--teal);color:var(--navy)}
+@media(max-width:980px){.lines{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:720px){.lines{grid-template-columns:repeat(2,minmax(0,1fr))}.line .nm small .lt{display:none}.line .ct{margin-right:8px}}
+@media(max-width:380px){.lines{grid-template-columns:1fr}}
+
+/* ---------- results ---------- */
+.res{padding:40px 0 20px}
+.res-h{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 30px;align-items:end;margin-bottom:18px}
+.res-h .kick{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:var(--sky-ink);margin-bottom:6px}
+.res-h h2{font-family:var(--c);font-weight:800;font-size:clamp(34px,4.4vw,52px);line-height:1;color:var(--navy)}
+.res-h p{margin-top:10px;max-width:68ch;color:#2C3D4A}
+.res-h .guide{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;text-decoration:none;font-weight:700;color:var(--navy);border:2px solid var(--navy);border-radius:999px;padding:10px 18px;background:#fff;transition:background .2s,color .2s}
+.res-h .guide:hover{background:var(--navy);color:#fff}
+.alert{display:flex;gap:14px;align-items:flex-start;background:#FFF6E0;border:1px solid #F3D48A;border-left:6px solid var(--amber);border-radius:var(--r-s);padding:14px 16px;margin-bottom:22px;font-size:16px}
+.alert .ai{width:28px;height:28px;border-radius:50%;background:var(--amber);color:var(--navy);display:grid;place-items:center;font-weight:800;flex:none}
+.alert b{color:var(--navy)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,380px);gap:24px;align-items:start}
+@media(max-width:1020px){.layout{grid-template-columns:1fr}}
+.filters{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px}
+.filters span{font-weight:600;font-size:15px;color:var(--soft);margin-right:2px}
+.chip{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:600;font-size:14.5px;color:var(--navy);transition:background .2s,border-color .2s,color .2s}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--m,#13293C)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.townnote{display:none;margin-bottom:12px;background:#E6F6FD;border:1px solid #B7E3F6;border-radius:var(--r-s);padding:10px 14px;font-size:15px;font-weight:500}
+.townnote.on{display:block}
+
+/* option cards */
+.opts{display:grid;gap:12px}
+.opt{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:box-shadow .3s var(--ease),border-color .3s}
+.opt:hover{box-shadow:0 14px 28px -22px rgba(19,41,60,.6)}
+.opt.open{border-color:var(--m);box-shadow:0 0 0 2px var(--m),0 18px 34px -24px rgba(19,41,60,.6)}
+.opt.dim{opacity:.55}
+.oh{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:52px minmax(0,1fr) auto 32px;gap:4px 16px;align-items:center;padding:16px 18px}
+.mode-r{width:52px;height:52px;border-radius:50%;background:var(--m);color:#fff;display:grid;place-items:center;font-size:25px;grid-row:1/3}
+.oh .t{font-weight:700;font-size:19px;line-height:1.25;color:var(--navy)}
+.oh .t .opt-l{display:inline-block;vertical-align:2px;margin-right:8px;font-size:12.5px;font-weight:700;background:var(--mist);color:var(--soft);border-radius:6px;padding:2px 7px}
+.oh .s{grid-column:2;font-size:15px;color:var(--soft);font-weight:500;line-height:1.35}
+.legs{grid-column:2;display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:6px}
+.leg{display:inline-flex;align-items:center;gap:5px;border-radius:6px;padding:3px 8px;font-size:13px;font-weight:700;color:#fff;background:var(--lg)}
+.leg.walk{background:#fff;color:var(--walk);border:1px dashed #A8B6C0}
+.legs .ar{color:#A3B1BC;font-size:13px}
+.key{grid-row:1/3;grid-column:3;text-align:right}
+.key b{display:block;font-size:17px;line-height:1.2;color:var(--navy)}
+.key small{display:block;font-size:13px;color:var(--soft);font-weight:500}
+.tw{grid-row:1/3;grid-column:4;width:32px;height:32px;border-radius:50%;background:var(--mist);display:grid;place-items:center;transition:transform .3s var(--ease),background .2s}
+.opt.open .tw{transform:rotate(180deg);background:var(--m);color:#fff}
+.townhit{grid-column:2;display:inline-flex;width:max-content;margin-top:6px;font-size:12.5px;font-weight:700;background:#E6F6FD;color:var(--sky-ink);border-radius:6px;padding:2px 8px}
+@media(max-width:640px){
+  .oh{grid-template-columns:44px minmax(0,1fr) 30px;padding:14px}
+  .mode-r{width:44px;height:44px;font-size:21px}
+  .key{grid-row:auto;grid-column:2;text-align:left;margin-top:6px}
+  .tw{grid-column:3}
+}
+.ob{display:none;border-top:1px solid var(--line)}
+.opt.open .ob{display:block}
+.otabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);padding:0 10px}
+.otabs::-webkit-scrollbar{display:none}
+.otabs button{all:unset;cursor:pointer;flex:none;padding:13px 14px 11px;font-weight:600;font-size:15.5px;color:var(--soft);border-bottom:4px solid transparent;transition:color .2s,border-color .2s}
+.otabs button[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--m)}
+.pane{padding:20px 22px 22px}
+.pane[hidden]{display:none}
+.lead{color:#2C3D4A}
+/* journey steps */
+.steps{list-style:none;padding:0;margin:16px 0 0;position:relative}
+.steps li{position:relative;display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;padding-bottom:14px}
+.steps li:before{content:"";position:absolute;left:17px;top:34px;bottom:-2px;width:4px;background:var(--sc);border-radius:2px}
+.steps li.walk:before{background:repeating-linear-gradient(var(--walk) 0 6px,transparent 6px 11px)}
+.steps li:last-child:before{display:none}
+.steps .sn{width:38px;height:38px;border-radius:50%;background:#fff;border:4px solid var(--sc);display:grid;place-items:center;color:var(--sc);font-size:17px;position:relative;z-index:1}
+.steps .sx b{display:block;font-size:17px;line-height:1.3;color:var(--navy)}
+.steps .sx span{display:block;font-size:13px;font-weight:700;color:var(--sc)}
+.steps .sx p{margin-top:2px;font-size:15.5px;line-height:1.5;color:#33444F}
+.steps .sx a{display:inline-flex;margin-top:6px;font-size:14px;font-weight:700;color:var(--sky-ink);text-underline-offset:3px}
+.warn{margin-top:14px;display:flex;gap:10px;background:#FDECEC;border-left:5px solid var(--red);border-radius:8px;padding:12px 14px;font-size:15.5px}
+.warn b{color:var(--red)}
+/* departure board (Stagecoach / National Rail style) */
+.dtabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.dtabs button{all:unset;cursor:pointer;border-radius:999px;padding:7px 13px;font-weight:600;font-size:14px;background:var(--mist);color:var(--navy)}
+.dtabs button[aria-selected="true"]{background:var(--navy);color:#fff}
+.dboard{background:#0D1218;border-radius:var(--r-s);overflow:hidden;color:#F4C542}
+.dboard .dh{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:10px;padding:10px 14px;background:#1A222B;color:#9FB0BE;font-weight:600;font-size:13px}
+.drow{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid #1E2A35;font-family:"Barlow",monospace}
+.drow .tm{font-weight:700;font-size:18px;color:#F4C542;font-variant-numeric:tabular-nums}
+.drow .sv{color:#fff;font-weight:600;font-size:15px;line-height:1.35}
+.drow .sv small{display:block;color:#9FB0BE;font-weight:500;font-size:13px}
+.drow button{all:unset;cursor:pointer;border:1px solid #3B4A57;border-radius:999px;padding:5px 11px;color:#DCE7EF;font-weight:600;font-size:13px;white-space:nowrap;transition:background .2s,color .2s}
+.drow button:hover{background:#F4C542;color:#0D1218;border-color:#F4C542}
+.drow button[aria-pressed="true"]{background:var(--teal);color:#0D1218;border-color:var(--teal)}
+.dnote{font-size:13.5px;color:var(--soft);margin-top:8px;line-height:1.5}
+@media(max-width:560px){.dboard .dh{display:none}.drow{grid-template-columns:70px minmax(0,1fr)}.drow button{grid-column:2;width:max-content}}
+/* route maps: the site's own bus and train buttons */
+.maps .br-box,.maps .tr-box{margin:0 0 12px!important;border-radius:var(--r-s)}
+.maps .tr-box{border:1px solid var(--line);border-left:5px solid #D2232A;padding:16px 18px 18px;background:#fff}
+.maps .tr-box h4{font-family:var(--c);font-size:22px;color:var(--navy);text-transform:none}
+.maps .tr-box p{font-size:15px;color:#33444F;margin:6px 0 12px}
+.maps a.tr-btn{display:inline-flex;align-items:stretch;background:#2E3236;color:#fff;text-decoration:none;font-weight:600;font-size:15px;line-height:20px;border-radius:6px;overflow:hidden;transition:transform .3s var(--ease)}
+.maps a.tr-btn:hover{transform:translateY(-2px)}
+.maps .tr-ic{display:flex;align-items:center;justify-content:center;width:44px;background:#D2232A}.maps .tr-ic svg{width:22px;height:22px}
+.maps .tr-txt{display:flex;flex-direction:column;justify-content:center;padding:9px 14px}.maps .tr-txt small{font-weight:500;font-size:12.5px;color:#C9D2DA}
+.maps a.tr-btn i{font-style:normal;display:flex;align-items:center;padding:0 12px 0 2px}
+.none{color:var(--soft);font-size:15.5px}
+/* tips */
+.tips{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tips div{background:var(--mist);border-radius:var(--r-s);padding:14px 16px}
+.tips h4{font-size:15px;color:var(--m);margin-bottom:4px}
+.tips p{font-size:15.5px;line-height:1.55;color:#2C3D4A}
+.facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.facts span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px;color:var(--soft);font-weight:500}
+.facts b{color:var(--navy)}
+@media(max-width:600px){.tips{grid-template-columns:1fr}}
+.oacts{display:flex;flex-wrap:wrap;gap:8px;padding:14px 22px 18px;border-top:1px solid var(--line);background:#FBFCFD}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 16px;font-weight:700;font-size:15px;text-decoration:none;transition:background .2s,color .2s,transform .2s}
+.btn.pri{background:var(--navy);color:#fff}.btn.pri:hover{background:var(--navy-2);transform:translateY(-1px)}
+.btn.pri[aria-pressed="true"]{background:var(--teal);color:var(--navy)}
+.btn.sec{background:#fff;color:var(--navy);border:2px solid var(--line)}.btn.sec:hover{border-color:var(--navy)}
+
+/* side: plan + map */
+.side{display:grid;gap:16px;position:sticky;top:16px}
+@media(max-width:1020px){.side{position:static}}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.card-h{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--navy);color:#fff}
+.card-h b{font-size:18px}
+.card-h small{margin-left:auto;font-size:13px;color:#B9CEDC;font-weight:600}
+.plan-b{padding:16px 18px}
+.plan-empty{color:var(--soft);font-size:15.5px}
+.ticket{border:2px dashed #C3D1DB;border-radius:var(--r-s);padding:12px 14px;position:relative;background:linear-gradient(90deg,var(--mist),#fff)}
+.ticket .tt{font-size:13px;font-weight:600;color:var(--soft)}
+.ticket .tv{font-weight:700;font-size:17px;color:var(--navy);line-height:1.3}
+.ticket+.ticket{margin-top:8px}
+.picked{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.picked li{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:8px;align-items:center;background:var(--mist);border-radius:8px;padding:8px 10px;font-size:14.5px}
+.picked li b{font-variant-numeric:tabular-nums;color:var(--navy)}
+.picked li small{display:block;color:var(--soft);font-size:12.5px}
+.picked li button{all:unset;cursor:pointer;color:var(--red);font-weight:700;font-size:13px}
+.checks{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:4px}
+.checks label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:15px;line-height:1.4;padding:5px 0}
+.checks input{width:20px;height:20px;margin-top:1px;accent-color:var(--teal);flex:none}
+.checks input:checked+span{color:var(--soft);text-decoration:line-through}
+.plan-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.plan-acts .btn{padding:9px 14px;font-size:14px}
+.copied{font-size:13.5px;color:var(--teal-ink);font-weight:600;align-self:center;opacity:0;transition:opacity .3s}
+.copied.on{opacity:1}
+.map iframe{display:block;width:100%;height:260px;border:0;background:#E4ECF0}
+.map .mb{display:flex;justify-content:space-between;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--navy)}
+.map .mb a{color:var(--sky-ink)}
+
+/* town results */
+.townres{margin-top:24px}
+.townres[hidden]{display:none}
+.townres .br-box{border-radius:var(--r)}
+
+/* faq */
+.faq{padding:36px 0 56px}
+.faq h2{font-family:var(--c);font-weight:800;font-size:clamp(30px,3.6vw,42px);color:var(--navy);margin-bottom:14px}
+.qa{display:grid;gap:8px}
+.qa details{background:#fff;border:1px solid var(--line);border-radius:var(--r-s)}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;font-weight:700;font-size:17.5px;color:var(--navy)}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary:after{content:"+";width:28px;height:28px;border-radius:50%;background:var(--mist);display:grid;place-items:center;font-size:20px;flex:none;transition:transform .3s var(--ease)}
+.qa details[open] summary:after{transform:rotate(45deg);background:var(--navy);color:#fff}
+.qa .a{padding:0 18px 18px;color:#2C3D4A;max-width:75ch}
+.more{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:30px}
+.more a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px;background:#fff;border:1px solid var(--line);border-radius:var(--r-s);text-decoration:none;font-weight:700;color:var(--navy);transition:border-color .2s,transform .2s}
+.more a:hover{border-color:var(--navy);transform:translateY(-2px)}
+@media(max-width:900px){.more{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.more{grid-template-columns:1fr}}
+footer{background:var(--deep);color:#C4D2DC;font-size:15px;padding:22px 0}
+footer a{color:#fff}
+
+@media(max-width:900px){
+  .hero .wrap{grid-template-columns:1fr;padding-top:40px;padding-bottom:64px}
+  .res-h{grid-template-columns:1fr}
+}
+@media(max-width:520px){.modes{grid-template-columns:repeat(3,minmax(0,1fr))}.pform,.planner-h{padding-left:16px;padding-right:16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  .topbar,.hero,.board,.res-h,.alert,.filters,.opts,.map,.faq,footer,.plan-acts{display:none!important}
+  body{background:#fff}.layout{display:block}.side{position:static}
+}
 </style>
-__DL__
 </head>
 <body>
 
-<header class="cg-hero" id="top">
-  <div class="cg-bg"><img class="photo" src="__IMG__" alt="Families in camping chairs on the seafront lawns watching an airshow, with the pier behind"></div>
-  <div class="wrap cg-in">
-    <p class="cg-crumb"><a href="https://www.ukairshowguide.co.uk/" target="_top">Home</a><span>/</span><a href="https://www.ukairshowguide.co.uk/first-airshow-getting-there" target="_top">Getting there</a><span>/</span>Public transport</p>
-    <span class="cg-tag">Travel guide</span>
-    <h1 class="cg-title">Airshows By Bus And Train</h1>
-    <p class="cg-red">Every bus and train I have mapped, show by show</p>
-    <p class="cg-sub">Leave the car at home. Pick your show below and you get the same getting there guide as on the show page, just the trains, buses and coaches. I would always check the last bus or train home before you set off, as that is the one that catches people out.</p>
-  </div>
-  <div class="wrap cg-planbar">
-    <div class="cg-glass"><div><span>Shows covered</span><b>__NSHOW__ featured shows</b></div><div><span>Bus routes</span><b>__NB__ route pages</b></div><div><span>Train route pages</span><b>__NT__ shows</b></div><div class="hl"><span>Always check</span><b>The last bus home</b></div>
-      <button type="button" class="cg-go" data-jump="routes">Pick your show</button>
-      <button type="button" class="cg-go alt" data-jump="find">Find your bus</button>
+<div class="topbar"><div class="wrap">
+  <a class="brand" href="https://www.ukairshowguide.co.uk/" target="_top"><span class="roundel" aria-hidden="true"></span><b>Airshow Travel</b><span>by The Big Guide to UK Airshows</span></a>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="https://www.ukairshowguide.co.uk/first-airshow-getting-there" target="_top">Getting there</a><span aria-hidden="true">/</span><span>Public transport</span></nav>
+</div></div>
+
+<header class="hero">
+  <img src="__IMG__" alt="Families in camping chairs on the seafront lawns watching an airshow, with the pier behind">
+  <div class="wrap">
+    <div>
+      <h1>Get to the airshow by <em>train, bus or coach</em></h1>
+      <p class="sub">Pick your show and where you’re starting from. I’ll show you every way in, where to get off, the times and the walk to the gate. Then add the ones you like to your plan for the day.</p>
+      <div class="stats"><span style="--c1:var(--teal)"><i></i>__NSHOW__ shows</span><span style="--c1:var(--bus)"><i></i>__NB__ bus routes mapped</span><span style="--c1:var(--train)"><i></i>__NT__ train route pages</span></div>
     </div>
+    <form class="planner" id="planner" onsubmit="return false">
+      <div class="planner-h"><span class="ic" aria-hidden="true">__ICON_PLAN__</span><span><b>Plan your journey</b><small>Times are this winter’s, a good guide for 2027</small></span></div>
+      <div class="pform">
+        <div class="field"><label for="fShow">Going to</label><div class="inp"><span class="dot to" aria-hidden="true"></span><select id="fShow"></select><span class="chev" aria-hidden="true">▾</span></div></div>
+        <div class="field"><label for="fFrom">Starting from <span style="font-weight:500;color:var(--soft)">(optional)</span></label><div class="inp"><span class="dot" aria-hidden="true"></span><input id="fFrom" type="search" list="towns" placeholder="Town or bus number, for example Colchester" autocomplete="off"><button type="button" id="fClear" hidden>Clear</button></div><datalist id="towns"></datalist></div>
+        <div class="field"><span class="lb" id="mLbl">How would you like to travel?</span><div class="modes" role="group" aria-labelledby="mLbl" id="fModes"></div></div>
+        <button type="button" class="go" id="fGo">Show my options <span aria-hidden="true">→</span></button>
+      </div>
+    </form>
   </div>
 </header>
 
-<div class="notice purple"><div class="wrap"><span class="tag">2027 times</span><span>The bus and train times on these pages are this winter’s timetables. The summer 2027 times usually come out in the spring, so I will update them then. Please check again just before you travel.</span></div></div>
+<section class="board" aria-label="Choose your show"><div class="wrap"><div class="board-in">
+  <div class="board-h"><h2>Choose your show</h2><p>The number is how many ways in by public transport I have mapped.</p></div>
+  <div class="lines" id="lines"></div>
+</div></div></section>
 
-<nav class="tabbar" aria-label="Choose your show" id="routes"><span class="cg-read" id="cgRead" aria-hidden="true"></span>
-  <div class="wrap"><div class="tablist" role="tablist" id="showTabs"></div></div>
-</nav>
-
-<section class="pt-find" id="find" aria-label="Find your bus by town">
-  <div class="wrap">
-    <div class="fbar">
-      <label for="ptQ"><b>Coming from a certain town?</b><small>Type a town or a bus number and I will find every route that goes there, for every show</small></label>
-      <div class="pt-box"><input id="ptQ" type="search" placeholder="For example Colchester or 12X" autocomplete="off"><button type="button" class="pt-clear" id="ptClear" hidden>Clear</button></div>
-    </div>
-    <div class="pt-res" id="ptRes" hidden></div>
+<main class="res" id="results"><div class="wrap">
+  <div class="res-h">
+    <div><div class="kick" id="rKick"></div><h2 id="rTitle"></h2><p id="rIntro"></p></div>
+    <a class="guide" id="rGuide" href="#" target="_top">Full show guide <span aria-hidden="true">→</span></a>
   </div>
-</section>
-
-<main>
-<section class="panel flush active" id="travel" aria-live="polite"></section>
-</main>
-
-<section class="pt-end">
-  <div class="wrap">
-    <h2>Keep Planning</h2>
-    <div class="pt-more">
-      <a href="https://www.ukairshowguide.co.uk/first-airshow-getting-there" target="_top">Getting there guide <i>&rarr;</i></a>
-      <a href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top">Find your airshow <i>&rarr;</i></a>
-      <a href="https://www.ukairshowguide.co.uk/first-airshow-what-to-pack" target="_top">What to pack <i>&rarr;</i></a>
-      <a href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top">Camping at airshows <i>&rarr;</i></a>
+  <div class="alert" role="note"><span class="ai" aria-hidden="true">!</span><div><b>Check your last bus or train home before you set off.</b> Roads near the show can close on the day, so stops may move. I would take a screenshot of the times, as phone signal can be poor in big crowds.</div></div>
+  <div class="layout">
+    <div>
+      <div class="filters" id="rFilters"></div>
+      <div class="townnote" id="townNote"></div>
+      <div class="opts" id="opts"></div>
+      <div class="townres" id="townRes" hidden></div>
     </div>
+    <aside class="side">
+      <div class="card" id="plan" aria-live="polite">
+        <div class="card-h"><span aria-hidden="true">__ICON_TICKET__</span><b>My travel plan</b><small id="planShow"></small></div>
+        <div class="plan-b" id="planBody"></div>
+      </div>
+      <div class="card map">
+        <div class="card-h"><span aria-hidden="true">__ICON_PIN__</span><b>Map</b><small id="mapLbl"></small></div>
+        <iframe id="map" title="Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="mb"><span id="mapPlace"></span><a id="mapOpen" href="https://www.google.com/maps" target="_blank" rel="noopener">Open in Google Maps ↗</a></div>
+      </div>
+    </aside>
   </div>
-</section>
-<footer class="pt-foot"><div class="wrap">The Big Guide to UK Airshows. Bus and train times change, so please check the route page and the bus or train company before you travel. <a href="https://www.ukairshowguide.co.uk/" target="_top">Back to the home page</a></div></footer>
+</div></main>
+
+<section class="faq"><div class="wrap">
+  <h2>Good to know</h2>
+  <div class="qa" id="faq"></div>
+  <div class="more">
+    <a href="https://www.ukairshowguide.co.uk/first-airshow-getting-there" target="_top">Getting there guide <span aria-hidden="true">→</span></a>
+    <a href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top">Find your airshow <span aria-hidden="true">→</span></a>
+    <a href="https://www.ukairshowguide.co.uk/first-airshow-what-to-pack" target="_top">What to pack <span aria-hidden="true">→</span></a>
+    <a href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top">Camping at airshows <span aria-hidden="true">→</span></a>
+  </div>
+</div></section>
+<footer><div class="wrap">The Big Guide to UK Airshows. Bus and train times change, so please check with the bus or train company before you travel. <a href="https://www.ukairshowguide.co.uk/" target="_top">Back to the home page</a></div></footer>
 
 <script src="https://jskedge1.github.io/airshow-pages/transport-times.js"></script>
 <script src="https://jskedge1.github.io/airshow-pages/bus-routes.js"></script>
 <script>
-__RICON__
-</script>
-__AR__
-<script>window.EXPLORE_DESIGN='mix';</script>
-<script>
 (function(){
-  var SHOWS=__SHOWS__;
-  var FIND=__FIND__;
+  var SHOWS=__SHOWS__, FIND=__FIND__, FAQ=__FAQ__;
   var SITE='https://www.ukairshowguide.co.uk/';
-  var DESIGN_JS='https://jskedge1.github.io/airshow-pages/explore-designs.js';
-  var $=function(id){return document.getElementById(id)};
+  var $=function(id){return document.getElementById(id);};
   function esc(t){return String(t==null?'':t).replace(/&(?![a-z#0-9]+;)/gi,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
-
-  var ICONS={
-    'Park and Ride':'<path d="M9 17V7h4a3 3 0 0 1 0 6H9" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>',
-    'By train':'<rect x="5" y="3" width="14" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 10h14M8 20l2-4M16 20l-2-4" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/>',
-    'By bus':'<rect x="4" y="3" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 11h16M7 17v3M17 17v3" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="8" cy="14" r="1" fill="currentColor"/><circle cx="16" cy="14" r="1" fill="currentColor"/>',
-    'By road':'<path d="M5 16l1.5-5A2 2 0 0 1 8.4 9.5h7.2a2 2 0 0 1 1.9 1.5L19 16v3H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="8" cy="16" r="1.2" fill="currentColor"/><circle cx="16" cy="16" r="1.2" fill="currentColor"/>',
-    'By coach':'<rect x="2" y="5" width="20" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2 11h20M7 5v6M12 5v6M17 5v6" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="7" cy="18.5" r="1.8" fill="currentColor"/><circle cx="17" cy="18.5" r="1.8" fill="currentColor"/>'
+  var P={
+    train:'<rect x="5" y="3" width="14" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 10h14M8 20l2-4M16 20l-2-4" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/>',
+    bus:'<rect x="4" y="3" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 11h16M7 17v3M17 17v3" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="8" cy="14" r="1" fill="currentColor"/><circle cx="16" cy="14" r="1" fill="currentColor"/>',
+    coach:'<rect x="2" y="5" width="20" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2 11h20M7 5v6M12 5v6M17 5v6" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="7" cy="18.5" r="1.8" fill="currentColor"/><circle cx="17" cy="18.5" r="1.8" fill="currentColor"/>',
+    pr:'<path d="M9 17V7h4a3 3 0 0 1 0 6H9" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>',
+    walk:'<circle cx="13" cy="4" r="2" fill="currentColor"/><path d="M10 21l2-6 3 3v3M9 11l3-3 3 3 3 1M12 8l-1 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    car:'<path d="M5 16l1.5-5A2 2 0 0 1 8.4 9.5h7.2a2 2 0 0 1 1.9 1.5L19 16v3H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="8" cy="16" r="1.2" fill="currentColor"/><circle cx="16" cy="16" r="1.2" fill="currentColor"/>',
+    stop:'<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/>',
+    any:'<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    tram:'<rect x="6" y="5" width="12" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 2h6M12 2v3M6 11h12M9 20l1.5-3M15 20l-1.5-3" stroke="currentColor" stroke-width="2" fill="none"/>'
   };
-  var COL={'Park and Ride':['#2BA84A','rgba(43,168,74,.12)'],'By train':['#D74949','rgba(215,73,73,.12)'],'By bus':['#00A6E2','rgba(0,166,226,.12)'],'By coach':['#C2255C','rgba(194,37,92,.12)'],'By road':['#F2B233','rgba(242,178,51,.16)']};
-  function icon(g){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(ICONS[g]||ICONS['By road'])+'</svg>';}
+  function ic(k){return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">'+(P[k]||P.bus)+'</svg>';}
+  var MODE={'By train':{k:'train',c:'#D74949',lb:'Train'},'By bus':{k:'bus',c:'#00A6E2',lb:'Bus'},'By coach':{k:'coach',c:'#C2255C',lb:'Coach'},'Park and Ride':{k:'pr',c:'#2BA84A',lb:'Park and Ride'}};
+  var LEG={train:['Train','#D74949'],bus:['Bus','#00A6E2'],coach:['Coach','#C2255C'],tram:['Tram','#6950A1'],car:['Drive','#13293C'],stop:['Get off','#13293C'],walk:['Walk','']};
+  var st={show:'clacton',from:'',mode:'all',open:null};
+  try{var sv=JSON.parse(localStorage.getItem('ptPlanner')||'null');if(sv){st.show=sv.show||st.show;}}catch(e){}
+  var h=(location.hash||'').slice(1); if(SHOWS.some(function(s){return s.k===h;})) st.show=h;
 
-  /* ---- show tabs ---- */
-  var tabs=$('showTabs');
-  tabs.innerHTML=SHOWS.map(function(s){return '<button class="tab" role="tab" type="button" data-show="'+s.k+'" aria-selected="false" tabindex="-1">'+esc(s.name)+'<small>'+s.count+'</small></button>';}).join('');
+  /* ---------- planner form ---------- */
+  $('fShow').innerHTML=SHOWS.map(function(s){return '<option value="'+s.k+'">'+esc(s.full)+'</option>';}).join('');
+  var towns={}; FIND.forEach(function(r){r.ft.split(/ to /i).forEach(function(t){t=t.replace(/^To /,'').trim();if(t.length>2)towns[t]=1;});});
+  $('towns').innerHTML=Object.keys(towns).sort().map(function(t){return '<option value="'+esc(t)+'">';}).join('');
+  var MODES=[['all','Any','any','#13293C'],['By train','Train','train','#D74949'],['By bus','Bus','bus','#00A6E2'],['By coach','Coach','coach','#C2255C'],['Park and Ride','Park and Ride','pr','#2BA84A']];
+  $('fModes').innerHTML=MODES.map(function(m){return '<button type="button" data-m="'+esc(m[0])+'" style="--m:'+m[3]+'" aria-pressed="false"><span class="mi">'+ic(m[2])+'</span>'+m[1]+'</button>';}).join('');
+  $('fShow').addEventListener('change',function(){pick(this.value,false);});
+  $('fModes').addEventListener('click',function(e){var b=e.target.closest('[data-m]');if(!b)return;st.mode=b.dataset.m;sync();render();});
+  $('fFrom').addEventListener('input',function(){st.from=this.value.trim();$('fClear').hidden=!this.value;render();});
+  $('fClear').addEventListener('click',function(){$('fFrom').value='';st.from='';this.hidden=true;render();$('fFrom').focus();});
+  $('fGo').addEventListener('click',function(){$('results').scrollIntoView({behavior:'smooth',block:'start'});});
 
-  /* ---- one show's Getting there section, built the way the show pages build theirs ---- */
-  var cur=null, curTopic=null;
-  function heroHTML(s){
-    var btn=function(g,label,sub){var c=COL[g];return '<button class="btn" type="button" data-flag="'+esc(g)+'" style="--bc:'+c[0]+'"><span class="xd-bi">'+icon(g)+'</span><span class="xd-bp" aria-hidden="true"></span><span class="xd-bt">'+esc(label)+'<small>'+esc(sub)+'</small></span><span class="xd-ba" aria-hidden="true">&rsaquo;</span></button>';};
-    var btns=s.groups.map(function(g){return btn(g.name,g.name==='By train'?'Arriving by train':g.name==='By bus'?'Arriving by bus':g.name==='By coach'?'Arriving by coach':'Park and Ride',g.items.length+(g.items.length===1?' option':' options'));}).join('');
-    return '<div class="wrap"><div class="gt-hero reveal in"><div><h2><small>'+esc(s.full)+'</small>Public Transport Guide</h2><p class="lead">'+esc(s.intro)+'</p>'
-      +'<div class="btns">'+btns+'<a class="btn" href="'+s.url+'" target="_top" style="--bc:#13293C"><span class="xd-bi">'+icon('By road')+'</span><span class="xd-bp" aria-hidden="true"></span><span class="xd-bt">The full show guide<small>Parking, roads and where to watch</small></span><span class="xd-ba" aria-hidden="true">&rsaquo;</span></a></div></div>'
-      +'<div class="gt-facts"><div class="xd-kp-h"><span style="background:none;color:inherit;padding:0;font-size:inherit;font-family:inherit">Key places</span><span>'+esc(s.name)+'</span></div><dl>'
-      +s.facts.map(function(f){var c=COL[f[2]]||COL['By road'];return '<div style="--rc:'+c[0]+';--rs:'+c[1]+'"><span class="xd-ri" aria-hidden="true">'+icon(f[2])+'</span><dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd></div>';}).join('')
-      +'</dl></div></div></div>';
-  }
-  function build(k){
-    var s=SHOWS.filter(function(x){return x.k===k;})[0]||SHOWS[0];
-    cur=s; curTopic=null;
-    [].forEach.call(tabs.children,function(b){var on=b.dataset.show===s.k;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;});
-    var T=$('travel');
-    T.innerHTML=heroHTML(s)
-      +'<div class="notice gt-status"><div class="wrap"><span class="tag">'+esc(s.tag)+'</span><span>'+s.status+'</span></div></div>'
-      +'<section class="explore" id="explore" aria-label="Public transport options"><div class="wrap explore-grid"><aside class="explore-side"><h2>Choose a topic</h2><p>Pick a train, bus or coach option and I’ll show you the planning information, the route maps and where it is on Google Maps.</p><div class="park-list" id="parkList" role="group" aria-label="Public transport options"></div><p class="side-note">'+esc(s.note)+'</p></aside>'
-      +'<div><article class="detail" id="parkDetail" aria-live="polite"></article><div class="mapbox"><div class="map-head"><h3>Arrival map</h3><p>Pick an option and the map will update for you.</p></div><iframe id="gtMap" title="Google Maps" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe><div class="mapbar"><span id="gtMapLabel">Google Maps · planning reference</span><a id="gtFullMap" href="https://www.google.com/maps" target="_blank" rel="noopener">Open Google Maps ↗</a></div><p class="map-note">Map locations are there to help you plan. Bus stops and diversions can change on show days, so please follow the official signs and stewards.</p></div></div></div></section>'
-      +'<section class="options" aria-label="Ways to arrive at a glance"><div class="wrap"><div class="opt-head reveal in"><div><h2>Ways to <span class="teal-t">arrive</span></h2></div><p class="note">Every public transport way in for '+esc(s.full)+'. Tap a row for more, or See on the map to open it above.</p></div><div id="optGrid"></div></div></section>'
-      +'<div class="wrap"><div class="acc reveal in">'+FAQ.map(function(q,i){return '<details'+(i===0?' open':'')+'><summary>'+esc(q[0])+'</summary><div class="body">'+q[1]+'</div></details>';}).join('')+'</div></div>';
-    var pl=$('parkList');
-    pl.innerHTML=s.groups.map(function(g){return '<div class="park-group">'+esc(g.name)+'</div>'+g.items.map(function(t){return '<button type="button" aria-pressed="false" data-id="'+esc(t.id)+'"><span>'+esc(t.name)+'<small>'+esc(t.sub)+'</small></span><i aria-hidden="true">→</i></button>';}).join('');}).join('');
-    pl.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){setTopic(b.dataset.id,true);});});
-    renderWays(s);
-    setTopic(s.items[0].id,false);
-    T.querySelectorAll('[data-flag]').forEach(function(b){b.addEventListener('click',function(){
-      var f=[].filter.call(document.querySelectorAll('.xd-flag'),function(x){return x.querySelector('b')&&x.querySelector('b').textContent.trim()===b.dataset.flag;})[0];
-      if(f)f.click(); var e=$('explore'); if(e)e.scrollIntoView({behavior:'smooth',block:'start'});
-    });});
-    runDesign();
-    try{history.replaceState(null,'','#'+s.k);}catch(e){}
-  }
-  function fill(t){
-    var s=cur, q=encodeURIComponent(t.place||s.place);
-    $('parkDetail').innerHTML='<h3>'+esc(t.title)+'</h3><p class="lead">'+esc(t.text)+'</p>'
-      +(t.place?'<p class="on-map"><b>Map search</b>'+esc(t.place)+'</p>':'')
-      +((window.UKAG_BR&&UKAG_BR.render)?UKAG_BR.render(s.k,t.id):'')
-      +(t.train||'')
-      +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train',coach:'Coach',tram:'Tram'}[r[0]]||'';
-          var links=(r[3]||[]).map(function(l){return '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(l[1])+'&destination='+encodeURIComponent(l[2])+'&travelmode=walking">'+esc(l[0])+' ↗</a>';}).join('');
-          return '<li class="r-'+r[0]+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p>'+(links?'<div class="r-links">'+links+'</div>':'')+'</div></li>';
-        }).join('')+'</ol>':'')
-      +(t.areas?'<div class="areas"><h4>'+esc(t.areasTitle||'Bus routes')+'</h4>'+t.areas.map(function(a){return '<div><span>'+esc(a[0])+'</span><b>'+esc(a[1])+'</b></div>';}).join('')+'</div>':'')
-      +(t.warn?'<p class="d-warn">'+esc(t.warn)+'</p>':'')
-      +((window.UKAG_TT&&UKAG_TT.render)?UKAG_TT.render(s.k,t.id):'')
-      +((t.arrive||t.walk)?'<div class="cols"><div><h4>Arriving &amp; planning</h4><p>'+esc(t.arrive||'')+'</p></div><div><h4>Walking &amp; leaving</h4><p>'+esc(t.walk||'')+'</p></div></div>':'')
-      +((t.meta&&t.meta.length)?'<div class="detail-meta">'+t.meta.map(function(m){return '<span>'+esc(m[0])+': <b>'+esc(m[1])+'</b></span>';}).join('')+'</div>':'')
-      +'<p class="update">I would check the official sources just before you travel. I’ll update this guide if anything changes.</p>'
-      +'<div class="btns"><a class="btn small" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'">Open in Google Maps ↗</a>'+(t.off&&t.off[1]?'<a class="btn small ghost" target="_blank" rel="noopener" href="'+esc(t.off[1])+'">Official: '+esc(t.off[0])+' ↗</a>':'')+'</div>';
-  }
-  function setTopic(id,animate){
-    var t=cur.items.filter(function(x){return x.id===id;})[0]||cur.items[0];
-    if(t===curTopic)return; curTopic=t;
-    $('parkList').querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.id===t.id?'true':'false');});
-    var pd=$('parkDetail');
-    if(animate){pd.classList.add('out');setTimeout(function(){fill(t);pd.classList.remove('out');},200);}else fill(t);
-    var place=t.place||cur.place, q=encodeURIComponent(place), m=$('gtMap');
-    if(m){m.src='https://maps.google.com/maps?q='+q+'&t=m&z=14&iwloc=near&output=embed';m.title='Google Maps: '+place;}
-    var fm=$('gtFullMap'); if(fm) fm.href='https://www.google.com/maps/search/?api=1&query='+q;
-    var ml=$('gtMapLabel'); if(ml) ml.textContent='Google Maps · '+place;
+  /* ---------- status board of shows ---------- */
+  $('lines').innerHTML=SHOWS.map(function(s){
+    var dots=s.groups.map(function(g){return '<i class="md" style="background:'+MODE[g.name].c+'" title="'+esc(MODE[g.name].lb)+'"></i>';}).join('');
+    return '<button type="button" class="line" data-show="'+s.k+'" aria-pressed="false" style="--lc:'+s.lc+'"><span class="bar"></span><span class="nm"><b>'+esc(s.name)+'</b><small>'+dots+' <span class="lt">'+esc(s.groups.map(function(g){return MODE[g.name].lb;}).join(', '))+'</span></small></span><span class="ct">'+s.count+'</span></button>';
+  }).join('');
+  $('lines').addEventListener('click',function(e){var b=e.target.closest('[data-show]');if(b)pick(b.dataset.show,true);});
+
+  function cur(){return SHOWS.filter(function(s){return s.k===st.show;})[0]||SHOWS[0];}
+  function pick(k,scroll){st.show=k;st.open=null;st.mode='all';sync();render();if(scroll)$('results').scrollIntoView({behavior:'smooth',block:'start'});try{history.replaceState(null,'','#'+k);localStorage.setItem('ptPlanner',JSON.stringify({show:k}));}catch(e){}}
+  function sync(){
+    var s=cur(); $('fShow').value=s.k;
+    [].forEach.call($('lines').children,function(b){b.setAttribute('aria-pressed',String(b.dataset.show===s.k));});
+    [].forEach.call($('fModes').children,function(b){var has=b.dataset.m==='all'||s.groups.some(function(g){return g.name===b.dataset.m;});b.disabled=!has;b.style.opacity=has?'':'.4';b.setAttribute('aria-pressed',String(b.dataset.m===st.mode));});
   }
 
-  /* ---- ways to arrive: the route line list from the show pages ---- */
-  function renderWays(s){
-    var og=$('optGrid'), st={f:'all',sort:'rec'};
-    var groups=s.groups.map(function(g){return g.name;});
-    og.insertAdjacentHTML('beforebegin','<div class="fbar reveal in" id="optBar"><div class="fbar-group" role="group" aria-label="Filter by type"><span class="fbar-label">Filter by type</span><button type="button" data-of="all" aria-pressed="true">All</button>'+groups.map(function(g){return '<button type="button" data-of="'+esc(g)+'" aria-pressed="false">'+esc(g.replace('By ','').replace(/^./,function(c){return c.toUpperCase();}))+'</button>';}).join('')+'</div><div class="fbar-group"><label class="fbar-label" for="optSort">Sort</label><select id="optSort"><option value="rec">Recommended</option><option value="az">A to Z</option><option value="za">Z to A</option></select><button type="button" class="clear" id="optClear">Clear</button></div></div>');
-    function draw(){
-      var list=s.items.filter(function(t){return st.f==='all'||t.g===st.f;});
-      if(st.sort!=='rec') list=list.slice().sort(function(a,b){return st.sort==='az'?a.title.localeCompare(b.title):b.title.localeCompare(a.title);});
-      if(window.arRender) window.arRender(list.map(function(t){return {id:t.id,name:t.title,kind:(t.opt&&t.opt[0])||t.g.replace('By ',''),group:t.g,tag:t.sub,text:(t.opt&&t.opt[1])||t.text,rows:t.meta||[]};}),og,st);
-      og.querySelectorAll('.dl-card').forEach(function(c){var t=s.items.filter(function(x){return x.id===c.getAttribute('data-dl');})[0];var cd=c.querySelector('.dl-code');if(t&&cd&&t.g==='By coach')cd.textContent='CCH';});
-      og.querySelectorAll('[data-topic]').forEach(function(b){b.addEventListener('click',function(){setTopic(b.dataset.topic,true);var e=$('explore');if(e)e.scrollIntoView({behavior:'smooth',block:'start'});});});
-    }
-    document.querySelectorAll('#optBar [data-of]').forEach(function(b){b.addEventListener('click',function(){st.f=b.dataset.of;document.querySelectorAll('#optBar [data-of]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});draw();});});
-    $('optSort').addEventListener('change',function(e){st.sort=e.target.value;draw();});
-    $('optClear').addEventListener('click',function(){st.f='all';st.sort='rec';$('optSort').value='rec';document.querySelectorAll('#optBar [data-of]').forEach(function(x){x.setAttribute('aria-pressed',String(x.dataset.of==='all'));});draw();});
-    draw();
+  /* ---------- options ---------- */
+  function legsOf(t){
+    var g=MODE[t.g]; var r=(t.route||[]).map(function(x){return x[0];}).filter(function(k){return k!=='stop';});
+    if(!r.length) r=[g.k==='pr'?'car':g.k,'walk']; else if(r[r.length-1]!=='walk') r.push('walk');
+    if(g.k==='pr'&&r[0]!=='car') r.unshift('car');
+    var out=[]; r.forEach(function(k){if(out[out.length-1]!==k)out.push(k);});
+    return out.map(function(k){var L=LEG[k]||LEG.bus;return k==='walk'?'<span class="leg walk">'+ic('walk')+'Walk</span>':'<span class="leg" style="--lg:'+L[1]+'">'+ic(k==='car'?'car':k)+L[0]+'</span>';}).join('<span class="ar" aria-hidden="true">›</span>');
+  }
+  function matchesTown(t,q){
+    if(!q)return false; q=q.toLowerCase();
+    var blob=[t.name,t.sub,t.title,t.text,t.arrive,(t.route||[]).map(function(r){return r[1]+' '+r[2];}).join(' ')].join(' ').toLowerCase();
+    if(blob.indexOf(q)>-1)return true;
+    var buses=(window.UKAG_BR&&UKAG_BR.map[st.show]||{})[t.id]||[];
+    return buses.some(function(b){var f=FIND.filter(function(x){return x.id===b[1];})[0];return b[0].toLowerCase()===q||(f&&f.ft.toLowerCase().indexOf(q)>-1);});
+  }
+  function times(t){var d=window.UKAG_TT&&UKAG_TT.data&&UKAG_TT.data[st.show];return (d&&d[t.id])||[];}
+  function render(){
+    var s=cur();
+    $('rKick').innerHTML=ic('stop')+esc(s.place);
+    $('rTitle').textContent=s.full;
+    $('rIntro').textContent=s.intro;
+    $('rGuide').href=s.url;
+    $('rFilters').innerHTML='<span>Show</span><button type="button" class="chip" data-m="all" aria-pressed="'+(st.mode==='all')+'">All ways in ('+s.count+')</button>'+s.groups.map(function(g){var m=MODE[g.name];return '<button type="button" class="chip" data-m="'+esc(g.name)+'" style="--m:'+m.c+'" aria-pressed="'+(st.mode===g.name)+'"><i></i>'+esc(m.lb)+' ('+g.items.length+')</button>';}).join('');
+    var list=s.items.filter(function(t){return st.mode==='all'||t.g===st.mode;});
+    var q=st.from, hits=0;
+    var html=list.map(function(t,i){
+      var m=MODE[t.g], hit=matchesTown(t,q); if(hit)hits++;
+      var key=(t.meta&&t.meta[0])||null, open=st.open===t.id;
+      var T=times(t), buses=(window.UKAG_BR&&UKAG_BR.render)?UKAG_BR.render(s.k,t.id):'';
+      var tabs=[['j','Journey']];
+      if(T.length) tabs.push(['t','Times']);
+      if(buses||t.train) tabs.push(['m','Route maps']);
+      tabs.push(['p','Tips']);
+      return '<article class="opt'+(open?' open':'')+'" data-id="'+esc(t.id)+'" style="--m:'+m.c+'">'
+        +'<button type="button" class="oh" aria-expanded="'+open+'"><span class="mode-r">'+ic(m.k)+'</span>'
+        +'<span class="t"><span class="opt-l">'+esc(m.lb)+'</span>'+esc(t.title)+'</span><span class="s">'+esc(t.sub)+'</span>'
+        +'<span class="legs">'+legsOf(t)+'</span>'+(hit?'<span class="townhit">Goes from '+esc(q)+'</span>':'')
+        +(key?'<span class="key"><b>'+esc(key[1])+'</b><small>'+esc(key[0])+'</small></span>':'<span class="key"></span>')
+        +'<span class="tw" aria-hidden="true">▾</span></button>'
+        +'<div class="ob">'
+          +'<div class="otabs" role="tablist">'+tabs.map(function(x,j){return '<button type="button" role="tab" data-tab="'+x[0]+'" aria-selected="'+(j===0)+'">'+x[1]+'</button>';}).join('')+'</div>'
+          +'<div class="pane" data-pane="j"><p class="lead">'+esc(t.text)+'</p>'+stepsHTML(t)+(t.warn?'<div class="warn"><b>!</b><span>'+esc(t.warn)+'</span></div>':'')+'</div>'
+          +(T.length?'<div class="pane" data-pane="t" hidden>'+boardHTML(t,T)+'</div>':'')
+          +((buses||t.train)?'<div class="pane maps" data-pane="m" hidden>'+buses+(t.train||'')+'</div>':'')
+          +'<div class="pane" data-pane="p" hidden><div class="tips"><div><h4>Arriving and planning</h4><p>'+esc(t.arrive||'I would check the times before you set off.')+'</p></div><div><h4>Walking and leaving</h4><p>'+esc(t.walk||'Allow extra time on the way home, as everyone leaves at once.')+'</p></div></div>'
+            +((t.meta&&t.meta.length)?'<div class="facts">'+t.meta.map(function(x){return '<span>'+esc(x[0])+': <b>'+esc(x[1])+'</b></span>';}).join('')+'</div>':'')+'</div>'
+          +'<div class="oacts"><button type="button" class="btn pri" data-add="'+esc(t.id)+'" aria-pressed="'+(planOf().way===t.id)+'">'+(planOf().way===t.id?'✓ In my plan':'Add to my plan')+'</button>'
+            +'<button type="button" class="btn sec" data-map="'+esc(t.id)+'">'+ic('stop')+'Show on map</button>'
+            +(t.off&&t.off[1]?'<a class="btn sec" href="'+esc(t.off[1])+'" target="_blank" rel="noopener">'+esc(t.off[0])+' ↗</a>':'')+'</div>'
+        +'</div></article>';
+    }).join('');
+    $('opts').innerHTML=html||'<p class="none">No ways in for that choice. Try Any.</p>';
+    var tn=$('townNote');
+    if(q){tn.classList.add('on');tn.innerHTML=hits?'<b>'+hits+(hits===1?' way in':' ways in')+'</b> for '+esc(s.name)+' mention '+esc(q)+'. They are marked below.':'None of the ways in for '+esc(s.name)+' mention '+esc(q)+'. Try the nearest big town, or see the buses from there to other shows below.';}
+    else tn.classList.remove('on');
+    townRes(); planRender(); mapTo((s.items.filter(function(t){return t.id===st.open;})[0]||{}).place||s.place);
+  }
+  function stepsHTML(t){
+    if(!t.route||!t.route.length)return '';
+    return '<ol class="steps">'+t.route.map(function(r){
+      var k=r[0], L=LEG[k]||LEG.bus, c=k==='walk'?'#6B7C89':(L[1]||'#13293C');
+      var links=(r[3]||[]).map(function(l){return '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(l[1])+'&destination='+encodeURIComponent(l[2])+'&travelmode=walking">'+esc(l[0])+' ↗</a>';}).join(' ');
+      return '<li class="'+(k==='walk'?'walk':'')+'" style="--sc:'+c+'"><span class="sn">'+ic(k==='stop'?'stop':k)+'</span><div class="sx"><span>'+esc(L[0])+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p>'+links+'</div></li>';
+    }).join('')+'</ol>';
+  }
+  function boardHTML(t,T){
+    var picked=planOf().times||[];
+    return '<div class="dtabs" role="tablist">'+T.map(function(x,i){return '<button type="button" role="tab" data-d="'+i+'" aria-selected="'+(i===0)+'">'+esc(x.title)+'</button>';}).join('')+'</div>'
+      +T.map(function(x,i){return '<div class="dwrap" data-dw="'+i+'"'+(i?' hidden':'')+'><div class="dboard"><div class="dh"><span>Time</span><span>Service</span><span></span></div>'
+        +x.rows.map(function(r){var id=t.id+'|'+i+'|'+r[0]+'|'+r[1];var on=picked.some(function(p){return p.id===id;});
+          return '<div class="drow"><span class="tm">'+esc(r[0])+'</span><span class="sv">'+esc(r[1])+'<small>'+esc(r[2])+'</small></span><button type="button" data-pick="'+esc(id)+'" data-t="'+esc(x.title)+'" data-tm="'+esc(r[0])+'" data-sv="'+esc(r[1])+'" aria-pressed="'+on+'">'+(on?'✓ Added':'Add to plan')+'</button></div>';}).join('')
+        +'</div>'+(x.note?'<p class="dnote">'+esc(x.note)+'</p>':'')+'</div>';}).join('');
   }
 
-  /* ---- the transport design: run it again for each show ---- */
-  function runDesign(){
-    [].slice.call(document.head.querySelectorAll('style')).forEach(function(st){if(/^#explore\.xd-on/.test(st.textContent))st.remove();});
-    var old=document.querySelectorAll('script[data-xd]'); [].forEach.call(old,function(x){x.remove();});
-    var sc=document.createElement('script'); if(window.XD_SRC) sc.textContent=window.XD_SRC; else sc.src=DESIGN_JS; sc.setAttribute('data-xd','1'); document.body.appendChild(sc);
+  /* ---------- clicks inside the options ---------- */
+  $('opts').addEventListener('click',function(e){
+    var card=e.target.closest('.opt'); if(!card)return; var id=card.dataset.id;
+    if(e.target.closest('.oh')){st.open=st.open===id?null:id;render();if(st.open){var c=document.querySelector('.opt[data-id="'+CSS.escape(id)+'"]');if(c&&c.getBoundingClientRect().top<0)c.scrollIntoView({behavior:'smooth',block:'start'});}return;}
+    var tb=e.target.closest('[data-tab]');
+    if(tb){card.querySelectorAll('[data-tab]').forEach(function(b){b.setAttribute('aria-selected',String(b===tb));});card.querySelectorAll('[data-pane]').forEach(function(p){p.hidden=p.dataset.pane!==tb.dataset.tab;});return;}
+    var dt=e.target.closest('[data-d]');
+    if(dt){card.querySelectorAll('[data-d]').forEach(function(b){b.setAttribute('aria-selected',String(b===dt));});card.querySelectorAll('[data-dw]').forEach(function(p){p.hidden=p.dataset.dw!==dt.dataset.d;});return;}
+    var pk=e.target.closest('[data-pick]');
+    if(pk){var p=planOf();p.times=p.times||[];var i=p.times.findIndex(function(x){return x.id===pk.dataset.pick;});
+      if(i>-1)p.times.splice(i,1);else p.times.push({id:pk.dataset.pick,tm:pk.dataset.tm,sv:pk.dataset.sv,t:pk.dataset.t});
+      if(!p.way)p.way=id; savePlan(p); pk.setAttribute('aria-pressed',String(i<0)); pk.textContent=i<0?'✓ Added':'Add to plan';
+      document.querySelectorAll('[data-add]').forEach(function(a){var on=planOf().way===a.dataset.add;a.setAttribute('aria-pressed',String(on));a.textContent=on?'✓ In my plan':'Add to my plan';}); planRender(); return;}
+    var ad=e.target.closest('[data-add]');
+    if(ad){var p2=planOf();p2.way=p2.way===id?null:id;savePlan(p2);render();return;}
+    var mp=e.target.closest('[data-map]');
+    if(mp){var t=cur().items.filter(function(x){return x.id===id;})[0];mapTo(t.place||cur().place);$('map').closest('.card').scrollIntoView({behavior:'smooth',block:'center'});}
+  });
+  $('rFilters').addEventListener('click',function(e){var b=e.target.closest('[data-m]');if(!b)return;st.mode=b.dataset.m;sync();render();});
+
+  /* ---------- map ---------- */
+  var lastPlace='';
+  function mapTo(place){if(!place||place===lastPlace)return;lastPlace=place;var q=encodeURIComponent(place);$('map').src='https://maps.google.com/maps?q='+q+'&t=m&z=14&iwloc=near&output=embed';$('mapOpen').href='https://www.google.com/maps/search/?api=1&query='+q;$('mapPlace').textContent=place;$('mapLbl').textContent=cur().name;}
+
+  /* ---------- my travel plan ---------- */
+  var CHECKS=['Checked the last bus or train home','Screenshot of the times saved','Ticket or bus pass ready','Chairs fold small enough for the bus','Local taxi number saved, just in case'];
+  function allPlans(){try{return JSON.parse(localStorage.getItem('ptPlans')||'{}')||{};}catch(e){return {};}}
+  var mem=allPlans();
+  function planOf(){return mem[st.show]||(mem[st.show]={});}
+  function savePlan(p){mem[st.show]=p;try{localStorage.setItem('ptPlans',JSON.stringify(mem));}catch(e){}}
+  function planText(){
+    var s=cur(),p=planOf(),t=s.items.filter(function(x){return x.id===p.way;})[0];
+    var out=['My travel plan for '+s.full];
+    if(t)out.push('Way in: '+t.title+(t.place?' ('+t.place+')':''));
+    (p.times||[]).forEach(function(x){out.push(x.tm+'  '+x.sv+'  ('+x.t+')');});
+    out.push('','Before I go:');CHECKS.forEach(function(c,i){out.push(((p.ticks||[])[i]?'[x] ':'[ ] ')+c);});
+    out.push('','Planned with The Big Guide to UK Airshows: '+SITE+'airshow-public-transport#'+s.k);
+    return out.join('\n');
   }
-  /* the design adds a link back to this page under the times: point it at the show instead */
-  new MutationObserver(function(){
-    if(!cur)return;
-    document.querySelectorAll('#travel a.xd-tt-link[href$="airshow-public-transport"]').forEach(function(a){
-      a.href=cur.url; a.querySelector('b').textContent='Getting there on the '+cur.name+' guide'; var sm=a.querySelector('small'); if(sm) sm.textContent='Parking, roads and accessible arrival';
-      if(cur.trainPage&&!a.parentNode.querySelector('a[href$="'+cur.trainPage+'"]')) a.insertAdjacentHTML('beforebegin','<a class="xd-tt-link" href="'+SITE+cur.trainPage+'" target="_top"><span class="xd-tt-ic">'+icon('By train')+'</span><span><b>Train route and live times</b><small>Every station, platform and change</small></span></a>');
-    });
-  }).observe($('travel'),{childList:true,subtree:true});
-
-  tabs.addEventListener('click',function(e){var b=e.target.closest('[data-show]');if(b){build(b.dataset.show);$('travel').scrollIntoView({behavior:'smooth',block:'start'});}});
-  tabs.addEventListener('keydown',function(e){if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;var bs=[].slice.call(tabs.children),i=bs.findIndex(function(b){return b.dataset.show===cur.k;});i=(i+(e.key==='ArrowRight'?1:-1)+bs.length)%bs.length;build(bs[i].dataset.show);bs[i].focus();e.preventDefault();});
-  document.querySelectorAll('[data-jump]').forEach(function(b){b.addEventListener('click',function(){var t=$(b.dataset.jump);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});if(b.dataset.jump==='find')setTimeout(function(){$('ptQ').focus();},400);});});
-
-  /* ---- find your bus by town ---- */
-  var q=$('ptQ'),res=$('ptRes'),clr=$('ptClear'),brCss='';
-  function brStyle(){ if(brCss) return brCss; var h=(window.UKAG_BR&&UKAG_BR.render)?UKAG_BR.render('clacton','bus-colchester'):''; var m=h.match(/<style>[\s\S]*?<\/style>/); brCss=m?m[0]:''; return brCss; }
-  function search(){
-    var v=q.value.trim().toLowerCase(); clr.hidden=!q.value;
-    if(v.length<2){res.hidden=true;res.innerHTML='';return;}
-    var hits=FIND.filter(function(r){return r.num.toLowerCase()===v||r.ft.toLowerCase().indexOf(v)>-1||r.stop.toLowerCase().indexOf(v)>-1;});
-    var tgt=' target="_top"';
-    res.hidden=false;
-    res.innerHTML=hits.length?'<div class="br-box">'+brStyle()+'<h4 class="br-h">Routes for “'+esc(q.value.trim())+'”</h4><p class="br-p">'+hits.length+(hits.length===1?' bus goes':' buses go')+' there. Each one says which show it is for.</p><div class="br-list">'+hits.map(function(r){
-        return '<a class="br-btn" href="'+((window.UKAG_BR&&UKAG_BR.href)?UKAG_BR.href(r.id):SITE+'bus-route?r='+r.id)+'"'+tgt+' style="--b1:'+r.c1+';--bi:'+r.ink+';--b2:'+r.c2+'"><span class="br-num">'+esc(r.num)+'</span><span class="br-txt">'+esc(r.ft)+'<small>'+esc(r.show)+', run by '+esc(r.op)+'</small></span><i aria-hidden="true">→</i></a>';
-      }).join('')+'</div></div>'
-      :'<p class="pt-res-h">I couldn’t find a bus that mentions that. Try the nearest big town, or pick your show from the tabs above.</p>';
+  function planRender(){
+    var s=cur(),p=planOf(),t=s.items.filter(function(x){return x.id===p.way;})[0];
+    $('planShow').textContent=s.name;
+    var h='';
+    if(!t&&!(p.times||[]).length) h='<p class="plan-empty">Open a way in below and tap <b>Add to my plan</b>, or add a train or bus from its Times tab. Your plan stays on this device.</p>';
+    if(t) h+='<div class="ticket"><div class="tt">My way in</div><div class="tv">'+esc(t.title)+'</div></div>';
+    if((p.times||[]).length) h+='<ul class="picked">'+p.times.map(function(x,i){return '<li><b>'+esc(x.tm)+'</b><span>'+esc(x.sv)+'<small>'+esc(x.t)+'</small></span><button type="button" data-rm="'+i+'" aria-label="Remove '+esc(x.tm)+'">Remove</button></li>';}).join('')+'</ul>';
+    h+='<ul class="checks">'+CHECKS.map(function(c,i){return '<li><label><input type="checkbox" data-tick="'+i+'"'+((p.ticks||[])[i]?' checked':'')+'><span>'+esc(c)+'</span></label></li>';}).join('')+'</ul>';
+    h+='<div class="plan-acts"><button type="button" class="btn pri" id="pCopy">Copy my plan</button><button type="button" class="btn sec" id="pPrint">Print</button><button type="button" class="btn sec" id="pClear">Start again</button><span class="copied" id="pDone">Copied</span></div>';
+    $('planBody').innerHTML=h;
   }
-  q.addEventListener('input',search);
-  clr.addEventListener('click',function(){q.value='';search();q.focus();});
+  $('planBody').addEventListener('click',function(e){
+    var p=planOf();
+    var rm=e.target.closest('[data-rm]'); if(rm){p.times.splice(+rm.dataset.rm,1);savePlan(p);render();return;}
+    if(e.target.id==='pClear'){mem[st.show]={};savePlan({});render();return;}
+    if(e.target.id==='pPrint'){try{window.print();}catch(err){}return;}
+    if(e.target.id==='pCopy'){var txt=planText(),done=function(){var d=$('pDone');d.classList.add('on');setTimeout(function(){d.classList.remove('on');},1800);};
+      try{navigator.clipboard.writeText(txt).then(done,function(){prompt('Copy your plan',txt);});}catch(err){}}
+  });
+  $('planBody').addEventListener('change',function(e){var c=e.target.closest('[data-tick]');if(!c)return;var p=planOf();p.ticks=p.ticks||[];p.ticks[+c.dataset.tick]=c.checked;savePlan(p);});
 
-  /* red reading line on the show bar */
-  var rd=$('cgRead');
-  window.addEventListener('scroll',function(){var h=document.documentElement.scrollHeight-innerHeight;rd.style.width=(h>0?Math.min(100,scrollY/h*100):0)+'%';},{passive:true});
+  /* ---------- buses from your town, for every show ---------- */
+  var brCss='';
+  function brStyle(){if(brCss)return brCss;var x=(window.UKAG_BR&&UKAG_BR.render)?UKAG_BR.render('clacton','bus-colchester'):'';var m=x.match(/<style>[\s\S]*?<\/style>/);brCss=m?m[0]:'';return brCss;}
+  function townRes(){
+    var q=st.from.toLowerCase(), box=$('townRes');
+    if(q.length<2){box.hidden=true;box.innerHTML='';return;}
+    var hits=FIND.filter(function(r){return r.num.toLowerCase()===q||r.ft.toLowerCase().indexOf(q)>-1||r.stop.toLowerCase().indexOf(q)>-1;});
+    hits.sort(function(a,b){return (b.show===cur().name)-(a.show===cur().name);});
+    if(!hits.length){box.hidden=true;return;}
+    box.hidden=false;
+    box.innerHTML='<div class="br-box">'+brStyle()+'<h4 class="br-h">Buses from '+esc(st.from)+'</h4><p class="br-p">Every bus I have mapped that mentions '+esc(st.from)+', for any show. Tap one for the roads it takes, every stop and the times.</p><div class="br-list">'+hits.map(function(r){
+      return '<a class="br-btn" href="'+((window.UKAG_BR&&UKAG_BR.href)?UKAG_BR.href(r.id):SITE+'bus-route?r='+r.id)+'" target="_top" style="--b1:'+r.c1+';--bi:'+r.ink+';--b2:'+r.c2+'"><span class="br-num">'+esc(r.num)+'</span><span class="br-txt">'+esc(r.ft)+'<small>'+esc(r.show)+', run by '+esc(r.op)+'</small></span><i aria-hidden="true">→</i></a>';}).join('')+'</div></div>';
+  }
 
-  var FAQ=__FAQ__;
-  var start=(location.hash||'').slice(1);
-  build(SHOWS.some(function(s){return s.k===start;})?start:'clacton');
+  $('faq').innerHTML=FAQ.map(function(q,i){return '<details'+(i===0?' open':'')+'><summary>'+esc(q[0])+'</summary><div class="a">'+q[1]+'</div></details>';}).join('');
+  sync(); render();
 })();
 </script>
 </body>
