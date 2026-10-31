@@ -397,6 +397,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li > div{padding:12px 16px}
 .route .r-tag{display:inline-block;font-family:"Barlow",sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:2px}
 .route b{display:block;font-family:"Barlow",sans-serif;font-weight:700;font-size:19px;line-height:1.15;text-transform:uppercase}
@@ -3464,7 +3465,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
   };
   window.RICON=RICON;
   /* getting there & parking — Eastbourne parking layout */
-  var OFFICIAL={show:['Clacton Airshow','https://www.clactonairshow.com/'],pr:['Airshow Park and Ride','https://clactonairshow.com/faqs/'],ga:['Greater Anglia','https://www.greateranglia.co.uk'],bus:['Travel Essex bus timetables','https://www.travelessex.co.uk/search-for-a-timetable/clacton/services'],coach:['Coach advice','https://www.tendringdc.gov.uk/news/coach-visitors-given-travel-guidance-for-clacton-airshow-2026'],parks:['Tendring car parks','https://www.tendringdc.gov.uk/content/car-parks'],tdc:['Tendring District Council','https://www.tendringdc.gov.uk'],loo:['West Greensward toilets','https://www.tendringdc.gov.uk/public-conveniences/west-greensward']};
+  var OFFICIAL={nx:['National Express','https://www.nationalexpress.com'],show:['Clacton Airshow','https://www.clactonairshow.com/'],pr:['Airshow Park and Ride','https://clactonairshow.com/faqs/'],ga:['Greater Anglia','https://www.greateranglia.co.uk'],bus:['Travel Essex bus timetables','https://www.travelessex.co.uk/search-for-a-timetable/clacton/services'],coach:['Coach advice','https://www.tendringdc.gov.uk/news/coach-visitors-given-travel-guidance-for-clacton-airshow-2026'],parks:['Tendring car parks','https://www.tendringdc.gov.uk/content/car-parks'],tdc:['Tendring District Council','https://www.tendringdc.gov.uk'],loo:['West Greensward toilets','https://www.tendringdc.gov.uk/public-conveniences/west-greensward']};
   var topics=[
     {g:'Park and Ride'},
     {id:'pr',name:'Park and Ride',sub:'From Clacton Shopping Village',title:'Clacton Shopping Village Park and Ride',
@@ -3506,6 +3507,18 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
       arrive:'All of these are Central Connect routes. I would check the timetable for the show days, as stops near the seafront can move.',
       walk:'From the town centre, head down to the seafront and turn right for the West Greensward.',
       meta:[['Operator','Central Connect'],['From Walton','7, 9']],off:OFFICIAL.bus},
+    {g:'By coach'},
+    {id:'nx-coach',name:'National Express coaches',sub:'Into Colchester, then bus or train',title:'Coaches to Clacton',
+      text:'There is no coach into Clacton itself, so the easy way is to take a National Express coach to Colchester and finish the journey by bus or train. This may suit you if you are coming from Ipswich, Stansted Airport or further away.',
+      place:'Colchester Coach Stop, Colchester',
+      route:[['coach','National Express 717 to Colchester','The 717 runs between Ipswich and Stansted Airport and calls at Colchester Coach Stop. Book in advance with National Express.'],
+             ['stop','Get off at Colchester Coach Stop','From London you would change at Stansted Airport, so the direct Greater Anglia train is usually simpler for that journey.'],
+             ['bus','Bus 74, 74B or 76 on to Clacton','Central Connect buses run between Colchester and Clacton. The route buttons are in the Buses from Colchester topic.'],
+             ['train','Or take the train from Colchester','Greater Anglia runs about 29 minutes from Colchester to Clacton.'],
+             ['walk','Walk to the West Greensward','From Clacton town centre, head down to the seafront and turn right.',[['Walking directions','Clacton-on-Sea town centre','West Greensward, Clacton-on-Sea']]]],
+      arrive:'I would book the coach early and pick one that gets you to Colchester with time for the bus or train. Coaches fill up on show days.',
+      walk:'The last coaches leave Colchester early evening, so I would check the times home before you go, especially if you plan to stay for the twilight display.',
+      meta:[['Coach','National Express 717'],['Stop','Colchester Coach Stop']],off:OFFICIAL.nx},
     {g:'By road'},
     {id:'car',name:'Driving to Clacton',sub:'Main roads and where to park',title:'Driving to Clacton',
       text:'The seafront car parks near the display are often shut during the show, and the roads around the seafront close as well. I would suggest the Park and Ride or the West Road event car park as the easiest options.',
@@ -3571,7 +3584,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('clacton',t.id):'')
       +(t.id==='rail'?'<div class="tr-box"><h4>Train route map</h4><p>Pick your station, see every train with live times, the platforms, any changes and the line it takes to Clacton-on-Sea.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-clacton" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#D2232A"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#F4C21B"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>Greater Anglia trains only</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train'}[r[0]];
+          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train',coach:'Coach'}[r[0]];
           var links=(r[3]||[]).map(function(l){return '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(l[1])+'&destination='+encodeURIComponent(l[2])+'&travelmode=walking">'+esc(l[0])+' ↗</a>';}).join('');
           return '<li class="r-'+r[0]+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p>'+(links?'<div class="r-links">'+links+'</div>':'')+'</div></li>';
         }).join('')+'</ol>':'')
