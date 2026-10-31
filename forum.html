@@ -142,7 +142,17 @@ body{font-family:'Barlow',sans-serif;color:#fff;-webkit-font-smoothing:antialias
   Object.values(F).forEach(f=>f.addEventListener('load',()=>hubTweaks(f)));
   hubTweaks(F.clean);
 
-  const saved=store.get('forumLook')||(hubWin?'hud':'');
+  /* arriving from My Airshow Hub: fade in from the hub's dark screen and open on the HUD look unless a look was chosen before */
+  let fromHub=false;
+  try{const t=+localStorage.getItem('ukagFromHub');fromHub=!!t&&Date.now()-t<20000;localStorage.removeItem('ukagFromHub')}catch(e){}
+  if(fromHub){
+    const v=document.createElement('div');v.id='fromHub';
+    v.setAttribute('style','position:fixed;inset:0;z-index:99999;background:#050C11;opacity:1;transition:opacity .5s ease;pointer-events:none');
+    document.body.appendChild(v);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{v.style.opacity='0'}));
+    setTimeout(()=>v.remove(),700);
+  }
+  const saved=store.get('forumLook')||(hubWin||fromHub?'hud':'');
   if(saved==='hud'){cur='clean';F.clean.classList.add('off');set('hud',false)}
 
   function hideHint(){$('#hint').hidden=true;store.set('forumLookHint','1')}

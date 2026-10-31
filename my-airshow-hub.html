@@ -740,6 +740,13 @@ label.f{color:var(--hud-fg)}
 })();
 </script>
 
+<style id="hub-leave">
+#hubLeave{position:fixed;inset:0;z-index:99999;display:grid;place-content:center;gap:8px;text-align:center;background:#050C11;color:#7CFF9E;opacity:0;pointer-events:none;transition:opacity .4s ease}
+#hubLeave.on{opacity:1;pointer-events:auto}
+#hubLeave small{font-family:"Share Tech Mono",ui-monospace,monospace;font-size:13px;letter-spacing:.08em}
+#hubLeave b{font-family:"Barlow Condensed","Barlow",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);color:#EAF6F0}
+@media (prefers-reduced-motion:reduce){#hubLeave{transition:none}}
+</style>
 <style id="hub-forum-tab">
 .tabs a.hub-forum{display:inline-flex;flex-direction:column;justify-content:center;min-height:44px;padding:4px 14px;margin-left:6px;background:#050C11;border:1px solid #7CFF9E;box-shadow:inset 4px 0 0 #7CFF9E,0 0 14px rgba(124,255,158,.22);color:#fff;text-decoration:none;font-weight:700;font-size:15px;line-height:1.2;white-space:nowrap;transition:box-shadow .3s ease}
 .tabs a.hub-forum small{font-family:"Share Tech Mono",ui-monospace,monospace;font-weight:400;font-size:11px;color:#7CFF9E}
@@ -2328,12 +2335,6 @@ body.o2-shake #app{animation:o2shake .5s linear}
   </main>
 
   <!-- POSTS -->
-  <main class="page" id="p-forum" hidden>
-    <div class="wrap hub-forum-wrap">
-      <iframe id="hubForumFrame" title="Airshow Forum" data-src="https://jskedge1.github.io/airshow-pages/forum.html" loading="lazy"></iframe>
-    </div>
-  </main>
-
   <main class="page" id="p-posts" hidden>
     <div class="wrap">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap">
@@ -2457,9 +2458,6 @@ body.o2-shake #app{animation:o2shake .5s linear}
 #hubSO button{display:block;margin-top:18px;font:700 16px "Barlow",Arial,sans-serif;background:transparent;color:#fff;border:2px solid #fff;padding:10px 18px;cursor:pointer;transition:background .25s,color .25s}
 #hubSO button:hover,#hubSO button:focus-visible{background:#fff;color:#08141F;outline:none}
 #hubSO i::after{animation-duration:2.2s!important}
-/* forum inside the hub */
-.hub-forum-wrap{padding-top:18px}
-#hubForumFrame{display:block;width:100%;height:calc(100vh - 120px);min-height:560px;border:1px solid rgba(124,255,158,.45);box-shadow:inset 4px 0 0 #7CFF9E;background:#061019}
 /* short hello */
 .hub-hello{position:fixed;top:16px;right:16px;z-index:80;display:flex;align-items:flex-start;gap:12px;width:min(380px,calc(100% - 32px));background:rgba(8,20,31,.94);border:1px solid #5FE3D6;box-shadow:0 0 30px rgba(95,227,214,.18);padding:14px 16px;color:#fff;font-family:"Barlow",Arial,sans-serif;animation:hhIn .6s cubic-bezier(.2,.8,.2,1) both}
 .hub-hello.out{opacity:0;transform:translateY(-8px);transition:opacity .4s,transform .4s}
@@ -2517,7 +2515,6 @@ body.o2-shake #app{animation:o2shake .5s linear}
   body.is-member .tabs{display:none}
   .su-opts{grid-template-columns:1fr}
   .a2hs{bottom:76px}
-  #hubForumFrame{height:calc(100vh - 150px)}
 }
 @media (prefers-reduced-motion:reduce){.hub-hello,.su-box,.a2hs,.hub-me,.hb-ring i{animation:none!important}}
 </style>
@@ -2627,7 +2624,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       if (window.ukagWB && Date.now() - window.ukagWB < 600000) { window.ukagWB = 0; welcomeBack(hub.member.name); }
       else if (!load.helloDone) quickHello();
       load.helloDone = true;
-      if (S.startPage) { var sp = S.startPage; S.startPage = ""; window.ukagNext = null; if ($("hubWB").hidden && $("p-" + sp)) showPage(sp); }
+      if (S.startPage) { var sp = S.startPage; S.startPage = ""; window.ukagNext = null; if ($("hubWB").hidden && ($("p-" + sp) || sp === "forum")) showPage(sp); }
       hubSummary();
       document.body.classList.add("is-member");
       if (S.join) { var c = S.join; S.join = ""; joinGroup(c); }
@@ -2676,29 +2673,28 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
     }
     try { localStorage.setItem("ukagHubSummary", JSON.stringify(sum)); } catch (e) {}
   }
-  function openForum() {
-    var f = $("hubForumFrame");
-    if (!f.src) {
-      f.src = f.dataset.src;
-      /* links inside the forum that point back to the hub stay inside the hub */
-      f.addEventListener("load", function () {
-        var d; try { d = f.contentDocument; } catch (e) { return; }
-        if (!d) return;
-        /* inside the hub, the forum's own "Open My Airshow Hub" and "Join or log in" buttons are not needed */
-        var st = d.createElement("style"); st.textContent = '.btns a[href*="my-airshow-hub"]{display:none!important}'; d.head.appendChild(st);
-        d.addEventListener("click", function (e) {
-          var a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
-          if (/my-airshow-hub/.test(a.getAttribute("href") || "")) { e.preventDefault(); showPage("overview"); }
-        }, true);
-      });
+  /* The forum is its own full screen page now. The hub fades out, then the whole window opens the forum. */
+  function goForum() {
+    try { localStorage.setItem("ukagFromHub", String(Date.now())); } catch (e) {}
+    var o = $("hubLeave");
+    if (!o) {
+      o = document.createElement("div"); o.id = "hubLeave"; o.setAttribute("aria-live", "polite");
+      o.innerHTML = '<small>F1 · COMMS</small><b>Opening the Airshow Forum</b>';
+      document.body.appendChild(o);
     }
+    requestAnimationFrame(function () { o.classList.add("on"); });
+    var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setTimeout(function () {
+      var u = "https://www.ukairshowguide.co.uk/community-forum";
+      try { window.top.location.href = u; } catch (e) { window.location.href = u; }
+    }, calm ? 0 : 420);
   }
   $("hubForumTab").addEventListener("click", function (e) { e.preventDefault(); showPage("forum"); });
-  /* the forum lives inside the hub: forum links open the Forum tab, or ask logged out visitors to log in first */
+  /* forum links fade out to the forum page, or ask logged out visitors to log in first */
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest('a[href*="community-forum"]'); if (!a) return;
     e.preventDefault();
-    if (S.hub && S.hub.member) { showPage("forum"); return; }
+    if (S.hub && S.hub.member) { goForum(); return; }
     window.ukagNext = "forum"; var b = $("lgNavLogin"); if (b) b.click();
   }, true);
   window.ukagShowPage = function (p) { if (S.hub && S.hub.member) showPage(p); };
@@ -2871,16 +2867,16 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
     b.addEventListener("click", function () { showPage(b.dataset.p); });
   });
   function showPage(p) {
+    if (p === "forum") { goForum(); return; }
     S.page = p;
     document.querySelectorAll(".tabs button").forEach(function (x) { x.classList.toggle("on", x.dataset.p === p); });
-    ["overview", "briefing", "trips", "showday", "updates", "community", "kit", "group", "hangar", "saved", "history", "year", "posts", "forum"].forEach(function (k) { $("p-" + k).hidden = k !== p; });
+    ["overview", "briefing", "trips", "showday", "updates", "community", "kit", "group", "hangar", "saved", "history", "year", "posts"].forEach(function (k) { $("p-" + k).hidden = k !== p; });
     if (S.hub && S.hub.member && /overview|briefing|hangar|year/.test(p)) renderHudx();
     if (p === "community" && !F.loaded) loadFeed();
     if (p === "updates" && S.hub.unread) {
       call("markUpdatesRead").then(function () { S.hub.unread = 0; $("unreadDot").hidden = true; hubSummary(); }).catch(function () {});
     }
     if (p === "group") startChat(); else stopChat();
-    if (p === "forum") openForum();
     dockSync(p);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
