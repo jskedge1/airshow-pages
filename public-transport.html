@@ -1414,7 +1414,7 @@ body .tabbar .tab[aria-selected="true"] small{background:#13293C;color:#fff}
   function runDesign(){
     [].slice.call(document.head.querySelectorAll('style')).forEach(function(st){if(/^#explore\.xd-on/.test(st.textContent))st.remove();});
     var old=document.querySelectorAll('script[data-xd]'); [].forEach.call(old,function(x){x.remove();});
-    var sc=document.createElement('script'); sc.src=DESIGN_JS; sc.setAttribute('data-xd','1'); document.body.appendChild(sc);
+    var sc=document.createElement('script'); if(window.XD_SRC) sc.textContent=window.XD_SRC; else sc.src=DESIGN_JS; sc.setAttribute('data-xd','1'); document.body.appendChild(sc);
   }
   /* the design adds a link back to this page under the times: point it at the show instead */
   new MutationObserver(function(){
