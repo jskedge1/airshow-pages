@@ -393,3 +393,5 @@ The backend (velo/backend/traders.web.js) only takes the plans free, founding, f
 - A question can be opened from the address: `?q=dogs` or `#q-dogs` (the question ids are in questions.py); `#family` opens a topic.
 - Photos are Jack's own from home-img/ and first-airshow-img/, plus two AI images from guide-img/ (accessible-viewing and bag-check) with "AI generated for a visual look" captions.
 - The page carries FAQ structured data for search engines, built from the same questions.
+
+Clacton topic section redesign (31 Oct 2026): `explore-designs.js` re-lays out the page's own "Choose a topic" section (route flags, numbered line, phone pages, Getting here and Trains home tabs, transport style Getting there hero). It is loaded on camping-layout/clacton.html with `window.EXPLORE_DESIGN='mix'`. The page still builds its own topic buttons and panel, so the bus route buttons and train box are never touched. Not yet on the other show pages.
