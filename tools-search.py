@@ -34,7 +34,7 @@ PAGES = [
     ('/clactonairshow', 'camping-layout/clacton.html', SHOWS, 'Clacton Air Show', None, 'Clacton Essex seafront beach free Tendring'),
     ('/walesairshow', 'camping-layout/wales.html', SHOWS, 'Wales Airshow', None, 'Swansea Wales seafront beach free'),
     ('/duxfordairshows', 'camping-layout/duxford.html', SHOWS, 'Duxford Air Shows', None, 'IWM Duxford Cambridgeshire Spitfire warbirds Imperial War Museum'),
-    ('/headcorn-air-show', 'camping-layout/headcorn.html', SHOWS, 'Headcorn Air Show', None, 'Headcorn Kent Lashenden aerodrome'),
+    # Headcorn is not on the site for now (27 Oct 2026), so it is left out of search until its page returns.
     ('/shuttleworthairshows', 'camping-layout/shuttleworth.html', SHOWS, 'Shuttleworth Air Shows', None, 'Shuttleworth Old Warden Bedfordshire vintage evening'),
     ('/little-gransden-air-and-car-show', 'camping-layout/gransden.html', SHOWS, 'Little Gransden Air and Car Show', None, 'Gransden Cambridgeshire cars charity'),
     ('/southport-air-show', 'camping-layout/southport.html', SHOWS, 'Southport Air Show', None, 'Southport Merseyside seafront beach free'),

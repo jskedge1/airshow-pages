@@ -336,6 +336,7 @@ a:hover{color:var(--red)}
   @media (pointer:coarse){.tab,.toc a{min-height:44px}}
 </style>
 <!-- mobile-fit -->
+<script src="https://jskedge1.github.io/airshow-pages/trail.js" defer></script>
 </body>
 </html>
 """
