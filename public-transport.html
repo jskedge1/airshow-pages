@@ -96,27 +96,40 @@ svg.i{width:1em;height:1em;flex:none}
 .go:hover{background:#BF3B3B;transform:translateY(-1px)}
 .pnote{font-size:14px;color:var(--soft);font-weight:500;margin-top:-4px}
 
-/* ---------- show status board (TfL style) ---------- */
+/* ---------- choose your show: station departures board ---------- */
 .board{margin-top:-34px;position:relative;z-index:2}
-.board-in{background:#fff;border-radius:var(--r);box-shadow:0 14px 34px -22px rgba(19,41,60,.45);padding:18px 18px 14px}
-.board-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:0 4px 12px}
-.board-h h2{font-size:20px;color:var(--navy)}
-.board-h p{font-size:15px;color:var(--soft);font-weight:500}
-.lines{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.line{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:8px minmax(0,1fr) auto;align-items:center;gap:0 12px;border:1px solid var(--line);border-radius:var(--r-s);overflow:hidden;background:#fff;transition:box-shadow .25s var(--ease),transform .25s var(--ease),background .2s}
-.line .bar{align-self:stretch;background:var(--lc)}
-.line .nm{padding:10px 0}
-.line .nm b{display:block;font-size:16.5px;line-height:1.2}
-.line .nm small{display:flex;gap:5px;align-items:center;margin-top:4px;color:var(--soft);font-size:13px;font-weight:500}
-.line .md{width:9px;height:9px;border-radius:50%;display:inline-block}
-.line .ct{margin-right:12px;min-width:30px;height:30px;border-radius:0;background:var(--mist);display:grid;place-items:center;font-weight:700;font-size:14px;color:var(--navy)}
-.line:hover{box-shadow:0 10px 22px -16px rgba(19,41,60,.6);transform:translateY(-2px)}
-.line[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
-.line[aria-pressed="true"] small{color:#B9CEDC}
-.line[aria-pressed="true"] .ct{background:var(--teal);color:var(--navy)}
-@media(max-width:980px){.lines{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:720px){.lines{grid-template-columns:repeat(2,minmax(0,1fr))}.line .nm small .lt{display:none}.line .ct{margin-right:8px}}
-@media(max-width:380px){.lines{grid-template-columns:1fr}}
+.dep{background:#0B0F13;color:#F4C542;box-shadow:0 22px 44px -26px rgba(0,0,0,.7);border-top:6px solid var(--red)}
+.dep-top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;background:#151B21;border-bottom:1px solid #222B33}
+.dep-top h2{display:flex;align-items:center;gap:12px;color:#fff;font-family:var(--c);font-weight:800;font-size:clamp(24px,3vw,32px);line-height:1;letter-spacing:.01em}
+.dep-top h2 .roundel{width:26px;height:26px;border-width:4px}
+.dep-top p{color:#9FB0BE;font-size:14.5px;font-weight:500;max-width:46ch}
+.dep-clock{flex:none;background:#000;color:#F4C542;font-weight:700;font-size:22px;letter-spacing:.06em;padding:3px 10px;font-variant-numeric:tabular-nums;text-shadow:0 0 10px rgba(244,197,66,.45)}
+.dep-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 2px;background:#222B33}
+.dep-col{background:#0B0F13}
+.dep-h,.line{display:grid;grid-template-columns:34px minmax(0,1.5fr) minmax(0,1fr) 92px;gap:0 12px;align-items:center;padding:0 16px}
+.dep-h{padding-top:8px;padding-bottom:8px;color:#7F92A1;font-weight:600;font-size:13px;border-bottom:1px solid #1E2830}
+.lines{display:block}
+.line{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:34px minmax(0,1.5fr) minmax(0,1fr) 92px;gap:0 12px;align-items:center;padding:11px 16px;border-bottom:1px solid #1A232B;position:relative;transition:background .25s var(--ease)}
+.line .no{font-weight:700;font-size:14px;color:#7F92A1;font-variant-numeric:tabular-nums}
+.line .dest{font-family:var(--c);font-weight:700;font-size:21px;line-height:1.1;color:#F4C542;text-shadow:0 0 10px rgba(244,197,66,.3)}
+.line .dest small{display:block;font-family:var(--f);font-weight:500;font-size:13px;color:#8FA2B0;text-shadow:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.line .via{display:flex;gap:4px;flex-wrap:wrap}
+.line .via i{display:grid;place-items:center;width:24px;height:24px;background:var(--mc);color:#fff;font-style:normal;font-size:14px}
+.line .plat{justify-self:end;text-align:right;font-weight:700;font-size:14px;color:#fff;white-space:nowrap}
+.line .plat b{display:inline-block;min-width:26px;text-align:center;background:#1E2830;color:#F4C542;padding:2px 6px;margin-right:6px;font-variant-numeric:tabular-nums}
+.line:hover{background:#141C23}
+.line:hover .dest{color:#FFD86B}
+.line[aria-pressed="true"]{background:#F4C542}
+.line[aria-pressed="true"] .dest,.line[aria-pressed="true"] .no{color:#0B0F13;text-shadow:none}
+.line[aria-pressed="true"] .dest small{color:#3A3320}
+.line[aria-pressed="true"] .plat{color:#0B0F13}
+.line[aria-pressed="true"] .plat b{background:#0B0F13;color:#F4C542}
+.line[aria-pressed="true"]:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--red)}
+.dep-foot{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 20px;background:#151B21;color:#9FB0BE;font-size:13.5px;font-weight:500}
+.dep-foot span{display:inline-flex;align-items:center;gap:6px}
+.dep-foot i{display:inline-grid;place-items:center;width:18px;height:18px;background:var(--mc);color:#fff;font-style:normal;font-size:11px}
+@media(max-width:900px){.dep-cols{grid-template-columns:1fr}.dep-col+.dep-col .dep-h{display:none}.dep-top p{display:none}}
+@media(max-width:520px){.dep-h{display:none}.line{grid-template-columns:26px minmax(0,1fr) auto;padding:10px 12px}.line .via{display:none}.line .plat b{margin-right:0}.line .plat span{display:none}}
 
 /* ---------- results ---------- */
 .res{padding:40px 0 20px}
@@ -403,9 +416,10 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
   </div>
 </header>
 
-<section class="board" aria-label="Choose your show"><div class="wrap"><div class="board-in">
-  <div class="board-h"><h2>Choose your show</h2><p>The number is how many ways in by public transport I have mapped.</p></div>
-  <div class="lines" id="lines"></div>
+<section class="board" aria-label="Choose your show"><div class="wrap"><div class="dep">
+  <div class="dep-top"><div><h2><span class="roundel" aria-hidden="true"></span>Choose your show</h2><p>Pick where you’re heading. The last column is how many ways in by public transport I have mapped.</p></div><span class="dep-clock" data-clock>--:--</span></div>
+  <div class="dep-cols" id="lines"></div>
+  <div class="dep-foot" id="depKey"></div>
 </div></div></section>
 
 <main class="res" id="results"><div class="wrap">
@@ -486,17 +500,22 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
   $('fGo').addEventListener('click',function(){$('results').scrollIntoView({behavior:'smooth',block:'start'});});
 
   /* ---------- status board of shows ---------- */
-  $('lines').innerHTML=SHOWS.map(function(s){
-    var dots=s.groups.map(function(g){return '<i class="md" style="background:'+MODE[g.name].c+'" title="'+esc(MODE[g.name].lb)+'"></i>';}).join('');
-    return '<button type="button" class="line" data-show="'+s.k+'" aria-pressed="false" style="--lc:'+s.lc+'"><span class="bar"></span><span class="nm"><b>'+esc(s.name)+'</b><small>'+dots+' <span class="lt">'+esc(s.groups.map(function(g){return MODE[g.name].lb;}).join(', '))+'</span></small></span><span class="ct">'+s.count+'</span></button>';
-  }).join('');
+  (function(){
+    var half=Math.ceil(SHOWS.length/2), cols=[SHOWS.slice(0,half),SHOWS.slice(half)];
+    var head='<div class="dep-h"><span>No.</span><span>Show</span><span>By</span><span style="text-align:right">Ways in</span></div>';
+    $('lines').innerHTML=cols.map(function(c,ci){return '<div class="dep-col">'+head+c.map(function(s,i){
+      var via=s.groups.map(function(g){var m=MODE[g.name];return '<i style="--mc:'+m.c+'" title="'+esc(m.lb)+'">'+ic(m.k)+'</i>';}).join('');
+      return '<button type="button" class="line" data-show="'+s.k+'" aria-pressed="false"><span class="no">'+('0'+(ci*half+i+1)).slice(-2)+'</span><span class="dest">'+esc(s.full)+'<small>'+esc(s.place)+'</small></span><span class="via">'+via+'</span><span class="plat"><b>'+s.count+'</b><span>ways in</span></span></button>';
+    }).join('')+'</div>';}).join('');
+    $('depKey').innerHTML=['By train','By bus','By coach','Park and Ride'].map(function(n){var m=MODE[n];return '<span><i style="--mc:'+m.c+'">'+ic(m.k)+'</i>'+esc(m.lb)+'</span>';}).join('')+'<span>Picked show lights up in yellow</span>';
+  })();
   $('lines').addEventListener('click',function(e){var b=e.target.closest('[data-show]');if(b)pick(b.dataset.show,true);});
 
   function cur(){return SHOWS.filter(function(s){return s.k===st.show;})[0]||SHOWS[0];}
   function pick(k,scroll){st.show=k;st.open=null;st.mode='all';sync();render();if(scroll)$('results').scrollIntoView({behavior:'smooth',block:'start'});try{history.replaceState(null,'','#'+k);localStorage.setItem('ptPlanner',JSON.stringify({show:k}));}catch(e){}}
   function sync(){
     var s=cur(); $('fShow').value=s.k;
-    [].forEach.call($('lines').children,function(b){b.setAttribute('aria-pressed',String(b.dataset.show===s.k));});
+    $('lines').querySelectorAll('.line').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.show===s.k));});
     [].forEach.call($('fModes').children,function(b){var has=b.dataset.m==='all'||s.groups.some(function(g){return g.name===b.dataset.m;});b.disabled=!has;b.style.opacity=has?'':'.4';b.setAttribute('aria-pressed',String(b.dataset.m===st.mode));});
   }
 
