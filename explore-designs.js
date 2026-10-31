@@ -556,7 +556,9 @@
     var st = document.createElement('style');
     st.textContent = CSS_BASE + ({ line: CSS_LINE, board: CSS_BOARD, stop: CSS_STOP, mix: CSS_MIX }[DESIGN]) + CSS_HERO;
     decorateHero();
-    document.head.appendChild(st);
+    /* on the live site the guide sits inside the site's own container, so the styles go next to it, not in the page head */
+    var host = explore.getRootNode && explore.getRootNode();
+    if (host && host.nodeType === 11) host.appendChild(st); else document.head.appendChild(st);
 
     explore.classList.add('xd-on');
     var hold = document.createElement('div'); hold.className = 'xd-hold';
