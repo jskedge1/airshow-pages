@@ -22,7 +22,11 @@
     'headcorn':['headcorn','Headcorn Airshow']
   };
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  /* Switched off until the Wix page /show-day-live exists, so the button never leads to a missing page.
+     Set to true once that page is on the site. */
+  var SHOW_DAY_LIVE_READY=false;
   function go(){
+    if(!SHOW_DAY_LIVE_READY) return;
     var file=(location.pathname.split('/').pop()||'').replace(/\.html$/,'').replace(/-v\d+$/,'');
     var s=SHOWS[file];
     if(!s||document.getElementById('sd-band')) return;
