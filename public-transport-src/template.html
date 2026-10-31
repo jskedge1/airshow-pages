@@ -384,7 +384,56 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
 .chip[aria-pressed="true"] i{color:#fff}
 .opt{border-left:5px solid var(--m)}
 
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.bl-via span{padding-left:0}}
+
+/* ---------- motion and hover ---------- */
+.msec{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.msec.in{opacity:1;transform:none}
+.opt{transition:box-shadow .3s var(--ease),border-color .3s,transform .3s var(--ease)}
+.opt:hover{transform:translateY(-2px);box-shadow:0 16px 30px -22px rgba(19,41,60,.7),inset 4px 0 0 var(--m)}
+.mode-r{transition:transform .4s var(--ease)}
+.opt:hover .mode-r{transform:scale(1.06) rotate(-4deg)}
+.oh .t{transition:color .2s}
+.opt:hover .oh .t{color:var(--m)}
+.leg{transition:transform .2s var(--ease),filter .2s}
+.opt:hover .leg{transform:translateY(-1px)}
+.opt:hover .leg:hover{filter:brightness(1.12)}
+.feature .tr-box,.feature .br-box{transition:box-shadow .3s var(--ease),transform .3s var(--ease)}
+.feature .tr-box:hover,.feature .br-box:hover{transform:translateY(-2px);box-shadow:0 16px 30px -24px rgba(19,41,60,.7)}
+.mt-i{transition:background .25s}
+.mt-i:hover{background:color-mix(in srgb,var(--m) 7%,#fff)}
+.mt-i:hover .mt-n{transform:scale(1.1)}
+.mt-n{transition:transform .25s var(--ease)}
+.mtips summary{transition:background .2s}
+.mtips summary:hover{background:#F6F9FB}
+.chip{transition:background .2s,border-color .2s,color .2s,transform .2s}
+.chip:hover{transform:translateY(-1px);border-color:var(--m,#13293C)}
+.sg-clock .col{animation:blink 2s steps(1) infinite}
+@keyframes blink{50%{opacity:.25}}
+
+/* ---------- train extras: rail track and station signs ---------- */
+.track{position:relative;height:22px;background:#2A3037;overflow:hidden}
+.track:before{content:"";position:absolute;left:0;right:0;top:6px;height:10px;background:repeating-linear-gradient(90deg,#4A535C 0 6px,transparent 6px 18px)}
+.track:after{content:"";position:absolute;left:0;right:0;top:7px;height:8px;border-top:2px solid #9AA6B0;border-bottom:2px solid #9AA6B0}
+.track .loco{position:absolute;top:2px;left:-90px;width:86px;height:16px;z-index:1}
+.msec.in .track .loco{animation:loco 3.6s cubic-bezier(.45,.05,.3,1) .3s forwards}
+@keyframes loco{to{left:calc(100% - 100px)}}
+.stn{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:10px}
+.tile{background:#fff;border:1px solid var(--line);padding:12px 14px;display:flex;gap:12px;align-items:center;transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}
+.tile:hover{transform:translateY(-2px);border-color:var(--m);box-shadow:0 12px 24px -20px rgba(19,41,60,.7)}
+.tile small{display:block;font-size:12.5px;font-weight:600;color:var(--soft)}
+.tile b{display:block;font-size:16px;line-height:1.25;color:var(--navy)}
+.tile .ti{width:36px;height:36px;display:grid;place-items:center;flex:none;font-size:19px;color:#fff;background:var(--navy)}
+.tile.nameboard{background:var(--navy);border-color:var(--navy);border-top:5px solid var(--train)}
+.tile.nameboard small{color:#AFC3D2}
+.tile.nameboard b{color:#fff;font-size:18px}
+.tile.nameboard .ti{background:var(--train)}
+.tile.walk .ti{border-radius:50%;background:#1D63B7}
+.tile.live .ti{background:#0D1218;color:#F4C542}
+.tile.live b{color:var(--navy)}
+.tile.live .pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pr);margin-right:6px;animation:pulse 1.6s ease-in-out infinite;vertical-align:1px}
+@keyframes pulse{50%{opacity:.25;transform:scale(.7)}}
+
+@media(prefers-reduced-motion:reduce){.msec{opacity:1;transform:none}*{transition:none!important;animation:none!important}.bl-via span{padding-left:0}}
 @media print{
   .topbar,.hero,.board,.res-h,.alert,.filters,.opts,.map,.faq,footer,.plan-acts{display:none!important}
   body{background:#fff}.layout{display:block}.side{position:static}
@@ -555,7 +604,9 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
     var m=MODE[g.name], n=g.items.length;
     if(m.k==='train'){
       var stn=(s.facts.filter(function(f){return f[0]==='Nearest station';})[0]||[])[1]||s.name;
-      return '<div class="sg sg-train"><div class="sg-l"><span class="sg-ic">'+ic('train')+'</span><div><small>Trains to</small><b>'+esc(stn)+'</b></div></div><div class="sg-r"><span class="sg-dep">Departures</span><span class="sg-clock" data-clock>--:--</span></div></div>';
+      return '<div class="sg sg-train"><div class="sg-l"><span class="sg-ic">'+ic('train')+'</span><div><small>Trains to</small><b>'+esc(stn)+'</b></div></div><div class="sg-r"><span class="sg-dep">Departures</span><span class="sg-clock" data-clock>--:--</span></div></div>'
+        +'<div class="track" aria-hidden="true"><svg class="loco" viewBox="0 0 86 16"><rect x="2" y="1" width="80" height="11" fill="#D74949"/><path d="M82 1h2l2 6v5h-4z" fill="#D74949"/><rect x="8" y="3" width="8" height="4" fill="#E8F4FA"/><rect x="20" y="3" width="8" height="4" fill="#E8F4FA"/><rect x="32" y="3" width="8" height="4" fill="#E8F4FA"/><rect x="44" y="3" width="8" height="4" fill="#E8F4FA"/><rect x="56" y="3" width="8" height="4" fill="#E8F4FA"/><rect x="68" y="3" width="10" height="4" fill="#E8F4FA"/><rect x="2" y="9" width="84" height="2" fill="#F2B233"/><circle cx="14" cy="13.5" r="2" fill="#111"/><circle cx="70" cy="13.5" r="2" fill="#111"/></svg></div>'
+        +stnTiles(g,s,stn);
     }
     if(m.k==='bus'){
       var nums=busList(s.k).map(function(b){return b[0];});
@@ -566,8 +617,17 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
     }
     return '<div class="sg sg-pr"><span class="pr-p">P</span><div><small>Leave the car and ride in</small><b>Park and Ride</b></div><span class="pr-arrow" aria-hidden="true">→</span></div>';
   }
+  function stnTiles(g,s,stn){
+    var t=g.items[0]||{}, meta=t.meta||[], walk=null, rest=[];
+    meta.forEach(function(m){ if(/walk/i.test(m[0])) walk=m; else rest.push(m); });
+    var h='<div class="stn"><div class="tile nameboard"><span class="ti">'+ic('train')+'</span><div><small>Station</small><b>'+esc(stn)+'</b></div></div>';
+    if(walk) h+='<div class="tile walk"><span class="ti">'+ic('walk')+'</span><div><small>Then walk</small><b>'+esc(walk[1])+'</b></div></div>';
+    rest.slice(0,1).forEach(function(m){h+='<div class="tile"><span class="ti">'+ic('any')+'</span><div><small>'+esc(m[0])+'</small><b>'+esc(m[1])+'</b></div></div>';});
+    h+='<div class="tile live"><span class="ti">'+ic('any')+'</span><div><small>Train times</small><b>'+(s.trainPage?'<span class="pulse"></span>Live times online':'In each option below')+'</b></div></div>';
+    return h+'</div>';
+  }
   var TIPS={
-    train:[['Look at a railcard','A Two Together or Family and Friends Railcard takes money off the fare, and it often pays for itself in one trip.'],['Check for engineering works','Summer weekends are when a lot of rail work happens. I would look the week before and again on the morning.'],['Think about a flexible ticket home','The trains are busy straight after the flying, and an Advance ticket ties you to one train.']],
+    train:[['Look at a railcard','A Two Together or Family and Friends Railcard takes money off, and it can pay for itself in one trip.'],['Check for engineering works','Summer weekends are busy for rail works. I would check the week before, then again on the morning.'],['Think about a flexible ticket home','Trains are packed straight after the flying. An Advance ticket ties you to one train.']],
     bus:[['Have a way to pay','Most buses take contactless now, but I would carry a little change just in case.'],['Ask the driver','If you’re not sure which stop is yours, tell the driver where you’re going. They’ll usually let you know.'],['Walk back a stop','On the way home I would walk a stop or two back along the route. The queue is shorter and you may get a seat.']],
     coach:[['Book ahead','Coach seats are booked, and show weekends can sell out, so try to book early.'],['Check the luggage rules','Chairs and cool boxes take up room, so have a look at what you’re allowed before you pack.'],['Allow for traffic home','Coaches use the same roads as everyone leaving the show, so build in some extra time.']],
     pr:[['Book if you need to','Some Park and Ride sites are pre-booked only, so please see the rules for your show before you go.'],['Note your stop','Take a photo of the stop name and the last bus time when you get off.'],['Let the first rush go','There’s usually a queue for the buses at the end. If you can, have a drink first and catch a later bus.']]
@@ -621,9 +681,11 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
     var tn=$('townNote');
     if(q){tn.classList.add('on');tn.innerHTML=hits?'<b>'+hits+(hits===1?' way in':' ways in')+'</b> for '+esc(s.name)+' mention '+esc(q)+'. They are marked below.':'None of the ways in for '+esc(s.name)+' mention '+esc(q)+'. Try the nearest big town, or see the buses from there to other shows below.';}
     else tn.classList.remove('on');
-    tick(); townRes(); planRender(); mapTo((s.items.filter(function(t){return t.id===st.open;})[0]||{}).place||s.place);
+    tick(); reveal(); townRes(); planRender(); mapTo((s.items.filter(function(t){return t.id===st.open;})[0]||{}).place||s.place);
   }
-  function tick(){var d=new Date(),t=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);document.querySelectorAll('[data-clock]').forEach(function(e){e.textContent=t;});}
+  function tick(){var d=new Date(),hh=('0'+d.getHours()).slice(-2),mm=('0'+d.getMinutes()).slice(-2);document.querySelectorAll('[data-clock]').forEach(function(e){e.innerHTML=hh+'<span class="col">:</span>'+mm;});}
+  var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'}):null;
+  function reveal(){document.querySelectorAll('.msec:not(.in)').forEach(function(el){if(io)io.observe(el);else el.classList.add('in');});}
   setInterval(tick,15000);
   function stepsHTML(t){
     if(!t.route||!t.route.length)return '';

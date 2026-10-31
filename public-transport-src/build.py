@@ -120,7 +120,7 @@ for k, name, full, place, slug, intro in SHOWS:
     station = ''
     for t in items:
         if t['g'] == 'By train':
-            station = next((m[1] for m in t.get('meta', []) if m[0].lower() == 'station'), '') or re.sub(r'^Train to ', '', t['name'])
+            station = next((m[1] for m in t.get('meta', []) if m[0].lower() == 'station'), '') or (re.search(r'(?i)trains? to ([^,]+)', t['title']) or re.search(r'(?i)trains? to ([^,]+)', t['name']) or [None, t['name']])[1].strip()
             break
     facts = [['Showground', place, 'By road']]
     if station: facts.append(['Nearest station', station, 'By train'])
