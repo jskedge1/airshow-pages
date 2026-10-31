@@ -16,10 +16,9 @@
 
   function href(id){ return WIX_PAGE ? SITE + WIX_PAGE + '?r=' + id : BASE + id + '.html'; }
 
-  function css(){
-    if (document.getElementById('ukag-br-css')) return;
-    var s = document.createElement('style'); s.id = 'ukag-br-css';
-    s.textContent =
+  /* The styles go in the page head and inside each route box too, because the feature pages run inside
+     the site's page element, where styles in the head do not reach the buttons. */
+  var CSS =
       '.br-box{margin:18px 0 8px;background:#fff;color:#13293C;border-left:5px solid #F2B233;padding:16px 18px 18px;border-radius:0}' +
       '.br-box h4.br-h{margin:0!important;padding:0!important;font-family:"Barlow Condensed",sans-serif!important;font-weight:800!important;font-size:24px!important;line-height:26px!important;text-transform:uppercase!important;letter-spacing:0!important;color:#13293C!important}' +
       '.br-box p.br-p{margin:6px 0 12px!important;font-family:"Barlow",sans-serif!important;font-weight:500!important;font-size:15px!important;line-height:22px!important;color:#4E5D68!important;text-transform:none!important}' +
@@ -32,6 +31,10 @@
       'a.br-btn i{font-style:normal;display:flex;align-items:center;padding:0 12px 0 2px;border-bottom:4px solid var(--b2,#F2B233);transition:transform .3s cubic-bezier(.22,.61,.36,1)}' +
       'a.br-btn:hover i{transform:translateX(3px)}' +
       '@media(max-width:420px){a.br-btn{flex:1 1 100%}.br-txt{flex:1}}';
+  function css(){
+    if (document.getElementById('ukag-br-css')) return;
+    var s = document.createElement('style'); s.id = 'ukag-br-css';
+    s.textContent = CSS;
     document.head.appendChild(s);
   }
 
@@ -41,7 +44,7 @@
     css();
     var tgt = WIX_PAGE ? ' target="_top"' : ' target="_blank" rel="noopener"';
     var one = list.length === 1;
-    return '<div class="br-box"><h4 class="br-h">' + (one ? 'Route map for the ' + list[0][0] : 'Route maps for these buses') + '</h4>' +
+    return '<div class="br-box"><style>' + CSS + '</style><h4 class="br-h">' + (one ? 'Route map for the ' + list[0][0] : 'Route maps for these buses') + '</h4>' +
       '<p class="br-p">' + (one ? 'See the roads it takes, every stop and the times, with the stop closest to the show marked.'
                    : 'Pick a bus to see the roads it takes, every stop and the times, with the stop closest to the show marked.') + '</p>' +
       '<div class="br-list">' + list.map(function(r){

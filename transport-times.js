@@ -4429,7 +4429,8 @@ function fmtDate(iso){ var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso||''); if(!m) r
 function render(show, id){
   var s=DATA[show]; if(!s||!s[id]||!s[id].length) return '';
   css();
-  var h='<div class="ttx"><p class="ttx-head">Train and bus times</p>';
+  /* styles also go inside the box, because the feature pages run inside the site's page element where styles in the head do not reach */
+  var h='<div class="ttx"><style>'+CSS+'</style><p class="ttx-head">Train and bus times</p>';
   s[id].forEach(function(t,i){
     h+='<details'+(i===0?' open':'')+'><summary>'+esc(t.title)+'</summary><div class="ttx-rows">';
     (t.rows||[]).forEach(function(r){ h+='<div class="ttx-row"><b>'+esc(r[0])+'</b><span>'+esc(r[1])+'</span><em>'+esc(r[2])+'</em></div>'; });
