@@ -432,6 +432,18 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
 .go{background:var(--purple)}
 .go:hover{background:#563F8A}
 
+/* ---------- hero tabs: coloured icon block with a pointed edge, dark label bar ---------- */
+.htabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:28px;max-width:640px}
+.htab{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:stretch;min-height:54px;background:#454850;color:#fff;box-shadow:0 6px 16px -10px rgba(0,0,0,.6);transition:background .25s,transform .25s var(--ease)}
+.htab .hi{position:relative;flex:none;width:58px;display:grid;place-items:center;background:var(--tc);color:#fff;transition:width .3s var(--ease)}
+.htab .hi:after{content:"";position:absolute;right:-14px;top:0;bottom:0;width:14px;background:var(--tc);clip-path:polygon(0 0,100% 50%,0 100%)}
+.htab .hi svg{width:24px;height:24px}
+.htab .hl{flex:1;display:flex;align-items:center;gap:6px;padding:8px 16px 8px 28px;font-weight:500;font-size:16px;letter-spacing:.01em}
+.htab .hl b{font-family:var(--c);font-weight:700;font-size:24px;line-height:1;color:#fff}
+.htab:hover,.htab:focus-visible{background:#2F3238;transform:translateY(-2px)}
+.htab:hover .hi{width:66px}
+@media(max-width:520px){.htabs{grid-template-columns:1fr}}
+
 /* ---------- motion and hover ---------- */
 .msec{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .msec.in{opacity:1;transform:none}
@@ -500,7 +512,12 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
     <div>
       <h1>Get to the airshow by <em>train, bus or coach</em></h1>
       <p class="sub">Pick your show and where you’re starting from. I’ll show you every way in, where to get off, the times and the walk to the gate. Then add the ones you like to your plan for the day.</p>
-      <div class="stats"><span style="--c1:var(--teal)"><i></i>12 shows</span><span style="--c1:var(--bus)"><i></i>53 bus routes mapped</span><span style="--c1:var(--train)"><i></i>5 train route pages</span></div>
+      <div class="htabs">
+        <button type="button" class="htab" data-go="board" style="--tc:#2BA84A"><span class="hi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg></span><span class="hl"><b>12</b> shows to pick from</span></button>
+        <button type="button" class="htab" data-go="sec-bus" style="--tc:#00A6E2"><span class="hi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 11h16M7 17v3M17 17v3" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="8" cy="14" r="1" fill="currentColor"/><circle cx="16" cy="14" r="1" fill="currentColor"/></svg></span><span class="hl"><b>53</b> bus routes mapped</span></button>
+        <button type="button" class="htab" data-go="sec-train" style="--tc:#D74949"><span class="hi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 10h14M8 20l2-4M16 20l-2-4" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/></svg></span><span class="hl"><b>5</b> train route pages</span></button>
+        <button type="button" class="htab" data-go="plan" style="--tc:#E07A1F"><span class="hi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 5v14" stroke="currentColor" stroke-width="2" stroke-dasharray="2 2"/></svg></span><span class="hl">Build my travel plan</span></button>
+      </div>
     </div>
     <form class="planner" id="planner" onsubmit="return false">
       <div class="planner-h"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.5" fill="#D74949"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 2"/></svg></span><span><b>Plan your journey</b><small>Times are this winter’s, a good guide for 2027</small></span></div>
@@ -596,6 +613,13 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
   $('fModes').addEventListener('click',function(e){var b=e.target.closest('[data-m]');if(!b)return;st.mode=b.dataset.m;sync();render();});
   $('fFrom').addEventListener('input',function(){st.from=this.value.trim();$('fClear').hidden=!this.value;render();});
   $('fClear').addEventListener('click',function(){$('fFrom').value='';st.from='';this.hidden=true;render();$('fFrom').focus();});
+  document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){
+    var id=b.dataset.go, el=id==='board'?document.querySelector('.board'):$(id);
+    if(!el&&id.indexOf('sec-')===0){st.mode='all';sync();render();el=$(id);}
+    if(!el&&id==='sec-bus'){el=$('results');}
+    if(!el&&id==='sec-train'){el=$('results');}
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  });});
   $('fGo').addEventListener('click',function(){$('results').scrollIntoView({behavior:'smooth',block:'start'});});
 
   /* ---------- status board of shows ---------- */
