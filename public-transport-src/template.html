@@ -286,7 +286,7 @@ svg.i{width:1em;height:1em;flex:none}
 .qa details{background:#fff;border:1px solid var(--line);border-radius:var(--r-s)}
 .qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;font-weight:700;font-size:17.5px;color:var(--navy)}
 .qa summary::-webkit-details-marker{display:none}
-.qa summary:after{content:"+";width:28px;height:28px;border-radius:50%;background:var(--mist);display:grid;place-items:center;font-size:20px;flex:none;transition:transform .3s var(--ease)}
+.qa summary:after{content:"+";width:28px;height:28px;border-radius:0;background:var(--mist);display:grid;place-items:center;font-size:20px;flex:none;transition:transform .3s var(--ease)}
 .qa details[open] summary:after{transform:rotate(45deg);background:var(--navy);color:#fff}
 .qa .a{padding:0 18px 18px;color:#2C3D4A;max-width:75ch}
 .more{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:30px}
@@ -384,6 +384,38 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
 .chip[aria-pressed="true"] i{color:#fff}
 .opt{border-left:5px solid var(--m)}
 
+
+/* ---------- good to know: information sign ---------- */
+.info-h{display:flex;align-items:center;gap:14px;background:#1D63B7;color:#fff;padding:14px 18px;margin-bottom:12px;border-bottom:5px solid var(--navy)}
+.info-i{width:42px;height:42px;border-radius:50%;background:#fff;color:#1D63B7;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;font-style:italic;font-size:26px;flex:none}
+.info-h h2{color:#fff!important;margin:0!important;font-size:clamp(26px,3vw,34px)!important;line-height:1}
+.info-h p{color:#D3E4F5;font-weight:500;font-size:15px;margin-top:2px}
+.info-modes{margin-left:auto;display:flex;gap:4px}
+.info-modes i{width:12px;height:28px;background:var(--mc)}
+.qa details{border-left:5px solid var(--qc);transition:border-color .25s,box-shadow .25s}
+.qa summary{justify-content:flex-start;transition:background .25s,color .25s}
+.qa summary .qt{flex:1}
+.qa .qi{width:34px;height:34px;display:grid;place-items:center;background:var(--qc);color:#fff;font-size:18px;flex:none;transition:background .25s,color .25s}
+.qa summary:hover{background:#1D63B7;color:#fff}
+.qa summary:hover .qi{background:#fff;color:#1D63B7}
+.qa summary:hover:after{background:#fff;color:#1D63B7}
+.qa details:hover{box-shadow:0 12px 26px -22px rgba(29,99,183,.9)}
+.qa details[open]{border-left-color:#1D63B7}
+.qa details[open] summary{color:#1D63B7}
+.qa details[open] summary:hover{color:#fff}
+.qa .a{padding-left:64px}
+@media(max-width:560px){.qa .a{padding-left:18px}.info-modes{display:none}}
+.more-h{margin:28px 0 10px;font-size:19px;color:var(--navy)}
+.more{margin-top:0!important}
+.more a{display:grid!important;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;border-top:4px solid var(--mc)!important;transition:background .25s,color .25s,transform .25s var(--ease),border-color .25s!important}
+.more a .mi{width:40px;height:40px;display:grid;place-items:center;background:var(--mc);color:#fff}
+.more a .mi svg{width:22px;height:22px}
+.more a small{display:block;font-weight:600;font-size:12.5px;color:var(--soft)}
+.more a .ar{font-size:20px;transition:transform .25s var(--ease)}
+.more a:hover{background:#1D63B7;color:#fff;border-color:#1D63B7!important;border-top-color:var(--mc)!important;transform:translateY(-3px)}
+.more a:hover small{color:#D3E4F5}
+.more a:hover .ar{transform:translateX(4px)}
+.more a:hover .mi{background:#fff;color:#1D63B7}
 
 /* ---------- motion and hover ---------- */
 .msec{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
@@ -501,13 +533,14 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
 </div></main>
 
 <section class="faq"><div class="wrap">
-  <h2>Good to know</h2>
+  <div class="info-h"><span class="info-i" aria-hidden="true">i</span><div><h2>Good to know</h2><p>Quick answers before you travel</p></div><span class="info-modes" aria-hidden="true"><i style="--mc:var(--train)"></i><i style="--mc:var(--bus)"></i><i style="--mc:var(--coach)"></i><i style="--mc:var(--pr)"></i></span></div>
   <div class="qa" id="faq"></div>
+  <h3 class="more-h">Keep planning</h3>
   <div class="more">
-    <a href="https://www.ukairshowguide.co.uk/first-airshow-getting-there" target="_top">Getting there guide <span aria-hidden="true">→</span></a>
-    <a href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top">Find your airshow <span aria-hidden="true">→</span></a>
-    <a href="https://www.ukairshowguide.co.uk/first-airshow-what-to-pack" target="_top">What to pack <span aria-hidden="true">→</span></a>
-    <a href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top">Camping at airshows <span aria-hidden="true">→</span></a>
+    <a href="https://www.ukairshowguide.co.uk/first-airshow-getting-there" target="_top" style="--mc:var(--train)"><span class="mi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.5" fill="currentColor"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span><small>Guide</small>Getting there</span><span class="ar" aria-hidden="true">→</span></a>
+    <a href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top" style="--mc:var(--bus)"><span class="mi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg></span><span><small>Shows</small>Find your airshow</span><span class="ar" aria-hidden="true">→</span></a>
+    <a href="https://www.ukairshowguide.co.uk/first-airshow-what-to-pack" target="_top" style="--mc:var(--coach)"><span class="mi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 7V4h6v3M4 12h16" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span><small>Checklist</small>What to pack</span><span class="ar" aria-hidden="true">→</span></a>
+    <a href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top" style="--mc:var(--pr)"><span class="mi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20L12 4l9 16zM12 20l-3-6h6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span><small>Stay over</small>Camping at airshows</span><span class="ar" aria-hidden="true">→</span></a>
   </div>
 </div></section>
 <footer><div class="wrap">The Big Guide to UK Airshows. Bus and train times change, so please check with the bus or train company before you travel. <a href="https://www.ukairshowguide.co.uk/" target="_top">Back to the home page</a></div></footer>
@@ -779,7 +812,8 @@ a.bnum:hover,a.bnum:focus-visible{transform:translateY(-2px);background:var(--b1
   }
 
   document.head.insertAdjacentHTML('beforeend',brStyle());
-  $('faq').innerHTML=FAQ.map(function(q,i){return '<details'+(i===0?' open':'')+'><summary>'+esc(q[0])+'</summary><div class="a">'+q[1]+'</div></details>';}).join('');
+  var FQM=[['bus','#00A6E2'],['bus','#00A6E2'],['train','#D74949'],['any','#13293C'],['train','#D74949']];
+  $('faq').innerHTML=FAQ.map(function(q,i){var m=FQM[i]||['any','#13293C'];return '<details'+(i===0?' open':'')+' style="--qc:'+m[1]+'"><summary><span class="qi">'+ic(m[0])+'</span><span class="qt">'+esc(q[0])+'</span></summary><div class="a">'+q[1]+'</div></details>';}).join('');
   sync(); render();
 })();
 </script>
