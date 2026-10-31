@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Build Your Kit Calculator | The Big Guide to UK Airshows</title>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout concept: the camping hub look. Full width flyby photo with a big centred condensed title, a glass bar over its lower edge that switches between the two lists, a dark sticky tab bar for brands or kit groups, white list pages on faint teal contours, and one navy tool panel for totals and budget. */
+:root{
+  --navy:#13293C; --deep:#0E2131; --teal:#32B4AF; --tealink:#0E5F5B; --purple:#6950A1; --red:#D74949;
+  --paper:#F4F6F8; --mint:#F2F7F7; --white:#FFFFFF; --ink:#0B1722; --line:#CBD5DD; --mute:#33475A; --pale:#8FDCD8;
+  --font:'Barlow','Helvetica Neue',Arial,sans-serif;
+  --cond:'Barlow Condensed','Barlow','Arial Narrow',sans-serif;
+  --hand:'Caveat','Segoe Script',cursive;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+[hidden]{display:none!important}
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--white);color:var(--ink);font:400 17px/1.6 var(--font)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--deep);z-index:30}
+img{max-width:100%}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+button,input,select{font-family:var(--font)}
+.in{max-width:1240px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+
+/* photo header */
+.phero{position:relative;min-height:clamp(440px,64vh,640px);background:var(--navy) url(https://jskedge1.github.io/airshow-pages/kit-calculator-img/hero-flyby.jpg) center 55%/cover no-repeat;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;overflow:hidden}
+.phero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,41,60,.15) 0%,rgba(19,41,60,.45) 45%,rgba(19,41,60,.94) 100%)}
+.phero-in{position:relative;text-align:center;padding-bottom:30px;display:flex;flex-direction:column;align-items:center}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:16px;padding:5px 12px}
+.ptitle{font-family:var(--cond);font-weight:800;font-size:clamp(48px,8.5vw,108px);line-height:.9;margin-top:16px;letter-spacing:.01em;text-shadow:0 4px 30px rgba(0,0,0,.35);max-width:13ch}
+.ptitle em{font-style:normal;color:var(--teal)}
+.psub{max-width:60ch;margin-top:16px;font-size:clamp(17px,1.8vw,20px);color:#E6EEF4}
+
+/* glass list switcher */
+.planbar{position:relative;z-index:3;width:100%;padding-bottom:30px}
+.pb-glass{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:rgba(14,33,49,.94);border-top:4px solid var(--teal);box-shadow:0 18px 44px rgba(0,0,0,.35);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+.pick{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:16px 20px;border-right:1px solid rgba(255,255,255,.1);color:#fff;transition:background .4s ease}
+.pick:hover{background:rgba(50,180,175,.22)}
+.pick:focus-visible{outline:3px solid var(--purple);outline-offset:-3px}
+.pick small{color:var(--pale);font-weight:600;font-size:15px}
+.pick b{font-family:var(--cond);font-size:clamp(24px,2.6vw,32px);font-weight:800;line-height:1}
+.pick span.v{font-weight:700;font-size:18px;font-variant-numeric:tabular-nums}
+.pick[aria-selected="true"]{background:var(--teal)}
+.pick[aria-selected="true"] small{color:#fff}
+.pick.both{cursor:default;background:var(--red)}
+.pick.both:hover{background:var(--red)}
+.pick.both small{color:#fff}
+.pick.both span.v{font-family:var(--cond);font-size:clamp(30px,3.4vw,42px);font-weight:800;line-height:1}
+
+/* tab bar */
+.nav{background:var(--deep);position:sticky;top:env(safe-area-inset-top,0px);z-index:20;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.nav .in{display:flex;overflow-x:auto;scrollbar-width:none}
+.nav .in::-webkit-scrollbar{display:none}
+.nav button{flex:none;font:600 16px/1 var(--font);color:#fff;background:transparent;border:0;padding:19px 15px;cursor:pointer;white-space:nowrap;transition:padding .4s ease,background .4s ease}
+.nav button:hover,.nav button:focus-visible{padding-left:26px;padding-right:26px;background:var(--teal)}
+.nav button[aria-selected="true"]{background:var(--teal)}
+.nav button .ct{display:inline-block;min-width:22px;margin-left:8px;padding:2px 6px;background:var(--purple);font-size:13px;font-variant-numeric:tabular-nums}
+.nav button.alt{background:rgba(105,80,161,.55)}
+.nav button.alt[aria-selected="true"]{background:var(--teal)}
+
+/* faint contour background */
+.topo{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='440' viewBox='0 0 560 440'%3E%3Cg fill='none' stroke='%2332B4AF' stroke-opacity='.10' stroke-width='1.2'%3E%3Cpath d='M120 70c60-30 140-10 170 40s-10 110-80 120-150-10-170-60 20-80 80-100z'/%3E%3Cpath d='M110 40c80-40 190-15 225 55s-15 150-110 160-200-15-225-85 30-105 110-130z'/%3E%3Cpath d='M100 10c100-50 240-20 280 70s-20 190-140 200-250-20-280-110 40-130 140-160z'/%3E%3Cpath d='M420 250c40-20 95-5 110 30s-10 75-55 80-100-10-110-45 15-50 55-65z'/%3E%3Cpath d='M410 220c55-28 130-8 150 42s-14 105-76 112-138-14-152-62 22-70 78-92z'/%3E%3C/g%3E%3C/svg%3E") 0 0/560px 440px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:40px;align-items:start;padding-top:46px;padding-bottom:70px}
+.col{min-width:0}
+
+/* section head with red line */
+.shead{border-left:4px solid var(--red);padding-left:18px;margin-bottom:22px}
+.stitle{font-family:var(--cond);font-size:clamp(34px,4vw,52px);font-weight:800;color:var(--red);line-height:.95;letter-spacing:.01em}
+.sintro{color:var(--mute);max-width:64ch;margin-top:10px}
+.sintro b{color:var(--ink);font-weight:600}
+.lv{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:16px;margin-bottom:10px;color:var(--navy)}
+.lv::before{content:"";width:14px;height:14px;background:var(--teal)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 14px}
+.finder{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin:0 0 24px}
+.search{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-bottom:3px solid var(--teal);padding:0 14px;min-width:0}
+.search svg{flex:none;width:20px;height:20px}
+.search input{flex:1;min-width:0;border:0;background:transparent;font:500 17px var(--font);color:var(--ink);padding:13px 0}
+.search input:focus{outline:none}
+.search input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.search:focus-within{outline:3px solid var(--purple);outline-offset:2px}
+.search button{border:0;background:transparent;color:var(--red);font:700 15px var(--font);cursor:pointer;padding:6px 0}
+.sort{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--navy);white-space:nowrap}
+.sort select{font:500 16px var(--font);padding:12px 10px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.fbtn{font:600 16px/1 var(--font);padding:12px 15px;background:#fff;border:1px solid var(--line);color:var(--navy);cursor:pointer;transition:background .3s,padding .3s,color .3s}
+.fbtn:hover{padding-left:21px;padding-right:21px}
+.fbtn.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.fbtn.red{background:var(--red);border-color:var(--red);color:#fff}
+.stepper{display:inline-flex;align-items:stretch;border:1px solid var(--line);background:#fff}
+.stepper button{width:40px;background:transparent;border:0;cursor:pointer;font-size:20px;font-weight:700;color:var(--navy);transition:background .25s,color .25s}
+.stepper button:hover{background:var(--teal);color:#fff}
+.stepper output{min-width:38px;display:grid;place-items:center;font-weight:700;font-variant-numeric:tabular-nums;padding:8px 4px}
+.lab{font-weight:600;color:var(--navy)}
+.found{margin:0 0 16px;font-weight:600;color:var(--navy)}
+.none{background:#fff;border:1px solid var(--line);border-left:5px solid var(--purple);padding:18px 20px;max-width:62ch}
+
+/* groups and rows */
+.group{background:#fff;border:1px solid var(--line);margin-bottom:22px}
+.group>header{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--teal);color:#fff;padding:12px 16px}
+.group>header.pu{background:var(--purple)}
+.group>header.nv{background:var(--navy)}
+.group h3{font-family:var(--cond);font-size:24px;font-weight:700;letter-spacing:.01em;line-height:1}
+.group h3 small{font-family:var(--font);font-size:15px;font-weight:500;opacity:.9;margin-left:8px;letter-spacing:0}
+.group header .sub{font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto 112px 90px 96px;gap:8px 16px;align-items:center;padding:13px 16px;border-top:1px solid var(--line);transition:background .3s}
+.group>header+.row{border-top:0}
+.row.on{background:var(--mint)}
+.chk{display:flex;gap:12px;align-items:flex-start;cursor:pointer;min-width:0}
+.chk input{appearance:none;-webkit-appearance:none;width:22px;height:22px;flex:none;border:2px solid var(--teal);background:#fff;margin:3px 0 0;cursor:pointer;display:grid;place-items:center;transition:background .2s}
+.chk input:checked{background:var(--teal)}
+.chk input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.nm{min-width:0}
+.nm b{display:block;font-weight:700;font-size:17px;color:var(--navy);line-height:1.25}
+.nm small{display:block;color:var(--mute);font-size:15px;line-height:1.4;margin-top:2px}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.badge{display:inline-block;color:#fff;font-weight:600;font-size:13.5px;padding:2px 8px;background:var(--teal)}
+.badge.pu{background:var(--purple)}.badge.nv{background:var(--navy)}.badge.rd{background:var(--red)}.badge.gr{background:#E3EAEE;color:var(--navy)}
+.price{display:flex;align-items:center;border:1px solid var(--line);background:#fff;padding-left:10px}
+.price span{font-weight:600;color:var(--mute)}
+.price input{width:100%;min-width:0;border:0;background:transparent;padding:9px 8px 9px 4px;font:600 16px var(--font);color:var(--ink);font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.price input::-webkit-outer-spin-button,.price input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.line{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;font-size:17px;color:var(--navy)}
+.row:not(.on) .line{color:#8A99A6}
+.shop{justify-self:end;font-weight:700;font-size:15px;color:var(--red);text-decoration:none;white-space:nowrap}
+.shop::after{content:" \2192";transition:margin .3s}
+.shop:hover::after{margin-left:5px}
+
+
+/* hub link card */
+.hublink{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px 16px;align-items:center;background:var(--mint);border:1px solid var(--line);border-left:5px solid var(--teal);padding:14px 18px;margin:0 0 22px;text-decoration:none;color:var(--ink);transition:transform .3s ease,box-shadow .3s ease}
+.hublink:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(19,41,60,.14)}
+.hl-ic{width:46px;height:46px;border-radius:50%;background:var(--purple);display:grid;place-items:center}
+.hl-ic svg{width:24px;height:24px}
+.hl-tx{min-width:0}
+.hl-tx b{display:block;font-family:var(--cond);font-size:24px;font-weight:700;color:var(--navy);line-height:1.05}
+.hl-tx small{display:block;color:var(--mute);font-size:15px;margin-top:2px}
+.hl-go{font-weight:700;color:var(--red);white-space:nowrap}
+.hl-go::after{content:" \2192";transition:margin .3s}
+.hublink:hover .hl-go::after{margin-left:6px}
+.onsite{justify-self:end;font-size:14px;font-weight:600;color:var(--mute);white-space:nowrap}
+
+/* budget calculator */
+.bcalc{background:var(--navy);color:#fff;border-top:4px solid var(--teal);box-shadow:0 18px 40px rgba(19,41,60,.22);padding:26px;margin-top:34px;scroll-margin-top:80px}
+.bcalc h3{font-family:var(--cond);color:var(--teal);font-weight:800;font-size:clamp(28px,3vw,36px);line-height:1}
+.bc-intro{color:#DCE6EE;max-width:62ch;margin-top:8px}
+.bc-in{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.bc-in label{display:flex;flex-direction:column;gap:6px;color:var(--pale);font-weight:600;font-size:15px;min-width:0}
+.bc-in .bwrap{display:flex;align-items:center;background:#fff;color:var(--ink);padding-left:10px;width:100%}
+.bc-in .bwrap span{font-weight:600;color:var(--mute)}
+.bc-in input{width:100%;min-width:0;border:0;background:transparent;padding:11px 10px 11px 4px;font:700 17px var(--font);color:var(--ink);font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.bc-in input::-webkit-outer-spin-button,.bc-in input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.bc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.bc-big{background:var(--deep);padding:14px 16px;min-width:0}
+.bc-big span{display:block;color:var(--pale);font-weight:500;font-size:15px}
+.bc-big b{display:block;font-family:var(--cond);font-weight:800;font-size:34px;line-height:1.05;margin-top:4px;font-variant-numeric:tabular-nums}
+.bc-big.ok{background:var(--teal)}.bc-big.ok span{color:#fff}
+.bc-big.over{background:var(--red)}.bc-big.over span{color:#fff}
+.bc-big.muted b{font-size:22px;color:#AFC2CF;padding-top:6px}
+.bc-note{margin-top:8px;font-size:15px;color:#DCE6EE}
+.bc-rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px;margin-top:14px}
+.bc-rows div{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;background:rgba(255,255,255,.06);font-variant-numeric:tabular-nums}
+.bc-rows span{color:var(--pale);min-width:0}
+.bc-split{margin-top:18px}
+.bc-st{font-weight:600;color:#fff;margin-bottom:6px}
+.bs-row{display:grid;grid-template-columns:minmax(0,170px) minmax(0,1fr) auto;gap:12px;align-items:center;padding:5px 0;font-variant-numeric:tabular-nums}
+.bs-n{color:var(--pale);font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bs-bar{height:10px;background:rgba(255,255,255,.12)}
+.bs-bar i{display:block;height:100%;background:var(--teal);transition:width .5s cubic-bezier(.22,1,.36,1)}
+.bs-row:nth-child(3n) .bs-bar i{background:var(--purple)}
+.bs-v{font-weight:700}
+.panel .bud{margin-top:12px;font-size:15px;color:#DCE6EE}
+.panel .bud b{color:#fff}
+.panel .tobud{all:unset;cursor:pointer;color:var(--pale);font-weight:600;text-decoration:underline;text-underline-offset:3px;font-size:15px;margin-top:4px;display:inline-block}
+.panel .tobud:focus-visible{outline:3px solid var(--purple)}
+#p-others{display:grid;gap:6px;margin-top:10px}
+button.other{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.18);font-variant-numeric:tabular-nums;transition:background .3s}
+button.other:hover{background:rgba(50,180,175,.22)}
+button.other:focus-visible{outline:3px solid var(--purple)}
+button.other span:first-child{color:var(--pale)}
+button.other span:last-child{font-weight:700}
+
+
+/* fuel calculator */
+.fuel{background:var(--navy);color:#fff;border-top:4px solid var(--teal);padding:18px 20px;margin:0 0 20px}
+.fuel h3{font-family:var(--cond);color:var(--teal);font-weight:800;font-size:26px;line-height:1}
+.fuel-in{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.fuel-in label{display:flex;flex-direction:column;gap:6px;color:var(--pale);font-weight:600;font-size:15px;min-width:0}
+.fuel-in .bwrap{display:flex;background:#fff;width:100%}
+.fuel-in input{width:100%;min-width:0;border:0;background:transparent;padding:10px 12px;font:700 17px var(--font);color:var(--ink);font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.fuel-in input::-webkit-outer-spin-button,.fuel-in input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.fuel-out{margin-top:12px;color:#DCE6EE}
+.fuel-out b{color:#fff;font-family:var(--cond);font-size:26px;font-weight:800}
+
+/* Jack's pinned note */
+.note{position:relative;background:#fff;padding:26px 24px 20px;margin:30px 0 8px;max-width:62ch;box-shadow:0 10px 26px rgba(19,41,60,.14);transform:rotate(-.6deg)}
+.note::before{content:"";position:absolute;top:-10px;left:28px;width:92px;height:22px;background:rgba(105,80,161,.75);transform:rotate(-3deg)}
+.note b{display:block;font-family:var(--hand);font-size:30px;line-height:1;color:var(--purple);margin-bottom:6px;font-weight:700}
+.print{margin:8px 0 28px;background:#fff;padding:12px 12px 8px;box-shadow:0 14px 34px rgba(19,41,60,.2);transform:rotate(.8deg);max-width:560px;pointer-events:none}
+.pimg{aspect-ratio:3/2;background:var(--navy) center/cover;max-width:100%}
+.print figcaption{font-family:var(--hand);font-size:24px;line-height:1.15;color:var(--navy);padding:8px 4px 2px;font-weight:600}
+
+/* navy total panel */
+.panel{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);background:var(--navy);color:#fff;border-top:4px solid var(--teal);box-shadow:0 18px 40px rgba(19,41,60,.22);padding:22px}
+.panel h3{font-family:var(--cond);color:var(--teal);font-weight:800;font-size:28px;line-height:1}
+.rows{margin-top:14px}
+.rows div{display:flex;justify-content:space-between;gap:16px;padding:10px 12px;background:rgba(255,255,255,.06);margin-top:4px;font-variant-numeric:tabular-nums}
+.rows div span:first-child{color:var(--pale);font-weight:500;min-width:0}
+.rows div span:last-child{font-weight:700;text-align:right}
+.rows .empty{color:#C9D6DF;font-weight:500;background:transparent;padding-left:0}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;background:var(--red);padding:14px 16px;margin-top:10px}
+.total span:first-child{font-family:var(--cond);font-weight:700;font-size:24px}
+.total span:last-child{font-family:var(--cond);font-weight:800;font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
+.budget{margin-top:14px;background:var(--deep);padding:14px 14px 16px}
+.budget label{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--pale);font-weight:600}
+.budget .bwrap{display:flex;align-items:center;background:#fff;color:var(--ink);padding-left:10px;width:130px}
+.budget .bwrap span{font-weight:600;color:var(--mute)}
+.budget input{width:100%;min-width:0;border:0;background:transparent;padding:8px 8px 8px 4px;font:700 16px var(--font);color:var(--ink);font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.budget input::-webkit-outer-spin-button,.budget input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.track{height:10px;background:rgba(255,255,255,.14);margin-top:12px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--teal);transition:width .5s cubic-bezier(.22,1,.36,1),background .3s}
+.fill.over{background:var(--red)}
+.bnote{margin-top:8px;font-size:15px;color:#DCE6EE;font-variant-numeric:tabular-nums}
+.bnote b{color:#fff}
+.other{display:flex;justify-content:space-between;gap:12px;margin-top:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.18);font-variant-numeric:tabular-nums}
+.other span:first-child{color:var(--pale)}
+.other span:last-child{font-weight:700}
+.panel .btn{display:block;width:100%;margin-top:14px;font:600 17px/1 var(--font);padding:15px 18px;border:2px solid var(--teal);background:var(--teal);color:#fff;cursor:pointer;transition:transform .3s,background .3s,color .3s}
+.panel .btn:hover{transform:translateY(-2px)}
+.panel .btn.ghost{background:transparent;border-color:#fff;margin-top:8px}
+.panel .btn.ghost:hover{background:#fff;color:var(--navy)}
+.panel .msg{margin-top:14px;font-size:15px;color:#DCE6EE}
+
+/* shops band */
+.shopband{background:var(--navy);color:#fff;padding:38px 0}
+.shopband h2{font-family:var(--cond);color:var(--red);font-size:clamp(30px,3.4vw,42px);font-weight:800;line-height:1;letter-spacing:.01em}
+.shopband p{color:#DCE6EE;max-width:68ch;margin-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.chip{display:inline-block;font:600 17px/1 var(--font);padding:14px 18px;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.18);border-top:3px solid var(--purple);transition:background .3s,padding .3s}
+.chip:hover,.chip:focus-visible{background:var(--teal);padding-left:24px;padding-right:24px}
+.foot{padding:28px 0 90px;color:var(--mute);font-size:16px;max-width:90ch}
+
+.bar{display:none}
+@media (max-width:1100px) and (min-width:761px){
+  .pick{padding:14px 14px}
+  .pick b{font-size:22px}
+}
+@media (max-width:980px){
+  .main{grid-template-columns:minmax(0,1fr);gap:30px}
+  .panel{position:static}
+}
+@media (max-width:760px){
+  .pb-glass{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pick{padding:12px 12px}
+  .pick b{font-size:20px}
+  .pick small{font-size:13px}
+  .pick.both{grid-column:1 / -1;flex-direction:row;justify-content:space-between;align-items:baseline}
+  .hublink{grid-template-columns:auto minmax(0,1fr)}
+  .hl-go{grid-column:2}
+  .bc-in,.bc-grid,.bc-rows,.fuel-in{grid-template-columns:minmax(0,1fr)}
+  .bs-row{grid-template-columns:minmax(0,110px) minmax(0,1fr) auto}
+  .bcalc{padding:20px}
+  .finder{grid-template-columns:minmax(0,1fr)}
+  .row{grid-template-columns:minmax(0,1fr) auto}
+  .row .chk{grid-column:1 / -1}
+  .row .price{grid-column:1;grid-row:2}
+  .row .qty{grid-column:2;grid-row:2}
+  .row .line{grid-column:1;grid-row:3;text-align:left}
+  .row .shop{grid-column:2;grid-row:3}
+  .bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--deep);color:#fff;border-top:3px solid var(--teal);justify-content:space-between;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+  .bar .t{font-family:var(--cond);font-size:21px;font-weight:700}
+  .bar .v{font-family:var(--cond);font-size:32px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<!-- seo: matches the Wix page on ukairshowguide.co.uk -->
+<meta name="description" content="Tick the photography kit, camping kit, food and drink, tickets and travel you need for a UK airshow, set a budget for each and see what the whole trip costs.">
+<link rel="canonical" href="https://www.ukairshowguide.co.uk/build-your-kit-calculator">
+<meta property="og:url" content="https://www.ukairshowguide.co.uk/build-your-kit-calculator">
+<meta property="og:title" content="Build Your Kit Calculator | The Big Guide to UK Airshows">
+<meta property="og:description" content="Tick the photography kit, camping kit, food and drink, tickets and travel you need for a UK airshow, set a budget for each and see what the whole trip costs.">
+<meta property="og:site_name" content="The Big Guide to UK Airshows">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://static.wixstatic.com/media/a0546b_e9ac2e401b564c6083fb2a13997c3349~mv2.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /seo -->
+</head>
+<body>
+
+<header class="phero">
+  <div class="phero-in in">
+    <span class="tag">New Tool</span>
+    <h1 class="ptitle">Build Your <em>Kit</em> Calculator</h1>
+    <p class="psub" id="psub">Two lists, one for photography and one for camping. Pick your camera brand, tick what you need and see what it costs new before you spend a penny.</p>
+  </div>
+  <div class="planbar in">
+    <div class="pb-glass" role="tablist" aria-label="Choose a list">
+      <button class="pick" role="tab" id="pick-photo" data-list="photo" aria-selected="true"><small>List one</small><b>Photography Kit</b><span class="v" id="pv-photo">£0</span></button>
+      <button class="pick" role="tab" id="pick-camp" data-list="camp" aria-selected="false"><small>List two</small><b>Camping Kit</b><span class="v" id="pv-camp">£0</span></button>
+      <button class="pick" role="tab" id="pick-food" data-list="food" aria-selected="false"><small>List three</small><b>Food And Drink</b><span class="v" id="pv-food">£0</span></button>
+      <button class="pick" role="tab" id="pick-trip" data-list="trip" aria-selected="false"><small>List four</small><b>Tickets And Travel</b><span class="v" id="pv-trip">£0</span></button>
+      <div class="pick both" aria-live="polite"><small>All four lists</small><span class="v" id="pv-all">£0</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Kit sections"><div class="in" id="tabs" role="tablist"></div></nav>
+
+<div class="topo">
+  <div class="in main">
+    <div class="col" id="view"></div>
+    <aside class="panel" aria-label="Your totals">
+      <h3 id="p-title">Photography Total</h3>
+      <div class="rows" id="p-rows"></div>
+      <div class="total"><span>Total</span><span id="p-total">£0</span></div>
+      <p class="bud" id="p-bud">No budget set yet for this list.</p>
+      <button type="button" class="tobud" id="to-budget">Open the budget calculator</button>
+      <div id="p-others"></div>
+      <button class="btn" type="button" id="copy">Copy This List</button>
+      <button class="btn ghost" type="button" id="clear">Clear This List</button>
+      <p class="msg" id="msg" role="status">Your ticks are saved on this device, so they will still be here next time you visit.</p>
+    </aside>
+  </div>
+</div>
+
+<div class="shopband">
+  <div class="in">
+    <h2>Where To Check Prices</h2>
+    <p>Every Check price link opens a search on one of these two shops, so you can see today's price and what's in stock. Camera kit goes to WEX Photo Video. Camping kit and food kit, like cool bags and flasks, go to Amazon UK. Food at the show, tickets, travel and rooms have no shop link, so type in the price you are quoted.</p>
+    <div class="chips">
+      <a class="chip" href="https://www.wex.co.uk" target="_blank" rel="noopener">WEX Photo Video</a>
+      <a class="chip" href="https://www.amazon.co.uk" target="_blank" rel="noopener">Amazon UK</a>
+    </div>
+  </div>
+</div>
+<div class="in"><p class="foot">The prices on this page are my own guide to what the kit costs new, and what food and drink usually costs at UK shows. They are not live shop prices and they change all the time, so please check the shop before you buy. Some links may earn the guide a small commission at no cost to you.</p></div>
+
+<div class="bar" aria-hidden="true"><span class="t" id="b-t">Photography total</span><span class="v" id="b-v">£0</span></div>
+
+<script>
+(function(){
+var WEX = "https://www.wex.co.uk/search?q=";
+var AMZ = "https://www.amazon.co.uk/s?k=";
+
+function I(id, name, price, note, badges, q, extra){
+  var o = {id: id, name: name, price: price, note: note || "", badges: badges || [], q: q || name};
+  if (extra) for (var k in extra) o[k] = extra[k];
+  return o;
+}
+
+/* Badges: [text, colour] */
+var FIRST = ["Good first buy","pu"], PRO = ["Pro","nv"], REACH = ["Big reach","tl"], NEW = ["New","pu"];
+var FF = ["Full frame","gr"], APSC = ["Crop sensor","gr"], MFT = ["Micro Four Thirds","gr"], PRIME = ["Prime","gr"];
+
+/* ---------- Photography list ---------- */
+var BRANDS = [
+ {id:"nikon", name:"Nikon", kind:"brand", mount:"Nikon Z mount. My older F mount DSLR lenses fit with the FTZ II adapter.", groups:[
+  {t:"Camera Bodies", items:[
+   I("nk-z50ii","Nikon Z50 II",850,"Small, light and quick. It picks out birds and aircraft on its own.",[FIRST,APSC]),
+   I("nk-z5ii","Nikon Z5 II",1500,"Full frame at a fair price. Great for the static park.",[FF]),
+   I("nk-z6iii","Nikon Z6 III",1900,"Fast autofocus and 20 frames a second. My pick for most people.",[FF]),
+   I("nk-z8","Nikon Z8",3500,"The Z9's engine in a smaller body.",[PRO,FF]),
+   I("nk-z9","Nikon Z9",4800,"Built in grip and a huge battery. Made for long show days.",[PRO,FF]),
+   I("nk-d850","Nikon D850 (DSLR)",2500,"Still sold new. 45 megapixels and a big optical viewfinder.",[FF],"Nikon D850 body")]},
+  {t:"Lenses For Flying Aircraft", items:[
+   I("nk-50250","Nikon Z DX 50 to 250mm",300,"Light budget zoom for the Z50 II.",[FIRST,APSC],"Nikon Z DX 50-250mm"),
+   I("nk-28400","Nikon Z 28 to 400mm",1300,"One lens for the whole day. Good if you travel light with family.",[],"Nikon Z 28-400mm"),
+   I("nk-180600","Nikon Z 180 to 600mm",1650,"The airshow favourite. Reach for display teams and fast jets.",[REACH],"Nikon Z 180-600mm"),
+   I("nk-100400","Nikon Z 100 to 400mm S",2500,"Sharper and lighter than the 180 to 600mm.",[PRO],"Nikon Z 100-400mm S"),
+   I("nk-70180","Nikon Z 70 to 180mm f/2.8",1250,"A light bright zoom for close passes and helicopters.",[],"Nikon Z 70-180mm f2.8"),
+   I("nk-70200","Nikon Z 70 to 200mm f/2.8 S",2400,"Close passes, arrivals and evening light.",[PRO],"Nikon Z 70-200mm f2.8"),
+   I("nk-400","Nikon Z 400mm f/4.5 S",3000,"A light prime that pans beautifully.",[PRO,PRIME],"Nikon Z 400mm f4.5"),
+   I("nk-600pf","Nikon Z 600mm f/6.3 PF S",4800,"Huge reach you can still hand hold all day.",[PRO,PRIME,REACH],"Nikon Z 600mm f6.3 PF"),
+   I("nk-tc14","Nikon Z TC 1.4x teleconverter",600,"Adds 40 percent more reach to S line long lenses.",[],"Nikon Z TC-1.4x")]},
+  {t:"Lenses For Static Aircraft And Crowds", items:[
+   I("nk-24120","Nikon Z 24 to 120mm f/4 S",1000,"The one lens I would leave on for the static park.",[],"Nikon Z 24-120mm f4"),
+   I("nk-24200","Nikon Z 24 to 200mm",800,"Wide to long in one go, with no lens swaps in a crowd.",[],"Nikon Z 24-200mm"),
+   I("nk-18140","Nikon Z DX 18 to 140mm",550,"An easy walk around lens for crop cameras.",[APSC],"Nikon Z DX 18-140mm"),
+   I("nk-40","Nikon Z 40mm f/2",280,"Small, cheap and sharp. Great for creative static shots.",[FIRST,PRIME],"Nikon Z 40mm f2"),
+   I("nk-1430","Nikon Z 14 to 30mm f/4 S",1250,"Gets the whole aircraft and the sky in one frame.",[],"Nikon Z 14-30mm f4")]},
+  {t:"Lenses From Other Brands That Fit", items:[
+   I("nk-t150500","Tamron 150 to 500mm (Nikon Z)",1300,"A strong rival to the Nikon 180 to 600mm.",[REACH],"Tamron 150-500mm Nikon Z"),
+   I("nk-t50400","Tamron 50 to 400mm (Nikon Z)",1250,"Wide enough for the crowd line, long enough for jets.",[],"Tamron 50-400mm Nikon Z"),
+   I("nk-t70300","Tamron 70 to 300mm (Nikon Z)",550,"Small and cheap. A good first long lens.",[FIRST],"Tamron 70-300mm Nikon Z"),
+   I("nk-ftz","Nikon FTZ II adapter",250,"Lets you use F mount DSLR lenses on a Z camera.",[],"Nikon FTZ II")]}]},
+
+ {id:"canon", name:"Canon", kind:"brand", mount:"Canon RF mount. Older EF lenses fit with the Canon EF to RF adapter.", groups:[
+  {t:"Camera Bodies", items:[
+   I("cn-r100","Canon EOS R100",480,"The cheapest way into Canon mirrorless. Keep it simple.",[APSC]),
+   I("cn-r50","Canon EOS R50",680,"Tiny, simple and a great first camera.",[FIRST,APSC]),
+   I("cn-r10","Canon EOS R10",900,"Faster bursts and a better grip than the R50.",[APSC]),
+   I("cn-r7","Canon EOS R7",1350,"Crop sensor reach with 15 frames a second.",[APSC]),
+   I("cn-r6ii","Canon EOS R6 Mark II",1900,"Brilliant autofocus. Now cheaper since the Mark III came out.",[FF],"Canon EOS R6 Mark II body"),
+   I("cn-r6iii","Canon EOS R6 Mark III",2899,"Up to 40 frames a second. Great in poor light.",[NEW,FF],"Canon EOS R6 Mark III body"),
+   I("cn-r5ii","Canon EOS R5 Mark II",3900,"45 megapixels, so you can crop in hard.",[PRO,FF],"Canon EOS R5 Mark II body"),
+   I("cn-r1","Canon EOS R1",6300,"Canon's flagship sports camera.",[PRO,FF],"Canon EOS R1 body")]},
+  {t:"Lenses For Flying Aircraft", items:[
+   I("cn-18150","Canon RF S 18 to 150mm",480,"Kit lens that covers most of a family day.",[FIRST,APSC],"Canon RF-S 18-150mm"),
+   I("cn-100400","Canon RF 100 to 400mm",600,"Light and cheap reach. Brilliant on the R7.",[FIRST],"Canon RF 100-400mm"),
+   I("cn-200800","Canon RF 200 to 800mm",1900,"Huge reach for distant passes and tankers.",[REACH],"Canon RF 200-800mm"),
+   I("cn-100500","Canon RF 100 to 500mm L",2800,"The pro choice for flying displays.",[PRO],"Canon RF 100-500mm L"),
+   I("cn-70200f4","Canon RF 70 to 200mm f/4 L",1500,"Compact for close passes and arrivals.",[],"Canon RF 70-200mm f4 L"),
+   I("cn-70200","Canon RF 70 to 200mm f/2.8 L",2800,"Bright and quick for helicopters and dusk displays.",[PRO],"Canon RF 70-200mm f2.8 L"),
+   I("cn-600","Canon RF 600mm f/11",800,"A cheap long prime. Best on bright, sunny days.",[PRIME,REACH],"Canon RF 600mm f11"),
+   I("cn-800","Canon RF 800mm f/11",1000,"Even more reach for the same trick. Needs good light.",[PRIME,REACH],"Canon RF 800mm f11"),
+   I("cn-ext14","Canon RF 1.4x extender",600,"Adds reach to the L lenses.",[],"Canon RF 1.4x extender")]},
+  {t:"Lenses For Static Aircraft And Crowds", items:[
+   I("cn-24105","Canon RF 24 to 105mm f/4 L",1100,"An easy walk around lens for the static park.",[],"Canon RF 24-105mm f4 L"),
+   I("cn-24105s","Canon RF 24 to 105mm STM",450,"The budget version. Fine for a family day.",[FIRST],"Canon RF 24-105mm STM"),
+   I("cn-24240","Canon RF 24 to 240mm",900,"Wide to long, so you rarely need to swap lenses.",[],"Canon RF 24-240mm"),
+   I("cn-50","Canon RF 50mm f/1.8",200,"Small, sharp and cheap.",[FIRST,PRIME],"Canon RF 50mm f1.8"),
+   I("cn-16","Canon RF 16mm f/2.8",300,"Wide and tiny for cockpits and big skies.",[PRIME],"Canon RF 16mm f2.8")]},
+  {t:"Lenses From Other Brands That Fit", items:[
+   I("cn-s1850","Sigma 18 to 50mm f/2.8 (Canon RF)",550,"Bright everyday zoom for the R50, R10 and R7.",[APSC],"Sigma 18-50mm Canon RF"),
+   I("cn-adapt","Canon EF to RF adapter",120,"Opens up the huge range of used EF lenses.",[],"Canon EF-EOS R adapter")]}]},
+
+ {id:"sony", name:"Sony", kind:"brand", mount:"Sony E mount. Lots of Sigma and Tamron lenses fit, which gives you more choice on price.", groups:[
+  {t:"Camera Bodies", items:[
+   I("sn-a6400","Sony a6400",800,"A proven budget body with good tracking.",[FIRST,APSC]),
+   I("sn-a6700","Sony a6700",1350,"Excellent subject tracking in a small body.",[APSC]),
+   I("sn-a7cii","Sony a7C II",1900,"Full frame in a travel sized body.",[FF],"Sony a7C II body"),
+   I("sn-a7iv","Sony a7 IV",2000,"Still a great all rounder, and cheaper now the a7 V is out.",[FF],"Sony a7 IV body"),
+   I("sn-a7v","Sony a7 V",2399,"The new all rounder with much quicker autofocus.",[NEW,FF],"Sony a7 V body"),
+   I("sn-a7rvi","Sony a7R VI",4399,"66 megapixels. Crop in a long way on distant jets.",[NEW,PRO,FF],"Sony a7R VI body"),
+   I("sn-a9iii","Sony a9 III",4500,"Made for speed. Freezes the fastest jets.",[PRO,FF],"Sony a9 III body"),
+   I("sn-a1ii","Sony a1 II",6000,"50 megapixels and 30 frames a second.",[PRO,FF],"Sony a1 II body")]},
+  {t:"Lenses For Flying Aircraft", items:[
+   I("sn-70350","Sony E 70 to 350mm",850,"Light reach for the a6400 and a6700.",[FIRST,APSC],"Sony E 70-350mm"),
+   I("sn-200600","Sony FE 200 to 600mm G",1800,"The classic airshow lens for Sony users.",[REACH],"Sony FE 200-600mm"),
+   I("sn-400800","Sony FE 400 to 800mm G",2600,"Serious reach for tankers and high passes.",[REACH],"Sony FE 400-800mm"),
+   I("sn-100400","Sony FE 100 to 400mm GM",2400,"Lighter and sharper, easier to pan with.",[PRO],"Sony FE 100-400mm GM"),
+   I("sn-70200f4","Sony FE 70 to 200mm f/4 G II",1500,"Small and very sharp for close passes.",[],"Sony FE 70-200mm f4 G II"),
+   I("sn-70200","Sony FE 70 to 200mm f/2.8 GM II",2700,"Light for an f/2.8 zoom. Lovely at dusk.",[PRO],"Sony FE 70-200mm f2.8 GM II"),
+   I("sn-tc14","Sony FE 1.4x teleconverter",600,"Adds reach to the G Master and 200 to 600mm lenses.",[],"Sony FE 1.4x teleconverter")]},
+  {t:"Lenses For Static Aircraft And Crowds", items:[
+   I("sn-24105","Sony FE 24 to 105mm f/4 G",1150,"The walk around lens for the static park.",[],"Sony FE 24-105mm f4"),
+   I("sn-2070","Sony FE 20 to 70mm f/4 G",1150,"A little wider for cockpits and whole aircraft.",[],"Sony FE 20-70mm f4"),
+   I("sn-24240","Sony FE 24 to 240mm",1000,"One lens for the whole day.",[],"Sony FE 24-240mm"),
+   I("sn-50","Sony FE 50mm f/1.8",220,"Cheap and sharp.",[FIRST,PRIME],"Sony FE 50mm f1.8")]},
+  {t:"Lenses From Other Brands That Fit", items:[
+   I("sn-s150600","Sigma 150 to 600mm Sports DG DN",1350,"Big reach for less than the Sony 200 to 600mm.",[REACH],"Sigma 150-600mm DG DN Sony E"),
+   I("sn-s60600","Sigma 60 to 600mm Sports DG DN",1900,"One lens from the crowd line to the far end of the runway.",[REACH],"Sigma 60-600mm DG DN Sony E"),
+   I("sn-s100400","Sigma 100 to 400mm DG DN",900,"Light and good value.",[FIRST],"Sigma 100-400mm DG DN Sony E"),
+   I("sn-t150500","Tamron 150 to 500mm (Sony E)",1250,"Shorter and lighter than most long zooms.",[],"Tamron 150-500mm Sony E"),
+   I("sn-t50400","Tamron 50 to 400mm (Sony E)",1200,"Wide enough for crowds, long enough for jets.",[],"Tamron 50-400mm Sony E"),
+   I("sn-t70300","Tamron 70 to 300mm (Sony E)",550,"Small, light and cheap.",[],"Tamron 70-300mm Sony E")]}]},
+
+ {id:"fuji", name:"Fujifilm", kind:"brand", mount:"Fujifilm X mount. These are all crop sensor cameras, so every lens gives you extra reach.", groups:[
+  {t:"Camera Bodies", items:[
+   I("fj-xt30iii","Fujifilm X-T30 III",829,"The newest small Fuji. A lovely first camera.",[NEW,FIRST,APSC],"Fujifilm X-T30 III body"),
+   I("fj-xs20","Fujifilm X-S20",1250,"Good grip and long battery life for its size.",[APSC]),
+   I("fj-xt50","Fujifilm X-T50",1300,"40 megapixels in a small classic style body.",[APSC]),
+   I("fj-xt5","Fujifilm X-T5",1600,"Lovely dials and great detail for static aircraft.",[APSC]),
+   I("fj-xh2","Fujifilm X-H2",1800,"40 megapixels with a proper grip.",[APSC]),
+   I("fj-xh2s","Fujifilm X-H2S",2100,"Fuji's fastest body for tracking jets.",[PRO,APSC])]},
+  {t:"Lenses For Flying Aircraft", items:[
+   I("fj-70300","Fujifilm XF 70 to 300mm",700,"Light reach and a great first long lens.",[FIRST],"Fujifilm XF 70-300mm"),
+   I("fj-100400","Fujifilm XF 100 to 400mm",1650,"Tough and weather sealed.",[],"Fujifilm XF 100-400mm"),
+   I("fj-150600","Fujifilm XF 150 to 600mm",1900,"Reach that feels like 900mm on full frame.",[REACH,PRO],"Fujifilm XF 150-600mm"),
+   I("fj-50140","Fujifilm XF 50 to 140mm f/2.8",1300,"Bright zoom for close passes and helicopters.",[],"Fujifilm XF 50-140mm"),
+   I("fj-tc14","Fujifilm XF 1.4x teleconverter",450,"Adds reach to the 100 to 400mm and 150 to 600mm.",[],"Fujifilm XF1.4X TC")]},
+  {t:"Lenses For Static Aircraft And Crowds", items:[
+   I("fj-1680","Fujifilm XF 16 to 80mm f/4",800,"The everyday lens for the static park.",[],"Fujifilm XF 16-80mm"),
+   I("fj-1855","Fujifilm XF 18 to 55mm",600,"A classic kit zoom that punches above its price.",[FIRST],"Fujifilm XF 18-55mm"),
+   I("fj-1655","Fujifilm XF 16 to 55mm f/2.8 II",1000,"Bright and sharp for cockpits and crews.",[],"Fujifilm XF 16-55mm f2.8 II"),
+   I("fj-35","Fujifilm XF 35mm f/2",350,"Small, quiet and sharp.",[PRIME],"Fujifilm XF 35mm f2")]},
+  {t:"Lenses From Other Brands That Fit", items:[
+   I("fj-t150500","Tamron 150 to 500mm (Fujifilm X)",1250,"Cheaper reach than the Fuji long zooms.",[REACH],"Tamron 150-500mm Fujifilm X"),
+   I("fj-s100400","Sigma 100 to 400mm (Fujifilm X)",900,"Light and good value reach.",[],"Sigma 100-400mm Fujifilm X"),
+   I("fj-t18300","Tamron 18 to 300mm (Fujifilm X)",700,"One lens from the crowd to the display line.",[],"Tamron 18-300mm Fujifilm X"),
+   I("fj-s1850","Sigma 18 to 50mm f/2.8 (Fujifilm X)",550,"Bright and small for walking round.",[],"Sigma 18-50mm Fujifilm X")]}]},
+
+ {id:"om", name:"OM System", kind:"brand", mount:"Micro Four Thirds. Your lens reach doubles, so a 300mm lens acts like 600mm. Panasonic lenses fit too.", groups:[
+  {t:"Camera Bodies", items:[
+   I("om-5ii","OM System OM-5 Mark II",1200,"Small, weather sealed and light to carry all day.",[FIRST,MFT],"OM System OM-5 Mark II"),
+   I("om-3","OM System OM-3",1700,"Classic looks with the OM-1's speed inside.",[MFT],"OM System OM-3"),
+   I("om-1ii","OM System OM-1 Mark II",2200,"Fast tracking and amazing image stabilisation.",[PRO,MFT],"OM System OM-1 Mark II")]},
+  {t:"Lenses For Flying Aircraft", items:[
+   I("om-75300","M.Zuiko 75 to 300mm",450,"Light and cheap. Acts like a 600mm lens.",[FIRST],"M.Zuiko 75-300mm"),
+   I("om-100400","M.Zuiko 100 to 400mm",1200,"Acts like 800mm. Huge reach in a small bag.",[REACH],"M.Zuiko 100-400mm"),
+   I("om-150600","M.Zuiko 150 to 600mm",2700,"Acts like 1200mm, with very good stabilisation.",[REACH,PRO],"M.Zuiko 150-600mm"),
+   I("om-150400","M.Zuiko 150 to 400mm f/4.5 PRO",6300,"Built in teleconverter. A dream lens if the budget allows.",[PRO,REACH],"M.Zuiko 150-400mm f4.5 PRO"),
+   I("om-40150f4","M.Zuiko 40 to 150mm f/4 PRO",800,"Tiny pro zoom for close passes.",[],"M.Zuiko 40-150mm f4 PRO"),
+   I("om-40150","M.Zuiko 40 to 150mm f/2.8 PRO",1300,"Bright for helicopters and dusk displays.",[],"M.Zuiko 40-150mm f2.8 PRO"),
+   I("om-mc14","OM System MC 14 teleconverter",380,"Adds 40 percent reach to the PRO lenses.",[],"OM System MC-14")]},
+  {t:"Lenses For Static Aircraft And Crowds", items:[
+   I("om-1245","M.Zuiko 12 to 45mm f/4 PRO",550,"Small and sharp for the static park.",[],"M.Zuiko 12-45mm f4 PRO"),
+   I("om-12100","M.Zuiko 12 to 100mm f/4 PRO",1100,"Wide to long with superb stabilisation.",[],"M.Zuiko 12-100mm f4 PRO"),
+   I("om-1240","M.Zuiko 12 to 40mm f/2.8 PRO",700,"Bright everyday zoom.",[],"M.Zuiko 12-40mm f2.8 PRO"),
+   I("om-25","M.Zuiko 25mm f/1.8",350,"Acts like a 50mm lens. Cheap and sharp.",[FIRST,PRIME],"M.Zuiko 25mm f1.8")]},
+  {t:"Lenses From Other Brands That Fit", items:[
+   I("om-l100400","Leica DG 100 to 400mm (Panasonic)",1300,"Panasonic's long zoom fits OM System cameras.",[REACH],"Leica DG 100-400mm"),
+   I("om-p100300","Lumix 100 to 300mm II (Panasonic)",550,"A cheaper way to 600mm style reach.",[FIRST],"Lumix G 100-300mm II")]}]},
+
+ {id:"pana", name:"Panasonic", kind:"brand", mount:"Two systems. G cameras use Micro Four Thirds, S cameras use full frame L mount. Check which one your lens is for.", groups:[
+  {t:"Camera Bodies", items:[
+   I("pn-g97","Panasonic Lumix G97",850,"A simple, light first camera.",[FIRST,MFT],"Panasonic Lumix G97"),
+   I("pn-g9ii","Panasonic Lumix G9 II",1700,"Fast tracking for aircraft and a great grip.",[MFT],"Panasonic Lumix G9 II"),
+   I("pn-s5ii","Panasonic Lumix S5 II",1800,"Full frame L mount, very good for video too.",[FF],"Panasonic Lumix S5 II"),
+   I("pn-s5iix","Panasonic Lumix S5 IIX",2000,"The S5 II with extra video features.",[FF],"Panasonic Lumix S5 IIX")]},
+  {t:"Lenses For Flying Aircraft", items:[
+   I("pn-100300","Lumix 100 to 300mm II",550,"Budget reach for G cameras. Acts like 600mm.",[FIRST,MFT],"Lumix G 100-300mm II"),
+   I("pn-100400","Leica DG 100 to 400mm",1300,"Acts like 800mm for G cameras.",[REACH,MFT],"Leica DG 100-400mm"),
+   I("pn-50200","Leica DG 50 to 200mm",1300,"Weather sealed and sharp for G cameras.",[MFT],"Leica DG 50-200mm"),
+   I("pn-s70300","Lumix S 70 to 300mm",1150,"Full frame reach for the S5 II.",[FF],"Lumix S 70-300mm"),
+   I("pn-stc14","Lumix S 1.4x teleconverter",500,"Adds reach to the S 70 to 200mm lenses.",[FF],"Lumix S 1.4x teleconverter")]},
+  {t:"Lenses For Static Aircraft And Crowds", items:[
+   I("pn-1260","Lumix G 12 to 60mm",400,"An easy everyday lens for G cameras.",[MFT],"Lumix G 12-60mm"),
+   I("pn-14140","Lumix G 14 to 140mm",550,"Wide to long for G cameras.",[MFT],"Lumix G 14-140mm"),
+   I("pn-s2060","Lumix S 20 to 60mm",550,"Wide everyday lens for the S5 II.",[FF],"Lumix S 20-60mm"),
+   I("pn-s28200","Lumix S 28 to 200mm",800,"Small for how far it reaches.",[FF],"Lumix S 28-200mm")]},
+  {t:"Lenses From Other Brands That Fit", items:[
+   I("pn-s150600","Sigma 150 to 600mm Sports (L mount)",1350,"Big reach for the S5 II.",[REACH,FF],"Sigma 150-600mm DG DN L mount"),
+   I("pn-s60600","Sigma 60 to 600mm Sports (L mount)",1900,"One lens from crowd to runway end.",[REACH,FF],"Sigma 60-600mm DG DN L mount"),
+   I("pn-s100400","Sigma 100 to 400mm (L mount)",900,"Lighter reach for the S5 II.",[FF],"Sigma 100-400mm DG DN L mount"),
+   I("pn-om75300","M.Zuiko 75 to 300mm (OM System)",450,"Fits G cameras too, for cheap reach.",[MFT],"M.Zuiko 75-300mm")]}]},
+
+ {id:"bridge", name:"Bridge Cameras", kind:"bridge", mount:"One camera with the zoom lens built in. No lenses to buy, so this works well for families who want reach without a heavy bag.", groups:[
+  {t:"Bridge Cameras", items:[
+   I("br-sx70","Canon PowerShot SX70 HS",500,"65x zoom in a light body. Great for a first show.",[FIRST],"Canon PowerShot SX70 HS"),
+   I("br-fz1000","Panasonic Lumix FZ1000 II",700,"Bigger sensor, so cleaner shots on a dull day.",[],"Panasonic Lumix FZ1000 II"),
+   I("br-p950","Nikon Coolpix P950",800,"83x zoom. Reaches display teams with ease.",[REACH],"Nikon Coolpix P950"),
+   I("br-rx10","Sony RX10 IV",1600,"The best bridge camera for fast jets. Quick autofocus.",[PRO],"Sony RX10 IV")]}]},
+
+ {id:"acc", name:"Bags And Accessories", kind:"acc", alt:true, mount:"Fits any camera. Check the battery and memory card type your camera takes before you buy.", groups:[
+  {t:"Bags And Straps", items:[
+   I("ac-sling","Small camera sling",60,"For one body and a small lens on a family day.",[FIRST],"camera sling bag"),
+   I("ac-ruck","Camera rucksack",130,"Carries a body, two lenses and water all day.",[],"camera backpack"),
+   I("ac-roller","Wheeled camera bag",160,"For the car boot, not the long walk in.",[],"camera roller bag"),
+   I("ac-hard","Hard camera case",70,"Keeps kit dry and safe in the tent.",[],"hard camera case"),
+   I("ac-pouch","Lens pouch",25,"Clips to your belt so a second lens is always to hand.",[],"lens pouch"),
+   I("ac-strap","Comfort camera strap",30,"A wide padded strap saves your neck by the afternoon.",[],"padded camera strap"),
+   I("ac-harness","Sling strap for heavy lenses",70,"The camera hangs at your hip, ready to lift.",[],"camera sling strap")]},
+  {t:"Power And Storage", items:[
+   I("ac-bat","Spare camera battery",65,"Mirrorless drains fast. I take five on a show day.",[FIRST],"camera battery"),
+   I("ac-chg","Twin battery charger",50,"Charge two at once overnight.",[],"dual camera battery charger"),
+   I("ac-usbc","USB C camera charging cable",15,"Many new cameras charge straight from a power bank.",[],"USB C cable camera charging"),
+   I("ac-card","Fast memory card 128GB",35,"Write speed matters for long bursts.",[FIRST],"128GB SD card V60"),
+   I("ac-card2","Spare memory card 64GB",20,"For the second body or as a backup.",[],"64GB SD card"),
+   I("ac-cfx","CFexpress card 256GB",150,"For the pro bodies that take them. Clears bursts in a flash.",[PRO],"CFexpress Type B 256GB"),
+   I("ac-cardcase","Memory card holder",10,"So cards do not get lost in a pocket.",[],"memory card case"),
+   I("ac-reader","Card reader",30,"Get your shots off quickly at the end of the day.",[],"SD card reader USB C"),
+   I("ac-ssd","Portable SSD 1TB",90,"Back up every night when you are camping.",[],"portable SSD 1TB")]},
+  {t:"Support And Protection", items:[
+   I("ac-mono","Monopod",70,"Takes the weight of a long lens on a long day.",[],"monopod"),
+   I("ac-tripod","Tripod with gimbal head",250,"For slow shutter speeds and anyone who cannot hold a heavy lens for long.",[],"tripod gimbal head"),
+   I("ac-rain","Rain cover for camera and lens",25,"UK weather can turn fast.",[FIRST],"camera rain cover"),
+   I("ac-cpl","Circular polariser filter",70,"Deepens blue skies and cuts glare on the static park.",[],"circular polariser filter"),
+   I("ac-uv","Protective clear filter",40,"Guards the front of the lens in a busy crowd.",[],"protective lens filter"),
+   I("ac-clean","Lens cleaning kit",15,"Dust shows up badly in a blue sky.",[],"lens cleaning kit"),
+   I("ac-blower","Air blower",12,"Clears dust without touching the glass.",[],"camera air blower"),
+   I("ac-sensor","Sensor cleaning swabs",30,"For the spots that show up in every sky shot.",[],"sensor cleaning swabs"),
+   I("ac-wipes","Lens wipes",6,"Quick clean between displays.",[],"lens wipes")]}]},
+
+ {id:"extras", name:"Airshow Extras", kind:"acc", alt:true, mount:"Not camera kit, but the bits I see enthusiasts carry at every show. Please see the rules for your show before you go, as some ban step ladders.", groups:[
+  {t:"Watch And Listen", items:[
+   I("ex-binos","Binoculars",120,"Spot aircraft early and follow the display teams.",[FIRST],"binoculars 10x42"),
+   I("ex-scanner","Airband scanner",130,"Hear the display pilots and the commentary as it happens.",[],"airband scanner"),
+   I("ex-phones","Headphones for the scanner",25,"So you can hear it over the jets.",[],"over ear headphones wired"),
+   I("ex-ears","Adult ear defenders",20,"Fast jets are loud. Your ears will thank you.",[FIRST],"ear defenders adult")]},
+  {t:"Comfort At The Crowd Line", items:[
+   I("ex-stool","Folding stool",25,"Light enough to carry, low enough not to block anyone.",[],"folding camping stool"),
+   I("ex-step","Small step stool",35,"Gets you over heads at the fence, where the rules allow it.",[],"folding step stool"),
+   I("ex-kneel","Kneeling pad",15,"For low angles in the static park.",[],"kneeling pad"),
+   I("ex-trolley","Folding trolley",70,"Carries chairs, cool box and camera bag from the car park.",[],"folding trolley wagon")]}]}
+];
+
+/* ---------- Camping list ---------- */
+var L1 = ["Level 1 Basics","tl"], L2 = ["Level 2 Comfort","pu"], L3 = ["Level 3 Luxury","nv"];
+var CAMP = [
+ {id:"shelter", name:"Shelter", groups:[{t:"Shelter", items:[
+  I("cp-tent","Tent",180,"A 4 to 6 berth is around this price. An 8 berth is nearer £350.",[L1],"6 berth tent",{lvl:1}),
+  I("cp-mallet","Mallet",10,"For pegs on hard airfield ground.",[L1],"camping mallet",{lvl:1}),
+  I("cp-pegs","Heavy duty pegs",15,"The pegs that come with a tent rarely hold in wind.",[L1],"heavy duty tent pegs",{lvl:1}),
+  I("cp-tarp","Tarpaulin",15,"Under the tent or over the kit.",[L1],"tarpaulin 3x4m",{lvl:1}),
+  I("cp-trolley","Camping trolley",70,"The walk from the car to your pitch can be a long one. This saves a lot of trips.",[L1],"folding camping trolley",{lvl:1}),
+  I("cp-foot","Tent footprint",25,"Keeps the tent floor clean and dry.",[L2],"tent footprint groundsheet",{lvl:2}),
+  I("cp-carpet","Tent carpet",40,"Warmer and comfier underfoot in the evenings.",[L2],"tent carpet",{lvl:2}),
+  I("cp-gaz","Gazebo",90,"Shade in the day and cover when it rains.",[L2],"camping gazebo 3x3",{lvl:2}),
+  I("cp-gazw","Gazebo leg weights",25,"Stops the gazebo lifting in a gust.",[L2],"gazebo weights",{lvl:2}),
+  I("cp-wind","Windbreak",25,"Makes a big difference on an open field.",[L2],"camping windbreak",{lvl:2}),
+  I("cp-cord","Paracord",6,"Guy lines, washing lines and repairs.",[L2],"paracord 30m",{lvl:2}),
+  I("cp-storm","Storm straps",15,"Extra hold for big tents in strong wind.",[L2],"tent storm straps",{lvl:2}),
+  I("cp-shelter","Event shelter kitchen",250,"A walled shelter for cooking and sitting out the rain.",[L3],"event shelter with sides",{lvl:3})]}]},
+
+ {id:"sleep", name:"Sleeping", groups:[{t:"Sleeping", items:[
+  I("cp-mat","Sleeping mat",25,"One each. Keeps the cold ground away.",[L1],"self inflating sleeping mat",{lvl:1,pp:true}),
+  I("cp-bag","Sleeping bag",40,"Pick a comfort rating of 5 degrees or lower for UK nights.",[L1],"sleeping bag 3 season",{lvl:1,pp:true}),
+  I("cp-pillow","Camping pillow",8,"Small, light and worth it.",[L1],"camping pillow",{lvl:1,pp:true}),
+  I("cp-plugs","Ear plugs and eye mask",6,"Generators, snoring and a 4.45am sunrise. Trust me.",[L1],"ear plugs eye mask",{lvl:1,pp:true}),
+  I("cp-bed","Raised camping bed",45,"One each. Your back will thank you.",[L2],"folding camping bed",{lvl:2,pp:true}),
+  I("cp-airbed","Double airbed",30,"Comfy for couples. Bring a pump.",[L2],"double airbed",{lvl:2}),
+  I("cp-pump","Rechargeable air pump",20,"Blows up an airbed in a minute or two.",[L2],"rechargeable air pump",{lvl:2}),
+  I("cp-liner","Sleeping bag liner",15,"Adds warmth on cold nights.",[L2],"sleeping bag liner",{lvl:2,pp:true}),
+  I("cp-blanket","Blanket",15,"For cold nights and early mornings.",[L2],"fleece blanket",{lvl:2,pp:true})]}]},
+
+ {id:"cook", name:"Cooking And Food", groups:[{t:"Cooking And Food", items:[
+  I("cp-stove","Gas stove",35,"Simple and reliable.",[L1],"camping gas stove",{lvl:1}),
+  I("cp-gas","Spare gas canisters",15,"Running out on Saturday morning is no fun.",[L1],"butane gas canisters 4 pack",{lvl:1}),
+  I("cp-lighter","Lighter and matches",3,"Keep them dry in a sandwich bag.",[L1],"long lighter",{lvl:1}),
+  I("cp-kettle","Camping kettle",15,"Hot drinks before the gates open.",[L1],"camping kettle",{lvl:1}),
+  I("cp-cool","Cool box",30,"Add ice packs for a hot weekend.",[L1],"cool box 30L",{lvl:1}),
+  I("cp-ice","Ice packs",10,"Freeze them the night before you leave.",[L1],"cool box ice packs",{lvl:1}),
+  I("cp-pots","Pot and pan set",30,"",[L1],"camping cookware set",{lvl:1}),
+  I("cp-plates","Plates, bowls and mugs set",20,"",[L1],"camping plates bowls mugs set",{lvl:1}),
+  I("cp-utensils","Cooking utensils",15,"Spatula, ladle, tongs and a sharp knife.",[L1],"camping utensil set",{lvl:1}),
+  I("cp-washup","Washing up kit",10,"Bowl, brush, liquid and a tea towel.",[L1],"camping washing up kit",{lvl:1}),
+  I("cp-bins","Bin bags",4,"Leave your pitch as you found it.",[L1],"bin bags",{lvl:1}),
+  I("cp-table","Folding table",35,"One for cooking and one for eating.",[L2],"folding camping table",{lvl:2}),
+  I("cp-larder","Camping kitchen unit",40,"Keeps food off the ground and the pitch tidy.",[L2],"camping kitchen unit",{lvl:2}),
+  I("cp-jet","Jetboil style stove",110,"Boils water in about two minutes.",[L2],"Jetboil stove",{lvl:2}),
+  I("cp-bbq","BBQ",40,"Charcoal and lighter fluid are extra. Check the campsite allows it.",[L2],"camping bbq",{lvl:2}),
+  I("cp-fridge","Gas fridge",280,"Dearer, but handy for a long stay.",[L3],"camping gas fridge",{lvl:3})]}]},
+
+ {id:"wash", name:"Washing And Toilets", groups:[{t:"Washing And Toilets", items:[
+  I("cp-loo","Toilet roll",6,"Campsite toilets run out by Sunday. Bring your own.",[L1],"toilet roll",{lvl:1}),
+  I("cp-wipes","Wet wipes",4,"The camper's best friend.",[L1],"wet wipes",{lvl:1,pp:true}),
+  I("cp-sanit","Hand sanitiser",4,"For when the taps are a walk away.",[L1],"hand sanitiser",{lvl:1}),
+  I("cp-towel","Quick dry towel",15,"One each. Dries far faster than a bath towel.",[L1],"quick dry towel",{lvl:1,pp:true}),
+  I("cp-washbag","Wash bag",10,"Hang it up in the shower block.",[L1],"hanging wash bag",{lvl:1,pp:true}),
+  I("cp-bowl","Washing bowl",10,"For quick washes at the tent.",[L2],"collapsible washing bowl",{lvl:2}),
+  I("cp-shower","Solar shower",15,"Leave it in the sun all day for a warm rinse.",[L2],"solar shower camping",{lvl:2}),
+  I("cp-toilet","Portable toilet",60,"No more night walks across the field. Great with children.",[L3],"portable camping toilet",{lvl:3}),
+  I("cp-ttent","Toilet tent",40,"Privacy for the portable toilet.",[L3],"toilet tent",{lvl:3}),
+  I("cp-tfluid","Toilet fluid",12,"",[L3],"camping toilet fluid",{lvl:3})]}]},
+
+ {id:"power", name:"Light And Power", groups:[{t:"Light And Power", items:[
+  I("cp-torch","Head torch",10,"One each, so your hands stay free.",[L1],"head torch",{lvl:1,pp:true}),
+  I("cp-bank","Power bank",35,"Keeps phones going all weekend.",[L1],"power bank 20000mAh",{lvl:1}),
+  I("cp-batts","Spare batteries",8,"For torches and lanterns.",[L1],"AA batteries",{lvl:1}),
+  I("cp-lantern","Tent lantern",20,"Lights the whole tent.",[L2],"camping lantern",{lvl:2}),
+  I("cp-solarl","Solar lights for the windbreaks",15,"Stops people tripping over guy ropes at night.",[L2],"solar camping lights",{lvl:2}),
+  I("cp-radio","Wind up radio",25,"Local news and weather with no signal needed.",[L2],"wind up radio",{lvl:2}),
+  I("cp-hookup","Electric hook up cable",40,"Only if you have booked a pitch with power.",[L3],"electric hook up cable camping",{lvl:3}),
+  I("cp-reel","Camping mains unit",35,"Sockets inside the tent from your hook up.",[L3],"camping mains unit",{lvl:3}),
+  I("cp-station","Portable power station with solar panel",450,"Charges camera batteries in the field.",[L3],"portable power station solar panel",{lvl:3})]}]},
+
+ {id:"comfort", name:"Comfort And Safety", groups:[{t:"Comfort And Safety", items:[
+  I("cp-chair","Camping chair",20,"One each, plus spares for visitors.",[L1],"folding camping chair",{lvl:1,pp:true}),
+  I("cp-aid","First aid kit",12,"Add plasters and pain killers.",[L1],"first aid kit",{lvl:1}),
+  I("cp-water","Water container",12,"Fresh water for washing and cooking.",[L1],"water container 20L camping",{lvl:1}),
+  I("cp-sun","Sun cream",8,"Fairford can get very hot.",[L1],"sun cream SPF50",{lvl:1}),
+  I("cp-midge","Midge spray",8,"Evenings by the hedges get busy with bugs.",[L1],"midge repellent",{lvl:1}),
+  I("cp-poncho","Waterproof poncho",5,"Cheap, light and fits over a camera bag.",[L1],"waterproof poncho",{lvl:1,pp:true}),
+  I("cp-co","Carbon monoxide alarm",20,"A must if you cook or heat anything near the tent.",[L1],"carbon monoxide alarm camping",{lvl:1}),
+  I("cp-umb","Umbrella",12,"",[L2],"umbrella",{lvl:2}),
+  I("cp-after","After sun",6,"",[L2],"after sun lotion",{lvl:2}),
+  I("cp-lock","Padlock for the tent",8,"Puts off opportunists while you are at the show.",[L2],"tent padlock",{lvl:2})]}]},
+
+ {id:"kids", name:"Kids And Family", alt:true, groups:[{t:"Kids And Family", items:[
+  I("cp-kears","Kids ear defenders",15,"Your child's ears are delicate, so try to protect them as much as possible.",[L1],"kids ear defenders",{lvl:1}),
+  I("cp-kbag","Kids sleeping bag",25,"Sized for little ones, so they stay warm.",[L1],"kids sleeping bag",{lvl:1}),
+  I("cp-ktorch","Kids head torch",8,"They love having their own.",[L1],"kids head torch",{lvl:1}),
+  I("cp-ksuit","Kids waterproof suit",20,"Muddy fields are half the fun for them.",[L1],"kids waterproof all in one",{lvl:1}),
+  I("cp-kchair","Kids camping chair",15,"",[L2],"kids camping chair",{lvl:2}),
+  I("cp-glow","Glow sticks",6,"Easy to spot children after dark.",[L2],"glow sticks",{lvl:2}),
+  I("cp-games","Travel games",10,"For the quiet times between displays.",[L2],"travel games",{lvl:2}),
+  I("cp-cot","Travel cot",40,"For babies and toddlers.",[L3],"travel cot",{lvl:3})]}]}
+];
+
+/* ---------- Food and drink list ---------- */
+var SHOW = ["Pay on the day","rd"], HOME = ["From home","tl"], ONCE = ["Buy once","pu"], CAMPERS = ["For campers","nv"];
+var FOOD = [
+ {id:"hot", name:"Hot Food", groups:[{t:"Hot Food At The Show", shop:null, items:[
+  I("fd-bacon","Bacon roll",6,"Usually £5 to £7 when I last checked. A good start if you arrive early.",[SHOW],"",{pd:true}),
+  I("fd-burger","Beef burger",8,"Usually £6 to £10.",[SHOW],"",{pd:true}),
+  I("fd-hotdog","Hot dog",6.5,"Usually £5 to £8.",[SHOW],"",{pd:true}),
+  I("fd-fries","Loaded fries",9.5,"Usually £8 to £11. Big enough to share between two.",[SHOW],"",{pd:true}),
+  I("fd-pizza","Wood fired pizza",13.5,"Usually £12 to £15. One easily feeds two.",[SHOW],"",{pd:true}),
+  I("fd-fish","Fish and chips",14,"Usually £12 to £16. Seafront shows have the town chippies close by too.",[SHOW],"",{pd:true})]}]},
+ {id:"drinks", name:"Drinks", groups:[
+  {t:"Hot Drinks", shop:null, items:[
+   I("fd-tea","Tea",3,"Usually £2.50 to £3.50.",[SHOW],"",{pd:true}),
+   I("fd-americano","Americano",3.75,"Usually £3.50 to £4.",[SHOW],"",{pd:true}),
+   I("fd-latte","Latte",4.3,"Usually £3.80 to £4.80.",[SHOW],"",{pd:true}),
+   I("fd-hotchoc","Hot chocolate",4.15,"Usually £3.80 to £4.50. The children's favourite on a fresh morning.",[SHOW],"",{pd:true})]},
+  {t:"Cold Drinks", shop:null, items:[
+   I("fd-water","Bottled water",2.5,"Usually £2 to £3. You will want two each on a hot day.",[SHOW],"",{pd:true}),
+   I("fd-can","Can of pop",2.5,"Usually £2 to £3.",[SHOW],"",{pd:true}),
+   I("fd-smoothie","Smoothie",5.25,"Usually £4.50 to £6.",[SHOW],""),
+   I("fd-pint","Pint",7,"Usually £6 to £8. Adults only, and please see the rules for driving home.",[SHOW],"")]}]},
+ {id:"treats", name:"Sweet Treats", groups:[{t:"Sweet Treats", shop:null, items:[
+  I("fd-ice","Ice cream",4,"From £4. The one treat I would always budget for.",[SHOW],"",{pd:true}),
+  I("fd-donut","Doughnuts",5,"Usually £4 to £6 a bag.",[SHOW],""),
+  I("fd-churros","Churros",6,"Usually £5 to £7.",[SHOW],""),
+  I("fd-slush","Slushie",3.75,"Usually £3 to £4.50.",[SHOW],"",{pd:true})]}]},
+ {id:"home", name:"Bring From Home", groups:[
+  {t:"Food From Home", shop:null, homeLabel:true, items:[
+   I("fd-lunch","Packed lunch",3.5,"Sandwiches or wraps. The biggest saving of the day.",[HOME],"",{pd:true}),
+   I("fd-snacks","Snacks and crisps",1.5,"Covers the waits between displays.",[HOME],"",{pd:true}),
+   I("fd-fruit","Fruit",1,"",[HOME],"",{pd:true}),
+   I("fd-drinkhome","Drinks from home",1,"Squash or water. Freeze the bottles the night before.",[HOME],"",{pd:true}),
+   I("fd-flaskfill","Flask of tea or coffee",0.6,"Covers the morning for two people.",[HOME],"",{perDay:true}),
+   I("fd-cake","Cake or biscuits",1.5,"",[HOME],"",{perDay:true})]},
+  {t:"Kit To Carry It", shop:AMZ, items:[
+   I("fd-coolbag","Cool bag",15,"A small one is allowed at most shows. Check the rules first.",[ONCE],"cool bag"),
+   I("fd-icepacks","Ice packs",6,"",[ONCE],"cool bag ice packs"),
+   I("fd-flask","Flask",15,"Pays for itself on the first day.",[ONCE],"vacuum flask 1 litre"),
+   I("fd-bottle","Refillable bottle",8,"One each. An open airfield gets hot with little shade.",[ONCE],"refillable water bottle",{fp:true}),
+   I("fd-boxes","Food boxes",10,"Stops the sandwiches getting squashed.",[ONCE],"food storage boxes"),
+   I("fd-blanket","Picnic blanket",15,"A waterproof back is worth it on damp grass.",[ONCE],"waterproof picnic blanket")]}]},
+ {id:"campfood", name:"Camp Meals", alt:true, groups:[{t:"Camp Meals", shop:null, homeLabel:true, items:[
+  I("fd-breakfast","Cooked breakfast",2.5,"Bacon, eggs and bread for one person.",[CAMPERS],"",{pd:true}),
+  I("fd-cereal","Cereal and milk",0.8,"The quick option before the gates open.",[CAMPERS],"",{pd:true}),
+  I("fd-pasta","Pasta dinner",2.5,"One pan and easy to scale up.",[CAMPERS],"",{pd:true}),
+  I("fd-bbqnight","BBQ night",4,"Burgers, sausages and rolls. Check the campsite allows it.",[CAMPERS],"",{pd:true}),
+  I("fd-brews","Tea, coffee and milk for the weekend",6,"",[CAMPERS],""),
+  I("fd-campwater","Big bottles of water",1.5,"For cooking and the kettle.",[CAMPERS],"",{perDay:true})]}]}
+];
+
+/* ---------- Tickets, travel and stay list ---------- */
+var EX = ["Example price","gr"], FREE = ["Often free","tl"], CHECK = ["Check your show","pu"];
+var TRIP = [
+ {id:"tickets", name:"Tickets And Entry", hub:{name:"Find Your Airshow", url:"https://www.ukairshowguide.co.uk/air-shows-guides", text:"Dates, ticket details and what is included for each featured show."}, groups:[
+  {t:"Tickets", shop:null, items:[
+   I("tr-adult","Adult day ticket",45,"One for each adult, each day. Airfield shows vary a lot, so type in the price for your show.",[EX],"",{pa:true}),
+   I("tr-child","Child day ticket",15,"Many shows let children in free with an adult. Please see the rules for your show.",[EX,FREE],"",{pk:true}),
+   I("tr-family","Family ticket",110,"Some shows sell one for two adults and two or three children. Untick the adult and child tickets if you use it.",[EX],"",{perDay:true}),
+   I("tr-carer","Carer ticket",0,"Usually free with a paying visitor who needs a carer. Proof may be needed.",[FREE,CHECK],""),
+   I("tr-seafront","Free seafront show",0,"Eastbourne, Clacton and other seafront shows are usually free to watch.",[FREE],"")]},
+  {t:"Upgrades", shop:null, items:[
+   I("tr-grand","Grandstand or enclosure seat",30,"A seat and a better view, often with its own toilets.",[EX],"",{pa:true}),
+   I("tr-early","Early entry or fast track",15,"Beat the gate queues and get to the crowd line first.",[EX],"",{pa:true}),
+   I("tr-hosp","Hospitality package",200,"Food, drink and a private viewing area. The treat option.",[EX],"",{pa:true})]}]},
+ {id:"travel", name:"Getting There", hub:{name:"Getting There", url:"https://www.ukairshowguide.co.uk/first-airshow-getting-there", text:"Roads, parking, park and ride, trains and buses for your show."}, groups:[
+  {t:"By Car", shop:null, items:[
+   I("tr-fuel","Fuel",21.22,"Use the fuel calculator above to work this out from your miles.",[],"",{fuel:true}),
+   I("tr-park","Car parking",15,"Some shows charge for parking on the day or ask you to book it.",[EX,CHECK],"",{perDay:true}),
+   I("tr-dart","Dartford Crossing",3.5,"£3.50 each way for a car, or less with an account. Pay online by midnight the next day.",[],"",{qty:2}),
+   I("tr-ulez","ULEZ or clean air zone charge",12.5,"London ULEZ is £12.50 a day if your car does not meet the standard.",[CHECK],"",{perDay:true}),
+   I("tr-pr","Park and ride",8,"Some shows run it free with your ticket. Others charge per car.",[EX,FREE],"",{perDay:true})]},
+  {t:"By Train, Bus Or Coach", shop:null, items:[
+   I("tr-train","Adult train fare, return",30,"A railcard can take a third off. Book ahead for the best price.",[EX],"",{pa:true}),
+   I("tr-trainc","Child train fare, return",15,"Children usually travel for about half price.",[EX],"",{pk:true}),
+   I("tr-bus","Bus fare, return",6,"Many local buses cap a single fare. Check the bus company before you go.",[EX],"",{pall:true}),
+   I("tr-taxi","Taxi from the station",20,"Book it ahead for the journey home, when queues are long.",[EX],""),
+   I("tr-coach","Organised coach trip",45,"Some coach firms run day trips to the big shows, often with entry included.",[EX],"",{pall:true})]}]},
+ {id:"stay", name:"Where To Stay", hub:{name:"Accommodation Near Shows", url:"https://www.ukairshowguide.co.uk/first-airshow-accommodation", text:"Hotels, B&Bs and places to stay near the shows."}, groups:[
+  {t:"Rooms", shop:null, items:[
+   I("tr-budget","Budget hotel, per night",75,"Premier Inn or Travelodge style. Rooms near the big shows go fast, so book early.",[EX],"",{perNight:true}),
+   I("tr-hotel","Hotel, per night",120,"",[EX],"",{perNight:true}),
+   I("tr-bnb","B&B, per night",95,"Breakfast included, which saves on food.",[EX],"",{perNight:true}),
+   I("tr-rental","Holiday let, per night",140,"Good value for a big group.",[EX],"",{perNight:true})]},
+  {t:"Camping And Campervans", shop:null, items:[
+   I("tr-pitch","Campsite pitch, per night",30,"Local campsites not attached to the show.",[EX],"",{perNight:true}),
+   I("tr-showcamp","On site show camping",120,"A pitch for the whole show weekend at the bigger airfield shows.",[EX,CHECK],""),
+   I("tr-hookup","Electric hook up, per night",8,"",[EX],"",{perNight:true}),
+   I("tr-van","Campervan pitch, per night",40,"",[EX],"",{perNight:true})]},
+  {t:"While You Are Away", shop:null, items:[
+   I("tr-kennel","Kennels or cattery, per night",25,"Most airfield shows only allow assistance dogs.",[EX,CHECK],"",{perNight:true}),
+   I("tr-sitter","House or pet sitter, per night",20,"",[EX],"",{perNight:true})]}]},
+ {id:"extras", name:"On The Day Extras", hub:{name:"Planning Your First Airshow", url:"https://www.ukairshowguide.co.uk/planning-your-first-airshow", text:"What to expect on the day, from the gate to getting home."}, groups:[
+  {t:"Programme And Souvenirs", shop:null, items:[
+   I("tr-prog","Show programme",10,"Has the flying times and aircraft details. Great to keep.",[EX],""),
+   I("tr-merch","Souvenirs and merch",25,"Caps, patches, models and prints from the trade stalls.",[EX],""),
+   I("tr-aircraftmerch","Merch from the aircraft crews",20,"Some aircraft are opened up for you to take a look inside, and the crews sell exclusive merch in or outside the aircraft.",[EX],"")]},
+  {t:"Family Fun And Giving", shop:null, items:[
+   I("tr-rides","Funfair rides",5,"Per ride. Children love them between displays.",[EX],"",{pk:true}),
+   I("tr-face","Face painting",6,"",[EX],"",{pk:true}),
+   I("tr-charity","Charity donation",5,"The RAF charities and air ambulance buckets do a great job.",[],""),
+   I("tr-locker","Phone charging or locker",5,"Some shows offer it. Handy on a long day.",[EX,CHECK],"")]}]}
+];
+
+var LISTS = {
+  photo: {tabs: BRANDS, shop: WEX, label: "Photography", hash: "photography",
+    hub: {name: "Airshow Photography Hub", url: "https://www.ukairshowguide.co.uk/airshow-photography-hub", text: "My camera settings, kit advice and guides for flying and static aircraft."}},
+  camp: {tabs: CAMP, shop: AMZ, label: "Camping", hash: "camping",
+    hub: {name: "Camping At Airshows", url: "https://www.ukairshowguide.co.uk/camping-at-airshows", text: "Where to camp, how to pitch and what to pack, from years on airshow campsites."}},
+  food: {tabs: FOOD, shop: AMZ, label: "Food And Drink", hash: "food-and-drink",
+    hub: {name: "Food And Drink At Airshows", url: "https://www.ukairshowguide.co.uk/foodanddrinkatairshows", text: "Typical prices, feeding the kids, what you can bring and how to beat the queues."}},
+  trip: {tabs: TRIP, shop: null, label: "Tickets And Travel", hash: "tickets-and-travel",
+    hub: {name: "Find Your Airshow", url: "https://www.ukairshowguide.co.uk/air-shows-guides", text: "Dates, ticket details and what is included for each featured show."}}
+};
+var ORDER = ["photo", "camp", "food", "trip"];
+
+function eachItem(fn){
+  ORDER.forEach(function(l){
+    LISTS[l].tabs.forEach(function(t){
+      t.groups.forEach(function(g){ g.items.forEach(function(it){ fn(it, l, t, g); }); });
+    });
+  });
+}
+
+var S = {
+  list: "photo",
+  tab: {photo: "nikon", camp: "shelter", food: "hot", trip: "tickets"},
+  ppl: 2,
+  food: {adults: 2, kids: 2, days: 1, nights: 1},
+  fuel: {miles: 150, mpg: 45, ppl: 140},
+  items: {},
+  q: {photo: "", camp: "", food: "", trip: ""},
+  sort: {photo: "listed", camp: "listed", food: "listed", trip: "listed"},
+  plan: {photo: {budget: 0, saved: 0, months: 0}, camp: {budget: 0, saved: 0, months: 0}, food: {budget: 0, saved: 0, months: 0}, trip: {budget: 0, saved: 0, months: 0}}
+};
+var byId = {}, itemCount = 0;
+function foodPeople(){ return S.food.adults + S.food.kids; }
+function defaultQty(it){
+  if (it.pp) return S.ppl;
+  if (it.pd) return foodPeople() * S.food.days;
+  if (it.fp) return foodPeople();
+  if (it.perDay) return S.food.days;
+  if (it.pa) return S.food.adults * S.food.days;
+  if (it.pk) return S.food.kids * S.food.days;
+  if (it.pall) return foodPeople();
+  if (it.perNight) return Math.max(1, S.food.nights);
+  if (it.qty) return it.qty;
+  return 1;
+}
+eachItem(function(it){ byId[it.id] = it; itemCount++; });
+eachItem(function(it){ S.items[it.id] = {on: false, qty: defaultQty(it), price: it.price}; });
+
+var KEY = "ukag-kit-calculator-v3";
+function save(){
+  try {
+    var picks = {};
+    for (var id in S.items){
+      var s = S.items[id], it = byId[id];
+      if (s.on || s.qty !== defaultQty(it) || s.price !== it.price) picks[id] = s;
+    }
+    localStorage.setItem(KEY, JSON.stringify({list: S.list, tab: S.tab, ppl: S.ppl, food: S.food, fuel: S.fuel, sort: S.sort, plan: S.plan, picks: picks}));
+  } catch (e) {}
+}
+function load(){
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (!raw) return false;
+    var d = JSON.parse(raw);
+    if (d.list && LISTS[d.list]) S.list = d.list;
+    if (d.tab) ORDER.forEach(function(l){ if (d.tab[l] && tabObj(l, d.tab[l])) S.tab[l] = d.tab[l]; });
+    if (d.ppl) S.ppl = clamp(d.ppl, 1, 12);
+    if (d.food) S.food = {adults: clamp(d.food.adults, 0, 12), kids: clamp(d.food.kids, 0, 12), days: clamp(d.food.days, 1, 7), nights: clamp(d.food.nights == null ? 1 : d.food.nights, 0, 14)};
+    if (d.fuel) S.fuel = {miles: clamp(d.fuel.miles, 0, 2000), mpg: clamp(d.fuel.mpg, 10, 150), ppl: clamp(d.fuel.ppl, 50, 300)};
+    if (d.sort) ORDER.forEach(function(l){ if (d.sort[l]) S.sort[l] = d.sort[l]; });
+    if (d.plan) ORDER.forEach(function(l){ if (d.plan[l]) S.plan[l] = d.plan[l]; });
+    eachItem(function(it){ S.items[it.id].qty = defaultQty(it); });
+    for (var id in (d.picks || {})){
+      if (S.items[id]){
+        var p = d.picks[id];
+        S.items[id] = {on: !!p.on, qty: clamp(p.qty == null ? 1 : +p.qty, 0, 99), price: isFinite(+p.price) ? +p.price : byId[id].price};
+      }
+    }
+    return true;
+  } catch (e) { return false; }
+}
+
+var $ = function(id){ return document.getElementById(id); };
+function clamp(n, lo, hi){ n = +n; if (!isFinite(n)) n = lo; return Math.max(lo, Math.min(hi, n)); }
+function gbp(n){
+  n = Math.max(0, n);
+  var pence = Math.round(n * 100) % 100 !== 0;
+  if (pence && n < 1000) return "£" + n.toFixed(2);
+  return "£" + Math.round(n).toLocaleString("en-GB");
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function tabObj(l, id){ return LISTS[l].tabs.filter(function(t){ return t.id === id; })[0]; }
+function tabCount(t){ var n = 0; t.groups.forEach(function(g){ g.items.forEach(function(it){ if (S.items[it.id].on) n++; }); }); return n; }
+function tabSum(t){ var n = 0; t.groups.forEach(function(g){ g.items.forEach(function(it){ var s = S.items[it.id]; if (s.on) n += s.qty * s.price; }); }); return n; }
+function listSum(l){ return LISTS[l].tabs.reduce(function(a, t){ return a + tabSum(t); }, 0); }
+function hasBadge(it, b){ return it.badges.indexOf(b) > -1; }
+function groupOf(id){ var found = null; eachItem(function(it, l, t, g){ if (it.id === id) found = g; }); return found; }
+
+function renderTabs(){
+  var l = S.list;
+  $("tabs").innerHTML = LISTS[l].tabs.map(function(t){
+    var c = tabCount(t);
+    return '<button role="tab" data-tab="' + t.id + '" class="' + (t.alt ? "alt" : "") + '" aria-selected="' + (S.tab[l] === t.id && !S.q[l]) + '">' + esc(t.name) + '<span class="ct"' + (c ? "" : " hidden") + '>' + c + '</span></button>';
+  }).join("");
+  document.querySelectorAll(".pick[data-list]").forEach(function(b){ b.setAttribute("aria-selected", String(b.getAttribute("data-list") === l)); });
+}
+
+function badgeHTML(b){ return '<span class="badge ' + (b[1] === "tl" ? "" : b[1]) + '">' + esc(b[0]) + '</span>'; }
+function rowHTML(it, shop, g){
+  var s = S.items[it.id];
+  var link = shop ? '<a class="shop" href="' + shop + encodeURIComponent(it.q) + '" target="_blank" rel="noopener">Check price</a>'
+                  : '<span class="onsite">' + (S.list === "trip" ? "Your price" : g && g.homeLabel ? "From the shops" : "On the day") + '</span>';
+  var step = (S.list === "food" || S.list === "trip") && it.price < 40 ? "0.05" : "1";
+  return '<div class="row' + (s.on ? " on" : "") + '" data-id="' + it.id + '">' +
+    '<label class="chk"><input type="checkbox" id="c-' + it.id + '" data-act="toggle"' + (s.on ? " checked" : "") + '>' +
+    '<span class="nm"><b>' + esc(it.name) + '</b>' + (it.note ? '<small>' + esc(it.note) + '</small>' : "") +
+    (it.badges.length ? '<span class="badges">' + it.badges.map(badgeHTML).join("") + '</span>' : "") + '</span></label>' +
+    '<div class="stepper qty" role="group" aria-label="How many ' + esc(it.name) + '"><button type="button" data-act="dec" aria-label="Fewer">&minus;</button><output data-o="q">' + s.qty + '</output><button type="button" data-act="inc" aria-label="More">+</button></div>' +
+    '<label class="price"><span>£</span><input type="number" inputmode="decimal" min="0" step="' + step + '" id="p-' + it.id + '" data-act="price" value="' + s.price + '" aria-label="Price of ' + esc(it.name) + ' in pounds"></label>' +
+    '<div class="line" data-o="l">' + gbp(s.on ? s.qty * s.price : 0) + '</div>' + link + '</div>';
+}
+function sorted(items){
+  var mode = S.sort[S.list], arr = items.slice();
+  if (mode === "low") arr.sort(function(a, b){ return S.items[a.id].price - S.items[b.id].price; });
+  if (mode === "high") arr.sort(function(a, b){ return S.items[b.id].price - S.items[a.id].price; });
+  return arr;
+}
+function groupSub(items){
+  var c = 0, sum = 0;
+  items.forEach(function(it){ var s = S.items[it.id]; if (s.on){ c++; sum += s.qty * s.price; } });
+  return c ? c + " ticked, " + gbp(sum) : "Nothing ticked yet";
+}
+function groupHTML(title, items, tone, small){
+  return '<div class="group" data-items="' + items.map(function(i){ return i.id; }).join(",") + '"><header class="' + tone + '"><h3>' + esc(title) + (small ? '<small>' + esc(small) + '</small>' : "") + '</h3><span class="sub">' + groupSub(items) + '</span></header>' +
+    sorted(items).map(function(it){ var g = groupOf(it.id); return rowHTML(it, g && "shop" in g ? g.shop : LISTS[S.list].shop, g); }).join("") + '</div>';
+}
+
+var SEARCH_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="#0E5F5B" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>';
+var HUB_ICONS = {
+  photo: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+  camp: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 20L12 5l9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg>',
+  trip: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z"/><path d="M14 7v12" stroke-dasharray="2 2"/></svg>',
+  food: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M16 3c-2 1-3 4-3 7h3v11"/></svg>'
+};
+function hubLinkHTML(l, t){
+  var h = (t && t.hub) || LISTS[l].hub;
+  return '<a class="hublink" href="' + h.url + '" target="_top" rel="noopener"><span class="hl-ic">' + HUB_ICONS[l] + '</span><span class="hl-tx"><b>' + esc(h.name) + '</b><small>' + esc(h.text) + '</small></span><span class="hl-go">Open the guide</span></a>';
+}
+function stepperHTML(id, label, val){
+  return '<span class="lab" id="' + id + '-l">' + label + '</span><div class="stepper" role="group" aria-labelledby="' + id + '-l"><button type="button" data-stp="' + id + '" data-d="-1" aria-label="Fewer">&minus;</button><output id="' + id + '">' + val + '</output><button type="button" data-stp="' + id + '" data-d="1" aria-label="More">+</button></div>';
+}
+
+function renderView(){
+  var l = S.list, t = tabObj(l, S.tab[l]), h = "";
+  var placeholder = l === "photo" ? "Search, such as 600mm or Z6" : l === "camp" ? "Search, such as chair or gas" : "Search, such as coffee or ice cream";
+  if (l === "photo"){
+    var label = t.kind === "brand" ? "Brand tab" : t.kind === "bridge" ? "All in one cameras" : "Fits every brand";
+    var title = t.kind === "brand" ? t.name + " Kit" : t.name;
+    h += '<div class="shead"><span class="lv">' + label + '</span><h2 class="stitle">' + esc(title) + '</h2><p class="sintro">' + esc(t.mount) +
+      (t.kind === "brand" ? ' <b>You do not need everything here.</b> One body and one long lens will get you great shots at your first show.' : "") + '</p></div>';
+    h += hubLinkHTML(l);
+    h += '<div class="tools">' +
+      (t.kind === "brand" ? '<button class="fbtn red" type="button" data-quick="brand">Quick start for ' + esc(t.name) + '</button>' : "") +
+      (t.kind === "acc" ? '<button class="fbtn red" type="button" data-quick="basics">Tick the basics</button>' : "") +
+      '<button class="fbtn" type="button" data-quick="cleartab">Clear this tab</button></div>';
+  } else if (l === "camp"){
+    h += '<div class="shead"><span class="lv">Camping list</span><h2 class="stitle">' + esc(t.name) + '</h2><p class="sintro">Each item has a level from the camping guides. <b>Start with Level 1 to stay safe and dry</b>, then add comfort and luxury as you go. Beds, bags, chairs, towels and torches follow the number of people.</p></div>';
+    h += hubLinkHTML(l);
+    h += '<div class="tools">' + stepperHTML("ppl", "People camping", S.ppl) +
+      '<button class="fbtn" type="button" data-level="1">Level 1 Basics</button><button class="fbtn" type="button" data-level="2">Up To Comfort</button><button class="fbtn" type="button" data-level="3">Everything</button></div>';
+  } else if (l === "food") {
+    h += '<div class="shead"><span class="lv">Food and drink list</span><h2 class="stitle">' + esc(t.name) + '</h2><p class="sintro">Set who is coming and for how many days. <b>Meals and drinks scale up for everyone</b>, so one tick covers the whole group. Prices are what I usually see at UK shows, and they do change from show to show.</p></div>';
+    h += hubLinkHTML(l);
+    h += '<div class="tools">' + stepperHTML("adults", "Adults", S.food.adults) + stepperHTML("kids", "Children", S.food.kids) + stepperHTML("days", "Days", S.food.days) + '</div>';
+    h += '<div class="tools"><button class="fbtn red" type="button" data-fquick="buy">Buy it all at the show</button><button class="fbtn" type="button" data-fquick="pack">Pack most, buy one treat</button><button class="fbtn" type="button" data-quick="clearlist">Clear food list</button></div>';
+  } else {
+    h += '<div class="shead"><span class="lv">Tickets, travel and stay</span><h2 class="stitle">' + esc(t.name) + '</h2><p class="sintro">The big costs of the trip. <b>Every price here is an example, so type in the real price for your show.</b> Tickets, fares and rooms follow who is coming, and the group is shared with the Food And Drink list.</p></div>';
+    h += hubLinkHTML(l, t);
+    h += '<div class="tools">' + stepperHTML("adults", "Adults", S.food.adults) + stepperHTML("kids", "Children", S.food.kids) + stepperHTML("days", "Days", S.food.days) + stepperHTML("nights", "Nights", S.food.nights) + '</div>';
+    if (t.id === "travel") h += fuelHTML();
+  }
+  h += '<div class="finder"><label class="search" for="q">' + SEARCH_ICON + '<input type="search" id="q" placeholder="' + placeholder + '" value="' + esc(S.q[l]) + '" autocomplete="off"><button type="button" id="q-clear"' + (S.q[l] ? "" : " hidden") + '>Clear</button></label>' +
+    '<label class="sort" for="sort">Sort <select id="sort"><option value="listed">As listed</option><option value="low">Price, low to high</option><option value="high">Price, high to low</option></select></label></div>';
+  h += '<div id="rows"></div>';
+  h += budgetCalcHTML(l);
+  $("view").innerHTML = h;
+  $("sort").value = S.sort[l];
+  renderRows();
+  renderBudget();
+}
+
+function fuelCost(){ var f = S.fuel; return f.mpg > 0 ? Math.round(f.miles / f.mpg * 4.54609 * f.ppl) / 100 : 0; }
+function fuelHTML(){
+  var f = S.fuel;
+  return '<div class="fuel" aria-labelledby="fuel-h"><h3 id="fuel-h">Fuel Calculator</h3><div class="fuel-in">' +
+    '<label for="fu-miles">Miles there and back<span class="bwrap"><input type="number" inputmode="numeric" min="0" step="10" id="fu-miles" value="' + f.miles + '"></span></label>' +
+    '<label for="fu-mpg">Your car\'s mpg<span class="bwrap"><input type="number" inputmode="numeric" min="10" step="1" id="fu-mpg" value="' + f.mpg + '"></span></label>' +
+    '<label for="fu-ppl">Pence per litre<span class="bwrap"><input type="number" inputmode="decimal" min="50" step="1" id="fu-ppl" value="' + f.ppl + '"></span></label>' +
+    '</div><p class="fuel-out" id="fu-out">About <b>' + gbp(fuelCost()) + '</b> in fuel. This fills in the Fuel row below.</p></div>';
+}
+function noteHTML(l, t){
+  if (l === "photo"){
+    if (t.kind === "brand") return '<div class="note"><b>Jack\'s note</b>Quick start ticks the good first body and long lens for this brand. I would advise buying those first, going to a show, then adding a second lens once you know what you like to shoot. Big reach is lovely. It is also heavy by mid afternoon.</div>';
+    if (t.kind === "bridge") return '<div class="note"><b>Jack\'s note</b>I see more and more families with a bridge camera at the crowd line, and I get it. No lens swaps. No heavy bag. You lose a bit of quality on a dull day, but on a bright one the results can really surprise you.</div>';
+    if (t.id === "extras") return '<div class="note"><b>Jack\'s note</b>An airband scanner changed how I watch a show. You hear the display pilots talk to the tower, so you know who is coming in next. Please see the rules before you go, as some shows have their own rules on stools and steps.</div>';
+    return '<div class="note"><b>Jack\'s note</b>Batteries and memory cards are where I see people run short. I take five batteries and a spare card to every show, and I have heard plenty of stories of people missing the Red Arrows with a flat battery.</div>';
+  }
+  if (l === "trip"){
+    if (t.id === "tickets") return '<div class="note"><b>Jack\'s note</b>Ticket prices change every year and many shows sell early bird tickets cheaper. I would advise checking the official website for your show and typing the real prices in here. Think about how into aviation your group is too. A grandstand seat is lovely, but it is not a must.</div>';
+    if (t.id === "travel") return '<div class="note"><b>Jack\'s note</b>Getting out of a big show can take hours. Try to arrive early, and if the train is an option, it often beats the car park queue home. Please see the rules for park and ride before you go, as some shows want it booked.</div>';
+    if (t.id === "stay") return '<div class="note"><b>Jack\'s note</b>Rooms near the big shows can sell out a year ahead and prices jump on show weekend. Camping can work out far cheaper, and the camping hub has a calculator to compare the two for your family.</div>';
+    return '<div class="note"><b>Jack\'s note</b>Set a little aside for extras. Children always find the funfair, and some aircraft crews sell merch you will not find anywhere else. A small cash float for the charity buckets is a nice thing to have too.</div>';
+  }
+  if (l === "food"){
+    if (t.id === "home") return '<div class="note"><b>Jack\'s note</b>Most UK shows let you bring your own food and soft drinks, but glass and barbecues are usually a no. Please see the rules for your show before you go. Freeze your water the night before. It keeps the cool bag cold all morning.</div>';
+    if (t.id === "campfood") return '<div class="note"><b>Jack\'s note</b>A proper breakfast at the tent keeps everyone going until lunch, and it saves buying bacon rolls on site. Leaving a big show can take hours too, so I would suggest eating dinner back at camp while the traffic clears.</div>';
+    return '<div class="note"><b>Jack\'s note</b>Queues are longest between 12:00 and 14:00, and that is often when the best flying is on. Try to grab hot food around 11:00 or after 14:30. If there are two of you, one queues while the other keeps your spot on the crowd line.</div>';
+  }
+  if (t.id === "kids") return '<div class="note"><b>Jack\'s note</b>Children love camping at a show, but they get tired and cold quicker than we do. Pack one more layer than you think they need. Glow sticks sound silly. They really help you spot them on a busy field after dark.</div>';
+  if (t.id === "wash") return '<div class="note"><b>Jack\'s note</b>Shower queues at the big shows can be long first thing. I would suggest going late in the evening or while the flying is on, when the blocks are quiet.</div>';
+  return '<div class="note"><b>Jack\'s note</b>This prices everything new, so it shows the top end. When I last looked, Facebook Marketplace and Vinted had good second hand tents and chairs for far less. You can try it yourself as it may suit you.</div>';
+}
+
+function renderRows(){
+  var l = S.list, q = S.q[l].trim().toLowerCase(), h = "";
+  var tone0 = l === "camp" ? "pu" : (l === "food" || l === "trip") ? "" : "nv";
+  if (q){
+    var words = q.split(/\s+/), found = 0, parts = "";
+    LISTS[l].tabs.forEach(function(t){
+      var hits = [];
+      t.groups.forEach(function(g){ g.items.forEach(function(it){
+        var hay = (it.name + " " + it.note + " " + it.badges.map(function(b){ return b[0]; }).join(" ") + " " + t.name + " " + g.t).toLowerCase();
+        if (words.every(function(w){ return hay.indexOf(w) > -1; })) hits.push(it);
+      }); });
+      if (hits.length){ found += hits.length; parts += groupHTML(t.name, hits, tone0); }
+    });
+    h += '<p class="found" role="status">' + (found ? found + (found === 1 ? " item" : " items") + ' found for "' + esc(S.q[l].trim()) + '"' : "") + '</p>';
+    h += found ? parts : '<div class="none">Nothing matches "' + esc(S.q[l].trim()) + '". Try a shorter word.</div>';
+  } else {
+    var t = tabObj(l, S.tab[l]);
+    if (l === "camp" && t.id === "shelter") h += '<figure class="print"><div class="pimg" role="img" aria-label="Camping kit laid out ready to pack" style="background-image:url(https://jskedge1.github.io/airshow-pages/kit-calculator-img/kit-laid-out.jpg)"></div><figcaption>Everything laid out before it goes in the car</figcaption></figure>';
+    h += t.groups.map(function(g, i){
+      var tone = l === "camp" ? "pu" : l === "food" ? (g.shop ? "pu" : "") : l === "trip" ? (i === 0 ? "nv" : "") : (t.kind === "brand" && i === 0) ? "nv" : "";
+      return groupHTML(g.t, g.items, tone, g.items.length + " items");
+    }).join("");
+    h += noteHTML(l, t);
+  }
+  $("rows").innerHTML = h;
+}
+
+/* ---------- Budget calculator, one per list ---------- */
+function budgetCalcHTML(l){
+  var p = S.plan[l], lab = LISTS[l].label.toLowerCase();
+  var intro = l === "photo" ? "Set what you want to spend on camera kit. If you are saving up for next season, add what you have put aside and how many months you have, and it works out what to save each month."
+    : l === "camp" ? "Set what you want to spend on camping kit. Most kit lasts years, so if you are saving for next summer, add what you have so far and the months to go."
+    : l === "food" ? "Set a food budget before you go, the same way you would for tickets and parking. It shows the cost per person each day, and how much goes on food bought at the show."
+    : "Set a budget for tickets, travel and your stay. It also adds up all four lists, so you can see what the whole trip costs per person and for your group.";
+  return '<section class="bcalc" id="bcalc" aria-labelledby="bc-h"><h3 id="bc-h">' + esc(LISTS[l].label) + ' Budget Calculator</h3><p class="bc-intro">' + intro + '</p>' +
+    '<div class="bc-in">' +
+    '<label for="bc-budget">My budget<span class="bwrap"><span>£</span><input type="number" inputmode="decimal" min="0" step="' + (l === "food" ? "5" : "50") + '" id="bc-budget" placeholder="0" value="' + (p.budget || "") + '"></span></label>' +
+    '<label for="bc-saved">Saved so far<span class="bwrap"><span>£</span><input type="number" inputmode="decimal" min="0" step="' + (l === "food" ? "5" : "50") + '" id="bc-saved" placeholder="0" value="' + (p.saved || "") + '"></span></label>' +
+    '<label for="bc-months">Months to go<span class="bwrap"><input type="number" inputmode="numeric" min="0" max="36" step="1" id="bc-months" placeholder="0" value="' + (p.months || "") + '"></span></label>' +
+    '</div><div id="bc-out" aria-live="polite"></div></section>';
+}
+function renderBudget(){
+  var out = $("bc-out");
+  if (!out) return;
+  var l = S.list, p = S.plan[l], total = listSum(l), h = "";
+  var b = p.budget || 0, saved = p.saved || 0, months = p.months || 0;
+  h += '<div class="bc-grid">';
+  h += '<div class="bc-big"><span>Your ' + esc(LISTS[l].label.toLowerCase()) + ' total</span><b>' + gbp(total) + '</b></div>';
+  if (b > 0){
+    var left = b - total;
+    h += '<div class="bc-big ' + (left < 0 ? "over" : "ok") + '"><span>' + (left < 0 ? "Over budget by" : "Left in your budget") + '</span><b>' + gbp(Math.abs(left)) + '</b></div>';
+  } else {
+    h += '<div class="bc-big muted"><span>Left in your budget</span><b>Set a budget</b></div>';
+  }
+  var still = Math.max(0, total - saved);
+  if (months > 0 && still > 0){
+    h += '<div class="bc-big"><span>Save each month</span><b>' + gbp(Math.ceil(still / months * 100) / 100) + '</b></div>';
+  } else if (saved > 0){
+    h += '<div class="bc-big ' + (still > 0 ? "" : "ok") + '"><span>' + (still > 0 ? "Still to save" : "Saved enough") + '</span><b>' + (still > 0 ? gbp(still) : "Done") + '</b></div>';
+  } else {
+    h += '<div class="bc-big muted"><span>Save each month</span><b>Add months</b></div>';
+  }
+  h += '</div>';
+  if (b > 0){
+    var pct = Math.min(100, total / b * 100);
+    h += '<div class="track" aria-hidden="true"><div class="fill' + (total > b ? " over" : "") + '" style="width:' + pct + '%"></div></div>';
+    h += '<p class="bc-note">' + (total > b ? 'You are over. ' + (l === "photo" ? "Try a cheaper lens from the other brands section, or think about buying used." : l === "camp" ? "Start with the Level 1 kit and add comfort items over a few seasons." : "Swap a bought meal for a packed lunch and keep the ice cream.") : "You have used " + Math.round(pct) + " percent of your budget.") + '</p>';
+  }
+  if (l === "food"){
+    var people = foodPeople(), days = S.food.days, show = 0, home = 0;
+    FOOD.forEach(function(t){ t.groups.forEach(function(g){ g.items.forEach(function(it){ var s = S.items[it.id]; if (!s.on) return; if (hasBadge(it, SHOW)) show += s.qty * s.price; else home += s.qty * s.price; }); }); });
+    h += '<div class="bc-rows">' +
+      '<div><span>Per person, per day</span><b>' + (people ? gbp(Math.max(0, show + home - kitSpend()) / (people * days)) : "Add people") + '</b></div>' +
+      '<div><span>Bought at the show</span><b>' + gbp(show) + '</b></div>' +
+      '<div><span>Food and kit from home</span><b>' + gbp(home) + '</b></div>' +
+      '<div><span>Cash to take, if you like a cash limit</span><b>' + gbp(Math.ceil(show / 5) * 5) + '</b></div></div>';
+  }
+  if (l === "trip"){
+    var people2 = foodPeople(), whole = ORDER.reduce(function(a, k){ return a + listSum(k); }, 0), noKit = listSum("trip") + listSum("food") - kitSpend();
+    h += '<div class="bc-rows">' +
+      '<div><span>Tickets, travel and stay per person</span><b>' + (people2 ? gbp(total / people2) : "Add people") + '</b></div>' +
+      '<div><span>Trip and food per person</span><b>' + (people2 ? gbp(noKit / people2) : "Add people") + '</b></div>' +
+      '<div><span>All four lists together</span><b>' + gbp(whole) + '</b></div>' +
+      '<div><span>Tickets, travel, stay and food for the group</span><b>' + gbp(noKit) + '</b></div></div>' +
+      '<p class="bc-note">Camera and camping kit lasts for years, so the per person figures leave it out. Food kit like cool bags is left out too.</p>';
+  }
+  var parts = LISTS[l].tabs.map(function(t){ return [t.name, tabSum(t)]; }).filter(function(x){ return x[1] > 0; });
+  if (parts.length && total > 0){
+    h += '<div class="bc-split"><p class="bc-st">Where the money goes</p>' + parts.map(function(x){
+      return '<div class="bs-row"><span class="bs-n">' + esc(x[0]) + '</span><span class="bs-bar"><i style="width:' + (x[1] / total * 100) + '%"></i></span><span class="bs-v">' + gbp(x[1]) + '</span></div>';
+    }).join("") + '</div>';
+  }
+  out.innerHTML = h;
+}
+function kitSpend(){
+  var n = 0;
+  FOOD.forEach(function(t){ t.groups.forEach(function(g){ if (!g.shop) return; g.items.forEach(function(it){ var s = S.items[it.id]; if (s.on) n += s.qty * s.price; }); }); });
+  return n;
+}
+
+function renderTotals(){
+  var l = S.list, totals = {};
+  ORDER.forEach(function(k){ totals[k] = listSum(k); });
+  $("pv-photo").textContent = gbp(totals.photo);
+  $("pv-camp").textContent = gbp(totals.camp);
+  $("pv-food").textContent = gbp(totals.food);
+  $("pv-trip").textContent = gbp(totals.trip);
+  $("pv-all").textContent = gbp(totals.photo + totals.camp + totals.food + totals.trip);
+  $("p-title").textContent = LISTS[l].label + " Total";
+  var rows = LISTS[l].tabs.filter(function(t){ return tabCount(t) > 0; }).map(function(t){
+    return '<div><span>' + esc(t.name) + ' (' + tabCount(t) + ')</span><span>' + gbp(tabSum(t)) + '</span></div>';
+  }).join("");
+  $("p-rows").innerHTML = rows || '<div class="empty">Nothing ticked yet. Tick a row to start your total.</div>';
+  $("p-total").textContent = gbp(totals[l]);
+  var b = S.plan[l].budget || 0;
+  $("p-bud").innerHTML = b > 0 ? (b >= totals[l] ? "<b>" + gbp(b - totals[l]) + "</b> left of your " + gbp(b) + " budget." : "<b>" + gbp(totals[l] - b) + "</b> over your " + gbp(b) + " budget.") : "No budget set yet for this list.";
+  $("p-others").innerHTML = ORDER.filter(function(k){ return k !== l; }).map(function(k){
+    return '<button type="button" class="other" data-list="' + k + '"><span>' + esc(LISTS[k].label) + ' list</span><span>' + gbp(totals[k]) + '</span></button>';
+  }).join("");
+  $("b-t").textContent = LISTS[l].label + " total";
+  $("b-v").textContent = gbp(totals[l]);
+  document.querySelectorAll("#tabs [data-tab]").forEach(function(btn){
+    var t = tabObj(l, btn.getAttribute("data-tab")), c = tabCount(t), ct = btn.querySelector(".ct");
+    ct.textContent = c; ct.hidden = !c;
+  });
+  renderBudget();
+  save();
+}
+
+function refreshGroups(){
+  document.querySelectorAll("#rows .group").forEach(function(el){
+    var items = el.getAttribute("data-items").split(",").map(function(id){ return byId[id]; });
+    el.querySelector(".sub").textContent = groupSub(items);
+  });
+}
+function refreshRows(){
+  document.querySelectorAll("#rows .row").forEach(function(r){
+    var s = S.items[r.getAttribute("data-id")];
+    r.classList.toggle("on", s.on);
+    r.querySelector('[data-act="toggle"]').checked = s.on;
+    r.querySelector('[data-o="q"]').textContent = s.qty;
+    r.querySelector('[data-o="l"]').textContent = gbp(s.on ? s.qty * s.price : 0);
+  });
+  refreshGroups();
+}
+function updRow(row){
+  var s = S.items[row.getAttribute("data-id")];
+  row.classList.toggle("on", s.on);
+  row.querySelector('[data-o="q"]').textContent = s.qty;
+  row.querySelector('[data-o="l"]').textContent = gbp(s.on ? s.qty * s.price : 0);
+  refreshGroups();
+  renderTotals();
+}
+function setHash(){ if (/ukairshowguide/.test(location.hostname)) return; try { history.replaceState(null, "", "#" + LISTS[S.list].hash); } catch (e) {} }
+function all(){ renderTabs(); renderView(); renderTotals(); }
+
+function quick(kind){
+  var l = S.list, t = tabObj(l, S.tab[l]);
+  if (kind === "cleartab"){
+    t.groups.forEach(function(g){ g.items.forEach(function(it){ S.items[it.id].on = false; }); });
+    all(); $("msg").textContent = "Cleared the " + t.name + " tab."; return;
+  }
+  if (kind === "clearlist"){ clearList(); return; }
+  if (kind === "brand"){
+    var body = t.groups[0].items.filter(function(i){ return hasBadge(i, FIRST); })[0] || t.groups[0].items[0];
+    var lenses = t.groups[1].items.filter(function(i){ return hasBadge(i, FIRST); });
+    var lens = lenses[lenses.length - 1] || t.groups[1].items[0];
+    S.items[body.id].on = true; S.items[lens.id].on = true;
+    all(); $("msg").textContent = "Ticked the " + body.name + " and " + lens.name + "."; return;
+  }
+  if (kind === "basics"){
+    t.groups.forEach(function(g){ g.items.forEach(function(it){ if (hasBadge(it, FIRST)) S.items[it.id].on = true; }); });
+    all(); $("msg").textContent = "Ticked the basics in " + t.name + ".";
+  }
+}
+function foodQuick(kind){
+  var pd = foodPeople() * S.food.days;
+  eachItem(function(it, l){ if (l === "food"){ S.items[it.id].on = false; S.items[it.id].qty = defaultQty(it); } });
+  var pick = kind === "buy"
+    ? {"fd-burger": pd, "fd-latte": pd, "fd-water": pd * 2, "fd-ice": pd}
+    : {"fd-lunch": pd, "fd-snacks": pd, "fd-fruit": pd, "fd-drinkhome": pd * 2, "fd-flaskfill": S.food.days, "fd-ice": pd};
+  for (var id in pick){ S.items[id].on = true; S.items[id].qty = Math.max(1, pick[id]); }
+  all();
+  $("msg").textContent = kind === "buy" ? "Ticked lunch, a hot drink, two cold drinks and an ice cream for everyone, each day." : "Ticked a packed lunch, snacks, drinks from home, a flask and one ice cream each.";
+}
+function clearList(){
+  LISTS[S.list].tabs.forEach(function(t){ t.groups.forEach(function(g){ g.items.forEach(function(it){ S.items[it.id].on = false; }); }); });
+  all();
+  $("msg").textContent = "Cleared your " + LISTS[S.list].label.toLowerCase() + " list.";
+}
+function level(n){
+  CAMP.forEach(function(t){ t.groups.forEach(function(g){ g.items.forEach(function(it){
+    if (t.id === "kids") return;
+    var s = S.items[it.id];
+    s.on = it.lvl <= n;
+    if (it.pp) s.qty = S.ppl;
+  }); }); });
+  all();
+  $("msg").textContent = n === 1 ? "Ticked every Level 1 item. Kids items are left for you to choose." : n === 2 ? "Ticked Level 1 and 2 items. Kids items are left for you to choose." : "Ticked everything except the kids items.";
+}
+function stepper(id, d){
+  var before = {};
+  eachItem(function(it){ before[it.id] = defaultQty(it); });
+  if (id === "ppl"){
+    S.ppl = clamp(S.ppl + d, 1, 12);
+  } else {
+    var lim = id === "days" ? [1, 7] : id === "nights" ? [0, 14] : [0, 12];
+    S.food[id] = clamp(S.food[id] + d, lim[0], lim[1]);
+    if ((id === "adults" || id === "kids") && foodPeople() === 0) S.food[id] = 1;
+  }
+  eachItem(function(it){
+    if (!(it.pp || it.pd || it.fp || it.perDay || it.pa || it.pk || it.pall || it.perNight)) return;
+    var s = S.items[it.id], nb = defaultQty(it), ob = before[it.id];
+    s.qty = ob ? clamp(Math.round(s.qty * nb / ob), 0, 99) : nb;
+  });
+  $(id).textContent = id === "ppl" ? S.ppl : S.food[id];
+  refreshRows(); renderTotals();
+}
+
+document.addEventListener("click", function(e){
+  var el;
+  if ((el = e.target.closest("[data-list]"))){ S.list = el.getAttribute("data-list"); setHash(); all(); if (el.classList.contains("other")) document.querySelector(".nav").scrollIntoView({behavior: "smooth"}); return; }
+  if ((el = e.target.closest("[data-tab]"))){
+    S.tab[S.list] = el.getAttribute("data-tab"); S.q[S.list] = "";
+    renderTabs(); renderView(); renderTotals();
+    var top = document.querySelector(".topo").getBoundingClientRect().top;
+    if (top < 0) window.scrollBy({top: top - 60, behavior: "smooth"});
+    return;
+  }
+  if (e.target.id === "q-clear"){ S.q[S.list] = ""; $("q").value = ""; e.target.hidden = true; renderTabs(); renderRows(); renderTotals(); $("q").focus(); return; }
+  if (e.target.id === "to-budget"){ var bc = $("bcalc"); if (bc){ bc.scrollIntoView({behavior: "smooth", block: "start"}); setTimeout(function(){ $("bc-budget").focus({preventScroll: true}); }, 400); } return; }
+  if ((el = e.target.closest("[data-quick]"))){ quick(el.getAttribute("data-quick")); return; }
+  if ((el = e.target.closest("[data-fquick]"))){ foodQuick(el.getAttribute("data-fquick")); return; }
+  if ((el = e.target.closest("[data-level]"))){ level(+el.getAttribute("data-level")); return; }
+  if ((el = e.target.closest("[data-stp]"))){ stepper(el.getAttribute("data-stp"), +el.getAttribute("data-d")); return; }
+  if ((el = e.target.closest("[data-act]"))){
+    var row = el.closest(".row"); if (!row) return;
+    var s = S.items[row.getAttribute("data-id")], a = el.getAttribute("data-act");
+    if (a === "inc"){ s.qty = Math.min(99, s.qty + 1); if (!s.on){ s.on = true; row.querySelector('[data-act="toggle"]').checked = true; } updRow(row); }
+    if (a === "dec"){ s.qty = Math.max(0, s.qty - 1); updRow(row); }
+  }
+});
+document.addEventListener("change", function(e){
+  var t = e.target;
+  if (t.getAttribute && t.getAttribute("data-act") === "toggle"){
+    var row = t.closest(".row");
+    S.items[row.getAttribute("data-id")].on = t.checked;
+    updRow(row);
+  }
+  if (t.id === "sort"){ S.sort[S.list] = t.value; renderRows(); save(); }
+});
+document.addEventListener("input", function(e){
+  var t = e.target;
+  if (t.getAttribute && t.getAttribute("data-act") === "price"){
+    var row = t.closest(".row"), v = parseFloat(t.value);
+    S.items[row.getAttribute("data-id")].price = isFinite(v) && v >= 0 ? v : 0;
+    updRow(row);
+  }
+  if (t.id === "q"){
+    S.q[S.list] = t.value;
+    $("q-clear").hidden = !t.value;
+    renderTabs(); renderRows(); renderTotals();
+  }
+  if (t.id === "fu-miles" || t.id === "fu-mpg" || t.id === "fu-ppl"){
+    var fv = parseFloat(t.value), fk = t.id.slice(3);
+    if (isFinite(fv) && fv >= 0) S.fuel[fk] = fv;
+    var fc = fuelCost();
+    S.items["tr-fuel"].price = fc; S.items["tr-fuel"].on = fc > 0;
+    $("fu-out").innerHTML = "About <b>" + gbp(fc) + "</b> in fuel. This fills in the Fuel row below.";
+    var fr = document.querySelector('.row[data-id="tr-fuel"]');
+    if (fr){ fr.querySelector('[data-act="price"]').value = fc; fr.querySelector('[data-act="toggle"]').checked = fc > 0; updRow(fr); } else renderTotals();
+  }
+  if (t.id === "bc-budget" || t.id === "bc-saved" || t.id === "bc-months"){
+    var v2 = parseFloat(t.value), key = t.id.slice(3);
+    S.plan[S.list][key] = isFinite(v2) && v2 > 0 ? (key === "months" ? Math.min(36, Math.round(v2)) : v2) : 0;
+    renderTotals();
+  }
+});
+
+$("clear").addEventListener("click", clearList);
+$("copy").addEventListener("click", function(){
+  var l = S.list, out = ["My " + LISTS[l].label.toLowerCase() + " list, from the Build your Kit Calculator", ""];
+  if (l === "food" || l === "trip") out.push(S.food.adults + " adults, " + S.food.kids + " children, " + S.food.days + (S.food.days === 1 ? " day" : " days") + (l === "trip" ? ", " + S.food.nights + (S.food.nights === 1 ? " night" : " nights") : ""), "");
+  LISTS[l].tabs.forEach(function(t){
+    var lines = [];
+    t.groups.forEach(function(g){ g.items.forEach(function(it){ var s = S.items[it.id]; if (s.on) lines.push(s.qty + " x " + it.name + " (" + gbp(s.qty * s.price) + ")"); }); });
+    if (lines.length){ out.push(t.name); out = out.concat(lines); out.push(""); }
+  });
+  out.push("Total: " + gbp(listSum(l)));
+  var p = S.plan[l];
+  if (p.budget) out.push("Budget: " + gbp(p.budget));
+  if (p.months && listSum(l) > (p.saved || 0)) out.push("Save each month: " + gbp(Math.ceil((listSum(l) - (p.saved || 0)) / p.months * 100) / 100));
+  var m = $("msg");
+  try {
+    navigator.clipboard.writeText(out.join("\n")).then(function(){ m.textContent = "Copied. Paste it into your notes or a message."; }, function(){ m.textContent = "Your browser blocked copying. Try again in a different browser."; });
+  } catch (err) { m.textContent = "Your browser blocked copying. Try again in a different browser."; }
+});
+
+$("psub").textContent = "Four lists in one place: photography, camping, food and drink, and tickets and travel, with over " + (Math.floor(itemCount / 10) * 10) + " items. Tick what you need, set a budget for each and see what the whole trip costs before you spend a penny.";
+
+function fromHash(){
+  var h = (location.hash || "").replace("#", "");
+  var m = /[?&]list=([a-z-]+)/.exec(location.search || "");
+  if (m) h = m[1];
+  var hit = ORDER.filter(function(k){ return LISTS[k].hash === h; })[0];
+  if (hit){ S.list = hit; return true; }
+  return false;
+}
+window.addEventListener("hashchange", function(){ if (fromHash()) all(); });
+
+/* First visit opens with an example of each list so the tool shows what it does */
+if (!load()){
+  S.items["nk-z6iii"].on = true; S.items["nk-180600"].on = true;
+  S.items["ac-bat"].on = true; S.items["ac-bat"].qty = 2; S.items["ac-card"].on = true;
+  CAMP.forEach(function(t){ if (t.id === "kids") return; t.groups.forEach(function(g){ g.items.forEach(function(it){ if (it.lvl === 1) S.items[it.id].on = true; }); }); });
+  var pd0 = foodPeople() * S.food.days;
+  ["fd-lunch","fd-snacks","fd-fruit","fd-ice"].forEach(function(id){ S.items[id].on = true; S.items[id].qty = pd0; });
+  S.items["fd-drinkhome"].on = true; S.items["fd-drinkhome"].qty = pd0 * 2;
+  S.items["fd-latte"].on = true; S.items["fd-latte"].qty = 2;
+  S.items["fd-coolbag"].on = true;
+  ["tr-adult","tr-child","tr-park"].forEach(function(id){ S.items[id].on = true; });
+  S.items["tr-fuel"].price = fuelCost(); S.items["tr-fuel"].on = true;
+}
+fromHash();
+all();
+})();
+</script>
+<script src="https://jskedge1.github.io/airshow-pages/links.js"></script>
+<!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
+<style id="mobile-fit">
+  img,video,iframe,canvas{max-width:100%}
+  h1,h2,h3,h4,p,li,dd,dt,td,th,a,button,figcaption,label{overflow-wrap:break-word}
+  /* grid and flex children may shrink below their longest word instead of pushing the page wider */
+  .hero2-body>*,.hero2-side,.hero2-side dl,.hero2-side dl>div,.hero2-side dd,.btn-row>*,.jump.boxes>*,.reveal,.lu-fwrap{min-width:0}
+  @media (max-width:760px){
+    .hero2-body{grid-template-columns:minmax(0,1fr)!important}
+    .btn-row{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .hero2 h1{font-size:clamp(30px,10.4vw,44px)!important;line-height:1.02}
+    .hero2-side dl>div{grid-template-columns:minmax(min-content,34%) minmax(0,1fr)!important}
+    .hero2-side dt{overflow-wrap:normal}
+  }
+  @media (max-width:440px){
+    .jump.boxes{grid-template-columns:minmax(0,1fr)!important}
+    .jump.boxes strong{font-size:22px}
+    .lu .lu-key ul{grid-template-columns:minmax(0,1fr)!important}
+  }
+  /* drawings with labels: when the space is too narrow they keep a readable size and slide sideways instead of shrinking */
+  .mf-pan{position:relative;min-width:0;max-width:100%}
+  .mf-pan-hint{display:none}
+  .mf-pan.mf-on .mf-pan-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .mf-pan.mf-on .mf-pan-scroll::-webkit-scrollbar{display:none}
+  .mf-pan.mf-on .mf-pan-scroll>svg{min-width:var(--mf-min,560px)}
+  .mf-pan.mf-on .mf-pan-hint{display:flex;align-items:center;gap:8px;margin:8px 0 0;font:500 14px/20px "Barlow",sans-serif;color:inherit;opacity:.85;transition:opacity .4s ease}
+  .mf-pan-hint svg{width:22px!important;height:12px!important;flex:none;display:inline-block!important;background:none!important;min-width:0!important}
+  .mf-pan.mf-on .mf-pan-hint.mf-light,.pmap-fig .mf-pan.mf-on .mf-pan-hint{color:#D8E3EC;padding:0 6px}
+  .mf-pan.mf-seen .mf-pan-hint{opacity:.55}
+  .layout>*,.layout-map,.layout-text,.pmap-fig,.sg-sec{min-width:0}
+  /* comfortable tap sizes on touch screens */
+  @media (pointer:coarse){
+    .more-link,.clear,#gtFullMap,a.back,a.more,button.more{min-height:40px!important;display:inline-flex;align-items:center}
+  }
+</style>
+<script id="mobile-fit-js">
+(function(){
+  /* labelled drawings (sun guide, site layouts, photo maps) slide sideways on phones so their labels stay readable */
+  function panify(){
+    var list=document.querySelectorAll('.sg-sec svg.view, .layout-map > svg, .pmap-fig > svg, svg[data-pan]');
+    [].forEach.call(list,function(svg){
+      if(svg.closest('.mf-pan')) return;
+      var vb=(svg.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+      if(vb.length!==4 || vb[2]<300) return;
+      var smallest=99;
+      [].forEach.call(svg.querySelectorAll('text'),function(t){
+        var fs=parseFloat(getComputedStyle(t).fontSize); if(fs&&fs<smallest) smallest=fs;
+      });
+      if(smallest===99) smallest=14;
+      /* width at which the smallest label renders at about 10px, kept between 520 and 820 */
+      var min=Math.round(Math.max(520,Math.min(820,vb[2]*10/smallest)));
+      var pan=document.createElement('div'); pan.className='mf-pan';
+      var sc=document.createElement('div'); sc.className='mf-pan-scroll'; sc.style.setProperty('--mf-min',min+'px');
+      svg.parentNode.insertBefore(pan,svg); sc.appendChild(svg); pan.appendChild(sc);
+      var hint=document.createElement('p'); hint.className='mf-pan-hint';
+      hint.innerHTML='<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M1 6h20M5 2L1 6l4 4M17 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Swipe sideways to see the whole drawing';
+      pan.appendChild(hint);
+      if(onDark(pan)) hint.classList.add('mf-light');
+      pan._min=min;
+      sc.addEventListener('scroll',function(){ if(sc._auto){sc._auto=false;return;} pan.classList.add('mf-seen');},{passive:true});
+    });
+  }
+  /* light hint text when the drawing sits on a dark panel */
+  function onDark(el){
+    for(var p=el;p&&p!==document.documentElement;p=p.parentElement){
+      var m=getComputedStyle(p).backgroundColor.match(/[\d.]+/g);
+      if(m && (m.length<4 || +m[3]>0.5)) return (0.299*m[0]+0.587*m[1]+0.114*m[2])<110;
+    }
+    return false;
+  }
+  function centre(sc){ var x=(sc.scrollWidth-sc.clientWidth)/2; if(x>0 && Math.abs(sc.scrollLeft-x)>1){ sc._auto=true; sc.scrollLeft=x; } }
+  /* turn sliding on only where the drawing would otherwise render too small to read */
+  function measure(){
+    [].forEach.call(document.querySelectorAll('.mf-pan'),function(pan){
+      var w=pan.clientWidth; if(!w) return;
+      pan.classList.toggle('mf-on', w < pan._min*0.92);
+    });
+  }
+  function recentre(){ measure(); [].forEach.call(document.querySelectorAll('.mf-pan.mf-on:not(.mf-seen) .mf-pan-scroll'),centre); }
+  /* boxes laid out in a grid may shrink below their longest line instead of pushing the page wider */
+  function gridKids(){
+    [].forEach.call(document.body.getElementsByTagName('*'),function(el){
+      var d=getComputedStyle(el).display;
+      if(d!=='grid' && d!=='inline-grid') return;
+      [].forEach.call(el.children,function(c){ if(getComputedStyle(c).minWidth==='auto') c.style.minWidth='0'; });
+    });
+  }
+  function init(){ gridKids(); panify(); recentre(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  window.addEventListener('load',function(){panify();recentre();});
+  /* sections opened later become visible: centre their drawings when they appear */
+  document.addEventListener('click',function(){ setTimeout(recentre,450); },true);
+  window.addEventListener('resize',recentre);
+})();
+</script>
+<!-- /mobile-fit -->
+</body>
+</html>

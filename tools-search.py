@@ -54,6 +54,7 @@ PAGES = [
     ('/first-airshow-what-to-pack', 'first-airshow-what-to-pack.html', PLAN, 'What To Pack For An Airshow', 'My packing list, from chairs to ear defenders.', 'pack packing list bring chairs ear defenders'),
     ('/airshow-security', 'airshow-security.html', PLAN, 'Airshow Security And Bag Searches', 'What happens at the gate and how to pack for quicker checks.', 'security bag search gate banned items'),
     ('/airshow-questions', 'questions-and-answers.html', PLAN, 'Airshow Questions And Answers', 'Straight answers to the questions people ask most, sorted by topic.', 'questions answers faq q&a ask help'),
+    ('/build-your-kit-calculator', 'kit-calculator.html', PLAN, 'Build Your Kit Calculator', 'Add up your photography kit, camping kit, food, tickets and travel, with a budget for each.', 'budget cost calculator kit price money how much spend tickets fuel camera lens tent'),
     ('/foodanddrinkatairshows', 'food-and-drink.html', PLAN, 'Food And Drink At Airshows', 'What to eat, what it costs and whether to take a picnic.', 'food drink picnic eat'),
 
     ('/airshow-photography-hub', 'photography-hub.html', PHOTO, 'Airshow Photography Hub', 'Camera settings, kit and photo tools for airshows.', 'photography camera settings lens shutter speed kit'),
