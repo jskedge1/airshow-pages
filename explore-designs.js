@@ -727,6 +727,14 @@
         root.querySelector('.xd-page-t').textContent = g.name;
         root.classList.add('xd-open');
         document.documentElement.style.overflow = 'hidden';
+        /* start the page under the site's own header bar, so Back is never hidden behind it */
+        var top = 0;
+        try {
+          var hd = (root.ownerDocument || document).querySelector('#SITE_HEADER, header');
+          var hb = hd ? hd.getBoundingClientRect().bottom : 0;
+          if (hb > 0 && hb < 160) top = Math.round(hb);
+        } catch (err) { top = 0; }
+        page.style.top = top + 'px';
         page.scrollTop = 0;
         setTimeout(function () { var bk = root.querySelector('.xd-back'); if (bk) bk.focus(); }, 60);
       }
