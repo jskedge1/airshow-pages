@@ -6040,9 +6040,31 @@ body h1.cg-title{text-transform:none!important}
     'By bus': { short: 'Bus', colour: '#00A6E2', ink: '#06283D' },
     'By road': { short: 'Road', colour: '#F2B233', ink: '#13293C' },
     'By coach': { short: 'Coach', colour: '#C2255C', ink: '#fff' },
-    'Access & taxis': { short: 'Access', colour: '#6950A1', ink: '#fff' }
+    'Access & taxis': { short: 'Taxi', colour: '#6950A1', ink: '#fff' },
+    'Parking': { short: 'Parking', colour: '#2B5DA8', ink: '#fff' },
+    'Fuel': { short: 'Fuel', colour: '#E8762B', ink: '#fff' },
+    'Walking': { short: 'On foot', colour: '#32B4AF', ink: '#13293C' }
   };
-  function mode(name) { return MODES[name] || { short: name, colour: '#32B4AF', ink: '#13293C' }; }
+  /* each show names its topics its own way (Show day parking, Taxis & buses, Fuel), so match them on key words */
+  var WORDS = [
+    ['By coach', /coach|national express|megabus/],
+    ['By train', /train|station|rail/],
+    ['By bus', /tram|bus|shuttle|247/],
+    ['Access & taxis', /taxi|access|blue badge/],
+    ['Walking', /walk|without a car|on foot|camping/],
+    ['Fuel', /fuel|petrol/],
+    ['Parking', /parking|car park|gate|entrance/],
+    ['By road', /road|driv|sat ?nav|motorway|postcode|what3words|address|showground|promenade|seafront|beachy|live travel|main/]
+  ];
+  function canon(name) {
+    var n = String(name || '').toLowerCase();
+    if (MODES[name]) return name;
+    if (/park ?(and|&|&amp;) ?ride/.test(n)) return 'Park and Ride';
+    var best = 'By road', at = Infinity;
+    WORDS.forEach(function (w) { var m = n.match(w[1]); if (m && m.index < at) { at = m.index; best = w[0]; } });
+    return best;
+  }
+  function mode(name) { return MODES[canon(name)]; }
 
   var ICONS = {
     'Park and Ride': '<path d="M9 17V7h4a3 3 0 0 1 0 6H9" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>',
@@ -6050,9 +6072,12 @@ body h1.cg-title{text-transform:none!important}
     'By bus': '<rect x="4" y="3" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 11h16M7 17v3M17 17v3" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="8" cy="14" r="1" fill="currentColor"/><circle cx="16" cy="14" r="1" fill="currentColor"/>',
     'By road': '<path d="M5 16l1.5-5A2 2 0 0 1 8.4 9.5h7.2a2 2 0 0 1 1.9 1.5L19 16v3H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="8" cy="16" r="1.2" fill="currentColor"/><circle cx="16" cy="16" r="1.2" fill="currentColor"/>',
     'By coach': '<rect x="2" y="5" width="20" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2 11h20M7 5v6M12 5v6M17 5v6" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="7" cy="18.5" r="1.8" fill="currentColor"/><circle cx="17" cy="18.5" r="1.8" fill="currentColor"/>',
-    'Access & taxis': '<circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 7v6h5l2 6M12 10h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.5 10.5a5 5 0 1 0 6.8 6.6" fill="none" stroke="currentColor" stroke-width="2"/>'
+    'Access & taxis': '<circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 7v6h5l2 6M12 10h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.5 10.5a5 5 0 1 0 6.8 6.6" fill="none" stroke="currentColor" stroke-width="2"/>',
+    'Parking': '<rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.5 17V7h3.5a3 3 0 0 1 0 6H9.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>',
+    'Fuel': '<path d="M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h14M7 8h6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 9h2a2 2 0 0 1 2 2v6a1.5 1.5 0 0 0 3 0V8l-3-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    'Walking': '<circle cx="13" cy="4" r="2" fill="currentColor"/><path d="M10 21l2.5-7 2.5 3v4M9 12l2-5 4 2 2 3M11 7l-3 3v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
   };
-  function icon(name) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || ICONS['By road']) + '</svg>'; }
+  function icon(name) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[canon(name)] + '</svg>'; }
   /* a see-through version of a section colour, for faded boxes and hovers */
   function soft(hex, a) {
     var h = hex.replace('#', ''), n = parseInt(h.length === 3 ? h.replace(/(.)/g, '$1$1') : h, 16);
@@ -6503,26 +6528,21 @@ body h1.cg-title{text-transform:none!important}
   function decorateHero() {
     var travel = document.getElementById('travel');
     if (!travel) return;
-    var MAP = {
-      'park and ride': ['Park and Ride', '#2BA84A', 'rgba(43,168,74,.12)', 'Park and Ride'],
-      'arriving by train': ['By train', '#D74949', 'rgba(215,73,73,.12)', 'Arriving by train'],
-      'showground': ['By road', '#F2B233', 'rgba(242,178,51,.16)', ''],
-      'event car park': ['By road', '#F2B233', 'rgba(242,178,51,.16)', ''],
-      'nearest station': ['By train', '#D74949', 'rgba(215,73,73,.12)', ''],
-      'coach drop-off': ['By coach', '#C2255C', 'rgba(194,37,92,.12)', '']
-    };
+    function look(label) { var k = canon(label), m = MODES[k]; return [k, m.colour, soft(m.colour, .14)]; }
+    var place = (window.CG_PLACE && window.CG_PLACE.short) || '';
+    var SUBS = place === 'Clacton' ? { 'park and ride': 'Leave the car, ride to the seafront', 'arriving by train': 'Direct from London and Colchester' } : {};
     Array.prototype.slice.call(travel.querySelectorAll('.gt-hero .btns .btn')).forEach(function (b) {
       if (b.querySelector('.xd-bt')) return;
-      var label = b.textContent.trim(), m = MAP[label.toLowerCase()] || ['By bus', '#00A6E2', '', ''];
+      var label = b.textContent.trim(), m = look(label);
       b.style.setProperty('--bc', m[1]);
-      var sub = { 'park and ride': 'Leave the car, ride to the seafront', 'arriving by train': 'Direct from London and Colchester' }[label.toLowerCase()] || '';
+      var sub = SUBS[label.toLowerCase()] || '';
       b.innerHTML = '<span class="xd-bi">' + icon(m[0]) + '</span><span class="xd-bp" aria-hidden="true"></span><span class="xd-bt">' + esc(label) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</span><span class="xd-ba" aria-hidden="true">&rsaquo;</span>';
     });
     var facts = travel.querySelector('.gt-facts');
     if (facts && !facts.querySelector('.xd-kp-h')) {
-      facts.insertAdjacentHTML('afterbegin', '<div class="xd-kp-h"><span style="background:none;color:inherit;padding:0;font-size:inherit;font-family:inherit">Key places</span><span>Clacton</span></div>');
+      facts.insertAdjacentHTML('afterbegin', '<div class="xd-kp-h"><span style="background:none;color:inherit;padding:0;font-size:inherit;font-family:inherit">Key places</span>' + (place ? '<span>' + esc(place) + '</span>' : '') + '</div>');
       Array.prototype.slice.call(facts.querySelectorAll('dl > div')).forEach(function (row) {
-        var dt = row.querySelector('dt'), m = MAP[(dt ? dt.textContent : '').trim().toLowerCase()] || ['By road', '#00A6E2', 'rgba(0,166,226,.12)', ''];
+        var dt = row.querySelector('dt'), m = look(dt ? dt.textContent.trim() : '');
         row.style.setProperty('--rc', m[1]); row.style.setProperty('--rs', m[2]);
         row.insertAdjacentHTML('afterbegin', '<span class="xd-ri" aria-hidden="true">' + icon(m[0]) + '</span>');
       });
