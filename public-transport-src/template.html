@@ -831,6 +831,21 @@ a.bnum{width:64px;min-width:64px;padding:0}
 /* Keep planning: flat, no folded corner or lift */
 .more a .mi:before{display:none}
 .more a,.more a:hover{transform:none!important;box-shadow:none!important}
+/* Check before you go: station information board */
+.sheet.sb{padding:0;background:#fff!important;border:0!important;box-shadow:var(--soft-sh)!important;margin-top:18px}
+.sb-h{display:flex;align-items:center;gap:10px;background:#13293C;color:#fff;padding:10px 14px;border-bottom:3px solid #F2B233}
+.sb-i{width:24px;height:24px;border-radius:50%;background:#F2B233;color:#13293C;display:grid;place-items:center;font-weight:800;font-size:15px;font-style:italic;font-family:Georgia,serif;flex:none}
+.sb-h b{font-size:17px;font-weight:700;letter-spacing:.01em}
+.sb-w{display:flex;align-items:center;gap:10px;padding:12px 14px 10px;font-size:15.5px;font-weight:500;color:#33444F}
+.sb-rows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;border-top:1px solid #EDF1F4}
+.sb-rows>div{padding:10px 14px 12px;border-left:1px solid #EDF1F4}
+.sb-rows>div:first-child{border-left:0}
+.sb-rows dt{font-size:13.5px;font-weight:500;color:var(--navy);margin-bottom:4px}
+.sb-rows dd{margin:0;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sb-rows dd b{font-size:17px;line-height:1.25;color:var(--navy)}
+.sb-line{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--navy)}
+.sb-line:before{content:"";width:18px;height:6px;background:var(--lc)}
+@media(max-width:520px){.sb-rows{grid-template-columns:1fr}.sb-rows>div{border-left:0;border-top:1px solid #EDF1F4}.sb-rows>div:first-child{border-top:0}}
 @media(prefers-reduced-motion:reduce){.msec{opacity:1;transform:none}*{transition:none!important;animation:none!important}.bl-via span{padding-left:0}}
 @media print{
   .topbar,.hero,.board,.res-h,.alert,.filters,.opts,.map,.faq,footer,.plan-acts{display:none!important}
@@ -1164,11 +1179,14 @@ a.bnum{width:64px;min-width:64px;padding:0}
   function sheetHTML(t,m,T){
     var meta=t.meta||[], walk=meta.filter(function(x){return /walk/i.test(x[0]);})[0], other=meta.filter(function(x){return x!==walk;})[0];
     var modes=[]; (t.route||[]).forEach(function(r){var k=r[0]; if(k==='stop'||k==='walk'||k==='car')return; if(modes.indexOf(k)<0)modes.push(k);}); if(!modes.length)modes=[m.k];
-    var cols={train:'#D74949',bus:'#00A6E2',coach:'#C2255C',pr:'#2BA84A',tram:'#6950A1'};
-    var tiles='<div class="shs"><small>Status</small><span class="shs-v"><span class="shw" aria-hidden="true">!</span>'+modes.map(function(k){return '<i style="background:'+(cols[k]||m.c)+'"></i>';}).join('')+'</span></div>';
-    tiles+=walk?'<div class="shs ok"><small>'+esc(walk[0])+'</small><b><i class="gd"></i>'+esc(walk[1])+'</b></div>':'<div class="shs ok"><small>Steps</small><b><i class="gd"></i>'+((t.route||[]).length||1)+'</b></div>';
-    tiles+=other?'<div class="shs"><small>'+esc(other[0])+'</small><b>'+esc(other[1])+'</b></div>':'<div class="shs"><small>Times</small><b>'+(T.length?'Show day':'Check')+'</b></div>';
-    return '<div class="sheet"><span class="sh-hd" aria-hidden="true"></span><div class="sh-t">Check before you go</div><div class="sh-w"><span class="sh-ic">'+ic('walk')+'</span>'+esc(t.sub||t.title)+'</div><div class="sh-tiles">'+tiles+'</div></div>';
+    var cols={train:'#D74949',bus:'#00A6E2',coach:'#C2255C',pr:'#2BA84A',tram:'#6950A1'}, names={train:'Train',bus:'Bus',coach:'Coach',pr:'Park and Ride',tram:'Tram'};
+    var lines=modes.map(function(k){return '<span class="sb-line" style="--lc:'+(cols[k]||m.c)+'">'+esc(names[k]||k)+'</span>';}).join('');
+    var rows=[['Lines',lines,1]];
+    rows.push(walk?[walk[0],esc(walk[1])]:['Journey legs',String((t.route||[]).length||1)]);
+    rows.push(other?[other[0],esc(other[1])]:['Times',T.length?'Show day times below':'Check on the day']);
+    return '<div class="sheet sb"><div class="sb-h"><span class="sb-i" aria-hidden="true">i</span><b>Check before you go</b></div>'
+      +'<div class="sb-w"><span class="sh-ic">'+ic('walk')+'</span>'+esc(t.sub||t.title)+'</div>'
+      +'<dl class="sb-rows">'+rows.map(function(r){return '<div><dt>'+esc(r[0])+'</dt><dd>'+(r[2]?r[1]:'<b>'+r[1]+'</b>')+'</dd></div>';}).join('')+'</dl></div>';
   }
   function afirst(p,t){
     var best=null; (p.times||[]).forEach(function(x){var a=parseArr(x.d); if(!a)return; if(!best||toMin(a)<toMin(best.a))best={x:x,a:a};});
