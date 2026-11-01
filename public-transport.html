@@ -1426,7 +1426,7 @@ a.bnum{width:64px;min-width:64px;padding:0}
       return '<a class="br-btn" href="'+((window.UKAG_BR&&UKAG_BR.href)?UKAG_BR.href(r.id):SITE+'bus-route?r='+r.id)+'" target="_top" style="--b1:'+r.c1+';--bi:'+r.ink+';--b2:'+r.c2+'"><span class="br-num">'+esc(r.num)+'</span><span class="br-txt">'+esc(r.ft)+'<small>'+esc(r.show)+', run by '+esc(r.op)+'</small></span><i aria-hidden="true">→</i></a>';}).join('')+'</div></div>';
   }
 
-  document.head.insertAdjacentHTML('beforeend',brStyle());
+  (function(){var css=(brStyle().match(/<style>([\s\S]*?)<\/style>/)||[])[1]||''; if(!css)return; var host=$('opts'), root=host&&host.getRootNode?host.getRootNode():document, el=document.createElement('style'); el.textContent=css; (root===document||!root.appendChild?document.head:root).appendChild(el);})();
   var FQM=[['bus','#00A6E2'],['bus','#00A6E2'],['train','#D74949'],['any','#13293C'],['train','#D74949']];
   $('faq').innerHTML=FAQ.map(function(q,i){var m=FQM[i]||['any','#13293C'];return '<details'+(i===0?' open':'')+' style="--qc:'+m[1]+'"><summary><span class="qi">'+ic(m[0])+'</span><span class="qt">'+esc(q[0])+'</span></summary><div class="a">'+q[1]+'</div></details>';}).join('');
   sync(); render();
