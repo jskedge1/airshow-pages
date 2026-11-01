@@ -735,6 +735,29 @@ a.bnum{width:64px;min-width:64px;padding:0}
 #rFilters{display:flex;flex-wrap:nowrap;align-items:center;margin-bottom:16px}
 #rFilters>span{padding:0 14px 0 10px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
 .dtabs{margin-bottom:12px}
+/* Clacton style ways in tabs, replacing the ways in map */
+#rFilters{display:none!important}
+.xflags{display:grid;grid-template-columns:repeat(var(--n,5),minmax(0,1fr));gap:12px;margin:0 0 22px}
+.xflag{all:unset;box-sizing:border-box;cursor:pointer;background:#fff;padding:18px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 10px 24px rgba(6,40,61,.12);border-bottom:8px solid #13293C;text-align:center;transition:transform .25s var(--ease),background .25s var(--ease),border-color .25s}
+.xflag:hover{transform:translateY(-3px);border-bottom-color:var(--c)}
+.xflag:focus-visible{outline:3px solid #1D63B7;outline-offset:2px}
+.xring{width:64px;height:64px;border-radius:50%;border:9px solid var(--c);display:flex;align-items:center;justify-content:center;color:#13293C;background:#fff;box-sizing:border-box;font-size:24px;transition:transform .3s var(--ease)}
+.xflag:hover .xring{transform:scale(1.06)}
+.xflag b{font-weight:700;font-size:17px;line-height:1.2;color:inherit}
+.xflag small{font-weight:500;font-size:14px;color:#41586B}
+.xflag[aria-selected="true"]{background:#13293C;color:#fff;border-bottom-color:var(--c)}
+.xflag[aria-selected="true"] small{color:#C9DCEA}
+.xflag[aria-selected="true"] .xring{background:#13293C;color:#fff}
+@media(max-width:900px){.xflags{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){.xflags{grid-template-columns:minmax(0,1fr);gap:8px}.xflag{flex-direction:row;justify-content:flex-start;gap:14px;border-bottom:0;border-left:8px solid var(--c);padding:10px 44px 10px 12px;position:relative;text-align:left}.xflag:after{content:"\203A";position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:26px;font-weight:700;color:var(--c)}.xflag small{margin-left:auto;white-space:nowrap}.xring{width:44px;height:44px;border-width:6px;font-size:18px;flex:none}.xflag:hover{transform:none}}
+/* circles on the symbols */
+.mode-r,.sg-ic,.tile .ti,.line .via i,.modes button .mi,.dc-i,.sh-ic,.planner-h .ic,.wl-b .i,.dtl .sq,.lwh b{border-radius:50%!important}
+.lwh b{border-radius:0!important}
+.opt:hover .mode-r{transform:scale(1.06)}
+.tile .ti{box-shadow:0 0 0 3px #fff,0 0 0 5px #DCE4EA}
+.tile.nameboard .ti{box-shadow:0 0 0 3px var(--navy),0 0 0 5px #fff}
+.mode-r{box-shadow:0 0 0 4px #fff,0 0 0 6px var(--m)}
+.sg-ic{box-shadow:0 0 0 3px rgba(255,255,255,.9)}
 @media(prefers-reduced-motion:reduce){.msec{opacity:1;transform:none}*{transition:none!important;animation:none!important}.bl-via span{padding-left:0}}
 @media print{
   .topbar,.hero,.board,.res-h,.alert,.filters,.opts,.map,.faq,footer,.plan-acts{display:none!important}
@@ -969,13 +992,10 @@ a.bnum{width:64px;min-width:64px;padding:0}
     else{var lh=t?lastHome(times(t)):null; if(lh) n.push(['Last way home',lh.tm,lh.sv,1]);}
     return '<div class="dtl" style="--n:'+n.length+';--m:'+(m?m.c:'#13293C')+'"><b class="dtl-h">My day</b><ol>'+n.map(function(x){return '<li'+(x[3]?' class="est"':'')+'><span class="sq"></span><small>'+esc(x[0])+'</small>'+(x[1]?'<b>'+esc(x[1])+'</b>':'')+'<em>'+esc(x[2])+'</em></li>';}).join('')+'</ol></div>';
   }
-  function wimHTML(s){
-    return '<details class="wim"'+(st.wim===false?'':' open')+'><summary>'+ic('stop')+'Ways in map<small>'+s.count+(s.count===1?' way':' ways')+' to '+esc(s.name)+', tap a stop</small></summary><div class="wl-wrap">'
-      +s.groups.map(function(g){var m=MODE[g.name];
-        return '<div class="wl" style="--m:'+m.c+'"><div class="wl-b">'+ic(m.k)+'<span>'+esc(g.name)+'</span></div><ol class="wl-s">'
-          +g.items.map(function(t){var lh=lastHome(times(t));return '<li><button type="button" data-wim="'+esc(t.id)+'"><i class="sq"></i><span>'+esc(t.title)+'</span>'+(lh?'<small>Last home '+esc(lh.tm)+'</small>':'')+'</button></li>';}).join('')
-          +'<li class="end"><i class="sq"></i><span class="en">'+esc(s.name)+'</span></li></ol></div>';}).join('')
-      +'</div></details>';
+  function flagsHTML(s){
+    var all=[['all','All ways in','any','#13293C',s.count]].concat(s.groups.map(function(g){var m=MODE[g.name];return [g.name,g.name,m.k,m.c,g.items.length];}));
+    return '<div class="xflags" role="tablist" aria-label="Ways to get there" style="--n:'+all.length+'">'+all.map(function(f){
+      return '<button type="button" class="xflag" role="tab" data-fm="'+esc(f[0])+'" aria-selected="'+(st.mode===f[0])+'" style="--c:'+f[3]+'"><span class="xring">'+ic(f[2])+'</span><b>'+esc(f[1])+'</b><small>'+f[4]+(f[4]===1?' option':' options')+'</small></button>';}).join('')+'</div>';
   }
   function card(t,s,q){
     var m=MODE[t.g], hit=matchesTown(t,q);
@@ -1022,7 +1042,7 @@ a.bnum{width:64px;min-width:64px;padding:0}
       var shut=st.hid[m.k];
       html+='<section class="msec m-'+m.k+(shut?' shut':'')+'" style="--m:'+m.c+'" id="sec-'+m.k+'">'+head(g,s)+'<button type="button" class="mtog" data-sec="'+m.k+'" aria-expanded="'+(!shut)+'"><span class="mtl">'+(shut?'Show':'Hide')+' the '+g.items.length+(g.items.length===1?' way':' ways')+' in</span><i class="cv" aria-hidden="true">▴</i></button>'+extra+'<div class="opts">'+cards+'</div><details class="mtips"><summary>'+ic(m.k)+esc({train:'Train tips',bus:'Bus tips',coach:'Coach tips',pr:'Park and Ride tips'}[m.k])+'</summary>'+tipsHTML(m.k)+'</details></section>';
     });
-    var wm=$('wim'); if(wm) wm.innerHTML=wimHTML(s);
+    var wm=$('wim'); if(wm) wm.innerHTML=flagsHTML(s);
     $('opts').innerHTML=html||'<p class="none">No ways in for that choice. Try Any.</p>';
     var tn=$('townNote');
     if(q){tn.classList.add('on');tn.innerHTML=hits?'<b>'+hits+(hits===1?' way in':' ways in')+'</b> for '+esc(s.name)+' mention '+esc(q)+'. They are marked below.':'None of the ways in for '+esc(s.name)+' mention '+esc(q)+'. Try the nearest big town, or see the buses from there to other shows below.';}
@@ -1109,12 +1129,9 @@ a.bnum{width:64px;min-width:64px;padding:0}
     var sec=b.closest('.msec'),shut=sec.classList.toggle('shut');st.hid[b.dataset.sec]=shut;
     b.setAttribute('aria-expanded',String(!shut));var l=b.querySelector('.mtl');if(l)l.textContent=l.textContent.replace(/^(Hide|Show)/,shut?'Show':'Hide');
   });
-  $('wim').addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('wim'))st.wim=e.target.open;},true);
   $('wim').addEventListener('click',function(e){
-    var b=e.target.closest('[data-wim]'); if(!b)return;
-    var id=b.dataset.wim,t=cur().items.filter(function(x){return x.id===id;})[0]; if(!t)return;
-    st.mode='all';st.hid[MODE[t.g].k]=false;st.open=id;sync();render();
-    var c=document.querySelector('.opt[data-id="'+CSS.escape(id)+'"]');if(c)c.scrollIntoView({behavior:'smooth',block:'start'});
+    var b=e.target.closest('[data-fm]'); if(!b)return;
+    st.mode=b.dataset.fm; if(st.mode!=='all')st.hid[MODE[st.mode].k]=false; sync(); render();
   });
   document.querySelectorAll('.side .card-h').forEach(function(h){
     h.setAttribute('tabindex','0');h.setAttribute('role','button');h.setAttribute('aria-expanded','true');
