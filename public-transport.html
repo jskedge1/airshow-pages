@@ -1120,7 +1120,7 @@ a.bnum{width:64px;min-width:64px;padding:0}
     return '<div class="dtl" style="--n:'+n.length+';--m:'+(m?m.c:'#13293C')+'"><b class="dtl-h">My day</b><ol>'+n.map(function(x){return '<li'+(x[3]?' class="est"':'')+'><span class="sq"></span><small>'+esc(x[0])+'</small>'+(x[1]?'<b>'+esc(x[1])+'</b>':'')+'<em>'+esc(x[2])+'</em></li>';}).join('')+'</ol></div>';
   }
   function flagsHTML(s){
-    var all=[['all','All ways in','any','#13293C',s.count]].concat(s.groups.map(function(g){var m=MODE[g.name];return [g.name,g.name,m.k,m.c,g.items.length];}));
+    var all=s.groups.map(function(g){var m=MODE[g.name];return [g.name,g.name,m.k,m.c,g.items.length];});
     return '<div class="xflags" role="tablist" aria-label="Ways to get there" style="--n:'+all.length+'">'+all.map(function(f){
       return '<button type="button" class="xflag" role="tab" data-fm="'+esc(f[0])+'" aria-selected="'+(st.mode===f[0])+'" style="--c:'+f[3]+'"><span class="xring">'+ic(f[2])+'</span><b>'+esc(f[1])+'</b><small>'+f[4]+(f[4]===1?' option':' options')+'</small></button>';}).join('')+'</div>';
   }
@@ -1261,7 +1261,7 @@ a.bnum{width:64px;min-width:64px;padding:0}
   });
   $('wim').addEventListener('click',function(e){
     var b=e.target.closest('[data-fm]'); if(!b)return;
-    st.mode=b.dataset.fm; if(st.mode!=='all')st.hid[MODE[st.mode].k]=false; sync(); render();
+    st.mode=st.mode===b.dataset.fm?'all':b.dataset.fm; if(st.mode!=='all')st.hid[MODE[st.mode].k]=false; sync(); render();
   });
   document.querySelectorAll('.side .card-h').forEach(function(h){
     h.setAttribute('tabindex','0');h.setAttribute('role','button');h.setAttribute('aria-expanded','true');
