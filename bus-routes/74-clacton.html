@@ -623,6 +623,10 @@ html:not(.hdr) .fold{scroll-margin-top:62px}
 /* the bell tip box under your bus: site navy with white writing */
 #sumsave{background:#13293C!important;color:#fff!important}
 #sumsave b{color:#fff!important}
+
+/* transport tabs under the departures: dark company green on hover, and the one you tapped stays green */
+.pin .row.links .lnk:hover,.pin .row.links .lnk:focus-visible,.pin .row.links .lnk.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pin .row.links .lnk:hover::before,.pin .row.links .lnk:focus-visible::before,.pin .row.links .lnk.on::before{border-color:#fff;background-color:#fff;box-shadow:none}
 </style>
 <!-- seo: matches the Wix page on ukairshowguide.co.uk -->
 <meta name="description" content="The 74 bus to the Clacton Air Show: the roads it takes, every stop, times on show days and the closest stop to the show. Run by Central Connect.">
@@ -1819,6 +1823,12 @@ function apply(){var t=[].slice.call(b.querySelectorAll('.dep')),n=t.length,show
 btn.addEventListener('click',function(){all=!all;apply();});
 new MutationObserver(apply).observe(b,{childList:true});apply();
 window.addEventListener('resize',apply);})();
+</script>
+<script id="links-tab-on">
+/* keep the transport tab you tapped picked out */
+(function(){var r=document.querySelector('.pin .row.links');if(!r)return;
+r.addEventListener('click',function(e){var b=e.target.closest('.lnk');if(!b)return;
+[].forEach.call(r.querySelectorAll('.lnk'),function(x){x.classList.toggle('on',x===b);x.setAttribute('aria-current',x===b?'true':'false');});});})();
 </script>
 </body>
 </html>
