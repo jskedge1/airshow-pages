@@ -427,3 +427,11 @@ Bus route pages, 2 Nov 2026 (from the 74 Clacton edit copy), now on every bus pa
 - The On the bus controls are option card buttons.
 - The bell tip is navy (#13293C) with white writing.
 - The destination blind and the Pick your bus number screen use the orange LED of the departures screen (#FFB21E, JetBrains Mono) in place of the dot matrix.
+
+## Train route pages all on the new design (2 Nov 2026)
+
+Clacton, Cosford and the three RIAT pages (Swindon, Cheltenham, Kemble) now build from `template-v2.html` too, so every page built from train-routes-src has the Your way in card, Pay less, Good to know and the access box. Each cfg has `pay`, `faq` and `access`, plus `opd`, `tint` and `tintln` in its theme.
+- Changes made on the Clacton page on 2 Nov are on every train page, Headcorn and Shuttleworth included (they were patched directly): a red corner with a train on the operator note box, rounded corners on My advice, a faded hover on each stretch in The line it takes, and See every train as a transport tab like the Public Transport page (`#ttbtn.ttbtn` rules in `v2-parts/styles.css`).
+- `x.wayIn` and `x.wayBack` ([label, heading]) replace the Walk step in the Your way in card when the way in is a shuttle or a taxi (RIAT pages, Duxford).
+- The trail bar script (`trail.js`) and the winter times note are in `template.html`, so rebuilding no longer drops them. `trail.js` has rows for Ayr, Duxford, Headcorn and Shuttleworth.
+- Show pages: Ayr (Train to Ayr topic) and Duxford (Train + free Air Show shuttle topic) now have the Train route details button. They open the GitHub page in a new tab until the Wix pages /train-to-ayr and /train-to-duxford exist.
