@@ -201,6 +201,7 @@ The train route pages (Clacton, Eastbourne) were added on 30 Oct 2026 late eveni
 inline scripts together (so `var CFG` from one script reaches the next) and to copy non-font stylesheets inside the guide.
 The template passes the map element to Leaflet (`L.map(document.getElementById('map'), ...)`), which is needed for that. New train pages
 (Cosford, Wales, RIAT) only need their path adding to `AE_GH_PAGES` once they have a Wix page.
+On 2 Nov 2026 every train route page was added to `AE_GH_PAGES` (wales, ayr, headcorn, cosford, riat, riat-kemble, riat-cheltenham), saved in the editor; it goes live the next time the site is published. Until then the Swansea page sits in its 7100 px box and scrolls inside it.
 If a guide cannot load (an error, or longer than 15 seconds), the element leaves the normal HTML box in place.
 The full-width check compares each box with its own section as well as the window, because an iPad can zoom the page out.
 The site footer box (comp-mvf3v9rt) must stay stretched to the screen: when it was a fixed 1878px it made pages 1445px wide on iPads.
