@@ -8,8 +8,8 @@ shows = sys.argv[1:] or sorted(os.path.basename(f)[:-9] for f in glob.glob(os.pa
 src = open(os.path.join(here, '..', 'previews', 'bus-route-layout', '132-duxford.html')).read()
 mf = src[src.index('<!-- mobile-fit'):src.index('<!-- /mobile-fit -->') + len('<!-- /mobile-fit -->')]
 for show in shows:
-    page = open(os.path.join(here, 'template.html')).read()
     cfg = json.load(open(os.path.join(here, show + '-cfg.json')))
+    page = open(os.path.join(here, cfg.get('template', 'template.html'))).read()
     data = open(os.path.join(here, show + '-data.json')).read()
     page = page.replace('__CFG__', json.dumps(cfg, ensure_ascii=False)).replace('__DATA__', data)
     page = page.replace('<title>Train to Clacton | The Big Guide to UK Airshows</title>', '<title>' + cfg['title'].replace('Trains', 'Train') + ' | The Big Guide to UK Airshows</title>')

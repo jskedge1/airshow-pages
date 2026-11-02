@@ -1,0 +1,14 @@
+<script id="pick-board-more">
+/* no scroller: show the trains around the one you picked, with a button to see every time */
+(function(){var b=document.getElementById('board');if(!b||!window.MutationObserver)return;
+var all=false,btn=document.createElement('button');btn.type='button';btn.className='moretimes';
+b.parentNode.parentNode.insertBefore(btn,b.parentNode.nextSibling);
+function apply(){var t=[].slice.call(b.querySelectorAll('.dep')),n=t.length,show=window.innerWidth<681?8:15;
+  var p=Math.max(0,t.findIndex(function(x){return x.getAttribute('aria-pressed')==='true';}));
+  var s=Math.max(0,Math.min(p-Math.floor(show/3),n-show));
+  t.forEach(function(x,i){x.classList.toggle('far',!all&&(i<s||i>=s+show));});
+  btn.hidden=n<=show;btn.textContent=all?'Show fewer times':'Show all '+n+' times';}
+btn.addEventListener('click',function(){all=!all;apply();});
+new MutationObserver(apply).observe(b,{childList:true});apply();
+window.addEventListener('resize',apply);})();
+</script>
