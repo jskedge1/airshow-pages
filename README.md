@@ -462,3 +462,15 @@ Service numbers come from the National Express timetables current in November 20
 - Audit: all 13 pages built from data files were compared with the live timetable. Every journey (about 17,000) matched on departure and arrival time. The pages keep every direct train and the best one change options, and leave out late night and very early services and alternative changes. Scripts and notes are in `train-routes-src/audit-tools/`.
 - Fixes from the audit: the RIAT show page now gives the official Fast Track bus hours (Friday 07:00 to 18:15, weekend 06:15 to 19:45) and the Kemble train page says the Fast Track must be booked; Headcorn shows the confirmed 2027 dates and on sale tickets; Clacton no longer states the twilight display as confirmed for 2027.
 - Official source fixes (2 Nov 2026, evening): Eastbourne says the Sunday fireworks depend on sponsorship and were cancelled in 2026 (visiteastbourne.com); Wales says Afterburn began in 2026 with no 2027 plans seen (Swansea Council) and that improvement works hit the London to Swansea line that weekend; Ayr says the Friday flying ran 6.15pm to about 8.40pm in 2026 (South Ayrshire Council). Checked and left alone: RIAT Yellow entry at the eastern end and the Cheltenham Park and Ride (airtattoo.com), and the frequency and journey time claims, which match the timetable data.
+
+## Command Centre (2 Nov 2026)
+
+`admin/command.html` is Jack's HUD command centre for the whole site: Overview (radar, alerts, headline numbers),
+Site traffic (Wix Analytics, 30 days), Airshow Hub (members, trips, must see, send a notice to every member),
+Traders (founding places, queue with Approve and Send back, plans, stalls, shows), Forum (profiles, posts, groups,
+reported items with Hide and Keep), All pages (every live page with desktop, phone and tablet checks, plus every
+page in `admin/unpublished.json`), Plans and log, and Controls (publish, take offline, timed checks, links).
+It shows on the Wix page /command-centre (hidden from the menu, members only) and talks to
+`velo/backend/command.web.js` through the page code `velo/page-code/command-centre.js` (postMessage, source `ukag-command`).
+Plans, log, checks, ideas and publishing reuse `admin.web.js`; trader approvals reuse `traders.web.js`.
+Traffic needs the `ukagApiKey` secret with Site Analytics read access. Opened on its own, the page shows a snapshot.

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Command Centre | The Big Guide to UK Airshows</title>
+<!--FONTS--><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"><!--/FONTS-->
+<style>
+:root{
+  --bg:#050F18;--deep:#081A27;--panel:rgba(10,32,48,.72);--panel2:rgba(14,41,60,.85);
+  --navy:#13293C;--teal:#32B4AF;--teal2:#5FD6CF;--tealdim:rgba(50,180,175,.22);
+  --purple:#6950A1;--purple2:#9C86D6;--red:#D74949;--amber:#F2B84B;--blue:#1D63B7;
+  --text:#E8F3F6;--soft:#A9C3CE;--line:rgba(95,214,207,.18);
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --cond:'Barlow Condensed','Barlow',sans-serif;
+  --ease:cubic-bezier(.22,.8,.24,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow',system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar,.scroll::-webkit-scrollbar{display:none}
+.scroll{scrollbar-width:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--teal2);outline-offset:2px}
+
+/* backdrop: grid, glow, scanlines */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+   radial-gradient(1200px 700px at 72% -10%,rgba(105,80,161,.20),transparent 60%),
+   radial-gradient(900px 600px at 10% 110%,rgba(50,180,175,.16),transparent 60%),
+   linear-gradient(rgba(95,214,207,.045) 1px,transparent 1px) 0 0/44px 44px,
+   linear-gradient(90deg,rgba(95,214,207,.045) 1px,transparent 1px) 0 0/44px 44px}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+
+.app{position:relative;z-index:1;display:grid;grid-template-columns:232px 1fr;height:100vh}
+
+/* ---------- rail ---------- */
+.rail{border-right:1px solid var(--line);background:linear-gradient(180deg,rgba(8,26,39,.95),rgba(5,15,24,.95));display:flex;flex-direction:column;padding:22px 0 18px;overflow:auto}
+.brand{display:flex;gap:12px;align-items:center;padding:0 20px 22px}
+.brand .jet{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--teal);position:relative}
+.brand .jet::after{content:"";position:absolute;inset:3px;border:1px solid var(--tealdim)}
+.brand b{font-family:var(--cond);font-weight:800;font-size:21px;letter-spacing:.04em;line-height:1;display:block}
+.brand span{font-size:13px;color:var(--teal2);font-weight:500}
+.nav{display:flex;flex-direction:column;gap:2px;padding:0 10px}
+.nav button{display:flex;align-items:center;gap:12px;padding:10px 12px;text-align:left;font-weight:500;color:var(--soft);position:relative;transition:color .3s var(--ease),background .3s var(--ease),padding .35s var(--ease)}
+.nav button svg{flex:none;opacity:.8}
+.nav button .badge{margin-left:auto;font-family:var(--mono);font-size:12px;min-width:22px;text-align:center;padding:1px 6px;background:var(--red);color:#fff}
+.nav button .badge.calm{background:transparent;border:1px solid var(--line);color:var(--soft)}
+.nav button:hover{color:var(--text);background:rgba(50,180,175,.07);padding-left:16px}
+.nav button.on{color:#fff;background:linear-gradient(90deg,rgba(50,180,175,.26),rgba(50,180,175,.04))}
+.nav button.on::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;background:var(--teal2);box-shadow:0 0 12px var(--teal)}
+.rail .foot{margin-top:auto;padding:18px 20px 0;font-size:13px;color:var(--soft)}
+.rail .foot .clock{font-family:var(--mono);font-size:22px;color:var(--text);letter-spacing:.04em}
+.rail .foot .who{margin-top:8px;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--teal2);box-shadow:0 0 10px var(--teal2);animation:pulse 2.4s ease-in-out infinite}
+.dot.off{background:var(--red);box-shadow:0 0 10px var(--red)}
+.dot.unk{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+@keyframes pulse{50%{opacity:.35}}
+
+/* ---------- main ---------- */
+.main{overflow:auto;padding:22px 28px 60px}
+.top{display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-family:var(--cond);font-weight:800;font-size:44px;line-height:.95;letter-spacing:.02em}
+.top h1 em{font-style:normal;color:var(--teal2);text-shadow:0 0 22px rgba(95,214,207,.45)}
+.top p{color:var(--soft);max-width:56ch;margin-top:6px}
+.top .chips{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line);background:var(--panel);font-weight:500;font-size:14px;white-space:nowrap}
+.chip.purple{border-color:rgba(156,134,214,.5);background:rgba(105,80,161,.28)}
+.chip.red{border-color:rgba(215,73,73,.6);background:rgba(215,73,73,.18)}
+.sample{display:none;margin:-6px 0 18px;padding:10px 14px;border-left:4px solid var(--purple2);background:rgba(105,80,161,.18);font-size:14px}
+body.demo .sample{display:block}
+
+.view{display:none}
+.view.on{display:block}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(12,1fr)}
+.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
+
+/* panel with HUD brackets */
+.p{position:relative;background:var(--panel);border:1px solid var(--line);padding:18px 18px 16px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transform-origin:50% 50%}
+.p::before,.p::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--teal);pointer-events:none}
+.p::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.p::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.p.purple::before,.p.purple::after{border-color:var(--purple2)}
+.p.red::before,.p.red::after{border-color:var(--red)}
+.p h2{font-family:var(--cond);font-weight:700;font-size:20px;letter-spacing:.05em;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.p h2 .tag{margin-left:auto;font-family:'Barlow';font-weight:500;font-size:13px;letter-spacing:0;color:var(--teal2)}
+.p .note{font-size:14px;color:var(--soft)}
+.live .p{animation:openOut .62s var(--ease) both}
+.live .p:nth-child(2){animation-delay:.05s}.live .p:nth-child(3){animation-delay:.1s}.live .p:nth-child(4){animation-delay:.15s}.live .p:nth-child(5){animation-delay:.2s}.live .p:nth-child(6){animation-delay:.25s}.live .p:nth-child(7){animation-delay:.3s}.live .p:nth-child(8){animation-delay:.35s}
+@keyframes openOut{
+  0%{opacity:0;transform:scale(.02,.04);filter:brightness(2)}
+  35%{opacity:1;transform:scale(1,.04)}
+  62%{transform:scale(1,1);clip-path:inset(0 0 0 0)}
+  70%{clip-path:inset(18% 0 52% 0);transform:translateX(5px)}
+  76%{clip-path:inset(60% 0 8% 0);transform:translateX(-4px)}
+  82%{clip-path:inset(0 0 0 0);transform:translateX(0);filter:none}
+  100%{opacity:1;transform:none}
+}
+
+/* stat tiles */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{padding:14px 14px 12px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(50,180,175,.10),rgba(8,26,39,.4));position:relative;overflow:hidden;transition:transform .35s var(--ease),border-color .35s var(--ease)}
+.stat:hover{transform:translateY(-2px);border-color:rgba(95,214,207,.5)}
+.stat::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--teal),transparent)}
+.stat.purple{background:linear-gradient(160deg,rgba(105,80,161,.22),rgba(8,26,39,.4))}.stat.purple::after{background:linear-gradient(90deg,var(--purple2),transparent)}
+.stat.red::after{background:linear-gradient(90deg,var(--red),transparent)}
+.stat small{display:block;font-weight:500;color:var(--soft);font-size:14px}
+.stat .n{font-family:var(--mono);font-weight:600;font-size:34px;line-height:1.15;letter-spacing:-.01em;color:#fff;text-shadow:0 0 18px rgba(95,214,207,.35)}
+.stat .sub{font-size:13px;color:var(--teal2);font-weight:500}
+.stat.big .n{font-size:46px}
+
+/* radar */
+.radarWrap{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:center}
+.radar{position:relative;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(50,180,175,.12) 0,transparent 70%),
+  repeating-radial-gradient(circle,transparent 0 31px,rgba(95,214,207,.18) 31px 32px);
+  border:1px solid rgba(95,214,207,.35);overflow:hidden}
+.radar::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 49.8%,rgba(95,214,207,.2) 50%,transparent 50.2%),linear-gradient(90deg,transparent 49.8%,rgba(95,214,207,.2) 50%,transparent 50.2%)}
+.radar .sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(95,214,207,.42),rgba(95,214,207,0) 22%,transparent);animation:spin 5.5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.radar .blip{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--teal2);box-shadow:0 0 10px var(--teal2);animation:pulse 2.6s ease-in-out infinite}
+.radar .blip.bp{background:var(--purple2);box-shadow:0 0 10px var(--purple2)}
+.radar .blip.r{background:var(--red);box-shadow:0 0 10px var(--red)}
+.radar .core{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.radar .core b{display:block;font-family:var(--cond);font-weight:800;font-size:30px;letter-spacing:.06em}
+.radar .core span{font-size:13px;color:var(--soft)}
+.key{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--soft);margin-top:10px}
+.key i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+
+/* alerts */
+.alerts{display:flex;flex-direction:column;gap:8px}
+.alert{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-left:3px solid var(--teal);background:rgba(50,180,175,.08);font-size:14px}
+.alert.red{border-color:var(--red);background:rgba(215,73,73,.12)}
+.alert.purple{border-color:var(--purple2);background:rgba(105,80,161,.16)}
+.alert b{display:block;font-weight:600;font-size:15px}
+.alert button{margin-left:auto;flex:none;font-weight:600;font-size:13px;color:var(--teal2);padding:2px 0;border-bottom:1px solid currentColor}
+
+/* charts */
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.readout{position:absolute;pointer-events:none;padding:8px 10px;background:rgba(5,15,24,.94);border:1px solid var(--teal);font-size:13px;white-space:nowrap;opacity:0;transform:translate(-50%,-110%);transition:opacity .2s}
+.readout b{font-family:var(--mono);font-weight:600}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:130px 1fr 44px;gap:10px;align-items:center;font-size:14px}
+.bar .t{height:10px;background:rgba(95,214,207,.08);position:relative;overflow:hidden}
+.bar .t i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--teal),var(--teal2));box-shadow:0 0 12px rgba(95,214,207,.5);width:0;transition:width 1.1s var(--ease)}
+.bar.purple .t i{background:linear-gradient(90deg,var(--purple),var(--purple2));box-shadow:0 0 12px rgba(156,134,214,.5)}
+.bar .v{font-family:var(--mono);text-align:right}
+.bar .l{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--soft);font-weight:500}
+.cols{display:flex;align-items:flex-end;gap:8px;height:150px;padding-top:10px}
+.cols .c{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.cols .c i{width:100%;max-width:38px;background:linear-gradient(0deg,rgba(50,180,175,.25),var(--teal2));box-shadow:0 0 14px rgba(95,214,207,.35);height:0;transition:height 1s var(--ease)}
+.cols .c span{font-size:12px;color:var(--soft);font-family:var(--mono)}
+.cols .c b{font-family:var(--mono);font-size:13px}
+.cols.purple .c i{background:linear-gradient(0deg,rgba(105,80,161,.3),var(--purple2));box-shadow:0 0 14px rgba(156,134,214,.35)}
+
+/* gauge */
+.gauge{position:relative;width:200px;margin:0 auto}
+.gauge svg{width:200px;height:200px;transform:rotate(-90deg)}
+.gauge .mid{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.gauge .mid b{font-family:var(--mono);font-size:40px;line-height:1}
+.gauge .mid span{display:block;font-size:13px;color:var(--soft);margin-top:4px}
+
+/* tables and lists */
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center;font-size:14px}
+.row:last-child{border-bottom:0}
+.row b{font-weight:600;font-size:15px}
+.row .m{color:var(--soft);font-size:13px}
+.acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;font-weight:600;font-size:14px;border:1px solid var(--teal);color:#fff;background:rgba(50,180,175,.16);transition:background .25s var(--ease),transform .25s var(--ease),box-shadow .25s var(--ease);text-decoration:none}
+.btn:hover{background:var(--teal);box-shadow:0 0 18px rgba(95,214,207,.45);transform:translateY(-1px)}
+.btn.ghost{border-color:var(--line);background:transparent;color:var(--soft)}
+.btn.ghost:hover{color:#fff;background:rgba(95,214,207,.12);box-shadow:none}
+.btn.red{border-color:var(--red);background:rgba(215,73,73,.18)}
+.btn.red:hover{background:var(--red);box-shadow:0 0 18px rgba(215,73,73,.5)}
+.btn.purple{border-color:var(--purple2);background:rgba(105,80,161,.3)}
+.btn.purple:hover{background:var(--purple);box-shadow:0 0 18px rgba(156,134,214,.5)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.empty{padding:16px;border:1px dashed var(--line);color:var(--soft);font-size:14px;text-align:center}
+.st{font-family:var(--mono);font-size:12px;padding:3px 8px;border:1px solid var(--line);white-space:nowrap}
+.st.Scheduled{color:var(--soft)}.st.Boarding{color:var(--amber);border-color:rgba(242,184,75,.5)}.st.Delayed{color:var(--red);border-color:rgba(215,73,73,.6)}.st.Departed{color:var(--teal2);border-color:rgba(95,214,207,.5)}
+button.st{cursor:pointer;transition:background .2s}
+button.st:hover{background:rgba(95,214,207,.12)}
+
+/* pages */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.filters button{padding:7px 13px;border:1px solid var(--line);font-weight:500;font-size:14px;color:var(--soft);transition:all .25s var(--ease)}
+.filters button:hover{color:#fff;border-color:var(--teal)}
+.filters button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.search{flex:1;min-width:180px;background:rgba(5,15,24,.6);border:1px solid var(--line);padding:7px 12px;color:var(--text);font:inherit;font-size:14px}
+.pages{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.pg{border:1px solid var(--line);background:rgba(8,26,39,.65);padding:14px;display:flex;flex-direction:column;gap:10px;transition:border-color .3s var(--ease),transform .3s var(--ease)}
+.pg:hover{border-color:rgba(95,214,207,.55);transform:translateY(-2px)}
+.pg .h{display:flex;gap:10px;align-items:flex-start}
+.pg .h b{font-weight:600;font-size:15px;line-height:1.3}
+.pg .h .kind{margin-left:auto;flex:none;font-size:12px;font-weight:500;padding:2px 7px;background:rgba(50,180,175,.16);color:var(--teal2)}
+.pg .h .kind.nl{background:rgba(105,80,161,.3);color:#D9CFF5}
+.pg .path{font-family:var(--mono);font-size:12px;color:var(--soft);word-break:break-all}
+.dev{display:flex;gap:6px}
+.dev button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border:1px solid var(--line);font-size:12px;font-weight:500;color:var(--soft);transition:all .2s}
+.dev button svg{opacity:.8}
+.dev button.Clear{border-color:rgba(95,214,207,.6);color:var(--teal2);background:rgba(50,180,175,.1)}
+.dev button.Check{border-color:rgba(215,73,73,.7);color:#FFB3B3;background:rgba(215,73,73,.12)}
+.dev button:hover{border-color:var(--teal2)}
+.pg .links{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+
+/* forms */
+.f{display:flex;flex-direction:column;gap:8px}
+.f label{font-weight:500;font-size:14px;color:var(--soft)}
+.f input,.f textarea,.f select{background:rgba(5,15,24,.7);border:1px solid var(--line);padding:9px 11px;color:var(--text);font:inherit;font-size:14px}
+.f textarea{min-height:76px;resize:vertical}
+.f .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* ticker */
+.ticker{border:1px solid var(--line);background:rgba(8,26,39,.8);overflow:hidden;white-space:nowrap;margin-bottom:18px;font-size:14px;position:relative}
+.ticker::before{content:"Live";position:absolute;left:0;top:0;bottom:0;z-index:2;display:flex;align-items:center;padding:0 12px;background:var(--purple);font-weight:600}
+.ticker .run{display:inline-block;padding:8px 0 8px 70px;animation:tick 60s linear infinite}
+.ticker .run span{margin-right:44px}
+.ticker .run span b{color:var(--teal2);font-weight:600}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* gate and toast */
+.gate{position:fixed;inset:0;z-index:20;display:none;place-items:center;background:var(--bg)}
+.gate.on{display:grid}
+.gate .box{max-width:420px;text-align:center;padding:34px}
+.gate h1{font-family:var(--cond);font-weight:800;font-size:40px;letter-spacing:.06em;margin-bottom:8px}
+.gate p{color:var(--soft);margin-bottom:20px}
+.boot{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:var(--bg);transition:opacity .5s .2s}
+.boot.gone{opacity:0;pointer-events:none}
+.boot .ln{font-family:var(--mono);font-size:14px;color:var(--teal2);min-width:300px}
+.boot .ln div{opacity:0;animation:in .3s forwards}
+@keyframes in{to{opacity:1}}
+.toast{position:fixed;right:22px;bottom:22px;z-index:40;padding:12px 16px;background:var(--panel2);border:1px solid var(--teal);max-width:360px;font-size:14px;transform:translateY(20px);opacity:0;transition:all .35s var(--ease);pointer-events:none}
+.toast.on{opacity:1;transform:none}
+.toast.bad{border-color:var(--red)}
+.confirm{position:fixed;inset:0;z-index:45;display:none;place-items:center;background:rgba(5,15,24,.75);backdrop-filter:blur(4px)}
+.confirm.on{display:grid}
+.confirm .p{max-width:420px;width:calc(100% - 40px)}
+.confirm .acts{justify-content:flex-start;margin-top:14px}
+
+.mtop{display:none}
+
+@media (max-width:1180px){.stats{grid-template-columns:repeat(2,1fr)}.s3,.s4,.s5{grid-column:span 6}.s7,.s8{grid-column:span 12}.radarWrap{grid-template-columns:1fr}.radar{margin:0 auto}}
+@media (max-width:820px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .rail{flex-direction:row;padding:10px;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto;gap:10px;align-items:center}
+  .brand{padding:0 8px 0 0}.brand div{display:none}
+  .nav{flex-direction:row;padding:0}
+  .nav button{white-space:nowrap;padding:8px 10px}
+  .nav button.on::before{left:6px;right:6px;top:auto;bottom:0;width:auto;height:3px}
+  .nav button:hover{padding-left:10px}
+  .rail .foot{display:none}
+  .main{padding:16px 14px 50px}
+  .top h1{font-size:34px}
+  .top .chips{margin-left:0}
+  .grid{grid-template-columns:1fr}
+  .grid>*{grid-column:1/-1!important}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat .n{font-size:28px}.stat.big .n{font-size:36px}
+  .bar{grid-template-columns:96px 1fr 36px}
+  .radar{width:220px;height:220px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="boot" id="boot"><div class="ln" id="bootLines"></div></div>
+
+<div class="gate" id="gate"><div class="box p">
+  <h1>ADMIN ONLY</h1>
+  <p id="gateText">The command centre is for the site admin. Log in with your admin account to open it.</p>
+  <button class="btn" id="loginBtn" type="button">Log in</button>
+</div></div>
+
+<div class="app">
+  <aside class="rail scroll">
+    <div class="brand">
+      <span class="jet"><svg width="24" height="24" viewBox="0 0 24 24" fill="#D74949" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></span>
+      <div><b>COMMAND CENTRE</b><span>UK Airshow Guide</span></div>
+    </div>
+    <nav class="nav" id="nav" aria-label="Command centre sections"></nav>
+    <div class="foot">
+      <div>UK time</div>
+      <div class="clock" id="clock">00:00:00</div>
+      <div class="who"><span class="dot unk" id="siteDot"></span><span id="siteWord">Checking the site</span></div>
+    </div>
+  </aside>
+
+  <main class="main scroll" id="main">
+    <div class="top">
+      <div>
+        <h1 id="vTitle">COMMAND <em>CENTRE</em></h1>
+        <p id="vIntro">Everything on the site in one place.</p>
+      </div>
+      <div class="chips" id="topChips"></div>
+    </div>
+    <div class="sample">You're looking at this page on its own, so it shows a snapshot of the real site figures from 2 November 2026. Buttons that change the site are switched off here. On ukairshowguide.co.uk/command-centre everything is live.</div>
+    <div class="ticker" aria-label="Latest from the site"><div class="run" id="ticker"></div></div>
+
+    <section class="view" id="v-overview"></section>
+    <section class="view" id="v-traffic"></section>
+    <section class="view" id="v-hub"></section>
+    <section class="view" id="v-traders"></section>
+    <section class="view" id="v-forum"></section>
+    <section class="view" id="v-pages"></section>
+    <section class="view" id="v-ops"></section>
+    <section class="view" id="v-controls"></section>
+  </main>
+</div>
+
+<div class="confirm" id="confirm"><div class="p red"><h2 id="cTitle">ARE YOU SURE?</h2><p class="note" id="cText"></p><div class="acts"><button class="btn red" id="cYes" type="button">Yes, do it</button><button class="btn ghost" id="cNo" type="button">Cancel</button></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var SITE='https://www.ukairshowguide.co.uk';
+var PAGES_BASE='https://jskedge1.github.io/airshow-pages/';
+var REPO='https://github.com/jskedge1/airshow-pages';
+var SITE_ID='073f6961-6a1c-4313-a30e-a850cc8c3512';
+var DASH='https://manage.wix.com/dashboard/'+SITE_ID;
+var IN_WIX=window.parent!==window&&!window.__PREVIEW;
+var REDUCED=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var D=null, unpublished=[], view='overview', pageFilter='All', pageQ='';
+if(!IN_WIX)document.body.classList.add('demo');
+
+/* ---------- icons ---------- */
+var I={
+  overview:'<path d="M3 13h8V3H3zm10 8h8V11h-8zM3 21h8v-6H3zm10-18v6h8V3z"/>',
+  traffic:'<path d="M3 17l6-6 4 4 8-8v4h2V3h-8v2h4l-6 6-4-4-8 8z"/>',
+  hub:'<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v2h16v-2c0-3.3-4.7-5-8-5z"/>',
+  traders:'<path d="M4 4h16l-1.5 6H5.5zM5 12h14v8H5zm4 2v4h6v-4z"/>',
+  forum:'<path d="M4 4h16v11H7l-3 3zm4 4v2h8V8z"/>',
+  pages:'<path d="M6 2h9l5 5v15H6zm8 1.5V8h4.5z"/>',
+  ops:'<path d="M3 5h18v2H3zm0 6h12v2H3zm0 6h18v2H3z"/>',
+  controls:'<path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm9 3h-2.1a7 7 0 0 0-1-2.4l1.5-1.5-1.5-1.5-1.5 1.5a7 7 0 0 0-2.4-1V3h-2v2.1a7 7 0 0 0-2.4 1L8.1 4.6 6.6 6.1l1.5 1.5a7 7 0 0 0-1 2.4H5v2h2.1a7 7 0 0 0 1 2.4l-1.5 1.5 1.5 1.5 1.5-1.5a7 7 0 0 0 2.4 1V21h2v-2.1a7 7 0 0 0 2.4-1l1.5 1.5 1.5-1.5-1.5-1.5a7 7 0 0 0 1-2.4H21z"/>',
+  desk:'<path d="M2 4h20v12H2zm8 14h4v2h3v1H7v-1h3z"/>',
+  phone:'<path d="M7 2h10v20H7zm4 17v1h2v-1z"/>',
+  tab:'<path d="M4 2h16v20H4zm7 17v1h2v-1z"/>'
+};
+function ic(n,s){return '<svg width="'+(s||18)+'" height="'+(s||18)+'" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'+I[n]+'</svg>'}
+
+var VIEWS=[
+  {id:'overview',name:'Overview',title:'COMMAND <em>CENTRE</em>',intro:'Everything on the site in one place. Numbers update each time you open this page.'},
+  {id:'traffic',name:'Site traffic',title:'SITE <em>TRAFFIC</em>',intro:'Visits and visitors over the last 30 days, straight from Wix Analytics.'},
+  {id:'hub',name:'Airshow Hub',title:'AIRSHOW <em>HUB</em>',intro:'Members, the trips they are planning and what they are saving. You can send every member a notice from here.'},
+  {id:'traders',name:'Traders',title:'TRADERS <em>DIRECTORY</em>',intro:'Sign ups, founding places, plans and the approval queue. Approve or send back a listing without leaving this page.'},
+  {id:'forum',name:'Forum',title:'AIRSHOW <em>FORUM</em>',intro:'Profiles, posts, photos and anything members have reported. Hide a post or keep it with one tap.'},
+  {id:'pages',name:'All pages',title:'EVERY <em>PAGE</em>',intro:'Every page on the site and every page waiting to go live. Tap a desktop, phone or tablet box to mark it checked.'},
+  {id:'ops',name:'Plans and log',title:'PLANS <em>AND LOG</em>',intro:'Your jobs, what has changed on the site and the ideas waiting in the hangar.'},
+  {id:'controls',name:'Controls',title:'SITE <em>CONTROLS</em>',intro:'Publish, take offline, send notices and jump to everything else you use to run the guide.'}
+];
+
+/* ---------- snapshot for the standalone preview (real figures, 2 Nov 2026) ---------- */
+function snapshot(){
+  var s=[12,2,11,1,2,2,3,1,1,13,7,0,1,0,0,3,14,11,3,0,0,0,2,0,3,0,29,1,8];
+  var u=[11,2,10,1,2,2,3,1,1,12,7,0,1,0,0,1,6,6,2,0,0,0,2,0,3,0,27,1,6];
+  var f=[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  function days(a){return a.map(function(v,i){var d=new Date(Date.UTC(2026,9,4+i));return {date:d.toISOString().slice(0,10),value:v}})}
+  function sum(a){return a.reduce(function(x,y){return x+y},0)}
+  var pages=[['Royal International Air Tattoo','/riat','riat.html'],['RAF Cosford Air Show','/cosfordairshow','raf-cosford.html'],['Midlands Air Festival','/midlandsairfestival',''],['Eastbourne Airshow','/eastbourneairshow','eastbourne.html'],['Clacton Air Show','/clactonairshow',''],['Wales Air Show','/walesairshow',''],['Duxford Air Shows','/duxfordairshows','duxford.html'],['Shuttleworth Air Shows','/shuttleworthairshows','shuttleworth.html'],['Little Gransden Air and Car Show','/little-gransden-air-and-car-show','little-gransden.html'],['Southport Air Show','/southport-air-show','southport.html'],['Blackpool Air Show','/blackpool-air-show','blackpool.html'],['International Ayr Show','/international-ayr-show','ayr.html'],['Headcorn Air Show','/headcorn-air-show',''],['Find your Air Show','/air-shows-guides','find-your-airshow.html'],['UK Airshow Map','/airshow-map','airshow-map.html'],['Airshow News','/airshow-news','airshow-news.html'],['Planning your first airshow','/planning-your-first-airshow','planning-your-first-airshow.html'],['Airshow Security and Bag Searches','/airshow-security','airshow-security.html'],['Camping at Airshows','/camping-at-airshows','camping-hub.html'],['Airshow Photography Hub','/airshow-photography-hub','photography-hub.html'],['Airshow Forum','/community-forum','forum.html'],['My Airshow Hub','/my-airshow-hub','my-airshow-hub.html'],['Airshow traders','/airshow-traders','traders/directory.html'],['YouTube','/youtube','youtube.html'],['Policies','/policies','policies.html']];
+  var plans=[['Copyright wording on Policies','NOV','Policies','Departed'],['Coastal command panels','NOV','Seafront shows','Departed'],['Bus route maps','NOV','Show pages','Boarding'],['Aircraft photos on line-ups','NOV','Feature pages','Boarding'],['Nikon D500 guide page on Wix','NOV','Photography','Scheduled'],['Member checklist page','NOV','My Airshow Hub','Scheduled'],['Mobile and tablet checks','NOV','All pages','Scheduled'],['Final publish for launch','NOV','Whole site','Scheduled'],['Night before, getting home, rainy day and calm visit guides','DEC','Planning guides','Scheduled'],['Arrivals board and live radar','DEC','Show Day','Scheduled'],['Traders phase 2','DEC','Traders','Scheduled'],['Which show suits me quiz','WINTER','Find your airshow','Scheduled'],['Home screen app','WINTER','Whole site','Scheduled']];
+  var ideas=[['Build your Kit Calculator','Photography'],['Printable spotter cards','Kids'],['Most wanted aircraft for 2027','Winter content'],['Aircraft A to Z','Reference'],['Show day buddy board','Community'],['Spot the Spot map','Photography'],['Monthly photo challenge','Community'],['Rarity log','Community'],['Kit for sale or swap','Community'],['Member show reviews','Members'],['UK aircraft museum guide','Guides']];
+  var log=[['2026-10-31','Fixed','Southport card: removed the free filter, show is ticketed','Southport'],['2026-10-31','Fixed','Southport card entry set to Ticketed, matching the official site','Southport'],['2026-10-30','Added','Questions and Answers page added: 59 questions in 11 topics with a search box','Planning guides'],['2026-10-30','Added','Not Live Yet tab added to the admin board: 16 unpublished pages with previews','Admin board'],['2026-10-30','Changed','Aircraft line-ups weekly (Fridays) until 28 February, daily from 1 March 2027','Scheduled tasks'],['2026-10-30','Fixed','Show dates rewritten with to instead of dashes','Show details'],['2026-10-29','Published','Site went live for 10 minutes for a test, then came offline again','Whole site'],['2026-10-29','Updated','Full audit of every train and bus detail on the feature pages, with times added','Feature pages'],['2026-10-27','Changed','Coastal command seafront panel added for six seafront shows','Seafront shows'],['2026-10-27','Updated','Weather advice and ear defender wording for children added','All show pages'],['2026-10-25','Added','Traders directory, Trader Hub and trader admin built, with a founding offer for the first 25 traders','Traders'],['2026-10-21','Published','HUD forum live at /community-forum','Community']];
+  var groups=['Welcome and introductions','First timers and families','Show reports and reviews','Aviation photography','Plane spotting and line ups','Getting there and parking','Camping and places to stay','Accessibility at airshows','Kit, gear and buy and sell','Airshow news and rumours','Museums and heritage aviation','Meet ups and site feedback','Ask for advice','Tips and techniques','Editing and processing','Where to shoot'];
+  function wk(a){var out=[];for(var i=0;i<8;i++){var d=new Date(Date.UTC(2026,8,14+i*7));out.push({start:d.toISOString().slice(0,10),count:a[i]})}return out}
+  return {
+    admin:true,demo:true,now:new Date().toISOString(),
+    site:{known:true,live:false},
+    traffic:{known:true,TOTAL_SESSIONS:{total:sum(s),days:days(s)},TOTAL_UNIQUE_VISITORS:{total:92,days:days(u)},TOTAL_FORMS_SUBMITTED:{total:sum(f),days:days(f)},CLICKS_TO_CONTACT:{total:0,days:days(f.map(function(){return 0}))}},
+    hub:{members:3,membersWeek:0,trips:5,mustSee:0,updates:1,unread:1,settings:1,hangar:5,groups:0,groupMessages:0,past:0,saved:0,checklist:0,
+      weeks:wk([0,0,0,0,0,2,0,0]),
+      newest:[{name:'Jack Skedge',joined:'2026-10-19T10:12:53Z'},{name:'jack Skedge',joined:'2026-10-19T10:12:21Z'},{name:'thebigguidetoriat',joined:'2026-05-28T15:17:15Z'}],
+      tripsByShow:[{name:'RAF Cosford Air Show',count:2},{name:'Royal International Air Tattoo',count:1},{name:'Airbourne: Eastbourne International Airshow',count:1},{name:'IWM Duxford Air Shows',count:1}]},
+    traders:{total:0,live:0,pending:0,paused:0,sentBack:0,founding:{taken:0,total:25},byPlan:[],byCategory:[],byShow:[],weeks:wk([0,0,0,0,0,0,0,0]),queue:[],list:[]},
+    forum:{profiles:2,threads:0,photos:0,comments:0,likes:0,follows:0,groups:groups.map(function(g){return {name:g,status:'active',threads:0}}),pendingGroups:0,weeks:wk([0,0,0,0,0,0,0,0]),reported:[],activity:[]},
+    content:{news:16,newsLatest:[{title:'Little Gransden returns Sunday 29 August 2027',show:'Little Gransden Air & Car Show',when:'2026-10-30T08:06:17Z'},{title:'RIAT27 set for 16 to 18 July 2027, tickets on sale',show:'Royal International Air Tattoo',when:'2026-10-18T07:14:00Z'},{title:'Ayr Show returns 3 to 4 September 2027',show:'The International Ayr Show',when:'2026-10-17T07:12:18Z'},{title:'Midlands Air Festival set for 4 to 6 June 2027',show:'Midlands Air Festival',when:'2026-10-17T07:12:18Z'}],
+      shows:[{name:'Royal International Air Tattoo',dates:'Fri 16 to Sun 18 July'},{name:'RAF Cosford Air Show',dates:'Sun 13 June'},{name:'Midlands Air Festival',dates:'Fri 4 to Sun 6 June'},{name:'Airbourne: Eastbourne',dates:'Thu 12 to Sun 15 August'},{name:'Clacton Airshow',dates:'Thu 26 to Fri 27 August'},{name:'IWM Duxford Air Shows',dates:'19 to 20 June, 11 to 12 Sept'},{name:'Shuttleworth Air Shows',dates:'Seven shows, 9 May to 25 Sept'},{name:'The International Ayr Show',dates:'Fri 3 to Sat 4 September'}],
+      aircraft:3,crowd:2,uploadsHeld:0,questions:[]},
+    board:{
+      plans:plans.map(function(p,i){return {id:'p'+i,title:p[0],due:p[1],gate:p[2],status:p[3]}}),
+      ideas:ideas.map(function(p,i){return {id:'i'+i,title:p[0],area:p[1],status:'standby',votes:0}}),
+      log:log.map(function(l){return {date:l[0],type:l[1],what:l[2],area:l[3]}}),
+      pages:pages.map(function(p,i){return {id:'c'+i,page:p[0],wixPath:p[1],file:p[2],desktop:'Not checked',mobile:'Not checked',tablet:'Not checked',lastChecked:''}})
+    }
+  };
+}
+
+/* ---------- talking to the Wix page code ---------- */
+var pending={},seq=0;
+function call(action,payload){
+  if(!IN_WIX){
+    if(action==='command')return Promise.resolve(snapshot());
+    return Promise.reject(new Error('This is the preview. Open the command centre on the site to make changes.'));
+  }
+  return new Promise(function(resolve,reject){
+    var id='c'+(++seq);pending[id]={resolve:resolve,reject:reject};
+    try{window.parent.postMessage({source:'ukag-command',id:id,action:action,payload:payload||{}},'*')}catch(e){}
+    setTimeout(function(){if(pending[id]){delete pending[id];reject(new Error('The command centre could not reach the site. Please refresh and try again.'))}},action==='login'?600000:45000);
+  });
+}
+window.addEventListener('message',function(e){
+  var m=e.data;if(!m||m.source!=='ukag-command')return;
+  if(m.event==='refresh'){load();return}
+  var p=pending[m.id];if(!p)return;delete pending[m.id];
+  if(m.ok)p.resolve(m.data);else p.reject(new Error(m.error||'Something went wrong.'));
+});
+
+function toast(msg,bad){var t=$('#toast');t.textContent=msg;t.classList.toggle('bad',!!bad);t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('on')},3600)}
+function ask(title,text){
+  return new Promise(function(res){
+    $('#cTitle').textContent=title;$('#cText').textContent=text;$('#confirm').classList.add('on');
+    function done(v){$('#confirm').classList.remove('on');$('#cYes').onclick=$('#cNo').onclick=null;res(v)}
+    $('#cYes').onclick=function(){done(true)};$('#cNo').onclick=function(){done(false)};
+  });
+}
+function run(action,payload,okMsg){
+  return call(action,payload).then(function(r){if(okMsg)toast(okMsg);return load(true).then(function(){return r})}).catch(function(e){toast(e.message,true)});
+}
+
+/* ---------- small helpers ---------- */
+function n(v){return v==null?'?':v}
+function num(v){return '<span class="cnt" data-to="'+(v==null?0:v)+'">0</span>'}
+function ago(d){if(!d)return '';var s=(Date.now()-new Date(d))/1000;if(s<3600)return Math.max(1,Math.round(s/60))+' min ago';if(s<86400)return Math.round(s/3600)+' hours ago';var days=Math.round(s/86400);return days===1?'yesterday':days+' days ago'}
+function niceDate(s){return new Date(String(s).length===10?s+'T12:00:00':s).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}).replace(',','')}
+function stat(label,v,sub,cls){return '<div class="stat '+(cls||'')+'"><small>'+esc(label)+'</small><div class="n">'+(typeof v==='number'?num(v):esc(v))+'</div>'+(sub?'<div class="sub">'+esc(sub)+'</div>':'')+'</div>'}
+function panel(cls,title,tag,body){return '<div class="p '+cls+'"><h2>'+title+(tag?'<span class="tag">'+tag+'</span>':'')+'</h2>'+body+'</div>'}
+function bars(list,cls,max){
+  if(!list||!list.length)return '<div class="empty">Nothing here yet.</div>';
+  var m=max||Math.max.apply(null,list.map(function(x){return x.count}))||1;
+  return '<div class="bars">'+list.slice(0,10).map(function(x){return '<div class="bar '+(cls||'')+'"><span class="l" title="'+esc(x.name)+'">'+esc(x.name)+'</span><span class="t"><i data-w="'+(x.count/m*100)+'"></i></span><span class="v">'+x.count+'</span></div>'}).join('')+'</div>';
+}
+function cols(weeks,cls){
+  var m=Math.max.apply(null,weeks.map(function(w){return w.count}))||1;
+  return '<div class="cols '+(cls||'')+'">'+weeks.map(function(w){var d=new Date(w.start+'T12:00:00');return '<div class="c"><b>'+w.count+'</b><i data-h="'+(w.count/m*100)+'"></i><span>'+d.getDate()+' '+d.toLocaleDateString('en-GB',{month:'short'})+'</span></div>'}).join('')+'</div>';
+}
+function gauge(taken,total,label){
+  var r=84,c=2*Math.PI*r,pct=total?taken/total:0;
+  return '<div class="gauge"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="'+r+'" fill="none" stroke="rgba(95,214,207,.12)" stroke-width="12"/><circle class="arc" cx="100" cy="100" r="'+r+'" fill="none" stroke="#5FD6CF" stroke-width="12" stroke-dasharray="'+c+'" stroke-dashoffset="'+c+'" data-off="'+(c*(1-pct))+'" style="transition:stroke-dashoffset 1.4s cubic-bezier(.22,.8,.24,1);filter:drop-shadow(0 0 6px #32B4AF)"/>'+
+  Array.apply(null,Array(total)).map(function(_,i){var a=i/total*2*Math.PI;return '<line x1="'+(100+98*Math.cos(a))+'" y1="'+(100+98*Math.sin(a))+'" x2="'+(100+92*Math.cos(a))+'" y2="'+(100+92*Math.sin(a))+'" stroke="'+(i<taken?'#5FD6CF':'rgba(169,195,206,.35)')+'" stroke-width="2"/>'}).join('')+
+  '</svg><div class="mid"><div><b>'+num(taken)+'</b><span>'+esc(label)+'</span></div></div></div>';
+}
+
+/* line chart with hover readout */
+function lineChart(id,series){
+  var W=900,H=260,P={l:34,r:12,t:16,b:28};
+  var days=series[0].days,len=days.length;
+  var max=Math.max(1,Math.max.apply(null,series.map(function(s){return Math.max.apply(null,s.days.map(function(d){return d.value}))})));
+  max=Math.ceil(max/5)*5;
+  var x=function(i){return P.l+(W-P.l-P.r)*(len<2?0:i/(len-1))};
+  var y=function(v){return H-P.b-(H-P.t-P.b)*v/max};
+  var g='';
+  for(var k=0;k<=4;k++){var v=max*k/4;g+='<line x1="'+P.l+'" x2="'+(W-P.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="rgba(95,214,207,.1)"/><text x="'+(P.l-8)+'" y="'+(y(v)+4)+'" fill="#A9C3CE" font-size="11" text-anchor="end" font-family="JetBrains Mono">'+Math.round(v)+'</text>'}
+  days.forEach(function(d,i){if(i%5===0||i===len-1){var dt=new Date(d.date+'T12:00:00');g+='<text x="'+x(i)+'" y="'+(H-8)+'" fill="#A9C3CE" font-size="11" text-anchor="middle" font-family="JetBrains Mono">'+dt.getDate()+' '+dt.toLocaleDateString('en-GB',{month:'short'})+'</text>'}});
+  var paths=series.map(function(s,si){
+    var pts=s.days.map(function(d,i){return x(i).toFixed(1)+','+y(d.value).toFixed(1)});
+    var area='M'+x(0)+','+y(0)+' L'+pts.join(' L')+' L'+x(len-1)+','+y(0)+' Z';
+    return '<defs><linearGradient id="g'+id+si+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+s.colour+'" stop-opacity=".35"/><stop offset="1" stop-color="'+s.colour+'" stop-opacity="0"/></linearGradient></defs>'+
+      '<path d="'+area+'" fill="url(#g'+id+si+')"/>'+
+      '<polyline class="draw" points="'+pts.join(' ')+'" fill="none" stroke="'+s.colour+'" stroke-width="2.2" stroke-linejoin="round" style="filter:drop-shadow(0 0 5px '+s.colour+')"/>';
+  }).join('');
+  return '<div class="chart" id="'+id+'" data-len="'+len+'"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'+g+paths+'<line class="cur" x1="0" x2="0" y1="'+P.t+'" y2="'+(H-P.b)+'" stroke="#5FD6CF" stroke-dasharray="3 4" opacity="0"/><rect x="'+P.l+'" y="0" width="'+(W-P.l-P.r)+'" height="'+H+'" fill="transparent" class="hit"/></svg><div class="readout"></div></div>';
+}
+function wireChart(id,series){
+  var el=document.getElementById(id);if(!el)return;
+  var svg=el.querySelector('svg'),hit=el.querySelector('.hit'),cur=el.querySelector('.cur'),ro=el.querySelector('.readout');
+  var len=+el.dataset.len,W=900,P={l:34,r:12};
+  function at(ev){
+    var b=svg.getBoundingClientRect(),cx=(ev.touches?ev.touches[0].clientX:ev.clientX)-b.left;
+    var vx=cx/b.width*W,i=Math.round((vx-P.l)/(W-P.l-P.r)*(len-1));i=Math.max(0,Math.min(len-1,i));
+    var px=P.l+(W-P.l-P.r)*i/(len-1);cur.setAttribute('x1',px);cur.setAttribute('x2',px);cur.setAttribute('opacity',1);
+    ro.innerHTML=niceDate(series[0].days[i].date)+'<br>'+series.map(function(s){return '<span style="color:'+s.colour+'">'+esc(s.name)+'</span> <b>'+s.days[i].value+'</b>'}).join('<br>');
+    ro.style.left=(px/W*b.width)+'px';ro.style.top='40px';ro.style.opacity=1;
+  }
+  hit.addEventListener('mousemove',at);hit.addEventListener('touchstart',at,{passive:true});hit.addEventListener('touchmove',at,{passive:true});
+  hit.addEventListener('mouseleave',function(){ro.style.opacity=0;cur.setAttribute('opacity',0)});
+}
+
+/* animate numbers, bars and gauges once a view is drawn */
+function animate(root){
+  $$('.cnt',root).forEach(function(el){
+    var to=+el.dataset.to;if(REDUCED||!to){el.textContent=to.toLocaleString('en-GB');return}
+    var t0=null,dur=1200+Math.min(900,to*4);
+    function step(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=Math.round(to*e).toLocaleString('en-GB');if(k<1)requestAnimationFrame(step)}
+    requestAnimationFrame(step);
+  });
+  setTimeout(function(){
+    $$('.bar .t i',root).forEach(function(i){i.style.width=i.dataset.w+'%'});
+    $$('.cols .c i',root).forEach(function(i){i.style.height=Math.max(2,+i.dataset.h)+'%'});
+    $$('.arc',root).forEach(function(a){a.style.strokeDashoffset=a.dataset.off});
+  },REDUCED?0:380);
+  $$('polyline.draw',root).forEach(function(p){
+    if(REDUCED)return;var L=p.getTotalLength?p.getTotalLength():1500;p.style.strokeDasharray=L;p.style.strokeDashoffset=L;p.style.transition='stroke-dashoffset 1.6s cubic-bezier(.22,.8,.24,1) .3s';
+    requestAnimationFrame(function(){requestAnimationFrame(function(){p.style.strokeDashoffset=0})});
+  });
+}
+
+/* ---------- alerts: things that need you ---------- */
+function alertsFor(){
+  var a=[];
+  var t=D.traders,f=D.forum,c=D.content,h=D.hub;
+  if(t.queue.length)a.push({cls:'red',t:t.queue.length+' trader listing'+(t.queue.length>1?'s':'')+' waiting',d:'New sign ups and changes need your OK before they show.',go:'traders'});
+  if(f.reported.length)a.push({cls:'red',t:f.reported.length+' reported forum item'+(f.reported.length>1?'s':''),d:'Members have flagged these. Hide them or keep them.',go:'forum'});
+  if(c.uploadsHeld)a.push({cls:'purple',t:c.uploadsHeld+' Show Day upload'+(c.uploadsHeld>1?'s':'')+' held',d:'These did not pass the automatic show, date and place check.',go:'controls'});
+  if(c.questions.length)a.push({cls:'purple',t:c.questions.length+' reader question'+(c.questions.length>1?'s':''),d:'From the contact form. Latest: '+(c.questions[0].name||'a visitor')+'.',go:'controls'});
+  if(f.pendingGroups)a.push({cls:'purple',t:f.pendingGroups+' forum group idea'+(f.pendingGroups>1?'s':''),d:'Members have suggested new groups.',go:'forum'});
+  var unchecked=D.board.pages.filter(function(p){return p.desktop==='Not checked'||p.mobile==='Not checked'||p.tablet==='Not checked'}).length;
+  if(unchecked)a.push({cls:'',t:unchecked+' page'+(unchecked>1?'s':'')+' still to check',d:'Desktop, phone or tablet not marked yet. Worth doing before launch.',go:'pages'});
+  if(D.site.known&&!D.site.live)a.push({cls:'',t:'The site is offline',d:'Your edits are saved in the editor. Publish from Controls when you are ready.',go:'controls'});
+  if(!D.traffic.known)a.push({cls:'purple',t:'Visits are switched off',d:D.traffic.note||'Add the ukagApiKey secret in Wix to see traffic.',go:'traffic'});
+  if(!a.length)a.push({cls:'',t:'All clear',d:'Nothing is waiting for you right now.'});
+  return a;
+}
+
+/* ---------- views ---------- */
+var draw={
+overview:function(){
+  var tr=D.traffic,h=D.hub,t=D.traders,f=D.forum,c=D.content,b=D.board;
+  var visits=tr.known?tr.TOTAL_SESSIONS.total:'Off',vis=tr.known?tr.TOTAL_UNIQUE_VISITORS.total:'Off';
+  var departed=b.plans.filter(function(p){return p.status==='Departed'}).length;
+  var blips=[],seedI=0;
+  function blip(cls,count){for(var i=0;i<Math.min(count,14);i++){seedI++;var ang=(seedI*137.5)%360*Math.PI/180,rad=22+((seedI*53)%38);blips.push('<span class="blip '+cls+'" style="left:'+(50+rad*Math.cos(ang))+'%;top:'+(50+rad*Math.sin(ang))+'%;animation-delay:'+(seedI%7*.37)+'s"></span>')}}
+  blip('',h.members);blip('bp',t.total);blip('',f.profiles);blip('r',f.reported.length+t.queue.length);
+  var live=D.site.known?(D.site.live?'LIVE':'OFFLINE'):'UNKNOWN';
+  return '<div class="grid">'+
+    panel('s12','SITE AT A GLANCE','Last 30 days','<div class="stats">'+
+      stat('Visits',visits,tr.known?'Busiest day '+busiest(tr.TOTAL_SESSIONS.days):'Add the API key to see this','big')+
+      stat('Unique visitors',vis,tr.known?'People, counted once each':'', 'big')+
+      stat('Hub members',h.members,h.membersWeek+' joined this week','big purple')+
+      stat('Traders',t.total,t.founding.taken+' of '+t.founding.total+' founding places taken','big')+
+      stat('Trips being planned',h.trips,'Saved in members’ hubs')+
+      stat('Forum posts',f.threads+f.photos,f.profiles+' forum profiles','purple')+
+      stat('News stories',c.news,'From the official show sites')+
+      stat('Pages',b.pages.length+unpublished.length,b.pages.length+' live, '+unpublished.length+' waiting','')+
+    '</div>')+
+    panel('s7','RADAR','Who is on the site','<div class="radarWrap"><div class="radar"><div class="sweep"></div>'+blips.join('')+'<div class="core"><div><b>'+live+'</b><span>ukairshowguide.co.uk</span></div></div></div><div>'+
+      '<p class="note">Each blip is someone in your system right now. This fills up as the guide grows.</p>'+
+      '<div class="key"><span><i style="background:#5FD6CF"></i>Members and forum profiles</span><span><i style="background:#9C86D6"></i>Traders</span><span><i style="background:#D74949"></i>Waiting for you</span></div>'+
+      '<div style="margin-top:16px">'+bars([{name:'Plans finished',count:departed},{name:'Plans open',count:b.plans.length-departed}],'',b.plans.length)+'</div></div></div>')+
+    panel('s5 red','NEEDS YOU','', '<div class="alerts">'+alertsFor().map(function(a){return '<div class="alert '+a.cls+'"><div><b>'+esc(a.t)+'</b>'+esc(a.d)+'</div>'+(a.go?'<button type="button" data-go="'+a.go+'">Open</button>':'')+'</div>'}).join('')+'</div>')+
+    panel('s8','VISITS',tr.known?'Sessions and unique visitors':'', tr.known?lineChart('ovChart',[{name:'Visits',colour:'#5FD6CF',days:tr.TOTAL_SESSIONS.days},{name:'Visitors',colour:'#9C86D6',days:tr.TOTAL_UNIQUE_VISITORS.days}]):'<div class="empty">'+esc(tr.note||'Traffic is not switched on yet.')+'</div>')+
+    panel('s4 purple','LATEST NEWS','From the show sites','<div class="rows">'+c.newsLatest.slice(0,4).map(function(x){return '<div class="row"><div><b>'+esc(x.title)+'</b><div class="m">'+esc(x.show)+', '+ago(x.when)+'</div></div></div>'}).join('')+'</div>')+
+  '</div>';
+},
+traffic:function(){
+  var tr=D.traffic;
+  if(!tr.known)return '<div class="grid">'+panel('s12 purple','TRAFFIC IS SWITCHED OFF','','<p class="note">'+esc(tr.note||'')+'. Make a Wix API key with Site Analytics read access, then add it in Developer Tools, Secrets Manager, named ukagApiKey. The same key already runs the Publish button.</p>')+'</div>';
+  var s=tr.TOTAL_SESSIONS.days,u=tr.TOTAL_UNIQUE_VISITORS.days;
+  var last7=s.slice(-7).reduce(function(a,d){return a+d.value},0),prev7=s.slice(-14,-7).reduce(function(a,d){return a+d.value},0);
+  var change=prev7?Math.round((last7-prev7)/prev7*100):null;
+  var returning=tr.TOTAL_SESSIONS.total-tr.TOTAL_UNIQUE_VISITORS.total;
+  var wd=[0,0,0,0,0,0,0];s.forEach(function(d){wd[(new Date(d.date+'T12:00:00').getDay()+6)%7]+=d.value});
+  var wdNames=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  return '<div class="grid">'+
+    panel('s12','30 DAYS','From '+niceDate(s[0].date)+' to '+niceDate(s[s.length-1].date),'<div class="stats">'+
+      stat('Visits',tr.TOTAL_SESSIONS.total,'A visit ends after 30 quiet minutes','big')+
+      stat('Unique visitors',tr.TOTAL_UNIQUE_VISITORS.total,'Each person counted once','big purple')+
+      stat('Last 7 days',last7,change==null?'No visits the week before':(change>=0?'Up ':'Down ')+Math.abs(change)+'% on the week before','big')+
+      stat('Return visits',Math.max(0,returning),'Visits beyond the first','big')+
+      stat('Forms sent',tr.TOTAL_FORMS_SUBMITTED.total,'Contact, sign up and other forms')+
+      stat('Clicks to contact',tr.CLICKS_TO_CONTACT.total,'Phone, email and WhatsApp taps','purple')+
+      stat('Busiest day',bestDay(s).label,bestDay(s).sub)+
+      stat('Daily average',Math.round(tr.TOTAL_SESSIONS.total/s.length*10)/10+'','Visits per day')+
+    '</div>')+
+    panel('s12','VISITS AND VISITORS','Hover or tap the chart for a day',lineChart('trChart',[{name:'Visits',colour:'#5FD6CF',days:s},{name:'Visitors',colour:'#9C86D6',days:u}]))+
+    panel('s6','BY DAY OF THE WEEK','Visits added up',bars(wdNames.map(function(n,i){return {name:n,count:wd[i]}})))+
+    panel('s6 purple','WHAT THIS TELLS YOU','','<p class="note">The site is still offline most of the time, so these visits are mostly you and anyone testing it. Once it is live for launch, this chart is the one to watch after each social post. I would suggest checking it the morning after a Facebook or Instagram post goes out, so you can see which ones bring people in.</p>')+
+  '</div>';
+},
+hub:function(){
+  var h=D.hub;
+  return '<div class="grid">'+
+    panel('s12','MEMBERS AND PLANNING','','<div class="stats">'+
+      stat('Hub members',h.members,h.membersWeek+' joined this week','big purple')+
+      stat('Trips planned',h.trips,'Shows saved to a hub','big')+
+      stat('Must see aircraft',h.mustSee,'Added from the line-ups','big')+
+      stat('Hangar items',h.hangar,'Aircraft collected','big')+
+      stat('Trip groups',h.groups,h.groupMessages+' group messages')+
+      stat('Notifications',h.updates,h.unread+' not read yet','purple')+
+      stat('Past shows logged',h.past,'Members’ airshow history')+
+      stat('Saved tools',h.saved+h.checklist,'Tool results and checklist items')+
+    '</div>')+
+    panel('s6','NEW MEMBERS','Per week, last 8 weeks',cols(h.weeks,'purple'))+
+    panel('s6','SHOWS MEMBERS ARE PLANNING','',bars(h.tripsByShow))+
+    panel('s6','NEWEST MEMBERS','','<div class="rows">'+(h.newest.length?h.newest.map(function(m){return '<div class="row"><div><b>'+esc(m.name)+'</b><div class="m">Joined '+niceDate(m.joined)+'</div></div></div>'}).join(''):'<div class="empty">No members yet.</div>')+'</div>')+
+    panel('s6 purple','SEND A NOTICE','Goes to every member’s bell','<form class="f" id="noticeForm"><label for="nH">Heading</label><input id="nH" maxlength="80" placeholder="RIAT 2027 tickets are on sale" required><label for="nB">Message</label><textarea id="nB" maxlength="300" placeholder="I have updated the RIAT page with the new prices and the Park and Ride details."></textarea><label for="nL">Link (optional)</label><input id="nL" maxlength="200" placeholder="/riat"><div class="r"><button class="btn purple" type="submit">Send to '+h.members+' member'+(h.members===1?'':'s')+'</button></div></form>')+
+  '</div>';
+},
+traders:function(){
+  var t=D.traders;
+  var q=t.queue.length?t.queue.map(function(x){return '<div class="row"><div><b>'+esc(x.name)+'</b><div class="m">'+esc([x.town,x.category,x.isNew?'New sign up':'Changed listing',x.requestedPlan==='founding'?'Wants a founding place':''].filter(Boolean).join(', '))+', '+ago(x.submitted)+'</div></div><div class="acts"><button class="btn sm" data-act="approve" data-id="'+esc(x.id)+'">Approve</button><button class="btn sm ghost" data-act="sendback" data-id="'+esc(x.id)+'">Send back</button></div></div>'}).join(''):'<div class="empty">No listings waiting. New sign ups show here first.</div>';
+  var list=t.list.length?t.list.map(function(x){return '<div class="row"><div><b>'+esc(x.name)+'</b><div class="m">'+esc([x.town,x.plan,x.founding?'Founding trader':''].filter(Boolean).join(', '))+'</div></div><div class="acts"><span class="st">'+esc(x.status)+'</span>'+(x.status==='live'?'<button class="btn sm ghost" data-act="pause" data-id="'+esc(x.id)+'">Pause</button>':x.status==='paused'?'<button class="btn sm ghost" data-act="unpause" data-id="'+esc(x.id)+'">Make live</button>':'')+'</div></div>'}).join(''):'<div class="empty">No traders have signed up yet. The founding offer is ready for the first 25.</div>';
+  return '<div class="grid">'+
+    panel('s4','FOUNDING PLACES','Limited to '+t.founding.total,gauge(t.founding.taken,t.founding.total,'of '+t.founding.total+' taken')+'<p class="note" style="text-align:center;margin-top:8px">'+(t.founding.total-t.founding.taken)+' places left at the founding price.</p>')+
+    panel('s8','TRADER NUMBERS','','<div class="stats">'+
+      stat('Signed up',t.total,'All listings','big')+
+      stat('Live',t.live,'Showing in the directory','big')+
+      stat('Waiting',t.pending,'Need your OK','big red')+
+      stat('Paused or sent back',t.paused+t.sentBack,t.paused+' paused, '+t.sentBack+' sent back','big purple')+
+    '</div><div style="margin-top:16px">'+cols(t.weeks)+'</div><p class="note">New sign ups per week.</p>')+
+    panel('s12 red','APPROVAL QUEUE',t.queue.length+' waiting','<div class="rows">'+q+'</div>')+
+    panel('s4','BY PLAN','Live listings',bars(t.byPlan,'purple'))+
+    panel('s4','BY TYPE OF STALL','',bars(t.byCategory))+
+    panel('s4','AT EACH SHOW','Booked or applied',bars(t.byShow))+
+    panel('s12','EVERY TRADER','<a href="'+SITE+'/trader-admin" target="_top" style="color:inherit">Full trader admin</a>','<div class="rows">'+list+'</div>')+
+  '</div>';
+},
+forum:function(){
+  var f=D.forum;
+  var rep=f.reported.length?f.reported.map(function(r){return '<div class="row"><div><b>'+esc(r.title||'(no text)')+'</b><div class="m">'+esc(r.kind)+' by '+esc(r.by||'a member')+', reported '+r.reports+' time'+(r.reports>1?'s':'')+(r.reasons.length?', '+esc(r.reasons.join('; ')):'')+'</div></div><div class="acts"><button class="btn sm red" data-act="hide" data-kind="'+r.kind+'" data-id="'+esc(r.id)+'">Hide</button><button class="btn sm ghost" data-act="keep" data-kind="'+r.kind+'" data-id="'+esc(r.id)+'">Keep</button></div></div>'}).join(''):'<div class="empty">Nothing reported. Anything members flag lands here.</div>';
+  var act=f.activity.length?f.activity.map(function(a){return '<div class="row"><div><b>'+esc(a.title||'(photo)')+'</b><div class="m">'+esc(a.kind)+' by '+esc(a.by)+', '+ago(a.when)+'</div></div><div class="m">'+a.likes+' likes, '+a.comments+' comments</div></div>'}).join(''):'<div class="empty">No posts yet. The first ones will show here as they come in.</div>';
+  var groups=f.groups.map(function(g){return {name:g.name,count:g.threads}});
+  return '<div class="grid">'+
+    panel('s12','FORUM NUMBERS','','<div class="stats">'+
+      stat('Forum profiles',f.profiles,'Members set up to post','big purple')+
+      stat('Posts',f.threads,'Threads started','big')+
+      stat('Photos',f.photos,'Shared to the forum','big')+
+      stat('Comments',f.comments,'Replies on posts','big')+
+      stat('Likes',f.likes,'Across posts and photos')+
+      stat('Follows',f.follows,'Members following members','purple')+
+      stat('Groups',f.groups.length,f.pendingGroups+' suggested by members')+
+      stat('Reported',f.reported.length,'Waiting for you',f.reported.length?'red':'')+
+    '</div>')+
+    panel('s12 red','REPORTED',f.reported.length+' waiting','<div class="rows">'+rep+'</div>')+
+    panel('s6','POSTS PER WEEK','Last 8 weeks',cols(f.weeks))+
+    panel('s6','LATEST ACTIVITY','','<div class="rows">'+act+'</div>')+
+    panel('s12 purple','GROUPS','Posts in each',groups.some(function(g){return g.count})?bars(groups,'purple'):'<p class="note" style="margin-bottom:10px">All '+groups.length+' groups are open and waiting for their first post.</p><div class="key">'+f.groups.map(function(g){return '<span><i style="background:#9C86D6"></i>'+esc(g.name)+'</span>'}).join('')+'</div>')+
+  '</div>';
+},
+pages:function(){
+  var live=D.board.pages.map(function(p){return {id:p.id,name:p.page,path:p.wixPath,file:p.file,kind:kindOf(p.wixPath,p.page),live:true,desktop:p.desktop,mobile:p.mobile,tablet:p.tablet,last:p.lastChecked}});
+  var waiting=unpublished.map(function(u){return {name:u.name,path:u.wix?'/'+u.wix:'',file:u.file,kind:'Not live yet',live:false,note:u.status,art:u.art}});
+  var all=live.concat(waiting);
+  var kinds=['All','Show pages','Guides','Community','Not live yet'];
+  var shown=all.filter(function(p){return (pageFilter==='All'||p.kind===pageFilter)&&(!pageQ||(p.name+' '+p.path).toLowerCase().indexOf(pageQ)>-1)});
+  var done=live.filter(function(p){return p.desktop==='Clear'&&p.mobile==='Clear'&&p.tablet==='Clear'}).length;
+  function devBtn(p,field,icon,label){var v=p[field]||'Not checked';return '<button type="button" class="'+v.replace(' ','')+'" data-check="'+esc(p.id)+'" data-field="'+field+'" data-v="'+v+'" title="'+label+': '+v+'">'+ic(icon,16)+label+'</button>'}
+  return '<div class="grid">'+
+    panel('s12','ALL PAGES',all.length+' pages, '+done+' fully checked','<div class="filters">'+kinds.map(function(k){var c=k==='All'?all.length:all.filter(function(p){return p.kind===k}).length;return '<button type="button" data-pf="'+k+'" class="'+(k===pageFilter?'on':'')+'">'+k+' '+c+'</button>'}).join('')+'<input class="search" id="pageQ" placeholder="Search pages" value="'+esc(pageQ)+'"></div>'+
+    '<div class="pages">'+(shown.length?shown.map(function(p){
+      return '<div class="pg"><div class="h"><b>'+esc(p.name)+'</b><span class="kind'+(p.live?'':' nl')+'">'+esc(p.live?p.kind:'Not live')+'</span></div><div class="path">'+esc(p.path||'No Wix page yet')+'</div>'+
+      (p.live?'<div class="dev">'+devBtn(p,'desktop','desk','Desktop')+devBtn(p,'mobile','phone','Phone')+devBtn(p,'tablet','tab','Tablet')+'</div>':'<div class="note">'+esc(p.note||'')+'</div>')+
+      '<div class="links">'+(p.live&&p.path?'<a class="btn sm" href="'+SITE+p.path+'" target="_blank" rel="noopener">Open on site</a>':'')+(p.file?'<a class="btn sm ghost" href="'+PAGES_BASE+p.file+'" target="_blank" rel="noopener">Page file</a>':'')+(p.art?'<a class="btn sm ghost" href="https://claude.ai/artifact/'+esc(p.art)+'" target="_blank" rel="noopener">Preview</a>':'')+'</div></div>';
+    }).join(''):'<div class="empty">No pages match that.</div>')+'</div>')+
+  '</div>';
+},
+ops:function(){
+  var b=D.board;
+  var plans=b.plans.map(function(p){return '<div class="row"><div><b>'+esc(p.title)+'</b><div class="m">'+esc(p.gate)+', due '+esc(p.due)+'</div></div><button class="st '+esc(p.status)+'" type="button" data-plan="'+esc(p.id)+'" data-s="'+esc(p.status)+'" title="Tap to move it on">'+esc(p.status)+'</button></div>'}).join('');
+  var log=b.log.slice(0,14).map(function(l){return '<div class="row"><div><b>'+esc(l.what)+'</b><div class="m">'+esc(l.area)+', '+niceDate(l.date)+'</div></div><span class="st">'+esc(l.type)+'</span></div>'}).join('');
+  var ideas=b.ideas.filter(function(i){return i.status==='standby'}).map(function(i){return '<div class="row"><div><b>'+esc(i.title)+'</b><div class="m">'+esc(i.area)+', '+i.votes+' vote'+(i.votes===1?'':'s')+'</div></div><div class="acts"><button class="btn sm ghost" data-act="vote" data-id="'+esc(i.id)+'">Vote up</button><button class="btn sm purple" data-act="schedule" data-id="'+esc(i.id)+'">Move to plans</button></div></div>'}).join('');
+  var departed=b.plans.filter(function(p){return p.status==='Departed'}).length;
+  return '<div class="grid">'+
+    panel('s7','PLANS',departed+' of '+b.plans.length+' finished','<p class="note" style="margin-bottom:6px">Tap a status to move a job on: Scheduled, Boarding, Delayed, Departed.</p><div class="rows">'+plans+'</div>')+
+    panel('s5 purple','ADD TO THE LOG','','<form class="f" id="logForm"><label for="lW">What changed</label><input id="lW" maxlength="200" placeholder="Clacton train page updated with the winter times" required><div class="r"><select id="lT" aria-label="Type"><option>Updated</option><option>Changed</option><option>Added</option><option>Fixed</option><option>Searched</option><option>Published</option></select><input id="lA" maxlength="40" placeholder="Area, like Clacton" style="flex:1"><button class="btn purple" type="submit">Add</button></div></form>')+
+    panel('s7','FLIGHT RECORDS','Last 6 weeks','<div class="rows">'+(log||'<div class="empty">Nothing logged yet.</div>')+'</div>')+
+    panel('s5','HANGAR','Ideas on standby','<div class="rows">'+(ideas||'<div class="empty">The hangar is empty.</div>')+'</div>')+
+  '</div>';
+},
+controls:function(){
+  var c=D.content,s=D.site;
+  var state=s.known?(s.live?'Live':'Offline'):'Not known';
+  var q=c.questions.length?c.questions.map(function(m){return '<div class="row"><div><b>'+esc(m.name||'A visitor')+'</b><div class="m">'+esc(m.message)+'</div></div><div class="m">'+ago(m.when)+'</div></div>'}).join(''):'<div class="empty">No messages from the contact form yet.</div>';
+  var link=function(t,u,d){return '<a class="row" style="text-decoration:none" href="'+u+'" target="_blank" rel="noopener"><div><b>'+t+'</b><div class="m">'+d+'</div></div><span class="m">Open</span></a>'};
+  return '<div class="grid">'+
+    panel('s5 red','PUBLISHING','Site is '+state,'<div class="stats" style="grid-template-columns:1fr 1fr">'+stat('Right now',state.toUpperCase(),s.known?'ukairshowguide.co.uk':s.note,s.live?'':'red')+stat('Shows in the guide',c.shows.length,'Featured shows','purple')+'</div><div class="acts" style="justify-content:flex-start;margin-top:14px"><button class="btn" data-act="publish">Publish the site</button><button class="btn red" data-act="unpublish">Take offline</button></div><p class="note" style="margin-top:10px">Both ask you to confirm first. Publishing puts every saved edit live.</p>')+
+    panel('s7','SITE CHECKS ON A TIMER','What runs without you','<div class="rows">'+
+      [['Every morning','Morning show check: news from official sites and newly confirmed dates'],['Monday 12:17','Show date checker'],['Wednesday','Visitor facts check: timings, tickets, costs, buses and trains'],['Friday','Aircraft line-ups, weekly until 28 February, then daily from 1 March 2027'],['Friday 14:19','Your weekly status report'],['Sunday','Debug and fix the whole site, ready for the week']].map(function(r){return '<div class="row"><div><b>'+r[0]+'</b><div class="m">'+r[1]+'</div></div></div>'}).join('')+'</div>')+
+    panel('s6','CONTENT','','<div class="stats" style="grid-template-columns:1fr 1fr">'+stat('News stories',c.news,'On Airshow News')+stat('Aircraft confirmed',c.aircraft,'Across the line-ups','purple')+stat('Crowd reports',c.crowd,'From Show Day')+stat('Uploads held',c.uploadsHeld,'Failed the auto check',c.uploadsHeld?'red':'')+'</div>')+
+    panel('s6 purple','READER QUESTIONS','From the contact form','<div class="rows">'+q+'</div>')+
+    panel('s12','EVERYTHING ELSE','','<div class="rows">'+
+      link('Wix dashboard',DASH+'/home','Settings, members, forms and the editor')+
+      link('Site pages hub','https://claude.ai/artifact/GK56jhoe4CtQTYsHjUzD7e','Every page, idea page and future page in one place')+
+      link('Admin board',SITE+'/site-admin','The Departures Board, with Timetable and Not Live Yet')+
+      link('Trader admin',SITE+'/trader-admin','Full trader listings, photos and shows')+
+      link('Page files on GitHub',REPO,'airshow-pages, where every HTML page lives')+
+      link('The live site',SITE,'ukairshowguide.co.uk')+
+    '</div>')+
+  '</div>';
+}
+};
+
+function bestDay(days){var b=days.reduce(function(a,d){return d.value>a.value?d:a},days[0]);return b.value?{label:new Date(b.date+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}),sub:b.value+' visits, the most in one day'}:{label:'None',sub:'No visits yet'}}
+function busiest(days){var b=days.reduce(function(a,d){return d.value>a.value?d:a},days[0]);return b.value?niceDate(b.date)+' ('+b.value+')':'None yet'}
+function kindOf(path,name){
+  if(/community-forum|my-airshow-hub|airshow-traders/.test(path))return 'Community';
+  if(/map|news|guides|first|security|camping|photography|youtube|policies/.test(path))return 'Guides';
+  return 'Show pages';
+}
+
+/* ---------- render ---------- */
+function setView(id,instant){
+  view=id;var v=VIEWS.filter(function(x){return x.id===id})[0];
+  $$('#nav button').forEach(function(b){b.classList.toggle('on',b.dataset.v===id)});
+  var nb=$('#nav button.on');if(nb&&window.innerWidth<=820)nb.scrollIntoView({inline:'center',block:'nearest'});
+  $('#vTitle').innerHTML=v.title;$('#vIntro').textContent=v.intro;
+  $$('.view').forEach(function(s){s.classList.remove('on','live')});
+  var sec=$('#v-'+id);sec.innerHTML=draw[id]();sec.classList.add('on');
+  if(!instant&&!REDUCED){void sec.offsetWidth;sec.classList.add('live')}
+  animate(sec);
+  if(id==='overview'&&D.traffic.known)wireChart('ovChart',[{name:'Visits',colour:'#5FD6CF',days:D.traffic.TOTAL_SESSIONS.days},{name:'Visitors',colour:'#9C86D6',days:D.traffic.TOTAL_UNIQUE_VISITORS.days}]);
+  if(id==='traffic'&&D.traffic.known)wireChart('trChart',[{name:'Visits',colour:'#5FD6CF',days:D.traffic.TOTAL_SESSIONS.days},{name:'Visitors',colour:'#9C86D6',days:D.traffic.TOTAL_UNIQUE_VISITORS.days}]);
+  if(!instant)$('#main').scrollTo({top:0,behavior:REDUCED?'auto':'smooth'});
+  try{history.replaceState(null,'','#'+id)}catch(e){}
+}
+function drawNav(){
+  var badges={traders:D.traders.queue.length,forum:D.forum.reported.length,pages:D.board.pages.filter(function(p){return p.desktop!=='Clear'||p.mobile!=='Clear'||p.tablet!=='Clear'}).length};
+  $('#nav').innerHTML=VIEWS.map(function(v){
+    var b=badges[v.id];var badge=b?'<span class="badge'+(v.id==='pages'?' calm':'')+'">'+b+'</span>':'';
+    return '<button type="button" data-v="'+v.id+'" class="'+(v.id===view?'on':'')+'">'+ic(v.id)+'<span>'+v.name+'</span>'+badge+'</button>';
+  }).join('');
+}
+function drawTop(){
+  var s=D.site;
+  $('#siteDot').className='dot'+(s.known?(s.live?'':' off'):' unk');
+  $('#siteWord').textContent=s.known?(s.live?'Site is live':'Site is offline'):'Site status not known';
+  $('#topChips').innerHTML='<span class="chip"><span class="dot'+(s.known?(s.live?'':' off'):' unk')+'"></span>'+(s.known?(s.live?'Live':'Offline'):'Status not known')+'</span><span class="chip purple">Launch in November</span><button class="chip" type="button" id="refresh">Refresh</button>';
+  var c=D.content,items=[];
+  c.newsLatest.slice(0,3).forEach(function(x){items.push('<b>News</b> '+esc(x.title))});
+  items.push('<b>Hub</b> '+D.hub.members+' members, '+D.hub.trips+' trips planned');
+  items.push('<b>Traders</b> '+D.traders.founding.taken+' of '+D.traders.founding.total+' founding places taken');
+  items.push('<b>Forum</b> '+D.forum.groups.length+' groups open');
+  if(D.traffic.known)items.push('<b>Visits</b> '+D.traffic.TOTAL_SESSIONS.total+' in the last 30 days');
+  if(D.board.log[0])items.push('<b>Last change</b> '+esc(D.board.log[0].what));
+  var html=items.map(function(i){return '<span>'+i+'</span>'}).join('');
+  $('#ticker').innerHTML=html+html;
+}
+function render(keep){drawNav();drawTop();setView(view,keep)}
+
+function load(keep){
+  return call('command').then(function(d){
+    if(!d||!d.admin){$('#gate').classList.add('on');return}
+    $('#gate').classList.remove('on');D=d;render(keep);
+  }).catch(function(e){toast(e.message,true)});
+}
+function loadUnpublished(){
+  if(window.__UNPUB){unpublished=window.__UNPUB;return Promise.resolve()}
+  var url=new URL('unpublished.json',location.href.indexOf('http')===0?location.href:PAGES_BASE+'admin/command.html').href;
+  return fetch(url,{cache:'no-store'}).then(function(r){return r.ok?r.json():{pages:[]}}).then(function(j){unpublished=j.pages||[]}).catch(function(){unpublished=window.__UNPUB||[]});
+}
+
+/* ---------- clicks ---------- */
+document.addEventListener('click',function(e){
+  var t=e.target.closest('button,[data-go]');if(!t)return;
+  if(t.dataset.v){setView(t.dataset.v);return}
+  if(t.dataset.go){setView(t.dataset.go);return}
+  if(t.id==='refresh'){load(true).then(function(){toast('Figures refreshed')});return}
+  if(t.id==='loginBtn'){call('login').then(function(d){if(d&&d.admin){$('#gate').classList.remove('on');D=d;render()}}).catch(function(e){toast(e.message,true)});return}
+  if(t.dataset.pf){pageFilter=t.dataset.pf;setView('pages',true);return}
+  if(t.dataset.plan){var order=['Scheduled','Boarding','Delayed','Departed'];var next=order[(order.indexOf(t.dataset.s)+1)%order.length];run('planStatus',{id:t.dataset.plan,status:next},'Moved to '+next);return}
+  if(t.dataset.check){var vals=['Not checked','Clear','Check'];var nv=vals[(vals.indexOf(t.dataset.v)+1)%vals.length];run('check',{id:t.dataset.check,field:t.dataset.field,value:nv},'Marked '+nv.toLowerCase());return}
+  var a=t.dataset.act,id=t.dataset.id;if(!a)return;
+  if(a==='approve')run('approveTrader',{id:id},'Listing approved and live');
+  else if(a==='sendback'){var note=window.prompt('What should the trader change? They will see this note.');if(note)run('sendBackTrader',{id:id,note:note},'Sent back with your note')}
+  else if(a==='pause')run('traderStatus',{id:id,status:'paused'},'Listing paused');
+  else if(a==='unpause')run('traderStatus',{id:id,status:'live'},'Listing is live again');
+  else if(a==='hide')ask('HIDE THIS?','It disappears from the forum straight away. It stays saved, so it can be brought back later.').then(function(y){if(y)run('hideItem',{kind:t.dataset.kind,id:id},'Hidden from the forum')});
+  else if(a==='keep')run('clearReports',{kind:t.dataset.kind,id:id},'Kept, and the reports cleared');
+  else if(a==='vote')run('vote',{id:id},'Voted up');
+  else if(a==='schedule')run('schedule',{id:id},'Moved onto the plans');
+  else if(a==='publish')ask('PUBLISH THE SITE?','Every saved edit in the Wix editor goes live on ukairshowguide.co.uk.').then(function(y){if(y)run('publish',{},'The site is live')});
+  else if(a==='unpublish')ask('TAKE THE SITE OFFLINE?','Visitors will see the Wix offline page until you publish again. Your edits stay saved.').then(function(y){if(y)run('unpublish',{},'The site is offline')});
+});
+document.addEventListener('submit',function(e){
+  e.preventDefault();
+  if(e.target.id==='noticeForm'){var h=$('#nH').value.trim();if(!h)return;ask('SEND THIS NOTICE?','It goes to every Airshow Hub member’s notifications.').then(function(y){if(y)run('notice',{heading:h,body:$('#nB').value.trim(),link:$('#nL').value.trim()},'Notice sent')})}
+  if(e.target.id==='logForm'){var w=$('#lW').value.trim();if(w)run('log',{what:w,type:$('#lT').value,area:$('#lA').value.trim()},'Added to the log')}
+});
+document.addEventListener('input',function(e){
+  if(e.target.id==='pageQ'){pageQ=e.target.value.toLowerCase();var pos=e.target.selectionStart;setView('pages',true);var q=$('#pageQ');q.focus();q.setSelectionRange(pos,pos)}
+});
+
+/* ---------- clock and boot ---------- */
+function tick(){$('#clock').textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'Europe/London'})}
+setInterval(tick,1000);tick();
+(function boot(){
+  var lines=['Linking to ukairshowguide.co.uk','Reading the Airshow Hub','Reading the traders','Reading the forum','Reading every page','Command centre ready'];
+  var box=$('#bootLines');
+  lines.forEach(function(l,i){var d=document.createElement('div');d.textContent='> '+l;d.style.animationDelay=(REDUCED?0:i*.14)+'s';box.appendChild(d)});
+  var h=(location.hash||'').slice(1);if(VIEWS.some(function(v){return v.id===h}))view=h;
+  Promise.all([loadUnpublished(),new Promise(function(r){setTimeout(r,REDUCED?0:950)})]).then(function(){return load()}).then(function(){$('#boot').classList.add('gone')});
+})();
+})();
+</script>
+</body>
+</html>
