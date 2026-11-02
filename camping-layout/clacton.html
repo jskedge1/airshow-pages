@@ -6497,17 +6497,17 @@ body h1.cg-title{text-transform:none!important}
     '#travel .gt-hero{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important;gap:40px 56px!important;align-items:start!important}' +
     '#travel .gt-hero h2 small{color:#00A6E2!important;font-family:"Barlow",sans-serif;font-weight:600;font-size:.4em;letter-spacing:0}' +
     '#travel .gt-hero .btns{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:26px!important}' +
-    '#travel .gt-hero .btns .btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:stretch;background:#13293C;color:#fff;min-height:64px;position:relative;border-radius:4px;overflow:visible;box-shadow:0 4px 0 rgba(19,41,60,.25);transition:transform .25s ' + EASE + ',box-shadow .25s ' + EASE + ',background .25s ' + EASE + '}' +
-    '#travel .gt-hero .btns .btn:before{content:"";flex:none;width:64px;background:var(--bc,#00A6E2);border-radius:4px 0 0 4px}' +
-    '#travel .gt-hero .btns .btn .xd-bi{position:absolute;left:0;top:0;bottom:0;width:64px;display:flex;align-items:center;justify-content:center;color:#fff}' +
-    '#travel .gt-hero .btns .btn .xd-bi svg{width:28px;height:28px}' +
-    '#travel .gt-hero .btns .btn:after{display:none!important}' +
-    '#travel .gt-hero .btns .btn .xd-bp{position:absolute;left:64px;top:50%;margin-top:-12px;width:0;height:0;border-style:solid;border-width:12px 0 12px 12px;border-color:transparent transparent transparent var(--bc,#00A6E2)}' +
-    '#travel .gt-hero .btns .btn .xd-bt{display:flex;flex-direction:column;justify-content:center;padding:10px 40px 10px 28px;font-weight:700;font-size:18px;line-height:1.2}' +
-    '#travel .gt-hero .btns .btn .xd-bt small{font-weight:500;font-size:14px;color:#C9DCEA;margin-top:2px}' +
-    '#travel .gt-hero .btns .btn .xd-ba{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:22px;font-weight:700;color:var(--bc,#00A6E2);transition:transform .25s ' + EASE + '}' +
-    '#travel .gt-hero .btns .btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 rgba(19,41,60,.18);background:#1C3850}' +
+    /* button design 2: the flat purple Show my options button from the journey planner */
+    '#travel .gt-hero .btns .btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;background:#6950A1;color:#fff;min-height:64px;padding:12px 48px 12px 20px;position:relative;overflow:hidden;border-radius:0;font-family:"Barlow",sans-serif;transition:background .4s ' + EASE + ',transform .4s ' + EASE + ',filter .4s ' + EASE + '}' +
+    '#travel .gt-hero .btns .btn:before,#travel .gt-hero .btns .btn .xd-bi,#travel .gt-hero .btns .btn .xd-bp{display:none!important}' +
+    '#travel .gt-hero .btns .btn:after{content:""!important;display:block!important;position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);transition:left .7s ' + EASE + ';pointer-events:none}' +
+    '#travel .gt-hero .btns .btn .xd-bt{display:flex;flex-direction:column;justify-content:center;font-weight:700;font-size:18px;line-height:1.2;color:#fff}' +
+    '#travel .gt-hero .btns .btn .xd-bt small{font-weight:500;font-size:14px;color:#E4DDF3;margin-top:2px}' +
+    '#travel .gt-hero .btns .btn .xd-ba{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:24px;font-weight:700;color:#fff;transition:transform .4s ' + EASE + '}' +
+    '#travel .gt-hero .btns .btn:hover{background:#563F8A;transform:translateY(-2px);filter:brightness(1.06)}' +
+    '#travel .gt-hero .btns .btn:hover:after{left:120%}' +
     '#travel .gt-hero .btns .btn:hover .xd-ba{transform:translate(5px,-50%)}' +
+    '#travel .gt-hero .btns .btn:active{transform:translateY(0) scale(.99)}' +
     '#travel .gt-hero .btns .btn:focus-visible{outline:3px solid #D74949;outline-offset:3px}' +
     /* key places board */
     '#travel .gt-facts{padding:0!important;background:none!important}' +
@@ -6523,7 +6523,7 @@ body h1.cg-title{text-transform:none!important}
     '#travel .gt-facts dt{font-family:"Barlow",sans-serif!important;font-weight:600!important;font-size:14px!important;line-height:1.2!important;letter-spacing:0!important;text-transform:none!important;color:#41586B!important}' +
     '#travel .gt-facts dd{font-family:"Barlow",sans-serif!important;font-weight:700!important;font-size:19px!important;line-height:1.2!important;text-transform:none!important;margin-top:2px!important;color:#13293C}' +
     '@media(max-width:900px){#travel .gt-hero{grid-template-columns:minmax(0,1fr)!important}}' +
-    '@media(prefers-reduced-motion:reduce){#travel .gt-hero .btns .btn,#travel .gt-facts dl > div{transition:none}}';
+    '@media(prefers-reduced-motion:reduce){#travel .gt-hero .btns .btn:after{display:none!important}#travel .gt-hero .btns .btn,#travel .gt-facts dl > div{transition:none}}';
 
   function decorateHero() {
     var travel = document.getElementById('travel');
@@ -6536,7 +6536,7 @@ body h1.cg-title{text-transform:none!important}
       var label = b.textContent.trim(), m = look(label);
       b.style.setProperty('--bc', m[1]);
       var sub = SUBS[label.toLowerCase()] || '';
-      b.innerHTML = '<span class="xd-bi">' + icon(m[0]) + '</span><span class="xd-bp" aria-hidden="true"></span><span class="xd-bt">' + esc(label) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</span><span class="xd-ba" aria-hidden="true">&rsaquo;</span>';
+      b.innerHTML = '<span class="xd-bi">' + icon(m[0]) + '</span><span class="xd-bp" aria-hidden="true"></span><span class="xd-bt">' + esc(label) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</span><span class="xd-ba" aria-hidden="true">&rarr;</span>';
     });
     var facts = travel.querySelector('.gt-facts');
     if (facts && !facts.querySelector('.xd-kp-h')) {
