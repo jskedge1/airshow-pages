@@ -535,6 +535,33 @@ html:not(.hdr) .fold{scroll-margin-top:62px}
 .pin .seg button:hover:not([aria-pressed="true"]){background:#fff}
 .pin .seg button[aria-pressed="true"]{background:var(--navy);color:#fff;box-shadow:0 6px 14px -8px rgba(12,28,42,.8)}
 @media (max-width:520px){.pin{padding:22px 18px 22px}.pin .row{padding-left:40px}.pin .row::before{width:26px;height:26px;font-size:15px}.pin .row::after{left:12px;top:32px}}
+
+/* key details as transport tabs: white tiles with rounded tops on a company colour line, a ring round each symbol
+   that fills on hover, and the stop to get off at picked out in the dark tab colour */
+.facts-band{border-bottom:0;background:#fff;padding-top:18px}
+.factrow{gap:6px;align-items:stretch;border-bottom:3px solid var(--op1);padding:0 2px}
+.factrow .kv{display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;row-gap:2px;align-items:center;padding:10px 14px 12px 10px;border:1px solid var(--line);border-bottom:0;border-radius:12px 12px 0 0;background:#fff;transition:background .2s,color .2s}
+.factrow .kv:first-child{border-left:1px solid var(--line);padding-left:10px}
+.factrow .kv::before{content:"";grid-row:1 / span 2;width:34px;height:34px;box-sizing:border-box;border-radius:50%;border:3px solid var(--op1);background:#fff var(--ic) center/17px no-repeat;transition:background-color .2s,box-shadow .2s}
+.factrow .kv:hover{background:var(--mist)}
+.factrow .kv:hover::before{background-color:var(--op1);box-shadow:0 0 0 4px rgba(19,41,60,.14)}
+.factrow .kv span:first-child{font-size:13.5px}
+.factrow .kv span:last-child{font-size:20px;overflow-wrap:anywhere}
+.factrow .kv.hl{background:var(--navy);border-color:var(--navy)}
+.factrow .kv.hl::before{border-color:#fff}
+.factrow .kv.hl span:first-child{color:rgba(255,255,255,.78)}
+.factrow .kv.hl span:last-child{color:#fff}
+.factrow .kv[data-k="runs"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2323272B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='5' width='16' height='15' rx='1.5'/%3E%3Cpath d='M4 10h16M8 3v4M16 3v4'/%3E%3C/svg%3E")}
+.factrow .kv[data-k="often"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2323272B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E")}
+.factrow .kv[data-k="off"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2323272B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z'/%3E%3Ccircle cx='12' cy='10' r='2.5'/%3E%3C/svg%3E")}
+.factrow .kv[data-k="walk"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2323272B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='13' cy='4.5' r='1.8'/%3E%3Cpath d='M10 21l2-6 3 3v3M12 15l1-6-3 1-2 3M13 9l2 3 3 1'/%3E%3C/svg%3E")}
+.factrow .kv[data-k="by"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2323272B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='3' width='16' height='15' rx='2'/%3E%3Cpath d='M4 11h16M8 21v-3M16 21v-3'/%3E%3Ccircle cx='8' cy='14.5' r='.6'/%3E%3Ccircle cx='16' cy='14.5' r='.6'/%3E%3C/svg%3E")}
+@media (max-width:900px){
+  .factrow .kv,.factrow .kv:first-child{border:1px solid var(--line);border-bottom:0;padding-left:10px}
+  .factrow .kv:nth-child(-n+2){border-top:1px solid var(--line)}
+  .factrow .kv.hl{border-color:var(--navy)}
+}
+@media (max-width:520px){.factrow .kv{grid-template-columns:28px minmax(0,1fr);padding:8px 10px 10px 8px;border-radius:10px 10px 0 0}.factrow .kv::before{width:28px;height:28px;background-size:14px}.factrow .kv span:last-child{font-size:17px}}
 </style>
 <!-- seo: matches the Wix page on ukairshowguide.co.uk -->
 <meta name="description" content="The 74 bus to the Clacton Air Show: the roads it takes, every stop, times on show days and the closest stop to the show. Run by Central Connect.">
@@ -848,7 +875,8 @@ var DATA={"stops":[["Colchester Head Street (Stop Ea)",51.88819,0.89621,"Colches
   }
 
   $('facts').innerHTML = CFG.facts.concat([['Run by', CFG.operator]]).map(function(f){
-    return '<div class="kv' + (f[2] ? ' ' + f[2] : '') + '"><span>' + f[0] + '</span><span>' + f[1] + '</span></div>';
+    var k = /runs/i.test(f[0]) ? 'runs' : /often/i.test(f[0]) ? 'often' : /off/i.test(f[0]) ? 'off' : /walk/i.test(f[0]) ? 'walk' : 'by';
+    return '<div class="kv' + (f[2] ? ' ' + f[2] : '') + '" data-k="' + k + '"><span>' + f[0] + '</span><span>' + f[1] + '</span></div>';
   }).join('');
 
   $('legs').innerHTML = CFG.legs.map(function(l, n){
