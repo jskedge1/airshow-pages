@@ -448,3 +448,9 @@ Service numbers come from the National Express timetables current in November 20
 - Cosford, RIAT, Cheltenham and Kemble data were scraped again so each trip records its companies (`ops`); their build_data.py now writes them.
 - New pages, built from their own `<show>-tools` folders on template-v2: Blackpool (trains to Blackpool North, Northern), Southport (Merseyrail grey and yellow, Northern), Midlands Air Festival (trains to Redditch, then the Diamond 247 bus, West Midlands Railway) and Little Gransden (trains to St Neots, then a taxi, Thameslink). Wix pages /train-to-blackpool, /train-to-southport, /train-to-midlands and /train-to-little-gransden embed them and they are in `AE_GH_PAGES`.
 - New cfg options: `x.busyTip` (first line of My advice), `x.wayIn`/`x.wayBack` also name the last leg chip, and Google Maps directions use transit or driving when the last part is a bus, shuttle or taxi.
+
+## Change here card and going home tips (2 Nov 2026, evening)
+
+- New cfg option `x.changeHere`: `{"station": "Glasgow Central", "text": [paragraphs]}`. It names the page's main change station and adds a small card in the company colours (`v2-parts/change-here.css`, code in `v2-parts/ptx.js`). In Your way in it shows in the Journey tab, with the picked train's platforms, when that train changes at the station, and otherwise in the Tips tab as a general tip (not when you start from that station). `{typ}`, `{min}` and `{max}` in the text are filled with the usual, shortest and longest change there, worked out from the timetable data, so they stay right after a refresh. Pages without it are unchanged.
+- In use on Eastbourne (Brighton), Ayr (Glasgow Central), Wales (Cardiff Central) and Duxford (Ely), the busiest change station in each page's data.
+- `x.busyTip` (first line of My advice) now set on Eastbourne, Ayr and Wales, and Duxford's covers going home too.

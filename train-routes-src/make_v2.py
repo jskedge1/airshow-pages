@@ -16,7 +16,7 @@ def R(a, b, n=1):
 
 # styles: after the main style block
 i = t.index('</style>') + len('</style>')
-t = t[:i] + '\n' + P('styles.css') + '\n' + P('ring-tabs.css') + P('tints.css') + t[i:]
+t = t[:i] + '\n' + P('styles.css') + '\n' + P('ring-tabs.css') + P('tints.css') + P('change-here.css') + t[i:]
 
 # theme: a darker shade of the company colour for button edges
 R("['op1', 'op2', 'op3', 'opink', 'accink', 'onui']", "['op1', 'op2', 'op3', 'opink', 'accink', 'onui', 'opd', 'tint', 'tintln']")

@@ -51,6 +51,32 @@
     if (toShow) html += step('walk', (X.wayIn || ['Walk'])[0], X.wayIn ? esc(X.wayIn[1]) : 'Walk to the ' + esc(CFG.targetLabel), esc(CFG.walkLine), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_FROM, WALK_TO) + '">Open in Google Maps ↗</a>');
     return '<ol class="steps">' + html + '</ol>';
   }
+  /* Change here card (cfg x.changeHere = {station, text: [paragraphs]}): the page's main change station.
+     It sits in the Journey tab when the picked train changes there, otherwise in the Tips tab as a general tip.
+     {typ}, {min} and {max} in the text are the usual, shortest and longest change there, worked out from the timetable data. */
+  var CHGH = X.changeHere && X.changeHere.station ? X.changeHere : null, chghSt;
+  function chghWaits(){
+    if (chghSt !== undefined) return chghSt;
+    var w = [];
+    DATA.hubs.forEach(function(h){
+      var sets = h.days ? Object.keys(h.days).map(function(k){ return h.days[k]; }) : [h.dirs];
+      sets.forEach(function(dirs){ dirs.forEach(function(d){ d.trips.forEach(function(t){ t.changes.forEach(function(c){ if (c.at === CHGH.station && c.wait != null) w.push(c.wait); }); }); }); });
+    });
+    w.sort(function(a, b){ return a - b; });
+    chghSt = w.length ? { min: w[0], max: w[w.length - 1], typ: w[Math.floor(w.length / 2)] } : null;
+    return chghSt;
+  }
+  function chghCard(trip, inJourney){
+    if (!CHGH) return '';
+    var c = trip.changes.filter(function(x){ return x.at === CHGH.station; })[0];
+    if (inJourney ? !c : (c || H().name === CHGH.station)) return '';
+    var st = chghWaits();
+    var ps = (CHGH.text || []).filter(function(p){ return st || !/\{(typ|min|max)\}/.test(p); }).map(function(p){
+      return '<p>' + esc(p).replace(/\{typ\}/g, st && st.typ).replace(/\{min\}/g, st && st.min).replace(/\{max\}/g, st && st.max) + '</p>';
+    });
+    if (c && c.ap && c.dp) ps.unshift('<p class="you">On this train you get in on platform ' + esc(c.ap) + ' and the ' + c.dep + ' leaves from platform ' + esc(c.dp) + ', when I last checked.</p>');
+    return '<div class="chgh"><div class="chgh-h"><span class="chgh-i">' + PI.train + '</span><b>' + esc((inJourney ? 'Change here at ' : 'If you change at ') + CHGH.station) + '</b></div>' + ps.join('') + '</div>';
+  }
   function ptxLastHome(h){
     var back = HD(h)[1].trips, l = back[back.length - 1];
     return { big: l.big, arr: l.s[l.s.length - 1][0], ch: l.changes.length, v: mm(l.big) < 240 ? mm(l.big) + 1440 : mm(l.big) };
@@ -72,7 +98,7 @@
     var picked = plan[toShow ? 'out' : 'home'], inPlan = picked && picked.day === D().label && picked.hub === h.name && picked.big === trip.big;
     var site = OPSITE[op0] || X.buyUrl;
 
-    var journey = '<p class="lead">' + esc(toShow ? 'Here is how the ' + trip.big + ' from ' + h.name + ' gets you to the show, one step at a time.' : 'Here is how the ' + trip.big + ' from ' + X.dest + ' gets you back to ' + h.name + ', one step at a time.') + '</p>' + ptxSteps(trip, toShow)
+    var journey = '<p class="lead">' + esc(toShow ? 'Here is how the ' + trip.big + ' from ' + h.name + ' gets you to the show, one step at a time.' : 'Here is how the ' + trip.big + ' from ' + X.dest + ' gets you back to ' + h.name + ', one step at a time.') + '</p>' + ptxSteps(trip, toShow) + chghCard(trip, true)
       + '<div class="sheet sb"><div class="sb-h"><span class="sb-i" aria-hidden="true">i</span><b>Check before you go</b></div>'
       + '<div class="sb-w"><span class="sh-ic">' + PI.walk + '</span>' + esc(X.walkShort || X.dest + ' to the ' + CFG.targetLabel + ' on foot') + '</div>'
       + '<dl class="sb-rows"><div><dt>Lines</dt><dd>' + opsOf(trip).map(function(o){ return '<span class="sb-line" style="--lc:' + (OPC ? opLine(o) : 'var(--op1)') + '">' + esc(o) + '</span>'; }).join('') + '</dd></div>'
@@ -90,6 +116,7 @@
 
     var tips = '<div class="ptips"><div><h4>Arriving and planning</h4><p>' + esc(X.tipArrive || 'I would aim to get there well before the flying starts. If you want a front row seat, head there first and save your pitch. Then take a look round the static show, speak to the pilots and check the food. Visit the toilet before the flying display starts.') + '</p></div>'
       + '<div><h4>Walking and leaving</h4><p>' + esc(CFG.walkBack) + ' Everyone leaves at once, so I would either go a little early or stay in town for something to eat and catch a later train.</p></div></div>'
+      + chghCard(trip, false)
       + '<div class="facts">' + (X.ptxFacts || []).map(function(f){ return '<span>' + esc(f[0]) + ': <b>' + esc(f[1]) + '</b></span>'; }).join('') + '<span>Last train home: <b>' + lh.big + '</b></span></div>';
 
     card.innerHTML = '<article class="opt open" style="--m:var(--op1)">'
