@@ -470,7 +470,8 @@ Site traffic (Wix Analytics, 30 days), Airshow Hub (members, trips, must see, se
 Traders (founding places, queue with Approve and Send back, plans, stalls, shows), Forum (profiles, posts, groups,
 reported items with Hide and Keep), All pages (every live page with desktop, phone and tablet checks, plus every
 page in `admin/unpublished.json`), Plans and log, and Controls (publish, take offline, timed checks, links).
-It shows on the Wix page /command-centre (hidden from the menu, members only) and talks to
-`velo/backend/command.web.js` through the page code `velo/page-code/command-centre.js` (postMessage, source `ukag-command`).
+The site is at the Wix 100 page limit, so it shares the hidden, members only Wix page /site-admin with the Departures Board:
+/site-admin opens the Command Centre and /site-admin?view=board opens the board. The page code `velo/page-code/site-admin.js`
+points the embed html1 at the right file and routes messages (source `ukag-command` or `ukag-admin`) to `velo/backend/command.web.js`.
 Plans, log, checks, ideas and publishing reuse `admin.web.js`; trader approvals reuse `traders.web.js`.
 Traffic needs the `ukagApiKey` secret with Site Analytics read access. Opened on its own, the page shows a snapshot.

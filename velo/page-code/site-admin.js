@@ -1,40 +1,71 @@
-// Page code for /site-admin (Jack's admin board).
-// Set this page to Members only in the editor (Page settings, Permissions) and hide it from the menu.
-// The backend (backend/admin.web.js) checks the Admin role on every request, so nobody else sees or changes anything.
-// The page has ONE HTML embed, set to Website address:
-//   https://jskedge1.github.io/airshow-pages/admin/board.html
-// Its ID must be html1 (click the embed, Properties panel). Change BOARD_BOX below if it is different.
+// Page code for /site-admin (Jack's Command Centre, with the Departures Board one tap away).
+// The site is at the Wix 100 page limit, so both admin screens share this one hidden, members only page.
+//   /site-admin              opens the Command Centre  (admin/command.html, messages source 'ukag-command')
+//   /site-admin?view=board   opens the Departures Board (admin/board.html,   messages source 'ukag-admin')
+// The backend web modules check the Admin role on every request, so nobody else sees or changes anything.
+// The page has ONE HTML embed with the ID html1, set to Website address. This code points it at the right screen.
+import { getCommand, hideForumItem, clearForumReports, sendMemberNotice } from 'backend/command.web';
 import { getBoard, setPlanStatus, addPlan, addIdea, voteIdea, scheduleIdea, addLogEntry, setCheck, publishSite, unpublishSite } from 'backend/admin.web';
+import { approveTrader, sendBackTrader, setTraderStatus } from 'backend/traders.web';
 import { authentication } from 'wix-members-frontend';
+import wixLocation from 'wix-location-frontend';
 
-const BOARD_BOX = '#html1';
-const SOURCE = 'ukag-admin';
+const BOX = '#html1';
+const BASE = 'https://jskedge1.github.io/airshow-pages/admin/';
+const SCREENS = {
+  command: { url: BASE + 'command.html', source: 'ukag-command' },
+  board: { url: BASE + 'board.html', source: 'ukag-admin' }
+};
+
+const COMMAND = {
+  command: () => getCommand(),
+  planStatus: (p) => setPlanStatus(p),
+  log: (p) => addLogEntry(p),
+  check: (p) => setCheck(p),
+  vote: (p) => voteIdea(p),
+  schedule: (p) => scheduleIdea(p),
+  publish: () => publishSite(),
+  unpublish: () => unpublishSite(),
+  approveTrader: (p) => approveTrader(p),
+  sendBackTrader: (p) => sendBackTrader(p),
+  traderStatus: (p) => setTraderStatus(p),
+  hideItem: (p) => hideForumItem(p),
+  clearReports: (p) => clearForumReports(p),
+  notice: (p) => sendMemberNotice(p),
+  login: async () => { await authentication.promptLogin({ mode: 'login' }); return getCommand(); }
+};
+
+const BOARD = {
+  board: () => getBoard(),
+  planStatus: (p) => setPlanStatus(p),
+  addPlan: (p) => addPlan(p),
+  addIdea: (p) => addIdea(p),
+  vote: (p) => voteIdea(p),
+  schedule: (p) => scheduleIdea(p),
+  log: (p) => addLogEntry(p),
+  check: (p) => setCheck(p),
+  publish: () => publishSite(),
+  unpublish: () => unpublishSite(),
+  login: async () => { await authentication.promptLogin({ mode: 'login' }); return getBoard(); }
+};
 
 $w.onReady(function () {
-  const box = $w(BOARD_BOX);
-  authentication.onLogin(() => box.postMessage({ source: SOURCE, event: 'refresh' }));
+  const box = $w(BOX);
+  const which = wixLocation.query.view === 'board' ? 'board' : 'command';
+  const screen = SCREENS[which];
+  const actions = which === 'board' ? BOARD : COMMAND;
+  if (box.src !== screen.url) box.src = screen.url;
+
+  authentication.onLogin(() => box.postMessage({ source: screen.source, event: 'refresh' }));
 
   box.onMessage(async (event) => {
     const m = event.data;
-    if (!m || m.source !== SOURCE) return;
-    const reply = { source: SOURCE, id: m.id, ok: true };
+    if (!m || m.source !== screen.source) return;
+    const reply = { source: screen.source, id: m.id, ok: true };
     try {
-      const p = m.payload || {};
-      let res;
-      switch (m.action) {
-        case 'board': res = await getBoard(); break;
-        case 'planStatus': res = await setPlanStatus(p); break;
-        case 'addPlan': res = await addPlan(p); break;
-        case 'addIdea': res = await addIdea(p); break;
-        case 'vote': res = await voteIdea(p); break;
-        case 'schedule': res = await scheduleIdea(p); break;
-        case 'log': res = await addLogEntry(p); break;
-        case 'check': res = await setCheck(p); break;
-        case 'publish': res = await publishSite(); break;
-        case 'unpublish': res = await unpublishSite(); break;
-        case 'login': await authentication.promptLogin({ mode: 'login' }); res = await getBoard(); break;
-        default: throw new Error('Unknown request.');
-      }
+      const run = actions[m.action];
+      if (!run) throw new Error('Unknown request.');
+      const res = await run(m.payload || {});
       if (!res.ok) throw new Error(res.error);
       reply.data = res.data;
     } catch (err) {

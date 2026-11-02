@@ -1,5 +1,5 @@
 // backend/command.web.js
-// The Big Guide to UK Airshows: Jack's Command Centre (Wix page /command-centre, page code velo/page-code/command-centre.js).
+// The Big Guide to UK Airshows: Jack's Command Centre (Wix page /site-admin, page code velo/page-code/site-admin.js).
 // One read that gathers the whole site: traffic, Airshow Hub, traders, forum, content, pages and the admin board,
 // plus the moderation and member notice actions that only the command centre has.
 // Every request checks the Admin role first. Plans, log, checks and publishing reuse backend/admin.web.js,
