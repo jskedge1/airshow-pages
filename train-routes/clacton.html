@@ -1517,7 +1517,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   })();
   $('cdtArr').textContent = 'Arrivals at ' + X.destShort;
   $('ysplat').textContent = X.dest.toUpperCase();
-  (function(){ var sp = $('ysplat'); if (X.dest.length > 14) sp.setAttribute('textLength', 230); })();
+  (function(){ var sp = $('ysplat'); if (X.dest.length > 14) { sp.setAttribute('textLength', 152); sp.setAttribute('lengthAdjust', 'spacingAndGlyphs'); } })();
   $('ysend').textContent = CFG.targetLabel;
   if (X.walkSteps) { var ws = document.querySelectorAll('.ys-walk em'); X.walkSteps.forEach(function(t, i){ if (ws[i] && i < ws.length - 1) ws[i].textContent = t; }); }
   $('hubsub').textContent = X.hubSub;
@@ -2304,7 +2304,11 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
   var QICON = "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"8.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M9.6 9.5a2.5 2.5 0 1 1 3.6 2.2c-.8.5-1.2 1-1.2 1.9M12 16.4v.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>";
   function opOf(trip, i){ return (trip.ops || [])[i] || CFG.operator; }
   function opsOf(trip){ var seen = {}, out = []; (trip.ops || [CFG.operator]).forEach(function(o){ if (!seen[o]) { seen[o] = 1; out.push(o); } }); return out; }
-  function gmaps(a, b){ return 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(a) + '&destination=' + encodeURIComponent(b) + '&travelmode=walking'; }
+  function gmaps(a, b){
+    /* walking unless the last part is a bus, shuttle or taxi */
+    var w = (X.wayIn || [''])[0].toLowerCase(), mode = /taxi/.test(w) ? 'driving' : /bus|shuttle/.test(w) ? 'transit' : 'walking';
+    return 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(a) + '&destination=' + encodeURIComponent(b) + '&travelmode=' + mode;
+  }
   var WALK_FROM = X.walkFrom || X.dest + ' railway station', WALK_TO = X.walkTo || CFG.targetLabel;
   function legList(trip){
     /* the train legs of the picked journey: where each one starts and ends, and who runs it */

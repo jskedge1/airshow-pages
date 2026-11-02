@@ -52,7 +52,11 @@
     "train-routes/ayr": train("International Ayr Show", "international-ayr-show"),
     "train-routes/duxford": train("IWM Duxford Air Shows", "duxfordairshows"),
     "train-routes/headcorn": train("Headcorn International Airshow", "headcorn-air-show"),
-    "train-routes/shuttleworth": train("Shuttleworth Air Shows", "shuttleworthairshows")
+    "train-routes/shuttleworth": train("Shuttleworth Air Shows", "shuttleworthairshows"),
+    "train-routes/southport": train("Southport Air Show", "southport-air-show"),
+    "train-routes/blackpool": train("Blackpool Air Show", "blackpool-air-show"),
+    "train-routes/gransden": train("Little Gransden Air and Car Show", "little-gransden-air-and-car-show"),
+    "train-routes/midlands": train("Midlands Air Festival", "midlandsairfestival")
   };
 
   var key = location.pathname.replace(/^.*\/airshow-pages\//, "").replace(/^\//, "").replace(/\.html$/, "");
