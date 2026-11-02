@@ -517,6 +517,24 @@ html:not(.hdr) .fold{scroll-margin-top:62px}
 }
 @media (prefers-reduced-motion:reduce){.fold-body{transition:none}}
 @media (max-width:680px){.livebadge{top:auto;bottom:26px;left:8px;margin-left:0}}
+
+/* planner steps, like the train pages: numbered steps joined by a dashed line, each label above its buttons */
+.pin{counter-reset:pk;padding:28px 30px 26px}
+.pin .row{position:relative;grid-template-columns:minmax(0,1fr);gap:10px;border-top:0;padding:0 0 22px 46px;align-items:start}
+.pin .row::before{counter-increment:pk;content:counter(pk);position:absolute;left:0;top:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--navy);color:#fff;font:800 17px/1 var(--c)}
+.pin .row::after{content:"";position:absolute;left:14px;top:36px;bottom:6px;width:2px;background:repeating-linear-gradient(#C9CED2 0 5px,transparent 5px 9px)}
+.pin .row:last-child{padding-bottom:0}
+.pin .row:last-child::after,.pin .row:has(+ .links)::after{display:none}
+.pin .row.links{padding-top:4px;border-top:1px solid var(--line);padding-left:0;margin-top:2px;padding-top:16px}
+.pin .row.links::before,.pin .row.links::after{display:none;counter-increment:none}
+.pin .lb{font:700 18px/1.2 var(--f);color:var(--navy);padding-top:4px}
+.pin .lb small{margin-top:2px;font-size:14px;font-weight:500}
+.pin .seg{justify-self:start;display:inline-flex;gap:4px;border:0;background:#EEF1F3;padding:4px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.pin .seg::-webkit-scrollbar{display:none}
+.pin .seg button{padding:9px 18px;font-weight:600;font-size:15px;color:var(--ink,#23272B);background:transparent;transition:background .3s var(--ease),color .3s var(--ease),box-shadow .3s var(--ease)}
+.pin .seg button:hover:not([aria-pressed="true"]){background:#fff}
+.pin .seg button[aria-pressed="true"]{background:var(--navy);color:#fff;box-shadow:0 6px 14px -8px rgba(12,28,42,.8)}
+@media (max-width:520px){.pin{padding:22px 18px 22px}.pin .row{padding-left:40px}.pin .row::before{width:26px;height:26px;font-size:15px}.pin .row::after{left:12px;top:32px}}
 </style>
 <!-- seo: matches the Wix page on ukairshowguide.co.uk -->
 <meta name="description" content="The 74 bus to the Clacton Air Show: the roads it takes, every stop, times on show days and the closest stop to the show. Run by Central Connect.">
