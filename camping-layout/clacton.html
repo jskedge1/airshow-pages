@@ -6713,8 +6713,18 @@ body h1.cg-title{text-transform:none!important}
     var mapbox = explore.querySelector('.mapbox');
     var h2 = aside.querySelector('h2'), intro = aside.querySelector('h2 + p'), note = aside.querySelector('.side-note');
     var groups = readGroups(pl);
+    /* trains first, then buses, then everything else in the page's own order */
+    function rank(g) {
+      var ids = g.items.map(function (it) { return it.id; }).join(' ');
+      if (/train|rail/i.test(g.name) || /(^|\s)(rail|train)/.test(ids)) return 0;
+      if (/bus/i.test(g.name) || /(^|\s)bus/.test(ids)) return 1;
+      return 2;
+    }
+    groups = groups.map(function (g, i) { return { g: g, i: i, r: rank(g) }; })
+      .sort(function (a, b) { return a.r - b.r || a.i - b.i; }).map(function (x) { return x.g; });
     var all = [];
     groups.forEach(function (g) { g.items.forEach(function (it) { all.push(it); }); });
+    if (all[0] && all[0].btn.getAttribute('aria-pressed') !== 'true') all[0].btn.click();
 
     var st = document.createElement('style');
     st.textContent = CSS_BASE + ({ line: CSS_LINE, board: CSS_BOARD, stop: CSS_STOP, mix: CSS_MIX }[DESIGN]) + CSS_HERO;
