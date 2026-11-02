@@ -1711,7 +1711,7 @@ var DATA={"stops":[["London Paddington",51.51656,-0.17726,"Paddington"],["Readin
   function travel(trip){
     var h = H(), back = HD(h)[1].trips, last = back[back.length - 1], lastEnd = last.s[last.s.length - 1][0];
     var late = mm(lastEnd) < mm(last.big);
-    var tip = ['Trains are very busy straight after the flying, as everyone heads for the station at once. I would either leave a little early, or stay in town for something to eat and catch a later train.',
+    var tip = [X.busyTip || 'Trains are very busy straight after the flying, as everyone heads for the station at once. I would either leave a little early, or stay in town for something to eat and catch a later train.',
       X.lastTrain.replace('{hub}', h.name).replace('{last}', last.big).replace('{day}', D().label).replace('{chg}', last.changes.length ? ', with a change at ' + names(last.changes.map(function(c){ return c.at; })) : '').replace('{gets}', late ? ', and doesn’t get in until ' + lastEnd : ', and gets in at ' + lastEnd)];
     if (trip.changes.length) {
       var c0 = trip.changes.reduce(function(a, c){ return c.wait < a.wait ? c : a; });
@@ -2346,9 +2346,9 @@ var DATA={"stops":[["London Paddington",51.51656,-0.17726,"Paddington"],["Readin
       return '<button type="button" class="nchip" data-pick="' + (idx + k) + '" aria-pressed="' + (k === 0) + '"><b>' + t.big + '</b><small>arr ' + t.s[t.s.length - 1][0] + '</small></button>';
     }).join('');
     var legChips = [];
-    if (!toShow) legChips.push('<span class="pleg walk">' + PI.walk + 'Walk</span>');
+    if (!toShow) legChips.push('<span class="pleg walk">' + PI.walk + esc(X.wayBack ? X.wayBack[0] : 'Walk') + '</span>');
     legList(trip).forEach(function(l){ legChips.push('<span class="pleg" style="--lg:' + (OPC ? opLine(l.op) : 'var(--op1)') + '">' + PI.train + esc(l.op) + '</span>'); });
-    if (toShow) legChips.push('<span class="pleg walk">' + PI.walk + 'Walk</span>');
+    if (toShow) legChips.push('<span class="pleg walk">' + PI.walk + esc(X.wayIn ? X.wayIn[0] : 'Walk') + '</span>');
     var tabs = [['j', 'Journey', PI.stop], ['t', 'Train times', PI.any], ['p', 'Tips', PI.info]].map(function(x){
       return '<button type="button" role="tab" data-tab="' + x[0] + '" aria-selected="' + (ptxTab === x[0]) + '"><span class="ti">' + x[2] + '</span><span>' + x[1] + '</span><i class="cv" aria-hidden="true">▾</i></button>';
     }).join('');

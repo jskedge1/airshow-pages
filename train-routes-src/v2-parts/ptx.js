@@ -58,9 +58,9 @@
       return '<button type="button" class="nchip" data-pick="' + (idx + k) + '" aria-pressed="' + (k === 0) + '"><b>' + t.big + '</b><small>arr ' + t.s[t.s.length - 1][0] + '</small></button>';
     }).join('');
     var legChips = [];
-    if (!toShow) legChips.push('<span class="pleg walk">' + PI.walk + 'Walk</span>');
+    if (!toShow) legChips.push('<span class="pleg walk">' + PI.walk + esc(X.wayBack ? X.wayBack[0] : 'Walk') + '</span>');
     legList(trip).forEach(function(l){ legChips.push('<span class="pleg" style="--lg:' + (OPC ? opLine(l.op) : 'var(--op1)') + '">' + PI.train + esc(l.op) + '</span>'); });
-    if (toShow) legChips.push('<span class="pleg walk">' + PI.walk + 'Walk</span>');
+    if (toShow) legChips.push('<span class="pleg walk">' + PI.walk + esc(X.wayIn ? X.wayIn[0] : 'Walk') + '</span>');
     var tabs = [['j', 'Journey', PI.stop], ['t', 'Train times', PI.any], ['p', 'Tips', PI.info]].map(function(x){
       return '<button type="button" role="tab" data-tab="' + x[0] + '" aria-selected="' + (ptxTab === x[0]) + '"><span class="ti">' + x[2] + '</span><span>' + x[1] + '</span><i class="cv" aria-hidden="true">▾</i></button>';
     }).join('');
