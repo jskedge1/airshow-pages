@@ -36,7 +36,7 @@
       var colour = kind === 'walk' ? '#6B7C89' : kind === 'train' ? 'var(--op1)' : 'var(--navy)';
       return '<li class="' + (kind === 'walk' ? 'walk' : '') + '" style="--sc:' + colour + '"><span class="sn">' + PI[kind === 'off' ? 'stop' : kind] + '</span><div class="sx"><span>' + label + '</span><b>' + title + '</b><p>' + text + '</p>' + (extra || '') + '</div></li>';
     }
-    if (!toShow) html += step('walk', 'Walk', 'Walk back to ' + esc(X.dest), esc(CFG.walkBack), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_TO, WALK_FROM) + '">Open in Google Maps ↗</a>');
+    if (!toShow) html += step('walk', X.wayBack ? X.wayBack[0] : 'Walk', X.wayBack ? esc(X.wayBack[1]) : 'Walk back to ' + esc(X.dest), esc(CFG.walkBack), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_TO, WALK_FROM) + '">Open in Google Maps ↗</a>');
     legsOf.forEach(function(l, i){
       html += step('train', 'Train', esc(l.op) + ' from ' + esc(l.from) + ' to ' + esc(l.to),
         'Leaves at ' + l.dep + ' and gets to ' + esc(l.to) + ' at ' + l.arr + '. ' + (l.stops.length ? 'It calls at ' + esc(names(l.stops)) + '.' : 'It runs non stop between the two.'));
@@ -44,7 +44,7 @@
     });
     var last = trip.s[trip.s.length - 1];
     html += step('off', 'Get off', 'Get off at ' + esc(last[1]), toShow ? (endsHere(trip) ? 'It is the last stop and the closest station to the show.' : 'It is the closest station to the show. The train carries on to ' + esc(lastTo(trip)) + ', so listen out for the announcement as you come in.') : 'You are home, or at the start of the next part of your trip.');
-    if (toShow) html += step('walk', 'Walk', 'Walk to the ' + esc(CFG.targetLabel), esc(CFG.walkLine), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_FROM, WALK_TO) + '">Open in Google Maps ↗</a>');
+    if (toShow) html += step('walk', (X.wayIn || ['Walk'])[0], X.wayIn ? esc(X.wayIn[1]) : 'Walk to the ' + esc(CFG.targetLabel), esc(CFG.walkLine), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_FROM, WALK_TO) + '">Open in Google Maps ↗</a>');
     return '<ol class="steps">' + html + '</ol>';
   }
   function ptxLastHome(h){

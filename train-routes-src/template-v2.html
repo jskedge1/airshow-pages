@@ -1099,7 +1099,8 @@ html,body{background:var(--mist)}
 /* up to four show days in one row */
 .pickctl #day{grid-template-columns:repeat(auto-fit,minmax(78px,1fr))}
 .pickctl #day button{padding:14px 6px}
-.ttbtn .hi{display:none}.ttbtn .hl{padding:0;gap:10px;font-weight:700;font-size:15px}.ttbtn:hover{transform:none}
+/* every-train button as a transport tab, like the Public Transport page (2 Nov 2026) */
+#ttbtn.ttbtn{border:0!important;border-radius:0!important;padding:0!important;box-sizing:border-box!important;cursor:pointer!important;display:inline-flex!important;align-items:stretch!important;min-height:54px!important;min-width:min(100%,360px)!important;background:#454850!important;color:#fff!important;box-shadow:0 6px 16px -10px rgba(0,0,0,.6)!important;transition:background .25s,transform .25s var(--ease)!important}#ttbtn.ttbtn .hi{position:relative!important;flex:none!important;width:58px!important;display:grid!important;place-items:center!important;background:var(--op1)!important;color:#fff!important;transition:width .3s var(--ease)!important}#ttbtn.ttbtn .hi:after{content:"";position:absolute!important;right:-14px!important;top:0!important;bottom:0!important;width:14px!important;background:var(--op1)!important;clip-path:polygon(0 0,100% 50%,0 100%)!important}#ttbtn.ttbtn .hi svg{width:24px!important;height:24px!important;transform:none!important}#ttbtn.ttbtn .hl{flex:1!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:8px 16px 8px 28px!important;font-weight:600!important;font-size:16px!important;letter-spacing:.01em!important}#ttbtn.ttbtn .chev{width:18px!important;height:18px!important;transition:transform .35s var(--ease)!important}#ttbtn.ttbtn[aria-expanded="true"] .chev{transform:rotate(180deg)!important}#ttbtn.ttbtn:hover,#ttbtn.ttbtn:focus-visible{background:#2F3238!important;color:#fff!important;transform:translateY(-2px)!important}#ttbtn.ttbtn:hover .hi{width:66px!important}#ttbtn.ttbtn[aria-expanded="true"]{background:#2F3238!important}#ttbtn.ttbtn::before{display:none!important}#ttbtn.ttbtn>.ti{display:none!important}
 </style>
 <style id="board-ring-tabs">
 /* departures and arrivals switch in the transport tab style: white tiles with rounded tops, a ring round each symbol
@@ -2270,7 +2271,7 @@ var DATA=__DATA__;
       var colour = kind === 'walk' ? '#6B7C89' : kind === 'train' ? 'var(--op1)' : 'var(--navy)';
       return '<li class="' + (kind === 'walk' ? 'walk' : '') + '" style="--sc:' + colour + '"><span class="sn">' + PI[kind === 'off' ? 'stop' : kind] + '</span><div class="sx"><span>' + label + '</span><b>' + title + '</b><p>' + text + '</p>' + (extra || '') + '</div></li>';
     }
-    if (!toShow) html += step('walk', 'Walk', 'Walk back to ' + esc(X.dest), esc(CFG.walkBack), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_TO, WALK_FROM) + '">Open in Google Maps ↗</a>');
+    if (!toShow) html += step('walk', X.wayBack ? X.wayBack[0] : 'Walk', X.wayBack ? esc(X.wayBack[1]) : 'Walk back to ' + esc(X.dest), esc(CFG.walkBack), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_TO, WALK_FROM) + '">Open in Google Maps ↗</a>');
     legsOf.forEach(function(l, i){
       html += step('train', 'Train', esc(l.op) + ' from ' + esc(l.from) + ' to ' + esc(l.to),
         'Leaves at ' + l.dep + ' and gets to ' + esc(l.to) + ' at ' + l.arr + '. ' + (l.stops.length ? 'It calls at ' + esc(names(l.stops)) + '.' : 'It runs non stop between the two.'));
@@ -2278,7 +2279,7 @@ var DATA=__DATA__;
     });
     var last = trip.s[trip.s.length - 1];
     html += step('off', 'Get off', 'Get off at ' + esc(last[1]), toShow ? (endsHere(trip) ? 'It is the last stop and the closest station to the show.' : 'It is the closest station to the show. The train carries on to ' + esc(lastTo(trip)) + ', so listen out for the announcement as you come in.') : 'You are home, or at the start of the next part of your trip.');
-    if (toShow) html += step('walk', 'Walk', 'Walk to the ' + esc(CFG.targetLabel), esc(CFG.walkLine), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_FROM, WALK_TO) + '">Open in Google Maps ↗</a>');
+    if (toShow) html += step('walk', (X.wayIn || ['Walk'])[0], X.wayIn ? esc(X.wayIn[1]) : 'Walk to the ' + esc(CFG.targetLabel), esc(CFG.walkLine), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_FROM, WALK_TO) + '">Open in Google Maps ↗</a>');
     return '<ol class="steps">' + html + '</ol>';
   }
   function ptxLastHome(h){
