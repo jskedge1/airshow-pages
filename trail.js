@@ -48,7 +48,11 @@
     "train-routes/wales": train("Wales Airshow", "walesairshow"),
     "train-routes/riat": train("Royal International Air Tattoo", "riat"),
     "train-routes/riat-cheltenham": train("Royal International Air Tattoo", "riat"),
-    "train-routes/riat-kemble": train("Royal International Air Tattoo", "riat")
+    "train-routes/riat-kemble": train("Royal International Air Tattoo", "riat"),
+    "train-routes/ayr": train("International Ayr Show", "international-ayr-show"),
+    "train-routes/duxford": train("IWM Duxford Air Shows", "duxfordairshows"),
+    "train-routes/headcorn": train("Headcorn International Airshow", "headcorn-air-show"),
+    "train-routes/shuttleworth": train("Shuttleworth Air Shows", "shuttleworthairshows")
   };
 
   var key = location.pathname.replace(/^.*\/airshow-pages\//, "").replace(/^\//, "").replace(/\.html$/, "");
