@@ -3505,7 +3505,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
   var topics=[
     {g:'Park and Ride'},
     {id:'pr',name:'Park and Ride',sub:'From Clacton Shopping Village',title:'Clacton Shopping Village Park and Ride',
-      text:'You leave the car at Clacton Shopping Village on Stephenson Road West and take the airshow bus to the seafront. KonectBuses ran it in 2025, and in 2026 it ran under the Central Connect name.',
+      text:'Park at Clacton Shopping Village on Stephenson Road West and hop on the airshow bus. It drops you on the seafront at Marine Parade East in about 15 minutes, and brings you back to your car at the end of the day. For me, this is the easiest way in if you are driving.',
       place:'Clacton Shopping Village, Stephenson Road West, Clacton-on-Sea',
       route:[['car','Park at Clacton Shopping Village','I would follow the airshow signs as you come into town on the A133.'],
              ['bus','Airshow bus to the seafront','In 2026 buses ran about every 10 minutes from 10:00.'],
@@ -3647,7 +3647,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
       html+='<div class="jx-dcard" style="--lc:'+op[1]+';--oc:'+op[2]+'"><div class="jx-strip"></div>'
         +'<div class="jx-title"><b>'+esc(op[0])+'</b><span>'+esc(out.title)+'</span></div>'
         +'<div class="jx-row"><span class="jx-t"><b>'+esc(f[0])+'</b>'+(then.length?'<small>then '+esc(then.join(', '))+'</small>':'')+'</span><span class="jx-d"><b>'+esc(f[1])+'</b><small>'+esc(f[2])+'</small></span></div>'
-        +(rows.length>1?'<div class="jx-chips">'+rows.slice(0,5).map(function(r){var a=arr(r);return '<span class="jx-chip"><b>'+esc(r[0])+'</b><small>'+(a?'arr '+esc(a):esc(r[1].split(' ').slice(0,2).join(' ')))+'</small></span>';}).join('')+'</div>':'');
+        +(rows.length>1?'<div class="jx-chips">'+rows.slice(0,5).map(function(r){var a=arr(r);return '<span class="jx-chip"><b>'+esc(r[0])+'</b>'+(a?'<small>arr '+esc(a)+'</small>':'')+'</span>';}).join('')+'</div>':'');
     }
     var best=null;
     T.forEach(function(x){if(!home(x))return;x.rows.forEach(function(r){var v=jxHm(r[0]);if(v!==null&&(!best||v>best.v))best={v:v,tm:r[0],sv:r[1]};});});
@@ -6585,7 +6585,8 @@ body h1.cg-title{text-transform:none!important}
     }).join('') + (foot ? '<p class="xd-tt-foot">' + esc(foot.textContent.trim()) + '</p>' : '');
     var links = '';
     var slug = showSlug(), train = TRAIN_PAGE[slug];
-    if (train) links += '<a class="xd-tt-link" href="https://www.ukairshowguide.co.uk/' + train + '" target="_top"><span class="xd-tt-ic">' + icon('By train') + '</span><span><b>Train route and live times</b><small>Every station, platform and change</small></span></a>';
+    /* the train route link only shows on topics whose times are trains */
+    if (train && tables.some(function (t) { return kind(t.title + ' ' + t.rows.map(function (r) { return r[1]; }).join(' ')) === 'train'; })) links += '<a class="xd-tt-link" href="https://www.ukairshowguide.co.uk/' + train + '" target="_top"><span class="xd-tt-ic">' + icon('By train') + '</span><span><b>Train route and live times</b><small>Every station, platform and change</small></span></a>';
     links += '<a class="xd-tt-link" href="https://www.ukairshowguide.co.uk/airshow-public-transport" target="_top"><span class="xd-tt-ic">' + icon('By bus') + '</span><span><b>Every bus and train for this show</b><small>Route maps and where to get off</small></span></a>';
     wrap.insertAdjacentHTML('afterbegin', '<div class="xd-tt-links">' + links + '</div>');
     wrap.addEventListener('click', function (e) {
@@ -6615,6 +6616,17 @@ body h1.cg-title{text-transform:none!important}
     '#travel .gt-hero .btns .btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 rgba(19,41,60,.18);background:#1C3850}' +
     '#travel .gt-hero .btns .btn:hover .xd-ba{transform:translate(5px,-50%)}' +
     '#travel .gt-hero .btns .btn:focus-visible{outline:3px solid #D74949;outline-offset:3px}' +
+    /* button design 2 (Clacton): the flat purple Show my options button from the journey planner */
+    '#travel.xd-btn2 .gt-hero .btns .btn{align-items:center;gap:10px;background:#6950A1;padding:12px 48px 12px 20px;overflow:hidden;border-radius:0;box-shadow:none;transition:background .4s ' + EASE + ',transform .4s ' + EASE + ',filter .4s ' + EASE + '}' +
+    '#travel.xd-btn2 .gt-hero .btns .btn:before,#travel.xd-btn2 .gt-hero .btns .btn .xd-bi,#travel.xd-btn2 .gt-hero .btns .btn .xd-bp{display:none!important}' +
+    '#travel.xd-btn2 .gt-hero .btns .btn:after{content:""!important;display:block!important;position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);transition:left .7s ' + EASE + ';pointer-events:none}' +
+    '#travel.xd-btn2 .gt-hero .btns .btn .xd-bt{padding:0}' +
+    '#travel.xd-btn2 .gt-hero .btns .btn .xd-bt small{color:#E4DDF3}' +
+    '#travel.xd-btn2 .gt-hero .btns .btn .xd-ba{right:18px;font-size:24px;color:#fff;transition:transform .4s ' + EASE + '}' +
+    '#travel.xd-btn2 .gt-hero .btns .btn:hover{background:#563F8A;transform:translateY(-2px);filter:brightness(1.06);box-shadow:none}' +
+    '#travel.xd-btn2 .gt-hero .btns .btn:hover:after{left:120%}' +
+    '#travel.xd-btn2 .gt-hero .btns .btn:active{transform:translateY(0) scale(.99)}' +
+    '@media(prefers-reduced-motion:reduce){#travel.xd-btn2 .gt-hero .btns .btn:after{display:none!important}}' +
     /* key places board */
     '#travel .gt-facts{padding:0!important;background:none!important}' +
     '#travel .gt-facts::before{display:none!important}' +
@@ -6634,6 +6646,8 @@ body h1.cg-title{text-transform:none!important}
   function decorateHero() {
     var travel = document.getElementById('travel');
     if (!travel) return;
+    var btn2 = /clacton/i.test(showSlug());
+    if (btn2) travel.classList.add('xd-btn2');
     function look(label) { var k = canon(label), m = MODES[k]; return [k, m.colour, soft(m.colour, .14)]; }
     var place = (window.CG_PLACE && window.CG_PLACE.short) || '';
     var SUBS = place === 'Clacton' ? { 'park and ride': 'Leave the car, ride to the seafront', 'arriving by train': 'Direct from London and Colchester' } : {};
@@ -6642,7 +6656,7 @@ body h1.cg-title{text-transform:none!important}
       var label = b.textContent.trim(), m = look(label);
       b.style.setProperty('--bc', m[1]);
       var sub = SUBS[label.toLowerCase()] || '';
-      b.innerHTML = '<span class="xd-bi">' + icon(m[0]) + '</span><span class="xd-bp" aria-hidden="true"></span><span class="xd-bt">' + esc(label) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</span><span class="xd-ba" aria-hidden="true">&rsaquo;</span>';
+      b.innerHTML = '<span class="xd-bi">' + icon(m[0]) + '</span><span class="xd-bp" aria-hidden="true"></span><span class="xd-bt">' + esc(label) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</span><span class="xd-ba" aria-hidden="true">' + (btn2 ? '&rarr;' : '&rsaquo;') + '</span>';
     });
     var facts = travel.querySelector('.gt-facts');
     if (facts && !facts.querySelector('.xd-kp-h')) {
@@ -6677,9 +6691,9 @@ body h1.cg-title{text-transform:none!important}
     Array.prototype.slice.call(detail.children).forEach(function (el) {
       if (el.matches('h3, .lead, .on-map')) out.head.push(el);
       else if (el.matches('.br-box, .tr-box')) out.keep.push(el);
-      else if (el.matches('ol.route')) out.journey.push(el);
+      else if (el.matches('ol.route, ol.jx-steps')) out.journey.push(el);
       else if (el.matches('.areas')) out.buses.push(el);
-      else if (el.matches('.ttx')) out.times.push(el);
+      else if (el.matches('.ttx, .jx-dcard')) out.times.push(el);
       else if (el.matches('.cols, .d-warn')) out.tips.push(el);
       else out.info.push(el);
     });

@@ -2490,22 +2490,32 @@ var DATA = {
   ],
   "pr": [
    {
-    "title": "Park and Ride in 2026, Thursday and Friday",
+    "title": "Getting there, Thursday and Friday",
     "rows": [
      [
       "10:00",
-      "Shopping Village to the seafront",
-      "Every 10 minutes, about 15 minutes to Marine Parade East"
-     ],
-     [
-      "12:00",
-      "First bus back from the seafront",
-      "Then every 10 minutes through the afternoon"
+      "First bus to the seafront",
+      "From Clacton Shopping Village, then every 10 minutes"
      ],
      [
       "16:08",
-      "Shopping Village to the seafront",
-      "Every 8 minutes in the late afternoon"
+      "Buses every 8 minutes",
+      "Still running to the seafront in the late afternoon"
+     ]
+    ],
+    "note": "The ride takes about 15 minutes and drops you at Marine Parade East. In 2026 a return was £6 for adults, £5 for ages 5 to 19, or £16 for a group ticket. Concessionary bus passes weren't accepted. These are the 2026 times, as the 2027 ones aren't out yet.",
+    "source": [
+     "Clacton Airshow: Central Connect Park and Ride timetable 2026",
+     "https://clactonairshow.com/wp-content/uploads/2026/07/Konect-Buses-A4.pdf"
+    ]
+   },
+   {
+    "title": "Buses home to the car park, Thursday and Friday",
+    "rows": [
+     [
+      "12:00",
+      "First bus back to the Shopping Village",
+      "From Marine Parade East, then every 10 minutes"
      ],
      [
       "18:30",
@@ -2516,14 +2526,9 @@ var DATA = {
       "22:00",
       "Last bus back on Thursday",
       "From Marine Parade East, after the twilight display"
-     ],
-     [
-      "Fares",
-      "£6 adult, £5 ages 5 to 19",
-      "£16 group ticket, no concessionary pass discount"
      ]
     ],
-    "note": "From the Central Connect Park and Ride timetable for Thursday 27 and Friday 28 August 2026, linked from the Clacton Airshow FAQs. The 2027 timetable and fares have not been published yet.",
+    "note": "On the Thursday the flying runs into the evening, so I would keep an eye on the time if you want to stay for the twilight display.",
     "source": [
      "Clacton Airshow: Central Connect Park and Ride timetable 2026",
      "https://clactonairshow.com/wp-content/uploads/2026/07/Konect-Buses-A4.pdf"
