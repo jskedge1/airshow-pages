@@ -6287,6 +6287,36 @@ body h1.cg-title{text-transform:none!important}
     '.sec-toggle:hover .st-stop{transform:scale(1.08)}' +
     '.sec-toggle[aria-expanded="true"] .st-stop{background:var(--sl,#32B4AF);color:#fff}' +
     '.sec-toggle .st-s{color:#9FD8F2!important}' +
+    /* the other show pages build their section bars two other ways, so bring both in line with Clacton */
+    '.sec-bar,.sec-bar.is-open{border-left:0!important;background:var(--navy)!important}' +
+    '.sec-bar:hover,.sec-bar.is-open:hover{background:var(--navy-2)!important}' +
+    '.sec-toggle .st-icon{display:none!important}' +
+    '.sec-toggle .st-btn{background:none!important;padding:0!important;height:auto!important;gap:0!important}' +
+    '.sec-toggle .st-btn span,#secCount{display:none!important}' +
+    '.sec-toggle .st-btn i{width:44px!important;height:44px!important;flex:0 0 44px!important;border-radius:50%;background:var(--teal)!important;transition:background .3s ' + EASE + '}' +
+    '.sec-toggle[aria-expanded="true"] .st-btn i{background:var(--purple)!important}' +
+    '.folds{gap:12px!important;padding:12px 0!important;background:transparent!important}' +
+    '.folds > section.fold{position:relative}' +
+    '.folds > section.fold + section.fold:before{content:"";position:absolute;z-index:2;top:-12px;height:12px;width:6px;left:calc(max(0px,(100% - 1200px) / 2) + 42px);background:#32B4AF}' +
+    '.fold-btn,.fold.open .fold-btn{background:var(--navy)!important;box-shadow:inset 0 -5px 0 var(--sl,#32B4AF)!important}' +
+    '.fold-btn:hover,.fold.open .fold-btn:hover{background:var(--navy-2)!important}' +
+    '.fold-btn .fold-ic{display:none!important}' +
+    '.fold-btn .wrap{grid-template-columns:auto minmax(0,1fr) auto!important;gap:20px!important;padding-top:22px!important;padding-bottom:22px!important}' +
+    '.fold-btn .st-stop{flex:0 0 42px;width:42px;height:42px;box-sizing:border-box;border-radius:50%;background:#fff;border:6px solid var(--sl,#32B4AF);display:flex;align-items:center;justify-content:center;font:700 16px/1 "Barlow",sans-serif;color:#13293C;transition:background .3s ' + EASE + ',color .3s ' + EASE + ',transform .3s ' + EASE + '}' +
+    '.fold-btn:hover .st-stop{transform:scale(1.08)}' +
+    '.fold.open .fold-btn .st-stop{background:var(--sl,#32B4AF);color:#fff}' +
+    '.fold .fold-btn .fold-t{font:800 clamp(24px,3vw,34px)/1.05 "Barlow",sans-serif!important;text-transform:uppercase!important;letter-spacing:.01em!important}' +
+    '.fold-d{color:#9FD8F2!important}' +
+    '.fold-x span{display:none!important}' +
+    '.fold-x i{width:44px!important;height:44px!important;flex:0 0 44px!important;border-radius:50%;background:var(--teal)!important;transition:background .3s ' + EASE + '}' +
+    '.fold-x i::before,.fold-x i::after{background:#fff!important;width:18px!important;height:2.5px!important}' +
+    '.fold.open .fold-x i{background:var(--purple)!important}' +
+    '.fold-bar{background:transparent!important}' +
+    '.fold-bar .wrap{justify-content:flex-end!important;padding-top:14px!important;padding-bottom:14px!important}' +
+    '.fold-bar p{display:none!important}' +
+    '.fold-bar button{border:0!important;background:var(--mist)!important;color:var(--navy)!important;padding:9px 14px!important;font:600 15px/20px "Barlow",sans-serif!important}' +
+    '.fold-bar button:hover{background:var(--teal-wash)!important}' +
+    '@media(max-width:640px){.fold-btn .wrap{gap:12px!important;padding-top:18px!important;padding-bottom:18px!important}.fold-btn .st-stop{flex-basis:36px;width:36px;height:36px;border-width:5px;font-size:14px}.fold-x i,.sec-toggle .st-btn i{width:38px!important;height:38px!important;flex-basis:38px!important}.fold-x i::before,.fold-x i::after,.sec-toggle .st-btn i::before,.sec-toggle .st-btn i::after{width:16px!important}.sec-toggle .st-btn i::before,.sec-toggle .st-btn i::after{left:11px!important;top:18px!important}.folds > section.fold + section.fold:before{left:31px}}' +
 
     /* stops in a clean rail style: white service cards on a line diagram, with interchange style circles */
     '.xd-mix .xd-hline:before{height:8px;top:8px;border-radius:0}' +
@@ -6664,6 +6694,11 @@ body h1.cg-title{text-transform:none!important}
         p.style.setProperty('--sl', LINES[i % LINES.length]);
         var t = p.querySelector('.sec-toggle');
         if (t && !t.querySelector('.st-stop')) t.insertAdjacentHTML('afterbegin', '<span class="st-stop" aria-hidden="true">' + (i + 1) + '</span>');
+      });
+      Array.prototype.slice.call(document.querySelectorAll('.folds > section.fold')).forEach(function (f, i) {
+        f.style.setProperty('--sl', LINES[i % LINES.length]);
+        var w = f.querySelector('.fold-btn .wrap');
+        if (w && !w.querySelector('.st-stop')) w.insertAdjacentHTML('afterbegin', '<span class="st-stop" aria-hidden="true">' + (i + 1) + '</span>');
       });
       root.querySelector('.xd-flags').style.setProperty('--n', groups.length);
       var box = root.querySelector('.xd-line-box');
