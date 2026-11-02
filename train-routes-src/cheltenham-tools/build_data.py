@@ -39,7 +39,7 @@ def trip(x,toshow,hubname):
     return {'big':s[0][0],'plat':first[3],'ride':tot,'dest':tdest(l0['info']),
         'calls':[SHORT.get(NICE(c[0]),NICE(c[0])) for c in l0['calls'][1:]],
         'small':('Gets to Cheltenham at ' if toshow else 'Back in '+hubname+' at ')+s[-1][0],
-        'title':'The '+s[0][0]+' from '+stops[s[0][1]][0],'s':s,'changes':changes,'lorig':torig(legs[-1]['info'])}
+        'title':'The '+s[0][0]+' from '+stops[s[0][1]][0],'s':s,'changes':changes,'ops':[re.match(r'(.+?) from ',lg['info']).group(1).replace('%26','&').replace('LNR & WMR','West Midlands Railway') if re.match(r'(.+?) from ',lg['info']) else '' for lg in legs],'lorig':torig(legs[-1]['info'])}
 def table(trips,toshow,hubfull):
     direct=trips and all(not t['changes'] for t in trips)
     if direct:

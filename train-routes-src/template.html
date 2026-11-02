@@ -878,6 +878,34 @@ var DATA=__DATA__;
     if (th.ui) rs.setProperty('--navy', th.ui);
     if (th.acc) rs.setProperty('--amber', th.acc);
   }
+  /* train company colours: each company keeps its own colours on the station buttons, departure cards, legs and map,
+     and the page takes the colours of the company that runs most trains from the picked station (CFG.opColors) */
+  var OPC = CFG.opColors || null;
+  function opC(name){
+    if (!OPC) return null;
+    if (OPC[name]) return OPC[name];
+    var th = CFG.theme || {};
+    return name === CFG.operator ? { op1: th.op1, navy: th.ui, onui: th.onui, opink: th.opink, opd: th.opd, tint: th.tint, tintln: th.tintln } : null;
+  }
+  function opVars(name){
+    var c = opC(name); if (!c) return '';
+    return '--op1:' + c.op1 + ';--navy:' + c.navy + ';--onui:' + c.onui + ';--opink:' + (c.opink || '#fff') + ';--amber:' + c.op1 + (c.opd ? ';--opd:' + c.opd : '') + (c.tint ? ';--tint:' + c.tint : '') + (c.tintln ? ';--tintln:' + c.tintln : '');
+  }
+  function opStyle(name){ var v = opVars(name); return v ? ' data-op="' + name + '" style="' + v + '"' : ''; }
+  function opLine(name){ var c = opC(name); return c ? c.op1 : ((CFG.theme && CFG.theme.op1) || '#00A6E2'); }
+  function hubOp(h){
+    var n = {};
+    HD(h)[0].trips.forEach(function(t){ var o = (t.ops || [])[0] || CFG.operator; n[o] = (n[o] || 0) + 1; });
+    return Object.keys(n).sort(function(a, b){ return n[b] - n[a]; })[0] || CFG.operator;
+  }
+  function pageOp(){
+    if (!OPC) return;
+    var op = hubOp(H()), c = opC(op) || opC(CFG.operator), rs = document.documentElement.style;
+    var v = { op1: c.op1, navy: c.navy, onui: c.onui, opink: c.opink || '#fff', amber: c.op1, opd: c.opd || c.navy, tint: c.tint, tintln: c.tintln };
+    Object.keys(v).forEach(function(k){ if (v[k]) rs.setProperty('--' + k, v[k]); });
+    document.body.setAttribute('data-op', op);
+    $('opname').textContent = 'Run by ' + (opC(op) ? op : CFG.operator);
+  }
   (function(){
     var t = CFG.title, k = t.lastIndexOf(' to ');
     if (k < 0) { $('title').textContent = t; return; }
@@ -1231,6 +1259,7 @@ var DATA=__DATA__;
   }
 
   function render(){
+    pageOp();
     $('hub').innerHTML = DATA.hubs.map(function(h, i){
       /* the number of changes most trains that day need, and the quickest of those */
       var tr = HD(h)[0].trips, count = {};
@@ -1238,7 +1267,7 @@ var DATA=__DATA__;
       var fewest = +Object.keys(count).sort(function(p, q){ return count[q] - count[p] || p - q; })[0];
       var best = Math.min.apply(null, tr.filter(function(x){ return x.changes.length === fewest; }).map(function(x){ return x.ride; }));
       var how = fewest === 0 ? '<i>Direct</i>' : fewest + (fewest === 1 ? ' change' : ' changes');
-      return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
+      return '<button type="button" data-i="' + i + '"' + opStyle(hubOp(h)) + ' aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
     }).join('');
     each($('hub').children, function(b){ b.addEventListener('click', function(){ hub = +b.getAttribute('data-i'); idx = pickDefault(); render(); runTrain(); }); });
     segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ var was = DIR().trips[idx] ? mm(DIR().trips[idx].big) : 0; day = i; var tr = DIR().trips; idx = 0; for (var q = 0; q < tr.length; q++) if (mm(tr[q].big) >= was) { idx = q; break; } render(); runTrain(); });
@@ -1489,7 +1518,7 @@ var DATA=__DATA__;
   function board(){
     var d = DIR(), nx = nextIndex();
     $('board').innerHTML = d.trips.map(function(t, i){
-      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + (t.split ? '<span class="sp">Splits</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span>' + (t.changes.length ? '<span class="cg">Change at ' + names(t.changes.map(function(c){ return c.at; })) + '</span>' : '<span class="cg">Direct</span>') + (BUS ? (function(){ var bc = busConn(t); return '<span class="bs' + (bc.ok ? '' : ' no') + '">' + (bc.ok ? (dir === 0 ? BUS.short + ' ' + bc.dep : BUS.short + ' by ' + bc.dep) : bc.none ? 'No ' + BUS.short.toLowerCase() + ' today' : (dir === 0 ? 'Misses the ' + BUS.short.toLowerCase() : 'No ' + BUS.short.toLowerCase() + ' in time')) + '</span>'; })() : '') + '</button>';
+      return '<button type="button" class="dep"' + opStyle((t.ops || [])[0] || CFG.operator) + ' aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + (t.split ? '<span class="sp">Splits</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span>' + (t.changes.length ? '<span class="cg">Change at ' + names(t.changes.map(function(c){ return c.at; })) + '</span>' : '<span class="cg">Direct</span>') + (BUS ? (function(){ var bc = busConn(t); return '<span class="bs' + (bc.ok ? '' : ' no') + '">' + (bc.ok ? (dir === 0 ? BUS.short + ' ' + bc.dep : BUS.short + ' by ' + bc.dep) : bc.none ? 'No ' + BUS.short.toLowerCase() + ' today' : (dir === 0 ? 'Misses the ' + BUS.short.toLowerCase() : 'No ' + BUS.short.toLowerCase() + ' in time')) + '</span>'; })() : '') + '</button>';
     }).join('');
     $('bnote').textContent = d.note || '';
     each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); var sl = $('board').scrollLeft; board(); $('board').scrollLeft = sl; draw(); table(); screen(); }); });
@@ -1507,7 +1536,20 @@ var DATA=__DATA__;
       ROUTE = ROUTE.concat(ROUTE.length ? seg.slice(1) : seg);
     }
     casing = L.polyline(ROUTE, { color: '#13293C', weight: 9, opacity: .9 }).addTo(lineLayer);
-    L.polyline(ROUTE, { color: (CFG.theme && CFG.theme.op1) || '#00A6E2', weight: 5, opacity: 1 }).addTo(lineLayer);
+    if (OPC && trip.ops && trip.ops.length) {
+      /* each leg of the journey in its own company's colour */
+      var leg = 0, part = [];
+      for (var q = 1; q < trip.s.length; q++) {
+        var a2 = trip.s[q - 1][6], b2 = trip.s[q][6], sg = DATA.seg[a2 + '|' + b2], rv = false;
+        if (!sg) { sg = DATA.seg[b2 + '|' + a2]; rv = true; }
+        if (!sg) sg = [[trip.s[q - 1][2], trip.s[q - 1][3]], [trip.s[q][2], trip.s[q][3]]];
+        part = part.concat(rv ? sg.slice().reverse() : sg);
+        if (q === trip.s.length - 1 || (trip.s[q][4] & CHG)) {
+          L.polyline(part, { color: opLine(trip.ops[leg] || CFG.operator), weight: 5, opacity: 1 }).addTo(lineLayer);
+          part = []; leg++;
+        }
+      }
+    } else L.polyline(ROUTE, { color: (CFG.theme && CFG.theme.op1) || '#00A6E2', weight: 5, opacity: 1 }).addTo(lineLayer);
     L.polyline(ROUTE, { color: '#fff', weight: 1.4, opacity: .9, dashArray: '10 10' }).addTo(lineLayer);
     fit(); measure();
   }
@@ -1543,7 +1585,10 @@ var DATA=__DATA__;
       : toShow ? (X.endOfLine ? 'Stay on to the end of the line. <b>' + X.dest + '</b> is the last stop, so you can’t miss it.' : X.stayOn(trip))
       : X.endOfLine ? 'The train starts at ' + X.destShort + ', so it’s often waiting in the platform. I would get there a little early for a seat.' : X.backOn(trip);
     $('buysub').textContent = 'For the ' + first[0] + ' from ' + first[5] + ' to ' + last[5] + ', opens their website';
-    $('slip').innerHTML = '<div class="sh1"><span>' + CFG.operator + '</span><span>' + D().label + '</span></div>' +
+    /* the slip and the buy button name the company running the first train, with its own website when the page knows it */
+    var bop = (trip.ops || [])[0] || CFG.operator, bsite = (X.opSites || {})[bop];
+    if (OPC) { $('buybtn').href = bsite || X.buyUrl; $('buytxt').firstChild.textContent = 'Buy tickets from ' + (bsite ? bop : X.opName); }
+    $('slip').innerHTML = '<div class="sh1"><span>' + (OPC ? bop : CFG.operator) + '</span><span>' + D().label + '</span></div>' +
       '<div class="grid"><span>From</span><span>' + first[5] + '</span><span>To</span><span>' + last[5] + '</span>' +
       '<span>Depart</span><span>' + first[0] + ', plat ' + (trip.plat || 'TBC') + '</span><span>Arrive</span><span>' + last[0] + '</span>' +
       (ch.length ? '<span>Change</span><span>' + ch.map(function(c){ return c.at + ' ' + c.dep; }).join(', ') + '</span>' : '') +

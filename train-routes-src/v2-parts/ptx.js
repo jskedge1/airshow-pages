@@ -32,14 +32,14 @@
   }
   function ptxSteps(trip, toShow){
     var legsOf = legList(trip), ch = trip.changes, html = '';
-    function step(kind, label, title, text, extra){
-      var colour = kind === 'walk' ? '#6B7C89' : kind === 'train' ? 'var(--op1)' : 'var(--navy)';
+    function step(kind, label, title, text, extra, col){
+      var colour = col || (kind === 'walk' ? '#6B7C89' : kind === 'train' ? 'var(--op1)' : 'var(--navy)');
       return '<li class="' + (kind === 'walk' ? 'walk' : '') + '" style="--sc:' + colour + '"><span class="sn">' + PI[kind === 'off' ? 'stop' : kind] + '</span><div class="sx"><span>' + label + '</span><b>' + title + '</b><p>' + text + '</p>' + (extra || '') + '</div></li>';
     }
     if (!toShow) html += step('walk', X.wayBack ? X.wayBack[0] : 'Walk', X.wayBack ? esc(X.wayBack[1]) : 'Walk back to ' + esc(X.dest), esc(CFG.walkBack), '<a target="_blank" rel="noopener" href="' + gmaps(WALK_TO, WALK_FROM) + '">Open in Google Maps ↗</a>');
     legsOf.forEach(function(l, i){
       html += step('train', 'Train', esc(l.op) + ' from ' + esc(l.from) + ' to ' + esc(l.to),
-        'Leaves at ' + l.dep + ' and gets to ' + esc(l.to) + ' at ' + l.arr + '. ' + (l.stops.length ? 'It calls at ' + esc(names(l.stops)) + '.' : 'It runs non stop between the two.'));
+        'Leaves at ' + l.dep + ' and gets to ' + esc(l.to) + ' at ' + l.arr + '. ' + (l.stops.length ? 'It calls at ' + esc(names(l.stops)) + '.' : 'It runs non stop between the two.'), '', OPC ? opLine(l.op) : '');
       if (i < ch.length) html += step('off', 'Change', 'Change at ' + esc(ch[i].at), 'You get in at ' + ch[i].arr + ' and the ' + ch[i].dep + ' to ' + esc(ch[i].to) + ' leaves ' + ch[i].wait + ' minutes later.' + (ch[i].wait <= 6 ? ' That is a quick change, so sit near the doors.' : ''));
     });
     var last = trip.s[trip.s.length - 1];
@@ -59,7 +59,7 @@
     }).join('');
     var legChips = [];
     if (!toShow) legChips.push('<span class="pleg walk">' + PI.walk + 'Walk</span>');
-    legList(trip).forEach(function(l){ legChips.push('<span class="pleg" style="--lg:var(--op1)">' + PI.train + esc(l.op) + '</span>'); });
+    legList(trip).forEach(function(l){ legChips.push('<span class="pleg" style="--lg:' + (OPC ? opLine(l.op) : 'var(--op1)') + '">' + PI.train + esc(l.op) + '</span>'); });
     if (toShow) legChips.push('<span class="pleg walk">' + PI.walk + 'Walk</span>');
     var tabs = [['j', 'Journey', PI.stop], ['t', 'Train times', PI.any], ['p', 'Tips', PI.info]].map(function(x){
       return '<button type="button" role="tab" data-tab="' + x[0] + '" aria-selected="' + (ptxTab === x[0]) + '"><span class="ti">' + x[2] + '</span><span>' + x[1] + '</span><i class="cv" aria-hidden="true">▾</i></button>';
@@ -71,7 +71,7 @@
     var journey = '<p class="lead">' + esc(toShow ? 'Here is how the ' + trip.big + ' from ' + h.name + ' gets you to the show, one step at a time.' : 'Here is how the ' + trip.big + ' from ' + X.dest + ' gets you back to ' + h.name + ', one step at a time.') + '</p>' + ptxSteps(trip, toShow)
       + '<div class="sheet sb"><div class="sb-h"><span class="sb-i" aria-hidden="true">i</span><b>Check before you go</b></div>'
       + '<div class="sb-w"><span class="sh-ic">' + PI.walk + '</span>' + esc(X.walkShort || X.dest + ' to the ' + CFG.targetLabel + ' on foot') + '</div>'
-      + '<dl class="sb-rows"><div><dt>Lines</dt><dd>' + opsOf(trip).map(function(o){ return '<span class="sb-line" style="--lc:var(--op1)">' + esc(o) + '</span>'; }).join('') + '</dd></div>'
+      + '<dl class="sb-rows"><div><dt>Lines</dt><dd>' + opsOf(trip).map(function(o){ return '<span class="sb-line" style="--lc:' + (OPC ? opLine(o) : 'var(--op1)') + '">' + esc(o) + '</span>'; }).join('') + '</dd></div>'
       + '<div><dt>Last train home</dt><dd><b>' + lh.big + ' from ' + esc(X.dest) + (lh.ch ? ', with a change' : '') + '</b></dd></div>'
       + '<div><dt>Live times</dt><dd><b>On the board above, and on the National Rail app</b></dd></div></dl></div>';
 
@@ -93,7 +93,7 @@
       + '<span class="legs">' + legChips.join('<span class="ar" aria-hidden="true">›</span>') + '</span>'
       + '<span class="key"><b>' + hm(trip.ride) + '</b><small>' + (ch.length ? ch.length + (ch.length === 1 ? ' change' : ' changes') : 'Direct') + '</small></span></div>'
       + '<div class="lwh' + (lh.v < 1200 ? ' early' : '') + '"><span class="lw-l">Last way home</span><b>' + lh.big + '</b><span class="lw-s">From ' + esc(X.dest) + ' to ' + esc(h.name) + ' on a ' + esc(D().label) + ', gets in at ' + lh.arr + '</span></div>'
-      + '<div class="nxt"><div class="dcard has-op" style="--lc:var(--op1);--oc:var(--op1);--oc2:var(--opink)"><div class="dc-strip"></div><div class="dc-title"><b>' + esc(op0) + '</b><span class="dc-i">' + PI.any + '</span></div>'
+      + '<div class="nxt"><div class="dcard has-op" style="--lc:' + (OPC ? opLine(op0) : 'var(--op1)') + ';--oc:' + (OPC ? opLine(op0) : 'var(--op1)') + ';--oc2:var(--opink)"><div class="dc-strip"></div><div class="dc-title"><b>' + esc(op0) + '</b><span class="dc-i">' + PI.any + '</span></div>'
       + '<div class="dc-row"><span class="dc-d"><b>' + esc(first[1]) + '</b><small>' + esc(trip.dest) + '</small></span><span class="dc-t"><b>' + trip.big + '</b><small>' + esc(trip.small) + '</small></span></div><div class="nchips">' + chips + '</div></div></div>'
       + '<div class="ob"><div class="otabs" role="tablist">' + tabs + '</div>'
       + '<div class="pane"' + (ptxTab === 'j' ? '' : ' hidden') + ' data-pane="j">' + journey + '</div>'
