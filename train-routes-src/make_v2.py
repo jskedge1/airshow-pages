@@ -16,10 +16,13 @@ def R(a, b, n=1):
 
 # styles: after the main style block
 i = t.index('</style>') + len('</style>')
-t = t[:i] + '\n' + P('styles.css') + t[i:]
+t = t[:i] + '\n' + P('styles.css') + '\n' + P('ring-tabs.css') + P('tints.css') + t[i:]
 
 # theme: a darker shade of the company colour for button edges
-R("['op1', 'op2', 'op3', 'opink', 'accink', 'onui']", "['op1', 'op2', 'op3', 'opink', 'accink', 'onui', 'opd']")
+R("['op1', 'op2', 'op3', 'opink', 'accink', 'onui']", "['op1', 'op2', 'op3', 'opink', 'accink', 'onui', 'opd', 'tint', 'tintln']")
+# Headcorn updates (2 Nov 2026): ring tabs on the board and timetable switches, company colour tints, map clear of the right edge
+t = t.replace('</style>\n<style id="refresh">', '</style>\n<style id="refresh">', 1)
+R(".extend(CFG.target), wide ? { padding: [36, 36] }", ".extend(CFG.target), wide ? { paddingTopLeft: [36, 36], paddingBottomRight: [120, 36] }")
 t = t.replace('<style id="refresh">', '<style id="refresh">\n:root{--opd:#13293C}', 1)
 
 # a different default train for each day, when the show runs at different times (Ayr: Friday evening, Saturday afternoon)
