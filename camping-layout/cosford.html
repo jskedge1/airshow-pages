@@ -2109,15 +2109,6 @@ window.PHOTO_ALT={"formation": "Bristol Blenheim K6183 trailing smoke over RAF C
     </div>
   </section>
 
-  <section class="options" aria-label="Arrival options at a glance">
-    <div class="wrap">
-      <div class="opt-head reveal">
-        <div><h2>Ways to <span class="teal-t">arrive</span></h2></div>
-        <p class="note">This is based on the 2026 show. Train services, road closures and parking for 2027 haven’t been confirmed yet.</p>
-      </div>
-      <div class="opt-grid reveal" id="optGrid"></div>
-    </div>
-  </section>
 
   <div class="wrap">
     <div class="acc reveal">
@@ -3419,7 +3410,7 @@ window.PHOTO_ALT={"formation": "Bristol Blenheim K6183 trailing smoke over RAF C
   topics.forEach(function(t){ if(t.g) gname=t.g; else groupOf[t.id]=gname; });
   var OPT_BADGE={'rail':['Easiest way in',''],'car':['Parking included','teal'],'disabled':['Accessible','teal']};
   var optItems=items.filter(function(t){return t.opt;}), ost={f:'all',sort:'rec'};
-  var og=document.getElementById('optGrid');
+  var og=document.getElementById('optGrid')||(function(){var w=document.createElement('div'),d=document.createElement('div');w.hidden=true;w.appendChild(d);document.body.appendChild(w);return d;})(); /* Ways to arrive section removed from the page (2 Nov 2026) */
   og.className='cards r2 reveal';
   og.insertAdjacentHTML('beforebegin','<div class="fbar reveal" id="optBar"><div class="fbar-group" role="group" aria-label="Filter by type"><span class="fbar-label">Filter by type</span><button type="button" data-of="all" aria-pressed="true">All</button><button type="button" data-of="By train" aria-pressed="false">Train</button><button type="button" data-of="By road" aria-pressed="false">Road</button><button type="button" data-of="Parking" aria-pressed="false">Parking</button></div><div class="fbar-group"><label class="fbar-label" for="optSort">Sort</label><select id="optSort"><option value="rec">Recommended</option><option value="az">A to Z</option><option value="za">Z to A</option></select><button type="button" class="clear" id="optClear">Clear</button></div></div>');
   function renderOpts(){

@@ -2085,15 +2085,6 @@ a.tr-btn:hover i{transform:translateX(3px)}
     </div>
   </section>
 
-  <section class="options" aria-label="Arrival options at a glance">
-    <div class="wrap">
-      <div class="opt-head reveal">
-        <div><h2>Ways to <span class="teal-t">arrive</span></h2></div>
-        <p class="note">This is based on past shows. When I last checked, bus timetables, diversions and parking for 2027 were still to be confirmed.</p>
-      </div>
-      <div class="opt-grid reveal" id="optGrid"></div>
-    </div>
-  </section>
 
   <div class="wrap">
     <div class="acc reveal">
@@ -3787,7 +3778,7 @@ a.tr-btn:hover i{transform:translateX(3px)}
   topics.forEach(function(t){ if(t.g) gname=t.g; else groupOf[t.id]=gname; });
   var OPT_BADGE={'beachy-park':['All day, but expensive','warn'],'beachy-bus':['No parking charge','teal'],'rail':['Easiest way in',''],'bus-brighton':['Scenic route','teal'],'bus-beachy':['Arrive by the lawns','teal'],'car':['Pre-book','warn'],'access':['Accessible','teal']};
   var optItems=items.filter(function(t){return t.opt;}), ost={f:'all',sort:'rec'};
-  var og=document.getElementById('optGrid');
+  var og=document.getElementById('optGrid')||(function(){var w=document.createElement('div'),d=document.createElement('div');w.hidden=true;w.appendChild(d);document.body.appendChild(w);return d;})(); /* Ways to arrive section removed from the page (2 Nov 2026) */
   og.className='cards r2 reveal';
   og.insertAdjacentHTML('beforebegin','<div class="fbar reveal" id="optBar"><div class="fbar-group" role="group" aria-label="Filter by type"><span class="fbar-label">Filter by type</span><button type="button" data-of="all" aria-pressed="true">All</button><button type="button" data-of="By train" aria-pressed="false">Train</button><button type="button" data-of="By bus" aria-pressed="false">Bus</button><button type="button" data-of="By road" aria-pressed="false">Road</button><button type="button" data-of="Beachy Head" aria-pressed="false">Beachy Head</button><button type="button" data-of="Access & taxis" aria-pressed="false">Access</button></div><div class="fbar-group"><label class="fbar-label" for="optSort">Sort</label><select id="optSort"><option value="rec">Recommended</option><option value="az">A to Z</option><option value="za">Z to A</option></select><button type="button" class="clear" id="optClear">Clear</button></div></div>');
   function renderOpts(){
