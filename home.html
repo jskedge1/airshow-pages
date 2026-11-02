@@ -1413,9 +1413,13 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
 
   /* planner */
   document.getElementById('planner').addEventListener('submit',function(e){e.preventDefault();
+    var PAGES={'Royal International Air Tattoo':'riat','RAF Cosford Air Show':'cosfordairshow','Midlands Air Festival':'midlandsairfestival','Airbourne Eastbourne':'eastbourneairshow','Clacton Airshow':'clactonairshow','Wales Airshow':'walesairshow','IWM Duxford Air Shows':'duxfordairshows','Shuttleworth Air Shows':'shuttleworthairshows','Little Gransden Air And Car Show':'little-gransden-air-and-car-show','Southport Air Show':'southport-air-show','Blackpool Air Show':'blackpool-air-show','The International Ayr Show':'international-ayr-show'};
     var g=function(i){return document.getElementById(i).value};var s=g('p-show'),w=g('p-who').toLowerCase(),h=g('p-how').toLowerCase();
     var tip={'car':'Getting there and parking','train and bus':'Trains and buses','camping nearby':'Camping and places to stay'}[h];
-    document.getElementById('result').innerHTML='Your guide is <b>'+s+'</b>. I would suggest starting with <b>'+tip+'</b>, then taking a look at <b>'+(w.indexOf('camera')>-1?'Photography':w.indexOf('access')>-1?'Accessibility':w.indexOf('family')>-1?'Is it right for you':'Plan your day')+'</b>. On the live site this button opens those sections.'});
+    document.getElementById('result').innerHTML='Opening the <b>'+s+'</b> guide. I would suggest starting with <b>'+tip+'</b>, then taking a look at <b>'+(w.indexOf('camera')>-1?'Photography':w.indexOf('access')>-1?'Accessibility':w.indexOf('family')>-1?'Is it right for you':'Plan your day')+'</b>.';
+    /* open the chosen show's page in the whole window, the same way the site's other links do */
+    var a=document.createElement('a');a.href='https://www.ukairshowguide.co.uk/'+(PAGES[s]||'air-shows-guides');a.target='_top';a.rel='noopener';
+    document.body.appendChild(a);setTimeout(function(){a.click();a.remove()},450)});
 
   /* reveal: only things below the first screen start hidden */
   var vh=innerHeight,io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}})},{threshold:.12});
