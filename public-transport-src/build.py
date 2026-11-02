@@ -96,7 +96,7 @@ for f in sorted(glob.glob('bus-routes/*.html')):
 data = []
 for k, name, full, place, slug, intro in SHOWS:
     page = open('camping-layout/%s.html' % k, encoding='utf8').read()
-    tb = re.search(r"t\.id==='([a-z-]+)'\?'(<div class=\"tr-box\">.*?</a></div>)':''", page)
+    tb = re.search(r"\(?t\.id==='([a-z-]+)'(?:\|\|t\.id==='[a-z-]+')*\)?\?'(<div class=\"tr-box\">.*?</a></div>)':''", page)
     train_page = ''
     if tb:
         train_page = re.search(r'ukairshowguide\.co\.uk/([a-z-]+)', tb.group(2)).group(1)

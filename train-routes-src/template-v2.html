@@ -1465,11 +1465,11 @@ var DATA=__DATA__;
     if (!OPC) return null;
     if (OPC[name]) return OPC[name];
     var th = CFG.theme || {};
-    return name === CFG.operator ? { op1: th.op1, navy: th.ui, onui: th.onui, opink: th.opink, opd: th.opd, tint: th.tint, tintln: th.tintln } : null;
+    return name === CFG.operator ? { op1: th.op1, navy: th.ui, onui: th.onui, opink: th.opink, accink: th.accink, opd: th.opd, tint: th.tint, tintln: th.tintln } : null;
   }
   function opVars(name){
     var c = opC(name); if (!c) return '';
-    return '--op1:' + c.op1 + ';--navy:' + c.navy + ';--onui:' + c.onui + ';--opink:' + (c.opink || '#fff') + ';--amber:' + c.op1 + (c.opd ? ';--opd:' + c.opd : '') + (c.tint ? ';--tint:' + c.tint : '') + (c.tintln ? ';--tintln:' + c.tintln : '');
+    return '--op1:' + c.op1 + ';--navy:' + c.navy + ';--onui:' + c.onui + ';--opink:' + (c.opink || '#fff') + ';--accink:' + (c.accink || c.opink || '#fff') + ';--amber:' + c.op1 + (c.opd ? ';--opd:' + c.opd : '') + (c.tint ? ';--tint:' + c.tint : '') + (c.tintln ? ';--tintln:' + c.tintln : '');
   }
   function opStyle(name){ var v = opVars(name); return v ? ' data-op="' + name + '" style="' + v + '"' : ''; }
   function opLine(name){ var c = opC(name); return c ? c.op1 : ((CFG.theme && CFG.theme.op1) || '#00A6E2'); }
@@ -1481,7 +1481,7 @@ var DATA=__DATA__;
   function pageOp(){
     if (!OPC) return;
     var op = hubOp(H()), c = opC(op) || opC(CFG.operator), rs = document.documentElement.style;
-    var v = { op1: c.op1, navy: c.navy, onui: c.onui, opink: c.opink || '#fff', amber: c.op1, opd: c.opd || c.navy, tint: c.tint, tintln: c.tintln };
+    var v = { op1: c.op1, navy: c.navy, onui: c.onui, opink: c.opink || '#fff', accink: c.accink || c.opink || '#fff', amber: c.op1, opd: c.opd || c.navy, tint: c.tint, tintln: c.tintln };
     Object.keys(v).forEach(function(k){ if (v[k]) rs.setProperty('--' + k, v[k]); });
     document.body.setAttribute('data-op', op);
     $('opname').textContent = 'Run by ' + (opC(op) ? op : CFG.operator);
