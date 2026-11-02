@@ -14,7 +14,7 @@ for f in glob.glob('osm/r*.xml'):
 def dist(a,b):
     la=math.radians((a[0]+b[0])/2);return math.hypot((a[0]-b[0])*111.32,(a[1]-b[1])*111.32*math.cos(la))
 cands=[k for k in adj if k in nodes]
-snap={};pos={}
+snap={};pos={};FAR=set()
 for n in NAMES:
     o=osmname(n); p=ST_OSM.get(o) or EXTRA.get(n) or EXTRA.get(o)
     if not p: print('NO POS',n); continue
@@ -22,6 +22,7 @@ for n in NAMES:
     k=min(cands,key=lambda c:dist(nodes[c],p)); snap[n]=k
     d=dist(nodes[k],p)
     if d>0.4: print('far snap',n,round(d,2))
+    if d>1.5: FAR.add(n)
 near={}
 for n,p in pos.items():
     near[n]=[c for c in cands if dist(nodes[c],p)<0.35] or [snap[n]]
@@ -43,8 +44,9 @@ pairs=set(tuple(x) for x in json.load(open('pairs.json')))
 SEG={}
 for a,b in sorted(pairs):
     if (b,a) in SEG or a not in snap or b not in snap: continue
-    p,d=sp(near[a],near[b]); straight=dist(pos[a],pos[b])
-    if p is None or d>straight*1.45+1.5:
+    straight=dist(pos[a],pos[b])
+    p,d=(None,None) if (a in FAR or b in FAR) else sp(near[a],near[b])
+    if p is None or d>straight*1.7+2:
         print('fallback',a,b,None if d is None else round(d,1),round(straight,1)); pts=[tuple(pos[a]),tuple(pos[b])]
     else: pts=[nodes[k] for k in p]
     simp=[pts[0]]

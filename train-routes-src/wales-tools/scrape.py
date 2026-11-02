@@ -42,7 +42,7 @@ for frm, to in [(hub, 'SWA'), ('SWA', hub)]:
     rows = []
     for key, links in journeys(frm, to, date).items():
         ops = re.findall(r'ops\[\]=([^&]+)', key)
-        ga = bool(ops) and len(ops) == key.count('info[]=')
+        ga = bool(ops) and all(o for o in ops) and len(ops) == key.count('info[]=')
         row = {'key': key, 'ops': ops, 'ga': ga, 'stages': []}
         if full and ga:
             for l in links:

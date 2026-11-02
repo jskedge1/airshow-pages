@@ -2,7 +2,7 @@
 and writes hubjourneys.json, allnames.json and pairs.json (station pairs for the map lines)."""
 import json,os
 from parse2 import parse
-HUBS='PAD RDG SWI BPW BRI NWP CDF BGN LLE CMN MAN BHM'.split()
+HUBS=['PAD','RDG','SWI','BPW','BRI','NWP','CDF','BGN','LLE','CMN','MFH','MAN','CTR','SHR','HFD','LLO','BHM','GCR','SOU','EXD']
 DAYS=[tuple(x) for x in json.load(open('dates.json'))]
 def mm(t): return int(t[:2])*60+int(t[3:])
 def gap(a,b):
@@ -14,7 +14,8 @@ def clean(js):
         if not legs: continue
         dep=legs[0]['calls'][0]; arr=legs[-1]['calls'][-1]
         d=dep[2] or dep[1]; a=arr[1]; tot=gap(d,a)
-        if tot>300 or len(legs)>3: continue
+        if tot>330 or len(legs)>3: continue
+        if any(legs[i]['calls'][-1][0]!=legs[i+1]['calls'][0][0] for i in range(len(legs)-1)): continue  # no walks between stations
         if any(gap(legs[i]['calls'][-1][1], legs[i+1]['calls'][0][2] or legs[i+1]['calls'][0][1])>60 for i in range(len(legs)-1)): continue
         out.append((d,a,tot,legs))
     keep=[]

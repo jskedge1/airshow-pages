@@ -1,7 +1,11 @@
 import re
-NICE_FIX={'Telford':'Telford Central','Wellington (Shropshire)':'Wellington','Whitchurch (Shropshire)':'Whitchurch','Newport (South Wales)':'Newport','Wilnecote (Staffs)':'Wilnecote','University (Birmingham)':'University','Pontypool & New Inn':'Pontypool and New Inn','Swindon (Wilts)':'Swindon','Pembrey & Burry Port':'Pembrey and Burry Port'}
+NICE_FIX={'Prestwick (Strathclyde)':'Prestwick Town','Edinburgh':'Edinburgh Waverley','Preston (Lancs)':'Preston','London St Pancras International':'London St Pancras','Earlswood Surrey':'Earlswood','Seaford Sussex':'Seaford'}
 def nice(n):
-    return NICE_FIX.get(n,n)
-EXTRA={}
+    n=NICE_FIX.get(n,n)
+    return re.sub(r'\s*\([^)]*\)','',n) if '(Brighton)' not in n else n
+OSM_FIX={'Edinburgh':'Edinburgh Waverley','Pembrey & Burry Port':'Pembrey and Burry Port','Pontypool & New Inn':'Pontypool and New Inn',
+ 'Goring by Sea':'Goring-by-Sea','Shoreham by Sea':'Shoreham-by-Sea','Durrington':'Durrington-on-Sea','Earlswood Surrey':'Earlswood'}
+EXTRA={'Ash':(51.2496, -0.7128),'Avoncliff':(51.3396, -2.2812),'Bedminster':(51.4401, -2.594),'Blackwater':(51.3317, -0.7768),'Bramley':(51.3301, -1.0612),'Cam & Dursley':(51.7176, -2.3588),'Crowthorne':(51.3667, -0.8195),'Dilton Marsh':(51.249, -2.2077),'Eastleigh':(50.9692, -1.35),'Farnborough North':(51.302, -0.743),'Freshford':(51.342, -2.3009),'Garth':(52.1333, -3.5297),'Guildford':(51.237, -0.58),'Havant':(50.8544, -0.9815),'Highbridge & Burnham':(51.2181, -2.9722),'Johnston':(51.7568, -4.9963),'Keynsham':(51.4176, -2.4955),'Micheldever':(51.1823, -1.2605),'Mortimer':(51.3721, -1.0354),'Nailsea & Backwell':(51.4194, -2.7505),'North Camp':(51.2758, -0.7311),'Oldfield Park':(51.3794, -2.3809),'Parson Street':(51.4334, -2.6075),'Pen Y Bont':(52.2739, -3.3221),'Reading Green Park':(51.4245, -0.9905),'Reading West':(51.4554, -0.9902),'Sandhurst':(51.3466, -0.8045),'Shawford':(51.0222, -1.3279),'St Denys':(50.9223, -1.3876),'Sugar Loaf Halt':(52.0823, -3.687),'Swaythling':(50.9411, -1.3762),'Weston Milton':(51.3485, -2.9425),'Wokingham':(51.4112, -0.8427),'Yate':(51.5406, -2.4325),'Cambuslang':(55.8195,-4.1729),'Cardonald':(55.8526,-4.3405),'Crossmyloof':(55.8340,-4.2846),'Hillington East':(55.8545,-4.3550),'Hillington West':(55.8561,-4.3714),'Kennishead':(55.8132,-4.3253),'Nitshill':(55.8125,-4.3605),'Pollokshaws West':(55.8238,-4.3015),'Priesthill & Darnley':(55.8121,-4.3428),'Penrith':(54.6619,-2.7584),'Coulsdon South':(51.3157,-0.1378),'Merstham':(51.2642,-0.1501),'Selhurst':(51.3919,-0.0882),'Littlehampton':(50.8106,-0.5463),
+ 'Pevensey Bay':(50.8178,0.3434),'Doleham':(50.9186,0.6098),'Bedhampton':(50.8540,-0.9958),'Seaford Sussex':(50.7727,0.1006),'Newhaven Harbour':(50.7894,0.0549)}
 def osmname(n):
-    return n
+    return OSM_FIX.get(n, re.sub(r'\s*\([^)]*\)','',n))

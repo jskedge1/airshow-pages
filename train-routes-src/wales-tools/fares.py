@@ -1,7 +1,7 @@
 import subprocess,re,html,json,time
 F={}
-for h in 'PAD RDG SWI BPW BRI NWP CDF BGN LLE CMN MAN BHM'.split():
-    s=subprocess.run(['curl','-s','--max-time','40','-A','Mozilla/5.0 (planning preview)',f'https://traintimes.org.uk/{h}/SWA/10:00/'+json.load(open('dates.json'))[0][1]],capture_output=True,text=True).stdout
+for h in 'PAD RDG SWI BPW BRI NWP CDF BGN LLE CMN MFH MAN CTR SHR HFD LLO BHM GCR SOU EXD'.split():
+    s=subprocess.run(['curl','-s','--max-time','40','-A','Mozilla/5.0 (planning preview)',f'https://traintimes.org.uk/{h}/SWA/12:30/'+json.load(open('dates.json'))[0][1]],capture_output=True,text=True).stdout
     f={}
     for blk in re.findall(r'<div class="fares slide"><ul>(.*?)</ul>',s,re.S):
         for li in re.findall(r'<li>(.*?)</li>',blk,re.S):

@@ -355,11 +355,10 @@ Added 30 Oct 2026. Same template as Clacton and Eastbourne, in West Midlands Rai
 
 ## Train route page (Wales Airshow, Swansea)
 
-Added 30 Oct 2026. Same template, in Transport for Wales colours (red #D6001C, silver #9EA3A8, charcoal #24272B, no logos). Built like Cosford: all operators where the connection works well (GWR, Transport for Wales, CrossCountry).
-- Twelve stations: London Paddington, Reading, Swindon, Bristol Parkway, Bristol Temple Meads, Newport, Cardiff Central, Bridgend, Llanelli, Carmarthen, Manchester Piccadilly and Birmingham New Street. Saturday and Sunday, each with its own timetable.
-- Times are from Saturday 7 and Sunday 8 November 2026 as a stand in (some Sunday London trains were changed by engineering works that weekend). Refresh with the summer 2027 weekend times when they are out.
-- Refreshing: `train-routes-src/wales-tools/` (scrape.py, journeys.py, build_data.py, fares.py, geo.py; set the dates in dates.json). Map lines come from OpenStreetMap relations (copy the Cosford ones plus those found near the Wales stations, not kept in git).
-- Wix: page /train-to-swansea, hidden from the menu, copy of Train to Clacton, one HTML embed set to the address above, 7100 tall on desktop and 13500 on mobile (tallest measured 7025 and 13467 on 30 Oct 2026). The Wales page (`camping-layout/wales.html`) shows a "Train route details" button in the Train to Swansea topic.
+Rebuilt 2 Nov 2026 in the v2 layout (see "Train route pages in the Blackpool layout"), in Transport for Wales red with charcoal. Covers every main line into Swansea, with any operator where the change works (GWR, Transport for Wales, CrossCountry, South Western Railway, West Midlands Railway, Avanti West Coast); journeys that need a walk between stations are left out.
+- Twenty stations: London Paddington, Reading, Swindon, Bristol Parkway, Bristol Temple Meads, Newport, Cardiff Central, Bridgend, Llanelli, Carmarthen, Milford Haven, Manchester Piccadilly, Chester, Shrewsbury, Hereford, Llandrindod (Heart of Wales line), Birmingham New Street, Gloucester, Southampton Central and Exeter St Davids. Saturday and Sunday, each with its own timetable. Journeys up to 5.5 hours are kept.
+- Times are from Saturday 7 and Sunday 8 November 2026 as a stand in. Refresh with `train-routes-src/wales-tools/update.sh <Saturday date>`, then update the cfg note and fares and run `python3 build.py wales`. Map lines come from the OpenStreetMap relations in `fetch_osm.sh`; a few short stretches (North Downs line, Chester to Crewe, Worcester) are drawn station to station.
+- Wix: page /train-to-swansea, hidden from the menu. The Wales page (`camping-layout/wales.html`) shows a "Train route details" button in the Train to Swansea topic.
 
 ## Train route page (RIAT, with the shuttle bus)
 
@@ -402,7 +401,7 @@ Clacton topic section redesign (31 Oct 2026): `explore-designs.js` re-lays out t
 
 `train-routes-src/template-v2.html` is the train template in the layout of the Blackpool train preview (1 Nov 2026): a matt finish, the route map under the station picker, bigger day, direction and time pickers with a Show all times button, Your way in (way in card with Journey, Train times and Tips tabs, roundel steps, last way home strip, next trains board, Check before you go, Add to my plan, Show on map, Buy tickets), My travel plan (My day line and a checklist), the Full show guide button, Pay less to get there (the fare from the picked station, then the show's own cards) and Good to know (questions and the disability and buggy box). It is built by `python3 make_v2.py` from template.html plus the parts in `v2-parts/`, so fixes to template.html carry over; run make_v2.py again after changing either. A cfg picks it with `"template": "template-v2.html"`; the other train pages stay on template.html.
 New cfg fields for v2: `theme.opd` (a darker shade of the company colour), `x.walkShort`, `x.walkFrom`, `x.walkTo` (Google Maps walking directions), `x.atShow`, `x.tipArrive`, `x.ptxFacts`, `x.opSites` (ticket site per company), `x.checks` (the plan checklist), `x.dayDefaults` (default train per day, there and back), `pay` ([title, text, tag, icon] with icon ticket, clock or card), `faq` ([question, answer]) and `access` ([intro, [points]]). Data trips carry `ops`, the company for each train in the journey.
-Pages on v2: Eastbourne (Southern green) and Ayr.
+Pages on v2: Eastbourne (Southern green), Ayr and Wales (Swansea).
 From the Headcorn page (2 Nov 2026): the Departures and Arrivals switch and See every time are ring tabs (`v2-parts/ring-tabs.css`), and the departure tiles, planning slip and the show's timetable row take a light tint of the company colour (`v2-parts/tints.css`, cfg `theme.tint` and `theme.tintln`). The map leaves 120 px clear on the right on desktop.
 
 ## Train route page (Ayr)

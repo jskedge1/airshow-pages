@@ -2356,6 +2356,7 @@ var DATA=__DATA__;
     var g = $('paygrid'); if (!g) return;
     var f = (CFG.fares || {})[h.code] || {}, op = f['Off-Peak Day Return'], sop = f['Super Off-Peak Day Return'], any = f['Anytime Day Return'];
     var fare = op ? 'When I last checked, an off-peak day return from ' + h.name + ' to ' + X.destShort + ' was ' + money(op) + (sop && sop < op ? ', or ' + money(sop) + ' super off-peak' : '') + (any && any > op ? '. An anytime day return was ' + money(any) : '') + '.'
+      : any ? 'When I last checked, an anytime day return from ' + h.name + ' to ' + X.destShort + ' was ' + money(any) + '. Off peak and Advance tickets can be cheaper, so I would check the times before you buy.'
       : 'I would check the fare from ' + h.name + ' on the ' + X.opName + ' website before you go, as off-peak tickets can save you a fair bit.';
     var cards = [['Your fare from ' + h.name, fare, 'Fare', 'ticket']].concat(CFG.pay || []);
     g.innerHTML = cards.map(function(c, i){

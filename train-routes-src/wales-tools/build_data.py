@@ -3,11 +3,12 @@ import json,re
 from names import nice as NICE
 J=json.load(open('hubjourneys.json')); G=json.load(open('geo.json'))
 DEST='Swansea'
-HUBS=[('PAD','London Paddington','London'),('RDG','Reading','Reading'),('SWI','Swindon (Wilts)','Swindon'),('BPW','Bristol Parkway','Bristol Parkway'),
-      ('BRI','Bristol Temple Meads','Bristol'),('NWP','Newport (South Wales)','Newport'),('CDF','Cardiff Central','Cardiff'),('BGN','Bridgend','Bridgend'),
-      ('LLE','Llanelli','Llanelli'),('CMN','Carmarthen','Carmarthen'),('MAN','Manchester Piccadilly','Manchester'),('BHM','Birmingham New Street','Birmingham')]
-SHORT={'London Paddington':'Paddington','Birmingham New Street':'Birmingham','Manchester Piccadilly':'Manchester','Cardiff Central':'Cardiff','Bristol Temple Meads':'Temple Meads','Port Talbot Parkway':'Port Talbot','Worcester Foregate Street':'Worcester Foregate St','Worcester Shrub Hill':'Worcester','Pembrey and Burry Port':'Pembrey'}
-BIG={'London Paddington','Reading','Didcot Parkway','Swindon (Wilts)','Bristol Parkway','Bristol Temple Meads','Bath Spa','Chippenham','Severn Tunnel Junction','Newport (South Wales)','Cardiff Central','Bridgend','Port Talbot Parkway','Neath','Swansea','Llanelli','Carmarthen','Manchester Piccadilly','Stockport','Crewe','Shrewsbury','Hereford','Abergavenny','Birmingham New Street','Cheltenham Spa','Gloucester','Worcester Shrub Hill','Great Malvern','Ludlow','Chepstow','Wolverhampton','Stafford'}
+HUBS=[('PAD','London Paddington','London'),('RDG','Reading','Reading'),('SWI','Swindon (Wilts)','Swindon'),('BPW','Bristol Parkway','Bristol Parkway'),('BRI','Bristol Temple Meads','Bristol'),
+      ('NWP','Newport (South Wales)','Newport'),('CDF','Cardiff Central','Cardiff'),('BGN','Bridgend','Bridgend'),('LLE','Llanelli','Llanelli'),('CMN','Carmarthen','Carmarthen'),
+      ('MFH','Milford Haven','Milford Haven'),('MAN','Manchester Piccadilly','Manchester'),('CTR','Chester','Chester'),('SHR','Shrewsbury','Shrewsbury'),('HFD','Hereford','Hereford'),
+      ('LLO','Llandrindod','Llandrindod'),('BHM','Birmingham New Street','Birmingham'),('GCR','Gloucester','Gloucester'),('SOU','Southampton Central','Southampton'),('EXD','Exeter St Davids','Exeter')]
+SHORT={'London Paddington':'Paddington','Bristol Temple Meads':'Bristol TM','Cardiff Central':'Cardiff','Birmingham New Street':'Birmingham','Manchester Piccadilly':'Manchester','Port Talbot Parkway':'Port Talbot','Southampton Central':'Southampton','Exeter St Davids':'Exeter'}
+BIG={'London Paddington','Reading','Swindon (Wilts)','Bristol Parkway','Bristol Temple Meads','Newport (South Wales)','Cardiff Central','Bridgend','Port Talbot Parkway','Neath','Swansea','Llanelli','Carmarthen','Milford Haven','Haverfordwest','Manchester Piccadilly','Crewe','Chester','Shrewsbury','Hereford','Abergavenny','Llandrindod','Llandovery','Birmingham New Street','Gloucester','Cheltenham Spa','Southampton Central','Salisbury','Bath Spa','Westbury','Exeter St Davids','Taunton','Severn Tunnel Junction','Stockport','Wrexham General','Didcot Parkway'}
 DAYS=[('sat','Saturday'),('sun','Sunday')]
 stops=[];SI={}
 def si(n):
@@ -18,7 +19,7 @@ def mm(t): return int(t[:2])*60+int(t[3:])
 def gap(a,b):
     d=mm(b)-mm(a); return d+1440 if d<0 else d
 def tdest(info):
-    d=re.sub(r'.* to ','',info); d=d
+    d=re.sub(r'.* to ','',info).replace('Newport (South Wales)','Newport') if True else ''; d=d.replace('Portsmouth And Southsea','Portsmouth & Southsea').replace('Seaford Sussex','Seaford')
     return d
 def torig(info):
     m=re.search(r' from (.+) to ',info); return m.group(1).replace('Portsmouth And Southsea','Portsmouth & Southsea') if m else ''
@@ -41,7 +42,7 @@ def trip(x,toshow,hubname):
     return {'big':s[0][0],'plat':first[3],'ride':tot,'dest':tdest(l0['info']),
         'calls':[SHORT.get(NICE(c[0]),NICE(c[0])) for c in l0['calls'][1:]],
         'small':('Gets to Swansea at ' if toshow else 'Back in '+hubname+' at ')+s[-1][0],
-        'title':'The '+s[0][0]+' from '+stops[s[0][1]][0],'s':s,'changes':changes,'lorig':torig(legs[-1]['info'])}
+        'title':'The '+s[0][0]+' from '+stops[s[0][1]][0],'s':s,'changes':changes,'ops':[re.match(r'(.+?) from ',lg['info']).group(1).replace('%26','&').replace('LNR & WMR','West Midlands Railway') if re.match(r'(.+?) from ',lg['info']) else '' for lg in legs],'lorig':torig(legs[-1]['info'])}
 def table(trips,toshow,hubfull):
     direct=trips and all(not t['changes'] for t in trips)
     if direct:
@@ -59,10 +60,10 @@ def dirs(code,full,short,dk):
     nice=NICE(full)
     there=[trip(x,True,short) for x in J[code][dk]['there']]; back=[trip(x,False,short) for x in J[code][dk]['back']]
     return [{'label':'To Swansea','trips':there,'tt':table(there,True,full),'from':nice,'note':'Times from '+nice+'. Tap one to see every station on the way.'},
-            {'label':'Back to '+short,'trips':back,'tt':table(back,False,full),'from':DEST,'note':'Times from Swansea. If you’re staying for Afterburn on the Saturday evening, look at the last trains before you settle in.'}]
+            {'label':'Back to '+short,'trips':back,'tt':table(back,False,full),'from':DEST,'note':'Times from Swansea. If Afterburn returns on the Saturday evening, look at the later trains, and allow for the queues after the fireworks.'}]
 hubs=[]
 for code,full,short in HUBS:
-    base=dirs(code,full,short,'sat'); days={}
+    base=dirs(code,full,short,DAYS[0][0]); days={}
     sig=lambda D:json.dumps([[t['big'],t['s'][-1][0],len(t['changes'])] for d in D for t in d['trips']])
     for dk,_ in DAYS[1:]:
         if dk not in J[code]: continue
