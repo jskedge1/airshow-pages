@@ -443,7 +443,7 @@
 
 
   /* Train and bus times as a departures board: one transport tab per timetable, then link tabs to the full route pages */
-  var TRAIN_PAGE = { clactonairshow: 'train-to-clacton', cosfordairshow: 'train-to-cosford', eastbourneairshow: 'train-to-eastbourne', riat: 'train-to-riat', walesairshow: 'train-to-swansea' };
+  var TRAIN_PAGE = { clactonairshow: 'train-to-clacton', cosfordairshow: 'train-to-cosford', eastbourneairshow: 'train-to-eastbourne', riat: 'train-to-riat', walesairshow: 'train-to-swansea', duxfordairshows: 'train-to-duxford', shuttleworthairshows: 'train-to-shuttleworth', 'headcorn-air-show': 'train-to-headcorn', 'international-ayr-show': 'train-to-ayr', 'blackpool-air-show': 'train-to-blackpool', 'southport-air-show': 'train-to-southport', midlandsairfestival: 'train-to-midlands', 'little-gransden-air-and-car-show': 'train-to-little-gransden' };
   function showSlug() {
     var c = document.querySelector('link[rel="canonical"]');
     var m = c && c.href.match(/ukairshowguide\.co\.uk\/([^\/?#]+)/);
