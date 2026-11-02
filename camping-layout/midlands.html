@@ -394,6 +394,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route{list-style:none;display:grid;gap:4px;margin:var(--gap) 0 0}
 .route li{display:grid;grid-template-columns:46px 1fr;background:rgba(255,255,255,.06)}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
 .route li > div{padding:12px 16px}
@@ -3681,7 +3682,25 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       arrive:'You might want to wear comfortable shoes, and allow time for the walk before the gates open.',
       walk:'After Nightfire it’s a long walk in the dark, so I think a torch is a must.',
       meta:[['Distance','About 1.5 miles'],['Entry','Main entrance']],off:SW_OFF,
-      opt:['On foot','About 1.5 miles from the main entrance to the house.']}
+      opt:['On foot','About 1.5 miles from the main entrance to the house.']},
+    {g:'By coach'},
+    {id:'nx-coach',name:'National Express coaches',sub:'Into Birmingham, then train and bus',title:'Coach to Birmingham, then on to Ragley',
+      text:'No coach comes out to Ragley. You can take a National Express coach into Birmingham Coach Station, though, and finish with the train to Redditch and the Diamond 247 bus. Coaches come into Birmingham from all over the country.',
+      place:'Birmingham Coach Station, Digbeth, Birmingham',
+      route:[['coach','National Express to Birmingham Coach Station','Lots of routes finish or call at Digbeth. Book in advance with National Express.'],
+             ['walk','Walk to Birmingham New Street','About 15 to 20 minutes through the city centre.',[['Walking directions','Birmingham Coach Station, Digbeth','Birmingham New Street station']]],
+             ['train','West Midlands Railway to Redditch','The Cross City line to Redditch, the end of the line.'],
+             ['bus','Diamond 247 to Ragley Hall','It stops right by the main entrance. The Diamond 247 topic has the details.']],
+      warn:'The 247 has no Sunday service and only three buses each way on a Saturday in the current timetable. On a Sunday I would book a taxi from Redditch instead.',
+      arrive:'It’s about 1.5 miles from the main entrance to the house, so wear comfortable shoes.',
+      walk:'The last 247 back passes Ragley at about 18:00, well before Nightfire. If you’re staying late, book a taxi back to Redditch and check the last train into Birmingham.',
+      meta:[['Coach to','Birmingham Coach Station'],['Then','Train to Redditch, 247 bus']],off:['National Express','https://www.nationalexpress.com']},
+    {id:'coach',name:'Coach groups',sub:'Welcome for the day',title:'Coming as a coach group',
+      text:'Coaches and motorhomes are both welcome for the day. They can’t stay overnight in the car park, though.',
+      place:'Ragley Hall main entrance, Alcester',
+      arrive:'If you’re organising a group, I would contact the festival before the day to ask where the coach should drop off and park.',
+      walk:'I would agree a pick up time with your group, as phone signal can be poor in big crowds.',
+      meta:[['Coaches','Welcome for the day'],['Overnight','Not allowed']],off:SW_OFF}
   ];
 
   var pl=document.getElementById('parkList'), pd=document.getElementById('parkDetail');
@@ -3696,7 +3715,7 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('midlands',t.id):'')
       +(t.id==='rail-red'?'<div class="tr-box"><h4>Train route map</h4><p>Pick your station, see every train to Redditch with live times, any changes and which 247 bus you can catch to Ragley Hall.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-midlands" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#3C1053"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#E8891C"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>Trains to Redditch and the 247 bus</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive'}[r[0]];
+          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive',coach:'Coach'}[r[0]];
           return '<li class="r-'+(r[0]==='car'?'bus':r[0])+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p></div></li>';
         }).join('')+'</ol>':'')
       +(t.areas?'<div class="areas"><h4>'+esc(t.areasTitle||'Details')+'</h4>'+t.areas.map(function(a){return '<div><span>'+esc(a[0])+'</span><b>'+a[1]+'</b></div>';}).join('')+'</div>':'')

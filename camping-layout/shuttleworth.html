@@ -394,6 +394,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route{list-style:none;display:grid;gap:4px;margin:var(--gap) 0 0}
 .route li{display:grid;grid-template-columns:46px 1fr;background:rgba(255,255,255,.06)}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
 .route li > div{padding:12px 16px}
@@ -3801,6 +3802,17 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       walk:'For most people I think the train and shuttle bus is the easier option.',
       meta:[['Route','74'],['Operator','Grant Palmer'],['Sundays','No service']],off:['Route 74 timetable','https://www.centralbedfordshire.gov.uk/bus-timetables/route-74-grant-palmer'],
       opt:['Bus · route 74','Monday to Saturday to Ickwell, then a walk. No Sunday service.']},
+    {g:'By coach'},
+    {id:'nx-coach',name:'National Express coaches',sub:'Into Cambridge, then train and shuttle',title:'Coach to Cambridge, then the train and the shuttle bus',
+      text:'There’s no coach to Old Warden, so you’ll need to change. The way I would do it is a National Express coach into Cambridge, the train to Biggleswade, then Shuttleworth’s own shuttle bus to the gate.',
+      place:'Parkside, Cambridge CB1 1JE',
+      route:[['coach','National Express to Cambridge Parkside','The 491 from London Victoria, the 777 from Birmingham, the 727 and 728 from Heathrow, Stansted and Norwich, and the 786 from Luton Airport. Book in advance.'],
+             ['walk','Walk to Cambridge station','About 20 minutes from Parkside.',[['Walking directions','Parkside, Cambridge','Cambridge railway station']]],
+             ['train','Train to Biggleswade, changing at Hitchin','Great Northern or Thameslink to Hitchin, then Thameslink north to Biggleswade.'],
+             ['bus','Shuttleworth shuttle bus','£10 return, booked with your show tickets. The times are in the Train and Shuttleworth shuttle bus topic.']],
+      arrive:'From the Midlands and the north, you could take a coach to Milton Keynes Coachway instead, then the Stagecoach X5 to Bedford and the Grant Palmer 74 to Ickwell on a Saturday. That way ends with a walk along the lanes, so for most people I think Cambridge is easier.',
+      walk:'I would pick a return shuttle that leaves time for the train and the walk back to Parkside before your coach.',
+      meta:[['Coach to','Cambridge Parkside'],['Then','Train to Biggleswade, shuttle']],off:['National Express','https://www.nationalexpress.com']},
     {g:'Taxis'},
     {id:'taxi-local',name:'Local taxi firms',sub:'Biggleswade, Sandy and Bedford',title:'Local taxi firms',
       text:'I would book your taxi there and back before the show, especially for the return trip, as local firms get very busy when the shows finish.',
@@ -3833,7 +3845,7 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('shuttleworth',t.id):'')
       +((t.id==='rail-shuttle'||t.id==='rail-big')?'<div class="tr-box"><h4>Train route map</h4><p>Pick your station, see every train with live times, any changes and the line it takes to Biggleswade, on a Saturday or a Sunday.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-shuttleworth" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#2A1027"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#DA4290"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>Thameslink trains to Biggleswade</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive'}[r[0]];
+          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive',coach:'Coach'}[r[0]];
           return '<li class="r-'+(r[0]==='car'?'bus':r[0])+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p></div></li>';
         }).join('')+'</ol>':'')
       +(t.areas?'<div class="areas"><h4>'+esc(t.areasTitle||'Details')+'</h4>'+t.areas.map(function(a){return '<div><span>'+esc(a[0])+'</span><b>'+a[1]+'</b></div>';}).join('')+'</div>':'')

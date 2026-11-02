@@ -394,6 +394,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route{list-style:none;display:grid;gap:4px;margin:var(--gap) 0 0}
 .route li{display:grid;grid-template-columns:46px 1fr;background:rgba(255,255,255,.06)}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
 .route li > div{padding:12px 16px}
@@ -3409,6 +3410,23 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Lancaster, Spitfire
       areas:[['Newton-on-Ayr','North of the river, about 1.5 miles from the Low Green'],['Prestwick Town','About 3 miles north'],['Prestwick International Airport','About 4 miles north, with its own station']],
       arrive:'This will work well if you are staying in Prestwick. I would advise staying on the train to Ayr rather than walking from Newton-on-Ayr with young children.',
       meta:[['Trains','About every 30 minutes'],['Closest','Ayr station']],off:OFFICIAL.rail},
+    {g:'By coach'},
+    {id:'nx-coach',name:'Coaches to Glasgow',sub:'Then the X77 to Ayr',title:'Coach to Glasgow, then the X77 to Ayr',
+      text:'Long distance coaches don’t run through to Ayr, so I would take one into Glasgow Buchanan Bus Station and change onto the Stagecoach X77, which leaves from the same bus station. National Express runs to Glasgow from London, Birmingham, Manchester and Preston, and Megabus and Scottish Citylink come in from all over.',
+      place:'Buchanan Bus Station, Glasgow',
+      route:[['coach','Coach to Glasgow Buchanan','National Express 590 and 595 from London, and the 181 from Birmingham, Manchester and Preston. Book in advance.'],
+             ['bus','Stagecoach X77 to Ayr','Every 20 to 30 minutes, taking about an hour via Prestwick Airport. The Buses into Ayr topic has the details.'],
+             ['stop','Get off at Ayr bus station','On Sandgate, about 0.4 miles from the Low Green.'],
+             ['walk','Walk to the Low Green','About 10 minutes down to the seafront.',[['Walking directions','Ayr bus station, Sandgate','Low Green, Ayr KA7 2UP']]]],
+      arrive:'From Buchanan it’s also about 10 minutes’ walk to Glasgow Central for the ScotRail train to Ayr, which is a little quicker if it suits your times.',
+      walk:'The X77 back to Glasgow runs into the late evening. I would leave a good gap before your coach home, as the roads out of Ayr are slow after the show.',
+      meta:[['Coach to','Glasgow Buchanan'],['Then','Stagecoach X77']],off:['National Express','https://www.nationalexpress.com']},
+    {id:'coach',name:'Coach groups',sub:'Riverside Sports Arena, booked',title:'Coming as a coach group',
+      text:'In 2026 coaches parked at the Riverside Sports Arena, booked in advance. There was no overnight parking.',
+      place:'Riverside Sports Arena, Ayr',
+      arrive:'This was the 2026 arrangement, so I would check with the show organisers for 2027 and book early.',
+      walk:'I would agree a pick up time with your group, as phone signal can be poor in big crowds.',
+      meta:[['Coach parking','Booked (2026)'],['Overnight','Not allowed']],off:OFFICIAL.parking},
     {g:'By road'},
     {id:'car',name:'Driving to Ayr',sub:'M77, then the A77 from Glasgow',title:'Driving to Ayr',
       text:'From Glasgow, take the M77 south. At junction 8 near Fenwick the motorway becomes the A77, which carries on past Kilmarnock and Prestwick to Ayr. You can expect heavy traffic on the A77, A78 and A737 on show days, so I would allow plenty of time and follow the signs for your booked car park rather than heading for the seafront.',
@@ -3496,7 +3514,7 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Lancaster, Spitfire
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('ayr',t.id):'')
       +(t.id==='rail'?'<div class="tr-box"><h4>Train route map</h4><p>Pick your station, see every train with live times, any changes and the line it takes to Ayr, on both show days.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-ayr" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#0F2147"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#BBC2DB"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>ScotRail and connections</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train'}[r[0]];
+          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train',coach:'Coach'}[r[0]];
           var links=(r[3]||[]).map(function(l){return '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(l[1])+'&destination='+encodeURIComponent(l[2])+'&travelmode=walking">'+esc(l[0])+' ↗</a>';}).join('');
           return '<li class="r-'+r[0]+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p>'+(links?'<div class="r-links">'+links+'</div>':'')+'</div></li>';
         }).join('')+'</ol>':'')

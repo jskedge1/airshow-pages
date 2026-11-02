@@ -394,6 +394,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route{list-style:none;display:grid;gap:4px;margin:var(--gap) 0 0}
 .route li{display:grid;grid-template-columns:46px 1fr;background:rgba(255,255,255,.06)}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
 .route li > div{padding:12px 16px}
@@ -3433,6 +3434,16 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Dakota, Spitfire an
       arrive:'This will work well if you are staying near the Pleasure Beach. I would allow for a long walk, or take the tram to Manchester Square and walk north along the prom.',
       walk:'With only one train an hour, or one every two hours on Sundays, it’s worth checking the times back before the flying finishes so you don’t miss it in the crowds.',
       meta:[['Trains','Hourly Saturdays, two hourly Sundays'],['Distance','About 1.5 to 2 miles']],off:OFFICIAL.rail},
+    {g:'By coach'},
+    {id:'nx-coach',name:'National Express coaches',sub:'Straight into Blackpool',title:'National Express coaches to Blackpool',
+      text:'Blackpool is one of the few shows with a coach right into town. National Express coaches stop at the coach station on Central Drive, about 10 minutes’ walk from the Tower and Central Pier.',
+      place:'Blackpool Central Coach Station, Central Drive, Blackpool',
+      route:[['coach','National Express 121 or 424','The 121 runs from Birmingham via Manchester Airport and Manchester. The 424 is the overnight coach from London, calling at Birmingham, Manchester, Bolton and Preston.'],
+             ['stop','Get off at Blackpool coach station','On Central Drive, by the Central car park.'],
+             ['walk','Walk to the promenade','Head down to the prom between the Tower and Central Pier.',[['Walking directions','Blackpool Central Coach Station','Central Pier, Blackpool']]]],
+      arrive:'In the current timetable the 121 gets in from Birmingham at about 08:45 and 11:35, and the overnight 424 from London at about 07:50. That gives you plenty of time to save a front row spot.',
+      walk:'When I last checked, the last 121 back towards Manchester and Birmingham left at about 19:55, and the 424 to London at about 22:00. I would check the 2027 times before you book.',
+      meta:[['Coach','National Express 121, 424'],['Walk','About 10 minutes']],off:['National Express','https://www.nationalexpress.com']},
     {g:'By road'},
     {id:'car',name:'Driving and parking',sub:'M6 junction 32, then the M55',title:'Driving to Blackpool',
       text:'Leave the M6 at junction 32 and follow the M55 west to its end. It runs almost to the beach and feeds straight onto Yeadon Way and the big town centre car parks. For the Tower area use the postcode FY1 4BJ, but once you are in town, follow the car park signs, as the promenade itself is closed on show days.',
@@ -3521,7 +3532,7 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Dakota, Spitfire an
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('blackpool',t.id):'')
       +(t.id==='rail'?'<div class="tr-box"><h4>Train route map</h4><p>Pick your station, see every train with live times, the platforms, any changes at Preston and the line it takes to Blackpool, on both show days.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-blackpool" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#004354"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#FF7A00"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>Avanti and Northern trains</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train'}[r[0]];
+          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train',coach:'Coach'}[r[0]];
           var links=(r[3]||[]).map(function(l){return '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(l[1])+'&destination='+encodeURIComponent(l[2])+'&travelmode=walking">'+esc(l[0])+' ↗</a>';}).join('');
           return '<li class="r-'+r[0]+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p>'+(links?'<div class="r-links">'+links+'</div>':'')+'</div></li>';
         }).join('')+'</ol>':'')

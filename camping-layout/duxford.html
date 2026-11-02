@@ -394,6 +394,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route{list-style:none;display:grid;gap:4px;margin:var(--gap) 0 0}
 .route li{display:grid;grid-template-columns:46px 1fr;background:rgba(255,255,255,.06)}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
 .route li > div{padding:12px 16px}
@@ -3918,6 +3919,18 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       walk:'If there’s no bus late enough, I would book a taxi for the journey home.',
       meta:[['Routes','132, 7A'],['Sundays','132 only']],off:['IWM: getting to Duxford by bus','https://www.iwm.org.uk/visits/iwm-duxford/getting-here'],
       opt:['Bus · local routes','Limited local services, mostly on weekdays, so please check times before you travel.']},
+    {g:'By coach'},
+    {id:'nx-coach',name:'National Express coaches',sub:'Into Cambridge, then the free shuttle',title:'Coach to Cambridge, then the Air Show shuttle',
+      text:'National Express runs into Cambridge Parkside from London, Stansted, Heathrow, Birmingham, Norwich and Luton Airport. For the Summer Air Show and the Battle of Britain Air Show you can then pick up the free Air Show shuttle. Handy if you’d rather not sit in the M11 queues.',
+      place:'Parkside, Cambridge CB1 1JE',
+      route:[['coach','National Express to Cambridge Parkside','The 491 from London Victoria, the 777 from Birmingham and Coventry, the 727 and 728 from Heathrow, Stansted and Norwich, and the 786 from Luton Airport. Book in advance.'],
+             ['stop','Or get off at Trumpington Park and Ride','The 727 and 728 also call here, and the free shuttle runs from it on the big Air Show days. That saves the walk across Cambridge.'],
+             ['walk','From Parkside, walk to Cambridge station','About 20 minutes to the bus interchange outside the station.',[['Walking directions','Parkside, Cambridge','Cambridge railway station']]],
+             ['bus','Free Air Show shuttle from stand 5','About 30 minutes to IWM Duxford. The times are in the Train and free Air Show shuttle topic.']],
+      warn:'The free shuttle only runs for the two big Air Shows. For the Flying Days, Flying Evening and Flying Finale I would look at the 132 bus or a taxi from Cambridge instead.',
+      arrive:'I would pick a coach that gets you into Cambridge well before the last shuttle out. Coaches can be held up on the M11 on a summer Saturday, so give yourself some slack.',
+      walk:'In 2026 the last shuttle back left Duxford at 18:30. I would book a coach home that leaves time to get back into the city and grab some food.',
+      meta:[['Coach to','Cambridge Parkside'],['Then','Free shuttle, big Air Shows']],off:['National Express','https://www.nationalexpress.com']},
     {g:'Taxis'},
     {id:'taxi-local',name:'Local taxi firms',sub:'Cambridge and the Shelfords',title:'Local taxi firms',
       text:'Taxis are useful from Whittlesford Parkway, Royston or Cambridge. I would book your taxi there and back before the show, especially for the return trip, as firms get very busy when the shows finish.',
@@ -3950,7 +3963,7 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('duxford',t.id):'')
       +(t.id==='rail-shuttle'?'<div class="tr-box"><h4>Train route map</h4><p>Pick your station, see every train into Cambridge with live times, any changes, and the free Air Show shuttle you\u2019re likely to catch.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-duxford" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#2E3236"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#F4C21B"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>Greater Anglia and every train into Cambridge</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive'}[r[0]];
+          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive',coach:'Coach'}[r[0]];
           return '<li class="r-'+(r[0]==='car'?'bus':r[0])+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p></div></li>';
         }).join('')+'</ol>':'')
       +(t.areas?'<div class="areas"><h4>'+esc(t.areasTitle||'Details')+'</h4>'+t.areas.map(function(a){return '<div><span>'+esc(a[0])+'</span><b>'+a[1]+'</b></div>';}).join('')+'</div>':'')

@@ -396,6 +396,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route{list-style:none;display:grid;gap:4px;margin:var(--gap) 0 0}
 .route li{display:grid;grid-template-columns:46px 1fr;background:rgba(255,255,255,.06)}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
 .route li > div{padding:12px 16px}
@@ -3470,6 +3471,16 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
       walk:'Buses fill up after the flying, so I would allow extra time, or stay in town for something to eat first.',
       meta:[['Fare','Free at weekends (2026)'],['Late buses','Saturday evening']],off:OFFICIAL.bus,
       opt:['Bus','Free at weekends in summer 2026, with late buses after the evening show.']},
+    {g:'By coach'},
+    {id:'nx-coach',name:'National Express coaches',sub:'Straight into Swansea bus station',title:'National Express coaches to Swansea',
+      text:'Swansea has coaches right into the city. National Express runs to Swansea bus station from London, Heathrow, Gatwick, Bristol, Cardiff and Birmingham, and it’s only a short walk from there to the seafront.',
+      place:'Swansea bus station',
+      route:[['coach','National Express to Swansea bus station','The 507 and 508 from London Victoria, the 201 and 202 from Gatwick, Heathrow and Bristol, and the 111 from Birmingham. Book in advance.'],
+             ['stop','Get off at Swansea bus station','Plymouth Street, in the city centre.'],
+             ['walk','Walk to the promenade','About 10 to 15 minutes down to the Civic Centre and the seafront.',[['Walking directions','Swansea bus station','Swansea Civic Centre, Oystermouth Road']]]],
+      arrive:'The seafront roads close on Airshow weekend, so I would aim to arrive in good time and check for diversions around the bus station.',
+      walk:'Coaches home get booked up, so I would book your seat back in advance and allow for the crowds leaving the seafront.',
+      meta:[['Coach','National Express'],['Walk','10 to 15 minutes']],off:['National Express','https://www.nationalexpress.com']},
     {g:'By road'},
     {id:'car',name:'Driving to Swansea',sub:'Main roads and event car parks',title:'Driving to Swansea',
       text:'Oystermouth Road and Mumbles Road close for the show, so I would suggest the Park and Ride or one of the official event car parks. Some can be booked ahead through the airshow website, with a booking fee.',
@@ -3526,7 +3537,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('wales',t.id):'')
       +(t.id==='rail'?'<div class="tr-box"><h4>Train route map</h4><p>Pick your station, see every train with live times, the platforms, any changes and the line it takes to Swansea, on both show days.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-swansea" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#9EA3A8"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#F4C21B"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>Transport for Wales, GWR and connections</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train'}[r[0]];
+          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train',coach:'Coach'}[r[0]];
           var links=(r[3]||[]).map(function(l){return '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(l[1])+'&destination='+encodeURIComponent(l[2])+'&travelmode=walking">'+esc(l[0])+' ↗</a>';}).join('');
           return '<li class="r-'+r[0]+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p>'+(links?'<div class="r-links">'+links+'</div>':'')+'</div></li>';
         }).join('')+'</ol>':'')

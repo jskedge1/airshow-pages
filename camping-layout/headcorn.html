@@ -394,6 +394,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route{list-style:none;display:grid;gap:4px;margin:var(--gap) 0 0}
 .route li{display:grid;grid-template-columns:46px 1fr;background:rgba(255,255,255,.06)}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
 .route li > div{padding:12px 16px}
@@ -3828,6 +3829,17 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       walk:'If there isn’t a bus late enough, you might want to book a taxi for the journey home.',
       meta:[['Stop','Aerodrome, A274'],['Route','12, Arriva']],off:['Arriva: bus 12','https://www.arrivabus.co.uk/services/AKS_MD_12'],
       opt:['Bus · route 12','Maidstone to Tenterden through Headcorn, with an Aerodrome stop.']},
+    {g:'By coach'},
+    {id:'nx-coach',name:'Coaches into London',sub:'Then Southeastern to Headcorn',title:'Coach to London, then the train to Headcorn',
+      text:'I couldn’t find a regular coach into Maidstone or Headcorn. If you’re coming from further afield by coach, I would come into London Victoria and take the Southeastern train from there. This may suit you if the coach to London is a lot cheaper than the train from home.',
+      place:'Victoria Coach Station, London',
+      route:[['coach','Coach to London Victoria','National Express, Megabus and FlixBus all run into Victoria Coach Station from right across the country.'],
+             ['train','Tube to Charing Cross or London Bridge','Take the District or Circle line from Victoria to Embankment, a short walk from Charing Cross.'],
+             ['train','Southeastern to Headcorn','About an hour, calling at London Bridge, Tonbridge and Paddock Wood. The Headcorn station topic has the details.'],
+             ['walk','Taxi, bus or walk to the aerodrome','About 1.5 miles. There’s a taxi rank at the station, and the 12 bus stops at the Aerodrome.']],
+      arrive:'Coaches into Victoria can run late, so I would leave at least an hour before your train.',
+      walk:'I would check the last coach home from Victoria before you set off, and allow for the train back into London.',
+      meta:[['Coach to','London Victoria'],['Then','Southeastern to Headcorn']],off:['National Express','https://www.nationalexpress.com']},
     {g:'Taxis'},
     {id:'taxi-local',name:'MTC Taxis, Headcorn',sub:'01622 890003, rank at the station',title:'Taxis',
       text:'MTC Taxis work from the rank at Headcorn station, and the airfield is about 5 minutes away. Call 01622 890003. I would advise booking your return taxi before the day, as the rank can empty when the show finishes.',
@@ -3856,7 +3868,7 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('headcorn',t.id):'')
       +(t.id==='rail-headcorn'?'<div class="tr-box"><h4>Train route map</h4><p>Pick your station, see every train with live times, any changes and the line it takes to Headcorn, on both show days.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-headcorn" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#1E1E50"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#FFC72C"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>Southeastern trains only</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive'}[r[0]];
+          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive',coach:'Coach'}[r[0]];
           return '<li class="r-'+(r[0]==='car'?'bus':r[0])+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p></div></li>';
         }).join('')+'</ol>':'')
       +(t.areas?'<div class="areas"><h4>'+esc(t.areasTitle||'Details')+'</h4>'+t.areas.map(function(a){return '<div><span>'+esc(a[0])+'</span><b>'+a[1]+'</b></div>';}).join('')+'</div>':'')

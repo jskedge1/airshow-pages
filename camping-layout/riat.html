@@ -400,6 +400,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route{list-style:none;display:grid;gap:4px;margin:var(--gap) 0 0}
 .route li{display:grid;grid-template-columns:46px 1fr;background:rgba(255,255,255,.06)}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
 .route li > div{padding:12px 16px}
@@ -3379,6 +3380,17 @@ window.PHOTO_ALT={"formation": "Bristol Blenheim K6183 trailing smoke", "bbmf": 
       arrive:'I would pre-book a taxi from Kemble, as local firms are small and very busy on show weekend.',
       walk:'Agreeing a pick-up time at South Cerney for the return will save you a lot of hassle.',
       meta:[['Shuttle','None'],['Operator','GWR']],off:OFFICIAL.gwr},
+    {g:'By coach'},
+    {id:'nx-coach',name:'National Express coaches',sub:'Into Swindon, then the free shuttle',title:'Coach to Swindon, then the Swindon Shuttle',
+      text:'National Express coaches stop on Fleming Way in Swindon, at the same Bus Interchange the free Swindon Shuttle leaves from. The 401 comes from London Victoria and Heathrow, and the 444 runs through from Gloucester, Cheltenham and Cirencester. This might work for you if you’re flying in or coming from London and don’t want to drive.',
+      place:'Swindon Bus Interchange, Fleming Way, Swindon SN1 1DW',
+      route:[['coach','National Express 401 or 444 to Swindon','The 401 runs from London Victoria via Heathrow. I would book in advance with National Express, as summer weekends sell out.'],
+             ['stop','Get off at Fleming Way, Stop N1','This is on the Bus Interchange, a short walk from Stop N, where the shuttle leaves.'],
+             ['bus','Free Swindon Shuttle to the Yellow entry','About 30 minutes. You pre book it by choosing “Air Tattoo with Swindon Shuttle Bus” when you buy your show tickets. The times are in the Train to Swindon topic.']],
+      warn:'In the current timetable the first coach from London gets into Swindon just before midday, and the shuttle stops running out to the show at 12:00. That’s far too tight.',
+      arrive:'I would advise coming in the day before and staying over in Swindon, then taking an early shuttle in the morning. The 2027 coach times won’t be out until the spring, so I would check them again before you book.',
+      walk:'Shuttles back start at 14:00. When I last checked, the last coach from Swindon to London left at about 20:35, so leave yourself a good gap for the exit queues.',
+      meta:[['Coach','National Express 401, 444'],['Stop','Fleming Way, Stop N1'],['Then','Free shuttle, pre booked']],off:['National Express','https://www.nationalexpress.com']},
     {g:'Taxis & buses'},
     {id:'taxi',name:'Taxis and lifts',sub:'Drop-off at South Cerney',title:'Taxis, lifts and drop-off',
       text:'Taxis and lifts can&rsquo;t drop off or collect at the showground because of the one way system. I would use the South Cerney Fast Track Park &amp; Ride as your drop off and pick up point, then take the free bus in.',
@@ -3418,7 +3430,7 @@ window.PHOTO_ALT={"formation": "Bristol Blenheim K6183 trailing smoke", "bbmf": 
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('riat',t.id):'')
       +(t.id==='rail'?'<div class="tr-box"><h4>Train, shuttle and Park and Ride planner</h4><p>Pick your way in, the Swindon Shuttle, the Cheltenham Park and Ride or the South Cerney Fast Track from Kemble. Then see every train with live times and the bus you’re likely to catch to the Yellow entry, any day of the week.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-riat" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#0E2B24"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#F7C51E"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>Trains plus the shuttle and Park and Ride buses</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train'}[r[0]];
+          var lbl={car:'Park',walk:'Walk',bus:'Bus',stop:'Get off',train:'Train',coach:'Coach'}[r[0]];
           var links=(r[3]||[]).map(function(l){return '<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(l[1])+'&destination='+encodeURIComponent(l[2])+'&travelmode=walking">'+esc(l[0])+' ↗</a>';}).join('');
           return '<li class="r-'+r[0]+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p>'+(links?'<div class="r-links">'+links+'</div>':'')+'</div></li>';
         }).join('')+'</ol>':'')

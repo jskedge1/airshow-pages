@@ -394,6 +394,7 @@ h3{font-weight:700;font-size:24px;line-height:1.05}
 .route{list-style:none;display:grid;gap:4px;margin:var(--gap) 0 0}
 .route li{display:grid;grid-template-columns:46px 1fr;background:rgba(255,255,255,.06)}
 .route .r-n{display:flex;align-items:center;justify-content:center;font-family:"Barlow",sans-serif;font-weight:800;font-size:22px;background:rgba(255,255,255,.06)}
+.route li.r-coach .r-n{background:#C2255C;color:#fff}
 .route li.r-bus .r-n{background:var(--teal);color:var(--navy-deep)}
 .route li.r-stop .r-n{background:var(--sky);color:var(--navy-deep)}
 .route li > div{padding:12px 16px}
@@ -3715,6 +3716,16 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       walk:'If there’s no bus late enough, I’d book a taxi for the journey home.',
       meta:[['Route','18'],['Sundays','No service found']],off:['Whippet buses','https://www.whippetbus.co.uk'],
       opt:['Bus · local routes','No useful Sunday service. A taxi from the station is the better choice.']},
+    {g:'By coach'},
+    {id:'nx-coach',name:'National Express coaches',sub:'Into Cambridge, then bus or taxi',title:'Coach to Cambridge, then on to the airfield',
+      text:'No coach comes anywhere near the airfield. National Express runs plenty into Cambridge Parkside, though, and from there I would take a taxi, or the Stagecoach 905 to St Neots and a shorter taxi from there.',
+      place:'Parkside, Cambridge CB1 1JE',
+      route:[['coach','National Express to Cambridge Parkside','The 491 from London Victoria, the 777 from Birmingham, the 727 and 728 from Heathrow, Stansted and Norwich, and the 786 from Luton Airport. Book in advance.'],
+             ['bus','Or the 905 to St Neots','Stagecoach 905 runs between Cambridge and Bedford via Cambourne and St Neots, from Drummer Street, a few minutes from Parkside.'],
+             ['car','Taxi to the airfield','About 30 minutes from Cambridge, or 15 to 20 minutes from St Neots. The Local taxi firms topic has the numbers.']],
+      arrive:'Taxis are thin on the ground out here, so I would book the taxi there and back before the day.',
+      walk:'Think about the taxi and the coach home together. I would check the last coach out of Cambridge before you go, and allow for traffic on the A428.',
+      meta:[['Coach to','Cambridge Parkside'],['Then','Taxi, or 905 and taxi']],off:['National Express','https://www.nationalexpress.com']},
     {g:'Taxis'},
     {id:'taxi-local',name:'Local taxi firms',sub:'St Neots and Cambridge',title:'Local taxi firms',
       text:'Taxis are the easiest way from St Neots, Sandy or Cambridge station. You might want to book your taxi there and back before the show, as rural taxis are limited and get busy when the show finishes.',
@@ -3747,7 +3758,7 @@ function swNext(){var t=new Date();t.setHours(0,0,0,0);for(var i=0;i<SW_SHOWS.le
       +((window.UKAG_BR&&window.UKAG_BR.render)?window.UKAG_BR.render('gransden',t.id):'')
       +(t.id==='rail-stneots'?'<div class="tr-box"><h4>Train route map</h4><p>Pick your station, see every train with live times, any changes and the taxi from the station to the airfield.</p><a class="tr-btn" href="https://www.ukairshowguide.co.uk/train-to-little-gransden" target="_top"><span class="tr-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#fff"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#2A1027"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#DA4290"/><path d="M7 15l-2 3M13 15l2 3" stroke="#fff" stroke-width="1.6"/></svg></span><span class="tr-txt">Train route details<small>Trains and the taxi to the show</small></span><i aria-hidden="true">→</i></a></div>':'')
       +(t.route?'<ol class="route">'+t.route.map(function(r,n){
-          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive'}[r[0]];
+          var lbl={walk:'Then',bus:'Bus',stop:'Next',train:'Train',car:'Drive',coach:'Coach'}[r[0]];
           return '<li class="r-'+(r[0]==='car'?'bus':r[0])+'"><span class="r-n">'+(n+1)+'</span><div><span class="r-tag">'+lbl+'</span><b>'+esc(r[1])+'</b><p>'+esc(r[2])+'</p></div></li>';
         }).join('')+'</ol>':'')
       +(t.areas?'<div class="areas"><h4>'+esc(t.areasTitle||'Details')+'</h4>'+t.areas.map(function(a){return '<div><span>'+esc(a[0])+'</span><b>'+a[1]+'</b></div>';}).join('')+'</div>':'')
