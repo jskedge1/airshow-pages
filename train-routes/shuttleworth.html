@@ -1849,7 +1849,7 @@ html,body{background:var(--mist)}
 .ttbtn[aria-expanded="true"]::before{border-color:#fff}
 .ttcase.on{margin-top:0}
 </style>
-<style id="dtl-names">.ptx .dtl li em{overflow-wrap:normal!important;word-break:normal!important;hyphens:none;font-size:11.5px;letter-spacing:-.01em}.ptx .pleg.ga{background:rgb(210,35,42)!important;--lg:rgb(210,35,42)!important}.ptx .steps li.ga{--sc:rgb(210,35,42)!important}.ptx .steps li.ga:before{background:rgb(210,35,42)!important}.ptx .drow .swb{color:#F7A8CE;font-weight:600;font-size:14px;font-family:Barlow,sans-serif}
+<style id="dtl-names">.ptx .dtl li em{overflow-wrap:normal!important;word-break:normal!important;hyphens:none;font-size:11.5px;letter-spacing:-.01em}.ptx .pleg.ga{background:rgb(210,35,42)!important;--lg:rgb(210,35,42)!important}.ptx .pleg.tl{background:rgb(218,66,144)!important;--lg:rgb(218,66,144)!important;color:#fff!important}.ptx .steps li.tl{--sc:rgb(218,66,144)!important}.ptx .steps li.tl:before{background:rgb(218,66,144)!important}.ptx .sb-line.op-TL,.ptx .sb-line.op-GN{--lc:rgb(218,66,144)}.ptx .sb-line.op-LE{--lc:rgb(210,35,42)}.ptx .dcard.op-TL,.ptx .dcard.op-GN{--oc:rgb(218,66,144)!important;--lc:rgb(218,66,144)!important}.ptx .dcard.op-LE{--oc:rgb(210,35,42)!important;--lc:rgb(210,35,42)!important}.ptx .steps li.ga{--sc:rgb(210,35,42)!important}.ptx .steps li.ga:before{background:rgb(210,35,42)!important}.ptx .drow .swb{color:#F7A8CE;font-weight:600;font-size:14px;font-family:Barlow,sans-serif}
 :where(body.op-le) .ptx .drow .swb{color:#F4C21B;font-weight:600;font-size:14px;font-family:Barlow,sans-serif}.ptx .drow.swon{background:rgba(218,66,144,.2)}
 :where(body.op-le) .ptx .drow.swon{background:rgba(210,35,42,.2)}.ptx .drow .tm{font-size:14px;line-height:1.3}.ptx .opt .dtabs[aria-label=Show] button{min-height:38px!important;font-size:14px!important}</style>
 <style id="greater-anglia-when-picked">.hubs button[data-op="LE"] small i{color:#D2232A}.hubs button[data-op="LE"][aria-pressed="true"]{background:#2E3236}.pickctl .dep[data-op="LE"]:hover{box-shadow:inset 0 0 0 2px #D2232A!important}.pickctl .dep[data-op="LE"][aria-pressed="true"]{box-shadow:inset 0 0 0 2px #D2232A,0 10px 20px -14px rgba(0,0,0,.6)!important}.dep[data-op="LE"]{background:#F6EEEE;box-shadow:inset 0 0 0 1px #E3CFCF}.dep[data-op="LE"]::before{border-left-color:#C9A0A2}.dep[data-op="LE"][aria-pressed="true"]{background:#2E3236}.dep[data-op="LE"]:not([aria-pressed="true"]) .cg{color:#B01C22}.hubs button[data-op="TL"] small i{color:#A3175F}</style>
@@ -2875,7 +2875,7 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
     legsOf.forEach(function(l, i){
       var st = step('train', 'Train', esc(l.op) + ' from ' + esc(l.from) + ' to ' + esc(l.to),
         'Leaves at ' + l.dep + ' and gets to ' + esc(l.to) + ' at ' + l.arr + '. ' + (l.stops.length ? 'It calls at ' + esc(names(l.stops)) + '.' : 'It runs non stop between the two.'));
-      html += l.ga ? st.replace('<li class="', '<li class="ga ') : st;
+      html += st.replace('<li class="', l.ga ? '<li class="ga ' : '<li class="tl ');
       if (i < ch.length) html += step('off', 'Change', 'Change at ' + esc(ch[i].at), 'You get in at ' + ch[i].arr + (ch[i].walkTo ? ', walk across the road to ' + esc(ch[i].walkTo) + ', which takes about 5 minutes,' : '') + ' and the ' + ch[i].dep + ' to ' + esc(ch[i].to) + ' leaves ' + ch[i].wait + ' minutes later.' + (ch[i].wait <= 6 ? ' That is a quick change, so sit near the doors.' : ''));
     });
     var last = trip.s[trip.s.length - 1];
@@ -2895,19 +2895,19 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
     }).join('');
     var legChips = [];
     if (!toShow) legChips.push('<span class="pleg walk">' + PI.walk + 'Shuttle or taxi</span>');
-    legList(trip).forEach(function(l){ legChips.push('<span class="pleg' + (l.ga ? ' ga' : '') + '" style="--lg:#DA4290">' + PI.train + esc(l.op) + '</span>'); });
+    legList(trip).forEach(function(l){ legChips.push('<span class="pleg' + (l.ga ? ' ga' : ' tl') + '" style="--lg:#DA4290">' + PI.train + esc(l.op) + '</span>'); });
     if (toShow) legChips.push('<span class="pleg walk">' + PI.walk + 'Shuttle or taxi</span>');
     var tabs = [['j', 'Journey', PI.stop], ['t', 'Train times', PI.any], ['s', 'Shuttle bus', PI.walk], ['p', 'Tips', PI.info]].map(function(x){
       return '<button type="button" role="tab" data-tab="' + x[0] + '" aria-selected="' + (ptxTab === x[0]) + '"><span class="ti">' + x[2] + '</span><span>' + x[1] + '</span><i class="cv" aria-hidden="true">▾</i></button>';
     }).join('');
-    var op0 = OPNAME[trip.ops[0]] || trip.opLabel;
+    var op0code = (trip.legops || trip.ops)[0], op0 = OPNAME[op0code] || trip.opLabel;
     var picked = plan[toShow ? 'out' : 'home'], inPlan = picked && picked.day === D().label && picked.hub === h.name && picked.big === trip.big;
     var site = OPSITE.TL;
 
     var journey = '<p class="lead">' + esc(toShow ? 'Here is how the ' + trip.big + ' from ' + h.name + ' gets you to the show, one step at a time.' : 'Here is how the ' + trip.big + ' from Biggleswade gets you back to ' + h.name + ', one step at a time.') + '</p>' + ptxSteps(trip, toShow)
       + '<div class="sheet sb"><div class="sb-h"><span class="sb-i" aria-hidden="true">i</span><b>Check before you go</b></div>'
       + '<div class="sb-w"><span class="sh-ic">' + PI.walk + '</span>' + esc('Biggleswade station to Shuttleworth, about 3 miles, by the Shuttleworth shuttle bus or a 10 minute taxi') + '</div>'
-      + '<dl class="sb-rows"><div><dt>Lines</dt><dd>' + trip.ops.map(function(o){ return '<span class="sb-line" style="--lc:#DA4290">' + OPNAME[o] + '</span>'; }).join('') + '</dd></div>'
+      + '<dl class="sb-rows"><div><dt>Lines</dt><dd>' + trip.ops.map(function(o){ return '<span class="sb-line op-' + o + '">' + OPNAME[o] + '</span>'; }).join('') + '</dd></div>'
       + '<div><dt>Last train home</dt><dd><b>' + lh.big + ' from Biggleswade' + (lh.ch ? ', with a change' : '') + '</b></dd></div>'
       + '<div><dt>Live times</dt><dd><b>On the board above, and on the National Rail app</b></dd></div></dl></div>';
 
@@ -2929,7 +2929,7 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
       + '<span class="legs">' + legChips.join('<span class="ar" aria-hidden="true">›</span>') + '</span>'
       + '<span class="key"><b>' + hm(trip.ride) + '</b><small>' + (ch.length ? ch.length + (ch.length === 1 ? ' change' : ' changes') : 'Direct') + '</small></span></div>'
       + '<div class="lwh' + (lh.v < 1200 ? ' early' : '') + '"><span class="lw-l">Last way home</span><b>' + lh.big + '</b><span class="lw-s">From Biggleswade to ' + esc(h.name) + ', gets in at ' + lh.arr + '</span></div>'
-      + '<div class="nxt"><div class="dcard has-op" style="--lc:#DA4290;--oc:#DA4290;--oc2:#FFFFFF"><div class="dc-strip"></div><div class="dc-title"><b>' + esc(op0) + '</b><span class="dc-i">' + PI.any + '</span></div>'
+      + '<div class="nxt"><div class="dcard has-op op-' + op0code + '" style="--lc:#DA4290;--oc:#DA4290;--oc2:#FFFFFF"><div class="dc-strip"></div><div class="dc-title"><b>' + esc(op0) + '</b><span class="dc-i">' + PI.any + '</span></div>'
       + '<div class="dc-row"><span class="dc-d"><b>' + esc(first[1]) + '</b><small>' + esc(trip.dest) + '</small></span><span class="dc-t"><b>' + trip.big + '</b><small>' + esc(trip.small) + '</small></span></div><div class="nchips">' + chips + '</div></div></div>'
       + '<div class="ob"><div class="otabs" role="tablist">' + tabs + '</div>'
       + '<div class="pane"' + (ptxTab === 'j' ? '' : ' hidden') + ' data-pane="j">' + journey + '</div>'
