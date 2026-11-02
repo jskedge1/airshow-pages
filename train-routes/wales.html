@@ -604,6 +604,15 @@ html,body{background:var(--mist)}
 .yourstop,.planner,.stage{background:#fff;border:1px solid var(--line);border-top:4px solid var(--op1);border-radius:0}
 .tip{background:#fff;border:1px solid var(--line);border-left:5px solid var(--op1)}
 .gaonly{background:#fff;border:1px solid var(--line);border-left:5px solid var(--op1)}
+/* Winter and summer timetable notice (2 Nov 2026): a plain, visible card at the top of the times section */
+.tnotice{display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;margin:0 0 28px;padding:18px 22px 10px;background:#FFF6DD;border:1px solid #EBCB78;border-left:6px solid #F2B233;border-radius:var(--rad-s,6px);color:#13293C}
+.tnotice .tn-i{width:46px;height:46px;border-radius:50%;background:#F2B233;display:grid;place-items:center}
+.tnotice .tn-i svg{width:26px;height:26px}
+.tnotice h3{font-family:Barlow,sans-serif;font-weight:500;font-size:21px;line-height:1.25;letter-spacing:0;text-transform:none;margin:2px 0 8px;color:#13293C}
+.tnotice p{margin:0 0 10px;font-size:16px;line-height:1.55;color:#2C3D4A}
+.tnotice a{color:#13293C;font-weight:600;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:600px){.tnotice{grid-template-columns:1fr;gap:10px;padding:16px 16px 8px}.tnotice .tn-i{width:40px;height:40px}.tnotice .tn-i svg{width:22px;height:22px}}
+
 .more a{background:#fff;border:1px solid var(--line);border-left:1px solid var(--line);border-top:4px solid var(--op1);font-weight:700;transition:background .25s,color .25s,transform .25s var(--ease)}
 .more a:hover{background:var(--navy);color:#fff;border-color:var(--navy);border-top-color:var(--op1);transform:translateY(-3px)}
 
@@ -1266,6 +1275,16 @@ html,body{background:var(--mist)}
 
 <section class="s" id="times">
   <div class="wrap">
+    <aside class="tnotice rise" id="tnotice" aria-label="Winter and summer timetables">
+      <div class="tn-i" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="#13293C" stroke-width="2"/><path d="M3.5 10h17M8 3v4M16 3v4" fill="none" stroke="#13293C" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="1.6" fill="#13293C"/></svg></div>
+      <div>
+        <h3>These are this winter’s train times</h3>
+        <p>Train companies change their timetables twice a year, and the summer one is not the same as the winter one. Some trains run at different times, and a few get added or taken away. A change that works well now may not work in summer.</p>
+        <p>Every time on this page comes from a winter weekend, so please treat it as a guide to how the trains run. When I last checked, the summer 2027 times had not been published. They usually come out in the spring, and I will update this page when they do. I have kept to the trains and changes that work well, so a journey planner may show a few more options.</p>
+        <p id="tnextra" hidden></p>
+        <p id="tncheck"></p>
+      </div>
+    </aside>
     <div class="sh rise" style="align-items:stretch">
       <div class="ph-left">
         <div class="ph-head"><h2 class="t">Pick your train</h2><span class="numscreen" aria-hidden="true"><b>Platform<strong id="nsnum"></strong></b><span id="nsdest"></span></span></div>
@@ -1356,7 +1375,7 @@ html,body{background:var(--mist)}
     <div class="ttcase" id="ttcase">
       <div class="tthead"><span class="br" id="ttnum"></span><div><b id="tttitle"></b><span id="ttsub"></span></div></div>
       <div class="ttsheet" id="ttsheet"></div>
-      <p class="tthint"><span id="tthint"></span><span>Times can change, so check before you travel. These are this winter's times. I will add the summer 2027 times once the train companies publish them.</span></p>
+      <p class="tthint"><span id="tthint"></span><span>These are this winter’s times and the summer timetable is different, so please check before you travel.</span></p>
     </div>
   </div>
 </section>
@@ -1513,6 +1532,12 @@ var DATA={"stops":[["London Paddington",51.51656,-0.17726,"Paddington"],["Readin
   })();
   $('lead').textContent = CFG.lead;
   $('gaonly').innerHTML = CFG.gaOnly;
+  (function(){
+    var x = CFG.x || {}, nm = x.checkWith || x.opName || CFG.operator || 'the train company', sites = x.opSites || {};
+    var url = sites[nm] || { 'Greater Anglia': 'https://www.greateranglia.co.uk/' }[nm], link = url ? '<a href="' + url + '" target="_blank" rel="noopener">' + nm + '</a>' : nm;
+    $('tncheck').innerHTML = 'I would advise checking your train again with ' + link + ' or <a href="https://www.nationalrail.co.uk/" target="_blank" rel="noopener">National Rail</a> about a week before you go, and once more on the morning. Engineering work can change things on the day too.';
+    if (x.tnExtra) { $('tnextra').textContent = x.tnExtra; $('tnextra').hidden = false; }
+  })();
   /* everything that names the operator or the station for the show, so one template serves every page */
   var X = (function(){
     var x = { dest: 'Clacton-on-Sea', destShort: 'Clacton', destCrs: 'CLT', opCodes: ['LE'], opShort: 'GA', opName: CFG.operator,
