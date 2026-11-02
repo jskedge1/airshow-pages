@@ -420,3 +420,10 @@ Built 2 Nov 2026 in the v2 layout, in Greater Anglia red with charcoal. Every jo
 - Times are this winter's weekend timetable (7 and 8 Nov 2026) until the summer 2027 times are out; shuttle times are 2026 (every 30 minutes, 08:30 to 13:30 there, 15:30 to 18:30 back). Shuttle road line from OSRM via Trumpington Park & Ride.
 - Refresh: `train-routes-src/duxford-tools/update.sh <show Saturday>`, then `python3 build.py duxford`. The Midland Main Line (Leicester via St Pancras) is drawn as straight lines.
 - Still to do: the Wix page /train-to-duxford (copy /train-to-eastbourne and change the address), add it to AE_GH_PAGES, and a "Train route details" button in the Duxford page's train topic.
+
+Bus route pages, 2 Nov 2026 (from the 74 Clacton edit copy), now on every bus page and the bus route template:
+- Pick your bus is laid out like the newest train pages: numbered round steps, big Day and Direction buttons, a grid of departure times with Show all times, and Your bus as a full width band.
+- Key details and the See every time / Follow this bus links are transport tabs. The links go dark company green on hover and stay green once tapped.
+- The On the bus controls are option card buttons.
+- The bell tip is navy (#13293C) with white writing.
+- The destination blind and the Pick your bus number screen use the orange LED of the departures screen (#FFB21E, JetBrains Mono) in place of the dot matrix.
