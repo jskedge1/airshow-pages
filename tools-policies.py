@@ -337,6 +337,7 @@ a:hover{color:var(--red)}
 </style>
 <!-- mobile-fit -->
 <script src="https://jskedge1.github.io/airshow-pages/trail.js" defer></script>
+<script src="https://jskedge1.github.io/airshow-pages/back-tab.js" defer></script>
 </body>
 </html>
 """

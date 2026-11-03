@@ -505,3 +505,13 @@ Bus pages sit in their own box on /bus-route, so the page code there has to pass
 `velo/page-code/bus-route.js` does this, and needs pasting into the /bus-route page code in the Wix editor.
 Until then bus pages send everyone to the show's Getting there.
 Headcorn has no Wix page yet, so its tab opens camping-layout/headcorn.html.
+
+## Back tabs on the rest of the site (3 Nov 2026)
+
+`back-tab.js` adds the same style of back tab (top and bottom, "transport tabs op1" look) to pages outside the bus and train routes, which keep `transport-back.js`. Load it at the end of a page: `<script src="https://jskedge1.github.io/airshow-pages/back-tab.js" defer></script>`. Pages are listed in `PAGES` inside the file, keyed by file path and by Wix address.
+- On: all featured show pages in camping-layout/ (purple, replaces the old "Back to Find your airshow" sitebar link), the first airshow guides, Planning your first airshow, Security, Questions and answers, Food and drink and Kit calculator (purple), both forum looks (teal, Back to my hub; the HUD look gets corner brackets), New to aviation photography (navy), the traders directory and Advertise with us (green), Policies (grey). The calendar and map only show it when the visitor came from a show, Find your airshow or the hub.
+- Record only (no tab, they just say where the visitor came from): home, Find your airshow, Public transport, Visitor planning guides, Photography hub, Camping hub, My Airshow Hub.
+- Where it goes, in order: `?from=<source>` in the address (added to site links when tapped on a page that loads the file; bus and train route links are left to bus-routes.js), the last page tapped through from (kept on the device for 30 minutes), the referrer, then the page's default.
+- Inside a Wix page (the airshow-page element) the tabs go in the guide's own container. Pages in a fixed height Wix box are about 140px taller now, so check the bottom tab is not cut off.
+- The tag is in the Q&A and Public transport templates and tools-policies.py, so rebuilding keeps it.
+- No coach pages exist (coach options are topics on the show pages), and there are no separate camping guide pages yet, so those have no tab.
