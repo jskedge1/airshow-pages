@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How My Airshow Hub Works And How To Join | The Big Guide to UK Airshows</title>
+<meta name="description" content="How the free My Airshow Hub works, from joining in about a minute to saving your shows, must see alerts, show day mode and the forum.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;800&display=swap">
+<style>
+:root{
+  --navy:#13293C;--navy2:#0E2131;--teal:#32B4AF;--tealtext:#0E5F5B;--red:#D74949;--purple:#6950A1;--blue:#1D63B7;
+  --ink:#0B1722;--soft:#41586B;--line:#DCE3E8;--pale:#F2F4F5;
+  --c:"Barlow Condensed","Barlow",Arial,sans-serif;--b:"Barlow","Segoe UI",Arial,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font:400 17px/1.6 var(--b);color:var(--ink);background:#fff}
+img{max-width:100%;height:auto;display:block;pointer-events:none;-webkit-user-drag:none;user-select:none}
+a{color:inherit}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+.in{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ===== header: photo edge to edge behind a navy gradient, glass key details box ===== */
+.hd{position:relative;background:var(--navy);color:#fff;overflow:hidden}
+.hd-photo{position:absolute;inset:0;background:url(https://jskedge1.github.io/airshow-pages/join-img/hero-a400m.webp) 72% 30%/cover no-repeat;animation:drift 22s var(--ease) both}
+.hd-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#13293C 0%,rgba(19,41,60,.95) 36%,rgba(19,41,60,.55) 64%,rgba(19,41,60,.1) 100%),linear-gradient(0deg,#13293C 0%,rgba(19,41,60,0) 42%)}
+@keyframes drift{from{transform:scale(1.08)}to{transform:scale(1)}}
+.hd .in{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.82fr);gap:44px;align-items:end;padding-top:118px;padding-bottom:40px}
+.tag{display:inline-block;background:var(--purple);color:#fff;font:600 15px var(--b);padding:6px 12px;margin-bottom:18px}
+.hd h1{font:800 clamp(50px,7.6vw,96px)/.9 var(--c);letter-spacing:.005em;text-transform:uppercase;margin:0 0 14px}
+.hd h1 span{color:var(--teal)}
+.sub{font:700 clamp(17px,1.8vw,21px)/1.25 var(--b);color:var(--teal);text-transform:uppercase;letter-spacing:.02em;margin:0 0 20px}
+.intro{max-width:56ch;color:#DCE6EE;margin:0 0 14px}
+.intro b{color:#fff;font-weight:600}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:700 17px var(--b);padding:14px 22px;background:var(--teal);color:#fff;border:2px solid var(--teal);transition:transform .3s var(--ease),background .3s,border-color .3s}
+.btn:hover{transform:translateY(-2px);background:var(--blue);border-color:var(--blue)}
+.btn.ol{background:transparent;border-color:#fff}
+.btn.ol:hover{background:#fff;color:var(--navy);border-color:#fff}
+.btn.red{background:var(--red);border-color:var(--red)}
+.btn .ar{transition:transform .3s var(--ease)}
+.btn:hover .ar{transform:translateX(4px)}
+.glass{background:rgba(14,33,49,.92);border-top:4px solid var(--teal);box-shadow:0 18px 40px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:20px 20px 18px;transform:translateY(10px)}
+.glass h2{font:800 24px/1 var(--c);color:var(--teal);text-transform:uppercase;margin:0 0 12px;letter-spacing:.01em}
+.rows{display:grid;gap:4px}
+.rows div{display:flex;justify-content:space-between;align-items:baseline;gap:14px;background:rgba(255,255,255,.07);padding:10px 12px;font-size:16px}
+.rows span{color:#8FDCD8;font-weight:500}
+.rows b{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.rows div.hl{background:rgba(215,73,73,.92)}
+.rows div.hl span{color:#fff}
+.teal-rule{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:.7}
+
+/* jump bar: visitors guide tab animation, section in view stays teal */
+.jump{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.08)}
+.jump .in{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.jump .in::-webkit-scrollbar{display:none}
+.jump a{flex:none;color:#fff;text-decoration:none;font:600 16px var(--b);padding:14px 16px;transition:padding .4s ease,background-color .4s ease}
+.jump a:hover,.jump a:focus-visible,.jump a.on{background:var(--teal);padding-left:28px;padding-right:28px}
+.jump a.cta{margin-left:auto;background:var(--red)}
+.jump a.cta:hover{background:var(--blue)}
+
+/* ===== section titles ===== */
+.sec{padding:84px 0 40px}
+.st{font:800 clamp(34px,4.4vw,50px)/1 var(--c);color:var(--red);text-transform:uppercase;margin:0 0 10px;padding-left:16px;border-left:6px solid var(--red);letter-spacing:.005em}
+.st-p{color:var(--soft);max-width:62ch;margin:0 0 34px 22px}
+
+/* ===== walkthrough rail ===== */
+.step{display:grid;grid-template-columns:minmax(0,370px) minmax(0,1fr);gap:40px;align-items:start;position:relative;padding-bottom:64px}
+.step::before{content:"";position:absolute;left:22px;top:50px;bottom:0;width:3px;background:var(--line)}
+.step:last-child{padding-bottom:10px}
+.step:last-child::before{display:none}
+.copy{display:grid;grid-template-columns:46px minmax(0,1fr);gap:18px;position:sticky;top:76px}
+.num{width:46px;height:46px;border-radius:50%;background:var(--teal);color:#fff;font:800 22px var(--c);display:grid;place-items:center;position:relative;z-index:1;box-shadow:0 0 0 6px #fff;transition:transform .4s var(--ease)}
+.step:hover .num{transform:scale(1.08)}
+.step.wix .num{background:var(--purple)}
+.copy h3{font:800 28px/1 var(--c);text-transform:uppercase;color:var(--navy);margin:8px 0 0;letter-spacing:.01em}
+.copy p{margin:10px 0 0;color:#26394A}
+.who{display:inline-block;font:600 14px var(--b);padding:3px 10px;margin-top:12px;background:#E7ECEF;color:var(--navy)}
+.who.wix{background:var(--purple);color:#fff}
+.tip{margin-top:14px;border-left:4px solid var(--purple);background:var(--pale);padding:12px 14px;font-size:16px;color:#26394A}
+.tip b{color:var(--purple)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:20px;align-items:end}
+.shot{background:#fff;border:1px solid var(--line);box-shadow:0 26px 50px -28px rgba(19,41,60,.6);overflow:hidden;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+.step:hover .shot{transform:translateY(-3px);box-shadow:0 34px 60px -28px rgba(19,41,60,.7)}
+.shot .bar{display:flex;align-items:center;gap:6px;background:#E7EBEE;padding:8px 12px;font:500 14px var(--b);color:var(--soft)}
+.shot .bar i{width:9px;height:9px;border-radius:50%;background:#C3CBD1;display:block}
+.shot .bar span{margin-left:8px;background:#fff;padding:2px 10px;flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.phone{border:8px solid var(--navy);border-radius:28px;overflow:hidden;background:var(--navy);box-shadow:0 26px 50px -24px rgba(19,41,60,.7);transform:translateY(-30px);transition:transform .6s var(--ease)}
+.step:hover .phone{transform:translateY(-38px)}
+.cap{font:500 15px var(--b);color:var(--soft);margin-top:10px}
+/* sign up window drawn to match the Wix members window */
+.wixwin{position:relative;background:#273D50;padding:44px 18px;display:grid;place-items:center;overflow:hidden}
+.wixwin::before{content:"";position:absolute;inset:0;background:url(https://jskedge1.github.io/airshow-pages/join-img/hub-login.webp) center/cover;filter:blur(4px);opacity:.35}
+.modal{position:relative;background:#fff;width:100%;max-width:400px;padding:32px 30px 26px;text-align:center;box-shadow:0 30px 60px -20px rgba(0,0,0,.55)}
+.modal .x{position:absolute;right:16px;top:10px;font-size:24px;color:#777;line-height:1}
+.modal h4{font:600 30px/1.1 var(--b);color:#222;margin:0}
+.modal .ms{font-size:15px;color:#555;margin:8px 0 0}
+.modal .ms u{color:var(--navy);font-weight:600}
+.soc{margin-top:20px;display:grid;gap:10px}
+.soc div{display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #CFD4D8;padding:11px;font:500 16px var(--b);color:#333}
+.soc svg{width:18px;height:18px}
+.or{display:flex;align-items:center;gap:10px;color:#888;font-size:14px;margin:16px 0}
+.or::before,.or::after{content:"";flex:1;height:1px;background:#DDD}
+.mail{border:1px solid #CFD4D8;padding:11px;font:500 16px var(--b);color:#333}
+
+/* ===== season: phase tabs ===== */
+.season{background:var(--pale);padding:84px 0 70px;position:relative;overflow:hidden}
+.season::before{content:"";position:absolute;right:-120px;top:-80px;width:520px;height:520px;border:2px solid rgba(50,180,175,.14);border-radius:50%;box-shadow:0 0 0 60px rgba(50,180,175,.05),0 0 0 120px rgba(50,180,175,.035)}
+.ph-tabs{display:flex;gap:0;background:#fff;border-bottom:3px solid var(--pc,var(--teal));position:relative;z-index:1;margin-bottom:0;flex-wrap:wrap}
+.ph-tabs button{flex:1 1 0;min-width:150px;display:flex;align-items:center;gap:12px;border:0;background:#fff;cursor:pointer;font:700 18px var(--b);color:var(--navy);padding:16px 20px;text-align:left;border-top:5px solid transparent;transition:background .35s var(--ease),color .35s var(--ease),border-color .35s}
+.ph-tabs button .ring{flex:none;width:32px;height:32px;border-radius:50%;border:3px solid var(--tc);display:grid;place-items:center;transition:background .35s,box-shadow .35s}
+.ph-tabs button .ring svg{width:16px;height:16px;stroke:var(--tc);transition:stroke .35s}
+.ph-tabs button small{display:block;font:500 14px var(--b);color:var(--soft)}
+.ph-tabs button:hover .ring{background:var(--tc);box-shadow:0 0 0 6px color-mix(in srgb,var(--tc) 18%,transparent)}
+.ph-tabs button:hover .ring svg{stroke:#fff}
+.ph-tabs button[aria-selected=true]{background:var(--tc);color:#fff;border-top-color:rgba(0,0,0,.18)}
+.ph-tabs button[aria-selected=true] small{color:rgba(255,255,255,.85)}
+.ph-tabs button[aria-selected=true] .ring{border-color:#fff;background:transparent}
+.ph-tabs button[aria-selected=true] .ring svg{stroke:#fff}
+.ph{display:none;position:relative;z-index:1;background:#fff;box-shadow:0 20px 44px -30px rgba(19,41,60,.5)}
+.ph.on{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.15fr);animation:phin .55s var(--ease)}
+@keyframes phin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ph-list{padding:30px 30px 26px}
+.ph-list h3{font:800 32px/1 var(--c);text-transform:uppercase;color:var(--navy);margin:0 0 6px}
+.ph-list>p{margin:0 0 18px;color:var(--soft)}
+.tool{display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.tool .ic{width:40px;height:40px;background:var(--tc);display:grid;place-items:center;transition:transform .4s var(--ease)}
+.tool:hover .ic{transform:rotate(-6deg) scale(1.06)}
+.tool .ic svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tool b{display:block;font:700 18px/1.25 var(--b);color:var(--navy)}
+.tool span{display:block;font-size:16px;line-height:1.5;color:#33424F;margin-top:3px}
+.ph-pic{background:var(--navy);padding:26px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.ph-pic .shot{border-color:rgba(255,255,255,.1)}
+.ph-pic .cap{color:#B9C9D6}
+.ph-pic.two{display:grid;grid-template-columns:minmax(0,1fr) 150px;align-items:end;gap:16px}
+
+/* ===== forum band: asymmetric, screenshot breaks out of the band ===== */
+.forum{position:relative;background:var(--navy);color:#fff;padding:0;margin-top:70px}
+.forum .in{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.9fr);gap:50px;align-items:center}
+.forum .fpic{transform:translateY(-56px);margin-bottom:-56px}
+.forum .shot{border-color:rgba(255,255,255,.12)}
+.forum .ftext{padding:60px 0}
+.forum .ftag{display:inline-block;background:var(--teal);color:#fff;font:600 15px var(--b);padding:5px 11px;margin-bottom:14px}
+.forum h2{font:800 clamp(38px,4.6vw,56px)/.95 var(--c);text-transform:uppercase;margin:0 0 16px}
+.forum h2 span{color:var(--teal)}
+.forum p{color:#DCE6EE;margin:0 0 14px;max-width:52ch}
+.fl{list-style:none;padding:0;margin:20px 0 26px;display:grid;gap:6px}
+.fl li{position:relative;padding:10px 12px 10px 36px;background:rgba(255,255,255,.07);font:500 16px/1.4 var(--b);transition:transform .35s var(--ease),background .35s}
+.fl li::before{content:"";position:absolute;left:13px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:var(--teal)}
+.fl li:hover{transform:translateX(6px);background:rgba(255,255,255,.12)}
+
+/* ===== your plans stay yours: offset note ===== */
+.yours{padding:90px 0 30px}
+.yours-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:0;align-items:stretch}
+.y-note{background:var(--purple);color:#fff;padding:40px 38px;position:relative;z-index:1;margin-top:40px;margin-right:-40px;box-shadow:0 24px 50px -24px rgba(105,80,161,.7)}
+.y-note h2{font:800 clamp(34px,3.8vw,46px)/.95 var(--c);text-transform:uppercase;margin:0 0 14px}
+.y-note p{margin:0 0 12px;color:rgba(255,255,255,.92)}
+.y-note .sig{font:500 16px var(--b);color:rgba(255,255,255,.8);margin-top:18px}
+.y-note .sig b{display:block;font:800 22px/1.1 var(--c);color:#fff;text-transform:uppercase}
+.y-rows{background:var(--pale);padding:40px 40px 40px 80px;display:grid;gap:10px;align-content:center}
+.y-row{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;background:#fff;padding:16px;border-left:5px solid var(--rc,var(--teal));transition:transform .35s var(--ease),box-shadow .35s}
+.y-row:hover{transform:translateX(4px);box-shadow:0 12px 26px rgba(19,41,60,.1)}
+.y-row .ic{width:44px;height:44px;border-radius:50%;background:var(--navy);display:grid;place-items:center}
+.y-row .ic svg{width:20px;height:20px;stroke:var(--teal);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.y-row b{display:block;font:700 18px/1.25 var(--b);color:var(--navy)}
+.y-row span{display:block;font-size:16px;color:#33424F;margin-top:2px}
+
+/* ===== good to know ===== */
+.faq{padding:70px 0 40px}
+.faq-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:44px;align-items:start}
+.faq-side{position:sticky;top:80px}
+.faq-side .st-p{margin-bottom:18px}
+.qa{border:1px solid var(--line);background:#fff;margin-bottom:8px;transition:box-shadow .35s}
+.qa[open]{box-shadow:0 14px 30px -18px rgba(19,41,60,.35);border-color:#C9D3DA}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 18px;font:700 18px/1.3 var(--b);color:var(--navy)}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary i{flex:none;width:30px;height:30px;background:var(--teal);position:relative;transition:background .3s,transform .4s var(--ease)}
+.qa summary i::before,.qa summary i::after{content:"";position:absolute;left:8px;right:8px;top:14px;height:2px;background:#fff}
+.qa summary i::after{transform:rotate(90deg);transition:transform .4s var(--ease)}
+.qa[open] summary i{background:var(--navy)}
+.qa[open] summary i::after{transform:rotate(0)}
+.qa summary:hover{color:var(--tealtext)}
+.qa .ans{padding:0 18px 18px;color:#26394A}
+.qa .ans p{margin:0 0 10px}
+.qa .ans p:last-child{margin:0}
+
+/* ===== final call ===== */
+.end{background:var(--navy);color:#fff;position:relative;overflow:hidden;margin-top:60px}
+.end::before{content:"";position:absolute;inset:0;background:url(https://jskedge1.github.io/airshow-pages/join-img/hero-a400m.webp) 80% 35%/cover;opacity:.18}
+.end .in{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;align-items:center;padding-top:70px;padding-bottom:70px}
+.end h2{font:800 clamp(44px,6vw,76px)/.9 var(--c);text-transform:uppercase;margin:0 0 14px}
+.end h2 span{color:var(--teal)}
+.end p{color:#DCE6EE;margin:0;max-width:50ch}
+.signs{display:grid;gap:12px}
+.sign{display:flex;align-items:stretch;text-decoration:none;background:var(--navy2);color:#fff;border-bottom:4px solid var(--teal);box-shadow:0 10px 24px rgba(0,0,0,.25);transition:transform .3s var(--ease),border-color .3s}
+.sign .ic{flex:none;width:58px;display:grid;place-items:center;background:var(--teal);transition:background .3s}
+.sign .ic svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sign .tx{flex:1;padding:14px 16px}
+.sign .tx b{display:block;font:700 18px/1.2 var(--b)}
+.sign .tx span{display:block;font-size:15px;color:#B9C9D6;margin-top:2px}
+.sign .ar{flex:none;display:grid;place-items:center;width:52px;border-left:1px solid rgba(255,255,255,.16);font-size:22px;transition:transform .3s var(--ease)}
+.sign:hover{transform:translateY(-2px);border-bottom-color:var(--blue)}
+.sign:hover .ic{background:var(--blue)}
+.sign:hover .ar{transform:translateX(4px)}
+.sign.main{background:var(--red);border-bottom-color:#A33A3A}
+.sign.main .ic{background:#A33A3A}
+.small{background:var(--navy2);color:#9FB3C3;font-size:15px;padding:18px 0}
+.small p{margin:0}
+
+/* ===== scroll reveal ===== */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rv.on{opacity:1;transform:none}
+
+@media(max-width:1000px){
+  .hd .in{grid-template-columns:minmax(0,1fr);padding-top:200px}
+  .glass{transform:none;max-width:480px}
+  .step{grid-template-columns:minmax(0,1fr);gap:22px}
+  .step::before{display:none}
+  .copy{position:static}
+  .ph.on{grid-template-columns:minmax(0,1fr)}
+  .forum .in{grid-template-columns:minmax(0,1fr);gap:0}
+  .forum .ftext{padding:10px 0 50px}
+  .yours-grid{grid-template-columns:minmax(0,1fr)}
+  .y-note{margin:0 18px -30px;padding:32px 28px}
+  .y-rows{padding:60px 24px 28px}
+  .faq-grid{grid-template-columns:minmax(0,1fr);gap:10px}
+  .faq-side{position:static}
+  .end .in{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:700px){
+  .in{padding:0 18px}
+  .hd .in{padding-top:170px;padding-bottom:36px}
+  .hd-photo{background-position:78% 20%}
+  .hd-photo::after{background:linear-gradient(0deg,#13293C 0%,rgba(19,41,60,.93) 55%,rgba(19,41,60,.3) 100%)}
+  .sec,.season{padding-top:60px}
+  .st-p{margin-left:0}
+  .pair{grid-template-columns:minmax(0,1fr) 120px;gap:12px}
+  .phone{border-width:5px;border-radius:18px;transform:translateY(-16px)}
+  .step:hover .phone{transform:translateY(-16px)}
+  .ph-tabs button{min-width:0;flex:1 1 100%}
+  .ph-list{padding:24px 20px}
+  .ph-pic{padding:16px}
+  .ph-pic.two{grid-template-columns:minmax(0,1fr) 100px}
+  .forum .fpic{transform:translateY(-36px);margin-bottom:-36px}
+  .y-note{margin:0 0 -24px}
+  .jump a{padding:12px 12px;font-size:15px}
+  .jump a.cta{margin-left:0}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hd-photo,.ph.on{animation:none}
+  .rv{opacity:1;transform:none;transition:none}
+  .btn,.sign,.shot,.phone,.num,.tool .ic,.fl li,.y-row,.jump a,.ph-tabs button,.qa summary i,.qa summary i::after{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <div class="hd-photo" role="img" aria-label="A400M Atlas banking hard over the crowd line with its four propellers turning"></div>
+  <div class="in">
+    <div>
+      <span class="tag">My Airshow Hub</span>
+      <h1>How The Hub <span>Works</span></h1>
+      <p class="sub">And how to join, free</p>
+      <p class="intro">I built My Airshow Hub because my own planning used to live in five different places. Screenshots, notes on my phone, emails with train tickets. <b>The hub keeps every show you are going to in one place, and it stays with you right up to the crowd line.</b></p>
+      <p class="intro">This page walks you through it. How you join, what you get, and how it helps from the day you book to the drive home.</p>
+      <div class="acts">
+        <a class="btn" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Join free <span class="ar">→</span></a>
+        <a class="btn ol" href="#joining">See how it works</a>
+      </div>
+    </div>
+    <aside class="glass" aria-label="At a glance">
+      <h2>At A Glance</h2>
+      <div class="rows">
+        <div><span>Cost to join</span><b>£0</b></div>
+        <div><span>Sign in with</span><b>Email, Google or Facebook</b></div>
+        <div><span>Setting up</span><b>About a minute</b></div>
+        <div><span>Shows you can save</span><b>All 13 featured shows</b></div>
+        <div><span>Who sees your plans</span><b>Just you</b></div>
+        <div class="hl"><span>Card details</span><b>Never asked for</b></div>
+      </div>
+    </aside>
+  </div>
+  <div class="teal-rule"></div>
+</header>
+
+<nav class="jump" aria-label="On this page">
+  <div class="in">
+    <a href="#joining">Joining</a>
+    <a href="#season">Through the season</a>
+    <a href="#forum">The forum</a>
+    <a href="#yours">Your plans</a>
+    <a href="#questions">Good to know</a>
+    <a class="cta" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top">Join free</a>
+  </div>
+</nav>
+
+<main>
+<section class="sec" id="joining">
+  <div class="in">
+    <h2 class="st rv">Joining Takes About A Minute</h2>
+    <p class="st-p rv">Four steps and you are in. I have shown each one with the real screens, filled in with an example member called Alex.</p>
+
+    <div class="steps">
+      <article class="step rv">
+        <div class="copy">
+          <div class="num">1</div>
+          <div>
+            <h3>Open The Hub</h3>
+            <p>Tap Airshow Hub in the menu at the top of any page. It opens on the hub's welcome screen, with a Log In tab and a Join free tab.</p>
+            <p>If you have used the forum before, you already have an account. Just log in.</p>
+            <span class="who">You do this</span>
+          </div>
+        </div>
+        <figure style="margin:0">
+          <div class="shot"><div class="bar"><i></i><i></i><i></i><span>ukairshowguide.co.uk/my-airshow-hub</span></div><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-login.webp" alt="The My Airshow Hub welcome screen with Log In and Join free tabs" loading="lazy" width="1280" height="800"></div>
+          <figcaption class="cap">The welcome screen you see before you log in.</figcaption>
+        </figure>
+      </article>
+
+      <article class="step wix rv">
+        <div class="copy">
+          <div class="num">2</div>
+          <div>
+            <h3>Pick How You Sign In</h3>
+            <p>A secure members window opens. Use your email and a password, or carry on with Google or Facebook if that is easier.</p>
+            <p>This window is run by Wix, who host the site, so I never see your password.</p>
+            <span class="who wix">Handled by Wix</span>
+            <div class="tip"><b>I would suggest</b> using the same sign in every time. If you join with Facebook and later try your email, it can look like you have two accounts.</div>
+          </div>
+        </div>
+        <figure style="margin:0">
+          <div class="shot"><div class="bar"><i></i><i></i><i></i><span>Members window</span></div>
+            <div class="wixwin" aria-label="Example of the sign up window">
+              <div class="modal">
+                <span class="x" aria-hidden="true">×</span>
+                <h4>Sign Up</h4>
+                <p class="ms">Already a member? <u>Log In</u></p>
+                <div class="soc">
+                  <div><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.6a4.8 4.8 0 0 1-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-7.5z"/><path fill="#34A853" d="M12 22c2.8 0 5.2-.9 6.9-2.5l-3.4-2.6c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.7v2.7A10 10 0 0 0 12 22z"/><path fill="#FBBC05" d="M6.2 13.6a6 6 0 0 1 0-3.8V7.1H2.7a10 10 0 0 0 0 9z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.9.5 4 1.6l3-3A10 10 0 0 0 2.7 7.1l3.5 2.7C7 7.7 9.3 5.9 12 5.9z"/></svg>Sign up with Google</div>
+                  <div><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877F2" d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>Sign up with Facebook</div>
+                </div>
+                <div class="or">or</div>
+                <div class="mail">Sign up with email</div>
+              </div>
+            </div>
+          </div>
+          <figcaption class="cap">Drawn to show the choices. The real window may look slightly different on your phone.</figcaption>
+        </figure>
+      </article>
+
+      <article class="step rv">
+        <div class="copy">
+          <div class="num">3</div>
+          <div>
+            <h3>Save Your First Show</h3>
+            <p>Go to My Trips and choose a show from the list. That's it. It gets its own card, a countdown and a simple tick sheet for tickets, trains and parking.</p>
+            <p>Going to more than one this year? Add them all. Alex has RIAT and Eastbourne saved here.</p>
+            <span class="who">You do this</span>
+          </div>
+        </div>
+        <figure style="margin:0">
+          <div class="pair">
+            <div class="shot"><div class="bar"><i></i><i></i><i></i><span>My Airshow Hub · My Trips</span></div><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-trips.webp" alt="My Trips with two saved shows, a to do list and show updates" loading="lazy" width="1280" height="800"></div>
+            <div class="phone"><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-trips-phone.webp" alt="My Trips on a phone" loading="lazy" width="390" height="844"></div>
+          </div>
+          <figcaption class="cap">My Trips on a laptop and on a phone. Everything saves as you go.</figcaption>
+        </figure>
+      </article>
+
+      <article class="step rv">
+        <div class="copy">
+          <div class="num">4</div>
+          <div>
+            <h3>Your Hub Is Ready</h3>
+            <p>Your next show now sits at the top of the hub with a countdown to the gates opening. Underneath, the trip readiness dial levels out as you tick things off.</p>
+            <p>Next time, you just log in and it is all there, on any device.</p>
+            <span class="who">Done for you</span>
+            <div class="tip"><b>I would advise</b> having a look round every tab once you are in. It only takes a couple of minutes, and you might find a tool you did not know you needed.</div>
+          </div>
+        </div>
+        <figure style="margin:0">
+          <div class="pair">
+            <div class="shot"><div class="bar"><i></i><i></i><i></i><span>My Airshow Hub · Overview</span></div><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-overview.webp" alt="The hub overview with a countdown to RIAT and the trip readiness dial" loading="lazy" width="1280" height="800"></div>
+            <div class="phone"><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-overview-phone.webp" alt="The hub overview on a phone" loading="lazy" width="390" height="844"></div>
+          </div>
+          <figcaption class="cap">The overview, with Alex's countdown to RIAT running.</figcaption>
+        </figure>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="season" id="season">
+  <div class="in">
+    <h2 class="st rv">How It Helps Through The Season</h2>
+    <p class="st-p rv">Pick a stage below. The hub changes what it shows you as your show gets closer, so it is just as useful in March as it is on the crowd line.</p>
+
+    <div class="ph-tabs rv" role="tablist" aria-label="Stages of your airshow trip" id="phTabs">
+      <button role="tab" id="tb-before" aria-controls="ph-before" aria-selected="true" style="--tc:#32B4AF"><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span><span>Before the show<small>Planning and booking</small></span></button>
+      <button role="tab" id="tb-day" aria-controls="ph-day" aria-selected="false" style="--tc:#6950A1" tabindex="-1"><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg></span><span>On show day<small>On your phone</small></span></button>
+      <button role="tab" id="tb-after" aria-controls="ph-after" aria-selected="false" style="--tc:#D74949" tabindex="-1"><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10l8-6 8 6v10z"/><path d="M9 20v-6h6v6"/></svg></span><span>After the show<small>Your airshow year</small></span></button>
+    </div>
+
+    <div class="ph on" id="ph-before" role="tabpanel" aria-labelledby="tb-before" style="--tc:#32B4AF">
+      <div class="ph-list">
+        <h3>Before The Show</h3>
+        <p>This is where most of the hub's work happens. Months out, it keeps an eye on things so you don't have to.</p>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></span><div><b>Saved shows and countdowns</b><span>Save any featured show and its countdown sits on your hub. When the show changes its details, you see it there first.</span></div></div>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></span><div><b>Must see aircraft alerts</b><span>Tap "Add to must see" on any aircraft in a show's line up. If it gets confirmed or cancelled, the hub tells you.</span></div></div>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/><path d="M17 17l2 2 3-4"/></svg></span><div><b>Trip tick sheet</b><span>Tickets booked, need printing, trains sorted, parking paid. A simple list for each show, with nothing to upload.</span></div></div>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M15 6a4 4 0 0 0-7 2.5V12H6m2 0h6M8 12v3c0 2-1 3-2 4h11"/></svg></span><div><b>Budget tracker</b><span>Tickets, travel, food and camping in one running total. No nasty surprises when you get to the food stalls.</span></div></div>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 1.8 6 5.5"/></svg></span><div><b>Group planner and packing list</b><span>Share a plan with the people you are going with, using a code only they get. The packing list changes for a day visitor, a photographer or a camper.</span></div></div>
+      </div>
+      <div class="ph-pic">
+        <div class="shot"><div class="bar"><i></i><i></i><i></i><span>My Airshow Hub · Updates</span></div><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-updates.webp" alt="The Updates tab listing line up changes for saved shows" loading="lazy" width="1280" height="800"></div>
+        <div class="shot"><div class="bar"><i></i><i></i><i></i><span>My Airshow Hub · Kit And Packing</span></div><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-kit.webp" alt="The packing list with essentials, weather and comfort groups" loading="lazy" width="1280" height="800"></div>
+        <p class="cap">Updates and the packing list, with example data.</p>
+      </div>
+    </div>
+
+    <div class="ph" id="ph-day" role="tabpanel" aria-labelledby="tb-day" style="--tc:#6950A1" hidden>
+      <div class="ph-list">
+        <h3>On Show Day</h3>
+        <p>Leave the hub open on your phone. This is the bit I use most once I am through the gate.</p>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M2 16l20-8-6 12-3-5z"/><path d="M13 15l9-7"/></svg></span><div><b>Show day mode</b><span>Upload the flying display page from your programme and it shows what is flying now and next. A good one for planning a toilet break.</span></div></div>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l6-6"/></svg></span><div><b>Live inbound radar</b><span>Watch display aircraft heading in to the show, so the camera is ready before they arrive.</span></div></div>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M7 17a5 5 0 1 1 1.6-9.7A6 6 0 0 1 20 10a4 4 0 0 1-1 7.9H7z"/></svg></span><div><b>Show weather panel</b><span>Opens about a week before. Wind, cloud and rain for the show site, so you pack the right kit. Unfortunately the weather on the day will be what it will be, so plan accordingly.</span></div></div>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 14a6 6 0 1 1 12 0v4a2 2 0 0 1-2 2h-1v-6h3M6 14h3v6H8a2 2 0 0 1-2-2z"/></svg></span><div><b>Ear defender alerts</b><span>A heads up before the loudest jets display. Your child's ears are delicate, so try to protect them as much as possible.</span></div></div>
+      </div>
+      <div class="ph-pic two">
+        <div class="shot"><div class="bar"><i></i><i></i><i></i><span>My Airshow Hub · Show Day</span></div><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-showday.webp" alt="Show day mode with a button to upload the flying display page" loading="lazy" width="1280" height="780"></div>
+        <div class="phone" style="transform:none"><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-showday-phone.webp" alt="Show day mode on a phone" loading="lazy" width="390" height="820"></div>
+        <p class="cap" style="grid-column:1/-1">Show day mode before the running order is in. Times come from the official programme and can change on the day.</p>
+      </div>
+    </div>
+
+    <div class="ph" id="ph-after" role="tabpanel" aria-labelledby="tb-after" style="--tc:#D74949" hidden>
+      <div class="ph-list">
+        <h3>After The Show</h3>
+        <p>The drive home is not the end of it. The hub keeps a record of every show, so it builds up year after year.</p>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 20V9l9-5 9 5v11"/><path d="M7 20v-6h10v6"/></svg></span><div><b>My Hangar</b><span>Log the aircraft you saw. Common ones glow teal, rare ones purple and the true one offs red.</span></div></div>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4v16h16"/><path d="M8 15l3-4 3 2 5-6"/></svg></span><div><b>My Airshow History</b><span>Every show you have been to, with your notes and the rare visitors you caught.</span></div></div>
+        <div class="tool"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><div><b>My Airshow Year</b><span>An end of season recap with your most seen aircraft and best photo, plus story cards sized for Facebook and Instagram.</span></div></div>
+      </div>
+      <div class="ph-pic">
+        <div class="shot"><div class="bar"><i></i><i></i><i></i><span>My Airshow Hub · My Group</span></div><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-group.webp" alt="The group planner for a saved show" loading="lazy" width="1280" height="500"></div>
+        <p class="cap">Your hangar and recap fill up as you log aircraft, so a brand new account starts empty. Here is the group planner instead, which you can use before and after a show.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="forum" id="forum">
+  <div class="in">
+    <div class="fpic rv">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>ukairshowguide.co.uk/community-forum</span></div><img src="https://jskedge1.github.io/airshow-pages/join-img/hub-forum.webp" alt="The Airshow Forum home page" loading="lazy" width="1280" height="800"></div>
+    </div>
+    <div class="ftext rv">
+      <span class="ftag">Comes with your account</span>
+      <h2>The <span>Airshow</span> Forum</h2>
+      <p>I'd say half the fun of an airshow is the chat along the barrier. The forum puts that chat in one place, using the same log in as the hub.</p>
+      <ul class="fl">
+        <li>A feed for the shows you follow</li>
+        <li>Show groups and Photographer's Corner</li>
+        <li>A buddy board if you are going on your own</li>
+        <li>Show day live, for queue and car park updates</li>
+      </ul>
+      <a class="btn" href="https://www.ukairshowguide.co.uk/community-forum" target="_top">Have a look at the forum <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="yours" id="yours">
+  <div class="in">
+    <div class="yours-grid">
+      <div class="y-note rv">
+        <h2>Your Plans Stay Yours</h2>
+        <p>A few people have asked me what happens to their details. Fair question.</p>
+        <p>Your trips, lists and budgets are private to your account. I don't sell your details to anyone, and the hub stays free.</p>
+        <div class="sig"><b>Jack Skedge</b>Founder and Managing Editor</div>
+      </div>
+      <div class="y-rows">
+        <div class="y-row rv" style="--rc:#32B4AF"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div><b>Private by default</b><span>Only you can see your trips, tick sheets and budget.</span></div></div>
+        <div class="y-row rv" style="--rc:#6950A1"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 11l2 2 4-4"/></svg></span><div><b>Groups only see what you share</b><span>The group planner shows the plan to people with your code, and nothing else.</span></div></div>
+        <div class="y-row rv" style="--rc:#D74949"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4"/></svg></span><div><b>Alerts arrive on the site</b><span>Updates show up in your hub. You won't get a pile of emails.</span></div></div>
+        <div class="y-row rv" style="--rc:#13293C"><span class="ic"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span><div><b>Log out any time</b><span>Everything is kept for when you come back.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="questions">
+  <div class="in">
+    <div class="faq-grid">
+      <div class="faq-side">
+        <h2 class="st rv">Good To Know</h2>
+        <p class="st-p rv">The questions I get asked most about the hub. If yours isn't here, drop me a message.</p>
+        <a class="btn" href="https://www.ukairshowguide.co.uk/contact-us" target="_top">Ask me something <span class="ar">→</span></a>
+      </div>
+      <div>
+        <details class="qa rv" open><summary>Is it really free?<i aria-hidden="true"></i></summary><div class="ans"><p>Yes. Every tool in the hub and the forum is free, and you are never asked for card details. The guide earns a little through links and partners instead, so it can stay free for visitors.</p></div></details>
+        <details class="qa rv"><summary>Do I need a Facebook account?<i aria-hidden="true"></i></summary><div class="ans"><p>No. Facebook and Google are just quicker ways in. An email address and a password works exactly the same.</p></div></details>
+        <details class="qa rv"><summary>Will it work on my phone?<i aria-hidden="true"></i></summary><div class="ans"><p>It was built with the phone in mind, as that is what you will have in your hand on show day. You can also add the site to your home screen, so it opens like an app.</p></div></details>
+        <details class="qa rv"><summary>What if a show changes its line up?<i aria-hidden="true"></i></summary><div class="ans"><p>When a show's official website updates, the guide picks it up and the change shows in your Updates tab. If the aircraft is on your must see list, you get told about it straight away.</p><p>I would still advise checking the official show website before you travel, as things can change late on.</p></div></details>
+        <details class="qa rv"><summary>I already joined the forum. Do I need a new account?<i aria-hidden="true"></i></summary><div class="ans"><p>No. The hub and the forum use the same log in, so just log in and your hub is waiting for you.</p></div></details>
+        <details class="qa rv"><summary>Can I delete my account?<i aria-hidden="true"></i></summary><div class="ans"><p>Of course. Email me at <a href="mailto:contactus@ukairshowguide.co.uk">contactus@ukairshowguide.co.uk</a> and I will remove it for you.</p></div></details>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<section class="end" id="join">
+  <div class="in">
+    <div class="rv">
+      <h2>Ready When <span>You Are</span></h2>
+      <p>Join in about a minute, save the shows you are going to, and let the hub do the remembering. See you on the crowd line.</p>
+    </div>
+    <div class="signs rv">
+      <a class="sign main" href="https://www.ukairshowguide.co.uk/my-airshow-hub" target="_top"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></span><span class="tx"><b>Join My Airshow Hub</b><span>Free, and ready on any device</span></span><span class="ar">→</span></a>
+      <a class="sign" href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span class="tx"><b>Find your airshow</b><span>Pick a show to save first</span></span><span class="ar">→</span></a>
+      <a class="sign" href="https://www.ukairshowguide.co.uk/join-the-team" target="_top"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 1.8 6 5.5"/></svg></span><span class="tx"><b>Join the team</b><span>Help with photos, reviews or show tips</span></span><span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+<div class="small"><div class="in"><p>Screens on this page use example data, with a made up member called Alex. My Airshow Hub is part of The Big Guide to UK Airshows. Please check official show websites before you travel.</p></div></div>
+
+<script>
+(function(){
+  /* scroll reveal */
+  var rv=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});
+    rv.forEach(function(el){io.observe(el);});
+  }else{rv.forEach(function(el){el.classList.add('on');});}
+
+  /* jump bar: the section in view stays teal */
+  var links=[].slice.call(document.querySelectorAll('.jump a[href^="#"]'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  function spy(){
+    var y=window.scrollY+120,cur=-1;
+    secs.forEach(function(s,i){if(s&&s.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.classList.toggle('on',i===cur);});
+  }
+  window.addEventListener('scroll',spy,{passive:true});spy();
+
+  /* stage tabs */
+  var tabs=[].slice.call(document.querySelectorAll('#phTabs [role=tab]'));
+  function pick(t,focus){
+    tabs.forEach(function(b){
+      var on=b===t,p=document.getElementById(b.getAttribute('aria-controls'));
+      b.setAttribute('aria-selected',on?'true':'false');b.tabIndex=on?0:-1;
+      p.hidden=!on;p.classList.toggle('on',on);
+    });
+    document.getElementById('phTabs').style.setProperty('--pc',t.style.getPropertyValue('--tc'));
+    if(focus)t.focus();
+  }
+  tabs.forEach(function(b,i){
+    b.addEventListener('click',function(){pick(b);});
+    b.addEventListener('keydown',function(e){
+      var n=null;if(e.key==='ArrowRight')n=tabs[(i+1)%tabs.length];if(e.key==='ArrowLeft')n=tabs[(i-1+tabs.length)%tabs.length];
+      if(n){e.preventDefault();pick(n,true);}
+    });
+  });
+  pick(tabs[0]);
+})();
+</script>
+</body>
+</html>

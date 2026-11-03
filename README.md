@@ -65,6 +65,10 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Build Your Kit Calculator, four lists (photography by camera brand, camping, food and drink, tickets and travel) each with a budget calculator (Wix page /build-your-kit-calculator made 31 Oct 2026 by copying Questions and Answers, under Visitor Planning Guides in the Site Menu so it shows in the Planning Guides tab, embed html12, path added to AE_GH_PAGES; photos in kit-calculator-img/; `?list=photography`, `camping`, `food-and-drink` or `tickets-and-travel` opens a list; prices are examples to type over) | https://jskedge1.github.io/airshow-pages/kit-calculator.html |
 | Public transport to UK airshows, every bus and train route page by show in tabs, with a town search (Wix page /airshow-public-transport made 30 Oct 2026 by copying Train to Clacton, in the Planning Guides menu after Getting There since 2 Nov 2026 (added to the "UK Airshow Guide header menu" custom code and the copied menus on the route pages), embed html12, path added to AE_GH_PAGES; linked from the Public transport section of Getting there and the Public transport card on Visitor Planning Guides. Since 31 Oct 2026 (evening) a square cornered journey planner layout in the style of transport websites, grouped into themed train (station departures sign with a live clock and the train route box), bus (dot matrix destination blind and every bus number button), coach (ticket) and Park and Ride (car park sign) sections, each with its own tips: planner box over the photo (show, starting town, how to travel), a board of the 12 shows, then each show's train, bus, coach and Park and Ride ways in as result cards with Journey, Times (departure board), Route maps and Tips tabs, a My travel plan panel (way in, picked times, checklist, copy and print, kept on the visitor's device), a map and the FAQs. Rebuild with `python3 public-transport-src/build.py` after changing a show page's topics; it reads them from camping-layout/<show>.html) | https://jskedge1.github.io/airshow-pages/public-transport.html |
 | Bus route maps, every route by show (Wix page /bus-route made 30 Oct 2026, hidden from the menu, embed ID html12, page code velo/page-code/bus-route.js; live since 30 Oct 2026, 2800px tall on desktop and 4700px on phones) | https://jskedge1.github.io/airshow-pages/bus-routes/index.html |
+| Join The Team, the volunteer page: how it works, the eight roles, what you get back, a few things I ask and a message builder (Wix page /join-the-team, under Community in the menu; embed html1 by website address) | https://jskedge1.github.io/airshow-pages/join-the-team.html |
+| Volunteer Hub, volunteer log in and dashboard (Wix page /volunteer-hub, under Community in the menu, page code velo/page-code/volunteer-hub.js) | https://jskedge1.github.io/airshow-pages/volunteer-hub.html |
+| Team Admin, Jack only (Wix page /team-admin, hidden from the menu, members only, page code velo/page-code/team-admin.js) | https://jskedge1.github.io/airshow-pages/team-admin.html |
+| How My Airshow Hub works and how to join (made 3 Nov 2026, no Wix page yet, planned /how-my-airshow-hub-works; screens in join-img/) | https://jskedge1.github.io/airshow-pages/join-my-airshow-hub.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
@@ -281,6 +285,25 @@ traders join. Data comes from the public feed `https://www.ukairshowguide.co.uk/
 (gransden.html uses little-gransden; Headcorn has no traders list yet). If the feed can't be reached or nobody has listed the
 show, a short "first traders are on their way" note shows instead. Add `?tdemo=1` to a page address to check the layout with
 example traders; visitors never see those.
+
+## Volunteer team (3 Nov 2026)
+
+Volunteers ask to join on /join-the-team, log in to /volunteer-hub to send their work, and Jack checks it on /team-admin.
+The hub and admin pages talk to `velo/backend/team.web.js` through their page code (postMessage, source `ukag-team`) by way of
+`team-api.js`. Opened anywhere but the Wix site, `team-api.js` answers from the example data in `team-demo.js`, so the design can
+be checked, and the two pages share it in the browser (send something as Sam in the hub and it shows in the admin queue).
+Logged in members who are not on the team see an Ask to join form; once Jack switches them on in Team Admin, the hub opens up.
+Photos are made smaller in the browser (2000px, JPG) and upload one at a time to the Media folder /team/<member>. Video goes in as a link.
+Collections, admin only for reading and writing (the backend uses suppressAuth and checks who is asking):
+- `TeamVolunteers`: memberId, email, name, first, link, bio, roles (array), shows (array), status (waiting, active, paused), team (shown on Meet the team), applied (their message), joined (date)
+- `TeamWork`: memberId, kind (photo, video, review, tips, arrivals, social), title, show, day (YYYY-MM-DD), status (sent, checking, live, change, removal, no, gone), page (where it went live), msg (Jack's change note), imgs (array of Wix image addresses), n, text, link, where, sentDate, decidedDate
+- `TeamRequests`: title, show, kind, detail, sort (number). These show as What I need right now on every volunteer's overview.
+- `TeamNotes`: who ("all" or a memberId), text
+- `TeamLog`: text, at (date). Jack's main decisions also go into `AdminLog` (area Volunteers, source Team admin).
+Wix editor setup: each page has one HTML embed with ID html1 set to the address in the table above, stretched full width, inside a
+section taller than the embed. /team-admin is set to members only. Backend web module team.web.js from velo/backend/team.web.js.
+The site footer and site search do not list these pages yet: add Join The Team and Volunteer Hub to footer.html (About) and
+tools-search.py (Community) once the site has been published with the new pages.
 
 ## Admin board (30 Oct 2026)
 

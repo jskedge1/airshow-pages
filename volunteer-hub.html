@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Volunteer Hub | The Big Guide to UK Airshows</title>
+<meta name="description" content="The Volunteer Hub for The Big Guide to UK Airshows. Log in to send photos, videos, reviews and show tips, and see where your work is on the guide.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;800&display=swap">
+<style>
+:root{
+  --navy:#13293C;--navy2:#0E2131;--teal:#32B4AF;--tealtext:#0E5F5B;--red:#D74949;--purple:#6950A1;--blue:#1D63B7;--sky:#00A6E2;--green:#2BA84A;--coach:#C2255C;
+  --ink:#0B1722;--soft:#41586B;--line:#DCE3E8;--pale:#F2F4F5;
+  --c:"Barlow Condensed","Barlow",Arial,sans-serif;--b:"Barlow","Segoe UI",Arial,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+html{scroll-padding-top:70px}
+body{font:400 17px/1.6 var(--b);color:var(--ink);background:#fff}
+img,video{max-width:100%;height:auto;display:block}
+img{pointer-events:none;-webkit-user-drag:none;user-select:none}
+a{color:inherit}
+button{font-family:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+[hidden]{display:none!important}
+.in{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ===== shared bits ===== */
+.tag{display:inline-block;background:var(--purple);color:#fff;font:600 15px var(--b);padding:6px 12px;margin-bottom:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font:700 17px var(--b);padding:13px 20px;background:var(--teal);color:#fff;border:2px solid var(--teal);cursor:pointer;transition:transform .3s var(--ease),background .3s,border-color .3s,color .3s}
+.btn:hover{transform:translateY(-2px);background:var(--blue);border-color:var(--blue)}
+.btn.ol{background:transparent;border-color:#fff}
+.btn.ol:hover{background:#fff;color:var(--navy);border-color:#fff}
+.btn.line{background:#fff;color:var(--navy);border-color:var(--navy)}
+.btn.line:hover{background:var(--navy);color:#fff}
+.btn.red{background:var(--red);border-color:var(--red)}
+.btn.small{font-size:15px;padding:8px 13px}
+.btn .ar{transition:transform .3s var(--ease)}
+.btn:hover .ar{transform:translateX(4px)}
+.st{font:800 clamp(32px,4vw,46px)/1 var(--c);color:var(--red);text-transform:uppercase;margin:0 0 10px;padding-left:16px;border-left:6px solid var(--red);letter-spacing:.005em}
+.st-p{color:var(--soft);max-width:62ch;margin:0 0 28px 22px}
+.rows{display:grid;gap:4px}
+.rows div{display:flex;justify-content:space-between;align-items:baseline;gap:14px;background:rgba(255,255,255,.07);padding:10px 12px;font-size:16px}
+.rows span{color:#8FDCD8;font-weight:500}
+.rows b{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.rows div.hl{background:rgba(215,73,73,.92)}
+.rows div.hl span{color:#fff}
+.glass{background:rgba(14,33,49,.92);border-top:4px solid var(--teal);box-shadow:0 18px 40px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:20px}
+.glass h2{font:800 24px/1 var(--c);color:var(--teal);text-transform:uppercase;margin:0 0 12px;letter-spacing:.01em}
+.teal-rule{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:.7}
+.pill{display:inline-block;font:600 14px var(--b);padding:3px 10px;color:#fff;background:var(--pc,var(--purple));white-space:nowrap}
+.demo{background:var(--purple);color:#fff;font:500 15px var(--b);padding:9px 0;text-align:center}
+.demo b{font-weight:700}
+.demo button{margin-left:10px;background:#fff;color:var(--purple);border:0;font:700 14px var(--b);padding:4px 10px;cursor:pointer}
+
+/* ===== header (both screens) ===== */
+.hd{position:relative;background:var(--navy);color:#fff;overflow:hidden}
+.hd-photo{position:absolute;inset:0;background:url(https://jskedge1.github.io/airshow-pages/join-img/hero-wildcat.webp) 70% 45%/cover no-repeat;animation:drift 22s var(--ease) both}
+.hd-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#13293C 0%,rgba(19,41,60,.95) 36%,rgba(19,41,60,.6) 64%,rgba(19,41,60,.2) 100%),linear-gradient(0deg,#13293C 0%,rgba(19,41,60,0) 42%)}
+@keyframes drift{from{transform:scale(1.08)}to{transform:scale(1)}}
+.hd .in{position:relative;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.85fr);gap:44px;align-items:end;padding-top:100px;padding-bottom:44px}
+.hd h1{font:800 clamp(50px,7.6vw,96px)/.9 var(--c);letter-spacing:.005em;text-transform:uppercase;margin:0 0 14px}
+.hd h1 span{color:var(--teal)}
+.sub{font:700 clamp(17px,1.8vw,21px)/1.25 var(--b);color:var(--teal);text-transform:uppercase;letter-spacing:.02em;margin:0 0 20px}
+.intro{max-width:56ch;color:#DCE6EE;margin:0 0 14px}
+.intro b{color:#fff;font-weight:600}
+
+/* login box */
+.login .tabs2{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:14px}
+.login .tabs2 button{border:1px solid rgba(255,255,255,.18);background:transparent;color:#fff;font:700 16px var(--b);padding:10px;cursor:pointer;transition:background .3s}
+.login .tabs2 button[aria-selected=true]{background:var(--teal);border-color:var(--teal)}
+.login p{margin:0 0 12px;color:#DCE6EE;font-size:16px}
+.how3{display:grid;gap:6px;margin-bottom:14px}
+.how3 button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:#fff;color:#333;font:600 16px var(--b);padding:11px 14px;cursor:pointer;transition:transform .25s var(--ease)}
+.how3 button:hover{transform:translateX(4px)}
+.how3 svg{width:18px;height:18px;flex:none}
+.login .fine{font-size:14px;color:#9FB3C3;margin:10px 0 0}
+.login .fine a{color:#8FDCD8}
+
+/* logged out: what's inside */
+.inside{padding:76px 0 70px}
+.in-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;align-items:start}
+.ins{position:relative;background:#fff;border:1px solid var(--line);border-top:5px solid var(--ic);padding:24px 22px;box-shadow:0 10px 26px rgba(19,41,60,.07);transition:transform .45s var(--ease),box-shadow .45s}
+.ins:hover{transform:translateY(-4px);box-shadow:0 22px 44px rgba(19,41,60,.14)}
+.ins:nth-child(1){grid-column:1/span 5}
+.ins:nth-child(2){grid-column:6/span 4;margin-top:46px}
+.ins:nth-child(3){grid-column:10/span 3;margin-top:12px}
+.ins .ii{width:48px;height:48px;background:var(--ic);display:grid;place-items:center;margin-bottom:14px}
+.ins .ii svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ins h3{font:800 28px/1 var(--c);text-transform:uppercase;color:var(--navy);margin:0 0 8px}
+.ins p{margin:0;color:#33424F}
+
+/* ===== logged in header ===== */
+.me{display:flex;align-items:center;gap:22px}
+.av{flex:none;width:104px;height:104px;background:var(--teal);color:var(--navy);font:800 52px/1 var(--c);display:grid;place-items:center;box-shadow:0 18px 36px rgba(0,0,0,.3)}
+.me h1{margin:0 0 6px}
+.chipsline{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chipsline span{font:600 14px var(--b);background:rgba(255,255,255,.1);padding:4px 10px;border-left:3px solid var(--teal)}
+.out{position:absolute;top:18px;right:28px;z-index:2;display:flex;gap:8px}
+.out button,.out a{background:rgba(14,33,49,.8);color:#fff;border:1px solid rgba(255,255,255,.25);font:600 15px var(--b);padding:8px 14px;cursor:pointer;text-decoration:none;transition:background .3s}
+.out button:hover,.out a:hover{background:var(--red);border-color:var(--red)}
+
+/* tab bar */
+.tabbar{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.08)}
+.tabbar .in{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabbar .in::-webkit-scrollbar{display:none}
+.tabbar button{flex:none;border:0;background:transparent;color:#fff;font:600 16px var(--b);padding:14px 16px;cursor:pointer;transition:padding .4s ease,background-color .4s ease}
+.tabbar button:hover,.tabbar button[aria-selected=true]{background:var(--teal);padding-left:28px;padding-right:28px}
+.tabbar a.adm{flex:none;margin-left:auto;color:#fff;text-decoration:none;font:600 16px var(--b);padding:14px 16px;background:var(--purple);transition:padding .4s ease,background-color .4s ease}
+.tabbar a.adm:hover{background:var(--blue);padding-left:28px;padding-right:28px}
+.tabbar em{font-style:normal;display:inline-block;min-width:20px;margin-left:6px;background:var(--red);font-size:13px;padding:0 6px;text-align:center}
+.panel{padding:60px 0 70px;animation:pin .5s var(--ease)}
+@keyframes pin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* overview */
+.ov{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:24px;align-items:start}
+.note{background:var(--purple);color:#fff;padding:28px 30px;position:relative;box-shadow:0 24px 50px -26px rgba(105,80,161,.75)}
+.note h3{font:800 30px/1 var(--c);text-transform:uppercase;margin:0 0 10px}
+.note p{margin:0 0 10px;color:rgba(255,255,255,.93)}
+.note .sig{font:800 20px/1 var(--c);text-transform:uppercase;margin-top:14px}
+.wanted{margin-top:24px}
+.wanted h3{font:800 26px/1 var(--c);text-transform:uppercase;color:var(--navy);margin:0 0 12px}
+.want{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-left:5px solid var(--wc);padding:14px 16px;margin-bottom:8px;transition:transform .35s var(--ease),box-shadow .35s}
+.want:hover{transform:translateX(4px);box-shadow:0 12px 26px rgba(19,41,60,.1)}
+.want .wi{width:44px;height:44px;border-radius:50%;background:var(--wc);display:grid;place-items:center}
+.want .wi svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.want b{display:block;font:700 17px/1.3 var(--b);color:var(--navy)}
+.want span{display:block;font-size:15px;color:var(--soft)}
+.side .glassl{background:var(--navy);color:#fff;border-top:4px solid var(--teal);padding:20px}
+.side h3{font:800 24px/1 var(--c);color:var(--teal);text-transform:uppercase;margin:0 0 12px}
+.recent{margin-top:18px;background:var(--pale);padding:18px}
+.recent h3{color:var(--navy)}
+.rc{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.rc:first-of-type{border-top:0}
+.rc .th{width:64px;height:44px;background:var(--navy) center/cover;display:grid;place-items:center;color:#fff}
+.rc .th svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2}
+.rc b{display:block;font:600 16px/1.3 var(--b);color:var(--navy)}
+
+/* send something */
+.types{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;background:#fff;box-shadow:0 14px 34px -22px rgba(19,41,60,.5)}
+.ty{border:0;border-top:5px solid transparent;background:#fff;cursor:pointer;padding:18px 12px 16px;text-align:center;color:var(--navy);font:700 16px/1.25 var(--b);transition:background .35s,color .35s}
+.ty .ring{width:46px;height:46px;margin:0 auto 10px;border-radius:50%;border:3px solid var(--tc);display:grid;place-items:center;transition:background .35s,box-shadow .35s}
+.ty .ring svg{width:20px;height:20px;stroke:var(--tc);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .35s}
+.ty small{display:block;font:500 14px var(--b);color:var(--soft);margin-top:2px}
+.ty:hover .ring{background:var(--tc);box-shadow:0 0 0 6px color-mix(in srgb,var(--tc) 18%,transparent)}
+.ty:hover .ring svg{stroke:#fff}
+.ty[aria-selected=true]{background:var(--tc);color:#fff;border-top-color:rgba(0,0,0,.2)}
+.ty[aria-selected=true] small{color:rgba(255,255,255,.85)}
+.ty[aria-selected=true] .ring{border-color:#fff}
+.ty[aria-selected=true] .ring svg{stroke:#fff}
+.sendgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:0;margin-top:18px;box-shadow:0 26px 50px -30px rgba(19,41,60,.55)}
+.form{background:#fff;border:1px solid var(--line);border-right:0;padding:28px 30px;border-top:5px solid var(--tc,var(--teal))}
+.form h3{font:800 30px/1 var(--c);text-transform:uppercase;color:var(--navy);margin:0 0 6px}
+.form>p{margin:0 0 20px;color:var(--soft)}
+.fld{margin-bottom:16px}
+.fld>label,.fld>.fl{display:block;font:700 16px var(--b);color:var(--navy);margin-bottom:6px}
+.fld small{font-weight:500;color:var(--soft)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.inp,select.inp,textarea.inp{width:100%;font:400 17px/1.5 var(--b);color:var(--ink);background:#F7F9FA;border:0;border-bottom:2px solid #B9C5CE;padding:11px 12px;transition:border-color .3s,background .3s;border-radius:0}
+.inp:focus{outline:0;border-bottom-color:var(--teal);background:#fff}
+textarea.inp{min-height:130px;resize:vertical}
+.drop{position:relative;border:2px dashed #B9C5CE;background:#F7F9FA;padding:26px 18px;text-align:center;transition:border-color .3s,background .3s;cursor:pointer}
+.drop.over,.drop:hover{border-color:var(--teal);background:#EAF7F6}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.drop svg{width:34px;height:34px;stroke:var(--tealtext);fill:none;stroke-width:2;margin:0 auto 6px;display:block}
+.drop b{display:block;color:var(--navy);font-size:17px}
+.drop span{color:var(--soft);font-size:15px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px}
+.thumbs div{position:relative;aspect-ratio:16/10;background:var(--navy) center/cover;overflow:hidden}
+.thumbs div video{width:100%;height:100%;object-fit:cover}
+.thumbs button{position:absolute;top:4px;right:4px;width:26px;height:26px;border:0;background:rgba(11,23,34,.8);color:#fff;font-size:16px;cursor:pointer;line-height:1}
+.thumbs small{position:absolute;left:0;right:0;bottom:0;background:rgba(11,23,34,.7);color:#fff;font-size:12px;padding:2px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.checks{display:grid;gap:8px;margin:6px 0 18px}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:16px;color:#26394A;cursor:pointer}
+.ck input{width:20px;height:20px;accent-color:var(--teal);margin-top:3px;flex:none}
+.err{display:none;background:#FBEAEA;border-left:4px solid var(--red);color:#7A2020;padding:10px 12px;font-size:15px;margin-bottom:12px}
+.err.on{display:block}
+.prev{background:var(--navy);color:#fff;padding:28px 26px}
+.prev h3{font:800 24px/1 var(--c);text-transform:uppercase;color:var(--teal);margin:0 0 12px}
+.prev .tip{border-left:4px solid var(--purple);background:rgba(255,255,255,.06);padding:12px 14px;font-size:16px;color:#E6EEF4;margin-bottom:12px}
+.prev .tip b{color:#B9A6E6}
+.prev ul{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:6px}
+.prev li{position:relative;padding:8px 10px 8px 30px;background:rgba(255,255,255,.06);font-size:15px;line-height:1.4}
+.prev li::before{content:"";position:absolute;left:11px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:var(--teal)}
+.sentok{display:none;margin-top:14px;background:#E7F6EE;border-left:4px solid var(--green);padding:12px 14px;color:#15502A;font-size:16px}
+.sentok.on{display:block;animation:pin .5s var(--ease)}
+
+/* my work */
+.wtop{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.filt{display:flex;flex-wrap:wrap;gap:6px}
+.filt button{border:1px solid #C9D3DA;background:#fff;color:var(--navy);font:600 15px var(--b);padding:7px 12px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.filt button[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:#fff}
+.key{display:flex;flex-wrap:wrap;gap:6px}
+.works{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.wk{background:#fff;border:1px solid var(--line);border-top:5px solid var(--sc);box-shadow:0 8px 22px rgba(19,41,60,.06);display:flex;flex-direction:column;transition:transform .4s var(--ease),box-shadow .4s}
+.wk:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(19,41,60,.13)}
+.wk .pic{position:relative;aspect-ratio:16/9;background:var(--navy) center/cover;display:grid;place-items:center}
+.wk .pic .play{width:54px;height:54px;border-radius:50%;background:rgba(11,23,34,.75);display:grid;place-items:center}
+.wk .pic .play svg{width:22px;height:22px;fill:#fff}
+.wk .pic.txt{background:linear-gradient(135deg,var(--navy),#1C3A52)}
+.wk .pic.txt svg{width:42px;height:42px;stroke:var(--teal);fill:none;stroke-width:1.8}
+.wk .pic .n{position:absolute;right:8px;bottom:8px;background:rgba(11,23,34,.75);color:#fff;font:600 13px var(--b);padding:2px 8px}
+.wk .bd{padding:16px 16px 14px;flex:1;display:flex;flex-direction:column}
+.wk .top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}
+.wk .kind{font:600 14px var(--b);color:var(--tealtext)}
+.wk h4{font:700 18px/1.3 var(--b);color:var(--navy);margin:0 0 4px}
+.wk .meta{font-size:15px;color:var(--soft);margin:0}
+.wk .msg{margin-top:10px;border-left:4px solid var(--red);background:#FBEAEA;padding:8px 10px;font-size:15px;color:#5A2020}
+.wk .msg.ok{border-color:var(--teal);background:#EAF7F6;color:#0E4744}
+.wk .acts{margin-top:auto;padding-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.wk .acts button{border:1px solid #C9D3DA;background:#fff;color:var(--navy);font:600 14px var(--b);padding:6px 10px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.wk .acts button:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.wk .acts button.rm:hover{background:var(--red);border-color:var(--red)}
+.wk .acts a{font:600 14px var(--b);color:var(--tealtext);padding:6px 0}
+.empty{background:var(--pale);padding:30px;text-align:center;color:var(--soft)}
+
+/* profile */
+.pf{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:0;box-shadow:0 26px 50px -30px rgba(19,41,60,.55)}
+.pf .form{border-top-color:var(--teal)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+.chip span{display:inline-block;border:1px solid #C9D3DA;background:#fff;color:var(--navy);font:500 15px var(--b);padding:7px 12px;transition:background .3s,color .3s,border-color .3s}
+.chip input:hover+span{border-color:var(--teal)}
+.chip input:checked+span{background:var(--teal);border-color:var(--teal);color:#fff}
+.chip input:focus-visible+span{outline:3px solid var(--purple);outline-offset:2px}
+.credit{background:var(--navy);color:#fff;padding:28px 26px}
+.credit h3{font:800 24px/1 var(--c);text-transform:uppercase;color:var(--teal);margin:0 0 6px}
+.credit>p{color:#B9C9D6;font-size:16px;margin:0 0 14px}
+.cardprev{background:#fff;color:var(--ink);border-top:5px solid var(--purple)}
+.cardprev .cp{position:relative;aspect-ratio:16/9;background:url(https://jskedge1.github.io/airshow-pages/join-img/vh-typhoon.webp) center/cover}
+.cardprev .cp span{position:absolute;right:8px;bottom:8px;background:rgba(11,23,34,.72);color:#fff;font:500 13px var(--b);padding:3px 8px}
+.cardprev .cb{padding:14px 16px}
+.cardprev .cb b{display:block;font:800 26px/1 var(--c);text-transform:uppercase;color:var(--navy)}
+.cardprev .cb small{display:block;color:var(--tealtext);font:500 15px var(--b);margin-top:4px}
+.cardprev .cb p{margin:8px 0 0;font-size:15px;color:#33424F}
+.saved{display:none;margin-top:12px;font:600 15px var(--b);color:var(--tealtext)}
+.saved.on{display:block}
+
+/* guidelines */
+.trays{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.tray{background:#fff;box-shadow:0 6px 18px rgba(19,41,60,.08);transition:transform .4s var(--ease),box-shadow .4s}
+.tray:hover{transform:translateY(-4px);box-shadow:0 18px 36px rgba(19,41,60,.14)}
+.tray header{display:flex;align-items:center;gap:12px;background:var(--tc);color:#fff;padding:14px 16px}
+.tray header i{flex:none;width:34px;height:34px;border-radius:50%;background:#fff;display:grid;place-items:center;font:800 18px var(--b);font-style:normal;color:var(--tc)}
+.tray header h3{font:800 24px/1 var(--c);text-transform:uppercase;margin:0}
+.tray ul{list-style:none;margin:0;padding:4px 16px 8px}
+.tray li{padding:12px 0;border-bottom:1px solid var(--line);font:500 16px/1.45 var(--b);color:var(--navy)}
+.tray li:last-child{border-bottom:0}
+.tray li span{display:block;font-weight:400;color:#41586B;font-size:15px;margin-top:2px}
+.guide-pale{background:var(--pale);padding:30px 0;margin-top:30px}
+.sizes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.sz{background:#fff;border:1px solid var(--line);border-top:5px solid var(--zc);padding:18px}
+.sz b{display:block;font:700 18px var(--b);color:var(--navy);margin-bottom:4px}
+.sz p{margin:0;font-size:16px;color:#33424F}
+
+/* Jack's view */
+.adm-note{background:var(--pale);border-left:5px solid var(--purple);padding:14px 18px;margin-bottom:20px;color:#26394A}
+.queue{display:grid;gap:12px}
+.q{display:grid;grid-template-columns:200px minmax(0,1fr) auto;gap:18px;align-items:center;background:#fff;border:1px solid var(--line);border-left:5px solid var(--sc);padding:12px;box-shadow:0 8px 20px rgba(19,41,60,.06)}
+.q .pic{aspect-ratio:16/9;background:var(--navy) center/cover;display:grid;place-items:center}
+.q .pic.txt svg,.q .pic svg{width:32px;height:32px;stroke:var(--teal);fill:none;stroke-width:1.8}
+.q h4{margin:0 0 4px;font:700 18px/1.3 var(--b);color:var(--navy)}
+.q p{margin:0;font-size:15px;color:var(--soft)}
+.q .qa{display:flex;flex-direction:column;gap:6px}
+.q .qa button{border:0;font:700 14px var(--b);padding:8px 12px;cursor:pointer;color:#fff;background:var(--teal);transition:background .3s}
+.q .qa button.ch{background:var(--purple)}
+.q .qa button.no{background:var(--red)}
+.q .qa button:hover{background:var(--blue)}
+
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:30px}
+.flow a{position:relative;display:block;text-decoration:none;color:#fff;padding:20px 20px 22px;min-height:150px;transition:min-height .4s var(--ease)}
+.flow a:nth-child(1){background:var(--teal)}.flow a:nth-child(2){background:var(--purple)}.flow a:nth-child(3){background:var(--navy)}.flow a:nth-child(4){background:var(--red)}
+.flow a:hover{min-height:166px}
+.flow small{display:inline-block;background:rgba(0,0,0,.2);font:600 14px var(--b);padding:3px 9px;margin-bottom:10px}
+.flow b{display:block;font:800 26px/1 var(--c);text-transform:uppercase;margin-bottom:6px}
+.flow span{font-size:15px;color:rgba(255,255,255,.9)}
+.flow a.here{box-shadow:inset 0 -6px 0 #fff}
+@media(max-width:1000px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.flow{grid-template-columns:minmax(0,1fr)}.flow a,.flow a:hover{min-height:0}}
+/* toast */
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--navy);color:#fff;border-bottom:4px solid var(--teal);padding:12px 18px;font:600 16px var(--b);z-index:60;transition:opacity .35s,transform .35s var(--ease);pointer-events:none;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translateX(-50%)}
+
+.small{background:var(--navy2);color:#9FB3C3;font-size:15px;padding:18px 0}
+.small p{margin:0}
+
+@media(max-width:1000px){
+  .hd .in{grid-template-columns:minmax(0,1fr);padding-top:170px}
+  .glass{max-width:480px}
+  .ins:nth-child(n){grid-column:1/-1;margin-top:0}
+  .ov{grid-template-columns:minmax(0,1fr)}
+  .types{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sendgrid,.pf{grid-template-columns:minmax(0,1fr)}
+  .form{border-right:1px solid var(--line)}
+  .works{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .trays,.sizes{grid-template-columns:minmax(0,1fr)}
+  .q{grid-template-columns:140px minmax(0,1fr)}
+  .q .qa{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}
+}
+@media(max-width:700px){
+  .in{padding:0 18px}
+  .hd .in{padding-top:130px;padding-bottom:32px}
+  .hd-photo::after{background:linear-gradient(0deg,#13293C 0%,rgba(19,41,60,.93) 55%,rgba(19,41,60,.35) 100%)}
+  .out{right:18px;top:14px}
+  .me{flex-direction:column;align-items:flex-start;gap:14px}
+  .av{width:72px;height:72px;font-size:36px}
+  .st-p{margin-left:0}
+  .panel{padding-top:40px}
+  .types{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .form{padding:22px 18px}
+  .prev,.credit{padding:22px 18px}
+  .works{grid-template-columns:minmax(0,1fr)}
+  .want{grid-template-columns:40px minmax(0,1fr)}
+  .want .btn{grid-column:1/-1}
+  .q{grid-template-columns:minmax(0,1fr)}
+  .tabbar button{padding:12px;font-size:15px}
+  .tabbar a.adm{margin-left:0;padding:12px;font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hd-photo,.panel,.sentok.on{animation:none}
+  .btn,.ins,.want,.ty,.wk,.tray,.tabbar button,.how3 button,.toast{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="demo" id="demo" hidden><b>Preview with example data.</b> Log in to see it as Sam, an example volunteer. Anything you send shows in Team admin, and Jack's decisions show back here. <button type="button" id="resetDemo">Start the example again</button></div>
+
+<!-- ===================== LOGGED OUT ===================== -->
+<div id="outView">
+  <header class="hd">
+    <div class="hd-photo" role="img" aria-label="A Royal Navy Wildcat helicopter on the grass with its crew chatting beside it"></div>
+    <div class="in">
+      <div>
+        <span class="tag">For the team</span>
+        <h1>Volunteer <span>Hub</span></h1>
+        <p class="sub">Your photos, videos and write ups in one place</p>
+        <p class="intro">This is where the team sends me their work. <b>Log in, pick what you are sending, and you can see where it is on the guide from then on.</b></p>
+        <p class="intro">Not on the team yet? Have a read of the Join the team page first. It takes two minutes.</p>
+      </div>
+      <aside class="glass login" aria-label="Volunteer log in">
+        <h2>Volunteer Log In</h2>
+        <div class="tabs2" role="tablist">
+          <button role="tab" aria-selected="true" id="tLog">Log in</button>
+          <button role="tab" aria-selected="false" id="tNew">I'm new</button>
+        </div>
+        <p id="logText">Use the same log in as My Airshow Hub and the forum. It opens the secure members window.</p>
+        <div class="how3">
+          <button type="button" data-login><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><rect x="3" y="5" width="18" height="14"/><path d="M3 7l9 6 9-6"/></svg>Log in with email</button>
+          <button type="button" data-login><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.6a4.8 4.8 0 0 1-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-7.5z"/><path fill="#34A853" d="M12 22c2.8 0 5.2-.9 6.9-2.5l-3.4-2.6c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.7v2.7A10 10 0 0 0 12 22z"/><path fill="#FBBC05" d="M6.2 13.6a6 6 0 0 1 0-3.8V7.1H2.7a10 10 0 0 0 0 9z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.9.5 4 1.6l3-3A10 10 0 0 0 2.7 7.1l3.5 2.7C7 7.7 9.3 5.9 12 5.9z"/></svg>Log in with Google</button>
+          <button type="button" data-login><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877F2" d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>Log in with Facebook</button>
+        </div>
+        <div class="rows">
+          <div><span>Who can log in</span><b>Team members</b></div>
+          <div class="hl"><span>Cost</span><b>Free, always</b></div>
+        </div>
+        <p class="fine">Not on the team? <a href="https://www.ukairshowguide.co.uk/join-the-team" target="_top">Join the team</a> first, and I'll switch your account on.</p>
+      </aside>
+    </div>
+    <div class="teal-rule"></div>
+  </header>
+
+  <section class="inside">
+    <div class="in">
+      <h2 class="st">What's Inside</h2>
+      <p class="st-p">Everything from the Join the team page, in one place once you are logged in.</p>
+      <div class="in-grid">
+        <div class="ins" style="--ic:#D74949"><span class="ii"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/></svg></span><h3>Send Something</h3><p>Photos, video, a review, show tips or an arrivals report. Pick the show and the day, add your files and send it over.</p></div>
+        <div class="ins" style="--ic:#32B4AF"><span class="ii"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M8 14h8"/></svg></span><h3>See Where It Is</h3><p>Every piece shows if it has arrived, if I am checking it, or if it is live on the guide with a link to the page.</p></div>
+        <div class="ins" style="--ic:#6950A1"><span class="ii"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></span><h3>Your Credit</h3><p>Choose the name that goes on your work and the links people can follow.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===================== LOGGED IN ===================== -->
+<div id="inView" hidden>
+  <header class="hd">
+    <div class="hd-photo" role="img" aria-label="A Royal Navy Wildcat helicopter on the grass with its crew"></div>
+    <div class="out"><a href="https://www.ukairshowguide.co.uk/join-the-team" target="_top">Join the team page</a><button type="button" id="logout">Log out</button></div>
+    <div class="in">
+      <div>
+        <span class="tag">Volunteer Hub</span>
+        <div class="me">
+          <div class="av" id="av" aria-hidden="true">S</div>
+          <div>
+            <h1 id="hello">Hello, <span>Sam</span></h1>
+            <p class="intro" style="margin:0">Thanks for helping with the guide. Here's where your work is up to.</p>
+            <div class="chipsline" id="myRoles"></div>
+          </div>
+        </div>
+      </div>
+      <aside class="glass" aria-label="Your work at a glance">
+        <h2>Your Work So Far</h2>
+        <div class="rows" id="stats"></div>
+      </aside>
+    </div>
+    <div class="teal-rule"></div>
+  </header>
+
+  <nav class="tabbar" aria-label="Volunteer Hub sections">
+    <div class="in" role="tablist" id="tabbar">
+      <button role="tab" data-p="overview" aria-selected="true">Overview</button>
+      <button role="tab" data-p="send" aria-selected="false">Send something</button>
+      <button role="tab" data-p="work" aria-selected="false">My work <em id="chDot" hidden>0</em></button>
+      <button role="tab" data-p="profile" aria-selected="false">My profile</button>
+      <button role="tab" data-p="rules" aria-selected="false">Guidelines</button>
+      <a class="adm" href="https://www.ukairshowguide.co.uk/team-admin" target="_top" id="admLink">Team admin <span aria-hidden="true">→</span></a>
+    </div>
+  </nav>
+
+  <!-- not on the team yet, or waiting to be switched on -->
+  <section class="panel" id="p-join" hidden>
+    <div class="in">
+      <div class="sendgrid" style="margin-top:0">
+        <form class="form" id="joinForm" novalidate style="--tc:#6950A1">
+          <h3 id="jTitle">Ask To Join The Team</h3>
+          <p id="jIntro">You are logged in, but your account isn't on the team yet. Tell me what you'd like to help with and I'll switch you on after a quick chat.</p>
+          <div class="err" id="jErr" role="alert"></div>
+          <div id="jFields">
+            <div class="fld"><label for="jName">Your name</label><input class="inp" id="jName" maxlength="60" autocomplete="name"></div>
+            <div class="fld"><span class="fl">What would you like to help with?</span><div class="chips" id="jRoles"></div></div>
+            <div class="fld"><span class="fl">Which shows do you go to?</span><div class="chips" id="jShows"></div></div>
+            <div class="fld"><label for="jMsg">A bit about you</label><textarea class="inp" id="jMsg" maxlength="1200" placeholder="How long you've been going to airshows, what kit you use, and any links to your work"></textarea></div>
+            <label class="ck" style="margin-bottom:16px"><input type="checkbox" id="jOk"> I have read the guidelines on the Join the team page</label>
+            <button class="btn" type="submit">Ask to join <span class="ar">→</span></button>
+          </div>
+        </form>
+        <aside class="prev">
+          <h3>What Happens Next</h3>
+          <ul><li>I read your message, usually within a few days</li><li>We have a quick chat by email</li><li>I switch your account on and this page opens up</li></ul>
+          <div class="tip"><b>Not sure yet?</b> Have a read of the <a href="https://www.ukairshowguide.co.uk/join-the-team" target="_top" style="color:#8FDCD8">Join the team page</a> first. There is no pressure and no minimum.</div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- overview -->
+  <section class="panel" id="p-overview">
+    <div class="in">
+      <div class="ov">
+        <div>
+          <div class="note">
+            <h3>A Note From Me</h3>
+            <div id="noteBody"></div>
+            <div class="sig">Jack</div>
+          </div>
+          <div class="wanted">
+            <h3>What I Need Right Now</h3>
+            <div id="wantList"></div>
+          </div>
+        </div>
+        <div class="side">
+          <div class="glassl">
+            <h3>Your Next Steps</h3>
+            <div class="rows" id="nextRows"></div>
+          </div>
+          <div class="recent">
+            <h3>Latest From You</h3>
+            <div id="recentList"></div>
+            <button class="btn small line" type="button" data-go="work" style="margin-top:12px">See all my work <span class="ar">→</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- send something -->
+  <section class="panel" id="p-send" hidden>
+    <div class="in">
+      <h2 class="st">Send Something</h2>
+      <p class="st-p">Pick what you are sending. The form changes to ask for what I need for that kind of thing.</p>
+      <div class="types" role="tablist" aria-label="What are you sending?" id="types"></div>
+      <div class="sendgrid">
+        <form class="form" id="sendForm" novalidate>
+          <div class="err on" id="pausedNote" hidden>Your account is paused at the moment, so sending is switched off. Drop me a message when you would like to start again.</div>
+          <h3 id="fTitle">Photos</h3>
+          <p id="fIntro"></p>
+          <div class="err" id="fErr" role="alert"></div>
+          <div class="two">
+            <div class="fld"><label for="fShow">Which show?</label><select class="inp" id="fShow"></select></div>
+            <div class="fld"><label for="fDay">Which day?</label><input class="inp" type="date" id="fDay"></div>
+          </div>
+          <div class="fld"><label for="fTitleIn" id="lTitle">Give it a title</label><input class="inp" id="fTitleIn" maxlength="90" placeholder="For example, Red Arrows from the bandstand"></div>
+          <div class="fld" id="wFiles"><span class="fl" id="lFiles">Your files</span>
+            <div class="drop" id="drop"><input type="file" id="fFiles" multiple aria-labelledby="lFiles"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/></svg><b>Drop files here or tap to choose</b><span id="dropHint">JPG, PNG or HEIC photos</span></div>
+            <div class="thumbs" id="thumbs"></div>
+          </div>
+          <div class="fld" id="wLink"><label for="fLink">Or paste a link <small>Google Drive, WeTransfer, YouTube or Instagram</small></label><input class="inp" id="fLink" maxlength="300" placeholder="https://"></div>
+          <div class="fld" id="wWhere"><label for="fWhere">Where were you stood? <small>Optional</small></label><input class="inp" id="fWhere" maxlength="120" placeholder="For example, crowd line by the bandstand, about 10 metres from the barrier"></div>
+          <div class="fld" id="wText"><label for="fText" id="lText">Your words</label><textarea class="inp" id="fText" maxlength="6000"></textarea></div>
+          <div class="checks" id="checks"></div>
+          <button class="btn" type="submit">Send it to Jack <span class="ar">→</span></button>
+          <div class="sentok" id="sentOk" role="status"></div>
+          <p class="note" id="upProg" role="status" style="font-size:15px;color:#41586B;margin:10px 0 0"></p>
+        </form>
+        <aside class="prev" id="fSide"></aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- my work -->
+  <section class="panel" id="p-work" hidden>
+    <div class="in">
+      <h2 class="st">My Work</h2>
+      <p class="st-p">Everything you have sent, newest first. You can ask for anything to come off the site at any time.</p>
+      <div class="wtop">
+        <div class="filt" id="filt"></div>
+        <div class="key" aria-label="What the colours mean">
+          <span class="pill" style="--pc:#6950A1">Sent</span><span class="pill" style="--pc:#1D63B7">Checking</span><span class="pill" style="--pc:#0E5F5B">Live</span><span class="pill" style="--pc:#D74949">Change asked</span>
+        </div>
+      </div>
+      <div class="works" id="works"></div>
+    </div>
+  </section>
+
+  <!-- profile -->
+  <section class="panel" id="p-profile" hidden>
+    <div class="in">
+      <h2 class="st">My Profile</h2>
+      <p class="st-p">This is how your name shows on the guide. Change it whenever you like.</p>
+      <div class="pf">
+        <form class="form" id="pfForm" novalidate>
+          <h3>Your Details</h3>
+          <p>Only your credit name and links are shown on the site. Your email stays private.</p>
+          <div class="two">
+            <div class="fld"><label for="pName">Credit name</label><input class="inp" id="pName" maxlength="60"></div>
+            <div class="fld"><label for="pLink">Link people can follow <small>Optional</small></label><input class="inp" id="pLink" maxlength="200"></div>
+          </div>
+          <div class="fld"><span class="fl">My roles</span><div class="chips" id="pRoles"></div></div>
+          <div class="fld"><span class="fl">Shows I go to</span><div class="chips" id="pShows"></div></div>
+          <div class="fld"><label for="pBio">A line about you <small>Shown with your work if you like</small></label><textarea class="inp" id="pBio" maxlength="240" style="min-height:80px"></textarea></div>
+          <div class="checks">
+            <label class="ck"><input type="checkbox" id="pTeam" checked> Show me on the Meet the team page</label>
+            <label class="ck"><input type="checkbox" id="pNews" checked> Tell me in the hub when Jack needs something from my shows</label>
+          </div>
+          <button class="btn" type="submit">Save my profile</button>
+          <span class="saved" id="pSaved" role="status">Saved. Your credit updates on your live work too.</span>
+        </form>
+        <aside class="credit">
+          <h3>How Your Credit Looks</h3>
+          <p>An example of one of your photos on a show page.</p>
+          <div class="cardprev">
+            <div class="cp"><span id="cpCredit">© Sam Carter</span></div>
+            <div class="cb"><b>Typhoon On The Static Park</b><small id="cpBy">Photo by Sam Carter</small><p id="cpBio"></p></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- guidelines -->
+  <section class="panel" id="p-rules" hidden>
+    <div class="in">
+      <h2 class="st">Guidelines</h2>
+      <p class="st-p">The same few things from the Join the team page, kept here so you don't have to go looking.</p>
+      <div class="trays">
+        <div class="tray" style="--tc:#32B4AF"><header><i aria-hidden="true">✓</i><h3>Please Do</h3></header><ul>
+          <li>Send work that's your own<span>Your photos, your words, your video.</span></li>
+          <li>Be honest<span>If the car park was a mess, say so. Readers trust that.</span></li>
+          <li>Tell me the show and the date<span>Things change year to year.</span></li>
+          <li>Follow each show's rules<span>Please see the rules before you go.</span></li></ul></div>
+        <div class="tray" style="--tc:#6950A1"><header><i aria-hidden="true">!</i><h3>Check With Me First</h3></header><ul>
+          <li>Close ups of people<span>Especially children. I'd rather check than guess.</span></li>
+          <li>Show logos and official material<span>I only use these with the organiser's permission.</span></li>
+          <li>Anything from behind the barriers<span>Media passes and private areas come with their own rules.</span></li>
+          <li>If you're under 18<span>I'd need a parent or guardian to say it's OK.</span></li></ul></div>
+        <div class="tray" style="--tc:#D74949"><header><i aria-hidden="true">×</i><h3>Please Don't</h3></header><ul>
+          <li>Send other people's photos<span>Even with credit, unless they've said yes.</span></li>
+          <li>Fly drones at a show<span>It isn't allowed, and it puts the display at risk.</span></li>
+          <li>Speak for the guide without asking<span>Organisers and press come to me first.</span></li></ul></div>
+      </div>
+    </div>
+    <div class="guide-pale">
+      <div class="in">
+        <h2 class="st">Sending Big Files</h2>
+        <p class="st-p">Photos upload straight from your phone or computer. Video and very big files go in as a link.</p>
+        <div class="sizes">
+          <div class="sz" style="--zc:#32B4AF"><b>Photos</b><p>Up to 10 at a time. The hub sends them at a size that works on the site. For full size originals, add a Google Drive or WeTransfer link too.</p></div>
+          <div class="sz" style="--zc:#C2255C"><b>Video</b><p>Video goes in as a link. YouTube, Google Drive or WeTransfer all work, and it keeps the quality you filmed at.</p></div>
+          <div class="sz" style="--zc:#6950A1"><b>Write ups</b><p>Type straight into the box, or paste from Word or your notes app.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<section class="guide-pale" id="flowWrap" style="margin-top:0">
+  <div class="in">
+    <h2 class="st">How It All Links Up</h2>
+    <p class="st-p">Where your work goes after you press send.</p>
+    <div class="flow">
+      <a href="https://www.ukairshowguide.co.uk/join-the-team" target="_top"><small>Step 1</small><b>Join The Team</b><span>Pick a role and say hello</span></a>
+      <a href="#top" class="here" id="flowHere"><small>Step 2, you are here</small><b>Volunteer Hub</b><span>Send your work and see where it is</span></a>
+      <a href="https://www.ukairshowguide.co.uk/team-admin" target="_top"><small>Step 3</small><b>Jack Checks It</b><span>It goes live, or I ask for a small change</span></a>
+      <a href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top"><small>Step 4</small><b>On The Guide</b><span>Your name on the show pages</span></a>
+    </div>
+  </div>
+</section>
+
+<div class="small"><div class="in"><p>Volunteer Hub preview for The Big Guide to UK Airshows. The example volunteers are made up. Photos are mine and used as examples.</p></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://jskedge1.github.io/airshow-pages/team-demo.js"></script>
+<script src="https://jskedge1.github.io/airshow-pages/team-api.js"></script>
+<script src="https://jskedge1.github.io/airshow-pages/volunteer-hub.js"></script>
+</body>
+</html>
