@@ -155,7 +155,8 @@
   }
   if (cfg.me) {
     document.addEventListener("click", function (e) {
-      var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+      var t0 = e.composedPath ? e.composedPath()[0] : e.target;
+      var a = t0 && t0.closest ? t0.closest("a[href]") : null;
       if (!a || a.closest(".ukbt")) return;
       var h = a.getAttribute("href") || "";
       var isSite = /^https?:\/\/(www\.)?ukairshowguide\.co\.uk/i.test(h);
@@ -271,36 +272,59 @@
     return n;
   }
 
-  function build() {
-    if (document.querySelector(".ukbt")) return;
+  /* Where the guide lives. Opened on its own (GitHub, or inside a Wix HTML box) it is this document.
+     On the live site the airshow-page element puts it in a shadow root (div.ae-body), and this
+     script runs in the Wix page's head, so the tabs must go into that root and never into the
+     Wix page itself, or they end up above the site's header menu and below the footer. */
+  var ONSITE = /ukairshowguide\.co\.uk$/i.test(location.hostname);
+  function guideRoot() {
+    var mine = ME && ME.getRootNode ? ME.getRootNode() : null;
+    if (mine && mine !== document && mine.querySelector) return mine;
+    var hosts = document.querySelectorAll("airshow-page");
+    for (var i = 0; i < hosts.length; i++) {
+      var r = hosts[i].shadowRoot;
+      if (r && r.querySelector(".ae-body")) return r;
+    }
+    return ONSITE ? null : document;
+  }
+
+  function build(R) {
+    if (R.querySelector(".ukbt")) return;
+    var box = R === document ? document.body : (R.querySelector(".ae-body") || R);
+    if (R === document && ME && ME.parentNode && ME.parentNode.nodeType === 1 &&
+        ME.parentNode !== document.head && ME.parentNode !== document.documentElement) box = ME.parentNode;
     var st = document.createElement("style");
     st.id = "ukbt-style";
     st.textContent = css;
-    (document.head || document.body).appendChild(st);
+    if (R === document) (document.head || document.body).appendChild(st);
+    else R.insertBefore(st, R.firstChild);
 
-    var box = ME && ME.parentNode && ME.parentNode !== document.head && ME.parentNode.nodeType === 1 ? ME.parentNode : document.body;
-    if (box === document.documentElement) box = document.body;
-    var crumb = "";
     var top;
     var sitebar = box.querySelector("nav.sitebar");
     if (cfg.kind === "show" && sitebar) {
       /* the show pages had a plain Back to Find your airshow link: the tab takes its place */
-      crumb = '<a href="' + SITE + '" target="_top">The Big Guide to UK Airshows</a>';
-      top = bar(false, crumb);
+      top = bar(false, '<a href="' + SITE + '" target="_top">The Big Guide to UK Airshows</a>');
       sitebar.parentNode.insertBefore(top, sitebar);
       sitebar.style.display = "none";
     } else {
       top = bar(false, "");
-      var trail = document.getElementById("ukag-trail");
-      if (trail && trail.parentNode && (box === document.body || box.contains(trail))) trail.parentNode.insertBefore(top, trail.nextSibling);
+      var trail = R.getElementById ? R.getElementById("ukag-trail") : R.querySelector("#ukag-trail");
+      if (trail && trail.parentNode && box.contains(trail)) trail.parentNode.insertBefore(top, trail.nextSibling);
       else box.insertBefore(top, box.firstChild);
     }
     box.appendChild(bar(true, ""));
     try { window.dispatchEvent(new Event("resize")); } catch (e) {}
   }
 
+  var tries = 0;
+  function go() {
+    var R = guideRoot();
+    if (R) { build(R); return; }
+    if (tries++ < 60) setTimeout(go, 250);
+  }
+
   /* wait a moment so the trail bar (trail.js) is in place first */
-  function go() { setTimeout(build, 60); }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", go);
-  else go();
+  function start() { setTimeout(go, 60); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
 })();
