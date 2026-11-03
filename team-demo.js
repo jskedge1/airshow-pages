@@ -5,7 +5,7 @@
   var src=(document.currentScript&&document.currentScript.src)||'';
   var IMG=src.replace(/team-demo\.js.*$/,'')+'join-img/';
   var KEY='ukagTeamPreview1';
-  var SHOWS=['Royal International Air Tattoo','RAF Cosford Air Show','IWM Duxford Air Shows','Shuttleworth Air Shows','Little Gransden Air and Car Show','Eastbourne Airshow','Clacton Air Show','Wales Air Show','Midlands Air Festival','Blackpool Air Show','Southport Air Show','International Ayr Show','Headcorn Airshow'];
+  var SHOWS=['Royal International Air Tattoo','RAF Cosford Air Show','IWM Duxford Air Shows','Shuttleworth Air Shows','Little Gransden Air and Car Show','Eastbourne Airshow','Clacton Air Show','Wales National Airshow','Midlands Air Festival','Blackpool Air Show','Southport Air Show','International Ayr Show','Headcorn Airshow'];
   var ROLES=['Airshow expert','Photographer','Videographer','Blogger or reviewer','Social media helper','YouTuber, vlogger or TikToker','Plane spotting lead','Organiser liaison'];
   var ST={sent:['Sent','#6950A1'],checking:['Checking','#1D63B7'],live:['Live','#0E5F5B'],change:['Change asked','#D74949'],removal:['Removal asked','#41586B'],no:['Not this time','#41586B'],gone:['Taken down','#41586B']};
   var KIND={photo:'Photos',video:'Video',review:'Review',tips:'Show tips',arrivals:'Arrivals report',social:'Post idea'};
@@ -25,7 +25,7 @@
         sam:{id:'sam',name:'Sam Carter',first:'Sam',link:'instagram.com/samshootsjets',bio:'Eastbourne regular since I was a kid. Nikon Z6 and a lot of patience.',roles:['Photographer','Blogger or reviewer'],shows:['Eastbourne Airshow','IWM Duxford Air Shows','Royal International Air Tattoo'],status:'active',joined:'2026-08-02',team:true},
         priya:{id:'priya',name:'Priya Shah',first:'Priya',link:'',bio:'Scanner, notebook and a flask. RIAT every year.',roles:['Plane spotting lead'],shows:['Royal International Air Tattoo','RAF Cosford Air Show'],status:'active',joined:'2026-07-10',team:true},
         dan:{id:'dan',name:'Dan Hughes',first:'Dan',link:'youtube.com/@danfilmsflight',bio:'Films walk rounds and arrivals.',roles:['Videographer','YouTuber, vlogger or TikToker'],shows:['IWM Duxford Air Shows','Shuttleworth Air Shows'],status:'active',joined:'2026-09-01',team:true},
-        megan:{id:'megan',name:'Megan Lloyd',first:'Megan',link:'',bio:'Swansea local, knows the seafront inside out.',roles:['Airshow expert'],shows:['Wales Air Show','Blackpool Air Show','Southport Air Show'],status:'paused',joined:'2026-06-20',team:true},
+        megan:{id:'megan',name:'Megan Lloyd',first:'Megan',link:'',bio:'Swansea local, knows the seafront inside out.',roles:['Airshow expert'],shows:['Wales National Airshow','Blackpool Air Show','Southport Air Show'],status:'paused',joined:'2026-06-20',team:true},
         tom:{id:'tom',name:'Tom Reid',first:'Tom',link:'flickr.com/tomreidaviation',bio:'',roles:['Photographer'],shows:['Clacton Air Show','Eastbourne Airshow'],status:'waiting',joined:'2026-11-02',team:false,applied:'I have been shooting Clacton for six years and would love to help with the seafront pages.'}
       },
       work:[
@@ -37,7 +37,7 @@
         {id:6,v:'sam',k:'photo',title:'B-17 Sally B flypast',show:'IWM Duxford Air Shows',day:'2026-09-12',st:'sent',imgs:[IMG+'vh-b17.webp'],n:3,at:'2026-11-01'},
         {id:7,v:'priya',k:'arrivals',title:'RIAT Thursday arrivals',show:'Royal International Air Tattoo',day:'2026-07-16',st:'sent',text:'10:42 Rafale x2 landed 27. 11:15 F-35A. 13:05 Il-76 was expected but did not turn up.',at:'2026-11-02'},
         {id:8,v:'dan',k:'video',title:'Apache arrival from the north side',show:'IWM Duxford Air Shows',day:'2026-09-11',st:'sent',imgs:[IMG+'vh-apache.webp'],link:'youtube.com/watch?v=example',where:'North side, by the hard standing',at:'2026-11-03'},
-        {id:9,v:'megan',k:'tips',title:'Swansea seafront parking',show:'Wales Air Show',day:'2026-07-05',st:'removal',page:'Wales, Getting there',text:'The Civic Centre car park fills by 9. Try the park and ride at Fabian Way instead.',at:'2026-10-30'}
+        {id:9,v:'megan',k:'tips',title:'Swansea seafront parking',show:'Wales National Airshow',day:'2026-07-05',st:'removal',page:'Wales, Getting there',text:'The Civic Centre car park fills by 9. Try the park and ride at Fabian Way instead.',at:'2026-10-30'}
       ],
       next:10,
       requests:[

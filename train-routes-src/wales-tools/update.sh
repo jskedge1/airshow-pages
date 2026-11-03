@@ -1,5 +1,5 @@
 #!/bin/bash
-# Refreshes the Swansea (Wales Airshow) train page from the timetable.
+# Refreshes the Swansea (Wales National Airshow) train page from the timetable.
 # Usage: ./update.sh THU_DATE   e.g. ./update.sh 2027-08-12   (give the Saturday; it uses that Saturday and the Sunday after it)
 # Then check the output, run python3 ../build.py wales, and commit.
 set -e

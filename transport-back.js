@@ -34,7 +34,7 @@
     midlands: ['Midlands Air Festival', SITE + 'midlandsairfestival'],
     eastbourne: ['Eastbourne Airshow', SITE + 'eastbourneairshow'],
     clacton: ['Clacton Air Show', SITE + 'clactonairshow'],
-    wales: ['Wales Airshow', SITE + 'walesairshow'],
+    wales: ['Wales National Airshow', SITE + 'walesairshow'],
     duxford: ['IWM Duxford Air Shows', SITE + 'duxfordairshows'],
     shuttleworth: ['Shuttleworth Air Shows', SITE + 'shuttleworthairshows'],
     gransden: ['Little Gransden Air and Car Show', SITE + 'little-gransden-air-and-car-show'],

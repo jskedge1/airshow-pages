@@ -45,7 +45,7 @@
     "train-routes/clacton": train("Clacton Air Show", "clactonairshow"),
     "train-routes/cosford": train("RAF Cosford Air Show", "cosfordairshow"),
     "train-routes/eastbourne": train("Eastbourne Air Show", "eastbourneairshow"),
-    "train-routes/wales": train("Wales Airshow", "walesairshow"),
+    "train-routes/wales": train("Wales National Airshow", "walesairshow"),
     "train-routes/riat": train("Royal International Air Tattoo", "riat"),
     "train-routes/riat-cheltenham": train("Royal International Air Tattoo", "riat"),
     "train-routes/riat-kemble": train("Royal International Air Tattoo", "riat"),

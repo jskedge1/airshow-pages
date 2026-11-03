@@ -24,7 +24,7 @@ SHOWS = [
      'This is one of the easiest shows to get to without a car. The train drops you in the town centre, and buses come in from Brighton, Lewes and Hastings. If you want the shortest walk, the 3 takes you right down to Meads.'),
     ('clacton', 'Clacton', 'Clacton Air Show', 'West Greensward, Clacton', 'clactonairshow',
      'Clacton has a direct train from London every hour, Central Connect buses from all round Tendring and Colchester, and National Express coaches into Colchester. Pick the one from your nearest town and you won’t need to worry about seafront parking.'),
-    ('wales', 'Wales', 'Wales Airshow', 'Swansea Bay', 'walesairshow',
+    ('wales', 'Wales', 'Wales National Airshow', 'Swansea Bay', 'walesairshow',
      'Please read this one before you travel. The seafront roads close on Airshow weekend, so the buses don’t always stop where they normally would. The train to Swansea and the Park and Ride from Fabian Way are the ones I would look at first.'),
     ('duxford', 'Duxford', 'Duxford Air Shows', 'IWM Duxford, Cambridgeshire', 'duxfordairshows',
      'For the big Air Shows there is a free shuttle bus from Cambridge station, and that is the one I would use. Whittlesford Parkway and Royston are closer stations, and the 132 bus runs from Cambridge too.'),

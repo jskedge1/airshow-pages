@@ -3937,7 +3937,7 @@ var DATA = {
     ],
     "note": "These are the official 2026 hours. The 2027 Park and Ride times have not been published yet, and no individual bus times were given.",
     "source": [
-     "Visit Swansea Bay: Wales Airshow parking",
+     "Visit Swansea Bay: Wales National Airshow parking",
      "https://www.visitswanseabay.com/wales-airshow-parking/"
     ]
    }
