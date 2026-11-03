@@ -7625,7 +7625,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
           <h3>My view</h3>
           <p>If you want to see what today's RAF can do, Cosford is hard to beat. You get the Red Arrows and the Typhoon in one day, children go free, and you can step off the train almost at the gate. I would suggest Duxford or Shuttleworth if warbirds and a calmer crowd matter more to you. If you want the biggest international line-up of the year, I would suggest pairing Cosford with RIAT.</p>
         </div>
-        <a class="guide" href="https://www.ukairshowguide.co.uk/cosfordairshow" target="_top"><span class="g-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg></span><span class="g-t"><b>Full show guide</b><small>Line-up, where to watch and more</small></span><span class="g-a" aria-hidden="true">→</span></a>
+        <a class="guide" href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top"><span class="g-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg></span><span class="g-t"><b>Find your Air Show</b><small>Every UK show on the guide</small></span><span class="g-a" aria-hidden="true">→</span></a>
       </div>
     </div></div>
   </section>
@@ -7637,6 +7637,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
 <script>
 (function(){
   /* ---- per show: the content for RAF Cosford ---- */
+  var SHOWNAME="RAF Cosford";
   var ICON={
     plane:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V8.5l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5l8 2.5z"/></svg>',
     family:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="8" cy="6" r="2.5"/><circle cx="17" cy="8" r="2"/><path d="M4 21v-6a4 4 0 0 1 8 0v6M14 21v-4a3 3 0 0 1 6 0v4"/></svg>',
@@ -7705,7 +7706,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
       {t:"Teenagers",s:6,r:["see"],g:"Teenagers who find historic aircraft slow usually love the noise and speed of the fast jets and the Red Arrows."}]},
     {id:"see",q:"What do you most want to see?",s:"The kind of flying you're here for",a:[
       {t:"Fast jets and the Red Arrows",s:14,r:["see"],g:"Modern RAF flying is what Cosford does best. In 2026 that meant the Red Arrows, the Typhoon, the F-35B and a Rafale."},
-      {t:"Historic warbirds",s:-10,r:["cmp"],g:"There's some history, such as the Battle of Britain Memorial Flight and visiting Mustang and Thunderbolt warbirds.",x:"If warbirds are your main love, Duxford or Shuttleworth will give you far more of them."},
+      {t:"Historic warbirds",s:-10,r:["cmp"],g:"There's some history, such as the Battle of Britain Memorial Flight and visiting Mustang and Thunderbolt warbirds.",x:"If warbirds are your main love, Duxford or Shuttleworth will give you far more of them.",alt:"For warbirds, I would suggest having a look at Duxford or Shuttleworth on the guide."},
       {t:"A bit of everything",s:8,r:["see"],g:"The mix is broad: jets, helicopters, a parachute team, aerobatics and warbirds, plus a large static display."},
       {t:"Not sure yet",s:4,r:["who"],g:"A good first taste of air shows, with plenty on the ground as well as in the sky."}]},
     {id:"cam",q:"Are you bringing a camera?",s:"Phone, long lens or neither",a:[
@@ -7715,7 +7716,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
     {id:"crowd",q:"How do you feel about crowds?",s:"Cosford sold out in 2026",a:[
       {t:"I love the buzz",s:6,g:"Over 50,000 people came in 2025 and the 2026 show sold out, so the atmosphere is big."},
       {t:"Fine either way",s:2},
-      {t:"I'd rather it was calm",s:-16,r:["cmp"],x:"It's a sell out show with queues for food, toilets and car parks at busy times. A smaller show such as Shuttleworth may suit you better."}]},
+      {t:"I'd rather it was calm",s:-16,r:["cmp"],x:"It's a sell out show with queues for food, toilets and car parks at busy times. A smaller show such as Shuttleworth may suit you better.",alt:"For a calmer day, I would suggest a smaller show such as Shuttleworth."}]},
     {id:"go",q:"How will you get there?",s:"Train, car or not sure yet",a:[
       {t:"By car",s:2,r:["travel"],g:"Car parking is included in your ticket.",w:"Parking is on grass, and you can't be dropped off or picked up at the airfield. Expect queues on the roads in and out."},
       {t:"By train",s:8,r:["travel"],g:"Cosford station is next to the airfield, a couple of hundred metres from the entrance. Few shows are this easy by train.",w:"The station has no step free access and trains get very busy, so allow extra time."},
@@ -7870,7 +7871,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
     QS.forEach(function(q){if(picks[q.id]==null)return;var a=q.a[picks[q.id]];score+=a.s;if(a.g)g.push(a.g);if(a.w)w.push(a.w);if(a.x)x.push(a.x);(a.r||[]).forEach(function(id){if(PART&&!HOST[id])return;if(r.indexOf(id)<0)r.push(id)})});
     score=Math.max(20,Math.min(98,score));
     if(!n){
-      res.innerHTML=board(0,'<div class="board-rows"><div><dt>Destination</dt><dd>RAF Cosford</dd></div><div><dt>Status</dt><dd style="color:#F2B233">Waiting to depart</dd></div></div>'+bar(0,"#2A4157")+'<p class="lede">Start at any stop on the left. You don\'t have to answer them all, but the score is more useful when you do. I\'ll also give you the next stops worth reading.</p>');
+      res.innerHTML=board(0,'<div class="board-rows"><div><dt>Destination</dt><dd>'+SHOWNAME+'</dd></div><div><dt>Status</dt><dd style="color:#F2B233">Waiting to depart</dd></div></div>'+bar(0,"#2A4157")+'<p class="lede">Start at any stop on the left. You don\'t have to answer them all, but the score is more useful when you do. I\'ll also give you the next stops worth reading.</p>');
       return;
     }
     var v,c,alt="";
@@ -7878,9 +7879,8 @@ body.part .fold-body,body.part .fold-in{transition:none}
     else if(score>=70){v=["A great","fit"];c="#32B4AF"}
     else if(score>=55){v=["Worth","a look"];c="#F2B233"}
     else {v=["Maybe not","this one"];c="#D74949"}
-    if(picks.see===1)alt="For warbirds, I would suggest having a look at Duxford or Shuttleworth on the guide.";
-    else if(picks.crowd===2)alt="For a calmer day, I would suggest a smaller show such as Shuttleworth.";
-    var h='<div class="board-rows"><div><dt>Destination</dt><dd>RAF Cosford</dd></div><div><dt>Status</dt><dd style="color:'+c+'">'+v[0]+' '+v[1]+'</dd></div></div>'+bar(score,c);
+    QS.forEach(function(q){if(picks[q.id]==null)return;var a=q.a[picks[q.id]];if(a.alt&&!alt)alt=a.alt});
+    var h='<div class="board-rows"><div><dt>Destination</dt><dd>'+SHOWNAME+'</dd></div><div><dt>Status</dt><dd style="color:'+c+'">'+v[0]+' '+v[1]+'</dd></div></div>'+bar(score,c);
     if(g.length)h+='<h4>Why it suits you</h4><ul class="why">'+list(g)+'</ul>';
     if(w.length)h+='<h4>Worth knowing</h4><ul class="why">'+w.map(function(t){return'<li class="w">'+t+'</li>'}).join("")+'</ul>';
     if(x.length)h+='<h4>May not suit you</h4><ul class="why">'+x.map(function(t){return'<li class="x">'+t+'</li>'}).join("")+'</ul>';
