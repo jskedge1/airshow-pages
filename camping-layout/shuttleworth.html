@@ -7012,10 +7012,10 @@ body h1.cg-title{text-transform:none!important}
     var out = { head: [], keep: [], journey: [], buses: [], times: [], tips: [], info: [] };
     Array.prototype.slice.call(detail.children).forEach(function (el) {
       if (el.matches('h3, .lead, .on-map')) out.head.push(el);
-      else if (el.matches('.br-box, .tr-box')) out.keep.push(el);
+      else if (el.matches('.br-box, .tr-box, .d-times')) out.keep.push(el);
       else if (el.matches('ol.route, ol.jx-steps')) out.journey.push(el);
       else if (el.matches('.areas')) out.buses.push(el);
-      else if (el.matches('.ttx, .jx-dcard, .d-times')) out.times.push(el);
+      else if (el.matches('.ttx, .jx-dcard')) out.times.push(el);
       else if (el.matches('.cols, .d-warn')) out.tips.push(el);
       else out.info.push(el);
     });
@@ -8306,10 +8306,10 @@ body.part .fold-body,body.part .fold-in{transition:none}
 .sw-pick{--c:#32B4AF}
 .sw-calc{--c:#D74949}
 .sw-tabs .xd-tt-tabs{display:flex;flex-wrap:nowrap;gap:6px;margin:0;padding:6px 0 0;border-bottom:4px solid var(--c,#13293C)}
-.sw-tabs .xd-tt-tabs button[type]{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;align-items:center;gap:10px;flex:1 1 0;min-width:0;min-height:52px;margin-bottom:-4px;padding:14px 18px 12px;background:#EAF0F4;color:#41586B;font:600 15px/1.25 "Barlow",sans-serif;letter-spacing:0;text-transform:none;border:2px solid #C9D6DF;border-bottom:0;border-radius:10px 10px 0 0;transition:background .25s cubic-bezier(.2,.7,.2,1),color .25s cubic-bezier(.2,.7,.2,1),transform .25s cubic-bezier(.2,.7,.2,1),border-color .25s cubic-bezier(.2,.7,.2,1)}
+.sw-tabs .xd-tt-tabs button[type]{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;align-items:center;gap:10px;flex:1 1 0;min-width:0;min-height:52px;margin-bottom:0;padding:14px 18px 12px;background:#EAF0F4;color:#41586B;font:600 15px/1.25 "Barlow",sans-serif;letter-spacing:0;text-transform:none;border:2px solid #C9D6DF;border-bottom:0;border-radius:10px 10px 0 0;transition:background .25s cubic-bezier(.2,.7,.2,1),color .25s cubic-bezier(.2,.7,.2,1),transform .25s cubic-bezier(.2,.7,.2,1),border-color .25s cubic-bezier(.2,.7,.2,1)}
 .sw-tabs .xd-tt-tabs button[type]:hover{background:#fff;color:#13293C;border-color:var(--c,#13293C);transform:translateY(-2px)}
 .sw-tabs .xd-tt-tabs button[type]:focus-visible{outline:3px solid #00A6E2;outline-offset:2px}
-.sw-tabs .xd-tt-tabs button[aria-selected="true"],.sw-tabs .xd-tt-tabs button[aria-checked="true"],.sw-tabs .xd-tt-tabs button[type].on{background:#fff;color:#13293C;border-color:var(--c,#13293C);border-top-width:5px;padding-top:12px;padding-bottom:16px;transform:translateY(-3px);box-shadow:0 -6px 14px rgba(19,41,60,.08)}
+.sw-tabs .xd-tt-tabs button[aria-selected="true"],.sw-tabs .xd-tt-tabs button[aria-checked="true"],.sw-tabs .xd-tt-tabs button[type].on{background:#fff;color:#13293C;border-color:var(--c,#13293C);border-top-width:5px;margin-bottom:-4px;padding-top:12px;padding-bottom:16px;transform:translateY(-3px);box-shadow:0 -6px 14px rgba(19,41,60,.08)}
 .sw-tabs .xd-tt-tabs button[aria-selected="true"]:after,.sw-tabs .xd-tt-tabs button[aria-checked="true"]:after,.sw-tabs .xd-tt-tabs button[type].on:after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:6px;background:#fff}
 .sw-tabs .xd-tt-ic{display:inline-flex;align-items:center;justify-content:center;flex:none;width:28px;height:28px;border-radius:50%;background:var(--c,#13293C);color:#fff}
 .sw-tabs .xd-tt-ic svg{width:17px;height:17px}
@@ -8336,9 +8336,12 @@ body.part .fold-body,body.part .fold-in{transition:none}
 #days .sw-pick .wk-day{background:#fff;color:#13293C;border:1px solid #DCE5EB;border-top:5px solid var(--c);border-radius:4px;padding:20px 22px 16px;box-shadow:0 8px 22px rgba(19,41,60,.08)}
 #days .sw-pick .wk-day h4{color:#13293C;margin:0 0 14px}
 #days .sw-pick .wk-day ol{gap:6px}
-#days .sw-pick .wk-day li{grid-template-columns:140px minmax(0,1fr);gap:16px;align-items:baseline;background:#fff;border:1px solid #DCE5EB;border-left:5px solid var(--c);border-radius:4px;padding:12px 16px 12px 18px;color:#3E4045;font-size:16px;line-height:1.5;transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s cubic-bezier(.2,.7,.2,1)}
+#days .sw-pick .wk-day li{display:block;position:relative;background:#fff;border:1px solid #DCE5EB;border-left:5px solid var(--c);border-radius:4px;padding:12px 16px 12px 174px;color:#3E4045;font-size:16px;line-height:1.5;transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s cubic-bezier(.2,.7,.2,1)}
 #days .sw-pick .wk-day li:hover{transform:translateX(3px);box-shadow:0 6px 16px rgba(19,41,60,.08)}
-#days .sw-pick .wk-day li span{color:#13293C;font:600 16px/1.4 "Barlow",sans-serif}
+#days .sw-pick .wk-day li span{position:absolute;left:18px;top:12px;width:140px;color:#13293C;font:600 16px/1.5 "Barlow",sans-serif}
+#days .sw-pick .wk-day .inlink{all:unset;cursor:pointer;color:#0E5F5B;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+#days .sw-pick .wk-day .inlink:hover{color:#13293C}
+#days .sw-pick .wk-day .inlink:focus-visible{outline:3px solid #00A6E2;outline-offset:2px}
 #days .sw-pick .wk-day li.ev{background:#F4F1FA;border-left-color:#6950A1}
 
 /* settings calculator: the choices as transport tabs, the settings as a board below */
@@ -8352,14 +8355,14 @@ body.part .fold-body,body.part .fold-in{transition:none}
 #phCalc .sw-calc .readout{gap:6px}
 #phCalc .sw-calc .readout div{background:#fff;border:1px solid #DCE5EB;border-left:5px solid var(--c);border-radius:4px;padding:12px 14px 14px}
 #phCalc .sw-calc .readout div:first-child{background:#13293C;border-color:#13293C;border-left-color:var(--c)}
-#phCalc .sw-calc .readout span{font:500 15px/1.2 "Barlow",sans-serif;letter-spacing:0;text-transform:none;color:#41586B}
+#phCalc .sw-calc .readout span{font-family:"Barlow",sans-serif;font-size:15px!important;line-height:1.2!important;font-weight:500!important;letter-spacing:0;text-transform:none!important;color:#41586B}
 #phCalc .sw-calc .readout div:first-child span{color:#C9DCEA}
 #phCalc .sw-calc .readout b{color:#13293C;font-weight:700;font-variant-numeric:tabular-nums}
 #phCalc .sw-calc .readout div:first-child b{color:#fff}
 #phCalc .sw-calc .howto{gap:6px}
 #phCalc .sw-calc .howto div{grid-template-columns:150px minmax(0,1fr);gap:16px;background:#fff;border:1px solid #DCE5EB;border-left:5px solid var(--c);border-radius:4px;padding:12px 16px 12px 18px;transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s cubic-bezier(.2,.7,.2,1)}
 #phCalc .sw-calc .howto div:hover{transform:translateX(3px);box-shadow:0 6px 16px rgba(19,41,60,.08)}
-#phCalc .sw-calc .howto dt{padding:0;font:600 16px/1.4 "Barlow",sans-serif;letter-spacing:0;text-transform:none;color:#13293C}
+#phCalc .sw-calc .howto dt{padding:0;font-family:"Barlow",sans-serif;font-size:16px!important;line-height:1.4!important;font-weight:600!important;letter-spacing:0;text-transform:none!important;color:#13293C}
 #phCalc .sw-calc .howto dd{margin:0;color:#3E4045;font-size:16px;line-height:1.5}
 #phCalc .sw-calc .calc-notes{gap:6px}
 #phCalc .sw-calc .calc-notes li{background:#F1F4F6;border-left:5px solid #F2B233;border-radius:4px;color:#3E4045}
@@ -8369,7 +8372,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
 @media(max-width:900px){
   .sw-pick .xd-tt-tabs,.sw-calc .xd-tt-tabs{flex-wrap:wrap;padding-bottom:8px}
   .sw-pick .xd-tt-tabs button[type],.sw-calc .xd-tt-tabs button[type]{flex:1 1 calc(33.333% - 4px);margin-bottom:0;border-bottom:2px solid #C9D6DF;border-radius:8px}
-  .sw-pick .xd-tt-tabs button[type].on,.sw-calc .xd-tt-tabs button[aria-checked="true"]{border-bottom:2px solid var(--c);transform:none;box-shadow:0 4px 12px rgba(19,41,60,.1)}
+  .sw-pick .xd-tt-tabs button[type].on,.sw-calc .xd-tt-tabs button[aria-checked="true"]{margin-bottom:0;border-bottom:2px solid var(--c);transform:none;box-shadow:0 4px 12px rgba(19,41,60,.1)}
   .sw-pick .xd-tt-tabs button[type].on:after,.sw-calc .xd-tt-tabs button[aria-checked="true"]:after{display:none}
   .sw-pick .xd-tt-tabs button[type]:hover,.sw-calc .xd-tt-tabs button[type]:hover{transform:none}
 }
@@ -8379,7 +8382,9 @@ body.part .fold-body,body.part .fold-in{transition:none}
   .sw-tabs .xd-tt-h{display:none}
   .sw-tabs .xd-tt-row{grid-template-columns:minmax(0,1fr);padding:12px 14px}
   #days .sw-pick .wk-day{padding:16px 14px 12px}
-  #days .sw-pick .wk-day li,#phCalc .sw-calc .howto div{grid-template-columns:minmax(0,1fr);gap:2px;padding:10px 12px 10px 14px}
+  #days .sw-pick .wk-day li{padding:10px 12px 10px 14px}
+  #days .sw-pick .wk-day li span{position:static;display:block;width:auto}
+  #phCalc .sw-calc .howto div{grid-template-columns:minmax(0,1fr);gap:2px;padding:10px 12px 10px 14px}
   #phCalc .sw-calc .calc-out{padding:18px 14px 14px}
   #phCalc .sw-calc .calc-out h4{font-size:22px}
 }
@@ -8396,9 +8401,9 @@ body.part .fold-body,body.part .fold-in{transition:none}
   }
   document.addEventListener('click', function(e){
     var t = e.target.closest('.sw-shuttle .xd-tt-tabs button');
-    if (t) { pickTab(t.closest('.sw-shuttle'), Number(t.dataset.i)); return; }
+    if (t) { e.stopPropagation(); pickTab(t.closest('.sw-shuttle'), Number(t.dataset.i)); return; }
     if (e.target.closest('.sw-pick .xd-tt-tabs button')) setTimeout(syncPick, 0);
-  });
+  }, true);
   document.addEventListener('keydown', function(e){
     var t = e.target.closest && e.target.closest('.sw-shuttle .xd-tt-tabs button');
     if (!t || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
