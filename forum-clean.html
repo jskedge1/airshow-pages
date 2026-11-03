@@ -102,8 +102,10 @@ main{flex:1}
 @media (max-width:700px){.jump a{padding:10px 12px;font-size:14.5px}}
 .jump a b{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:8px;border-radius:11px;background:var(--purple);font-size:12.5px;padding:0 6px}
 
-/* Look switch in the section bar, same control as My Profile */
-.look{display:inline-flex;align-items:center;gap:4px;margin-left:auto;padding:5px;align-self:center;background:var(--navy-d);border-top:3px solid var(--teal);transition:border-color .45s var(--ease)}
+/* Look switch docked on top of the section bar, same control as My Profile */
+.jumprow{position:relative;z-index:1;display:flex;flex-direction:column;margin-top:28px}
+.jumprow .jump{margin-top:0}
+.look{display:inline-flex;align-items:center;gap:4px;align-self:flex-end;margin-bottom:14px;padding:5px;background:var(--navy-d);border-top:3px solid var(--teal);box-shadow:0 12px 30px rgba(0,0,0,.28);transition:border-color .45s var(--ease)}
 .look .lbl{font-weight:600;font-size:14px;color:#9FD8D5;padding:0 8px 0 6px;white-space:nowrap}
 .seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.06)}
 .seg .pill{position:absolute;top:0;bottom:0;left:0;width:50%;background:var(--teal);transition:transform .45s var(--ease),background .45s var(--ease)}
@@ -113,7 +115,7 @@ main{flex:1}
 .look.go{border-top-color:#5FE3DC}
 .look.go .pill{transform:translateX(100%);background:#5FE3DC}
 .look.go button[data-look=hud]{color:#061019}
-@media (max-width:700px){.look{margin:8px 0 0;width:100%}.look .seg{flex:1}.seg button{padding:10px 8px}}
+@media (max-width:700px){.jumprow{margin-top:22px}.look{align-self:stretch}.look .seg{flex:1}.seg button{padding:10px 8px}}
 
 /* Section titles */
 section{scroll-margin-top:12px}
@@ -578,16 +580,7 @@ textarea{min-height:92px;resize:vertical}
         <div class="kv hl"><span>Cost to join</span><span>Free</span></div>
       </aside>
     </div>
-    <nav class="jump" aria-label="Forum sections">
-      <a href="#feed">News feed<b id="jFeed">4</b></a>
-      <a href="#groups">Show groups</a>
-      <a href="#corner">Photographer's corner</a>
-      <a href="#buddy">Buddy board</a>
-      <a href="#live">Show day live</a>
-      <a href="#rarity">Rarity log</a>
-      <a href="#kit">Kit swap</a>
-      <a href="#how">How it works</a>
-      <a href="#admin">Admin</a>
+    <div class="jumprow">
       <div class="look" id="lookSw" role="group" aria-label="Choose how the forum looks">
         <span class="lbl">Forum look</span>
         <div class="seg">
@@ -596,7 +589,18 @@ textarea{min-height:92px;resize:vertical}
           <button type="button" data-look="hud" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-5"/></svg>HUD</button>
         </div>
       </div>
-    </nav>
+      <nav class="jump" aria-label="Forum sections">
+        <a href="#feed">News feed<b id="jFeed">4</b></a>
+        <a href="#groups">Show groups</a>
+        <a href="#corner">Photographer's corner</a>
+        <a href="#buddy">Buddy board</a>
+        <a href="#live">Show day live</a>
+        <a href="#rarity">Rarity log</a>
+        <a href="#kit">Kit swap</a>
+        <a href="#how">How it works</a>
+        <a href="#admin">Admin</a>
+      </nav>
+    </div>
   </div>
 </header>
 
