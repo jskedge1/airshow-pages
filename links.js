@@ -1,7 +1,7 @@
 /* Site links for The Big Guide to UK Airshows.
    One file, loaded by every page, so the links between pages are kept in one place.
    To add a page: add a row to PAGES. Set live:false until the Wix page exists and is published, so nobody lands on a 404.
-   The six guides below (night before to A to Z) have Wix pages saved on 3 Nov 2026; set them live:true after the November publish.
+   The six guides below (night before to A to Z) went live with the publish on 3 Nov 2026.
    slug is the page's current address on Wix (checked live 19 Oct 2026). If a page's URL is renamed in Wix, change it here. */
 (function(){
   var SITE='https://www.ukairshowguide.co.uk/';
@@ -31,12 +31,12 @@
     {key:'airshow-security', name:'Airshow Security and Bag Searches', where:'What happens at the gate and how to pack', slug:'airshow-security', live:true},
     {key:'questions-and-answers', name:'Airshow Questions and Answers', where:'Straight answers, sorted by topic', slug:'airshow-questions', live:true},
     {key:'nikon-d500', name:'Nikon D500 3D Camera Guide', where:'Every button, set up for airshows', slug:'nikon-d500-guide', live:false},
-    {key:'night-before', name:'The Night Before An Airshow', where:'A tick list for the evening before', slug:'night-before-an-airshow', live:false},
-    {key:'getting-home', name:'Getting Home From An Airshow', where:'When to leave and how to get away', slug:'getting-home-from-an-airshow', live:false},
-    {key:'rainy-day-plan', name:'Rainy Day Plan', where:'Will it fly, and what to pack', slug:'airshow-rainy-day-plan', live:false},
-    {key:'calm-visit', name:'A Calm Airshow Visit', where:'For anyone who finds noise and crowds hard', slug:'calm-airshow-visit', live:false},
-    {key:'spotter-cards', name:'Aircraft Spotter Cards', where:'Printable cards for young spotters', slug:'aircraft-spotter-cards', live:false},
-    {key:'aircraft-a-to-z', name:'Airshow Aircraft A To Z', where:'Every aircraft you might see', slug:'airshow-aircraft-a-to-z', live:false}
+    {key:'night-before', name:'The Night Before An Airshow', where:'A tick list for the evening before', slug:'night-before-an-airshow', live:true},
+    {key:'getting-home', name:'Getting Home From An Airshow', where:'When to leave and how to get away', slug:'getting-home-from-an-airshow', live:true},
+    {key:'rainy-day-plan', name:'Rainy Day Plan', where:'Will it fly, and what to pack', slug:'airshow-rainy-day-plan', live:true},
+    {key:'calm-visit', name:'A Calm Airshow Visit', where:'For anyone who finds noise and crowds hard', slug:'calm-airshow-visit', live:true},
+    {key:'spotter-cards', name:'Aircraft Spotter Cards', where:'Printable cards for young spotters', slug:'aircraft-spotter-cards', live:true},
+    {key:'aircraft-a-to-z', name:'Airshow Aircraft A To Z', where:'Every aircraft you might see', slug:'airshow-aircraft-a-to-z', live:true}
   ];
   window.AIRSHOW_LINKS={site:SITE,find:SITE+FIND,pages:PAGES,guides:GUIDES};
 

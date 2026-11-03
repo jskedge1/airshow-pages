@@ -193,7 +193,7 @@
      behaviour go wherever the guide actually is: that root, or the page itself when opened on its own. */
   var ME = document.currentScript;
   /* guide notes: hide a note while the guide it links to has no live Wix page yet (links.js live:false) */
-  var WAITING = ['night-before-an-airshow','getting-home-from-an-airshow','airshow-rainy-day-plan','calm-airshow-visit','aircraft-spotter-cards','airshow-aircraft-a-to-z'];
+  var WAITING = []; /* the six new guides went live on 3 Nov 2026; add a slug here to hide notes for a guide that is not published yet */
   function gate(R){
     var wait = {};
     WAITING.forEach(function(s){ wait[s] = 1; });
