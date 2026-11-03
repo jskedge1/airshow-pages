@@ -69,6 +69,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Volunteer Hub, volunteer log in and dashboard (Wix page /volunteer-hub, under Community in the menu, page code velo/page-code/volunteer-hub.js) | https://jskedge1.github.io/airshow-pages/volunteer-hub.html |
 | Team Admin, Jack only (Wix page /team-admin, hidden from the menu, members only, page code velo/page-code/team-admin.js) | https://jskedge1.github.io/airshow-pages/team-admin.html |
 | How My Airshow Hub works and how to join (made 3 Nov 2026, no Wix page yet, planned /how-my-airshow-hub-works; screens in join-img/) | https://jskedge1.github.io/airshow-pages/join-my-airshow-hub.html |
+| How The Airshow Forum Works, a walkthrough of joining, groups, posting, Photographer's Corner, buddy board, kit swap and reports (made 3 Nov 2026, no Wix page yet, planned /how-the-forum-works; screens in join-img/forum-*.webp, taken from forum-clean.html with example members) | https://jskedge1.github.io/airshow-pages/forum-how-it-works.html |
 | Template: Featured Airshow Webpage | https://jskedge1.github.io/airshow-pages/templates/featured-airshow-webpage.html |
 | Template: Airshow Feature Page | https://jskedge1.github.io/airshow-pages/templates/airshow-feature-page.html |
 
