@@ -84,6 +84,8 @@ Keep it when copying a template to make a new show page.
 
 ## Site search (30 Oct 2026)
 
+Header menu fit (3 Nov 2026): a Community menu with more than 7 links becomes a wide two-column drop-down, which stuck out past the menu and made the header think the tabs did not fit, so it switched to the Menu button on every screen. Wix custom code "UK Airshow Guide header menu fit fix" (HEAD) opens wide drop-downs from the 5th tab onwards from the right (`#ukag .m>.it:nth-child(n+5)>.dd.wd{left:auto;right:0}`). Tabs now show from about 1300px wide. Keep this in mind before adding more top level tabs.
+
 A search button sits in the header menu on every page (the magnifier between Community and Airshow Forum, and beside Menu on phones and tablets). It opens a search bar that drops down under the header. The home page has its own search bar in the photo header, under the intro. Both use the same results.
 
 - `search/index.js` is the search itself: the page list plus the engine. Built by `python3 tools-search.py` from the `PAGES` list in that file and the headings on each page, so a search for "toilets" or "park and ride" lands on the page that covers it, with the matching heading shown under the result. Do not edit index.js by hand.
