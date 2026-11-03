@@ -148,6 +148,11 @@ h2.t{font:800 clamp(34px,4.4vw,52px)/.95 var(--c);text-transform:uppercase;color
 @keyframes tickhand{from{transform:rotate(-40deg)}to{transform:rotate(0)}}
 .ys-scene .nose{transform:translateX(-120px);transition:transform 2.2s cubic-bezier(.2,.7,.2,1) .3s}
 .yourstop.in .ys-scene .nose{transform:none}
+.ys-scene .dl,.ys-scene .dr{transition:transform .9s cubic-bezier(.4,0,.2,1)}
+.yourstop.dopen .ys-scene .dl{transform:translateX(-13px)}
+.yourstop.dopen .ys-scene .dr{transform:translateX(13px)}
+.ys-scene .dbtn{fill:#2E4B37;transition:fill .3s}
+.yourstop.dopen .ys-scene .dbtn{fill:#3CFF7A}
 .ys-tagwrap{position:absolute;left:24px;top:22px;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 .ys-tagwrap .lbl{display:inline-block;background:var(--red);color:#fff;font-weight:600;font-size:14px;line-height:1;padding:7px 10px}
 .ys-body{grid-area:body;position:relative;padding:30px 34px 26px 0;min-width:0}
@@ -329,6 +334,17 @@ h2.t{font:800 clamp(34px,4.4vw,52px)/.95 var(--c);text-transform:uppercase;color
 .mlbl::before{display:none}
 .traindot{width:34px;height:34px;border-radius:50%;background:#fff;border:3px solid var(--op1);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -2px rgba(12,28,42,.6);transition:opacity .6s var(--ease)}
 .traindot svg{width:18px;height:18px}
+/* change station sign on the map, shown while the train waits there */
+.chgsign{position:absolute;left:0;bottom:24px;transform:translateX(-50%);transform-origin:50% 100%;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:190px;background:#fff;border:2px solid #15181B;border-top:5px solid var(--op1);border-radius:6px;padding:7px 12px 8px;text-align:center;white-space:nowrap;box-shadow:0 8px 18px -10px rgba(12,28,42,.6);animation:chgin .45s cubic-bezier(.34,1.56,.64,1) both}
+.chgsign::after{content:"";position:absolute;left:50%;bottom:-9px;width:12px;height:12px;margin-left:-6px;background:#fff;border-right:2px solid #15181B;border-bottom:2px solid #15181B;transform:rotate(45deg)}
+.chgsign b{font:800 18px/1 var(--c);text-transform:uppercase;letter-spacing:.02em;color:var(--op1)}
+.chgsign span{font:600 13.5px/1.2 var(--f);color:#15181B}
+.chgsign small{margin-top:2px;font:600 12px/1.2 var(--f);color:var(--muted)}
+.chgring{position:absolute;left:-18px;top:-18px;width:36px;height:36px;border-radius:50%;border:3px solid var(--op1);animation:chgpulse 1.4s ease-out infinite}
+.chgout .chgsign{animation:chgaway .35s ease-in both}.chgout .chgring{opacity:0}
+@keyframes chgin{from{opacity:0;transform:translateX(-50%) translateY(8px) scale(.7)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+@keyframes chgaway{to{opacity:0;transform:translateX(-50%) translateY(-6px) scale(.9)}}
+@keyframes chgpulse{from{transform:scale(.5);opacity:1}to{transform:scale(1.6);opacity:0}}
 .offpin{width:30px;height:46px}
 .offpin svg{width:30px;height:46px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
 .leaflet-popup-content{font:500 15px/21px var(--f);margin:10px 14px}
@@ -1239,14 +1255,8 @@ html,body{background:var(--mist)}
           <rect x="300" y="214" width="96" height="26" fill="#15181B"/>
           <text x="312" y="232" font-family="Barlow, sans-serif" font-weight="700" font-size="13" fill="#F4C21B">Way out</text>
           <path d="M372 227h14m-5-5l5 5-5 5" stroke="#F4C21B" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- the train that just pulled in -->
-          <g class="nose">
-            <path d="M-40 196 H96 Q122 200 128 240 V300 H-40 Z" fill="#F6F7F8"/>
-            <path d="M102 202 Q122 210 126 244 V300 H112 Z" fill="#F4C21B"/>
-            <rect x="-40" y="214" width="128" height="22" fill="#23272B"/><path d="M96 214 Q114 220 118 236 H96 Z" fill="#23272B"/>
-            <rect x="14" y="212" width="18" height="88" fill="#D2232A" style="fill:var(--op1)"/><rect x="60" y="212" width="18" height="88" fill="#D2232A" style="fill:var(--op1)"/>
-            <rect x="21" y="236" width="4" height="4" fill="#3CFF7A"/>
-          </g>
+          <!-- the train that just pulled in, drawn as the train company's own train (see the train-nose script); its doors slide open once it stops -->
+          <g class="nose" id="ysnose"></g>
           <!-- platform, yellow line and tactile strip -->
           <rect x="0" y="292" width="460" height="68" fill="#B8BEC3"/>
           <rect x="0" y="292" width="460" height="7" fill="#F4C21B"/>
@@ -1846,7 +1856,7 @@ var DATA={"stops":[["London Paddington",51.51656,-0.17726,"Paddington"],["Readin
     L.polyline([DATA.stops.filter(function(x){ return x[0] === X.dest; })[0].slice(1, 3), CFG.target], { color: '#D74949', weight: 3, dashArray: '2 7', lineCap: 'round' }).addTo(map);
   }
 
-  var day = 0, dir = 0, idx = 0, hub = 0, ROUTE = [], casing = null;
+  var day = 0, dir = 0, idx = 0, hub = 0, ROUTE = [], CHGPTS = [], casing = null;
   if (CFG.defaultDay) DATA.days.forEach(function(d, i){ if (d.key === CFG.defaultDay) day = i; });
   window.addEventListener('resize', function(){ map.invalidateSize(); fit(); });
   window.addEventListener('load', function(){ map.invalidateSize(); fit(); });
@@ -2152,13 +2162,15 @@ var DATA={"stops":[["London Paddington",51.51656,-0.17726,"Paddington"],["Readin
 
   function drawLine(trip){
     lineLayer.clearLayers();
-    ROUTE = [];
+    ROUTE = []; CHGPTS = [];
     for (var k = 1; k < trip.s.length; k++) {
       var a = trip.s[k - 1][6], b = trip.s[k][6], seg = DATA.seg[a + '|' + b], rev = false;
       if (!seg) { seg = DATA.seg[b + '|' + a]; rev = true; }
       if (!seg) seg = [[trip.s[k - 1][2], trip.s[k - 1][3]], [trip.s[k][2], trip.s[k][3]]];
       seg = rev ? seg.slice().reverse() : seg;
       ROUTE = ROUTE.concat(ROUTE.length ? seg.slice(1) : seg);
+      /* remember where along the line each change station is, so the train can stop there */
+      if (trip.s[k][4] & CHG) CHGPTS.push({ i: ROUTE.length - 1, ll: [trip.s[k][2], trip.s[k][3]], arr: trip.s[k][7], dep: trip.s[k][0] });
     }
     casing = L.polyline(ROUTE, { color: '#13293C', weight: 9, opacity: .9 }).addTo(lineLayer);
     if (OPC && trip.ops && trip.ops.length) {
@@ -2306,21 +2318,40 @@ var DATA={"stops":[["London Paddington",51.51656,-0.17726,"Paddington"],["Readin
     var f = (d - cum[lo]) / ((cum[hi] - cum[lo]) || 1);
     return [ROUTE[lo][0] + (ROUTE[hi][0] - ROUTE[lo][0]) * f, ROUTE[lo][1] + (ROUTE[hi][1] - ROUTE[lo][1]) * f];
   }
+  /* the train pulls up at each change station and a sign pops up before it carries on */
+  var chgSign = null, chgT = 0;
+  function showChange(c){
+    chgSign = L.marker(c.ll, { interactive: false, keyboard: false, zIndexOffset: 2000, icon: L.divIcon({ className: '', iconSize: [0, 0], iconAnchor: [0, 0],
+      html: '<div class="chgring"></div><div class="chgsign"><b>Change here</b><span>for your onward connection</span>' + (c.arr ? '<small>Arrive ' + c.arr + ', leave ' + c.dep + '</small>' : '') + '</div>' }) }).addTo(map);
+  }
+  function hideChange(){
+    if (!chgSign) return;
+    var s = chgSign, el = s.getElement(); chgSign = null;
+    if (el) el.classList.add('chgout');
+    setTimeout(function(){ map.removeLayer(s); }, 400);
+  }
   function runTrain(){
     if (reduce || ROUTE.length < 2) return;
-    cancelAnimationFrame(raf);
+    cancelAnimationFrame(raf); clearTimeout(chgT); hideChange();
     if (train) { map.removeLayer(train); train = null; }
-    var total = cum[cum.length - 1], start = null, dur = 8000;
+    var total = cum[cum.length - 1], dur = 8000;
+    var halts = CHGPTS.filter(function(c){ return cum[c.i] > 0 && cum[c.i] < total; });
+    var marks = [0].concat(halts.map(function(c){ return cum[c.i]; }), [total]), leg = 0;
     train = L.marker(ROUTE[0], { icon: trainIcon, interactive: false, keyboard: false }).addTo(map);
-    function step(ts){
-      if (!train) return;
-      if (!start) start = ts;
-      var p = Math.min((ts - start) / dur, 1), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-      train.setLatLng(at(e * total));
-      if (p < 1) raf = requestAnimationFrame(step);
-      else { var el = train.getElement(); if (el) el.firstChild.style.opacity = 0; var b = train; setTimeout(function(){ map.removeLayer(b); }, 700); train = null; }
+    function runLeg(){
+      var from = marks[leg], to = marks[leg + 1], len = Math.max(halts.length ? 2200 : 0, dur * (to - from) / total), start = null;
+      function step(ts){
+        if (!train) return;
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / len, 1), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        train.setLatLng(at(from + (to - from) * e));
+        if (p < 1) raf = requestAnimationFrame(step);
+        else if (leg < halts.length) { showChange(halts[leg]); chgT = setTimeout(function(){ hideChange(); leg++; runLeg(); }, 3400); }
+        else { var el = train.getElement(); if (el) el.firstChild.style.opacity = 0; var b = train; setTimeout(function(){ map.removeLayer(b); }, 700); train = null; }
+      }
+      raf = requestAnimationFrame(step);
     }
-    raf = requestAnimationFrame(step);
+    runLeg();
   }
 
   /* ---------- Your way in, My travel plan, Pay less and Good to know: the Blackpool layout (1 Nov 2026),
@@ -2560,11 +2591,12 @@ var DATA={"stops":[["London Paddington",51.51656,-0.17726,"Paddington"],["Readin
   $('doorpush').addEventListener('click', function(){
     var b = $('doorpush'), led = $('doorled'), pd = $('paneldoors'); clearTimeout(doorT);
     if (b.getAttribute('aria-pressed') !== 'true') beeps(3, 420, 880);
-    b.setAttribute('aria-pressed', 'true'); led.classList.add('on'); pd.classList.add('on');
+    b.setAttribute('aria-pressed', 'true'); led.classList.add('on'); pd.classList.add('on'); $('yourstop').classList.add('dopen');
     led.textContent = dir === 0 ? X.dest + (endsHere(DIR().trips[idx]) ? ', this train terminates here' : ', mind the gap') : 'Mind the gap';
     doorT = setTimeout(function(){
       beeps(6, 220, 1040);
       led.textContent = 'Doors closing';
+      $('yourstop').classList.remove('dopen');
       doorT = setTimeout(function(){ b.setAttribute('aria-pressed', 'false'); led.classList.remove('on'); pd.classList.remove('on'); led.textContent = 'Doors locked'; }, 1400);
     }, 4000);
   });
@@ -2694,5 +2726,58 @@ window.addEventListener('resize',apply);})();
 <script>window.UKAG_ROUTE={mode:'train',id:'wales'};</script>
 <script src="https://jskedge1.github.io/airshow-pages/transport-back.js" defer></script>
 <!-- /back-to-transport -->
+<style id="chip-colours">
+/* the train time chips in Your way in take the train company's own colours */
+.ptx .dcard .nchip b{color:var(--onui)}
+.ptx .dcard .nchip:hover{background:color-mix(in srgb,var(--amber) 30%,#2E3236)!important}
+.ptx .dcard .nchip[aria-pressed="true"]{background:var(--amber)!important;color:var(--accink)}
+.ptx .dcard .nchip[aria-pressed="true"] b{color:var(--accink)}
+.ptx .nchip:hover{background:color-mix(in srgb,var(--op1) 18%,#fff)}
+</style>
+<script id="train-nose">
+/* the platform scene's train: each train company's own train, a simple side view, with doors that open once it stops.
+   nose shapes: slope (Aventra, IET), electro (Electrostar), desiro (Desiro City), civity (CAF Civity), stadler (Stadler Class 777) */
+(function(){
+  var NOSES = {
+    slope:   ['M-40 194 H60 Q84 194 98 204 L116 222 Q125 231 126 246 V300 H-40 Z', 'M70 198 Q88 199 99 208 L115 225 H90 Z', 'M92 226 H116 Q125 233 126 247 V300 H102 Q100 262 92 226 Z'],
+    electro: ['M-40 194 H100 Q116 194 120 208 L126 236 V300 H-40 Z', 'M92 198 H108 Q114 199 117 210 L121 228 H92 Z', 'M98 230 H121 L126 240 V300 H106 Q104 262 98 230 Z'],
+    desiro:  ['M-40 194 H82 Q110 194 119 213 Q126 230 126 250 V300 H-40 Z', 'M80 198 Q102 199 112 212 L119 228 H90 Z', 'M94 230 H120 Q126 240 126 252 V300 H104 Q102 262 94 230 Z'],
+    civity:  ['M-40 194 H74 L102 199 L121 223 Q126 231 126 244 V300 H-40 Z', 'M76 198 L100 202 L116 224 H90 Z', 'M92 227 H119 Q126 236 126 246 V300 H102 Q100 262 92 227 Z'],
+    stadler: ['M-40 192 H106 Q124 192 126 214 V300 H-40 Z', 'M100 196 Q119 197 122 214 V234 H100 Z', 'M100 238 H126 V300 H100 Z']
+  };
+  /* shape, body, doors (null = the page's own colour), skirt, unit number, cab end colour, number colour */
+  var TRAINS = {
+    'Greater Anglia':        ['slope',   '#F6F7F8', '#D2232A', '#8A8C8E', '720 515'],
+    'ScotRail':              ['desiro',  '#1C2D5B', '#E6EAF0', '#0F1A38', '380 101', null, '#FFFFFF'],
+    'Northern':              ['civity',  '#F6F7F8', null,      '#262262', '331 109'],
+    'West Midlands Railway': ['civity',  '#ECE6DA', '#E8891C', '#3C1053', '196 012', '#3C1053', '#FFFFFF'],
+    'Southern':              ['electro', '#F6F7F8', '#7AB929', '#23412E', '377 411'],
+    'Southeastern':          ['electro', '#F6F7F8', null,      '#1E1E50', '375 905'],
+    'Thameslink':            ['desiro',  '#F6F7F8', '#DA4290', '#8A8C8E', '700 113'],
+    'GWR':                   ['slope',   '#0A493E', '#2E7D66', '#062E27', '800 312', null, '#FFFFFF'],
+    'Merseyrail':            ['stadler', '#C9CDD1', '#FFD200', '#4A4F55', '777 034'],
+    'Transport for Wales':   ['civity',  '#D9DCDF', '#D6001C', '#2B2F33', '197 001']
+  };
+  var g = document.getElementById('ysnose'); if (!g) return;
+  var cfg = window.CFG || {}, t = TRAINS[cfg.operator] || TRAINS['Greater Anglia'], n = NOSES[t[0]];
+  var door = t[2] || (cfg.theme && cfg.theme.op1) || '#D2232A', cab = t[5], numc = t[6] || '#5E666D';
+  function pair(x){
+    return '<g class="dl"><rect x="' + x + '" y="212" width="14" height="80" fill="' + door + '"/><rect x="' + (x + 3) + '" y="216" width="8" height="26" fill="#23272B"/></g>' +
+      '<g class="dr"><rect x="' + (x + 14) + '" y="212" width="14" height="80" fill="' + door + '"/><rect x="' + (x + 17) + '" y="216" width="8" height="26" fill="#23272B"/></g>';
+  }
+  g.innerHTML = '<rect x="-40" y="189" width="96" height="6" fill="#C9CED2"/><rect x="-8" y="185" width="22" height="5" fill="#8A8C8E"/>' +
+    '<path d="' + n[0] + '" fill="' + t[1] + '"/>' + (cab ? '<rect x="60" y="194" width="30" height="84" fill="' + cab + '"/>' : '') +
+    '<path d="' + n[1] + '" fill="#23272B"/><path d="' + n[2] + '" fill="#F4C21B"/>' +
+    '<rect x="113" y="258" width="9" height="5" rx="1" fill="#fff"/><rect x="113" y="267" width="9" height="3" rx="1" fill="#D2232A"/>' +
+    '<rect x="-40" y="210" width="' + (cab ? 100 : 108) + '" height="18" fill="#23272B"/><rect x="-40" y="278" width="146" height="14" fill="' + t[3] + '"/>' +
+    '<text x="' + (cab ? 75 : 80) + '" y="246" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="8" fill="' + numc + '">' + t[4] + '</text>' +
+    '<rect x="-30" y="212" width="28" height="80" fill="#2E3236"/><rect x="-17" y="216" width="2" height="72" fill="#C9CED2"/>' +
+    '<rect x="18" y="212" width="28" height="80" fill="#2E3236"/><rect x="31" y="216" width="2" height="72" fill="#C9CED2"/>' +
+    pair(-30) + pair(18) + '<rect class="dbtn" x="1" y="248" width="4" height="6" rx="1"/><rect class="dbtn" x="49" y="248" width="4" height="6" rx="1"/>';
+  /* the doors open once the train has stopped */
+  var ys = document.getElementById('yourstop');
+  g.addEventListener('transitionend', function(e){ if (e.propertyName === 'transform' && ys && ys.classList.contains('in')) setTimeout(function(){ ys.classList.add('dopen'); }, 300); });
+})();
+</script>
 </body>
 </html>
