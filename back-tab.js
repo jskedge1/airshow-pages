@@ -49,7 +49,7 @@
     pt: ["Public transport", "Public transport to UK airshows", "airshow-public-transport"],
     buses: ["Bus routes", "Every bus route by show", "bus-route"],
     vpg: ["Planning guides", "All my visitor planning guides", "visitorplanningguides"],
-    first: ["Planning your first airshow", "My first airshow guides", "planning-your-first-airshow"],
+    first: ["Planning your first airshow", "Start here if it is your first show", "planning-your-first-airshow"],
     photohub: ["Photography Hub", "All my photography guides", "airshow-photography-hub"],
     camphub: ["Camping Hub", "All my camping guides", "camping-at-airshows"],
     hub: ["my hub", "My Airshow Hub", "my-airshow-hub"],
@@ -95,7 +95,7 @@
   var FIRST = ["which-show", "getting-there", "where-to-watch", "on-the-day", "safety", "what-to-pack", "accommodation", "weather"];
   FIRST.forEach(function (g) {
     add(["first-airshow-" + g], { colour: C.guide, kind: "guide",
-      allow: ANY_SHOW.concat(["first", "vpg", "hub", "find", "pt", "faq"]), def: "first" });
+      allow: ANY_SHOW.concat(["first", "vpg", "hub", "find", "pt", "faq"]), def: "vpg" });
   });
   add(["planning-your-first-airshow"], { me: "first", colour: C.guide, kind: "guide",
     allow: ANY_SHOW.concat(["vpg", "hub", "find", "faq"]), def: "vpg" });
