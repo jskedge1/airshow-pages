@@ -28,16 +28,16 @@
     '@media(prefers-reduced-motion:reduce){.sx-gtk article{transition:none}}'
   ].join('');
 
-  function inject(){
-    var have = [].map.call(document.querySelectorAll('style'), function(s){ return s.textContent; }).join('').replace(/\s+/g,'');
+  function inject(R){
+    var have = [].map.call(R.querySelectorAll('style'), function(s){ return s.textContent; }).join('').replace(/\s+/g,'');
     var css = SX;
     Object.keys(GROUPS).forEach(function(k){ if(have.indexOf(GROUPS[k].test) < 0) css += GROUPS[k].css; });
-    var st = document.createElement('style'); st.id = 'show-extras-css'; st.textContent = css; document.head.appendChild(st);
+    var st = document.createElement('style'); st.id = 'show-extras-css'; st.textContent = css; (R === document ? document.head : R).appendChild(st);
   }
 
   /* Pick your day: each answer adds points to days, the best scoring day's card shows */
-  function picker(){
-    [].forEach.call(document.querySelectorAll('.sx-pick'), function(box){
+  function picker(R){
+    [].forEach.call(R.querySelectorAll('.sx-pick'), function(box){
       var groups = [].slice.call(box.querySelectorAll('[data-sx-q]'));
       var res = [].slice.call(box.querySelectorAll('.sx-res'));
       if(!res.length) return;
@@ -67,9 +67,9 @@
   }
 
   /* Card filters: buttons in [data-sx-filter="gridId"] highlight cards whose data-t holds the value */
-  function filters(){
-    [].forEach.call(document.querySelectorAll('[data-sx-filter]'), function(pick){
-      var grid = document.getElementById(pick.getAttribute('data-sx-filter')); if(!grid) return;
+  function filters(R){
+    [].forEach.call(R.querySelectorAll('[data-sx-filter]'), function(pick){
+      var grid = R.getElementById(pick.getAttribute('data-sx-filter')); if(!grid) return;
       var cards = [].slice.call(grid.children);
       [].forEach.call(pick.querySelectorAll('button'), function(b){
         b.addEventListener('click', function(){
@@ -85,10 +85,11 @@
   }
 
   /* Experience flights filter, for pages that don't already have one */
-  function flights(){
-    if(document.getElementById('flights-js')) return;
-    var chips = [].slice.call(document.querySelectorAll('[data-xf]')); if(!chips.length) return;
-    var cards = [].slice.call(document.querySelectorAll('.xf-card')), cnt = document.getElementById('xfCount'), empty = document.getElementById('xfEmpty');
+  function flights(R){
+    if(R.getElementById('flights-js') || R.querySelector('[data-xf][data-sx-bound]')) return;
+    var chips = [].slice.call(R.querySelectorAll('[data-xf]')); if(!chips.length) return;
+    chips.forEach(function(b){ b.setAttribute('data-sx-bound', '1'); });
+    var cards = [].slice.call(R.querySelectorAll('.xf-card')), cnt = R.getElementById('xfCount'), empty = R.getElementById('xfEmpty');
     var place = (window.SX_PC && window.SX_PC.place) || 'the show';
     function pick(k){
       var n = 0;
@@ -106,8 +107,8 @@
   }
 
   /* Postcard maker, for sections marked data-sx-postcard */
-  function postcard(){
-    var sec = document.querySelector('[data-sx-postcard]'); if(!sec) return;
+  function postcard(R){
+    var sec = R.querySelector('[data-sx-postcard]'); if(!sec) return;
     var cv = sec.querySelector('canvas'); if(!cv) return;
     var cx = cv.getContext('2d'), P = window.SX_PC || {};
     var state = { pic: null, style: 'glass', name: '', msg: P.msg || 'Wish you were here!', show: '' };
@@ -186,6 +187,26 @@
     Promise.all(loads.concat([fonts])).then(start); start();
   }
 
-  function go(){ inject(); picker(); filters(); flights(); postcard(); }
+  /* Inside the Wix site the guide lives in the airshow-page element's shadow root, so styles and
+     behaviour go wherever the guide actually is: that root, or the page itself when opened on its own. */
+  var ME = document.currentScript;
+  function roots(){
+    var out = [];
+    var mine = ME && ME.getRootNode ? ME.getRootNode() : null;
+    if(mine && mine !== document && mine.querySelector) out.push(mine);
+    [].forEach.call(document.querySelectorAll('airshow-page'), function(e){ if(e.shadowRoot && out.indexOf(e.shadowRoot) < 0) out.push(e.shadowRoot); });
+    out.push(document);
+    return out.filter(function(r){ return r.querySelector('.sx-gtk, [data-sx-postcard], .sx-pick, .sx-checked'); });
+  }
+  function run(R){
+    if(R.__sxDone) return; R.__sxDone = true;
+    inject(R); picker(R); filters(R); flights(R); postcard(R);
+  }
+  var tries = 0;
+  function go(){
+    var rs = roots();
+    rs.forEach(run);
+    if(!rs.length && tries++ < 40) setTimeout(go, 250);
+  }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
 })();
