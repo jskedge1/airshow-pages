@@ -47,7 +47,7 @@ PLACE = {
     'gransden': ('Little Gransden', 'Little Gransden Air and Car Show 2027'),
     'headcorn': ('Headcorn', 'Headcorn Airshow 2027'), 'midlands': ('Ragley', 'Midlands Air Festival 2027'),
     'riat': ('RIAT', 'Royal International Air Tattoo 2027'), 'shuttleworth': ('Old Warden', 'Shuttleworth Air Shows 2027'),
-    'southport': ('Southport', 'Southport Air Show 2027'), 'wales': ('Swansea Bay', 'Wales Airshow 2027'),
+    'southport': ('Southport', 'Southport Air Show 2027'), 'wales': ('Swansea Bay', 'Wales National Airshow 2027'),
 }
 # photos for the postcard, from each page's own library
 PC_PICS = {

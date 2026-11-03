@@ -14,7 +14,7 @@
     {key:'little-gransden', name:'Little Gransden Air and Car Show', where:'Cambridgeshire',              slug:'little-gransden-air-and-car-show',live:true},
     {key:'eastbourne',      name:'Eastbourne Airshow',             where:'East Sussex seafront',          slug:'eastbourneairshow',        live:true},
     {key:'clacton',         name:'Clacton Air Show',               where:'Essex seafront',                slug:'clactonairshow',           live:true},
-    {key:'wales',           name:'Wales Air Show',                 where:'Swansea Bay',                   slug:'walesairshow',             live:true},
+    {key:'wales',           name:'Wales National Airshow',                 where:'Swansea Bay',                   slug:'walesairshow',             live:true},
     {key:'midlands',        name:'Midlands Air Festival',          where:'Ragley Estate, Warwickshire',   slug:'midlandsairfestival',     live:true},
     {key:'hampshire',       name:'Hampshire Air Festival',         where:'Hampshire',                     slug:'copy-of-template-page-6',  live:false},
     {key:'blackpool',       name:'Blackpool Air Show',             where:'Lancashire seafront',           slug:'blackpool-air-show',      live:true},

@@ -33,7 +33,7 @@ W = {
  '/train-to-midlands': ("Train to Redditch for the Midlands Air Festival | The Big Guide to UK Airshows","Trains to Redditch for the Midlands Air Festival at Ragley Hall: pick your station, day and train, see the route map, any changes, and the Diamond 247 bus to the main entrance."),
  '/train-to-little-gransden': ("Train to St Neots for Little Gransden | The Big Guide to UK Airshows","Trains to St Neots for the Little Gransden Air and Car Show: pick your station and train, see the route map, any changes, and the taxi from St Neots to the airfield."),
  '/train-to-southport': ("Train to Southport | The Big Guide to UK Airshows","Trains to Southport for the Southport Air Show: pick your station, day and train, see the route map, any changes, and the walk from Southport station to Marine Drive."),
- '/train-to-swansea': ("Train to Swansea | The Big Guide to UK Airshows","Trains to Swansea for the Wales Airshow: pick your station, day and train, see the route map, any changes, and the walk from Swansea station to the seafront."),
+ '/train-to-swansea': ("Train to Swansea | The Big Guide to UK Airshows","Trains to Swansea for the Wales National Airshow: pick your station, day and train, see the route map, any changes, and the walk from Swansea station to the seafront."),
  '/train-to-cosford': ("Train to Cosford | The Big Guide to UK Airshows","Trains to Cosford for the RAF Cosford Air Show: pick your station and train, see the route map, any changes, and the short walk from Cosford station to the airfield."),
  '/train-to-eastbourne': ("Train to Eastbourne | The Big Guide to UK Airshows","Southern trains to Eastbourne for Airbourne, the Eastbourne Airshow: pick your station, day and train, see the route map, and the walk from the station to the Western Lawns."),
  '/groups': ("Airshow Groups | The Big Guide to UK Airshows","Join groups for your favourite UK airshows and topics. Share photos, swap tips and meet other visitors heading to the same show."),
@@ -55,7 +55,7 @@ W = {
  '/airshow-photography-hub': ("Airshow Photography Hub | The Big Guide to UK Airshows","Airshow photography in plain English: camera settings for jets and propellers, lenses and kit, and how to make the most of the light."),
  '': ("The Big Guide to UK Airshows | Plan Your Airshow Day","Independent guides to UK airshows. Parking, travel, where to watch, aircraft line ups, photography tips and honest advice on which show suits you and your family."),
  '/community-forum': ("Airshow Forum | The Big Guide to UK Airshows","Talk, share and plan with other UK airshow fans. Post photos, join show groups, find a buddy for show day and swap kit."),
- '/walesairshow': ("Wales Airshow Swansea Visitor Guide | The Big Guide to UK Airshows","Plan your visit to the Wales Airshow on Swansea Bay: where to watch along the seafront, getting there, parking, road closures, accessibility and photography tips."),
+ '/walesairshow': ("Wales National Airshow Swansea Visitor Guide | The Big Guide to UK Airshows","Plan your visit to the Wales National Airshow on Swansea Bay: where to watch along the seafront, getting there, parking, road closures, accessibility and photography tips."),
  '/policies': ("Policies | The Big Guide to UK Airshows","Privacy policy, cookie policy and website terms for The Big Guide to UK Airshows, an independent airshow visitor guide."),
 }
 SHOW = {'ayr':'/international-ayr-show','blackpool':'/blackpool-air-show','clacton':'/clactonairshow','cosford':'/cosfordairshow','duxford':'/duxfordairshows',

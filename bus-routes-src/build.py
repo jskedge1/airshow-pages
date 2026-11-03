@@ -87,7 +87,7 @@ SHOWS = {
    tip='These local buses don’t run on Sundays and don’t reach the show entrances, so on show days I would use the Swindon Shuttle or a Park and Ride instead.'),
  'shuttleworth': dict(name='Shuttleworth Air Shows', slug='shuttleworthairshows', target=[52.08544, -0.31984], label='Old Warden Aerodrome', town='Old Warden',
    tip='There’s no bus to the aerodrome itself, and the nearest stops are a fair walk away. I would use the shuttle bus from Biggleswade station instead if you can.'),
- 'wales': dict(name='Wales Airshow', slug='walesairshow', target=[51.611, -3.965], label='the seafront by the Cenotaph', town='Swansea',
+ 'wales': dict(name='Wales National Airshow', slug='walesairshow', target=[51.611, -3.965], label='the seafront by the Cenotaph', town='Swansea',
    tip='In 2026 Oystermouth Road and Mumbles Road closed for the whole weekend, so buses that normally run along the seafront were sent via Uplands and Sketty, and the seafront stops weren’t used. I would check First Cymru’s diversions before you set off and be ready to walk down from the city centre. Buses back fill up after the flying, so allow extra time.'),
  'southport': dict(name='Southport Air Show', slug='southport-air-show', target=[53.65326, -3.01540], label='Southport Pier', town='Southport',
    tip='The town centre stops on Lord Street are the closest. From there it’s a walk through town to the Promenade and Marine Drive. Buses fill up after the flying, so allow extra time.'),

@@ -34,7 +34,7 @@
     gransden: ["Little Gransden Air and Car Show", "little-gransden-air-and-car-show"],
     eastbourne: ["Eastbourne Airshow", "eastbourneairshow"],
     clacton: ["Clacton Air Show", "clactonairshow"],
-    wales: ["Wales Airshow", "walesairshow"],
+    wales: ["Wales National Airshow", "walesairshow"],
     midlands: ["Midlands Air Festival", "midlandsairfestival"],
     blackpool: ["Blackpool Air Show", "blackpool-air-show"],
     southport: ["Southport Air Show", "southport-air-show"],

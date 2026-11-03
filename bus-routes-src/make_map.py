@@ -29,7 +29,7 @@ open('bus-routes.js', 'w').write(open('bus-routes.tpl.js').read().replace('/*MAP
 
 SHOWN = {'ayr': 'International Ayr Show', 'blackpool': 'Blackpool Air Show', 'clacton': 'Clacton Air Show', 'duxford': 'Duxford Air Shows',
          'eastbourne': 'Eastbourne Airshow', 'headcorn': 'Headcorn Airshow', 'midlands': 'Midlands Air Festival', 'riat': 'Royal International Air Tattoo',
-         'shuttleworth': 'Shuttleworth Air Shows', 'southport': 'Southport Air Show', 'wales': 'Wales Airshow'}
+         'shuttleworth': 'Shuttleworth Air Shows', 'southport': 'Southport Air Show', 'wales': 'Wales National Airshow'}
 groups = ''
 for sh in SHOWN:
     rs = sorted([b for b in built if b['show'] == sh], key=lambda b: (len(b['num']), b['num']))

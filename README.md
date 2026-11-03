@@ -42,7 +42,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Train to Ayr, ScotRail train route page for the International Ayr Show (Wix page /train-to-ayr still to be made, then add its path to AE_GH_PAGES and a button on the Ayr page; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/ayr.html |
 | Train to Cosford, West Midlands Railway train route page with connections for the RAF Cosford Air Show (Wix page /train-to-cosford, hidden from the menu; opened by the "Train route details" button in the Cosford page's Train to Cosford topic; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/cosford.html |
 | Train to Cambridge for IWM Duxford, Greater Anglia plus every train that gets to Cambridge, with the free Air Show shuttle (no Wix page yet; planned /train-to-duxford; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/duxford.html |
-| Train to Swansea, Transport for Wales and GWR train route page for the Wales Airshow (Wix page /train-to-swansea, hidden from the menu; opened by the "Train route details" button in the Wales page's Train to Swansea topic; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/wales.html |
+| Train to Swansea, Transport for Wales and GWR train route page for the Wales National Airshow (Wix page /train-to-swansea, hidden from the menu; opened by the "Train route details" button in the Wales page's Train to Swansea topic; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/wales.html |
 | Train to Shuttleworth, Thameslink and Great Northern train route page to Biggleswade for the Shuttleworth air shows, seventeen stations including Gatwick, East Croydon, London Bridge, Blackfriars and Farringdon, plus Greater Anglia from Ipswich, Bury St Edmunds, Norwich and Stansted Airport (in GA red), with the 2027 Shuttleworth shuttle bus times built into each journey, in Thameslink pink (no Wix page yet: opened in a new tab by the "Train route details" button in the Shuttleworth page's train and shuttle bus topics, and by the "Train route and live times" link above its train times; built in a Claude session, not from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/shuttleworth.html |
 | Train to Headcorn, Southeastern train route page for the Headcorn International Airshow, twelve stations across London and Kent in Southeastern blues (no Wix page yet: opened in a new tab by the "Train route details" button in the Headcorn page's Headcorn station topic; built in a Claude session, not from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/headcorn.html |
 | Train to RIAT, trains to Swindon plus the free Swindon Shuttle to RAF Fairford (Wix page /train-to-riat, hidden from the menu; opened by the "Train route details" button in the RIAT page's Train to Swindon and shuttle topic; built from train-routes-src/) | https://jskedge1.github.io/airshow-pages/train-routes/riat.html |
@@ -182,7 +182,7 @@ Set `live:false` on a page until its Wix page exists.
 | Little Gransden Air and Car Show | /little-gransden-air-and-car-show |
 | Eastbourne Airshow | /eastbourneairshow |
 | Clacton Air Show | /clactonairshow |
-| Wales Air Show | /walesairshow |
+| Wales National Airshow | /walesairshow |
 | Midlands Air Festival | /midlandsairfestival |
 | Blackpool Air Show | /blackpool-air-show |
 | Southport Air Show | /southport-air-show |
@@ -384,7 +384,7 @@ Added 30 Oct 2026. Same template as Clacton and Eastbourne, in West Midlands Rai
 - Refreshing: `train-routes-src/cosford-tools/` (scrape.py, journeys.py, build_data.py, fares.py, geo.py; set the date in dates.json). Map lines come from OpenStreetMap railway and train route relations listed in `rels.json` (download with the OSM API, not kept in git); station positions in `stops_osm.json`.
 - Wix: page /train-to-cosford, hidden from the menu, copy of Train to Clacton, one HTML embed set to the address above, 7100 tall on desktop and 13500 on mobile (tallest measured 7032 and 13456 on 30 Oct 2026). The Cosford page (`camping-layout/cosford.html`) shows a "Train route details" button in the Train to Cosford topic.
 
-## Train route page (Wales Airshow, Swansea)
+## Train route page (Wales National Airshow, Swansea)
 
 Rebuilt 2 Nov 2026 in the v2 layout (see "Train route pages in the Blackpool layout"), in Transport for Wales red with charcoal. Covers every main line into Swansea, with any operator where the change works (GWR, Transport for Wales, CrossCountry, South Western Railway, West Midlands Railway, Avanti West Coast); journeys that need a walk between stations are left out.
 - Twenty stations: London Paddington, Reading, Swindon, Bristol Parkway, Bristol Temple Meads, Newport, Cardiff Central, Bridgend, Llanelli, Carmarthen, Milford Haven, Manchester Piccadilly, Chester, Shrewsbury, Hereford, Llandrindod (Heart of Wales line), Birmingham New Street, Gloucester, Southampton Central and Exeter St Davids. Saturday and Sunday, each with its own timetable. Journeys up to 5.5 hours are kept.
