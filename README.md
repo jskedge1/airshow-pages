@@ -515,3 +515,24 @@ Headcorn has no Wix page yet, so its tab opens camping-layout/headcorn.html.
 - Inside a Wix page (the airshow-page element) the tabs go in the guide's own container. Pages in a fixed height Wix box are about 140px taller now, so check the bottom tab is not cut off.
 - The tag is in the Q&A and Public transport templates and tools-policies.py, so rebuilding keeps it.
 - No coach pages exist (coach options are topics on the show pages), and there are no separate camping guide pages yet, so those have no tab.
+
+## Show page extras (3 Nov 2026)
+
+Every feature show page in `camping-layout/` now has the same set of sections, in one order:
+Overview, Right for you, (Story), Line-up, (Ticket day countdown), Getting there, Where to stay, Pick your day,
+the show's own extras (enclosures, Park and View, museum, balloons, camping, exhibit, after show party),
+Plan your day, Help on show days, The ground show (or Flightline / RAF Village), Where to watch, Seafront,
+Photography, Kids' corner, Experience flights, Keep the show free, Make a postcard, Food and facilities.
+Experience flights and Keep the show free only appear where the show really offers them. No history sections
+were added to shows without one.
+
+- Content for the new sections and the Good to know grid is in `extras-src/<show>.json` (written from the
+  official sites on 3 Nov 2026; `notes` in each file lists things on the page that may be out of date).
+- `python3 tools-extras.py [show ...]` puts it into the pages, adds the postcard, the Good to know grid
+  (top of Food and facilities), the Last checked line under the key details, renames the day sections to
+  Pick your day (Duxford and Shuttleworth: Pick your show), and puts the sections and tab bar in order.
+  It is safe to run again after editing a JSON file.
+- `show-extras.js` (loaded by every show page) styles and runs the new parts: Good to know grid, day pickers
+  (`.sx-pick`, `data-sx-q`, `data-sx-score`, `.sx-res`), card filters (`data-sx-filter`), the flights filter and
+  the postcard maker. Postcard photos load with crossorigin so the card can be saved inside the Wix page.
+- To update a show's Good to know facts or Last checked date, edit its JSON file and rerun the tool.
