@@ -83,11 +83,36 @@ body{font-family:'Barlow',sans-serif;color:#fff;-webkit-font-smoothing:antialias
   <button type="button" id="hintOk">Got it</button>
 </div>
 
+
+<script id="forum-relay">
+/* Passes forum messages between the two looks and the Wix page code on /community-forum (3 Nov 2026).
+   A look asks with {source:"ukag-forum", id, action, payload}; the page code answers with the same id,
+   and sends {event:"session"} after a log in. Answers go back to the look that asked, session news to both. */
+(function(){
+  var frames=function(){return [document.getElementById('f-clean'),document.getElementById('f-hud')].filter(Boolean)};
+  var asked={};
+  var inWix=window.parent!==window;
+  window.addEventListener('message',function(e){
+    var m=e.data;if(!m||m.source!=='ukag-forum')return;
+    var fromLook=frames().some(function(f){return f.contentWindow===e.source});
+    if(fromLook&&m.action){
+      if(!inWix){e.source.postMessage({source:'ukag-forum',id:m.id,ok:false,error:'The forum only works on the website. Open it at ukairshowguide.co.uk/community-forum.'},'*');return}
+      asked[m.id]=e.source;
+      window.parent.postMessage(m,'*');
+      return;
+    }
+    if(e.source===window.parent){
+      if(m.id&&asked[m.id]){var w=asked[m.id];delete asked[m.id];try{w.postMessage(m,'*')}catch(x){}return}
+      if(m.event)frames().forEach(function(f){try{f.contentWindow.postMessage(m,'*')}catch(x){}});
+    }
+  });
+})();
+</script>
 <script>
 (function(){
   const $=s=>document.querySelector(s);
   const F={clean:$('#f-clean'),hud:$('#f-hud')};
-  const SECS=['feed','groups','corner','buddy','live','rarity','kit','how','admin'];
+  const SECS=['feed','groups','corner','buddy','rarity','kit','live','how','admin'];
   const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
   let cur='clean';
 

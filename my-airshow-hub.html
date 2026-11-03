@@ -2680,7 +2680,8 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       try { window.top.location.href = u; } catch (e) { window.location.href = u; }
     }, calm ? 0 : 420);
   }
-  $("hubForumTab").addEventListener("click", function (e) { e.preventDefault(); showPage("forum"); });
+  /* the forum is its own page and talks to the site from there, so the tab opens it rather than a copy inside the hub */
+  $("hubForumTab").addEventListener("click", function (e) { e.preventDefault(); goForum(); });
   /* forum links fade out to the forum page, or ask logged out visitors to log in first */
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest('a[href*="community-forum"]'); if (!a) return;
