@@ -3,7 +3,7 @@
 //   https://jskedge1.github.io/airshow-pages/my-profile.html
 // Its ID must be html1. Change PROFILE_BOX below if it is different.
 // The backend web module is backend/profile.web.js (velo/backend/profile.web.js in the repository).
-import { getMyProfile, saveProfile, uploadPhoto } from 'backend/profile.web';
+import { getMyProfile, saveProfile, uploadPhoto, savePrivacy } from 'backend/profile.web';
 import { authentication } from 'wix-members-frontend';
 import wixLocation from 'wix-location';
 
@@ -35,6 +35,7 @@ $w.onReady(function () {
           break;
         case 'save': res = await saveProfile(p); break;
         case 'photo': res = await uploadPhoto(p); break;
+        case 'privacy': res = await savePrivacy(p); break;
         case 'go':
           wixLocation.to(String(p.url || '/'));
           res = { ok: true, data: {} };
