@@ -594,7 +594,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   }else{rv.forEach(function(el){el.classList.add('on');});}
   var links=[].slice.call(document.querySelectorAll('.jump a[href^="#"]'));
   var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
-  function spy(){var y=window.scrollY+120,cur=-1;secs.forEach(function(s,i){if(s&&s.offsetTop<=y)cur=i;});links.forEach(function(a,i){a.classList.toggle('on',i===cur);});}
+  function spy(){
+    var cur=-1;
+    secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<=130)cur=i;});
+    links.forEach(function(a,i){a.classList.toggle('on',i===cur);});
+  }
+  /* jump links scroll by script, so they also work when the page sits inside the site's airshow-page element */
+  document.addEventListener('click',function(e){
+    var path=e.composedPath?e.composedPath():[e.target],a=null;
+    for(var k=0;k<path.length;k++){if(path[k].matches&&path[k].matches('a[href^="#"]')){a=path[k];break;}}
+    if(!a)return;
+    var t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;
+    e.preventDefault();
+    var y=t.getBoundingClientRect().top+window.pageYOffset-64;
+    window.scrollTo({top:y,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+  });
   window.addEventListener('scroll',spy,{passive:true});spy();
 })();
 </script>

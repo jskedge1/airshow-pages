@@ -67,7 +67,7 @@ function day(value) {
 
 function ymd(d) {
   const x = d ? new Date(d) : new Date();
-  return isNaN(x) ? "" : x.toISOString().slice(0, 10);
+  return isNaN(x.getTime()) ? "" : x.toISOString().slice(0, 10);
 }
 
 // wix:image://v1/<id>/<name>#... into an address the hub pages can show
