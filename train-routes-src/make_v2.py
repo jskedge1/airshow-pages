@@ -57,5 +57,14 @@ R('  idx = pickDefault();\n  render();\n', P('ptx.js') + '\n  idx = pickDefault(
 R('    jline(trip);\n    setBlind(trip.big, trip.dest, blindLines(trip));', '    jline(trip);\n    ptxRender(trip);\n    setBlind(trip.big, trip.dest, blindLines(trip));')
 # the board shows the trains around the picked one, with a button for every time
 t = t.replace('</body>', P('board-more.html') + '\n</body>')
+# a short walk between two stations at a change (cfg x.walkPairs, used for Wigan North Western and Wallgate): the line list says so instead of "0 miles" and "runs non-stop"
+R("      out.push({ line: line, title: a + ' to ' + b, miles: segMiles(s, i0, i1), change: i0 > 0 && (s[i0][4] & CHG), text: (about ? about + ' ' : '') + stops, t: s[i0][0] + ' to ' + (s[i1][7] || s[i1][0]) });",
+  "      var wk = ((X && X.walkPairs) || []).some(function(w){ return (w[0] === a && w[1] === b) || (w[0] === b && w[1] === a); });\n      out.push(wk ? { line: 'Walk', title: 'Walk from ' + a + ' to ' + b, miles: 'A few minutes', change: false, text: about, t: '' } : { line: line, title: a + ' to ' + b, miles: segMiles(s, i0, i1), change: i0 > 0 && (s[i0][4] & CHG), text: (about ? about + ' ' : '') + stops, t: s[i0][0] + ' to ' + (s[i1][7] || s[i1][0]) });")
+R("<span class=\"sign mi\">' + l.t + '</span>", "' + (l.t ? '<span class=\"sign mi\">' + l.t + '</span>' : '') + '")
+# Winter and summer timetable notice (2 Nov 2026): card at the top of "Pick your train", filled from the cfg (x.checkWith, x.tnExtra)
+R(".gaonly{background:#fff;border:1px solid var(--line);border-left:5px solid var(--op1)}", ".gaonly{background:#fff;border:1px solid var(--line);border-left:5px solid var(--op1)}\n" + P('tnotice.css'))
+R('<section class="s" id="times">\n  <div class="wrap">\n', '<section class="s" id="times">\n  <div class="wrap">\n' + P('tnotice.html'))
+R("  $('gaonly').innerHTML = CFG.gaOnly;\n", "  $('gaonly').innerHTML = CFG.gaOnly;\n" + P('tnotice.js'))
+R("Times can change, so check before you travel. These are this winter's times. I will add the summer 2027 times once the train companies publish them.", "These are this winter\u2019s times and the summer timetable is different, so please check before you travel.")
 open(os.path.join(here, 'template-v2.html'), 'w').write(t)
 print('built template-v2.html', len(t))

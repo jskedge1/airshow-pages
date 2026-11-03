@@ -22,6 +22,7 @@
     return 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(a) + '&destination=' + encodeURIComponent(b) + '&travelmode=' + mode;
   }
   var WALK_FROM = X.walkFrom || X.dest + ' railway station', WALK_TO = X.walkTo || CFG.targetLabel;
+  function isWalkPair(a, b){ return (X.walkPairs || []).some(function(w){ return (w[0] === a && w[1] === b) || (w[0] === b && w[1] === a); }); }
   function legList(trip){
     /* the train legs of the picked journey: where each one starts and ends, and who runs it */
     var s = trip.s, cut = [0];
@@ -30,7 +31,11 @@
     var out = [];
     for (var c = 1; c < cut.length; c++) {
       var a = s[cut[c - 1]], b = s[cut[c]];
-      out.push({ from: a[1], to: b[1], dep: a[0], arr: b[7] || b[0], op: opOf(trip, c - 1), stops: s.slice(cut[c - 1] + 1, cut[c]).map(function(p){ return p[1]; }) });
+      var leg = { from: a[1], to: b[1], dep: a[0], arr: b[7] || b[0], op: opOf(trip, c - 1), stops: s.slice(cut[c - 1] + 1, cut[c]).map(function(p){ return p[1]; }) };
+      /* a short walk between two stations at a change (cfg x.walkPairs): the train really starts at the second station */
+      if (leg.stops.length && isWalkPair(leg.from, leg.stops[0])) { leg.walkedFrom = leg.from; leg.from = leg.stops.shift(); }
+      if (leg.stops.length && isWalkPair(leg.to, leg.stops[leg.stops.length - 1])) { leg.walkedTo = leg.to; leg.to = leg.stops.pop(); }
+      out.push(leg);
     }
     return out;
   }
@@ -44,7 +49,7 @@
     legsOf.forEach(function(l, i){
       html += step('train', 'Train', esc(l.op) + ' from ' + esc(l.from) + ' to ' + esc(l.to),
         'Leaves at ' + l.dep + ' and gets to ' + esc(l.to) + ' at ' + l.arr + '. ' + (l.stops.length ? 'It calls at ' + esc(names(l.stops)) + '.' : 'It runs non stop between the two.'), '', OPC ? opLine(l.op) : '');
-      if (i < ch.length) html += step('off', 'Change', 'Change at ' + esc(ch[i].at), 'You get in at ' + ch[i].arr + ' and the ' + ch[i].dep + ' to ' + esc(ch[i].to) + ' leaves ' + ch[i].wait + ' minutes later.' + (ch[i].wait <= 6 ? ' That is a quick change, so sit near the doors.' : ''));
+      if (i < ch.length) html += step('off', 'Change', 'Change at ' + esc(l.walkedTo ? l.to : ch[i].at), 'You get in at ' + ch[i].arr + ' and the ' + ch[i].dep + ' to ' + esc(ch[i].to) + ' leaves ' + ch[i].wait + ' minutes later.' + (legsOf[i + 1] && legsOf[i + 1].walkedFrom ? ' It leaves from ' + esc(legsOf[i + 1].from) + ', a short walk away.' : '') + (l.walkedTo ? ' It leaves from ' + esc(l.walkedTo) + ', a short walk away.' : '') + (ch[i].wait <= 6 ? ' That is a quick change, so sit near the doors.' : ''));
     });
     var last = trip.s[trip.s.length - 1];
     html += step('off', 'Get off', 'Get off at ' + esc(last[1]), toShow ? (endsHere(trip) ? 'It is the last stop and the closest station to the show.' : 'It is the closest station to the show. The train carries on to ' + esc(lastTo(trip)) + ', so listen out for the announcement as you come in.') : 'You are home, or at the start of the next part of your trip.');

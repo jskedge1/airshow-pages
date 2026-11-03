@@ -12,8 +12,8 @@ json.dump([[k,str(d+datetime.timedelta(i))] for i,k in enumerate(['fri','sat'])]
 P
 mkdir -p raw && rm -f raw/*.json
 for d in $(python3 -c "import json;print(' '.join(x[1] for x in json.load(open('dates.json'))))"); do
-  for h in GLC PYG EDB KMK LAR GIR STR CAR PRE; do echo "$h $d"; done
-done | xargs -P 6 -n 2 sh -c 'python3 scrape.py $0 $1 full'
+  for h in GLC PYG EDB KMK LAR GIR STR CAR PRE EUS; do echo "$h $d"; done
+done | xargs -P 2 -n 2 sh -c 'python3 scrape.py $0 $1 full'
 python3 journeys.py
 # map lines: only rebuild if a journey uses a stretch of line not already drawn (needs the OSM relations, see README)
 python3 - <<'P'

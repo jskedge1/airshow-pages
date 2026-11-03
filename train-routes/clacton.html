@@ -1790,10 +1790,11 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
       var mids = s.slice(i0 + 1, i1).map(function(p){ return p[1]; });
       var about = ABOUT[a + '|' + b] || ABOUT[b + '|' + a] || '';
       var stops = mids.length ? 'This train calls at ' + names(mids) + '.' : 'This train runs non-stop between the two.';
-      out.push({ line: line, title: a + ' to ' + b, miles: segMiles(s, i0, i1), change: i0 > 0 && (s[i0][4] & CHG), text: (about ? about + ' ' : '') + stops, t: s[i0][0] + ' to ' + (s[i1][7] || s[i1][0]) });
+      var wk = ((X && X.walkPairs) || []).some(function(w){ return (w[0] === a && w[1] === b) || (w[0] === b && w[1] === a); });
+      out.push(wk ? { line: 'Walk', title: 'Walk from ' + a + ' to ' + b, miles: 'A few minutes', change: false, text: about, t: '' } : { line: line, title: a + ' to ' + b, miles: segMiles(s, i0, i1), change: i0 > 0 && (s[i0][4] & CHG), text: (about ? about + ' ' : '') + stops, t: s[i0][0] + ' to ' + (s[i1][7] || s[i1][0]) });
     }
     $('legs').innerHTML = out.map(function(l, n){
-      return '<li class="way"><span class="n">' + (n + 1) + '</span><h3>' + l.title + '</h3><div class="signs">' + (l.change ? '<span class="sign chg">Change trains</span>' : '') + '<span class="sign"><i></i>' + l.line + '</span><span class="sign mi">' + l.miles + '</span><span class="sign mi">' + l.t + '</span></div><p>' + l.text + '</p></li>';
+      return '<li class="way"><span class="n">' + (n + 1) + '</span><h3>' + l.title + '</h3><div class="signs">' + (l.change ? '<span class="sign chg">Change trains</span>' : '') + '<span class="sign"><i></i>' + l.line + '</span><span class="sign mi">' + l.miles + '</span>' + (l.t ? '<span class="sign mi">' + l.t + '</span>' : '') + '</div><p>' + l.text + '</p></li>';
     }).join('');
     $('roadsintro').textContent = 'The stretches of line your ' + trip.big + ' from ' + s[0][1] + ' uses, with the times you pass each end. Handy if you want to know where you are, or where to look out of the window.';
   }
@@ -2346,6 +2347,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     return 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(a) + '&destination=' + encodeURIComponent(b) + '&travelmode=' + mode;
   }
   var WALK_FROM = X.walkFrom || X.dest + ' railway station', WALK_TO = X.walkTo || CFG.targetLabel;
+  function isWalkPair(a, b){ return (X.walkPairs || []).some(function(w){ return (w[0] === a && w[1] === b) || (w[0] === b && w[1] === a); }); }
   function legList(trip){
     /* the train legs of the picked journey: where each one starts and ends, and who runs it */
     var s = trip.s, cut = [0];
@@ -2354,7 +2356,11 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     var out = [];
     for (var c = 1; c < cut.length; c++) {
       var a = s[cut[c - 1]], b = s[cut[c]];
-      out.push({ from: a[1], to: b[1], dep: a[0], arr: b[7] || b[0], op: opOf(trip, c - 1), stops: s.slice(cut[c - 1] + 1, cut[c]).map(function(p){ return p[1]; }) });
+      var leg = { from: a[1], to: b[1], dep: a[0], arr: b[7] || b[0], op: opOf(trip, c - 1), stops: s.slice(cut[c - 1] + 1, cut[c]).map(function(p){ return p[1]; }) };
+      /* a short walk between two stations at a change (cfg x.walkPairs): the train really starts at the second station */
+      if (leg.stops.length && isWalkPair(leg.from, leg.stops[0])) { leg.walkedFrom = leg.from; leg.from = leg.stops.shift(); }
+      if (leg.stops.length && isWalkPair(leg.to, leg.stops[leg.stops.length - 1])) { leg.walkedTo = leg.to; leg.to = leg.stops.pop(); }
+      out.push(leg);
     }
     return out;
   }
@@ -2368,7 +2374,7 @@ var DATA={"stops":[["London Liverpool Street",51.51804,-0.08189,"Liverpool Stree
     legsOf.forEach(function(l, i){
       html += step('train', 'Train', esc(l.op) + ' from ' + esc(l.from) + ' to ' + esc(l.to),
         'Leaves at ' + l.dep + ' and gets to ' + esc(l.to) + ' at ' + l.arr + '. ' + (l.stops.length ? 'It calls at ' + esc(names(l.stops)) + '.' : 'It runs non stop between the two.'), '', OPC ? opLine(l.op) : '');
-      if (i < ch.length) html += step('off', 'Change', 'Change at ' + esc(ch[i].at), 'You get in at ' + ch[i].arr + ' and the ' + ch[i].dep + ' to ' + esc(ch[i].to) + ' leaves ' + ch[i].wait + ' minutes later.' + (ch[i].wait <= 6 ? ' That is a quick change, so sit near the doors.' : ''));
+      if (i < ch.length) html += step('off', 'Change', 'Change at ' + esc(l.walkedTo ? l.to : ch[i].at), 'You get in at ' + ch[i].arr + ' and the ' + ch[i].dep + ' to ' + esc(ch[i].to) + ' leaves ' + ch[i].wait + ' minutes later.' + (legsOf[i + 1] && legsOf[i + 1].walkedFrom ? ' It leaves from ' + esc(legsOf[i + 1].from) + ', a short walk away.' : '') + (l.walkedTo ? ' It leaves from ' + esc(l.walkedTo) + ', a short walk away.' : '') + (ch[i].wait <= 6 ? ' That is a quick change, so sit near the doors.' : ''));
     });
     var last = trip.s[trip.s.length - 1];
     html += step('off', 'Get off', 'Get off at ' + esc(last[1]), toShow ? (endsHere(trip) ? 'It is the last stop and the closest station to the show.' : 'It is the closest station to the show. The train carries on to ' + esc(lastTo(trip)) + ', so listen out for the announcement as you come in.') : 'You are home, or at the start of the next part of your trip.');

@@ -11,11 +11,17 @@ def get(u):
     return ''
 
 
+# London Kings Cross goes by LNER to York and changes there, so its search is routed via York
+VIA = {'KGX': 'YRK'}
+
+
 def journeys(frm, to, date):
     out = {}
     t = '04:30'
+    via = VIA.get(hub)
+    q = f'?via={via}' if via else ''
     for _ in range(14):
-        s = get(f'/{frm}/{to}/{t}/{date}')
+        s = get(f'/{frm}/{to}/{t}/{date}{q}')
         new = 0
         for l in re.findall(r'class="calling_link(?:_inner)?" href="([^"]+)"', s):
             l = html.unescape(l)
@@ -27,7 +33,7 @@ def journeys(frm, to, date):
                 new += 1
             if l not in out[key]:
                 out[key].append(l)
-        later = re.search(r"href=\"(/[A-Z]{3}/[A-Z]{3}/(\d\d:\d\d)/(\S+?))\">Later", s)
+        later = re.search(r"href=\"(/[A-Z]{3}/[A-Z]{3}/(\d\d:\d\d)/([^\"?\s]+)(?:\?[^\"]*)?)\">Later", s)
         if not later or later.group(3) != date or new == 0:
             break
         t = later.group(2)

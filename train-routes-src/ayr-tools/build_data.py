@@ -4,9 +4,11 @@ from names import nice as NICE
 J=json.load(open('hubjourneys.json')); G=json.load(open('geo.json'))
 DEST='Ayr'
 HUBS=[('GLC','Glasgow Central','Glasgow'),('PYG','Paisley Gilmour Street','Paisley'),('EDB','Edinburgh','Edinburgh'),('KMK','Kilmarnock','Kilmarnock'),
-      ('LAR','Largs','Largs'),('GIR','Girvan','Girvan'),('STR','Stranraer','Stranraer'),('CAR','Carlisle','Carlisle'),('PRE','Preston (Lancs)','Preston')]
+      ('LAR','Largs','Largs'),('GIR','Girvan','Girvan'),('STR','Stranraer','Stranraer'),('CAR','Carlisle','Carlisle'),('PRE','Preston (Lancs)','Preston'),
+      ('EUS','London Euston','London Euston')]
 SHORT={'Glasgow Central':'Glasgow Central','Paisley Gilmour Street':'Paisley','Edinburgh Waverley':'Edinburgh','Prestwick Town':'Prestwick','Prestwick International Airport':'Prestwick Airport','Kilwinning':'Kilwinning'}
-BIG={'Glasgow Central','Paisley Gilmour Street','Edinburgh','Kilmarnock','Largs','Girvan','Stranraer','Carlisle','Preston (Lancs)','Ayr','Kilwinning','Irvine','Troon','Prestwick International Airport','Motherwell','Lockerbie','Dumfries','Penrith','Oxenholme Lake District','Lancaster','Ardrossan South Beach','West Kilbride','Maybole','Barrhill','Shotts','Carstairs','Haymarket','Kilmaurs','Barassie'}
+BIG={'Glasgow Central','Paisley Gilmour Street','Edinburgh','Kilmarnock','Largs','Girvan','Stranraer','Carlisle','Preston (Lancs)','Ayr','Kilwinning','Irvine','Troon','Prestwick International Airport','Motherwell','Lockerbie','Dumfries','Penrith','Oxenholme Lake District','Lancaster','Ardrossan South Beach','West Kilbride','Maybole','Barrhill','Shotts','Carstairs','Haymarket','Kilmaurs','Barassie',
+     'London Euston','Wigan North Western','Warrington Bank Quay','Crewe','Stafford','Milton Keynes Central','Watford Junction','Rugby','Nuneaton','Tamworth','Lichfield Trent Valley'}
 DAYS=[('fri','Friday'),('sat','Saturday')]
 stops=[];SI={}
 def si(n):
@@ -61,6 +63,7 @@ def dirs(code,full,short,dk):
             {'label':'Back to '+short,'trips':back,'tt':table(back,False,full),'from':DEST,'note':'Times from Ayr. On the Friday the flying goes on until about 20:40, so look at the later trains, and on the Saturday it usually finishes around 17:30.'}]
 hubs=[]
 for code,full,short in HUBS:
+    if code not in J: continue
     base=dirs(code,full,short,DAYS[0][0]); days={}
     sig=lambda D:json.dumps([[t['big'],t['s'][-1][0],len(t['changes'])] for d in D for t in d['trips']])
     for dk,_ in DAYS[1:]:

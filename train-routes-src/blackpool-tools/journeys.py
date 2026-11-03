@@ -2,19 +2,24 @@
 and writes hubjourneys.json, allnames.json and pairs.json (station pairs for the map lines)."""
 import json,os
 from parse2 import parse
-HUBS='PRE MAN MIA LIV EUS LDS YRK LAN WGN GLC KKM'.split()
+HUBS='PRE MAN MIA LIV EUS KGX LDS YRK LAN WGN GLC KKM'.split()
 DAYS=[tuple(x) for x in json.load(open('dates.json'))]
 def mm(t): return int(t[:2])*60+int(t[3:])
 def gap(a,b):
     d=mm(b)-mm(a); return d+1440 if d<0 else d
-def clean(js):
+# London Kings Cross via York takes 4 and a half to 5 hours, so it gets a longer limit than the rest
+LIMIT={'KGX':310}
+# Kings Cross (added 2 Nov 2026): its journeys must start (or end) at Kings Cross itself
+ENDS={'KGX':'London Kings Cross'}
+def clean(js,lim=270,hub=None,there=True):
     out=[]
     for legs in js:
         legs=[l for l in legs if l['calls']]
         if not legs: continue
+        if hub in ENDS and (legs[0]['calls'][0][0] if there else legs[-1]['calls'][-1][0])!=ENDS[hub]: continue
         dep=legs[0]['calls'][0]; arr=legs[-1]['calls'][-1]
         d=dep[2] or dep[1]; a=arr[1]; tot=gap(d,a)
-        if tot>270 or len(legs)>3: continue
+        if tot>lim or len(legs)>3: continue
         if any(legs[i]['calls'][-1][0]!=legs[i+1]['calls'][0][0] for i in range(len(legs)-1)): continue  # no walks between stations
         if any(gap(legs[i]['calls'][-1][1], legs[i+1]['calls'][0][2] or legs[i+1]['calls'][0][1])>60 for i in range(len(legs)-1)): continue
         out.append((d,a,tot,legs))
@@ -37,7 +42,7 @@ for h in HUBS:
         f=f'raw/h_{h}_{date}.json'
         if not os.path.exists(f): continue
         R=parse(f)
-        J.setdefault(h,{})[dk]={'there':clean(R.get(f'{h}_BPN',[])),'back':clean(R.get(f'BPN_{h}',[]))}
+        J.setdefault(h,{})[dk]={'there':clean(R.get(f'{h}_BPN',[]),LIMIT.get(h,270),h,True),'back':clean(R.get(f'BPN_{h}',[]),LIMIT.get(h,270),h,False)}
 json.dump(J,open('hubjourneys.json','w'))
 names=set();pairs=set()
 for h in J:

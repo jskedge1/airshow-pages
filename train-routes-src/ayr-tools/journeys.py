@@ -2,20 +2,23 @@
 and writes hubjourneys.json, allnames.json and pairs.json (station pairs for the map lines)."""
 import json,os
 from parse2 import parse
-HUBS=['GLC','PYG','EDB','KMK','LAR','GIR','STR','CAR','PRE']
+HUBS=['GLC','PYG','EDB','KMK','LAR','GIR','STR','CAR','PRE','EUS']
+# London Euston is a long way out, so it gets its own time limit (every other hub keeps 240 minutes)
+LIMIT={'EUS':400}
+WALKS={}
 DAYS=[tuple(x) for x in json.load(open('dates.json'))]
 def mm(t): return int(t[:2])*60+int(t[3:])
 def gap(a,b):
     d=mm(b)-mm(a); return d+1440 if d<0 else d
-def clean(js):
+def clean(js,hub=None):
     out=[]
     for legs in js:
         legs=[l for l in legs if l['calls']]
         if not legs: continue
         dep=legs[0]['calls'][0]; arr=legs[-1]['calls'][-1]
         d=dep[2] or dep[1]; a=arr[1]; tot=gap(d,a)
-        if tot>240 or len(legs)>3: continue
-        if any(legs[i]['calls'][-1][0]!=legs[i+1]['calls'][0][0] for i in range(len(legs)-1)): continue  # no walks between stations
+        if tot>LIMIT.get(hub,240) or len(legs)>3: continue
+        if any(legs[i]['calls'][-1][0]!=legs[i+1]['calls'][0][0] and frozenset((legs[i]['calls'][-1][0],legs[i+1]['calls'][0][0])) not in WALKS.get(hub,()) for i in range(len(legs)-1)): continue  # no walks between stations, apart from WALKS
         if any(gap(legs[i]['calls'][-1][1], legs[i+1]['calls'][0][2] or legs[i+1]['calls'][0][1])>60 for i in range(len(legs)-1)): continue
         out.append((d,a,tot,legs))
     keep=[]
@@ -37,16 +40,17 @@ for h in HUBS:
         f=f'raw/h_{h}_{date}.json'
         if not os.path.exists(f): continue
         R=parse(f)
-        J.setdefault(h,{})[dk]={'there':clean(R.get(f'{h}_AYR',[])),'back':clean(R.get(f'AYR_{h}',[]))}
+        J.setdefault(h,{})[dk]={'there':clean(R.get(f'{h}_AYR',[]),h),'back':clean(R.get(f'AYR_{h}',[]),h)}
 json.dump(J,open('hubjourneys.json','w'))
 names=set();pairs=set()
 for h in J:
     for dk in J[h]:
         for k in J[h][dk]:
             for x in J[h][dk][k]:
-                for lg in x[3]:
+                for li,lg in enumerate(x[3]):
                     cs=[c[0] for c in lg['calls']]
                     names.update(cs); pairs.update(zip(cs,cs[1:]))
+                    if li and x[3][li-1]['calls'][-1][0]!=cs[0]: pairs.add((x[3][li-1]['calls'][-1][0],cs[0]))  # a walk between stations
 json.dump(sorted(names),open('allnames.json','w')); json.dump(sorted(pairs),open('pairs.json','w'))
 for h in J:
     print(h,{dk:(len(v['there']),len(v['back'])) for dk,v in J[h].items()})

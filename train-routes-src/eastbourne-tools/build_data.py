@@ -3,11 +3,11 @@ import json,re
 from names import nice as NICE
 J=json.load(open('hubjourneys.json')); G=json.load(open('geo.json'))
 DEST='Eastbourne'
-HUBS=[('VIC','London Victoria','London Victoria'),('CLJ','Clapham Junction','Clapham'),('ECR','East Croydon','East Croydon'),('LBG','London Bridge','London Bridge'),
-      ('STP','London St Pancras International','St Pancras'),('GTW','Gatwick Airport','Gatwick'),('BTN','Brighton','Brighton'),('HGS','Hastings','Hastings'),
+HUBS=[('VIC','London Victoria','London Victoria'),('CLJ','Clapham Junction','Clapham'),('WAT','London Waterloo','Waterloo'),('ECR','East Croydon','East Croydon'),('LBG','London Bridge','London Bridge'),
+      ('STP','London St Pancras International','St Pancras'),('ZFD','Farringdon','Farringdon'),('BFR','London Blackfriars','Blackfriars'),('GTW','Gatwick Airport','Gatwick'),('BTN','Brighton','Brighton'),('HGS','Hastings','Hastings'),
       ('AFK','Ashford International','Ashford'),('PMS','Portsmouth & Southsea','Portsmouth')]
 SHORT={'London Victoria':'Victoria','London St Pancras':'St Pancras','London Bridge':'London Bridge','St Leonards Warrior Square':'St Leonards','Portsmouth & Southsea':'Portsmouth','Ashford International':'Ashford','Gatwick Airport':'Gatwick'}
-BIG={'London Victoria','Clapham Junction','East Croydon','London Bridge','London St Pancras International','Gatwick Airport','Three Bridges','Haywards Heath','Lewes','Brighton','Polegate','Eastbourne','Hastings','Bexhill','Rye (Sussex)','Ashford International','Worthing','Chichester','Havant','Portsmouth & Southsea','Ore','Hampden Park (Sussex)','Farringdon','London Blackfriars'}
+BIG={'London Victoria','Clapham Junction','East Croydon','London Bridge','London St Pancras International','Gatwick Airport','Three Bridges','Haywards Heath','Lewes','Brighton','Polegate','Eastbourne','Hastings','Bexhill','Rye (Sussex)','Ashford International','Worthing','Chichester','Havant','Portsmouth & Southsea','Ore','Hampden Park (Sussex)','Farringdon','London Blackfriars','London Waterloo'}
 DAYS=[('thu','Thursday'),('fri','Friday'),('sat','Saturday'),('sun','Sunday')]
 stops=[];SI={}
 def si(n):
@@ -38,7 +38,7 @@ def trip(x,toshow,hubname):
             f=(KEY|LABEL if c[0] in BIG or ci==0 and li==0 or last else 0)|(OFF|KEY|LABEL if c[0]==DEST else 0)
             s.append([t,si(c[0]),f])
     l0=legs[0]; first=l0['calls'][0]
-    return {'big':s[0][0],'plat':first[3],'ride':tot,'dest':tdest(l0['info']),
+    return {'big':s[0][0],'plat':first[3] if first[3]!='-' else '','ride':tot,'dest':tdest(l0['info']),
         'calls':[SHORT.get(NICE(c[0]),NICE(c[0])) for c in l0['calls'][1:]],
         'small':('Gets to Eastbourne at ' if toshow else 'Back in '+hubname+' at ')+s[-1][0],
         'title':'The '+s[0][0]+' from '+stops[s[0][1]][0],'s':s,'changes':changes,'ops':[re.match(r'(.+?) from ',lg['info']).group(1) if re.match(r'(.+?) from ',lg['info']) else '' for lg in legs],'lorig':torig(legs[-1]['info'])}
@@ -57,7 +57,9 @@ def table(trips,toshow,hubfull):
     return {'rows':rows,'off':3 if toshow else 0,'cols':cols,'wide':1}
 def dirs(code,full,short,dk):
     nice=NICE(full)
-    there=[trip(x,True,short) for x in J[code][dk]['there']]; back=[trip(x,False,short) for x in J[code][dk]['back']]
+    # a late night journey can end at another London station (Blackfriars, St Pancras) instead of the hub; leave those out
+    okend=lambda x: not full.startswith('London') or NICE(x[3][-1]['calls'][-1][0])==NICE(full)
+    there=[trip(x,True,short) for x in J[code][dk]['there']]; back=[trip(x,False,short) for x in J[code][dk]['back'] if okend(x)]
     return [{'label':'To Eastbourne','trips':there,'tt':table(there,True,full),'from':nice,'note':'Times from '+nice+'. Tap one to see every station on the way.'},
             {'label':'Back to '+short,'trips':back,'tt':table(back,False,full),'from':DEST,'note':'Times from Eastbourne. The flying usually finishes around 17:00, so look at the trains after that.'}]
 hubs=[]

@@ -2,16 +2,21 @@
 and writes hubjourneys.json, allnames.json and pairs.json (station pairs for the map lines)."""
 import json,os
 from parse2 import parse
-HUBS=['VIC','CLJ','ECR','LBG','STP','GTW','BTN','HGS','AFK','PMS']
+HUBS=['VIC','CLJ','WAT','ECR','LBG','STP','ZFD','BFR','GTW','BTN','HGS','AFK','PMS']
 DAYS=[tuple(x) for x in json.load(open('dates.json'))]
 def mm(t): return int(t[:2])*60+int(t[3:])
 def gap(a,b):
     d=mm(b)-mm(a); return d+1440 if d<0 else d
-def clean(js):
+# Stations added on 2 Nov 2026: their journeys must start (or end) at the station itself, with no walk between stations
+ENDS={'WAT':'London Waterloo','ZFD':'Farringdon','BFR':'London Blackfriars'}
+def clean(js,hub=None,there=True):
     out=[]
     for legs in js:
         legs=[l for l in legs if l['calls']]
         if not legs: continue
+        if hub in ENDS:
+            if (legs[0]['calls'][0][0] if there else legs[-1]['calls'][-1][0])!=ENDS[hub]: continue
+            if any(legs[i]['calls'][-1][0]!=legs[i+1]['calls'][0][0] for i in range(len(legs)-1)): continue
         dep=legs[0]['calls'][0]; arr=legs[-1]['calls'][-1]
         d=dep[2] or dep[1]; a=arr[1]; tot=gap(d,a)
         if tot>240 or len(legs)>3: continue
@@ -36,7 +41,7 @@ for h in HUBS:
         f=f'raw/h_{h}_{date}.json'
         if not os.path.exists(f): continue
         R=parse(f)
-        J.setdefault(h,{})[dk]={'there':clean(R.get(f'{h}_EBN',[])),'back':clean(R.get(f'EBN_{h}',[]))}
+        J.setdefault(h,{})[dk]={'there':clean(R.get(f'{h}_EBN',[]),h,True),'back':clean(R.get(f'EBN_{h}',[]),h,False)}
 json.dump(J,open('hubjourneys.json','w'))
 names=set();pairs=set()
 for h in J:

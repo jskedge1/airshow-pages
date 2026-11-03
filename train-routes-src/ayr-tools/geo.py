@@ -1,6 +1,11 @@
 import json,math,heapq,glob,sys,xml.etree.ElementTree as ET
 from names import osmname,EXTRA
 ST_OSM=json.load(open('stops_osm.json')); NAMES=json.load(open('allnames.json'))
+# python3 geo.py --keep : keep every line already in geo.json and only draw the stretches and stations that are new
+KEEP='--keep' in sys.argv
+OLD=json.load(open('geo.json')) if KEEP else {'snap':{},'seg':{}}
+# a short walk between two stations as part of a change, drawn as a straight line (none on this page)
+STRAIGHT=set()
 nodes={};adj={}
 for f in glob.glob('osm/r*.xml'):
     r=ET.parse(f).getroot()
@@ -43,6 +48,9 @@ pairs=set(tuple(x) for x in json.load(open('pairs.json')))
 SEG={}
 for a,b in sorted(pairs):
     if (b,a) in SEG or a not in snap or b not in snap: continue
+    if a+'|'+b in OLD['seg'] or b+'|'+a in OLD['seg']: continue
+    if frozenset((a,b)) in STRAIGHT:
+        SEG[a+'|'+b]=[[round(x,5),round(y,5)] for x,y in (nodes[snap[a]],nodes[snap[b]])]; continue
     p,d=sp(near[a],near[b]); straight=dist(pos[a],pos[b])
     if p is None or d>straight*1.7+2:
         print('fallback',a,b,None if d is None else round(d,1),round(straight,1)); pts=[tuple(pos[a]),tuple(pos[b])]
@@ -52,5 +60,7 @@ for a,b in sorted(pairs):
         if dist(simp[-1],q)>0.06: simp.append(q)
     simp.append(pts[-1])
     SEG[a+'|'+b]=[[round(x,5),round(y,5)] for x,y in simp]
-json.dump({'snap':{n:[round(nodes[k][0],5),round(nodes[k][1],5)] for n,k in snap.items()},'seg':SEG},open('geo.json','w'))
+SNAP={n:[round(nodes[k][0],5),round(nodes[k][1],5)] for n,k in snap.items()}
+if KEEP: SNAP={**SNAP,**OLD['snap']}; SEG={**OLD['seg'],**SEG}
+json.dump({'snap':SNAP,'seg':SEG},open('geo.json','w'))
 print('segs',len(SEG),sum(len(v) for v in SEG.values()))

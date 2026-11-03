@@ -37,12 +37,14 @@ def journeys(frm, to, date):
 
 hub, date = sys.argv[1], sys.argv[2]
 full = len(sys.argv) > 3
+# Southern, Thameslink and Gatwick Express only, plus South Western Railway into Clapham Junction for Waterloo
+OK = ('Southern', 'Thameslink', 'Gatwick+Express') + (('South+Western+Railway', 'South Western Railway') if hub == 'WAT' else ())
 res = {}
 for frm, to in [(hub, 'EBN'), ('EBN', hub)]:
     rows = []
     for key, links in journeys(frm, to, date).items():
         ops = re.findall(r'ops\[\]=([^&]+)', key)
-        ga = bool(ops) and all(o in ('Southern','Thameslink','Gatwick+Express') for o in ops) and len(ops) == key.count('info[]=')
+        ga = bool(ops) and all(o in OK for o in ops) and len(ops) == key.count('info[]=')
         row = {'key': key, 'ops': ops, 'ga': ga, 'stages': []}
         if full and ga:
             for l in links:

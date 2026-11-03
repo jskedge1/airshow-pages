@@ -4,10 +4,14 @@ from names import nice as NICE
 J=json.load(open('hubjourneys.json')); G=json.load(open('geo.json'))
 DEST='Southport'
 HUBS=[('LVC','Liverpool Central','Liverpool Central'),('KIR','Kirkby (Merseyside)','Kirkby'),('OMS','Ormskirk','Ormskirk'),('CTR','Chester','Chester'),
-      ('MCV','Manchester Victoria','Manchester Victoria'),('MCO','Manchester Oxford Road','Oxford Road'),('BON','Bolton','Bolton'),('WGW','Wigan Wallgate','Wigan Wallgate')]
+      ('MCV','Manchester Victoria','Manchester Victoria'),('MCO','Manchester Oxford Road','Oxford Road'),('BON','Bolton','Bolton'),('WGW','Wigan Wallgate','Wigan Wallgate'),
+      ('EUS','London Euston','London Euston')]
 SHORT={'Liverpool Central':'Liverpool Central','Manchester Victoria':'Manchester Victoria','Manchester Oxford Road':'Oxford Road','Manchester Piccadilly':'Piccadilly','Liverpool Lime Street':'Lime Street','Liverpool James Street':'James Street'}
-BIG={'Liverpool Central','Kirkby','Ormskirk','Chester','Manchester Victoria','Manchester Oxford Road','Manchester Piccadilly','Bolton','Wigan Wallgate','Southport','Sandhills','Moorfields','Liverpool Lime Street','Formby','Birkdale','Ainsdale','Hunts Cross','Liverpool South Parkway','Salford Crescent','Hooton','Birkenhead Central','Hamilton Square','Liverpool James Street','Atherton','Westhoughton','Parbold','Burscough Bridge','Bootle New Strand','Hall Road','Waterloo','Hindley','Runcorn','Ellesmere Port'}
+BIG={'Liverpool Central','Kirkby','Ormskirk','Chester','Manchester Victoria','Manchester Oxford Road','Manchester Piccadilly','Bolton','Wigan Wallgate','Southport','Sandhills','Moorfields','Liverpool Lime Street','Formby','Birkdale','Ainsdale','Hunts Cross','Liverpool South Parkway','Salford Crescent','Hooton','Birkenhead Central','Hamilton Square','Liverpool James Street','Atherton','Westhoughton','Parbold','Burscough Bridge','Bootle New Strand','Hall Road','Waterloo','Hindley','Runcorn','Ellesmere Port',
+     'London Euston','Wigan North Western','Warrington Bank Quay','Crewe','Stafford','Milton Keynes Central','Watford Junction','Rugby','Nuneaton','Tamworth','Lichfield Trent Valley'}
 DAYS=[('sat','Saturday'),('sun','Sunday')]
+# where a change with a walk between two stations is named (the Northern train leaves from Wallgate)
+CHGAT={frozenset(('Wigan North Western','Wigan Wallgate')):'Wigan North Western'}
 stops=[];SI={}
 def si(n):
     if n not in SI:
@@ -29,6 +33,19 @@ def trip(x,toshow,hubname):
         cs=lg['calls']
         for ci,c in enumerate(cs):
             last=(li==len(legs)-1 and ci==len(cs)-1)
+            if li>0 and ci==0 and legs[li-1]['calls'][-1][0]!=c[0]:
+                # a short walk between two stations as part of the change (WALKS in journeys.py): both stations stay in the
+                # stop list, one after the other, the walk counts in the change time, and the change is named at CHGAT
+                pe=legs[li-1]['calls'][-1]; dep=c[2] or c[1]; prev=s[-1]; arr=prev[0]
+                at=CHGAT.get(frozenset((pe[0],c[0])),pe[0])
+                if at==pe[0]:
+                    prev[0]=dep; prev[2]|=CHG|KEY|LABEL; prev.append(arr); s.append([dep,si(c[0]),KEY|LABEL])
+                    ap=pe[3]; dp=c[3]+' at '+NICE(c[0]) if c[3] else ''
+                else:
+                    prev[2]|=KEY|LABEL; s.append([dep,si(c[0]),CHG|KEY|LABEL,arr])
+                    ap=pe[3]+' at '+NICE(pe[0]) if pe[3] else ''; dp=c[3]
+                changes.append({'at':NICE(at),'arr':arr,'dep':dep,'ap':ap,'dp':dp,'wait':gap(arr,dep),'to':tdest(lg['info'])})
+                continue
             if li>0 and ci==0:
                 prev=s[-1]; arr=prev[0]; prev[0]=c[2] or c[1]; prev[2]|=CHG|KEY|LABEL; prev.append(arr)
                 changes.append({'at':NICE(c[0]),'arr':arr,'dep':c[2] or c[1],'ap':legs[li-1]['calls'][-1][3],'dp':c[3],'wait':gap(arr,c[2] or c[1]),'to':tdest(lg['info'])})
@@ -61,6 +78,7 @@ def dirs(code,full,short,dk):
             {'label':'Back to '+short,'trips':back,'tt':table(back,False,full),'from':DEST,'note':'Times from Southport. Trains are busy straight after the flying, so I would look at the later trains, or have something to eat in town while the queues clear.'}]
 hubs=[]
 for code,full,short in HUBS:
+    if code not in J: continue
     base=dirs(code,full,short,DAYS[0][0]); days={}
     sig=lambda D:json.dumps([[t['big'],t['s'][-1][0],len(t['changes'])] for d in D for t in d['trips']])
     for dk,_ in DAYS[1:]:

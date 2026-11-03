@@ -1,6 +1,6 @@
 import subprocess,re,html,json,time
 F={}
-for h in 'GLC PYG EDB KMK LAR GIR STR CAR PRE'.split():
+for h in 'GLC PYG EDB KMK LAR GIR STR CAR PRE EUS'.split():
     s=subprocess.run(['curl','-s','--max-time','40','-A','Mozilla/5.0 (planning preview)',f'https://traintimes.org.uk/{h}/AYR/12:30/'+json.load(open('dates.json'))[0][1]],capture_output=True,text=True).stdout
     f={}
     for blk in re.findall(r'<div class="fares slide"><ul>(.*?)</ul>',s,re.S):
