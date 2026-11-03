@@ -29,7 +29,13 @@
     {key:'camping',     name:'Camping at Air Shows',         where:'Campsites and what to pack',    slug:'camping-at-airshows',         live:true},
     {key:'airshow-security', name:'Airshow Security and Bag Searches', where:'What happens at the gate and how to pack', slug:'airshow-security', live:true},
     {key:'questions-and-answers', name:'Airshow Questions and Answers', where:'Straight answers, sorted by topic', slug:'airshow-questions', live:true},
-    {key:'nikon-d500', name:'Nikon D500 3D Camera Guide', where:'Every button, set up for airshows', slug:'nikon-d500-guide', live:false}
+    {key:'nikon-d500', name:'Nikon D500 3D Camera Guide', where:'Every button, set up for airshows', slug:'nikon-d500-guide', live:false},
+    {key:'night-before', name:'The Night Before An Airshow', where:'A tick list for the evening before', slug:'night-before-an-airshow', live:false},
+    {key:'getting-home', name:'Getting Home From An Airshow', where:'When to leave and how to get away', slug:'getting-home-from-an-airshow', live:false},
+    {key:'rainy-day-plan', name:'Rainy Day Plan', where:'Will it fly, and what to pack', slug:'airshow-rainy-day-plan', live:false},
+    {key:'calm-visit', name:'A Calm Airshow Visit', where:'For anyone who finds noise and crowds hard', slug:'calm-airshow-visit', live:false},
+    {key:'spotter-cards', name:'Aircraft Spotter Cards', where:'Printable cards for young spotters', slug:'aircraft-spotter-cards', live:false},
+    {key:'aircraft-a-to-z', name:'Airshow Aircraft A To Z', where:'Every aircraft you might see', slug:'airshow-aircraft-a-to-z', live:false}
   ];
   window.AIRSHOW_LINKS={site:SITE,find:SITE+FIND,pages:PAGES,guides:GUIDES};
 

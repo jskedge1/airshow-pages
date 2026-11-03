@@ -129,7 +129,7 @@ def postcard_html(show, t):
     for k in PC_PICS.get(show, []):
         if k in lib:
             u, a = lib[k]
-            btns += '<button type="button" aria-label="%s"><img src="%s" alt="" crossorigin="anonymous" loading="lazy" decoding="async"></button>' % (esc(a or k.replace('_', ' ')), esc(u))
+            btns += '<button type="button" aria-label="%s"><img src="%s" alt="%s" crossorigin="anonymous" loading="lazy" decoding="async"></button>' % (esc(a or k.replace('_', ' ')), esc(u), esc(a or k.replace('_', ' ')))
     return '''    <div class="panel-head reveal">
       <div><h2>Make A <span class="sky">Postcard</span></h2></div>
       <p>Been to %s, or counting down to your first visit? You can make your own postcard from one of my photos and share it with your friends and family. Just pick a photo and a style, add your name and a message, and it&rsquo;s ready to go.</p>
@@ -226,6 +226,21 @@ def build(show):
         blocks['facilities'] = f
         log.append('good to know')
 
+    # links to the planning guides that help on every show
+    SITE = 'https://www.ukairshowguide.co.uk/'
+    notes = {
+        'timeline': ('<div class="ns-note"><b>The night before</b>I&rsquo;ve made a tick list for the evening before any airshow: tickets, travel, charging, the bag and the alarms. '
+                     '<a href="%snight-before-an-airshow" target="_top">Open the night before checklist</a>, and you can print it or tick it off on your phone.</div>') % SITE,
+        'help': ('<div class="ns-note"><b>More help</b>If the forecast looks grim, have a look at my <a href="%sairshow-rainy-day-plan" target="_top">rainy day plan</a>. '
+                 'If you or someone in your group finds noise and crowds hard, my <a href="%scalm-airshow-visit" target="_top">calm visit guide</a> may help. '
+                 'And for the end of the day, there&rsquo;s <a href="%sgetting-home-from-an-airshow" target="_top">getting home from an airshow</a>.</div>') % (SITE, SITE, SITE),
+    }
+    for pid, note in notes.items():
+        if pid in blocks:
+            f = re.sub(r'\n?\s*<!-- sx-nb -->.*?<!-- /sx-nb -->', '', blocks[pid], flags=re.S)
+            h = match_close(f, f.index('<div class="panel-head'), 'div')
+            blocks[pid] = f[:h] + '\n    <!-- sx-nb -->' + note + '<!-- /sx-nb -->' + f[h:]
+
     # one name for the day sections
     day_name = 'Pick Your Show' if show in MULTI_SHOW else 'Pick Your Day'
     for pid in ('days', 'weekend'):
@@ -286,7 +301,7 @@ def build(show):
     # 6. load show-extras.js
     t = re.sub(r'<!-- sx-js -->.*?<!-- /sx-js -->\n?', '', t, flags=re.S)
     conf = {'place': place, 'greet': 'Greetings From ' + place, 'msg': 'Wish you were here!', 'slug': show, 'year': '2027', 'shows': [event]}
-    tag = '<!-- sx-js --><script>window.SX_PC=%s;</script><script src="%sshow-extras.js?v=2" defer></script><!-- /sx-js -->\n' % (json.dumps(conf), GH)
+    tag = '<!-- sx-js --><script>window.SX_PC=%s;</script><script src="%sshow-extras.js?v=3" defer></script><!-- /sx-js -->\n' % (json.dumps(conf), GH)
     i = t.rindex('</body>') if '</body>' in t else len(t)
     bt = t.find('<script src="%sback-tab.js"' % GH)
     i = bt if bt > -1 else i

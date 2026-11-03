@@ -25,7 +25,9 @@
     '.sx-gtk p{margin:0;font-size:15px;line-height:1.5;color:#33424F}',
     '.sx-res[hidden]{display:none!important}',
     '@media(max-width:640px){.sx-gtk{grid-template-columns:minmax(0,1fr)}.sx-gtk-h{font-size:23px}}',
-    '@media(prefers-reduced-motion:reduce){.sx-gtk article{transition:none}}'
+    '@media(prefers-reduced-motion:reduce){.sx-gtk article{transition:none}}',
+    /* easier reading outdoors: nothing on a phone smaller than 14px apart from compact table codes */
+    '@media(max-width:700px){small,figcaption,.lu-note,.lu-small,.sg-foot,.xd-sl,.ph,.l,i.dark,.cg-sub small{font-size:14px!important;line-height:1.4!important}}'
   ].join('');
 
   function inject(R){
