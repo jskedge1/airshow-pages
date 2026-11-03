@@ -32,6 +32,8 @@ SHOWS = [
      'Old Warden is a small village. On show days a shuttle bus runs from Biggleswade station, which I would suggest over the 74 bus, as that stops about 25 minutes’ walk away and doesn’t run on Sundays.'),
     ('gransden', 'Little Gransden', 'Little Gransden Air & Car Show', 'Little Gransden Airfield', 'little-gransden-air-and-car-show',
      'The airfield is out in the countryside. St Neots is the nearest station and the Whippet 18 runs on weekdays and Saturdays, so for a Sunday show I would think about a taxi from the station or sharing a lift.'),
+    ('headcorn', 'Headcorn', 'Headcorn Airshow', 'Headcorn Aerodrome, Kent', 'headcorn-air-show',
+     'Headcorn station is about a mile and a half from the aerodrome, with Southeastern trains from London and across Kent. I would think about how you will do that last stretch before you go, as it is a fair walk along country lanes.'),
     ('southport', 'Southport', 'Southport Air Show', 'Southport beach and pier', 'southport-air-show',
      'Merseyrail from Liverpool is the easy way in, about 10 minutes’ walk from the seafront. Lots of buses come in from Liverpool, Preston, Wigan and St Helens too.'),
     ('blackpool', 'Blackpool', 'Blackpool Air Show', 'Central Pier, Blackpool', 'blackpool-air-show',

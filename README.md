@@ -504,7 +504,7 @@ to a bus or train route link when it is tapped. The tab links back with `?tb=<to
 Bus pages sit in their own box on /bus-route, so the page code there has to pass `from` and `t` on: the updated
 `velo/page-code/bus-route.js` does this, and needs pasting into the /bus-route page code in the Wix editor.
 Until then bus pages send everyone to the show's Getting there.
-Headcorn has no Wix page yet, so its tab opens camping-layout/headcorn.html.
+Headcorn has its Wix page (/headcorn-air-show) and is the 13th featured show since 3 Nov 2026.
 
 ## Back tabs on the rest of the site (3 Nov 2026)
 
