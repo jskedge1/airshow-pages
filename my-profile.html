@@ -348,6 +348,14 @@ html.hud .bf-bar span{background:rgba(255,255,255,.06);color:var(--cy);font-fami
 .mini-l b{color:var(--navy);font-weight:700;font-size:16px}
 html.hud .mini-l button{background:rgba(6,16,25,.55);border-color:var(--hl)}
 html.hud .mini-l b{color:#fff}
+.snd-chip{display:none;align-items:center;gap:7px;background:transparent;border:1px solid rgba(95,227,220,.35);color:#A9BDCB;font:500 13px "JetBrains Mono",monospace;padding:8px 11px}
+.snd-chip svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.snd-chip[aria-pressed=true]{color:#5FE3DC;border-color:#5FE3DC;box-shadow:0 0 14px rgba(95,227,220,.25)}
+html.hud .snd-chip{display:inline-flex}
+.snd-box .snd-off{margin:12px 0 0;border-left:4px solid var(--purple);background:#F6F4FA;padding:8px 12px;font-size:15px}
+html.hud .snd-box .snd-off{display:none}
+.snd-box .tgl,.snd-box .btn{opacity:.55}
+html.hud .snd-box .tgl,html.hud .snd-box .btn{opacity:1}
 /* ===== look switch (same as the forum) ===== */
 .look{display:inline-flex;align-items:center;gap:4px;padding:5px;background:var(--navy2);border-top:3px solid var(--teal);transition:border-color .45s var(--ease)}
 .look .lbl{font:600 14px var(--b);color:#9FD8D5;padding:0 8px 0 6px;white-space:nowrap}
@@ -663,7 +671,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
             ((a.into||[]).length?'<div class="chips">'+a.into.map(function(x){return '<span class="chip t">'+esc(x)+'</span>';}).join('')+'</div>':'')+
             badgeRow()+
           '</div>'+
-          '<div class="acts">'+LOOKSW+'<button class="btn sm" type="button" data-act="edit">Edit profile</button><button class="btn sm line" type="button" data-act="public">'+svg('eye')+' How others see me</button></div>'+
+          '<div class="acts">'+LOOKSW+sndChip()+'<button class="btn sm" type="button" data-act="edit">Edit profile</button><button class="btn sm line" type="button" data-act="public">'+svg('eye')+' How others see me</button></div>'+
         '</section>'+
         '<div class="stats">'+
           '<div class="stat"><b>'+(h.trips||[]).length+'</b><span>Shows planned</span></div>'+
@@ -683,9 +691,10 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
       var dot=t.s?'<span class="dot'+(t.s==='off'?' off':(t.s==='wait'?' wait':''))+'" title="'+(t.s==='on'?'Signed up':(t.s==='wait'?'Waiting':'Not joined yet'))+'"></span>':'';
       return '<button class="tb" type="button" role="tab" id="tab-'+t.k+'" data-tab="'+t.k+'" style="--lc:'+t.c+'" aria-selected="'+(t.k===tab)+'" tabindex="'+(t.k===tab?0:-1)+'"><span class="ring">'+svg(t.i)+'</span>'+esc(t.n)+(t.count?'<span class="cnt">'+t.count+'</span>':'')+dot+'</button>';
     }).join('');
-    showTab(tab,false);
+    showTab(tab,false,true);
   }
-  function showTab(k,focus){
+  function showTab(k,focus,quiet){
+    if(!quiet&&D){SFX.key();setTimeout(SFX.glitch,180);if(k==='notes')setTimeout(SFX.radio,520);}
     tab=k;var T=TABS(),t=T.filter(function(x){return x.k===k;})[0];
     [].forEach.call(document.querySelectorAll('.tb'),function(b){var on=b.getAttribute('data-tab')===k;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;if(on&&focus)b.focus();});
     document.getElementById('tabs').style.setProperty('--tc',t.c);
@@ -787,11 +796,54 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
         '<div><span>Profile Name</span><b>'+esc(a.name)+'</b></div></div>'+
         '<p style="margin-top:14px">To change your password, log out and choose Forgot password on the log in window. It sends you a link by email.</p>'+
         '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" type="button" data-act="edit">Edit profile</button><button class="btn sm red" type="button" data-act="logout">Log out</button></div></div>'+
-      privacyBox()+'<div class="box"><h3>Your Details</h3><p>Your profile name, photo, area and bio show to other members on the forum. Your email never does.</p><p>Want your account or anything you have posted taken off? Drop me a message and I will sort it for you.</p>'+
+      privacyBox()+soundBox()+'<div class="box"><h3>Your Details</h3><p>Your profile name, photo, area and bio show to other members on the forum. Your email never does.</p><p>Want your account or anything you have posted taken off? Drop me a message and I will sort it for you.</p>'+
         '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm line" type="button" data-go="policies">Privacy policy</button><button class="btn sm line" type="button" data-go="contact-us">Contact the guide</button></div></div></div>';
   }
 
 
+
+
+  /* ---------- cockpit sounds (HUD look only), the same sounds as My Airshow Hub ---------- */
+  var SFX=(function(){
+    var on=false,ctx=null;
+    try{on=localStorage.getItem('ukagOvSound')==='on';}catch(e){}
+    function ac(){if(!ctx){var A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A();}if(ctx.state==='suspended')ctx.resume();return ctx;}
+    function noise(at,dur,f0,f1,vol,type){
+      var c=ac();if(!c)return;var t=c.currentTime+.01+at;
+      var n=Math.floor(c.sampleRate*dur),b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);
+      for(var i=0;i<n;i++)d[i]=Math.random()*2-1;
+      var src=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();
+      src.buffer=b;f.type=type||'bandpass';f.Q.value=1.4;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(f1,t+dur);
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+dur*.35);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+      src.connect(f);f.connect(g);g.connect(c.destination);src.start(t);src.stop(t+dur);
+    }
+    function beep(f,at,dur,type,vol){
+      var c=ac();if(!c)return;var t=c.currentTime+.01+at,o=c.createOscillator(),g=c.createGain();
+      o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+      o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur+.02);
+    }
+    function ok(){return on&&document.documentElement.classList.contains('hud');}
+    return {
+      isOn:function(){return on;},
+      set:function(v){on=v;try{localStorage.setItem('ukagOvSound',v?'on':'off');}catch(e){}if(v)ac();},
+      key:function(){if(ok()){noise(0,.03,2600,2400,.35,'highpass');beep(380,0,.05,'sine',.25);beep(2093,.045,.04,'sine',.08);}},
+      glitch:function(){if(ok()){noise(0,.26,300,5000,.18);[.24,.28,.31].forEach(function(a){beep(600+Math.random()*1800,a,.025,'square',.04);});beep(1760,.36,.08,'sine',.08);}},
+      lock:function(){if(ok()){for(var i=0;i<4;i++)beep(1400+i*140,i*.07,.04,'square',.04);beep(2093,.3,.25,'triangle',.1);}},
+      radio:function(){if(ok()){noise(0,.35,1800,900,.1);beep(1000,.02,.06,'sine',.04);}},
+      whoosh:function(){if(ok())noise(0,.4,600,4500,.22);},
+      jet:function(){if(ok())noise(0,2.6,200,1400,.4,'lowpass');}
+    };
+  })();
+  function sndChip(){
+    return '<button type="button" class="snd-chip" data-act="sound" aria-pressed="'+SFX.isOn()+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/>'+(SFX.isOn()?'<path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/>':'<path d="M17 9l5 6M22 9l-5 6"/>')+'</svg>'+(SFX.isOn()?'Cockpit sounds on':'Cockpit sounds off')+'</button>';
+  }
+  function soundBox(){
+    return '<div class="box snd-box"><h3>Cockpit Sounds</h3><p>The same switch clicks, radio blips and jet roar as My Airshow Hub. They only play in the HUD look, and they are off until you turn them on.</p>'+
+      '<label class="tgl"><input type="checkbox" data-snd'+(SFX.isOn()?' checked':'')+'><span class="sw" aria-hidden="true"></span><span><b>Play cockpit sounds</b><small>Your choice is shared with My Airshow Hub.</small></span></label>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn sm line" type="button" data-try="key">Try a switch</button><button class="btn sm line" type="button" data-try="radio">Try the radio</button><button class="btn sm line" type="button" data-try="jet">Try a flypast</button></div>'+
+      '<p class="snd-off">Switch to the HUD look at the top of your profile to use cockpit sounds.</p></div>';
+  }
+  function sndUI(){[].forEach.call(document.querySelectorAll('.snd-chip'),function(b){b.outerHTML=sndChip();});[].forEach.call(document.querySelectorAll('[data-snd]'),function(x){x.checked=SFX.isOn();});}
 
   /* ---------- badges ---------- */
   var BI={shows:'stamp',riat:'hub',photo:'cam',story:'forum',season:'hub',team:'team'};
@@ -852,6 +904,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
   }
   /* ---------- how others see me ---------- */
   function publicView(){
+    SFX.whoosh();
     var a=D.account,pv=D.privacy||{},f=D.forum||{},h=D.hub||{};
     var dlg=document.createElement('div');dlg.className='dlg';
     dlg.innerHTML='<div class="pub" role="dialog" aria-label="How other members see your profile"><div class="pub-bar"><span>This is how other members see you</span><button type="button" data-x aria-label="Close">×</button></div>'+
@@ -928,7 +981,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
       var er=document.getElementById('pfE');
       if(p.name.length<2){er.textContent='Your display name needs at least 2 characters.';er.hidden=false;return;}
       var b=f.querySelector('[type=submit]');b.disabled=true;b.textContent='Saving';
-      api('save',p).then(function(){close();toast('Profile saved.');load();},function(err){er.textContent=err.message;er.hidden=false;b.disabled=false;b.textContent='Save profile';});
+      api('save',p).then(function(){SFX.lock();close();toast('Profile saved.');load();},function(err){er.textContent=err.message;er.hidden=false;b.disabled=false;b.textContent='Save profile';});
     });
   }
   function photo(){
@@ -952,6 +1005,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
   document.addEventListener('click',function(e){
     var cg=e.target.closest('#cmGo');if(cg){e.preventDefault();var mm=document.getElementById('cmM').value.trim(),er=document.getElementById('cmE');if(mm.length<3){er.textContent='Add a few words to your message first.';er.hidden=false;return;}er.hidden=true;var c=cmBuild();var href='mailto:'+MAIL+'?subject='+encodeURIComponent(c.subject)+'&body='+encodeURIComponent(c.body);try{window.top.location.href=href;}catch(x){location.href=href;}return;}
     var cc=e.target.closest('#cmCopy');if(cc){var c2=cmBuild(),txt='To: '+MAIL+'\nSubject: '+c2.subject+'\n\n'+c2.body;var ok=function(){document.getElementById('cmOk').hidden=false;};try{navigator.clipboard.writeText(txt).then(ok,function(){});}catch(x){}return;}
+    var tr=e.target.closest('[data-try]');if(tr){var was=SFX.isOn();if(!was)SFX.set(true);SFX[tr.getAttribute('data-try')]();if(!was)SFX.set(false);return;}
     var nf=e.target.closest('[data-nf]');if(nf){nFilter=nf.getAttribute('data-nf');showTab('notes',false);return;}
     var lk=e.target.closest('[data-look]');if(lk){setLook(lk.getAttribute('data-look'),true);if(document.getElementById('panel'))showTab(tab,false);return;}
     var t=e.target.closest('[data-act],[data-go],[data-tab],[data-tab-go]');if(!t)return;
@@ -964,12 +1018,14 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
     if(a==='edit')edit();
     if(a==='photo')photo();
     if(a==='public')publicView();
+    if(a==='sound'){SFX.set(!SFX.isOn());sndUI();SFX.key();}
   });
   document.addEventListener('change',function(e){
-    var t=e.target;if(!t.hasAttribute||!t.hasAttribute('data-pv'))return;
+    var t=e.target;if(t.hasAttribute&&t.hasAttribute('data-snd')){SFX.set(t.checked);sndUI();SFX.key();return;}
+    if(!t.hasAttribute||!t.hasAttribute('data-pv'))return;
     var p={};[].forEach.call(document.querySelectorAll('[data-pv]'),function(x){p[x.getAttribute('data-pv')]=x.checked;});
     D.privacy=p;
-    api('privacy',p).then(function(){toast('Privacy saved.');},function(err){toast(err.message);});
+    api('privacy',p).then(function(){SFX.lock();toast('Privacy saved.');},function(err){toast(err.message);});
   });
   document.addEventListener('keydown',function(e){
     var b=e.target.closest&&e.target.closest('.tb');if(!b)return;
