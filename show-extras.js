@@ -120,11 +120,10 @@
     if(sel){ sel.innerHTML = (P.shows || [P.place]).map(function(s){ return '<option>' + s + '</option>'; }).join(''); state.show = sel.value; }
     function cover(img, x, y, w, h){ var r = Math.max(w / img.naturalWidth, h / img.naturalHeight), iw = img.naturalWidth * r, ih = img.naturalHeight * r; cx.drawImage(img, x + (w - iw) / 2, y + (h - ih) / 2, iw, ih); }
     function logo(x, y, s, col){
-      cx.font = '800 40px "Barlow Condensed", Barlow, sans-serif'; var tw = cx.measureText('UK AIRSHOW GUIDE').width; x = Math.min(x, cv.width - 50 - (s * 23 + 18 + tw));
-      cx.save(); cx.translate(x, y); cx.scale(s, s); cx.fillStyle = '#D74949'; cx.fill(JET); cx.restore();
+      cx.font = '800 40px "Barlow Condensed", Barlow, sans-serif'; var tw = cx.measureText('UK AIRSHOW GUIDE').width; x = Math.min(x, cv.width - 50 - tw);
       cx.fillStyle = col || '#fff'; cx.textBaseline = 'alphabetic';
-      cx.font = '800 40px "Barlow Condensed", Barlow, sans-serif'; cx.fillText('UK AIRSHOW GUIDE', x + s * 23 + 18, y + s * 8 - 2);
-      cx.font = '500 22px Barlow, sans-serif'; cx.globalAlpha = .85; cx.fillText('Big Guide to UK Airshows', x + s * 23 + 18, y + s * 8 + 26); cx.globalAlpha = 1;
+      cx.fillText('UK AIRSHOW GUIDE', x, y + s * 8 - 2);
+      cx.font = '500 22px Barlow, sans-serif'; cx.globalAlpha = .85; cx.fillText('Big Guide to UK Airshows', x, y + s * 8 + 26); cx.globalAlpha = 1;
     }
     function wrap(t, x, y, maxW, lh){ var w = t.split(' '), line = '', n = 0; for(var i = 0; i < w.length; i++){ var test = line ? line + ' ' + w[i] : w[i]; if(cx.measureText(test).width > maxW && line){ cx.fillText(line, x, y + n * lh); line = w[i]; n++; } else line = test; } cx.fillText(line, x, y + n * lh); }
     function fit(t, maxW, size, weight, fam){ do { cx.font = weight + ' ' + size + 'px ' + fam; size -= 2; } while(cx.measureText(t).width > maxW && size > 20); }

@@ -1228,15 +1228,50 @@ body.o2-shake #app{animation:o2shake .5s linear}
 #guest .blink{animation:lgBlink 1.1s steps(1) infinite}
 
 /* pilot note */
-#guest .lg-note{flex:1 1 100%;min-width:0;background:rgba(14,33,49,.7);border-left:3px solid var(--lg-teal);padding:18px 22px}
-#guest .lg-note .top{display:flex;justify-content:space-between;font-family:var(--lg-mono);font-size:13px;color:#8FE9E3;margin-bottom:8px}
-#guest .lg-note .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 28px;margin-bottom:12px;color:#D6E2E8}
+/* pilot note: green phosphor HUD readout. On wide screens it sits under the title, beside the login card */
+@media (min-width:1100px){
+  #guest .lg-row{display:grid;grid-template-columns:minmax(0,820px) minmax(0,470px);justify-content:space-between;column-gap:48px;row-gap:28px}
+  #guest .lg-title{grid-column:1;grid-row:1}
+  #guest .lg-card{grid-column:2;grid-row:1/3}
+  #guest .lg-note{grid-column:1;grid-row:2;align-self:start;margin-top:-6px}
+}
+#guest .lg-note{--hn:#7CFF9E;--hn-dim:rgba(124,255,158,.38);--hn-ink:#D9F7E2;position:relative;isolation:isolate;flex:1 1 100%;min-width:0;padding:16px 22px 18px;background:radial-gradient(90% 120% at 0% 0%,rgba(124,255,158,.09),transparent 60%),rgba(3,12,9,.82);box-shadow:inset 0 0 0 1px rgba(124,255,158,.14),0 0 34px rgba(124,255,158,.07);overflow:hidden}
+#guest .hn-scan{position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(124,255,158,.05) 0 1px,transparent 1px 3px)}
+#guest .hn-scan::after{content:"";position:absolute;left:0;right:0;top:-30%;height:30%;background:linear-gradient(180deg,transparent,rgba(124,255,158,.07),transparent);animation:hnRoll 6.5s linear infinite}
+@keyframes hnRoll{to{top:100%}}
+#guest .hn-c{position:absolute;width:18px;height:18px;border:2px solid var(--hn);filter:drop-shadow(0 0 4px rgba(124,255,158,.7));pointer-events:none}
+#guest .hn-c.tl{top:0;left:0;border-right:0;border-bottom:0}
+#guest .hn-c.tr{top:0;right:0;border-left:0;border-bottom:0}
+#guest .hn-c.bl{bottom:0;left:0;border-right:0;border-top:0}
+#guest .hn-c.br{bottom:0;right:0;border-left:0;border-top:0}
+#guest .lg-note .top{display:flex;align-items:center;gap:12px;font-family:var(--lg-mono);font-size:13px;color:var(--hn);text-shadow:0 0 8px rgba(124,255,158,.55);padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid var(--hn-dim)}
+#guest .lg-note .top .hn-rule{flex:1;height:7px;background:repeating-linear-gradient(90deg,var(--hn-dim) 0 1px,transparent 1px 12px);align-self:center}
+#guest .hn-body{display:grid;grid-template-columns:22px minmax(0,1fr) 132px;gap:0 18px}
+#guest .hn-tape{position:relative;border-right:1px solid var(--hn-dim);background:repeating-linear-gradient(180deg,var(--hn-dim) 0 1px,transparent 1px 9px) right/8px 100% no-repeat,repeating-linear-gradient(180deg,var(--hn) 0 1px,transparent 1px 45px) right/16px 100% no-repeat}
+#guest .hn-tape::after{content:"";position:absolute;right:-6px;top:20%;border:6px solid transparent;border-right:0;border-left:8px solid var(--hn);filter:drop-shadow(0 0 4px var(--hn));animation:hnTape 9s ease-in-out infinite}
+@keyframes hnTape{0%,100%{top:14%}50%{top:78%}}
+#guest .lg-note .cols{display:flex;flex-direction:column;gap:12px;color:var(--hn-ink);font-size:16px;line-height:1.6}
+#guest .lg-note .cols p{position:relative;padding-left:40px}
 #guest .lg-note .cols b{color:#fff}
-#guest .lg-note .foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px}
-#guest .lg-note .foot button{min-height:44px;background:none;border:0;padding:0;color:var(--lg-cyan);font-weight:700;font-size:16px}
-#guest .lg-reads{display:grid;grid-template-columns:repeat(3,minmax(90px,1fr));gap:8px;flex:0 1 380px;font-family:var(--lg-mono);font-size:13px}
-#guest .lg-reads div{background:#08141F;padding:6px 8px}
-#guest .lg-reads em{display:block;font-style:normal;color:#8FE9E3}
+#guest .hn-k{position:absolute;left:0;top:1px;font-family:var(--lg-mono);font-size:14px;color:var(--hn);text-shadow:0 0 6px rgba(124,255,158,.6)}
+#guest .lg-reads{display:flex;flex-direction:column;gap:8px;font-family:var(--lg-mono);font-size:15px;color:#fff}
+#guest .lg-reads div{position:relative;padding:7px 10px 9px;border:1px solid var(--hn-dim);background:rgba(124,255,158,.05);clip-path:polygon(0 0,86% 0,100% 24%,100% 100%,0 100%)}
+#guest .lg-reads em{display:block;font-style:normal;font-size:12px;color:var(--hn)}
+#guest .lg-reads i{display:block;height:3px;margin-top:6px;background:rgba(124,255,158,.14);position:relative}
+#guest .lg-reads i::after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--w,100%);background:var(--hn);box-shadow:0 0 6px var(--hn)}
+#guest .lg-note .foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;margin-top:16px;padding-top:12px;border-top:1px dashed var(--hn-dim)}
+#guest .lg-note .foot button{position:relative;min-height:44px;padding:0 18px;background:transparent;border:1px solid var(--hn);color:var(--hn);font-weight:700;font-size:16px;text-shadow:0 0 8px rgba(124,255,158,.45);transition:background .35s ease,color .35s ease,box-shadow .35s ease}
+#guest .lg-note .foot button:hover,#guest .lg-note .foot button:focus-visible{background:var(--hn);color:#04110A;text-shadow:none;box-shadow:0 0 22px rgba(124,255,158,.45);outline:none}
+#guest .hn-cue{font-family:var(--lg-mono);font-size:13px;color:var(--hn);opacity:.85}
+@media (max-width:640px){
+  #guest .lg-note{padding:14px 16px 16px}
+  #guest .hn-body{grid-template-columns:minmax(0,1fr)}
+  #guest .hn-tape{display:none}
+  #guest .lg-note .cols p{padding-left:30px}
+  #guest .lg-reads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:14px;font-size:14px}
+  #guest .lg-note .foot button{width:100%}
+  #guest .hn-cue{display:none}
+}
 
 /* blue HUD tabs */
 #guest .lg-tabs{padding-bottom:clamp(48px,6vw,80px)}
@@ -1421,15 +1456,21 @@ body.o2-shake #app{animation:o2shake .5s linear}
       </div>
 
       <div class="lg-note fade" style="--del:3.6s">
-        <div class="top"><span>PILOT NOTE</span><span class="blink">REC ●</span></div>
+        <span class="hn-scan" aria-hidden="true"></span>
+        <span class="hn-c tl" aria-hidden="true"></span><span class="hn-c tr" aria-hidden="true"></span><span class="hn-c bl" aria-hidden="true"></span><span class="hn-c br" aria-hidden="true"></span>
+        <div class="top"><span>PILOT NOTE · CH 01</span><span class="hn-rule" aria-hidden="true"></span><span class="blink">REC ●</span></div>
+        <div class="hn-body">
+        <span class="hn-tape" aria-hidden="true"></span>
         <div class="cols">
-          <p>This is your own space on the site. I built it so you can keep every show you are going to in one place, then just pull it up on your phone when you are stood on the crowd line.</p>
-          <p><b>First time here?</b> Create a free account and your airshow plans are saved for you, ready on any device. You get every tool in the hub, from countdowns and must see alerts to show day mode. There is also the forum, where you can chat with airshow fans from right across the UK, swap tips and find people heading to the same shows.</p>
-          <p>I would suggest having a look round all the features once you are in. It only takes a couple of minutes to set up, and it is free for everyone.</p>
+          <p><span class="hn-k" aria-hidden="true">01›</span>This is your own space on the site. I built it so you can keep every show you are going to in one place, then just pull it up on your phone when you are stood on the crowd line.</p>
+          <p><span class="hn-k" aria-hidden="true">02›</span><b>First time here?</b> Create a free account and your airshow plans are saved for you, ready on any device. You get every tool in the hub, from countdowns and must see alerts to show day mode. There is also the forum, where you can chat with airshow fans from right across the UK, swap tips and find people heading to the same shows.</p>
+          <p><span class="hn-k" aria-hidden="true">03›</span>I would suggest having a look round all the features once you are in. It only takes a couple of minutes to set up, and it is free for everyone.</p>
+        </div>
+        <div class="lg-reads"><div class="fade" style="--del:3.9s"><em>STATUS</em>ONLINE<i aria-hidden="true"></i></div><div class="fade" style="--del:4.05s"><em>COST</em>£0.00<i aria-hidden="true" style="--w:4%"></i></div><div class="fade" style="--del:4.2s"><em>ACCESS</em>ALL<i aria-hidden="true"></i></div></div>
         </div>
         <div class="foot">
           <button type="button" id="lgNoteJoin">Create your free account →</button>
-          <div class="lg-reads"><div class="fade" style="--del:3.9s"><em>STATUS</em>ONLINE</div><div class="fade" style="--del:4.05s"><em>COST</em>£0.00</div><div class="fade" style="--del:4.2s"><em>ACCESS</em>ALL</div></div>
+          <span class="hn-cue" aria-hidden="true">AWAITING INPUT <span class="blink">▮</span></span>
         </div>
       </div>
     </div>

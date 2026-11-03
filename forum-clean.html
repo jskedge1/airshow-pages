@@ -102,6 +102,19 @@ main{flex:1}
 @media (max-width:700px){.jump a{padding:10px 12px;font-size:14.5px}}
 .jump a b{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:8px;border-radius:11px;background:var(--purple);font-size:12.5px;padding:0 6px}
 
+/* Look switch in the section bar, same control as My Profile */
+.look{display:inline-flex;align-items:center;gap:4px;margin-left:auto;padding:5px;align-self:center;background:var(--navy-d);border-top:3px solid var(--teal);transition:border-color .45s var(--ease)}
+.look .lbl{font-weight:600;font-size:14px;color:#9FD8D5;padding:0 8px 0 6px;white-space:nowrap}
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.06)}
+.seg .pill{position:absolute;top:0;bottom:0;left:0;width:50%;background:var(--teal);transition:transform .45s var(--ease),background .45s var(--ease)}
+.seg button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:7px;border:0;background:none;color:#fff;font-weight:700;font-size:14px;padding:8px 12px;white-space:nowrap;cursor:pointer;transition:color .35s}
+.seg button svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2}
+.seg button:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+.look.go{border-top-color:#5FE3DC}
+.look.go .pill{transform:translateX(100%);background:#5FE3DC}
+.look.go button[data-look=hud]{color:#061019}
+@media (max-width:700px){.look{margin:8px 0 0;width:100%}.look .seg{flex:1}.seg button{padding:10px 8px}}
+
 /* Section titles */
 section{scroll-margin-top:12px}
 .sec{padding:84px 0 80px}
@@ -575,6 +588,14 @@ textarea{min-height:92px;resize:vertical}
       <a href="#kit">Kit swap</a>
       <a href="#how">How it works</a>
       <a href="#admin">Admin</a>
+      <div class="look" id="lookSw" role="group" aria-label="Choose how the forum looks">
+        <span class="lbl">Forum look</span>
+        <div class="seg">
+          <span class="pill" aria-hidden="true"></span>
+          <button type="button" data-look="clean" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M8 13h8M8 16h5"/></svg>Normal</button>
+          <button type="button" data-look="hud" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-5"/></svg>HUD</button>
+        </div>
+      </div>
     </nav>
   </div>
 </header>
@@ -596,6 +617,30 @@ textarea{min-height:92px;resize:vertical}
 
 <script src="forum-live.js"></script>
 <script>ForumLive.start({look:"clean",buttons:{main:"btn btn-teal sm",alt:"btn btn-navy sm"}});</script>
+<script>
+/* Normal / HUD switch in the section bar. Inside forum.html it presses the page's own look switch,
+   so the choice is saved as forumLook just like before. Opened on its own it saves forumLook and loads the HUD file. */
+(function(){
+  var sw=document.getElementById('lookSw');
+  function hostButton(){
+    try{
+      if(window.parent===window)return null;
+      return window.parent.document.querySelector('#look .seg button[data-look="hud"]');
+    }catch(e){return null}
+  }
+  sw.addEventListener('click',function(e){
+    var b=e.target.closest('button[data-look]');
+    if(!b||b.getAttribute('data-look')!=='hud')return;
+    sw.classList.add('go');
+    setTimeout(function(){
+      var host=hostButton();
+      if(host){host.click();setTimeout(function(){sw.classList.remove('go')},700);return}
+      try{localStorage.setItem('forumLook','hud')}catch(x){}
+      location.href='forum-hud.html'+location.hash;
+    },320);
+  });
+})();
+</script>
 <!-- the "More air shows" band from links.js is left off this page, which is not a show guide -->
 <div id="xl-band" hidden></div>
 <script src="links.js"></script>
