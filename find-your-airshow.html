@@ -290,14 +290,14 @@ body{background:#fff;color:var(--ink);font:400 17px/1.55 'Barlow',Arial,sans-ser
 <button type="button" class="soundbtn" id="soundbtn" aria-pressed="false"></button>
 <div class="in head-grid">
 <div>
-<span class="banner">Thirteen Featured Shows For 2027</span>
+<span class="banner" id="kd-banner">Twelve Featured Shows For 2027</span>
 <h1 class="h1">Find Your Airshow</h1>
 <p class="tealsub">Your boarding pass to the whole season</p>
 <p class="lead">Just pick a tab to filter the shows, then follow the runway from May to October and see how far each one is from home. When you find one that suits you, tear off the stub and it opens that show's guide.</p>
 </div>
 <div class="glass" style="padding:22px">
 <div class="gt">Key Details</div>
-<div class="kv" style="margin-top:12px"><span>Featured Shows</span><span id="kd-count">13</span></div>
+<div class="kv" style="margin-top:12px"><span>Featured Shows</span><span id="kd-count">12</span></div>
 <div class="kv"><span>Free Seaside Shows</span><span id="kd-free">6</span></div>
 <div class="kv"><span>Next Show</span><span id="kd-next">Dates to come</span></div>
 <div class="kv hot"><span>Dates Confirmed</span><span id="kd-dated">0 of 12</span></div>
@@ -499,6 +499,8 @@ body{background:#fff;color:var(--ink);font:400 17px/1.55 'Barlow',Arial,sans-ser
     /* key details */
     var dated = shows.filter(function(s){ return s.days !== null; }).sort(function(a, b){ return a.days - b.days; });
     $('kd-count').textContent = shows.length;
+    var WORDS = ['No','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen','Twenty'];
+    $('kd-banner').textContent = (WORDS[shows.length] || shows.length) + ' Featured Shows For 2027';
     $('kd-free').textContent = shows.filter(isFree).length;
     $('kd-next').textContent = dated.length ? dated[0].short + ', ' + (dated[0].days === 0 ? 'today' : dated[0].days + ' days') : 'Dates to come';
     $('kd-dated').textContent = dated.length + ' of ' + shows.length;
