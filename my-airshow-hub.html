@@ -1549,7 +1549,7 @@ body.o2-shake #app{animation:o2shake .5s linear}
   /* sounds: the start up plays when the page opens (or on the first tap if the browser waits for one) */
   var soundOn = false, introDone = false;
   var intro = new Audio(BASE + "hub-start-up.mp3"); intro.preload = "auto"; intro.volume = .9;
-  var cleared = new Audio(BASE + "hub-cleared.mp3"); cleared.preload = "auto";
+  var cleared = new Audio(BASE + "hub-cleared.mp3"); cleared.preload = "none"; /* only needed at log in, so it loads then */
   var snd = $("lgSound");
   function setSound(on, keep) { if (!keep) { try { localStorage.setItem("ukagSound", on ? "on" : "off"); } catch (e) {} } soundOn = on; snd.setAttribute("aria-pressed", on ? "true" : "false"); snd.textContent = on ? "Cockpit sounds on" : "Cockpit sounds off"; }
   function tryIntro() {
