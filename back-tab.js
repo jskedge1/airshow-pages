@@ -100,7 +100,7 @@
   add(["planning-your-first-airshow"], { me: "first", colour: C.guide, kind: "guide",
     allow: ANY_SHOW.concat(["vpg", "hub", "find", "faq"]), def: "vpg" });
   add(["airshow-security", "questions-and-answers", "airshow-questions", "food-and-drink", "foodanddrinkatairshows",
-    "kit-calculator", "build-your-kit-calculator"], { colour: C.guide, kind: "guide",
+    "kit-calculator", "build-your-kit-calculator", "airshows-on-a-budget"], { colour: C.guide, kind: "guide",
     allow: ANY_SHOW.concat(["vpg", "first", "hub", "find", "photohub", "camphub", "pt", "faq"]), def: "vpg" });
   PAGES["questions-and-answers"] = PAGES["airshow-questions"] = { me: "faq", colour: C.guide, kind: "guide",
     allow: ANY_SHOW.concat(["vpg", "first", "hub", "find", "photohub", "camphub", "pt"]), def: "vpg" };

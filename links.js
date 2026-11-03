@@ -36,7 +36,8 @@
     {key:'rainy-day-plan', name:'Rainy Day Plan', where:'Will it fly, and what to pack', slug:'airshow-rainy-day-plan', live:true},
     {key:'calm-visit', name:'A Calm Airshow Visit', where:'For anyone who finds noise and crowds hard', slug:'calm-airshow-visit', live:true},
     {key:'spotter-cards', name:'Aircraft Spotter Cards', where:'Printable cards for young spotters', slug:'aircraft-spotter-cards', live:true},
-    {key:'aircraft-a-to-z', name:'Airshow Aircraft A To Z', where:'Every aircraft you might see', slug:'airshow-aircraft-a-to-z', live:true}
+    {key:'aircraft-a-to-z', name:'Airshow Aircraft A To Z', where:'Every aircraft you might see', slug:'airshow-aircraft-a-to-z', live:true},
+    {key:'airshows-on-a-budget', name:'Airshows On A Budget', where:'Free shows, cheaper tickets and a day cost planner', slug:'airshows-on-a-budget', live:true}
   ];
   window.AIRSHOW_LINKS={site:SITE,find:SITE+FIND,pages:PAGES,guides:GUIDES};
 
