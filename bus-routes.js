@@ -124,3 +124,111 @@
 
   window.UKAG_BR = { render: render, href: href, map: MAP };
 })();
+
+/* Back to Transport (3 Nov 2026), the show page and Public transport page half. The route pages' half is transport-back.js.
+   1. When a bus or train route button is tapped, the link gets ?from=show&t=<topic> (show page) or ?from=hub
+      (Public transport page), so the route page's Back to Transport tab knows where to send the visitor.
+   2. When a visitor comes back from a route page (?tb=<topic>&tr=<route>&tm=<bus or train>), the show page
+      opens Getting there, picks the topic they were on and scrolls to it. */
+(function(){
+  if (window.UKAG_TB_SHOW) return;
+  window.UKAG_TB_SHOW = true;
+
+  var FROM_KEY = 'ukagTransportFrom', BACK_KEY = 'ukagTransportBack';
+  var ROUTE_LINK = /bus-route\?r=|bus-routes\/[a-z0-9-]+\.html|train-to-|train-routes\/[a-z0-9-]+\.html/i;
+  /* show key from the page address, on the site (Wix address) or on GitHub (camping-layout/<show>.html) */
+  var SLUGS = {riat:'riat',cosfordairshow:'cosford',midlandsairfestival:'midlands',eastbourneairshow:'eastbourne',
+    clactonairshow:'clacton',walesairshow:'wales',duxfordairshows:'duxford',shuttleworthairshows:'shuttleworth',
+    'little-gransden-air-and-car-show':'gransden','southport-air-show':'southport','blackpool-air-show':'blackpool',
+    'international-ayr-show':'ayr','headcorn-air-show':'headcorn'};
+  var TRAIN_SLUG = {riat:'riat',cosford:'cosford',midlands:'midlands',eastbourne:'eastbourne',clacton:'clacton',
+    swansea:'wales',duxford:'duxford',shuttleworth:'shuttleworth','little-gransden':'gransden',southport:'southport',
+    blackpool:'blackpool',ayr:'ayr',headcorn:'headcorn'};
+
+  function clean(t){ return String(t || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40); }
+  function param(name){
+    var q = location.search.match(new RegExp('[?&]' + name + '=([^&#]*)'));
+    return q ? clean(decodeURIComponent(q[1])) : '';
+  }
+  function read(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch(e){ return null; } }
+  function write(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+  function hereShow(){
+    var p = location.pathname.replace(/\/+$/, '');
+    var g = p.match(/camping-layout\/([a-z0-9-]+)\.html$/i);
+    if (g) return g[1].replace(/-v\d+$/, '');
+    return SLUGS[p.split('/').pop()] || '';
+  }
+  function linkShow(h){
+    var b = h.match(/(?:\?r=|bus-routes\/)([a-z0-9-]+)/i);
+    if (b) return b[1].split('-').pop().toLowerCase();
+    var t = h.match(/train-to-([a-z0-9-]+)/i);
+    if (t) return TRAIN_SLUG[t[1].toLowerCase()] || '';
+    var f = h.match(/train-routes\/([a-z0-9-]+)\.html/i);
+    if (f) return f[1].indexOf('riat') === 0 ? 'riat' : f[1].toLowerCase();
+    return '';
+  }
+
+  /* 1. note where the visitor is coming from */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (!ROUTE_LINK.test(h) || /[?&]from=/.test(h)) return;
+    var hub = !!document.getElementById('fShow') && !document.getElementById('parkList');
+    var list = document.getElementById('parkList');
+    /* on a show page only the route buttons inside Getting there count, not the menus */
+    if (!hub && (!list || !a.closest('#parkDetail, .tr-box, .br-box, #travel'))) return;
+    var on = list && list.querySelector('[aria-pressed="true"]');
+    var topic = !hub && on ? clean(on.getAttribute('data-id')) : '';
+    write(FROM_KEY, {kind: hub ? 'hub' : 'show', show: linkShow(h), topic: topic, at: Date.now()});
+    var add = 'from=' + (hub ? 'hub' : 'show') + (topic ? '&t=' + topic : '');
+    var cut = h.indexOf('#');
+    var base = cut < 0 ? h : h.slice(0, cut), tail = cut < 0 ? '' : h.slice(cut);
+    a.setAttribute('href', base + (base.indexOf('?') < 0 ? '?' : '&') + add + tail);
+  }, true);
+
+  /* 2. back from a route page: open Getting there on the right topic */
+  var topic = param('tb'), route = param('tr'), mode = param('tm');
+  if (!topic && !route) {
+    var n = read(BACK_KEY), me = hereShow();
+    if (n && me && n.show === me && (Date.now() - (n.at || 0)) < 120000) { topic = clean(n.topic); route = clean(n.route); mode = clean(n.mode); }
+  }
+  if (!topic && !route) return;
+  try { localStorage.removeItem(BACK_KEY); } catch(e){}
+
+  function pick(list){
+    var ids = [].map.call(list.querySelectorAll('button[data-id]'), function(b){ return b.getAttribute('data-id'); });
+    if (topic && topic !== 'auto' && ids.indexOf(topic) >= 0) return topic;
+    if (mode === 'bus' && route && window.UKAG_BR) {
+      var M = UKAG_BR.map[route.split('-').pop()] || {};
+      for (var i = 0; i < ids.length; i++) {
+        var l = M[ids[i]] || [];
+        for (var j = 0; j < l.length; j++) if (l[j][1] === route) return ids[i];
+      }
+    }
+    var want = mode === 'bus' ? /^bus/ : /^rail/;
+    for (var k = 0; k < ids.length; k++) if (want.test(ids[k])) return ids[k];
+    return '';
+  }
+  function openTravel(){
+    var t = document.getElementById('travel');
+    if (!t) return;
+    if (typeof window.secOpen === 'function') { window.secOpen('travel'); return; }
+    var f = t.closest ? t.closest('.fold') : null;
+    if (f && !f.classList.contains('open')) { var b = f.querySelector('.fold-btn'); if (b) b.click(); }
+  }
+  var tries = 0;
+  (function wait(){
+    var list = document.getElementById('parkList');
+    if (!list || !list.querySelector('button[data-id]')) { if (++tries < 60) setTimeout(wait, 250); return; }
+    setTimeout(function(){
+      openTravel();
+      var id = pick(list);
+      var btn = id && list.querySelector('button[data-id="' + id + '"]');
+      if (btn && btn.getAttribute('aria-pressed') !== 'true') btn.click();
+      var to = document.getElementById('explore') || document.getElementById('travel');
+      var slow = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      setTimeout(function(){ if (to) to.scrollIntoView({behavior: slow ? 'auto' : 'smooth', block: 'start'}); }, 650);
+    }, 400);
+  })();
+})();

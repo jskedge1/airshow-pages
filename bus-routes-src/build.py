@@ -1,5 +1,7 @@
 """Build bus route pages from raw/<id>.json into out/<id>.html, plus routes-index.json."""
-import json, math, os, re, statistics, glob
+import json, math, os, re, statistics, glob, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import importlib; _tb = importlib.import_module('tools-transport-back')
 
 os.makedirs('out', exist_ok=True)
 TPL = open('template.html').read()
@@ -328,6 +330,7 @@ def build(fn):
     _t = f'{cfg["title"]} for the {show["name"]} | The Big Guide to UK Airshows'
     _d = f'The {r["num"]} bus to the {show["name"]}: the roads it takes, every stop, times on show days and the closest stop to the show. Run by {cfg["operator"]}.'
     html = re.sub(r'<title>.*?</title>', lambda m: f'<title>{_t}</title>\n<!-- seo: matches the Wix page on ukairshowguide.co.uk -->\n<meta name="description" content="{_d}">\n<!-- /seo -->', html, count=1)
+    html = _tb.add(html, 'bus', rid)  # Back to Transport tab (transport-back.js)
     open(f'out/{rid}.html', 'w').write(html)
     return dict(id=rid, show=r['show'], num=r['num'], title=cfg['title'], off=offname, offd=round(offd), served=served, days=r['days']), 'ok'
 

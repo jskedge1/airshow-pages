@@ -483,3 +483,25 @@ Traffic needs the `ukagApiKey` secret with Site Analytics read access. Opened on
 - New cfg option `x.walkPairs` (Southport: `[["Wigan North Western","Wigan Wallgate"]]`): a short walk between two stations at a change. The line list says "Walk from A to B" instead of "0 miles" and "runs non-stop", the train steps start at the second station, and the change step says where the next train leaves from. The change card's minutes for Southport were written by hand because the template only works them out from the second day when times differ, so update that line after a timetable refresh.
 - `make_v2.py` now also builds the winter timetable notice from `v2-parts/tnotice.css`, `tnotice.html` and `tnotice.js`, and the walk pair code. If you regenerate the template, nothing is lost.
 - Eastbourne: late night journeys that end at Blackfriars or St Pancras instead of the hub (16 of them) are no longer shown under Victoria and London Bridge, and `eastbourne-tools/build_data.py` skips them on a refresh.
+
+## Back to Transport tab (3 Nov 2026)
+
+Every bus route page (`bus-routes/<id>.html`) and train route page (`train-routes/<show>.html`) has a Back to Transport tab
+at the top (above the cover) and the bottom (above the small print), in the "transport tabs op1" look: grey bar, a line in the
+mode colour (bus sky blue #00A6E2, train red #D74949), a white tab with a rounded top and a ring around a bus or train.
+`transport-back.js` draws it; each page says which page it is with `window.UKAG_ROUTE={mode,id}` just before loading it.
+`python3 tools-transport-back.py` adds both lines to any route page missing them, and both builders add them on rebuild.
+
+Where the tab goes:
+- From a show page: back to that show page with Getting there open, on the topic the visitor had picked.
+- From the Public transport page: back there, on the same show.
+- From anywhere else: the show's Getting there, on the topic that lists that bus or train.
+
+How: `bus-routes.js` (loaded by every show page and the Public transport page) adds `?from=show&t=<topic>` or `?from=hub`
+to a bus or train route link when it is tapped. The tab links back with `?tb=<topic>&tr=<route>&tm=<bus|train>`, and
+`bus-routes.js` on the show page opens Getting there, picks the topic and scrolls to it. A note in the browser
+(ukagTransportFrom, ukagTransportBack) covers the same ground when the address can't.
+Bus pages sit in their own box on /bus-route, so the page code there has to pass `from` and `t` on: the updated
+`velo/page-code/bus-route.js` does this, and needs pasting into the /bus-route page code in the Wix editor.
+Until then bus pages send everyone to the show's Getting there.
+Headcorn has no Wix page yet, so its tab opens camping-layout/headcorn.html.

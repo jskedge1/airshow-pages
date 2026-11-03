@@ -2,7 +2,9 @@
 <show>-data.json (stations, line shapes and every journey for each hub station).
 Run from this folder: python3 build.py            (builds every show)
                       python3 build.py eastbourne (builds one)"""
-import json, os, sys, glob
+import json, os, sys, glob, importlib
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+_tb = importlib.import_module('tools-transport-back')
 here = os.path.dirname(os.path.abspath(__file__))
 shows = sys.argv[1:] or sorted(os.path.basename(f)[:-9] for f in glob.glob(os.path.join(here, '*-cfg.json')))
 src = open(os.path.join(here, '..', 'previews', 'bus-route-layout', '132-duxford.html')).read()
@@ -21,5 +23,6 @@ for show in shows:
         old = open(out).read()
         if A in old and A in page and 'canonical' in old[old.index(A):old.index(B)]:
             page = page[:page.index(A)] + old[old.index(A):old.index(B)] + page[page.index(B):]
+    page = _tb.add(page, 'train', show)  # Back to Transport tab (transport-back.js)
     open(out, 'w').write(page)
     print('built train-routes/' + show + '.html')

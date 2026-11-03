@@ -2,7 +2,8 @@
 // The page has ONE HTML embed, set to Website address:
 //   https://jskedge1.github.io/airshow-pages/bus-routes/index.html
 // Its ID is html12 on the live page (made 30 Oct 2026 by copying Train to Clacton).
-// The show pages link here as /bus-route?r=<route id>, for example /bus-route?r=132-duxford.
+// The show pages link here as /bus-route?r=<route id>, for example /bus-route?r=132-duxford,
+// with &from=show&t=<topic> or &from=hub added when the visitor taps the button.
 // This code swaps the embed to that route's page. With no ?r= it shows the list of every route.
 //
 // "Use my location on the bus": phones won't share a location with the page inside the embed,
@@ -21,7 +22,12 @@ let timer = null;
 
 $w.onReady(function () {
   const id = String(wixLocation.query.r || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
-  $w(ROUTE_BOX).src = BASE + (id ? id : 'index') + '.html';
+  // Back to Transport (3 Nov 2026): pass on where the visitor came from (?from=show&t=<topic> or ?from=hub),
+  // so the tab on the route page sends them back to the right place.
+  const from = String(wixLocation.query.from || '').toLowerCase().replace(/[^a-z]/g, '');
+  const topic = String(wixLocation.query.t || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
+  const pass = (from === 'show' || from === 'hub') ? '?from=' + from + (topic ? '&t=' + topic : '') : '';
+  $w(ROUTE_BOX).src = BASE + (id ? id : 'index') + '.html' + (id ? pass : '');
 
   $w(ROUTE_BOX).onMessage((event) => {
     const msg = event.data || {};
