@@ -75,7 +75,19 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--purple);outline-off
 .mate.k{grid-column:1/span 5;--c1:var(--purple)}
 .mate.t{grid-column:7/span 6;margin-top:70px;--c1:var(--teal)}
 .mate.c{grid-column:2/span 10;margin-top:6px;--c1:var(--red);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
-.mate .body{padding:28px 28px 26px}
+.mate .body{padding:28px 28px 26px;position:relative;overflow:hidden}
+.mate .body::before{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:var(--c1);opacity:.06;transition:width .6s var(--ease)}
+.mate:hover .body::before{width:100%}
+.mate .top,.mate p,.does{position:relative}
+.mono-s{transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.mate:hover .mono-s{transform:rotate(-5deg) scale(1.06);box-shadow:0 10px 22px rgba(19,41,60,.22)}
+.mate h3{transition:color .35s var(--ease),transform .45s var(--ease)}
+.mate:hover h3{color:var(--c1);transform:translateX(3px)}
+.does li{transition:transform .35s var(--ease),background .35s var(--ease)}
+.does li::before{transition:transform .35s var(--ease)}
+.does li:hover{transform:translateX(6px);background:#fff;box-shadow:inset 3px 0 0 var(--c1)}
+.does li:hover::before{transform:scale(1.35)}
+@media(prefers-reduced-motion:reduce){.mate .body::before,.mono-s,.mate h3,.does li,.does li::before{transition:none}}
 .mate .top{display:flex;align-items:center;gap:18px;margin-bottom:16px}
 .mono-s{flex:none;width:76px;height:76px;display:grid;place-items:center;background:var(--c1);color:#fff;font:800 36px/1 var(--c)}
 .mate h3{font:800 34px/.95 var(--c);color:var(--navy);text-transform:uppercase;margin:0 0 6px;letter-spacing:.005em}
