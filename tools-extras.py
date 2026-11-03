@@ -222,7 +222,7 @@ def build(show):
         f = re.sub(r'<!-- sx-gtk -->.*?<!-- /sx-gtk -->', '', f, flags=re.S)
         h = f.index('<div class="panel-head')
         h = match_close(f, h, 'div')
-        f = f[:h] + '\n    ' + gtk_html(data, event.replace(' 2027', '')) + f[h:]
+        f = f[:h] + '\n    ' + gtk_html(data, event.replace(' 2027', '')) + '\n    ' + f[h:].lstrip()
         blocks['facilities'] = f
         log.append('good to know')
 

@@ -5717,7 +5717,7 @@ body h1.cg-title{text-transform:none!important}
       function startOf(x){ return new Date(x.iso+'T'+pad(Math.floor(x.gates[0]/60))+':'+pad(x.gates[0]%60)+':00'); }
       function endOf(x){ var d=new Date(x.iso+'T00:00:00'); d.setDate(d.getDate()+x.days-1); d.setMinutes(x.gates[1]); return d; }
       var box=document.createElement('div'); box.className='cg-countwrap';
-      var opts=SH.map(function(x){ return '<option value="'+x.id+'"'+(x.id===pick.id?' selected':'')+'>'+(x.short||x.event).replace(/</g,'&lt;')+', '+x.day.replace(/(January|February|March|April|May|June|July|August|September|October|November|December)/g,function(m){return m.slice(0,3);})+'</option>'; }).join('');
+      var opts=SH.map(function(x){ return '<option value="'+x.id+'"'+(x.id===pick.id?' selected':'')+'>'+(x.short||x.event).replace(/</g,'&lt;')+(/\d+ [A-Za-z]/.test(x.short||'')?'':', '+((x.short&&x.day.slice(0,3)===x.short.slice(0,3))?x.day.slice(4):x.day).replace(/(January|February|March|April|May|June|July|August|September|October|November|December)/g,function(m){return m.slice(0,3);}))+'</option>'; }).join('');
       box.innerHTML='<div class="cg-count" role="timer" aria-live="off"><label class="lbl"><span>Counting down to</span><select id="cgShow" aria-label="Choose a show to count down to">'+opts+'</select></label>'
         +'<span class="u"><b data-u="d">0</b><span>Days</span></span><span class="u"><b data-u="h">0</b><span>Hours</span></span><span class="u"><b data-u="m">0</b><span>Mins</span></span><span class="u"><b data-u="s">0</b><span>Secs</span></span></div>'
         +'<div class="cg-cal"><span>Add it to my calendar</span><button type="button" id="cgIcs">Apple or Outlook</button><a id="cgGoo" target="_blank" rel="noopener">Google Calendar</a></div>'
