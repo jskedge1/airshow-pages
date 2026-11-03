@@ -127,6 +127,9 @@
   add(["advertise-with-us"], { colour: C.trade, kind: "list",
     allow: ANY_SHOW.concat(["traders", "vpg", "find", "hub", "home"]), def: "home" });
 
+  /* meet the team */
+  add(["meet-the-team", "meettheteam"], { colour: C.forum, kind: "list", allow: ["*"], def: "home" });
+
   /* policies */
   add(["policies"], { colour: C.pol, kind: "list", allow: ["*"], def: "home" });
 
