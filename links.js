@@ -1,6 +1,7 @@
 /* Site links for The Big Guide to UK Airshows.
    One file, loaded by every page, so the links between pages are kept in one place.
-   To add a page: add a row to PAGES. Set live:false until the Wix page exists, so nobody lands on a 404.
+   To add a page: add a row to PAGES. Set live:false until the Wix page exists and is published, so nobody lands on a 404.
+   The six guides below (night before to A to Z) have Wix pages saved on 3 Nov 2026; set them live:true after the November publish.
    slug is the page's current address on Wix (checked live 19 Oct 2026). If a page's URL is renamed in Wix, change it here. */
 (function(){
   var SITE='https://www.ukairshowguide.co.uk/';

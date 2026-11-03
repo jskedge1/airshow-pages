@@ -536,3 +536,15 @@ were added to shows without one.
   (`.sx-pick`, `data-sx-q`, `data-sx-score`, `.sx-res`), card filters (`data-sx-filter`), the flights filter and
   the postcard maker. Postcard photos load with crossorigin so the card can be saved inside the Wix page.
 - To update a show's Good to know facts or Last checked date, edit its JSON file and rerun the tool.
+
+## Six new planning guides on Wix (3 Nov 2026)
+
+- Wix pages made by copying On the day (embed html10), saved in the editor, not published yet:
+  /night-before-an-airshow (night-before.html), /getting-home-from-an-airshow (getting-home.html),
+  /airshow-rainy-day-plan (rainy-day-plan.html), /calm-airshow-visit (calm-visit.html),
+  /aircraft-spotter-cards (spotter-cards.html), /airshow-aircraft-a-to-z (aircraft-a-to-z.html).
+  Each has its own SEO title and description and sits under Visitor Planning Guides in the Site Menu.
+- All six paths are in `AE_GH_PAGES` (saved 3 Nov), so after publishing they grow with the page. Until then the
+  boxes are fixed (3100px; the A to Z box is 4390px) and scroll inside.
+- The show pages link to them from guide notes. show-extras.js (v=4) hides those notes while links.js has the guide
+  at live:false, so nobody lands on a 404. After the November publish, set the six to live:true in links.js and the notes appear.

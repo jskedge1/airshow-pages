@@ -301,7 +301,7 @@ def build(show):
     # 6. load show-extras.js
     t = re.sub(r'<!-- sx-js -->.*?<!-- /sx-js -->\n?', '', t, flags=re.S)
     conf = {'place': place, 'greet': 'Greetings From ' + place, 'msg': 'Wish you were here!', 'slug': show, 'year': '2027', 'shows': [event]}
-    tag = '<!-- sx-js --><script>window.SX_PC=%s;</script><script src="%sshow-extras.js?v=3" defer></script><!-- /sx-js -->\n' % (json.dumps(conf), GH)
+    tag = '<!-- sx-js --><script>window.SX_PC=%s;</script><script src="%sshow-extras.js?v=4" defer></script><!-- /sx-js -->\n' % (json.dumps(conf), GH)
     i = t.rindex('</body>') if '</body>' in t else len(t)
     bt = t.find('<script src="%sback-tab.js"' % GH)
     i = bt if bt > -1 else i

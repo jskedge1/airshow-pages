@@ -192,15 +192,33 @@
   /* Inside the Wix site the guide lives in the airshow-page element's shadow root, so styles and
      behaviour go wherever the guide actually is: that root, or the page itself when opened on its own. */
   var ME = document.currentScript;
+  /* guide notes: hide a note while the guide it links to has no live Wix page yet (links.js live:false) */
+  var WAITING = ['night-before-an-airshow','getting-home-from-an-airshow','airshow-rainy-day-plan','calm-airshow-visit','aircraft-spotter-cards','airshow-aircraft-a-to-z'];
+  function gate(R){
+    var wait = {};
+    WAITING.forEach(function(s){ wait[s] = 1; });
+    var L = window.AIRSHOW_LINKS;
+    if(L && L.guides) L.guides.forEach(function(g){ if(g.live) delete wait[g.slug]; else wait[g.slug] = 1; });
+    [].forEach.call(R.querySelectorAll('.ns-note'), function(n){
+      var hide = false;
+      [].forEach.call(n.querySelectorAll('a[href]'), function(a){
+        var m = (a.getAttribute('href') || '').match(/^https?:\/\/(?:www\.)?ukairshowguide\.co\.uk\/([^\/?#]+)/);
+        if(m && wait[m[1]]) hide = true;
+      });
+      if(hide){ n.style.display = 'none'; n.setAttribute('data-sx-gated', '1'); }
+      else if(n.hasAttribute('data-sx-gated')){ n.style.display = ''; n.removeAttribute('data-sx-gated'); }
+    });
+  }
   function roots(){
     var out = [];
     var mine = ME && ME.getRootNode ? ME.getRootNode() : null;
     if(mine && mine !== document && mine.querySelector) out.push(mine);
     [].forEach.call(document.querySelectorAll('airshow-page'), function(e){ if(e.shadowRoot && out.indexOf(e.shadowRoot) < 0) out.push(e.shadowRoot); });
     out.push(document);
-    return out.filter(function(r){ return r.querySelector('.sx-gtk, [data-sx-postcard], .sx-pick, .sx-checked'); });
+    return out.filter(function(r){ return r.querySelector('.sx-gtk, [data-sx-postcard], .sx-pick, .sx-checked, .ns-note'); });
   }
   function run(R){
+    gate(R);
     if(R.__sxDone) return; R.__sxDone = true;
     inject(R); picker(R); filters(R); flights(R); postcard(R);
   }
@@ -211,4 +229,6 @@
     if(!rs.length && tries++ < 40) setTimeout(go, 250);
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
+  window.addEventListener('load', function(){ roots().forEach(gate); });
+  setTimeout(function(){ roots().forEach(gate); }, 3000);
 })();
