@@ -476,6 +476,16 @@ svg.i{width:1em;height:1em;flex:none}
   var jl=document.querySelectorAll('.jump a[href^="#"]');
   if(jl.length&&'IntersectionObserver' in window){var so=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting)jl.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+x.target.id);});});},{rootMargin:'-40% 0px -55% 0px'});
     jl.forEach(function(a){var t=document.querySelector(a.getAttribute('href'));if(t)so.observe(t);});}
+  /* jump links scroll by script, so they also work when the page sits inside the site's airshow-page element */
+  document.addEventListener('click',function(e){
+    var path=e.composedPath?e.composedPath():[e.target],a=null;
+    for(var k=0;k<path.length;k++){if(path[k].matches&&path[k].matches('a[href^="#"]')){a=path[k];break;}}
+    if(!a)return;
+    var t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;
+    e.preventDefault();
+    var y=t.getBoundingClientRect().top+window.pageYOffset-64;
+    window.scrollTo({top:y,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+  });
   var c=document.querySelector('[data-clock]');
   function tick(){if(!c)return;var d=new Date();c.textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);}
   tick();setInterval(tick,20000);
