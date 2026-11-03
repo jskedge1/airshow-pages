@@ -1814,9 +1814,9 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
     <div class="tablist" role="tablist">
       <button class="tab" role="tab" id="t-overview" aria-controls="overview" aria-selected="true">Overview</button>
       <button class="tab" role="tab" id="t-right" aria-controls="right" aria-selected="false" tabindex="-1">Right for you?</button>
+      <button class="tab" role="tab" id="t-travel" aria-controls="travel" aria-selected="false" tabindex="-1">Getting there &amp; parking</button>
       <button class="tab" role="tab" id="t-story" aria-controls="story" aria-selected="false" tabindex="-1">Duxford's Story</button>
       <button class="tab" role="tab" id="t-lineup" aria-controls="lineup" aria-selected="false" tabindex="-1">Aircraft line-up</button>
-      <button class="tab" role="tab" id="t-travel" aria-controls="travel" aria-selected="false" tabindex="-1">Getting there &amp; parking</button>
       <button class="tab" role="tab" id="t-stay" aria-controls="stay" aria-selected="false" tabindex="-1">Where to stay</button>
       <button class="tab" role="tab" id="t-days" aria-controls="days" aria-selected="false" tabindex="-1">Pick Your Show</button>
       <button class="tab" role="tab" id="t-timeline" aria-controls="timeline" aria-selected="false" tabindex="-1">Plan your day</button>
@@ -2162,6 +2162,89 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
 </section>
 
 <!-- AIRCRAFT LINE-UP -->
+<section class="panel flush" id="travel" role="tabpanel" aria-labelledby="t-travel" hidden>
+  <div class="wrap">
+    <div class="gt-hero reveal">
+      <div>
+        <h2><small>Duxford Air Shows</small>Parking &amp; arrival guide</h2>
+        <p class="lead">IWM Duxford sits right beside junction 10 of the M11, south of Cambridge. At the Summer and Battle of Britain Air Shows every car needs a parking permit booked with your ticket, and a free shuttle bus runs from Cambridge station and Trumpington Park &amp; Ride. At the smaller events parking is on site with no booking.</p>
+        <div class="btns">
+          <button class="btn" data-topic="park-main">How show parking works</button>
+          <button class="btn outline" data-topic="rail-shuttle">Train and free shuttle bus</button>
+        </div>
+      </div>
+      <div class="gt-facts">
+        <dl>
+          <div><dt>Postcode</dt><dd>CB22 4QR</dd></div>
+          <div><dt>what3words</dt><dd>///clips.retraced.author</dd></div>
+          <div><dt>Motorway</dt><dd>M11 junction 10</dd></div>
+          <div><dt>Car parking</dt><dd>Permit at the big Air Shows</dd></div>
+          <div><dt>Free shuttle</dt><dd>From Cambridge station</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice gt-status"><div class="wrap"><span class="tag">Leaving</span><span><b>Leaving a Duxford Air Show can take a long time.</b> It’s very common to queue to get out of the car parks and back onto the M11. My tip is either to leave before the flying display ends or, if you’re able to, spend more time looking around the static displays and the museum hangars and grab some food while the rush leaves. This has worked for me in the past. <a href="https://www.iwm.org.uk/airshows/getting-here" target="_blank" rel="noopener">IWM's getting here page ↗</a></span></div></div>
+
+  <section class="arrive" aria-label="How arrival works">
+    <div class="wrap">
+      <div class="arrive-head reveal">
+        <h2>How arrival works</h2>
+        <p>At the two big Air Shows a traffic plan is in place on the roads around Duxford. Here’s what I would expect, so a short wait in the queue doesn’t catch you out.</p>
+      </div>
+      <div class="arrive-grid reveal">
+        <div class="arrive-step"><span class="arrive-n">1</span><h3>Follow the event signs</h3><p>The car parks open at 07:00, so I would advise arriving about an hour before entry starts. As you leave the M11 at junction 10, I would follow the yellow event signs and the marshals rather than your sat nav, and have your parking permit ready to show.</p></div>
+        <figure class="arrive-step arrive-photo"><img loading="lazy" decoding="async" class="photo" data-pic="queue" src="https://jskedge1.github.io/airshow-pages/camping-layout/img/680cf3a3b2e03ebe.webp" alt="A long queue of visitors in sun hats waiting on the grass to enter the air show"><figcaption><span class="arrive-n">2</span><b>The entry queue.</b> On busy mornings the queue to get in stretches across the grass, often in full sun. I would bring water and a hat.</figcaption></figure>
+        <div class="arrive-step"><span class="arrive-n">3</span><h3>Gates open at 08:00</h3><p>Ticket scanning starts at 08:00. It helps to have your ticket ready on your phone and to allow time for bag checks. If you want a front row spot, I would head to the crowd line first and save your pitch, then go and explore.</p></div>
+      </div>
+      <p class="note arrive-note">IWM recommends arriving before 11:00. Parking is on grass close to the historic buildings, and the walk from the main car parks to the showground is only a few minutes and well signposted. At the Flying Days, Flying Evening and Flying Finale parking is on site with no permit needed.</p>
+    </div>
+  </section>
+
+  <section class="explore" id="explore" aria-label="Arrival map and information">
+    <div class="wrap">
+      <div class="explore-head reveal">
+        <h2>Choose your topic</h2>
+        <p>Pick a road, train, bus, taxi or parking option and I’ll show you the planning information and where it is on Google Maps.</p>
+      </div>
+      <div class="explore-grid">
+        <aside class="explore-side">
+          <div class="park-list" id="parkList" role="group" aria-label="Travel and parking options"></div>
+          <p class="side-note">On Air Show weekends a traffic plan is in place. I would follow the event signs and marshals rather than relying only on sat nav.</p>
+        </aside>
+        <div>
+          <article class="detail" id="parkDetail" aria-live="polite"></article>
+          <div class="mapbox">
+            <div class="map-head">
+              <h3>Parking &amp; arrival map</h3>
+              <p>Pick an option and the map will update for you.</p>
+            </div>
+            <iframe id="gtMap" title="Google Maps" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="mapbar">
+              <span id="gtMapLabel">Google Maps · planning reference</span>
+              <a id="gtFullMap" href="https://www.google.com/maps" target="_blank" rel="noopener">Open Google Maps ↗</a>
+            </div>
+            <p class="map-note">The map locations are there to help you plan. Traffic routes and parking can change on the day, so please follow the official signs and marshals.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="wrap">
+    <div class="acc reveal">
+      <details open><summary>Do I need to book parking?</summary><div class="body">Yes for the Summer Air Show and the Battle of Britain Air Show. Every car needs a parking permit, booked when you buy your tickets, and spaces are limited, so you can’t turn up and park without one. At the Flying Days, the Flying Evening and the Flying Finale, parking is on site with no booking needed. Motorbikes park free in the visitor centre car park with no permit.</div></details>
+      <details><summary>Is there parking for Blue Badge holders?</summary><div class="body">Yes. Anyone with mobility issues can park in the main car park, but proof needs to be provided to park there, and staff will be on hand to answer any questions. At the two big Air Shows, I would book an accessible parking permit with your ticket and bring your Blue Badge (or international equivalent) on the day. If you haven’t been before, you’ll see a Hurricane on a pole at the main gate, and this is the way in for anyone with a disabled badge or mobility issues. There’s a wheelchair accessible shuttle bus from the accessible parking to the main showground.</div></details>
+      <details><summary>Should I follow my sat nav?</summary><div class="body">Only until you’re close. IWM runs a special traffic plan on Air Show weekends, so once you leave the M11 at junction 10, I would follow the event signs and the marshals instead.</div></details>
+      <details><summary>Will there be traffic?</summary><div class="body">Yes, on the big Air Show days. Traffic builds on the M11 slip roads and the A505 from about 08:00, so arriving around 07:00 makes a real difference. It’s worth checking National Highways for road works before you set off.</div></details>
+      <details><summary>How do I get home easily?</summary><div class="body">It’s very common for leaving a Duxford Air Show to take a long time. I would either leave before the flying display ends or, if you’re able to, stay on, take a look around the static displays and the other museum hangars, and grab some food while the rush leaves. The site stays open until 19:00 at the big Air Shows. If you’re on the free shuttle, the last bus left at 18:30 in 2026.</div></details>
+    </div>
+  </div>
+  <div style="height:88px"></div>
+</section>
+
 <section class="panel" id="story" role="tabpanel" aria-labelledby="t-story" hidden>
   <div class="wrap">
     <div class="panel-head reveal">
@@ -2314,88 +2397,7 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
 </section>
 
 <!-- GETTING THERE & PARKING -->
-<section class="panel flush" id="travel" role="tabpanel" aria-labelledby="t-travel" hidden>
-  <div class="wrap">
-    <div class="gt-hero reveal">
-      <div>
-        <h2><small>Duxford Air Shows</small>Parking &amp; arrival guide</h2>
-        <p class="lead">IWM Duxford sits right beside junction 10 of the M11, south of Cambridge. At the Summer and Battle of Britain Air Shows every car needs a parking permit booked with your ticket, and a free shuttle bus runs from Cambridge station and Trumpington Park &amp; Ride. At the smaller events parking is on site with no booking.</p>
-        <div class="btns">
-          <button class="btn" data-topic="park-main">How show parking works</button>
-          <button class="btn outline" data-topic="rail-shuttle">Train and free shuttle bus</button>
-        </div>
-      </div>
-      <div class="gt-facts">
-        <dl>
-          <div><dt>Postcode</dt><dd>CB22 4QR</dd></div>
-          <div><dt>what3words</dt><dd>///clips.retraced.author</dd></div>
-          <div><dt>Motorway</dt><dd>M11 junction 10</dd></div>
-          <div><dt>Car parking</dt><dd>Permit at the big Air Shows</dd></div>
-          <div><dt>Free shuttle</dt><dd>From Cambridge station</dd></div>
-        </dl>
-      </div>
-    </div>
-  </div>
 
-  <div class="notice gt-status"><div class="wrap"><span class="tag">Leaving</span><span><b>Leaving a Duxford Air Show can take a long time.</b> It’s very common to queue to get out of the car parks and back onto the M11. My tip is either to leave before the flying display ends or, if you’re able to, spend more time looking around the static displays and the museum hangars and grab some food while the rush leaves. This has worked for me in the past. <a href="https://www.iwm.org.uk/airshows/getting-here" target="_blank" rel="noopener">IWM's getting here page ↗</a></span></div></div>
-
-  <section class="arrive" aria-label="How arrival works">
-    <div class="wrap">
-      <div class="arrive-head reveal">
-        <h2>How arrival works</h2>
-        <p>At the two big Air Shows a traffic plan is in place on the roads around Duxford. Here’s what I would expect, so a short wait in the queue doesn’t catch you out.</p>
-      </div>
-      <div class="arrive-grid reveal">
-        <div class="arrive-step"><span class="arrive-n">1</span><h3>Follow the event signs</h3><p>The car parks open at 07:00, so I would advise arriving about an hour before entry starts. As you leave the M11 at junction 10, I would follow the yellow event signs and the marshals rather than your sat nav, and have your parking permit ready to show.</p></div>
-        <figure class="arrive-step arrive-photo"><img loading="lazy" decoding="async" class="photo" data-pic="queue" src="https://jskedge1.github.io/airshow-pages/camping-layout/img/680cf3a3b2e03ebe.webp" alt="A long queue of visitors in sun hats waiting on the grass to enter the air show"><figcaption><span class="arrive-n">2</span><b>The entry queue.</b> On busy mornings the queue to get in stretches across the grass, often in full sun. I would bring water and a hat.</figcaption></figure>
-        <div class="arrive-step"><span class="arrive-n">3</span><h3>Gates open at 08:00</h3><p>Ticket scanning starts at 08:00. It helps to have your ticket ready on your phone and to allow time for bag checks. If you want a front row spot, I would head to the crowd line first and save your pitch, then go and explore.</p></div>
-      </div>
-      <p class="note arrive-note">IWM recommends arriving before 11:00. Parking is on grass close to the historic buildings, and the walk from the main car parks to the showground is only a few minutes and well signposted. At the Flying Days, Flying Evening and Flying Finale parking is on site with no permit needed.</p>
-    </div>
-  </section>
-
-  <section class="explore" id="explore" aria-label="Arrival map and information">
-    <div class="wrap">
-      <div class="explore-head reveal">
-        <h2>Choose your topic</h2>
-        <p>Pick a road, train, bus, taxi or parking option and I’ll show you the planning information and where it is on Google Maps.</p>
-      </div>
-      <div class="explore-grid">
-        <aside class="explore-side">
-          <div class="park-list" id="parkList" role="group" aria-label="Travel and parking options"></div>
-          <p class="side-note">On Air Show weekends a traffic plan is in place. I would follow the event signs and marshals rather than relying only on sat nav.</p>
-        </aside>
-        <div>
-          <article class="detail" id="parkDetail" aria-live="polite"></article>
-          <div class="mapbox">
-            <div class="map-head">
-              <h3>Parking &amp; arrival map</h3>
-              <p>Pick an option and the map will update for you.</p>
-            </div>
-            <iframe id="gtMap" title="Google Maps" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
-            <div class="mapbar">
-              <span id="gtMapLabel">Google Maps · planning reference</span>
-              <a id="gtFullMap" href="https://www.google.com/maps" target="_blank" rel="noopener">Open Google Maps ↗</a>
-            </div>
-            <p class="map-note">The map locations are there to help you plan. Traffic routes and parking can change on the day, so please follow the official signs and marshals.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <div class="wrap">
-    <div class="acc reveal">
-      <details open><summary>Do I need to book parking?</summary><div class="body">Yes for the Summer Air Show and the Battle of Britain Air Show. Every car needs a parking permit, booked when you buy your tickets, and spaces are limited, so you can’t turn up and park without one. At the Flying Days, the Flying Evening and the Flying Finale, parking is on site with no booking needed. Motorbikes park free in the visitor centre car park with no permit.</div></details>
-      <details><summary>Is there parking for Blue Badge holders?</summary><div class="body">Yes. Anyone with mobility issues can park in the main car park, but proof needs to be provided to park there, and staff will be on hand to answer any questions. At the two big Air Shows, I would book an accessible parking permit with your ticket and bring your Blue Badge (or international equivalent) on the day. If you haven’t been before, you’ll see a Hurricane on a pole at the main gate, and this is the way in for anyone with a disabled badge or mobility issues. There’s a wheelchair accessible shuttle bus from the accessible parking to the main showground.</div></details>
-      <details><summary>Should I follow my sat nav?</summary><div class="body">Only until you’re close. IWM runs a special traffic plan on Air Show weekends, so once you leave the M11 at junction 10, I would follow the event signs and the marshals instead.</div></details>
-      <details><summary>Will there be traffic?</summary><div class="body">Yes, on the big Air Show days. Traffic builds on the M11 slip roads and the A505 from about 08:00, so arriving around 07:00 makes a real difference. It’s worth checking National Highways for road works before you set off.</div></details>
-      <details><summary>How do I get home easily?</summary><div class="body">It’s very common for leaving a Duxford Air Show to take a long time. I would either leave before the flying display ends or, if you’re able to, stay on, take a look around the static displays and the other museum hangars, and grab some food while the rush leaves. The site stays open until 19:00 at the big Air Shows. If you’re on the free shuttle, the last bus left at 18:30 in 2026.</div></details>
-    </div>
-  </div>
-  <div style="height:88px"></div>
-</section>
 
 <!-- WHERE TO STAY -->
 <section class="panel" id="stay" role="tabpanel" aria-labelledby="t-stay" hidden>
@@ -3486,7 +3488,7 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
       <div><h2>Food, facilities <span class="sky">&amp; what to expect</span></h2></div>
       <p>IWM Duxford has a few places to eat and drink around the museum. If you’re after a hot meal, a quick sandwich or just a coffee, you’ll find something during your visit.</p>
     </div>
-    <!-- sx-gtk --><h3 class="sx-gtk-h">Good To Know</h3><p class="sx-gtk-p">The quick answers I get asked most about Duxford Air Shows. I last checked these on 3 November 2026, so I would still look at the show&rsquo;s own rules before you go.</p><div class="sx-gtk"><article><h4>Pushchairs And Buggies</h4><span class="sx-ans">Welcome</span><p>Buggies are allowed right across the site, but there’s no buggy park, so I would bring one you’re happy to keep with you all day. The shuttle buses at the big Air Shows take a limited number of unfolded buggies.</p></article><article class="no"><h4>Dogs</h4><span class="sx-ans">Assistance dogs only</span><p>Only guide dogs and assistance dogs are allowed, and that includes the car parks. Please leave pet dogs at home, as a car gets far too hot on a show day.</p></article><article><h4>Your Own Food And Drink</h4><span class="sx-ans">Picnics welcome</span><p>Packed lunches and picnics are fine, but barbecues aren’t. When I last checked, the rules didn’t say whether you can bring your own alcohol, so I would ask IWM before you pack any, as there are licensed bars on site.</p></article><article class="check"><h4>Gazebos, Windbreaks And Chairs</h4><span class="sx-ans">Chairs yes, gazebos no</span><p>Folding chairs, picnic blankets and a properly secured windbreak are fine, and small tents are allowed if they don’t block anyone’s view. Large tents, gazebos, stools and step ladders aren’t.</p></article><article><h4>Water Refill Points</h4><span class="sx-ans">Free water points</span><p>There are free water points across the site. I would bring a refillable bottle and top it up through the day, especially on the crowd line.</p></article><article><h4>Changing Places Toilet</h4><span class="sx-ans">In Hangar 1</span><p>There’s a registered Changing Places toilet in Hangar 1, next to the Visitor Centre. It opens with a Radar key, and staff or volunteers can lend you one.</p></article><article><h4>Carers&#x27; Tickets</h4><span class="sx-ans">Free carer ticket</span><p>Disabled visitors can bring a carer free of charge. You book the free carer ticket at the same time as your own, and I would bring your documentation on the day, dated within the last two years.</p></article><article><h4>Hearing Support</h4><span class="sx-ans">Hearing loops</span><p>Hearing loops are fitted at the Visitor Centre admissions desk and shop, Hangar 1, the American Air Museum and Historic Duxford, and the films in Hangar 1 and Historic Duxford have BSL. I couldn’t see anything about BSL for the show commentary, so I would ask IWM before you go.</p></article><article><h4>Quiet Area</h4><span class="sx-ans">Quiet Room</span><p>There’s a Quiet Room behind the 19 Squadron Restaurant, and sensory backpacks with ear defenders can be borrowed free from the Visitor Centre and the Visit Planning Point in Hangar 1. Your child’s ears are delicate, so try to protect them as much as possible.</p></article><article class="check"><h4>Re-entry</h4><span class="sx-ans">Ask before you leave</span><p>The ticket rules say a ticket that has already been used will be refused at the gate. So I would plan on staying in once you’re through, and if you really need to pop back to the car, ask a steward at the gate first.</p></article><article><h4>First Aid And Lost Children</h4><span class="sx-ans">Ask a steward</span><p>First aid is in the Green Zone, and children must be with an adult at all times. I would agree a meeting point as soon as you arrive and tell the nearest steward straight away if you get separated.</p></article><article class="check"><h4>If It Rains</h4><span class="sx-ans">Hangars for shelter</span><p>Unfortunately the weather on the day will be what it will be, so plan accordingly. If it’s fresh, dress in layers to keep warm. The hangars are the best shelter on site, and there are no refunds if a show is called off because of the weather.</p></article></div><!-- /sx-gtk -->
+    <!-- sx-gtk --><h3 class="sx-gtk-h">Good To Know</h3><p class="sx-gtk-p">The quick answers I get asked most about Duxford Air Shows. I last checked these on 3 November 2026, so I would still look at the show&rsquo;s own rules before you go.</p><div class="gtk2"><div class="g-key"><span class="g-yes"><i aria-hidden="true"></i>Yes</span><span class="g-check"><i aria-hidden="true"></i>Check first</span><span class="g-no"><i aria-hidden="true"></i>No</span><button type="button" class="g-all" data-open="0">Open all answers</button></div><div class="g-cols"><ol class="g-line"><li class="g-yes"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span class="g-q"><b>Pushchairs And Buggies</b><em><span class="g-k">Yes</span>Welcome</em></span><span class="g-x" aria-hidden="true"></span></summary><p>Buggies are allowed right across the site, but there’s no buggy park, so I would bring one you’re happy to keep with you all day. The shuttle buses at the big Air Shows take a limited number of unfolded buggies.</p></details></li><li class="g-no"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="g-q"><b>Dogs</b><em><span class="g-k">No</span>Assistance dogs only</em></span><span class="g-x" aria-hidden="true"></span></summary><p>Only guide dogs and assistance dogs are allowed, and that includes the car parks. Please leave pet dogs at home, as a car gets far too hot on a show day.</p></details></li><li class="g-yes"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span class="g-q"><b>Your Own Food And Drink</b><em><span class="g-k">Yes</span>Picnics welcome</em></span><span class="g-x" aria-hidden="true"></span></summary><p>Packed lunches and picnics are fine, but barbecues aren’t. When I last checked, the rules didn’t say whether you can bring your own alcohol, so I would ask IWM before you pack any, as there are licensed bars on site.</p></details></li><li class="g-check"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v8M12 18h.01"/></svg></span><span class="g-q"><b>Gazebos, Windbreaks And Chairs</b><em><span class="g-k">Check first</span>Chairs yes, gazebos no</em></span><span class="g-x" aria-hidden="true"></span></summary><p>Folding chairs, picnic blankets and a properly secured windbreak are fine, and small tents are allowed if they don’t block anyone’s view. Large tents, gazebos, stools and step ladders aren’t.</p></details></li><li class="g-yes"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span class="g-q"><b>Water Refill Points</b><em><span class="g-k">Yes</span>Free water points</em></span><span class="g-x" aria-hidden="true"></span></summary><p>There are free water points across the site. I would bring a refillable bottle and top it up through the day, especially on the crowd line.</p></details></li><li class="g-yes"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span class="g-q"><b>Changing Places Toilet</b><em><span class="g-k">Yes</span>In Hangar 1</em></span><span class="g-x" aria-hidden="true"></span></summary><p>There’s a registered Changing Places toilet in Hangar 1, next to the Visitor Centre. It opens with a Radar key, and staff or volunteers can lend you one.</p></details></li></ol><ol class="g-line"><li class="g-yes"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span class="g-q"><b>Carers&#x27; Tickets</b><em><span class="g-k">Yes</span>Free carer ticket</em></span><span class="g-x" aria-hidden="true"></span></summary><p>Disabled visitors can bring a carer free of charge. You book the free carer ticket at the same time as your own, and I would bring your documentation on the day, dated within the last two years.</p></details></li><li class="g-yes"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span class="g-q"><b>Hearing Support</b><em><span class="g-k">Yes</span>Hearing loops</em></span><span class="g-x" aria-hidden="true"></span></summary><p>Hearing loops are fitted at the Visitor Centre admissions desk and shop, Hangar 1, the American Air Museum and Historic Duxford, and the films in Hangar 1 and Historic Duxford have BSL. I couldn’t see anything about BSL for the show commentary, so I would ask IWM before you go.</p></details></li><li class="g-yes"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span class="g-q"><b>Quiet Area</b><em><span class="g-k">Yes</span>Quiet Room</em></span><span class="g-x" aria-hidden="true"></span></summary><p>There’s a Quiet Room behind the 19 Squadron Restaurant, and sensory backpacks with ear defenders can be borrowed free from the Visitor Centre and the Visit Planning Point in Hangar 1. Your child’s ears are delicate, so try to protect them as much as possible.</p></details></li><li class="g-check"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v8M12 18h.01"/></svg></span><span class="g-q"><b>Re-entry</b><em><span class="g-k">Check first</span>Ask before you leave</em></span><span class="g-x" aria-hidden="true"></span></summary><p>The ticket rules say a ticket that has already been used will be refused at the gate. So I would plan on staying in once you’re through, and if you really need to pop back to the car, ask a steward at the gate first.</p></details></li><li class="g-yes"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span class="g-q"><b>First Aid And Lost Children</b><em><span class="g-k">Yes</span>Ask a steward</em></span><span class="g-x" aria-hidden="true"></span></summary><p>First aid is in the Green Zone, and children must be with an adult at all times. I would agree a meeting point as soon as you arrive and tell the nearest steward straight away if you get separated.</p></details></li><li class="g-check"><details><summary><span class="g-rd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v8M12 18h.01"/></svg></span><span class="g-q"><b>If It Rains</b><em><span class="g-k">Check first</span>Hangars for shelter</em></span><span class="g-x" aria-hidden="true"></span></summary><p>Unfortunately the weather on the day will be what it will be, so plan accordingly. If it’s fresh, dress in layers to keep warm. The hangars are the best shelter on site, and there are no refunds if a show is called off because of the weather.</p></details></li></ol></div></div><!-- /sx-gtk -->
     <div class="food reveal">
       <figure class="food-main"><img class="photo" data-pic="p40" data-dup="1" src="" alt="A Curtiss P-40 Warhawk taxiing past the crowd"><figcaption>I would eat a little early, so you’re back on the crowd line before the flying starts.</figcaption></figure>
       <div class="food-text">
@@ -7675,3 +7677,77 @@ body h1.cg-title{text-transform:none!important}
 </script>
 <!-- sx-js --><script>window.SX_PC={"place": "Duxford", "greet": "Greetings From Duxford", "msg": "Wish you were here!", "slug": "duxford", "year": "2027", "shows": ["Duxford Air Shows 2027"]};</script><script src="https://jskedge1.github.io/airshow-pages/show-extras.js?v=4" defer></script><!-- /sx-js -->
 <script src="https://jskedge1.github.io/airshow-pages/back-tab.js" defer></script>
+
+<style>.xd-lane{display:none!important}
+/* the option picker in Getting there details uses design 1, the route line: each option is a station on the line colour */
+#explore .xd-line-box{background:#fff!important;border:1px solid #DCE4EA!important;border-left:0!important;padding:20px 22px 22px!important}
+#explore .xd-line-h{display:flex;align-items:center;gap:10px;color:#13293C!important;font:800 20px/1 "Barlow Condensed","Barlow",sans-serif!important;text-transform:uppercase;margin-bottom:20px!important}
+#explore .xd-line-h .xd-roundel{width:34px!important;height:34px!important}
+#explore .xd-hline{display:grid!important;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);list-style:none;margin:0;padding:0}
+#explore .xd-hline:before{display:none!important}
+#explore .xd-hline li{position:relative;padding-top:0!important;text-align:center}
+#explore .xd-hline li:not(:last-child):after{content:"";position:absolute;left:50%;width:100%;top:19px;height:6px;background:var(--c);z-index:0}
+#explore .xd-hstop{position:relative!important;z-index:1;display:grid!important;justify-items:center;gap:4px;width:100%!important;min-height:0!important;margin:0!important;padding:56px 10px 4px!important;background:transparent!important;box-shadow:none!important;border:0!important;border-radius:0!important;color:#13293C!important;text-align:center;transform:none!important}
+#explore .xd-hstop:before{left:50%!important;top:0!important;width:44px!important;height:44px!important;box-sizing:border-box;border-radius:50%!important;background:#fff!important;border:6px solid var(--c)!important;box-shadow:none!important;transform:translateX(-50%)!important;transition:box-shadow .25s,background .25s}
+#explore .xd-hstop:after{display:none!important}
+#explore .xd-hstop:hover:before{box-shadow:0 0 0 6px var(--cs)!important}
+#explore .xd-hstop[aria-current="true"]:before{background:var(--c)!important;box-shadow:inset 0 0 0 4px #fff!important}
+#explore .xd-hstop .xd-sl{position:static!important;display:block;width:auto!important;height:auto!important;padding:0!important;background:none!important;border:0!important;color:var(--c)!important;font:700 13px/1.2 "Barlow",sans-serif!important}
+#explore .xd-hstop b{font:700 18px/1.25 "Barlow",sans-serif!important;color:#13293C!important}
+#explore .xd-hstop[aria-current="true"] b{text-decoration:underline;text-decoration-color:var(--c);text-decoration-thickness:3px;text-underline-offset:5px}
+#explore .xd-hstop small{color:#4A5A66!important;font-size:14.5px!important;line-height:1.35}
+@media(max-width:640px){
+  #explore .xd-hline{grid-auto-flow:row;row-gap:18px}
+  #explore .xd-hline li{text-align:left}
+  #explore .xd-hline li:not(:last-child):after{left:19px;top:22px;width:6px;height:calc(100% + 18px)}
+  #explore .xd-hstop{justify-items:start;text-align:left;padding:2px 0 0 60px!important;min-height:44px!important}
+  #explore .xd-hstop:before{left:0!important;transform:none!important}
+}
+
+/* Good To Know as collapsible rows on a route line, "the transport roundel look" */
+.gtk2{margin:18px 0 40px}
+.gtk2 .g-key{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-bottom:14px;font:600 15px/1.2 "Barlow",sans-serif;color:#13293C}
+.gtk2 .g-key span{display:inline-flex;align-items:center;gap:8px}
+.gtk2 .g-key i{width:14px;height:14px;border-radius:50%;background:var(--gc)}
+.gtk2 .g-all{margin-left:auto;font:600 15px/18px "Barlow",sans-serif;padding:9px 14px;border:2px solid #13293C;border-radius:3px;background:#fff;color:#13293C;cursor:pointer;transition:background .25s,color .25s}
+.gtk2 .g-all:hover{background:#13293C;color:#fff}
+.gtk2 .g-yes{--gc:#2BA84A}.gtk2 .g-check{--gc:#F2B233}.gtk2 .g-no{--gc:#D74949}
+.gtk2 .g-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.gtk2 .g-line{list-style:none;margin:0;padding:0}
+.gtk2 .g-line li{position:relative;padding-bottom:8px}
+.gtk2 .g-line li:before{content:"";position:absolute;left:18px;top:30px;bottom:-4px;width:4px;background:#13293C;opacity:.18}
+.gtk2 .g-line li:last-child:before{display:none}
+.gtk2 details{position:relative}
+.gtk2 summary{list-style:none;display:grid!important;grid-template-columns:40px minmax(0,1fr) 34px;gap:12px;align-items:center;cursor:pointer;text-transform:none!important;font:inherit!important;letter-spacing:0!important;padding:0!important;background:none!important;border:0!important;color:inherit!important}
+.gtk2 summary::-webkit-details-marker{display:none}
+.gtk2 summary:after,.gtk2 summary:before{display:none!important}
+.gtk2 .g-rd{position:relative;z-index:1;width:40px;height:40px;box-sizing:border-box;border-radius:50%;border:3px solid #fff;background:var(--gc);color:#fff;box-shadow:0 0 0 3px var(--gc);display:grid;place-items:center}
+.gtk2 .g-check .g-rd{color:#0B1A27}
+.gtk2 .g-rd svg{width:18px;height:18px}
+.gtk2 .g-q{display:block;padding:10px 14px 11px;background:linear-gradient(90deg,color-mix(in srgb,var(--gc) 14%,#fff) 0%,color-mix(in srgb,var(--gc) 5%,#fff) 55%,#fff 100%);box-shadow:inset 3px 0 0 var(--gc);transition:background .3s}
+.gtk2 summary:hover .g-q{background:linear-gradient(90deg,color-mix(in srgb,var(--gc) 22%,#fff) 0%,color-mix(in srgb,var(--gc) 8%,#fff) 60%,#fff 100%)}
+.gtk2 .g-q b{display:block;font:700 17px/1.3 "Barlow",sans-serif;color:#13293C;text-transform:none}
+.gtk2 .g-q em{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:3px;font:600 14.5px/1.3 "Barlow",sans-serif;font-style:normal;color:#33444F;text-transform:none!important}
+.gtk2 .g-k{text-transform:none!important}
+.gtk2 .g-k{font-size:12.5px;font-weight:700;padding:3px 7px;border-radius:3px;background:var(--gc);color:#fff}
+.gtk2 .g-check .g-k{color:#0B1A27}
+.gtk2 .g-x{position:relative;display:block;width:34px;height:34px;border-radius:3px;background:#13293C}
+.gtk2 .g-x:before,.gtk2 .g-x:after{content:"";position:absolute;left:50%;top:50%;width:14px;height:3px;background:#fff;transform:translate(-50%,-50%)}
+.gtk2 .g-x:after{transform:translate(-50%,-50%) rotate(90deg)}
+.gtk2 details[open] .g-x{background:var(--gc)}
+.gtk2 details[open] .g-x:after{transform:translate(-50%,-50%) rotate(0)}
+.gtk2 summary:focus-visible{outline:3px solid #6950A1;outline-offset:3px}
+.gtk2 details p{margin:6px 46px 4px 52px;padding:12px 16px;background:#fff;border:1px solid #DCE4EA;border-left:3px solid var(--gc);font:400 16px/25px "Barlow",sans-serif;color:#1B1B1B}
+@media(max-width:820px){.gtk2 .g-cols{grid-template-columns:1fr}.gtk2 .g-all{margin-left:0}}
+@media(max-width:520px){.gtk2 summary{grid-template-columns:36px minmax(0,1fr) 30px;gap:10px}.gtk2 .g-rd{width:36px;height:36px}.gtk2 .g-line li:before{left:16px}.gtk2 .g-x{width:30px;height:30px}.gtk2 details p{margin:6px 0 4px 46px}}
+</style>
+<script>
+(function(){
+  var b=document.querySelector(".gtk2 .g-all");if(!b)return;
+  b.addEventListener("click",function(){
+    var open=b.getAttribute("data-open")!=="1";
+    [].forEach.call(document.querySelectorAll(".gtk2 details"),function(d){d.open=open});
+    b.setAttribute("data-open",open?"1":"0");b.textContent=open?"Close all answers":"Open all answers";
+  });
+})();
+</script>
