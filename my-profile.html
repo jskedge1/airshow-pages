@@ -7,7 +7,7 @@
 <meta name="description" content="Your profile on The Big Guide to UK Airshows. One account for My Airshow Hub, the Airshow Forum, the Volunteer Hub and the Trader Hub, with a tab for each.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 :root{
   --navy:#13293C;--navy2:#0E2131;--teal:#32B4AF;--tealtext:#0E5F5B;--red:#D74949;--purple:#6950A1;--blue:#1D63B7;--green:#2BA84A;--coach:#C2255C;
@@ -194,6 +194,104 @@ svg .pl{fill:#fff;stroke:none}
 .dlg .row{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-left:5px solid var(--teal);z-index:90;font-weight:500;box-shadow:0 14px 30px rgba(0,0,0,.25)}
 
+
+/* ===== look switch (same as the forum) ===== */
+.look{display:inline-flex;align-items:center;gap:4px;padding:5px;background:var(--navy2);border-top:3px solid var(--teal);transition:border-color .45s var(--ease)}
+.look .lbl{font:600 14px var(--b);color:#9FD8D5;padding:0 8px 0 6px;white-space:nowrap}
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.06)}
+.seg .pill{position:absolute;top:0;bottom:0;left:0;width:50%;background:var(--teal);transition:transform .45s var(--ease),background .45s var(--ease)}
+.seg button{position:relative;z-index:1;display:flex;align-items:center;gap:7px;border:0;background:none;color:#fff;font:700 14px var(--b);padding:8px 12px;white-space:nowrap;transition:color .35s}
+.seg button svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2}
+.seg button:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+html.hud .look{border-top-color:#5FE3DC;background:rgba(6,16,25,.8)}
+html.hud .seg .pill{transform:translateX(100%);background:#5FE3DC}
+html.hud .seg button[data-look=hud]{color:#061019}
+.out-hd .look{margin-top:22px}
+.card .look{margin-right:4px}
+
+/* ===== HUD look: the cockpit style from My Airshow Hub and the forum ===== */
+html.hud{--hbg:#061019;--hfg:#E8F1F6;--hmut:#A9BDCB;--cy:#5FE3DC;--glass:rgba(22,52,74,.55);--glass2:rgba(6,16,25,.62);--hl:rgba(95,227,220,.22);--hl2:rgba(95,227,220,.1);--m:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;color-scheme:dark}
+html.hud body{background-color:var(--hbg);color:var(--hfg);background-image:radial-gradient(1200px 700px at 80% -10%,rgba(50,180,175,.16),transparent 60%),radial-gradient(900px 600px at -10% 60%,rgba(105,80,161,.14),transparent 60%),linear-gradient(var(--hl2) 1px,transparent 1px),linear-gradient(90deg,var(--hl2) 1px,transparent 1px);background-size:auto,auto,48px 48px,48px 48px}
+html.hud .cover::after{background:linear-gradient(0deg,#061019 0%,rgba(6,16,25,.35) 70%),repeating-linear-gradient(0deg,rgba(95,227,220,.05) 0 1px,transparent 1px 4px)}
+html.hud .card{background:var(--glass);border:1px solid var(--hl);box-shadow:0 0 0 1px rgba(0,0,0,.2),0 24px 50px -24px rgba(0,0,0,.8);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+html.hud .card::before,html.hud .card::after,html.hud .panel::before,html.hud .panel::after{content:"";position:absolute;width:18px;height:18px;border:2px solid var(--cy);pointer-events:none}
+html.hud .card::before,html.hud .panel::before{left:-1px;top:-1px;border-right:0;border-bottom:0}
+html.hud .card::after,html.hud .panel::after{right:-1px;bottom:-1px;border-left:0;border-top:0}
+html.hud .av{border-color:#0B1C29;box-shadow:0 0 0 2px var(--cy),0 0 30px rgba(95,227,220,.35)}
+html.hud .av-btn{background:#061019;border-color:var(--cy);color:var(--cy)}
+html.hud .who-n h1{color:#fff;text-shadow:0 0 24px rgba(95,227,220,.25)}
+html.hud .who-n .meta{color:var(--hmut);font-family:var(--m);font-size:14px}
+html.hud .who-n .meta b{color:var(--cy);font-weight:500}
+html.hud .chip,html.hud .chip.t{background:rgba(95,227,220,.1);color:var(--cy);border:1px solid var(--hl);font-family:var(--m);font-size:13px}
+html.hud .stats{background:var(--glass2);border:1px solid var(--hl);border-top:0}
+html.hud .stat{border-right-color:var(--hl2)}
+html.hud .stat b{font-family:var(--m);font-weight:500;font-size:30px;color:var(--cy);text-shadow:0 0 16px rgba(95,227,220,.45)}
+html.hud .stat span{font-family:var(--m);font-size:13px;color:var(--hmut)}
+html.hud .tabs{background:transparent;border-bottom:1px solid var(--hl);padding:10px 0 0;gap:4px}
+html.hud .tb{position:relative;background:transparent;border:1px solid transparent;border-radius:0;color:var(--hmut);font:500 14px var(--m);padding:9px 14px 9px 9px;letter-spacing:.02em}
+html.hud .tb::before,html.hud .tb::after{content:"";position:absolute;top:0;bottom:0;width:8px;border:2px solid var(--cy);opacity:0;transition:opacity .3s,width .35s var(--ease)}
+html.hud .tb::before{left:0;border-right:0}
+html.hud .tb::after{right:0;border-left:0}
+html.hud .tb:hover{box-shadow:none;color:#fff}
+html.hud .tb:hover::before,html.hud .tb:hover::after{opacity:.6}
+html.hud .tb[aria-selected=true]{background:rgba(95,227,220,.08);color:#fff;border-color:transparent}
+html.hud .tb[aria-selected=true]::before,html.hud .tb[aria-selected=true]::after{opacity:1;width:12px}
+html.hud .tb .ring{border-color:var(--cy);width:26px;height:26px;border-width:2px}
+html.hud .tb .ring svg{stroke:var(--cy)}
+html.hud .tb .ring svg .pl,html.hud .tb:hover .ring svg .pl{fill:var(--cy)}
+html.hud .tb:hover .ring,html.hud .tb[aria-selected=true] .ring{background:transparent}
+html.hud .tb[aria-selected=true] .ring svg{stroke:var(--cy)}
+html.hud .tb[aria-selected=true] .ring svg .pl{fill:var(--cy)}
+html.hud .panel{position:relative;background:var(--glass);border:1px solid var(--hl);border-top:0;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);animation:hudOpen .55s var(--ease)}
+@keyframes hudOpen{0%{clip-path:inset(0 50% 0 50%);opacity:.6}55%{clip-path:inset(0 0 0 0)}62%{transform:translateX(3px);filter:hue-rotate(40deg) saturate(1.6)}68%{transform:translateX(-2px)}74%{transform:none;filter:none}100%{opacity:1}}
+html.hud .ph-t h2{color:var(--cy);border-left-color:var(--cy);text-shadow:0 0 20px rgba(95,227,220,.3)}
+html.hud .ph-t p,html.hud .box p{color:var(--hmut)}
+html.hud .box{background:var(--glass2);border:1px solid var(--hl)}
+html.hud .box h3{color:#fff}
+html.hud .info div{background:rgba(255,255,255,.04);border:1px solid var(--hl2)}
+html.hud .info span{color:var(--cy);font-family:var(--m);font-size:14px}
+html.hud .next{background:linear-gradient(135deg,rgba(50,180,175,.18),rgba(6,16,25,.7));border:1px solid var(--hl);border-top:3px solid var(--cy)}
+html.hud .next h3{color:var(--cy)}
+html.hud .next .cd div{background:rgba(6,16,25,.7);border:1px solid var(--hl)}
+html.hud .next .cd b{font-family:var(--m);font-weight:500;color:var(--cy);text-shadow:0 0 14px rgba(95,227,220,.5)}
+html.hud .lg{background:rgba(6,16,25,.55);border-color:var(--hl);border-left-width:4px}
+html.hud .lg:hover{box-shadow:0 0 24px rgba(95,227,220,.12)}
+html.hud .lg b,html.hud .num b,html.hud .join-box b{color:#fff}
+html.hud .lg small,html.hud .num span{color:var(--hmut)}
+html.hud .pill{font-family:var(--m);font-weight:500;font-size:13px}
+html.hud .pill.on{background:rgba(43,168,74,.16);color:#7DE39A;border:1px solid rgba(125,227,154,.35)}
+html.hud .pill.off{background:rgba(255,255,255,.05);color:var(--hmut);border:1px solid var(--hl2)}
+html.hud .pill.wait{background:rgba(224,161,0,.14);color:#FFD36B;border:1px solid rgba(255,211,107,.35)}
+html.hud .lg-n,html.hud .empty{background:rgba(105,80,161,.16);color:var(--hmut);border-left-color:var(--purple)}
+html.hud .empty b{color:#fff}
+html.hud .list li{border-bottom-color:var(--hl2)}
+html.hud .list li b{color:#fff}
+html.hud .list li span{color:var(--hmut);font-family:var(--m);font-size:14px}
+html.hud .num{background:rgba(6,16,25,.55);border:1px solid var(--hl2);border-top:3px solid var(--ac)}
+html.hud .num b{font-family:var(--m);font-weight:500}
+html.hud .join-box{border-color:var(--hl)}
+html.hud .join-box p{color:var(--hmut)}
+html.hud .area-hd{box-shadow:0 0 30px rgba(0,0,0,.35)}
+html.hud .btn.line{background:transparent;color:var(--cy);border-color:var(--cy)}
+html.hud .btn.line:hover{background:var(--cy);color:#061019}
+html.hud .btn:not(.line):not(.red):not(.ol){box-shadow:0 0 18px rgba(50,180,175,.35)}
+html.hud .gal div{background-color:rgba(255,255,255,.05)}
+html.hud .out-body .st{color:var(--cy);border-left-color:var(--cy)}
+html.hud .out-body .st-p{color:var(--hmut)}
+html.hud .area{background:var(--glass);border-color:var(--hl);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+html.hud .area b{color:#fff}
+html.hud .area p{color:var(--hmut)}
+html.hud .area .who{background:rgba(95,227,220,.1);color:var(--cy);font-family:var(--m);font-size:13px}
+html.hud .dlg form{background:#0B1C29;border:1px solid var(--hl);border-top:4px solid var(--cy);color:var(--hfg)}
+html.hud .dlg h2,html.hud .fld label,html.hud .fld .fl{color:#fff}
+html.hud .dlg>form>p,html.hud .fld small{color:var(--hmut)}
+html.hud .fld input,html.hud .fld textarea{background:rgba(255,255,255,.05);color:#fff;border-bottom-color:var(--hl)}
+html.hud .pick span{background:transparent;color:var(--hmut);border-color:var(--hl)}
+html.hud .pick input:checked+span{background:var(--cy);border-color:var(--cy);color:#061019}
+html.hud .load{color:var(--hmut)}
+html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
+@media(prefers-reduced-motion:reduce){html.hud .panel{animation:none}.seg .pill{transition:none}}
+
 @media(max-width:1000px){
   .areas{grid-template-columns:repeat(2,minmax(0,1fr))}
   .area:nth-child(4){margin-top:0}
@@ -331,17 +429,30 @@ svg .pl{fill:#fff;stroke:none}
     ];
   }
 
+  var LOOKSW='<div class="look" role="group" aria-label="Choose how your profile looks"><span class="lbl">Look</span><div class="seg"><span class="pill" aria-hidden="true"></span>'+
+    '<button type="button" data-look="clean" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M8 13h8M8 16h5"/></svg>Clean</button>'+
+    '<button type="button" data-look="hud" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-5"/></svg>HUD</button></div></div>';
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){return null;}}
+  var look=store('profileLook')||store('forumLook')||'clean';
+  function setLook(l,save){
+    look=l==='hud'?'hud':'clean';
+    document.documentElement.classList.toggle('hud',look==='hud');
+    [].forEach.call(document.querySelectorAll('.seg button'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-look')===look);});
+    if(save)store('profileLook',look);
+  }
+  setLook(look,false);
+
   var D=null,tab='overview',app=document.getElementById('app');
 
   /* ---------- logged out ---------- */
-  function outView(err){
+  function outView(err){setTimeout(function(){setLook(look,false);},0);
     var A=AREAS({});
     app.innerHTML=
       '<header class="out-hd"><div class="ph" aria-hidden="true"></div><div class="in">'+
       '<span class="tag">My Profile</span><h1>One Account, <span>Everything</span> In One Place</h1>'+
       '<p class="sub">Sign up once and use it all over the guide</p>'+
       '<p class="intro">Make one free account and you get your own profile. It works for My Airshow Hub and the Airshow Forum straight away. If you later join the volunteer team or list a stall, those show up here too, each with its own tab. No extra log ins to remember.</p>'+
-      '<div class="acts"><button class="btn" type="button" data-act="signup">Sign up free <span class="ar">→</span></button><button class="btn ol" type="button" data-act="login">Log in</button></div>'+
+      '<div class="acts"><button class="btn" type="button" data-act="signup">Sign up free <span class="ar">→</span></button><button class="btn ol" type="button" data-act="login">Log in</button></div>'+LOOKSW+
       (err?'<div class="err">'+esc(err)+'</div>':'')+
       '</div></header>'+
       '<section class="out-body"><div class="in"><h2 class="st">What Your Profile Holds</h2><p class="st-p">Every part of the site that needs a log in, all on the same account. You only see the extra tabs once you have joined that part.</p>'+
@@ -375,7 +486,7 @@ svg .pl{fill:#fff;stroke:none}
             '<span><b>'+joinedN+'</b> of 4 parts of the site joined</span></div>'+
             ((a.into||[]).length?'<div class="chips">'+a.into.map(function(x){return '<span class="chip t">'+esc(x)+'</span>';}).join('')+'</div>':'')+
           '</div>'+
-          '<div class="acts"><button class="btn sm" type="button" data-act="edit">Edit profile</button><button class="btn sm line" type="button" data-go="my-airshow-hub">My Airshow Hub</button></div>'+
+          '<div class="acts">'+LOOKSW+'<button class="btn sm" type="button" data-act="edit">Edit profile</button><button class="btn sm line" type="button" data-go="my-airshow-hub">My Airshow Hub</button></div>'+
         '</section>'+
         '<div class="stats">'+
           '<div class="stat"><b>'+(h.trips||[]).length+'</b><span>Shows planned</span></div>'+
@@ -537,6 +648,7 @@ svg .pl{fill:#fff;stroke:none}
 
   /* ---------- clicks ---------- */
   document.addEventListener('click',function(e){
+    var lk=e.target.closest('[data-look]');if(lk){setLook(lk.getAttribute('data-look'),true);if(document.getElementById('panel'))showTab(tab,false);return;}
     var t=e.target.closest('[data-act],[data-go],[data-tab],[data-tab-go]');if(!t)return;
     if(t.hasAttribute('data-tab')){showTab(t.getAttribute('data-tab'),false);return;}
     if(t.hasAttribute('data-tab-go')){showTab(t.getAttribute('data-tab-go'),false);document.getElementById('tabs').scrollIntoView({behavior:reduce?'auto':'smooth'});return;}
@@ -554,7 +666,7 @@ svg .pl{fill:#fff;stroke:none}
     if(n!==null){e.preventDefault();showTab(all[n].getAttribute('data-tab'),true);}
   });
 
-  function render(d){D=d;if(!d||!d.loggedIn){outView();return;}inView();}
+  function render(d){D=d;if(!d||!d.loggedIn){outView();}else{inView();}setLook(look,false);}
   function load(){api('me').then(render,function(err){outView(err.message);});}
 
   try{var h=(location.hash||'').slice(1);if(/^[a-z]+$/.test(h))tab=h;}catch(e){}
