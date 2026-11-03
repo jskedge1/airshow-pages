@@ -74,6 +74,10 @@ PAGES = [
     ('/groups', 'groups-header.html', COMMUNITY, 'Airshow Groups', 'A group for every show.', 'groups community'),
     ('/youtube', 'youtube.html', COMMUNITY, 'Airshow Videos', 'My airshow videos, sorted by show.', 'youtube videos watch'),
     ('/airshow-traders', 'traders/directory.html', COMMUNITY, 'Airshow Traders', 'Small businesses you can find at the shows.', 'traders stalls shop merch businesses'),
+    ('/how-my-airshow-hub-works', 'join-my-airshow-hub.html', COMMUNITY, 'How My Airshow Hub Works', 'How the free hub works and how to join in about a minute.', 'hub how it works join sign up free account planner'),
+    ('/how-the-forum-works', 'forum-how-it-works.html', COMMUNITY, 'How The Forum Works', 'Joining, finding your group, posting and the forum rules.', 'forum how it works join post reply rules photographers corner buddy kit swap'),
+    ('/join-the-team', 'join-the-team.html', COMMUNITY, 'Join The Team', 'Volunteer as a photographer, writer, video maker or show expert.', 'volunteer join team help write photos contribute'),
+    ('/volunteer-hub', 'volunteer-hub.html', COMMUNITY, 'Volunteer Hub', 'Log in to send your photos, videos and write ups.', 'volunteer hub log in send photos upload team'),
 
     ('/', None, SITE, 'Home', 'The front page of the guide.', 'home start'),
     ('/meettheteam', None, SITE, 'Meet The Team', 'Who is behind the guide.', 'team about Jack'),
