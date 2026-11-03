@@ -114,9 +114,20 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--purple);outline-off
 .step:hover .lvl{background:rgba(0,0,0,.32)}
 .step h3{font:800 30px/1 var(--c);text-transform:uppercase;margin:0 0 10px}
 .step p{margin:0;font-size:16px;line-height:1.55;color:rgba(255,255,255,.92)}
-.roles{display:flex;flex-wrap:wrap;gap:8px;margin:34px 0 0}
-.roles span{background:#fff;border:1px solid var(--line);padding:7px 12px;font:500 15px var(--b);color:var(--navy);transition:border-color .3s,transform .3s var(--ease)}
-.roles span:hover{border-color:var(--teal);transform:translateY(-2px)}
+.rolewrap{margin-top:46px}
+.rl-h{font:800 28px/1 var(--c);color:var(--navy);text-transform:uppercase;margin:0 0 16px;letter-spacing:.01em}
+.rolegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.rl{position:relative;background:#fff;border:1px solid var(--line);border-top:5px solid var(--rc);padding:18px 18px 20px;box-shadow:0 6px 18px rgba(19,41,60,.06);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.rl:nth-child(even){margin-top:22px}
+.rl:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(19,41,60,.14)}
+.rl-ic{display:grid;place-items:center;width:44px;height:44px;background:var(--rc);margin-bottom:14px;transition:transform .4s var(--ease)}
+.rl:hover .rl-ic{transform:rotate(-6deg) scale(1.06)}
+.rl-ic svg{width:22px;height:22px}
+.rl h3{font:700 18px/1.2 var(--b);color:var(--navy);margin:0 0 6px}
+.rl p{margin:0;font-size:15px;line-height:1.5;color:#33424F}
+@media(max-width:980px){.rolegrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.rolegrid{grid-template-columns:minmax(0,1fr)}.rl:nth-child(even){margin-top:0}}
+@media(prefers-reduced-motion:reduce){.rl,.rl-ic{transition:none}}
 
 /* ===== the show guide button ===== */
 .go{padding:46px 0 80px;background:var(--pale)}
@@ -279,9 +290,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--purple);outline-off
         <div class="step"><span class="lvl">Step 2</span><h3>Pick what you know</h3><p>Photos, video, reviews, plane spotting or local tips. Choose whatever suits you.</p></div>
         <div class="step"><span class="lvl">Step 3</span><h3>Share it your way</h3><p>Send things in when you can. If you ever want something taken down, just ask and I'll remove it.</p></div>
       </div>
-      <div class="roles rv" aria-label="Ways you can help">
-        <span>Airshow experts</span><span>Photographers</span><span>Videographers</span><span>Bloggers and review writers</span><span>Social media helpers</span><span>YouTubers, vloggers and TikTokers</span><span>Plane spotting lead</span><span>Organiser liaison</span>
-      </div>
+      <div class="rolewrap"><h3 class="rl-h rv">Ways you can help</h3><div class="rolegrid" aria-label="Ways you can help"><article class="rl rv" style="--rc:var(--teal)"><span class="rl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l20-8-6 12-3-5z"/></svg></span><h3>Airshow expert</h3><p>Share what you know about a show, from the best viewing spots to the car park that fills first.</p></article><article class="rl rv" style="--rc:var(--purple)"><span class="rl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8 7l2-3h4l2 3"/></svg></span><h3>Photographer</h3><p>Send in your shots from the crowd line, the static park or the campsite.</p></article><article class="rl rv" style="--rc:var(--red)"><span class="rl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12"/><path d="M16 10l6-3v10l-6-3z"/></svg></span><h3>Videographer</h3><p>Film arrivals, displays or a walk round the showground for our channel.</p></article><article class="rl rv" style="--rc:var(--navy)"><span class="rl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L20 8l-4-4L4 16z"/></svg></span><h3>Blogger or reviewer</h3><p>Write up your day, honestly, so others know what to expect.</p></article><article class="rl rv" style="--rc:var(--teal)"><span class="rl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11l7.6-4M8.2 13l7.6 4"/></svg></span><h3>Social media helper</h3><p>Help share planning cards and show news on Facebook and Instagram.</p></article><article class="rl rv" style="--rc:var(--purple)"><span class="rl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9l5 3-5 3z"/></svg></span><h3>YouTuber, vlogger or TikToker</h3><p>Make short videos from the shows and we'll share them with our readers.</p></article><article class="rl rv" style="--rc:var(--red)"><span class="rl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg></span><h3>Plane spotting lead</h3><p>Keep track of arrivals and rare visitors, and help with the line-ups.</p></article><article class="rl rv" style="--rc:var(--navy)"><span class="rl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l4-4 5 5 5-5 4 4-9 9z"/></svg></span><h3>Organiser liaison</h3><p>Help us talk to show organisers, so the information stays right.</p></article></div></div>
     </div>
   </section>
 
