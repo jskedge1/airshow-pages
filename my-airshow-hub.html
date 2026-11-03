@@ -2539,7 +2539,18 @@ body.o2-shake #app{animation:o2shake .5s linear}
   /* ---------- talking to the page code ---------- */
   var pending = {};
   var seq = 0;
+  /* Only the Wix page answers the hub. Opened anywhere else (the site preview in Claude, or straight from
+     GitHub) nothing will ever answer, so show the logged out hub at once instead of waiting about 50 seconds. */
+  var ON_SITE = (function () {
+    var where = "";
+    try { if (location.ancestorOrigins && location.ancestorOrigins.length) where = Array.prototype.join.call(location.ancestorOrigins, " "); } catch (e) {}
+    if (!where) { try { where = document.referrer || ""; } catch (e) {} }
+    if (window.parent === window) return false;
+    if (!where) return true;
+    return /ukairshowguide\.co\.uk|ukairshowguide\.uk|wixsite\.com|wixstudio\.|editor\.wix\.com|wix\.com|filesusr\.com|parastorage\.com/.test(where);
+  })();
   function call(action, payload) {
+    if (!ON_SITE) return action === "getHub" ? Promise.resolve({ member: null }) : Promise.reject(new Error("This part of the hub works on the website."));
     return new Promise(function (resolve, reject) {
       var id = "h" + (++seq);
       pending[id] = { resolve: resolve, reject: reject };
@@ -4525,6 +4536,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
   /* ---------- start ---------- */
   // The page code may not be listening yet when this loads, so keep saying hello until it answers.
   function hello(tries) {
+    if (!ON_SITE) return Promise.resolve({});
     return new Promise(function (resolve) {
       var done = false;
       var id = "h" + (++seq);
