@@ -58,8 +58,38 @@
     });
   }
 
-  function band(){
-    if(document.getElementById('xl-band')) return;
+  /* On the live site the show page is drawn inside the airshow-page element's shadow root, so the band
+     has to go in there, above the page's own footer, not at the bottom of the Wix page. */
+  function pageRoots(){
+    var docs=[document];
+    try{ if(window.document&&docs.indexOf(window.document)<0) docs.push(window.document); }catch(e){}
+    var roots=[];
+    docs.forEach(function(d){
+      try{ [].forEach.call(d.querySelectorAll('airshow-page'),function(h){ if(h.shadowRoot&&roots.indexOf(h.shadowRoot)<0) roots.push(h.shadowRoot); }); }catch(e){}
+    });
+    return roots.concat(docs);
+  }
+  function findAnchor(){
+    var roots=pageRoots();
+    for(var i=0;i<roots.length;i++){
+      var r=roots[i], inShadow=!(r.nodeType===9);
+      var a=r.querySelector('section.useful')||r.querySelector('footer.small-print')||(inShadow?r.querySelector('footer'):null);
+      if(a) return {anchor:a,root:r,shadow:inShadow};
+    }
+    return null;
+  }
+  function hasBand(){
+    return pageRoots().some(function(r){ return !!r.querySelector('#xl-band'); });
+  }
+  var onWix=/ukairshowguide\.co\.uk$/.test(location.hostname);
+  function bandWhenReady(tries){
+    if(hasBand()) return;
+    var hit=findAnchor();
+    if(hit||!onWix||tries>40){ band(hit); return; }
+    setTimeout(function(){ bandWhenReady(tries+1); },500);
+  }
+  function band(hit){
+    if(hasBand()) return;
     var me=here();
     var shows=PAGES.filter(function(p){return p.live && p.key!==me;});
     var guides=GUIDES.filter(function(p){return p.live && p.key!==me;});
@@ -82,7 +112,8 @@
       +'@media(max-width:820px){#xl-band .xl-wrap{grid-template-columns:minmax(0,1fr)}}'
       +'@media(max-width:640px){#xl-band{padding:40px 0}#xl-band .xl-wrap{padding:0 16px}#xl-band ul{grid-template-columns:minmax(0,1fr)}}'
       +'@media(prefers-reduced-motion:reduce){#xl-band li a{transition:none}}';
-    var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+    var st=document.createElement('style');st.textContent=css;
+    if(hit&&hit.shadow) hit.root.appendChild(st); else document.head.appendChild(st);
     function li(p){return '<li><a href="'+SITE+p.slug+'" target="_top"><span><b>'+esc(p.name)+'</b><small>'+esc(p.where)+'</small></span><i aria-hidden="true">&rarr;</i></a></li>';}
     var sec=document.createElement('section');
     sec.id='xl-band';sec.setAttribute('aria-label','More air shows');
@@ -92,10 +123,10 @@
       +'<div><ul>'+shows.map(li).join('')+'</ul>'
       +(guides.length?'<h3>Visitor guides</h3><ul>'+guides.filter(function(g){return g.key!=='find';}).map(li).join('')+'</ul>':'')
       +'</div></div>';
-    var anchor=document.querySelector('section.useful')||document.querySelector('footer');
+    var anchor=hit&&hit.anchor;
     if(anchor&&anchor.parentNode) anchor.parentNode.insertBefore(sec,anchor); else document.body.appendChild(sec);
   }
 
-  function go(){fixLinks();band();}
+  function go(){fixLinks();bandWhenReady(0);}
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
