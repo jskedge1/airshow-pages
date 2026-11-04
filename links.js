@@ -109,6 +109,12 @@
       +'#xl-band li i{font-style:normal;color:#32B4AF;font-weight:700}'
       +'#xl-band h3{margin:28px 0 10px;text-transform:none;letter-spacing:0;font-family:inherit;font-size:18px;font-weight:600;color:#32B4AF}'
       +'#xl-band a:focus-visible{outline:3px solid #32B4AF;outline-offset:2px}'
+      /* inside the show page's shadow root the page's own heading and text rules reach the band, so pin the look */
+      +'#xl-band h2{text-transform:uppercase!important;line-height:1!important;letter-spacing:.01em!important}'
+      +'#xl-band h3,#xl-band li b,#xl-band li small{text-transform:none!important;letter-spacing:0!important}'
+      +'#xl-band li b{line-height:1.25!important;font-size:17px!important}'
+      +'#xl-band li small{line-height:1.4!important;font-size:14px!important}'
+      +'#xl-band .xl-lede{line-height:1.55!important}'
       +'@media(max-width:820px){#xl-band .xl-wrap{grid-template-columns:minmax(0,1fr)}}'
       +'@media(max-width:640px){#xl-band{padding:40px 0}#xl-band .xl-wrap{padding:0 16px}#xl-band ul{grid-template-columns:minmax(0,1fr)}}'
       +'@media(prefers-reduced-motion:reduce){#xl-band li a{transition:none}}';
