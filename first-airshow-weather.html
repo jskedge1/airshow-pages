@@ -1448,35 +1448,7 @@ button{font-family:var(--f)}
   <figure class="v4"><img src="https://jskedge1.github.io/airshow-pages/first-airshow-img/weather-cloud-jet.webp" alt="A Hornet climbing in front of a towering white cloud" loading="lazy"><figcaption>A bright cloud behind a climbing Hornet at RIAT 2024.</figcaption></figure>
   <figure class="v5"><img src="https://jskedge1.github.io/airshow-pages/first-airshow-img/weather-cloud-b52.webp" alt="A B52 flying low under a heavy grey cloud base" loading="lazy"><figcaption>A B52 under a low cloud base at RIAT 2024.</figcaption></figure>
 </div>
-<div class="vlb" id="vlb" hidden><button class="vx" type="button" aria-label="Close">&times;</button><button class="vp" type="button" aria-label="Previous photo">&#8249;</button><figure><img alt=""><figcaption></figcaption></figure><button class="vn" type="button" aria-label="Next photo">&#8250;</button></div>
-<style>
-.vgal figure{cursor:zoom-in}
-.vlb{position:fixed;inset:0;z-index:9999;background:rgba(8,18,28,.94);display:flex;align-items:center;justify-content:center;padding:40px 64px;opacity:0;transition:opacity .3s ease}
-.vlb[hidden]{display:none}.vlb.on{opacity:1}
-.vlb figure{margin:0;max-width:min(1300px,100%);max-height:100%;display:flex;flex-direction:column;align-items:center;transform:scale(.96);transition:transform .35s cubic-bezier(.22,1,.36,1)}
-.vlb.on figure{transform:none}
-.vlb img{max-width:100%;max-height:calc(100vh - 140px);object-fit:contain;display:block;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.vlb figcaption{color:#fff;font-size:16px;margin-top:12px;text-align:center;line-height:1.45}
-.vlb button{position:absolute;background:none;border:0;color:#fff;cursor:pointer;font-size:44px;line-height:1;padding:8px 14px;opacity:.85}
-.vlb button:hover{opacity:1;color:#D74949}
-.vlb .vx{top:10px;right:14px;font-size:40px}.vlb .vp{left:8px;top:50%;transform:translateY(-50%)}.vlb .vn{right:8px;top:50%;transform:translateY(-50%)}
-@media (max-width:760px){.vlb{padding:50px 10px}.vlb .vp,.vlb .vn{top:auto;bottom:10px;transform:none}}
-</style>
-<script>
-(function(){
-  var lb=document.getElementById('vlb'); if(!lb) return;
-  var figs=[].slice.call(document.querySelectorAll('.vgal figure')), im=lb.querySelector('img'), cap=lb.querySelector('figcaption'), i=0;
-  function show(n){ i=(n+figs.length)%figs.length; var f=figs[i]; im.src=f.querySelector('img').src; im.alt=f.querySelector('img').alt; cap.textContent=f.querySelector('figcaption').textContent; }
-  function open(n){ show(n); lb.hidden=false; requestAnimationFrame(function(){lb.classList.add('on');}); }
-  function close(){ lb.classList.remove('on'); setTimeout(function(){lb.hidden=true;},300); }
-  figs.forEach(function(f,n){ f.addEventListener('click',function(){open(n);}); });
-  lb.querySelector('.vx').addEventListener('click',close);
-  lb.querySelector('.vp').addEventListener('click',function(e){e.stopPropagation();show(i-1);});
-  lb.querySelector('.vn').addEventListener('click',function(e){e.stopPropagation();show(i+1);});
-  lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
-  document.addEventListener('keydown',function(e){ if(lb.hidden) return; if(e.key==='Escape') close(); if(e.key==='ArrowLeft') show(i-1); if(e.key==='ArrowRight') show(i+1); });
-})();
-</script>
+<style>.vgal figure{cursor:default}</style>
 <div class="boxes">
   <div class="box "><span class="tag teal">Viewing</span><h3>Lower and closer</h3><p>Flat and rolling shows put the aircraft in front of you at low level for longer. Great for seeing detail.</p></div>
   <div class="box "><span class="tag navy">Photography</span><h3>Vapour and condensation</h3><p>Humid air and hard turns give you vapour over the wings and sometimes a full cone. Fast jets only.</p></div>
