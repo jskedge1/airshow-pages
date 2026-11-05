@@ -1448,7 +1448,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
 
   /* ---------- settings calculator: benchmark 1/1250 fastest, at least double the focal length, ISO 100 to 1200 ---------- */
   var PC=(function(){
-    var SH=[1250,1000,800,640,500,400,320,250,200,160,125,100,80,60];
+    var SH=[1600,1250,1000,800,640,500,400,320,250,200,160,125,100,80,60];
     var AP=[4,4.5,5,5.6,6.3,7.1,8,9,10,11,13,14,16];
     var ISOS=[100,125,160,200,250,320,400,500,640,800,1000,1200];
     var SUBJ={
@@ -1478,7 +1478,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
       var t=s.t, N=8, iso;
       if(s.kind==='freeze'){if(s.fl&&fl)t=lensT;else if(lensT>t)t=lensT;
         iso=need(t,N,ev);
-        while(iso<100 && idx(SH,t)>0){t=SH[idx(SH,t)-1];iso=need(t,N,ev);}
+        while(iso<100 && idx(SH,t)>0&&SH[idx(SH,t)-1]<=Math.max(1250,lensT)){t=SH[idx(SH,t)-1];iso=need(t,N,ev);}
         while(iso<100 && N<11){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
         if(iso>1200){N=maxAp;iso=need(t,N,ev);}
         while(iso>1200 && t>(s.fl&&fl?lensT:Math.max(s.min,lensT))){t=SH[idx(SH,t)+1];iso=need(t,N,ev);}
@@ -1488,12 +1488,12 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
         while(iso<100 && N<16){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
         if(iso<100){
           var orig=t;
-          while(iso<100 && idx(SH,t)>0){t=SH[idx(SH,t)-1];iso=need(t,N,ev);}
+          while(iso<100 && idx(SH,t)>0&&SH[idx(SH,t)-1]<=Math.max(1250,lensT)){t=SH[idx(SH,t)-1];iso=need(t,N,ev);}
           notes.push('Too bright for 1/'+orig+' even at f/16 and ISO 100. Use 1/'+t+', or fit a 1 or 2 stop ND filter to keep the slower shutter.');
         }
         if(iso>1200){N=maxAp;iso=need(t,N,ev);}
       }
-      if(fl&&s.kind==='freeze'&&(s.fl||lensT>s.t))notes.push('With your lens at '+fl+'mm I have set the shutter to '+(s.fl?'':'at least ')+'1/'+lensT+'. The longer the lens, the faster the shutter, so I go for double the focal length.');if(fl&&s.kind==='freeze'&&2*fl>SH[0])notes.push('Double '+fl+'mm would be 1/'+(2*fl)+'. I use 1/'+SH[0]+' as my benchmark, but if your shots come out soft you can go faster.');if(fl&&s.kind==='blur'&&lensT>t)notes.push('At '+fl+'mm, double your focal length would be 1/'+lensT+'. You are slower than that here to get the blur, so I would keep stabilisation on and pan smoothly.');var under=0;
+      if(fl&&s.kind==='freeze'&&(s.fl||lensT>s.t))notes.push('With your lens at '+fl+'mm I have set the shutter to '+(s.fl?'':'at least ')+'1/'+lensT+'. The longer the lens, the faster the shutter, so I go for double the focal length.');if(fl&&s.kind==='freeze'&&lensT>1250)notes.push('Above 600mm I go faster than my 1/1250 benchmark, so 1/'+lensT+' at '+fl+'mm. The extra reach shows every bit of shake.');if(fl&&s.kind==='blur'&&lensT>t)notes.push('At '+fl+'mm, double your focal length would be 1/'+lensT+'. You are slower than that here to get the blur, so I would keep stabilisation on and pan smoothly.');var under=0;
       if(iso>1200){under=LOG2(iso/1200);iso=1200;}
       var isoR=iso>=1200?1200:Math.min(1200,nearest(ISOS,Math.max(100,iso)));
       var NR=nearest(AP,N);
