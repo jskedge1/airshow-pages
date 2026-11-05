@@ -281,7 +281,7 @@
     var box = clear($("bfCam"));
     var wx = X.wx[(t.showSlug || slugFor(t.showName)) + isoDay(t.start)];
     var dull = wx && wx.cloud_cover_low ? wx.cloud_cover_low.slice(11, 17).reduce(function (a, b) { return a + b; }, 0) / 6 > 60 : false;
-    [["Fast jets", dull ? "1/1000" : "1/1600", dull ? "f/5.6" : "f/8", dull ? "ISO 1000" : "ISO 400", "Freeze the action and keep the jet sharp."], ["Propeller aircraft", dull ? "1/160" : "1/200", "f/11", dull ? "ISO 400" : "ISO 100", "Slow enough to show a full blur in the prop."], ["Helicopters", "1/125", dull ? "f/11" : "f/13", dull ? "ISO 400" : "ISO 100", "Keeps a little blur in the rotor blades."], ["Display teams", "1/1000", dull ? "f/5.6" : "f/8", dull ? "ISO 800" : "ISO 320", "Leave space in the frame for the smoke."]].forEach(function (c) {
+    [["Fast jets", dull ? "1/1000" : "1/1250", dull ? "f/5.6" : "f/8", dull ? "ISO 1000" : "ISO 400", "Freeze the action and keep the jet sharp. Go for at least double your focal length."], ["Propeller aircraft", dull ? "1/160" : "1/200", "f/11", dull ? "ISO 400" : "ISO 100", "Slow enough to show a full blur in the prop."], ["Helicopters", "1/125", dull ? "f/11" : "f/13", dull ? "ISO 400" : "ISO 100", "Keeps a little blur in the rotor blades."], ["Display teams", "1/1000", dull ? "f/5.6" : "f/8", dull ? "ISO 800" : "ISO 320", "Leave space in the frame for the smoke."]].forEach(function (c) {
       var r = el("div", "bf-cam"); var d = el("div"); d.appendChild(el("b", "", c[0])); d.appendChild(el("span", "", c[4])); r.appendChild(d);
       var v = el("code", "", c[1] + "  " + c[2] + "  " + c[3]); r.appendChild(v); box.appendChild(r);
     });

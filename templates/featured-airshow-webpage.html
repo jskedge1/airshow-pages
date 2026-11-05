@@ -2498,7 +2498,7 @@ h3{font-weight:700}
     <section class="ph-sec" id="phCalc" aria-label="Airshow settings calculator">
       <div class="sec-head reveal">
         <div><h3>Starting <em>settings</em></h3></div>
-        <p class="note">Pick what&rsquo;s flying and the weather for a starting point. It never goes faster than 1/2000 or above ISO 1200, so the files stay clean and the shutter stays realistic for the subject. Check your histogram after the first pass and adjust.</p>
+        <p class="note">Pick what&rsquo;s flying and the weather for a starting point. It uses 1/1250 as a benchmark for the fastest shutter, at least double your focal length, and keeps ISO at 1200 or below, so the files stay clean and the shutter stays realistic for the subject. Check your histogram after the first pass and adjust.</p>
       </div>
       <div class="calc reveal">
         <div class="calc-form">
@@ -2531,6 +2531,7 @@ h3{font-weight:700}
               <button type="button" role="radio" data-v="5.6">f/5.6</button>
               <button type="button" role="radio" data-v="6.3">f/6.3</button>
             </div></fieldset></div>
+<div class="pl-q"><fieldset><legend>Your focal length at full zoom</legend><div class="pl-chips" role="radiogroup" data-c="fl"><button type="button" role="radio" data-v="200">Up to 200mm</button><button type="button" role="radio" data-v="300">300mm</button><button type="button" role="radio" data-v="400">400mm</button><button type="button" role="radio" data-v="500">500mm</button><button type="button" role="radio" data-v="600">600mm</button><button type="button" role="radio" data-v="800">800mm</button></div></fieldset></div>
         </div>
         <article class="calc-out" id="calcOut" aria-live="polite"></article>
       </div>
@@ -3248,13 +3249,13 @@ h3{font-weight:700}
     new MutationObserver(function(){ if(!panel.hidden) load(); }).observe(panel,{attributes:true,attributeFilter:['hidden']});
   })();
 
-/* Airshow settings calculator: limits 1/2000 s fastest, ISO 100–1200 */
+/* Airshow settings calculator: benchmark 1/1250 fastest, at least double the focal length, ISO 100 to 1200 */
 var PC=(function(){
-  var SH=[2000,1600,1250,1000,800,640,500,400,320,250,200,160,125,100,80,60];
+  var SH=[1250,1000,800,640,500,400,320,250,200,160,125,100,80,60];
   var AP=[4,4.5,5,5.6,6.3,7.1,8,9,10,11,13,14,16];
   var ISOS=[100,125,160,200,250,320,400,500,640,800,1000,1200];
   var SUBJ={
-    fastjet:{label:'Fast jets',short:'Fast jets',kind:'freeze',t:1600,min:1000},
+    fastjet:{label:'Fast jets',short:'Fast jets',kind:'freeze',t:1250,min:1000},
     team:{label:'Display team jets',short:'Display teams',kind:'freeze',t:1250,min:1000},
     large:{label:'Large & slow aircraft',short:'Large aircraft',kind:'freeze',t:1000,min:640},
     propsafe:{label:'Propellers, some blur',short:'Props (safe)',kind:'blur',t:320},
@@ -3275,17 +3276,17 @@ var PC=(function(){
   function nearest(arr,v){var b=arr[0];arr.forEach(function(a){if(Math.abs(LOG2(a/v))<Math.abs(LOG2(b/v)))b=a;});return b;}
   function fmtComp(c){var r=Math.round(c*3)/3;var s=r===0?'0':(r>0?'+':'−')+(Math.abs(r)%1===0?Math.abs(r).toFixed(0):Math.abs(r).toFixed(1));return s.replace('.7','.7').replace('1.3','1.3');}
   function apOpen(maxAp){return AP.indexOf(maxAp)>=0?maxAp:5.6;}
-  function calc(subjKey,wxKey,backlit,maxAp){
+  function calc(subjKey,wxKey,backlit,maxAp,fl){fl=+fl||0;var lensT=0;if(fl){lensT=SH[0];for(var q=SH.length-1;q>=0;q--){if(SH[q]>=2*fl){lensT=SH[q];break;}}}
     var s=SUBJ[subjKey],w=WX[wxKey];maxAp=apOpen(maxAp||6.3);
     var comp=Math.min(w.comp+(backlit?0.7:0),1.7), ev=w.ev-comp, notes=[];
     var t=s.t, N=8, iso, i;
-    if(s.kind==='freeze'){
+    if(s.kind==='freeze'){if(lensT>t)t=lensT;
       iso=need(t,N,ev);
       while(iso<100 && idx(SH,t)>0){t=SH[idx(SH,t)-1];iso=need(t,N,ev);}
       while(iso<100 && N<11){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
       if(iso>1200){N=Math.max(maxAp,Math.min(N,maxAp));N=maxAp;iso=need(t,N,ev);}
-      while(iso>1200 && t>s.min){t=SH[idx(SH,t)+1];iso=need(t,N,ev);}
-      if(t<s.t && iso<=1200) notes.push('Shutter dropped to 1/'+t+' to keep ISO at or below 1200. That\u2019s fine for most passes, but pan smoothly.');
+      while(iso>1200 && t>Math.max(s.min,lensT)){t=SH[idx(SH,t)+1];iso=need(t,N,ev);}
+      if(t<Math.max(s.t,lensT) && iso<=1200) notes.push('Shutter dropped to 1/'+t+' to keep ISO at or below 1200. That\u2019s fine for most passes, but pan smoothly.');
     } else {
       N=8; iso=need(t,N,ev);
       while(iso<100 && N<16){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
@@ -3296,7 +3297,7 @@ var PC=(function(){
       }
       if(iso>1200){N=maxAp;iso=need(t,N,ev);}
     }
-    var under=0;
+    if(fl&&s.kind==='freeze'&&lensT>s.t)notes.push('With your lens at '+fl+'mm I have set the shutter to at least 1/'+lensT+'. The longer the lens, the faster the shutter, so I go for double the focal length.');if(fl&&s.kind==='freeze'&&2*fl>SH[0])notes.push('Double '+fl+'mm would be 1/'+(2*fl)+'. I use 1/'+SH[0]+' as my benchmark, but if your shots come out soft you can go faster.');if(fl&&s.kind==='blur'&&lensT>t)notes.push('At '+fl+'mm, double your focal length would be 1/'+lensT+'. You are slower than that here to get the blur, so I would keep stabilisation on and pan smoothly.');var under=0;
     if(iso>1200){under=LOG2(iso/1200);iso=1200;}
     var isoR=iso>=1200?1200:Math.min(1200,nearest(ISOS,Math.max(100,iso)));
     var NR=nearest(AP,N);
@@ -3365,7 +3366,7 @@ var KIT={
       ['s_raw','Image quality: RAW (or RAW + JPEG)','More room to recover dark undersides'],
       ['s_mode','Mode: Manual with Auto ISO, or Shutter priority','You choose the shutter speed'],
       ['s_iso','Auto ISO: minimum 100, maximum 1200','Use 1000 if your camera has no 1200 setting. Higher ISO means noisy files'],
-      ['s_shutter','Starting shutter: 1/1250 jets, 1/320 propellers','Never faster than 1/2000. Faster only costs you ISO'],
+      ['s_shutter','Starting shutter: 1/1250 jets, 1/320 propellers','At least double your focal length, so 1/800 at 400mm. 1/1250 is a benchmark, you can go faster if you need to'],
       ['s_af','Focus: AF-C / AI Servo','Continuous focus to track moving aircraft'],
       ['s_area','AF area: dynamic, zone or single point','Tracking modes suit display teams'],
       ['s_prio','AF-C priority: release, or focus + release','So the camera never refuses to fire'],
@@ -3410,18 +3411,18 @@ var KIT={
     }
 
     /* --- settings calculator --- */
-    var cs=load('eastbourneCalc',{subj:'fastjet',wx:'sun',back:'no',ap:'6.3'});
+    var cs=load('eastbourneCalc',{subj:'fastjet',wx:'sun',back:'no',ap:'6.3'});if(!cs.fl)cs.fl='400';
     var out=document.getElementById('calcOut'), wxGrid=document.getElementById('calcWx');
     function renderCalc(){
       paintChips('[data-c]','data-c',cs);
-      var r=PC.calc(cs.subj,cs.wx,cs.back==='yes',parseFloat(cs.ap));
+      var r=PC.calc(cs.subj,cs.wx,cs.back==='yes',parseFloat(cs.ap),parseFloat(cs.fl));
       out.innerHTML='<h4>'+E(r.subject)+' <em>&middot; '+E(r.weather)+'</em></h4>'
         +'<div class="readout"><div><span>Shutter</span><b>'+r.shutter+'</b></div><div><span>Aperture</span><b>'+r.aperture+'</b></div><div><span>ISO</span><b>'+r.iso+'</b></div><div><span>Exp. comp</span><b>'+r.comp+'</b></div></div>'
         +'<dl class="howto"><div><dt>Mode</dt><dd>'+E(r.mode)+'</dd></div><div><dt>Focus</dt><dd>'+E(r.af)+'</dd></div><div><dt>Drive</dt><dd>'+E(r.drive)+'</dd></div><div><dt>Stabilisation</dt><dd>'+E(r.vr)+'</dd></div></dl>'
         +(r.notes.length?'<ul class="calc-notes">'+r.notes.map(function(n){return '<li>'+E(n)+'</li>';}).join('')+'</ul>':'')
-        +'<p class="calc-limits">Limits used: fastest 1/2000 · ISO 100 to 1200 · '+(r.kind==='blur'?'aperture up to f/16':'aperture f/'+cs.ap+' to f/11')+'</p>';
+        +'<p class="calc-limits">Benchmark 1/1250 fastest, go faster if you need to · At least double your focal length · ISO 100 to 1200 · '+(r.kind==='blur'?'aperture up to f/16':'aperture f/'+cs.ap+' to f/11')+'</p>';
       wxGrid.innerHTML=Object.keys(PC.WX).map(function(k){
-        var x=PC.calc(cs.subj,k,cs.back==='yes',parseFloat(cs.ap));
+        var x=PC.calc(cs.subj,k,cs.back==='yes',parseFloat(cs.ap),parseFloat(cs.fl));
         return '<button type="button" data-wx="'+k+'" aria-pressed="'+(k===cs.wx)+'"><span>'+E(PC.WX[k].short)+'</span><b>'+x.shutter+' · '+x.aperture+'</b><i'+(x.under>0.15?' class="dark"':'')+'>ISO '+x.iso+(x.under>0.15?' · dark':'')+'</i></button>';
       }).join('');
       wxGrid.querySelectorAll('button').forEach(function(b){b.onclick=function(){cs.wx=b.dataset.wx;renderCalc();};});

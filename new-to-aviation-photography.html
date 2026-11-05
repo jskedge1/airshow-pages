@@ -887,7 +887,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
     <div class="wrap">
       <div class="sec-head fade">
         <h2>Settings calculator <span class="tag new">New</span></h2>
-        <p>Pick what's flying, the weather, where the sun is and your lens. It never goes faster than 1/2000 or above ISO 1200, so your files stay clean and the shutter speed stays realistic for the subject. Check your histogram after the first pass and adjust from there.</p>
+        <p>Pick what's flying, the weather, where the sun is and your lens. It uses 1/1250 as a benchmark for the fastest shutter, at least double your focal length, and keeps ISO at 1200 or below, so your files stay clean and the shutter speed stays realistic for the subject. Check your histogram after the first pass and adjust from there.</p>
       </div>
       <div class="calc fade">
         <div class="calc-form">
@@ -920,6 +920,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
               <button type="button" role="radio" data-v="5.6">f/5.6</button>
               <button type="button" role="radio" data-v="6.3">f/6.3</button>
             </div></fieldset></div>
+<div class="pl-q"><fieldset><legend>Your focal length at full zoom</legend><div class="pl-chips" role="radiogroup" data-c="fl"><button type="button" role="radio" data-v="200">Up to 200mm</button><button type="button" role="radio" data-v="300">300mm</button><button type="button" role="radio" data-v="400">400mm</button><button type="button" role="radio" data-v="500">500mm</button><button type="button" role="radio" data-v="600">600mm</button><button type="button" role="radio" data-v="800">800mm</button></div></fieldset></div>
         </div>
         <article class="calc-out" id="calcOut" aria-live="polite"></article>
       </div>
@@ -1327,7 +1328,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
 
   /* quick settings */
   var data={
-    jets:{img:'ph-2',alt:'A fast jet pulling vapour in a hard turn',title:'Fast jets',lead:'Jets move quickly and their engines don’t need blur, so a fast shutter keeps them pin sharp.',mode:'Shutter priority (S or Tv)',shutter:'1/1000, up to 1/2000 for close or fast passes',ap:'Set by the camera, around f/7.1 to f/8 in good light',iso:'Auto ISO, often 100 to 400 in sunshine',af:'Continuous (AF-C or AI Servo), small group',tip:'<strong>Start wider than you think.</strong> Find the jet, follow it smoothly and zoom in once you have it under control. Use short bursts as it passes closest, and leave room around the wingtips.'},
+    jets:{img:'ph-2',alt:'A fast jet pulling vapour in a hard turn',title:'Fast jets',lead:'Jets move quickly and their engines don’t need blur, so a fast shutter keeps them pin sharp.',mode:'Shutter priority (S or Tv)',shutter:'1/1000 to 1/1250 as a benchmark, and at least double your focal length',ap:'Set by the camera, around f/7.1 to f/8 in good light',iso:'Auto ISO, often 100 to 400 in sunshine',af:'Continuous (AF-C or AI Servo), small group',tip:'<strong>Start wider than you think.</strong> Find the jet, follow it smoothly and zoom in once you have it under control. Use short bursts as it passes closest, and leave room around the wingtips.'},
     props:{img:'ph-8',alt:'An aerobatic propeller aircraft trailing smoke',title:'Propeller aircraft',lead:'Warbirds, trainers and display teams with propellers need a slower shutter so the blades blur and the aircraft looks alive.',mode:'Shutter priority (S or Tv)',shutter:'Around 1/320, then 1/250 and slower',ap:'Set by the camera',iso:'Auto ISO, keep it as low as the light allows',af:'Continuous (AF-C or AI Servo)',tip:'<strong>Build up slowly.</strong> Get a sharp frame at 1/320 first. As your panning improves, work down to 1/200 and 1/160 for a fuller disc. Fast aerobatic aircraft are best started at around 1/500.'},
     helis:{img:'ph-10',alt:'A helicopter banking with its rotor blades blurred',title:'Helicopters',lead:'Rotor blades turn more slowly than propellers, so a very fast shutter makes them look completely frozen.',mode:'Shutter priority (S or Tv)',shutter:'1/125 to begin',ap:'Set by the camera',iso:'Auto ISO',af:'Continuous (AF-C or AI Servo)',tip:'<strong>Then go slower.</strong> Once you have a sharp frame, try 1/60 to 1/100 for more rotor blur. A larger helicopter with slower looking rotors may need a slower shutter than a small one.'},
     statics:{img:'ph-20',alt:'A large military helicopter on static display',title:'Static aircraft',lead:'Parked aircraft give you time to think about composition, light and the small details most visitors walk past.',mode:'Aperture priority (A or Av)',shutter:'Set by the camera, 1/250 or faster in hand',ap:'f/7.1 to f/11 for the whole aircraft, f/4 to f/5.6 for details',iso:'100 to 400 in good light',af:'Single (AF-S or One Shot) on the cockpit or markings',tip:'<strong>Walk around it first.</strong> Get low to make aircraft look powerful, use your wide lens for the whole airframe and your long lens for details. Popular aircraft are quieter early or late in the day.'}
@@ -1384,7 +1385,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
 <script>
 /* =========================================================
    NEW FEATURES (15 October 2026)
-   Start here picker, settings calculator (fastest 1/2000, ISO 100 to 1200),
+   Start here picker, settings calculator (benchmark 1/1250, double the focal length, ISO 100 to 1200),
    kit planner, packing list, settings checklist, A4 and phone PDFs.
    ========================================================= */
 (function(){
@@ -1445,13 +1446,13 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
   pkBtns.forEach(function(b){b.addEventListener('click',function(){pickShow(b.dataset.pk,true);});});
   pickShow('phone',false);
 
-  /* ---------- settings calculator: limits 1/2000 fastest, ISO 100 to 1200 ---------- */
+  /* ---------- settings calculator: benchmark 1/1250 fastest, at least double the focal length, ISO 100 to 1200 ---------- */
   var PC=(function(){
-    var SH=[2000,1600,1250,1000,800,640,500,400,320,250,200,160,125,100,80,60];
+    var SH=[1250,1000,800,640,500,400,320,250,200,160,125,100,80,60];
     var AP=[4,4.5,5,5.6,6.3,7.1,8,9,10,11,13,14,16];
     var ISOS=[100,125,160,200,250,320,400,500,640,800,1000,1200];
     var SUBJ={
-      fastjet:{label:'Fast jets',kind:'freeze',t:1600,min:1000},
+      fastjet:{label:'Fast jets',kind:'freeze',t:1250,min:1000},
       team:{label:'Display team jets',kind:'freeze',t:1250,min:1000},
       large:{label:'Large and slow aircraft',kind:'freeze',t:1000,min:640},
       propsafe:{label:'Propellers, some blur',kind:'blur',t:320},
@@ -1471,17 +1472,17 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
     function idx(arr,v){return arr.indexOf(v);}
     function nearest(arr,v){var b=arr[0];arr.forEach(function(a){if(Math.abs(LOG2(a/v))<Math.abs(LOG2(b/v)))b=a;});return b;}
     function fmtComp(c){var r=Math.round(c*3)/3;if(r===0)return '0';var a=Math.abs(r);return (r>0?'+':'−')+(a%1===0?a.toFixed(0):a.toFixed(1));}
-    function calc(subjKey,wxKey,backlit,maxAp){
+    function calc(subjKey,wxKey,backlit,maxAp,fl){fl=+fl||0;var lensT=0;if(fl){lensT=SH[0];for(var q=SH.length-1;q>=0;q--){if(SH[q]>=2*fl){lensT=SH[q];break;}}}
       var s=SUBJ[subjKey],w=WX[wxKey];maxAp=AP.indexOf(maxAp)>=0?maxAp:5.6;
       var comp=Math.min(w.comp+(backlit?0.7:0),1.7), ev=w.ev-comp, notes=[];
       var t=s.t, N=8, iso;
-      if(s.kind==='freeze'){
+      if(s.kind==='freeze'){if(lensT>t)t=lensT;
         iso=need(t,N,ev);
         while(iso<100 && idx(SH,t)>0){t=SH[idx(SH,t)-1];iso=need(t,N,ev);}
         while(iso<100 && N<11){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
         if(iso>1200){N=maxAp;iso=need(t,N,ev);}
-        while(iso>1200 && t>s.min){t=SH[idx(SH,t)+1];iso=need(t,N,ev);}
-        if(t<s.t && iso<=1200) notes.push('Shutter dropped to 1/'+t+' to keep ISO at or below 1200. That’s fine for most passes, but pan smoothly.');
+        while(iso>1200 && t>Math.max(s.min,lensT)){t=SH[idx(SH,t)+1];iso=need(t,N,ev);}
+        if(t<Math.max(s.t,lensT) && iso<=1200) notes.push('Shutter dropped to 1/'+t+' to keep ISO at or below 1200. That’s fine for most passes, but pan smoothly.');
       } else {
         iso=need(t,N,ev);
         while(iso<100 && N<16){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
@@ -1492,7 +1493,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
         }
         if(iso>1200){N=maxAp;iso=need(t,N,ev);}
       }
-      var under=0;
+      if(fl&&s.kind==='freeze'&&lensT>s.t)notes.push('With your lens at '+fl+'mm I have set the shutter to at least 1/'+lensT+'. The longer the lens, the faster the shutter, so I go for double the focal length.');if(fl&&s.kind==='freeze'&&2*fl>SH[0])notes.push('Double '+fl+'mm would be 1/'+(2*fl)+'. I use 1/'+SH[0]+' as my benchmark, but if your shots come out soft you can go faster.');if(fl&&s.kind==='blur'&&lensT>t)notes.push('At '+fl+'mm, double your focal length would be 1/'+lensT+'. You are slower than that here to get the blur, so I would keep stabilisation on and pan smoothly.');var under=0;
       if(iso>1200){under=LOG2(iso/1200);iso=1200;}
       var isoR=iso>=1200?1200:Math.min(1200,nearest(ISOS,Math.max(100,iso)));
       var NR=nearest(AP,N);
@@ -1509,18 +1510,18 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
     }
     return {WX:WX,calc:calc};
   })();
-  var cs=load('ukagPhotoCalc',{subj:'fastjet',wx:'sun',back:'no',ap:'6.3'});
+  var cs=load('ukagPhotoCalc',{subj:'fastjet',wx:'sun',back:'no',ap:'6.3'});if(!cs.fl)cs.fl='400';
   var out=document.getElementById('calcOut'), wxGrid=document.getElementById('calcWx');
   function renderCalc(){
     paintChips('[data-c]','data-c',cs);
-    var r=PC.calc(cs.subj,cs.wx,cs.back==='yes',parseFloat(cs.ap));
+    var r=PC.calc(cs.subj,cs.wx,cs.back==='yes',parseFloat(cs.ap),parseFloat(cs.fl));
     out.innerHTML='<h3>'+E(r.subject)+' <em>&middot; '+E(r.weather)+'</em></h3>'
       +'<div class="readout"><div><span>Shutter</span><b>'+r.shutter+'</b></div><div><span>Aperture</span><b>'+r.aperture+'</b></div><div><span>ISO</span><b>'+r.iso+'</b></div><div><span>Exposure comp</span><b>'+r.comp+'</b></div></div>'
       +'<dl class="howto"><div><dt>Mode</dt><dd>'+E(r.mode)+'</dd></div><div><dt>Focus</dt><dd>'+E(r.af)+'</dd></div><div><dt>Drive</dt><dd>'+E(r.drive)+'</dd></div><div><dt>Stabilisation</dt><dd>'+E(r.vr)+'</dd></div></dl>'
       +(r.notes.length?'<ul class="calc-notes">'+r.notes.map(function(n){return '<li>'+E(n)+'</li>';}).join('')+'</ul>':'')
-      +'<p class="calc-limits">Limits used: fastest 1/2000, ISO 100 to 1200, '+(r.kind==='blur'?'aperture up to f/16.':'aperture f/'+cs.ap+' to f/11.')+' These are starting points, not fixed rules.</p>';
+      +'<p class="calc-limits">Benchmark 1/1250 fastest, go faster if you need to, At least double your focal length, ISO 100 to 1200, '+(r.kind==='blur'?'aperture up to f/16.':'aperture f/'+cs.ap+' to f/11.')+' These are starting points, not fixed rules.</p>';
     wxGrid.innerHTML=Object.keys(PC.WX).map(function(k){
-      var x=PC.calc(cs.subj,k,cs.back==='yes',parseFloat(cs.ap));
+      var x=PC.calc(cs.subj,k,cs.back==='yes',parseFloat(cs.ap),parseFloat(cs.fl));
       return '<button type="button" data-wx="'+k+'" aria-pressed="'+(k===cs.wx)+'"><span>'+E(PC.WX[k].short)+'</span><b>'+x.shutter+', '+x.aperture+'</b><i'+(x.under>0.15?' class="dark"':'')+'>ISO '+x.iso+(x.under>0.15?', dark':'')+'</i></button>';
     }).join('');
     wxGrid.querySelectorAll('button').forEach(function(b){b.onclick=function(){cs.wx=b.dataset.wx;renderCalc();};});
@@ -1578,7 +1579,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
         ['s_raw','Image quality: RAW, or RAW and JPEG','More room to recover dark undersides'],
         ['s_mode','Mode: Manual with Auto ISO, or Shutter priority','You choose the shutter speed'],
         ['s_iso','Auto ISO: minimum 100, maximum 1200','Use 1000 if your camera has no 1200 setting. Higher ISO means noisy files'],
-        ['s_shutter','Starting shutter: 1/1250 jets, 1/320 propellers','Never faster than 1/2000. Faster only costs you ISO'],
+        ['s_shutter','Starting shutter: 1/1250 jets, 1/320 propellers','At least double your focal length, so 1/800 at 400mm. 1/1250 is a benchmark, you can go faster if you need to'],
         ['s_af','Focus: AF-C or AI Servo','Continuous focus to track moving aircraft'],
         ['s_area','AF area: dynamic, zone or single point','Tracking modes suit display teams'],
         ['s_prio','AF-C priority: release, or focus and release','So the camera never refuses to fire'],
