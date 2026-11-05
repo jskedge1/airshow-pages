@@ -3405,7 +3405,7 @@ var PC=(function(){
   var AP=[4,4.5,5,5.6,6.3,7.1,8,9,10,11,13,14,16];
   var ISOS=[100,125,160,200,250,320,400,500,640,800,1000,1200];
   var SUBJ={
-    fastjet:{label:'Fast jets',short:'Fast jets',kind:'freeze',t:1250,min:1000},
+    fastjet:{label:'Fast jets',short:'Fast jets',kind:'freeze',t:1250,fl:1,min:1000},
     team:{label:'Display team jets',short:'Display teams',kind:'freeze',t:1250,min:1000},
     large:{label:'Large & slow aircraft',short:'Large aircraft',kind:'freeze',t:1000,min:640},
     propsafe:{label:'Propellers, some blur',short:'Props (safe)',kind:'blur',t:320},
@@ -3430,13 +3430,13 @@ var PC=(function(){
     var s=SUBJ[subjKey],w=WX[wxKey];maxAp=apOpen(maxAp||6.3);
     var comp=Math.min(w.comp+(backlit?0.7:0),1.7), ev=w.ev-comp, notes=[];
     var t=s.t, N=8, iso, i;
-    if(s.kind==='freeze'){if(lensT>t)t=lensT;
+    if(s.kind==='freeze'){if(s.fl&&fl)t=lensT;else if(lensT>t)t=lensT;
       iso=need(t,N,ev);
       while(iso<100 && idx(SH,t)>0){t=SH[idx(SH,t)-1];iso=need(t,N,ev);}
       while(iso<100 && N<11){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
       if(iso>1200){N=Math.max(maxAp,Math.min(N,maxAp));N=maxAp;iso=need(t,N,ev);}
-      while(iso>1200 && t>Math.max(s.min,lensT)){t=SH[idx(SH,t)+1];iso=need(t,N,ev);}
-      if(t<Math.max(s.t,lensT) && iso<=1200) notes.push('Shutter dropped to 1/'+t+' to keep ISO at or below 1200. That\u2019s fine for most passes, but pan smoothly.');
+      while(iso>1200 && t>(s.fl&&fl?lensT:Math.max(s.min,lensT))){t=SH[idx(SH,t)+1];iso=need(t,N,ev);}
+      if(t<(s.fl&&fl?lensT:Math.max(s.t,lensT)) && iso<=1200) notes.push('Shutter dropped to 1/'+t+' to keep ISO at or below 1200. That\u2019s fine for most passes, but pan smoothly.');
     } else {
       N=8; iso=need(t,N,ev);
       while(iso<100 && N<16){N=AP[idx(AP,N)+1];iso=need(t,N,ev);}
@@ -3447,7 +3447,7 @@ var PC=(function(){
       }
       if(iso>1200){N=maxAp;iso=need(t,N,ev);}
     }
-    if(fl&&s.kind==='freeze'&&lensT>s.t)notes.push('With your lens at '+fl+'mm I have set the shutter to at least 1/'+lensT+'. The longer the lens, the faster the shutter, so I go for double the focal length.');if(fl&&s.kind==='freeze'&&2*fl>SH[0])notes.push('Double '+fl+'mm would be 1/'+(2*fl)+'. I use 1/'+SH[0]+' as my benchmark, but if your shots come out soft you can go faster.');if(fl&&s.kind==='blur'&&lensT>t)notes.push('At '+fl+'mm, double your focal length would be 1/'+lensT+'. You are slower than that here to get the blur, so I would keep stabilisation on and pan smoothly.');var under=0;
+    if(fl&&s.kind==='freeze'&&(s.fl||lensT>s.t))notes.push('With your lens at '+fl+'mm I have set the shutter to '+(s.fl?'':'at least ')+'1/'+lensT+'. The longer the lens, the faster the shutter, so I go for double the focal length.');if(fl&&s.kind==='freeze'&&2*fl>SH[0])notes.push('Double '+fl+'mm would be 1/'+(2*fl)+'. I use 1/'+SH[0]+' as my benchmark, but if your shots come out soft you can go faster.');if(fl&&s.kind==='blur'&&lensT>t)notes.push('At '+fl+'mm, double your focal length would be 1/'+lensT+'. You are slower than that here to get the blur, so I would keep stabilisation on and pan smoothly.');var under=0;
     if(iso>1200){under=LOG2(iso/1200);iso=1200;}
     var isoR=iso>=1200?1200:Math.min(1200,nearest(ISOS,Math.max(100,iso)));
     var NR=nearest(AP,N);
@@ -3516,7 +3516,7 @@ var KIT={
       ['s_raw','Image quality: RAW (or RAW + JPEG)','More room to recover dark undersides'],
       ['s_mode','Mode: Manual with Auto ISO, or Shutter priority','You choose the shutter speed'],
       ['s_iso','Auto ISO: minimum 100, maximum 1200','Use 1000 if your camera has no 1200 setting. Higher ISO means noisy files'],
-      ['s_shutter','Starting shutter: 1/1250 jets, 1/320 propellers','At least double your focal length, so 1/800 at 400mm. 1/1250 is a benchmark, you can go faster if you need to'],
+      ['s_shutter','Starting shutter: jets at double your focal length up to 1/1250, propellers 1/320','At least double your focal length, so 1/800 at 400mm. 1/1250 is a benchmark, you can go faster if you need to'],
       ['s_af','Focus: AF-C / AI Servo','Continuous focus to track moving aircraft'],
       ['s_area','AF area: dynamic, zone or single point','Tracking modes suit display teams'],
       ['s_prio','AF-C priority: release, or focus + release','So the camera never refuses to fire'],
