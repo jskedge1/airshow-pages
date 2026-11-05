@@ -4644,5 +4644,64 @@ textarea:focus,.input:focus{font-family:"JetBrains Mono",ui-monospace,Menlo,Cons
 @media (max-width:700px){.head .wrap{padding-top:44px}}
 </style>
 <script src="https://jskedge1.github.io/airshow-pages/back-tab.js" defer></script>
+<!-- On screen fix (5 Nov 2026): the hub sits in a tall Wix box, so anything pinned to the middle or bottom of the box
+     (log in check, tower screen, welcome screens, messages, the phone tab bar) could land off the visitor's screen.
+     Thin strips track which part of the box is on screen, and the pinned parts use that band instead. -->
+<style id="on-screen-fix">
+html.in-box #hubLeave,html.in-box #hubSO,html.in-box .o2-fly,html.in-box .o2-boom,html.in-box .o2-replay,
+html.in-box #guest .lg-tower,html.in-box .hub-setup,html.in-box #hubWB{top:var(--vt,0px)!important;bottom:auto!important;height:var(--vh,100%)!important}
+html.in-box #hubSO,html.in-box .o2-replay,html.in-box #guest .lg-tower,html.in-box .hub-setup,html.in-box #hubWB{overflow-y:auto}
+html.in-box .o2-cleared{top:calc(var(--vt,0px) + var(--vh,100vh) * .22)}
+html.in-box .hub-hello{top:calc(var(--vt,0px) + 16px)}
+html.in-box .toast{bottom:calc(var(--vb,0px) + 20px)}
+html.in-box .a2hs{bottom:calc(var(--vb,0px) + 16px)}
+@media (max-width:760px){
+  html.in-box body.is-member .hub-dock{bottom:var(--vb,0px)}
+  html.in-box body.is-member .hub-me:not([hidden]){bottom:calc(var(--vb,0px) + 58px)}
+}
+.vis-strip{position:fixed;left:0;width:1px;height:20px;pointer-events:none;visibility:hidden}
+</style>
+<script id="on-screen-fix-js">
+(function () {
+  if (window.parent === window || !("IntersectionObserver" in window)) return;
+  var root = document.documentElement, STEP = 20, seen = {}, strips = [], io = null, raf = 0;
+  root.classList.add("in-box");
+  function apply() {
+    raf = 0;
+    var top = Infinity, bot = -Infinity;
+    for (var k in seen) { var r = seen[k]; if (r) { if (r[0] < top) top = r[0]; if (r[1] > bot) bot = r[1]; } }
+    var H = window.innerHeight;
+    if (top === Infinity) { top = 0; bot = Math.min(H, 700); }
+    top = Math.max(0, Math.round(top)); bot = Math.min(H, Math.round(bot));
+    if (bot - top < 120) { bot = Math.min(H, top + 120); top = Math.max(0, bot - 120); }
+    root.style.setProperty("--vt", top + "px");
+    root.style.setProperty("--vh", (bot - top) + "px");
+    root.style.setProperty("--vb", (H - bot) + "px");
+  }
+  function build() {
+    if (io) io.disconnect();
+    strips.forEach(function (s) { s.remove(); });
+    strips = []; seen = {};
+    var n = Math.ceil(window.innerHeight / STEP), th = [];
+    for (var t = 0; t <= 20; t++) th.push(t / 20);
+    io = new IntersectionObserver(function (list) {
+      list.forEach(function (e) {
+        var i = e.target.dataset.i, r = e.intersectionRect;
+        seen[i] = e.isIntersecting && r.height > 0 ? [r.top, r.bottom] : null;
+      });
+      if (!raf) raf = requestAnimationFrame(apply);
+    }, { threshold: th });
+    for (var i = 0; i < n; i++) {
+      var s = document.createElement("div");
+      s.className = "vis-strip"; s.setAttribute("aria-hidden", "true"); s.dataset.i = i; s.style.top = (i * STEP) + "px";
+      document.body.appendChild(s); strips.push(s); io.observe(s);
+    }
+  }
+  var lastH = 0;
+  function start() { lastH = window.innerHeight; build(); }
+  window.addEventListener("resize", function () { if (Math.abs(window.innerHeight - lastH) > 40) start(); });
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+})();
+</script>
 </body>
 </html>
