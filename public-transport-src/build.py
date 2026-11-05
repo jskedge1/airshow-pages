@@ -162,7 +162,7 @@ out = (tpl.replace('__SHOWS__', json.dumps(data, ensure_ascii=False).replace('</
           .replace('__ICON_PLAN__', SVG('<circle cx="6" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.5" fill="#D74949"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 2"/>'))
           .replace('__ICON_TICKET__', SVG('<path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 5v14" stroke="currentColor" stroke-width="2" stroke-dasharray="2 2"/>'))
           .replace('__ICON_PIN__', SVG('<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/>'))
-          .replace('__IMG__', 'public-transport-img/seafront-crowd.webp'))
+          .replace('__IMG__', 'visitor-guides-img/transport-greater-anglia.webp'))
 mf = re.search(r'<!-- mobile-fit.*?<!-- /mobile-fit -->', open('airshow-security.html', encoding='utf8').read(), re.S)
 if mf: out = out.replace('</body>', mf.group(0) + '\n</body>')
 open('public-transport.html', 'w', encoding='utf8').write(out)
