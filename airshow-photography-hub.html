@@ -2233,7 +2233,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
       +'<div class="readout"><div><span>Shutter</span><b>'+r.shutter+'</b></div><div><span>Aperture</span><b>'+r.aperture+'</b></div><div><span>ISO</span><b>'+r.iso+'</b></div><div><span>Exposure comp</span><b>'+r.comp+'</b></div></div>'
       +'<dl class="howto"><div><dt>Mode</dt><dd>'+E(r.mode)+'</dd></div><div><dt>Focus</dt><dd>'+E(r.af)+'</dd></div><div><dt>Drive</dt><dd>'+E(r.drive)+'</dd></div><div><dt>Stabilisation</dt><dd>'+E(r.vr)+'</dd></div></dl>'
       +(r.notes.length?'<ul class="calc-notes">'+r.notes.map(function(n){return '<li>'+E(n)+'</li>';}).join('')+'</ul>':'')
-      +'<p class="calc-limits">Benchmark 1/1250 fastest, go faster if you need to, At least double your focal length, ISO 100 to 1200, '+(r.kind==='blur'?'aperture up to f/16.':'aperture f/'+cs.ap+' to f/11.')+' These are starting points, not fixed rules.</p>';
+      +'<p class="calc-limits">Benchmark 1/1250 fastest, go faster if you need to, at least double your focal length, ISO 100 to 1200, '+(r.kind==='blur'?'aperture up to f/16.':'aperture f/'+cs.ap+' to f/11.')+' These are starting points, not fixed rules.</p>';
     wxGrid.innerHTML=Object.keys(PC.WX).map(function(k){
       var x=PC.calc(cs.subj,k,cs.back==='yes',parseFloat(cs.ap),parseFloat(cs.fl));
       return '<button type="button" data-wx="'+k+'" aria-pressed="'+(k===cs.wx)+'"><span>'+E(PC.WX[k].short)+'</span><b>'+x.shutter+', '+x.aperture+'</b><i'+(x.under>0.15?' class="dark"':'')+'>ISO '+x.iso+(x.under>0.15?', dark':'')+'</i></button>';
