@@ -7,7 +7,7 @@
   var SITE='https://www.ukairshowguide.co.uk/';
   var FIND='air-shows-guides';
   var PAGES=[
-    {key:'riat',            name:'Royal International Air Tattoo', where:'RAF Fairford, Gloucestershire', slug:'riat',                    live:true},
+    {key:'riat',            name:'Royal International Air Tattoo', where:'MOD Boscombe Down, Wiltshire', slug:'riat',                    live:true},
     {key:'raf-cosford',     name:'RAF Cosford Air Show',           where:'Shropshire',                    slug:'cosfordairshow',           live:true},
     {key:'duxford',         name:'Duxford Air Shows',              where:'IWM Duxford, Cambridgeshire',   slug:'duxfordairshows',          live:true},
     {key:'shuttleworth',    name:'Shuttleworth Air Shows',         where:'Old Warden, Bedfordshire',      slug:'shuttleworthairshows',     live:true},

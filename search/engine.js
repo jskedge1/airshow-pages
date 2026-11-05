@@ -24,7 +24,7 @@
     map:'map', near:'map', nearby:'map',
     forum:'forum', chat:'forum', members:'hub', login:'hub', planner:'hub',
     reds:'red arrows', arrows:'red arrows',
-    tattoo:'riat', fairford:'riat', airbourne:'eastbourne', swansea:'wales', warden:'shuttleworth',
+    tattoo:'riat', fairford:'riat', boscombe:'riat', airbourne:'eastbourne', swansea:'wales', warden:'shuttleworth',
     gransden:'gransden', cosford:'cosford', iwm:'duxford', ragley:'midlands'
   };
   var SKIP = {the:1,a:1,an:1,and:1,or:1,to:1,of:1,at:1,in:1,on:1,for:1,is:1,it:1,my:1,i:1,do:1,how:1,what:1,where:1,can:1,with:1,best:1,uk:1,airshow:1,airshows:1,air:1,show:1,shows:1,guide:1};

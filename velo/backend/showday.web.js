@@ -110,7 +110,7 @@ export const confirmCrowdReport = webMethod(Permissions.SiteMember, async (id) =
 // The crowd area of each show, roughly, and how far away (km) a member can be and still count as at the show.
 // Seafront shows get more room because the crowd line runs along the front.
 const SHOW_POINTS = {
-  'riat': [51.682, -1.790, 5], 'cosford': [52.640, -2.306, 4], 'midlands': [52.203, -1.888, 4],
+  'riat': [51.152, -1.747, 5], 'cosford': [52.640, -2.306, 4], 'midlands': [52.203, -1.888, 4],
   'eastbourne': [50.763, 0.285, 8], 'clacton': [51.788, 1.155, 8], 'wales': [51.615, -3.944, 9],
   'duxford': [52.090, 0.132, 4], 'shuttleworth': [52.088, -0.320, 4], 'little-gransden': [52.167, -0.149, 4],
   'southport': [53.648, -3.010, 8], 'blackpool': [53.810, -3.055, 8], 'ayr': [55.462, -4.640, 8],
@@ -123,7 +123,7 @@ const EXTRA_SHOW_DAYS = {
 };
 // Words on a programme page that name a show, used to spot a page from a different show.
 const SHOW_WORDS = {
-  'riat': ['air tattoo', 'riat', 'fairford'], 'cosford': ['cosford'], 'midlands': ['midlands air festival', 'ragley'],
+  'riat': ['air tattoo', 'riat', 'fairford', 'boscombe'], 'cosford': ['cosford'], 'midlands': ['midlands air festival', 'ragley'],
   'eastbourne': ['eastbourne', 'airbourne'], 'clacton': ['clacton'], 'wales': ['wales airshow', 'swansea'],
   'duxford': ['duxford'], 'shuttleworth': ['shuttleworth', 'old warden'], 'little-gransden': ['gransden'],
   'southport': ['southport'], 'blackpool': ['blackpool'], 'ayr': ['ayr show', 'international ayr'], 'headcorn': ['headcorn', 'lashenden']

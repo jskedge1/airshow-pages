@@ -14,8 +14,8 @@ SITE = 'https://www.ukairshowguide.co.uk/'
 os.chdir(ROOT)
 
 SHOWS = [
-    ('riat', 'RIAT', 'Royal International Air Tattoo', 'RAF Fairford, Gloucestershire', 'riat',
-     'Fairford is out in the Cotswolds, so this one takes a bit of planning. I would look at the train to Swindon and the free Swindon Shuttle first, which you book with your ticket. The Park and Ride buses work well too.'),
+    ('riat', 'RIAT', 'Royal International Air Tattoo', 'MOD Boscombe Down, Wiltshire', 'riat',
+     'RIAT moves from RAF Fairford to MOD Boscombe Down, near Amesbury in Wiltshire, from 2027. The organisers haven’t released the travel plan for the new airfield yet, so I have taken the old Fairford trains, buses and shuttles off this page. I will add the new ones in due course.'),
     ('cosford', 'Cosford', 'RAF Cosford Air Show', 'RAF Cosford, Shropshire', 'cosfordairshow',
      'Cosford is the easy one for the train. The station is under 300 metres from the entrance, with a train an hour each way on the Birmingham to Shrewsbury line. There are no Sunday buses, so the train really is the way in.'),
     ('midlands', 'Midlands', 'Midlands Air Festival', 'Ragley Hall, Alcester', 'midlandsairfestival',
@@ -132,12 +132,21 @@ for k, name, full, place, slug, intro in SHOWS:
     if any(t['g'] == 'Park and Ride' for t in items):
         pr = [t for t in items if t['g'] == 'Park and Ride'][0]
         facts.append(['Park and Ride', pr['sub'], 'Park and Ride'])
+    status = '<b>I would always check the last bus or train home before you set off.</b> Roads near the show can close on the day, so stops may move. Each option below says where I would get off, and the route pages show every stop.'
+    note = 'I have only listed trains, buses and coaches here. Driving, parking and taxis are on the full show guide.'
+    tag = 'Before you go'
+    if k == 'riat':
+        # RIAT moves to MOD Boscombe Down from 2027: no confirmed public transport yet
+        facts = [['Showground', place, 'By road'], ['Travel plans', 'Still to be announced', 'By train'], ['Bus route pages', 'Coming in due course', 'By bus']]
+        status = '<b>RIAT is moving to MOD Boscombe Down for 2027.</b> Shuttles, Park and Ride and the best stations will all change, so I would hold off booking trains until the travel plan is out.'
+        note = 'The RIAT page has everything confirmed so far, and I will update this section as soon as the new travel details are released.'
+        tag = 'Moving for 2027'
     data.append(dict(k=k, name=name, full=full, place=place, url=SITE + slug, intro=intro, trainPage=train_page,
                      count=len(items), items=items,
                      groups=groups, facts=facts[:5],
-                     tag='Before you go',
-                     status='<b>I would always check the last bus or train home before you set off.</b> Roads near the show can close on the day, so stops may move. Each option below says where I would get off, and the route pages show every stop.',
-                     note='I have only listed trains, buses and coaches here. Driving, parking and taxis are on the full show guide.'))
+                     tag=tag,
+                     status=status,
+                     note=note))
 
 # ---- page
 LINE = ['#D74949', '#00A6E2', '#2BA84A', '#F2B233', '#6950A1', '#32B4AF', '#C2255C', '#1D4F91', '#E07A1F', '#0E5F5B', '#8A6D3B', '#13293C']

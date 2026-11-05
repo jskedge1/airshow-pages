@@ -1,7 +1,7 @@
   /* ---------- Overview: cockpit layout (21 Oct 2026) ---------- */
   var O2 = { typed: false, flapsBuilt: false, lastMsg: "", celebrated: {}, radarStarted: false, blips: [] };
   var O2_REDUCE = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var O2_SHOWPTS = { riat: [51.682, -1.790], cosford: [52.640, -2.306], midlands: [52.203, -1.888], eastbourne: [50.763, 0.285], clacton: [51.788, 1.155], wales: [51.615, -3.944], duxford: [52.090, 0.132], shuttleworth: [52.088, -0.320], "little-gransden": [52.167, -0.149], southport: [53.648, -3.010], blackpool: [53.810, -3.055], ayr: [55.462, -4.640] };
+  var O2_SHOWPTS = { riat: [51.152, -1.747], cosford: [52.640, -2.306], midlands: [52.203, -1.888], eastbourne: [50.763, 0.285], clacton: [51.788, 1.155], wales: [51.615, -3.944], duxford: [52.090, 0.132], shuttleworth: [52.088, -0.320], "little-gransden": [52.167, -0.149], southport: [53.648, -3.010], blackpool: [53.810, -3.055], ayr: [55.462, -4.640] };
   var O2_AREAS = [["London and the South East", 51.507, -0.128], ["East of England", 51.95, 0.75], ["Midlands", 52.48, -1.90], ["North of England", 53.80, -1.55], ["South West", 51.45, -2.59], ["Wales", 51.48, -3.18], ["Scotland", 55.86, -4.25]];
   var O2_CODES = { riat: "FFD", cosford: "COS", midlands: "MID", eastbourne: "EBN", clacton: "CLA", wales: "SWA", duxford: "DUX", shuttleworth: "OWD", "little-gransden": "LGR", southport: "SPT", blackpool: "BPL", ayr: "AYR" };
 

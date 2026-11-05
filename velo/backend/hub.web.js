@@ -39,7 +39,7 @@ const WAIT_MESSAGE_MS = 3000;
 
 // Weather points for the featured shows (crowd area, roughly).
 const SHOW_POINTS = {
-  riat: [51.682, -1.790], cosford: [52.640, -2.306], midlands: [52.203, -1.888], eastbourne: [50.763, 0.285],
+  riat: [51.152, -1.747], cosford: [52.640, -2.306], midlands: [52.203, -1.888], eastbourne: [50.763, 0.285],
   clacton: [51.788, 1.155], wales: [51.615, -3.944], duxford: [52.090, 0.132], shuttleworth: [52.088, -0.320],
   "little-gransden": [52.167, -0.149], southport: [53.648, -3.010], blackpool: [53.810, -3.055], ayr: [55.462, -4.640]
 };
@@ -405,7 +405,7 @@ export const getHub = webMethod(Permissions.Anyone, () => wrap(async () => {
   const updates = stored.concat(social).sort((a, b) => (b.created || "").localeCompare(a.created || "")).slice(0, 50);
 
   const past = pastRes.items.map((p) => ({ id: p._id, showName: p.showName, year: p.year, note: p.note || "", rareAircraft: p.rareAircraft || "" }));
-  const riatCount = past.filter((p) => /tattoo|riat|fairford/i.test(p.showName)).length;
+  const riatCount = past.filter((p) => /tattoo|riat|fairford|boscombe/i.test(p.showName)).length;
 
   const extras = await hubExtras(me, upcoming);
 

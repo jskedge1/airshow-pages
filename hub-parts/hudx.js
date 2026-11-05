@@ -1,13 +1,13 @@
   /* ================= HUD extras: Overview, Flight Briefing, My Hangar, My Airshow Year, photo sharing ================= */
   var X = { hangar: null, hangarLoading: false, hgFilter: "all", hgSel: null, bfTrip: null, wx: {}, prog: {}, year: null, photo: null, cards: [] };
-  var RUNWAYS = { riat: 90, cosford: 60, duxford: 60, shuttleworth: 30, "little-gransden": 100, headcorn: 100 };
+  var RUNWAYS = { riat: 50, cosford: 60, duxford: 60, shuttleworth: 30, "little-gransden": 100, headcorn: 100 };
   var GEOX = {
-    riat: [51.682, -1.790, 0], cosford: [52.640, -2.306, null], duxford: [52.090, 0.132, 180], eastbourne: [50.766, 0.290, 165],
+    riat: [51.152, -1.747, 0], cosford: [52.640, -2.306, null], duxford: [52.090, 0.132, 180], eastbourne: [50.766, 0.290, 165],
     clacton: [51.788, 1.155, 135], wales: [51.605, -3.960, 180], midlands: [52.198, -1.888, null], shuttleworth: [52.087, -0.318, null],
     "little-gransden": [52.165, -0.153, null], southport: [53.653, -3.010, 285], blackpool: [53.816, -3.056, 270], ayr: [55.462, -4.636, 270],
     headcorn: [51.157, 0.646, null]
   };
-  var POINT_NAMES = { riat: "Fairford", cosford: "Cosford", duxford: "Duxford", eastbourne: "Eastbourne", clacton: "Clacton", wales: "Swansea", midlands: "Ragley", shuttleworth: "Old Warden", "little-gransden": "Little Gransden", southport: "Southport", blackpool: "Blackpool", ayr: "Ayr", headcorn: "Headcorn" };
+  var POINT_NAMES = { riat: "Boscombe Down", cosford: "Cosford", duxford: "Duxford", eastbourne: "Eastbourne", clacton: "Clacton", wales: "Swansea", midlands: "Ragley", shuttleworth: "Old Warden", "little-gransden": "Little Gransden", southport: "Southport", blackpool: "Blackpool", ayr: "Ayr", headcorn: "Headcorn" };
   var COMPASS = ["north", "north east", "east", "south east", "south", "south west", "west", "north west"];
   var SHORT = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
   var PHOTO_CATS = ["Fast jets", "Display teams", "Warbirds and classics", "Helicopters", "Transport and tankers", "Static and ground", "Night shoots", "Arrivals and spotting"];
