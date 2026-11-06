@@ -185,6 +185,7 @@ body.demo .sample{display:block}
 .btn.purple:hover{background:var(--purple);box-shadow:0 0 18px rgba(156,134,214,.5)}
 .btn.sm{padding:5px 10px;font-size:13px}
 .btn[disabled]{opacity:.45;pointer-events:none}
+.rbox{grid-column:1/-1;display:flex;flex-direction:column;gap:8px;padding:10px 12px 12px;margin-top:4px;background:rgba(5,15,24,.55);border:1px solid var(--line)}.rbox[hidden]{display:none}.rbox .q{font-size:13px;color:var(--soft);white-space:pre-wrap;border-left:2px solid var(--purple);padding-left:10px}.rbox textarea{min-height:110px;background:rgba(5,15,24,.7);border:1px solid var(--line);padding:9px 11px;color:var(--text);font:inherit;font-size:14px;line-height:1.45;resize:vertical}.rbox .acts{justify-content:flex-start}.row .msg{white-space:pre-wrap;margin-top:3px}
 .empty{padding:16px;border:1px dashed var(--line);color:var(--soft);font-size:14px;text-align:center}
 .st{font-family:var(--mono);font-size:12px;padding:3px 8px;border:1px solid var(--line);white-space:nowrap}
 .st.Scheduled{color:var(--soft)}.st.Boarding{color:var(--amber);border-color:rgba(242,184,75,.5)}.st.Delayed{color:var(--red);border-color:rgba(215,73,73,.6)}.st.Departed{color:var(--teal2);border-color:rgba(95,214,207,.5)}
@@ -517,7 +518,7 @@ function alertsFor(){
   if(t.queue.length)a.push({cls:'red',t:t.queue.length+' trader listing'+(t.queue.length>1?'s':'')+' waiting',d:'New sign ups and changes need your OK before they show.',go:'traders'});
   if(f.reported.length)a.push({cls:'red',t:f.reported.length+' reported forum item'+(f.reported.length>1?'s':''),d:'Members have flagged these. Hide them or keep them.',go:'forum'});
   if(c.uploadsHeld)a.push({cls:'purple',t:c.uploadsHeld+' Show Day upload'+(c.uploadsHeld>1?'s':'')+' held',d:'These did not pass the automatic show, date and place check.',go:'controls'});
-  if(c.questions.length)a.push({cls:'purple',t:c.questions.length+' reader question'+(c.questions.length>1?'s':''),d:'From the contact form. Latest: '+(c.questions[0].name||'a visitor')+'.',go:'controls'});
+  var waiting=c.questions.filter(function(m){return !m.repliedOn});if(waiting.length)a.push({cls:'purple',t:waiting.length+' reader question'+(waiting.length>1?'s':'')+' to answer',d:'From the contact form. Latest: '+(waiting[0].name||'a visitor')+'. Reply from Controls.',go:'controls'});
   if(f.pendingGroups)a.push({cls:'purple',t:f.pendingGroups+' forum group idea'+(f.pendingGroups>1?'s':''),d:'Members have suggested new groups.',go:'forum'});
   var unchecked=D.board.pages.filter(function(p){return p.desktop==='Not checked'||p.mobile==='Not checked'||p.tablet==='Not checked'}).length;
   if(unchecked)a.push({cls:'',t:unchecked+' page'+(unchecked>1?'s':'')+' still to check',d:'Desktop, phone or tablet not marked yet. Worth doing before launch.',go:'pages'});
@@ -675,7 +676,12 @@ ops:function(){
 controls:function(){
   var c=D.content,s=D.site;
   var state=s.known?(s.live?'Live':'Offline'):'Not known';
-  var q=c.questions.length?c.questions.map(function(m){return '<div class="row"><div><b>'+esc(m.name||'A visitor')+'</b><div class="m">'+esc(m.message)+'</div></div><div class="m">'+ago(m.when)+'</div></div>'}).join(''):'<div class="empty">No messages from the contact form yet.</div>';
+  var q=c.questions.length?c.questions.map(function(m,i){
+    var who=esc(m.name||'A visitor'),info=[m.topic,m.email,ago(m.when)].filter(Boolean).map(esc).join(', ');
+    var act=!m.id?'':m.repliedOn?'<span class="st">Replied '+ago(m.repliedOn)+'</span>':(m.email?'<button class="btn" type="button" data-reply="'+i+'">Reply</button>':'<span class="st">No email given</span>');
+    var box=m.email&&!m.repliedOn?'<div class="rbox" id="rb'+i+'" hidden><label class="m" for="rt'+i+'">Your reply to '+who+'</label><textarea id="rt'+i+'" placeholder="Hi '+esc(String(m.name||'').split(' ')[0]||'there')+', thanks for getting in touch."></textarea><div class="acts"><a class="btn" href="#" target="_blank" rel="noopener" data-sendreply="'+i+'">Open in my email</a><button class="btn ghost" type="button" data-replyclose="'+i+'">Cancel</button></div><p class="note">Your email app opens with this reply and their message underneath, ready to send. The message is then marked as replied here.</p></div>':'';
+    return '<div class="row"><div><b>'+who+'</b><div class="m">'+info+'</div><div class="msg">'+esc(m.message)+'</div></div><div class="acts">'+act+'</div>'+box+'</div>';
+  }).join(''):'<div class="empty">No messages from the contact form yet.</div>';
   var link=function(t,u,d){return '<a class="row" style="text-decoration:none" href="'+u+'" target="_blank" rel="noopener"><div><b>'+t+'</b><div class="m">'+d+'</div></div><span class="m">Open</span></a>'};
   return '<div class="grid">'+
     panel('s5 red','PUBLISHING','Site is '+state,'<div class="stats" style="grid-template-columns:1fr 1fr">'+stat('Right now',state.toUpperCase(),s.known?'ukairshowguide.co.uk':s.note,s.live?'':'red')+stat('Shows in the guide',c.shows.length,'Featured shows','purple')+'</div><div class="acts" style="justify-content:flex-start;margin-top:14px"><button class="btn" data-act="publish">Publish the site</button><button class="btn red" data-act="unpublish">Take offline</button></div><p class="note" style="margin-top:10px">Both ask you to confirm first. Publishing puts every saved edit live.</p>')+
@@ -755,6 +761,24 @@ function loadUnpublished(){
   var url=new URL('unpublished.json',location.href.indexOf('http')===0?location.href:PAGES_BASE+'admin/command.html').href;
   return fetch(url,{cache:'no-store'}).then(function(r){return r.ok?r.json():{pages:[]}}).then(function(j){unpublished=j.pages||[]}).catch(function(){unpublished=window.__UNPUB||[]});
 }
+
+/* ---------- contact form replies (6 Nov 2026) ---------- */
+function replyLink(m,text){
+  var first=String(m.name||'').split(' ')[0]||'there';
+  var body=(text.trim()||('Hi '+first+',\n\nThanks for getting in touch.'))+'\n\nJack\nThe Big Guide to UK Airshows\nukairshowguide.co.uk\n\n'+
+    'On '+new Date(m.when).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+' you wrote:\n'+String(m.message||'').split('\n').map(function(l){return '> '+l}).join('\n');
+  var subject='Re: '+(m.topic||'Your message to UK Airshow Guide');
+  return 'mailto:'+encodeURIComponent(m.email)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+}
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-reply],[data-replyclose],[data-sendreply]');if(!t)return;
+  var qs=(D&&D.content&&D.content.questions)||[];
+  if(t.dataset.reply!=null){var b=$('#rb'+t.dataset.reply);if(b){b.hidden=!b.hidden;if(!b.hidden)$('#rt'+t.dataset.reply).focus()}return}
+  if(t.dataset.replyclose!=null){var c=$('#rb'+t.dataset.replyclose);if(c)c.hidden=true;return}
+  var m=qs[+t.dataset.sendreply];if(!m){e.preventDefault();return}
+  t.href=replyLink(m,$('#rt'+t.dataset.sendreply).value);
+  setTimeout(function(){run('replied',{id:m.id,box:m.box},'Email opened. Marked as replied')},400);
+},true);
 
 /* ---------- clicks ---------- */
 document.addEventListener('click',function(e){

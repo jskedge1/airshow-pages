@@ -326,7 +326,16 @@ async function content() {
   const questions = contactA.concat(contactB)
     .sort((x, y) => new Date(y._createdDate) - new Date(x._createdDate))
     .slice(0, 8)
-    .map((m) => ({ when: m._createdDate, name: clean(m.name || m.firstName || m.title || "", 60), message: clean(m.message || m.body || m.text || "", 300) }));
+    .map((m) => ({
+      id: m._id,
+      box: contactA.indexOf(m) > -1 ? "contact" : "contactForm",
+      when: m._createdDate,
+      name: clean(m.name || m.firstName || m.title || "", 60),
+      email: clean(m.email || "", 120),
+      topic: clean(m.topic || m.show || "", 80),
+      message: clean(m.message || m.body || m.text || "", 1200),
+      repliedOn: m.repliedOn || null
+    }));
   return {
     news,
     newsLatest: newsLatest.map((n) => ({ title: clean(n.title || "", 100), show: n.showName || "", when: n._createdDate })),
@@ -406,3 +415,20 @@ export const sendMemberNotice = webMethod(Permissions.Anyone, (input) => wrap(as
   await addLog("Added", "Notice sent to " + rows.length + " hub members: " + heading, "My Airshow Hub");
   return { sent: rows.length };
 }));
+
+/* ---------- contact form replies (6 Nov 2026) ---------- */
+
+const REPLY_BOXES = { contact: C.contact, contactForm: C.contactForm };
+
+// The reply itself goes from Jack's own email app (the command centre opens it ready written).
+// This marks the message as replied, so the command centre shows it, and adds a line to the log.
+export const markReplied = webMethod(Permissions.Anyone, (input) => wrap(async () => {
+  await requireAdmin();
+  const coll = REPLY_BOXES[input && input.box] || fail("That message could not be found.");
+  const item = await wixData.get(coll, String(input.id || ""), OPTS);
+  if (!item) fail("That message has gone.");
+  await wixData.update(coll, Object.assign({}, item, { repliedOn: new Date() }), OPTS);
+  await addLog("Replied", "Replied to " + clean(item.name || "a visitor", 60) + " from the contact form", "Contact");
+  return { id: item._id };
+}));
+

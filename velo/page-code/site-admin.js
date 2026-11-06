@@ -4,7 +4,7 @@
 //   /site-admin?view=board   opens the Departures Board (admin/board.html,   messages source 'ukag-admin')
 // The backend web modules check the Admin role on every request, so nobody else sees or changes anything.
 // The page has ONE HTML embed with the ID html1, set to Website address. This code points it at the right screen.
-import { getCommand, hideForumItem, clearForumReports, sendMemberNotice } from 'backend/command.web';
+import { getCommand, hideForumItem, clearForumReports, sendMemberNotice, markReplied } from 'backend/command.web';
 import { getBoard, setPlanStatus, addPlan, addIdea, voteIdea, scheduleIdea, addLogEntry, setCheck, publishSite, unpublishSite } from 'backend/admin.web';
 import { approveTrader, sendBackTrader, setTraderStatus } from 'backend/traders.web';
 import { authentication } from 'wix-members-frontend';
@@ -32,6 +32,7 @@ const COMMAND = {
   hideItem: (p) => hideForumItem(p),
   clearReports: (p) => clearForumReports(p),
   notice: (p) => sendMemberNotice(p),
+  replied: (p) => markReplied(p),
   login: async () => { await authentication.promptLogin({ mode: 'login' }); return getCommand(); }
 };
 
