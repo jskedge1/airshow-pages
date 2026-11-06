@@ -101,6 +101,7 @@ h1 em{font-style:normal;color:var(--onui)}
 .jl-node b{display:block;margin-top:12px;font:800 17px/1.1 var(--c);text-transform:uppercase;letter-spacing:.02em}
 .jl-node small{display:block;margin-top:3px;font-weight:500;font-size:13.5px;line-height:18px;color:rgba(255,255,255,.78)}
 .jl-node em{display:inline-block;margin-top:6px;font-style:normal;background:var(--red);color:#fff;font-weight:700;font-size:12px;line-height:1;padding:4px 7px}
+@media (min-width:681px){.jl-node{flex:0 1 150px;min-width:86px}.jl-node b{overflow-wrap:anywhere}.jl-leg{min-width:28px}}
 .jl-hint{display:flex;align-items:center;gap:7px;margin-left:auto;font-weight:600;font-size:13.5px;color:rgba(255,255,255,.65)}
 .jl-hint i{width:9px;height:9px;border-radius:50%;background:#6B7278;flex:none}
 .jl-hint.on{color:#7CF0A6}.jl-hint.on i{background:#22C55E;animation:livepulse 1.8s ease-out infinite}
@@ -238,6 +239,10 @@ h2.t{font:800 clamp(34px,4.4vw,52px)/.95 var(--c);text-transform:uppercase;color
 
 /* hub stations and the Greater Anglia note */
 .hubs{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:8px;margin-top:12px}
+.hubgrp{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:14px 0 0;padding-top:12px;border-top:2px solid var(--line)}
+.hubgrp b{font:800 19px/1.1 var(--c);text-transform:uppercase;color:#23272B}
+.hubgrp span{font-size:14px;color:var(--muted)}
+.hubgrp b i{font-style:normal;text-transform:none}
 .hubs button{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;text-align:left;border:0;background:#fff;padding:10px 12px 15px;box-shadow:inset 0 0 0 2px #23272B;transition:transform .3s var(--ease),background .3s var(--ease),box-shadow .3s var(--ease)}
 .hubs button::after{content:"";position:absolute;left:2px;right:2px;bottom:2px;height:6px;background:var(--op1)}
 .hubs button b{font:800 19px/1.05 var(--c);text-transform:uppercase;letter-spacing:.01em;color:#23272B;overflow-wrap:anywhere}
@@ -1612,6 +1617,8 @@ var DATA=__DATA__;
   };
   var LINE = {}, BREAK = {}, ABOUT = LN.about, MAINL = LN.main;
   LN.groups.forEach(function(g){ g[0].forEach(function(n){ LINE[n] = g[1]; }); });
+  /* c2c-parts: the c2c stations are on the London, Tilbury and Southend line */
+  ['London Fenchurch Street', 'Limehouse', 'West Ham', 'Barking', 'Upminster', 'West Horndon', 'Laindon', 'Basildon', 'Pitsea', 'Benfleet', 'Leigh-on-Sea', 'Chalkwell', 'Westcliff', 'Southend Central', 'Southend East', 'Thorpe Bay', 'Shoeburyness', 'Dagenham Dock', 'Rainham', 'Purfleet', 'Grays', 'Chafford Hundred', 'Ockendon', 'Tilbury Town', 'East Tilbury', 'Stanford-le-Hope'].forEach(function(n){ if (!LINE[n]) LINE[n] = 'London, Tilbury and Southend line'; });
   LN.breaks.forEach(function(n){ BREAK[n] = 1; });
   /* the railway strip: the stations of the picked journey (start, any changes, then the end), four
      UK four-aspect colour light signals, and a train that runs the line, stopping at each change.
@@ -1690,7 +1697,8 @@ var DATA=__DATA__;
   function jline(trip){
     var s = trip.s, ch = trip.changes, first = s[0], last = s[s.length - 1];
     var nodes = [{ n: first[1], t: 'Leave ' + first[0] + (trip.plat ? ', platform ' + trip.plat : '') }];
-    ch.forEach(function(c){ nodes.push({ n: c.at, t: 'Arrive ' + c.arr + (c.ap ? ', platform ' + c.ap : '') + '<br>Leave ' + c.dep + (c.dp ? ', platform ' + c.dp : ''), chg: c.wait }); });
+    var ci = []; s.forEach(function(p, i){ if (i && i < s.length - 1 && (p[4] & CHG)) ci.push(i); });
+    ch.forEach(function(c, k){ var nx = ci[k] != null && s[ci[k] + 1] ? s[ci[k] + 1][1] : '', wk = nx && ((X && X.walkPairs) || []).some(function(w){ return w[0] === c.at && w[1] === nx; }); nodes.push({ n: wk ? c.at + ' to ' + nx : c.at, t: 'Arrive ' + c.arr + (c.ap ? ', platform ' + c.ap : '') + '<br>Leave ' + (wk ? nx + ' ' : '') + c.dep + (c.dp ? ', platform ' + c.dp : ''), chg: c.wait }); });
     nodes.push({ n: last[1], t: 'Arrive ' + last[0], end: dir === 0 && !BUS });
     var legsInfo = [], from = first[0], dest = trip.dest;
     ch.forEach(function(c){ legsInfo.push({ to: dest, mins: gap(from, c.arr) }); from = c.dep; dest = c.to; });
@@ -1780,7 +1788,7 @@ var DATA=__DATA__;
   function legs(trip){
     var s = trip.s, cuts = [0];
     for (var i = 1; i < s.length - 1; i++) {
-      if ((s[i][4] & CHG) || BREAK[s[i][1]]) cuts.push(i);
+      if ((s[i][4] & CHG) || BREAK[s[i][1]] || ((X && X.walkPairs) || []).some(function(w){ return (w[0] === s[i - 1][1] && w[1] === s[i][1]) || (w[1] === s[i - 1][1] && w[0] === s[i][1]); })) cuts.push(i);
     }
     cuts.push(s.length - 1);
     var out = [];
@@ -1793,7 +1801,8 @@ var DATA=__DATA__;
       var about = ABOUT[a + '|' + b] || ABOUT[b + '|' + a] || '';
       var stops = mids.length ? 'This train calls at ' + names(mids) + '.' : 'This train runs non-stop between the two.';
       var wk = ((X && X.walkPairs) || []).some(function(w){ return (w[0] === a && w[1] === b) || (w[0] === b && w[1] === a); });
-      out.push(wk ? { line: 'Walk', title: 'Walk from ' + a + ' to ' + b, miles: 'A few minutes', change: false, text: about, t: '' } : { line: line, title: a + ' to ' + b, miles: segMiles(s, i0, i1), change: i0 > 0 && (s[i0][4] & CHG), text: (about ? about + ' ' : '') + stops, t: s[i0][0] + ' to ' + (s[i1][7] || s[i1][0]) });
+      var WP = (X && X.walkPairs) || [], wo = wk ? (WP.filter(function(w){ return w[0] === a && w[1] === b; })[0] || WP.filter(function(w){ return w[1] === a && w[0] === b; })[0]) : null;
+      out.push(wk ? (wo[2] ? { line: wo[2], title: (wo[2] === 'Walk' ? 'Walk from ' : 'Across London from ') + a + ' to ' + b, miles: wo[4] || 'A few minutes', change: false, text: wo[3] || about, t: '' } : { line: 'Walk', title: 'Walk from ' + a + ' to ' + b, miles: 'A few minutes', change: false, text: about, t: '' }) : { line: line, title: a + ' to ' + b, miles: segMiles(s, i0, i1), change: i0 > 0 && (s[i0][4] & CHG), text: (about ? about + ' ' : '') + stops, t: s[i0][0] + ' to ' + (s[i1][7] || s[i1][0]) });
     }
     $('legs').innerHTML = out.map(function(l, n){
       return '<li class="way"><span class="n">' + (n + 1) + '</span><h3>' + l.title + '</h3><div class="signs">' + (l.change ? '<span class="sign chg">Change trains</span>' : '') + '<span class="sign"><i></i>' + l.line + '</span><span class="sign mi">' + l.miles + '</span>' + (l.t ? '<span class="sign mi">' + l.t + '</span>' : '') + '</div><p>' + l.text + '</p></li>';
@@ -1894,9 +1903,10 @@ var DATA=__DATA__;
       var fewest = +Object.keys(count).sort(function(p, q){ return count[q] - count[p] || p - q; })[0];
       var best = Math.min.apply(null, tr.filter(function(x){ return x.changes.length === fewest; }).map(function(x){ return x.ride; }));
       var how = fewest === 0 ? '<i>Direct</i>' : fewest + (fewest === 1 ? ' change' : ' changes');
-      return '<button type="button" data-i="' + i + '"' + opStyle(hubOp(h)) + ' aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
+      var gh = h.group && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class="hubgrp"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';
+      return gh + '<button type="button" data-i="' + i + '"' + opStyle(hubOp(h)) + ' aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
     }).join('');
-    each($('hub').children, function(b){ b.addEventListener('click', function(){ hub = +b.getAttribute('data-i'); idx = pickDefault(); render(); runTrain(); }); });
+    each($('hub').querySelectorAll('button'), function(b){ b.addEventListener('click', function(){ hub = +b.getAttribute('data-i'); idx = pickDefault(); render(); runTrain(); }); });
     segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ var was = DIR().trips[idx] ? mm(DIR().trips[idx].big) : 0; day = i; var tr = DIR().trips; idx = 0; for (var q = 0; q < tr.length; q++) if (mm(tr[q].big) >= was) { idx = q; break; } render(); runTrain(); });
     segBtns($('dir'), HD(H()).map(function(d){ return d.label; }), dir, function(i){ dir = i; idx = pickDefault(); render(); runTrain(); });
     if (idx >= DIR().trips.length) idx = 0;
@@ -2371,6 +2381,8 @@ var DATA=__DATA__;
     return 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(a) + '&destination=' + encodeURIComponent(b) + '&travelmode=' + mode;
   }
   var WALK_FROM = X.walkFrom || X.dest + ' railway station', WALK_TO = X.walkTo || CFG.targetLabel;
+  /* c2c-parts: the walkPairs entry for two stations, with any way across London */
+  function walkOf(a, b){ var W = X.walkPairs || []; return W.filter(function(w){ return w[0] === a && w[1] === b; })[0] || W.filter(function(w){ return w[1] === a && w[0] === b; })[0]; }
   function isWalkPair(a, b){ return (X.walkPairs || []).some(function(w){ return (w[0] === a && w[1] === b) || (w[0] === b && w[1] === a); }); }
   function legList(trip){
     /* the train legs of the picked journey: where each one starts and ends, and who runs it */
@@ -2398,7 +2410,7 @@ var DATA=__DATA__;
     legsOf.forEach(function(l, i){
       html += step('train', 'Train', esc(l.op) + ' from ' + esc(l.from) + ' to ' + esc(l.to),
         'Leaves at ' + l.dep + ' and gets to ' + esc(l.to) + ' at ' + l.arr + '. ' + (l.stops.length ? 'It calls at ' + esc(names(l.stops)) + '.' : 'It runs non stop between the two.'), '', OPC ? opLine(l.op) : '');
-      if (i < ch.length) html += step('off', 'Change', 'Change at ' + esc(l.walkedTo ? l.to : ch[i].at), 'You get in at ' + ch[i].arr + ' and the ' + ch[i].dep + ' to ' + esc(ch[i].to) + ' leaves ' + ch[i].wait + ' minutes later.' + (legsOf[i + 1] && legsOf[i + 1].walkedFrom ? ' It leaves from ' + esc(legsOf[i + 1].from) + ', a short walk away.' : '') + (l.walkedTo ? ' It leaves from ' + esc(l.walkedTo) + ', a short walk away.' : '') + (ch[i].wait <= 6 ? ' That is a quick change, so sit near the doors.' : ''));
+      if (i < ch.length) html += step('off', 'Change', 'Change at ' + esc(l.walkedTo ? l.to : ch[i].at), 'You get in at ' + ch[i].arr + ' and the ' + ch[i].dep + ' to ' + esc(ch[i].to) + ' leaves ' + ch[i].wait + ' minutes later.' + (legsOf[i + 1] && legsOf[i + 1].walkedFrom ? (function(w){ return w && w[3] ? ' It leaves from ' + esc(legsOf[i + 1].from) + '. ' + esc(w[3]) : ' It leaves from ' + esc(legsOf[i + 1].from) + ', a short walk away.'; })(walkOf(legsOf[i + 1].walkedFrom, legsOf[i + 1].from)) : '') + (l.walkedTo ? ' It leaves from ' + esc(l.walkedTo) + ', a short walk away.' : '') + (ch[i].wait <= 6 ? ' That is a quick change, so sit near the doors.' : ''));
     });
     var last = trip.s[trip.s.length - 1];
     html += step('off', 'Get off', 'Get off at ' + esc(last[1]), toShow ? (endsHere(trip) ? 'It is the last stop and the closest station to the show.' : 'It is the closest station to the show. The train carries on to ' + esc(lastTo(trip)) + ', so listen out for the announcement as you come in.') : 'You are home, or at the start of the next part of your trip.');
