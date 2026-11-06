@@ -2736,52 +2736,74 @@ window.addEventListener('resize',apply);})();
 .ptx .nchip:hover{background:color-mix(in srgb,var(--op1) 18%,#fff)}
 </style>
 <script id="train-nose">
-/* the platform scene's train: the train that pulls in at the show station, drawn as the class that train company really runs on that line,
-   in a simple side view, with doors that open once it stops. It follows the train you pick (the last train company on the way in,
-   the first one on the way home), so a page with more than one train company shows the right train each time.
-   nose shapes: slope (Aventra, IET), electro (Electrostar, Turbostar), desiro (Desiro, FLIRT), civity (CAF Civity), stadler (Stadler Class 777),
-   flat (Sprinter), pendo (Pendolino) */
+/* the platform scene's train: the train that pulls in at the show station, drawn as the class that train company really runs on that line.
+   Each class has its own nose shape, windscreen, front end, roof kit and livery bands, in a side view, with doors that open once it stops.
+   It follows the train you pick (the last train company on the way in, the first one on the way home). */
 (function(){
+  /* nose shapes, the cab end facing right: body outline, windscreen, yellow front, roof top line, cab door x, lamp x */
   var NOSES = {
-    slope:   ['M-40 194 H60 Q84 194 98 204 L116 222 Q125 231 126 246 V300 H-40 Z', 'M70 198 Q88 199 99 208 L115 225 H90 Z', 'M92 226 H116 Q125 233 126 247 V300 H102 Q100 262 92 226 Z'],
-    electro: ['M-40 194 H100 Q116 194 120 208 L126 236 V300 H-40 Z', 'M92 198 H108 Q114 199 117 210 L121 228 H92 Z', 'M98 230 H121 L126 240 V300 H106 Q104 262 98 230 Z'],
-    desiro:  ['M-40 194 H82 Q110 194 119 213 Q126 230 126 250 V300 H-40 Z', 'M80 198 Q102 199 112 212 L119 228 H90 Z', 'M94 230 H120 Q126 240 126 252 V300 H104 Q102 262 94 230 Z'],
-    civity:  ['M-40 194 H74 L102 199 L121 223 Q126 231 126 244 V300 H-40 Z', 'M76 198 L100 202 L116 224 H90 Z', 'M92 227 H119 Q126 236 126 246 V300 H102 Q100 262 92 227 Z'],
-    stadler: ['M-40 192 H106 Q124 192 126 214 V300 H-40 Z', 'M100 196 Q119 197 122 214 V234 H100 Z', 'M100 238 H126 V300 H100 Z'],
-    flat:    ['M-40 194 H114 Q124 194 125 204 V300 H-40 Z', 'M102 198 H116 Q121 199 121 206 V228 H102 Z', 'M100 232 H125 V300 H100 Z'],
-    pendo:   ['M-40 194 H44 Q92 196 113 226 Q126 244 126 262 V300 H-40 Z', 'M58 199 Q88 203 103 222 L108 229 H80 Z', 'M90 235 H117 Q126 250 126 264 V300 H102 Q100 266 90 235 Z']
+    aventra: { b: 'M-40 192 H64 C88 192 102 199 112 212 C120 223 125 236 126 252 V292 H-40 Z',
+               g: 'M78 195 C94 196 104 202 111 212 L116 222 C108 222 98 222 92 222 C88 212 84 203 78 195 Z',
+               y: 'M116 222 C122 233 125 242 126 252 V292 H116 C115 266 115 240 116 222 Z', cab: 62, lamp: 118 },
+    flirt:   { b: 'M-40 192 H72 C98 191 114 203 121 220 C125 231 126 243 126 256 V292 H-40 Z',
+               g: 'M80 195 C100 196 112 205 118 219 L121 232 C112 232 102 232 96 232 C92 218 88 205 80 195 Z',
+               y: 'M121 234 C124 244 126 250 126 256 V292 H118 C117 270 118 248 121 234 Z', cab: 66, lamp: 119 },
+    desiro:  { b: 'M-40 192 H84 C106 192 118 203 122 219 C125 229 126 239 126 250 V292 H-40 Z',
+               g: 'M84 195 C104 196 115 205 119 219 L122 236 C114 236 104 236 98 236 C94 220 90 205 84 195 Z',
+               y: 'M122 238 C125 244 126 248 126 252 V292 H118 C118 272 119 252 122 238 Z', cab: 70, lamp: 119 },
+    civity:  { b: 'M-40 192 H70 L98 195 C106 196 110 199 114 205 L121 218 C124 224 126 231 126 240 V292 H-40 Z',
+               g: 'M76 195 L97 197 C104 198 108 201 111 206 L118 220 C108 220 98 220 92 220 Z',
+               y: 'M121 222 C124 228 126 234 126 242 V292 H117 C117 262 118 238 121 222 Z', cab: 60, lamp: 119 },
+    electro: { b: 'M-40 192 H100 C112 192 117 197 119 206 L126 238 V292 H-40 Z',
+               g: 'M94 195 H106 C111 195 114 199 116 206 L120 226 H94 Z',
+               y: 'M120 228 L126 240 V292 H114 C114 268 116 244 120 228 Z', cab: 78, lamp: 119, gang: 1 },
+    sprinter:{ b: 'M-40 193 H116 C122 193 124 196 124 201 V292 H-40 Z',
+               g: 'M104 197 H118 C120 197 121 199 121 202 V226 H104 Z',
+               y: 'M116 230 H124 V292 H116 Z', cab: 88, lamp: 117, gang: 1 },
+    iet:     { b: 'M-40 192 H46 C80 192 100 200 113 214 C121 224 125 238 126 256 V292 H-40 Z',
+               g: 'M86 198 C98 202 106 208 111 215 L115 222 C108 222 101 222 96 222 C94 213 91 205 86 198 Z',
+               y: 'M115 224 C121 234 125 244 126 256 V292 H116 C115 268 115 244 115 224 Z', cab: 40, lamp: 118 },
+    pendo:   { b: 'M-40 192 H36 C76 193 102 206 116 226 C123 237 126 248 126 262 V292 H-40 Z',
+               g: 'M70 198 C88 202 100 210 108 219 L112 224 C104 224 96 224 90 224 C86 214 79 205 70 198 Z',
+               y: 'M112 226 C120 236 125 248 126 262 V292 H116 C115 268 114 246 112 226 Z', cab: 34, lamp: 118 },
+    stadler: { b: 'M-40 192 H108 C121 192 126 198 126 210 V292 H-40 Z',
+               g: 'M100 196 H115 C120 196 123 200 123 207 V238 H100 Z',
+               y: 'M116 240 H126 V292 H116 Z', cab: 86, lamp: 119 }
   };
-  /* shape, body, doors (null = the page's own colour), skirt, unit number, cab end colour, number colour */
+  /* each class: nose, body, lower band [top, colour], belt stripes [[top, height, colour]], window band colour, doors, door edge, cab end colour (from x),
+     extra livery shapes [[path, colour]], roof kit (ac or diesel), unit number, number colour */
+  var W = '#F4F5F6', G = '#2A2E33';
   var T = {
-    c720: ['slope',   '#F6F7F8', '#D2232A', '#8A8C8E', '720 515'],
-    c755: ['desiro',  '#F6F7F8', '#D2232A', '#8A8C8E', '755 411'],
-    c745: ['desiro',  '#F6F7F8', '#D2232A', '#8A8C8E', '745 105'],
-    c380: ['desiro',  '#1C2D5B', '#E6EAF0', '#0F1A38', '380 101', null, '#FFFFFF'],
-    c331: ['civity',  '#F6F7F8', '#1E5AA8', '#262262', '331 109'],
-    c195: ['civity',  '#F6F7F8', '#1E5AA8', '#262262', '195 107'],
-    c150: ['flat',    '#F6F7F8', '#1E5AA8', '#262262', '150 207'],
-    c196: ['civity',  '#ECE6DA', '#E8891C', '#3C1053', '196 012', '#3C1053', '#FFFFFF'],
-    c730: ['slope',   '#ECE6DA', '#E8891C', '#3C1053', '730 015', '#3C1053', '#FFFFFF'],
-    c350: ['desiro',  '#F6F7F8', '#00A651', '#1E3B32', '350 401'],
-    c377: ['electro', '#F6F7F8', '#7AB929', '#23412E', '377 411'],
-    c171: ['electro', '#F6F7F8', '#7AB929', '#23412E', '171 721'],
-    c387gx:['electro','#F6F7F8', '#C8102E', '#5A0A16', '387 205'],
-    c375: ['electro', '#F6F7F8', null,      '#1E1E50', '375 905'],
-    c700: ['desiro',  '#F6F7F8', '#DA4290', '#8A8C8E', '700 113'],
-    c387: ['electro', '#F6F7F8', '#253982', '#253982', '387 120'],
-    c800: ['slope',   '#0A493E', '#2E7D66', '#062E27', '800 312', null, '#FFFFFF'],
-    c777: ['stadler', '#C9CDD1', '#FFD200', '#4A4F55', '777 034'],
-    c197: ['civity',  '#D9DCDF', '#D6001C', '#2B2F33', '197 001'],
-    c170: ['electro', '#C3C7CB', '#9B1B58', '#4A1028', '170 101', '#9B1B58', '#FFFFFF'],
-    c390: ['pendo',   '#00434E', '#E2E6E8', '#00222B', '390 104', null, '#FFFFFF'],
-    c802: ['slope',   '#1D3E78', '#1A6FB6', '#0D2C4A', '802 201', null, '#FFFFFF'],
-    c803: ['slope',   '#1F3F95', '#2E6FD8', '#0F1E3D', '803 001', null, '#FFFFFF'],
-    c158: ['electro', '#4B2E83', '#E6E1EF', '#1E1236', '158 770', null, '#FFFFFF'],
-    c450: ['desiro',  '#3B4E66', '#24398C', '#121C47', '450 001', null, '#FFFFFF'],
-    c345: ['slope',   '#F6F7F8', '#6950A1', '#3E4651', '345 001'],
-    c801: ['slope',   '#F6F7F8', '#CE0E2D', '#3A3B3E', '801 101']
+    c720:  { n: 'aventra', body: W, low: [266, '#8B8D90'], win: G, door: '#D2232A', roof: 'ac', no: '720 515' },
+    c745:  { n: 'flirt', body: W, low: [268, '#8B8D90'], win: G, door: '#D2232A', roof: 'ac', no: '745 105' },
+    c755:  { n: 'flirt', body: W, low: [268, '#8B8D90'], win: G, door: '#D2232A', roof: 'diesel', no: '755 411' },
+    c345:  { n: 'aventra', body: W, low: [270, '#3E4651'], win: G, door: '#6950A1', roof: 'ac', no: '345 001' },
+    c730:  { n: 'aventra', body: '#D2B98A', low: [264, '#2B1631'], belt: [[260, 4, '#E8891C']], win: '#2B1631', door: '#3C1053', roof: 'ac', no: '730 015', nc: '#FFFFFF' },
+    c196:  { n: 'civity', body: '#D2B98A', low: [264, '#2B1631'], belt: [[260, 4, '#E8891C']], win: '#2B1631', door: '#3C1053', roof: 'diesel', no: '196 012', nc: '#FFFFFF' },
+    c350:  { n: 'desiro', body: '#E9ECEE', low: [262, '#00A651'], belt: [[258, 4, '#1E3B32']], win: G, door: '#00A651', roof: 'ac', no: '350 401' },
+    c380:  { n: 'desiro', body: '#1C2D5B', low: [276, '#0F1A38'], win: '#0F1A38', door: '#2B3F78', roof: 'ac', no: '380 101', nc: '#FFFFFF',
+             x: [['M22 292 L58 192 H68 L32 292 Z', '#FFFFFF'], ['M38 292 L74 192 H78 L42 292 Z', '#FFFFFF']] },
+    c331:  { n: 'civity', body: W, low: [262, '#262262'], belt: [[257, 5, '#1E5AA8']], win: G, door: '#1E5AA8', roof: 'ac', no: '331 109' },
+    c195:  { n: 'civity', body: W, low: [262, '#262262'], belt: [[257, 5, '#1E5AA8']], win: G, door: '#1E5AA8', roof: 'diesel', no: '195 107' },
+    c150:  { n: 'sprinter', body: W, low: [262, '#262262'], belt: [[257, 5, '#1E5AA8']], win: G, door: '#1E5AA8', roof: 'diesel', no: '150 207' },
+    c377:  { n: 'electro', body: W, low: [270, '#3C4146'], win: G, door: '#7AB929', roof: 'ac', no: '377 411' },
+    c171:  { n: 'electro', body: W, low: [270, '#3C4146'], win: G, door: '#7AB929', roof: 'diesel', no: '171 721' },
+    c387gx:{ n: 'electro', body: W, low: [266, '#C8102E'], win: G, door: '#C8102E', roof: 'ac', no: '387 205' },
+    c375:  { n: 'electro', body: W, low: [270, '#3C4146'], win: G, door: null, roof: 'ac', no: '375 905' },
+    c387:  { n: 'electro', body: W, low: [266, '#253982'], belt: [[262, 4, '#00A9E0']], win: G, door: '#253982', roof: 'ac', no: '387 120' },
+    c700:  { n: 'desiro', body: W, low: [270, '#A6A9AD'], belt: [[266, 4, '#DA4290']], win: G, door: '#5B6067', roof: 'ac', no: '700 113', cabc: [86, '#2A2E33'] },
+    c800:  { n: 'iet', body: '#0A493E', low: [278, '#062E27'], belt: [[268, 2, '#E9E3CF']], win: '#062E27', door: '#0F5A4C', roof: 'ac', no: '800 312', nc: '#FFFFFF' },
+    c802:  { n: 'iet', body: '#1D2F6B', low: [276, '#121C47'], belt: [[268, 4, '#1A9BD7']], win: '#121C47', door: '#24388A', roof: 'ac', no: '802 201', nc: '#FFFFFF' },
+    c803:  { n: 'iet', body: '#1F3F95', low: [276, '#0F1E3D'], belt: [[268, 4, '#2E9BE0']], win: '#0F1E3D', door: '#2652B8', roof: 'ac', no: '803 001', nc: '#FFFFFF' },
+    c801:  { n: 'iet', body: W, low: [272, '#CE0E2D'], win: G, door: '#CE0E2D', roof: 'ac', no: '801 101' },
+    c777:  { n: 'stadler', body: '#C9CDD1', low: [270, '#4A4F55'], win: G, door: '#FFD200', roof: 'ac', no: '777 034' },
+    c197:  { n: 'civity', body: '#E3E5E7', low: [266, '#2B2F33'], belt: [[262, 4, '#D6001C']], win: G, door: '#D6001C', roof: 'diesel', no: '197 001' },
+    c170:  { n: 'electro', body: '#C3C7CB', low: [270, '#4A1028'], win: G, door: '#9B1B58', roof: 'diesel', no: '170 101', nc: '#FFFFFF', cabc: [64, '#9B1B58'] },
+    c158:  { n: 'electro', body: '#4B2E83', low: [272, '#1E1236'], belt: [[266, 3, '#C1A8E8']], win: '#1E1236', door: '#E6E1EF', roof: 'diesel', no: '158 770', nc: '#FFFFFF' },
+    c390:  { n: 'pendo', body: '#00434E', low: [274, '#00222B'], belt: [[266, 3, '#7FC8D6']], win: '#00222B', door: '#005A69', roof: 'ac', no: '390 104', nc: '#FFFFFF' },
+    c450:  { n: 'desiro', body: '#3B4E66', low: [272, '#121C47'], belt: [[266, 3, '#E26B1B']], win: '#1B2433', door: '#24398C', roof: 'ac', no: '450 001', nc: '#FFFFFF' }
   };
-  /* the class each train company runs; [stations on the trip, class] rules pick a different class on the lines that use one */
+  /* the class each train company runs; [stations on the train, class] rules pick a different class on the lines that use one */
   var BY = {
     'Greater Anglia':         ['c720', [[['Ely', 'Thetford', 'Brandon', 'Newmarket', 'Bury St Edmunds', 'Kennett', 'Dullingham', 'Attleborough', 'Wymondham'], 'c755']]],
     'ScotRail':               ['c380'],
@@ -2815,33 +2837,53 @@ window.addEventListener('resize',apply);})();
   function pick(op, trip, toShow){
     var b = BY[op] || BY[cfg.operator] || BY['Greater Anglia'], key = b[0], st = {};
     if (trip && trip.s) {
-      /* only the stations on the train that serves the show station: after the last change on the way in, before the first change on the way home */
-      /* rows are [time, stop number, flags] as stored, or [time, name, lat, lon, flags, short name, ...] once the page has read them */
+      /* only the stations on the train that serves the show station: after the last change on the way in, before the first change on the way home.
+         rows are [time, stop number, flags] as stored, or [time, name, lat, lon, flags, short name, ...] once the page has read them */
       var rows = trip.s, ch = [], fl = function(r){ return typeof r[1] === 'string' ? r[4] : r[2]; };
       rows.forEach(function(r, i){ if (i > 0 && i < rows.length - 1 && (fl(r) & 8)) ch.push(i); });
       if (ch.length) rows = toShow === false ? rows.slice(0, ch[0] + 1) : rows.slice(ch[ch.length - 1]);
-      rows.forEach(function(r){ var x = typeof r[1] === 'string' ? [r[1], 0, 0, r[5]] : DATA.stops[r[1]]; if (x) { st[x[0]] = 1; if (x[3]) st[x[3]] = 1; } });
+      rows.forEach(function(r){ var x = typeof r[1] === 'string' ? [r[1], 0, 0, r[5]] : (window.DATA && DATA.stops[r[1]]); if (x) { st[x[0]] = 1; if (x[3]) st[x[3]] = 1; } });
     }
     (b[1] || []).forEach(function(r){ if (r[0].some(function(n){ return st[n]; })) key = r[1]; });
     return T[key];
   }
+  function R(x, y, w, h, f, extra){ return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + f + '"' + (extra || '') + '/>'; }
   function pair(x, door){
-    return '<g class="dl"><rect x="' + x + '" y="212" width="14" height="80" fill="' + door + '"/><rect x="' + (x + 3) + '" y="216" width="8" height="26" fill="#23272B"/></g>' +
-      '<g class="dr"><rect x="' + (x + 14) + '" y="212" width="14" height="80" fill="' + door + '"/><rect x="' + (x + 17) + '" y="216" width="8" height="26" fill="#23272B"/></g>';
+    /* a pair of sliding doors, each with a tall window and a dark rubber edge */
+    var one = function(dx, cls){ return '<g class="' + cls + '">' + R(dx, 211, 14, 81, door) + R(dx + 3, 215, 8, 30, '#1E2226', ' rx="1.5"') + R(dx + (cls === 'dl' ? 13 : 0), 211, 1, 81, 'rgba(0,0,0,.35)') + '</g>'; };
+    return R(x - 1, 210, 30, 82, '#1B1E21') + one(x, 'dl') + one(x + 14, 'dr');
   }
   var shown = '';
   window.ysTrain = function(op, trip, toShow){
-    var t = pick(op, trip, toShow), n = NOSES[t[0]], k = t.join('|'); if (k === shown) return; shown = k;
-    var door = t[2] || (cfg.theme && cfg.theme.op1) || '#D2232A', cab = t[5], numc = t[6] || '#5E666D';
-    g.innerHTML = '<rect x="-40" y="189" width="96" height="6" fill="#C9CED2"/><rect x="-8" y="185" width="22" height="5" fill="#8A8C8E"/>' +
-      '<path d="' + n[0] + '" fill="' + t[1] + '"/>' + (cab ? '<rect x="60" y="194" width="30" height="84" fill="' + cab + '"/>' : '') +
-      '<path d="' + n[1] + '" fill="#23272B"/><path d="' + n[2] + '" fill="#F4C21B"/>' +
-      '<rect x="113" y="258" width="9" height="5" rx="1" fill="#fff"/><rect x="113" y="267" width="9" height="3" rx="1" fill="#D2232A"/>' +
-      '<rect x="-40" y="210" width="' + (cab ? 100 : 108) + '" height="18" fill="#23272B"/><rect x="-40" y="278" width="146" height="14" fill="' + t[3] + '"/>' +
-      '<text x="' + (cab ? 75 : 80) + '" y="246" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="8" fill="' + numc + '">' + t[4] + '</text>' +
-      '<rect x="-30" y="212" width="28" height="80" fill="#2E3236"/><rect x="-17" y="216" width="2" height="72" fill="#C9CED2"/>' +
-      '<rect x="18" y="212" width="28" height="80" fill="#2E3236"/><rect x="31" y="216" width="2" height="72" fill="#C9CED2"/>' +
-      pair(-30, door) + pair(18, door) + '<rect class="dbtn" x="1" y="248" width="4" height="6" rx="1"/><rect class="dbtn" x="49" y="248" width="4" height="6" rx="1"/>';
+    var t = pick(op, trip, toShow), n = NOSES[t.n], k = JSON.stringify(t); if (k === shown) return; shown = k;
+    var door = t.door || (cfg.theme && cfg.theme.op1) || '#D2232A', dark = t.nc ? 'rgba(255,255,255,.18)' : 'rgba(0,0,0,.14)', s = '';
+    s += '<defs><clipPath id="ysclip"><path d="' + n.b + '"/></clipPath>' +
+         '<linearGradient id="ysshade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".18" stop-color="#fff" stop-opacity="0"/><stop offset=".85" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>' +
+         '<linearGradient id="ysglass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3A4148"/><stop offset=".55" stop-color="#15181B"/><stop offset="1" stop-color="#23292E"/></linearGradient></defs>';
+    /* roof kit: air conditioning pods on electric trains, an exhaust and silencer on diesels */
+    s += t.roof === 'diesel'
+      ? R(-34, 185, 30, 8, '#7E858C', ' rx="3"') + R(8, 182, 6, 11, '#3A3F44', ' rx="1"') + R(16, 186, 24, 7, '#8D949A', ' rx="3"')
+      : R(-36, 185, 40, 8, '#8D949A', ' rx="4"') + R(10, 187, 34, 6, '#A3A9AE', ' rx="3"');
+    s += '<path d="' + n.b + '" fill="' + t.body + '"/><g clip-path="url(#ysclip)">';
+    if (t.cabc) s += R(t.cabc[0], 186, 60, 110, t.cabc[1]);
+    s += R(-40, t.low[0], 170, 40, t.low[1]);
+    (t.belt || []).forEach(function(b){ s += R(-40, b[0], 170, b[1], b[2]); });
+    (t.x || []).forEach(function(p){ s += '<path d="' + p[0] + '" fill="' + p[1] + '"/>'; });
+    /* passenger window band and the cab side window */
+    s += R(-40, 207, n.cab + 34, 34, t.win, ' rx="2"') + R(-40, 209, n.cab + 34, 2, 'rgba(255,255,255,.12)');
+    s += R(-40, 192, 170, 2, 'rgba(0,0,0,.25)');
+    s += '<path d="' + n.y + '" fill="#F4C21B"/>' + '<path d="' + n.b + '" fill="url(#ysshade)"/></g>';
+    /* the cab: side door outline, little side window, windscreen with its reflection */
+    s += '<path d="M' + n.cab + ' 200 V240 M' + n.cab + ' 254 V286 M' + (n.cab + 16) + ' 200 V240 M' + (n.cab + 16) + ' 254 V286" stroke="' + dark + '" stroke-width="1.2"/>' +
+         R(n.cab + 3, 206, 10, 20, '#1E2226', ' rx="1.5"');
+    s += '<path d="' + n.g + '" fill="url(#ysglass)"/><path d="' + n.g + '" fill="none" stroke="#0E1012" stroke-width="1.2"/>';
+    if (n.gang) s += '<path d="M' + (n.lamp - 6) + ' 232 V288" stroke="rgba(0,0,0,.28)" stroke-width="1"/>';
+    /* lamps: white head light over a red tail light, then the coupler and the bogie skirt line */
+    s += R(n.lamp - 4, 254, 8, 5, '#FFFFFF', ' rx="1.5"') + R(n.lamp - 4, 262, 8, 3, '#D2232A', ' rx="1"') +
+         R(122, 278, 8, 6, '#2B2F33', ' rx="1"') + R(-40, 289, 166, 3, 'rgba(0,0,0,.35)');
+    s += '<text x="' + (n.cab + 8) + '" y="' + (t.low[0] - 6 > 246 ? 250 : t.low[0] - 6) + '" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="7.5" fill="' + (t.nc || '#4A5056') + '">' + t.no + '</text>';
+    s += pair(-30, door) + pair(18, door) + '<rect class="dbtn" x="1" y="248" width="4" height="6" rx="1"/><rect class="dbtn" x="49" y="248" width="4" height="6" rx="1"/>';
+    g.innerHTML = s;
   };
   window.ysTrain(window.ysOp || cfg.operator, window.ysTrip, window.ysIn);
   /* the doors open once the train has stopped */
