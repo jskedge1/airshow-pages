@@ -3346,9 +3346,16 @@ window.addEventListener('resize',apply);})();
   }
   function R(x, y, w, h, f, extra){ return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + f + '"' + (extra || '') + '/>'; }
   function pair(x, door){
-    /* a pair of sliding doors, each with a tall window and a dark rubber edge */
-    var one = function(dx, cls){ return '<g class="' + cls + '">' + R(dx, 211, 14, 81, door) + R(dx + 3, 215, 8, 30, '#1E2226', ' rx="1.5"') + R(dx + (cls === 'dl' ? 13 : 0), 211, 1, 81, 'rgba(0,0,0,.35)') + '</g>'; };
-    return R(x - 1, 210, 30, 82, '#1B1E21') + one(x, 'dl') + one(x + 14, 'dr');
+    /* a pair of sliding plug doors: frame, rounded window with a reflection, grab handle and a rubber nosing where they meet */
+    var one = function(dx, cls){
+      var edge = cls === 'dl' ? dx + 13 : dx;
+      return '<g class="' + cls + '">' + R(dx, 211, 14, 81, door) + R(dx, 211, 14, 81, 'url(#ysdoor)') +
+        R(dx + 2.5, 214.5, 9, 31, '#0E1012', ' rx="2"') + R(dx + 3, 215, 8, 30, 'url(#ysglass)', ' rx="1.6"') +
+        '<path d="M' + (dx + 4) + ' 236 L' + (dx + 9) + ' 218" stroke="rgba(255,255,255,.22)" stroke-width="1.2"/>' +
+        R(dx + (cls === 'dl' ? 9 : 3.5), 252, 1.5, 14, 'rgba(0,0,0,.35)', ' rx=".7"') +
+        R(edge, 211, 1, 81, '#15181B') + '</g>';
+    };
+    return R(x - 1.5, 209.5, 31, 83, '#15181B', ' rx="1.5"') + R(x, 211, 28, 81, '#3B4046') + R(x + 2, 214, 24, 2, '#F4C21B') + one(x, 'dl') + one(x + 14, 'dr');
   }
   var shown = '';
   window.ysTrain = function(op, trip, toShow){
@@ -3356,29 +3363,56 @@ window.addEventListener('resize',apply);})();
     var door = t.door || (cfg.theme && cfg.theme.op1) || '#D2232A', dark = t.nc ? 'rgba(255,255,255,.18)' : 'rgba(0,0,0,.14)', s = '';
     s += '<defs><clipPath id="ysclip"><path d="' + n.b + '"/></clipPath>' +
          '<linearGradient id="ysshade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".18" stop-color="#fff" stop-opacity="0"/><stop offset=".85" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>' +
+         '<linearGradient id="ysdoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".12"/><stop offset=".5" stop-color="#fff" stop-opacity=".10"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient>' +
          '<linearGradient id="ysglass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3A4148"/><stop offset=".55" stop-color="#15181B"/><stop offset="1" stop-color="#23292E"/></linearGradient></defs>';
-    /* roof kit: air conditioning pods on electric trains, an exhaust and silencer on diesels */
+    /* roof kit: air conditioning pods with grilles on electric trains, an exhaust stack and silencer on diesels */
+    var slats = function(x, w, y){ var o = ''; for (var i = x + 3; i < x + w - 2; i += 3) o += R(i, y, 1, 4, 'rgba(0,0,0,.28)'); return o; };
     s += t.roof === 'diesel'
-      ? R(-34, 185, 30, 8, '#7E858C', ' rx="3"') + R(8, 182, 6, 11, '#3A3F44', ' rx="1"') + R(16, 186, 24, 7, '#8D949A', ' rx="3"')
-      : R(-36, 185, 40, 8, '#8D949A', ' rx="4"') + R(10, 187, 34, 6, '#A3A9AE', ' rx="3"');
+      ? R(-34, 185, 30, 8, '#7E858C', ' rx="3"') + slats(-34, 30, 187) + R(8, 180, 6, 13, '#3A3F44', ' rx="1"') + R(7, 179, 8, 2, '#23272B') + R(16, 186, 24, 7, '#8D949A', ' rx="3"') + slats(16, 24, 188)
+      : R(-36, 185, 40, 8, '#8D949A', ' rx="4"') + slats(-36, 40, 187) + R(10, 187, 34, 6, '#A3A9AE', ' rx="3"') + slats(10, 34, 188) + R(48, 189, 10, 4, '#6E757B', ' rx="1"');
     s += '<path d="' + n.b + '" fill="' + t.body + '"/><g clip-path="url(#ysclip)">';
     if (t.cabc) s += R(t.cabc[0], 186, 60, 110, t.cabc[1]);
     s += R(-40, t.low[0], 170, 40, t.low[1]);
     (t.belt || []).forEach(function(b){ s += R(-40, b[0], 170, b[1], b[2]); });
     (t.x || []).forEach(function(p){ s += '<path d="' + p[0] + '" fill="' + p[1] + '"/>'; });
-    /* passenger window band and the cab side window */
-    s += R(-40, 207, n.cab + 34, 34, t.win, ' rx="2"') + R(-40, 209, n.cab + 34, 2, 'rgba(255,255,255,.12)');
+    /* rain strip along the cant rail and a soft gloss line on the body side */
+    s += R(-40, 197, 170, 1.2, 'rgba(0,0,0,.22)') + R(-40, 199, 170, 1, 'rgba(255,255,255,.35)');
+    /* passenger windows: rubber frame, tinted glass and a diagonal reflection */
+    var wx = n.cab - 4;
+    s += R(-40, 206, wx + 40, 36, 'rgba(0,0,0,.35)', ' rx="3"') + R(-39, 207, wx + 38, 34, t.win, ' rx="2.5"');
+    s += '<path d="M' + (wx - 18) + ' 241 L' + (wx - 6) + ' 207 H' + (wx - 1) + ' L' + (wx - 13) + ' 241 Z M-2 241 L10 207 H13 L1 241 Z" fill="rgba(255,255,255,.10)"/>';
+    s += R(-39, 208, wx + 38, 1.5, 'rgba(255,255,255,.16)');
+    /* panel seams */
+    s += '<path d="M8 200 V206 M8 242 V' + t.low[0] + ' M56 242 V' + t.low[0] + '" stroke="' + dark + '" stroke-width=".8"/>';
     s += R(-40, 192, 170, 2, 'rgba(0,0,0,.25)');
-    s += '<path d="' + n.y + '" fill="#F4C21B"/>' + '<path d="' + n.b + '" fill="url(#ysshade)"/></g>';
-    /* the cab: side door outline, little side window, windscreen with its reflection */
+    s += '<path d="' + n.y + '" fill="#F4C21B"/>';
+    /* horn grille on the front */
+    s += '<g fill="rgba(0,0,0,.45)">' + R(n.lamp + 1, 238, 6, 1.2, '') + R(n.lamp + 1, 241, 6, 1.2, '') + R(n.lamp + 1, 244, 6, 1.2, '') + '</g>';
+    /* bogie under the cab: frame, axle boxes, the tops of the wheels and a dark valance */
+    var bx = n.cab + 2;
+    s += R(-40, 284, 170, 8, 'rgba(0,0,0,.30)');
+    s += '<g>' + '<circle cx="' + (bx + 8) + '" cy="296" r="9" fill="#1A1C1F"/><circle cx="' + (bx + 34) + '" cy="296" r="9" fill="#1A1C1F"/>' +
+         '<circle cx="' + (bx + 8) + '" cy="296" r="5" fill="#3A3F44"/><circle cx="' + (bx + 34) + '" cy="296" r="5" fill="#3A3F44"/>' +
+         R(bx - 2, 284, 46, 5, '#2B2F33', ' rx="1.5"') + R(bx + 4, 286, 8, 6, '#555B61', ' rx="1"') + R(bx + 30, 286, 8, 6, '#555B61', ' rx="1"') +
+         '<path d="M' + (bx + 15) + ' 285 q3 3 0 6 q-3 3 0 6 M' + (bx + 27) + ' 285 q3 3 0 6 q-3 3 0 6" stroke="#8A9097" stroke-width="1.4" fill="none"/></g>';
+    s += '<path d="' + n.b + '" fill="url(#ysshade)"/></g>';
+    /* the cab: side door with its handle and steps, sliding side window, windscreen with sun blind, wiper and reflection */
     s += '<path d="M' + n.cab + ' 200 V240 M' + n.cab + ' 254 V286 M' + (n.cab + 16) + ' 200 V240 M' + (n.cab + 16) + ' 254 V286" stroke="' + dark + '" stroke-width="1.2"/>' +
-         R(n.cab + 3, 206, 10, 20, '#1E2226', ' rx="1.5"');
-    s += '<path d="' + n.g + '" fill="url(#ysglass)"/><path d="' + n.g + '" fill="none" stroke="#0E1012" stroke-width="1.2"/>';
-    if (n.gang) s += '<path d="M' + (n.lamp - 6) + ' 232 V288" stroke="rgba(0,0,0,.28)" stroke-width="1"/>';
-    /* lamps: white head light over a red tail light, then the coupler and the bogie skirt line */
-    s += R(n.lamp - 4, 254, 8, 5, '#FFFFFF', ' rx="1.5"') + R(n.lamp - 4, 262, 8, 3, '#D2232A', ' rx="1"') +
-         R(122, 278, 8, 6, '#2B2F33', ' rx="1"') + R(-40, 289, 166, 3, 'rgba(0,0,0,.35)');
-    s += '<text x="' + (n.cab + 8) + '" y="' + (t.low[0] - 6 > 246 ? 250 : t.low[0] - 6) + '" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="7.5" fill="' + (t.nc || '#4A5056') + '">' + t.no + '</text>';
+         R(n.cab + 13, 232, 1.5, 12, 'rgba(0,0,0,.45)', ' rx=".7"') + R(n.cab + 1, 282, 14, 2, 'rgba(0,0,0,.4)');
+    s += R(n.cab + 2, 205, 12, 22, '#0E1012', ' rx="2"') + R(n.cab + 3, 206, 10, 20, 'url(#ysglass)', ' rx="1.5"') + R(n.cab + 3, 215, 10, 1, 'rgba(0,0,0,.6)') +
+         '<path d="M' + (n.cab + 5) + ' 225 L' + (n.cab + 11) + ' 207" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>';
+    s += '<clipPath id="ysgclip"><path d="' + n.g + '"/></clipPath><path d="' + n.g + '" fill="url(#ysglass)"/>' +
+         '<g clip-path="url(#ysgclip)">' + R(60, 190, 70, 5, 'rgba(0,0,0,.55)') + '<path d="M70 230 L104 190 H112 L78 230 Z" fill="rgba(255,255,255,.13)"/>' +
+         '<path d="M' + (n.lamp - 22) + ' 224 L' + (n.lamp - 8) + ' 206" stroke="#0A0B0C" stroke-width="1.6" stroke-linecap="round"/></g>' +
+         '<path d="' + n.g + '" fill="none" stroke="#0E1012" stroke-width="1.4"/>';
+    if (n.gang) s += '<path d="M' + (n.lamp - 6) + ' 232 V288" stroke="rgba(0,0,0,.28)" stroke-width="1"/>' + R(n.lamp - 9, 256, 2, 8, 'rgba(0,0,0,.4)', ' rx="1"');
+    /* light cluster: a dark housing with two head lights and a red tail light, then the coupler with its air hoses and the snowplough */
+    s += '<path d="M' + (n.lamp - 7) + ' 254 L' + (n.lamp + 5) + ' 252 V262 L' + (n.lamp - 7) + ' 263 Z" fill="#16191C"/>' +
+         R(n.lamp - 5, 255, 8, 2.6, '#FFFFFF', ' rx="1.2"') + R(n.lamp - 5, 255, 8, 2.6, '#FFFFFF', ' rx="1.2" opacity=".35" transform="translate(0 -1) scale(1 1)"') +
+         R(n.lamp - 5, 259, 3.5, 2, '#E0262B', ' rx=".8"') + R(n.lamp - 0.5, 259, 3.5, 2, '#F2F6FF', ' rx=".8"');
+    s += R(120, 276, 11, 8, '#2B2F33', ' rx="1.5"') + R(128, 274, 4, 12, '#1A1C1F', ' rx="1"') + '<path d="M121 284 q3 5 7 4" stroke="#1A1C1F" stroke-width="1.4" fill="none"/>' +
+         '<path d="M108 286 L126 284 L128 292 H108 Z" fill="#1A1C1F"/>';
+    s += '<text x="' + (n.cab + 8) + '" y="250" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="7.5" fill="' + (t.nc || '#4A5056') + '">' + t.no + '</text>';
     s += pair(-30, door) + pair(18, door) + '<rect class="dbtn" x="1" y="248" width="4" height="6" rx="1"/><rect class="dbtn" x="49" y="248" width="4" height="6" rx="1"/>';
     g.innerHTML = s;
   };
