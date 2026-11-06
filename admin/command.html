@@ -742,8 +742,10 @@ function drawTop(){
 }
 function render(keep){drawNav();drawTop();setView(view,keep)}
 
+function markAdmin(d){if(!d||d.demo)return;try{d.admin?localStorage.setItem('ukagAdmin',String(Date.now())):localStorage.removeItem('ukagAdmin')}catch(e){}}
 function load(keep){
   return call('command').then(function(d){
+    markAdmin(d);
     if(!d||!d.admin){$('#gate').classList.add('on');return}
     $('#gate').classList.remove('on');D=d;render(keep);
   }).catch(function(e){toast(e.message,true)});
@@ -760,7 +762,7 @@ document.addEventListener('click',function(e){
   if(t.dataset.v){setView(t.dataset.v);return}
   if(t.dataset.go){setView(t.dataset.go);return}
   if(t.id==='refresh'){load(true).then(function(){toast('Figures refreshed')});return}
-  if(t.id==='loginBtn'){call('login').then(function(d){if(d&&d.admin){$('#gate').classList.remove('on');D=d;render()}}).catch(function(e){toast(e.message,true)});return}
+  if(t.id==='loginBtn'){call('login').then(function(d){markAdmin(d);if(d&&d.admin){$('#gate').classList.remove('on');D=d;render()}}).catch(function(e){toast(e.message,true)});return}
   if(t.dataset.pf){pageFilter=t.dataset.pf;setView('pages',true);return}
   if(t.dataset.plan){var order=['Scheduled','Boarding','Delayed','Departed'];var next=order[(order.indexOf(t.dataset.s)+1)%order.length];run('planStatus',{id:t.dataset.plan,status:next},'Moved to '+next);return}
   if(t.dataset.check){var vals=['Not checked','Clear','Check'];var nv=vals[(vals.indexOf(t.dataset.v)+1)%vals.length];run('check',{id:t.dataset.check,field:t.dataset.field,value:nv},'Marked '+nv.toLowerCase());return}

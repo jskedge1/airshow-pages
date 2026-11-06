@@ -17,3 +17,8 @@ Airshow Hub button HUD effect (21 Oct 2026):
   dark box, cyan glow, bracket corners that open out on hover, pinging dot when logged out.
 - The styles are in header-hub-button-hud.css, appended to the header menu styles block (marked /*hubhud*/).
   The old purple button rules and the hub-only button rules were folded into it, as that block has a 15,000 character limit.
+
+Admin links in the account drop down (6 Nov 2026):
+- When the admin account is logged in, the account drop down (and the phone menu) shows Command Centre (/site-admin) and Admin Board (/site-admin?view=board).
+- The Command Centre and Admin Board save ukagAdmin in GitHub Pages storage once the backend confirms the Admin role. hub-badge.html passes it to the header as ukagBadge.admin, and the header shows the .adm links only while someone is logged in and that flag is set.
+- The pages themselves still check the Admin role on every request, so the links only change what shows in the menu.

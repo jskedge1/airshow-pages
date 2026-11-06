@@ -380,6 +380,8 @@ section.board{background:var(--board);border:2px solid var(--line);border-top:4p
   function load(){
     return Promise.all([call('board'),loadCommits()]).then(function(r){
       var d=r[0];
+      /* tells the site header to show the admin links for this login (6 Nov 2026) */
+      if(d&&!d.demo){try{d.admin?localStorage.setItem('ukagAdmin',String(Date.now())):localStorage.removeItem('ukagAdmin')}catch(e){}}
       if(!d||!d.admin){$('#app').hidden=true;$('#gate').hidden=false;return}
       $('#gate').hidden=true;$('#app').hidden=false;
       state.data=d;render();
