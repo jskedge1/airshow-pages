@@ -2201,6 +2201,7 @@ var DATA={"stops":[["Birmingham New Street",52.47796,-1.89794,"Birmingham"],["Fi
     travel(trip);
     jline(trip);
     ptxRender(trip);
+    window.ysOp = trip.ops && trip.ops.length ? trip.ops[toShow ? trip.ops.length - 1 : 0] : CFG.operator; window.ysTrip = trip; window.ysIn = toShow; if (window.ysTrain) window.ysTrain(window.ysOp, trip, toShow);
     setBlind(trip.big, trip.dest, blindLines(trip));
     $('nsnum').textContent = trip.plat || 'TBC'; $('nsdest').textContent = d.from;
     $('ptitle').textContent = last[1];
@@ -2735,45 +2736,114 @@ window.addEventListener('resize',apply);})();
 .ptx .nchip:hover{background:color-mix(in srgb,var(--op1) 18%,#fff)}
 </style>
 <script id="train-nose">
-/* the platform scene's train: each train company's own train, a simple side view, with doors that open once it stops.
-   nose shapes: slope (Aventra, IET), electro (Electrostar), desiro (Desiro City), civity (CAF Civity), stadler (Stadler Class 777) */
+/* the platform scene's train: the train that pulls in at the show station, drawn as the class that train company really runs on that line,
+   in a simple side view, with doors that open once it stops. It follows the train you pick (the last train company on the way in,
+   the first one on the way home), so a page with more than one train company shows the right train each time.
+   nose shapes: slope (Aventra, IET), electro (Electrostar, Turbostar), desiro (Desiro, FLIRT), civity (CAF Civity), stadler (Stadler Class 777),
+   flat (Sprinter), pendo (Pendolino) */
 (function(){
   var NOSES = {
     slope:   ['M-40 194 H60 Q84 194 98 204 L116 222 Q125 231 126 246 V300 H-40 Z', 'M70 198 Q88 199 99 208 L115 225 H90 Z', 'M92 226 H116 Q125 233 126 247 V300 H102 Q100 262 92 226 Z'],
     electro: ['M-40 194 H100 Q116 194 120 208 L126 236 V300 H-40 Z', 'M92 198 H108 Q114 199 117 210 L121 228 H92 Z', 'M98 230 H121 L126 240 V300 H106 Q104 262 98 230 Z'],
     desiro:  ['M-40 194 H82 Q110 194 119 213 Q126 230 126 250 V300 H-40 Z', 'M80 198 Q102 199 112 212 L119 228 H90 Z', 'M94 230 H120 Q126 240 126 252 V300 H104 Q102 262 94 230 Z'],
     civity:  ['M-40 194 H74 L102 199 L121 223 Q126 231 126 244 V300 H-40 Z', 'M76 198 L100 202 L116 224 H90 Z', 'M92 227 H119 Q126 236 126 246 V300 H102 Q100 262 92 227 Z'],
-    stadler: ['M-40 192 H106 Q124 192 126 214 V300 H-40 Z', 'M100 196 Q119 197 122 214 V234 H100 Z', 'M100 238 H126 V300 H100 Z']
+    stadler: ['M-40 192 H106 Q124 192 126 214 V300 H-40 Z', 'M100 196 Q119 197 122 214 V234 H100 Z', 'M100 238 H126 V300 H100 Z'],
+    flat:    ['M-40 194 H114 Q124 194 125 204 V300 H-40 Z', 'M102 198 H116 Q121 199 121 206 V228 H102 Z', 'M100 232 H125 V300 H100 Z'],
+    pendo:   ['M-40 194 H44 Q92 196 113 226 Q126 244 126 262 V300 H-40 Z', 'M58 199 Q88 203 103 222 L108 229 H80 Z', 'M90 235 H117 Q126 250 126 264 V300 H102 Q100 266 90 235 Z']
   };
   /* shape, body, doors (null = the page's own colour), skirt, unit number, cab end colour, number colour */
-  var TRAINS = {
-    'Greater Anglia':        ['slope',   '#F6F7F8', '#D2232A', '#8A8C8E', '720 515'],
-    'ScotRail':              ['desiro',  '#1C2D5B', '#E6EAF0', '#0F1A38', '380 101', null, '#FFFFFF'],
-    'Northern':              ['civity',  '#F6F7F8', null,      '#262262', '331 109'],
-    'West Midlands Railway': ['civity',  '#ECE6DA', '#E8891C', '#3C1053', '196 012', '#3C1053', '#FFFFFF'],
-    'Southern':              ['electro', '#F6F7F8', '#7AB929', '#23412E', '377 411'],
-    'Southeastern':          ['electro', '#F6F7F8', null,      '#1E1E50', '375 905'],
-    'Thameslink':            ['desiro',  '#F6F7F8', '#DA4290', '#8A8C8E', '700 113'],
-    'GWR':                   ['slope',   '#0A493E', '#2E7D66', '#062E27', '800 312', null, '#FFFFFF'],
-    'Merseyrail':            ['stadler', '#C9CDD1', '#FFD200', '#4A4F55', '777 034'],
-    'Transport for Wales':   ['civity',  '#D9DCDF', '#D6001C', '#2B2F33', '197 001']
+  var T = {
+    c720: ['slope',   '#F6F7F8', '#D2232A', '#8A8C8E', '720 515'],
+    c755: ['desiro',  '#F6F7F8', '#D2232A', '#8A8C8E', '755 411'],
+    c745: ['desiro',  '#F6F7F8', '#D2232A', '#8A8C8E', '745 105'],
+    c380: ['desiro',  '#1C2D5B', '#E6EAF0', '#0F1A38', '380 101', null, '#FFFFFF'],
+    c331: ['civity',  '#F6F7F8', '#1E5AA8', '#262262', '331 109'],
+    c195: ['civity',  '#F6F7F8', '#1E5AA8', '#262262', '195 107'],
+    c150: ['flat',    '#F6F7F8', '#1E5AA8', '#262262', '150 207'],
+    c196: ['civity',  '#ECE6DA', '#E8891C', '#3C1053', '196 012', '#3C1053', '#FFFFFF'],
+    c730: ['slope',   '#ECE6DA', '#E8891C', '#3C1053', '730 015', '#3C1053', '#FFFFFF'],
+    c350: ['desiro',  '#F6F7F8', '#00A651', '#1E3B32', '350 401'],
+    c377: ['electro', '#F6F7F8', '#7AB929', '#23412E', '377 411'],
+    c171: ['electro', '#F6F7F8', '#7AB929', '#23412E', '171 721'],
+    c387gx:['electro','#F6F7F8', '#C8102E', '#5A0A16', '387 205'],
+    c375: ['electro', '#F6F7F8', null,      '#1E1E50', '375 905'],
+    c700: ['desiro',  '#F6F7F8', '#DA4290', '#8A8C8E', '700 113'],
+    c387: ['electro', '#F6F7F8', '#253982', '#253982', '387 120'],
+    c800: ['slope',   '#0A493E', '#2E7D66', '#062E27', '800 312', null, '#FFFFFF'],
+    c777: ['stadler', '#C9CDD1', '#FFD200', '#4A4F55', '777 034'],
+    c197: ['civity',  '#D9DCDF', '#D6001C', '#2B2F33', '197 001'],
+    c170: ['electro', '#C3C7CB', '#9B1B58', '#4A1028', '170 101', '#9B1B58', '#FFFFFF'],
+    c390: ['pendo',   '#00434E', '#E2E6E8', '#00222B', '390 104', null, '#FFFFFF'],
+    c802: ['slope',   '#1D3E78', '#1A6FB6', '#0D2C4A', '802 201', null, '#FFFFFF'],
+    c803: ['slope',   '#1F3F95', '#2E6FD8', '#0F1E3D', '803 001', null, '#FFFFFF'],
+    c158: ['electro', '#4B2E83', '#E6E1EF', '#1E1236', '158 770', null, '#FFFFFF'],
+    c450: ['desiro',  '#3B4E66', '#24398C', '#121C47', '450 001', null, '#FFFFFF'],
+    c345: ['slope',   '#F6F7F8', '#6950A1', '#3E4651', '345 001'],
+    c801: ['slope',   '#F6F7F8', '#CE0E2D', '#3A3B3E', '801 101']
   };
+  /* the class each train company runs; [stations on the trip, class] rules pick a different class on the lines that use one */
+  var BY = {
+    'Greater Anglia':         ['c720', [[['Ely', 'Thetford', 'Brandon', 'Newmarket', 'Bury St Edmunds', 'Kennett', 'Dullingham', 'Attleborough', 'Wymondham'], 'c755']]],
+    'ScotRail':               ['c380'],
+    'Northern':               ['c331', [[['Meols Cop', 'Burscough Bridge', 'Parbold', 'Bescar Lane', 'New Lane', 'Hoscar', 'Appley Bridge', 'Gathurst', 'Orrell', 'Pemberton', 'Upholland', 'Rainford'], 'c150']]],
+    'West Midlands Railway':  ['c196', [[['Redditch', 'Alvechurch', 'Barnt Green', 'Longbridge', 'Northfield', 'Bournville', 'Selly Oak', 'University', 'Five Ways', 'Lichfield Trent Valley', 'Lichfield City', 'Sutton Coldfield', 'Four Oaks', 'Erdington', 'Gravelly Hill', 'Butlers Lane', 'Blake Street', 'Shenstone', 'Chester Road', 'Wylde Green', 'Duddeston', 'Aston'], 'c730']]],
+    'London Northwestern Railway': ['c350'],
+    'Southern':               ['c377', [[['Rye', 'Ashford International', 'Appledore', 'Ham Street', 'Winchelsea', 'Doleham', 'Three Oaks'], 'c171']]],
+    'Gatwick Express':        ['c387gx'],
+    'Southeastern':           ['c375'],
+    'Thameslink':             ['c700'],
+    'Great Northern':         ['c387'],
+    'GWR':                    ['c800'],
+    'Great Western Railway':  ['c800'],
+    'Merseyrail':             ['c777'],
+    'Transport for Wales':    ['c197'],
+    'CrossCountry':           ['c170'],
+    'Avanti West Coast':      ['c390'],
+    'TransPennine Express':   ['c802'],
+    'Lumo':                   ['c803'],
+    'East Midlands Railway':  ['c158'],
+    'South Western Railway':  ['c450'],
+    'Elizabeth line':         ['c345'],
+    'London North Eastern Railway': ['c801'],
+    'LNER':                   ['c801']
+  };
+  /* some pages name the train companies by their short codes */
+  var CODES = { LE: 'Greater Anglia', SR: 'ScotRail', NT: 'Northern', LM: 'West Midlands Railway', LN: 'London Northwestern Railway', SN: 'Southern', GX: 'Gatwick Express', SE: 'Southeastern', TL: 'Thameslink', GN: 'Great Northern', GW: 'Great Western Railway', ME: 'Merseyrail', AW: 'Transport for Wales', XC: 'CrossCountry', VT: 'Avanti West Coast', TP: 'TransPennine Express', LD: 'Lumo', EM: 'East Midlands Railway', SW: 'South Western Railway', XR: 'Elizabeth line', GR: 'London North Eastern Railway' };
+  for (var c in CODES) if (!BY[c]) BY[c] = BY[CODES[c]];
   var g = document.getElementById('ysnose'); if (!g) return;
-  var cfg = window.CFG || {}, t = TRAINS[cfg.operator] || TRAINS['Greater Anglia'], n = NOSES[t[0]];
-  var door = t[2] || (cfg.theme && cfg.theme.op1) || '#D2232A', cab = t[5], numc = t[6] || '#5E666D';
-  function pair(x){
+  var cfg = window.CFG || {};
+  function pick(op, trip, toShow){
+    var b = BY[op] || BY[cfg.operator] || BY['Greater Anglia'], key = b[0], st = {};
+    if (trip && trip.s) {
+      /* only the stations on the train that serves the show station: after the last change on the way in, before the first change on the way home */
+      /* rows are [time, stop number, flags] as stored, or [time, name, lat, lon, flags, short name, ...] once the page has read them */
+      var rows = trip.s, ch = [], fl = function(r){ return typeof r[1] === 'string' ? r[4] : r[2]; };
+      rows.forEach(function(r, i){ if (i > 0 && i < rows.length - 1 && (fl(r) & 8)) ch.push(i); });
+      if (ch.length) rows = toShow === false ? rows.slice(0, ch[0] + 1) : rows.slice(ch[ch.length - 1]);
+      rows.forEach(function(r){ var x = typeof r[1] === 'string' ? [r[1], 0, 0, r[5]] : DATA.stops[r[1]]; if (x) { st[x[0]] = 1; if (x[3]) st[x[3]] = 1; } });
+    }
+    (b[1] || []).forEach(function(r){ if (r[0].some(function(n){ return st[n]; })) key = r[1]; });
+    return T[key];
+  }
+  function pair(x, door){
     return '<g class="dl"><rect x="' + x + '" y="212" width="14" height="80" fill="' + door + '"/><rect x="' + (x + 3) + '" y="216" width="8" height="26" fill="#23272B"/></g>' +
       '<g class="dr"><rect x="' + (x + 14) + '" y="212" width="14" height="80" fill="' + door + '"/><rect x="' + (x + 17) + '" y="216" width="8" height="26" fill="#23272B"/></g>';
   }
-  g.innerHTML = '<rect x="-40" y="189" width="96" height="6" fill="#C9CED2"/><rect x="-8" y="185" width="22" height="5" fill="#8A8C8E"/>' +
-    '<path d="' + n[0] + '" fill="' + t[1] + '"/>' + (cab ? '<rect x="60" y="194" width="30" height="84" fill="' + cab + '"/>' : '') +
-    '<path d="' + n[1] + '" fill="#23272B"/><path d="' + n[2] + '" fill="#F4C21B"/>' +
-    '<rect x="113" y="258" width="9" height="5" rx="1" fill="#fff"/><rect x="113" y="267" width="9" height="3" rx="1" fill="#D2232A"/>' +
-    '<rect x="-40" y="210" width="' + (cab ? 100 : 108) + '" height="18" fill="#23272B"/><rect x="-40" y="278" width="146" height="14" fill="' + t[3] + '"/>' +
-    '<text x="' + (cab ? 75 : 80) + '" y="246" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="8" fill="' + numc + '">' + t[4] + '</text>' +
-    '<rect x="-30" y="212" width="28" height="80" fill="#2E3236"/><rect x="-17" y="216" width="2" height="72" fill="#C9CED2"/>' +
-    '<rect x="18" y="212" width="28" height="80" fill="#2E3236"/><rect x="31" y="216" width="2" height="72" fill="#C9CED2"/>' +
-    pair(-30) + pair(18) + '<rect class="dbtn" x="1" y="248" width="4" height="6" rx="1"/><rect class="dbtn" x="49" y="248" width="4" height="6" rx="1"/>';
+  var shown = '';
+  window.ysTrain = function(op, trip, toShow){
+    var t = pick(op, trip, toShow), n = NOSES[t[0]], k = t.join('|'); if (k === shown) return; shown = k;
+    var door = t[2] || (cfg.theme && cfg.theme.op1) || '#D2232A', cab = t[5], numc = t[6] || '#5E666D';
+    g.innerHTML = '<rect x="-40" y="189" width="96" height="6" fill="#C9CED2"/><rect x="-8" y="185" width="22" height="5" fill="#8A8C8E"/>' +
+      '<path d="' + n[0] + '" fill="' + t[1] + '"/>' + (cab ? '<rect x="60" y="194" width="30" height="84" fill="' + cab + '"/>' : '') +
+      '<path d="' + n[1] + '" fill="#23272B"/><path d="' + n[2] + '" fill="#F4C21B"/>' +
+      '<rect x="113" y="258" width="9" height="5" rx="1" fill="#fff"/><rect x="113" y="267" width="9" height="3" rx="1" fill="#D2232A"/>' +
+      '<rect x="-40" y="210" width="' + (cab ? 100 : 108) + '" height="18" fill="#23272B"/><rect x="-40" y="278" width="146" height="14" fill="' + t[3] + '"/>' +
+      '<text x="' + (cab ? 75 : 80) + '" y="246" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="8" fill="' + numc + '">' + t[4] + '</text>' +
+      '<rect x="-30" y="212" width="28" height="80" fill="#2E3236"/><rect x="-17" y="216" width="2" height="72" fill="#C9CED2"/>' +
+      '<rect x="18" y="212" width="28" height="80" fill="#2E3236"/><rect x="31" y="216" width="2" height="72" fill="#C9CED2"/>' +
+      pair(-30, door) + pair(18, door) + '<rect class="dbtn" x="1" y="248" width="4" height="6" rx="1"/><rect class="dbtn" x="49" y="248" width="4" height="6" rx="1"/>';
+  };
+  window.ysTrain(window.ysOp || cfg.operator, window.ysTrip, window.ysIn);
   /* the doors open once the train has stopped */
   var ys = document.getElementById('yourstop');
   g.addEventListener('transitionend', function(e){ if (e.propertyName === 'transform' && ys && ys.classList.contains('in')) setTimeout(function(){ ys.classList.add('dopen'); }, 300); });
