@@ -296,6 +296,8 @@
     buildNav();
     renderCompose();
     show(current, false);
+    if (S.member && S.look === "clean") { if (S.groups.length) boardStart(); else loadGroups().then(boardStart); }
+    else boardStop();
   }
 
   /* ---------- feed ---------- */
@@ -339,9 +341,30 @@
     if (!group) { toast("Choose a group for your thread."); return; }
     if (title.length < 4) { toast("Give your thread a title of at least 4 characters."); return; }
     if (body.length < 2) { toast("Add a few words to your post."); return; }
-    var b = f.querySelector('button[type="submit"]'); b.disabled = true; b.textContent = "Posting";
-    call("createThread", { groupSlug: group, title: title, body: body }).then(function (r) {
-      b.disabled = false; b.textContent = "Post it";
+    var b = f.querySelector('button[type="submit"]');
+    var isQ = !!(f.isQuestion && f.isQuestion.checked), pic = boardOn() && f.closest(".bd-compose") ? B.photo : null;
+    if (pic && !(f.ownPhoto && f.ownPhoto.checked)) { toast("Please confirm the photo is your own."); return; }
+    var label = b.textContent;
+    b.disabled = true; b.textContent = pic ? "Uploading your photo" : "Posting";
+    var before = pic ? uploadPhoto(pic.file, {
+      title: title, category: (f.photoCat && f.photoCat.value) || CATS[0], showName: "", aircraft: "",
+      camera: exifVal(f, "camera"), lens: exifVal(f, "lens"), focal: exifVal(f, "focal"), shutter: exifVal(f, "shutter"), aperture: exifVal(f, "aperture"), iso: exifVal(f, "iso"),
+      description: body.slice(0, 1500), adviceWanted: false
+    }, function (pct) { b.textContent = "Uploading " + pct + "%"; }) : Promise.resolve(null);
+    before.then(function (photoId) {
+      b.textContent = "Posting";
+      var full = photoId ? body + "\n\n[[photo:" + photoId + "]]" : body;
+      return call("createThread", { groupSlug: group, title: title, body: full, isQuestion: isQ, hasPhoto: !!photoId });
+    }).catch(function (err) { return { ok: false, error: err.message || "The photo didn't upload. Please try again." }; }).then(function (r) {
+      b.textContent = label;
+      if (r.ok) { B.photo = null; if (r.data.id && B.fol.threads.indexOf(r.data.id) < 0) B.fol.threads.push(r.data.id); }
+      if (r.ok && r.data && r.data.pending) {
+        b.disabled = false; f.reset();
+        toast(r.data.reason === "words" ? "Thanks. Your post is waiting to be checked before it goes live." : "Thanks. As it's your first post, it will show once I've checked it. That's usually within a day.");
+        if (boardOn()) boardGo("group", group);
+        return;
+      }
+      b.disabled = false;
       if (!r.ok) { toast(r.error); return; }
       f.reset();
       toast("Posted. Thanks for starting the chat.");
@@ -425,6 +448,7 @@
 
   var openId = null;
   function openThread(id) {
+    if (boardOn()) { if (B.view === "thread" && B.thread === id) boardGo("thread", id, true); else boardGo("thread", id); return; }
     openId = id;
     openModal("<p>Opening the thread.</p>");
     call("getThread", { threadId: id }).then(function (r) {
@@ -468,6 +492,8 @@
     call("addComment", { threadId: openId, body: body }).then(function (r) {
       b.disabled = false;
       if (!r.ok) { toast(r.error); return; }
+      if (r.data && r.data.pending) { f.reset(); toast("Thanks. Your reply will show once it has been checked. That's usually within a day."); return; }
+      if (boardOn() && B.fol.threads.indexOf(openId) < 0) B.fol.threads.push(openId);
       openThread(openId); refreshLists();
     });
   });
@@ -511,7 +537,7 @@
       if (el.getAttribute("data-sure") !== "1") { el.setAttribute("data-sure", "1"); el.textContent = "Tap again to delete"; return; }
       call("deleteOwnPost", { targetType: "thread", targetId: el.getAttribute("data-fl-delt") }).then(function (r) {
         if (!r.ok) { toast(r.error); return; }
-        closeModal(); toast("Thread deleted."); loadGroups(); refreshLists();
+        closeModal(); toast("Thread deleted."); loadGroups().then(function () { if (boardOn()) boardGo("home", "", true); }); refreshLists();
       });
       return;
     }
@@ -523,6 +549,7 @@
       });
       return;
     }
+    if (el.hasAttribute("data-fl-group") && boardOn()) { boardGo("group", el.getAttribute("data-fl-group")); return; }
     if (el.hasAttribute("data-fl-group")) {
       S.feedGroup = el.getAttribute("data-fl-group");
       var sel = $("[data-fl-feedsel]"); if (sel) sel.value = S.feedGroup;
@@ -655,6 +682,32 @@
       '<label class="fl-as" style="margin-bottom:12px"><input type="checkbox" name="ownPhoto"> This is my own photo</label>' +
       '<div class="fl-row"><span class="fl-count" data-fl-up></span><button type="submit" class="' + (S.btn.main || "btn") + '">Share it</button></div></form>');
   }
+  function exifVal(f, k) { var el = f.querySelector('[data-exif="' + k + '"]'); return el ? el.value.trim() : ""; }
+  /* upload a member photo through the gallery pipeline, resolves with the new photo id */
+  function uploadPhoto(file, meta, progress) {
+    return toJpeg(file).then(function (j) {
+      var CH = 280000, pieces = [];
+      for (var i = 0; i < j.b64.length; i += CH) pieces.push(j.b64.slice(i, i + CH));
+      return call("startGalleryUpload", { total: pieces.length }).then(function (r) {
+        if (!r.ok) throw new Error(r.error);
+        var uploadId = r.data.uploadId, n = 0;
+        var next = function () {
+          if (n >= pieces.length) return call("finishGalleryUpload", { uploadId: uploadId, total: pieces.length, meta: meta, ownPhoto: true, width: j.width, height: j.height });
+          if (progress) progress(Math.round((n / pieces.length) * 100));
+          return call("sendGalleryPiece", { uploadId: uploadId, index: n, data: pieces[n] }).then(function (pr) {
+            if (!pr.ok) throw new Error(pr.error);
+            n++; return next();
+          });
+        };
+        return next();
+      }).then(function (r) {
+        if (!r || !r.ok) throw new Error((r && r.error) || "The upload didn't finish.");
+        var d = r.data || {};
+        gallery.loaded = false;
+        return d.id || d.photoId || (d.photo && d.photo.id) || null;
+      });
+    });
+  }
   function toJpeg(file) {
     return new Promise(function (resolve, reject) {
       var img = new Image(), url = URL.createObjectURL(file);
@@ -739,10 +792,21 @@
   function adminDo(el) {
     var action = el.getAttribute("data-fl-adm"), id = el.getAttribute("data-id");
     if (action === "open") { openThread(id); return; }
+    if (action === "removeThread" && el.getAttribute("data-sure") !== "1") { el.setAttribute("data-sure", "1"); el.textContent = "Tap again to remove"; return; }
+    var payload = { action: action, id: id };
+    if (action === "moveThread") { var mv = $("#bdMv"); payload.groupSlug = mv ? mv.value : ""; }
+    var DONE = { pin: "Pinned to the top.", unpin: "Unpinned.", lock: "Replies closed.", unlock: "Replies reopened.", moveThread: "Thread moved.", approvePost: "Approved. It's live now.", rejectPost: "Turned down.", removeThread: "Thread removed." };
     el.disabled = true;
-    call("adminAction", { action: action, id: id }).then(function (r) {
+    call("adminAction", payload).then(function (r) {
       if (!r.ok) { el.disabled = false; toast(r.error); return; }
-      toast("Done."); loadAdmin(); loadGroups(); refreshLists();
+      toast(DONE[action] || "Done."); loadAdmin();
+      loadGroups().then(function () {
+        if (!boardOn()) return;
+        if (B.view === "mod") boardGo("mod", "", true);
+        else if (B.view === "thread") { if (action === "removeThread") boardGo("home", "", true); else boardGo("thread", B.thread, true); }
+        else boardSide();
+      });
+      refreshLists();
     });
   }
 
@@ -791,6 +855,562 @@
     var sel = $("[data-fl-feedsel]");
     if (sel) sel.addEventListener("change", function () { S.feedGroup = sel.value; feedList(); renderCompose(); });
   }
+
+  /* ---------- logged in forum board (clean look): a proper forum layout once a member is logged in ---------- */
+  var CATS_ORDER = [
+    ["show", "Show threads", "One thread per show. Dates, a countdown and line up updates the moment an aircraft is confirmed."],
+    ["chat", "General chat", "Say hello, share show reports and catch up on the latest news."],
+    ["plan", "Planning your day", "Getting there, places to stay, first visits and accessibility."],
+    ["photo", "Photography and spotting", "Photography, line ups, arrivals and kit."],
+    ["corner", "Photographer's Corner", "Advice, techniques, editing and the best places to shoot."]
+  ];
+  var B = { on: false, view: "home", group: "", thread: "", sort: "activity", all: [], allLoaded: false, q: "", fol: { threads: [], groups: [] }, photo: null, people: [] };
+  function isFol(type, id) { return (B.fol[type === "group" ? "groups" : "threads"] || []).indexOf(id) >= 0; }
+  function loadFollowing() {
+    return call("listFollowing").then(function (r) { if (r.ok && r.data) B.fol = { threads: r.data.threads || [], groups: r.data.groups || [] }; });
+  }
+  function followBtn(type, id) {
+    var on = isFol(type, id);
+    return '<button type="button" class="bd-follow' + (on ? " on" : "") + '" data-bd-follow="' + type + '" data-id="' + esc(id) + '" aria-pressed="' + (on ? "true" : "false") + '">' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>' + (on ? "Following" : "Follow " + type) + "</button>";
+  }
+  /* @mentions: highlight names in posts */
+  function withMentions(html, names) {
+    names = (names || []).filter(Boolean).sort(function (a, b) { return b.length - a.length; });
+    names.forEach(function (n) {
+      var safe = esc(n).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      html = html.replace(new RegExp("@" + safe, "g"), '<span class="bd-at">@' + esc(n) + "</span>");
+    });
+    return html;
+  }
+  /* photo settings read straight from the photo file (JPEG EXIF) */
+  function readExif(file) {
+    return new Promise(function (resolve) {
+      if (!file || !/jpe?g/i.test(file.type || "")) { resolve({}); return; }
+      var fr = new FileReader();
+      fr.onload = function () { try { resolve(parseExif(new DataView(fr.result))); } catch (e) { resolve({}); } };
+      fr.onerror = function () { resolve({}); };
+      fr.readAsArrayBuffer(file.slice(0, 196608));
+    });
+  }
+  function parseExif(v) {
+    if (v.getUint16(0) !== 0xFFD8) return {};
+    var off = 2;
+    while (off < v.byteLength - 4) {
+      var mk = v.getUint16(off), len = v.getUint16(off + 2);
+      if (mk === 0xFFE1 && v.getUint32(off + 4) === 0x45786966) return tiff(v, off + 10);
+      if ((mk & 0xFF00) !== 0xFF00) break;
+      off += 2 + len;
+    }
+    return {};
+  }
+  function tiff(v, t) {
+    var le = v.getUint16(t) === 0x4949, out = {};
+    function u16(o) { return v.getUint16(o, le); }
+    function u32(o) { return v.getUint32(o, le); }
+    function str(o, n) { var s = ""; for (var i = 0; i < n; i++) { var c = v.getUint8(o + i); if (!c) break; s += String.fromCharCode(c); } return s.trim(); }
+    function rat(o) { var a = u32(o), b = u32(o + 4); return b ? a / b : 0; }
+    function num(type, cnt, at) {
+      if (type === 5 || type === 10) return rat(at);
+      if (type === 3) return cnt === 2 ? (u16(at + 2) ? u16(at) / u16(at + 2) : 0) : u16(at);
+      if (type === 4) return u32(at);
+      return 0;
+    }
+    function ifd(start, each) {
+      var n = u16(start);
+      for (var i = 0; i < n; i++) {
+        var e = start + 2 + i * 12, tag = u16(e), type = u16(e + 2), cnt = u32(e + 4), vo = e + 8;
+        var at = (type === 2 && cnt > 4) || type === 5 || type === 10 || (type === 4 && cnt > 1) ? t + u32(vo) : vo;
+        each(tag, type, cnt, at);
+      }
+    }
+    var exifPtr = 0;
+    ifd(t + u32(t + 4), function (tag, type, cnt, at) {
+      if (tag === 0x010F) out.make = str(at, cnt);
+      if (tag === 0x0110) out.model = str(at, cnt);
+      if (tag === 0x8769) exifPtr = u32(at);
+    });
+    if (exifPtr) ifd(t + exifPtr, function (tag, type, cnt, at) {
+      var x = num(type, cnt, at);
+      if (tag === 0x829A && x) out.shutter = x >= 1 ? x + "s" : "1/" + Math.round(1 / x);
+      if (tag === 0x829D && x) out.aperture = "f/" + (Math.round(x * 10) / 10);
+      if (tag === 0x8827 && x) out.iso = String(x);
+      if (tag === 0x920A && x) out.focal = Math.round(x) + "mm";
+      if (tag === 0xA434) out.lens = str(at, cnt);
+    });
+    var cam = (out.model || "").replace(/\b([A-Z]{4,})\b/g, function (w) { return w.charAt(0) + w.slice(1).toLowerCase(); });
+    var brand = out.make ? out.make.split(" ")[0] : "";
+    if (/^[A-Z]{4,}$/.test(brand)) brand = brand.charAt(0) + brand.slice(1).toLowerCase();
+    if (brand && cam.toLowerCase().indexOf(brand.toLowerCase()) < 0) cam = brand + " " + cam;
+    return { camera: cam.trim(), lens: out.lens || "", focal: out.focal || "", shutter: out.shutter || "", aperture: out.aperture || "", iso: out.iso || "" };
+  }
+  function photoFields(x) {
+    x = x || {};
+    var F = [["camera", "Camera", "Nikon D500"], ["lens", "Lens", "200-500mm"], ["focal", "Focal length", "500mm"], ["shutter", "Shutter", "1/1600"], ["aperture", "Aperture", "f/8"], ["iso", "ISO", "400"]];
+    return '<div class="bd-exif-f">' + F.map(function (f) {
+      return '<label><span>' + f[1] + '</span><input type="text" data-exif="' + f[0] + '" value="' + esc(x[f[0]] || "") + '" placeholder="' + f[2] + '" maxlength="60"></label>';
+    }).join("") + "</div>";
+  }
+  function settingsStrip(p) {
+    var set = [["Camera", p.camera], ["Lens", p.lens], ["Focal length", p.focal], ["Shutter", p.shutter], ["Aperture", p.aperture], ["ISO", p.iso]].filter(function (x) { return x[1]; });
+    if (!set.length) return "";
+    return '<div class="bd-set">' + set.map(function (x) { return "<span><small>" + esc(x[0]) + "</small>" + esc(x[1]) + "</span>"; }).join("") + "</div>";
+  }
+  function photoSlots(html) {
+    var slot = '<div class="bd-pic" data-bd-pic="$1"><div class="bd-pic-wait">Loading the photo</div></div>';
+    return html.replace(/<p>\s*\[\[photo:([A-Za-z0-9_-]+)\]\]\s*<\/p>/g, slot).replace(/\[\[photo:([A-Za-z0-9_-]+)\]\]/g, slot);
+  }
+  function fillPhotos(root) {
+    $$("[data-bd-pic]", root).forEach(function (box) {
+      var id = box.getAttribute("data-bd-pic");
+      call("getGalleryPhoto", { photoId: id }).then(function (r) {
+        if (!r.ok || !r.data || !r.data.photo) { box.innerHTML = '<div class="bd-pic-wait">This photo has been removed.</div>'; return; }
+        var p = r.data.photo, src = /^data:|\.(webp|jpe?g|png)$/i.test(p.image) ? p.image : p.image + "/v1/fit/w_1400,h_1400,q_85/p.jpg";
+        box.innerHTML = '<img src="' + esc(src) + '" alt="' + esc(p.title || "Photo") + '" loading="lazy" decoding="async">' +
+          '<p class="bd-cr">© ' + esc(p.authorName || "") + (p.showName ? " · " + esc(p.showName) : "") + (p.aircraft ? " · " + esc(p.aircraft) : "") + "</p>" + settingsStrip(p);
+      });
+    });
+  }
+
+  function boardOn() { return B.on; }
+  function catOf(slug) { var g = S.groups.filter(function (x) { return x.slug === slug; })[0]; return g ? (g.category || "other") : "other"; }
+  function catLabel(c) { var f = CATS_ORDER.filter(function (x) { return x[0] === c; })[0]; return f ? f[1] : "More groups"; }
+  function catGroups() {
+    var out = CATS_ORDER.map(function (c) { return { key: c[0], title: c[1], blurb: c[2], groups: [] }; });
+    var other = { key: "other", title: "More groups", blurb: "Show groups and anything else.", groups: [] };
+    S.groups.slice().sort(function (a, b) { return (a.sortOrder || 0) - (b.sortOrder || 0); }).forEach(function (g) {
+      var box = out.filter(function (c) { return c.key === g.category; })[0] || other;
+      box.groups.push(g);
+    });
+    if (other.groups.length) out.splice(1, 0, other);
+    return out.filter(function (c) { return c.groups.length; });
+  }
+  function lastIn(slug) {
+    return B.all.filter(function (t) { return t.groupSlug === slug; })
+      .sort(function (a, b) { return String(b.lastActivity || b.created).localeCompare(String(a.lastActivity || a.created)); })[0];
+  }
+  function crumbs(list) {
+    return '<nav class="bd-crumb" aria-label="You are here">' + list.map(function (c, i) {
+      return i < list.length - 1 ? '<button type="button" data-bd-go="' + esc(c[1]) + '">' + esc(c[0]) + "</button><span aria-hidden=\"true\">›</span>" : "<b>" + esc(c[0]) + "</b>";
+    }).join("") + "</nav>";
+  }
+  function loadAll() {
+    return call("listThreads", { groupSlug: "", all: true }).then(function (r) {
+      B.all = r.ok ? (r.data || []) : []; B.allLoaded = true; return B.all;
+    });
+  }
+  function boardBuild() {
+    if ($("#board")) return;
+    document.body.classList.add("fl-member");
+    var b = document.createElement("div"); b.id = "board";
+    b.innerHTML =
+      '<header class="bd-top"><div class="wrap bd-top-in">' +
+        '<button type="button" class="bd-name" data-bd-go="home"><span>Airshow</span> Forum</button>' +
+        '<form class="bd-search" role="search" data-bd-search><label class="fl-sr" for="bdQ">Search the forum</label><input type="search" id="bdQ" placeholder="Search threads" autocomplete="off"><button type="submit" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button></form>' +
+        '<button type="button" class="btn btn-teal sm bd-new" data-bd-new="">+ New thread</button>' +
+        '<span class="bd-me" data-bd-me></span>' +
+      "</div></header>" +
+      '<div class="wrap bd-grid"><aside class="bd-side" aria-label="Forum categories"><button type="button" class="bd-cats-t" data-bd-toggle aria-expanded="false">Categories and groups</button><div class="bd-side-in" data-bd-side></div></aside>' +
+      '<div class="bd-main" data-bd-main aria-live="polite"></div></div>';
+    var main = $("main"); main.parentNode.insertBefore(b, main);
+    var look = $("#lookSw"); if (look) $(".bd-top-in").appendChild(look);
+  }
+  function boardSide() {
+    var side = $("[data-bd-side]"); if (!side) return;
+    var me = S.member;
+    var extra = [["corner", "Photo gallery"], ["buddy", "Buddy board", G_BUDDY], ["rarity", "Rarity log", G_RARE], ["kit", "Kit swap", G_KIT], ["live", "Show day live"], ["how", "How it works"]];
+    var modLink = me && me.isAdmin ? '<button type="button" class="bd-home bd-modl' + (B.view === "mod" ? " on" : "") + '" data-bd-go="mod">Moderation' + (modCount(MOD.overview) ? "<small class=\"bd-mcount\">" + modCount(MOD.overview) + "</small>" : "") + "</button>" : "";
+    side.innerHTML = '<button type="button" class="bd-home' + (B.view === "home" ? " on" : "") + '" data-bd-go="home">Forum home</button>' +
+      '<button type="button" class="bd-home' + (B.view === "mine" ? " on" : "") + '" data-bd-go="mine">My threads</button>' +
+      '<button type="button" class="bd-home' + (B.view === "following" ? " on" : "") + '" data-bd-go="following">Following<small>' + (B.fol.threads.length + B.fol.groups.length) + "</small></button>" + modLink +
+      catGroups().map(function (c) {
+        return '<div class="bd-cat"><h3>' + esc(c.title) + "</h3>" + c.groups.map(function (g) {
+          return '<button type="button" class="bd-g' + (B.view === "group" && B.group === g.slug ? " on" : "") + '" data-bd-group="' + esc(g.slug) + '"><span>' + esc(g.title) + (isFol("group", g.slug) ? '<i class="bd-dot" title="Following"></i>' : "") + "</span><small>" + (g.threadCount || 0) + "</small></button>";
+        }).join("") + "</div>";
+      }).join("") +
+      '<div class="bd-cat"><h3>More of the forum</h3>' + extra.map(function (x) {
+        return x[2] ? '<button type="button" class="bd-g" data-bd-group="' + x[2] + '"><span>' + x[1] + "</span></button>"
+          : '<button type="button" class="bd-g' + (B.view === "sec" && B.sec === x[0] ? " on" : "") + '" data-bd-sec="' + x[0] + '"><span>' + x[1] + "</span></button>";
+      }).join("") + '<button type="button" class="bd-g bd-sug" data-fl-act="suggest"><span>Suggest a new group</span></button></div>';
+    var mc = $("[data-bd-me]");
+    if (mc && me) mc.innerHTML = avatar(me.name, me.colour, me.photo) + "<span>" + esc(me.name.split(" ")[0]) + "</span>";
+  }
+  function threadRow(t, showGroup) {
+    var g = showGroup ? groupTitle(t.groupSlug) : "";
+    return '<button type="button" class="bd-row bd-t" data-fl-thread="' + esc(t.id) + '">' +
+      '<span class="bd-t-main">' + avatar(t.authorName, t.authorColour, t.authorPhoto) + '<span><b>' + (t.pinned ? '<i class="bd-pin">Pinned</i>' : "") + (t.locked ? '<i class="bd-lock">Closed</i>' : "") + (t.isQuestion ? (t.answerId ? '<i class="bd-solved">Solved</i>' : '<i class="bd-q">Question</i>') : "") + (t.hasPhoto ? '<i class="bd-ph-i">Photo</i>' : "") + esc(t.title) + "</b>" +
+      "<small>Started by " + esc(t.authorName) + " · " + esc(ago(t.created)) + (g ? " · in " + esc(g) : "") + "</small></span></span>" +
+      '<span class="bd-n"><b>' + (t.commentCount || 0) + "</b><small>" + ((t.commentCount === 1) ? "reply" : "replies") + "</small></span>" +
+      '<span class="bd-n"><b>' + (t.likeCount || 0) + "</b><small>" + ((t.likeCount === 1) ? "like" : "likes") + "</small></span>" +
+      '<span class="bd-last">' + esc(ago(t.lastActivity || t.created)) + "</span></button>";
+  }
+  function threadHead() {
+    return '<div class="bd-row bd-head" aria-hidden="true"><span>Thread</span><span>Replies</span><span>Likes</span><span>Last activity</span></div>';
+  }
+  function vHome() {
+    var me = S.member, total = S.groups.reduce(function (n, g) { return n + (g.threadCount || 0); }, 0);
+    var latest = B.all.slice().sort(function (a, b) { return String(b.lastActivity || b.created).localeCompare(String(a.lastActivity || a.created)); }).slice(0, 5);
+    return '<div class="bd-hello"><div><h1>Welcome back, ' + esc(me.name.split(" ")[0]) + "</h1><p>Pick a group to read or start a new thread. Posts go live straight away, so have a quick read before you press post.</p></div>" +
+      '<div class="bd-stats"><div><b>' + S.groups.length + "</b><span>Groups</span></div><div><b>" + total + "</b><span>Threads</span></div><div><b>" + B.all.filter(function (t) { return t.authorId === me.id; }).length + "</b><span>Yours</span></div></div></div>" +
+      '<section class="bd-block"><h2>Latest activity</h2>' + (latest.length ? '<div class="bd-table">' + threadHead() + latest.map(function (t) { return threadRow(t, true); }).join("") + "</div>"
+        : '<div class="bd-empty"><b>It is quiet in here so far</b><p>Be one of the first to post. Most people start with a question about their next show.</p>' + '<button type="button" class="btn btn-teal sm" data-bd-new="">Start a thread</button></div>') + "</section>" +
+      catGroups().map(function (c) {
+        return '<section class="bd-block"><h2>' + esc(c.title) + '</h2><p class="bd-blurb">' + esc(c.blurb) + '</p><div class="bd-table">' +
+          '<div class="bd-row bd-head bd-gh" aria-hidden="true"><span>Group</span><span>Threads</span><span>Latest thread</span></div>' +
+          c.groups.map(function (g) {
+            var l = lastIn(g.slug);
+            return '<button type="button" class="bd-row bd-gr" data-bd-group="' + esc(g.slug) + '"><span class="bd-gname"><b>' + esc(g.title) + "</b><small>" + esc(g.description || "") + "</small></span>" +
+              '<span class="bd-n"><b>' + (g.threadCount || 0) + "</b><small>threads</small></span>" +
+              '<span class="bd-last">' + (l ? "<b>" + esc(l.title) + "</b><small>" + esc(l.authorName) + " · " + esc(ago(l.lastActivity || l.created)) + "</small>" : "<small>No threads yet. Start the first one.</small>") + "</span></button>";
+          }).join("") + "</div></section>";
+      }).join("");
+  }
+  function sortThreads(list) {
+    var by = B.sort;
+    return list.slice().sort(function (a, b) {
+      if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
+      if (by === "new") return String(b.created).localeCompare(String(a.created));
+      if (by === "replies") return (b.commentCount || 0) - (a.commentCount || 0);
+      return String(b.lastActivity || b.created).localeCompare(String(a.lastActivity || a.created));
+    });
+  }
+  function sortBar() {
+    return '<label class="bd-sort">Sort by <select data-bd-sort><option value="activity"' + (B.sort === "activity" ? " selected" : "") + ">Latest activity</option><option value=\"new\"" + (B.sort === "new" ? " selected" : "") + ">Newest threads</option><option value=\"replies\"" + (B.sort === "replies" ? " selected" : "") + ">Most replies</option></select></label>";
+  }
+  function vGroup(list) {
+    var g = S.groups.filter(function (x) { return x.slug === B.group; })[0] || { title: groupTitle(B.group) || "Group", description: "" };
+    return crumbs([["Forum", "home"], [catLabel(catOf(B.group)), "home"], [g.title, ""]]) +
+      '<div class="bd-ghead"><div><h1>' + esc(g.title) + "</h1>" + (g.description ? "<p>" + esc(g.description) + "</p>" : "") + '</div><span class="bd-btns">' + followBtn("group", B.group) + '<button type="button" class="btn btn-teal sm" data-bd-new="' + esc(B.group) + '">+ New thread here</button></span></div>' +
+      (g.show ? showCard(g.show) : "") +
+      '<div class="bd-tools"><span>' + list.length + (list.length === 1 ? " thread" : " threads") + "</span>" + sortBar() + "</div>" +
+      (list.length ? '<div class="bd-table">' + threadHead() + sortThreads(list).map(function (t) { return threadRow(t, false); }).join("") + "</div>"
+        : '<div class="bd-empty"><b>No threads in this group yet</b><p>Start the first one. Ask a question, share a tip or tell a story from the crowd line.</p><button type="button" class="btn btn-teal sm" data-bd-new="' + esc(B.group) + '">Start a thread</button></div>');
+  }
+  function showCard(sh) {
+    var days = sh.start ? Math.ceil((new Date(sh.start) - Date.now()) / 864e5) : null;
+    return '<div class="bd-show"><div class="bd-show-l"><b>' + esc(sh.name) + "</b><span>" + esc(sh.dateText || "Date to be confirmed") + "</span>" +
+      '<span class="bd-show-n">' + (sh.lineupCount ? sh.lineupCount + " aircraft confirmed so far. New ones are posted in the line up thread automatically." : "Line up updates are posted here automatically as aircraft are confirmed.") + "</span></div>" +
+      (days != null && days >= 0 ? '<div class="bd-cd"><b>' + days + "</b><span>days to go</span></div>" : '<div class="bd-cd"><b>TBC</b><span>dates to come</span></div>') +
+      '<div class="bd-show-b">' + (sh.link ? '<a class="btn btn-teal sm" href="' + esc(sh.link) + '" target="_top">Show guide</a>' : "") + '<a class="btn sm bd-hubbtn" href="' + esc(HUB) + '" target="_top">Save to my hub</a></div></div>';
+  }
+  function vList(title, lead, list, emptyT, emptyP) {
+    return crumbs([["Forum", "home"], [title, ""]]) + '<div class="bd-ghead"><div><h1>' + esc(title) + "</h1><p>" + esc(lead) + "</p></div></div>" +
+      '<div class="bd-tools"><span>' + list.length + (list.length === 1 ? " thread" : " threads") + "</span>" + sortBar() + "</div>" +
+      (list.length ? '<div class="bd-table">' + threadHead() + sortThreads(list).map(function (t) { return threadRow(t, true); }).join("") + "</div>"
+        : '<div class="bd-empty"><b>' + esc(emptyT) + "</b><p>" + esc(emptyP) + '</p><button type="button" class="btn btn-teal sm" data-bd-new="">Start a thread</button></div>');
+  }
+  function vCompose(fixed) {
+    var me = S.member;
+    var opts = catGroups().map(function (c) {
+      return '<optgroup label="' + esc(c.title) + '">' + c.groups.map(function (g) { return '<option value="' + esc(g.slug) + '"' + (g.slug === fixed ? " selected" : "") + ">" + esc(g.title) + "</option>"; }).join("") + "</optgroup>";
+    }).join("");
+    return crumbs([["Forum", "home"], ["New thread", ""]]) +
+      '<div class="bd-compose-grid"><form class="bd-compose" data-fl-compose novalidate><h1>Start a new thread</h1>' +
+        '<div class="fl-field"><label for="bdG">Category</label><select id="bdG" name="group" required><option value="">Choose where it goes</option>' + opts + "</select></div>" +
+        '<div class="fl-field"><label for="bdT">Title</label><input type="text" id="bdT" name="title" maxlength="120" placeholder="e.g. First time at Cosford next year, any tips?" required></div>' +
+        '<div class="fl-field"><label for="bdB">Your post</label><textarea id="bdB" name="body" maxlength="5000" rows="9" placeholder="Say what is on your mind. The more detail, the better the answers." required data-bd-mention></textarea></div>' +
+        '<label class="bd-qt"><input type="checkbox" name="isQuestion"><span class="bd-sw" aria-hidden="true"></span><span><b>This is a question</b><small>Once someone answers it, you can mark the best reply as the answer so the next person finds it straight away.</small></span></label>' +
+        '<div class="bd-photo" data-bd-photo><button type="button" class="btn btn-navy sm" data-bd-addphoto>Add a photo</button><input type="file" accept="image/jpeg,image/png,image/webp" data-bd-file hidden><small>Your own photos only. The camera settings are read from the photo for you.</small></div>' +
+        '<div class="fl-row"><span class="fl-as">' + avatar(me.name, me.colour, me.photo) + "<span>Posting as <b>" + esc(me.name) + '</b></span></span><span class="bd-btns"><button type="button" class="btn btn-navy sm" data-bd-go="back">Cancel</button><button type="submit" class="btn btn-teal sm">Post thread</button></span></div></form>' +
+      '<aside class="bd-tips"><h2>Before you post</h2><ul><li>Asking something? Tick This is a question, so the best answer can be marked.</li><li>Pick the group that fits best, so the right people see it.</li><li>A clear title gets more replies. Say the show and what you want to know.</li><li>Have a quick search first, someone may have asked already.</li><li>Keep it friendly and about airshows. Credit other people\'s photos.</li></ul></aside></div>';
+  }
+  function vThread(d) {
+    var t = d.thread, me = S.member, mine = me && (me.id === t.authorId || me.isAdmin);
+    var asker = me && me.id === t.authorId;
+    var names = [t.authorName].concat(d.comments.map(function (c) { return c.authorName; }));
+    B.people = names.filter(function (n, i) { return n && names.indexOf(n) === i && (!me || n !== me.name); });
+    var answer = t.answerId ? d.comments.filter(function (c) { return c.id === t.answerId; })[0] : null;
+    function post(p, n, isOp) {
+      var own = me && (me.id === p.authorId || me.isAdmin), sys = p.authorId === "system", best = !isOp && t.answerId === p.id;
+      return '<article class="bd-post' + (isOp ? " op" : "") + (sys ? " sys" : "") + (best ? " best" : "") + '" id="post-' + n + '"><div class="bd-who">' +
+        (sys ? '<span class="fl-av bd-bot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12c0-.8-.7-1.4-1.6-1.4H15L10.6 3H8.8l2.3 7.6H6.6L4.8 8.2H3.4l1 3.8-1 3.8h1.4l1.8-2.4h4.5L8.8 21h1.8l4.4-7.6h4.4c.9 0 1.6-.6 1.6-1.4z"/></svg></span>' : avatar(p.authorName, p.authorColour, p.authorPhoto)) +
+        "<b>" + esc(p.authorName) + "</b>" + (sys ? "<small>Automatic update</small>" : isOp ? "<small>Started the thread</small>" : "") + "</div>" +
+        '<div class="bd-body"><div class="bd-ph"><span>' + (best ? '<i class="bd-solved">Best answer</i>' : "") + esc(ago(p.created)) + '</span><span class="bd-num">#' + n + "</span></div>" +
+        '<div class="fl-body">' + photoSlots(withMentions(paras(p.body), names)) + "</div>" +
+        '<div class="bd-acts">' +
+          (!isOp && !sys && t.isQuestion && asker ? (best ? '<button type="button" class="fl-act" data-bd-answer="">Unmark answer</button>' : '<button type="button" class="fl-act bd-mark" data-bd-answer="' + esc(p.id) + '">Mark as the answer</button>') : "") +
+
+          (isOp ? '<button type="button" class="fl-act" data-fl-like="' + esc(t.id) + '" aria-pressed="' + (d.liked ? "true" : "false") + '">Like · <span>' + (t.likeCount || 0) + "</span></button>" : "") +
+          (!t.locked || (me && me.isAdmin) ? '<button type="button" class="fl-act" data-bd-quote="' + esc(p.authorName) + '">Reply</button>' : "") +
+          (me && !sys ? '<button type="button" class="fl-act" data-fl-report="' + (isOp ? "thread" : "comment") + '" data-id="' + esc(isOp ? t.id : p.id) + '">Report</button>' : "") +
+          (isOp && mine ? '<button type="button" class="fl-act red" data-fl-delt="' + esc(t.id) + '">Delete thread</button>' : "") +
+          (!isOp && own ? '<button type="button" class="fl-act red" data-fl-delc="' + esc(p.id) + '">Delete</button>' : "") +
+        "</div></div></article>";
+    }
+    var reply = t.locked && !(me && me.isAdmin) ? '<p class="bd-closed">Replies are closed on this thread.</p>'
+      : '<form class="bd-reply" data-fl-reply novalidate><h2>Your reply</h2><label class="fl-sr" for="flReply">Your reply</label><textarea id="flReply" name="body" maxlength="2000" rows="5" placeholder="Write a reply. Type @ to mention someone in this thread." data-bd-mention></textarea>' +
+        '<div class="fl-row" style="margin-top:10px"><span class="fl-as">' + avatar(me.name, me.colour, me.photo) + "<span>Replying as <b>" + esc(me.name) + '</b></span></span><button type="submit" class="btn btn-teal sm">Post reply</button></div></form>';
+    return crumbs([["Forum", "home"], [groupTitle(t.groupSlug) || "Group", "g:" + t.groupSlug], [t.title, ""]]) +
+      '<div class="bd-thead"><div><h1>' + (t.isQuestion ? (t.answerId ? '<i class="bd-solved big">Solved</i>' : '<i class="bd-q big">Question</i>') : "") + esc(t.title) + '</h1><p><span class="fl-tag">' + esc(groupTitle(t.groupSlug)) + "</span> " + (d.comments.length) + (d.comments.length === 1 ? " reply" : " replies") + " · " + (t.likeCount || 0) + ((t.likeCount === 1) ? " like" : " likes") + "</p></div>" + followBtn("thread", t.id) + "</div>" +
+      (me && me.isAdmin ? modTools(t) : "") +
+      post(t, 1, true) +
+      (answer ? '<div class="bd-ans"><b>Best answer</b><span>' + esc(answer.authorName) + " · " + esc(String(answer.body).slice(0, 140)) + (String(answer.body).length > 140 ? "…" : "") + '</span><button type="button" data-bd-jump>Jump to it</button></div>' : "") + d.comments.map(function (c, i) { return post(c, i + 2, false); }).join("") + reply;
+  }
+  function moveSection(id) {
+    var main = $("[data-bd-main]"), sec = $("#" + id);
+    if (!sec || !main) return;
+    main.innerHTML = crumbs([["Forum", "home"], [(SECTIONS.filter(function (s) { return s.id === id; })[0] || {}).nav || id, ""]]);
+    sec.removeAttribute("data-off"); sec.hidden = false; sec.classList.add("bd-sec");
+    main.appendChild(sec);
+    if (id === "corner") loadGallery();
+    if (id === "admin") loadAdmin();
+  }
+  function parkSections() {
+    var main = $("main");
+    $$(".bd-sec").forEach(function (sec) { sec.classList.remove("bd-sec"); sec.setAttribute("data-off", ""); main.appendChild(sec); });
+  }
+  var hist = [];
+  function boardGo(view, arg, noPush) {
+    if (!B.on) return;
+    if (!noPush) hist.push({ view: B.view, group: B.group, thread: B.thread, sec: B.sec });
+    parkSections();
+    B.view = view;
+    if (view === "group") B.group = arg;
+    if (view === "thread") B.thread = arg;
+    if (view === "sec") B.sec = arg;
+    var main = $("[data-bd-main]");
+    var side = $(".bd-side"); if (side) side.classList.remove("open");
+    var tg = $("[data-bd-toggle]"); if (tg) tg.setAttribute("aria-expanded", "false");
+    boardSide();
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) { window.scrollTo(0, 0); }
+    if (view === "sec") { moveSection(arg); return; }
+    if (view === "compose") { main.innerHTML = vCompose(arg || ""); var ti = $("#bdT"); if (ti && arg) setTimeout(function () { ti.focus(); }, 60); return; }
+    main.innerHTML = '<div class="bd-empty"><p>Loading.</p></div>';
+    if (view === "home") { loadAll().then(function () { if (B.view === "home") { main.innerHTML = vHome(); boardSide(); } }); return; }
+    if (view === "mod") {
+      if (!(S.member && S.member.isAdmin)) { boardGo("home", "", true); return; }
+      loadMod().then(function () { if (B.view === "mod") { main.innerHTML = vMod(); boardSide(); } });
+      return;
+    }
+    if (view === "following") {
+      Promise.all([loadAll(), loadFollowing()]).then(function () {
+        if (B.view !== "following") return;
+        boardSide();
+        var gs = B.fol.groups.map(function (sl) { return '<button type="button" class="bd-chip" data-bd-group="' + esc(sl) + '">' + esc(groupTitle(sl) || sl) + "</button>"; }).join("");
+        main.innerHTML = vList("Following", "Threads you follow. New replies reach your bell, and you follow your own threads and anything you reply to automatically.", B.all.filter(function (t) { return isFol("thread", t.id); }), "You're not following any threads yet", "Tap Follow thread at the top of any thread and new replies will reach your bell.") +
+          (gs ? '<div class="bd-folg"><b>Groups you follow</b><span>New threads in these groups reach your bell.</span><div>' + gs + "</div></div>" : "");
+      });
+      return;
+    }
+    if (view === "mine") { loadAll().then(function () { if (B.view === "mine") main.innerHTML = vList("My threads", "Every thread you have started, newest activity first.", B.all.filter(function (t) { return t.authorId === S.member.id; }), "You haven't started a thread yet", "When you post, your threads collect here so you can follow the replies."); }); return; }
+    if (view === "search") { loadAll().then(function () { var q = B.q.toLowerCase(); main.innerHTML = vList('Search: "' + B.q + '"', "Threads with your words in the title or the opening post.", B.all.filter(function (t) { return (t.title + " " + (t.preview || "")).toLowerCase().indexOf(q) >= 0; }), "Nothing found", "Try fewer words, or start a thread and ask."); }); return; }
+    if (view === "group") { call("listThreads", { groupSlug: arg }).then(function (r) { if (B.view === "group" && B.group === arg) main.innerHTML = r.ok ? vGroup(r.data || []) : offlineBox(r); }); return; }
+    if (view === "thread") {
+      openId = arg;
+      call("getThread", { threadId: arg }).then(function (r) {
+        if (B.view !== "thread") return;
+        main.innerHTML = r.ok ? vThread(r.data) : '<div class="bd-empty"><b>Thread not found</b><p>' + esc(r.error || "It may have been removed.") + "</p></div>";
+        if (r.ok) fillPhotos(main);
+      });
+    }
+  }
+  /* ---------- moderation (admin only) ---------- */
+  var MOD = { tab: "queue", settings: null, overview: null };
+  function modCount(d) {
+    if (!d) return 0;
+    return (d.pendingPosts || []).length + d.pendingGroups.length + d.reportedThreads.length + d.reportedComments.length + d.reportedPhotos.length;
+  }
+  function loadMod() {
+    return Promise.all([call("adminOverview"), call("getModSettings")]).then(function (rs) {
+      MOD.overview = rs[0].ok ? rs[0].data : null;
+      MOD.settings = rs[1].ok && rs[1].data ? rs[1].data : { words: [], wordMode: "hold", firstPostApproval: true, holdLinks: true };
+      return rs[0];
+    });
+  }
+  function admBtn(label, action, id, red, extra) {
+    return '<button type="button" class="fl-act' + (red ? " red" : "") + '" data-fl-adm="' + action + '" data-id="' + esc(id) + '"' + (extra || "") + ">" + label + "</button>";
+  }
+  function modItem(kind, title, sub, body, acts) {
+    return '<div class="bd-mi"><span class="bd-mk bd-mk-' + kind + '">' + esc({ first: "First post", link: "New member link", thread: "Reported thread", comment: "Reported reply", photo: "Reported photo", group: "Group idea", word: "Held by word filter" }[kind] || kind) + "</span>" +
+      "<div><b>" + esc(title) + "</b><small>" + sub + "</small>" + (body ? "<p>" + esc(body) + "</p>" : "") + '</div><div class="bd-ma">' + acts + "</div></div>";
+  }
+  function vMod() {
+    var d = MOD.overview, st = MOD.settings || {};
+    if (!d) return '<div class="bd-empty"><b>The admin tools didn\'t load</b><p>Please try again in a moment.</p></div>';
+    var why = function (x) { return (x.reportReasons || []).slice(-2).map(esc).join(" · "); };
+    var items = [];
+    (d.pendingPosts || []).forEach(function (p) {
+      items.push(modItem(p.heldFor === "words" ? "word" : p.heldFor === "links" ? "link" : "first", p.type === "comment" ? "Reply in: " + (p.threadTitle || "a thread") : p.title,
+        esc(p.authorName) + " · " + esc(ago(p.created)) + (p.groupSlug ? " · " + esc(groupTitle(p.groupSlug)) : "") + (p.heldFor === "words" ? " · Matched: " + esc((p.matched || []).join(", ")) : p.heldFor === "links" ? " · Has a link" : " · New member"),
+        String(p.body || "").slice(0, 220), admBtn("Approve", "approvePost", p.id) + admBtn("Turn down", "rejectPost", p.id, true)));
+    });
+    d.reportedThreads.forEach(function (t) { items.push(modItem("thread", t.title, t.reportCount + (t.reportCount === 1 ? " report" : " reports") + (why(t) ? " · " + why(t) : ""), "", admBtn("Open", "open", t.id) + admBtn("Keep it", "clearThreadReports", t.id) + admBtn("Remove", "removeThread", t.id, true))); });
+    d.reportedComments.forEach(function (c) { items.push(modItem("comment", "Reply by " + c.authorName, why(c), String(c.body || "").slice(0, 200), admBtn("Keep it", "clearCommentReports", c.id) + admBtn("Remove", "removeComment", c.id, true))); });
+    d.reportedPhotos.forEach(function (p) { items.push(modItem("photo", p.title, p.reportCount + (p.reportCount === 1 ? " report" : " reports") + (why(p) ? " · " + why(p) : ""), "", admBtn("Keep it", "clearGalleryReports", p.id) + admBtn("Remove", "removeGalleryPhoto", p.id, true))); });
+    d.pendingGroups.forEach(function (g) { items.push(modItem("group", g.title, "Suggested by " + esc(g.requestedByName), g.description || "", admBtn("Approve", "approveGroup", g.id) + admBtn("Turn down", "rejectGroup", g.id, true))); });
+    var n = items.length;
+    var tabs = [["queue", "Waiting for you" + (n ? " (" + n + ")" : "")], ["words", "Word filter"], ["rules", "Posting rules"]];
+    var body;
+    if (MOD.tab === "queue") {
+      body = n ? '<div class="bd-mlist">' + items.join("") + "</div>" : '<div class="bd-empty"><b>Nothing waiting</b><p>No posts to check, no reports and no group ideas right now.</p></div>';
+    } else if (MOD.tab === "words") {
+      body = '<div class="bd-mbox"><h2>Blocked words and phrases</h2><p>Posts and replies with any of these are checked before they go live. Matching is not case sensitive and catches the word inside longer words too.</p>' +
+        '<div class="bd-words">' + (st.words.length ? st.words.map(function (w, i) { return '<span>' + esc(w) + '<button type="button" data-bd-word-del="' + i + '" aria-label="Remove ' + esc(w) + '">×</button></span>'; }).join("") : '<em>No words added yet.</em>') + "</div>" +
+        '<form class="bd-wadd" data-bd-word-add><label class="fl-sr" for="bdW">Add a word or phrase</label><input type="text" id="bdW" maxlength="40" placeholder="Add a word or phrase" autocomplete="off"><button type="submit" class="btn btn-teal sm">Add</button></form>' +
+        '<h3>What happens to a match</h3><div class="bd-radio">' +
+        [["hold", "Hold it for me to check", "The post waits in Waiting for you until you approve it."], ["mask", "Post it with the word starred out", "It goes live straight away, with the word shown as ****."]].map(function (o) {
+          return '<label><input type="radio" name="wordMode" value="' + o[0] + '"' + (st.wordMode === o[0] ? " checked" : "") + ' data-bd-mset="wordMode"><span><b>' + o[1] + "</b><small>" + o[2] + "</small></span></label>";
+        }).join("") + "</div></div>";
+    } else {
+      body = '<div class="bd-mbox"><h2>Posting rules</h2>' +
+        '<label class="bd-qt"><input type="checkbox" data-bd-mset="firstPostApproval"' + (st.firstPostApproval ? " checked" : "") + '><span class="bd-sw" aria-hidden="true"></span><span><b>Check a new member\'s first post</b><small>Their first thread or reply waits for you. Once you approve one, everything after goes live straight away.</small></span></label>' +
+        '<label class="bd-qt"><input type="checkbox" data-bd-mset="holdLinks"' + (st.holdLinks ? " checked" : "") + '><span class="bd-sw" aria-hidden="true"></span><span><b>Check links from members who joined in the last 7 days</b><small>Stops spam links slipping through. Older members can post links as normal.</small></span></label>' +
+        '<p class="bd-mnote">Members whose post is waiting see a short note saying it will show once it has been checked.</p></div>';
+    }
+    return crumbs([["Forum", "home"], ["Moderation", ""]]) +
+      '<div class="bd-ghead"><div><h1>Moderation</h1><p>Only you and your moderators see this. Pin, close or move a thread from the tools at the top of any thread.</p></div></div>' +
+      '<div class="bd-mstats"><div><b>' + (d.counts.members || 0) + "</b><span>Members</span></div><div><b>" + (d.counts.threads || 0) + "</b><span>Threads</span></div><div><b>" + (d.counts.photos || 0) + "</b><span>Photos</span></div><div><b>" + n + "</b><span>Waiting for you</span></div></div>" +
+      '<div class="bd-mtabs" role="tablist">' + tabs.map(function (t) { return '<button type="button" role="tab" aria-selected="' + (MOD.tab === t[0]) + '" class="' + (MOD.tab === t[0] ? "on" : "") + '" data-bd-mtab="' + t[0] + '">' + t[1] + "</button>"; }).join("") + "</div>" + body;
+  }
+  function saveMod(msg) {
+    return call("saveModSettings", MOD.settings).then(function (r) { toast(r.ok ? msg : r.error || "That didn't save."); });
+  }
+  function modTools(t) {
+    var opts = catGroups().map(function (c) { return '<optgroup label="' + esc(c.title) + '">' + c.groups.map(function (g) { return '<option value="' + esc(g.slug) + '"' + (g.slug === t.groupSlug ? " selected" : "") + ">" + esc(g.title) + "</option>"; }).join("") + "</optgroup>"; }).join("");
+    return '<div class="bd-modbar"><b>Moderator tools</b>' +
+      admBtn(t.pinned ? "Unpin" : "Pin to the top", t.pinned ? "unpin" : "pin", t.id) +
+      admBtn(t.locked ? "Reopen replies" : "Close replies", t.locked ? "unlock" : "lock", t.id) +
+      '<span class="bd-move"><label class="fl-sr" for="bdMv">Move to</label><select id="bdMv">' + opts + "</select>" + admBtn("Move", "moveThread", t.id) + "</span>" +
+      admBtn("Remove thread", "removeThread", t.id, true) + "</div>";
+  }
+  document.addEventListener("click", function (e) {
+    if (!B.on) return;
+    var tb = e.target.closest && e.target.closest("[data-bd-mtab]");
+    if (tb) { MOD.tab = tb.getAttribute("data-bd-mtab"); $("[data-bd-main]").innerHTML = vMod(); return; }
+    var wd = e.target.closest && e.target.closest("[data-bd-word-del]");
+    if (wd) { var w = MOD.settings.words.splice(+wd.getAttribute("data-bd-word-del"), 1)[0]; $("[data-bd-main]").innerHTML = vMod(); saveMod("Removed " + w + "."); }
+  });
+  document.addEventListener("submit", function (e) {
+    var f = e.target.closest && e.target.closest("[data-bd-word-add]");
+    if (!f) return;
+    e.preventDefault();
+    var v = f.querySelector("input").value.trim().toLowerCase();
+    if (v.length < 2) { toast("Add at least 2 letters."); return; }
+    if (MOD.settings.words.indexOf(v) >= 0) { toast("That one is already on the list."); return; }
+    MOD.settings.words.push(v); $("[data-bd-main]").innerHTML = vMod(); saveMod("Added " + v + " to the filter.");
+    var i = $("#bdW"); if (i) i.focus();
+  });
+  document.addEventListener("change", function (e) {
+    var el = e.target; if (!B.on || !el.hasAttribute || !el.hasAttribute("data-bd-mset")) return;
+    var k = el.getAttribute("data-bd-mset");
+    MOD.settings[k] = el.type === "checkbox" ? el.checked : el.value;
+    saveMod(k === "firstPostApproval" ? (el.checked ? "First posts will wait for you." : "First posts now go live straight away.") : k === "holdLinks" ? (el.checked ? "New members' links will wait for you." : "Links now go live straight away.") : "Saved.");
+  });
+
+  function boardStart() {
+    if (B.on || S.look !== "clean") return;
+    B.on = true;
+    boardBuild();
+    loadFollowing().then(boardSide);
+    if (S.member && S.member.isAdmin) loadMod().then(boardSide);
+    boardGo("home", "", true);
+  }
+  function boardStop() {
+    if (!B.on) return;
+    B.on = false; parkSections();
+    var look = $("#lookSw"), row = $(".jumprow"); if (look && row) row.insertBefore(look, row.firstChild);
+    var b = $("#board"); if (b) b.remove();
+    document.body.classList.remove("fl-member");
+  }
+  document.addEventListener("click", function (e) {
+    if (!B.on) return;
+    var el = e.target.closest && e.target.closest("[data-bd-go],[data-bd-group],[data-bd-new],[data-bd-sec],[data-bd-toggle],[data-bd-quote],[data-bd-follow],[data-bd-answer],[data-bd-jump],[data-bd-addphoto],[data-bd-delphoto],[data-bd-at]");
+    if (!el) { if (!(e.target.closest && e.target.closest(".bd-atlist"))) closeAt(); return; }
+    if (el.hasAttribute("data-bd-follow")) {
+      e.preventDefault(); e.stopPropagation();
+      var type = el.getAttribute("data-bd-follow"), fid = el.getAttribute("data-id"), want = !isFol(type, fid);
+      el.disabled = true;
+      call("followTarget", { targetType: type, targetId: fid, follow: want }).then(function (r) {
+        el.disabled = false;
+        if (!r.ok) { toast(r.error || "That didn't save. Please try again."); return; }
+        var list = B.fol[type === "group" ? "groups" : "threads"], i = list.indexOf(fid);
+        if (want && i < 0) list.push(fid);
+        if (!want && i >= 0) list.splice(i, 1);
+        el.outerHTML = followBtn(type, fid); boardSide();
+        toast(want ? (type === "group" ? "Following. New threads here will reach your bell." : "Following. New replies will reach your bell.") : "You've stopped following it.");
+      });
+      return;
+    }
+    if (el.hasAttribute("data-bd-answer")) {
+      e.preventDefault(); e.stopPropagation();
+      var cid = el.getAttribute("data-bd-answer");
+      call("markAnswer", { threadId: B.thread, commentId: cid || null }).then(function (r) {
+        if (!r.ok) { toast(r.error || "That didn't save. Please try again."); return; }
+        toast(cid ? "Marked as the answer. Thanks, that helps the next person." : "Answer unmarked.");
+        var t = B.all.filter(function (x) { return x.id === B.thread; })[0]; if (t) t.answerId = cid || "";
+        boardGo("thread", B.thread, true);
+      });
+      return;
+    }
+    if (el.hasAttribute("data-bd-jump")) { e.preventDefault(); var a = $(".bd-post.best"); if (a) a.scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+    if (el.hasAttribute("data-bd-addphoto")) { e.preventDefault(); var fi = $("[data-bd-file]"); if (fi) fi.click(); return; }
+    if (el.hasAttribute("data-bd-delphoto")) { e.preventDefault(); B.photo = null; drawPhotoBox(); return; }
+    if (el.hasAttribute("data-bd-at")) {
+      e.preventDefault(); e.stopPropagation();
+      var ta = document.getElementById(el.getAttribute("data-ta")); if (!ta) return;
+      var pos = ta.selectionStart, before = ta.value.slice(0, pos).replace(/@[^@\s]*$/, ""), after = ta.value.slice(pos);
+      var ins = "@" + el.getAttribute("data-bd-at") + " ";
+      ta.value = before + ins + after; ta.focus(); ta.setSelectionRange((before + ins).length, (before + ins).length);
+      closeAt(); return;
+    }
+
+    e.preventDefault(); e.stopPropagation();
+    if (el.hasAttribute("data-bd-toggle")) { var s = $(".bd-side"); var o = !s.classList.contains("open"); s.classList.toggle("open", o); el.setAttribute("aria-expanded", o ? "true" : "false"); return; }
+    if (el.hasAttribute("data-bd-quote")) { var ta = $("#flReply"); if (ta) { ta.value = "@" + el.getAttribute("data-bd-quote") + " " + ta.value; ta.focus(); ta.scrollIntoView({ behavior: "smooth", block: "center" }); } return; }
+    if (el.hasAttribute("data-bd-new")) { boardGo("compose", el.getAttribute("data-bd-new") || (B.view === "group" ? B.group : "")); return; }
+    if (el.hasAttribute("data-bd-group")) { boardGo("group", el.getAttribute("data-bd-group")); return; }
+    if (el.hasAttribute("data-bd-sec")) { boardGo("sec", el.getAttribute("data-bd-sec")); return; }
+    var go = el.getAttribute("data-bd-go");
+    if (go === "back") { var h = hist.pop(); if (h && h.view !== "compose") boardGo(h.view, h.view === "group" ? h.group : h.view === "thread" ? h.thread : h.sec, true); else boardGo("home", "", true); return; }
+    if (go.indexOf("g:") === 0) { boardGo("group", go.slice(2)); return; }
+    boardGo(go);
+  }, true);
+  document.addEventListener("submit", function (e) {
+    var f = e.target.closest && e.target.closest("[data-bd-search]");
+    if (!f) return;
+    e.preventDefault();
+    B.q = f.querySelector("input").value.trim();
+    if (B.q.length < 2) { toast("Type at least 2 letters to search."); return; }
+    boardGo("search");
+  });
+  /* photo picked in New thread */
+  function drawPhotoBox() {
+    var box = $("[data-bd-photo]"); if (!box) return;
+    if (!B.photo) { box.innerHTML = '<button type="button" class="btn btn-navy sm" data-bd-addphoto>Add a photo</button><input type="file" accept="image/jpeg,image/png,image/webp" data-bd-file hidden><small>Your own photos only. The camera settings are read from the photo for you.</small>'; return; }
+    var x = B.photo.exif, found = ["camera", "shutter", "aperture", "iso"].filter(function (k) { return x[k]; }).length;
+    box.innerHTML = '<div class="bd-pv"><img src="' + B.photo.url + '" alt="Your photo"><div><b>' + esc(B.photo.name) + "</b><small>" + (found ? "Settings read from your photo. Check them and fill any gaps." : "No settings found in this photo. Add them if you know them, it really helps others learn.") + '</small><button type="button" class="fl-act red" data-bd-delphoto>Remove photo</button></div></div>' +
+      photoFields(x) + '<label class="bd-pcat"><span>Photo category</span><select name="photoCat">' + CATS.map(function (c) { return "<option>" + esc(c) + "</option>"; }).join("") + "</select></label>" +
+      '<label class="bd-own"><input type="checkbox" name="ownPhoto"> This is my own photo. It also goes into the photo gallery.</label>';
+  }
+  document.addEventListener("change", function (e) {
+    if (!B.on || !e.target.matches || !e.target.matches("[data-bd-file]")) return;
+    var file = e.target.files && e.target.files[0]; if (!file) return;
+    if (file.size > 25e6) { toast("That photo is a bit big. Please choose one under 25MB."); return; }
+    readExif(file).then(function (x) { B.photo = { file: file, name: file.name, url: URL.createObjectURL(file), exif: x }; drawPhotoBox(); });
+  });
+  /* @mention suggestions */
+  function closeAt() { var m = $(".bd-atlist"); if (m) m.remove(); }
+  document.addEventListener("input", function (e) {
+    if (!B.on || !e.target.matches || !e.target.matches("[data-bd-mention]")) return;
+    var ta = e.target, m = ta.value.slice(0, ta.selectionStart).match(/@([^@\s]*)$/);
+    closeAt();
+    if (!m) return;
+    var q = m[1].toLowerCase(), me = S.member ? S.member.name : "";
+    var pool = (B.view === "thread" ? B.people : []).concat(B.all.map(function (t) { return t.authorName; }));
+    var list = pool.filter(function (n, i) {
+      return n && pool.indexOf(n) === i && n !== me && (!q || n.toLowerCase().split(" ").some(function (w) { return w.indexOf(q) === 0; }));
+    }).slice(0, 6);
+    if (!list.length) return;
+    if (!ta.id) ta.id = "bdTa" + Date.now();
+    var box = document.createElement("div"); box.className = "bd-atlist"; box.setAttribute("role", "listbox");
+    box.innerHTML = "<small>Mention someone</small>" + list.map(function (n) { return '<button type="button" data-bd-at="' + esc(n) + '" data-ta="' + ta.id + '">@' + esc(n) + "</button>"; }).join("");
+    ta.parentNode.style.position = "relative"; ta.parentNode.appendChild(box);
+  });
+  document.addEventListener("change", function (e) {
+    if (!B.on || !e.target.matches || !e.target.matches("[data-bd-sort]")) return;
+    B.sort = e.target.value; boardGo(B.view, B.view === "group" ? B.group : "", true);
+  });
+
 
   /* ---------- start ---------- */
   function start(opts) {
