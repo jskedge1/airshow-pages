@@ -1008,6 +1008,7 @@
         '<button type="button" class="bd-name" data-bd-go="home"><span>Airshow</span> Forum</button>' +
         '<form class="bd-search" role="search" data-bd-search><label class="fl-sr" for="bdQ">Search the forum</label><input type="search" id="bdQ" placeholder="Search threads" autocomplete="off"><button type="submit" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button></form>' +
         '<button type="button" class="btn btn-teal sm bd-new" data-bd-new="">+ New thread</button>' +
+        '<button type="button" class="bd-dmb" data-bd-go="messages" data-bd-dm aria-label="Messages"></button>' +
         '<span class="bd-me" data-bd-me></span>' +
       "</div></header>" +
       '<div class="wrap bd-grid"><aside class="bd-side" aria-label="Forum categories"><button type="button" class="bd-cats-t" data-bd-toggle aria-expanded="false">Categories and groups</button><div class="bd-side-in" data-bd-side></div></aside>' +
@@ -1022,7 +1023,9 @@
     var modLink = me && me.isAdmin ? '<button type="button" class="bd-home bd-modl' + (B.view === "mod" ? " on" : "") + '" data-bd-go="mod">Moderation' + (modCount(MOD.overview) ? "<small class=\"bd-mcount\">" + modCount(MOD.overview) + "</small>" : "") + "</button>" : "";
     side.innerHTML = '<button type="button" class="bd-home' + (B.view === "home" ? " on" : "") + '" data-bd-go="home">Forum home</button>' +
       '<button type="button" class="bd-home' + (B.view === "mine" ? " on" : "") + '" data-bd-go="mine">My threads</button>' +
-      '<button type="button" class="bd-home' + (B.view === "following" ? " on" : "") + '" data-bd-go="following">Following<small>' + (B.fol.threads.length + B.fol.groups.length) + "</small></button>" + modLink +
+      '<button type="button" class="bd-home' + (B.view === "following" ? " on" : "") + '" data-bd-go="following">Following<small>' + (B.fol.threads.length + B.fol.groups.length) + "</small></button>" +
+      '<button type="button" class="bd-home' + (B.view === "members" ? " on" : "") + '" data-bd-go="members">Members</button>' +
+      '<button type="button" class="bd-home' + (B.view === "messages" ? " on" : "") + '" data-bd-go="messages" data-bd-dmside>Messages' + (DM.unread ? '<small class="bd-mcount">' + DM.unread + "</small>" : "") + "</button>" + modLink +
       catGroups().map(function (c) {
         return '<div class="bd-cat"><h3>' + esc(c.title) + "</h3>" + c.groups.map(function (g) {
           return '<button type="button" class="bd-g' + (B.view === "group" && B.group === g.slug ? " on" : "") + '" data-bd-group="' + esc(g.slug) + '"><span>' + esc(g.title) + (isFol("group", g.slug) ? '<i class="bd-dot" title="Following"></i>' : "") + "</span><small>" + (g.threadCount || 0) + "</small></button>";
@@ -1034,6 +1037,7 @@
       }).join("") + '<button type="button" class="bd-g bd-sug" data-fl-act="suggest"><span>Suggest a new group</span></button></div>';
     var mc = $("[data-bd-me]");
     if (mc && me) mc.innerHTML = avatar(me.name, me.colour, me.photo) + "<span>" + esc(me.name.split(" ")[0]) + "</span>";
+    dmBadge();
   }
   function threadRow(t, showGroup) {
     var g = showGroup ? groupTitle(t.groupSlug) : "";
@@ -1123,8 +1127,8 @@
     function post(p, n, isOp) {
       var own = me && (me.id === p.authorId || me.isAdmin), sys = p.authorId === "system", best = !isOp && t.answerId === p.id;
       return '<article class="bd-post' + (isOp ? " op" : "") + (sys ? " sys" : "") + (best ? " best" : "") + '" id="post-' + n + '"><div class="bd-who">' +
-        (sys ? '<span class="fl-av bd-bot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12c0-.8-.7-1.4-1.6-1.4H15L10.6 3H8.8l2.3 7.6H6.6L4.8 8.2H3.4l1 3.8-1 3.8h1.4l1.8-2.4h4.5L8.8 21h1.8l4.4-7.6h4.4c.9 0 1.6-.6 1.6-1.4z"/></svg></span>' : avatar(p.authorName, p.authorColour, p.authorPhoto)) +
-        "<b>" + esc(p.authorName) + "</b>" + (sys ? "<small>Automatic update</small>" : isOp ? "<small>Started the thread</small>" : "") + "</div>" +
+        (sys ? '<span class="fl-av bd-bot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12c0-.8-.7-1.4-1.6-1.4H15L10.6 3H8.8l2.3 7.6H6.6L4.8 8.2H3.4l1 3.8-1 3.8h1.4l1.8-2.4h4.5L8.8 21h1.8l4.4-7.6h4.4c.9 0 1.6-.6 1.6-1.4z"/></svg></span><b>' + esc(p.authorName) + "</b>"
+          : '<button type="button" class="bd-whob" data-bd-who="' + esc(p.authorId) + '" title="See ' + esc(p.authorName) + '\'s profile">' + avatar(p.authorName, p.authorColour, p.authorPhoto) + "<b>" + esc(p.authorName) + "</b></button>") + (sys ? "<small>Automatic update</small>" : isOp ? "<small>Started the thread</small>" : "") + "</div>" +
         '<div class="bd-body"><div class="bd-ph"><span>' + (best ? '<i class="bd-solved">Best answer</i>' : "") + esc(ago(p.created)) + '</span><span class="bd-num">#' + n + "</span></div>" +
         '<div class="fl-body">' + photoSlots(withMentions(paras(p.body), names)) + "</div>" +
         '<div class="bd-acts">' +
@@ -1176,6 +1180,8 @@
     if (view === "sec") { moveSection(arg); return; }
     if (view === "compose") { main.innerHTML = vCompose(arg || ""); var ti = $("#bdT"); if (ti && arg) setTimeout(function () { ti.focus(); }, 60); return; }
     main.innerHTML = '<div class="bd-empty"><p>Loading.</p></div>';
+    if (view === "members") { main.innerHTML = vMembers(); loadMembers(); return; }
+    if (view === "messages") { main.innerHTML = vMessages(); loadChats().then(drawMessages); return; }
     if (view === "home") { loadAll().then(function () { if (B.view === "home") { main.innerHTML = vHome(); boardSide(); } }); return; }
     if (view === "mod") {
       if (!(S.member && S.member.isAdmin)) { boardGo("home", "", true); return; }
@@ -1204,14 +1210,439 @@
       });
     }
   }
+  /* ---------- members, profile cards and private messages ---------- */
+  var DM = { unread: 0, chats: [], loaded: false, timer: null };
+  var MEM = { filter: "all", q: "", data: null };
+  var CHAT = { id: "" };
+  var IC = {
+    send: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/><path d="M11.5 13.5L20 4"/></svg>',
+    more: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>',
+    min: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>',
+    x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    msg: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>'
+  };
+  function memberSince(d) { return d ? "Member since " + new Date(d).toLocaleDateString("en-GB", { month: "long", year: "numeric" }) : ""; }
+  function clock(d) { return d ? new Date(d).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) : ""; }
+  function sameDay(a, b) { return a.toDateString() === b.toDateString(); }
+  function shortTime(d) {
+    if (!d) return "";
+    var t = new Date(d), now = new Date(), y = new Date(now.getTime() - 86400000);
+    if (sameDay(t, now)) return clock(d);
+    if (sameDay(t, y)) return "Yesterday";
+    if (now - t < 6 * 86400000) return t.toLocaleDateString("en-GB", { weekday: "short" });
+    return t.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+  }
+  function dayLabel(d) {
+    var t = new Date(d), now = new Date();
+    if (sameDay(t, now)) return "Today";
+    if (sameDay(t, new Date(now.getTime() - 86400000))) return "Yesterday";
+    return t.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+  }
+
+  /* unread count, checked now and then while the forum is open */
+  function loadChats() {
+    return call("listChats").then(function (r) {
+      if (r.ok && r.data) {
+        DM.chats = r.data.chats || []; DM.loaded = true;
+        // The chat that is open right now has been read, even if the list was fetched a moment before.
+        DM.chats.forEach(function (c) { if (CHAT.loaded && c.memberId === CHAT.id) c.unread = false; });
+        DM.unread = DM.chats.filter(function (c) { return c.unread; }).length;
+      }
+      dmBadge();
+      return r;
+    });
+  }
+  function dmBadge() {
+    var b = $("[data-bd-dm]");
+    if (b) b.innerHTML = IC.msg + "<span>Messages</span>" + (DM.unread ? "<i>" + DM.unread + "</i>" : "");
+    var s = $("[data-bd-dmside]");
+    if (s) s.innerHTML = "Messages" + (DM.unread ? '<small class="bd-mcount">' + DM.unread + "</small>" : "");
+  }
+  function dmPollStart() {
+    dmPollStop();
+    DM.timer = setInterval(function () {
+      if (document.hidden) return;
+      loadChats().then(function () { if (B.view === "messages") drawMessages(); });
+    }, 40000);
+  }
+  function dmPollStop() { if (DM.timer) clearInterval(DM.timer); DM.timer = null; }
+
+  /* the Members page */
+  function memRow(c) {
+    var posts = (c.threadCount || 0) + (c.commentCount || 0);
+    var meta = [c.area, posts ? posts + (posts === 1 ? " post" : " posts") : ""].filter(Boolean).join(" · ") || memberSince(c.joined);
+    return '<div class="bd-mem" role="listitem">' +
+      '<button type="button" class="bd-mem-who" data-bd-who="' + esc(c.memberId) + '">' + avatar(c.name, c.colour, c.photo) +
+        "<span><b>" + esc(c.name) + "</b><small>" + esc(meta) + "</small>" +
+        (c.sharedShows.length ? "<em>Also going to " + esc(c.sharedShows.slice(0, 2).join(" and ")) + "</em>" : "") +
+        (c.into.length ? '<span class="bd-tags">' + c.into.slice(0, 4).map(function (t) { return "<i>" + esc(t) + "</i>"; }).join("") + "</span>" : "") +
+      "</span></button>" +
+      '<span class="bd-mem-act">' +
+        (c.canMessage ? '<button type="button" class="btn btn-teal sm" data-bd-chat="' + esc(c.memberId) + '">Message</button>' : "") +
+        '<button type="button" class="bd-follow' + (c.following ? " on" : "") + '" data-bd-pfollow="' + esc(c.memberId) + '" aria-pressed="' + (c.following ? "true" : "false") + '">' + (c.following ? "Following" : "Follow") + "</button>" +
+      "</span></div>";
+  }
+  function vMembers() {
+    var d = MEM.data;
+    var head = crumbs([["Forum", "home"], ["Members", ""]]) +
+      '<div class="bd-ghead"><div><h1>Members</h1><p>Fans who have chosen to be listed. Tap anyone to see their profile, follow them or send them a private message.</p></div></div>';
+    if (!d) return head + '<div class="bd-empty"><p>Loading.</p></div>';
+    if (d.error) return head + '<div class="bd-empty"><b>The members list didn\'t load</b><p>' + esc(d.error) + "</p></div>";
+    var me = d.listed
+      ? '<div class="bd-listme on"><span><b>You are on the list.</b> Other fans can find you here, and you can take yourself off whenever you like.</span><button type="button" class="fl-act" data-bd-listme="0">Take me off</button></div>'
+      : '<div class="bd-listme"><span><b>You are not on the list yet.</b> Add yourself and fans heading to the same shows can find you and say hello.</span><button type="button" class="btn btn-teal sm" data-bd-listme="1">Add me to the list</button></div>';
+    var chips = [["all", "Everyone"]].concat(d.myShows ? [["going", "Going to my shows"]] : []).concat([["following", "People I follow"]]);
+    var tools = '<div class="bd-mtools"><form class="bd-msearch" data-bd-msearch role="search"><label class="fl-sr" for="bdMq">Search members</label>' +
+      '<input type="search" id="bdMq" value="' + esc(MEM.q) + '" placeholder="Search by name, area or interest" autocomplete="off"><button type="submit" class="btn btn-navy sm">Search</button></form>' +
+      '<div class="bd-chips">' + chips.map(function (c) {
+        return '<button type="button" class="bd-chip' + (MEM.filter === c[0] ? " on" : "") + '" data-bd-mfilter="' + c[0] + '" aria-pressed="' + (MEM.filter === c[0] ? "true" : "false") + '">' + c[1] + "</button>";
+      }).join("") + "</div></div>";
+    var narrowed = MEM.q || MEM.filter !== "all";
+    var list = d.members.length
+      ? '<p class="bd-mtotal">' + d.total + (d.total === 1 ? " member" : " members") + '</p><div class="bd-mems" role="list">' + d.members.map(memRow).join("") + "</div>"
+      : '<div class="bd-empty"><b>' + (narrowed ? "No one matches that" : "No one listed yet") + "</b><p>" +
+        (narrowed ? "Try a different word, or switch back to Everyone." : "The Members page is brand new, so it is quiet for now. Add yourself above and you will be one of the first faces people see.") + "</p></div>";
+    return head + me + tools + list;
+  }
+  function loadMembers() {
+    return call("listMembers", { query: MEM.q, filter: MEM.filter }).then(function (r) {
+      MEM.data = r.ok ? r.data : { members: [], total: 0, listed: false, myShows: 0, error: r.error || "Please try again in a moment." };
+      if (B.view === "members") $("[data-bd-main]").innerHTML = vMembers();
+    });
+  }
+
+  /* the Messages page */
+  function vMessages() {
+    var head = crumbs([["Forum", "home"], ["Messages", ""]]) +
+      '<div class="bd-ghead"><div><h1>Messages</h1><p>Your private chats. Only you and the person you are talking to can read them.</p></div><button type="button" class="btn btn-teal sm" data-bd-go="members">Find members</button></div>';
+    if (!DM.loaded) return head + '<div class="bd-empty"><p>Loading your chats.</p></div>';
+    var list = DM.chats.length
+      ? '<div class="bd-table bd-chats">' + DM.chats.map(function (c) {
+          return '<button type="button" class="bd-chatrow' + (c.unread ? " new" : "") + '" data-bd-chat="' + esc(c.memberId) + '">' + avatar(c.name, c.colour, c.photo) +
+            "<span><b>" + esc(c.name) + "</b><small>" + (c.lastFromMe ? "You: " : "") + esc(c.last) + '</small></span><span class="bd-cw">' + esc(shortTime(c.at)) + (c.unread ? '<i aria-label="Unread"></i>' : "") + "</span></button>";
+        }).join("") + "</div>"
+      : '<div class="bd-empty"><b>No messages yet</b><p>Find someone on the Members page, or tap a name on any post, then press Message. I would suggest starting with someone going to the same show as you.</p><button type="button" class="btn btn-teal sm" data-bd-go="members">Find members</button></div>';
+    return head + list + '<p class="bd-mnote">You choose who can message you, or turn messages off, in the Settings tab of My Profile. If anyone makes you uneasy, block or report them from the chat and I will take a look.</p>';
+  }
+  function drawMessages() { var m = $("[data-bd-main]"); if (m && B.view === "messages") m.innerHTML = vMessages(); }
+
+  /* profile cards */
+  function cardKey(e) { if (e.key === "Escape") { closeCard(); var c = $("#bdChat"); if (c && !$("#bdCard")) c.focus(); } }
+  function closeCard() { var w = $("#bdCard"); if (w) w.remove(); document.removeEventListener("keydown", cardKey); }
+  function openCard(id) {
+    if (!id || id === "system" || !needMember()) return;
+    closeCard();
+    var w = document.createElement("div");
+    w.id = "bdCard"; w.className = "bd-cardwrap";
+    w.innerHTML = '<div class="bd-card" role="dialog" aria-modal="true" aria-label="Member profile" tabindex="-1"><button type="button" class="bd-x" data-bd-cardx aria-label="Close">' + IC.x + '</button><div class="bd-card-in"><p class="bd-card-wait">Loading their profile</p></div></div>';
+    document.body.appendChild(w);
+    document.addEventListener("keydown", cardKey);
+    $(".bd-card", w).focus();
+    call("getMemberCard", { memberId: id }).then(function (r) {
+      var box = $(".bd-card-in", w); if (!box || !document.body.contains(w)) return;
+      box.innerHTML = r.ok ? cardHtml(r.data) : '<p class="bd-card-wait">' + esc(r.error || "That profile didn't load. Please try again.") + "</p>";
+    });
+  }
+  function cardHtml(c) {
+    var id = esc(c.memberId);
+    var tags = [];
+    if (c.followsYou) tags.push("Follows you");
+    if (c.role === "admin" || c.role === "moderator") tags.push(c.role === "admin" ? "Guide team" : "Moderator");
+    var acts = c.isMe
+      ? '<p class="bd-why">This is you. Change your photo, bio and who can message you from My Profile.</p>'
+      : (c.canMessage ? '<button type="button" class="btn btn-teal" data-bd-chat="' + id + '">' + (c.hasChat ? "Open chat" : "Message") + "</button>" : '<p class="bd-why">' + esc(c.why) + "</p>") +
+        '<button type="button" class="bd-follow' + (c.following ? " on" : "") + '" data-bd-pfollow="' + id + '" aria-pressed="' + (c.following ? "true" : "false") + '">' + (c.following ? "Following" : "Follow") + "</button>" +
+        '<button type="button" class="bd-blk" data-bd-block="' + id + '" data-on="' + (c.blockedByMe ? "1" : "0") + '">' + (c.blockedByMe ? "Unblock" : "Block") + "</button>";
+    return '<div class="bd-card-top">' + avatar(c.name, c.colour, c.photo) + "<div><h2>" + esc(c.name) + "</h2><p>" + esc([c.area, memberSince(c.joined)].filter(Boolean).join(" · ")) + "</p>" +
+        (tags.length ? '<div class="bd-fys">' + tags.map(function (t) { return '<span class="bd-fy">' + esc(t) + "</span>"; }).join("") + "</div>" : "") + "</div></div>" +
+      '<div class="bd-card-body">' +
+        (c.bio ? '<p class="bd-bio">' + esc(c.bio) + "</p>" : "") +
+        (c.into.length ? '<h3>Into</h3><div class="bd-tags">' + c.into.map(function (t) { return "<i>" + esc(t) + "</i>"; }).join("") + "</div>" : "") +
+        (c.going.length ? '<h3>Going to</h3><ul class="bd-going">' + c.going.slice(0, 6).map(function (g) { return "<li>" + esc(g) + "</li>"; }).join("") + "</ul>" : "") +
+        '<div class="bd-cstats"><div><b>' + (c.threadCount || 0) + "</b><span>" + (c.threadCount === 1 ? "Thread" : "Threads") + "</span></div><div><b>" + (c.commentCount || 0) + "</b><span>" + (c.commentCount === 1 ? "Reply" : "Replies") + "</span></div></div>" +
+        (c.threads.length ? '<h3>Latest threads</h3><div class="bd-cthreads">' + c.threads.map(function (t) {
+          return '<button type="button" data-bd-cthread="' + esc(t.id) + '"><span>' + esc(t.title) + "</span><small>" + esc(ago(t.created)) + "</small></button>";
+        }).join("") + "</div>" : "") +
+      '</div><div class="bd-card-acts">' + acts + "</div>";
+  }
+
+  /* the chat box, pinned to the bottom of the screen */
+  function chatEl() { return $("#bdChat"); }
+  function openChat(id, preview) {
+    if (!id || !needMember() || (S.member && id === S.member.id)) return;
+    closeCard();
+    stopChatPoll();
+    CHAT = { id: id, other: preview || null, msgs: [], can: false, why: "", blocked: false, more: false, loaded: false, error: "", timer: null, sure: "" };
+    var el = chatEl();
+    if (!el) {
+      el = document.createElement("section");
+      el.id = "bdChat"; el.className = "bd-chat"; el.setAttribute("aria-label", "Private chat"); el.tabIndex = -1;
+      document.body.appendChild(el);
+    }
+    el.classList.remove("min", "ping");
+    drawChat();
+    call("getChat", { memberId: id }).then(function (r) {
+      if (CHAT.id !== id) return;
+      if (!r.ok) { CHAT.error = r.error || "This chat didn't load. Please try again."; drawChat(); return; }
+      var d = r.data || {};
+      CHAT.loaded = true; CHAT.other = d.other; CHAT.msgs = d.messages || []; CHAT.can = !!d.canMessage; CHAT.why = d.why || ""; CHAT.blocked = !!d.blockedByMe; CHAT.more = !!d.more;
+      drawChat(true);
+      var c = DM.chats.filter(function (x) { return x.memberId === id; })[0];
+      if (c && c.unread) { c.unread = false; DM.unread = Math.max(0, DM.unread - 1); dmBadge(); drawMessages(); }
+      startChatPoll();
+      var ta = $("#bdChatIn");
+      if (ta && !matchMedia("(pointer:coarse)").matches) ta.focus();
+    });
+  }
+  function closeChat() { stopChatPoll(); var el = chatEl(); if (el) el.remove(); CHAT = { id: "" }; }
+  function bubbles() {
+    var out = "", lastDay = "";
+    CHAT.msgs.forEach(function (m, i) {
+      var day = dayLabel(m.at);
+      if (day !== lastDay) { out += '<p class="bd-day"><span>' + esc(day) + "</span></p>"; lastDay = day; }
+      out += '<div class="bd-b ' + (m.mine ? "me" : "them") + (m.failed ? " fail" : "") + (m.pending ? " wait" : "") + '"><p>' + esc(m.body).replace(/\n/g, "<br>") + "</p><small>" +
+        (m.pending ? "Sending" : m.failed ? 'Not sent. <button type="button" data-bd-retry="' + i + '">Try again</button>' : esc(clock(m.at))) + "</small></div>";
+    });
+    return out;
+  }
+  function chatBody() {
+    var o = CHAT.other || {};
+    if (CHAT.error) return '<p class="bd-chat-note">' + esc(CHAT.error) + "</p>";
+    if (!CHAT.loaded) return '<p class="bd-chat-note">Loading your chat</p>';
+    return (CHAT.more ? '<button type="button" class="bd-older" data-bd-older>Show earlier messages</button>' : "") +
+      (CHAT.msgs.length ? bubbles() : '<p class="bd-chat-note">Say hello to ' + esc(String(o.name || "them").split(" ")[0]) + ". Messages are private between the two of you.</p>");
+  }
+  function drawBody(scroll) {
+    var b = $("[data-bd-chatbody]"); if (!b) return;
+    b.innerHTML = chatBody();
+    if (scroll) b.scrollTop = b.scrollHeight;
+  }
+  function drawChat(scroll) {
+    var el = chatEl(); if (!el) return;
+    var o = CHAT.other || { name: "Loading", colour: "#32B4AF" }, id = esc(CHAT.id);
+    var old = $("#bdChatIn"), draft = old ? old.value : "";
+    var foot = !CHAT.loaded ? "" : CHAT.can
+      ? '<form class="bd-chat-f" data-bd-send><label class="fl-sr" for="bdChatIn">Write a message to ' + esc(o.name) + '</label><textarea id="bdChatIn" rows="1" maxlength="1000" placeholder="Write a message" enterkeyhint="send"></textarea><button type="submit" class="bd-send" aria-label="Send">' + IC.send + "</button></form>"
+      : '<p class="bd-chat-no">' + esc(CHAT.why) + (CHAT.blocked ? ' <button type="button" data-bd-block="' + id + '" data-on="1">Unblock</button>' : "") + "</p>";
+    el.innerHTML = '<header class="bd-chat-h"><button type="button" class="bd-chat-who" data-bd-who="' + id + '">' + avatar(o.name, o.colour, o.photo) +
+        "<span><b>" + esc(o.name) + "</b><small>" + esc(o.area || "Tap for their profile") + "</small></span></button>" +
+        '<button type="button" class="bd-ic" data-bd-chatmenu aria-label="Chat options" aria-expanded="false">' + IC.more + "</button>" +
+        '<button type="button" class="bd-ic bd-ic-min" data-bd-chatmin aria-label="Make the chat smaller">' + IC.min + "</button>" +
+        '<button type="button" class="bd-ic" data-bd-chatx aria-label="Close the chat">' + IC.x + "</button></header>" +
+      '<div class="bd-chat-menu" data-bd-menu hidden>' + chatMenu() + "</div>" +
+      '<div class="bd-chat-b" data-bd-chatbody aria-live="polite">' + chatBody() + "</div>" + foot;
+    var ta = $("#bdChatIn"); if (ta && draft) { ta.value = draft; grow(ta); }
+    if (scroll) { var b = $("[data-bd-chatbody]"); b.scrollTop = b.scrollHeight; }
+    fitChat();
+  }
+  function chatMenu() {
+    if (CHAT.sure === "report") {
+      return '<form class="bd-rep" data-bd-report><label for="bdRep">What is wrong with this chat?</label><textarea id="bdRep" rows="3" maxlength="300" placeholder="A few words help me sort it quickly"></textarea>' +
+        '<span><button type="submit" class="btn btn-teal sm">Send report</button><button type="button" class="fl-act" data-bd-rcancel>Cancel</button></span></form>';
+    }
+    return '<button type="button" data-bd-block="' + esc(CHAT.id) + '" data-on="' + (CHAT.blocked ? "1" : "0") + '">' + (CHAT.blocked ? "Unblock" : CHAT.sure === "block" ? "Tap again to block them" : "Block this member") + "</button>" +
+      '<button type="button" data-bd-chatreport>Report this chat</button>' +
+      '<button type="button" data-bd-chathide>' + (CHAT.sure === "hide" ? "Tap again to delete it from your list" : "Delete this chat from my list") + "</button>";
+  }
+  function drawMenu(open) {
+    var m = $("[data-bd-menu]"), b = $("[data-bd-chatmenu]"); if (!m) return;
+    m.innerHTML = chatMenu();
+    if (open != null) { m.hidden = !open; if (b) b.setAttribute("aria-expanded", open ? "true" : "false"); }
+  }
+  function grow(ta) { ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight, 132) + "px"; }
+  function fitChat() {
+    var el = chatEl(); if (!el) return;
+    var vv = window.visualViewport;
+    if (window.innerWidth <= 640 && vv && !el.classList.contains("min")) { el.style.height = vv.height + "px"; el.style.top = vv.offsetTop + "px"; }
+    else { el.style.height = ""; el.style.top = ""; }
+  }
+  if (window.visualViewport) { window.visualViewport.addEventListener("resize", fitChat); window.visualViewport.addEventListener("scroll", fitChat); }
+  window.addEventListener("resize", fitChat);
+  function startChatPoll() { stopChatPoll(); CHAT.timer = setInterval(pollChat, 5000); }
+  function stopChatPoll() { if (CHAT && CHAT.timer) clearInterval(CHAT.timer); if (CHAT) CHAT.timer = null; }
+  function pollChat() {
+    if (!CHAT.id || !CHAT.loaded || document.hidden) return;
+    var id = CHAT.id, real = CHAT.msgs.filter(function (m) { return !m.pending && !m.failed; });
+    var after = real.length ? real[real.length - 1].at : new Date(Date.now() - 3600000).toISOString();
+    call("getChat", { memberId: id, after: after }).then(function (r) {
+      if (CHAT.id !== id || !r.ok || !r.data) return;
+      var add = (r.data.messages || []).filter(function (m) { return !CHAT.msgs.some(function (x) { return x.id === m.id; }); });
+      if (!add.length) return;
+      var b = $("[data-bd-chatbody]"), atEnd = !b || b.scrollHeight - b.scrollTop - b.clientHeight < 90;
+      CHAT.msgs = CHAT.msgs.concat(add);
+      drawBody(atEnd);
+      var el = chatEl(); if (el && el.classList.contains("min")) el.classList.add("ping");
+      var last = add[add.length - 1];
+      noteChat(id, last.body, last.mine, last.at);
+    });
+  }
+  function noteChat(id, body, mine, at) {
+    var c = DM.chats.filter(function (x) { return x.memberId === id; })[0];
+    if (!c) { var o = CHAT.other || {}; c = { memberId: id, name: o.name || "A member", colour: o.colour, photo: o.photo }; }
+    DM.chats = [c].concat(DM.chats.filter(function (x) { return x !== c; }));
+    c.last = body.replace(/\s+/g, " ").slice(0, 140); c.lastFromMe = !!mine; c.at = at || new Date().toISOString(); c.unread = false;
+    drawMessages();
+  }
+  function sendNow(text, idx) {
+    var m;
+    if (idx == null) { m = { id: "tmp" + Date.now(), mine: true, body: text, at: new Date().toISOString(), pending: true }; CHAT.msgs.push(m); }
+    else { m = CHAT.msgs[idx]; if (!m) return; m.failed = false; m.pending = true; }
+    drawBody(true);
+    var id = CHAT.id;
+    call("sendMessage", { memberId: id, body: m.body }).then(function (r) {
+      m.pending = false;
+      if (r.ok && r.data) { m.id = r.data.id; m.at = r.data.at; noteChat(id, m.body, true, m.at); }
+      else { m.failed = true; toast(r.error || "That message didn't send. Please try again."); }
+      if (CHAT.id === id) drawBody(true);
+    });
+  }
+  function olderMessages() {
+    var first = CHAT.msgs.filter(function (m) { return !m.pending; })[0]; if (!first) return;
+    var id = CHAT.id, b = $("[data-bd-chatbody]"), h = b ? b.scrollHeight : 0;
+    call("getChat", { memberId: id, before: first.at }).then(function (r) {
+      if (CHAT.id !== id || !r.ok) return;
+      CHAT.msgs = (r.data.messages || []).concat(CHAT.msgs); CHAT.more = !!r.data.more;
+      drawBody(false);
+      var b2 = $("[data-bd-chatbody]"); if (b2) b2.scrollTop = b2.scrollHeight - h;
+    });
+  }
+  function setFollow(btn, on) {
+    $$('[data-bd-pfollow="' + btn.getAttribute("data-bd-pfollow") + '"]').forEach(function (x) {
+      x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false"); x.textContent = on ? "Following" : "Follow";
+    });
+  }
+
+  document.addEventListener("click", function (e) {
+    if (!B.on) return;
+    var t = e.target.closest && e.target.closest("[data-bd-who],[data-bd-chat],[data-bd-pfollow],[data-bd-block],[data-bd-listme],[data-bd-mfilter],[data-bd-cardx],[data-bd-cthread],[data-bd-chatx],[data-bd-chatmin],[data-bd-chatmenu],[data-bd-chatreport],[data-bd-chathide],[data-bd-older],[data-bd-retry],[data-bd-rcancel],[data-bd-rchat],[data-bd-rclear]");
+    if (!t) {
+      if (e.target.id === "bdCard") closeCard();
+      var menu = $("[data-bd-menu]");
+      if (menu && !menu.hidden && !(e.target.closest && e.target.closest("[data-bd-menu]"))) { CHAT.sure = ""; drawMenu(false); }
+      var mini = e.target.closest && e.target.closest(".bd-chat.min .bd-chat-h");
+      if (mini) { chatEl().classList.remove("min", "ping"); fitChat(); drawBody(true); }
+      return;
+    }
+    e.preventDefault(); e.stopPropagation();
+    var v;
+    if ((v = t.getAttribute("data-bd-who")) != null) {
+      var ch = chatEl();
+      if (ch && ch.classList.contains("min") && ch.contains(t)) { ch.classList.remove("min", "ping"); fitChat(); drawBody(true); return; }
+      openCard(v); return;
+    }
+    if ((v = t.getAttribute("data-bd-chat")) != null) { openChat(v, DM.chats.filter(function (x) { return x.memberId === v; })[0]); return; }
+    if ((v = t.getAttribute("data-bd-cthread")) != null) { closeCard(); boardGo("thread", v); return; }
+    if (t.hasAttribute("data-bd-cardx")) { closeCard(); return; }
+    if ((v = t.getAttribute("data-bd-pfollow")) != null) {
+      var was = t.classList.contains("on");
+      setFollow(t, !was);
+      call("toggleFollow", { memberId: v }).then(function (r) {
+        if (!r.ok) { setFollow(t, was); toast(r.error || "That didn't work. Please try again."); return; }
+        setFollow(t, !!r.data.following);
+        if (MEM.data) MEM.data.members.forEach(function (c) { if (c.memberId === v) c.following = !!r.data.following; });
+        toast(r.data.following ? "You are following them now. Their new posts reach your bell." : "You have stopped following them.");
+      });
+      return;
+    }
+    if ((v = t.getAttribute("data-bd-block")) != null) {
+      var unblock = t.getAttribute("data-on") === "1";
+      var inChat = !!(t.closest && t.closest("#bdChat"));
+      if (!unblock && inChat && CHAT.sure !== "block") { CHAT.sure = "block"; drawMenu(true); return; }
+      if (!unblock && !inChat && t.getAttribute("data-sure") !== "1") { t.setAttribute("data-sure", "1"); t.textContent = "Tap again to block"; return; }
+      call("blockMember", { memberId: v, block: !unblock }).then(function (r) {
+        if (!r.ok) { toast(r.error || "That didn't work. Please try again."); return; }
+        toast(unblock ? "Unblocked. They can message you again if your settings allow it." : "Blocked. They can't message you and you won't see them on the Members page.");
+        if (CHAT.id === v) { closeChat(); openChat(v); }
+        if ($("#bdCard")) openCard(v);
+        if (B.view === "members") loadMembers();
+      });
+      return;
+    }
+    if ((v = t.getAttribute("data-bd-listme")) != null) {
+      t.disabled = true;
+      call("setListing", { on: v === "1" }).then(function (r) {
+        if (!r.ok) { t.disabled = false; toast(r.error || "That didn't save."); return; }
+        toast(v === "1" ? "You are on the Members page now." : "You have been taken off the Members page.");
+        loadMembers();
+      });
+      return;
+    }
+    if ((v = t.getAttribute("data-bd-mfilter")) != null) { MEM.filter = v; loadMembers(); return; }
+    if (t.hasAttribute("data-bd-chatx")) { closeChat(); return; }
+    if (t.hasAttribute("data-bd-chatmin")) { var c2 = chatEl(); c2.classList.toggle("min"); c2.classList.remove("ping"); fitChat(); if (!c2.classList.contains("min")) drawBody(true); return; }
+    if (t.hasAttribute("data-bd-chatmenu")) { var m = $("[data-bd-menu]"); CHAT.sure = ""; drawMenu(m.hidden); return; }
+    if (t.hasAttribute("data-bd-chatreport")) { CHAT.sure = "report"; drawMenu(true); var rp = $("#bdRep"); if (rp) rp.focus(); return; }
+    if (t.hasAttribute("data-bd-rcancel")) { CHAT.sure = ""; drawMenu(false); return; }
+    if (t.hasAttribute("data-bd-chathide")) {
+      if (CHAT.sure !== "hide") { CHAT.sure = "hide"; drawMenu(true); return; }
+      var hid = CHAT.id;
+      call("hideChat", { memberId: hid }).then(function (r) {
+        if (!r.ok) { toast(r.error || "That didn't work."); return; }
+        DM.chats = DM.chats.filter(function (x) { return x.memberId !== hid; }); closeChat(); drawMessages();
+        toast("Deleted from your list. If they message you again it will come back.");
+      });
+      return;
+    }
+    if (t.hasAttribute("data-bd-older")) { olderMessages(); return; }
+    if ((v = t.getAttribute("data-bd-retry")) != null) { sendNow(null, +v); return; }
+    if ((v = t.getAttribute("data-bd-rchat")) != null) { modChat(v); return; }
+    if ((v = t.getAttribute("data-bd-rclear")) != null) {
+      call("clearChatReport", { chatId: v }).then(function (r) {
+        toast(r.ok ? "Marked as dealt with." : r.error || "That didn't work.");
+        closeCard(); if (B.view === "mod") boardGo("mod", "", true);
+      });
+    }
+  }, true);
+  document.addEventListener("submit", function (e) {
+    var f = e.target.closest && e.target.closest("[data-bd-send],[data-bd-msearch],[data-bd-report]");
+    if (!f || !B.on) return;
+    e.preventDefault();
+    if (f.hasAttribute("data-bd-msearch")) { MEM.q = f.querySelector("input").value.trim(); loadMembers(); return; }
+    if (f.hasAttribute("data-bd-report")) {
+      var why = f.querySelector("textarea").value.trim(), rid = CHAT.id;
+      call("reportChat", { memberId: rid, reason: why }).then(function (r) {
+        toast(r.ok ? "Thanks. I will read it and get back to you if I need to. You can block them too if you like." : r.error || "That report didn't send.");
+        if (r.ok && CHAT.id === rid) { CHAT.sure = ""; drawMenu(false); }
+      });
+      return;
+    }
+    var ta = $("#bdChatIn"), text = ta ? ta.value.trim() : "";
+    if (!text) return;
+    ta.value = ""; grow(ta); ta.focus();
+    sendNow(text);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (!e.target || e.target.id !== "bdChatIn" || e.key !== "Enter" || e.shiftKey || e.isComposing) return;
+    if (matchMedia("(pointer:coarse)").matches) return;
+    e.preventDefault();
+    var f = e.target.form; if (f) f.requestSubmit ? f.requestSubmit() : f.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+  });
+  document.addEventListener("input", function (e) { if (e.target && e.target.id === "bdChatIn") grow(e.target); });
+
+  /* reported chats, for the Moderation page */
+  function modChat(id) {
+    var c = (MOD.chats || []).filter(function (x) { return x.id === id; })[0]; if (!c) return;
+    closeCard();
+    var w = document.createElement("div");
+    w.id = "bdCard"; w.className = "bd-cardwrap";
+    w.innerHTML = '<div class="bd-card bd-card-wide" role="dialog" aria-modal="true" aria-label="Reported chat" tabindex="-1"><button type="button" class="bd-x" data-bd-cardx aria-label="Close">' + IC.x + "</button>" +
+      '<div class="bd-card-in"><div class="bd-card-body"><h2 class="bd-rh">' + esc(c.people.map(function (p) { return p.name; }).join(" and ")) + "</h2>" +
+      '<p class="bd-why">Reported by ' + esc(c.reportedBy) + " " + esc(ago(c.at)) + ": " + esc(c.reason) + "</p>" +
+      '<div class="bd-rlog">' + c.messages.map(function (m) { return "<p><b>" + esc(m.from) + "</b> <small>" + esc(shortTime(m.at)) + "</small><br>" + esc(m.body) + "</p>"; }).join("") + "</div></div>" +
+      '<div class="bd-card-acts"><button type="button" class="btn btn-teal" data-bd-rclear="' + esc(c.id) + '">Mark as dealt with</button></div></div></div>';
+    document.body.appendChild(w);
+    document.addEventListener("keydown", cardKey);
+    $(".bd-card", w).focus();
+  }
   /* ---------- moderation (admin only) ---------- */
   var MOD = { tab: "queue", settings: null, overview: null };
   function modCount(d) {
     if (!d) return 0;
-    return (d.pendingPosts || []).length + d.pendingGroups.length + d.reportedThreads.length + d.reportedComments.length + d.reportedPhotos.length;
+    return (MOD.chats || []).length + (d.pendingPosts || []).length + d.pendingGroups.length + d.reportedThreads.length + d.reportedComments.length + d.reportedPhotos.length;
   }
   function loadMod() {
-    return Promise.all([call("adminOverview"), call("getModSettings")]).then(function (rs) {
+    return Promise.all([call("adminOverview"), call("getModSettings"), call("reportedChats")]).then(function (rs) {
+      MOD.chats = rs[2].ok ? (rs[2].data || []) : [];
       MOD.overview = rs[0].ok ? rs[0].data : null;
       MOD.settings = rs[1].ok && rs[1].data ? rs[1].data : { words: [], wordMode: "hold", firstPostApproval: true, holdLinks: true };
       return rs[0];
@@ -1221,7 +1652,7 @@
     return '<button type="button" class="fl-act' + (red ? " red" : "") + '" data-fl-adm="' + action + '" data-id="' + esc(id) + '"' + (extra || "") + ">" + label + "</button>";
   }
   function modItem(kind, title, sub, body, acts) {
-    return '<div class="bd-mi"><span class="bd-mk bd-mk-' + kind + '">' + esc({ first: "First post", link: "New member link", thread: "Reported thread", comment: "Reported reply", photo: "Reported photo", group: "Group idea", word: "Held by word filter" }[kind] || kind) + "</span>" +
+    return '<div class="bd-mi"><span class="bd-mk bd-mk-' + kind + '">' + esc({ first: "First post", link: "New member link", thread: "Reported thread", comment: "Reported reply", chat: "Reported chat", photo: "Reported photo", group: "Group idea", word: "Held by word filter" }[kind] || kind) + "</span>" +
       "<div><b>" + esc(title) + "</b><small>" + sub + "</small>" + (body ? "<p>" + esc(body) + "</p>" : "") + '</div><div class="bd-ma">' + acts + "</div></div>";
   }
   function vMod() {
@@ -1237,6 +1668,11 @@
     d.reportedThreads.forEach(function (t) { items.push(modItem("thread", t.title, t.reportCount + (t.reportCount === 1 ? " report" : " reports") + (why(t) ? " · " + why(t) : ""), "", admBtn("Open", "open", t.id) + admBtn("Keep it", "clearThreadReports", t.id) + admBtn("Remove", "removeThread", t.id, true))); });
     d.reportedComments.forEach(function (c) { items.push(modItem("comment", "Reply by " + c.authorName, why(c), String(c.body || "").slice(0, 200), admBtn("Keep it", "clearCommentReports", c.id) + admBtn("Remove", "removeComment", c.id, true))); });
     d.reportedPhotos.forEach(function (p) { items.push(modItem("photo", p.title, p.reportCount + (p.reportCount === 1 ? " report" : " reports") + (why(p) ? " · " + why(p) : ""), "", admBtn("Keep it", "clearGalleryReports", p.id) + admBtn("Remove", "removeGalleryPhoto", p.id, true))); });
+    (MOD.chats || []).forEach(function (c) {
+      var last = c.messages.slice(-3).map(function (m) { return m.from + ": " + m.body; }).join("  /  ");
+      items.push(modItem("chat", "Chat between " + c.people.map(function (p) { return p.name; }).join(" and "), "Reported by " + esc(c.reportedBy) + " · " + esc(ago(c.at)) + (c.reason ? " · " + esc(c.reason) : ""), last.slice(0, 220),
+        '<button type="button" class="fl-act" data-bd-rchat="' + esc(c.id) + '">Read the chat</button><button type="button" class="fl-act" data-bd-rclear="' + esc(c.id) + '">Dealt with</button>'));
+    });
     d.pendingGroups.forEach(function (g) { items.push(modItem("group", g.title, "Suggested by " + esc(g.requestedByName), g.description || "", admBtn("Approve", "approveGroup", g.id) + admBtn("Turn down", "rejectGroup", g.id, true))); });
     var n = items.length;
     var tabs = [["queue", "Waiting for you" + (n ? " (" + n + ")" : "")], ["words", "Word filter"], ["rules", "Posting rules"]];
@@ -1304,10 +1740,21 @@
     loadFollowing().then(boardSide);
     if (S.member && S.member.isAdmin) loadMod().then(boardSide);
     boardGo("home", "", true);
+    loadChats().then(dmPollStart);
+    if (!B.whereDone) {
+      B.whereDone = true;
+      call("where").then(function (r) {
+        var w = (r.ok && r.data) || {};
+        if (!B.on) return;
+        if (w.chat) { boardGo("messages", "", true); openChat(w.chat); }
+        else if (w.v === "messages" || w.v === "members" || w.v === "mod") boardGo(w.v, "", true);
+      });
+    }
   }
   function boardStop() {
     if (!B.on) return;
     B.on = false; parkSections();
+    closeChat(); closeCard(); dmPollStop();
     var look = $("#lookSw"), row = $(".jumprow"); if (look && row) row.insertBefore(look, row.firstChild);
     var b = $("#board"); if (b) b.remove();
     document.body.classList.remove("fl-member");

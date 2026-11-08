@@ -519,6 +519,48 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
   .out-hd .ph,.panel,.dlg form{animation:none}
   .btn,.area,.lg,.tb{transition:none}
 }
+/* Members and Messages */
+.lg-b{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.lpc-bt{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.mk{aspect-ratio:960/470;background:#F2F4F5;display:grid;grid-template-columns:42% 1fr;font-size:11px;line-height:1.3;overflow:hidden}
+.mk-l{background:#fff;border-right:1px solid var(--line)}
+.mk-r{display:flex;gap:6px;align-items:center;padding:7px 8px;border-bottom:1px solid var(--line)}
+.mk-r.on{background:#E8F6F5}
+.mk-a{flex:none;width:22px;height:22px;border-radius:50%;color:#fff;display:grid;place-items:center;font:700 10px var(--c)}
+.mk-r span:last-child{min-width:0}
+.mk-r b{display:block;color:var(--navy);font-size:11px}
+.mk-r i{display:block;font-style:normal;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-c{display:flex;flex-direction:column;gap:6px;padding:10px;position:relative}
+.mk-b{max-width:85%;padding:6px 8px}
+.mk-b.t{background:#fff;border:1px solid var(--line);align-self:flex-start}
+.mk-b.m{background:#0E5F5B;color:#fff;align-self:flex-end}
+.mk-in{position:absolute;left:10px;right:10px;bottom:8px;background:#fff;border:1px solid var(--line);padding:5px 8px;color:var(--soft)}
+.lpc:hover .mk-r.on{background:#D3EFED}
+.chats{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.chats button{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 4px;text-align:left;font:inherit;color:inherit;cursor:pointer;transition:background .3s}
+.chats button:hover{background:#E8F6F5}
+.chats .ca{width:42px;height:42px;border-radius:50%;color:#fff;display:grid;place-items:center;font:700 16px var(--c)}
+.chats b{display:block;color:var(--navy)}
+.chats i{display:block;font-style:normal;color:var(--soft);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chats .new i{color:var(--ink);font-weight:600}
+.chats .cw{font-size:14px;color:var(--soft);font-weight:500}
+.chats .new .cw::after{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#D74949;margin-left:8px}
+.dm-o{display:grid;gap:6px}
+.dm-o label{display:flex;gap:10px;align-items:center;font-weight:600;color:var(--navy);padding:9px 11px;border:1px solid var(--line);cursor:pointer;transition:border-color .3s,background .3s}
+.dm-o label:has(input:checked){border-color:#32B4AF;background:#E8F6F5}
+.dm-o input{accent-color:#0E5F5B}
+html.hud .mk{background:rgba(6,16,25,.7)}
+html.hud .mk-l,html.hud .mk-b.t,html.hud .mk-in{background:rgba(255,255,255,.05);border-color:var(--hl)}
+html.hud .mk-r{border-color:var(--hl)}
+html.hud .mk-r.on{background:rgba(95,227,220,.12)}
+html.hud .mk-r b,html.hud .chats b,html.hud .dm-o label{color:#fff}
+html.hud .mk-b.t{color:#fff}
+html.hud .chats button{border-color:var(--hl)}
+html.hud .chats button:hover{background:rgba(95,227,220,.08)}
+html.hud .chats .new i{color:#fff}
+html.hud .dm-o label{border-color:var(--hl)}
+html.hud .dm-o label:has(input:checked){background:rgba(95,227,220,.12);border-color:var(--cy)}
+@media (max-width:640px){.lg-b{grid-column:1/-1;justify-content:stretch}.lg-b .btn{flex:1;justify-content:center}}
 </style>
 </head>
 <body>
@@ -553,6 +595,10 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
   /* ---------- example member for previews ---------- */
   var demoIn=true;
   var DEMO={loggedIn:true,
+    messages:{unread:2,chats:[
+      {name:'Tom Nakamura',colour:'#13293C',last:'I’ve got a spare space on my pitch if you fancy camping the Saturday night?',when:'16:42',unread:true},
+      {name:'Priya Hart',colour:'#32B4AF',last:'Get there early, the first couple of buses fill up fast.',when:'Yesterday',unread:true},
+      {name:'Nadia Shah',colour:'#1E3A34',last:'Ha, that makes me feel better. Thanks!',when:'Mon',unread:false}]},
     account:{id:'demo',name:'Alex Taylor',first:'Alex',email:'alex@example.com',created:'2026-10-21T10:00:00Z',photo:'',colour:'#32B4AF',
       bio:'Been going to RIAT since I was a kid. These days I take the camera and the family, and we camp most years.',area:'Swindon',into:['Photography','Fast jets','Camping'],going:['Royal International Air Tattoo','RAF Cosford Air Show']},
     hub:{joined:true,trips:[{id:'t1',showName:'RAF Cosford Air Show',showSlug:'cosford',start:'2027-06-13T09:00:00Z'},{id:'t2',showName:'Royal International Air Tattoo',showSlug:'riat',start:'2027-07-16T08:00:00Z'}],mustSee:7,unread:2,pastCount:5,past:[{showName:'Royal International Air Tattoo',year:2026},{showName:'Duxford Summer Air Show',year:2026},{showName:'Eastbourne Airshow',year:2025},{showName:'Royal International Air Tattoo',year:2025},{showName:'Clacton Air Show',year:2024}],riatCount:2},
@@ -561,7 +607,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
       gallery:[]},
     team:{joined:false,status:'none'},
     trader:{joined:false},
-    privacy:{area:true,going:true,followers:true,passport:true},
+    privacy:{area:true,going:true,followers:true,passport:true,members:true,dm:'all'},
     badges:[{k:'shows',label:'5 Shows Attended'},{k:'riat',label:'RIAT Regular',gold:true},{k:'photo',label:'Photographer'}],
     whosGoing:[{showSlug:'riat',showName:'Royal International Air Tattoo',people:[{memberId:'m1',name:'Sam Hughes',colour:'#6950A1'},{memberId:'m2',name:'Priya Shah',colour:'#D74949'}]},{showSlug:'cosford',showName:'RAF Cosford Air Show',people:[{memberId:'m3',name:'Dan Cole',colour:'#13293C'}]}],
     notifications:[
@@ -594,6 +640,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
     stamp:'<path d="M4 21h16M6 17h12v4H6z"/><path d="M9 17v-3a3 3 0 0 1-1.5-2.6A4.5 4.5 0 1 1 16.5 11.4 3 3 0 0 1 15 14v3"/>',
     eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
     cog:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+    msg:'<path d="M3 5h14v9H8l-5 4z"/><path d="M17 9h4v9l-3-2.5h-7v-1.5"/>',
     cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>'
   };
   function svg(k){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+I[k]+'</svg>';}
@@ -618,6 +665,10 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
       {k:'forum',n:'Airshow Forum',c:'#6950A1',s:'on',
        line:'Your posts, photos, groups and the members you follow.',
        open:'community-forum',label:'Open the forum',pill:'Signed up'},
+      {k:'msg',n:'Members and Messages',c:'#0E5F5B',s:'on',
+       line:(D.messages&&D.messages.unread)?'You have '+D.messages.unread+' unread '+(D.messages.unread===1?'message':'messages')+'. Find other fans and chat in private.':'Find other fans going to your shows and chat to them in private.',
+       open:'community-forum?v=messages',label:'Open my messages',pill:(D.messages&&D.messages.unread)?D.messages.unread+' new':'Ready to use',
+       open2:'community-forum?v=members',label2:'Find members'},
       {k:'team',n:'Volunteer Hub',c:'#1D63B7',s:teamState,
        line:teamState==='on'?'Send in your photos, write ups and videos, and see when they go live.':(teamState==='wait'?'You have asked to join the team. I will be in touch soon.':'For people helping to build the guide. Free, unpaid and at your own pace.'),
        open:teamState==='off'?'join-the-team':'volunteer-hub',label:teamState==='off'?'See how to join':'Open the Volunteer Hub',
@@ -724,7 +775,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
     document.getElementById('tabs').style.setProperty('--tc',t.c);
     var p=document.getElementById('panel');p.setAttribute('aria-labelledby','tab-'+k);
     p.style.animation='none';void p.offsetWidth;p.style.animation='';
-    p.innerHTML=({overview:pOverview,logins:pLogins,hub:pHub,forum:pForum,team:pTeam,trader:pTrader,contact:pContact,settings:pSettings,notes:pNotes,passport:pPassport})[k]();
+    p.innerHTML=({overview:pOverview,logins:pLogins,hub:pHub,forum:pForum,msg:pMsg,team:pTeam,trader:pTrader,contact:pContact,settings:pSettings,notes:pNotes,passport:pPassport})[k]();
     try{history.replaceState(null,'','#'+k);}catch(e){}
   }
 
@@ -732,13 +783,19 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
     return '<div class="logins">'+AREAS(D).map(function(a){
       return '<div class="lg" style="--ac:'+a.c+'"><span class="ai">'+svg(a.k)+'</span><div><b>'+esc(a.n)+'</b><small>'+esc(a.line)+'</small></div>'+
         '<span class="pill '+a.s+'">'+esc(a.pill)+'</span>'+
-        '<button class="btn sm '+(a.s==='off'?'line':'')+'" type="button" data-go="'+a.open+'">'+esc(a.label)+' <span class="ar">→</span></button></div>';
+        '<span class="lg-b"><button class="btn sm '+(a.s==='off'?'line':'')+'" type="button" data-go="'+a.open+'">'+esc(a.label)+' <span class="ar">→</span></button>'+(a.open2?'<button class="btn sm line" type="button" data-go="'+a.open2+'">'+esc(a.label2)+'</button>':'')+'</span></div>';
     }).join('')+'</div>';
   }
   function PROF(l){return 'https://jskedge1.github.io/airshow-pages/profile-img/'+(l==='hud'?'profile-hud':'profile')+'.webp';}
   var SHOT={hub:'hub',forum:'forum',team:'volunteer-hub',trader:'trader-hub'};
   var PATH={hub:'my-airshow-hub',forum:'community-forum',team:'volunteer-hub',trader:'trader-hub'};
   function shot(k){
+    if(k==='msg'){
+      var ch=(D.messages&&D.messages.chats)||[];
+      return '<div class="bf"><div class="bf-bar"><i></i><i></i><i></i><span>ukairshowguide.co.uk/community-forum</span></div><div class="mk" role="img" aria-label="Preview of your messages on the forum">'+
+        '<div class="mk-l">'+ch.slice(0,3).map(function(c,i){return '<div class="mk-r'+(i===0?' on':'')+'"><span class="mk-a" style="background:'+esc(c.colour)+'">'+esc(initials(c.name))+'</span><span><b>'+esc(c.name)+'</b><i>'+esc(c.last)+'</i></span></div>';}).join('')+'</div>'+
+        '<div class="mk-c"><span class="mk-b t">'+esc(ch[0]?ch[0].last:'Hello!')+'</span><span class="mk-b m">Sounds good, see you there.</span><span class="mk-in">Write a message</span></div></div></div>';
+    }
     return '<div class="bf"><div class="bf-bar"><i></i><i></i><i></i><span>ukairshowguide.co.uk/'+PATH[k]+'</span></div><div class="bf-img" style="background-image:url(https://jskedge1.github.io/airshow-pages/profile-img/'+SHOT[k]+'.webp)" role="img" aria-label="Preview of the '+esc(PATH[k].replace(/-/g,' '))+' page"></div></div>';
   }
   function pLogins(){
@@ -747,7 +804,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
         return '<article class="lpc" style="--ac:'+a.c+'">'+shot(a.k)+
           '<div class="lpc-b"><div class="lpc-t"><span class="ai">'+svg(a.k)+'</span><b>'+esc(a.n)+'</b><span class="pill '+a.s+'">'+esc(a.pill)+'</span></div>'+
           '<p>'+esc(a.line)+'</p>'+
-          '<button class="btn sm '+(a.s==='off'?'line':'')+'" type="button" data-go="'+a.open+'">'+esc(a.label)+' <span class="ar">→</span></button></div></article>';
+          '<div class="lpc-bt"><button class="btn sm '+(a.s==='off'?'line':'')+'" type="button" data-go="'+a.open+'">'+esc(a.label)+' <span class="ar">→</span></button>'+(a.open2?'<button class="btn sm line" type="button" data-go="'+a.open2+'">'+esc(a.label2)+'</button>':'')+'</div></div></article>';
       }).join('')+'</div>'+
       '<p class="lg-n">Signed in as <b>'+esc(D.account.email||D.account.name)+'</b>. Change your password or email from <button type="button" data-tab-go="settings" style="background:none;border:0;padding:0;color:var(--purple);font-weight:700;text-decoration:underline">Settings</button>.</p>';
   }
@@ -795,8 +852,41 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
       '<div class="nums" style="--ac:#6950A1"><div class="num"><b>'+(f.threadCount||0)+'</b><span>Threads started</span></div><div class="num"><b>'+(f.commentCount||0)+'</b><span>Replies</span></div><div class="num"><b>'+(f.followers||0)+'</b><span>Followers</span></div><div class="num"><b>'+(f.following||0)+'</b><span>Following</span></div></div>'+
       '<div class="cols2"><div class="box"><h3>My Posts</h3>'+posts+'<h3 style="margin-top:18px">My Groups</h3>'+groups+'</div><div class="box"><h3>My Photos</h3>'+gal+'</div></div>';
   }
+  function chatWhen(d){
+    if(!d)return '';var t=new Date(d),now=new Date(),y=new Date(now.getTime()-86400000);
+    if(t.toDateString()===now.toDateString())return t.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    if(t.toDateString()===y.toDateString())return 'Yesterday';
+    if(now-t<6*86400000)return t.toLocaleDateString('en-GB',{weekday:'short'});
+    return t.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  }
+  function pMsg(){
+    var m=D.messages||{},ch=m.chats||[],pv=D.privacy||{},f=D.forum||{};
+    var listed=pv.members===true,who=pv.dm||'all';
+    var WHO={all:'Any member',following:'Only people I follow',off:'Nobody at the moment'};
+    var chats=ch.length?'<ul class="chats">'+ch.map(function(c){
+        return '<li><button type="button" data-go="community-forum?'+(c.memberId?'chat='+encodeURIComponent(c.memberId):'v=messages')+'" class="'+(c.unread?'new':'')+'"><span class="ca" style="background:'+esc(c.colour||'#32B4AF')+'">'+(c.photo?'<img src="'+esc(c.photo)+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':esc(initials(c.name)))+'</span><span class="cb"><b>'+esc(c.name)+'</b><i>'+(c.lastFromMe?'You: ':'')+esc(c.last)+'</i></span><span class="cw">'+esc(c.when||chatWhen(c.at))+'</span></button></li>';
+      }).join('')+'</ul>'
+      :'<div class="empty"><b>No messages yet</b>Tap someone’s name on the forum or find them on the Members page, then press Message.</div>';
+    return areaHead('msg','Members and Messages','Find other fans and chat in private.','community-forum?v=messages','Open my messages')+
+      '<div class="nums" style="--ac:#0E5F5B"><div class="num"><b>'+(m.unread||0)+'</b><span>Unread messages</span></div><div class="num"><b>'+ch.length+'</b><span>Chats</span></div><div class="num"><b>'+(f.following||0)+'</b><span>Following</span></div><div class="num"><b>'+(f.followers||0)+'</b><span>Followers</span></div></div>'+
+      '<div class="cols2"><div class="box"><h3>My Messages</h3>'+chats+'<p class="lg-n" style="margin-top:12px">Only you and the person you are talking to can see a chat. If anything feels off, report or block them from the chat and I will take a look.</p></div>'+
+      '<div style="display:grid;gap:18px;align-content:start"><div class="box"><h3>Find Members</h3><p>See who else is going to your shows, find other photographers or campers, and follow people whose posts you like.</p>'+
+        '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" type="button" data-go="community-forum?v=members">Members page <span class="ar">→</span></button><button class="btn sm line" type="button" data-go="my-airshow-hub">Who’s going in my hub</button></div></div>'+
+      '<div class="box"><h3>How Others Find Me</h3><div class="info">'+
+        '<div><span>Members page</span><b>'+(listed?'You are listed':'Not listed')+'</b></div>'+
+        '<div><span>Who can message me</span><b>'+esc(WHO[who]||WHO.all)+'</b></div></div>'+
+        '<button class="btn sm line" type="button" data-tab-go="settings" style="margin-top:12px">Change in Settings</button></div></div></div>';
+  }
+  function membersBox(){
+    var pv=D.privacy||{},who=pv.dm||'all';
+    var R=[['all','Any member'],['following','Only people I follow'],['off','Nobody, I would rather not']];
+    return '<div class="box"><h3>Members And Messages</h3><p>Choose if other fans can find you on the Members page and who can send you a message.</p><div class="tg">'+
+      '<label class="tgl"><input type="checkbox" data-pv="members"'+(pv.members===true?' checked':'')+'><span class="sw" aria-hidden="true"></span><span><b>Show me on the Members page</b><small>Lists you on the forum so people can find and follow you. Turn it off and they can still tap your name on your posts.</small></span></label></div>'+
+      '<p style="margin:14px 0 8px"><b>Who can message me</b></p><div class="dm-o">'+
+      R.map(function(r){return '<label><input type="radio" name="dm" data-dm value="'+r[0]+'"'+(who===r[0]?' checked':'')+'> '+esc(r[1])+'</label>';}).join('')+'</div></div>';
+  }
   function pTeam(){
-    var t=D.team||{},a=AREAS(D)[2];
+    var t=D.team||{},a=AREAS(D).filter(function(x){return x.k==='team';})[0];
     if(a.s==='off')return areaHead('team','Volunteer Hub','For people helping to build the guide.','join-the-team','See how to join')+
       '<div class="peek">'+shot('team')+'<div class="join-box"><div><b>Fancy helping out?</b><p>Know a show inside out, or take a decent photo? Joining the team is voluntary, there is no minimum and you get full credit for anything you send. Once I say yes, the Volunteer Hub tab here opens up.</p></div><button class="btn" type="button" data-go="join-the-team">Join the team <span class="ar">→</span></button></div></div>';
     if(a.s==='wait')return areaHead('team','Volunteer Hub','Thanks for asking to join.','volunteer-hub','Open the Volunteer Hub')+
@@ -806,7 +896,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
       ((t.roles||[]).length?'<div class="box"><h3>My Roles</h3><div class="chips">'+t.roles.map(function(r){return '<span class="chip t">'+esc(r)+'</span>';}).join('')+'</div></div>':'');
   }
   function pTrader(){
-    var tr=D.trader||{},a=AREAS(D)[3];
+    var tr=D.trader||{},a=AREAS(D).filter(function(x){return x.k==='trader';})[0];
     if(a.s==='off')return areaHead('trader','Trader Hub','For stalls and small businesses at the shows.','advertise-with-us','List your stall')+
       '<div class="peek">'+shot('trader')+'<div class="join-box"><div><b>Run a stall at the shows?</b><p>List your business so visitors can see which shows and dates to find you at. Once your listing is in, the Trader Hub tab here opens up with everything in one place.</p></div><button class="btn" type="button" data-go="advertise-with-us">See trader plans <span class="ar">→</span></button></div></div>';
     return areaHead('trader','Trader Hub',(tr.name||'Your listing')+(a.s==='wait'?', waiting for a check.':'.'),'trader-hub','Open the Trader Hub')+
@@ -821,7 +911,7 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
         '<div><span>Profile Name</span><b>'+esc(a.name)+'</b></div></div>'+
         '<p style="margin-top:14px">To change your password, log out and choose Forgot password on the log in window. It sends you a link by email.</p>'+
         '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" type="button" data-act="edit">Edit profile</button><button class="btn sm red" type="button" data-act="logout">Log out</button></div></div>'+
-      privacyBox()+soundBox()+'<div class="box"><h3>Your Details</h3><p>Your profile name, photo, area and bio show to other members on the forum. Your email never does.</p><p>Want your account or anything you have posted taken off? Drop me a message and I will sort it for you.</p>'+
+      privacyBox()+membersBox()+soundBox()+'<div class="box"><h3>Your Details</h3><p>Your profile name, photo, area and bio show to other members on the forum. Your email never does.</p><p>Want your account or anything you have posted taken off? Drop me a message and I will sort it for you.</p>'+
         '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm line" type="button" data-go="policies">Privacy policy</button><button class="btn sm line" type="button" data-go="contact-us">Contact the guide</button></div></div></div>';
   }
 
@@ -1047,8 +1137,13 @@ html.hud .toast{background:#0B1C29;border-left-color:var(--cy)}
   });
   document.addEventListener('change',function(e){
     var t=e.target;if(t.hasAttribute&&t.hasAttribute('data-snd')){SFX.set(t.checked);sndUI();SFX.key();return;}
+    if(t.hasAttribute&&t.hasAttribute('data-dm')){
+      D.privacy=D.privacy||{};D.privacy.dm=t.value;
+      api('privacy',D.privacy).then(function(){SFX.lock();toast(t.value==='off'?'Messages switched off.':(t.value==='following'?'Only people you follow can message you.':'Any member can message you.'));},function(err){toast(err.message);});
+      return;
+    }
     if(!t.hasAttribute||!t.hasAttribute('data-pv'))return;
-    var p={};[].forEach.call(document.querySelectorAll('[data-pv]'),function(x){p[x.getAttribute('data-pv')]=x.checked;});
+    var p={dm:(D.privacy&&D.privacy.dm)||'all'};[].forEach.call(document.querySelectorAll('[data-pv]'),function(x){p[x.getAttribute('data-pv')]=x.checked;});
     D.privacy=p;
     api('privacy',p).then(function(){SFX.lock();toast('Privacy saved.');},function(err){toast(err.message);});
   });
