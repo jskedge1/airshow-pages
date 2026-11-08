@@ -59,7 +59,7 @@ def dirs(code,full,short,dk):
     nice=NICE(full)
     there=[trip(x,True,short) for x in J[code][dk]['there']]; back=[trip(x,False,short) for x in J[code][dk]['back']]
     return [{'label':'To Cosford','trips':there,'tt':table(there,True,full),'from':nice,'note':'Times from '+nice+'. Tap one to see every station on the way.'},
-            {'label':'Back to '+short,'trips':back,'tt':table(back,False,full),'from':DEST,'note':'Times from Cosford. The flying usually finishes around 17:00, so look at the trains after that.'}]
+            {'label':'Back to '+short,'trips':back,'tt':table(back,False,full),'from':DEST,'note':'Times from Cosford. The flying is due to finish at about 17:30, so look at the trains after that.'}]
 hubs=[]
 for code,full,short in HUBS:
     base=dirs(code,full,short,'sun'); days={}

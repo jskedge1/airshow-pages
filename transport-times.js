@@ -326,7 +326,7 @@ var DATA = {
   ]
  },
  "midlands": {
-  "checked": "2026-10-29",
+  "checked": "2026-11-08",
   "rail-red": [
    {
     "title": "Saturday, linking with the 247 bus",
