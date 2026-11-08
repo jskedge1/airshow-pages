@@ -19,6 +19,17 @@ function aeFitBox(frame, h) {
   frame.setAttribute('scrolling', 'no');
   const sec = comp.parentNode;
   if (sec && parseFloat(getComputedStyle(sec).marginBottom) < 0) sec.style.marginBottom = '0px';
+  // a section that holds only this box takes the box's height, so a section left
+  // much taller in the editor (the bus route page on phones) leaves no blank gap
+  const section = comp.closest('section');
+  if (section && section.querySelectorAll('[id^="comp-"]').length === 1) {
+    const top = comp.getBoundingClientRect().top - section.getBoundingClientRect().top;
+    const want = Math.round(top + parseFloat(px) + (parseFloat(getComputedStyle(comp).marginBottom) || 0)) + 'px';
+    [section].concat(Array.prototype.slice.call(section.children)).forEach(function (el) {
+      el.style.setProperty('height', want, 'important');
+      el.style.setProperty('min-height', '0px', 'important');
+    });
+  }
 }
 
 function aeFitAgain() {
