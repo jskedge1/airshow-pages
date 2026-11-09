@@ -1244,7 +1244,7 @@
   }
   /* ---------- members, profile cards and private messages ---------- */
   var DM = { unread: 0, chats: [], loaded: false, timer: null };
-  var MEM = { filter: "all", q: "", data: null };
+  var MEM = { filter: "all", q: "", data: null, show: "", int: "", sort: "active" };
   var CHAT = { id: "" };
   var IC = {
     send: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/><path d="M11.5 13.5L20 4"/></svg>',
@@ -1300,16 +1300,17 @@
   function dmPollStop() { if (DM.timer) clearInterval(DM.timer); DM.timer = null; }
 
   /* the Members page */
-  function memRow(c) {
-    var posts = (c.threadCount || 0) + (c.commentCount || 0);
-    var meta = [c.area, posts ? posts + (posts === 1 ? " post" : " posts") : ""].filter(Boolean).join(" · ") || memberSince(c.joined);
-    return '<div class="bd-mem" role="listitem">' +
-      '<button type="button" class="bd-mem-who" data-bd-who="' + esc(c.memberId) + '">' + avatar(c.name, c.colour, c.photo) +
-        "<span><b>" + esc(c.name) + "</b><small>" + esc(meta) + "</small>" +
-        (c.sharedShows.length ? "<em>Also going to " + esc(c.sharedShows.slice(0, 2).join(" and ")) + "</em>" : "") +
-        (c.into.length ? '<span class="bd-tags">' + c.into.slice(0, 4).map(function (t) { return "<i>" + esc(t) + "</i>"; }).join("") + "</span>" : "") +
-      "</span></button>" +
-      '<span class="bd-mem-act">' +
+  function memRow(c, n) {
+    var going = c.going && c.going.length ? '<span class="bd-mc-go">Going to <b>' + esc(c.going.slice(0, 2).join(", ")) + "</b>" + (c.going.length > 2 ? " and " + (c.going.length - 2) + " more" : "") + "</span>"
+      : c.sharedShows.length ? '<span class="bd-mc-go">Also going to <b>' + esc(c.sharedShows.slice(0, 2).join(" and ")) + "</b></span>" : "";
+    return '<div class="bd-mc" role="listitem" style="--ac:' + esc(c.colour || "#32B4AF") + ";animation-delay:" + Math.min(n || 0, 12) * 35 + 'ms">' +
+      '<button type="button" class="bd-mc-who" data-bd-who="' + esc(c.memberId) + '" aria-label="Open ' + esc(c.name) + '\'s profile">' +
+        '<span class="bd-mc-h">' + avatar(c.name, c.colour, c.photo) + "<span><b>" + esc(c.name) + "</b><small>" + esc(c.area || memberSince(c.joined)) + "</small></span></span>" +
+        (c.badges && c.badges.length ? '<span class="bd-mc-row"><span class="bd-badge"><i></i>' + esc(c.badges[0]) + "</span></span>" : "") +
+        (c.into.length ? '<span class="bd-mc-row">' + c.into.slice(0, 4).map(function (t) { return '<span class="bd-chip-t">' + esc(t) + "</span>"; }).join("") + "</span>" : "") +
+        going +
+      "</button>" +
+      '<span class="bd-mc-act">' +
         (c.canMessage ? '<button type="button" class="btn btn-teal sm" data-bd-chat="' + esc(c.memberId) + '">Message</button>' : "") +
         '<button type="button" class="bd-follow' + (c.following ? " on" : "") + '" data-bd-pfollow="' + esc(c.memberId) + '" aria-pressed="' + (c.following ? "true" : "false") + '">' + (c.following ? "Following" : "Follow") + "</button>" +
       "</span></div>";
@@ -1329,11 +1330,32 @@
       '<div class="bd-chips">' + chips.map(function (c) {
         return '<button type="button" class="bd-chip' + (MEM.filter === c[0] ? " on" : "") + '" data-bd-mfilter="' + c[0] + '" aria-pressed="' + (MEM.filter === c[0] ? "true" : "false") + '">' + c[1] + "</button>";
       }).join("") + "</div></div>";
-    var narrowed = MEM.q || MEM.filter !== "all";
-    var list = d.members.length
-      ? '<p class="bd-mtotal">' + d.total + (d.total === 1 ? " member" : " members") + '</p><div class="bd-mems" role="list">' + d.members.map(memRow).join("") + "</div>"
+    /* show, interest and sort filters work on the loaded list, so they are instant */
+    var shows = [], ints = [];
+    d.members.forEach(function (c) {
+      (c.going || []).forEach(function (g) { if (g && shows.indexOf(g) < 0) shows.push(g); });
+      (c.into || []).forEach(function (t) { if (t && ints.indexOf(t) < 0) ints.push(t); });
+    });
+    shows.sort(); ints.sort();
+    if (MEM.show && shows.indexOf(MEM.show) < 0) MEM.show = "";
+    if (MEM.int && ints.indexOf(MEM.int) < 0) MEM.int = "";
+    tools += '<div class="bd-mfil">' +
+      (shows.length ? '<label><span>Show</span><select data-bd-mshow><option value="">Any show</option>' + shows.map(function (g) { return "<option" + (g === MEM.show ? " selected" : "") + ">" + esc(g) + "</option>"; }).join("") + "</select></label>" : "") +
+      '<label><span>Sort</span><select data-bd-msort><option value="active"' + (MEM.sort === "active" ? " selected" : "") + '>Most active</option><option value="az"' + (MEM.sort === "az" ? " selected" : "") + '>A to Z</option><option value="new"' + (MEM.sort === "new" ? " selected" : "") + ">Newest members</option></select></label></div>" +
+      (ints.length ? '<div class="bd-mints">' + ints.map(function (t) { return '<button type="button" class="' + (MEM.int === t ? "on" : "") + '" data-bd-mint="' + esc(t) + '" aria-pressed="' + (MEM.int === t ? "true" : "false") + '">' + esc(t) + "</button>"; }).join("") + "</div>" : "");
+    var shown = d.members.filter(function (c) {
+      return (!MEM.show || (c.going || []).indexOf(MEM.show) >= 0) && (!MEM.int || (c.into || []).indexOf(MEM.int) >= 0);
+    });
+    if (MEM.sort === "az") shown.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    else if (MEM.sort === "new") shown.sort(function (a, b) { return String(b.joined || "").localeCompare(String(a.joined || "")); });
+    var narrowed = MEM.q || MEM.filter !== "all" || MEM.show || MEM.int;
+    var stack = d.members.slice(0, 4).map(function (c) { return avatar(c.name, c.colour, c.photo); }).join("");
+    if (stack && head.slice(-6) === "</div>") head = head.slice(0, -6) + '<div class="bd-mstack" aria-hidden="true">' + stack + "</div></div>";
+    var list = shown.length
+      ? '<p class="bd-mtotal">Showing ' + shown.length + " of " + d.total + (d.total === 1 ? " member" : " members") + '</p><div class="bd-mems" role="list">' + shown.map(function (c, i) { return memRow(c, i); }).join("") + "</div>" +
+        '<p class="bd-mnote">If someone would rather stay off this page, you can still tap their name on any post or reply to see their profile card. They just won\'t be listed here.</p>'
       : '<div class="bd-empty"><b>' + (narrowed ? "No one matches that" : "No other members yet") + "</b><p>" +
-        (narrowed ? "Try a different word, or switch back to Everyone." : "It is quiet for now. As more fans join the forum they will show up here.") + "</p></div>";
+        (narrowed ? "Try a different word, take off a filter, or switch back to Everyone." : "It is quiet for now. As more fans join the forum they will show up here.") + "</p></div>";
     return head + me + tools + list;
   }
   function loadMembers() {
@@ -1366,7 +1388,7 @@
     closeCard();
     var w = document.createElement("div");
     w.id = "bdCard"; w.className = "bd-cardwrap";
-    w.innerHTML = '<div class="bd-card" role="dialog" aria-modal="true" aria-label="Member profile" tabindex="-1"><button type="button" class="bd-x" data-bd-cardx aria-label="Close">' + IC.x + '</button><div class="bd-card-in"><p class="bd-card-wait">Loading their profile</p></div></div>';
+    w.innerHTML = '<div class="bd-card bd-pub" role="dialog" aria-modal="true" aria-label="Member profile" tabindex="-1"><button type="button" class="bd-x" data-bd-cardx aria-label="Close">' + IC.x + '</button><div class="bd-card-in"><p class="bd-card-wait">Loading their profile</p></div></div>';
     document.body.appendChild(w);
     document.addEventListener("keydown", cardKey);
     $(".bd-card", w).focus();
@@ -1376,26 +1398,39 @@
     });
   }
   function cardHtml(c) {
-    var id = esc(c.memberId);
-    var tags = [];
-    if (c.followsYou) tags.push("Follows you");
-    if (c.role === "admin" || c.role === "moderator") tags.push(c.role === "admin" ? "Guide team" : "Moderator");
-    var acts = c.isMe
-      ? '<p class="bd-why">This is you. Change your photo, bio and who can message you from My Profile.</p>'
-      : (c.canMessage ? '<button type="button" class="btn btn-teal" data-bd-chat="' + id + '">' + (c.hasChat ? "Open chat" : "Message") + "</button>" : '<p class="bd-why">' + esc(c.why) + "</p>") +
-        '<button type="button" class="bd-follow' + (c.following ? " on" : "") + '" data-bd-pfollow="' + id + '" aria-pressed="' + (c.following ? "true" : "false") + '">' + (c.following ? "Following" : "Follow") + "</button>" +
-        '<button type="button" class="bd-blk" data-bd-block="' + id + '" data-on="' + (c.blockedByMe ? "1" : "0") + '">' + (c.blockedByMe ? "Unblock" : "Block") + "</button>";
-    return '<div class="bd-card-top">' + avatar(c.name, c.colour, c.photo) + "<div><h2>" + esc(c.name) + "</h2><p>" + esc([c.area, memberSince(c.joined)].filter(Boolean).join(" · ")) + "</p>" +
-        (tags.length ? '<div class="bd-fys">' + tags.map(function (t) { return '<span class="bd-fy">' + esc(t) + "</span>"; }).join("") + "</div>" : "") + "</div></div>" +
-      '<div class="bd-card-body">' +
+    var id = esc(c.memberId), first = esc(String(c.name || "").split(" ")[0]);
+    var badges = (c.badges || []).slice();
+    if (c.followsYou) badges.unshift("Follows you");
+    var nums = '<div><b>' + ((c.threadCount || 0) + (c.commentCount || 0)) + "</b><span>Posts</span></div>" +
+      '<div><b>' + (c.photoCount || 0) + "</b><span>Photos</span></div>" +
+      (c.followerCount != null ? '<div><b data-bd-fcount>' + c.followerCount + "</b><span>Followers</span></div>" : "") +
+      (c.stamps != null ? '<div><b>' + c.stamps + "</b><span>Passport stamps</span></div>" : "");
+    var acts;
+    if (c.isMe) {
+      acts = '<div class="bd-pub-acts">' + linkBtn("main", "Edit my profile", SITE + "my-profile") + '<button type="button" class="bd-pub-line" data-bd-cardx>Close</button></div>';
+    } else {
+      acts = '<div class="bd-pub-acts">' +
+        '<button type="button" class="bd-pub-line' + (c.following ? " on" : "") + '" data-bd-pfollow="' + id + '" aria-pressed="' + (c.following ? "true" : "false") + '">' + (c.following ? "Following" : "Follow") + "</button>" +
+        (c.canMessage ? '<button type="button" class="btn btn-teal" data-bd-chat="' + id + '">' + (c.hasChat ? "Open chat" : "Message") + "</button>" : '<button type="button" class="btn btn-teal" disabled>Message</button>') +
+        '<button type="button" class="bd-pub-line" data-bd-cardx>Close</button></div>' +
+        (c.canMessage ? "" : '<p class="bd-no-msg">' + esc(c.why || first + " isn't taking messages at the moment.") + "</p>") +
+        '<button type="button" class="bd-blk" data-bd-block="' + id + '" data-on="' + (c.blockedByMe ? "1" : "0") + '">' + (c.blockedByMe ? "Unblock " + first : "Block " + first) + "</button>";
+    }
+    return '<div class="bd-pub-cv" aria-hidden="true"><svg viewBox="0 0 360 120"><path d="M10 110 C 120 100, 210 60, 340 14" fill="none" stroke="#32B4AF" stroke-width="2" stroke-dasharray="6 8"/><path d="M300 30 l40 -16 -8 14 14 8 -10 2 -6 10 -4 -10 -26 2z" fill="#fff"/></svg></div>' +
+      '<div class="bd-pub-b">' + avatar(c.name, c.colour, c.photo) +
+        "<h2>" + esc(c.name) + "</h2>" +
+        '<div class="bd-pub-m">' + esc([c.area ? "From " + c.area : "", memberSince(c.joined)].filter(Boolean).join(" · ")) + "</div>" +
         (c.bio ? '<p class="bd-bio">' + esc(c.bio) + "</p>" : "") +
-        (c.into.length ? '<h3>Into</h3><div class="bd-tags">' + c.into.map(function (t) { return "<i>" + esc(t) + "</i>"; }).join("") + "</div>" : "") +
-        (c.going.length ? '<h3>Going to</h3><ul class="bd-going">' + c.going.slice(0, 6).map(function (g) { return "<li>" + esc(g) + "</li>"; }).join("") + "</ul>" : "") +
-        '<div class="bd-cstats"><div><b>' + (c.threadCount || 0) + "</b><span>" + (c.threadCount === 1 ? "Thread" : "Threads") + "</span></div><div><b>" + (c.commentCount || 0) + "</b><span>" + (c.commentCount === 1 ? "Reply" : "Replies") + "</span></div></div>" +
-        (c.threads.length ? '<h3>Latest threads</h3><div class="bd-cthreads">' + c.threads.map(function (t) {
+        (badges.length ? '<div class="bd-pub-row">' + badges.map(function (b) { return '<span class="bd-badge"><i></i>' + esc(b) + "</span>"; }).join("") + "</div>" : "") +
+        (c.into.length ? '<div class="bd-pub-row">' + c.into.map(function (t) { return '<span class="bd-chip-t">' + esc(t) + "</span>"; }).join("") + "</div>" : "") +
+        '<div class="bd-pub-n">' + nums + "</div>" +
+        (c.going.length ? "<h3>Shows they're going to</h3>" + '<div class="bd-pub-row">' + c.going.slice(0, 8).map(function (g) { return '<span class="bd-chip-t p">' + esc(g) + "</span>"; }).join("") + "</div>" : "") +
+        (c.threads.length ? "<h3>Latest posts</h3>" + '<div class="bd-cthreads">' + c.threads.map(function (t) {
           return '<button type="button" data-bd-cthread="' + esc(t.id) + '"><span>' + esc(t.title) + "</span><small>" + esc(ago(t.created)) + "</small></button>";
         }).join("") + "</div>" : "") +
-      '</div><div class="bd-card-acts">' + acts + "</div>";
+        (!c.isMe && c.listed === false ? '<p class="bd-pub-h">' + first + " has chosen to stay off the Members page, so you can only find them through their posts.</p>" : "") +
+        (c.isMe ? '<p class="bd-pub-h">This is how other members see you. Your email, trip plans and must see list are never shown.</p>' : "") +
+        acts + "</div>";
   }
 
   /* the chat box, pinned to the bottom of the screen */
@@ -1539,6 +1574,8 @@
     });
   }
   function setFollow(btn, on) {
+    var was = btn.classList.contains("on"), fc = $("#bdCard [data-bd-fcount]");
+    if (fc && was !== on && $('#bdCard [data-bd-pfollow="' + btn.getAttribute("data-bd-pfollow") + '"]')) fc.textContent = Math.max(0, (parseInt(fc.textContent, 10) || 0) + (on ? 1 : -1));
     $$('[data-bd-pfollow="' + btn.getAttribute("data-bd-pfollow") + '"]').forEach(function (x) {
       x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false"); x.textContent = on ? "Following" : "Follow";
     });
@@ -1546,7 +1583,7 @@
 
   document.addEventListener("click", function (e) {
     if (!B.on) return;
-    var t = e.target.closest && e.target.closest("[data-bd-who],[data-bd-chat],[data-bd-pfollow],[data-bd-block],[data-bd-listme],[data-bd-mfilter],[data-bd-cardx],[data-bd-cthread],[data-bd-chatx],[data-bd-chatmin],[data-bd-chatmenu],[data-bd-chatreport],[data-bd-chathide],[data-bd-older],[data-bd-retry],[data-bd-rcancel],[data-bd-rchat],[data-bd-rclear]");
+    var t = e.target.closest && e.target.closest("[data-bd-who],[data-bd-chat],[data-bd-pfollow],[data-bd-block],[data-bd-listme],[data-bd-mfilter],[data-bd-mint],[data-bd-cardx],[data-bd-cthread],[data-bd-chatx],[data-bd-chatmin],[data-bd-chatmenu],[data-bd-chatreport],[data-bd-chathide],[data-bd-older],[data-bd-retry],[data-bd-rcancel],[data-bd-rchat],[data-bd-rclear]");
     if (!t) {
       if (e.target.id === "bdCard") closeCard();
       var menu = $("[data-bd-menu]");
@@ -1600,6 +1637,7 @@
       return;
     }
     if ((v = t.getAttribute("data-bd-mfilter")) != null) { MEM.filter = v; loadMembers(); return; }
+    if ((v = t.getAttribute("data-bd-mint")) != null) { MEM.int = MEM.int === v ? "" : v; $("[data-bd-main]").innerHTML = vMembers(); return; }
     if (t.hasAttribute("data-bd-chatx")) { closeChat(); return; }
     if (t.hasAttribute("data-bd-chatmin")) { var c2 = chatEl(); c2.classList.toggle("min"); c2.classList.remove("ping"); fitChat(); if (!c2.classList.contains("min")) drawBody(true); return; }
     if (t.hasAttribute("data-bd-chatmenu")) { var m = $("[data-bd-menu]"); CHAT.sure = ""; drawMenu(m.hidden); return; }
@@ -1884,6 +1922,11 @@
     var box = document.createElement("div"); box.className = "bd-atlist"; box.setAttribute("role", "listbox");
     box.innerHTML = "<small>Mention someone</small>" + list.map(function (n) { return '<button type="button" data-bd-at="' + esc(n) + '" data-ta="' + ta.id + '">@' + esc(n) + "</button>"; }).join("");
     ta.parentNode.style.position = "relative"; ta.parentNode.appendChild(box);
+  });
+  document.addEventListener("change", function (e) {
+    if (!B.on || !e.target.matches || !e.target.matches("[data-bd-mshow],[data-bd-msort]")) return;
+    if (e.target.matches("[data-bd-mshow]")) MEM.show = e.target.value; else MEM.sort = e.target.value;
+    if (B.view === "members") $("[data-bd-main]").innerHTML = vMembers();
   });
   document.addEventListener("change", function (e) {
     if (!B.on || !e.target.matches || !e.target.matches("[data-bd-sort]")) return;
