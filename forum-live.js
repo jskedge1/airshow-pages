@@ -1285,12 +1285,12 @@
   function vMembers() {
     var d = MEM.data;
     var head = crumbs([["Forum", "home"], ["Members", ""]]) +
-      '<div class="bd-ghead"><div><h1>Members</h1><p>Fans who have chosen to be listed. Tap anyone to see their profile, follow them or send them a private message.</p></div></div>';
+      '<div class="bd-ghead"><div><h1>Members</h1><p>Everyone who has joined the forum. Tap anyone to see their profile, follow them or send them a private message.</p></div></div>';
     if (!d) return head + '<div class="bd-empty"><p>Loading.</p></div>';
     if (d.error) return head + '<div class="bd-empty"><b>The members list didn\'t load</b><p>' + esc(d.error) + "</p></div>";
     var me = d.listed
       ? '<div class="bd-listme on"><span><b>You are on the list.</b> Other fans can find you here, and you can take yourself off whenever you like.</span><button type="button" class="fl-act" data-bd-listme="0">Take me off</button></div>'
-      : '<div class="bd-listme"><span><b>You are not on the list yet.</b> Add yourself and fans heading to the same shows can find you and say hello.</span><button type="button" class="btn btn-teal sm" data-bd-listme="1">Add me to the list</button></div>';
+      : '<div class="bd-listme"><span><b>You are hidden from this list.</b> Put yourself back on and fans heading to the same shows can find you and say hello.</span><button type="button" class="btn btn-teal sm" data-bd-listme="1">Show me on the list</button></div>';
     var chips = [["all", "Everyone"]].concat(d.myShows ? [["going", "Going to my shows"]] : []).concat([["following", "People I follow"]]);
     var tools = '<div class="bd-mtools"><form class="bd-msearch" data-bd-msearch role="search"><label class="fl-sr" for="bdMq">Search members</label>' +
       '<input type="search" id="bdMq" value="' + esc(MEM.q) + '" placeholder="Search by name, area or interest" autocomplete="off"><button type="submit" class="btn btn-navy sm">Search</button></form>' +
@@ -1300,8 +1300,8 @@
     var narrowed = MEM.q || MEM.filter !== "all";
     var list = d.members.length
       ? '<p class="bd-mtotal">' + d.total + (d.total === 1 ? " member" : " members") + '</p><div class="bd-mems" role="list">' + d.members.map(memRow).join("") + "</div>"
-      : '<div class="bd-empty"><b>' + (narrowed ? "No one matches that" : "No one listed yet") + "</b><p>" +
-        (narrowed ? "Try a different word, or switch back to Everyone." : "The Members page is brand new, so it is quiet for now. Add yourself above and you will be one of the first faces people see.") + "</p></div>";
+      : '<div class="bd-empty"><b>' + (narrowed ? "No one matches that" : "No other members yet") + "</b><p>" +
+        (narrowed ? "Try a different word, or switch back to Everyone." : "It is quiet for now. As more fans join the forum they will show up here.") + "</p></div>";
     return head + me + tools + list;
   }
   function loadMembers() {

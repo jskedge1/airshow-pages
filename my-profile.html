@@ -861,7 +861,7 @@ html.hud .dm-o label:has(input:checked){background:rgba(95,227,220,.12);border-c
   }
   function pMsg(){
     var m=D.messages||{},ch=m.chats||[],pv=D.privacy||{},f=D.forum||{};
-    var listed=pv.members===true,who=pv.dm||'all';
+    var listed=pv.members!==false,who=pv.dm||'all';
     var WHO={all:'Any member',following:'Only people I follow',off:'Nobody at the moment'};
     var chats=ch.length?'<ul class="chats">'+ch.map(function(c){
         return '<li><button type="button" data-go="community-forum?'+(c.memberId?'chat='+encodeURIComponent(c.memberId):'v=messages')+'" class="'+(c.unread?'new':'')+'"><span class="ca" style="background:'+esc(c.colour||'#32B4AF')+'">'+(c.photo?'<img src="'+esc(c.photo)+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':esc(initials(c.name)))+'</span><span class="cb"><b>'+esc(c.name)+'</b><i>'+(c.lastFromMe?'You: ':'')+esc(c.last)+'</i></span><span class="cw">'+esc(c.when||chatWhen(c.at))+'</span></button></li>';
@@ -881,7 +881,7 @@ html.hud .dm-o label:has(input:checked){background:rgba(95,227,220,.12);border-c
     var pv=D.privacy||{},who=pv.dm||'all';
     var R=[['all','Any member'],['following','Only people I follow'],['off','Nobody, I would rather not']];
     return '<div class="box"><h3>Members And Messages</h3><p>Choose if other fans can find you on the Members page and who can send you a message.</p><div class="tg">'+
-      '<label class="tgl"><input type="checkbox" data-pv="members"'+(pv.members===true?' checked':'')+'><span class="sw" aria-hidden="true"></span><span><b>Show me on the Members page</b><small>Lists you on the forum so people can find and follow you. Turn it off and they can still tap your name on your posts.</small></span></label></div>'+
+      '<label class="tgl"><input type="checkbox" data-pv="members"'+(pv.members!==false?' checked':'')+'><span class="sw" aria-hidden="true"></span><span><b>Show me on the Members page</b><small>On by default, so people on the forum can find and follow you. Turn it off and they can still tap your name on your posts.</small></span></label></div>'+
       '<p style="margin:14px 0 8px"><b>Who can message me</b></p><div class="dm-o">'+
       R.map(function(r){return '<label><input type="radio" name="dm" data-dm value="'+r[0]+'"'+(who===r[0]?' checked':'')+'> '+esc(r[1])+'</label>';}).join('')+'</div></div>';
   }
