@@ -129,7 +129,7 @@ async function getMemberOrNull() {
 async function isAdmin() {
   try {
     const roles = await currentMember.getRoles();
-    return roles.some((r) => r._id === ADMIN_ROLE_ID || r.title === "Admin" || r["name"] === "Admin");
+    return roles.some((r) => r._id === ADMIN_ROLE_ID || r._id === "2162459d-8a75-4c73-9f2f-0f821a5e21a2" || r.title === "Admin" || r["name"] === "Admin" || r.title === "Guide Admin" || r["name"] === "Guide Admin");
   } catch (e) {
     return false;
   }
