@@ -53,6 +53,9 @@ main{flex:1}
 @keyframes sweep{0%{background-position:-40% 0}100%{background-position:140% 0}}
 .bubble{animation:float 6s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-6px)}}
+.hero-formation{position:absolute;right:4%;top:56px;width:min(400px,34vw);z-index:1;pointer-events:none}
+.hero-formation svg{width:100%;height:auto;overflow:visible}
+@media (max-width:900px){.hero-formation{display:none}}
 .trail{stroke-dasharray:600;stroke-dashoffset:600;animation:draw 9s var(--ease) infinite}
 @keyframes draw{40%,100%{stroke-dashoffset:0}}
 .hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.75fr);gap:56px;align-items:end;padding:64px 0 0}
@@ -671,7 +674,7 @@ button.bd-row:hover,button.bd-row:focus-visible{background:#F6FBFB;outline:none;
 .bd-post.sys .bd-who{background:#EEF4FC}
 .bd-post.sys .bd-who small{color:#2E6FD8}
 .bd-bot{background:#13293C!important;display:grid;place-items:center}
-.bd-bot svg{width:26px;height:26px;fill:#32B4AF}
+.bd-bot svg{width:30px;height:30px;transform:rotate(-90deg)}
 .bd-show{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:18px;align-items:center;background:#13293C;color:#fff;padding:18px 20px;margin-bottom:16px;border-left:6px solid #D74949;position:relative;overflow:hidden}
 .bd-show::after{content:"";position:absolute;right:-40px;top:0;bottom:0;width:240px;background:repeating-linear-gradient(115deg,transparent 0 18px,rgba(255,255,255,.04) 18px 20px);pointer-events:none}
 .bd-show-l b{display:block;font:800 26px/1 'Barlow Condensed',sans-serif;text-transform:uppercase}
@@ -865,7 +868,7 @@ button.bd-row:hover,button.bd-row:focus-visible{background:#F6FBFB;outline:none;
 /* profile card, matched to the Members preview (9 Nov 2026) */
 .bd-pub{width:min(560px,100%);border-top:0}
 .bd-pub-cv{height:110px;background:#13293C;position:relative;overflow:hidden}
-.bd-pub-cv svg{position:absolute;right:60px;bottom:-6px;width:300px;opacity:.9}
+.bd-pub-cv svg{position:absolute;right:30px;bottom:-6px;width:330px}
 .bd-pub-b{padding:0 24px 24px}
 .bd-pub-b>.fl-av{width:92px;height:92px;font-size:32px;border:4px solid #fff;margin-top:-46px;position:relative}
 .bd-pub-b h2{font:800 36px/1 'Barlow Condensed',sans-serif;text-transform:uppercase;color:#13293C;margin:10px 0 4px}
@@ -1010,12 +1013,6 @@ button.bd-row:hover,button.bd-row:focus-visible{background:#F6FBFB;outline:none;
       <defs>
         <linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="#13293C"/><stop offset=".35" stop-color="#13293C" stop-opacity="0"/></linearGradient>
       </defs>
-      <!-- smoke trails and jets -->
-      <g transform="translate(0 6)">
-        <path class="trail" d="M120 150 C300 40 480 30 700 70" stroke="#D74949" stroke-opacity=".55" stroke-width="7" stroke-linecap="round"/>
-        <path class="trail" d="M120 170 C300 62 480 52 700 92" stroke="#ffffff" stroke-opacity=".45" stroke-width="7" stroke-linecap="round" style="animation-delay:.25s"/>
-        <path class="trail" d="M120 190 C300 84 480 74 700 114" stroke="#2E6FD8" stroke-opacity=".5" stroke-width="7" stroke-linecap="round" style="animation-delay:.5s"/>
-      </g>
       <!-- speech bubbles over the crowd -->
       <g class="bubble"><rect x="210" y="176" width="104" height="40" fill="#32B4AF"/><path d="M228 216 l0 14 14 -14z" fill="#32B4AF"/><rect x="224" y="188" width="60" height="5" fill="#fff"/><rect x="224" y="199" width="40" height="5" fill="#fff" fill-opacity=".7"/></g>
       <g class="bubble" style="animation-delay:1.4s"><rect x="420" y="150" width="122" height="44" fill="#6950A1"/><path d="M500 194 l0 15 -15 -15z" fill="#6950A1"/><rect x="434" y="163" width="80" height="5" fill="#fff"/><rect x="434" y="175" width="52" height="5" fill="#fff" fill-opacity=".7"/></g>
@@ -1048,6 +1045,9 @@ button.bd-row:hover,button.bd-row:focus-visible{background:#F6FBFB;outline:none;
       <rect x="0" y="0" width="900" height="360" fill="url(#fade)"/>
     </svg>
   </div>
+
+  <!-- Red Arrows Hawks in a Vic, drawn in forum-planes.js -->
+  <div class="hero-formation" aria-hidden="true"><svg viewBox="0 0 400 220" id="heroJets"></svg></div>
 
   <div class="wrap">
     <div class="hero-grid">
@@ -1111,7 +1111,20 @@ button.bd-row:hover,button.bd-row:focus-visible{background:#F6FBFB;outline:none;
 </footer>
 <div class="toast" id="toast" role="status" hidden></div>
 
+<script src="forum-planes.js"></script>
 <script src="forum-live.js"></script>
+<script>
+(function(){var h=document.getElementById('heroJets');if(!h||!window.ForumPlanes)return;
+  var hawk=ForumPlanes.g('hawk');
+  /* lead in front, the two wingmen just behind, each pulling red, white or blue smoke */
+  var jets=[[300,110,'#ffffff'],[246,72,'#D74949'],[246,148,'#2E6FD8']];
+  h.innerHTML='<g transform="rotate(-16 200 110)">'+jets.map(function(j){
+    return '<path class="trail" d="M-40 '+j[1]+' C80 '+(j[1]+6)+' 170 '+j[1]+' '+(j[0]+2)+' '+j[1]+'" stroke="'+j[2]+'" stroke-opacity=".5" stroke-width="7" stroke-linecap="round" fill="none"/>';
+  }).join('')+jets.map(function(j){
+    return '<g transform="translate('+j[0]+' '+j[1]+') scale(.8) translate(0 -50)">'+hawk+'</g>';
+  }).join('')+'</g>';
+})();
+</script>
 <script>ForumLive.start({look:"clean",buttons:{main:"btn btn-teal sm",alt:"btn btn-navy sm"}});</script>
 <script>
 /* Normal / HUD switch in the section bar. Inside forum.html it presses the page's own look switch,

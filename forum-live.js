@@ -1157,7 +1157,7 @@
     function post(p, n, isOp) {
       var own = me && (me.id === p.authorId || me.isAdmin), sys = p.authorId === "system", best = !isOp && t.answerId === p.id;
       return '<article class="bd-post' + (isOp ? " op" : "") + (sys ? " sys" : "") + (best ? " best" : "") + '" id="post-' + n + '"><div class="bd-who">' +
-        (sys ? '<span class="fl-av bd-bot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12c0-.8-.7-1.4-1.6-1.4H15L10.6 3H8.8l2.3 7.6H6.6L4.8 8.2H3.4l1 3.8-1 3.8h1.4l1.8-2.4h4.5L8.8 21h1.8l4.4-7.6h4.4c.9 0 1.6-.6 1.6-1.4z"/></svg></span><b>' + esc(p.authorName) + "</b>"
+        (sys ? '<span class="fl-av bd-bot" aria-hidden="true">' + planeSvg("typhoon") + "</span><b>" + esc(p.authorName) + "</b>"
           : '<button type="button" class="bd-whob" data-bd-who="' + esc(p.authorId) + '" title="See ' + esc(p.authorName) + '\'s profile">' + avatar(p.authorName, p.authorColour, p.authorPhoto) + "<b>" + esc(p.authorName) + "</b></button>") + (sys ? "<small>Automatic update</small>" : isOp ? "<small>Started the thread</small>" : "") + "</div>" +
         '<div class="bd-body"><div class="bd-ph"><span>' + (best ? '<i class="bd-solved">Best answer</i>' : "") + esc(ago(p.created)) + '</span><span class="bd-num">#' + n + "</span></div>" +
         '<div class="fl-body">' + photoSlots(withMentions(paras(p.body), names)) + "</div>" +
@@ -1253,6 +1253,8 @@
     x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     msg: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>'
   };
+  function planeSvg(kind, cls) { return window.ForumPlanes ? window.ForumPlanes.svg(kind, { cls: cls }) : ""; }
+  function planeG(kind) { return window.ForumPlanes ? window.ForumPlanes.g(kind) : ""; }
   function memberSince(d) { return d ? "Member since " + new Date(d).toLocaleDateString("en-GB", { month: "long", year: "numeric" }) : ""; }
   function clock(d) { return d ? new Date(d).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) : ""; }
   function sameDay(a, b) { return a.toDateString() === b.toDateString(); }
@@ -1416,7 +1418,9 @@
         (c.canMessage ? "" : '<p class="bd-no-msg">' + esc(c.why || first + " isn't taking messages at the moment.") + "</p>") +
         '<button type="button" class="bd-blk" data-bd-block="' + id + '" data-on="' + (c.blockedByMe ? "1" : "0") + '">' + (c.blockedByMe ? "Unblock " + first : "Block " + first) + "</button>";
     }
-    return '<div class="bd-pub-cv" aria-hidden="true"><svg viewBox="0 0 360 120"><path d="M10 110 C 120 100, 210 60, 340 14" fill="none" stroke="#32B4AF" stroke-width="2" stroke-dasharray="6 8"/><path d="M300 30 l40 -16 -8 14 14 8 -10 2 -6 10 -4 -10 -26 2z" fill="#fff"/></svg></div>' +
+    var kind = window.ForumPlanes ? window.ForumPlanes.pick(c.memberId) : "typhoon";
+    return '<div class="bd-pub-cv" aria-hidden="true"><svg viewBox="0 0 360 120"><path d="M10 112 C 90 106, 150 92, 196 79" fill="none" stroke="#32B4AF" stroke-width="2" stroke-dasharray="6 8"/>' +
+        '<g class="bd-pub-jet" transform="translate(194 80) rotate(-17) scale(1.05) translate(0 -50)">' + planeG(kind) + "</g></svg></div>" +
       '<div class="bd-pub-b">' + avatar(c.name, c.colour, c.photo) +
         "<h2>" + esc(c.name) + "</h2>" +
         '<div class="bd-pub-m">' + esc([c.area ? "From " + c.area : "", memberSince(c.joined)].filter(Boolean).join(" · ")) + "</div>" +
