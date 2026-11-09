@@ -1037,13 +1037,48 @@ body.o2-shake #app{animation:o2shake .5s linear}
 .o2-replay .rp-stats b{display:block;font-family:"Barlow Condensed","Barlow",Arial,sans-serif;font-weight:800;font-size:34px;line-height:1}
 .o2-replay .rp-stats small{color:#A9BDCB;font-size:14px}
 
+
+/* members going (crew manifest) */
+.o2 .c12{grid-column:1/-1}
+.o2-crew .pb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:22px;align-items:start}
+.o2-crew .cr-shows{display:grid;gap:6px}
+.o2-crew .cr-show{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left;background:rgba(6,16,25,.55);border:1px solid var(--o2l);color:#fff;padding:10px 12px;font:inherit;transition:border-color .3s,background .3s,transform .3s var(--o2e)}
+.o2-crew .cr-show b{font-weight:600;font-size:15px;line-height:1.25}
+.o2-crew .cr-show small{display:block;font-family:var(--o2mono);font-size:12px;color:var(--o2m);margin-top:2px}
+.o2-crew .cr-show .n{flex:none;min-width:34px;text-align:center;font-family:var(--o2cond);font-weight:800;font-size:22px;color:var(--o2c)}
+.o2-crew .cr-show:hover{border-color:var(--o2c);transform:translateX(3px)}
+.o2-crew .cr-show[aria-pressed="true"]{background:rgba(50,180,175,.16);border-color:var(--o2c);box-shadow:inset 4px 0 0 var(--o2c)}
+.o2-crew .cr-main{min-width:0}
+.o2-crew .cr-top{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.o2-crew .cr-big{font-family:var(--o2cond);font-weight:800;font-size:64px;line-height:.85;color:#fff}
+.o2-crew .cr-line{margin:0;color:#D2DFE8;max-width:46ch;font-size:16px;line-height:1.45}
+.o2-crew .cr-new{display:inline-block;background:#6950A1;color:#fff;font-size:12px;font-weight:700;padding:2px 8px;margin-left:6px;vertical-align:2px}
+.o2-crew .cr-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:16px 0 0;padding:0;list-style:none}
+.o2-crew .cr-p{display:flex;gap:10px;align-items:center;background:rgba(6,16,25,.5);border:1px solid var(--o2l);padding:9px 10px;min-width:0;opacity:0;transform:translateY(6px);animation:crIn .45s var(--o2e) forwards}
+@keyframes crIn{to{opacity:1;transform:none}}
+.o2-crew .cr-p.me{border-color:var(--o2c)}
+.o2-crew .cr-av{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;overflow:hidden;box-shadow:0 0 0 2px rgba(255,255,255,.12)}
+.o2-crew .cr-av img{width:100%;height:100%;object-fit:cover}
+.o2-crew .cr-p b{display:block;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.o2-crew .cr-p small{display:block;font-size:13px;color:var(--o2m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.o2-crew .cr-more{margin:10px 0 0;font-size:14px;color:var(--o2m)}
+.o2-crew .cr-me{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:16px;padding:12px;border:1px dashed var(--o2l)}
+.o2-crew .cr-me label{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:#fff}
+.o2-crew .cr-me input[type=checkbox]{width:18px;height:18px;accent-color:#32B4AF}
+.o2-crew .cr-me input[type=text]{flex:1;min-width:170px;background:rgba(6,16,25,.6);border:1px solid var(--o2l);color:#fff;padding:8px 10px;font:inherit;font-size:16px}
+.o2-crew .cr-me input[type=text]:focus{outline:none;border-color:var(--o2c)}
+.o2-crew .cr-me .o2-btn{margin-top:0}
+.o2-crew .cr-foot{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.o2-crew .cr-foot .o2-link{margin-top:14px}
+@media (max-width:900px){.o2-crew .pb{grid-template-columns:1fr}.o2-crew .cr-shows{grid-auto-flow:column;grid-auto-columns:minmax(200px,1fr);overflow-x:auto;scrollbar-width:none}.o2-crew .cr-shows::-webkit-scrollbar{display:none}.o2-crew .cr-big{font-size:52px}}
+@media (prefers-reduced-motion:reduce){.o2-crew .cr-p{animation:none;opacity:1;transform:none}}
 @media (max-width:1100px){.o2 .c7{grid-column:1/-1}.o2 .c5,.o2 .c4{grid-column:span 6}.o2 .q6,.o2 .o2-radar{grid-column:1/-1}}
 @media (max-width:760px){
   .o2-skyin{grid-template-columns:1fr;padding:26px 16px 70px}
   .o2-chips{justify-content:flex-start}
   .o2-grid{gap:14px}
   .o2 .c7,.o2 .c5,.o2 .c4{grid-column:1/-1}
-  .o2 .q1{order:1}.o2 .q2{order:2}.o2 .q3{order:3}.o2 .q4{order:4}.o2 .q5{order:6}.o2 .q6{order:5}.o2 .q7{order:7}.o2 .q8{order:8}.o2 .q9{order:9}
+  .o2 .q1{order:1}.o2 .q2{order:2}.o2 .q3{order:3}.o2 .q4{order:4}.o2 .q5{order:6}.o2 .q6{order:5}.o2 .q7{order:7}.o2 .q8{order:8}.o2 .q9{order:9}.o2 .q10{order:5}
   .o2-pass{grid-template-columns:1fr}
   .o2 .stub{border-left:0;border-top:2px dashed var(--o2l);flex-direction:row;flex-wrap:wrap}
   .o2 .bars{flex-basis:100%}
@@ -1852,6 +1887,14 @@ body.o2-shake #app{animation:o2shake .5s linear}
           </div>
         </section>
 
+
+        <section class="o2-p c12 q10 o2-crew" style="--d:.36s" aria-labelledby="o2CrT">
+          <div class="ph"><h3 id="o2CrT">Members going to your shows</h3><small id="o2CrN">CREW MANIFEST</small></div>
+          <div class="pb">
+            <div class="cr-shows" id="o2CrShows" role="group" aria-label="Your saved shows"></div>
+            <div class="cr-main" id="o2CrMain" aria-live="polite"></div>
+          </div>
+        </section>
         <section class="o2-p c4 q6" style="--d:.4s" aria-labelledby="o2MsT">
           <div class="ph"><h3 id="o2MsT">Must see</h3><small id="o2MsN"></small></div>
           <div class="pb deck" id="o2Deck"></div>
@@ -2307,7 +2350,7 @@ body.o2-shake #app{animation:o2shake .5s linear}
             <header class="p"><h3>Who's Going</h3><small id="goShow"></small></header>
             <div id="goList"></div>
             <div class="goingme">
-              <div class="toggle-row" style="padding:0;border:0"><div><b>Show I'm going</b><span>Members at the same show can see your name and note</span></div><input class="sw" type="checkbox" id="goMe" aria-label="Show I'm going"></div>
+              <div class="toggle-row" style="padding:0;border:0"><div><b>Show I'm going</b><span>Members going to the same show see your name and note. Untick to hide</span></div><input class="sw" type="checkbox" id="goMe" aria-label="Show I'm going"></div>
               <form class="addrow" id="goNoteForm" style="margin-top:0"><input class="input" id="goNote" maxlength="60" placeholder="Grass bank, all day"><button class="btn small" type="submit">Save</button></form>
             </div>
           </section>
@@ -2848,7 +2891,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
 
   function renderAll() {
     renderHead(); renderTrips(); renderTripDetail(); renderUpdates(); renderKit(); renderGroup(); renderHistory(); renderPosts();
-    renderComposer(); renderGoing(); renderPotw(); renderSaved(); if (S.page === "community") loadFeed();
+    renderComposer(); renderGoing(); renderCrew(); renderPotw(); renderSaved(); if (S.page === "community") loadFeed();
     renderHudx();
   }
 
@@ -3578,6 +3621,93 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       }).catch(oops).then(function () { btn.disabled = false; });
   });
 
+
+  /* ---------- members going to your shows (overview) ---------- */
+  var crewPick = null;
+  function crewAgo(isoText) {
+    if (!isoText) return "";
+    var d = Math.floor((Date.now() - new Date(isoText).getTime()) / 86400000);
+    if (isNaN(d)) return "";
+    if (d <= 0) return "Added today";
+    if (d === 1) return "Added yesterday";
+    if (d < 7) return "Added " + d + " days ago";
+    if (d < 28) { var w = Math.floor(d / 7); return "Added " + w + (w === 1 ? " week ago" : " weeks ago"); }
+    return "Added " + new Date(isoText).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+  }
+  function crewShort(name) { return (name || "").replace(/^The /, "").split(/[,:(]/)[0].trim(); }
+  function renderCrew() {
+    var shows = $("o2CrShows"), main = $("o2CrMain"); if (!shows || !main) return;
+    clear(shows); clear(main);
+    var trips = (S.hub && S.hub.trips) || [], going = (S.hub && S.hub.going) || {};
+    if (!trips.length) {
+      $("o2CrN").textContent = "CREW MANIFEST";
+      var e = el("div", "o2-empty"); e.appendChild(el("p", "", "Save the shows you are going to, and you will see every member heading to the same show right here. Handy if you want to meet up, share a lift or just say hello on the crowd line."));
+      var b = el("button", "o2-btn", "Add your first show"); b.type = "button"; b.onclick = function () { showPage("trips"); }; e.appendChild(b);
+      main.appendChild(e); shows.hidden = true; return;
+    }
+    shows.hidden = false;
+    var total = 0;
+    function others(t) { var g = going[t.id]; return g ? (g.count != null ? g.count : (g.people || []).filter(function (p) { return !p.me; }).length) : 0; }
+    trips.forEach(function (t) { total += others(t); });
+    $("o2CrN").textContent = total + (total === 1 ? " MEMBER" : " MEMBERS") + " ON YOUR SHOWS";
+    if (!crewPick || !trips.some(function (t) { return t.id === crewPick; })) {
+      var best = trips.slice().sort(function (a, b) { return others(b) - others(a); })[0];
+      crewPick = (others(best) ? best : trips[0]).id;
+    }
+    trips.forEach(function (t) {
+      var g = going[t.id] || {}, n = others(t);
+      var b = el("button", "cr-show"); b.type = "button"; b.setAttribute("aria-pressed", t.id === crewPick ? "true" : "false");
+      var d = el("div"); d.appendChild(el("b", "", crewShort(t.showName)));
+      d.appendChild(el("small", "", (g.newCount ? g.newCount + " new this week" : (n ? "Members going" : "No one else yet"))));
+      b.appendChild(d); b.appendChild(el("span", "n", String(n)));
+      b.onclick = function () { crewPick = t.id; renderCrew(); };
+      shows.appendChild(b);
+    });
+    var t = trips.filter(function (x) { return x.id === crewPick; })[0];
+    var g = going[t.id] || { people: [], sharing: true, note: "" };
+    var people = (g.people || []).filter(function (p) { return !p.me; });
+    var n = others(t), short = crewShort(t.showName);
+    var top = el("div", "cr-top"); top.appendChild(el("div", "cr-big", String(n)));
+    var line = el("p", "cr-line");
+    line.textContent = n ? (n === 1 ? "member is" : "members are") + " going to " + short + " as well as you." : "No one else has added " + short + " yet. When a member saves it, they will pop up here.";
+    if (g.newCount) { var nw = el("span", "cr-new", g.newCount + " new"); line.appendChild(nw); }
+    top.appendChild(line); main.appendChild(top);
+    if (people.length) {
+      var ul = el("ul", "cr-list");
+      people.slice(0, 12).forEach(function (p, i) {
+        var li = el("li", "cr-p"); li.style.animationDelay = (i * 0.05) + "s";
+        var av = el("span", "cr-av"); av.style.background = p.colour || "#32B4AF";
+        if (p.photo) { var im = document.createElement("img"); im.src = p.photo; im.alt = ""; av.appendChild(im); } else av.textContent = initials(p.name);
+        li.appendChild(av);
+        var d = el("div"); var nm = el("b", "", p.name);
+        if (p.isNew) nm.appendChild(el("span", "cr-new", "New"));
+        d.appendChild(nm); d.appendChild(el("small", "", p.note || crewAgo(p.added) || "Going"));
+        li.appendChild(d); ul.appendChild(li);
+      });
+      main.appendChild(ul);
+      var hiddenCount = n - Math.min(people.length, 12);
+      if (hiddenCount > 0) main.appendChild(el("p", "cr-more", "Plus " + hiddenCount + " more " + (hiddenCount === 1 ? "member" : "members") + " going."));
+    }
+    var me = el("form", "cr-me");
+    var lab = el("label"); var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = g.sharing !== false; lab.appendChild(cb); lab.appendChild(document.createTextNode("Show me as going"));
+    var note = document.createElement("input"); note.type = "text"; note.maxLength = 60; note.placeholder = "Add a note, like Saturday, grass bank by the hangars"; note.value = g.note || ""; note.setAttribute("aria-label", "Your note for other members");
+    var save = el("button", "o2-btn ghost", "Save"); save.type = "submit";
+    me.appendChild(lab); me.appendChild(note); me.appendChild(save);
+    function send() {
+      call("setGoing", { tripId: t.id, sharing: cb.checked, note: note.value.trim() }).then(function (r) {
+        S.hub.going = S.hub.going || {}; S.hub.going[t.id] = r; renderCrew(); if (typeof renderGoing === "function") renderGoing();
+        say(r.sharing ? "Members going to " + short + " can see you're going" : "You're hidden from members going to " + short);
+      }).catch(oops);
+    }
+    cb.onchange = send;
+    me.addEventListener("submit", function (e) { e.preventDefault(); send(); });
+    main.appendChild(me);
+    var foot = el("div", "cr-foot");
+    var f1 = el("button", "o2-link", "Chat in the forum"); f1.type = "button"; f1.onclick = function () { showPage("forum"); };
+    var f2 = el("button", "o2-link", "Plan a group trip"); f2.type = "button"; f2.onclick = function () { S.tripId = t.id; renderTrips(); renderTripDetail(); renderGroup(); renderGoing(); showPage("group"); };
+    foot.appendChild(f1); foot.appendChild(f2); main.appendChild(foot);
+  }
+
   /* ---------- who's going and photo of the week ---------- */
   function renderGoing() {
     var t = trip(); var box = clear($("goList"));
@@ -3592,12 +3722,12 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       var av = el("div", "av", initials(p.name)); av.style.background = p.colour || "var(--teal)"; av.style.width = "36px"; av.style.height = "36px"; av.style.fontSize = "13px"; r.appendChild(av);
       box.appendChild(r);
     });
-    $("goMe").checked = !!(g && g.sharing); $("goNote").value = (g && g.note) || "";
+    $("goMe").checked = !g || g.sharing !== false; $("goNote").value = (g && g.note) || "";
   }
   function saveGoing() {
     var t = trip(); if (!t) return;
     call("setGoing", { tripId: t.id, sharing: $("goMe").checked, note: $("goNote").value.trim() }).then(function (r) {
-      S.hub.going = S.hub.going || {}; S.hub.going[t.id] = r; renderGoing(); say(r.sharing ? "Others at the show can see you're going" : "You're hidden from Who's Going");
+      S.hub.going = S.hub.going || {}; S.hub.going[t.id] = r; renderGoing(); renderCrew(); say(r.sharing ? "Others at the show can see you're going" : "You're hidden from Who's Going");
     }).catch(oops);
   }
   $("goMe").onchange = saveGoing;

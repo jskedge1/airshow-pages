@@ -408,6 +408,7 @@ export const getHub = webMethod(Permissions.Anyone, () => wrap(async () => {
   const riatCount = past.filter((p) => /tattoo|riat|fairford|boscombe/i.test(p.showName)).length;
 
   const extras = await hubExtras(me, upcoming);
+  const updatesAll = updates.concat(goingNews(extras.going, upcoming)).sort((a, b) => (b.created || "").localeCompare(a.created || "")).slice(0, 50);
 
   return {
     member: {
@@ -423,7 +424,7 @@ export const getHub = webMethod(Permissions.Anyone, () => wrap(async () => {
       status: statusById[m.aircraftId] || m.status || "Waiting"
     })),
     lineup,
-    updates,
+    updates: updatesAll,
     unread: stored.filter((u) => !u.read).length,
     reminders: buildReminders(upcoming),
     weather,
@@ -920,18 +921,51 @@ async function goingFor(me, trips) {
   const out = {};
   const slugs = Array.from(new Set(trips.map((t) => t.showSlug).filter(Boolean)));
   if (!slugs.length) return out;
-  const others = await wixData.query(C.trips).hasSome("showSlug", slugs).eq("shareGoing", true).ne("archived", true).limit(300).find(OPTS);
-  const ids = Array.from(new Set(others.items.map((x) => x.memberId)));
-  const profs = ids.length ? await wixData.query(C.profiles).hasSome("memberId", ids).ne("blocked", true).limit(300).find(OPTS) : { items: [] };
+  // Everyone going is shown unless they untick "Show me as going" on that show,
+  // or turn off "Shows I'm going to" in the privacy settings on My Profile.
+  const all = await wixData.query(C.trips).hasSome("showSlug", slugs).ne("archived", true).limit(1000).find(OPTS);
+  const ids = Array.from(new Set(all.items.map((x) => x.memberId).filter(Boolean)));
+  const [profs, sets] = ids.length ? await Promise.all([
+    wixData.query(C.profiles).hasSome("memberId", ids).limit(1000).find(OPTS),
+    wixData.query(C.settings).hasSome("memberId", ids).limit(1000).find(OPTS)
+  ]) : [{ items: [] }, { items: [] }];
   const byId = {};
   profs.items.forEach((p) => { byId[p.memberId] = p; });
-  const raw = await wixData.query(C.trips).eq("memberId", me.id).hasSome("showSlug", slugs).ne("archived", true).limit(MAX_TRIPS).find(OPTS);
-  raw.items.forEach((mine) => {
-    const people = others.items.filter((x) => x.showSlug === mine.showSlug && byId[x.memberId]).map((x) => ({
-      name: x.memberId === me.id ? byId[x.memberId].title + " (you)" : byId[x.memberId].title,
-      colour: byId[x.memberId].colour || COLOURS[0], note: x.goingNote || "", me: x.memberId === me.id
-    })).sort((a, b) => (b.me ? 1 : 0) - (a.me ? 1 : 0)).slice(0, 30);
-    out[mine._id] = { sharing: !!mine.shareGoing, note: mine.goingNote || "", people };
+  const hidden = {};
+  sets.items.forEach((x) => { if (x.privacy && x.privacy.going === false) hidden[x.memberId] = true; });
+  const weekAgo = Date.now() - 7 * 86400000;
+  const shown = (x) => x.shareGoing !== false && !hidden[x.memberId] && !(byId[x.memberId] && byId[x.memberId].blocked);
+  all.items.filter((x) => x.memberId === me.id).forEach((mine) => {
+    const seen = {};
+    const theirs = all.items.filter((x) => x.showSlug === mine.showSlug && x.memberId !== me.id && shown(x) && !seen[x.memberId] && (seen[x.memberId] = true));
+    const people = theirs.filter((x) => byId[x.memberId]).map((x) => {
+      const added = iso(x._createdDate);
+      return {
+        memberId: x.memberId, name: byId[x.memberId].title || "Airshow fan", colour: byId[x.memberId].colour || COLOURS[0],
+        photo: byId[x.memberId].photo || "", note: x.goingNote || "", added, isNew: !!added && new Date(added).getTime() > weekAgo, me: false
+      };
+    }).sort((a, b) => (b.added || "").localeCompare(a.added || "")).slice(0, 40);
+    const sharing = mine.shareGoing !== false && !hidden[me.id];
+    if (sharing) people.unshift({ memberId: me.id, name: me.name + " (you)", colour: me.colour, photo: (me.profile && me.profile.photo) || "", note: mine.goingNote || "", added: iso(mine._createdDate), isNew: false, me: true });
+    out[mine._id] = {
+      sharing, note: mine.goingNote || "", people, count: theirs.length,
+      newCount: theirs.filter((x) => { const d = iso(x._createdDate); return d && new Date(d).getTime() > weekAgo; }).length
+    };
+  });
+  return out;
+}
+
+// "Sam is going to RAF Cosford too" lines for the hub updates, from members who added one of your shows this fortnight.
+function goingNews(going, trips) {
+  const out = [];
+  const since = Date.now() - 14 * 86400000;
+  trips.forEach((t) => {
+    const g = going[t.id];
+    if (!g) return;
+    g.people.filter((p) => !p.me && p.added && new Date(p.added).getTime() > since).slice(0, 5).forEach((p) => out.push({
+      id: "g" + t.id + p.memberId, kind: "social", heading: p.name + " is going to " + (t.showName || "your show") + " too",
+      body: p.note ? "Their note: " + p.note : "You'll both be there. Say hello in the forum or plan a meet up.", created: p.added, read: true
+    }));
   });
   return out;
 }
@@ -941,7 +975,7 @@ export const setGoing = webMethod(Permissions.Anyone, (input) => wrap(async () =
   const trip = await ownTrip(me.id, input && input.tripId);
   const saved = await wixData.update(C.trips, Object.assign({}, trip, { shareGoing: !!(input && input.sharing), goingNote: clean(input && input.note, 60) }), OPTS);
   const g = await goingFor(me, [{ showSlug: saved.showSlug }]);
-  return g[saved._id] || { sharing: !!saved.shareGoing, note: saved.goingNote || "", people: [] };
+  return g[saved._id] || { sharing: saved.shareGoing !== false, note: saved.goingNote || "", people: [], count: 0, newCount: 0 };
 }));
 
 /* photo of the week */
