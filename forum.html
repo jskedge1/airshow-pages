@@ -18,7 +18,8 @@ body{font-family:'Barlow',sans-serif;color:#fff;-webkit-font-smoothing:antialias
 .stage iframe.off{opacity:0;transform:scale(.985);pointer-events:none;visibility:hidden}
 .stage iframe.going{visibility:visible}
 
-/* Look switch */
+/* Look switch: removed 9 Nov 2026, it covered the message box. The forum always opens on the Clean look. */
+.look,.hint{display:none!important}
 .look{position:fixed;right:18px;bottom:18px;z-index:20;display:flex;align-items:center;gap:4px;padding:6px;background:rgba(14,33,49,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 16px 40px rgba(0,0,0,.38);border-top:3px solid var(--teal);transition:border-color .45s var(--ease)}
 .look.hud{border-top-color:var(--hud)}
 .look .lbl{font-weight:600;font-size:14px;color:#9FD8D5;padding:0 8px 0 6px;white-space:nowrap}
@@ -152,7 +153,6 @@ body{font-family:'Barlow',sans-serif;color:#fff;-webkit-font-smoothing:antialias
   document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{set(b.dataset.look);hideHint()}));
 
   /* warm the second look once the first has loaded, so switching is instant */
-  F.clean.addEventListener('load',()=>{setTimeout(()=>{if(!F.hud.src)F.hud.src=F.hud.dataset.src},1200)},{once:true});
 
   /* inside My Airshow Hub: open on the HUD look to match the hub, and keep the hub's own forum tweaks working */
   let hubWin=null;
@@ -177,13 +177,12 @@ body{font-family:'Barlow',sans-serif;color:#fff;-webkit-font-smoothing:antialias
     requestAnimationFrame(()=>requestAnimationFrame(()=>{v.style.opacity='0'}));
     setTimeout(()=>v.remove(),700);
   }
-  const saved=store.get('forumLook')||(hubWin||fromHub?'hud':'');
-  if(saved==='hud'){cur='clean';F.clean.classList.add('off');set('hud',false)}
+  /* Clean look only, so anyone who picked HUD before is moved back to Clean */
+  store.set('forumLook','clean');
 
   function hideHint(){$('#hint').hidden=true;store.set('forumLookHint','1')}
   $('#hintOk').addEventListener('click',hideHint);
   $('#infoBtn').addEventListener('click',()=>{const h=$('#hint');h.hidden=!h.hidden});
-  if(!store.get('forumLookHint'))setTimeout(()=>{$('#hint').hidden=false},1400);
 })();
 </script>
 <script src="https://jskedge1.github.io/airshow-pages/fit-frame.js" defer></script>
