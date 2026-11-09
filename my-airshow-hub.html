@@ -1068,6 +1068,12 @@ body.o2-shake #app{animation:o2shake .5s linear}
 .o2-crew .cr-me input[type=text]{flex:1;min-width:170px;background:rgba(6,16,25,.6);border:1px solid var(--o2l);color:#fff;padding:8px 10px;font:inherit;font-size:16px}
 .o2-crew .cr-me input[type=text]:focus{outline:none;border-color:var(--o2c)}
 .o2-crew .cr-me .o2-btn{margin-top:0}
+.o2-crew .cr-ask{margin-top:16px;padding:14px 16px;border:1px solid var(--o2c);background:rgba(50,180,175,.08)}
+.o2-crew .cr-ask b{display:block;font-size:17px;color:#fff}
+.o2-crew .cr-ask p{margin:6px 0 0;color:#D2DFE8;font-size:15px;line-height:1.45;max-width:60ch}
+.o2-crew .cr-askb{display:flex;flex-wrap:wrap;gap:10px}
+.o2-crew .cr-askb .o2-btn{margin-top:12px}
+.o2-crew .cr-me input:disabled,.o2-crew .cr-me button:disabled{opacity:.5}
 .o2-crew .cr-foot{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
 .o2-crew .cr-foot .o2-link{margin-top:14px}
 @media (max-width:900px){.o2-crew .pb{grid-template-columns:1fr}.o2-crew .cr-shows{grid-auto-flow:column;grid-auto-columns:minmax(200px,1fr);overflow-x:auto;scrollbar-width:none}.o2-crew .cr-shows::-webkit-scrollbar{display:none}.o2-crew .cr-big{font-size:52px}}
@@ -2350,7 +2356,7 @@ body.o2-shake #app{animation:o2shake .5s linear}
             <header class="p"><h3>Who's Going</h3><small id="goShow"></small></header>
             <div id="goList"></div>
             <div class="goingme">
-              <div class="toggle-row" style="padding:0;border:0"><div><b>Show I'm going</b><span>Members going to the same show see your name and note. Untick to hide</span></div><input class="sw" type="checkbox" id="goMe" aria-label="Show I'm going"></div>
+              <div class="toggle-row" style="padding:0;border:0"><div><b>Show I'm going</b><span>Your choice. Only members going to the same show see your forum name and note</span></div><input class="sw" type="checkbox" id="goMe" aria-label="Show I'm going"></div>
               <form class="addrow" id="goNoteForm" style="margin-top:0"><input class="input" id="goNote" maxlength="60" placeholder="Grass bank, all day"><button class="btn small" type="submit">Save</button></form>
             </div>
           </section>
@@ -3641,7 +3647,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
     var trips = (S.hub && S.hub.trips) || [], going = (S.hub && S.hub.going) || {};
     if (!trips.length) {
       $("o2CrN").textContent = "CREW MANIFEST";
-      var e = el("div", "o2-empty"); e.appendChild(el("p", "", "Save the shows you are going to, and you will see every member heading to the same show right here. Handy if you want to meet up, share a lift or just say hello on the crowd line."));
+      var e = el("div", "o2-empty"); e.appendChild(el("p", "", "Save the shows you are going to, and you will see the members who have chosen to share they are heading to the same show. Handy if you want to meet up, share a lift or just say hello on the crowd line."));
       var b = el("button", "o2-btn", "Add your first show"); b.type = "button"; b.onclick = function () { showPage("trips"); }; e.appendChild(b);
       main.appendChild(e); shows.hidden = true; return;
     }
@@ -3649,7 +3655,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
     var total = 0;
     function others(t) { var g = going[t.id]; return g ? (g.count != null ? g.count : (g.people || []).filter(function (p) { return !p.me; }).length) : 0; }
     trips.forEach(function (t) { total += others(t); });
-    $("o2CrN").textContent = total + (total === 1 ? " MEMBER" : " MEMBERS") + " ON YOUR SHOWS";
+    $("o2CrN").textContent = total + (total === 1 ? " MEMBER" : " MEMBERS") + " SHARING";
     if (!crewPick || !trips.some(function (t) { return t.id === crewPick; })) {
       var best = trips.slice().sort(function (a, b) { return others(b) - others(a); })[0];
       crewPick = (others(best) ? best : trips[0]).id;
@@ -3658,18 +3664,18 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       var g = going[t.id] || {}, n = others(t);
       var b = el("button", "cr-show"); b.type = "button"; b.setAttribute("aria-pressed", t.id === crewPick ? "true" : "false");
       var d = el("div"); d.appendChild(el("b", "", crewShort(t.showName)));
-      d.appendChild(el("small", "", (g.newCount ? g.newCount + " new this week" : (n ? "Members going" : "No one else yet"))));
+      d.appendChild(el("small", "", (g.newCount ? g.newCount + " new this week" : (n ? "Members sharing" : "No one shared yet"))));
       b.appendChild(d); b.appendChild(el("span", "n", String(n)));
       b.onclick = function () { crewPick = t.id; renderCrew(); };
       shows.appendChild(b);
     });
     var t = trips.filter(function (x) { return x.id === crewPick; })[0];
-    var g = going[t.id] || { people: [], sharing: true, note: "" };
+    var g = going[t.id] || { people: [], sharing: false, chosen: false, note: "" };
     var people = (g.people || []).filter(function (p) { return !p.me; });
     var n = others(t), short = crewShort(t.showName);
     var top = el("div", "cr-top"); top.appendChild(el("div", "cr-big", String(n)));
     var line = el("p", "cr-line");
-    line.textContent = n ? (n === 1 ? "member is" : "members are") + " going to " + short + " as well as you." : "No one else has added " + short + " yet. When a member saves it, they will pop up here.";
+    line.textContent = n ? (n === 1 ? "member has" : "members have") + " shared they're going to " + short + "." : "No one has shared they're going to " + short + " yet. When a member chooses to share, they will pop up here.";
     if (g.newCount) { var nw = el("span", "cr-new", g.newCount + " new"); line.appendChild(nw); }
     top.appendChild(line); main.appendChild(top);
     if (people.length) {
@@ -3688,20 +3694,36 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       var hiddenCount = n - Math.min(people.length, 12);
       if (hiddenCount > 0) main.appendChild(el("p", "cr-more", "Plus " + hiddenCount + " more " + (hiddenCount === 1 ? "member" : "members") + " going."));
     }
-    var me = el("form", "cr-me");
-    var lab = el("label"); var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = g.sharing !== false; lab.appendChild(cb); lab.appendChild(document.createTextNode("Show me as going"));
-    var note = document.createElement("input"); note.type = "text"; note.maxLength = 60; note.placeholder = "Add a note, like Saturday, grass bank by the hangars"; note.value = g.note || ""; note.setAttribute("aria-label", "Your note for other members");
-    var save = el("button", "o2-btn ghost", "Save"); save.type = "submit";
-    me.appendChild(lab); me.appendChild(note); me.appendChild(save);
-    function send() {
-      call("setGoing", { tripId: t.id, sharing: cb.checked, note: note.value.trim() }).then(function (r) {
+    function send(share, noteText) {
+      call("setGoing", { tripId: t.id, sharing: share, note: noteText }).then(function (r) {
         S.hub.going = S.hub.going || {}; S.hub.going[t.id] = r; renderCrew(); if (typeof renderGoing === "function") renderGoing();
-        say(r.sharing ? "Members going to " + short + " can see you're going" : "You're hidden from members going to " + short);
+        say(r.sharing ? "Members going to " + short + " can now see you're going" : "You're kept private for " + short);
       }).catch(oops);
     }
-    cb.onchange = send;
-    me.addEventListener("submit", function (e) { e.preventDefault(); send(); });
-    main.appendChild(me);
+    if (g.privacyOff) {
+      var po = el("div", "cr-ask"); po.appendChild(el("b", "", "You're hidden from every show"));
+      po.appendChild(el("p", "", "You turned off “Shows I'm going to” in the privacy settings on My Profile, so nobody can see your shows. Switch it back on there if you'd like to share."));
+      main.appendChild(po);
+    } else if (!g.chosen && !g.sharing) {
+      var ask = el("div", "cr-ask");
+      ask.appendChild(el("b", "", "Would you like other members to see you're going to " + short + "?"));
+      ask.appendChild(el("p", "", "It's completely up to you. If you share, members going to the same show see your forum name and any note you add, nothing else. You can change your mind here at any time."));
+      var row = el("div", "cr-askb");
+      var yes = el("button", "o2-btn", "Yes, share that I'm going"); yes.type = "button"; yes.onclick = function () { send(true, ""); };
+      var no = el("button", "o2-btn ghost", "Keep it private"); no.type = "button"; no.onclick = function () { send(false, ""); };
+      row.appendChild(yes); row.appendChild(no); ask.appendChild(row); main.appendChild(ask);
+    } else {
+      var me = el("form", "cr-me");
+      var lab = el("label"); var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!g.sharing; lab.appendChild(cb); lab.appendChild(document.createTextNode("Share that I'm going"));
+      var note = document.createElement("input"); note.type = "text"; note.maxLength = 60; note.placeholder = "Optional note, like Saturday, grass bank by the hangars"; note.value = g.note || ""; note.setAttribute("aria-label", "Optional note for other members");
+      note.disabled = !g.sharing;
+      var save = el("button", "o2-btn ghost", "Save"); save.type = "submit"; save.disabled = !g.sharing;
+      me.appendChild(lab); me.appendChild(note); me.appendChild(save);
+      cb.onchange = function () { send(cb.checked, cb.checked ? note.value.trim() : ""); };
+      me.addEventListener("submit", function (e) { e.preventDefault(); send(true, note.value.trim()); });
+      main.appendChild(me);
+      main.appendChild(el("p", "cr-more", g.sharing ? "Members going to " + short + " can see your forum name" + (g.note ? " and note." : ".") + " Untick to go private." : "You're private for " + short + ". Tick the box if you'd like to share."));
+    }
     var foot = el("div", "cr-foot");
     var f1 = el("button", "o2-link", "Chat in the forum"); f1.type = "button"; f1.onclick = function () { showPage("forum"); };
     var f2 = el("button", "o2-link", "Plan a group trip"); f2.type = "button"; f2.onclick = function () { S.tripId = t.id; renderTrips(); renderTripDetail(); renderGroup(); renderGoing(); showPage("group"); };
@@ -3722,7 +3744,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       var av = el("div", "av", initials(p.name)); av.style.background = p.colour || "var(--teal)"; av.style.width = "36px"; av.style.height = "36px"; av.style.fontSize = "13px"; r.appendChild(av);
       box.appendChild(r);
     });
-    $("goMe").checked = !g || g.sharing !== false; $("goNote").value = (g && g.note) || "";
+    $("goMe").checked = !!(g && g.sharing); $("goNote").value = (g && g.note) || "";
   }
   function saveGoing() {
     var t = trip(); if (!t) return;

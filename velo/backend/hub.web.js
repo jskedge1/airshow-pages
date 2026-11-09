@@ -921,8 +921,8 @@ async function goingFor(me, trips) {
   const out = {};
   const slugs = Array.from(new Set(trips.map((t) => t.showSlug).filter(Boolean)));
   if (!slugs.length) return out;
-  // Everyone going is shown unless they untick "Show me as going" on that show,
-  // or turn off "Shows I'm going to" in the privacy settings on My Profile.
+  // Members only appear once they choose "Show me as going" on that show (opt in),
+  // and never if they turn off "Shows I'm going to" in the privacy settings on My Profile.
   const all = await wixData.query(C.trips).hasSome("showSlug", slugs).ne("archived", true).limit(1000).find(OPTS);
   const ids = Array.from(new Set(all.items.map((x) => x.memberId).filter(Boolean)));
   const [profs, sets] = ids.length ? await Promise.all([
@@ -934,7 +934,7 @@ async function goingFor(me, trips) {
   const hidden = {};
   sets.items.forEach((x) => { if (x.privacy && x.privacy.going === false) hidden[x.memberId] = true; });
   const weekAgo = Date.now() - 7 * 86400000;
-  const shown = (x) => x.shareGoing !== false && !hidden[x.memberId] && !(byId[x.memberId] && byId[x.memberId].blocked);
+  const shown = (x) => x.shareGoing === true && !hidden[x.memberId] && !(byId[x.memberId] && byId[x.memberId].blocked);
   all.items.filter((x) => x.memberId === me.id).forEach((mine) => {
     const seen = {};
     const theirs = all.items.filter((x) => x.showSlug === mine.showSlug && x.memberId !== me.id && shown(x) && !seen[x.memberId] && (seen[x.memberId] = true));
@@ -945,10 +945,10 @@ async function goingFor(me, trips) {
         photo: byId[x.memberId].photo || "", note: x.goingNote || "", added, isNew: !!added && new Date(added).getTime() > weekAgo, me: false
       };
     }).sort((a, b) => (b.added || "").localeCompare(a.added || "")).slice(0, 40);
-    const sharing = mine.shareGoing !== false && !hidden[me.id];
+    const sharing = mine.shareGoing === true && !hidden[me.id];
     if (sharing) people.unshift({ memberId: me.id, name: me.name + " (you)", colour: me.colour, photo: (me.profile && me.profile.photo) || "", note: mine.goingNote || "", added: iso(mine._createdDate), isNew: false, me: true });
     out[mine._id] = {
-      sharing, note: mine.goingNote || "", people, count: theirs.length,
+      sharing, chosen: typeof mine.shareGoing === "boolean", privacyOff: !!hidden[me.id], note: mine.goingNote || "", people, count: theirs.length,
       newCount: theirs.filter((x) => { const d = iso(x._createdDate); return d && new Date(d).getTime() > weekAgo; }).length
     };
   });
@@ -975,7 +975,7 @@ export const setGoing = webMethod(Permissions.Anyone, (input) => wrap(async () =
   const trip = await ownTrip(me.id, input && input.tripId);
   const saved = await wixData.update(C.trips, Object.assign({}, trip, { shareGoing: !!(input && input.sharing), goingNote: clean(input && input.note, 60) }), OPTS);
   const g = await goingFor(me, [{ showSlug: saved.showSlug }]);
-  return g[saved._id] || { sharing: saved.shareGoing !== false, note: saved.goingNote || "", people: [], count: 0, newCount: 0 };
+  return g[saved._id] || { sharing: saved.shareGoing === true, chosen: true, note: saved.goingNote || "", people: [], count: 0, newCount: 0 };
 }));
 
 /* photo of the week */
