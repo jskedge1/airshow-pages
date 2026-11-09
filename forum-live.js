@@ -487,11 +487,23 @@
     if (!f) return;
     e.preventDefault();
     var body = f.body.value.trim();
-    if (!body) { toast("Write something before you reply."); return; }
-    var b = f.querySelector('button[type="submit"]'); b.disabled = true;
-    call("addComment", { threadId: openId, body: body }).then(function (r) {
-      b.disabled = false;
+    var pic = boardOn() && f.closest(".bd-reply") ? B.photo : null;
+    if (!body && !pic) { toast("Write something before you reply."); return; }
+    if (pic && !(f.ownPhoto && f.ownPhoto.checked)) { toast("Please confirm the photo is your own."); return; }
+    var b = f.querySelector('button[type="submit"]'), label = b.textContent; b.disabled = true;
+    if (pic) b.textContent = "Uploading your photo";
+    var before = pic ? uploadPhoto(pic.file, {
+      title: (body.split("\n")[0] || "Photo from a reply").slice(0, 80), category: (f.photoCat && f.photoCat.value) || CATS[0], showName: "", aircraft: "",
+      camera: exifVal(f, "camera"), lens: exifVal(f, "lens"), focal: exifVal(f, "focal"), shutter: exifVal(f, "shutter"), aperture: exifVal(f, "aperture"), iso: exifVal(f, "iso"),
+      description: body.slice(0, 1500), adviceWanted: false
+    }, function (pct) { b.textContent = "Uploading " + pct + "%"; }) : Promise.resolve(null);
+    before.then(function (photoId) {
+      b.textContent = "Posting";
+      return call("addComment", { threadId: openId, body: photoId ? (body ? body + "\n\n" : "") + "[[photo:" + photoId + "]]" : body });
+    }).catch(function (err) { return { ok: false, error: err.message || "The photo didn't upload. Please try again." }; }).then(function (r) {
+      b.disabled = false; b.textContent = label;
       if (!r.ok) { toast(r.error); return; }
+      if (pic) B.photo = null;
       if (r.data && r.data.pending) { f.reset(); toast("Thanks. Your reply will show once it has been checked. That's usually within a day."); return; }
       if (boardOn() && B.fol.threads.indexOf(openId) < 0) B.fol.threads.push(openId);
       openThread(openId); refreshLists();
@@ -1051,12 +1063,30 @@
   function threadHead() {
     return '<div class="bd-row bd-head" aria-hidden="true"><span>Thread</span><span>Replies</span><span>Likes</span><span>Last activity</span></div>';
   }
+  /* the busiest threads of the last 7 days: replies count double, likes once */
+  function hotThreads() {
+    var weekAgo = Date.now() - 7 * 864e5;
+    var score = function (t) { return (t.commentCount || 0) * 2 + (t.likeCount || 0) + (Date.parse(t.created) > weekAgo ? 1 : 0); };
+    var recent = B.all.filter(function (t) { return Date.parse(t.lastActivity || t.created) > weekAgo; });
+    var pool = recent.length >= 2 ? recent : B.all;
+    return { week: recent.length >= 2, list: pool.slice().sort(function (a, b) { return score(b) - score(a) || String(b.lastActivity || b.created).localeCompare(String(a.lastActivity || a.created)); }).slice(0, 4) };
+  }
+  function hotHtml() {
+    var h = hotThreads();
+    if (!h.list.length) return "";
+    return '<section class="bd-block bd-hot"><div class="bd-hot-h"><h2>' + (h.week ? "Hot this week" : "Most talked about") + "</h2><small>" + (h.week ? "The busiest threads from the last 7 days" : "The busiest threads so far") + '</small></div><div class="bd-hot-row">' +
+      h.list.map(function (t, i) {
+        return '<button type="button" class="bd-hot-c" data-fl-thread="' + esc(t.id) + '"><span class="bd-hot-n">' + (i + 1) + "</span>" +
+          '<span class="bd-hot-g">' + esc(groupTitle(t.groupSlug) || "Forum") + "</span><b>" + (t.hasPhoto ? '<i class="bd-ph-i">Photo</i>' : "") + esc(t.title) + "</b>" +
+          '<span class="bd-hot-m">' + avatar(t.authorName, t.authorColour, t.authorPhoto) + "<span>" + esc(t.authorName) + "</span><em>" + (t.commentCount || 0) + ((t.commentCount === 1) ? " reply" : " replies") + " · " + (t.likeCount || 0) + ((t.likeCount === 1) ? " like" : " likes") + "</em></span></button>";
+      }).join("") + "</div></section>";
+  }
   function vHome() {
     var me = S.member, total = S.groups.reduce(function (n, g) { return n + (g.threadCount || 0); }, 0);
     var latest = B.all.slice().sort(function (a, b) { return String(b.lastActivity || b.created).localeCompare(String(a.lastActivity || a.created)); }).slice(0, 5);
     return '<div class="bd-hello"><div><h1>Welcome back, ' + esc(me.name.split(" ")[0]) + "</h1><p>Pick a group to read or start a new thread. Posts go live straight away, so have a quick read before you press post.</p></div>" +
       '<div class="bd-stats"><div><b>' + S.groups.length + "</b><span>Groups</span></div><div><b>" + total + "</b><span>Threads</span></div><div><b>" + B.all.filter(function (t) { return t.authorId === me.id; }).length + "</b><span>Yours</span></div></div></div>" +
-      '<section class="bd-block"><h2>Latest activity</h2>' + (latest.length ? '<div class="bd-table">' + threadHead() + latest.map(function (t) { return threadRow(t, true); }).join("") + "</div>"
+      hotHtml() + '<section class="bd-block"><h2>Latest activity</h2>' + (latest.length ? '<div class="bd-table">' + threadHead() + latest.map(function (t) { return threadRow(t, true); }).join("") + "</div>"
         : '<div class="bd-empty"><b>It is quiet in here so far</b><p>Be one of the first to post. Most people start with a question about their next show.</p>' + '<button type="button" class="btn btn-teal sm" data-bd-new="">Start a thread</button></div>') + "</section>" +
       catGroups().map(function (c) {
         return '<section class="bd-block"><h2>' + esc(c.title) + '</h2><p class="bd-blurb">' + esc(c.blurb) + '</p><div class="bd-table">' +
@@ -1143,6 +1173,7 @@
     }
     var reply = t.locked && !(me && me.isAdmin) ? '<p class="bd-closed">Replies are closed on this thread.</p>'
       : '<form class="bd-reply" data-fl-reply novalidate><h2>Your reply</h2><label class="fl-sr" for="flReply">Your reply</label><textarea id="flReply" name="body" maxlength="2000" rows="5" placeholder="Write a reply. Type @ to mention someone in this thread." data-bd-mention></textarea>' +
+        '<div class="bd-photo" data-bd-photo style="margin-top:10px"><button type="button" class="btn btn-navy sm" data-bd-addphoto>Add a photo</button><input type="file" accept="image/jpeg,image/png,image/webp" data-bd-file hidden><small>Your own photos only. The camera settings are read from the photo for you.</small></div>' +
         '<div class="fl-row" style="margin-top:10px"><span class="fl-as">' + avatar(me.name, me.colour, me.photo) + "<span>Replying as <b>" + esc(me.name) + '</b></span></span><button type="submit" class="btn btn-teal sm">Post reply</button></div></form>';
     return crumbs([["Forum", "home"], [groupTitle(t.groupSlug) || "Group", "g:" + t.groupSlug], [t.title, ""]]) +
       '<div class="bd-thead"><div><h1>' + (t.isQuestion ? (t.answerId ? '<i class="bd-solved big">Solved</i>' : '<i class="bd-q big">Question</i>') : "") + esc(t.title) + '</h1><p><span class="fl-tag">' + esc(groupTitle(t.groupSlug)) + "</span> " + (d.comments.length) + (d.comments.length === 1 ? " reply" : " replies") + " · " + (t.likeCount || 0) + ((t.likeCount === 1) ? " like" : " likes") + "</p></div>" + followBtn("thread", t.id) + "</div>" +
@@ -1168,6 +1199,7 @@
     if (!B.on) return;
     if (!noPush) hist.push({ view: B.view, group: B.group, thread: B.thread, sec: B.sec });
     parkSections();
+    if (view !== B.view || view === "thread") B.photo = null;
     B.view = view;
     if (view === "group") B.group = arg;
     if (view === "thread") B.thread = arg;
