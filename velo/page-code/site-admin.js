@@ -33,6 +33,7 @@ const COMMAND = {
   clearReports: (p) => clearForumReports(p),
   notice: (p) => sendMemberNotice(p),
   replied: (p) => markReplied(p),
+  addPlan: (p) => addPlan(p),
   login: async () => { await authentication.promptLogin({ mode: 'login' }); return getCommand(); }
 };
 
