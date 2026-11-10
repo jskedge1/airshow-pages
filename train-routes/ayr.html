@@ -3485,6 +3485,12 @@ window.addEventListener('resize',apply);})();
   function sumText(){ var j = $('jlsum'); return j ? j.textContent : ''; }
   function watch(fn){ ['jlsum', 'sumbig', 'sumper', 'sumkv', 'buybtn'].forEach(function(i){ var e = $(i); if (e) new MutationObserver(fn).observe(e, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['href'] }); }); fn(); }
   document.body.classList.add('lx-' + MODE);
+  /* tall blocks (the station picker has 60 to 70 tiles) never get 15 per cent of themselves on a phone screen, so the page's
+     own fade in never fires and they stay invisible. Show anything as soon as any part of it is on screen. */
+  if ('IntersectionObserver' in window) {
+    var rio = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }); }, { threshold: 0 });
+    [].forEach.call(document.querySelectorAll('.rise'), function(el){ rio.observe(el); });
+  }
 
   if (MODE === 'a') {
     var bar = document.createElement('div'); bar.className = 'la-bar';
@@ -3531,6 +3537,12 @@ window.addEventListener('resize',apply);})();
     /* the page scrolls to the route map itself in places: follow it into the journey tab */
     if (route) { var osi = route.scrollIntoView; route.scrollIntoView = function(o){ if (cur !== 1) show(1, route); else osi.call(route, o); }; }
     watch(function(){ $('la-led').textContent = sumText(); });
+    /* phones: picking a station takes you up to the train strip, so you see that journey straight away */
+    document.addEventListener('click', function(e){
+      var hb = e.target.closest && e.target.closest('#hub button'); if (!hb || !strip || innerWidth > 860) return;
+      function up(how){ if (!strip.clientWidth) return; var gap = strip.getBoundingClientRect().top - bar.getBoundingClientRect().bottom; if (Math.abs(gap) > 3) scrollBy({ top: gap, behavior: how }); }
+      setTimeout(function(){ up('smooth'); }, 120); setTimeout(function(){ up('auto'); }, 1100);
+    }, true);   /* capture: the page redraws the tiles on the tap, so the tapped tile is gone by the time the tap bubbles */
     show(0, null, true);
     if (location.hash) setTimeout(function(){ toHash(location.hash); }, 400);
   }
