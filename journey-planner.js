@@ -21,7 +21,7 @@
     'Southeastern': ['#0B8FCF', '#fff'], 'South Western Railway': ['#24398C', '#fff'], 'Chiltern Railways': ['#0099C4', '#fff'],
     'West Midlands Railway': ['#E07709', '#fff'], 'Transport for Wales': ['#C8102E', '#fff'], 'Merseyrail': ['#FFD600', '#13293C'],
     'ScotRail': ['#1E467D', '#fff'], 'Elizabeth line': ['#6950A1', '#fff'], 'Stansted Express': ['#6B4C9A', '#fff'],
-    'Tube': ['#13293C', '#fff'], 'Walk': ['#6B7C89', '#fff']
+    'London Northwestern Railway': ['#00A651', '#fff'], 'Tube': ['#13293C', '#fff'], 'Walk': ['#6B7C89', '#fff']
   };
 
   /* ---------- stations: CRS code: [name, lat, lon] ---------- */
@@ -104,7 +104,9 @@
     LLJ: ['Llandudno Junction', 53.2837, -3.8092], BNG: ['Bangor', 53.2223, -4.1357], HHD: ['Holyhead', 53.3078, -4.6309],
     HFD: ['Hereford', 52.0612, -2.7084], AGV: ['Abergavenny', 51.8168, -3.0096], WOF: ['Worcester Foregate Street', 52.1956, -2.2216],
     GMV: ['Great Malvern', 52.1090, -2.3180], MCN: ['Machynlleth', 52.5951, -3.8547], AYW: ['Aberystwyth', 52.4140, -4.0817],
-    UNI: ['University (Birmingham)', 52.4511, -1.9365], RDC: ['Redditch', 52.3060, -1.9450]
+    UNI: ['University (Birmingham)', 52.4511, -1.9365], RDC: ['Redditch', 52.3060, -1.9450],
+    SUN: ['Sunderland', 54.9054, -1.3826], HPL: ['Hartlepool', 54.6863, -1.2069], SCA: ['Scarborough', 54.2798, -0.4059],
+    MDE: ['Maidstone East', 51.2779, 0.5213], MIA: ['Manchester Airport', 53.3650, -2.2730]
   };
 
   /* ---------- lines: [operator, line name, [code, minutes from start], ...] typical times ---------- */
@@ -177,6 +179,7 @@
     ['Chiltern Railways', 'Marylebone to Oxford', [['MYB', 0], ['HWY', 25], ['BIT', 50], ['OXF', 65]]],
     ['Southern', 'Victoria to Eastbourne', [['VIC', 0], ['CLJ', 7], ['ECR', 17], ['GTW', 32], ['HHE', 45], ['LWS', 63], ['EBN', 86]]],
     ['Southern', 'Brighton to Hastings', [['BTN', 0], ['LWS', 15], ['EBN', 35], ['BEX', 50], ['HGS', 62]]],
+    ['Southern', 'Ashford to Brighton via Hastings (Marshlink)', [['AFK', 0], ['HGS', 40], ['BEX', 52], ['EBN', 65], ['LWS', 85], ['BTN', 100]]],
     ['Southern', 'Brighton to Southampton', [['BTN', 0], ['WRH', 20], ['CCH', 50], ['HAV', 63], ['SOU', 105]]],
     ['Southern', 'Victoria to Brighton', [['VIC', 0], ['CLJ', 7], ['ECR', 17], ['GTW', 32], ['HHE', 45], ['BTN', 60]]],
     ['South Western Railway', 'Waterloo to Bournemouth', [['WAT', 0], ['CLJ', 7], ['WOK', 25], ['BSK', 45], ['WIN', 60], ['SOU', 75], ['BMH', 110]]],
@@ -187,6 +190,16 @@
     ['Southeastern', 'High Speed to Ashford', [['STP', 0], ['SFA', 7], ['EBD', 17], ['AFK', 37]]],
     ['Southeastern', 'Ashford to Ramsgate', [['AFK', 0], ['CBW', 18], ['RAM', 42]]],
     ['Southeastern', 'Victoria to Dover', [['VIC', 0], ['BMS', 15], ['CTM', 40], ['FAV', 60], ['CBE', 70], ['DVP', 92]]],
+    ['London Northwestern Railway', 'Euston to Birmingham via Northampton', [['EUS', 0], ['MKC', 35], ['NMP', 55], ['RUG', 75], ['COV', 88], ['BHI', 98], ['BHM', 110]]],
+    ['ScotRail', 'Glasgow to Aberdeen', [['GLQ', 0], ['STG', 28], ['PTH', 60], ['DEE', 85], ['ABD', 160]]],
+    ['ScotRail', 'Edinburgh to Inverness', [['EDB', 0], ['HYM', 4], ['PTH', 75], ['INV', 215]]],
+    ['ScotRail', 'Edinburgh to Stirling', [['EDB', 0], ['HYM', 4], ['STG', 50]]],
+    ['Northern', 'Newcastle to Middlesbrough via Sunderland', [['NCL', 0], ['SUN', 20], ['HPL', 45], ['MBR', 70]]],
+    ['TransPennine Express', 'York to Scarborough', [['YRK', 0], ['SCA', 50]]],
+    ['TransPennine Express', 'Manchester Airport to Manchester', [['MIA', 0], ['MAN', 18]]],
+    ['Northern', 'Liverpool to Blackpool North', [['LIV', 0], ['WGN', 35], ['PRE', 55], ['KKM', 68], ['BPN', 82]]],
+    ['LNER', 'Kings Cross to Hull', [['KGX', 0], ['SVG', 20], ['PBO', 45], ['GRA', 65], ['NNG', 78], ['RET', 92], ['DON', 100], ['SBY', 125], ['HUL', 160]]],
+    ['Southeastern', 'Victoria to Ashford via Maidstone East', [['VIC', 0], ['BMS', 15], ['MDE', 58], ['AFK', 88]]],
     ['Elizabeth line', 'Elizabeth line', [['PAD', 0], ['ZFD', 9], ['LST', 12], ['SRA', 20], ['SNF', 45]]],
     /* links between stations: walks and the Tube across London */
     ['Tube', 'Across London', [['KGX', 0], ['LST', 15]]], ['Tube', 'Across London', [['KGX', 0], ['VIC', 18]]],
@@ -241,8 +254,18 @@
       arr: [{ c: 'SAL', m: 30, how: 'taxi', t: 'RIAT moves to MOD Boscombe Down for 2027 and the travel plan isn’t out yet. Salisbury is the nearest big station, so I have planned to there for now. I will add the shuttles and Park and Ride as soon as they are announced.' }] }
   };
   var ORDER = ['riat', 'cosford', 'midlands', 'eastbourne', 'clacton', 'wales', 'duxford', 'shuttleworth', 'gransden', 'headcorn', 'southport', 'blackpool', 'ayr'];
-  var CITIES = ['KGX', 'BHM', 'MAN', 'LDS', 'NCL', 'GLC', 'EDB', 'BRI', 'CDF', 'NRW', 'SOU', 'PLY', 'LIV', 'NOT'];
-  var CITY_NAME = { KGX: 'London', BHM: 'Birmingham', MAN: 'Manchester', LDS: 'Leeds', NCL: 'Newcastle', GLC: 'Glasgow', EDB: 'Edinburgh', BRI: 'Bristol', CDF: 'Cardiff', NRW: 'Norwich', SOU: 'Southampton', PLY: 'Plymouth', LIV: 'Liverpool', NOT: 'Nottingham' };
+  /* ---------- every major station, by region: [name shown, [station codes]] ---------- */
+  var HUBS = [
+    ['Big cities', [['London', ['KGX', 'STP', 'EUS', 'PAD', 'LST', 'FST', 'VIC', 'WAT', 'LBG', 'CHX', 'MYB']], ['Birmingham', ['BHM', 'BMO']], ['Manchester', ['MAN']], ['Liverpool', ['LIV']], ['Leeds', ['LDS']], ['Sheffield', ['SHF']], ['Newcastle', ['NCL']], ['Glasgow', ['GLC', 'GLQ']], ['Edinburgh', ['EDB']], ['Bristol', ['BRI']], ['Cardiff', ['CDF']], ['Nottingham', ['NOT']]]],
+    ['London and the South East', [['London', ['KGX', 'STP', 'EUS', 'PAD', 'LST', 'FST', 'VIC', 'WAT', 'LBG', 'CHX', 'MYB']], ['Southend', ['SOC', 'SOV']], ['Chelmsford', ['CHM']], ['Brighton', ['BTN']], ['Gatwick Airport', ['GTW']], ['Ashford', ['AFK']], ['Maidstone', ['MDE']], ['Canterbury', ['CBW', 'CBE']], ['Dover', ['DVP']], ['Ramsgate', ['RAM']], ['Hastings', ['HGS']], ['Reading', ['RDG']], ['Oxford', ['OXF']], ['Guildford', ['GLD']], ['Portsmouth', ['PMH']], ['Southampton', ['SOU']], ['Milton Keynes', ['MKC']], ['Luton', ['LTN']]]],
+    ['East of England', [['Cambridge', ['CBG']], ['Colchester', ['COL']], ['Ipswich', ['IPS']], ['Norwich', ['NRW']], ['Peterborough', ['PBO']], ['Ely', ['ELY']], ['Kings Lynn', ['KLN']], ['Bury St Edmunds', ['BSE']], ['Lowestoft', ['LWT']], ['Great Yarmouth', ['GYM']], ['Stansted Airport', ['SSD']], ['Bedford', ['BDM']], ['Stevenage', ['SVG']]]],
+    ['South West', [['Penzance', ['PNZ']], ['Truro', ['TRU']], ['Plymouth', ['PLY']], ['Exeter', ['EXD']], ['Taunton', ['TAU']], ['Bristol', ['BRI']], ['Bath', ['BTH']], ['Swindon', ['SWI']], ['Gloucester', ['GCR']], ['Cheltenham', ['CNM']], ['Salisbury', ['SAL']], ['Bournemouth', ['BMH']]]],
+    ['Wales', [['Cardiff', ['CDF']], ['Newport', ['NWP']], ['Swansea', ['SWA']], ['Carmarthen', ['CMN']], ['Aberystwyth', ['AYW']], ['Abergavenny', ['AGV']], ['Wrexham', ['WRX']], ['Llandudno Junction', ['LLJ']], ['Bangor', ['BNG']], ['Holyhead', ['HHD']]]],
+    ['Midlands', [['Birmingham', ['BHM', 'BMO']], ['Coventry', ['COV']], ['Wolverhampton', ['WVH']], ['Leicester', ['LEI']], ['Nottingham', ['NOT']], ['Derby', ['DBY']], ['Stoke-on-Trent', ['STO']], ['Stafford', ['STA']], ['Shrewsbury', ['SHR']], ['Telford', ['TFC']], ['Hereford', ['HFD']], ['Worcester', ['WOF']], ['Northampton', ['NMP']], ['Lincoln', ['LCN']]]],
+    ['North West', [['Manchester', ['MAN']], ['Manchester Airport', ['MIA']], ['Liverpool', ['LIV']], ['Preston', ['PRE']], ['Blackpool', ['BPN']], ['Wigan', ['WGN']], ['Bolton', ['BON']], ['Lancaster', ['LAN']], ['Carlisle', ['CAR']], ['Chester', ['CTR']], ['Crewe', ['CRE']], ['Warrington', ['WBQ']]]],
+    ['Yorkshire and the North East', [['Leeds', ['LDS']], ['Sheffield', ['SHF']], ['York', ['YRK']], ['Bradford', ['BDI']], ['Huddersfield', ['HUD']], ['Doncaster', ['DON']], ['Hull', ['HUL']], ['Scarborough', ['SCA']], ['Darlington', ['DAR']], ['Middlesbrough', ['MBR']], ['Durham', ['DHM']], ['Newcastle', ['NCL']], ['Sunderland', ['SUN']]]],
+    ['Scotland', [['Glasgow', ['GLC', 'GLQ']], ['Edinburgh', ['EDB']], ['Stirling', ['STG']], ['Perth', ['PTH']], ['Dundee', ['DEE']], ['Aberdeen', ['ABD']], ['Inverness', ['INV']], ['Kirkcaldy', ['KDY']], ['Kilmarnock', ['KMK']], ['Dumfries', ['DMF']]]]
+  ];
 
   /* ---------- graph ---------- */
   var ADJ = {}, SERVES = {}; // ADJ['CRS|li'] = [[CRS, li, mins]]
@@ -262,9 +285,11 @@
     if (from === to) return { mins: 0, legs: [] };
     var dist = {}, prev = {}, Q = [];
     (SERVES[from] || []).forEach(function (li) { var k = from + '|' + li; dist[k] = 0; Q.push([0, k]); });
+    var push = function (it) { Q.push(it); var i = Q.length - 1; while (i) { var j = (i - 1) >> 1; if (Q[j][0] <= Q[i][0]) break; var t = Q[i]; Q[i] = Q[j]; Q[j] = t; i = j; } };
+    var pop = function () { var top = Q[0], last = Q.pop(); if (Q.length) { Q[0] = last; var i = 0; for (;;) { var a = 2 * i + 1, b = a + 1, m = i; if (a < Q.length && Q[a][0] < Q[m][0]) m = a; if (b < Q.length && Q[b][0] < Q[m][0]) m = b; if (m === i) break; var t = Q[i]; Q[i] = Q[m]; Q[m] = t; i = m; } } return top; };
+    Q.sort(function (x, y) { return x[0] - y[0]; });
     while (Q.length) {
-      Q.sort(function (x, y) { return x[0] - y[0]; });
-      var cur = Q.shift(), d = cur[0], k = cur[1];
+      var cur = pop(), d = cur[0], k = cur[1];
       if (d > dist[k]) continue;
       var p = k.split('|'), s = p[0], li = +p[1];
       if (s === to) {
@@ -281,14 +306,14 @@
       }
       (ADJ[k] || []).forEach(function (e) {
         var nk = e[0] + '|' + e[1], nd = d + e[2];
-        if (dist[nk] === undefined || nd < dist[nk]) { dist[nk] = nd; prev[nk] = k; Q.push([nd, nk]); }
+        if (dist[nk] === undefined || nd < dist[nk]) { dist[nk] = nd; prev[nk] = k; push([nd, nk]); }
       });
       (SERVES[s] || []).forEach(function (l2) {
         if (l2 === li) return;
         var pen = (isLink(li) || isLink(l2)) ? 2 : 12;
         if (LINES[l2][1] === LINES[li][1] && LINES[l2][0] === LINES[li][0]) pen = 1;
         var nk = s + '|' + l2, nd = d + pen;
-        if (dist[nk] === undefined || nd < dist[nk]) { dist[nk] = nd; prev[nk] = k; Q.push([nd, nk]); }
+        if (dist[nk] === undefined || nd < dist[nk]) { dist[nk] = nd; prev[nk] = k; push([nd, nk]); }
       });
     }
     return null;
@@ -320,6 +345,27 @@
   function minus(hhmm, m) {
     var t = hhmm.split(':'), x = (+t[0]) * 60 + (+t[1]) - m; if (x < 300) x = 300;
     x = Math.floor(x / 15) * 15; return ('0' + Math.floor(x / 60)).slice(-2) + ':' + ('0' + x % 60).slice(-2);
+  }
+
+  /* best train link from a big station (or a group, like all the London terminals) to a show */
+  var HUBC = {};
+  function hubRoute(codes, show) {
+    var key = codes.join(',') + '>' + show; if (HUBC[key] !== undefined) return HUBC[key];
+    var S = SHOWS[show], best = null;
+    codes.forEach(function (c) {
+      S.arr.forEach(function (a) {
+        var r = route(c, a.c); if (!r) return;
+        var t = r.mins + a.m;
+        if (!best || t < best.t) best = { r: r, a: a, t: t, from: c };
+      });
+    });
+    if (best) {
+      var tr = best.r.legs.filter(function (l) { return !isLink(l.li); });
+      if (tr.length && tr[0].from !== best.from && best.r.legs[0] && isLink(best.r.legs[0].li) && codes.indexOf(tr[0].from) >= 0) {
+        best.from = tr[0].from; best.r = { mins: best.r.mins - best.r.legs[0].mins, legs: best.r.legs.slice(1) };
+      }
+    }
+    return (HUBC[key] = best);
   }
 
   /* best plans from a point to a show */
@@ -392,6 +438,29 @@
     + '.ukag-jp td{padding:10px 12px;border-top:1px solid #E5EAEE;vertical-align:top}.ukag-jp td b{font-weight:700}'
     + '.ukag-jp tr:hover td{background:#F6F4FB}.ukag-jp td .jq-dots{display:inline-flex;gap:4px;margin-right:6px;vertical-align:middle}.ukag-jp td .jq-dots i{width:10px;height:10px;border-radius:50%;background:var(--c)}'
     + '.ukag-jp td a{color:var(--p);font-weight:600}'
+    + '.ukag-jp .jq-hubbar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;border-bottom:3px solid var(--p);margin-bottom:14px}'
+    + '.ukag-jp .jq-rg{display:flex;flex-wrap:wrap;gap:6px 6px}'
+    + '.ukag-jp .jq-rg button{border:1px solid var(--l);border-bottom:0;background:#fff;padding:9px 14px;border-radius:12px 12px 0 0;font:700 15px Barlow,sans-serif;color:var(--n);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s}'
+    + '.ukag-jp .jq-rg button:hover{box-shadow:0 -6px 14px -10px rgba(105,80,161,.9);color:var(--p)}'
+    + '.ukag-jp .jq-rg button[aria-selected="true"]{background:var(--p);border-color:var(--p);color:#fff}'
+    + '.ukag-jp .jq-hs{flex:0 1 300px;margin-bottom:8px;background:#fff}'
+    + '.ukag-jp .jq-hubs{display:grid;gap:8px}'
+    + '.ukag-jp .jq-hub{display:grid;grid-template-columns:170px 1fr 150px auto;gap:14px 18px;align-items:center;background:#fff;padding:14px 16px;border-left:5px solid var(--p);box-shadow:0 6px 16px -14px rgba(19,41,60,.7);transition:transform .25s,box-shadow .25s}'
+    + '.ukag-jp .jq-hub:hover{transform:translateX(3px);box-shadow:0 10px 22px -14px rgba(19,41,60,.8)}'
+    + '.ukag-jp .jq-hn b{display:block;font:800 21px/1.05 "Barlow Condensed",Barlow,sans-serif;text-transform:uppercase}.ukag-jp .jq-hub small{display:block;color:var(--s);font-size:14px;margin-top:3px}'
+    + '.ukag-jp .jq-legs{display:flex;flex-wrap:wrap;gap:6px 4px;align-items:center}'
+    + '.ukag-jp .jq-leg{display:inline-flex;align-items:center;font-size:14.5px;line-height:1.2;background:color-mix(in srgb,var(--c) 9%,#fff);border:1px solid color-mix(in srgb,var(--c) 30%,#fff);padding:0 9px 0 0}'
+    + '.ukag-jp .jq-leg i{font-style:normal;font-weight:700;background:var(--c);color:var(--k);padding:4px 8px;margin-right:7px;font-size:13.5px}'
+    + '.ukag-jp .jq-leg+.jq-leg:before{content:"›";margin:0 6px 0 -4px;color:var(--s);display:none}'
+    + '.ukag-jp .jq-leg.jq-x{--c:#6B7C89;--k:#fff;border-style:dashed}'
+    + '.ukag-jp .jq-there{font-weight:600;color:#0E5F5B}'
+    + '.ukag-jp .jq-ht b{display:block;font:800 19px/1.1 "Barlow Condensed",Barlow,sans-serif;color:var(--n)}'
+    + '.ukag-jp .jq-ha{display:flex;gap:8px;align-items:center;justify-content:flex-end}'
+    + '.ukag-jp .jq-ha a{color:var(--p);font-weight:700;text-decoration:none;white-space:nowrap}.ukag-jp .jq-ha a:hover{text-decoration:underline}'
+    + '.ukag-jp .jq-ha button{border:0;background:var(--n);color:#fff;font:700 14.5px Barlow,sans-serif;padding:9px 13px;cursor:pointer;white-space:nowrap;border-bottom:3px solid var(--t);transition:background .25s,transform .25s}'
+    + '.ukag-jp .jq-ha button:hover{background:#1D63B7;transform:translateY(-2px)}'
+    + '.ukag-jp .jq-none{background:#fff;padding:16px;margin:0}'
+    + '@media(max-width:900px){.ukag-jp .jq-hub{grid-template-columns:1fr auto}.ukag-jp .jq-hc{grid-column:1/-1;grid-row:2}.ukag-jp .jq-ha{grid-column:1/-1;justify-content:flex-start}.ukag-jp .jq-ht{text-align:right}.ukag-jp .jq-hs{flex:1 1 100%}}'
     + '@media(max-width:900px){.ukag-jp form,.ukag-jp form.jq-noshow{grid-template-columns:1fr 1fr}.ukag-jp .jq-f-from{grid-column:1/-1}.ukag-jp .jq-go{grid-column:1/-1}}'
     + '@media(max-width:560px){.ukag-jp{padding:0 12px}.ukag-jp form,.ukag-jp form.jq-noshow{grid-template-columns:1fr}.ukag-jp .jq-acts a{width:100%;justify-content:space-between}.ukag-jp .jq-jp-h{grid-template-columns:40px 1fr;padding:18px}.ukag-jp .jq-jp-h .jq-ic{width:40px;height:40px}.ukag-jp .jq-jp-h h2{font-size:23px}.ukag-jp form,.ukag-jp .jq-out,.ukag-jp .jq-lines{padding-left:16px;padding-right:16px}.ukag-jp .jq-msg{padding:0 16px 16px}.ukag-jp table .jq-hm{display:none}}'
     + '@media(prefers-reduced-motion:reduce){.ukag-jp *{transition:none!important}}';
@@ -527,19 +596,64 @@
           var c = OP[L[0]]; chips += '<span class="jq-chip" style="--c:' + c[0] + '"><i></i><span><b>' + esc(L[0]) + '</b>, ' + esc(L[1]) + ' (calls at ' + esc(STA[a.c][0]) + ')</span></span>';
         });
       });
-      var rows = CITIES.map(function (c) {
-        var best = null;
-        S.arr.forEach(function (a) { var r = route(c, a.c); if (r && (!best || r.mins + a.m < best.t)) best = { r: r, a: a, t: r.mins + a.m }; });
-        if (!best) return '';
-        var tr = best.r.legs.filter(function (l) { return !isLink(l.li); });
-        var chg = []; for (var i = 0; i < tr.length - 1; i++) chg.push(STA[tr[i].to][0] + (tr[i + 1].from !== tr[i].to ? ', across to ' + STA[tr[i + 1].from][0] : ''));
-        var dots = tr.map(function (l) { return '<i style="--c:' + OP[LINES[l.li][0]][0] + '" title="' + esc(LINES[l.li][0]) + '"></i>'; }).join('');
-        var from = c === 'KGX' && tr[0] ? STA[tr[0].from][0] : STA[c][0];
-        return '<tr><td><b>' + esc(CITY_NAME[c]) + '</b><br><small>' + esc(from) + '</small></td><td><span class="jq-dots">' + dots + '</span>' + (chg.length ? 'Change at ' + esc(chg.join(', then ')) : (tr.length ? 'Direct to ' + esc(STA[best.a.c][0]) : 'You are already there')) + '</td><td class="jq-hm">About ' + hm(best.r.mins) + '</td><td><a href="' + nrLink(c === 'KGX' && tr[0] ? tr[0].from : c, best.a.c) + '" target="_blank" rel="noopener">Times ↗</a></td></tr>';
-      }).join('');
-      lines.innerHTML = '<h3>Train lines and connections</h3><p>These are the lines that call at the station for ' + esc(S.name) + ', and the changes I would expect from the big cities. The train time is to the station, before the last leg.</p>'
+      var reg = st.rg || 0, hubTxt = st.hq || '';
+      lines.innerHTML = '<h3>Trains from every major station</h3><p>Find your nearest big station below and I will show you how it links up with ' + esc(S.name) + ', which train companies you need and where to change. The time is the train part only, to ' + esc(S.arr.map(function (a) { return STA[a.c][0]; }).join(' or ')) + ', before the last leg to the showground.</p>'
         + '<div class="jq-chips">' + chips + '</div>'
-        + '<table><thead><tr><th>From</th><th>How it connects</th><th class="jq-hm">On the train</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>';
+        + '<div class="jq-hubbar"><div class="jq-rg" role="tablist" aria-label="Choose a region">' + HUBS.map(function (R, i) { return '<button type="button" role="tab" data-r="' + i + '" aria-selected="' + (i === reg && !hubTxt) + '">' + esc(R[0]) + '</button>'; }).join('') + '</div>'
+        + '<div class="jq-inp jq-hs"><input type="search" aria-label="Find your station" placeholder="Find your station, for example Truro" value="' + esc(hubTxt) + '"></div></div>'
+        + '<div class="jq-hubs" aria-live="polite"></div>'
+        + '<p class="jq-note">These are typical journey times with sensible changes. Some routes have quicker or slower trains at different times of day, and on Sundays the first trains run later, so I would always tap Times to check the real trains before you book.' + (S.soon ? ' <b>Please hold off booking for RIAT</b> until the Boscombe Down travel plan is out.' : '') + '</p>';
+      var box = lines.querySelector('.jq-hubs'), hs = lines.querySelector('.jq-hs input');
+      function hubRow(H) {
+        var b = hubRoute(H[1], st.show);
+        if (!b) return '';
+        var legs = b.r.legs, html = '', tr = legs.filter(function (l) { return !isLink(l.li); }), ch = Math.max(0, tr.length - 1), chg = [];
+        if (!legs.length) html = '<span class="jq-there">You are already there, this is the station for the show</span>';
+        for (var i = 0; i < legs.length; i++) {
+          var l = legs[i], L = LINES[l.li];
+          if (isLink(l.li)) {
+            var to = l.to; while (legs[i + 1] && isLink(legs[i + 1].li)) { i++; to = legs[i].to; }
+            html += '<span class="jq-leg jq-x"><i>' + (L[0] === 'Walk' ? 'Walk' : 'Tube') + '</i>to ' + esc(STA[to][0]) + '</span>';
+            continue;
+          }
+          var c = OP[L[0]] || OP.Walk;
+          html += '<span class="jq-leg" style="--c:' + c[0] + ';--k:' + c[1] + '"><i>' + esc(L[0]) + '</i>to ' + esc(STA[l.to][0]) + '</span>';
+          if (tr.indexOf(l) < tr.length - 1) chg.push(STA[l.to][0]);
+        }
+        return '<div class="jq-hub"><div class="jq-hn"><b>' + esc(H[0]) + '</b><small>From ' + esc(STA[b.from][0]) + '</small></div>'
+          + '<div class="jq-hc"><div class="jq-legs">' + html + '</div>' + (chg.length ? '<small>Change at ' + esc(chg.join(', then ')) + '</small>' : (legs.length ? '<small>A direct train, no changes</small>' : '')) + '</div>'
+          + '<div class="jq-ht"><b>' + (legs.length ? 'About ' + hm(b.r.mins) : 'No train needed') + '</b><small>' + (legs.length ? (ch ? ch + (ch === 1 ? ' change' : ' changes') : 'No changes') : esc(STA[b.a.c][0])) + '</small></div>'
+          + '<div class="jq-ha">' + (legs.length ? '<a href="' + nrLink(b.from, b.a.c) + '" target="_blank" rel="noopener">Times <span aria-hidden="true">↗</span></a>' : '') + '<button type="button" data-st="' + esc(STA[b.from][0]) + '">Plan from here</button></div></div>';
+      }
+      function drawHubs() {
+        var t = (hs.value || '').trim().toLowerCase(), list = [];
+        if (t) {
+          var seen2 = {};
+          HUBS.forEach(function (R) { R[1].forEach(function (H) { if (seen2[H[0]]) return; var m = H[0].toLowerCase().indexOf(t) >= 0 || H[1].some(function (c) { return STA[c][0].toLowerCase().indexOf(t) >= 0; }); if (m) { seen2[H[0]] = 1; list.push(H); } }); });
+        } else list = HUBS[reg][1];
+        var h = list.map(hubRow).join('');
+        box.innerHTML = h || '<p class="jq-none">I haven’t got that station on the board yet. Type your town or postcode into the planner above and it will find your nearest big station for you.</p>';
+        [].forEach.call(box.querySelectorAll('button[data-st]'), function (bt) {
+          bt.addEventListener('click', function () {
+            fF.value = bt.getAttribute('data-st'); st.sel = 0; go(false);
+            try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { el.scrollIntoView(); }
+          });
+        });
+        resize();
+      }
+      [].forEach.call(lines.querySelectorAll('.jq-rg button'), function (bt) {
+        bt.addEventListener('click', function () {
+          reg = st.rg = +bt.getAttribute('data-r'); hs.value = st.hq = '';
+          [].forEach.call(lines.querySelectorAll('.jq-rg button'), function (x) { x.setAttribute('aria-selected', x === bt); });
+          drawHubs();
+        });
+      });
+      hs.addEventListener('input', function () {
+        st.hq = hs.value;
+        [].forEach.call(lines.querySelectorAll('.jq-rg button'), function (x) { x.setAttribute('aria-selected', !hs.value.trim() && +x.getAttribute('data-r') === reg); });
+        drawHubs();
+      });
+      drawHubs();
       resize();
     }
     q('form').addEventListener('submit', function () { go(false); });
@@ -565,7 +679,7 @@
     if (!document.getElementById('ukag-jp-css')) { var s = document.createElement('style'); s.id = 'ukag-jp-css'; s.textContent = CSS; document.head.appendChild(s); }
     [].forEach.call(document.querySelectorAll('.ukag-jp:not([data-on])'), function (el) { el.setAttribute('data-on', '1'); mount(el); });
   }
-  window.UKAG_JP = { init: init, route: route, plan: plan, STA: STA, LINES: LINES, SHOWS: SHOWS };
+  window.UKAG_JP = { init: init, route: route, plan: plan, hubRoute: hubRoute, HUBS: HUBS, STA: STA, LINES: LINES, SHOWS: SHOWS };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   /* the Wix page element can add the guide after this script has run, so watch for new boxes too */
   try {
