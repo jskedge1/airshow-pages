@@ -22,7 +22,7 @@ CSS = '''<style id="rs-switch">
 .bsw:hover,.bsw:focus-within{border-color:var(--led,#F2B233)}
 .bsw span{display:flex;align-items:center;gap:8px;padding:0 12px;font:700 15px/1 var(--f);color:#fff;background:rgba(255,255,255,.08);white-space:nowrap}
 .bsw span i{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:22px;padding:0 4px;font:800 14px/1 var(--c,var(--f));font-style:normal;background:var(--led,#F2B233);color:#05090D}
-.bsw select{appearance:none;-webkit-appearance:none;border:0;border-radius:0;background:transparent;color:#fff;font:600 15.5px/1.2 var(--f);padding:11px 40px 11px 12px;max-width:min(62vw,420px);cursor:pointer;text-overflow:ellipsis}
+.bsw select{appearance:none;-webkit-appearance:none;border:0;border-radius:0;background:transparent;color:#fff;font:600 15.5px/1.2 var(--f);padding:11px 46px 11px 12px;max-width:min(62vw,480px);cursor:pointer;text-overflow:ellipsis}
 .bsw select option{color:#13293C;background:#fff}
 .bsw::after{content:"";position:absolute;right:15px;top:50%;width:8px;height:8px;margin-top:-6px;border-right:2.5px solid var(--led,#F2B233);border-bottom:2.5px solid var(--led,#F2B233);transform:rotate(45deg);pointer-events:none}
 .bsw select:focus-visible{outline:none}
