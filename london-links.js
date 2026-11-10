@@ -32,6 +32,57 @@
       });
     });
   }
+
+  /* connections (10 Nov 2026): when the change is within the next hour, the live TfL times are walked through step by step
+     (walks at their usual time), so you can see which Tube or Elizabeth line train gets you to the next train in time. */
+  function hm2m(t) { var p = String(t || '').split(':'); return p.length < 2 ? null : +p[0] * 60 + +p[1]; }
+  function nowM() { var d = new Date(); return d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60; }
+  function m2hm(m) { m = Math.round(m) % 1440; if (m < 0) m += 1440; return ('0' + Math.floor(m / 60)).slice(-2) + ':' + ('0' + m % 60).slice(-2); }
+  function plan(steps, start, cb) {
+    var t = start, out = [], i = 0, live = true;
+    (function go() {
+      if (i >= steps.length) return cb({ arr: t, steps: out, live: live });
+      var st = steps[i++];
+      if (st.w) { t += st.m; out.push({ w: 1 }); return go(); }
+      nextTrains(st, function (ok, got) {
+        var off = t - nowM(), g = ok ? got.filter(function (x) { return x.m >= off - 0.5; })[0] : null;
+        if (g) { var board = nowM() + g.m; out.push({ l: g.l, board: board, arr: board + st.m, live: 1, tn: st.tn }); t = board + st.m; }
+        else { live = false; out.push({ l: st.l[0], board: t + 4, arr: t + 4 + st.m, tn: st.tn }); t += 4 + st.m; }
+        go();
+      });
+    })();
+  }
+  function crossings(tr) {
+    var s = tr.s, out = [], first = s[0], last = s[s.length - 1];
+    if (tr.walkStart) out.push({ a: first[1], b: tr.walkStart.to, start: hm2m(first[0]), catchAt: hm2m(tr.walkStart.dep), catchTxt: tr.walkStart.dep });
+    (tr.changes || []).forEach(function (c) { if (c.wayTo && c.wayTo !== c.at) out.push({ a: c.at, b: c.wayTo, start: hm2m(c.arr) + 3, catchAt: hm2m(c.dep), catchTxt: c.dep }); });
+    if (tr.walkEnd) out.push({ a: tr.walkEnd.from, b: last[1], start: hm2m(tr.walkEnd.arr) + 3, catchAt: null });
+    return out.filter(function (x) { return LINKS[x.a + '|' + x.b] && x.start != null; });
+  }
+  function connect(x, cb) {
+    var steps = LINKS[x.a + '|' + x.b], now = nowM(), start = Math.max(x.start, now);
+    if (x.start - now > 60 || now - x.start > 90) return cb({ soon: false });
+    plan(steps, start, function (r) {
+      var ride = r.steps.filter(function (q) { return !q.w; }), firstRide = ride[0], name = firstRide ? LN[firstRide.l][0] + (firstRide.l === 'elizabeth' ? ' line' : ' line') : '';
+      var txt = (r.live ? 'Live: ' : 'Estimate: ') + (firstRide ? 'the ' + m2hm(firstRide.board) + ' ' + name + ' gets you to ' + (x.b.replace(/^London /, '')) + ' about ' + m2hm(r.arr) : 'you reach ' + x.b.replace(/^London /, '') + ' about ' + m2hm(r.arr));
+      var spare = x.catchAt == null ? null : Math.round(x.catchAt - r.arr), cls = 'ok';
+      if (spare != null) {
+        if (spare >= 5) txt += ', ' + spare + ' min before your ' + x.catchTxt + ' train.';
+        else if (spare >= 0) { txt += ', only ' + spare + ' min before your ' + x.catchTxt + ' train, so it will be tight.'; cls = 'tight'; }
+        else { txt += ', after your ' + x.catchTxt + ' train leaves. I would allow for the next one.'; cls = 'miss'; }
+      } else txt += '.';
+      cb({ soon: true, live: r.live, text: txt, cls: cls, spare: spare, steps: r.steps });
+    });
+  }
+  function connFill(root, tr) {
+    crossings(tr).forEach(function (x) {
+      var el = root.querySelector('.llx-conn[data-p="' + esc(x.a + '|' + x.b) + '"]'); if (!el) return;
+      connect(x, function (r) {
+        if (!r.soon) { el.className = 'llx-conn off'; el.textContent = 'Live connection times show here from an hour before this change.'; return; }
+        el.className = 'llx-conn ' + r.cls; el.textContent = r.text;
+      });
+    });
+  }
   function stepHTML(st) {
     if (st.w) return '<li class="llx-s llx-w"><span class="llx-i" aria-hidden="true"></span><div><b>' + esc(st.w) + '</b><small>About ' + st.m + ' minutes on foot</small></div></li>';
     var pills = st.l.map(function (l) { var c = LN[l]; return '<span class="llx-p" style="background:' + c[1] + ';color:' + c[2] + '">' + esc(c[0]) + '</span>'; }).join('');
@@ -67,6 +118,8 @@
     + '.llx-live{display:inline-flex;align-items:center;gap:7px;margin-top:6px;background:#0F2E1B;color:#7CF0A6;border:1px solid #1F7A43;font-weight:700;font-size:12.5px;padding:4px 8px}'
     + '.llx-live i{width:8px;height:8px;border-radius:50%;background:#22C55E;animation:llxp 1.8s ease-out infinite}'
     + '.llx-live.off{background:#2A3742;color:#C9D6E0;border-color:#4A5A66}.llx-live.off i{background:#8A97A2;animation:none}'
+    + '.llx-conn{margin:10px 0 0 38px;padding:8px 10px;font-size:14px;line-height:1.4;font-weight:600;border-left:4px solid #22C55E;background:#0F2E1B;color:#C9F7D9}'
+    + '.llx-conn.tight{border-color:#F2B233;background:#33280F;color:#FBE3A6}.llx-conn.miss{border-color:#E5484D;background:#3A1516;color:#F9C5C7}.llx-conn.off{border-color:#4A5A66;background:#2A3742;color:#C9D6E0;font-weight:500}'
     + '@keyframes llxp{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}100%{box-shadow:0 0 0 7px rgba(34,197,94,0)}}'
     + '@media(prefers-reduced-motion:reduce){.llx-live i{animation:none}}';
   function css() { if (document.getElementById('llx-css')) return; var s = document.createElement('style'); s.id = 'llx-css'; s.textContent = CSS; document.head.appendChild(s); }
@@ -85,13 +138,13 @@
     if (!ps.length) { if (box) box.remove(); return; }
     if (!box) { box = document.createElement('div'); box.className = 'llx'; host.appendChild(box); }
     box.innerHTML = '<h4>Getting across London</h4><p>This journey changes station in London, so here is how to get across, with the next trains live from TfL. I would allow the time shown plus a few minutes for the walk through each station.</p>'
-      + ps.map(function (p) { return '<div class="llx-c"><b>' + esc(p[0]) + ' to ' + esc(p[1]) + '</b><ol>' + LINKS[p[0] + '|' + p[1]].map(stepHTML).join('') + '</ol></div>'; }).join('');
-    fill(box);
+      + ps.map(function (p) { return '<div class="llx-c"><b>' + esc(p[0]) + ' to ' + esc(p[1]) + '</b><ol>' + LINKS[p[0] + '|' + p[1]].map(stepHTML).join('') + '</ol><div class="llx-conn off" data-p="' + esc(p[0] + '|' + p[1]) + '">Checking your connection…</div></div>'; }).join('');
+    fill(box); connFill(box, t);
     var nodes = line.querySelectorAll('.jl-node');
     ps.forEach(function (p) {
       [].forEach.call(nodes, function (n) { var b = n.querySelector('b'); if (b && (b.textContent.indexOf(p[0] + ' to ' + p[1]) === 0 || b.textContent === p[0] || b.textContent === p[1]) && !n.querySelector('.llx-tag')) { var e = document.createElement('em'); e.className = 'llx-tag'; var st = LINKS[p[0] + '|' + p[1]].filter(function (x) { return x.l; }), eo = st.every(function (x) { return x.l[0] === 'elizabeth'; }), mix = !eo && st.some(function (x) { return x.l[0] === 'elizabeth'; }); e.textContent = (eo ? 'By Elizabeth line' : mix ? 'By Tube and Elizabeth line' : 'By Tube') + ', see below'; e.style.cssText = 'display:inline-block;margin-top:6px;background:#6950A1;color:#fff;font-style:normal;font-weight:700;font-size:12px;padding:3px 7px'; n.querySelector('div').appendChild(e); } });
     });
-    clearInterval(timer); timer = setInterval(function () { if (!document.body.contains(box)) return clearInterval(timer); fill(box); }, 30000);
+    clearInterval(timer); timer = setInterval(function () { if (!document.body.contains(box)) return clearInterval(timer); fill(box); connFill(box, t); }, 30000);
   }
-  window.UKAG_LL = { trip: trip, links: LINKS };
+  window.UKAG_LL = { trip: trip, links: LINKS, next: nextTrains, connect: connect, crossings: crossings };
 })();

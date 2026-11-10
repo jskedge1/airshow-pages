@@ -732,6 +732,7 @@ h1 em{font-style:normal;color:var(--onui)}
 .railstrip .sleepers{position:absolute;left:0;right:0;top:80px;height:22px;background:repeating-linear-gradient(90deg,#4A3F36 0 9px,transparent 9px 26px)}
 .railstrip .rails{position:absolute;left:0;right:0;top:83px;height:16px;border-top:3px solid #B9BEC2;border-bottom:3px solid #B9BEC2}
 .railstrip .lane{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;font:800 12px/1 var(--f);letter-spacing:.3em;color:rgba(255,255,255,.75)}
+.rs-cls .rs-live{font-weight:700;color:#7CF0A6;margin-left:4px}.railstrip .lane{left:auto;right:16px;transform:none}@media(max-width:640px){.rs-cls{white-space:normal;max-width:calc(100% - 16px);line-height:1.25}.rs-st.tube b{padding-left:16px}.rs-st.tube b::before{left:2px;width:6px;height:6px;border-width:2px}.rs-st.tube b::after{left:1px;width:12px;height:2px}}.rs-st.tube b{box-shadow:inset 0 -3px 0 #0019A8;padding-left:22px;position:relative;max-width:150px}.rs-st.tube b::before{content:"";position:absolute;left:4px;top:50%;width:8px;height:8px;margin-top:-6px;border:2.5px solid #DC241F;border-radius:50%}.rs-st.tube b::after{content:"";position:absolute;left:2px;top:50%;width:17px;height:3px;margin-top:-1.5px;background:#0019A8}
 .rs-cls{position:absolute;left:16px;bottom:9px;z-index:4;display:flex;align-items:center;gap:8px;font:600 14px/1.2 var(--f);color:#fff;background:rgba(5,6,7,.55);padding:6px 10px;border-radius:4px;white-space:nowrap}.rs-cls span{color:#F4C21B}.rs-cls i{font-style:normal;color:#C9CED2}@media(max-width:640px){.rs-cls{left:8px;bottom:6px;font-size:12.5px;padding:4px 8px}}
 .railstrip .rtrain{position:absolute;top:52px;left:0;transform-origin:0 50%;width:232px;height:34px;will-change:transform;z-index:3}
 .rtrain .lv1{fill:var(--op1)}.rtrain .lv3{fill:var(--op3)}
@@ -2337,17 +2338,109 @@ var DATA={"stops":[["London Charing Cross",51.5075,-0.12369,"Charing Cross"],["L
     tr.style.transition = 'opacity .35s ease'; tr.style.opacity = '0';
     setTimeout(function(){ put(); tr.style.opacity = '1'; }, 380);
   }
+  /* train-classes, every station on the way: the strip also shows each station where you change across London (or another
+     city), with the Tube or Elizabeth line train, or a walk, between them, from the Getting across London steps (london-links.js). */
+  var TL_NAME = { bakerloo: 'Bakerloo', central: 'Central', circle: 'Circle', district: 'District', 'hammersmith-city': 'Hammersmith & City', jubilee: 'Jubilee', metropolitan: 'Metropolitan', northern: 'Northern', victoria: 'Victoria', 'waterloo-city': 'Waterloo & City', elizabeth: 'Elizabeth' };
+  var TL_COL = { bakerloo: '#B36305', central: '#E32017', circle: '#FFD300', district: '#00782A', 'hammersmith-city': '#F3A9BB', jubilee: '#A0A5A9', metropolitan: '#9B0056', northern: '#000000', victoria: '#0098D4', 'waterloo-city': '#95CDBA', elizabeth: '#6950A1' };
+  var TL_SUB = { circle: 1, district: 1, 'hammersmith-city': 1, metropolitan: 1 };
+  function tcSame(a, b){
+    function k(x){ return String(x || '').toLowerCase().replace(/^london /, '').replace(/ (underground|station)$/, ''); }
+    var A = k(a), B = k(b);
+    return A === B || (A === 'kings cross st pancras' && (B === 'kings cross' || B === 'st pancras')) || (B === 'kings cross st pancras' && (A === 'kings cross' || A === 'st pancras'));
+  }
+  function tcSegs(trip){
+    var s = trip.s, short = {}, legs = tcLegs(trip), pts = [], segs = [];
+    s.forEach(function(p){ short[p[1]] = p[5] || p[1]; });
+    var LL = (window.UKAG_LL && window.UKAG_LL.links) || {};
+    function add(name, seg, tube){ pts.push([0, 0, 0, 0, 0, short[name] || name.replace(/^London /, ''), tube ? 1 : 0, name]); if (seg) segs.push(seg); }
+    function way(a, b){
+      var st = LL[a + '|' + b];
+      if (!st) { add(b, { kind: 'walk', to: b }); return; }
+      st.forEach(function(x, i){
+        if (x.w) {
+          var dest = st[i + 1] && st[i + 1].fn ? st[i + 1].fn : b;
+          if (tcSame(dest, pts[pts.length - 1][7])) return;
+          add(tcSame(dest, b) ? b : dest, { kind: 'walk', to: tcSame(dest, b) ? b : dest, mins: x.m }, !tcSame(dest, b));
+        } else {
+          var to = tcSame(x.tn, b) ? b : x.tn;
+          add(to, { kind: 'tube', lines: x.l, to: to, mins: x.m, step: x }, !tcSame(to, b));
+        }
+      });
+      if (!tcSame(pts[pts.length - 1][7], b)) add(b, { kind: 'walk', to: b });
+    }
+    add(legs[0].walkedFrom || legs[0].from);
+    legs.forEach(function(l, i){
+      if (l.walkedFrom) way(l.walkedFrom, l.from);
+      add(l.to, { kind: 'train', leg: l });
+      if (l.walkedTo) way(l.to, l.walkedTo);
+    });
+    pts.forEach(function(p, i){ if (i && i < pts.length - 1) p[4] = CHG; });
+    return { pts: pts, segs: segs };
+  }
+  function tubeSvg(lines){
+    var ln = lines[0], col = TL_COL[ln] || '#0019A8', out = '', n = 4, gap = 3, cw = (296 - gap * (n - 1)) / n;
+    if (ln === 'elizabeth') return tcSvg({ op: 'Elizabeth line', from: '', to: '', stops: [] }).svg;
+    var sub = TL_SUB[ln], top = sub ? 7 : 13;
+    for (var i = 0; i < n; i++) {
+      var a = 2 + i * (cw + gap), b = a + cw, f = i === n - 1, r = i === 0;
+      var path = 'M' + a + ' 34 V' + (top + 6) + ' Q' + a + ' ' + top + ' ' + (a + (r ? 10 : 5)) + ' ' + top + ' H' + (b - (f ? 10 : 5)) + ' Q' + b + ' ' + top + ' ' + b + ' ' + (top + 6) + ' V34 Z';
+      out += '<path d="' + path + '" fill="#F3F4F5"/>';
+      if (f) out += '<path d="M' + (b - 7) + ' ' + (top + 1) + ' Q' + b + ' ' + top + ' ' + b + ' ' + (top + 6) + ' V34 H' + (b - 7) + ' Z" fill="#DC241F"/><rect x="' + (b - 6) + '" y="' + (top + 4) + '" width="5" height="6" fill="#23272B"/>';
+      if (r) out += '<path d="M' + (a + 7) + ' ' + (top + 1) + ' Q' + a + ' ' + top + ' ' + a + ' ' + (top + 6) + ' V34 H' + (a + 7) + ' Z" fill="#DC241F"/><rect x="' + (a + 1) + '" y="' + (top + 4) + '" width="5" height="6" fill="#23272B"/>';
+      var wa = a + (r ? 10 : 4), wb = b - (f ? 10 : 4);
+      out += '<rect x="' + wa + '" y="' + (top + 4) + '" width="' + (wb - wa) + '" height="7" fill="#23272B"/>';
+      out += '<rect x="' + wa + '" y="' + (top + 14) + '" width="' + (wb - wa) + '" height="2" fill="' + col + '"/>';
+      [.25, .68].forEach(function(fr){ var x = Math.round(wa + (wb - wa) * fr - 5); out += '<g class="door"><rect x="' + x + '" y="' + (top + 3) + '" width="10" height="' + (31 - top) + '" fill="#3A4046"/><rect class="lf" x="' + x + '" y="' + (top + 3) + '" width="5" height="' + (31 - top) + '" fill="#DC241F"/><rect class="rt" x="' + (x + 5) + '" y="' + (top + 3) + '" width="5" height="' + (31 - top) + '" fill="#DC241F"/></g>'; });
+      out += '<rect x="' + a + '" y="31" width="' + cw + '" height="3" fill="#0019A8"/>';
+      out += '<g fill="#1D2125"><circle cx="' + (a + 10) + '" cy="38" r="2.8"/><circle cx="' + (a + 17) + '" cy="38" r="2.8"/><circle cx="' + (b - 17) + '" cy="38" r="2.8"/><circle cx="' + (b - 10) + '" cy="38" r="2.8"/></g>';
+    }
+    out += '<rect x="2" y="34" width="296" height="2" fill="#3A3F44"/><rect x="292" y="' + (top + 18) + '" width="3" height="2" fill="#fff"/><rect x="5" y="' + (top + 18) + '" width="3" height="2" fill="#D74949"/>';
+    return '<g>' + out + '</g>';
+  }
+  function walkSvg(){
+    function man(x, bag){ return '<g transform="translate(' + x + ' 0)" fill="#fff"><circle cx="8" cy="9" r="4"/><path d="M5 14 H11 L12 26 H9 L8 20 L7 26 H4 Z"/><path d="M5 26 L2 37 H5 L8 28 Z M9 26 L13 37 H16 L11 26 Z"/><path d="M5 15 L1 23 L3 24 L6 18 Z M11 15 L15 22 L13 23 L10 18 Z"/>' + (bag ? '<rect x="14" y="22" width="9" height="12" rx="1.5" fill="#F4C21B"/><rect x="17" y="19" width="3" height="3" fill="none" stroke="#F4C21B" stroke-width="1.2"/><circle cx="16" cy="35" r="1.4"/><circle cx="21" cy="35" r="1.4"/>' : '') + '</g>'; }
+    return '<g class="walkers">' + man(250, true) + man(276, false) + '</g>';
+  }
+  function tcSeg(seg){
+    if (seg.kind === 'train') return tcSvg(seg.leg);
+    if (seg.kind === 'tube') {
+      var ln = seg.lines || [], el = ln[0] === 'elizabeth';
+      var names = ln.map(function(x){ return TL_NAME[x] || x; });
+      var lab = el ? 'Class 345, Elizabeth line' : (names.length > 1 ? names.slice(0, -1).join(', ') + ' or ' + names[names.length - 1] : names[0]) + ' line';
+      return { svg: tubeSvg(ln), label: lab + ' to ' + String(seg.to).replace(/^London /, '') + (seg.mins ? ', about ' + seg.mins + ' min' : '') };
+    }
+    return { svg: walkSvg(), label: 'Walk to ' + String(seg.to).replace(/^London /, '') + (seg.mins ? ', about ' + seg.mins + ' min' : '') };
+  }
+  function tcDrawSeg(tr, segs, k, swap){
+    var seg = segs[Math.min(k, segs.length - 1)], t = tcSeg(seg), lab = $('rsCls');
+    var trains = segs.filter(function(x){ return x.kind === 'train'; }).length;
+    function put(){
+      tr.innerHTML = t.svg; if (!lab) return;
+      lab.innerHTML = '<span>' + (seg.kind === 'walk' ? 'On foot' : seg.kind === 'tube' ? 'Across London' : 'Your train') + '</span>' + esc(t.label) + (segs.length > 1 ? '<i>' + (Math.min(k, segs.length - 1) + 1) + ' of ' + segs.length + '</i>' : '');
+      /* the Tube and Elizabeth line: the next trains live from TfL (london-links.js) */
+      if (seg.kind === 'tube' && seg.step && window.UKAG_LL && window.UKAG_LL.next) window.UKAG_LL.next(seg.step, function(ok, got){
+        if (!ok || !got.length || !lab.isConnected) return;
+        var m = got[0].m, b = document.createElement('b'); b.className = 'rs-live';
+        b.textContent = 'Live: ' + (m < 1 ? 'next train due now' : 'next in ' + m + ' min');
+        var old = lab.querySelector('.rs-live'); if (old) old.remove(); lab.appendChild(b);
+      });
+    }
+    if (!swap) { put(); return; }
+    tr.style.transition = 'opacity .35s ease'; tr.style.opacity = '0';
+    setTimeout(function(){ put(); tr.style.opacity = '1'; }, 380);
+  }
   function railRun(resized){
     if (!$('rsStations')) return;
     var strip = $('railstrip'), trip = DIR().trips[idx], s = trip.s;
-    var stops = [s[0]].concat(s.filter(function(p){ return p[4] & CHG; })).concat([s[s.length - 1]]);
+    var SEGS = tcSegs(trip), stops = SEGS.pts;
     var W = strip.clientWidth, edge = W < 560 ? 44 : 72, x0 = edge, x1 = W - edge, up = dir === 1;
     /* stations always read left to right with Headcorn on the right; heading home the train runs right to left */
     var shown = up ? stops.slice().reverse() : stops;
     var xs = shown.map(function(p, k){ return x0 + (x1 - x0) * k / (shown.length - 1); });
     $('lanelbl').textContent = up ? 'UP LINE' : 'DOWN LINE';
+    var SP = shown.length > 1 ? (x1 - x0) / (shown.length - 1) : 999;
     $('rsStations').innerHTML = shown.map(function(p, k){
-      return '<div class="rs-st' + (k === shown.length - 1 ? ' end' : '') + '" style="left:' + xs[k] + 'px"><b>' + p[5] + '</b>' + ((p[4] & CHG) ? '<em>Change</em>' : '') + '<i></i></div>';
+      return '<div class="rs-st' + (k === shown.length - 1 ? ' end' : '') + (p[6] ? ' tube' : '') + '" style="left:' + xs[k] + 'px' + (SP < 100 ? ';width:' + (SP - 4) + 'px;margin-left:-' + (SP - 4) / 2 + 'px' : '') + '"><b' + (SP < 100 ? ' style="max-width:100%"' : '') + '>' + p[5] + '</b>' + ((p[4] & CHG) && SP >= 70 ? '<em>Change</em>' : '') + '<i></i></div>';
     }).join('');
     /* signals: one at the end of the first platform, four along the line, one at the Headcorn end of the platform there */
     var half = W < 560 ? 39 : 55;
@@ -2374,7 +2467,7 @@ var DATA={"stops":[["London Charing Cross",51.5075,-0.12369,"Charing Cross"],["L
     /* where the front of the train stops at each platform, in the order it gets there */
     var stopX = (up ? xs.slice().reverse() : xs).map(function(x){ return up ? x - half + 4 : x + half - 4; });
     var startFront = stopX[0], stopsAt = stopX.slice(1);
-    tcDraw(tr, TCL, reduce ? TCL.length - 1 : 0);
+    tcDrawSeg(tr, SEGS.segs, reduce ? SEGS.segs.length - 1 : 0);
     if (reduce || !railGo) { starterClear = !!reduce; place(reduce ? stopsAt[stopsAt.length - 1] : startFront); doors(reduce ? 'end' : null, reduce ? stopsAt[stopsAt.length - 1] : null); return; }
     var steps = [], speed = Math.max(70, W / 16);
     function wait(ms, fn){ steps.push({ d: ms, fn: fn }); }
@@ -2385,8 +2478,12 @@ var DATA={"stops":[["London Charing Cross",51.5075,-0.12369,"Charing Cross"],["L
     var from = startFront;
     stopsAt.forEach(function(to, k){
       run(from, to); from = to;
-      if (k < stopsAt.length - 1) { wait(1600, function(){ doors('open', to); }); wait(900, function(){ tcDraw(tr, TCL, k + 1, true); }); wait(900, function(){ doors('closing', to); }); wait(400, function(){ doors(null); }); }
-      else wait(1, function(){ doors('end', to); });
+      var walked = SEGS.segs[k] && SEGS.segs[k].kind === 'walk', walkNext = SEGS.segs[k + 1] && SEGS.segs[k + 1].kind === 'walk';
+      if (k < stopsAt.length - 1) {
+        if (walked) { wait(900, function(){ tcDrawSeg(tr, SEGS.segs, k + 1, true); }); wait(walkNext ? 400 : 1200, function(){ if (!walkNext) doors('open', to); }); if (!walkNext) { wait(900, function(){ doors('closing', to); }); wait(400, function(){ doors(null); }); } }
+        else { wait(1600, function(){ doors('open', to); }); wait(900, function(){ doors(null); tcDrawSeg(tr, SEGS.segs, k + 1, true); }); if (!walkNext) { wait(900, function(){ doors('open', to); }); wait(900, function(){ doors('closing', to); }); wait(400, function(){ doors(null); }); } }
+      }
+      else wait(1, function(){ if (walked) doors(null); else doors('end', to); });
     });
     var si = 0, t0 = null, fired = false;
     place(startFront); doors(null);
