@@ -96,9 +96,7 @@ def section(s):
         '<div class="sg rise" id="sg">'
         '<div class="sg-top"><span>%(show)s</span><em>by The Big Guide to UK Airshows</em></div>'
         '<div class="sg-red"><h2>Station guide</h2><span>%(name)s</span></div>'
-        '<div class="sg-plat" aria-hidden="true"><div class="sg-board">%(board)s<i></i></div><span class="sg-tag">%(tag)s</span>'
-        '<div class="sg-train"><svg viewBox="-40 180 175 125"><g id="sgnose"></g></svg></div>'
-        '<div class="sg-yl"></div><div class="sg-pf"></div></div>'
+        # platform picture removed 10 Nov 2026 (Jack's comment)
         '<div class="sg-body">'
         '<div class="sg-cards">'
         '<div class="sg-card"><h3>%(name)s</h3><p>%(lead)s</p><div class="sg-rows">%(rows)s</div></div>'
