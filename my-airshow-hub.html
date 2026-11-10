@@ -1109,6 +1109,23 @@ body.o2-shake #app{animation:o2shake .5s linear}
 }
 @media (prefers-reduced-motion:reduce){.o2 *,.o2 *::before,.o2 *::after,.o2-fly *,.o2-boom *{animation:none!important;transition:none!important}.o2-p{opacity:1}}
 
+/* since your last visit strip (10 Nov 2026) */
+.o2-since[hidden]{display:none!important}
+.o2-since .ph small{display:flex;align-items:center;gap:10px}
+.o2-since .sx{background:none;border:1px solid var(--o2l);color:var(--o2m);font-family:var(--o2mono);font-size:13px;padding:3px 9px;cursor:pointer}
+.o2-since .sx:hover{color:#fff;border-color:var(--o2c)}
+.o2-since .pb{padding:14px 16px 16px}
+.o2-since .lead{margin:0 0 12px;color:#E8F1F6;font-size:16px;line-height:1.45}
+.o2-since .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.o2-since .sc{display:flex;gap:12px;align-items:flex-start;text-align:left;background:rgba(5,13,20,.5);border:1px solid var(--o2l2);border-left:3px solid var(--o2c);color:#E8F1F6;padding:10px 12px;font:inherit;cursor:pointer;animation:o2in .5s var(--o2e) both;transition:border-color .25s,transform .25s var(--o2e)}
+.o2-since .sc:hover{border-color:var(--o2c);transform:translateY(-2px)}
+.o2-since .sc i{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;background:#32B4AF;color:#061019}
+.o2-since .sc b{display:block;font-size:15px;line-height:1.3;color:#fff}
+.o2-since .sc span{display:block;font-size:14px;line-height:1.35;color:var(--o2m);margin-top:2px}
+.o2-since .sc.pu{border-left-color:#8E73C9}.o2-since .sc.pu i{background:#8E73C9;color:#fff}
+.o2-since .sc.re{border-left-color:#D74949}.o2-since .sc.re i{background:#D74949;color:#fff}
+.o2-since .sc.go{border-left-color:#F2B233}.o2-since .sc.go i{background:#F2B233}
+.o2-since.quiet .pb{padding:12px 16px}.o2-since.quiet .lead{margin:0;color:var(--o2m);font-size:15px}
 .o2-mut{color:#A9BDCB;margin:0;font-size:15px;line-height:1.5}
 </style>
 <style id="hud-head">
@@ -1832,6 +1849,10 @@ body.o2-shake #app{animation:o2shake .5s linear}
       </section>
 
       <div class="o2-grid">
+        <section class="o2-p c12 o2-since" id="o2Since" style="--d:0s" aria-labelledby="o2SinceT" hidden>
+          <div class="ph"><h3 id="o2SinceT">Since your last visit</h3><small><span id="o2SinceAgo"></span><button type="button" class="sx" id="o2SinceX" aria-label="Hide what's new since your last visit">✕</button></small></div>
+          <div class="pb"><p class="lead" id="o2SinceLead"></p><div class="chips" id="o2SinceList"></div></div>
+        </section>
         <section class="o2-p c7 q1" style="--d:.05s" aria-labelledby="o2PassT">
           <div class="o2-pass">
             <div class="main">
@@ -2719,6 +2740,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
       $("loading").hidden = true;
       if (!hub.member) { hubSummary(); load.helloDone = false; document.body.classList.remove("is-member"); $("guest").hidden = false; $("app").hidden = true; return; }
       $("guest").hidden = true; $("app").hidden = false; $("lgOut").hidden = true;
+      sinceCheck(hub);
       if (!trip()) S.tripId = hub.trips[0] ? hub.trips[0].id : null;
       renderAll();
       if (window.ukagWB && Date.now() - window.ukagWB < 600000) { window.ukagWB = 0; welcomeBack(hub.member.name); }
@@ -3964,6 +3986,133 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
     var i = 0; setTimeout(function step() { node.textContent = text.slice(0, ++i); if (i < text.length) setTimeout(step, 40); else if (cb) cb(); }, delay);
   }
 
+  /* since your last visit (10 Nov 2026): the hub keeps a small note of what it showed last time, in this browser,
+     and on the next visit lists what has changed. Worked out once per page load, so refreshes don't wipe it. */
+  var SINCE = { done: false, list: [], ago: "", gap: 0, hidden: false };
+  function sinceKey(hub) { return "ukagSince-" + (hub.member.id || hub.member.name || "me"); }
+  function upKey(u) { return u.id || ((u.created || "") + "|" + (u.heading || "")); }
+  function sinceSnap(hub) {
+    var mine = {}; (hub.trips || []).forEach(function (t) { mine[t.showSlug] = 1; });
+    var must = {}; (hub.mustSee || []).forEach(function (m) { must[m.id || m.aircraftId] = m.status || "Confirmed"; });
+    var shows = {}; (hub.shows || []).forEach(function (s) { shows[s.slug] = s.start || ""; });
+    var p = hub.photoOfWeek;
+    return {
+      t: Date.now(),
+      ups: (hub.updates || []).slice(0, 300).map(upKey),
+      lu: (hub.lineup || []).filter(function (a) { return mine[a.showSlug]; }).map(function (a) { return a.id; }),
+      must: must, shows: shows,
+      potw: p && p.image ? (p.id || p.image) : ""
+    };
+  }
+  function sinceShort(slug, fallback) {
+    var s = (S.hub.shows || []).find(function (z) { return z.slug === slug; });
+    return s ? (s.shortName || s.name) : (fallback || "your show");
+  }
+  function sinceNames(list) {
+    var n = list.slice(0, 2).join(" and ");
+    return list.length > 2 ? list.slice(0, 2).join(", ") + " and " + (list.length - 2) + " more" : n;
+  }
+  function sinceCheck(hub) {
+    var key = sinceKey(hub), prev = null;
+    try { prev = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) {}
+    var now = sinceSnap(hub);
+    try { localStorage.setItem(key, JSON.stringify(now)); } catch (e) {}
+    if (SINCE.done) return;
+    SINCE.done = true;
+    if (!prev || !prev.t) return;
+    SINCE.gap = Date.now() - prev.t;
+    SINCE.ago = ago(new Date(prev.t).toISOString());
+    var list = [], seenUp = {}, seenLu = {}, oldMust = prev.must || {}, oldShows = prev.shows || {};
+    (prev.ups || []).forEach(function (k) { seenUp[k] = 1; });
+    (prev.lu || []).forEach(function (k) { seenLu[k] = 1; });
+    var fresh = (hub.updates || []).filter(function (u) {
+      if (seenUp[upKey(u)]) return false;
+      return !u.created || new Date(u.created).getTime() > prev.t - 864e5;
+    });
+
+    /* new acts at the shows on your trips, grouped by show */
+    if (prev.lu) {
+      var mine = {}; (hub.trips || []).forEach(function (t) { mine[t.showSlug] = t; });
+      var byShow = {};
+      (hub.lineup || []).forEach(function (a) {
+        if (!mine[a.showSlug] || seenLu[a.id] || /cancel|withdrawn|no longer/i.test(a.status || "")) return;
+        (byShow[a.showSlug] = byShow[a.showSlug] || []).push(a.name);
+      });
+      Object.keys(byShow).forEach(function (slug) {
+        var n = byShow[slug];
+        list.push({ tone: "", icon: "+", go: "trip", trip: mine[slug].id,
+          title: (n.length === 1 ? "1 new act" : n.length + " new acts") + " for " + sinceShort(slug, mine[slug].showName),
+          sub: sinceNames(n) });
+      });
+    }
+
+    /* must see aircraft whose status changed */
+    (hub.mustSee || []).forEach(function (m) {
+      var was = oldMust[m.id || m.aircraftId], is = m.status || "Confirmed";
+      if (was === undefined || was === is) return;
+      var bad = /cancel|withdrawn|no longer/i.test(is);
+      list.push({ tone: bad ? "re" : "go", icon: bad ? "×" : "★", go: "trips",
+        title: m.name + " is now " + is.toLowerCase(), sub: "On your must see list for " + sinceShort(m.showSlug, m.showName) });
+    });
+
+    /* cancellations, news and social from the updates feed */
+    var cancels = fresh.filter(function (u) { return u.kind === "lineup" && /no longer|cancel/i.test(u.heading || ""); });
+    if (cancels.length) list.push({ tone: "re", icon: "×", go: "updates",
+      title: cancels.length === 1 ? "1 line-up change" : cancels.length + " line-up changes", sub: cancels[0].heading });
+    var news = fresh.filter(function (u) { return u.kind === "news"; });
+    if (news.length) list.push({ tone: "pu", icon: "!", go: "updates",
+      title: news.length === 1 ? "1 piece of show news" : news.length + " pieces of show news", sub: news[0].heading });
+    var social = fresh.filter(function (u) { return u.kind === "social"; });
+    if (social.length) {
+      var likes = social.filter(function (u) { return !/comment/i.test(u.heading || ""); }).length, comments = social.length - likes;
+      var bits = []; if (likes) bits.push(likes === 1 ? "1 like" : likes + " likes"); if (comments) bits.push(comments === 1 ? "1 comment" : comments + " comments");
+      list.push({ tone: "", icon: "♥", go: "updates", title: bits.join(" and ") + " on your posts", sub: social[0].heading });
+    }
+
+    /* show dates announced, and shows added to the guide */
+    var dated = [], added = [];
+    (hub.shows || []).forEach(function (s) {
+      if (!(s.slug in oldShows)) { if (prev.shows) added.push(s.shortName || s.name); return; }
+      if (!oldShows[s.slug] && s.start) dated.push(s.shortName || s.name);
+    });
+    if (dated.length) list.push({ tone: "go", icon: "◷", go: "trips", title: "Dates announced", sub: sinceNames(dated) });
+    if (added.length) list.push({ tone: "pu", icon: "+", go: "trips", title: added.length === 1 ? "New show in the guide" : added.length + " new shows in the guide", sub: sinceNames(added) });
+
+    /* a new photo of the week */
+    var p = hub.photoOfWeek, pk = p && p.image ? (p.id || p.image) : "";
+    if (pk && pk !== prev.potw) list.push({ tone: "pu", icon: "◉", go: "community",
+      title: "New Photo of the Week", sub: (p.title || "See the most liked photo") + (p.authorName ? " by " + p.authorName : "") });
+
+    SINCE.list = list;
+  }
+  function o2Since() {
+    var box = $("o2Since"); if (!box) return;
+    var list = SINCE.list, next = o2Next();
+    var quiet = !list.length;
+    if (SINCE.hidden || !SINCE.ago || (quiet && SINCE.gap < 12 * 36e5)) { box.hidden = true; return; }
+    box.hidden = false; box.classList.add("on"); box.classList.toggle("quiet", quiet);
+    $("o2SinceAgo").textContent = ("Last here " + SINCE.ago).toUpperCase();
+    var d = next ? o2Days(next.start) : 0, cd = next && d > 0 ? (o2ShowFor(next).shortName || next.showName) + " is " + (d === 1 ? "tomorrow" : d + " days away") + "." : "";
+    $("o2SinceLead").textContent = quiet
+      ? "All quiet since your last visit. I check the official show websites every day, and anything new will be waiting here. " + cd
+      : "Here's what changed while you were away. " + cd;
+    var wrap = clear($("o2SinceList"));
+    list.forEach(function (c, i) {
+      var b = el("button", "sc" + (c.tone ? " " + c.tone : "")); b.type = "button"; b.style.animationDelay = (i * 0.07) + "s";
+      var ic = el("i", "", c.icon); ic.setAttribute("aria-hidden", "true"); b.appendChild(ic);
+      var t = el("div"); t.appendChild(el("b", "", c.title)); if (c.sub) t.appendChild(el("span", "", c.sub)); b.appendChild(t);
+      b.onclick = function () {
+        if (c.go === "trip") { S.tripId = c.trip; renderAll(); showPage("trips"); }
+        else showPage(c.go);
+      };
+      wrap.appendChild(b);
+    });
+  }
+  document.addEventListener("click", function (e) {
+    if (e.target && e.target.id === "o2SinceX") { SINCE.hidden = true; $("o2Since").hidden = true; }
+  });
+
+
   function renderOverview() {
     if (!S.hub || !S.hub.member || !$("o2")) return;
     var h = S.hub, next = o2Next(), home = o2Home();
@@ -4000,6 +4149,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
     if (!today && open) bits.push((open === 1 ? "One check is" : open + " checks are") + " still to sort.");
     $("o2Brief").textContent = bits.join(" ");
 
+    try { o2Since(); } catch (e) {}
     o2Pass(next, home, today);
     o2Ready(next);
     o2Radio();
