@@ -236,6 +236,9 @@ label.f{display:grid;gap:4px;font-weight:600;font-size:14px;color:var(--navy)}
 .person:first-child{border-top:0}
 .av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--white);font-weight:800;flex:none}
 .person span{font-size:14px;color:var(--grey);display:block}
+.person .pbtns{display:flex;gap:6px;align-items:center}
+.find-more{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;margin:12px 0 0;font-size:15px}
+.find-more span{color:var(--grey);display:inline}
 .role{font-style:normal;font-size:12px;font-weight:700;padding:3px 8px;background:var(--pale);color:var(--teal-dk);white-space:nowrap}
 .role.maybe{background:var(--lilac);color:var(--purple)}
 .bring{display:grid;gap:8px}
@@ -2470,6 +2473,7 @@ body.o2-shake #app{animation:o2shake .5s linear}
             <div class="pbody" style="border-top:1px solid var(--line)">
               <form class="addrow" id="findForm" style="margin-top:0"><input class="input" id="findIn" maxlength="40" placeholder="Find a member by name"><button class="btn small" type="submit">Search</button></form>
               <div class="people" id="findResults" style="margin-top:8px"></div>
+              <p class="find-more"><button type="button" class="link" data-go="members">See everyone on the Members page</button><span>or</span><button type="button" class="link" data-go="messages">open my messages</button></p>
             </div>
           </section>
         </div>
@@ -3192,7 +3196,7 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
   function upIcon(u) {
     if (u.kind === "lineup") return /no longer|cancel/i.test(u.heading) ? ["re", "×"] : ["pu", "+"];
     if (u.kind === "news") return ["re", "!"];
-    if (u.kind === "social") return /comment/i.test(u.heading) ? ["", "✎"] : ["", "♥"];
+    if (u.kind === "social") return /sent you a message/i.test(u.heading) ? ["pu", "✉"] : /comment/i.test(u.heading) ? ["", "✎"] : ["", "♥"];
     return ["nv", "i"];
   }
   function upRow(u) {
@@ -3200,7 +3204,12 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
     r.appendChild(el("div", "ic " + ic[0], ic[1]));
     var d = el("div"); var p = el("p"); p.appendChild(el("b", "", u.heading)); if (u.body) p.appendChild(document.createTextNode(" " + u.body)); d.appendChild(p);
     var sm = el("small", "", ago(u.created)); d.appendChild(sm);
-    if (u.link) { var a = el("a", "", " Read more"); a.href = u.link; a.target = "_blank"; a.rel = "noopener"; sm.appendChild(a); }
+    if (u.link && u.link.charAt(0) === "/") {
+      // Links to pages on this site open in the same tab, through the page code.
+      var o = el("button", "link", /sent you a message/i.test(u.heading) ? "Open the chat" : "Open"); o.type = "button"; o.style.marginLeft = "8px";
+      o.onclick = function () { call("go", { path: u.link }).catch(oops); };
+      sm.appendChild(o);
+    } else if (u.link) { var a = el("a", "", " Read more"); a.href = u.link; a.target = "_blank"; a.rel = "noopener"; sm.appendChild(a); }
     r.appendChild(d); return r;
   }
   function renderMiniFeed() {
@@ -3469,7 +3478,11 @@ var SHOWPIC={"riat":"https://jskedge1.github.io/airshow-pages/hub-img/c4992b614e
   function personRow(p, btnText, onBtn) {
     var r = el("div", "person"); var av = el("div", "av", initials(p.name)); av.style.background = p.colour; r.appendChild(av);
     var d = el("div"); d.appendChild(el("b", "", p.name)); d.appendChild(el("span", "", p.area || (p.into && p.into.slice(0, 2).join(", ")) || "Community member")); r.appendChild(d);
-    var b = el("button", "btn small" + (p.following ? " outline" : ""), btnText); b.onclick = function () { onBtn(b); }; r.appendChild(b);
+    var btns = el("div", "pbtns");
+    var m = el("button", "btn small outline", "Message"); m.type = "button"; m.setAttribute("aria-label", "Message " + p.name);
+    m.onclick = function () { call("go", { page: "chat", memberId: p.memberId }).catch(oops); };
+    var b = el("button", "btn small" + (p.following ? " outline" : ""), btnText); b.onclick = function () { onBtn(b); };
+    btns.appendChild(m); btns.appendChild(b); r.appendChild(btns);
     return r;
   }
   function renderFollowing() {
