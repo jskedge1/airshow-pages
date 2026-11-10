@@ -1978,39 +1978,8 @@ var DATA = {
   "rail": [
    {
     "title": "Getting there, Thursday and Friday",
-    "rows": [
-     [
-      "08:16",
-      "London Liverpool Street to Clacton",
-      "Greater Anglia, arrives 09:44"
-     ],
-     [
-      "09:18",
-      "London Liverpool Street to Clacton",
-      "Greater Anglia, arrives 10:44"
-     ],
-     [
-      "10:18",
-      "London Liverpool Street to Clacton",
-      "Greater Anglia, arrives 11:44"
-     ],
-     [
-      "11:18",
-      "London Liverpool Street to Clacton",
-      "Greater Anglia, arrives 12:44"
-     ],
-     [
-      "10:15",
-      "Colchester to Clacton",
-      "Same train, arrives 10:44"
-     ],
-     [
-      "Hourly",
-      "Direct from London",
-      "About 1 hour 26 minutes, 29 minutes from Colchester"
-     ]
-    ],
-    "note": "From the National Rail timetable valid 17 May to 12 December 2026 (Monday to Friday). The May 2027 timetable that covers the show is due out around March 2027. Greater Anglia usually adds extra trains on airshow days. Flying starts at about 13:45 on Thursday and 13:00 on Friday.",
+    "rows": [["07:16", "London Liverpool Street to Clacton", "Greater Anglia, platform 12, arrives 08:44, direct"], ["08:16", "London Liverpool Street to Clacton", "Greater Anglia, platform 13, arrives 09:44, direct"], ["09:18", "London Liverpool Street to Clacton", "Greater Anglia, platform 8, arrives 10:44, direct"], ["10:18", "London Liverpool Street to Clacton", "Greater Anglia, platform 10, arrives 11:44, direct"], ["11:18", "London Liverpool Street to Clacton", "Greater Anglia, platform 13, arrives 12:44, direct"], ["12:18", "London Liverpool Street to Clacton", "Greater Anglia, platform 14, arrives 13:44, direct"], ["13:18", "London Liverpool Street to Clacton", "Greater Anglia, platform 13, arrives 14:44, direct"]],
+    "note": "These are the same times as my Train to Clacton page, from London Liverpool Street, and the platforms are the usual ones. When a train shows on the live departure boards, usually a couple of hours before it leaves, its live time appears next to it. These are this winter’s times, so I would check again nearer the show, as Greater Anglia usually adds extra trains on airshow days.",
     "source": [
      "Network Rail timetable, Table 006",
      "https://www.networkrail.co.uk/industry-and-commercial/the-timetable/electronic-national-rail-timetable/"
@@ -2018,44 +1987,8 @@ var DATA = {
    },
    {
     "title": "Trains home, Thursday and Friday",
-    "rows": [
-     [
-      "17:04",
-      "Clacton to London Liverpool Street",
-      "Greater Anglia, Colchester 17:32, arrives 18:30"
-     ],
-     [
-      "18:05",
-      "Clacton to London Liverpool Street",
-      "Colchester 18:33, arrives 19:31"
-     ],
-     [
-      "19:05",
-      "Clacton to London Liverpool Street",
-      "Colchester 19:33, arrives 20:31"
-     ],
-     [
-      "Then",
-      "Hourly",
-      "At 5 minutes past the hour"
-     ],
-     [
-      "21:05",
-      "Clacton to London Liverpool Street",
-      "Arrives 22:31, leaves before the twilight display ends"
-     ],
-     [
-      "22:05",
-      "Last direct train to London",
-      "Colchester 22:33, arrives Liverpool Street 23:31"
-     ],
-     [
-      "23:05",
-      "Last train to Colchester",
-      "Arrives 23:38, no train on to London after it"
-     ]
-    ],
-    "note": "From the National Rail timetable valid 17 May to 12 December 2026. On the Thursday the twilight display ran until about 21:15 in 2025, so the 22:05 is the last train to London. Extra trains are usually added on airshow days.",
+    "rows": [["16:05", "Clacton to London Liverpool Street", "Greater Anglia, platform 2, back in London at 17:32"], ["17:04", "Clacton to London Liverpool Street", "Greater Anglia, platform 2, back in London at 18:30"], ["18:05", "Clacton to London Liverpool Street", "Greater Anglia, platform 2, back in London at 19:31"], ["19:05", "Clacton to London Liverpool Street", "Greater Anglia, platform 3, back in London at 20:31"], ["20:05", "Clacton to London Liverpool Street", "Greater Anglia, platform 4, back in London at 21:31"], ["21:05", "Clacton to London Liverpool Street", "Greater Anglia, platform 2, back in London at 22:31"], ["22:05", "Clacton to London Liverpool Street", "Greater Anglia, platform 2, back in London at 23:31"]],
+    "note": "The same times as my Train to Clacton page, leaving Clacton-on-Sea. On the Thursday I would check the last train before the twilight display starts. When a train shows on the live departure boards its live time appears next to it, and the times can change, so check on the day.",
     "source": [
      "Network Rail timetable, Table 006",
      "https://www.networkrail.co.uk/industry-and-commercial/the-timetable/electronic-national-rail-timetable/"

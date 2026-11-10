@@ -145,8 +145,8 @@
         cx.fillStyle = '#fff'; cx.shadowColor = 'rgba(0,0,0,.45)'; cx.shadowBlur = 18; cx.font = '700 96px Caveat, cursive'; wrap(state.msg, 64, 140, W * 0.62, 92); cx.shadowBlur = 0;
         var sx = W - 300, sy = 50; cx.fillStyle = '#6950A1'; cx.fillRect(sx, sy, 240, 280);
         cx.strokeStyle = '#fff'; cx.lineWidth = 6; cx.setLineDash([14, 10]); cx.strokeRect(sx + 14, sy + 14, 212, 252); cx.setLineDash([]);
-        cx.save(); cx.translate(sx + 60, sy + 60); cx.scale(5, 5); cx.fillStyle = '#fff'; cx.fill(JET); cx.restore();
-        cx.fillStyle = '#fff'; cx.textAlign = 'center'; cx.font = '800 64px "Barlow Condensed", sans-serif'; cx.fillText(P.year || '2027', sx + 120, sy + 230); cx.textAlign = 'left';
+        
+        cx.fillStyle = '#fff'; cx.textAlign = 'center'; cx.font = '800 64px "Barlow Condensed", sans-serif'; cx.fillText(P.year || '2027', sx + 120, sy + 162); cx.textAlign = 'left';
         cx.fillStyle = 'rgba(14,33,49,.85)'; cx.fillRect(0, H - 110, W, 110); cx.fillStyle = '#32B4AF'; cx.fillRect(0, H - 110, W, 6);
         cx.fillStyle = '#fff'; cx.font = '600 34px Barlow, sans-serif'; cx.fillText(sub || P.place, 50, H - 44);
         logo(W - 470, H - 90, 4);

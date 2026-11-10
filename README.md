@@ -579,3 +579,6 @@ were added to shows without one.
   boxes are fixed (3100px; the A to Z box is 4390px) and scroll inside.
 - The show pages link to them from guide notes. show-extras.js (v=4) hides those notes while links.js has the guide
   at live:false, so nobody lands on a 404. After the November publish, set the six to live:true in links.js and the notes appear.
+
+## Feature page publish, 10 Nov 2026
+The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, Eastbourne, Wales, Shuttleworth, Little Gransden, Southport, Blackpool, Ayr, Headcorn; RIAT unchanged) now carry the design work done through the preview artifacts: Box Tab 4 and clean info boxes, solid colour where to watch tabs, one line section menu with arrows, operator coloured train boxes and facts, the shuttle bus design, the Clacton header text, Keep reading hover with red READ, Good to know hover, checklist groups on the Cosford plan, the detailed crowd line view and aerial map, and the "Coming by train?" banner at the top of Getting There. The added styles and scripts sit at the end of each page. Images that were only in the previews are saved as `camping-layout/img/inl-*.{webp,jpg}`. The page sources from before this publish are kept in `backups/feature-src-2026-11-10/`.
