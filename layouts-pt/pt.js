@@ -124,8 +124,22 @@
     var a = e.target.closest('a[href^="#"]'); if (a) { var el; try { el = document.getElementById(a.getAttribute('href').slice(1)); } catch (x) {} var g = el && groupOf(el); if (g) { e.preventDefault(); show(g.i, el); } }
   });
   /* follow the picked show */
-  var pend = 0; function refresh(){ clearTimeout(pend); pend = setTimeout(function(){ fillStops(); screen(); }, 60); }
-  ['rTitle', 'wim', 'lines'].forEach(function(i){ var e = $(i); if (e) new MutationObserver(refresh).observe(e, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-pressed'] }); });
+  function planner(){
+    var b = document.querySelector('#sec-train .feature.f-train .tr-box'); if (!b || b.getAttribute('data-px')) return;
+    var a = b.querySelector('a.tr-btn'), p = b.querySelector('p'), h = b.querySelector('h4'); if (!a || !h) return;
+    var m = p && p.textContent.match(/takes to ([^.]+)\./), stn = m ? m[1] : 'the show', sm = a.querySelector('small');
+    b.setAttribute('data-px', '1'); b.classList.add('px-plan');
+    h.textContent = 'Plan your train to ' + stn;
+    var top = document.createElement('div'); top.className = 'px-plan-top';
+    top.innerHTML = '<span class="px-plan-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#13293C"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#F2B02E"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#fff"/><path d="M7 15l-2 3M13 15l2 3" stroke="#13293C" stroke-width="1.6"/></svg></span><b>Train planner</b><em>' + esc(sm ? sm.textContent : '') + '</em>';
+    b.insertBefore(top, b.firstChild);
+    var st = document.createElement('ol'); st.className = 'px-plan-steps';
+    st.innerHTML = [['Pick your station', 'Where you are starting from'], ['Choose your train', 'Every train, with live times'], ['See your changes', 'Platforms and where to change'], ['Check the way home', 'Last trains back after the show']].map(function(x, i){ return '<li><i>' + (i + 1) + '</i><span><b>' + x[0] + '</b>' + x[1] + '</span></li>'; }).join('');
+    if (p) { p.textContent = 'These times are from the winter timetable, and the summer one will be different, so please check before you travel.'; b.insertBefore(st, p); } else b.insertBefore(st, a);
+    a.innerHTML = '<span class="px-plan-go">Open the train planner<small>Start with your station</small></span><i aria-hidden="true">\u2192</i>';
+  }
+  var pend = 0; function refresh(){ clearTimeout(pend); pend = setTimeout(function(){ fillStops(); screen(); planner(); }, 60); }
+  ['rTitle', 'wim', 'lines', 'results'].forEach(function(i){ var e = $(i); if (e) new MutationObserver(refresh).observe(e, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-pressed'] }); });
   [].forEach.call(document.querySelectorAll('#faq details'), function(x){ x.open = true; });
   var fq = $('faq'); if (fq) new MutationObserver(function(){ [].forEach.call(fq.querySelectorAll('details:not([open])'), function(x){ x.open = true; }); }).observe(fq, { childList: true, subtree: true, attributes: true, attributeFilter: ['open'] });
   refresh(); show(0, null, true);
