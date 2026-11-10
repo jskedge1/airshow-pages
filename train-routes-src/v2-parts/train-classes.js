@@ -99,31 +99,53 @@
       return '<clipPath id="' + id + '"><path d="M' + a + ' 6 ' + nose.replace(/^M/, 'L') + ' H' + a + ' Z"/></clipPath>' +
         '<path d="M' + a + ' 6 ' + nose.replace(/^M/, 'L') + ' H' + a + ' Z" fill="' + v.body + '"/>' +
         '<g clip-path="url(#' + id + ')"><rect x="' + (b - L * .78) + '" y="19" width="' + L + '" height="16" fill="#F4C21B"/>' +
-        '<path d="M' + (b - L * .95) + ' 10 H' + (b - L * .5) + ' L' + (b + 1) + ' 20.5 H' + (b - L * .95) + ' Z" fill="#23272B"/></g>';
+        '<path d="M' + (b - L * .95) + ' 10 H' + (b - L * .5) + ' L' + (b + 1) + ' 20.5 H' + (b - L * .95) + ' Z" fill="#23272B"/>' +
+        '<path d="M' + (b - L * .9) + ' 10.8 H' + (b - L * .55) + ' L' + (b - L * .42) + ' 13.5 H' + (b - L * .9) + ' Z" fill="rgba(255,255,255,.22)"/>' +
+        '<rect x="' + (b - L * .62) + '" y="10" width=".9" height="10.5" fill="' + v.body + '"/>' +
+        '<rect x="' + a + '" y="6" width="' + (b - a) + '" height="3.2" fill="rgba(255,255,255,.16)"/><rect x="' + a + '" y="25" width="' + (b - a) + '" height="9" fill="rgba(0,0,0,.10)"/>' +
+        '<rect x="' + (b - 7) + '" y="24.5" width="6" height="1.1" fill="rgba(0,0,0,.45)"/></g>' +
+        '<rect x="' + (b - 1.2) + '" y="30.5" width="3" height="2.6" rx=".5" fill="#1D2125"/>';
     }
     function doorsFor(a, b, endCab){
       var lo = a + 4, hi = b - 4 - (endCab ? L : 0), w = hi - lo, fr = intercity ? [.06, .92] : dmu ? [.12, .86] : n > 3 ? [.3, .72] : [.22, .7];
       if (intercity && endCab) fr = [.08];
-      return fr.map(function(f){ var x = Math.round(lo + w * f - 5); return '<g class="door"><rect x="' + x + '" y="10" width="10" height="24" fill="#3A4046"/><rect class="lf" x="' + x + '" y="10" width="5" height="24" fill="' + v.door + '"/><rect class="rt" x="' + (x + 5) + '" y="10" width="5" height="24" fill="' + v.door + '"/></g>'; }).join('');
+      return fr.map(function(f){ var x = Math.round(lo + w * f - 5); function leaf(c, lx){ return '<g class="' + c + '"><rect x="' + lx + '" y="10" width="5" height="24" fill="' + v.door + '"/><rect x="' + (lx + 1) + '" y="11.5" width="3" height="8" rx=".6" fill="#23272B"/><rect x="' + (lx + 1) + '" y="11.5" width="3" height="1.6" rx=".6" fill="rgba(255,255,255,.2)"/><rect x="' + lx + '" y="27" width="5" height="7" fill="rgba(0,0,0,.12)"/></g>'; }
+        return '<g class="door"><rect x="' + x + '" y="10" width="10" height="24" fill="#FFE9A8"/><rect x="' + (x + 1.5) + '" y="12" width="7" height="22" fill="#3A4046"/>' + leaf('lf', x) + leaf('rt', x + 5) + '<rect x="' + (x + 4.8) + '" y="10" width=".4" height="24" fill="rgba(0,0,0,.45)"/><rect x="' + (x - .4) + '" y="9.6" width="10.8" height=".7" fill="rgba(0,0,0,.35)"/><circle cx="' + (x + 5) + '" cy="8.3" r=".7" fill="#FFB000"/></g>'; }).join('');
     }
     cars.forEach(function(ab, i){
       var a = ab[0], b = ab[1], front = i === n - 1, rear = i === 0;
       if (front) out += cab(a, b);
       else if (rear) out += '<g transform="translate(300 0) scale(-1 1)">' + cab(300 - b, 300 - a) + '</g>';
-      else out += '<rect x="' + a + '" y="6" width="' + (b - a) + '" height="28" fill="' + v.body + '"/>';
+      else out += '<rect x="' + a + '" y="6" width="' + (b - a) + '" height="28" fill="' + v.body + '"/><rect x="' + a + '" y="6" width="' + (b - a) + '" height="3.2" fill="rgba(255,255,255,.16)"/><rect x="' + a + '" y="25" width="' + (b - a) + '" height="9" fill="rgba(0,0,0,.10)"/>';
       var wa = a + (rear ? L + 2 : 4), wb = b - (front ? L + 2 : 4);
       out += '<rect x="' + wa + '" y="5" width="' + (b - a - (rear || front ? L : 0) - (rear || front ? 2 : 0)) + '" height="2.5" fill="' + v.roof + '" transform="translate(' + (rear ? 0 : 0) + ' 0)"/>';
       out += '<rect x="' + wa + '" y="11" width="' + Math.max(0, wb - wa) + '" height="8" fill="#23272B"/>';
-      out += '<rect x="' + wa + '" y="29.5" width="' + Math.max(0, wb - wa) + '" height="2.5" fill="' + v.band + '"/>';
+      var ww = Math.max(0, wb - wa), pitch = intercity ? 7.5 : 10.5;
+      out += '<rect x="' + wa + '" y="11" width="' + ww + '" height="2" fill="rgba(255,255,255,.17)"/>';
+      for (var px2 = wa + pitch; px2 < wb - 2; px2 += pitch) out += '<rect x="' + px2.toFixed(1) + '" y="10.6" width="' + (intercity ? 1.5 : 1.1) + '" height="8.8" fill="' + v.body + '"/>';
+      out += '<rect x="' + wa + '" y="21" width="' + ww + '" height=".6" fill="rgba(0,0,0,.2)"/>';
+      out += '<rect x="' + wa + '" y="29.5" width="' + ww + '" height="2.5" fill="' + v.band + '"/>';
+      /* roof: air conditioning pods and vents */
+      var rx0 = a + (rear ? L : 0) + (b - a - (front || rear ? L : 0)) * .2, rw = (b - a - (front || rear ? L : 0)) * .28;
+      out += '<rect x="' + rx0.toFixed(1) + '" y="2.6" width="' + rw.toFixed(1) + '" height="2.6" rx="1" fill="#6F777D"/><rect x="' + (rx0 + 2).toFixed(1) + '" y="3.3" width="' + (rw - 4).toFixed(1) + '" height=".6" fill="#4A5157"/><rect x="' + (rx0 + rw + 6).toFixed(1) + '" y="3.6" width="7" height="1.6" rx=".6" fill="#7C848A"/>';
+      /* under the floor: equipment boxes between the bogies */
+      var u0 = a + 28, u1 = b - 28, uw = u1 - u0;
+      if (uw > 12) out += '<rect x="' + u0 + '" y="34" width="' + (uw * .34).toFixed(1) + '" height="4.6" fill="#2B3035"/><rect x="' + (u0 + uw * .4).toFixed(1) + '" y="34" width="' + (uw * .22).toFixed(1) + '" height="3.6" fill="#343A40"/><rect x="' + (u0 + uw * .68).toFixed(1) + '" y="34" width="' + (uw * .32).toFixed(1) + '" height="4.2" fill="#2B3035"/><rect x="' + (u0 + 2) + '" y="35.3" width="' + (uw * .34 - 4).toFixed(1) + '" height=".6" fill="#555D64"/>' + (elec ? '' : '<rect x="' + (u0 + uw * .4 + 1).toFixed(1) + '" y="35" width="' + (uw * .22 - 2).toFixed(1) + '" height="1.6" fill="#1A1D20"/>');
+      /* gangway to the next coach */
+      if (!front) out += '<rect x="' + b + '" y="9" width="' + gap + '" height="25" fill="#17191C"/><rect x="' + (b + gap / 2 - .3) + '" y="9" width=".6" height="25" fill="#3A4046"/>';
       var d = doorsFor(a, b, front || rear);
       if (rear) d = '<g transform="translate(300 0) scale(-1 1)">' + doorsFor(300 - b, 300 - a, true) + '</g>';
       out += d;
-      out += '<g fill="#1D2125"><circle cx="' + (a + 12) + '" cy="39" r="3.4"/><circle cx="' + (a + 21) + '" cy="39" r="3.4"/><circle cx="' + (b - 21) + '" cy="39" r="3.4"/><circle cx="' + (b - 12) + '" cy="39" r="3.4"/></g>';
+      [a + 12, a + 21, b - 21, b - 12].forEach(function(cx, wi){
+        if (wi % 2 === 0) out += '<rect x="' + (cx - 4.5) + '" y="35.6" width="18" height="3.2" rx="1" fill="#2B3035"/><rect x="' + (cx + 2.5) + '" y="34.6" width="4" height="2" fill="#4A5157"/>';
+      });
+      [a + 12, a + 21, b - 21, b - 12].forEach(function(cx){ out += '<circle cx="' + cx + '" cy="39" r="3.4" fill="#1D2125"/><circle cx="' + cx + '" cy="39" r="2.3" fill="none" stroke="#5B636A" stroke-width=".6"/><circle cx="' + cx + '" cy="39" r=".9" fill="#8A9299"/>'; });
     });
     out += '<rect x="2" y="34" width="296" height="3" fill="#3A3F44"/>';
-    if (elec) { var px = cars[Math.floor(n / 2)][0] + cw / 2; out += '<path d="M' + (px - 8) + ' 5 L' + (px - 2) + ' 0 L' + (px + 8) + ' 0 M' + (px - 2) + ' 0 L' + (px + 2) + ' 5" stroke="#3A3F44" stroke-width="1.4" fill="none"/>'; }
-    else out += '<rect x="' + (cars[0][0] + cw * .55) + '" y="3" width="10" height="3" fill="#3A3F44"/>';
-    out += '<rect x="292" y="27" width="3" height="2" fill="#fff"/><rect x="5" y="27" width="3" height="2" fill="#D74949"/>';
+    if (elec) { var px = cars[Math.floor(n / 2)][0] + cw / 2; out += '<rect x="' + (px - 11) + '" y="4" width="22" height="1.4" fill="#4A5157"/><rect x="' + (px - 9) + '" y="2.8" width="1.6" height="1.6" fill="#B9BEC2"/><rect x="' + (px + 7) + '" y="2.8" width="1.6" height="1.6" fill="#B9BEC2"/><path d="M' + (px - 7) + ' 4 L' + (px + 1) + ' -1.6 L' + (px + 7) + ' 4" stroke="#2B3035" stroke-width="1.1" fill="none"/><rect x="' + (px - 5) + '" y="-2.4" width="12" height="1.1" rx=".5" fill="#2B3035"/>'; }
+    else cars.forEach(function(ab){ out += '<rect x="' + (ab[0] + cw * .62).toFixed(1) + '" y="2.4" width="5" height="3" rx=".8" fill="#2B3035"/><rect x="' + (ab[0] + cw * .62 + 1).toFixed(1) + '" y="1.6" width="3" height="1" fill="#17191C"/>'; });
+    out += '<circle cx="294" cy="28" r="4" fill="rgba(255,255,220,.28)"/><rect x="291.5" y="27" width="3.6" height="2.1" rx=".6" fill="#FFFDF0"/><rect x="287.6" y="27" width="2.6" height="2.1" rx=".6" fill="#F3F4F5" opacity=".8"/><circle cx="6.5" cy="28" r="3.2" fill="rgba(215,73,73,.3)"/><rect x="5" y="27" width="3.2" height="2.1" rx=".6" fill="#E5484D"/>';
+    out += '<rect x="2" y="33.4" width="296" height=".6" fill="rgba(0,0,0,.35)"/>';
     return { svg: '<g>' + out + '</g>', label: cls ? 'Class ' + cls + ', ' + tcOp(l.op) : tcOp(l.op) };
   }
   function tcLegs(trip){
@@ -189,7 +211,12 @@
       if (r) out += '<path d="M' + (a + 7) + ' ' + (top + 1) + ' Q' + a + ' ' + top + ' ' + a + ' ' + (top + 6) + ' V34 H' + (a + 7) + ' Z" fill="#DC241F"/><rect x="' + (a + 1) + '" y="' + (top + 4) + '" width="5" height="6" fill="#23272B"/>';
       var wa = a + (r ? 10 : 4), wb = b - (f ? 10 : 4);
       out += '<rect x="' + wa + '" y="' + (top + 4) + '" width="' + (wb - wa) + '" height="7" fill="#23272B"/>';
+      out += '<rect x="' + wa + '" y="' + (top + 4) + '" width="' + (wb - wa) + '" height="1.6" fill="rgba(255,255,255,.18)"/>';
+      for (var tx = wa + 8; tx < wb - 2; tx += 8) out += '<rect x="' + tx.toFixed(1) + '" y="' + (top + 3.7) + '" width="1" height="7.6" fill="#F3F4F5"/>';
+      out += '<rect x="' + a + '" y="' + top + '" width="' + cw + '" height="2" fill="rgba(255,255,255,.35)" opacity=".5"/><rect x="' + a + '" y="27" width="' + cw + '" height="4" fill="rgba(0,0,0,.08)"/>';
       out += '<rect x="' + wa + '" y="' + (top + 14) + '" width="' + (wb - wa) + '" height="2" fill="' + col + '"/>';
+      if (!f) out += '<rect x="' + b + '" y="' + (top + 4) + '" width="' + gap + '" height="' + (30 - top) + '" fill="#17191C"/>';
+      out += '<rect x="' + (a + 22) + '" y="34" width="' + (cw - 44) + '" height="3.4" fill="#2B3035"/>';
       [.25, .68].forEach(function(fr){ var x = Math.round(wa + (wb - wa) * fr - 5); out += '<g class="door"><rect x="' + x + '" y="' + (top + 3) + '" width="10" height="' + (31 - top) + '" fill="#3A4046"/><rect class="lf" x="' + x + '" y="' + (top + 3) + '" width="5" height="' + (31 - top) + '" fill="#DC241F"/><rect class="rt" x="' + (x + 5) + '" y="' + (top + 3) + '" width="5" height="' + (31 - top) + '" fill="#DC241F"/></g>'; });
       out += '<rect x="' + a + '" y="31" width="' + cw + '" height="3" fill="#0019A8"/>';
       out += '<g fill="#1D2125"><circle cx="' + (a + 10) + '" cy="38" r="2.8"/><circle cx="' + (a + 17) + '" cy="38" r="2.8"/><circle cx="' + (b - 17) + '" cy="38" r="2.8"/><circle cx="' + (b - 10) + '" cy="38" r="2.8"/></g>';
