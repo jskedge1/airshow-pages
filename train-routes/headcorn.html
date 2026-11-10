@@ -973,6 +973,8 @@ h2.t{font:800 clamp(34px,4.4vw,52px)/.95 var(--c);text-transform:uppercase;color
 .doors.on i{background:#3CFF7A;box-shadow:0 0 0 5px rgba(60,255,122,.3)}
 .stops{list-style:none;overflow-y:auto;scrollbar-width:none;padding:10px 18px 14px;flex:1}
 .stops::-webkit-scrollbar{display:none}
+.stops li.xrow{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;padding:6px 0 6px 28px;font-size:14px;line-height:1.35;color:#23303A}.stops li.xrow::before{background:repeating-linear-gradient(var(--xc) 0 5px,transparent 5px 9px);width:4px;left:5.5px}.stops li.xrow::after{display:none}.stops li.xrow>span{background:color-mix(in srgb,var(--xc) 10%,#fff);border-left:4px solid var(--xc);padding:6px 9px}
+.stops li.xrow b{display:inline-block;align-self:start;margin-top:4px;background:var(--xc);color:var(--xk);font-size:12px;padding:3px 7px;white-space:nowrap}
 .stops li{position:relative;padding:5px 0 5px 28px;display:flex;justify-content:space-between;gap:12px;font-size:15px;line-height:21px}
 .stops li::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:3px;background:var(--op1)}
 .stops li:first-child::before{top:14px}
@@ -2938,7 +2940,8 @@ var DATA={"stops":[["London Charing Cross",51.5075,-0.12369,"Charing Cross"],["L
     }
 
     ol.innerHTML = '';
-    var group = null, gid = 0;
+    var group = null, gid = 0, XROW = {};
+    if (window.UKAG_LL && UKAG_LL.info) s.forEach(function(p, i){ if (s[i + 1]) { var f = UKAG_LL.info(p[1], s[i + 1][1]); if (f) XROW[i] = f; } });
     s.forEach(function(p, i){
       var isOff = p[4] & OFF, isChg = p[4] & CHG, key = (p[4] & KEY) || isOff || i === 0 || i === s.length - 1;
       var m = isOff ? L.marker([p[2], p[3]], { icon: OFFPIN, zIndexOffset: 1000 }).addTo(layer) : L.circleMarker([p[2], p[3]], {
@@ -2966,6 +2969,14 @@ var DATA={"stops":[["London Charing Cross",51.5075,-0.12369,"Charing Cross"],["L
         map.setView([p[2], p[3]], (p[4] & KEY) ? 11 : 10, { animate: !reduce }); m.openPopup();
       });
       ol.appendChild(li);
+      var xf = XROW[i];
+      if (xf && s[i + 1]) {
+        closeGroup();
+        var xr = document.createElement('li'); xr.className = 'stop xrow'; xr.style.cssText = '--xc:' + xf.c + ';--xk:' + xf.k;
+        xr.innerHTML = '<b>' + xf.short + '</b><span>' + xf.full + (xf.mins ? ', about ' + xf.mins + ' min' : '') + '</span>';
+        ol.appendChild(xr);
+        L.polyline([[p[2], p[3]], [s[i + 1][2], s[i + 1][3]]], { color: xf.c, weight: 5, dashArray: '2 8', lineCap: 'round', opacity: .95 }).addTo(layer);
+      }
     });
     closeGroup();
     function closeGroup(){

@@ -321,7 +321,7 @@ def build(show):
         if nice not in SI:
             p = where(nice)
             if not p: missing.add(nice); p = (51.5, -0.1)
-            SI[nice] = len(stops); stops.append([nice, p[0], p[1], nice.replace('London ', '') if nice.startswith('London ') else nice])
+            SI[nice] = len(stops); stops.append([nice, p[0], p[1], nice.replace('London ', '') if nice.startswith('London ') and nice != 'London Bridge' else nice])
         return SI[nice]
     def trip(x, toshow, hubname):
         d, a, tot, legs = x; s = []; changes = []

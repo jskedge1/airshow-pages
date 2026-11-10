@@ -146,5 +146,17 @@
     });
     clearInterval(timer); timer = setInterval(function () { if (!document.body.contains(box)) return clearInterval(timer); fill(box); connFill(box, t); }, 30000);
   }
-  window.UKAG_LL = { trip: trip, links: LINKS, next: nextTrains, connect: connect, crossings: crossings };
+  /* a short description of one crossing for the route map list: line colour, a short label and the full steps */
+  function info(a, b) {
+    var st = LINKS[a + '|' + b]; if (!st) return null;
+    var t = st.filter(function (x) { return x.l; }), mins = st.reduce(function (n, x) { return n + (x.m || 0); }, 0);
+    if (!t.length) return null;
+    var one = function (x) { return x.l[0] === 'elizabeth' ? 'Elizabeth line' : joinOr(lines(x)) + ' line'; };
+    var eliz = t.every(function (x) { return x.l[0] === 'elizabeth'; });
+    var short = t.length === 1 && t[0].l.length === 1 ? one(t[0]) : eliz ? 'Elizabeth line' : 'Tube';
+    var full = st.map(function (x, i) { return x.l ? one(x) + ' from ' + x.fn + ' to ' + x.tn : (i ? x.w.charAt(0).toLowerCase() + x.w.slice(1) : x.w); }).join(', then ');
+    var c = LN[t[0].l[0]];
+    return { c: c[1], k: c[2], short: short, mins: mins, full: full };
+  }
+  window.UKAG_LL = { trip: trip, links: LINKS, next: nextTrains, connect: connect, crossings: crossings, info: info };
 })();
