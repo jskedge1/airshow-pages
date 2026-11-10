@@ -167,4 +167,5 @@ mf = re.search(r'<!-- mobile-fit.*?<!-- /mobile-fit -->', open('airshow-security
 if mf: out = out.replace('</body>', mf.group(0) + '\n</body>')
 open('public-transport.html', 'w', encoding='utf8').write(out)
 print('shows', len(data), 'topics', sum(s['count'] for s in data), 'buses', nb, 'train pages', nt)
-
+# keep the sign style tabbed layout (live since 10 Nov 2026) on the rebuilt page
+subprocess.check_call(['python3', os.path.join(ROOT, 'layouts-pt', 'apply_pt_layout.py')])

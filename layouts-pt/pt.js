@@ -271,5 +271,5 @@
   ['rTitle', 'wim', 'lines', 'results'].forEach(function(i){ var e = $(i); if (e) new MutationObserver(refresh).observe(e, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-pressed', 'aria-selected'] }); });
   [].forEach.call(document.querySelectorAll('#faq details'), function(x){ x.open = true; });
   var fq = $('faq'); if (fq) new MutationObserver(function(){ [].forEach.call(fq.querySelectorAll('details:not([open])'), function(x){ x.open = true; }); }).observe(fq, { childList: true, subtree: true, attributes: true, attributeFilter: ['open'] });
-  refresh(); show(0, null, true);
+  refresh(); show(rowOf((location.hash || '').slice(1)) ? 1 : 0, null, true);   /* a link to one show, such as #clacton, opens on its ways in */
 })();
