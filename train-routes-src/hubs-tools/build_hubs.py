@@ -98,6 +98,7 @@ WAYS = {
     ('Tottenham Hale', 'London Kings Cross'): ['Underground', 'Take the Victoria line from Tottenham Hale to Kings Cross St Pancras.', 'Take the Victoria line from Kings Cross St Pancras to Tottenham Hale.'],
     ('Tottenham Hale', 'London St Pancras'): ['Underground', 'Take the Victoria line from Tottenham Hale to Kings Cross St Pancras.', 'Take the Victoria line from Kings Cross St Pancras to Tottenham Hale.'],
     ('Tottenham Hale', 'London Victoria'): ['Underground', 'Take the Victoria line from Tottenham Hale straight to Victoria.', 'Take the Victoria line from Victoria straight to Tottenham Hale.'],
+    ('Stratford', 'Stratford International'): ['Walk', 'Stratford to Stratford International is about a 10 minute walk through Westfield, and the signs point the way. I would allow 15 minutes with luggage.', 'Stratford International to Stratford is about a 10 minute walk through Westfield, and the signs point the way. I would allow 15 minutes with luggage.'],
     ('Manchester Victoria', 'Manchester Piccadilly'): ['Walk', 'Manchester Victoria to Piccadilly is about a 15 minute walk, or take the Metrolink tram between the two.', 'Manchester Piccadilly to Victoria is about a 15 minute walk, or take the Metrolink tram between the two.'],
 }
 OPCODE = {'c2c': 'CC', 'Southeastern': 'SE', 'Thameslink': 'TL', 'Great Northern': 'GN', 'Greater Anglia': 'LE', 'Southern': 'SN', 'Elizabeth line': 'XR',
