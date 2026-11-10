@@ -238,3 +238,13 @@
     if(++tries < 80) setTimeout(wait, 150);
   })();
 })();
+
+/* Sticky section bars on the show pages and guides sit below this header: see search/sticky-offset.js (10 Nov 2026) */
+(function(){
+  if(window.__ukagStickyLoad) return;
+  window.__ukagStickyLoad = 1;
+  var s = document.createElement('script');
+  s.src = (window.UKAG_SEARCH_BASE || 'https://jskedge1.github.io/airshow-pages/search/') + 'sticky-offset.js?v=20261110';
+  s.async = true;
+  (document.head || document.documentElement).appendChild(s);
+})();
