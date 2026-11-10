@@ -77,8 +77,8 @@
     LMS: ['Leamington Spa', 52.2846, -1.5361], BMO: ['Birmingham Moor Street', 52.4791, -1.8924], BHM: ['Birmingham New Street', 52.4778, -1.8990],
     BHI: ['Birmingham International', 52.4508, -1.7258], COV: ['Coventry', 52.4006, -1.5134], RUG: ['Rugby', 52.3790, -1.2502],
     MKC: ['Milton Keynes Central', 52.0342, -0.7741], NMP: ['Northampton', 52.2378, -0.9068], NUN: ['Nuneaton', 52.5265, -1.4642],
-    WVH: ['Wolverhampton', 52.5879, -2.1195], CSD: ['Cosford', 52.6403, -2.3054], TFC: ['Telford Central', 52.6807, -2.4407],
-    SHR: ['Shrewsbury', 52.7119, -2.7495], STA: ['Stafford', 52.8040, -2.1219], STO: ['Stoke-on-Trent', 53.0080, -2.1808],
+    WVH: ['Wolverhampton', 52.5879, -2.1195], COS: ['Cosford', 52.6403, -2.3054], TFC: ['Telford Central', 52.6807, -2.4407],
+    SHR: ['Shrewsbury', 52.7119, -2.7495], STA: ['Stafford', 52.8040, -2.1219], SOT: ['Stoke-on-Trent', 53.0080, -2.1808],
     MAC: ['Macclesfield', 53.2593, -2.1215], SPT: ['Stockport', 53.4055, -2.1626], MAN: ['Manchester Piccadilly', 53.4774, -2.2309],
     CRE: ['Crewe', 53.0896, -2.4329], RUN: ['Runcorn', 53.3387, -2.7392], LIV: ['Liverpool Lime Street', 53.4076, -2.9772],
     LVC: ['Liverpool Central', 53.4045, -2.9790], WBQ: ['Warrington Bank Quay', 53.3920, -2.6040], WGN: ['Wigan North Western', 53.5435, -2.6333],
@@ -136,7 +136,7 @@
     ['ScotRail', 'Carlisle to Glasgow via Kilmarnock', [['CAR', 0], ['DMF', 35], ['KMK', 110], ['GLC', 150]]],
     ['Avanti West Coast', 'Euston to Glasgow', [['EUS', 0], ['MKC', 32], ['RUG', 50], ['CRE', 95], ['WBQ', 115], ['WGN', 125], ['PRE', 140], ['LAN', 155], ['OXN', 170], ['PNR', 195], ['CAR', 210], ['GLC', 285]]],
     ['Avanti West Coast', 'Euston to Birmingham and Wolverhampton', [['EUS', 0], ['MKC', 32], ['RUG', 50], ['COV', 60], ['BHI', 70], ['BHM', 82], ['WVH', 102]]],
-    ['Avanti West Coast', 'Euston to Manchester', [['EUS', 0], ['MKC', 32], ['STO', 85], ['MAC', 100], ['SPT', 112], ['MAN', 125]]],
+    ['Avanti West Coast', 'Euston to Manchester', [['EUS', 0], ['MKC', 32], ['SOT', 85], ['MAC', 100], ['SPT', 112], ['MAN', 125]]],
     ['Avanti West Coast', 'Euston to Liverpool', [['EUS', 0], ['MKC', 32], ['STA', 75], ['CRE', 95], ['RUN', 110], ['LIV', 130]]],
     ['Avanti West Coast', 'Euston to Blackpool North', [['EUS', 0], ['MKC', 32], ['CRE', 95], ['WGN', 125], ['PRE', 140], ['KKM', 152], ['BPN', 165]]],
     ['Avanti West Coast', 'Birmingham to Edinburgh', [['BHM', 0], ['WVH', 18], ['CRE', 55], ['PRE', 105], ['LAN', 120], ['OXN', 135], ['PNR', 160], ['CAR', 175], ['LOC', 195], ['EDB', 250]]],
@@ -155,7 +155,7 @@
     ['Northern', 'Sheffield to Leeds', [['SHF', 0], ['LDS', 45]]],
     ['Merseyrail', 'Northern line to Southport', [['LVC', 0], ['FBY', 30], ['SOP', 45]]],
     ['CrossCountry', 'North East to South West', [['EDB', 0], ['BWK', 40], ['NCL', 90], ['DHM', 105], ['DAR', 122], ['YRK', 150], ['LDS', 175], ['SHF', 215], ['DBY', 245], ['BHM', 285], ['CNM', 325], ['BPW', 355], ['BRI', 368], ['TAU', 400], ['EXD', 430], ['NTA', 450], ['PLY', 485], ['BOD', 515], ['TRU', 545], ['PNZ', 590]]],
-    ['CrossCountry', 'Manchester to Birmingham', [['MAN', 0], ['SPT', 10], ['MAC', 22], ['STO', 40], ['STA', 58], ['WVH', 72], ['BHM', 90]]],
+    ['CrossCountry', 'Manchester to Birmingham', [['MAN', 0], ['SPT', 10], ['MAC', 22], ['SOT', 40], ['STA', 58], ['WVH', 72], ['BHM', 90]]],
     ['CrossCountry', 'Birmingham to Bournemouth', [['BHM', 0], ['LMS', 30], ['BAN', 50], ['OXF', 72], ['RDG', 98], ['BSK', 115], ['WIN', 132], ['SOU', 145], ['BMH', 180]]],
     ['CrossCountry', 'Birmingham to Stansted Airport', [['BHM', 0], ['NUN', 25], ['LEI', 55], ['PBO', 110], ['ELY', 140], ['CBG', 155], ['SSD', 185]]],
     ['East Midlands Railway', 'St Pancras to Sheffield', [['STP', 0], ['LTN', 25], ['BDM', 40], ['KET', 55], ['MHR', 65], ['LEI', 75], ['LBO', 86], ['DBY', 100], ['CHD', 120], ['SHF', 135]]],
@@ -172,7 +172,7 @@
     ['Transport for Wales', 'Chester to Crewe', [['CTR', 0], ['CRE', 25]]],
     ['Transport for Wales', 'Swansea to Carmarthen', [['SWA', 0], ['LLE', 15], ['CMN', 45]]],
     ['Transport for Wales', 'Cambrian line', [['BHI', 0], ['BHM', 12], ['WVH', 32], ['TFC', 52], ['SHR', 72], ['MCN', 150], ['AYW', 185]]],
-    ['West Midlands Railway', 'Birmingham to Shrewsbury via Cosford', [['BHM', 0], ['WVH', 18], ['CSD', 33], ['TFC', 43], ['SHR', 62]]],
+    ['West Midlands Railway', 'Birmingham to Shrewsbury via Cosford', [['BHM', 0], ['WVH', 18], ['COS', 33], ['TFC', 43], ['SHR', 62]]],
     ['West Midlands Railway', 'Cross City line to Redditch', [['BHM', 0], ['UNI', 7], ['RDC', 35]]],
     ['West Midlands Railway', 'Birmingham to Worcester and Hereford', [['BMO', 0], ['WOF', 45], ['GMV', 60], ['HFD', 85]]],
     ['Chiltern Railways', 'Marylebone to Birmingham', [['MYB', 0], ['HWY', 25], ['BIT', 50], ['BAN', 62], ['LMS', 77], ['BMO', 105]]],
@@ -223,7 +223,7 @@
   var SITE = 'https://www.ukairshowguide.co.uk/';
   var SHOWS = {
     cosford: { name: 'RAF Cosford Air Show', page: 'cosfordairshow', train: 'train-to-cosford', dest: [52.6402, -2.3076], pc: 'TF11 8UP', time: '09:00',
-      arr: [{ c: 'CSD', m: 5, how: 'walk', t: 'Cosford station is under 300 metres from the entrance. It really is a few minutes on foot, so this is the easy one.' }] },
+      arr: [{ c: 'COS', m: 5, how: 'walk', t: 'Cosford station is under 300 metres from the entrance. It really is a few minutes on foot, so this is the easy one.' }] },
     midlands: { name: 'Midlands Air Festival', page: 'midlandsairfestival', train: 'train-to-midlands', dest: [52.1990, -1.8980], pc: 'B49 5NJ', time: '10:00',
       arr: [{ c: 'RDC', m: 30, how: 'bus', t: 'From Redditch station take the Diamond 247 bus, which stops right by the Ragley Hall main entrance. There is no Sunday service, so on a Sunday I would book a taxi from the station.' }] },
     eastbourne: { name: 'Eastbourne Airshow', page: 'eastbourneairshow', train: 'train-to-eastbourne', dest: [50.7615, 0.2830], time: '10:00',
@@ -261,7 +261,7 @@
     ['East of England', [['Cambridge', ['CBG']], ['Colchester', ['COL']], ['Ipswich', ['IPS']], ['Norwich', ['NRW']], ['Peterborough', ['PBO']], ['Ely', ['ELY']], ['Kings Lynn', ['KLN']], ['Bury St Edmunds', ['BSE']], ['Lowestoft', ['LWT']], ['Great Yarmouth', ['GYM']], ['Stansted Airport', ['SSD']], ['Bedford', ['BDM']], ['Stevenage', ['SVG']]]],
     ['South West', [['Penzance', ['PNZ']], ['Truro', ['TRU']], ['Plymouth', ['PLY']], ['Exeter', ['EXD']], ['Taunton', ['TAU']], ['Bristol', ['BRI']], ['Bath', ['BTH']], ['Swindon', ['SWI']], ['Gloucester', ['GCR']], ['Cheltenham', ['CNM']], ['Salisbury', ['SAL']], ['Bournemouth', ['BMH']]]],
     ['Wales', [['Cardiff', ['CDF']], ['Newport', ['NWP']], ['Swansea', ['SWA']], ['Carmarthen', ['CMN']], ['Aberystwyth', ['AYW']], ['Abergavenny', ['AGV']], ['Wrexham', ['WRX']], ['Llandudno Junction', ['LLJ']], ['Bangor', ['BNG']], ['Holyhead', ['HHD']]]],
-    ['Midlands', [['Birmingham', ['BHM', 'BMO']], ['Coventry', ['COV']], ['Wolverhampton', ['WVH']], ['Leicester', ['LEI']], ['Nottingham', ['NOT']], ['Derby', ['DBY']], ['Stoke-on-Trent', ['STO']], ['Stafford', ['STA']], ['Shrewsbury', ['SHR']], ['Telford', ['TFC']], ['Hereford', ['HFD']], ['Worcester', ['WOF']], ['Northampton', ['NMP']], ['Lincoln', ['LCN']]]],
+    ['Midlands', [['Birmingham', ['BHM', 'BMO']], ['Coventry', ['COV']], ['Wolverhampton', ['WVH']], ['Leicester', ['LEI']], ['Nottingham', ['NOT']], ['Derby', ['DBY']], ['Stoke-on-Trent', ['SOT']], ['Stafford', ['STA']], ['Shrewsbury', ['SHR']], ['Telford', ['TFC']], ['Hereford', ['HFD']], ['Worcester', ['WOF']], ['Northampton', ['NMP']], ['Lincoln', ['LCN']]]],
     ['North West', [['Manchester', ['MAN']], ['Manchester Airport', ['MIA']], ['Liverpool', ['LIV']], ['Preston', ['PRE']], ['Blackpool', ['BPN']], ['Wigan', ['WGN']], ['Bolton', ['BON']], ['Lancaster', ['LAN']], ['Carlisle', ['CAR']], ['Chester', ['CTR']], ['Crewe', ['CRE']], ['Warrington', ['WBQ']]]],
     ['Yorkshire and the North East', [['Leeds', ['LDS']], ['Sheffield', ['SHF']], ['York', ['YRK']], ['Bradford', ['BDI']], ['Huddersfield', ['HUD']], ['Doncaster', ['DON']], ['Hull', ['HUL']], ['Scarborough', ['SCA']], ['Darlington', ['DAR']], ['Middlesbrough', ['MBR']], ['Durham', ['DHM']], ['Newcastle', ['NCL']], ['Sunderland', ['SUN']]]],
     ['Scotland', [['Glasgow', ['GLC', 'GLQ']], ['Edinburgh', ['EDB']], ['Stirling', ['STG']], ['Perth', ['PTH']], ['Dundee', ['DEE']], ['Aberdeen', ['ABD']], ['Inverness', ['INV']], ['Kirkcaldy', ['KDY']], ['Kilmarnock', ['KMK']], ['Dumfries', ['DMF']]]]
@@ -388,6 +388,45 @@
     return { plans: out, direct: direct };
   }
 
+
+  /* ---------- live times: the public National Rail live departure boards, same feed as the train route pages ---------- */
+  var LIVE_HOSTS = ['https://huxley2.azurewebsites.net', 'https://national-rail-api.davwheat.dev'];
+  var LIVE = {}, LIVEQ = {};
+  function liveBoard(from, to, cb) {
+    var key = from + '>' + to, L = LIVE[key];
+    if (L && Date.now() - L.at < 55000) return cb(L);
+    (LIVEQ[key] = LIVEQ[key] || []).push(cb); if (LIVEQ[key].length > 1) return;
+    var done = function (r) { r.at = Date.now(); LIVE[key] = r; var q = LIVEQ[key]; LIVEQ[key] = []; q.forEach(function (f) { f(r); }); };
+    (function attempt(h) {
+      if (h >= LIVE_HOSTS.length || !window.fetch) return done({ ok: false });
+      fetch(LIVE_HOSTS[h] + '/departures/' + from + '/to/' + to + '/6').then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (js) { done({ ok: true, js: js }); }).catch(function () { attempt(h + 1); });
+    })(0);
+  }
+  function liveHTML(legs) {
+    var trains = legs.filter(function (l) { return !isLink(l.li); });
+    return trains.map(function (l, i) {
+      var L = LINES[l.li], c = OP[L[0]] || OP.Walk;
+      return '<div class="jq-lb2" data-f="' + l.from + '" data-t="' + l.to + '" style="--c:' + c[0] + '"><div class="jq-lbh"><span class="jq-lbn">' + (i + 1) + '</span><div><b>' + esc(STA[l.from][0]) + ' to ' + esc(STA[l.to][0]) + '</b><small>' + esc(L[0]) + (i ? ', your connection' : ', your first train') + '</small></div><span class="jq-pulse"><i></i>Live</span></div><div class="jq-lbb"><p class="jq-lbm">Checking the live board…</p></div>'
+        + '<a class="jq-lbl" href="' + live(l.from) + '" target="_blank" rel="noopener">Full live board for ' + esc(STA[l.from][0]) + ' <span aria-hidden="true">↗</span></a></div>';
+    }).join('');
+  }
+  function fillLive(root, after) {
+    [].forEach.call(root.querySelectorAll('.jq-lb2'), function (bx) {
+      var f = bx.getAttribute('data-f'), t = bx.getAttribute('data-t'), body = bx.querySelector('.jq-lbb');
+      liveBoard(f, t, function (r) {
+        if (!r.ok) { body.innerHTML = '<p class="jq-lbm">Live times can’t be reached right now. Tap the full live board below, or Times, to see them on National Rail.</p>'; bx.classList.add('jq-off'); return after && after(); }
+        var list = (r.js.trainServices || []).slice(0, 4);
+        if (!list.length) { body.innerHTML = '<p class="jq-lbm">No trains on the live board just yet. Trains show here a couple of hours before they leave, so early in the morning or late at night it can be empty.</p>'; return after && after(); }
+        body.innerHTML = '<table><tbody>' + list.map(function (sv) {
+          var e = sv.etd, bad = sv.isCancelled || (e !== 'On time'), st = sv.isCancelled ? 'Cancelled' : e === 'On time' ? 'On time' : e === 'Delayed' ? 'Delayed' : 'Expected ' + e;
+          var dest = ((sv.destination || [{}])[0].locationName || '').replace(/\s*\(.*?\)/, '');
+          return '<tr><td class="jq-lt">' + esc(sv.std) + '</td><td>' + esc(dest) + '<small>' + esc(sv.operator || '') + '</small></td><td class="jq-lp">' + (sv.platform ? 'Plat ' + esc(sv.platform) : '') + '</td><td class="jq-ls' + (bad ? ' jq-late' : '') + '">' + st + '</td></tr>';
+        }).join('') + '</tbody></table>';
+        after && after();
+      });
+    });
+  }
   /* ---------- styles ---------- */
   var CSS = '.ukag-jp{--n:#13293C;--t:#32B4AF;--p:#6950A1;--r:#D74949;--g:#F2F4F5;--l:#DCE3E9;--s:#5B6B78;font-family:Barlow,system-ui,sans-serif;color:var(--n);margin:28px auto;max-width:1200px;box-sizing:border-box;padding:0 20px}'
     + '.ukag-jp *{box-sizing:border-box}.ukag-jp .jp{background:#fff;box-shadow:0 18px 40px -26px rgba(19,41,60,.55)}'
@@ -461,9 +500,32 @@
     + '.ukag-jp .jq-ha button:hover{background:#1D63B7;transform:translateY(-2px)}'
     + '.ukag-jp .jq-none{background:#fff;padding:16px;margin:0}'
     + '@media(max-width:900px){.ukag-jp .jq-hub{grid-template-columns:1fr auto}.ukag-jp .jq-hc{grid-column:1/-1;grid-row:2}.ukag-jp .jq-ha{grid-column:1/-1;justify-content:flex-start}.ukag-jp .jq-ht{text-align:right}.ukag-jp .jq-hs{flex:1 1 100%}}'
+    + '.ukag-jp .jq-lvb{background:#fff!important;color:#1C7A3E!important;border:1px solid #BFE3CB!important;border-bottom:3px solid #22C55E!important;display:inline-flex;align-items:center;gap:7px}'
+    + '.ukag-jp .jq-lvb i,.ukag-jp .jq-pulse i{width:9px;height:9px;border-radius:50%;background:#22C55E;animation:jqpulse 1.8s ease-out infinite;flex:none}'
+    + '.ukag-jp .jq-lvb[aria-expanded="true"]{background:#0F2E1B!important;color:#7CF0A6!important}'
+    + '@keyframes jqpulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}100%{box-shadow:0 0 0 8px rgba(34,197,94,0)}}'
+    + '.ukag-jp .jq-lvp{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;padding-top:4px}'
+    + '.ukag-jp .jq-lvp[hidden]{display:none}'
+    + '.ukag-jp .jq-lb2{background:var(--n);color:#fff;border-top:4px solid var(--c);display:flex;flex-direction:column}'
+    + '.ukag-jp .jq-lbh{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12)}'
+    + '.ukag-jp .jq-lbn{width:28px;height:28px;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}'
+    + '.ukag-jp .jq-lbh b{display:block;font-size:15.5px;line-height:1.25}.ukag-jp .jq-lbh small{display:block;color:#C9D6E0;font-size:13.5px}'
+    + '.ukag-jp .jq-pulse{display:inline-flex;align-items:center;gap:6px;background:#0F2E1B;color:#7CF0A6;border:1px solid #1F7A43;font-weight:700;font-size:12.5px;padding:3px 7px}'
+    + '.ukag-jp .jq-off .jq-pulse{background:#2A3742;color:#C9D6E0;border-color:#4A5A66}.ukag-jp .jq-off .jq-pulse i{background:#8A97A2;animation:none}'
+    + '.ukag-jp .jq-lbb{padding:4px 12px 6px;flex:1}.ukag-jp .jq-lbb table{background:transparent;font-size:14.5px}'
+    + '.ukag-jp .jq-lbb td{border-top:1px solid rgba(255,255,255,.1);padding:7px 6px 7px 0;color:#fff;vertical-align:middle}.ukag-jp .jq-lbb tr:first-child td{border-top:0}.ukag-jp .jq-lbb tr:hover td{background:rgba(255,255,255,.04)}'
+    + '.ukag-jp .jq-lbb td small{display:block;color:#9FB2C2;font-size:12.5px}'
+    + '.ukag-jp .jq-lt{font:700 17px/1 "Barlow Condensed",Barlow,sans-serif;color:#FFC94A;width:52px;font-variant-numeric:tabular-nums}'
+    + '.ukag-jp .jq-lp{color:#C9D6E0!important;white-space:nowrap;font-size:13.5px}.ukag-jp .jq-ls{text-align:right;color:#7CF0A6!important;font-weight:700;font-size:13.5px;line-height:1.2}.ukag-jp .jq-ls.jq-late{color:#FF8A8A!important}'
+    + '.ukag-jp .jq-lbm{margin:8px 0;color:#C9D6E0;font-size:14.5px;line-height:1.45}'
+    + '.ukag-jp .jq-lbl{display:block;padding:9px 12px;color:#7FD9D5!important;font-weight:600;font-size:14px;text-decoration:none;border-top:1px solid rgba(255,255,255,.12)}.ukag-jp .jq-lbl:hover{color:#fff!important;background:rgba(255,255,255,.05)}'
+    + '.ukag-jp .jq-lvc{margin:6px 0 14px;display:flex;flex-wrap:wrap;gap:10px}.ukag-jp .jq-lvc .jq-lb2{flex:1 1 320px;min-width:0}'
+    + '.ukag-jp .jq-lvc h4{flex:1 1 100%;margin:6px 0 0;display:flex;align-items:center;gap:10px;font:800 21px/1.1 "Barlow Condensed",Barlow,sans-serif;text-transform:uppercase;color:var(--n)}'
+    + '.ukag-jp .jq-lvc>p{flex:1 1 100%;margin:0 0 4px;font-size:15px;color:#2C3E4C}'
+    + '@media(max-width:560px){.ukag-jp .jq-ha{flex-wrap:wrap}.ukag-jp .jq-lp{display:none}}'
     + '@media(max-width:900px){.ukag-jp form,.ukag-jp form.jq-noshow{grid-template-columns:1fr 1fr}.ukag-jp .jq-f-from{grid-column:1/-1}.ukag-jp .jq-go{grid-column:1/-1}}'
     + '@media(max-width:560px){.ukag-jp{padding:0 12px}.ukag-jp form,.ukag-jp form.jq-noshow{grid-template-columns:1fr}.ukag-jp .jq-acts a{width:100%;justify-content:space-between}.ukag-jp .jq-jp-h{grid-template-columns:40px 1fr;padding:18px}.ukag-jp .jq-jp-h .jq-ic{width:40px;height:40px}.ukag-jp .jq-jp-h h2{font-size:23px}.ukag-jp form,.ukag-jp .jq-out,.ukag-jp .jq-lines{padding-left:16px;padding-right:16px}.ukag-jp .jq-msg{padding:0 16px 16px}.ukag-jp table .jq-hm{display:none}}'
-    + '@media(prefers-reduced-motion:reduce){.ukag-jp *{transition:none!important}}';
+    + '@media(prefers-reduced-motion:reduce){.ukag-jp *{transition:none!important;animation:none!important}}';
 
   var ICON = '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="6" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.5" fill="#D74949"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 2"/></svg>';
   var SYM = { train: '<svg viewBox="0 0 24 24" width="20" height="20"><rect x="6" y="3" width="12" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 10h12M9 20l-2 2M15 20l2 2M9 13h.01M15 13h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
@@ -550,6 +612,8 @@
       h += card(P.plans[st.sel] || P.plans[0], S, o);
       out.innerHTML = h;
       [].forEach.call(out.querySelectorAll('.jq-tabs button'), function (b) { b.addEventListener('click', function () { st.sel = +b.getAttribute('data-i'); draw(); }); });
+      var lvc = out.querySelector('.jq-lvc');
+      if (lvc) { fillLive(lvc, resize); clearInterval(st.lt); st.lt = setInterval(function () { if (!document.body.contains(lvc)) return clearInterval(st.lt); fillLive(lvc, resize); }, 60000); }
       resize();
     }
     function card(p, S, o) {
@@ -575,7 +639,7 @@
       h += step(last[0], '#fff', last[1], last[2], esc(an) + ' to the showground', esc(p.arr.t), p.arr.how === 'walk');
       h += step('#D74949', '#fff', SYM.plane, 'Arrive', esc(S.name), 'Try to arrive about an hour before the flying starts if you want a good spot on the crowd line. Visit the toilet before the displays begin, as the queues build quickly.', false);
       if (early) h += '</ol><p class="jq-note">This is a long journey to get there for ' + esc(fT.value) + '. I would think about travelling the day before and staying nearby, as the first trains of the day may not get you there in time. The show page has places to stay.</p><ol style="display:none">';
-      h += '</ol><div class="jq-acts">'
+      h += '</ol><div class="jq-lvc"><h4><span class="jq-pulse"><i></i>Live</span>Live times for your trains today</h4><p>These come straight from the National Rail live boards and update every minute. They show today’s trains, so on show day open this page on the morning you travel.</p>' + liveHTML(p.rail.legs) + '</div><div class="jq-acts">'
         + '<a href="' + nrLink(p.start, p.arr.c, fD.value, dep) + '" target="_blank" rel="noopener">Exact times and tickets <span aria-hidden="true">↗</span></a>'
         + '<a class="jq-alt" href="' + gmaps(o.q || o.label, sn + ' station') + '" target="_blank" rel="noopener">From my door to ' + esc(sn) + ' <span aria-hidden="true">↗</span></a>'
         + '<a class="jq-alt" href="' + live(p.start) + '" target="_blank" rel="noopener">Live departures, ' + esc(sn) + ' <span aria-hidden="true">↗</span></a>'
@@ -623,7 +687,8 @@
         return '<div class="jq-hub"><div class="jq-hn"><b>' + esc(H[0]) + '</b><small>From ' + esc(STA[b.from][0]) + '</small></div>'
           + '<div class="jq-hc"><div class="jq-legs">' + html + '</div>' + (chg.length ? '<small>Change at ' + esc(chg.join(', then ')) + '</small>' : (legs.length ? '<small>A direct train, no changes</small>' : '')) + '</div>'
           + '<div class="jq-ht"><b>' + (legs.length ? 'About ' + hm(b.r.mins) : 'No train needed') + '</b><small>' + (legs.length ? (ch ? ch + (ch === 1 ? ' change' : ' changes') : 'No changes') : esc(STA[b.a.c][0])) + '</small></div>'
-          + '<div class="jq-ha">' + (legs.length ? '<a href="' + nrLink(b.from, b.a.c) + '" target="_blank" rel="noopener">Times <span aria-hidden="true">↗</span></a>' : '') + '<button type="button" data-st="' + esc(STA[b.from][0]) + '">Plan from here</button></div></div>';
+          + '<div class="jq-ha">' + (legs.length ? '<button type="button" class="jq-lvb" aria-expanded="false"><i></i>Live times</button><a href="' + nrLink(b.from, b.a.c) + '" target="_blank" rel="noopener">Times <span aria-hidden="true">↗</span></a>' : '') + '<button type="button" data-st="' + esc(STA[b.from][0]) + '">Plan from here</button></div>'
+          + (legs.length ? '<div class="jq-lvp" hidden>' + liveHTML(legs) + '</div>' : '') + '</div>';
       }
       function drawHubs() {
         var t = (hs.value || '').trim().toLowerCase(), list = [];
@@ -633,6 +698,14 @@
         } else list = HUBS[reg][1];
         var h = list.map(hubRow).join('');
         box.innerHTML = h || '<p class="jq-none">I haven’t got that station on the board yet. Type your town or postcode into the planner above and it will find your nearest big station for you.</p>';
+        [].forEach.call(box.querySelectorAll('.jq-lvb'), function (bt) {
+          bt.addEventListener('click', function () {
+            var pn = bt.closest('.jq-hub').querySelector('.jq-lvp'), open = pn.hidden;
+            pn.hidden = !open; bt.setAttribute('aria-expanded', open);
+            if (open) { fillLive(pn, resize); clearInterval(pn._t); pn._t = setInterval(function () { if (pn.hidden || !document.body.contains(pn)) return clearInterval(pn._t); fillLive(pn, resize); }, 60000); }
+            resize();
+          });
+        });
         [].forEach.call(box.querySelectorAll('button[data-st]'), function (bt) {
           bt.addEventListener('click', function () {
             fF.value = bt.getAttribute('data-st'); st.sel = 0; go(false);
