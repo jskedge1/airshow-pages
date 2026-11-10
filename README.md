@@ -94,7 +94,7 @@ A search button sits in the header menu on every page (the magnifier between Com
 
 - `search/index.js` is the search itself: the page list plus the engine. Built by `python3 tools-search.py` from the `PAGES` list in that file and the headings on each page, so a search for "toilets" or "park and ride" lands on the page that covers it, with the matching heading shown under the result. Do not edit index.js by hand.
 - `search/engine.js` is the matching (words that mean the same, such as rail and train, kids and children, are in `SAME`). tools-search.py joins it onto the page list.
-- `search/header-search.js` adds the header button and drop down bar. It is loaded by the Wix custom code block "UK Airshow Guide header search" (body end, every page), so changes here go live without touching Wix.
+- `search/header-search.js` adds the header button and drop down bar. It also loads `search/sticky-offset.js` (10 Nov 2026), which moves the sticky section bars on pages shown by the airshow-page element down below the fixed site header (#ukag), so they no longer slide under it, and gives jump targets room for the header. It is loaded by the Wix custom code block "UK Airshow Guide header search" (body end, every page), so changes here go live without touching Wix.
 - When a new page goes live, add a row to `PAGES` in tools-search.py and run it again. Run it after big heading changes too.
 - Shortcut keys in the header search: / or Ctrl K to open, arrow keys to move, Enter to open the page, Esc to close.
 
