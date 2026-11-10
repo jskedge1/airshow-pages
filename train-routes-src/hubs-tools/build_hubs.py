@@ -303,8 +303,8 @@ def build(show):
         l0 = legs[0] if legs[0]['op'] or len(legs) == 1 else legs[1]; first = legs[0]['calls'][0]
         sh = lambda n: stops[SI[n]][3] if n in SI else n
         names_ = [opname(lg['info'], lg['op']) for lg in legs]
-        if names_ and not names_[0] and len(names_) > 1: names_[0] = names_[1]
-        if names_ and not names_[-1] and len(names_) > 1: names_[-1] = names_[-2]
+        if ws and len(names_) > 1: names_ = names_[1:]   # the walk across is not a train leg
+        if we and len(names_) > 1: names_ = names_[:-1]
         if embedded:
             codes = [OPCODE.get(n, n) for n in names_]; uniq = list(dict.fromkeys(codes)); un = list(dict.fromkeys(names_))
             extra = {'orig': torig(l0['info']), 'ops': uniq, 'legops': codes, 'opLabel': ' and '.join(un)}
