@@ -3046,7 +3046,9 @@ var DATA={"stops":[["London Paddington",51.51656,-0.17726,"Paddington"],["Readin
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function(es, o){ es.forEach(function(e){ if (e.isIntersecting) { o.disconnect(); setTimeout(function(){ railGo = true; railRun(); }, 300); } }); }, { threshold: .5 }).observe(strip);
   } else { railGo = true; railRun(); }
-  window.addEventListener('resize', function(){ railRun(true); });
+  /* only start the strip again when its width really changes: a tap on the map or a phone toolbar sliding away also fires resize */
+  var railW = -1;
+  window.addEventListener('resize', function(){ var s = $('railstrip'), w = s ? s.clientWidth : 0; if (!w || w === railW) return; railW = w; railRun(true); });
   if (!io) runTrain();
 
   /* door button: lights up like the real thing and the screen beside it changes */
