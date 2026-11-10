@@ -58,7 +58,7 @@ for show in shows:
     for row in c.get('facts', []):
         if row[0] == 'Stations covered': row[1] = f'{n} stations across the UK'
     dest = x.get('destShort') or c.get('to')
-    x['hubSub'] = f'{word(n)} stations with a good way into {dest}, from {names[0]} to the big stations and city termini across the UK, with any changes on the way. Pick the one you’re starting from, or heading home to.'
+    x['hubSub'] = f'{word(n)} stations with a good way into {dest}, from {names[0]} to the Greater Anglia terminus stations and the big stations and city termini across the UK, with any changes on the way. Pick the one you’re starting from, or heading home to.'
     add = f' The big stations and city termini further from {dest} use the times for {when(SH[show]["days"])}, checked on 10 November 2026.'
     if 'city termini further from' not in c['note']:
         c['note'] = re.sub(r'(checked on [^.]*\.)', r'\1' + add.replace('\\', r'\\'), c['note'], count=1) if 'checked on' in c['note'] else c['note'] + add
