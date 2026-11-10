@@ -57,6 +57,34 @@ WAYS = {
     ('London Bridge', 'London Kings Cross'): ['Underground', 'Take the Northern line (Bank branch) from London Bridge to Kings Cross St Pancras.', 'Take the Northern line (Bank branch) from Kings Cross St Pancras to London Bridge.'],
     ('London St Pancras', 'London Kings Cross'): ['Walk', 'Kings Cross and St Pancras are just across the road from each other, about a 5 minute walk.', 'St Pancras and Kings Cross are just across the road from each other, about a 5 minute walk.'],
     ('London Marylebone', 'London Kings Cross'): ['Underground', 'Take the Bakerloo line one stop to Baker Street, then the Circle, Hammersmith & City or Metropolitan line to Kings Cross St Pancras.', 'Take the Circle, Hammersmith & City or Metropolitan line to Baker Street, then the Bakerloo line one stop to Marylebone.'],
+    ('London Liverpool Street', 'London Victoria'): ['Underground', 'Take the Circle line from Liverpool Street to Victoria.', 'Take the Circle line from Victoria to Liverpool Street.'],
+    ('London Liverpool Street', 'London Waterloo'): ['Underground', 'Take the Central line from Liverpool Street to Bank, then the Waterloo & City line to Waterloo.', 'Take the Waterloo & City line from Waterloo to Bank, then the Central line one stop to Liverpool Street.'],
+    ('London Liverpool Street', 'London Bridge'): ['Underground', 'Walk to Moorgate, a few minutes from Liverpool Street, and take the Northern line (Bank branch) to London Bridge.', 'Take the Northern line (Bank branch) from London Bridge to Moorgate, then it is a few minutes on foot to Liverpool Street.'],
+    ('London Liverpool Street', 'London Paddington'): ['Underground', 'Take the Elizabeth line from Liverpool Street straight to Paddington.', 'Take the Elizabeth line from Paddington straight to Liverpool Street.'],
+    ('London Liverpool Street', 'London St Pancras'): ['Underground', 'Take the Circle, Hammersmith & City or Metropolitan line from Liverpool Street to Kings Cross St Pancras.', 'Take the Circle, Hammersmith & City or Metropolitan line from Kings Cross St Pancras to Liverpool Street.'],
+    ('London Liverpool Street', 'London Marylebone'): ['Underground', 'Take the Circle, Hammersmith & City or Metropolitan line to Baker Street, then the Bakerloo line one stop to Marylebone.', 'Take the Bakerloo line one stop to Baker Street, then the Circle, Hammersmith & City or Metropolitan line to Liverpool Street.'],
+    ('London Victoria', 'London Waterloo'): ['Underground', 'Take the Victoria line from Victoria to Green Park, then the Jubilee line to Waterloo.', 'Take the Jubilee line from Waterloo to Green Park, then the Victoria line to Victoria.'],
+    ('London Victoria', 'London Paddington'): ['Underground', 'Take the Circle or District line from Victoria to Paddington.', 'Take the Circle or District line from Paddington to Victoria.'],
+    ('London Victoria', 'London Bridge'): ['Underground', 'Take the Victoria line from Victoria to Green Park, then the Jubilee line to London Bridge.', 'Take the Jubilee line from London Bridge to Green Park, then the Victoria line to Victoria.'],
+    ('London Victoria', 'London St Pancras'): ['Underground', 'Take the Victoria line from Victoria to Kings Cross St Pancras.', 'Take the Victoria line from Kings Cross St Pancras to Victoria.'],
+    ('London Victoria', 'London Marylebone'): ['Underground', 'Take the Victoria line to Oxford Circus, then the Bakerloo line to Marylebone.', 'Take the Bakerloo line from Marylebone to Oxford Circus, then the Victoria line to Victoria.'],
+    ('London Waterloo', 'London Bridge'): ['Underground', 'Take the Jubilee line from Waterloo to London Bridge.', 'Take the Jubilee line from London Bridge to Waterloo.'],
+    ('London Waterloo', 'London Paddington'): ['Underground', 'Take the Bakerloo line from Waterloo straight to Paddington.', 'Take the Bakerloo line from Paddington straight to Waterloo.'],
+    ('London Waterloo', 'London St Pancras'): ['Underground', 'Take the Northern line (Charing Cross branch) to Euston, then it is a 10 minute walk to St Pancras.', 'Walk to Euston, about 10 minutes, and take the Northern line (Charing Cross branch) to Waterloo.'],
+    ('London Waterloo', 'London Marylebone'): ['Underground', 'Take the Bakerloo line from Waterloo straight to Marylebone.', 'Take the Bakerloo line from Marylebone straight to Waterloo.'],
+    ('London Paddington', 'London Bridge'): ['Underground', 'Take the Bakerloo line from Paddington to Waterloo, then the Jubilee line one stop to London Bridge.', 'Take the Jubilee line one stop from London Bridge to Waterloo, then the Bakerloo line to Paddington.'],
+    ('London Paddington', 'London St Pancras'): ['Underground', 'Take the Circle or Hammersmith & City line from Paddington to Kings Cross St Pancras.', 'Take the Circle or Hammersmith & City line from Kings Cross St Pancras to Paddington.'],
+    ('London Paddington', 'London Marylebone'): ['Underground', 'Take the Bakerloo line one stop from Paddington to Marylebone, or it is about a 15 minute walk.', 'Take the Bakerloo line one stop from Marylebone to Paddington, or it is about a 15 minute walk.'],
+    ('London Bridge', 'London St Pancras'): ['Underground', 'Take the Northern line (Bank branch) from London Bridge to Kings Cross St Pancras.', 'Take the Northern line (Bank branch) from Kings Cross St Pancras to London Bridge.'],
+    ('London Bridge', 'London Marylebone'): ['Underground', 'Take the Jubilee line from London Bridge to Baker Street, then the Bakerloo line one stop to Marylebone.', 'Take the Bakerloo line one stop to Baker Street, then the Jubilee line to London Bridge.'],
+    ('London Bridge', 'London Fenchurch Street'): ['Walk', 'London Bridge to Fenchurch Street is about a 15 minute walk over London Bridge.', 'Fenchurch Street to London Bridge is about a 15 minute walk over London Bridge.'],
+    ('London St Pancras', 'London Marylebone'): ['Underground', 'Take the Circle, Hammersmith & City or Metropolitan line to Baker Street, then the Bakerloo line one stop to Marylebone.', 'Take the Bakerloo line one stop to Baker Street, then the Circle, Hammersmith & City or Metropolitan line to Kings Cross St Pancras.'],
+    ('London Liverpool Street', 'London Charing Cross'): ['Underground', 'Take the Central line to Tottenham Court Road, then the Northern line (Charing Cross branch) to Charing Cross.', 'Take the Northern line (Charing Cross branch) to Tottenham Court Road, then the Central line to Liverpool Street.'],
+    ('London Kings Cross', 'London Charing Cross'): ['Underground', 'Take the Victoria line one stop to Euston, then the Northern line (Charing Cross branch) to Charing Cross.', 'Take the Northern line (Charing Cross branch) to Euston, then the Victoria line one stop to Kings Cross St Pancras.'],
+    ('London St Pancras', 'London Charing Cross'): ['Underground', 'Take the Victoria line one stop to Euston, then the Northern line (Charing Cross branch) to Charing Cross.', 'Take the Northern line (Charing Cross branch) to Euston, then the Victoria line one stop to Kings Cross St Pancras.'],
+    ('London Paddington', 'London Charing Cross'): ['Underground', 'Take the Bakerloo line from Paddington to Charing Cross.', 'Take the Bakerloo line from Charing Cross to Paddington.'],
+    ('London Victoria', 'London Charing Cross'): ['Underground', 'Take the Circle or District line from Victoria to Embankment, then it is a short walk to Charing Cross.', 'Walk to Embankment, a short walk from Charing Cross, and take the Circle or District line to Victoria.'],
+    ('London Waterloo', 'London Charing Cross'): ['Walk', 'Waterloo to Charing Cross is about a 15 minute walk over the Golden Jubilee Bridges, or one stop on the Bakerloo line.', 'Charing Cross to Waterloo is about a 15 minute walk over the Golden Jubilee Bridges, or one stop on the Bakerloo line.'],
     ('Manchester Victoria', 'Manchester Piccadilly'): ['Walk', 'Manchester Victoria to Piccadilly is about a 15 minute walk, or take the Metrolink tram between the two.', 'Manchester Piccadilly to Victoria is about a 15 minute walk, or take the Metrolink tram between the two.'],
 }
 OPCODE = {'c2c': 'CC', 'Southeastern': 'SE', 'Thameslink': 'TL', 'Great Northern': 'GN', 'Greater Anglia': 'LE', 'Southern': 'SN', 'Elizabeth line': 'XR',
@@ -70,7 +98,8 @@ def way(a, b):
 NICE_FIX = {'Prestwick (Strathclyde)': 'Prestwick Town', 'Edinburgh': 'Edinburgh Waverley', 'Preston (Lancs)': 'Preston', 'London St Pancras International': 'London St Pancras',
             'Earlswood Surrey': 'Earlswood', 'Seaford Sussex': 'Seaford', 'Elsenham Essex': 'Elsenham', 'Roydon Essex': 'Roydon',
             'Poulton Le Fylde': 'Poulton-le-Fylde', 'Liverpool Lime St': 'Liverpool Lime Street', 'Telford': 'Telford Central', 'Bootle Oriel Rd': 'Bootle Oriel Road',
-            'Burnley Manchester Rd': 'Burnley Manchester Road'}
+            'Burnley Manchester Rd': 'Burnley Manchester Road', 'James St': 'James Street', 'Moreton in Marsh': 'Moreton-in-Marsh',
+            'Newton Le Willows': 'Newton-le-Willows'}
 def NICE(n):
     n = NICE_FIX.get(n, n)
     return re.sub(r'\s*\([^)]*\)', '', n) if '(Brighton)' not in n else n
@@ -124,6 +153,9 @@ def where(nice):
         if k in OSMST: return OSMST[k]
     for k in (STFIX.get(nice, nice), nice, nice + ' Central'):
         if k in STL: return STL[k]
+    norm = lambda n: re.sub(r'[^a-z]', '', re.sub(r'\s*\(.*?\)', '', n.lower().replace(' st ', ' street ').replace('-on-trent', '')))
+    for k in STL:
+        if norm(k) == norm(nice) or norm(k) == norm(nice).replace('ontrent', ''): return STL[k]
     return None
 def c2cpath(a, b):
     """the railway between two c2c stations, along the OSM c2c routes"""
@@ -387,7 +419,7 @@ def build(show):
     return report, sorted(missing), sorted(set(straight)), sorted(pairs_used)
 
 if __name__ == '__main__':
-    allpairs = {}
+    allpairs = json.load(open('ways_used.json')) if os.path.exists('ways_used.json') else {}
     for show in sys.argv[1:] or list(SH):
         rep, miss, st, pu = build(show)
         print(show, rep); print('   missing positions:', miss); print('   straight lines:', len(st), st[:12]); print('   ways across:', pu)
