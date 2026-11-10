@@ -14,6 +14,9 @@ for c in cfgs.values():
     SITES.update({k: v for k, v in c['x'].get('opSites', {}).items() if k not in SITES})
 COLORS.setdefault('Grand Central Railway', {'op1': '#E8731C', 'navy': '#1B1B1D', 'onui': '#F7B98A', 'opink': '#FFFFFF', 'opd': '#A85212', 'tint': '#FDF3EC', 'tintln': '#F5CDB0'})
 COLORS.setdefault('Hull Trains', {'op1': '#1F4E9C', 'navy': '#0E2348', 'onui': '#9FB9E6', 'opink': '#FFFFFF', 'opd': '#163A74', 'tint': '#EEF2F9', 'tintln': '#C3D1EA'})
+COLORS.setdefault('Chiltern Railways', {'op1': '#0090C8', 'navy': '#0B2E44', 'onui': '#9ED6EE', 'opink': '#FFFFFF', 'opd': '#00698F', 'tint': '#EDF6FA', 'tintln': '#BFE0EE'})
+COLORS.setdefault('Southeastern', {'op1': '#0B8FCF', 'navy': '#0A2A4A', 'onui': '#9CD3F0', 'opink': '#FFFFFF', 'opd': '#086A99', 'tint': '#EDF6FB', 'tintln': '#BEDFF1'})
+COLORS.setdefault('Lumo', {'op1': '#2E6FD8', 'navy': '#0F1E3D', 'onui': '#A7C4F2', 'opink': '#FFFFFF', 'opd': '#21509C', 'tint': '#F0F5FC', 'tintln': '#CBDBF5'})
 CODES = ['NT', 'VT', 'TP', 'LD', 'SR', 'GR', 'CC', 'XC', 'GW', 'EM', 'SW', 'SN', 'TL', 'CH', 'LM', 'GC', 'HT', 'AW', 'LE', 'GN', 'GX', 'SE', 'ME', 'XR', 'LO']
 BPW = {(w[0], w[1]): w for w in BP['x'].get('walkPairs', []) if len(w) > 2}
 WORDS = 'Zero One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen'.split()
