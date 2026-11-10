@@ -1,0 +1,127 @@
+/* Train page layouts A (tabs) and B (long page with line diagram and ticket). Preview only, 10 Nov 2026. */
+.jump{display:none!important}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:118px}
+.lx-wrapsec{padding:28px 0 0}
+.lx-wrapsec>.wrap>.railstrip{margin-top:0}
+
+/* ---------- Layout A: tabs like the steps on a ticket machine ---------- */
+.la-bar{position:sticky;top:0;z-index:40;background:var(--navy);box-shadow:0 10px 24px -14px rgba(0,0,0,.6)}
+.la-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;max-width:1180px;margin:0 auto;padding:0 16px}
+.la-tab{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 12px;align-items:center;padding:12px 14px 11px;color:#fff;border-left:1px solid rgba(255,255,255,.12);position:relative;transition:background .3s ease}
+.la-tab:last-child{border-right:1px solid rgba(255,255,255,.12)}
+.la-tab .n{grid-row:1/3;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--navy);font:800 26px/1 var(--c);border-radius:4px;transition:background .3s ease,color .3s ease,transform .3s ease}
+.la-tab b{font:800 21px/1.05 var(--c);text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.la-tab b .sm{display:none}
+.la-tab small{font:500 14px/1.2 var(--f);color:#C6D2DB;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.la-tab::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:#F2B233;transform:scaleX(0);transform-origin:0 50%;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.la-tab:hover{background:rgba(255,255,255,.07)}
+.la-tab:focus-visible{outline:3px solid #F2B233;outline-offset:-3px}
+.la-tab[aria-selected="true"]{background:rgba(255,255,255,.1)}
+.la-tab[aria-selected="true"]::after{transform:scaleX(1)}
+.la-tab[aria-selected="true"] .n{background:#F2B233;color:#13293C;transform:scale(1.06)}
+.la-tab.done .n{background:var(--op1);color:#fff}
+.la-led{background:#101214;border-top:1px solid #000}
+.la-led div{max-width:1180px;margin:0 auto;padding:7px 16px 6px;display:flex;gap:12px;align-items:baseline;font:600 15px/1.25 var(--f);color:#FFB000;text-shadow:0 0 8px rgba(255,176,0,.45);white-space:nowrap;overflow:hidden}
+.la-led span{color:#fff;text-shadow:none;font-weight:700;flex:none}
+.la-led em{font-style:normal;overflow:hidden;text-overflow:ellipsis}
+.la-panel{animation:lxin .5s cubic-bezier(.2,.7,.2,1) both}
+.la-panel[hidden]{display:none}
+@keyframes lxin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.la-next{max-width:1180px;margin:36px auto 0;padding:0 16px 56px;display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap}
+.la-next button{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:14px;min-height:60px;padding:10px 22px;font:700 17px/1.2 var(--f);background:#fff;color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy);transition:transform .25s ease,box-shadow .25s ease,background .25s ease}
+.la-next button small{display:block;font-weight:500;font-size:14px;color:#51616E}
+.la-next button.go{background:var(--navy);color:#fff;margin-left:auto;border-bottom:5px solid #F2B233}
+.la-next button.go small{color:#C6D2DB}
+.la-next button i{font-style:normal;font-size:22px;transition:transform .25s ease}
+.la-next button:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 2px var(--navy),0 12px 22px -14px rgba(19,41,60,.7)}
+.la-next button.go:hover i{transform:translateX(5px)}
+.la-next button.back:hover i{transform:translateX(-5px)}
+.la-next button:focus-visible{outline:3px solid #F2B233;outline-offset:3px}
+@media(max-width:860px){
+  .la-tabs{padding:0}
+  .la-tab{grid-template-columns:1fr;justify-items:center;text-align:center;padding:9px 4px 10px;gap:5px}
+  .la-tab .n{grid-row:auto;width:30px;height:30px;font-size:20px}
+  .la-tab b{font-size:15.5px;max-width:100%}
+  .la-tab small,.la-tab b .lg{display:none}.la-tab b .sm{display:inline}
+  .la-led div{font-size:13.5px;padding:6px 12px 5px}
+  .la-led span{display:none}
+  .la-next{padding-bottom:40px}.la-next button{flex:1 1 100%;margin-left:0}
+  [id]{scroll-margin-top:104px}
+}
+
+/* ---------- Layout B: one long page with a line diagram and your ticket ---------- */
+.lb-line{position:sticky;top:0;z-index:40;background:var(--navy);box-shadow:0 10px 24px -14px rgba(0,0,0,.6)}
+.lb-line ol{list-style:none;margin:0 auto;padding:10px 24px 12px;max-width:1180px;display:flex;overflow-x:auto;scrollbar-width:none;position:relative}
+.lb-line ol::-webkit-scrollbar{display:none}
+.lb-line li{flex:1 0 auto;min-width:104px;position:relative;text-align:center}
+.lb-line li::before{content:"";position:absolute;left:-50%;right:50%;bottom:8px;height:6px;background:rgba(255,255,255,.28);transition:background .4s ease}
+.lb-line li:first-child::before{display:none}
+.lb-line li.past::before,.lb-line li.on::before{background:#F2B233}
+.lb-line a{display:block;padding:2px 8px 26px;color:#C6D2DB;text-decoration:none;font:600 14.5px/1.2 var(--f);white-space:nowrap;position:relative;transition:color .3s ease}
+.lb-line a::after{content:"";position:absolute;left:50%;bottom:4px;width:10px;height:10px;margin-left:-7px;border-radius:50%;background:var(--navy);border:2px solid #C6D2DB;transition:transform .3s ease,background .3s ease,border-color .3s ease}
+.lb-line li.big a{font:800 17px/1.1 var(--c);text-transform:uppercase;letter-spacing:.02em;color:#fff}
+.lb-line li.big a::after{width:16px;height:16px;margin-left:-11px;bottom:0;border:3px solid #fff}
+.lb-line li.past a::after{border-color:#F2B233;background:#F2B233}
+.lb-line li.on a{color:#F2B233}
+.lb-line li.on a::after{border-color:#F2B233;background:#fff;transform:scale(1.25)}
+.lb-line a:hover{color:#fff}
+.lb-line a:focus-visible{outline:3px solid #F2B233;outline-offset:-3px}
+.lb-chap{background:var(--navy);color:#fff;margin-top:64px;position:relative;overflow:hidden}
+.lb-chap:first-child{margin-top:0}
+.lb-chap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,var(--op1) 0 62%,#F2B233 62% 80%,#fff 80% 86%,var(--op1) 86%)}
+.lb-chap .wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 22px;align-items:center;padding-top:26px;padding-bottom:30px}
+.lb-chap .n{grid-row:1/3;width:74px;height:74px;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--navy);font:800 52px/1 var(--c);border-radius:6px;box-shadow:6px 6px 0 #F2B233}
+.lb-chap h2{margin:0;font:800 clamp(34px,5vw,56px)/.95 var(--c);text-transform:uppercase;letter-spacing:.005em;color:#fff}
+.lb-chap p{margin:0;font:500 17px/1.4 var(--f);color:#D5DEE5;max-width:60ch}
+.lb-group>section.s:first-of-type{padding-top:36px}
+/* your ticket */
+.lb-ticket{position:fixed;right:18px;top:132px;z-index:35;width:286px;background:#FBF3E4;color:#1A2731;box-shadow:0 22px 44px -20px rgba(12,28,42,.7);font-family:var(--f);transform:rotate(1.2deg);transition:transform .4s cubic-bezier(.2,.7,.2,1),opacity .3s ease}
+.lb-ticket:hover{transform:rotate(0) translateY(-3px)}
+.lb-ticket::before,.lb-ticket::after{content:"";display:block;height:16px;background:#F28C28}
+.lb-ticket::after{height:10px}
+.lb-tin{padding:12px 16px 14px;background-image:repeating-linear-gradient(90deg,rgba(242,140,40,.07) 0 2px,transparent 2px 9px)}
+.lb-ticket h3{margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline;font:800 15px/1 var(--c);text-transform:uppercase;letter-spacing:.06em;color:#1A2731}
+.lb-ticket h3 span{font:600 13px/1 var(--f);text-transform:none;letter-spacing:0;color:#6A4A1E}
+.lb-big{font:800 54px/.9 var(--c);color:#13293C;display:flex;align-items:baseline;gap:10px}
+.lb-big small{font:700 15px/1 var(--f);background:#13293C;color:#fff;padding:4px 7px}
+.lb-per{margin:8px 0 10px;font-size:15px;line-height:1.35}
+.lb-kv{border-top:2px dashed rgba(26,39,49,.35);padding-top:8px;display:grid;gap:4px;font-size:14.5px}
+.lb-kv .kv{display:flex;justify-content:space-between;gap:10px}.lb-kv .kv span:first-child{color:#6A4A1E!important;font-weight:500}.lb-kv .kv span{color:#1A2731!important}.lb-kv .kv span:last-child{font-weight:700;text-align:right}
+.lb-btns{display:grid;gap:8px;margin-top:12px}
+.lb-btns a{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;font-weight:700;font-size:15px;text-decoration:none;color:#fff;background:#13293C;transition:background .25s ease,transform .25s ease}
+.lb-btns a.alt{background:transparent;color:#13293C;box-shadow:inset 0 0 0 2px #13293C}
+.lb-btns a:hover{transform:translateX(3px)}
+.lb-btns a:focus-visible{outline:3px solid #F28C28;outline-offset:2px}
+body.lx-b{overflow-x:clip}
+@media(min-width:1500px){
+  body.lx-b main,body.lx-b .lb-line ol{--lbpad:320px}
+  body.lx-b main{padding-right:320px}
+  body.lx-b main .railstrip,body.lx-b main .jline{width:auto;margin-left:0;margin-right:0}
+  body.lx-b .lb-chap .wrap{margin-left:max(0px,calc((100% - 1180px)/2))}
+}
+@media(max-width:1499px){
+  .lb-ticket{left:0;right:0;top:auto;bottom:0;width:auto;transform:none;box-shadow:0 -12px 28px -16px rgba(12,28,42,.7)}
+  .lb-ticket:hover{transform:none}
+  .lb-ticket::before{height:6px}.lb-ticket::after{display:none}
+  .lb-tin{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:8px 16px 10px;max-width:1180px;margin:0 auto}
+  .lb-ticket h3,.lb-kv{display:none}
+  .lb-big{font-size:38px}.lb-big small{font-size:13px}
+  .lb-per{margin:0;font-size:14.5px}
+  .lb-btns{margin:0;grid-auto-flow:column}
+  .lb-btns a{padding:9px 12px;font-size:14.5px;white-space:nowrap}
+  body.lx-b{padding-bottom:84px}
+}
+@media(max-width:640px){
+  .lb-tin{grid-template-columns:auto minmax(0,1fr);padding:6px 12px 8px}
+  .lb-big{font-size:30px}.lb-big small{display:none}
+  .lb-per{font-size:13.5px;line-height:1.25}
+  .lb-btns{grid-column:1/3}.lb-btns a{justify-content:center;padding:7px 10px}
+  .lb-btns a i{display:none}
+  body.lx-b{padding-bottom:118px}
+  .lb-chap{margin-top:44px}.lb-chap .n{width:52px;height:52px;font-size:38px;box-shadow:4px 4px 0 #F2B233}
+  .lb-chap .wrap{gap:4px 16px;padding-top:20px;padding-bottom:24px}.lb-chap p{font-size:15.5px;grid-column:1/3}
+  .lb-chap .n{grid-row:auto}
+  .lb-line li{min-width:92px}.lb-line ol{padding:8px 8px 10px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.la-panel{animation:none}.la-tab::after,.la-tab .n,.lb-ticket,.la-next button,.la-next button i{transition:none}}
