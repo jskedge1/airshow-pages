@@ -50,8 +50,16 @@
         (nx ? '<button type="button" class="go" data-go="' + (i + 1) + '"><span>Next, ' + nx.t.charAt(0).toLowerCase() + nx.t.slice(1) + '<small>' + nx.s + '</small></span><i aria-hidden="true">→</i></button>' : '<button type="button" class="go" data-go="0"><span>Pick a different train<small>Back to the start</small></span><i aria-hidden="true">→</i></button>');
       g.box.appendChild(f);
     });
+    /* the rail strip and Your journey line show on Plan your train as well as Your journey, so the changes are in view
+       while you pick: the one strip moves to whichever of the two tabs is open */
+    var jw = journey.querySelector('.wrap');
+    function seat(i){
+      if (!strip && !jl) return;
+      if (i === 0) { var before = ctl && ctl.parentNode === tw ? ctl.nextSibling : null; [strip, jl].forEach(function(n){ if (n) tw.insertBefore(n, before); }); }
+      else if (i === 1) { var first = jw.firstChild; [strip, jl].forEach(function(n){ if (n) jw.insertBefore(n, first); }); }
+    }
     function show(i, target, quiet){
-      cur = i;
+      cur = i; seat(i);
       G.forEach(function(g, k){ g.box.hidden = k !== i; tabs[k].setAttribute('aria-selected', k === i ? 'true' : 'false'); tabs[k].tabIndex = k === i ? 0 : -1; tabs[k].classList.toggle('done', k < i); });
       kick(); setTimeout(kick, 350);
       if (quiet) return;
