@@ -19,7 +19,8 @@ HUBN = [('STP','London St Pancras','St Pancras'),('PAD','London Paddington','Pad
  ('NCL','Newcastle','Newcastle'),('CAR','Carlisle','Carlisle'),('EDB','Edinburgh Waverley','Edinburgh'),('GLQ','Glasgow Queen Street','Glasgow QS'),
  ('BRI','Bristol Temple Meads','Bristol'),('CDF','Cardiff Central','Cardiff'),('NWP','Newport','Newport'),('SWA','Swansea','Swansea'),('EXD','Exeter St Davids','Exeter'),('PLY','Plymouth','Plymouth'),
  ('RDG','Reading','Reading'),('OXF','Oxford','Oxford'),('SOU','Southampton Central','Southampton'),('SAL','Salisbury','Salisbury'),('BTN','Brighton','Brighton'),
- ('CBG','Cambridge','Cambridge'),('PBO','Peterborough','Peterborough'),('NRW','Norwich','Norwich'),('IPS','Ipswich','Ipswich')]
+ ('CBG','Cambridge','Cambridge'),('PBO','Peterborough','Peterborough'),('NRW','Norwich','Norwich'),('IPS','Ipswich','Ipswich'),
+ ('SOV', 'Southend Victoria', 'Southend Vic'),('SMN', 'Southminster', 'Southminster'),('BTR', 'Braintree', 'Braintree'),('SUY', 'Sudbury', 'Sudbury'),('CLT', 'Clacton-on-Sea', 'Clacton'),('WON', 'Walton-on-the-Naze', 'Walton'),('HWC', 'Harwich Town', 'Harwich'),('FLX', 'Felixstowe', 'Felixstowe'),('LWT', 'Lowestoft', 'Lowestoft'),('GYM', 'Great Yarmouth', 'Great Yarmouth'),('SHM', 'Sheringham', 'Sheringham'),('SSD', 'Stansted Airport', 'Stansted'),('HFE', 'Hertford East', 'Hertford East')]
 C2C = HUBN
 GROUP_SUB = 'Starting further away? These are the big stations and city termini around the UK, with the changes that work well on the way to Blackpool North.'
 C2C_BIG = {n for _,n,_ in HUBN} | {'Preston','Crewe','Wigan North Western','Warrington Bank Quay','Manchester Piccadilly','Manchester Oxford Road','Leeds','York','Lancaster','Carlisle','Birmingham New Street','Stafford','Stockport','Wolverhampton','Huddersfield','Sheffield','Doncaster','Bristol Temple Meads','Cheltenham Spa','Newport','Reading','Oxford','Milton Keynes Central','Peterborough','Ely','Nottingham','Derby','Edinburgh Waverley','Motherwell','Oxenholme Lake District','Glasgow Central','Blackburn','Bolton','Chorley','Kirkham & Wesham','Poulton-le-Fylde','Salford Crescent'} | {'Shoeburyness', 'Southend Central', 'Leigh-on-Sea', 'Benfleet', 'Pitsea', 'Basildon', 'Grays', 'Upminster', 'Barking', 'West Ham',
@@ -93,6 +94,10 @@ WAYS = {
     ('London Paddington', 'Farringdon'): ['Underground', 'Take the Elizabeth line from Paddington to Farringdon.', 'Take the Elizabeth line from Farringdon to Paddington.'],
     ('London Victoria', 'Stratford'): ['Underground', 'Take the Victoria line to Oxford Circus, then the Central line to Stratford.', 'Take the Central line from Stratford to Oxford Circus, then the Victoria line to Victoria.'],
     ('London Liverpool Street', 'Stratford'): ['Underground', 'Take the Elizabeth or Central line from Liverpool Street to Stratford.', 'Take the Elizabeth or Central line from Stratford to Liverpool Street.'],
+    ('Tottenham Hale', 'London Euston'): ['Underground', 'Take the Victoria line from Tottenham Hale to Euston.', 'Take the Victoria line from Euston to Tottenham Hale.'],
+    ('Tottenham Hale', 'London Kings Cross'): ['Underground', 'Take the Victoria line from Tottenham Hale to Kings Cross St Pancras.', 'Take the Victoria line from Kings Cross St Pancras to Tottenham Hale.'],
+    ('Tottenham Hale', 'London St Pancras'): ['Underground', 'Take the Victoria line from Tottenham Hale to Kings Cross St Pancras.', 'Take the Victoria line from Kings Cross St Pancras to Tottenham Hale.'],
+    ('Tottenham Hale', 'London Victoria'): ['Underground', 'Take the Victoria line from Tottenham Hale straight to Victoria.', 'Take the Victoria line from Victoria straight to Tottenham Hale.'],
     ('Manchester Victoria', 'Manchester Piccadilly'): ['Walk', 'Manchester Victoria to Piccadilly is about a 15 minute walk, or take the Metrolink tram between the two.', 'Manchester Piccadilly to Victoria is about a 15 minute walk, or take the Metrolink tram between the two.'],
 }
 OPCODE = {'c2c': 'CC', 'Southeastern': 'SE', 'Thameslink': 'TL', 'Great Northern': 'GN', 'Greater Anglia': 'LE', 'Southern': 'SN', 'Elizabeth line': 'XR',
@@ -297,6 +302,8 @@ def build(show):
         D, n = json.JSONDecoder().raw_decode(page[i0:]); i1 = i0 + n
     else:
         D = json.load(open(f'../{show}-data.json'))
+    OLDUK = {h['code']: h for h in D['hubs'] if h.get('group') == 'uk'}  # kept when this run has no downloads for them
+    OLDDAY = [{h['code']: h for h in hs if h.get('group') == 'uk'} for hs in D.get('byDay', [])]
     D['hubs'] = [h for h in D['hubs'] if h.get('group') != 'uk']
     if 'byDay' in D: D['byDay'] = [[h for h in hs if h.get('group') != 'uk'] for hs in D['byDay']]
     stops = D['stops']; SI = {s[0]: i for i, s in enumerate(stops)}
@@ -386,6 +393,8 @@ def build(show):
                 rs = json.load(open(f'raw/{show}_SRY_{date}.json'))
                 th += via(journeys(rs, 'there', 'Shoeburyness'), 'there', name); bk += via(journeys(rs, 'back', 'Shoeburyness'), 'back', name)
             J[dk] = {'there': clean(th), 'back': clean(bk)}
+        if not J and code in OLDUK:
+            newhubs.append(OLDUK[code]); report[code] = 'kept from before'; continue
         if not J or not J.get(daykeys[0]) or len(J[daykeys[0]]['there']) < 3 or len(J[daykeys[0]]['back']) < 3:
             report[code] = 'skipped, no journeys'; continue
         base = dirs(J[daykeys[0]], short, name); days = {}
@@ -404,11 +413,15 @@ def build(show):
     if 'byDay' in D:
         for k, dk in enumerate(daykeys):
             for h in newhubs:
+                if report.get(h['code']) == 'kept from before':
+                    if h['code'] in OLDDAY[k]: D['byDay'][k].append(OLDDAY[k][h['code']])
+                    continue
                 hh = {kk: v for kk, v in h.items() if kk != 'days'}; hh['dirs'] = h.get('days', {}).get(dk, h['dirs'])
                 D['byDay'][k].append(hh)
     # map lines for every pair of stations next to each other on a c2c journey
     seg = D['seg']; nostraight = 0; straight = []
     for h in newhubs:
+        if report.get(h['code']) == 'kept from before': continue
         for DD in [h['dirs']] + list(h.get('days', {}).values()):
             for d in DD:
                 for t in d['trips']:
