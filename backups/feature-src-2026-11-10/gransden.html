@@ -1154,6 +1154,17 @@ img.photo{display:block;width:100%;height:100%;object-fit:cover;pointer-events:n
 }
 </style>
 <style>body #phCalc .sw-calc .pl-q legend{text-transform:none!important}</style>
+<style id="tab-slider">
+html body .tabbar .tablist{flex-wrap:nowrap!important;overflow-x:auto!important;justify-content:flex-start!important;scroll-behavior:smooth;scrollbar-width:none;scroll-snap-type:x proximity}
+html body .tabbar .tablist::-webkit-scrollbar{display:none}
+html body .tabbar .tab{flex:none;scroll-snap-align:start;padding:15px 12px!important;font-size:14.5px!important}
+html body .tabbar .tab:hover,html body .tabbar .tab.on{padding-left:18px!important;padding-right:18px!important}
+.tabbar .wrap{position:relative}
+.ts-arr{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:36px;height:36px;border-radius:50%;border:0;background:#32B4AF;color:#fff;font:700 22px/1 Barlow,sans-serif;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
+.ts-arr[hidden]{display:none}
+.ts-prev{left:4px}.ts-next{right:4px}
+@media(max-width:760px){.ts-arr{display:none!important}}
+</style>
 </head>
 <body>
 <script>window.PHOTO={};window.PHOTO_ALT={};
@@ -1229,6 +1240,12 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
     </div>
   </div>
 </nav>
+<script id="tab-slider-js">(function(){var l=document.querySelector('.tabbar .tablist');if(!l)return;var w=l.parentNode;
+function mk(c,t,d){var b=document.createElement('button');b.type='button';b.className='ts-arr '+c;b.setAttribute('aria-label',t);b.textContent=d<0?'\u2039':'\u203A';b.onclick=function(){l.scrollBy({left:d*l.clientWidth*.7,behavior:'smooth'})};w.appendChild(b);return b}
+var a=mk('ts-prev','Scroll tabs left',-1),b=mk('ts-next','Scroll tabs right',1);
+function u(){a.hidden=l.scrollLeft<4;b.hidden=l.scrollLeft+l.clientWidth>=l.scrollWidth-4}
+l.addEventListener('scroll',u,{passive:true});addEventListener('resize',u);u();setTimeout(u,600);})();</script>
+
 
 <main>
 
@@ -2008,7 +2025,7 @@ window.photoImg=function(k){var o=document.querySelector('img[data-pic="'+k+'"]'
       <div><h2>Shooting <span class="sky">Little Gransden</span></h2></div>
       <p>The crowd line runs along the north side of the runway, so you face roughly south across the grass. That puts the sun ahead of you around midday and swinging round to your right through the afternoon, so I have found the morning and late afternoon give the best light. The aircraft parked on the grass and the car show are great subjects in the morning before the flying starts.</p>
     </div>
-    <figure class="pic wide reveal"><img loading="lazy" decoding="async" src="https://jskedge1.github.io/airshow-pages/camping-layout/img/dd011ffd898a17ff.webp" class="photo" data-pic="spitfire" alt="A Spitfire in American markings banking against a pale sky"><figcaption>A slower shutter speed keeps some blur in the propeller, so the aircraft looks like it's flying.</figcaption></figure>
+    <figure class="pic wide reveal"><img loading="lazy" decoding="async" src="https://jskedge1.github.io/airshow-pages/camping-layout/img/efcf15b014547919.webp" class="photo" data-pic="spitfire" alt="Spitfire AB910 in invasion stripes banking past the clouds"><figcaption>A slower shutter speed keeps some blur in the propeller, so the aircraft looks like it's flying.</figcaption></figure>
     <nav class="ph-jump reveal" aria-label="In this section"><a href="#photoMap">Photographers&rsquo; map</a><a href="#phCreative">Get creative</a><a href="#phCalc">Settings calculator</a><a href="#phKit">Kit planner</a><a href="#phPack">Packing list</a><a href="#phCheck">Settings checklist</a><a href="#phDl">Print</a></nav>
     <style>
     .pmap{margin:56px 0 48px}
