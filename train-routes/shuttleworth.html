@@ -2325,12 +2325,13 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
   /* journey line: one node per station you board or leave a train at */
   function jline(trip){
     var s = trip.s, ch = trip.changes, first = s[0], last = s[s.length - 1];
-    var nodes = [{ n: first[1], t: 'Leave ' + first[0] + (trip.plat ? ', platform ' + trip.plat : '') }];
+    var WS = trip.walkStart, WE = trip.walkEnd;
+    var nodes = [WS ? { n: first[1] + ' to ' + WS.to, t: 'Leave ' + first[0] + '<br>Leave ' + WS.to + ' ' + WS.dep + (WS.dp ? ', platform ' + WS.dp : '') + '<br>' + WS.way } : { n: first[1], t: 'Leave ' + first[0] + (trip.plat ? ', platform ' + trip.plat : '') }];
     ch.forEach(function(c){ nodes.push({ n: c.at, t: 'Arrive ' + c.arr + (c.ap ? ', platform ' + c.ap : '') + '<br>Leave ' + c.dep + (c.dp ? ', platform ' + c.dp : ''), chg: c.wait }); });
-    nodes.push({ n: last[1], t: 'Arrive ' + last[0], end: dir === 0 });
-    var legsInfo = [], from = first[0], dest = trip.dest;
+    nodes.push(WE ? { n: WE.from + ' to ' + last[1], t: 'Arrive ' + WE.from + ' ' + WE.arr + (WE.ap ? ', platform ' + WE.ap : '') + '<br>' + WE.way + '<br>Arrive ' + last[1] + ' ' + last[0] } : { n: last[1], t: 'Arrive ' + last[0], end: dir === 0 });
+    var legsInfo = [], from = WS ? WS.dep : first[0], dest = trip.dest;
     ch.forEach(function(c){ legsInfo.push({ to: dest, mins: gap(from, c.arr) }); from = c.dep; dest = c.to; });
-    legsInfo.push({ to: dest, mins: gap(from, last[0]) });
+    legsInfo.push({ to: dest, mins: gap(from, WE ? WE.arr : last[0]) });
     var html = '';
     nodes.forEach(function(nd, k){
       html += '<li class="jl-node' + (nd.chg != null ? ' chg' : '') + (nd.end ? ' end' : '') + '"><span class="dot" aria-hidden="true"></span><div><b>' + nd.n + '</b><small>' + nd.t + '</small>' + (nd.chg != null ? '<em>Change trains, ' + nd.chg + ' min</em>' : '') + '</div></li>';
@@ -2516,7 +2517,7 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
       var fewest = +Object.keys(count).sort(function(p, q){ return count[q] - count[p] || p - q; })[0];
       var best = Math.min.apply(null, tr.filter(function(x){ return x.changes.length === fewest; }).map(function(x){ return x.ride; }));
       var how = fewest === 0 ? '<i>Direct</i>' : fewest + (fewest === 1 ? ' change' : ' changes');
-      var gh = h.group && h.group !== 'c2c' && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class="hubgrp"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';
+      var gh = h.group && h.group !== 'c2c' && h.group !== 'uk' && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class="hubgrp"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';
       return gh + '<button type="button" data-i="' + i + '" data-op="' + hubOp(h) + '"' + opStyle(hubOp(h)) + ' aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
     }).join('');
     each($('hub').querySelectorAll('button'), function(b){ b.addEventListener('click', function(){ hub = +b.getAttribute('data-i'); idx = pickDefault(); render(); runTrain(); }); });

@@ -96,7 +96,10 @@ WAYS = {
     ('Manchester Victoria', 'Manchester Piccadilly'): ['Walk', 'Manchester Victoria to Piccadilly is about a 15 minute walk, or take the Metrolink tram between the two.', 'Manchester Piccadilly to Victoria is about a 15 minute walk, or take the Metrolink tram between the two.'],
 }
 OPCODE = {'c2c': 'CC', 'Southeastern': 'SE', 'Thameslink': 'TL', 'Great Northern': 'GN', 'Greater Anglia': 'LE', 'Southern': 'SN', 'Elizabeth line': 'XR',
-          'London Overground': 'LO', 'London North Eastern Railway': 'GR', 'Gatwick Express': 'GX'}
+          'London Overground': 'LO', 'London North Eastern Railway': 'GR', 'Gatwick Express': 'GX', 'CrossCountry': 'XC', 'Great Western Railway': 'GW',
+          'East Midlands Railway': 'EM', 'South Western Railway': 'SW', 'Chiltern Railways': 'CH', 'West Midlands Railway': 'LM', 'London Northwestern Railway': 'LM',
+          'Grand Central Railway': 'GC', 'Hull Trains': 'HT', 'Transport for Wales': 'AW', 'Avanti West Coast': 'VT', 'TransPennine Express': 'TP',
+          'Northern': 'NT', 'ScotRail': 'SR', 'Lumo': 'LD', 'Merseyrail': 'ME'}
 def way(a, b):
     """[label, words for going from a to b]"""
     if (a, b) in WAYS: return WAYS[(a, b)][:2]
