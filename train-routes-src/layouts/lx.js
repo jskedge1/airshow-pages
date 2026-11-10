@@ -55,7 +55,7 @@
     var jw = journey.querySelector('.wrap');
     function seat(i){
       if (!strip && !jl) return;
-      if (i === 0) { var before = ctl && ctl.parentNode === tw ? ctl.nextSibling : null; [strip, jl].forEach(function(n){ if (n) tw.insertBefore(n, before); }); }
+      if (i === 0) { /* just above step 1, Your station (Jack, 10 Nov 2026) */ var before = pick && pick.parentNode === tw ? pick : ctl && ctl.parentNode === tw ? ctl.nextSibling : null; [strip, jl].forEach(function(n){ if (n) tw.insertBefore(n, before); }); }
       else if (i === 1) { var first = jw.firstChild; [strip, jl].forEach(function(n){ if (n) jw.insertBefore(n, first); }); }
     }
     function show(i, target, quiet){
