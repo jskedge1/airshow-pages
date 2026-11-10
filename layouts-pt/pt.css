@@ -1,0 +1,118 @@
+/* Public transport page, sign style layout (preview, 10 Nov 2026). The page's own parts are moved into four numbered tabs,
+   with a zone line map of the shows, a show name band and a Ways in screen laid out like station and pier signs. */
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:112px}
+.hero{min-height:0!important}
+/* ---- tabs ---- */
+.px-bar{position:sticky;top:0;z-index:60;background:#13293C;box-shadow:0 10px 24px -14px rgba(0,0,0,.6)}
+.px-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-width:1180px;margin:0 auto;padding:0 16px}
+.px-tab{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 12px;align-items:center;padding:12px 14px 11px;color:#fff;border-left:1px solid rgba(255,255,255,.12);position:relative;transition:background .3s ease}
+.px-tab:last-child{border-right:1px solid rgba(255,255,255,.12)}
+.px-tab .n{grid-row:1/3;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#fff;color:#13293C;font:800 26px/1 var(--c);border-radius:4px;transition:background .3s ease,color .3s ease,transform .3s ease}
+.px-tab b{font:800 21px/1.05 var(--c);text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.px-tab b .sm{display:none}
+.px-tab small{font:500 14px/1.2 var(--f);color:#C6D2DB;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.px-tab::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:#F2B233;transform:scaleX(0);transform-origin:0 50%;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.px-tab:hover{background:rgba(255,255,255,.07)}
+.px-tab:focus-visible{outline:3px solid #F2B233;outline-offset:-3px}
+.px-tab[aria-selected="true"]{background:rgba(255,255,255,.1)}
+.px-tab[aria-selected="true"]::after{transform:scaleX(1)}
+.px-tab[aria-selected="true"] .n{background:#F2B233;transform:scale(1.06)}
+.px-tab.done .n{background:var(--purple,#6950A1);color:#fff}
+.px-led{background:#101214;border-top:1px solid #000}
+.px-led div{max-width:1180px;margin:0 auto;padding:7px 16px 6px;display:flex;gap:12px;align-items:baseline;font:600 15px/1.25 var(--f);color:#FFB000;text-shadow:0 0 8px rgba(255,176,0,.45);white-space:nowrap;overflow:hidden}
+.px-led span{color:#fff;text-shadow:none;font-weight:700;flex:none}
+.px-led em{font-style:normal;overflow:hidden;text-overflow:ellipsis}
+.px-panel{animation:pxin .5s cubic-bezier(.2,.7,.2,1) both}
+.px-panel[hidden]{display:none}
+@keyframes pxin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.px-next{max-width:1180px;margin:30px auto 0;padding:0 16px 52px;display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap}
+.px-next button{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:14px;min-height:60px;padding:10px 22px;font:700 17px/1.2 var(--f);background:#fff;color:#13293C;box-shadow:inset 0 0 0 2px #13293C;transition:transform .25s ease,box-shadow .25s ease}
+.px-next button small{display:block;font-weight:500;font-size:14px;color:#51616E}
+.px-next button.go{background:#13293C;color:#fff;margin-left:auto;border-bottom:5px solid #F2B233}
+.px-next button.go small{color:#C6D2DB}
+.px-next button i{font-style:normal;font-size:22px;transition:transform .25s ease}
+.px-next button:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 2px #13293C,0 12px 22px -14px rgba(19,41,60,.7)}
+.px-next button.go:hover i{transform:translateX(5px)}.px-next button.back:hover i{transform:translateX(-5px)}
+.px-next button:focus-visible{outline:3px solid #F2B233;outline-offset:3px}
+/* ---- sign: name band ---- */
+.px-sign{max-width:1180px;margin:0 auto;padding:28px 16px 0}
+.px-band{display:flex;justify-content:space-between;align-items:baseline;gap:8px 24px;flex-wrap:wrap;background:var(--purple,#6950A1);color:#fff;padding:16px 22px 15px;border-top:10px solid #0B1722}
+.px-band h2{margin:0;font:700 clamp(26px,3.6vw,40px)/1.05 var(--f);letter-spacing:-.01em;color:#fff}
+.px-band span{font:400 clamp(20px,2.6vw,30px)/1.1 var(--f);color:#E9E2F6}
+/* ---- sign: zone line map ---- */
+.px-mapwrap{background:#E3E5E8;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.px-mapwrap::-webkit-scrollbar{display:none}
+.px-map{position:relative;min-width:1040px;height:312px}
+.px-zone{position:absolute;top:0;bottom:0}
+.px-zone:nth-child(odd){background:#D5D8DC}
+.px-zone b{position:absolute;left:16px;top:12px;font:600 17px/1.1 var(--f);color:#15181B;white-space:nowrap}
+.px-map svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.px-stop{all:unset;box-sizing:border-box;position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;cursor:pointer}
+.px-stop i{position:absolute;left:13px;top:13px;width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid #13293C;box-sizing:border-box;transition:transform .25s ease,background .25s ease}
+.px-stop span{position:absolute;left:50%;transform:translateX(-50%);width:128px;text-align:center;font:600 14.5px/1.15 var(--f);color:#15181B}
+.px-stop.up span{bottom:40px}.px-stop.dn span{top:40px}
+.px-stop span em{display:flex;justify-content:center;gap:3px;margin-top:4px;font-style:normal}
+.px-stop span em u{width:11px;height:11px;border-radius:50%;background:var(--mc);box-shadow:0 0 0 1.5px #fff;text-decoration:none}
+.px-stop:hover i{transform:scale(1.3)}
+.px-stop:focus-visible i{outline:3px solid #F2B233;outline-offset:3px}
+.px-stop[aria-pressed="true"] i{background:#F2B233;transform:scale(1.25)}
+.px-stop[aria-pressed="true"] span{font-weight:800}
+.px-stop span strong{display:none;margin:5px auto 0;width:max-content;background:#E07A1F;color:#fff;font:700 13px/1 var(--f);padding:5px 9px 6px}
+.px-stop[aria-pressed="true"] span strong{display:block}
+.px-key{background:#fff;display:flex;flex-wrap:wrap;gap:8px 26px;align-items:center;padding:14px 22px;font:500 15px/1.3 var(--f);color:#15181B;border-bottom:1px solid #D5D8DC}
+.px-key b{font-weight:700}
+.px-key span{display:inline-flex;align-items:center;gap:8px}
+.px-key span u{width:13px;height:13px;border-radius:50%;background:var(--mc)}
+.px-key span.ln u{width:34px;height:7px;border-radius:0;background:#13293C;box-shadow:0 0 0 3px #8FD0E4}
+.px-key span.st u{background:#fff;border:3px solid #13293C;box-sizing:border-box}
+/* ---- sign: Ways in screen ---- */
+.px-screen{background:#DCEEF5;border:10px solid #0B1722;margin-top:22px;font-family:var(--f);overflow:hidden}
+.px-s-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 18px;color:#13293C}
+.px-s-top b{font:700 22px/1.1 var(--f)}
+.px-s-top time{font:700 20px/1 var(--f);font-variant-numeric:tabular-nums}
+.px-s-head{background:var(--purple,#6950A1);color:#fff;font:700 21px/1 var(--f);padding:10px 18px}
+.px-row{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:44px 104px minmax(0,1fr) auto;align-items:center;width:100%;background:#0B1722;color:#fff;border-bottom:1px solid #2A3742;min-height:52px;transition:background .25s ease}
+.px-row:first-of-type{background:#DCEEF5;color:#13293C}
+.px-row .no{text-align:center;font:500 21px/1 var(--f)}
+.px-row .ch{align-self:stretch;display:flex;align-items:center;justify-content:center;background:var(--mc);color:#fff;font:800 19px/1 var(--c);letter-spacing:.03em;text-transform:uppercase}
+.px-row .tx{padding:8px 16px;font:500 20px/1.2 var(--f);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.px-row .op{padding:0 18px;font:500 17px/1 var(--f);white-space:nowrap}
+.px-row:hover{background:#1B2B38}.px-row:first-of-type:hover{background:#CBE4EE}
+.px-row:focus-visible{outline:3px solid #F2B233;outline-offset:-3px}
+.px-call{background:#13293C;color:#fff;padding:9px 18px;font:500 17px/1.3 var(--f)}
+.px-call b{color:#8FD0E4;font-weight:500;margin-right:8px}
+.px-none{background:#0B1722;color:#fff;padding:16px 18px;font:500 18px/1.4 var(--f)}
+/* ---- sign: Good to know panels ---- */
+body.px .faq .qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;background:#E3E5E8;padding:22px}
+body.px .faq .qa details{background:#fff;border:0!important;box-shadow:none;padding:20px 22px 22px;margin:0}
+body.px .faq .qa summary{pointer-events:none;list-style:none;padding:0;display:block}
+body.px .faq .qa summary::-webkit-details-marker{display:none}
+body.px .faq .qa summary::after,body.px .faq .qa summary::before{display:none!important}
+body.px .faq .qa .qi{display:inline-flex;margin-bottom:10px}
+body.px .faq .qa .qt{display:block;font:700 23px/1.15 var(--f);color:#15181B;letter-spacing:-.01em}
+body.px .faq .qa .a{padding:10px 0 0;font-size:15.5px;line-height:1.5;color:#26343F;max-width:none}
+body.px .faq .info-chev{display:none}
+@media(max-width:860px){
+  .px-tabs{padding:0}
+  .px-tab{grid-template-columns:1fr;justify-items:center;text-align:center;padding:9px 4px 10px;gap:5px}
+  .px-tab .n{grid-row:auto;width:30px;height:30px;font-size:20px}
+  .px-tab b{font-size:15.5px;max-width:100%}
+  .px-tab small,.px-tab b .lg{display:none}.px-tab b .sm{display:inline}
+  .px-led div{font-size:13.5px;padding:6px 12px 5px}.px-led span{display:none}
+  .px-next{padding-bottom:40px}.px-next button{flex:1 1 100%;margin-left:0}
+  [id]{scroll-margin-top:100px}
+  .px-sign{padding:18px 0 0}
+  .px-band{padding:13px 16px 12px}
+  .px-screen{border-width:6px;margin-top:16px}
+  .px-row{grid-template-columns:34px 78px minmax(0,1fr) auto;min-height:48px}
+  .px-row .no{font-size:18px}.px-row .ch{font-size:16px}.px-row .tx{font-size:16.5px;padding:8px 10px;white-space:normal}.px-row .op{font-size:14.5px;padding:0 10px}
+  .px-s-top b{font-size:18px}.px-s-head{font-size:18px}.px-call{font-size:15px}
+  .px-key{padding:12px 16px;font-size:14px;gap:8px 16px}
+  body.px .faq .qa{padding:12px;gap:12px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.px-panel{animation:none}.px-tab::after,.px-tab .n{transition:none}}
+body.px #rTitle,body.px #rKick{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+body.px .res-h{margin-top:6px}
+body.px section.board{margin-top:26px}
+body.px main.res{padding-top:22px}
