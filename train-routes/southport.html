@@ -1370,6 +1370,17 @@ body.lx-b{overflow-x:clip}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.la-panel{animation:none}.la-tab::after,.la-tab .n,.lb-ticket,.la-next button,.la-next button i{transition:none}}
 @media(max-width:1499px){body.lx-b #spm{bottom:96px}}@media(max-width:640px){body.lx-b #spm{bottom:128px}}
 #times>.wrap>.railstrip{margin-top:26px}
+
+/* tabs open out sideways when you hover over them, and the others make room */
+@media(hover:hover) and (min-width:861px){
+  .la-tabs{display:flex}
+  .la-tab{flex:1 1 0;min-width:0;transition:flex-grow .4s cubic-bezier(.2,.7,.2,1),background .3s ease,padding .4s cubic-bezier(.2,.7,.2,1)}
+  .la-tab:hover,.la-tab:focus-visible{flex-grow:1.55;background:rgba(255,255,255,.14);padding-left:22px}
+  .la-tab:hover .n,.la-tab:focus-visible .n{transform:scale(1.12)}
+  .la-tab:hover::after{transform:scaleX(1);opacity:.55}
+  .la-tab[aria-selected="true"]:hover::after{opacity:1}
+}
+@media(prefers-reduced-motion:reduce){.la-tab{transition:none!important}}
 </style>
 </head>
 <body>
