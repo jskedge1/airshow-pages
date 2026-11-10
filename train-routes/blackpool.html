@@ -2376,7 +2376,28 @@ var DATA={"stops":[["Preston",53.75427,-2.70672,"Preston"],["Kirkham & Wesham",5
     board(); draw(); table(); screen();
   }
   /* a sensible first pick: a mid morning train there, a train after the flying back */
+  /* the train shown first (10 Nov 2026): heading to the show, the one that gets in closest to 10am without being later
+     than ten past, so you're there early. If nothing from that station gets in by then, the first train that does.
+     Days with a late start (an afternoon or evening show) keep their own time, and the way home is unchanged. */
   function pickDefault(){
+    var base = pickDefaultOld(), dd = (CFG.x && CFG.x.dayDefaults || {})[D().key], want = dd ? dd[0] : CFG.defaultThere;
+    if (dir !== 0) {
+      /* heading home: if nothing leaves after the usual time, show the last train, not the first one of the morning */
+      var tb = DIR().trips, wb = dd ? dd[1] : CFG.defaultBack;
+      if (base === 0 && tb.length && wb && mm(tb[0].big) < mm(wb)) return tb.length - 1;
+      return base;
+    }
+    if (want && mm(want) >= 720) return base;
+    var tr = DIR().trips, best = -1, bestArr = -1, first = -1, firstArr = 1e9;
+    tr.forEach(function(x, i){
+      try { if (typeof BUS !== 'undefined' && BUS && !busConn(x).ok) return; } catch (e) {}
+      var arr = mm(x.s[x.s.length - 1][0]); if (arr < mm(x.big)) return;
+      if (arr <= 610 && arr > bestArr) { bestArr = arr; best = i; }
+      if (arr < firstArr) { firstArr = arr; first = i; }
+    });
+    return best >= 0 ? best : first >= 0 ? first : base;
+  }
+  function pickDefaultOld(){
     var dd = (CFG.x && CFG.x.dayDefaults || {})[D().key], tr = DIR().trips, want = dd ? dd[dir] : dir === 0 ? CFG.defaultThere : CFG.defaultBack;
     if (BUS) {
       var okIdx = []; tr.forEach(function(x, i){ if (busConn(x).ok) okIdx.push(i); });
