@@ -186,7 +186,7 @@
     b.setAttribute('data-px', '1'); b.classList.add('px-plan');
     h.textContent = 'Plan your train to ' + stn;
     var top = document.createElement('div'); top.className = 'px-plan-top';
-    top.innerHTML = '<span class="px-plan-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#13293C"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#F2B02E"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#fff"/><path d="M7 15l-2 3M13 15l2 3" stroke="#13293C" stroke-width="1.6"/></svg></span><b>Train planner</b><em>' + esc(sm ? sm.textContent : '') + '</em>';
+    top.innerHTML = '<span class="px-plan-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="12" rx="2.5" fill="#13293C"/><rect x="5.6" y="3.6" width="8.8" height="4.4" fill="#44AED6"/><rect x="5.4" y="10" width="9.2" height="2.2" fill="#fff"/><path d="M7 15l-2 3M13 15l2 3" stroke="#13293C" stroke-width="1.6"/></svg></span><b>Train planner</b><em>' + esc(sm ? sm.textContent : '') + '</em>';
     b.insertBefore(top, b.firstChild);
     var facts = [].slice.call(document.querySelectorAll('#sec-train .stn .tile')).map(function(t){ var l = t.querySelector('small'), v = t.querySelector('b'); return l && v ? '<div><span>' + esc(l.textContent) + '</span><b>' + esc(v.textContent) + '</b></div>' : ''; }).join('');
     var box = document.createElement('div'); box.className = 'px-plan-body';
