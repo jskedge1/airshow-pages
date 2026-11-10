@@ -2708,6 +2708,14 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
     tr.style.transition = 'opacity .35s ease'; tr.style.opacity = '0';
     setTimeout(function(){ put(); tr.style.opacity = '1'; }, 380);
   }
+  /* every change on a journey, counting the Tube, Elizabeth line and walking changes across a city, so the station
+     tiles, the departure cards and the journey summary all give the same number as the rail strip (10 Nov 2026) */
+  function chgList(trip){
+    if (trip._cl) return trip._cl;
+    var out; try { out = tcSegs(trip).pts.slice(1, -1).map(function(p){ return p[5] || p[7]; }); } catch (e) { out = (trip.changes || []).map(function(c){ return c.at; }); }
+    return (trip._cl = out);
+  }
+  function chgN(trip){ return chgList(trip).length; }
   function railRun(resized){
     if (!$('rsStations')) return;
     var strip = $('railstrip'), trip = DIR().trips[idx], s = trip.s;
@@ -2796,7 +2804,7 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
     $('jlline').innerHTML = html;
     jlLive(trip);
     if (window.UKAG_LL) UKAG_LL.trip(trip, $('jlline'));
-    $('jlsum').textContent = trip.big + ' ' + D().label + ', ' + first[1] + ' to ' + last[1] + '. ' + hm(trip.ride) + ', ' + (ch.length ? ch.length + (ch.length === 1 ? ' change' : ' changes') : 'direct') + '.';
+    $('jlsum').textContent = trip.big + ' ' + D().label + ', ' + first[1] + ' to ' + last[1] + '. ' + hm(trip.ride) + ', ' + (chgN(trip) ? chgN(trip) + (chgN(trip) === 1 ? ' change' : ' changes') : 'direct') + '.';
   }
 
   /* live times on the journey line: the first train at your start station, each connection, and the arrival,
@@ -2973,6 +2981,8 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
       tr.forEach(function(x){ count[x.changes.length] = (count[x.changes.length] || 0) + 1; });
       var fewest = +Object.keys(count).sort(function(p, q){ return count[q] - count[p] || p - q; })[0];
       var best = Math.min.apply(null, tr.filter(function(x){ return x.changes.length === fewest; }).map(function(x){ return x.ride; }));
+      /* show the changes of the train this tile opens on, Tube and walking changes included, so it matches the page */
+      try { var keepHub = hub, keepIdx = idx; hub = i; var dt = DIR().trips[pickDefault()]; hub = keepHub; idx = keepIdx; if (dt) { fewest = chgN(dt); var same = tr.filter(function(x){ return chgN(x) === fewest; }).map(function(x){ return x.ride; }); best = same.length ? Math.min.apply(null, same) : dt.ride; } } catch (e) { hub = keepHub; }
       var how = fewest === 0 ? '<i>Direct</i>' : fewest + (fewest === 1 ? ' change' : ' changes');
       var gh = h.group && h.group !== 'c2c' && h.group !== 'uk' && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class="hubgrp"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';
       return gh + '<button type="button" data-i="' + i + '" data-op="' + hubOp(h) + '"' + opStyle(hubOp(h)) + ' aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
@@ -3167,7 +3177,7 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
   function board(){
     var d = DIR(), nx = nextIndex();
     $('board').innerHTML = d.trips.map(function(t, i){
-      return '<button type="button" class="dep" data-op="' + ((t.legops || t.ops)[0]) + '"' + opStyle((t.legops || t.ops)[0]) + ' aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + (t.split ? '<span class="sp">Splits</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span>' + (t.changes.length ? '<span class="cg">Change at ' + names(t.changes.map(function(c){ return c.at; })) + '</span>' : '<span class="cg">Direct</span>') + '</button>';
+      return '<button type="button" class="dep" data-op="' + ((t.legops || t.ops)[0]) + '"' + opStyle((t.legops || t.ops)[0]) + ' aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + (t.split ? '<span class="sp">Splits</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span>' + (chgN(t) ? '<span class="cg">Change at ' + names(chgList(t)) + '</span>' : '<span class="cg">Direct</span>') + '</button>';
     }).join('');
     $('bnote').textContent = d.note || '';
     each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); var sl = $('board').scrollLeft; board(); $('board').scrollLeft = sl; draw(); table(); screen(); }); });
@@ -3226,7 +3236,7 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
     $('sumper').innerHTML = 'From <b>' + first[1] + '</b>. Gets to <b>' + last[1] + '</b> at ' + last[0] + '.';
     $('sumkv').innerHTML = '<div class="kv"><span>Journey time</span><span>' + hm(trip.ride) + '</span></div>' +
       '<div class="kv"><span>Stations</span><span>' + s.length + '</span></div>' +
-      '<div class="kv"><span>Changes</span><span>' + (ch.length ? ch.length + ', at ' + chn : 'None, it’s direct') + '</span></div>';
+      '<div class="kv"><span>Changes</span><span>' + (chgN(trip) ? chgN(trip) + ', at ' + names(chgList(trip)) : 'None, it’s direct') + '</span></div>';
     var save = $('sumsave');
     save.classList.toggle('warn', !!trip.split || ch.some(function(c){ return c.wait <= 6; }));
     save.innerHTML = ch.length ? ch.map(function(c){
@@ -3243,7 +3253,7 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
       '<div class="grid"><span>From</span><span>' + first[5] + '</span><span>To</span><span>' + last[5] + '</span>' +
       '<span>Depart</span><span>' + first[0] + (trip.plat ? ', plat ' + trip.plat : '') + '</span><span>Arrive</span><span>' + last[0] + '</span>' +
       (ch.length ? '<span>Change</span><span>' + ch.map(function(c){ return c.at + ' ' + c.dep; }).join(', ') + '</span>' : '') +
-      '<span>Journey</span><span>' + hm(trip.ride) + ', ' + (ch.length ? ch.length + (ch.length === 1 ? ' change' : ' changes') : 'no changes') + '</span></div>' +
+      '<span>Journey</span><span>' + hm(trip.ride) + ', ' + (chgN(trip) ? chgN(trip) + (chgN(trip) === 1 ? ' change' : ' changes') : 'no changes') + '</span></div>' +
       '<div class="ft">Planning slip, not a ticket</div>';
 
     /* your station for the show follows the picked train */
@@ -3475,7 +3485,7 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
       return '<button type="button" role="tab" data-d="' + i + '" aria-selected="' + (i === day) + '"><span class="ti">' + PI.any + '</span><span>' + dd.label + '</span><i class="cv" aria-hidden="true">▾</i></button>';
     }).join('') + '</div>';
     var rows = DIR().trips.map(function(t, i){
-      var how = t.changes.length ? 'change at ' + names(t.changes.map(function(c){ return c.at; })) : 'direct';
+      var how = chgN(t) ? 'change at ' + names(chgList(t)) : 'direct';
       return '<div class="drow"><span class="tm">' + t.big + '</span><span class="sv">' + esc(t.opLabel) + ', ' + how + '<small>' + esc(t.small) + '</small></span><button type="button" data-pick="' + i + '" aria-pressed="' + (i === idx) + '">' + (i === idx ? '✓ Picked' : 'Pick this train') + '</button></div>';
     }).join('');
     var times = days + '<div class="dwrap"><div class="dboard" style="max-height:430px;overflow:auto;scrollbar-width:none"><div class="dh"><span>Time</span><span>Service</span><span></span></div>' + rows + '</div><p class="dnote">' + esc(DIR().note) + '</p></div>';
@@ -3487,7 +3497,7 @@ var DATA={"stops":[["London Kings Cross",51.5324,-0.12302,"Kings Cross"],["Finsb
     card.innerHTML = '<article class="opt open" style="--m:#DA4290">'
       + '<div class="oh"><span class="mode-r">' + PI.train + '</span><span class="t">' + esc(trip.title) + '</span><span class="s">' + esc(trip.small) + '</span>'
       + '<span class="legs">' + legChips.join('<span class="ar" aria-hidden="true">›</span>') + '</span>'
-      + '<span class="key"><b>' + hm(trip.ride) + '</b><small>' + (ch.length ? ch.length + (ch.length === 1 ? ' change' : ' changes') : 'Direct') + '</small></span></div>'
+      + '<span class="key"><b>' + hm(trip.ride) + '</b><small>' + (chgN(trip) ? chgN(trip) + (chgN(trip) === 1 ? ' change' : ' changes') : 'Direct') + '</small></span></div>'
       + '<div class="lwh' + (lh.v < 1200 ? ' early' : '') + '"><span class="lw-l">Last way home</span><b>' + lh.big + '</b><span class="lw-s">From Biggleswade to ' + esc(h.name) + ', gets in at ' + lh.arr + '</span></div>'
       + '<div class="nxt"><div class="dcard has-op op-' + op0code + '" style="--lc:#DA4290;--oc:#DA4290;--oc2:#FFFFFF"><div class="dc-strip"></div><div class="dc-title"><b>' + esc(op0) + '</b><span class="dc-i">' + PI.any + '</span></div>'
       + '<div class="dc-row"><span class="dc-d"><b>' + esc(first[1]) + '</b><small>' + esc(trip.dest) + '</small></span><span class="dc-t"><b>' + trip.big + '</b><small>' + esc(trip.small) + '</small></span></div><div class="nchips">' + chips + '</div></div></div>'

@@ -256,3 +256,11 @@
     tr.style.transition = 'opacity .35s ease'; tr.style.opacity = '0';
     setTimeout(function(){ put(); tr.style.opacity = '1'; }, 380);
   }
+  /* every change on a journey, counting the Tube, Elizabeth line and walking changes across a city, so the station
+     tiles, the departure cards and the journey summary all give the same number as the rail strip (10 Nov 2026) */
+  function chgList(trip){
+    if (trip._cl) return trip._cl;
+    var out; try { out = tcSegs(trip).pts.slice(1, -1).map(function(p){ return p[5] || p[7]; }); } catch (e) { out = (trip.changes || []).map(function(c){ return c.at; }); }
+    return (trip._cl = out);
+  }
+  function chgN(trip){ return chgList(trip).length; }
