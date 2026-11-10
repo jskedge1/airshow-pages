@@ -106,7 +106,12 @@
     GMV: ['Great Malvern', 52.1090, -2.3180], MCN: ['Machynlleth', 52.5951, -3.8547], AYW: ['Aberystwyth', 52.4140, -4.0817],
     UNI: ['University (Birmingham)', 52.4511, -1.9365], RDC: ['Redditch', 52.3060, -1.9450],
     SUN: ['Sunderland', 54.9054, -1.3826], HPL: ['Hartlepool', 54.6863, -1.2069], SCA: ['Scarborough', 54.2798, -0.4059],
-    MDE: ['Maidstone East', 51.2779, 0.5213], MIA: ['Manchester Airport', 53.3650, -2.2730]
+    MDE: ['Maidstone East', 51.2779, 0.5213], MIA: ['Manchester Airport', 53.3650, -2.2730],
+    SWF: ['South Woodham Ferrers', 51.6493, 0.6064], BUC: ['Burnham-on-Crouch', 51.6334, 0.8142], SMN: ['Southminster', 51.6607, 0.8350],
+    BTR: ['Braintree', 51.8754, 0.5568], MKT: ['Marks Tey', 51.8810, 0.7832], KEL: ['Kelvedon', 51.8406, 0.7026], SUY: ['Sudbury', 52.0362, 0.7357],
+    WON: ['Walton-on-the-Naze', 51.8460, 1.2675], FRI: ['Frinton-on-Sea', 51.8380, 1.2433], HPQ: ['Harwich International', 51.9474, 1.2554], HWC: ['Harwich Town', 51.9441, 1.2866],
+    FLX: ['Felixstowe', 51.9670, 1.3505], CMR: ['Cromer', 52.9302, 1.2928], SHM: ['Sheringham', 52.9413, 1.2097], NWA: ['North Walsham', 52.8170, 1.3843],
+    BXB: ['Broxbourne', 51.7466, -0.0110], WAR: ['Ware', 51.8079, -0.0287], HFE: ['Hertford East', 51.7990, -0.0730]
   };
 
   /* ---------- lines: [operator, line name, [code, minutes from start], ...] typical times ---------- */
@@ -191,6 +196,15 @@
     ['Southeastern', 'Ashford to Ramsgate', [['AFK', 0], ['CBW', 18], ['RAM', 42]]],
     ['Southeastern', 'Victoria to Dover', [['VIC', 0], ['BMS', 15], ['CTM', 40], ['FAV', 60], ['CBE', 70], ['DVP', 92]]],
     ['London Northwestern Railway', 'Euston to Birmingham via Northampton', [['EUS', 0], ['MKC', 35], ['NMP', 55], ['RUG', 75], ['COV', 88], ['BHI', 98], ['BHM', 110]]],
+    ['Greater Anglia', 'Wickford to Southminster', [['WIC', 0], ['SWF', 8], ['BUC', 22], ['SMN', 28]]],
+    ['Greater Anglia', 'Liverpool Street to Braintree', [['LST', 0], ['SRA', 7], ['SNF', 25], ['CHM', 35], ['WTM', 45], ['BTR', 62]]],
+    ['Greater Anglia', 'Liverpool Street to Colchester (stopping)', [['LST', 0], ['SRA', 7], ['SNF', 25], ['CHM', 37], ['WTM', 48], ['KEL', 55], ['MKT', 61], ['COL', 68]]],
+    ['Greater Anglia', 'Marks Tey to Sudbury', [['MKT', 0], ['SUY', 19]]],
+    ['Greater Anglia', 'Colchester to Walton-on-the-Naze', [['COL', 0], ['TLS', 15], ['FRI', 24], ['WON', 28]]],
+    ['Greater Anglia', 'Manningtree to Harwich Town', [['MNG', 0], ['HPQ', 13], ['HWC', 20]]],
+    ['Greater Anglia', 'Ipswich to Felixstowe', [['IPS', 0], ['FLX', 26]]],
+    ['Greater Anglia', 'Norwich to Sheringham', [['NRW', 0], ['NWA', 22], ['CMR', 45], ['SHM', 58]]],
+    ['Greater Anglia', 'Liverpool Street to Hertford East', [['LST', 0], ['TOM', 13], ['BXB', 33], ['WAR', 47], ['HFE', 54]]],
     ['ScotRail', 'Glasgow to Aberdeen', [['GLQ', 0], ['STG', 28], ['PTH', 60], ['DEE', 85], ['ABD', 160]]],
     ['ScotRail', 'Edinburgh to Inverness', [['EDB', 0], ['HYM', 4], ['PTH', 75], ['INV', 215]]],
     ['ScotRail', 'Edinburgh to Stirling', [['EDB', 0], ['HYM', 4], ['STG', 50]]],
@@ -258,7 +272,8 @@
   var HUBS = [
     ['Big cities', [['London', ['KGX', 'STP', 'EUS', 'PAD', 'LST', 'FST', 'VIC', 'WAT', 'LBG', 'CHX', 'MYB']], ['Birmingham', ['BHM', 'BMO']], ['Manchester', ['MAN']], ['Liverpool', ['LIV']], ['Leeds', ['LDS']], ['Sheffield', ['SHF']], ['Newcastle', ['NCL']], ['Glasgow', ['GLC', 'GLQ']], ['Edinburgh', ['EDB']], ['Bristol', ['BRI']], ['Cardiff', ['CDF']], ['Nottingham', ['NOT']]]],
     ['London and the South East', [['London', ['KGX', 'STP', 'EUS', 'PAD', 'LST', 'FST', 'VIC', 'WAT', 'LBG', 'CHX', 'MYB']], ['Southend', ['SOC', 'SOV']], ['Chelmsford', ['CHM']], ['Brighton', ['BTN']], ['Gatwick Airport', ['GTW']], ['Ashford', ['AFK']], ['Maidstone', ['MDE']], ['Canterbury', ['CBW', 'CBE']], ['Dover', ['DVP']], ['Ramsgate', ['RAM']], ['Hastings', ['HGS']], ['Reading', ['RDG']], ['Oxford', ['OXF']], ['Guildford', ['GLD']], ['Portsmouth', ['PMH']], ['Southampton', ['SOU']], ['Milton Keynes', ['MKC']], ['Luton', ['LTN']]]],
-    ['East of England', [['Cambridge', ['CBG']], ['Colchester', ['COL']], ['Ipswich', ['IPS']], ['Norwich', ['NRW']], ['Peterborough', ['PBO']], ['Ely', ['ELY']], ['Kings Lynn', ['KLN']], ['Bury St Edmunds', ['BSE']], ['Lowestoft', ['LWT']], ['Great Yarmouth', ['GYM']], ['Stansted Airport', ['SSD']], ['Bedford', ['BDM']], ['Stevenage', ['SVG']]]],
+    ['East of England', [['Cambridge', ['CBG']], ['Colchester', ['COL']], ['Ipswich', ['IPS']], ['Norwich', ['NRW']], ['Peterborough', ['PBO']], ['Ely', ['ELY']], ['Kings Lynn', ['KLN']], ['Bury St Edmunds', ['BSE']], ['Lowestoft', ['LWT']], ['Great Yarmouth', ['GYM']], ['Stansted Airport', ['SSD']], ['Bedford', ['BDM']], ['Stevenage', ['SVG']],
+      ['Southend Victoria', ['SOV']], ['Southminster', ['SMN']], ['Braintree', ['BTR']], ['Sudbury', ['SUY']], ['Clacton-on-Sea', ['CLT']], ['Walton-on-the-Naze', ['WON']], ['Harwich Town', ['HWC']], ['Felixstowe', ['FLX']], ['Sheringham', ['SHM']], ['Hertford East', ['HFE']]]],
     ['South West', [['Penzance', ['PNZ']], ['Truro', ['TRU']], ['Plymouth', ['PLY']], ['Exeter', ['EXD']], ['Taunton', ['TAU']], ['Bristol', ['BRI']], ['Bath', ['BTH']], ['Swindon', ['SWI']], ['Gloucester', ['GCR']], ['Cheltenham', ['CNM']], ['Salisbury', ['SAL']], ['Bournemouth', ['BMH']]]],
     ['Wales', [['Cardiff', ['CDF']], ['Newport', ['NWP']], ['Swansea', ['SWA']], ['Carmarthen', ['CMN']], ['Aberystwyth', ['AYW']], ['Abergavenny', ['AGV']], ['Wrexham', ['WRX']], ['Llandudno Junction', ['LLJ']], ['Bangor', ['BNG']], ['Holyhead', ['HHD']]]],
     ['Midlands', [['Birmingham', ['BHM', 'BMO']], ['Coventry', ['COV']], ['Wolverhampton', ['WVH']], ['Leicester', ['LEI']], ['Nottingham', ['NOT']], ['Derby', ['DBY']], ['Stoke-on-Trent', ['SOT']], ['Stafford', ['STA']], ['Shrewsbury', ['SHR']], ['Telford', ['TFC']], ['Hereford', ['HFD']], ['Worcester', ['WOF']], ['Northampton', ['NMP']], ['Lincoln', ['LCN']]]],

@@ -9,3 +9,12 @@ to a show's train page, in a "From across the UK" group above the c2c stations. 
    which template-v2.html shows in the journey line. Glasgow Queen Street does the same to Glasgow Central.
    Stretches of line not drawn on any page are drawn straight between stations. Station positions come from stations.json when no page has them.
 3. Add the new walkPairs, crs codes and wording to the cfg (done by hand for Blackpool), then `cd .. && python3 build.py <show>`.
+
+## Every show (10 Nov 2026)
+All twelve train pages now have the forty main stations, merged into the main "Your station" tiles (no separate heading, same as the c2c stations).
+1. Set the dates in `shows.json` (Thursday and Friday share one weekday date), then `python3 run_shows.py show [show ...]`.
+   It skips stations a page already has (`skip_existing.json`) and prints `SHOW DONE <show>` as each one finishes.
+2. For the ten pages built from train-routes-src: `./finish.sh <show>` (extra legs, hubs, `patch_cfg.py`, page build).
+3. For Headcorn and Shuttleworth (settings inside the page): `python3 legs_for.py <show>`, `python3 build_hubs.py <show>`, `python3 patch_embedded.py <show>`,
+   then update the station count in the page's "Your station" line by hand.
+Some stations drop out for a show when that weekend's engineering works make the journey messy (for example Plymouth to Swansea); a fresh run on other dates brings them back.

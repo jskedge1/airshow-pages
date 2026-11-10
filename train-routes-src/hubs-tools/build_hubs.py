@@ -19,7 +19,8 @@ HUBN = [('STP','London St Pancras','St Pancras'),('PAD','London Paddington','Pad
  ('NCL','Newcastle','Newcastle'),('CAR','Carlisle','Carlisle'),('EDB','Edinburgh Waverley','Edinburgh'),('GLQ','Glasgow Queen Street','Glasgow QS'),
  ('BRI','Bristol Temple Meads','Bristol'),('CDF','Cardiff Central','Cardiff'),('NWP','Newport','Newport'),('SWA','Swansea','Swansea'),('EXD','Exeter St Davids','Exeter'),('PLY','Plymouth','Plymouth'),
  ('RDG','Reading','Reading'),('OXF','Oxford','Oxford'),('SOU','Southampton Central','Southampton'),('SAL','Salisbury','Salisbury'),('BTN','Brighton','Brighton'),
- ('CBG','Cambridge','Cambridge'),('PBO','Peterborough','Peterborough'),('NRW','Norwich','Norwich'),('IPS','Ipswich','Ipswich')]
+ ('CBG','Cambridge','Cambridge'),('PBO','Peterborough','Peterborough'),('NRW','Norwich','Norwich'),('IPS','Ipswich','Ipswich'),
+ ('SOV', 'Southend Victoria', 'Southend Vic'),('SMN', 'Southminster', 'Southminster'),('BTR', 'Braintree', 'Braintree'),('SUY', 'Sudbury', 'Sudbury'),('CLT', 'Clacton-on-Sea', 'Clacton'),('WON', 'Walton-on-the-Naze', 'Walton'),('HWC', 'Harwich Town', 'Harwich'),('FLX', 'Felixstowe', 'Felixstowe'),('LWT', 'Lowestoft', 'Lowestoft'),('GYM', 'Great Yarmouth', 'Great Yarmouth'),('SHM', 'Sheringham', 'Sheringham'),('SSD', 'Stansted Airport', 'Stansted'),('HFE', 'Hertford East', 'Hertford East')]
 C2C = HUBN
 GROUP_SUB = 'Starting further away? These are the big stations and city termini around the UK, with the changes that work well on the way to Blackpool North.'
 C2C_BIG = {n for _,n,_ in HUBN} | {'Preston','Crewe','Wigan North Western','Warrington Bank Quay','Manchester Piccadilly','Manchester Oxford Road','Leeds','York','Lancaster','Carlisle','Birmingham New Street','Stafford','Stockport','Wolverhampton','Huddersfield','Sheffield','Doncaster','Bristol Temple Meads','Cheltenham Spa','Newport','Reading','Oxford','Milton Keynes Central','Peterborough','Ely','Nottingham','Derby','Edinburgh Waverley','Motherwell','Oxenholme Lake District','Glasgow Central','Blackburn','Bolton','Chorley','Kirkham & Wesham','Poulton-le-Fylde','Salford Crescent'} | {'Shoeburyness', 'Southend Central', 'Leigh-on-Sea', 'Benfleet', 'Pitsea', 'Basildon', 'Grays', 'Upminster', 'Barking', 'West Ham',
@@ -57,10 +58,53 @@ WAYS = {
     ('London Bridge', 'London Kings Cross'): ['Underground', 'Take the Northern line (Bank branch) from London Bridge to Kings Cross St Pancras.', 'Take the Northern line (Bank branch) from Kings Cross St Pancras to London Bridge.'],
     ('London St Pancras', 'London Kings Cross'): ['Walk', 'Kings Cross and St Pancras are just across the road from each other, about a 5 minute walk.', 'St Pancras and Kings Cross are just across the road from each other, about a 5 minute walk.'],
     ('London Marylebone', 'London Kings Cross'): ['Underground', 'Take the Bakerloo line one stop to Baker Street, then the Circle, Hammersmith & City or Metropolitan line to Kings Cross St Pancras.', 'Take the Circle, Hammersmith & City or Metropolitan line to Baker Street, then the Bakerloo line one stop to Marylebone.'],
+    ('London Liverpool Street', 'London Victoria'): ['Underground', 'Take the Circle line from Liverpool Street to Victoria.', 'Take the Circle line from Victoria to Liverpool Street.'],
+    ('London Liverpool Street', 'London Waterloo'): ['Underground', 'Take the Central line from Liverpool Street to Bank, then the Waterloo & City line to Waterloo.', 'Take the Waterloo & City line from Waterloo to Bank, then the Central line one stop to Liverpool Street.'],
+    ('London Liverpool Street', 'London Bridge'): ['Underground', 'Walk to Moorgate, a few minutes from Liverpool Street, and take the Northern line (Bank branch) to London Bridge.', 'Take the Northern line (Bank branch) from London Bridge to Moorgate, then it is a few minutes on foot to Liverpool Street.'],
+    ('London Liverpool Street', 'London Paddington'): ['Underground', 'Take the Elizabeth line from Liverpool Street straight to Paddington.', 'Take the Elizabeth line from Paddington straight to Liverpool Street.'],
+    ('London Liverpool Street', 'London St Pancras'): ['Underground', 'Take the Circle, Hammersmith & City or Metropolitan line from Liverpool Street to Kings Cross St Pancras.', 'Take the Circle, Hammersmith & City or Metropolitan line from Kings Cross St Pancras to Liverpool Street.'],
+    ('London Liverpool Street', 'London Marylebone'): ['Underground', 'Take the Circle, Hammersmith & City or Metropolitan line to Baker Street, then the Bakerloo line one stop to Marylebone.', 'Take the Bakerloo line one stop to Baker Street, then the Circle, Hammersmith & City or Metropolitan line to Liverpool Street.'],
+    ('London Victoria', 'London Waterloo'): ['Underground', 'Take the Victoria line from Victoria to Green Park, then the Jubilee line to Waterloo.', 'Take the Jubilee line from Waterloo to Green Park, then the Victoria line to Victoria.'],
+    ('London Victoria', 'London Paddington'): ['Underground', 'Take the Circle line from Victoria to Paddington.', 'Take the Circle line from Paddington to Victoria.'],
+    ('London Victoria', 'London Bridge'): ['Underground', 'Take the Victoria line from Victoria to Green Park, then the Jubilee line to London Bridge.', 'Take the Jubilee line from London Bridge to Green Park, then the Victoria line to Victoria.'],
+    ('London Victoria', 'London St Pancras'): ['Underground', 'Take the Victoria line from Victoria to Kings Cross St Pancras.', 'Take the Victoria line from Kings Cross St Pancras to Victoria.'],
+    ('London Victoria', 'London Marylebone'): ['Underground', 'Take the Victoria line to Oxford Circus, then the Bakerloo line to Marylebone.', 'Take the Bakerloo line from Marylebone to Oxford Circus, then the Victoria line to Victoria.'],
+    ('London Waterloo', 'London Bridge'): ['Underground', 'Take the Jubilee line from Waterloo to London Bridge.', 'Take the Jubilee line from London Bridge to Waterloo.'],
+    ('London Waterloo', 'London Paddington'): ['Underground', 'Take the Bakerloo line from Waterloo straight to Paddington.', 'Take the Bakerloo line from Paddington straight to Waterloo.'],
+    ('London Waterloo', 'London St Pancras'): ['Underground', 'Take the Northern line (Charing Cross branch) to Euston, then it is a 10 minute walk to St Pancras.', 'Walk to Euston, about 10 minutes, and take the Northern line (Charing Cross branch) to Waterloo.'],
+    ('London Waterloo', 'London Marylebone'): ['Underground', 'Take the Bakerloo line from Waterloo straight to Marylebone.', 'Take the Bakerloo line from Marylebone straight to Waterloo.'],
+    ('London Paddington', 'London Bridge'): ['Underground', 'Take the Bakerloo line from Paddington to Waterloo, then the Jubilee line one stop to London Bridge.', 'Take the Jubilee line one stop from London Bridge to Waterloo, then the Bakerloo line to Paddington.'],
+    ('London Paddington', 'London St Pancras'): ['Underground', 'Take the Circle or Hammersmith & City line from Paddington to Kings Cross St Pancras.', 'Take the Circle or Hammersmith & City line from Kings Cross St Pancras to Paddington.'],
+    ('London Paddington', 'London Marylebone'): ['Underground', 'Take the Bakerloo line one stop from Paddington to Marylebone, or it is about a 15 minute walk.', 'Take the Bakerloo line one stop from Marylebone to Paddington, or it is about a 15 minute walk.'],
+    ('London Bridge', 'London St Pancras'): ['Underground', 'Take the Northern line (Bank branch) from London Bridge to Kings Cross St Pancras.', 'Take the Northern line (Bank branch) from Kings Cross St Pancras to London Bridge.'],
+    ('London Bridge', 'London Marylebone'): ['Underground', 'Take the Jubilee line from London Bridge to Baker Street, then the Bakerloo line one stop to Marylebone.', 'Take the Bakerloo line one stop to Baker Street, then the Jubilee line to London Bridge.'],
+    ('London Bridge', 'London Fenchurch Street'): ['Walk', 'London Bridge to Fenchurch Street is about a 15 minute walk over London Bridge.', 'Fenchurch Street to London Bridge is about a 15 minute walk over London Bridge.'],
+    ('London St Pancras', 'London Marylebone'): ['Underground', 'Take the Circle, Hammersmith & City or Metropolitan line to Baker Street, then the Bakerloo line one stop to Marylebone.', 'Take the Bakerloo line one stop to Baker Street, then the Circle, Hammersmith & City or Metropolitan line to Kings Cross St Pancras.'],
+    ('London Liverpool Street', 'London Charing Cross'): ['Underground', 'Take the Central line to Tottenham Court Road, then the Northern line (Charing Cross branch) to Charing Cross.', 'Take the Northern line (Charing Cross branch) to Tottenham Court Road, then the Central line to Liverpool Street.'],
+    ('London Kings Cross', 'London Charing Cross'): ['Underground', 'Take the Victoria line one stop to Euston, then the Northern line (Charing Cross branch) to Charing Cross.', 'Take the Northern line (Charing Cross branch) to Euston, then the Victoria line one stop to Kings Cross St Pancras.'],
+    ('London St Pancras', 'London Charing Cross'): ['Underground', 'Take the Victoria line one stop to Euston, then the Northern line (Charing Cross branch) to Charing Cross.', 'Take the Northern line (Charing Cross branch) to Euston, then the Victoria line one stop to Kings Cross St Pancras.'],
+    ('London Paddington', 'London Charing Cross'): ['Underground', 'Take the Bakerloo line from Paddington to Charing Cross.', 'Take the Bakerloo line from Charing Cross to Paddington.'],
+    ('London Victoria', 'London Charing Cross'): ['Underground', 'Take the Circle or District line from Victoria to Embankment, then it is a short walk to Charing Cross.', 'Walk to Embankment, a short walk from Charing Cross, and take the Circle or District line to Victoria.'],
+    ('London Waterloo', 'London Charing Cross'): ['Walk', 'Waterloo to Charing Cross is about a 15 minute walk over the Golden Jubilee Bridges, or one stop on the Bakerloo line.', 'Charing Cross to Waterloo is about a 15 minute walk over the Golden Jubilee Bridges, or one stop on the Bakerloo line.'],
+    ('Stratford', 'London Paddington'): ['Underground', 'Take the Elizabeth line from Stratford straight to Paddington.', 'Take the Elizabeth line from Paddington straight to Stratford.'],
+    ('Farringdon', 'London Liverpool Street'): ['Underground', 'Take the Elizabeth line from Farringdon one stop to Liverpool Street.', 'Take the Elizabeth line from Liverpool Street one stop to Farringdon.'],
+    ('Farringdon', 'Stratford'): ['Underground', 'Take the Elizabeth line from Farringdon to Stratford.', 'Take the Elizabeth line from Stratford to Farringdon.'],
+    ('London Waterloo', 'Stratford'): ['Underground', 'Take the Jubilee line from Waterloo to Stratford.', 'Take the Jubilee line from Stratford to Waterloo.'],
+    ('London Bridge', 'Stratford'): ['Underground', 'Take the Jubilee line from London Bridge to Stratford.', 'Take the Jubilee line from Stratford to London Bridge.'],
+    ('London Paddington', 'Farringdon'): ['Underground', 'Take the Elizabeth line from Paddington to Farringdon.', 'Take the Elizabeth line from Farringdon to Paddington.'],
+    ('London Victoria', 'Stratford'): ['Underground', 'Take the Victoria line to Oxford Circus, then the Central line to Stratford.', 'Take the Central line from Stratford to Oxford Circus, then the Victoria line to Victoria.'],
+    ('London Liverpool Street', 'Stratford'): ['Underground', 'Take the Elizabeth or Central line from Liverpool Street to Stratford.', 'Take the Elizabeth or Central line from Stratford to Liverpool Street.'],
+    ('Tottenham Hale', 'London Euston'): ['Underground', 'Take the Victoria line from Tottenham Hale to Euston.', 'Take the Victoria line from Euston to Tottenham Hale.'],
+    ('Tottenham Hale', 'London Kings Cross'): ['Underground', 'Take the Victoria line from Tottenham Hale to Kings Cross St Pancras.', 'Take the Victoria line from Kings Cross St Pancras to Tottenham Hale.'],
+    ('Tottenham Hale', 'London St Pancras'): ['Underground', 'Take the Victoria line from Tottenham Hale to Kings Cross St Pancras.', 'Take the Victoria line from Kings Cross St Pancras to Tottenham Hale.'],
+    ('Tottenham Hale', 'London Victoria'): ['Underground', 'Take the Victoria line from Tottenham Hale straight to Victoria.', 'Take the Victoria line from Victoria straight to Tottenham Hale.'],
     ('Manchester Victoria', 'Manchester Piccadilly'): ['Walk', 'Manchester Victoria to Piccadilly is about a 15 minute walk, or take the Metrolink tram between the two.', 'Manchester Piccadilly to Victoria is about a 15 minute walk, or take the Metrolink tram between the two.'],
 }
 OPCODE = {'c2c': 'CC', 'Southeastern': 'SE', 'Thameslink': 'TL', 'Great Northern': 'GN', 'Greater Anglia': 'LE', 'Southern': 'SN', 'Elizabeth line': 'XR',
-          'London Overground': 'LO', 'London North Eastern Railway': 'GR', 'Gatwick Express': 'GX'}
+          'London Overground': 'LO', 'London North Eastern Railway': 'GR', 'Gatwick Express': 'GX', 'CrossCountry': 'XC', 'Great Western Railway': 'GW',
+          'East Midlands Railway': 'EM', 'South Western Railway': 'SW', 'Chiltern Railways': 'CH', 'West Midlands Railway': 'LM', 'London Northwestern Railway': 'LM',
+          'Grand Central Railway': 'GC', 'Hull Trains': 'HT', 'Transport for Wales': 'AW', 'Avanti West Coast': 'VT', 'TransPennine Express': 'TP',
+          'Northern': 'NT', 'ScotRail': 'SR', 'Lumo': 'LD', 'Merseyrail': 'ME'}
 def way(a, b):
     """[label, words for going from a to b]"""
     if (a, b) in WAYS: return WAYS[(a, b)][:2]
@@ -70,7 +114,8 @@ def way(a, b):
 NICE_FIX = {'Prestwick (Strathclyde)': 'Prestwick Town', 'Edinburgh': 'Edinburgh Waverley', 'Preston (Lancs)': 'Preston', 'London St Pancras International': 'London St Pancras',
             'Earlswood Surrey': 'Earlswood', 'Seaford Sussex': 'Seaford', 'Elsenham Essex': 'Elsenham', 'Roydon Essex': 'Roydon',
             'Poulton Le Fylde': 'Poulton-le-Fylde', 'Liverpool Lime St': 'Liverpool Lime Street', 'Telford': 'Telford Central', 'Bootle Oriel Rd': 'Bootle Oriel Road',
-            'Burnley Manchester Rd': 'Burnley Manchester Road'}
+            'Burnley Manchester Rd': 'Burnley Manchester Road', 'James St': 'James Street', 'Moreton in Marsh': 'Moreton-in-Marsh',
+            'Newton Le Willows': 'Newton-le-Willows'}
 def NICE(n):
     n = NICE_FIX.get(n, n)
     return re.sub(r'\s*\([^)]*\)', '', n) if '(Brighton)' not in n else n
@@ -124,6 +169,9 @@ def where(nice):
         if k in OSMST: return OSMST[k]
     for k in (STFIX.get(nice, nice), nice, nice + ' Central'):
         if k in STL: return STL[k]
+    norm = lambda n: re.sub(r'[^a-z]', '', re.sub(r'\s*\(.*?\)', '', n.lower().replace(' st ', ' street ').replace('-on-trent', '')))
+    for k in STL:
+        if norm(k) == norm(nice) or norm(k) == norm(nice).replace('ontrent', ''): return STL[k]
     return None
 def c2cpath(a, b):
     """the railway between two c2c stations, along the OSM c2c routes"""
@@ -254,6 +302,8 @@ def build(show):
         D, n = json.JSONDecoder().raw_decode(page[i0:]); i1 = i0 + n
     else:
         D = json.load(open(f'../{show}-data.json'))
+    OLDUK = {h['code']: h for h in D['hubs'] if h.get('group') == 'uk'}  # kept when this run has no downloads for them
+    OLDDAY = [{h['code']: h for h in hs if h.get('group') == 'uk'} for hs in D.get('byDay', [])]
     D['hubs'] = [h for h in D['hubs'] if h.get('group') != 'uk']
     if 'byDay' in D: D['byDay'] = [[h for h in hs if h.get('group') != 'uk'] for hs in D['byDay']]
     stops = D['stops']; SI = {s[0]: i for i, s in enumerate(stops)}
@@ -343,6 +393,8 @@ def build(show):
                 rs = json.load(open(f'raw/{show}_SRY_{date}.json'))
                 th += via(journeys(rs, 'there', 'Shoeburyness'), 'there', name); bk += via(journeys(rs, 'back', 'Shoeburyness'), 'back', name)
             J[dk] = {'there': clean(th), 'back': clean(bk)}
+        if not J and code in OLDUK:
+            newhubs.append(OLDUK[code]); report[code] = 'kept from before'; continue
         if not J or not J.get(daykeys[0]) or len(J[daykeys[0]]['there']) < 3 or len(J[daykeys[0]]['back']) < 3:
             report[code] = 'skipped, no journeys'; continue
         base = dirs(J[daykeys[0]], short, name); days = {}
@@ -361,11 +413,15 @@ def build(show):
     if 'byDay' in D:
         for k, dk in enumerate(daykeys):
             for h in newhubs:
+                if report.get(h['code']) == 'kept from before':
+                    if h['code'] in OLDDAY[k]: D['byDay'][k].append(OLDDAY[k][h['code']])
+                    continue
                 hh = {kk: v for kk, v in h.items() if kk != 'days'}; hh['dirs'] = h.get('days', {}).get(dk, h['dirs'])
                 D['byDay'][k].append(hh)
     # map lines for every pair of stations next to each other on a c2c journey
     seg = D['seg']; nostraight = 0; straight = []
     for h in newhubs:
+        if report.get(h['code']) == 'kept from before': continue
         for DD in [h['dirs']] + list(h.get('days', {}).values()):
             for d in DD:
                 for t in d['trips']:
@@ -387,7 +443,7 @@ def build(show):
     return report, sorted(missing), sorted(set(straight)), sorted(pairs_used)
 
 if __name__ == '__main__':
-    allpairs = {}
+    allpairs = json.load(open('ways_used.json')) if os.path.exists('ways_used.json') else {}
     for show in sys.argv[1:] or list(SH):
         rep, miss, st, pu = build(show)
         print(show, rep); print('   missing positions:', miss); print('   straight lines:', len(st), st[:12]); print('   ways across:', pu)

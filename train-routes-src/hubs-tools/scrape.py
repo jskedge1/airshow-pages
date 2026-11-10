@@ -4,7 +4,7 @@ Run: python3 scrape.py [show ...]   (about 15 to 25 minutes for every show, 4 wo
 import re, json, time, subprocess, html, sys, os, hashlib
 from concurrent.futures import ThreadPoolExecutor
 BASE = 'https://traintimes.org.uk'
-HUBS = ['STP','PAD','LST','WAT','VIC','LBG','MYB','BHM','BRI','CDF','EDB','GLQ','NCL','SHF','NOT','LEI','DBY','CRE','SOT','RDG','SOU','BTN','NRW','CBG','PBO','DON','HUL','CAR','MCV','BHI','NWP','SWA','PLY','EXD','IPS','COV','WVH','OXF','MKC','SAL']
+HUBS = ['STP','PAD','LST','WAT','VIC','LBG','MYB','BHM','BRI','CDF','EDB','GLQ','NCL','SHF','NOT','LEI','DBY','CRE','SOT','RDG','SOU','BTN','NRW','CBG','PBO','DON','HUL','CAR','MCV','BHI','NWP','SWA','PLY','EXD','IPS','COV','WVH','OXF','MKC','SAL','SOV','SMN','BTR','SUY','CLT','WON','HWC','FLX','LWT','GYM','SHM','SSD','HFE']
 here = os.path.dirname(os.path.abspath(__file__)); os.chdir(here)
 os.makedirs('raw', exist_ok=True); os.makedirs('cache', exist_ok=True)
 SH = json.load(open('shows.json'))
@@ -52,7 +52,7 @@ def cache_leg(g):
 
 
 # the changes the pages can show: the same station, or one of these ways across (build_c2c.py has the words for each)
-WAYS_CRS = {frozenset(p) for p in [('FST', 'LST'), ('WEH', 'SRA'), ('FST', 'EUS'), ('FST', 'KGX'), ('FST', 'STP'), ('GLQ', 'GLC'), ('BHM', 'BMO'), ('FST', 'VIC'), ('WEH', 'LBG'), ('FST', 'BFR'), ('WGN', 'WGW'), ('LIV', 'LVC'), ('FST', 'PAD'), ('PAD', 'WEH'), ('ZLW', 'FST'),('STP','EUS'),('KGX','EUS'),('PAD','EUS'),('LST','EUS'),('WAT','EUS'),('VIC','EUS'),('LBG','EUS'),('MYB','EUS'),('CHX','EUS'),('CST','EUS'),('BFR','EUS'),('FST','EUS'),('MCV','MAN'),('PAD','KGX'),('LST','KGX'),('WAT','KGX'),('VIC','KGX'),('LBG','KGX'),('STP','KGX'),('MYB','KGX'),('GLQ','GLC'),('BHM','BMO'),('EDB','HYM')]}
+WAYS_CRS = {frozenset(p) for p in [('FST', 'LST'), ('WEH', 'SRA'), ('FST', 'EUS'), ('FST', 'KGX'), ('FST', 'STP'), ('GLQ', 'GLC'), ('BHM', 'BMO'), ('FST', 'VIC'), ('WEH', 'LBG'), ('FST', 'BFR'), ('WGN', 'WGW'), ('LIV', 'LVC'), ('FST', 'PAD'), ('PAD', 'WEH'), ('ZLW', 'FST'),('STP','EUS'),('KGX','EUS'),('PAD','EUS'),('LST','EUS'),('WAT','EUS'),('VIC','EUS'),('LBG','EUS'),('MYB','EUS'),('CHX','EUS'),('CST','EUS'),('BFR','EUS'),('FST','EUS'),('MCV','MAN'),('PAD','KGX'),('LST','KGX'),('WAT','KGX'),('VIC','KGX'),('LBG','KGX'),('STP','KGX'),('MYB','KGX'),('GLQ','GLC'),('BHM','BMO'),('EDB','HYM'),('TOM','EUS'),('TOM','KGX'),('TOM','STP'),('TOM','VIC'),('SRA','PAD'),('ZFD','LST'),('ZFD','SRA'),('WAT','SRA'),('LBG','SRA'),('PAD','ZFD'),('VIC','SRA'),('LST','SRA'),('LST','VIC'),('LST','WAT'),('LST','LBG'),('LST','PAD'),('LST','STP'),('LST','MYB'),('VIC','WAT'),('VIC','PAD'),('VIC','LBG'),('VIC','STP'),('VIC','MYB'),('WAT','LBG'),('WAT','PAD'),('WAT','STP'),('WAT','MYB'),('PAD','LBG'),('PAD','STP'),('PAD','MYB'),('LBG','STP'),('LBG','MYB'),('LBG','FST'),('STP','MYB'),('LST','CHX'),('KGX','CHX'),('STP','CHX'),('PAD','CHX'),('VIC','CHX'),('WAT','CHX')]}
 def keep(js, key, hub):
     """picks the journeys worth fetching calling points for, from the leg times alone (same rules as build_c2c.clean)"""
     def mins(iso): return int(iso[11:13]) * 60 + int(iso[14:16])

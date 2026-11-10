@@ -1183,6 +1183,7 @@ html,body{background:var(--mist)}
 <!-- seo: matches the Wix page on ukairshowguide.co.uk -->
 <meta name="robots" content="noindex, nofollow">
 <!-- /seo -->
+<script src="../london-links.js"></script>
 </head>
 <body>
 
@@ -1860,6 +1861,7 @@ var DATA=__DATA__;
     }
     $('jlline').innerHTML = html;
     jlLive(trip);
+    if (window.UKAG_LL) UKAG_LL.trip(trip, $('jlline'));
     $('jlsum').textContent = trip.big + ' ' + D().label + ', ' + first[1] + ' to ' + last[1] + '. ' + hm(trip.ride) + ', ' + (ch.length ? ch.length + (ch.length === 1 ? ' change' : ' changes') : 'direct') + '.';
   }
 
@@ -2047,7 +2049,7 @@ var DATA=__DATA__;
       var fewest = +Object.keys(count).sort(function(p, q){ return count[q] - count[p] || p - q; })[0];
       var best = Math.min.apply(null, tr.filter(function(x){ return x.changes.length === fewest; }).map(function(x){ return x.ride; }));
       var how = fewest === 0 ? '<i>Direct</i>' : fewest + (fewest === 1 ? ' change' : ' changes');
-      var gh = h.group && h.group !== 'c2c' && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class="hubgrp"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';
+      var gh = h.group && h.group !== 'c2c' && h.group !== 'uk' && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class="hubgrp"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';
       return gh + '<button type="button" data-i="' + i + '"' + opStyle(hubOp(h)) + ' aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
     }).join('');
     each($('hub').querySelectorAll('button'), function(b){ b.addEventListener('click', function(){ hub = +b.getAttribute('data-i'); idx = pickDefault(); render(); runTrain(); }); });
