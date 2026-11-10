@@ -2065,6 +2065,10 @@ body.lx-b{overflow-x:clip}
   .la-tab[aria-selected="true"]:hover::after{opacity:1}
 }
 @media(prefers-reduced-motion:reduce){.la-tab{transition:none!important}}
+
+/* typing heading */
+.lx-typing .lx-type::after{content:"";display:inline-block;width:.07em;height:.86em;margin-left:.07em;background:currentColor;vertical-align:-.06em;animation:lxcaret .7s steps(1) infinite}
+@keyframes lxcaret{50%{opacity:0}}
 </style>
 </head>
 <body>
@@ -4013,6 +4017,21 @@ window.addEventListener('resize',apply);})();
     var rio = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }); }, { threshold: 0 });
     [].forEach.call(document.querySelectorAll('.rise'), function(el){ rio.observe(el); });
   }
+  /* "Pick your train" types itself out as it comes into view, like a departure board filling in */
+  (function(){
+    var h = document.querySelector('#times h2.t'), full = h ? h.textContent.trim() : '';
+    if (!full || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    h.setAttribute('aria-label', full);
+    if (h.offsetHeight) h.style.minHeight = h.offsetHeight + 'px';
+    h.innerHTML = '<span class="lx-type" aria-hidden="true">​</span>';
+    var sp = h.firstChild, going = false;
+    new IntersectionObserver(function(es, io){
+      es.forEach(function(e){
+        if (!e.isIntersecting || going) return; going = true; io.disconnect(); h.classList.add('lx-typing');
+        var i = 0; (function tick(){ sp.textContent = full.slice(0, ++i); if (i < full.length) setTimeout(tick, 55 + Math.random() * 45); else setTimeout(function(){ h.classList.remove('lx-typing'); }, 1600); })();
+      });
+    }, { threshold: .6 }).observe(h);
+  })();
 
   if (MODE === 'a') {
     var bar = document.createElement('div'); bar.className = 'la-bar';
