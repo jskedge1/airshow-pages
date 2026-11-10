@@ -2356,7 +2356,7 @@ var DATA={"stops":[["London Charing Cross",51.5075,-0.12369,"Charing Cross"],["L
     'Grand Central': { body: '#1E1E1E', door: '#1E1E1E', band: '#F37021', roof: '#5E6266' },
     'Hull Trains': { body: '#0B3D91', door: '#0B3D91', band: '#7AC143', roof: '#7C8BA6' },
     'ScotRail': { body: '#1C4F9C', door: '#1C4F9C', band: '#F3F4F5', roof: '#8C9AB3' },
-    'c2c': { body: '#F3F4F5', door: '#B1006F', band: '#B1006F', roof: '#A3AAB0' },
+    'c2c': { body: '#F3F4F5', door: '#6A2C91', band: '#6A2C91', roof: '#A3AAB0' },
     'Greater Anglia': { body: '#F3F4F5', door: '#D70428', band: '#D70428', roof: '#A3AAB0' },
     'Great Northern': { body: '#F3F4F5', door: '#1E3A8A', band: '#1E3A8A', roof: '#A3AAB0' },
     'Gatwick Express': { body: '#F3F4F5', door: '#D0003C', band: '#D0003C', roof: '#A3AAB0' },
@@ -2855,7 +2855,7 @@ var DATA={"stops":[["London Charing Cross",51.5075,-0.12369,"Charing Cross"],["L
       try { var keepHub = hub, keepIdx = idx; hub = i; var dt = DIR().trips[pickDefault()]; hub = keepHub; idx = keepIdx; if (dt) { fewest = chgN(dt); var same = tr.filter(function(x){ return chgN(x) === fewest; }).map(function(x){ return x.ride; }); best = same.length ? Math.min.apply(null, same) : dt.ride; } } catch (e) { hub = keepHub; }
       var how = fewest === 0 ? '<i>Direct</i>' : fewest + (fewest === 1 ? ' change' : ' changes');
       var gh = h.group && h.group !== 'c2c' && h.group !== 'uk' && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class="hubgrp"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';
-      return gh + '<button type="button" data-i="' + i + '"' + (h.color ? ' style="--op1:' + h.color + '"' : h.group ? ' style="--op1:#B5177C"' : '') + ' aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
+      return gh + '<button type="button" data-i="' + i + '"' + (h.color ? ' style="--op1:' + h.color + '"' : h.group ? ' style="--op1:#6A2C91"' : '') + ' aria-pressed="' + (i === hub) + '"><b>' + h.name + '</b><small>' + how + ', from <span style="white-space:nowrap">' + hm(best) + '</span></small></button>';
     }).join('');
     each($('hub').querySelectorAll('button'), function(b){ b.addEventListener('click', function(){ hub = +b.getAttribute('data-i'); idx = pickDefault(); render(); runTrain(); }); });
     segBtns($('day'), DATA.days.map(function(d){ return d.label; }), day, function(i){ day = i; DATA.hubs = DATA.byDay[day]; idx = pickDefault(); render(); runTrain(); });
@@ -3047,7 +3047,7 @@ var DATA={"stops":[["London Charing Cross",51.5075,-0.12369,"Charing Cross"],["L
   function board(){
     var d = DIR(), nx = nextIndex();
     $('board').innerHTML = d.trips.map(function(t, i){
-      return '<button type="button" class="dep" aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + (t.split ? '<span class="sp">Splits</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span>' + (chgN(t) ? '<span class="cg">Change at ' + names(chgList(t)) + '</span>' : '<span class="cg">Direct</span>') + '</button>';
+      return '<button type="button" class="dep"' + (((t.legops || [])[0] === 'CC' || (t.ops || [])[0] === 'c2c') ? ' style="--op1:#6A2C91;--navy:#2E1245"' : '') + ' aria-pressed="' + (i === idx) + '" data-i="' + i + '">' + (i === nx ? '<span class="nx">Next</span>' : '') + (t.split ? '<span class="sp">Splits</span>' : '') + '<span class="t">' + t.big + '</span><span class="a">' + t.small + '</span>' + (chgN(t) ? '<span class="cg">Change at ' + names(chgList(t)) + '</span>' : '<span class="cg">Direct</span>') + '</button>';
     }).join('');
     $('bnote').textContent = d.note || '';
     each($('board').children, function(b){ b.addEventListener('click', function(){ idx = +b.getAttribute('data-i'); var sl = $('board').scrollLeft; board(); $('board').scrollLeft = sl; draw(); table(); screen(); }); });

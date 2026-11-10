@@ -40,10 +40,10 @@ for show in ['headcorn', 'shuttleworth']:
     R("  var OPNAME = { TL: 'Thameslink', GN: 'Great Northern', LE: 'Greater Anglia' };", "  var OPNAME = { TL: 'Thameslink', GN: 'Great Northern', LE: 'Greater Anglia', CC: 'c2c' };", opt=True)
     R("  var OPSITE = { TL: 'https://www.thameslinkrailway.com/', GN: 'https://www.greatnorthernrail.com/', LE: 'https://www.greateranglia.co.uk/' };",
       "  var OPSITE = { TL: 'https://www.thameslinkrailway.com/', GN: 'https://www.greatnorthernrail.com/', LE: 'https://www.greateranglia.co.uk/', CC: 'https://www.c2c-online.co.uk/' };", opt=True)
-    R("onui: 'rgb(247,168,206)' } };", "onui: 'rgb(247,168,206)' }, CC: { op1: '#B5177C', navy: '#3A1A5E', onui: '#F2A6D2' } };", opt=True)
+    R("onui: 'rgb(247,168,206)' } };", "onui: 'rgb(247,168,206)' }, CC: { op1: '#6A2C91', navy: '#2E1245', onui: '#D6B8EE' } };", opt=True)
     # station picker: c2c heading, and the c2c colour on Headcorn's buttons
     R("      return '<button type=\"button\" data-i=\"' + i + '\" aria-pressed=\"' + (i === hub) + '\">",
-      "      var gh = h.group && h.group !== 'c2c' && h.group !== 'uk' && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class=\"hubgrp\"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';\n      return gh + '<button type=\"button\" data-i=\"' + i + '\"' + (h.group ? ' style=\"--op1:#B5177C\"' : '') + ' aria-pressed=\"' + (i === hub) + '\">", opt=True)
+      "      var gh = h.group && h.group !== 'c2c' && h.group !== 'uk' && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class=\"hubgrp\"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';\n      return gh + '<button type=\"button\" data-i=\"' + i + '\"' + (h.group ? ' style=\"--op1:#6A2C91\"' : '') + ' aria-pressed=\"' + (i === hub) + '\">", opt=True)
     R("      return '<button type=\"button\" data-i=\"' + i + '\" data-op=\"' + hubOp(h) + '\"",
       "      var gh = h.group && h.group !== 'c2c' && h.group !== 'uk' && (i === 0 || DATA.hubs[i - 1].group !== h.group) ? '<div class=\"hubgrp\"><b>' + (h.groupTitle || 'From the <i>c2c</i> line') + '</b>' + (h.groupSub ? '<span>' + h.groupSub + '</span>' : '') + '</div>' : '';\n      return gh + '<button type=\"button\" data-i=\"' + i + '\" data-op=\"' + hubOp(h) + '\"", opt=True)
     R("    each($('hub').children, function(b){", "    each($('hub').querySelectorAll('button'), function(b){")

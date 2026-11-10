@@ -30,7 +30,7 @@ for show in shows:
             for h in hs:
                 if h['name'] in cols and h.get('group') == 'uk': h['color'] = cols[h['name']]
         s = s[:i0] + json.dumps(D, ensure_ascii=False, separators=(',', ':')) + s[i0 + n:]
-        s = s.replace("""(h.group ? ' style="--op1:#B5177C"' : '')""", """(h.color ? ' style="--op1:' + h.color + '"' : h.group ? ' style="--op1:#B5177C"' : '')""", 1)
+        s = s.replace("""(h.group ? ' style="--op1:#6A2C91"' : '')""", """(h.color ? ' style="--op1:' + h.color + '"' : h.group ? ' style="--op1:#6A2C91"' : '')""", 1)
     m = re.search(r"var OPS = \[(.*?)\];", s); ops = re.findall(r"'([A-Z]{2})'", m.group(1))
     allc = sorted({c for c in OPCODE.values()} | set(ops), key=lambda c: (c not in ops, c))
     s = s.replace(m.group(0), 'var OPS = [' + ', '.join(f"'{c}'" for c in allc) + '];', 1)

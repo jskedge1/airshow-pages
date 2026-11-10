@@ -6,7 +6,7 @@ here = os.path.dirname(os.path.abspath(__file__)); os.chdir(here)
 sys.path.insert(0, here)
 from build_c2c import WAYS, way  # noqa: E402
 
-C2C_COL = {'op1': '#B5177C', 'navy': '#3A1A5E', 'onui': '#F2A6D2', 'opink': '#FFFFFF', 'opd': '#86105B', 'tint': '#FBEFF6', 'tintln': '#F0C8DF', 'accink': '#FFFFFF'}
+C2C_COL = {'op1': '#6A2C91', 'navy': '#2E1245', 'onui': '#D6B8EE', 'opink': '#FFFFFF', 'opd': '#4E1F6C', 'tint': '#F3EDF8', 'tintln': '#DCC9EC', 'accink': '#FFFFFF'}
 CRS = {'Shoeburyness': 'SRY', 'Southend Central': 'SOC', 'Leigh-on-Sea': 'LES', 'Benfleet': 'BEF', 'Basildon': 'BSO', 'Grays': 'GRY',
        'Upminster': 'UPM', 'Barking': 'BKG', 'West Ham': 'WEH', 'London Fenchurch Street': 'FST', 'Pitsea': 'PSE', 'Laindon': 'LAI', 'Chafford Hundred': 'CFH'}
 NAME_CRS = {'London Fenchurch Street': 'FST', 'London Liverpool Street': 'LST', 'West Ham': 'WEH', 'Stratford': 'SRA', 'London Euston': 'EUS', 'London Kings Cross': 'KGX',
