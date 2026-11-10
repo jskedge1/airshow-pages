@@ -6689,7 +6689,7 @@ body h1.cg-title{text-transform:none!important}
     decorateHero();
     /* on the live site the guide sits inside the site's own container, so the styles go next to it, not in the page head */
     var host = explore.getRootNode && explore.getRootNode();
-    if (host && host.nodeType === 11) host.appendChild(st); else document.head.appendChild(st);
+    if (host && host.nodeType === 11) host.appendChild(st); else (document.body||document.head).appendChild(st);
 
     explore.classList.add('xd-on');
     var hold = document.createElement('div'); hold.className = 'xd-hold';
@@ -8470,7 +8470,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
   function start() {
     if (document.getElementById('transport-pier-css')) return;
     var st = document.createElement('style'); st.id = 'transport-pier-css'; st.textContent = CSS;
-    document.head.appendChild(st);
+    (document.body||document.head).appendChild(st);
     var tries = 0;
     (function wait() {
       var c = document.querySelector('#travel .xd-content');
@@ -8612,7 +8612,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
   function start() {
     if (document.getElementById('overview-pier-css')) return;
     var st = document.createElement('style'); st.id = 'overview-pier-css'; st.textContent = CSS;
-    document.head.appendChild(st);
+    (document.body||document.head).appendChild(st);
     [].forEach.call(document.querySelectorAll('#overview .jump.boxes>button'), function (b) {
       var m = BADGE[b.dataset.goto] || ['Go', '#13293C'];
       if (b.querySelector('.ovj-b')) return;
@@ -8787,7 +8787,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
     '@media(max-width:640px){.ft-stats{grid-template-columns:minmax(0,1fr);gap:12px}.ft-stat{padding:18px;grid-template-columns:48px minmax(0,1fr)}.ft-stat svg{width:46px;height:46px}.ft-band{padding:22px 18px}.ft-band button{width:100%;text-align:center}}',
     '@media(prefers-reduced-motion:reduce){.ft-nav button,.ft-nav button i{transition:none}}'
   ].join('\n');
-  var st = document.createElement('style'); st.id = 'topicFtCss'; st.textContent = css; document.head.appendChild(st);
+  var st = document.createElement('style'); st.id = 'topicFtCss'; st.textContent = css; (document.body||document.head).appendChild(st);
 
   var ICON = {
     walk: '<svg viewBox="0 0 64 64" fill="none" stroke="#D74949" stroke-width="2.2" aria-hidden="true"><circle cx="36" cy="10" r="5"/><path d="M33 18l-8 10 6 6-4 18M33 18l6 12 10 4M31 34l9 8 4 12M25 28l-9 2"/></svg>',
