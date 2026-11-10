@@ -4,5 +4,5 @@ import os
 here = os.path.dirname(os.path.abspath(__file__)); root = os.path.dirname(here)
 s = open(root + '/public-transport.html').read()
 s = s.replace('</head>', '<style id="px-css">\n' + open(here + '/pt.css').read() + '</style>\n</head>', 1)
-k = s.rfind('</body>'); s = s[:k] + '<script id="px-js">\n' + open(here + '/pt.js').read() + '</script>\n' + s[k:]
+k = s.rfind('</body>'); s = s[:k] + '<script id="px-js">\n' + open(here + '/pt.js').read().replace('/*UKGEO*/', open(here + '/ukgeo.json').read()) + '</script>\n' + s[k:]
 open(root + '/public-transport-layout.html', 'w').write(s); print('built public-transport-layout.html')

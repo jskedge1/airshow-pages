@@ -32,37 +32,86 @@
 
   /* ---------- sign pieces ---------- */
   var signA = document.createElement('div'); signA.className = 'px-sign';
-  signA.innerHTML = '<div class="px-band"><h2>Airshows by public transport</h2><span>All zones</span></div><div class="px-mapwrap"><div class="px-map" id="px-map"></div></div>' +
-    '<div class="px-key"><b>Key</b><span class="ln"><u></u>Tap a show on the line</span><span class="st"><u></u>Show</span><span style="--mc:#D74949"><u></u>Train</span><span style="--mc:#00A6E2"><u></u>Bus</span><span style="--mc:#C2255C"><u></u>Coach</span><span style="--mc:#2BA84A"><u></u>Park and Ride</span></div>';
+  signA.innerHTML = '<div class="px-band"><h2>Airshows by public transport</h2><span>All zones</span></div><div class="px-mapwrap"><div class="px-mapbox"><div class="px-map" id="px-map"></div></div><aside class="px-side" id="px-side"></aside></div>';
+  var KEY = '<div class="px-key"><b>Key</b><span class="ln"><u></u>The line links every show</span><span class="st"><u></u>Tap a show</span><span class="ys"><u></u>Your show</span></div>';
   var signB = document.createElement('div'); signB.className = 'px-sign';
   signB.innerHTML = '<div class="px-band"><h2 id="px-name"></h2><span id="px-zone"></span></div><div class="px-screen" id="px-screen"></div>';
   G[0].box.appendChild(signA); G[0].box.appendChild(board);
   G[1].box.appendChild(signB); G[1].box.appendChild(res);
+  var other = document.createElement('div'); other.className = 'px-other';
+  other.innerHTML = '<div><b>Looking at another way in?</b><span>Compare every option for getting to the show side by side</span></div><button type="button" class="px-other-go">See all ways in</button>';
+  G[1].box.appendChild(other);
+  other.querySelector('button').addEventListener('click', function(){ show(1, $('px-screen').parentNode); });
   if (jp) G[2].box.appendChild(jp);
   if (faq) G[3].box.appendChild(faq);
   if (!jp) { G[2].box.remove(); }
 
-  /* the line map: four zones, the shows as stops on one line, and a marker on the show you picked */
-  var map = $('px-map'), total = 0; ZONES.forEach(function(z){ total += z[1].length; });
-  var pts = [], zx = 0, html = '';
-  ZONES.forEach(function(z, zi){
-    var w = z[1].length / total * 100, y = zi % 2 ? 64 : 50;
-    html += '<div class="px-zone" style="left:' + zx + '%;width:' + w + '%"><b>' + z[0] + '</b></div>';
-    z[1].forEach(function(k, i){ pts.push({ k: k, x: 3 + (zx + w * (i + .5) / z[1].length) * .94, y: y }); });
-    zx += w;
+  /* the UK map: land shaded by zone like the pier sign, one line linking every show, and a stop for each show */
+  var GEO = /*UKGEO*/;
+  var VB = [40, 12, 400, 580], KC = Math.cos(54.5 * Math.PI / 180);
+  function proj(la, lo){ return [(lo + 8.7) * KC / (10.7 * KC) * 400, (59 - la) / 9.2 * 592]; }
+  /* where each show sits (nudged a touch where three shows sit close together), and which side its name goes */
+  var SPOT = { ayr: [55.462, -4.635, 'l'], blackpool: [53.86, -3.055, 'r'], southport: [53.6, -3.007, 'r'], cosford: [52.640, -2.306, 'l'], midlands: [52.198, -1.900, 'l'],
+    wales: [51.615, -3.955, 'dn'], riat: [51.152, -1.747, 'dn'], eastbourne: [50.766, 0.287, 'dn'], headcorn: [51.157, 0.643, 'r'], clacton: [51.787, 1.155, 'r'],
+    duxford: [52.06, 0.22, 'r'], gransden: [52.25, -0.12, 'up'], shuttleworth: [52.06, -0.44, 'dn'] };
+  var ORDER = ['ayr', 'blackpool', 'southport', 'cosford', 'midlands', 'wales', 'riat', 'eastbourne', 'headcorn', 'clacton', 'duxford', 'gransden', 'shuttleworth'];
+  var ZPOLY = [
+    ['#CBD1D7', 'M-100 -100H520V372L330 372L-100 372Z'],
+    ['#E6E9EC', 'M-100 372H286V492H-100Z'],
+    ['#CBD1D7', 'M286 372H520V482H286Z'],
+    ['#E6E9EC', 'M-100 492H286V482H520V700H-100Z']
+  ];
+  var ZLAB = [['Scotland and North West', 232, 268, 'start'], ['Midlands and Wales', 196, 392, 'end'], ['East of England', 404, 392, 'end'], ['The South', 196, 552, 'start']];
+  var map = $('px-map'), P = {};
+  ORDER.forEach(function(k){ var p = proj(SPOT[k][0], SPOT[k][1]); P[k] = [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10) / 10]; });
+  /* the line runs straight or at 45 degrees, the way a transport map does */
+  var d = '';
+  ORDER.forEach(function(k, i){
+    var p = P[k]; if (!i) { d = 'M' + p[0] + ' ' + p[1]; return; }
+    var q = P[ORDER[i - 1]], dx = p[0] - q[0], dy = p[1] - q[1], m = Math.min(Math.abs(dx), Math.abs(dy));
+    var cx = q[0] + Math.sign(dx) * m, cy = q[1] + Math.sign(dy) * m;
+    d += ' L' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' L' + p[0] + ' ' + p[1];
   });
-  var d = '', prev = null;
-  pts.forEach(function(p){ if (!prev) d = 'M0 ' + p.y + ' L' + p.x + ' ' + p.y; else if (prev.y === p.y) d += ' L' + p.x + ' ' + p.y; else { var m = (prev.x + p.x) / 2; d += ' L' + (m - 2.2) + ' ' + prev.y + ' L' + (m + 2.2) + ' ' + p.y + ' L' + p.x + ' ' + p.y; } prev = p; });
-  d += ' L100 ' + prev.y;
-  html += '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="' + d + '" fill="none" stroke="#8FD0E4" stroke-width="22" vector-effect="non-scaling-stroke" stroke-linejoin="round"/><path d="' + d + '" fill="none" stroke="#13293C" stroke-width="7" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>';
-  pts.forEach(function(p, i){ html += '<button type="button" class="px-stop ' + (i % 2 ? 'dn' : 'up') + '" data-k="' + p.k + '" style="left:' + p.x + '%;top:' + p.y + '%" aria-pressed="false"><i></i><span></span></button>'; });
+  var html = '<svg viewBox="' + VB.join(' ') + '" aria-hidden="true"><defs><clipPath id="px-land"><path d="' + GEO.uk + '"/></clipPath></defs>' +
+    '<rect x="-100" y="-100" width="700" height="900" fill="#DCEEF5"/><path d="' + GEO.ie + '" fill="#EEF1F3"/>' +
+    '<g clip-path="url(#px-land)">' + ZPOLY.map(function(z){ return '<path d="' + z[1] + '" fill="' + z[0] + '"/>'; }).join('') + '</g>' +
+    '<g clip-path="url(#px-land)"><path d="M-100 372H520M286 372V492M-100 492H286M286 482H520" stroke="#fff" stroke-width="2.2" fill="none"/></g><path d="' + GEO.uk + '" fill="none" stroke="#fff" stroke-width="1.2"/>' +
+    ZLAB.map(function(z){ return '<text x="' + z[1] + '" y="' + z[2] + '" text-anchor="' + z[3] + '" class="px-zl">' + z[0] + '</text>'; }).join('') +
+    '<path d="' + d + '" fill="none" stroke="#8FD0E4" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>' +
+    '<path d="' + d + '" fill="none" stroke="#13293C" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+  ORDER.forEach(function(k){ var p = P[k]; html += '<button type="button" class="px-stop ' + SPOT[k][2] + '" data-k="' + k + '" style="left:' + ((p[0] - VB[0]) / VB[2] * 100).toFixed(2) + '%;top:' + ((p[1] - VB[1]) / VB[3] * 100).toFixed(2) + '%" aria-pressed="false"><i></i><span></span></button>'; });
   map.innerHTML = html;
+
+  /* the panel beside the map: the show you picked, the zones, and the key */
+  function side(){
+    var el = $('px-side'), k = curKey(), r = k && rowOf(k); if (!el) return;
+    var h = '';
+    if (r) {
+      var nm = r.querySelector('.dest').firstChild.textContent, pl = (r.querySelector('.dest small') || {}).textContent || '', n = +(r.querySelector('.plat b') || {}).textContent || 0;
+      var modes = [].map.call(r.querySelectorAll('.via > *'), function(v){ var t = v.getAttribute('title') || '', c = v.style.getPropertyValue('--mc'); return '<li style="--mc:' + c + '"><u></u>' + esc(t) + '</li>'; }).join('');
+      h += '<div class="px-here"><div class="px-here-h"><span>You are looking at</span><em>' + esc(zoneOf(k)) + '</em></div><div class="px-here-b"><b>' + esc(nm) + '</b><small>' + esc(pl) + '</small>' +
+        '<div class="px-here-n"><strong>' + n + '</strong><span>' + (n === 1 ? 'way in' : 'ways in') + '</span></div>'  +
+        '<button type="button" class="px-here-go" data-go="1"><span>See the ways in<small>Trains, buses and coaches</small></span><i aria-hidden="true">→</i></button></div></div>';
+    }
+    var have = {}; if (r) [].forEach.call(r.querySelectorAll('.via > *'), function(v){ have[v.getAttribute('title')] = 1; });
+    var cnt = {}; [].forEach.call(document.querySelectorAll('#wim .xflag'), function(f){ cnt[f.getAttribute('data-fm')] = ((f.querySelector('small') || {}).textContent || '').trim(); });
+    h += '<div class="px-status"><div class="px-status-h"><span class="px-status-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="6.5" fill="none" stroke="#13293C" stroke-width="2.4"/><path d="M10 6.5v4l2.6 1.6" stroke="#13293C" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span><b>Status for this show</b></div>' +
+      [['Train', 'By train', '#D74949', 'sec-train'], ['Bus', 'By bus', '#00A6E2', 'sec-bus'], ['Coach', 'By coach', '#C2255C', 'sec-coach'], ['Park and Ride', 'Park and Ride', '#2BA84A', 'sec-pr']].map(function(m){
+        var on = have[m[0]], c = cnt[m[1]];
+        return '<button type="button" class="px-st' + (on ? '' : ' off') + '" data-sec="' + m[3] + '"' + (on ? '' : ' disabled') + ' style="--mc:' + m[2] + '"><span class="ln">' + m[0] + '</span><span class="sv">' + (on ? '<b>' + esc(c || 'Running') + '</b><small>Ready to plan</small>' : '<b>No service</b><small>Not mapped for this show</small>') + '</span>' + (on ? '<i aria-hidden="true">›</i>' : '') + '</button>';
+      }).join('') + '</div>' + KEY;
+    el.innerHTML = h;
+  }
+  $('px-side').addEventListener('click', function(e){
+    var st = e.target.closest('.px-st'); if (st && !st.disabled) { var sc = $(st.getAttribute('data-sec')); show(1, sc || null); return; }
+    var g = e.target.closest('.px-here-go'); if (g) show(1);
+  });
   function fillStops(){
     [].forEach.call(map.querySelectorAll('.px-stop'), function(b){
       var r = rowOf(b.getAttribute('data-k')), sp = b.querySelector('span'); if (!r) { b.hidden = true; return; }
       var name = r.querySelector('.dest').firstChild.textContent, n = +(r.querySelector('.plat b') || {}).textContent || 0;
       var dots = [].map.call(r.querySelectorAll('.via > *'), function(v){ var c = v.style.getPropertyValue('--c') || v.style.background || getComputedStyle(v).backgroundColor; return '<u style="--mc:' + c + '"></u>'; }).join('');
-      sp.innerHTML = esc(name.replace(/^Royal International Air Tattoo$/, 'RIAT').replace(/^International Ayr Show$/, 'Ayr').replace(/ (Air Show|Airshow|Air Shows|Air Festival|Air & Car Show)$/, '')) + (dots ? '<em>' + dots + '</em>' : '') + '<strong>Your show</strong>';
+      sp.innerHTML = esc(name.replace(/^Royal International Air Tattoo$/, 'RIAT').replace(/^International Ayr Show$/, 'Ayr').replace(/ (Air Show|Airshow|Air Shows|Air Festival|Air & Car Show)$/, '')) + '<strong>Your show</strong>';
       b.setAttribute('aria-label', name + ', ' + n + (n === 1 ? ' way in' : ' ways in'));
     });
   }
@@ -110,7 +159,7 @@
     window.dispatchEvent(new Event('resize'));
     [].forEach.call(G[i].box.querySelectorAll('.msec:not(.in)'), function(el){ el.classList.add('in'); });
     if (quiet) return;
-    var y = target ? target.getBoundingClientRect().top + scrollY - bar.offsetHeight - 8 : bar.getBoundingClientRect().top + scrollY;
+    var y = target ? target.getBoundingClientRect().top + scrollY - bar.offsetHeight - 20 : bar.getBoundingClientRect().top + scrollY;
     scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
   }
   /* the page scrolls to its own parts in places (Show my options, a picked show, the map): open the right tab first */
@@ -151,7 +200,7 @@
     if (p) { p.className = 'px-plan-note'; p.textContent = 'These times are from the winter timetable, and the summer one will be different, so please check before you travel.'; }
     a.innerHTML = '<span class="px-plan-go">Open the train planner<small>Start with your station</small></span><i aria-hidden="true">→</i>';
   }
-  var pend = 0; function refresh(){ clearTimeout(pend); pend = setTimeout(function(){ fillStops(); screen(); planner(); }, 60); }
+  var pend = 0; function refresh(){ clearTimeout(pend); pend = setTimeout(function(){ fillStops(); screen(); planner(); side(); }, 60); }
   ['rTitle', 'wim', 'lines', 'results'].forEach(function(i){ var e = $(i); if (e) new MutationObserver(refresh).observe(e, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-pressed'] }); });
   [].forEach.call(document.querySelectorAll('#faq details'), function(x){ x.open = true; });
   var fq = $('faq'); if (fq) new MutationObserver(function(){ [].forEach.call(fq.querySelectorAll('details:not([open])'), function(x){ x.open = true; }); }).observe(fq, { childList: true, subtree: true, attributes: true, attributeFilter: ['open'] });
