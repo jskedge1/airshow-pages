@@ -3,7 +3,7 @@ and vehicle. Run after patch_train_classes.py; it refreshes the train-classes bl
 import glob, os
 os.chdir(os.path.dirname(os.path.abspath(__file__)) + '/..')
 JS = open('train-routes-src/v2-parts/train-classes.js').read()
-CSS = ('.rs-cls .rs-live{font-weight:700;color:#7CF0A6;margin-left:4px}.railstrip .lane{left:auto;right:16px;transform:none}@media(max-width:640px){.rs-cls{white-space:normal;max-width:calc(100% - 16px);line-height:1.25}.rs-st.tube b{padding-left:16px}.rs-st.tube b::before{left:2px;width:6px;height:6px;border-width:2px}.rs-st.tube b::after{left:1px;width:12px;height:2px}}.rs-st.tube b{box-shadow:inset 0 -3px 0 #0019A8;padding-left:22px;position:relative;max-width:150px}'
+CSS = ('.rs-cls .rs-live{font-weight:700;color:#7CF0A6;margin-left:4px}.railstrip .lane{left:auto;right:16px;transform:none}@media(max-width:640px){.rs-cls{display:block!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 16px);font-size:12px!important}.rs-cls span{margin-right:6px}.rs-cls i{display:none}.rs-cls .rs-live{display:none}.rs-st.tube b{padding-left:16px}.rs-st.tube b::before{left:2px;width:6px;height:6px;border-width:2px}.rs-st.tube b::after{left:1px;width:12px;height:2px}}.rs-st.tube b{box-shadow:inset 0 -3px 0 #0019A8;padding-left:22px;position:relative;max-width:150px}'
        '.rs-st.tube b::before{content:"";position:absolute;left:4px;top:50%;width:8px;height:8px;margin-top:-6px;border:2.5px solid #DC241F;border-radius:50%}'
        '.rs-st.tube b::after{content:"";position:absolute;left:2px;top:50%;width:17px;height:3px;margin-top:-1.5px;background:#0019A8}\n')
 R = [
