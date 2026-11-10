@@ -684,6 +684,17 @@ html:not(.hdr) .fold{scroll-margin-top:62px}
 .rs-name:focus-within{outline:3px solid #F2B233;outline-offset:2px}
 .rs-name:hover b{background:#F1F4F6}
 </style>
+<style id="rs-switch">
+.bsw{display:flex;align-items:stretch;gap:0;margin:-6px 0 20px;max-width:100%;width:max-content;background:#05090D;border:2px solid rgba(255,255,255,.14);position:relative;transition:border-color .25s}
+.bsw:hover,.bsw:focus-within{border-color:var(--led,#F2B233)}
+.bsw span{display:flex;align-items:center;gap:8px;padding:0 12px;font:700 15px/1 var(--f);color:#fff;background:rgba(255,255,255,.08);white-space:nowrap}
+.bsw span i{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:22px;padding:0 4px;font:800 14px/1 var(--c,var(--f));font-style:normal;background:var(--led,#F2B233);color:#05090D}
+.bsw select{appearance:none;-webkit-appearance:none;border:0;border-radius:0;background:transparent;color:#fff;font:600 15.5px/1.2 var(--f);padding:11px 40px 11px 12px;max-width:min(62vw,420px);cursor:pointer;text-overflow:ellipsis}
+.bsw select option{color:#13293C;background:#fff}
+.bsw::after{content:"";position:absolute;right:15px;top:50%;width:8px;height:8px;margin-top:-6px;border-right:2.5px solid var(--led,#F2B233);border-bottom:2.5px solid var(--led,#F2B233);transform:rotate(45deg);pointer-events:none}
+.bsw select:focus-visible{outline:none}
+@media(max-width:640px){.bsw{width:100%;flex-direction:column}.bsw span{padding:9px 10px;font-size:14px;white-space:normal}.bsw select{width:100%;max-width:none;font-size:16px;padding:12px 40px 12px 10px}.bsw::after{top:auto;bottom:18px;margin-top:0}}
+</style>
 </head>
 <body>
 <!-- site menu header (copied from the Wix custom code "UK Airshow Guide header menu"; rebuild if the menu changes) -->
@@ -734,6 +745,7 @@ html:not(.hdr) .fold{scroll-margin-top:62px}
         <div class="num" id="bnum"></div>
         <div><div class="dest" id="bdest"></div><span class="via" id="bvia" aria-hidden="true"></span></div>
       </div>
+                  <label class="bsw"><span><i><svg viewBox="0 0 20 16" width="18" height="14" aria-hidden="true"><rect x="1" y="1" width="18" height="11" rx="2" fill="#05090D"/><rect x="3" y="3" width="4" height="4" fill="#F2B233"/><rect x="8" y="3" width="4" height="4" fill="#F2B233"/><rect x="13" y="3" width="4" height="4" fill="#F2B233"/><circle cx="5" cy="13" r="2" fill="#05090D"/><circle cx="15" cy="13" r="2" fill="#05090D"/></svg></i>Change bus, 4 more for International Ayr Show</span><select id="bswSel" aria-label="Change to another bus for International Ayr Show"><option value="4-ayr" selected>4, Glasgow to Ayr (this bus)</option><option value="9-ayr">9, Doonfoot to Ayr</option><option value="42-ayr">42, Muirkirk to Ayr</option><option value="x42-ayr">X42, Muirkirk to Ayr</option><option value="x77-ayr">X77, Glasgow to Ayr</option></select></label>
       <h1 id="title"></h1>
       <p class="lede" id="lead"></p>
       <div class="cta">
@@ -2003,5 +2015,14 @@ r.addEventListener('click',function(e){var b=e.target.closest('.lnk');if(!b)retu
 <script>window.UKAG_ROUTE={mode:'bus',id:'4-ayr'};</script>
 <script src="https://jskedge1.github.io/airshow-pages/transport-back.js" defer></script>
 <!-- /back-to-transport -->
+<script id="rs-switch-js">(function(){
+  var s = document.getElementById('bswSel'); if (!s) return;
+  var site = /ukairshowguide/.test(location.hostname);
+  s.addEventListener('change', function(){
+    var id = s.value; if (!id) return;
+    var u = site ? 'https://www.ukairshowguide.co.uk/bus-route?r=' + id : id + '.html';
+    try { (site ? window.top : window).location.href = u; } catch (e) { location.href = u; }
+  });
+})();</script>
 </body>
 </html>
