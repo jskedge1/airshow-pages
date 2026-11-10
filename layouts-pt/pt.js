@@ -125,9 +125,9 @@
     var body = flags.map(function(f, i){
       var fm = f.getAttribute('data-fm'), m = MODE[fm] || [fm, '#13293C'], cnt = (f.querySelector('small') || {}).textContent || '', id = { 'By train': 'sec-train', 'By bus': 'sec-bus', 'By coach': 'sec-coach', 'Park and Ride': 'sec-pr' }[fm];
       var sec = id && $(id), lab = fm === 'By train' && sec && sec.querySelector('.sg-l'), short = String(name).replace(/ (Air Show|Airshow|Air Shows|Air Festival|Air & Car Show)$/, '');
-      var tx = lab ? lab.textContent.replace(/\s+/g, ' ').trim().replace(/^(\S+ to)(\S)/, '$1 $2') : fm === 'By bus' ? 'Buses to ' + short : fm === 'By coach' ? 'Coaches for ' + short : fm === 'Park and Ride' ? 'Park and Ride, leave the car and ride in' : fm;
+      var tx = lab ? lab.textContent.replace(/\s+/g, ' ').trim().replace(/^(\S+ to)(\S)/, '$1 $2') : fm === 'By train' ? 'Trains to ' + short: fm === 'By bus' ? 'Buses to ' + short : fm === 'By coach' ? 'Coaches for ' + short : fm === 'Park and Ride' ? 'Park and Ride, leave the car and ride in' : fm;
       n += parseInt(cnt, 10) || 0;
-      var row = '<button type="button" class="px-row" data-fm="' + esc(fm) + '" style="--mc:' + m[1] + '"><span class="no">' + (i + 1) + '</span><span class="ch">' + m[0] + '</span><span class="tx">' + esc(tx) + '</span><span class="op">' + esc(cnt) + '</span></button>';
+      var row = '<button type="button" class="px-row' + (f.getAttribute('aria-selected') === 'true' ? ' on' : '') + '" data-fm="' + esc(fm) + '" style="--mc:' + m[1] + '"><span class="no">' + (i + 1) + '</span><span class="ch">' + m[0] + '</span><span class="tx">' + esc(tx) + '</span><span class="op">' + esc(cnt) + '</span></button>';
       if (i === 0) row += '<div class="px-call"><b>For</b>' + esc(place || name) + '</div>';
       return row;
     }).join('');
@@ -138,7 +138,7 @@
   }
   function clock(){ var c = $('px-clock'); if (!c) return; var t = new Date(); c.textContent = ('0' + t.getHours()).slice(-2) + ':' + ('0' + t.getMinutes()).slice(-2); }
   setInterval(clock, 20000);
-  $('px-screen').addEventListener('click', function(e){ var b = e.target.closest('.px-row'); if (!b) return; var f = document.querySelector('#wim .xflag[data-fm="' + b.getAttribute('data-fm') + '"]'); if (f) { f.click(); var sec = $('wim'); setTimeout(function(){ realSIV.call(sec, { behavior: 'smooth', block: 'start' }); }, 60); } });
+  $('px-screen').addEventListener('click', function(e){ var b = e.target.closest('.px-row'); if (!b) return; var f = document.querySelector('#wim .xflag[data-fm="' + b.getAttribute('data-fm') + '"]'); if (f) { f.click(); setTimeout(function(){ var sec = $('opts'); if (!sec) return; scrollTo({ top: Math.max(0, sec.getBoundingClientRect().top + scrollY - bar.offsetHeight - 20), behavior: 'smooth' }); }, 80); } });
 
   /* ---------- tabs ---------- */
   var tabs = [].slice.call(bar.querySelectorAll('.px-tab')), cur = 0;
@@ -201,7 +201,7 @@
     a.innerHTML = '<span class="px-plan-go">Open the train planner<small>Start with your station</small></span><i aria-hidden="true">→</i>';
   }
   var pend = 0; function refresh(){ clearTimeout(pend); pend = setTimeout(function(){ fillStops(); screen(); planner(); side(); }, 60); }
-  ['rTitle', 'wim', 'lines', 'results'].forEach(function(i){ var e = $(i); if (e) new MutationObserver(refresh).observe(e, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-pressed'] }); });
+  ['rTitle', 'wim', 'lines', 'results'].forEach(function(i){ var e = $(i); if (e) new MutationObserver(refresh).observe(e, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-pressed', 'aria-selected'] }); });
   [].forEach.call(document.querySelectorAll('#faq details'), function(x){ x.open = true; });
   var fq = $('faq'); if (fq) new MutationObserver(function(){ [].forEach.call(fq.querySelectorAll('details:not([open])'), function(x){ x.open = true; }); }).observe(fq, { childList: true, subtree: true, attributes: true, attributeFilter: ['open'] });
   refresh(); show(0, null, true);
