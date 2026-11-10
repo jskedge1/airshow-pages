@@ -203,6 +203,8 @@
     var a = e.target.closest('a[href^="#"]'); if (a) { var el; try { el = document.getElementById(a.getAttribute('href').slice(1)); } catch (x) {} var g = el && groupOf(el); if (g) { e.preventDefault(); show(g.i, el); } }
   });
   /* follow the picked show */
+  /* the planner's boxes and tabs rise in one after another when the planner comes on screen */
+  var planIO = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('px-in'); planIO.unobserve(e.target); } }); }, { threshold: .2 }) : null;
   var PLAN = [
     ['Plan your train', 'Start here', 'Pick the station you are setting off from and the day you are going. I show the train I would catch to be there for around 10am, with the later ones underneath.', ['Your station', 'Your day', 'Live times']],
     ['Your journey', 'Follow the line', 'See the line your train takes and every place you change, including the Tube across London if you need it. This is the part I would screenshot before you leave.', ['Every change', 'Which train', 'Time to connect']],
@@ -229,6 +231,7 @@
       [].forEach.call(box.querySelectorAll('.px-plan-pane'), function(q, k){ q.hidden = k !== n; }); });
     if (p) { p.className = 'px-plan-note'; p.textContent = 'These times are from the winter timetable, and the summer one will be different, so please check before you travel.'; }
     a.innerHTML = '<span class="px-plan-go">Open the train planner<small>Start with your station</small></span><i aria-hidden="true">→</i>';
+    if (planIO) planIO.observe(b); else b.classList.add('px-in');
   }
   /* By air: its own section under the other ways in, one card for each airport */
   var airKey = null;
