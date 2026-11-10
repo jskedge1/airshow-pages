@@ -12,13 +12,25 @@ for show in shows:
     f = f'../../train-routes/{show}.html'; s = open(f).read()
     i0 = s.index('var DATA=') + 9; D, n = json.JSONDecoder().raw_decode(s[i0:])
     uk = [h for h in D['hubs'] if h.get('group') == 'uk']
-    m = re.search(r"var OPCOL = (\{.*?\});\n", s); opcol = m.group(1)
-    have = set(re.findall(r'\b([A-Z]{2}): \{', opcol))
-    add = []
-    for name, code in OPCODE.items():
-        if code in have or name not in COLORS: continue
-        c = COLORS[name]; add.append(f"{code}: {{ op1: '{c['op1']}', navy: '{c['navy']}', onui: '{c['onui']}' }}"); have.add(code)
-    if add: s = s.replace(opcol, opcol[:-1].rstrip() + ', ' + ', '.join(add) + ' }', 1)
+    m = re.search(r"var OPCOL = (\{.*?\});\n", s); add = []
+    if m:
+        opcol = m.group(1); have = set(re.findall(r'\b([A-Z]{2}): \{', opcol))
+        for name, code in OPCODE.items():
+            if code in have or name not in COLORS: continue
+            c = COLORS[name]; add.append(f"{code}: {{ op1: '{c['op1']}', navy: '{c['navy']}', onui: '{c['onui']}' }}"); have.add(code)
+        if add: s = s.replace(opcol, opcol[:-1].rstrip() + ', ' + ', '.join(add) + ' }', 1)
+    else:  # no colour table (Headcorn): each new station's tile takes the colour of its first train company
+        NAME = {v: k for k, v in OPCODE.items()}
+        for h in uk:
+            lo = h['dirs'][0]['trips'][0].get('legops') or []
+            nm = next((NAME.get(c, c) for c in lo if c != 'CC'), None)
+            if nm in COLORS: h['color'] = COLORS[nm]['op1']
+        cols = {h['name']: h['color'] for h in uk if 'color' in h}
+        for hs in D.get('byDay', []):
+            for h in hs:
+                if h['name'] in cols and h.get('group') == 'uk': h['color'] = cols[h['name']]
+        s = s[:i0] + json.dumps(D, ensure_ascii=False, separators=(',', ':')) + s[i0 + n:]
+        s = s.replace("""(h.group ? ' style="--op1:#B5177C"' : '')""", """(h.color ? ' style="--op1:' + h.color + '"' : h.group ? ' style="--op1:#B5177C"' : '')""", 1)
     m = re.search(r"var OPS = \[(.*?)\];", s); ops = re.findall(r"'([A-Z]{2})'", m.group(1))
     allc = sorted({c for c in OPCODE.values()} | set(ops), key=lambda c: (c not in ops, c))
     s = s.replace(m.group(0), 'var OPS = [' + ', '.join(f"'{c}'" for c in allc) + '];', 1)
