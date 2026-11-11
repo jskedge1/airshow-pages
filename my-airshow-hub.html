@@ -5034,5 +5034,59 @@ html.in-box .a2hs{bottom:calc(var(--vb,0px) + 16px)}
 })();
 </script>
 <script src="https://jskedge1.github.io/airshow-pages/fit-frame.js" defer></script>
+
+<!-- Clean / HUD look switch (11 Nov 2026): HUD stays the default. Clean turns off the HUD theme, HUD header and HUD typing styles and keeps the white base. Choice is remembered on this device. -->
+<style id="look-switch">
+.look-sw{position:fixed;right:14px;bottom:16px;z-index:84;display:flex;align-items:stretch;background:#13293C;border:1px solid #32B4AF;box-shadow:0 8px 24px rgba(0,0,0,.28);font-family:"Barlow",Arial,sans-serif}
+.look-sw span{display:flex;align-items:center;padding:0 10px;font-size:12px;font-weight:600;letter-spacing:.04em;color:#C9D6E0;text-transform:none}
+.look-sw button{appearance:none;border:0;margin:0;padding:10px 14px;background:transparent;color:#fff;font:700 14px/1 "Barlow",Arial,sans-serif;cursor:pointer;transition:background .25s ease,color .25s ease}
+.look-sw button+button{border-left:1px solid rgba(50,180,175,.45)}
+.look-sw button[aria-pressed="true"]{background:#32B4AF;color:#13293C}
+.look-sw button:focus-visible{outline:2px solid #44AED6;outline-offset:-4px}
+.look-sw button:hover:not([aria-pressed="true"]){background:rgba(50,180,175,.22)}
+html[data-look="clean"] .hh-scan,html[data-look="clean"] .hh-sweep,html[data-look="clean"] .hh-br,html[data-look="clean"] .hh-strip,html[data-look="clean"] .hh-tape{display:none!important}
+@media (max-width:900px){body.is-member .look-sw{bottom:74px}}
+@media (prefers-reduced-motion:reduce){.look-sw button{transition:none}}
+</style>
+<script id="look-switch-js">
+(function () {
+  var KEY = "ukagHubLook", OFF = ["hud-theme", "hud-head", "typing-readout"];
+  var stored = "hud";
+  try { stored = localStorage.getItem(KEY) === "clean" ? "clean" : "hud"; } catch (e) {}
+  function setSheets(off) {
+    OFF.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && el.sheet) el.sheet.disabled = off;
+    });
+  }
+  function apply(look) {
+    var clean = look === "clean";
+    document.documentElement.setAttribute("data-look", clean ? "clean" : "hud");
+    setSheets(clean);
+    var bar = document.getElementById("lookSw");
+    if (bar) [].forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.look === look));
+    });
+  }
+  function build() {
+    var bar = document.createElement("div");
+    bar.className = "look-sw";
+    bar.id = "lookSw";
+    bar.setAttribute("role", "group");
+    bar.setAttribute("aria-label", "Hub look");
+    bar.innerHTML = '<span>Look</span><button type="button" data-look="clean">Clean</button><button type="button" data-look="hud">HUD</button>';
+    document.body.appendChild(bar);
+    bar.addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-look]");
+      if (!b) return;
+      var look = b.dataset.look;
+      try { localStorage.setItem(KEY, look); } catch (err) {}
+      apply(look);
+    });
+    apply(stored);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", build); else build();
+})();
+</script>
 </body>
 </html>
