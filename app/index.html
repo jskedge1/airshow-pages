@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Airshow Hub app | The Big Guide to UK Airshows</title>
+<meta name="description" content="My Airshow Hub, the Airshow Forum and Show Day Live in one app, from The Big Guide to UK Airshows.">
+<meta name="theme-color" content="#13293C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Airshow Hub">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap">
+<!--
+  Airshow Hub app (11 Nov 2026)
+  One app for My Airshow Hub, the Airshow Forum and Show Day Live, in the site's own look.
+  On the website (Wix page /app, page code velo/page-code/app.js) this page passes the hub, forum and
+  show day messages up to the page code, exactly as the separate pages do, so members log in once and
+  everything is live. Opened anywhere else it shows the logged out screens; add ?demo=1 to see the
+  Home tab filled with an example member so the design can be checked.
+-->
+<style>
+:root{
+  --navy:#13293C;--navy-2:#0E2131;--navy-3:#08141F;--teal:#32B4AF;--teal-dk:#0E5F5B;--hud:#5FE3DC;
+  --purple:#6950A1;--red:#D74949;--line:#DCE3E8;--pale:#E9EEF5;--soft:#F2F4F5;--ink:#13293C;--text:#26394A;--mut:#5A6B78;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --bar:58px;--tabs:64px;
+  --safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--navy-2);scrollbar-width:none;-webkit-text-size-adjust:100%}
+html::-webkit-scrollbar{display:none}
+body{font-family:var(--f-body);font-size:16px;line-height:1.5;color:var(--text);background:var(--soft);-webkit-font-smoothing:antialiased;min-height:100vh;overscroll-behavior-y:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+[hidden]{display:none!important}
+h1,h2,h3,h4{text-wrap:balance}
+
+/* ---------- splash ---------- */
+.splash{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:var(--navy-2);overflow:hidden;transition:opacity .55s var(--ease),visibility .55s}
+.splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+.splash::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 50% at 50% 42%,rgba(50,180,175,.28),transparent 70%),repeating-radial-gradient(circle at 50% 42%,rgba(95,227,220,.07) 0 1px,transparent 1px 46px)}
+.splash .in{position:relative;text-align:center;padding:24px}
+.splash img.jet{width:110px;filter:drop-shadow(0 0 18px rgba(95,227,220,.55));animation:climb 1.6s var(--ease) both}
+.splash h1{font:800 34px/1 var(--f-display);text-transform:uppercase;color:#fff;margin-top:18px;letter-spacing:.01em;animation:rise .7s .35s var(--ease) both}
+.splash h1 span{color:var(--teal)}
+.splash p{color:#9FB6C4;font-weight:600;margin-top:8px;animation:rise .7s .5s var(--ease) both}
+.splash .sweep{width:160px;height:3px;margin:22px auto 0;background:linear-gradient(90deg,transparent,var(--teal),transparent);animation:sweep 1.4s ease-in-out infinite}
+@keyframes climb{from{transform:translateY(60px) scale(.8);opacity:0}to{transform:none;opacity:1}}
+@keyframes rise{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+@keyframes sweep{0%,100%{opacity:.3;transform:scaleX(.6)}50%{opacity:1;transform:scaleX(1)}}
+
+/* ---------- app bar ---------- */
+.bar{position:fixed;left:0;right:0;top:var(--vt,0px);z-index:60;height:calc(var(--bar) + var(--safe-t));padding-top:var(--safe-t);background:var(--navy);color:#fff;display:flex;align-items:center;gap:12px;padding-left:14px;padding-right:10px;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.bar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);animation:glow 6s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.35}50%{opacity:1}}
+.bar .mark{width:36px;height:36px;flex:none;display:block}
+.bar .ttl{min-width:0;flex:1}
+.bar .ttl small{display:block;font:700 11px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--hud);opacity:.85}
+.bar .ttl h1{font:800 23px/1.05 var(--f-display);text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who{display:flex;align-items:center;gap:8px;padding:5px 6px 5px 12px;color:#fff;font-weight:700;font-size:14px;border:1px solid rgba(95,227,220,.45);background:rgba(8,20,31,.6);position:relative}
+.who::before,.who::after{content:"";position:absolute;width:7px;height:7px;border-color:var(--hud);border-style:solid;transition:all .3s var(--ease)}
+.who::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.who::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+.who:hover::before{top:-4px;left:-4px}.who:hover::after{bottom:-4px;right:-4px}
+.who .av{width:30px;height:30px}
+.who .ping{width:8px;height:8px;border-radius:50%;background:var(--hud);box-shadow:0 0 0 0 rgba(95,227,220,.7);animation:ping 1.8s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(95,227,220,.7)}70%{box-shadow:0 0 0 9px rgba(95,227,220,0)}100%{box-shadow:0 0 0 0 rgba(95,227,220,0)}}
+.av{flex:none;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 13px var(--f-body);overflow:hidden;background:var(--teal)}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.av.big{width:58px;height:58px;font-size:21px;border:3px solid var(--teal)}
+
+/* ---------- screens ---------- */
+main{padding-top:calc(var(--bar) + var(--safe-t));padding-bottom:calc(var(--tabs) + var(--safe-b))}
+.screen{display:block;animation:fadeIn .35s var(--ease)}
+.screen.off{display:none}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.frame{display:block;width:100%;height:760px;border:0;background:#fff}
+.frame.off{display:none}
+
+/* ---------- home ---------- */
+.home{max-width:760px;margin:0 auto;padding:0 0 26px}
+.hero{position:relative;background:var(--navy);color:#fff;padding:26px 18px 30px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 90% 0%,rgba(50,180,175,.25),transparent 55%),repeating-radial-gradient(circle at 92% 18%,rgba(255,255,255,.045) 0 1px,transparent 1px 38px);pointer-events:none}
+.hero > *{position:relative}
+.tag{display:inline-block;background:var(--purple);color:#fff;font-weight:700;font-size:12.5px;padding:3px 10px;letter-spacing:.02em}
+.hero h2{font:800 clamp(34px,9vw,52px)/.95 var(--f-display);text-transform:uppercase;margin-top:10px;letter-spacing:.005em}
+.hero h2 span{color:var(--teal)}
+.hero p{color:#C9D6DF;margin-top:8px;max-width:520px}
+.hero .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.hero .jet{position:absolute;right:-18px;top:14px;width:150px;opacity:.5;transform:rotate(28deg);filter:drop-shadow(0 0 12px rgba(95,227,220,.5));pointer-events:none}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.badge{display:flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.25);padding:3px 10px 3px 4px;font-size:13px;font-weight:600}
+.badge i{min-width:22px;height:22px;border-radius:11px;padding:0 5px;display:grid;place-items:center;font-style:normal;font-size:12px;background:var(--teal);color:#fff}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;font-weight:700;font-size:15.5px;text-decoration:none;border:2px solid transparent;transition:transform .25s var(--ease),background .25s,color .25s,border-color .25s}
+.btn:active{transform:scale(.97)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-dk)}
+.btn-line{border-color:rgba(255,255,255,.55);color:#fff}
+.btn-line:hover{background:#fff;color:var(--navy)}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-navy:hover{background:var(--navy-2)}
+.btn-ghost{border-color:var(--line);color:var(--navy);background:#fff}
+.btn-ghost:hover{border-color:var(--teal)}
+.btn.sm{min-height:38px;padding:7px 14px;font-size:14.5px}
+
+.sec{padding:0 14px;margin-top:20px}
+.sec-h{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sec-h h3{font:800 22px/1 var(--f-display);text-transform:uppercase;color:var(--navy);letter-spacing:.01em}
+.sec-h h3::before{content:"";display:inline-block;width:10px;height:10px;background:var(--teal);margin-right:8px;transform:translateY(-2px)}
+.sec-h button,.sec-h a{font-weight:700;font-size:14px;color:var(--teal-dk);text-decoration:none}
+.card{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);box-shadow:0 8px 22px rgba(19,41,60,.07)}
+.card.pur{border-top-color:var(--purple)}
+.card.red{border-top-color:var(--red)}
+
+/* next show */
+.next{margin:-18px 14px 0;position:relative;z-index:2;padding:18px}
+.next .lbl{font:700 12px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--purple)}
+.next h4{font:800 28px/1 var(--f-display);text-transform:uppercase;color:var(--navy);margin-top:6px}
+.next .when{color:var(--mut);font-weight:600;margin-top:4px}
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
+.count div{background:var(--navy);color:#fff;text-align:center;padding:10px 4px 8px;position:relative}
+.count div::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--teal)}
+.count b{display:block;font:800 30px/1 var(--f-display);color:var(--hud);font-variant-numeric:tabular-nums}
+.count span{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9FB6C4}
+.facts{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:14.5px;color:var(--text)}
+.facts span::before{content:"▸ ";color:var(--teal)}
+.next .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+
+/* quick actions */
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.qa{text-decoration:none;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:14px;text-align:left;background:#fff;border:1px solid var(--line);border-left:4px solid var(--teal);box-shadow:0 8px 22px rgba(19,41,60,.06);transition:transform .3s var(--ease),border-color .3s;min-height:104px}
+.qa:hover{transform:translateY(-2px)}
+.qa:active{transform:scale(.98)}
+.qa svg{width:26px;height:26px;fill:none;stroke:var(--teal-dk);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.qa b{font:800 18px/1.05 var(--f-display);text-transform:uppercase;color:var(--navy)}
+.qa small{font-size:13.5px;color:var(--mut);line-height:1.3}
+.qa.p{border-left-color:var(--purple)}.qa.p svg{stroke:var(--purple)}
+.qa.r{border-left-color:var(--red)}.qa.r svg{stroke:var(--red)}
+.qa.n{border-left-color:var(--navy)}.qa.n svg{stroke:var(--navy)}
+
+/* lists */
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;padding:13px 14px;text-align:left;width:100%;background:#fff;border:1px solid var(--line);box-shadow:0 6px 16px rgba(19,41,60,.05);transition:border-color .25s,transform .25s var(--ease)}
+.item:hover{border-color:var(--teal)}
+.item:active{transform:scale(.99)}
+.item .av{width:38px;height:38px;font-size:14px}
+.item h5{font:700 16px/1.25 var(--f-body);color:var(--navy)}
+.item p{font-size:14.5px;color:var(--mut);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:6px;font-size:12.5px;font-weight:600;color:var(--mut)}
+.chip{background:var(--pale);color:var(--navy);padding:1px 7px;font-weight:700}
+.chip.t{background:#DDF3F2;color:var(--teal-dk)}
+.chip.p{background:#ECE7F6;color:var(--purple)}
+.dot{width:38px;height:38px;display:grid;place-items:center;background:var(--pale);color:var(--teal-dk)}
+.dot svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dot.new{background:#DDF3F2}
+.empty{padding:18px;text-align:center;color:var(--mut)}
+.empty b{display:block;color:var(--navy);font:800 20px var(--f-display);text-transform:uppercase;margin-bottom:4px}
+
+/* shows rail */
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,64%);gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.show{text-decoration:none;scroll-snap-align:start;padding:14px;text-align:left;background:var(--navy);color:#fff;border-top:4px solid var(--teal);position:relative;overflow:hidden}
+.show::before{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 100% 0%,rgba(255,255,255,.05) 0 1px,transparent 1px 30px);pointer-events:none}
+.show b{position:relative;display:block;font:800 21px/1 var(--f-display);text-transform:uppercase}
+.show span{position:relative;display:block;color:#9FB6C4;font-size:14px;font-weight:600;margin-top:6px}
+.show em{position:relative;display:inline-block;margin-top:10px;font-style:normal;font:800 26px/1 var(--f-display);color:var(--hud)}
+.show em small{font:700 12px var(--f-body);color:#9FB6C4;letter-spacing:.08em;text-transform:uppercase;margin-left:4px}
+
+/* install card */
+.install{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:16px;background:var(--navy-3);color:#fff;border:1px solid rgba(95,227,220,.45)}
+.install img{width:56px;height:56px}
+.install h4{font:800 20px/1 var(--f-display);text-transform:uppercase}
+.install p{color:#B9CBD6;font-size:14px;margin-top:4px}
+.install .btns{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- more ---------- */
+.more{max-width:760px;margin:0 auto;padding:6px 0 26px}
+.group{margin-top:18px}
+.group h3{padding:0 16px 8px;font:700 12.5px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--purple)}
+.rows{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;width:100%;padding:13px 16px;text-align:left;text-decoration:none;color:var(--navy);font-weight:600;border-bottom:1px solid var(--soft)}
+.row:last-child{border-bottom:0}
+.row:hover{background:#F7FAFB}
+.row svg{width:22px;height:22px;fill:none;stroke:var(--teal-dk);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.row small{display:block;font-weight:500;color:var(--mut);font-size:13.5px}
+.row .chev{width:16px;height:16px;stroke:#9AA9B4}
+.foot{text-align:center;color:var(--mut);font-size:13px;margin-top:22px;padding:0 16px}
+.foot img{width:190px;display:block;margin:0 auto 8px}
+
+/* ---------- tab bar ---------- */
+.tabs{position:fixed;left:0;right:0;bottom:var(--vb,0px);z-index:60;display:grid;grid-template-columns:repeat(5,1fr);height:calc(var(--tabs) + var(--safe-b));padding-bottom:var(--safe-b);background:rgba(14,33,49,.97);border-top:1px solid rgba(95,227,220,.3);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.tabs button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#A9BDCB;font:600 12px var(--f-body);transition:color .25s}
+.tabs button::before{content:"";position:absolute;top:-1px;left:22%;right:22%;height:3px;background:var(--teal);transform:scaleX(0);transition:transform .35s var(--ease)}
+.tabs button.on{color:var(--hud)}
+.tabs button.on::before{transform:scaleX(1)}
+.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.tabs button.on svg{filter:drop-shadow(0 0 6px rgba(95,227,220,.6))}
+.tabs .badge-n{position:absolute;top:8px;left:calc(50% + 6px);min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--red);color:#fff;font:700 11px/17px var(--f-body);text-align:center}
+
+/* ---------- sheet and toast ---------- */
+.scrim{position:fixed;inset:0;z-index:90;background:rgba(5,12,17,.55);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.scrim.on{opacity:1;visibility:visible}
+.sheet{position:fixed;left:0;right:0;bottom:var(--vb,0px);z-index:91;max-width:560px;margin:0 auto;background:#fff;border-top:4px solid var(--teal);padding:20px 18px calc(22px + var(--safe-b));transform:translateY(105%);transition:transform .4s var(--ease);box-shadow:0 -14px 40px rgba(0,0,0,.25)}
+.sheet.on{transform:none}
+.sheet h3{font:800 26px/1 var(--f-display);text-transform:uppercase;color:var(--navy)}
+.sheet p{color:var(--mut);margin-top:6px}
+.sheet ol{margin:12px 0 0 20px;color:var(--text)}
+.sheet ol li{margin-top:6px}
+.sheet .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.sheet .grab{width:44px;height:4px;background:var(--line);margin:-8px auto 14px}
+.toast{position:fixed;left:14px;right:14px;bottom:calc(var(--vb,0px) + var(--tabs) + var(--safe-b) + 12px);z-index:95;max-width:520px;margin:0 auto;background:var(--navy);color:#fff;padding:12px 16px;border-left:4px solid var(--teal);box-shadow:0 12px 30px rgba(0,0,0,.3);font-weight:600;animation:rise .35s var(--ease)}
+.offline{background:#FFF4E5;color:#7A4B00;border-bottom:1px solid #F3D6A6;padding:8px 14px;font-size:14px;font-weight:600;text-align:center}
+.offline a{color:inherit}
+
+@media (min-width:900px){
+  .home,.more{max-width:980px}
+  .quick{grid-template-columns:repeat(4,1fr)}
+  .rail{grid-auto-columns:minmax(220px,30%)}
+  .hero{padding:34px 28px 40px}
+  .next{margin:-22px 28px 0}
+  .sec{padding:0 28px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash" aria-hidden="true">
+  <div class="in">
+    <img class="jet" src="../hub-img/hawk-hud.png" alt="">
+    <h1>Airshow <span>Hub</span></h1>
+    <p>The Big Guide to UK Airshows</p>
+    <div class="sweep"></div>
+  </div>
+</div>
+
+<header class="bar">
+  <img class="mark" src="icons/icon-192.png" alt="">
+  <div class="ttl"><small>UK Airshow Guide</small><h1 id="title">Home</h1></div>
+  <button type="button" class="who" id="who" aria-label="Log in"><span id="whoTxt">Log in</span><span class="ping" id="whoPing"></span></button>
+</header>
+
+<main>
+  <div class="offline" id="offline" hidden></div>
+
+  <!-- Home -->
+  <section class="screen" id="s-home" data-title="Home">
+    <div class="home">
+      <div class="hero">
+        <img class="jet" src="../hub-img/hawk-hud.png" alt="">
+        <span class="tag" id="heroTag">Your airshow year</span>
+        <h2 id="heroH">Your airshows, <span>in your pocket</span></h2>
+        <p id="heroP">Plan your trips, count down to the show, chat with other airshow fans and follow the day live, all from one app.</p>
+        <div class="badges" id="heroBadges" hidden></div>
+        <div class="btns" id="heroBtns">
+          <button type="button" class="btn btn-teal" data-login="login">Log in</button>
+          <button type="button" class="btn btn-line" data-login="signup">Join free</button>
+        </div>
+      </div>
+
+      <div class="card next" id="next" hidden></div>
+
+      <div class="sec">
+        <div class="sec-h"><h3>Quick actions</h3></div>
+        <div class="quick">
+          <button type="button" class="qa" data-tab="hub" data-hub="trips"><svg viewBox="0 0 24 24"><path d="M3 15l7-1 5-9h2l-2 9 5 1-1 2-5-1-4 6H8l2-6-6 1z"/></svg><b>My trips</b><small>Tickets, travel, budget and packing</small></button>
+          <button type="button" class="qa p" data-tab="forum"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg><b>Airshow Forum</b><small>Ask, share photos, find a buddy</small></button>
+          <button type="button" class="qa r" data-tab="showday"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg><b>Show Day Live</b><small>Running order, queues and car parks</small></button>
+          <a class="qa n" href="https://www.ukairshowguide.co.uk/air-shows-guides" target="_top"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><b>Find an airshow</b><small>Every UK show, dates and guides</small></a>
+        </div>
+      </div>
+
+      <div class="sec" id="updSec" hidden>
+        <div class="sec-h"><h3>Updates</h3><button type="button" data-tab="hub" data-hub="updates">See all</button></div>
+        <div class="list" id="updList"></div>
+      </div>
+
+      <div class="sec" id="showsSec" hidden>
+        <div class="sec-h"><h3>Coming up</h3><a href="https://www.ukairshowguide.co.uk/uk-airshow-calendar" target="_top">Calendar</a></div>
+        <div class="rail" id="showsRail"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><h3>From the forum</h3><button type="button" data-tab="forum">Open forum</button></div>
+        <div class="list" id="threads"><div class="card empty">Loading the latest posts.</div></div>
+      </div>
+
+      <div class="sec" id="installSec" hidden>
+        <div class="install">
+          <img src="icons/icon-192.png" alt="">
+          <div><h4>Add the app to your phone</h4><p>Open it from your home screen like any other app, full screen and one tap away on show day.</p></div>
+          <div class="btns"><button type="button" class="btn btn-teal sm" id="installBtn">Add to home screen</button><button type="button" class="btn btn-line sm" id="installLater">Not now</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hub, Forum and Show Day are the site's own pages, loaded when first opened -->
+  <section class="screen off" id="s-hub" data-title="My Airshow Hub">
+    <iframe class="frame off" id="f-hub" title="My Airshow Hub" data-src="../my-airshow-hub.html" allow="clipboard-write; web-share; geolocation"></iframe>
+  </section>
+  <section class="screen off" id="s-forum" data-title="Airshow Forum">
+    <iframe class="frame off" id="f-forum" title="Airshow Forum" data-src="../forum-clean.html" allow="clipboard-write; web-share"></iframe>
+  </section>
+  <section class="screen off" id="s-showday" data-title="Show Day Live">
+    <iframe class="frame off" id="f-showday" title="Show Day Live" data-src="../show-day.html?mode=hub" allow="clipboard-write; web-share; geolocation"></iframe>
+  </section>
+
+  <!-- More -->
+  <section class="screen off" id="s-more" data-title="More">
+    <div class="more">
+      <div class="group"><h3>Your account</h3><div class="rows">
+        <a class="row" href="https://www.ukairshowguide.co.uk/my-profile" target="_top"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg><span>My Profile<small>Your photo, bio and log ins</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <button type="button" class="row" data-tab="hub" data-hub="hangar"><svg viewBox="0 0 24 24"><path d="M3 20V10l9-6 9 6v10"/><path d="M7 20v-6h10v6"/></svg><span>My Hangar<small>Every aircraft you have seen</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button type="button" class="row" id="moreOut" hidden><svg viewBox="0 0 24 24"><path d="M15 4h4v16h-4"/><path d="M10 8l-4 4 4 4M6 12h10"/></svg><span>Log out</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div></div>
+      <div class="group"><h3>Plan a show</h3><div class="rows">
+        <a class="row" href="https://www.ukairshowguide.co.uk/uk-airshow-calendar" target="_top"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>UK Airshow Calendar<small>Every show date for the year</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/airshow-map" target="_top"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Airshow Map<small>Shows near you</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/visitorplanningguides" target="_top"><svg viewBox="0 0 24 24"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h6"/></svg><span>Visitor Planning Guides<small>Getting there, food, camping and more</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/airshow-public-transport" target="_top"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="2"/><path d="M5 11h14M8 21l2-4M16 21l-2-4"/></svg><span>Public transport<small>Trains, buses and Park and Ride</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/build-your-kit-calculator" target="_top"><svg viewBox="0 0 24 24"><path d="M4 8h16v12H4z"/><path d="M9 8V5h6v3"/></svg><span>Kit Calculator<small>What to pack for the weather</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+      </div></div>
+      <div class="group"><h3>Community</h3><div class="rows">
+        <a class="row" href="https://www.ukairshowguide.co.uk/how-my-airshow-hub-works" target="_top"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><span>How the hub works</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/how-the-forum-works" target="_top"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><span>How the forum works</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/airshow-photography-hub" target="_top"><svg viewBox="0 0 24 24"><path d="M4 7h4l2-3h4l2 3h4v13H4z"/><circle cx="12" cy="13" r="4"/></svg><span>Photography Hub</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/youtube" target="_top"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M10 9l5 3-5 3z"/></svg><span>YouTube<small>Videos from the shows</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/airshow-news" target="_top"><svg viewBox="0 0 24 24"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5"/></svg><span>Airshow News</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+      </div></div>
+      <div class="group"><h3>About</h3><div class="rows">
+        <button type="button" class="row" id="moreInstall"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M12 7v7M9 11l3 3 3-3"/></svg><span>Add the app to your phone</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+        <a class="row" href="https://www.ukairshowguide.co.uk/contact-us" target="_top"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 6l9 7 9-7"/></svg><span>Contact us</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/policies" target="_top"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg><span>Privacy, cookies and terms</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="row" href="https://www.ukairshowguide.co.uk/" target="_top"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Full website</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+      </div></div>
+      <div class="foot"><img src="icons/logo.png" alt="UK Airshow Guide, by The Big Guide to UK Airshows">Airshow Hub app</div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs" aria-label="App">
+  <button type="button" data-tab="home" class="on" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Home</button>
+  <button type="button" data-tab="hub"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 12l5-5"/></svg>Hub<span class="badge-n" id="hubBadge" hidden></span></button>
+  <button type="button" data-tab="forum"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>Forum</button>
+  <button type="button" data-tab="showday"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg>Show Day</button>
+  <button type="button" data-tab="more"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+</nav>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetH"><div class="grab"></div><div id="sheetBody"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="app.js"></script>
+<script src="https://jskedge1.github.io/airshow-pages/fit-frame.js" defer></script>
+</body>
+</html>

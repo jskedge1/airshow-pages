@@ -26,6 +26,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Find your Air Show (top HTML embed on /air-shows-guides, by website address since 30 Oct; photos in find-img/) | https://jskedge1.github.io/airshow-pages/find-your-airshow.html |
 | YouTube (Wix page /youtube; videos come from youtube/videos.json, refreshed every hour by .github/workflows/youtube.yml and tools-youtube.py. To move a video to another show or topic, edit it in videos.json and set "fixed": true) | https://jskedge1.github.io/airshow-pages/youtube.html |
 | Site map footer (goes in an HTML embed in the Wix footer, on every page; holds its own page list, so add new pages to it too; replaced the old About footer on 20 Oct 2026, whose pasted code stays at https://073f6961-6a1c-4313-a30e-a850cc8c3512.filesusr.com/html/a0546b_ef8a36c9e66a9c145f110a95db863b8a.html) | https://jskedge1.github.io/airshow-pages/footer.html |
+| Airshow Hub app: My Airshow Hub, the Airshow Forum and Show Day Live in one phone app in the site's look (Home, Hub, Forum, Show Day and More tabs). Wix page /app (to be made), box html1, page code `velo/page-code/app.js`, install tags `velo/custom-code/app-head.html`. See "Airshow Hub app" below. Add `?demo=1` to see Home with an example member. | https://jskedge1.github.io/airshow-pages/app/index.html |
 | Airshow Forum (Wix page /community-forum, real member posts since 3 Nov 2026 through `forum-live.js`, page code `velo/page-code/community-forum.js` on box #html12, backend `backend/forum.web.js`). Opens with a Forum look switch: Clean (default, traders page style) or HUD. forum.html relays the looks' messages (`ukag-forum`) to the page code. Visitors' choice is remembered. | https://jskedge1.github.io/airshow-pages/forum.html |
 | Airshow Forum, clean look on its own (loaded by forum.html) | https://jskedge1.github.io/airshow-pages/forum-clean.html |
 | Airshow Forum, HUD look on its own (loaded by forum.html; the previous forum.html, unchanged) | https://jskedge1.github.io/airshow-pages/forum-hud.html |
@@ -583,3 +584,37 @@ were added to shows without one.
 
 ## Feature page publish, 10 Nov 2026
 The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, Eastbourne, Wales, Shuttleworth, Little Gransden, Southport, Blackpool, Ayr, Headcorn; RIAT unchanged) now carry the design work done through the preview artifacts: Box Tab 4 and clean info boxes, solid colour where to watch tabs, one line section menu with arrows, operator coloured train boxes and facts, the shuttle bus design, the Clacton header text, Keep reading hover with red READ, Good to know hover, checklist groups on the Cosford plan, the detailed crowd line view and aerial map, and the "Coming by train?" banner at the top of Getting There. The added styles and scripts sit at the end of each page. Images that were only in the previews are saved as `camping-layout/img/inl-*.{webp,jpg}`. The page sources from before this publish are kept in `backups/feature-src-2026-11-10/`.
+
+
+## Airshow Hub app (11 Nov 2026)
+
+One app for My Airshow Hub, the Airshow Forum and Show Day Live, in the site's own look (navy, teal and purple,
+Barlow Condensed headings, square cards). Files are in `app/`:
+
+- `app/index.html` and `app/app.js`: the app. A top bar (logo, page title, account button with the HUD corners) and a
+  bottom tab bar: Home, Hub, Forum, Show Day, More. Home is drawn by the app itself: a welcome band with the member's
+  badges, a countdown card for their next saved show (or the next UK airshow for visitors), quick actions, unread hub
+  updates, the coming shows and the five latest forum posts. Hub, Forum and Show Day are the site's own pages
+  (`my-airshow-hub.html`, `forum-clean.html`, `show-day.html?mode=hub`) in frames, so they never need changing twice.
+  Inside the app the hub's phone tab bar moves to the top of the hub (its Show Day and Forum buttons become the app's
+  tabs), the hub's own add to home screen box and the forum's Back to my hub tab are hidden, and hub links to the
+  forum, members or messages open the Forum tab. More lists the profile, planning pages and community pages.
+- How it talks to the site: the frames send their usual messages (`ukag-hub`, `ukag-forum`, `ukag-showday`) to the app,
+  which passes them up to the page code on /app and hands each answer back to the frame that asked, like `forum.html`
+  does. The app's own messages use `ukag-app` (`ready`, `top`; the page code answers with `viewport` and `tab`).
+  Log in, Join free and Log out work from any tab and update all of them. Opened outside the website it shows the
+  logged out screens and a note to open ukairshowguide.co.uk/app.
+- `app/manifest.webmanifest`, `app/icons/` (made from `hub-img/hawk-hud.png` with the red and teal stripes) and
+  `app/sw.js` (keeps the app's own files for opening offline) make it installable. Its start address is
+  https://www.ukairshowguide.co.uk/app so the installed app opens logged in on the site. `?tab=hub`, `forum` or
+  `showday` on the page address opens that tab (used by the app icon's long press shortcuts).
+
+Wix setup (not done yet):
+1. Add a page "App" at /app, hidden from the menu. One HTML embed, ID html1, stretched full width, set to
+   "Website address" https://jskedge1.github.io/airshow-pages/app/index.html. Add `/airshow-pages/app/index.html`
+   to AE_GH_PAGES if the box should grow with the page like the others (fit-frame.js is loaded).
+2. Paste `velo/page-code/app.js` as the page code. It uses hub.web.js, hangar.web.js, forum.web.js (imported whole,
+   only the actions in FORUM_ACTIONS can be called) and showday.web.js, which are already on the site.
+3. Settings > Custom Code: paste `velo/custom-code/app-head.html` into the head of the App page only.
+4. Publish, open ukairshowguide.co.uk/app on a phone and use Add to Home Screen (iPhone, Safari share menu) or
+   Install app (Android, Chrome menu). The More tab has the same steps under "Add the app to your phone".
