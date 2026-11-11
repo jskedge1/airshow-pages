@@ -609,6 +609,13 @@ Barlow Condensed headings, square cards). Files are in `app/`:
   https://www.ukairshowguide.co.uk/app so the installed app opens logged in on the site. `?tab=hub`, `forum` or
   `showday` on the page address opens that tab (used by the app icon's long press shortcuts).
 
+Working preview (11 Nov 2026): `python3 tools-app-preview.py` builds `previews/app-preview/` (not committed): the app,
+the hub, the forum and Show Day with local addresses, plus `app/demo-backend.js`, which stands in for the page code
+with example data (log in and out, trips, must see, updates, hangar, forum threads, replies, likes, members, messages
+and a Show Day running order). Changes are kept on the viewer's device; "Start again" in the preview's note resets them.
+The only change to the hub copy is that it treats itself as on the site. Published as a Claude artifact:
+https://claude.ai/artifact/UjvtzLUM2ppeiRGVueQQHR (rebuild and republish after changing the app or the pages).
+
 Wix setup (not done yet):
 1. Add a page "App" at /app, hidden from the menu. One HTML embed, ID html1, stretched full width, set to
    "Website address" https://jskedge1.github.io/airshow-pages/app/index.html. Add `/airshow-pages/app/index.html`

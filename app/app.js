@@ -18,7 +18,9 @@
 
   var SITE = "https://www.ukairshowguide.co.uk/";
   var Q = new URLSearchParams(location.search);
-  var DEMO = Q.get("demo") === "1";
+  /* the working preview (tools-app-preview.py) puts an example backend in front of this file */
+  var BACKEND = typeof window.UKAG_BACKEND === "function" ? window.UKAG_BACKEND : null;
+  var DEMO = Q.get("demo") === "1" && !BACKEND;
   var SOURCES = { "ukag-hub": 1, "ukag-forum": 1, "ukag-showday": 1 };
 
   /* Inside the Wix page? Same test the hub uses. */
@@ -89,6 +91,7 @@
 
   /* the app's own questions (Home tab) */
   function ask(source, action, payload) {
+    if (BACKEND) return BACKEND({ source: source, action: action, payload: payload || {} });
     if (DEMO) return Promise.resolve(demo(source, action));
     if (!IN_WIX) return Promise.resolve({ ok: false, outside: true, error: "Open the app on the website to log in." });
     return new Promise(function (resolve) {
@@ -107,10 +110,10 @@
     var m = e.data;
     if (!m || typeof m !== "object") return;
 
-    /* a page in a frame saying how tall it is (forum and show day use fit-frame.js) */
+    /* a page in a frame saying how tall it is (the three pages use fit-frame.js, as in their boxes on the site) */
     if (m.source === "ukag-fit" && m.h > 0) {
       var which = frameFor(e.source);
-      if (which && which !== "hub") FRAMES[which].style.height = Math.ceil(m.h) + "px";
+      if (which) FRAMES[which].style.height = Math.ceil(m.h) + "px";
       return;
     }
 
@@ -130,6 +133,11 @@
         e.source.postMessage({ source: m.source, id: m.id, ok: true, data: { done: true } }, "*");
         return;
       }
+      if (BACKEND) {
+        var asker = e.source;
+        BACKEND(m).then(function (r) { try { asker.postMessage({ source: m.source, id: m.id, ok: r.ok, data: r.data, error: r.error }, "*"); } catch (x) {} });
+        return;
+      }
       if (!IN_WIX) {
         e.source.postMessage({ source: m.source, id: m.id, ok: false, error: "This only works in the app on the website. Open ukairshowguide.co.uk/app to log in." }, "*");
         return;
@@ -144,13 +152,17 @@
       var key = m.source + "|" + m.id;
       if (m.id && mine[key]) { var f = mine[key]; delete mine[key]; f(m); return; }
       if (m.id && asked[key]) { var w = asked[key]; delete asked[key]; try { w.postMessage(m, "*"); } catch (x) {} return; }
-      if (m.event) {
-        toFrames(m);
-        if (m.source === "ukag-forum" && m.event === "session") setForumMember(m.data && m.data.member);
-        if ((m.source === "ukag-forum" && m.event === "session") || (m.source === "ukag-hub" && m.event === "refresh")) reloadHomeSoon();
-      }
+      if (m.event) news(m);
     }
   });
+
+  /* news from the page code (or the preview's example backend): log in, log out, refresh */
+  function news(m) {
+    toFrames(m);
+    if (m.source === "ukag-forum" && m.event === "session") setForumMember(m.data && m.data.member);
+    if ((m.source === "ukag-forum" && m.event === "session") || (m.source === "ukag-hub" && m.event === "refresh")) reloadHomeSoon();
+  }
+  window.ukagAppEvent = news;
 
   /* the hub asks to go somewhere: keep forum and show day inside the app */
   function handleGo(p) {
@@ -212,13 +224,12 @@
     f.src = f.dataset.src;
   }
 
-  /* The hub scrolls inside its own frame (as it does in its box on the site), so it gets one screen's height. */
+  /* Until the hub says how tall it is, give it one screen's height. */
   function sizeHub() {
     var bar = $(".bar").offsetHeight, tabs = $(".tabs").offsetHeight;
     var screenH = S.vh || (IN_WIX ? Math.min(window.screen && screen.availHeight || 800, 900) : window.innerHeight);
     FRAMES.hub.style.height = Math.max(480, screenH - bar - tabs) + "px";
   }
-  window.addEventListener("resize", function () { if (!IN_WIX) sizeHub(); });
 
   function hubDoc() { try { return FRAMES.hub.contentDocument; } catch (e) { return null; } }
   function hubTweaks() {
@@ -230,10 +241,10 @@
     st.textContent =
       ".a2hs{display:none!important}" +
       "@media (max-width:700px){" +
-      "body.is-member .hub-dock{top:0!important;bottom:auto!important;grid-template-columns:repeat(3,1fr)!important;border-top:0!important;border-bottom:1px solid rgba(95,227,214,.35);padding-bottom:0!important}" +
+      "body.is-member .hub-dock{top:var(--vt,0px)!important;bottom:auto!important;grid-template-columns:repeat(3,1fr)!important;border-top:0!important;border-bottom:1px solid rgba(95,227,214,.35);padding-bottom:0!important}" +
       "body.is-member .hub-dock button{min-height:48px!important;flex-direction:row!important;gap:7px!important;font-size:13.5px!important}" +
       ".hub-dock [data-dock=showday],.hub-dock [data-dock=forum]{display:none!important}" +
-      "body.is-member .hub-me:not([hidden]){top:48px!important;bottom:auto!important}" +
+      "body.is-member .hub-me:not([hidden]){top:calc(var(--vt,0px) + 48px)!important;bottom:auto!important}" +
       "body.is-member{padding-bottom:0!important;padding-top:48px!important}}";
     d.head.appendChild(st);
     d.addEventListener("click", function (e) {
@@ -288,7 +299,7 @@
 
   /* ---------- account ---------- */
   function login(mode) {
-    if (!IN_WIX && !DEMO) { outsideSheet(); return; }
+    if (!IN_WIX && !DEMO && !BACKEND) { outsideSheet(); return; }
     if (DEMO) { toast("Example only: log in works in the app on the website."); return; }
     ask("ukag-forum", mode === "signup" ? "signup" : "login").then(function (r) {
       if (!r.ok && !r.timeout) toast(r.error || "Log in was cancelled.");
@@ -296,7 +307,7 @@
   }
   function logout() {
     closeSheet();
-    if (!IN_WIX) return;
+    if (!IN_WIX && !BACKEND) return;
     ask("ukag-forum", "logout").then(function () { toast("You have logged out. See you at the next show."); });
   }
   $$("[data-login]").forEach(function (b) { b.addEventListener("click", function () { login(b.dataset.login); }); });
@@ -545,7 +556,11 @@
   if (!navigator.onLine) { var o = $("#offline"); o.hidden = false; o.textContent = "You are offline. Your hub and the forum will update when you are back online."; }
   window.addEventListener("online", function () { $("#offline").hidden = true; loadHome(); });
   window.addEventListener("offline", function () { var o = $("#offline"); o.hidden = false; o.textContent = "You are offline. Your hub and the forum will update when you are back online."; });
-  if (!IN_WIX && !DEMO) {
+  if (BACKEND) {
+    var pv = $("#offline"); pv.hidden = false;
+    pv.innerHTML = 'Working preview with example data. Nothing here reaches the live site. <a href="#" id="pvReset">Start again</a>';
+    $("#pvReset").addEventListener("click", function (e) { e.preventDefault(); if (window.UKAG_PREVIEW_RESET) window.UKAG_PREVIEW_RESET(); toast("The preview has been reset."); });
+  } else if (!IN_WIX && !DEMO) {
     var off = $("#offline"); off.hidden = false;
     off.innerHTML = 'You are viewing the app outside the website, so log in is off. <a href="' + SITE + 'app" target="_top">Open it at ukairshowguide.co.uk/app</a>';
   }
