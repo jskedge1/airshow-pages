@@ -583,3 +583,12 @@ were added to shows without one.
 
 ## Feature page publish, 10 Nov 2026
 The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, Eastbourne, Wales, Shuttleworth, Little Gransden, Southport, Blackpool, Ayr, Headcorn; RIAT unchanged) now carry the design work done through the preview artifacts: Box Tab 4 and clean info boxes, solid colour where to watch tabs, one line section menu with arrows, operator coloured train boxes and facts, the shuttle bus design, the Clacton header text, Keep reading hover with red READ, Good to know hover, checklist groups on the Cosford plan, the detailed crowd line view and aerial map, and the "Coming by train?" banner at the top of Getting There. The added styles and scripts sit at the end of each page. Images that were only in the previews are saved as `camping-layout/img/inl-*.{webp,jpg}`. The page sources from before this publish are kept in `backups/feature-src-2026-11-10/`.
+
+## RIAT feature page rebuilt for MOD Boscombe Down (11 Nov 2026)
+
+`camping-layout/riat.html` is the full RIAT feature page again, rebuilt from the last Fairford version (`backups/riat-camping-layout-fairford-2026-11-04.html`) for the move to MOD Boscombe Down. The short holding page it replaces is kept in `backups/riat-boscombe-holding-2026-11-11.html`. The root `riat.html` is still the holding page.
+- New tab "New for 2027" (`#newsite`, after Overview): what changes, Fairford and Boscombe Down side by side, confirmed and still to come, if you've already booked, how the news came out.
+- Getting there topics rewritten (A303, A345, A338, A36; Salisbury, Grateley, Andover and Swindon stations; planned free rail shuttles and Park & Ride). Taxi firm numbers for Amesbury and Salisbury still to be added and checked.
+- Sun guide redrawn for runway 05/23 with a "crowd on the north west side / south east side" switch, as the crowd line isn't published. Plan is indicative and labelled not to scale.
+- Where to watch, Park & View, enclosures, accessibility and Good to know now say what is from Fairford and what is still to come. Gate and flying times in `SW_SHOWS`, the planner and timelines are approx. (Fairford times) until RIAT publishes them.
+- Don't rerun `tools-extras.py riat` without first updating `extras-src/riat.json`, as its Good to know text is still the Fairford version and would overwrite the page's.
