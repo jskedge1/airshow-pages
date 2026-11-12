@@ -608,4 +608,4 @@ The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, 
   showing YouTube's small grey placeholder.
 - Fonts: the site uses only Barlow Medium (500), Barlow Bold (700) and Assistant Medium (500). Assistant takes the
   place of the old Share Tech Mono and JetBrains Mono labels; Barlow Condensed and Caveat are gone. Every page loads
-  `family=Assistant:wght@500&family=Barlow:wght@500;700`. Use font-weight 500 or 700 only in new work.
+  `family=Assistant:wght@500&family=Barlow:wght@500;700&display=block`. Font lists name only Barlow or Assistant, with no serif or sans-serif fallback; display=block hides text for a moment while the font loads instead of showing a stand-in font. Use font-weight 500 or 700 only in new work.

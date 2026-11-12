@@ -1,5 +1,5 @@
 <!-- on the bus add-on (30 Oct 2026): dot matrix front sign, departures board and on board next stop screen -->
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Barlow:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Barlow:wght@500;700&display=block" rel="stylesheet">
 <style>html{font-synthesis-weight:none}body{font-weight:500}b,strong{font-weight:700}button,input,select,textarea{font-family:inherit;font-weight:500}
 /* dot matrix front sign, replaces the blind and the small number screen */
 .blind.dm{display:block;padding:10px 12px;background:#0f0d0a;border:6px solid #05090D}
@@ -17,15 +17,15 @@
 .cdscreen.db .cdin::after{display:none}
 .cdscreen.db .cdtop{align-items:center;padding:14px 18px;border:0;background:var(--obui,#13293C);color:var(--obon,#fff);text-shadow:none;font:700 21px/1.1 var(--c);letter-spacing:.01em;text-transform:none}
 .cdscreen.db .cdtop .lv{font:500 14px/1 var(--f);margin-right:12px;opacity:.9}
-.cdscreen.db .cdtop #cdclock{font:700 24px/1 Assistant,sans-serif;letter-spacing:.02em}
+.cdscreen.db .cdtop #cdclock{font:700 24px/1 Assistant;letter-spacing:.02em}
 .cdscreen.db .cdrows{margin:0}
 .cdscreen.db .cdrows li{grid-template-columns:58px minmax(0,1fr) auto;align-items:center;padding:11px 18px;border-top:1px solid rgba(255,255,255,.07);
   font:700 22px/1.1 var(--c);color:#EDF2F2;text-transform:none;letter-spacing:0;text-shadow:none;transition:background .3s var(--ease)}
 .cdscreen.db .cdrows li span:first-child{display:inline-flex;justify-content:center;background:#fff;color:var(--obui,#13293C);font:700 20px/1 var(--c);padding:5px 0;width:48px}
-.cdscreen.db .cdrows li span:last-child{font:700 20px/1 Assistant,sans-serif;color:#FFB21E;text-shadow:0 0 12px rgba(255,178,30,.35)}
+.cdscreen.db .cdrows li span:last-child{font:700 20px/1 Assistant;color:#FFB21E;text-shadow:0 0 12px rgba(255,178,30,.35)}
 .cdscreen.db .cdrows li .ex{display:block;font:500 13px/1.3 var(--f);color:#9FB6BA;text-shadow:none;margin-top:3px}
 .cdscreen.db .cdrows li.on{background:rgba(255,255,255,.06)}
-.cdscreen.db .cdtick{margin:0;padding:10px 0;border-top:1px solid rgba(255,255,255,.07);background:#091218;font:500 14px/1.3 Assistant,sans-serif;color:#FFB21E;letter-spacing:0;text-transform:none}
+.cdscreen.db .cdtick{margin:0;padding:10px 0;border-top:1px solid rgba(255,255,255,.07);background:#091218;font:500 14px/1.3 Assistant;color:#FFB21E;letter-spacing:0;text-transform:none}
 
 /* on board next stop screen */
 .onbus{margin-top:44px}
@@ -38,7 +38,7 @@
 .obnum{background:#fff;color:var(--obui,#13293C);font:700 6.4cqw/1 var(--c);padding:.6cqw 2cqw;letter-spacing:-.01em}
 .obdest{flex:1;min-width:0;font:700 4.6cqw/1 var(--c)}
 .obdest small{display:block;font:500 2cqw/1.25 var(--f);opacity:.92;margin-top:.5cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.obclock{font:700 4.6cqw/1 Assistant,sans-serif;font-variant-numeric:tabular-nums}
+.obclock{font:700 4.6cqw/1 Assistant;font-variant-numeric:tabular-nums}
 .obbody{display:grid;grid-template-columns:minmax(0,1fr) 44%;height:calc(100% - 14cqw)}
 .obleft{position:relative;padding:4.5cqw 3.6cqw 0;overflow:hidden}
 .oblbl{font:700 2.5cqw/1 var(--f);color:var(--obui,#13293C)}
@@ -60,7 +60,7 @@
 .oblist li::before{content:"";position:absolute;left:4.1cqw;top:0;bottom:0;width:.5cqw;background:var(--obline,#13293C)}
 .oblist li::after{content:"";position:absolute;left:3.45cqw;top:50%;width:1.8cqw;height:1.8cqw;margin-top:-.9cqw;border-radius:50%;background:#fff;border:.45cqw solid var(--obline,#13293C);box-sizing:border-box}
 .oblist li span{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.oblist li b{margin-left:auto;flex:none;font:500 2.1cqw/1 Assistant,sans-serif;color:#4A5C64}
+.oblist li b{margin-left:auto;flex:none;font:500 2.1cqw/1 Assistant;color:#4A5C64}
 .oblist li.off{color:#B8323A}
 .oblist li.off::after{background:#D74949;border-color:#D74949}
 .obend{position:absolute;left:3cqw;right:3cqw;top:9cqw;font:700 2.4cqw/1.4 var(--f);color:#4A5C64;opacity:0;transition:opacity .4s ease}
@@ -118,7 +118,7 @@
     var ctx = can.getContext('2d'), off = document.createElement('canvas'); off.width = cols; off.height = rows;
     var o = off.getContext('2d', { willReadFrequently: true });
     var st = { num: '', dest: '', via: '', t0: performance.now(), wipe: 1, prev: null };
-    function font(sz){ o.font = '700 ' + sz + 'px Barlow,sans-serif'; }
+    function font(sz){ o.font = '700 ' + sz + 'px Barlow'; }
     function compose(t, s){
       o.fillStyle = '#000'; o.fillRect(0, 0, cols, rows); o.fillStyle = '#fff'; o.textBaseline = 'alphabetic';
       var big = Math.round(rows * 1.02); font(big);

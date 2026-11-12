@@ -104,7 +104,7 @@
     });
   }
   var CSS = '.llx{margin:18px 0 0;padding:16px 18px;background:rgba(255,255,255,.06);border-left:4px solid #6950A1;color:#fff}'
-    + '.llx h4{margin:0 0 4px;font:700 20px/1.1 Barlow,sans-serif;text-transform:uppercase;letter-spacing:.01em}'
+    + '.llx h4{margin:0 0 4px;font:700 20px/1.1 Barlow;text-transform:uppercase;letter-spacing:.01em}'
     + '.llx>p{margin:0 0 12px;font-size:14.5px;line-height:1.45;color:rgba(255,255,255,.8)}'
     + '.llx-c{margin:0 0 14px}.llx-c:last-child{margin-bottom:0}.llx-c>b{display:block;font-size:15.5px;margin-bottom:8px}'
     + '.llx ol{list-style:none;margin:0;padding:0;position:relative}'

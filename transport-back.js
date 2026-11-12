@@ -114,7 +114,7 @@
   }
 
   var css = ''
-    + '.tb-bar{--tb:' + COLOUR[mode] + ';background:#F1F4F6;border-bottom:3px solid var(--tb);font-family:Barlow,sans-serif;position:relative;z-index:2}'
+    + '.tb-bar{--tb:' + COLOUR[mode] + ';background:#F1F4F6;border-bottom:3px solid var(--tb);font-family:Barlow;position:relative;z-index:2}'
     + '.tb-bar.tb-end{border-bottom:0;border-top:3px solid var(--tb)}'
     + '.tb-in{max-width:1200px;margin:0 auto;padding:12px 24px 0;display:flex;align-items:flex-end;gap:16px}'
     + '.tb-end .tb-in{padding:0 24px 14px;align-items:flex-start}'

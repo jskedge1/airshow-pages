@@ -18,13 +18,13 @@
 
 
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Barlow:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Barlow:wght@500;700&display=block">
 <style>html{font-synthesis-weight:none}body{font-weight:500}b,strong{font-weight:700}button,input,select,textarea{font-family:inherit;font-weight:500}
 /* Layout concept: camping hub design on the home page. Rotating photo header, glass planner bar, white and pale teal sections with red line titles, forest green band, navy organiser section. */
 :root{
   --navy:#13293C; --deep:#0E2131; --teal:#32B4AF; --pale:#E6F4F3; --purple:#6950A1; --red:#D74949; --forest:#1E3A34;
   --paper:#FFFFFF; --ink:#0B1722; --line:#CBD5DD; --mute:#33475A;
-  --font:Barlow,sans-serif; --cond:Barlow,sans-serif; --hand:Barlow,sans-serif;
+  --font:Barlow; --cond:Barlow; --hand:Barlow;
   --ease:cubic-bezier(.22,1,.36,1);
   color-scheme:light;
 }
@@ -466,7 +466,7 @@ footer a:hover{color:var(--teal);transform:translateX(4px)}
 .brow{display:grid;grid-template-columns:110px minmax(0,1.6fr) minmax(0,1fr) 140px;gap:12px;align-items:center;padding:10px 22px;border-bottom:1px solid #16293A;min-width:640px;transition:background .3s}
 .brow:hover{background:#10263A}
 .brow.th{color:#8FA6B9;font-weight:500;font-size:15px;padding-block:10px}
-.fl{font:700 19px/1 Assistant,sans-serif;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fl{font:700 19px/1 Assistant;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fl.d{color:#FFD873}
 .bst{font:700 15px/1 var(--font);padding:6px 10px;text-align:center;white-space:nowrap}
 .bst.c{background:var(--teal)}.bst.e{background:var(--purple)}.bst.t{background:#2A4459;color:#C9D6E0}
@@ -1355,7 +1355,7 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
     FEAT.forEach(function(f,i){if(hidden[f[4]])return;var p=proj(f[2],f[3]),ang=Math.atan2(p[1]-cy,p[0]-cx);var turn=((ang/(2*Math.PI))+1)%1,col=TYPES[f[4]][1],big=f[4]==='feat';
       var lx=p[0]>300?p[0]-8:p[0]+8,anc=p[0]>300?'end':'start';
       h+='<g class="blip" id="blip'+i+'"><circle class="ping" style="stroke:'+col+';animation-delay:'+(turn*4-4).toFixed(2)+'s" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="5"/><circle class="dot" style="fill:'+col+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(big?4.6:3.4)+'"'+(big?' stroke="#fff" stroke-width="1.2"':'')+'/><text x="'+lx.toFixed(1)+'" y="'+(p[1]+4).toFixed(1)+'" text-anchor="'+anc+'" paint-order="stroke" stroke="#0E2131" stroke-width="3">'+f[0]+'</text></g>'});
-    h+='<g class="you"><circle cx="'+cx+'" cy="'+cy+'" r="5"/><text x="'+cx+'" y="'+(+cy-11)+'" text-anchor="middle" style="font:700 12px Barlow,sans-serif;fill:#fff" paint-order="stroke" stroke="#0E2131" stroke-width="3">'+me[0]+'</text></g>';
+    h+='<g class="you"><circle cx="'+cx+'" cy="'+cy+'" r="5"/><text x="'+cx+'" y="'+(+cy-11)+'" text-anchor="middle" style="font:700 12px Barlow;fill:#fff" paint-order="stroke" stroke="#0E2131" stroke-width="3">'+me[0]+'</text></g>';
     rs.innerHTML=h;sweepT0=performance.now();BT=[];FEAT.forEach(function(f,i){if(hidden[f[4]])return;var p=proj(f[2],f[3]);BT.push([((Math.atan2(p[1]-cy,p[0]-cx)/(2*Math.PI))+1)%1,f[4]==='feat',miles(me[1],me[2],f[2],f[3])])});
     var list=FEAT.map(function(f,i){return[i,miles(me[1],me[2],f[2],f[3])]}).filter(function(x){return !hidden[FEAT[x[0]][4]]}).sort(function(a,b){return a[1]-b[1]});
     var within=list.filter(function(x){return x[1]<=100}),wf=within.filter(function(x){return FEAT[x[0]][4]==='feat'}).length;
@@ -1493,7 +1493,7 @@ var IMGU={"blenheim-smoke": "https://static.wixstatic.com/media/a0546b_59400d303
   var dA=document.getElementById('dayimgA'),dB=document.getElementById('dayimgB'),dCur=dA.getAttribute('src');
   function dayPhoto(st){var u=st.dataset.img;if(!u||u===dCur)return;dCur=u;var show=dA.classList.contains('on')?dB:dA,hide=show===dA?dB:dA;
     show.onload=function(){show.classList.add('on');hide.classList.remove('on')};show.alt=st.dataset.alt||'';show.src=u;if(show.complete&&show.naturalWidth)show.onload();}
-  sts.forEach(function(st){if(!st.dataset.img)return;var im=document.createElement('img');im.className='stimg';im.loading='lazy';im.decoding='async';im.src=st.dataset.img;im.alt=st.dataset.alt||'';var b=st.querySelector('b');b.parentNode.insertBefore(im,b.nextSibling);if(st.dataset.cap){var c=document.createElement('p');c.className='stcap';c.style.cssText='margin:0 0 6px;font:500 14px/1.35 Barlow,sans-serif;color:#13293C';c.textContent=st.dataset.cap;im.parentNode.insertBefore(c,im.nextSibling);}});
+  sts.forEach(function(st){if(!st.dataset.img)return;var im=document.createElement('img');im.className='stimg';im.loading='lazy';im.decoding='async';im.src=st.dataset.img;im.alt=st.dataset.alt||'';var b=st.querySelector('b');b.parentNode.insertBefore(im,b.nextSibling);if(st.dataset.cap){var c=document.createElement('p');c.className='stcap';c.style.cssText='margin:0 0 6px;font:500 14px/1.35 Barlow;color:#13293C';c.textContent=st.dataset.cap;im.parentNode.insertBefore(c,im.nextSibling);}});
   (function(){var nav=document.querySelector('.nav'),bar=document.getElementById('daybar'),root=document.documentElement;
     function m(){if(nav)root.style.setProperty('--navh',nav.offsetHeight+'px');if(bar)root.style.setProperty('--barh',bar.offsetHeight+'px')}
     m();addEventListener('resize',m);if(window.ResizeObserver&&bar)new ResizeObserver(m).observe(bar);})();

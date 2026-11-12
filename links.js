@@ -93,7 +93,7 @@
     var me=here();
     var shows=PAGES.filter(function(p){return p.live && p.key!==me;});
     var guides=GUIDES.filter(function(p){return p.live && p.key!==me;});
-    var css='#xl-band{background:#13293C;color:#FFFFFF;font-family:Barlow,sans-serif;padding:56px 0 52px}'
+    var css='#xl-band{background:#13293C;color:#FFFFFF;font-family:Barlow;padding:56px 0 52px}'
       +'#xl-band .xl-wrap{max-width:1200px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:32px 48px;align-items:start}'
       +'#xl-band h2{margin:0;font-family:inherit;font-weight:700;font-size:clamp(30px,4vw,44px);line-height:1;letter-spacing:.01em;text-transform:uppercase;color:#FFFFFF}'
       +'#xl-band h2 span{color:#32B4AF}'

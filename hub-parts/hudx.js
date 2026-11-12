@@ -122,7 +122,7 @@
       var col = i === 0 ? "#D74949" : i % 2 ? "#5FE3DC" : "#9C86D8";
       g.appendChild(svg("circle", { cx: x.toFixed(1), cy: y.toFixed(1), r: 9, fill: col, opacity: ".18", class: "blip-ring" }));
       g.appendChild(svg("circle", { cx: x.toFixed(1), cy: y.toFixed(1), r: 4, fill: col }));
-      var tx = svg("text", { x: (x + 8).toFixed(1), y: (y - 6).toFixed(1), fill: "#E8F1F6", "font-size": "10", "font-family": "Barlow,sans-serif", "font-weight": "700" });
+      var tx = svg("text", { x: (x + 8).toFixed(1), y: (y - 6).toFixed(1), fill: "#E8F1F6", "font-size": "10", "font-family": "Barlow", "font-weight": "700" });
       tx.textContent = (t.showName || "").split(/[ ,]/)[0]; g.appendChild(tx);
       var li = el("li"); var sw = el("i"); sw.style.background = col; li.appendChild(sw);
       li.appendChild(el("b", "", t.showName)); li.appendChild(el("span", "", d === null ? "Date to be confirmed" : d <= 0 ? "Today" : d + (d === 1 ? " day" : " days")));
@@ -168,7 +168,7 @@
       g.appendChild(svg("line", { x1: (110 - dx).toFixed(1), y1: (110 - dy).toFixed(1), x2: (110 + dx).toFixed(1), y2: (110 + dy).toFixed(1), stroke: rw != null ? "#E8F1F6" : "#32B4AF", "stroke-width": rw != null ? 10 : 3, "stroke-dasharray": rw != null ? "" : "8 6", opacity: rw != null ? ".85" : "1" }));
       if (rw != null) {
         [[line, -1], [(line + 180) % 360, 1]].forEach(function (e) {
-          var p = e[1] * 54, tx = svg("text", { x: (110 + Math.sin(a) * p).toFixed(1), y: (114 - Math.cos(a) * p).toFixed(1), "text-anchor": "middle", "font-size": "10", "font-family": "Assistant,sans-serif", fill: "#061019", "font-weight": "700" });
+          var p = e[1] * 54, tx = svg("text", { x: (110 + Math.sin(a) * p).toFixed(1), y: (114 - Math.cos(a) * p).toFixed(1), "text-anchor": "middle", "font-size": "10", "font-family": "Assistant", fill: "#061019", "font-weight": "700" });
           tx.textContent = pad(Math.round(e[0] / 10) || 36); g.appendChild(tx);
         });
       }
@@ -232,7 +232,7 @@
     s.appendChild(svg("rect", { x: 0, y: 0, width: 320, height: 190, fill: "rgba(6,16,25,.4)" }));
     s.appendChild(svg("line", { x1: 20, y1: 60, x2: 300, y2: 60, stroke: "#32B4AF", "stroke-width": 3, "stroke-dasharray": "10 7" }));
     s.appendChild(svg("line", { x1: 20, y1: 132, x2: 300, y2: 132, stroke: "#E8F1F6", "stroke-width": 2 }));
-    function lab(x, y, t, c) { var e = svg("text", { x: x, y: y, fill: c || "#A9BDCB", "font-size": 11, "font-family": "Barlow,sans-serif", "font-weight": 700 }); e.textContent = t; s.appendChild(e); }
+    function lab(x, y, t, c) { var e = svg("text", { x: x, y: y, fill: c || "#A9BDCB", "font-size": 11, "font-family": "Barlow", "font-weight": 700 }); e.textContent = t; s.appendChild(e); }
     lab(22, 52, "Display line", "#5FE3DC"); lab(22, 150, "Crowd line", "#E8F1F6");
     if (!geo || geo[2] == null || !ds) {
       lab(22, 176, "The crowd line for this show is still being mapped");
@@ -418,8 +418,8 @@
     for (var i = 0; i < 6; i++) { s.appendChild(svg("line", { x1: 20, y1: 25 + i * 66, x2: 280, y2: 25 + i * 66, stroke: "rgba(95,227,220,.12)" })); }
     for (var j = 0; j < 5; j++) { s.appendChild(svg("line", { x1: 20 + j * 65, y1: 25, x2: 20 + j * 65, y2: 355, stroke: "rgba(95,227,220,.12)" })); }
     if (pts.length > 1) { var d = pts.map(function (p, k) { var c = xy(p.lat, p.lon); return (k ? "L" : "M") + c[0].toFixed(1) + " " + c[1].toFixed(1); }).join(" "); s.appendChild(svg("path", { d: d, fill: "none", stroke: "#9C86D8", "stroke-width": 2, "stroke-dasharray": "5 5" })); }
-    pts.forEach(function (p) { var c = xy(p.lat, p.lon); s.appendChild(svg("circle", { cx: c[0].toFixed(1), cy: c[1].toFixed(1), r: 6, fill: "#D74949" })); var t = svg("text", { x: (c[0] + 9).toFixed(1), y: (c[1] + 4).toFixed(1), fill: "#E8F1F6", "font-size": 12, "font-family": "Barlow,sans-serif", "font-weight": 700 }); t.textContent = p.name; s.appendChild(t); });
-    if (!pts.length) { var t = svg("text", { x: 150, y: 190, "text-anchor": "middle", fill: "#A9BDCB", "font-size": 13, "font-family": "Barlow,sans-serif" }); t.textContent = "Your shows appear here"; s.appendChild(t); }
+    pts.forEach(function (p) { var c = xy(p.lat, p.lon); s.appendChild(svg("circle", { cx: c[0].toFixed(1), cy: c[1].toFixed(1), r: 6, fill: "#D74949" })); var t = svg("text", { x: (c[0] + 9).toFixed(1), y: (c[1] + 4).toFixed(1), fill: "#E8F1F6", "font-size": 12, "font-family": "Barlow", "font-weight": 700 }); t.textContent = p.name; s.appendChild(t); });
+    if (!pts.length) { var t = svg("text", { x: 150, y: 190, "text-anchor": "middle", fill: "#A9BDCB", "font-size": 13, "font-family": "Barlow" }); t.textContent = "Your shows appear here"; s.appendChild(t); }
     $("yrMapTag").textContent = pts.length ? pts.length + (pts.length === 1 ? " place" : " places") : "";
     $("yrMapTip").textContent = pts.length > 1 ? "From " + pts[0].name + " to " + pts[pts.length - 1].name + ". The further north you go, the higher the dot." : "";
   }
@@ -436,13 +436,13 @@
       var bg = g.createLinearGradient(0, 0, 1080, 1920); bg.addColorStop(0, "#061019"); bg.addColorStop(1, i === 1 ? "#2A1F4A" : "#0C3A3E"); g.fillStyle = bg; g.fillRect(0, 0, 1080, 1920);
       g.strokeStyle = "rgba(95,227,220,.10)"; g.lineWidth = 2; for (var k = 0; k < 1920; k += 80) { g.beginPath(); g.moveTo(0, k); g.lineTo(1080, k); g.stroke(); } for (var m = 0; m < 1080; m += 80) { g.beginPath(); g.moveTo(m, 0); g.lineTo(m, 1920); g.stroke(); }
       g.strokeStyle = "#5FE3DC"; g.lineWidth = 8; [[60, 60, 1], [1020, 1860, -1]].forEach(function (q) { g.beginPath(); g.moveTo(q[0], q[1] + 90 * q[2]); g.lineTo(q[0], q[1]); g.lineTo(q[0] + 90 * q[2], q[1]); g.stroke(); });
-      g.fillStyle = "#5FE3DC"; g.font = "700 52px Barlow,sans-serif"; g.fillText(c.kicker, 100, 260);
-      g.fillStyle = "#FFFFFF"; g.font = "700 360px Barlow,sans-serif"; g.fillText(c.big, 90, 760);
-      g.fillStyle = "#E8F1F6"; g.font = "700 86px Barlow,sans-serif"; wrapText(g, c.line, 100, 900, 880, 100);
-      g.fillStyle = "#A9BDCB"; g.font = "500 50px Barlow,sans-serif"; wrapText(g, c.sub || "", 100, 1150, 880, 66);
+      g.fillStyle = "#5FE3DC"; g.font = "700 52px Barlow"; g.fillText(c.kicker, 100, 260);
+      g.fillStyle = "#FFFFFF"; g.font = "700 360px Barlow"; g.fillText(c.big, 90, 760);
+      g.fillStyle = "#E8F1F6"; g.font = "700 86px Barlow"; wrapText(g, c.line, 100, 900, 880, 100);
+      g.fillStyle = "#A9BDCB"; g.font = "500 50px Barlow"; wrapText(g, c.sub || "", 100, 1150, 880, 66);
       g.fillStyle = "#D74949"; g.fillRect(100, 1660, 120, 10);
-      g.fillStyle = "#FFFFFF"; g.font = "700 50px Barlow,sans-serif"; g.fillText("UK Airshow Guide", 100, 1760);
-      g.fillStyle = "#A9BDCB"; g.font = "500 40px Barlow,sans-serif"; g.fillText("ukairshowguide.co.uk  ·  " + y, 100, 1820);
+      g.fillStyle = "#FFFFFF"; g.font = "700 50px Barlow"; g.fillText("UK Airshow Guide", 100, 1760);
+      g.fillStyle = "#A9BDCB"; g.font = "500 40px Barlow"; g.fillText("ukairshowguide.co.uk  ·  " + y, 100, 1820);
       var url = cv.toDataURL("image/png"); X.cards.push(url);
       var im = el("img", "yr-card"); im.src = url; im.alt = c.kicker + ": " + c.big + " " + c.line; box.appendChild(im);
     });

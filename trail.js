@@ -69,7 +69,7 @@
   function link(p) { return '<a href="' + SITE + p[1] + '" target="_top">' + esc(p[0]) + "</a>"; }
 
   var css =
-    "#ukag-trail{background:#fff;border-bottom:3px solid #32B4AF;font-family:Barlow,sans-serif;font-weight:500;font-size:16px;line-height:1.35;color:#13293C}" +
+    "#ukag-trail{background:#fff;border-bottom:3px solid #32B4AF;font-family:Barlow;font-weight:500;font-size:16px;line-height:1.35;color:#13293C}" +
     "#ukag-trail .tr-in{max-width:1200px;margin:0 auto;padding:10px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 24px}" +
     "#ukag-trail ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:2px 0}" +
     "#ukag-trail li{display:flex;align-items:center}" +

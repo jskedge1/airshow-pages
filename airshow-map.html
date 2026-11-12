@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>UK Airshow Map 2027 | The Big Guide to UK Airshows</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Barlow:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Barlow:wght@500;700&display=block">
 <style>html{font-synthesis-weight:none}body{font-weight:500}b,strong{font-weight:700}button,input,select,textarea{font-family:inherit;font-weight:500}
 /* UK airshow map for the Find your Air Show page. The radar from the home page, made bigger and more hands on:
    tap any blip for its details, zoom in around you, filter by type and distance, use your location, and hear the sweep. */
 :root{
   --navy:#13293C; --deep:#0E2131; --teal:#32B4AF; --pale:#E6F4F3; --purple:#6950A1; --red:#D74949;
   --paper:#FFFFFF; --ink:#0B1722; --line:#CBD5DD; --mute:#33475A;
-  --font:Barlow,sans-serif; --cond:Barlow,sans-serif;
+  --font:Barlow; --cond:Barlow;
   --ease:cubic-bezier(.22,1,.36,1);
   color-scheme:light;
 }
@@ -277,7 +277,7 @@ a{color:inherit}
     FEAT.forEach(function(f,i){if(!shown(i))return;var p=proj(f[2],f[3]),ang=Math.atan2(p[1]-cy,p[0]-cx),turn=((ang/(2*Math.PI))+1)%1,col=TYPES[f[4]][1],big=f[4]==='feat';
       var lx=p[0]>300?p[0]-8*Z:p[0]+8*Z,anc=p[0]>300?'end':'start';
       h+='<g class="blip'+(big?' feat':'')+(inRange(i)?'':' far')+'" data-i="'+i+'" tabindex="0" role="button" aria-label="'+esc(f[0])+', '+esc(f[1])+'"><circle class="hit" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+z(11)+'"/><circle class="ping" style="stroke-width:'+z(1.5)+';stroke:'+col+';animation-delay:'+(turn*4-4).toFixed(2)+'s" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+z(5)+'"/><circle class="dot" style="fill:'+col+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+z(big?4.6:3.4)+'"'+(big?' stroke="#fff" stroke-width="'+z(1.2)+'"':'')+'/><text style="font-size:'+z(11)+'px" x="'+lx.toFixed(1)+'" y="'+(p[1]+4*Z).toFixed(1)+'" text-anchor="'+anc+'" paint-order="stroke" stroke="#0E2131" stroke-width="'+z(3)+'">'+esc(f[0])+'</text></g>'});
-    h+='<g class="you"><circle cx="'+cx+'" cy="'+cy+'" r="'+z(5)+'"/><text x="'+cx+'" y="'+(+cy-11*Z).toFixed(1)+'" text-anchor="middle" style="font:700 '+z(12)+'Barlow,sans-serif;fill:#fff" paint-order="stroke" stroke="#0E2131" stroke-width="'+z(3)+'">'+esc(me[0])+'</text></g>';
+    h+='<g class="you"><circle cx="'+cx+'" cy="'+cy+'" r="'+z(5)+'"/><text x="'+cx+'" y="'+(+cy-11*Z).toFixed(1)+'" text-anchor="middle" style="font:700 '+z(12)+'Barlow;fill:#fff" paint-order="stroke" stroke="#0E2131" stroke-width="'+z(3)+'">'+esc(me[0])+'</text></g>';
     rs.innerHTML=h;sweepT0=performance.now();BT=[];
     FEAT.forEach(function(f,i){if(!shown(i)||!inRange(i))return;var p=proj(f[2],f[3]);BT.push([((Math.atan2(p[1]-cy,p[0]-cx)/(2*Math.PI))+1)%1,f[4]==='feat',miles(me[1],me[2],f[2],f[3])])});
     [].forEach.call(rs.querySelectorAll('.blip'),function(g){g.onclick=function(){pick(+g.dataset.i,true)};g.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(+g.dataset.i,true)}}});

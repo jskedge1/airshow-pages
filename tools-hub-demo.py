@@ -134,13 +134,13 @@ demo = r'''
 })();
 </script>
 <style>
-#demoBar{position:fixed;left:0;right:0;bottom:0;z-index:95;background:#6950A1;color:#fff;font:700 15px Barlow,sans-serif;padding:10px 16px;text-align:center}
-#demoLogin{position:fixed;inset:0;z-index:96;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.6);font-family:Barlow,sans-serif}
+#demoBar{position:fixed;left:0;right:0;bottom:0;z-index:95;background:#6950A1;color:#fff;font:700 15px Barlow;padding:10px 16px;text-align:center}
+#demoLogin{position:fixed;inset:0;z-index:96;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.6);font-family:Barlow}
 #demoLogin>div{width:min(420px,100%);background:#fff;color:#13293C;padding:26px;display:grid;gap:12px}
 #demoLogin span{font-size:14px;color:#41586B}
 #demoLogin b{font-size:28px;font-weight:700}
 #demoLogin p{font-size:16px;line-height:1.5;margin:0}
-#demoLogin button{font:700 16px Barlow,sans-serif;padding:12px 18px;border:2px solid #13293C;cursor:pointer}
+#demoLogin button{font:700 16px Barlow;padding:12px 18px;border:2px solid #13293C;cursor:pointer}
 #demoLogin .ok{background:#13293C;color:#fff}
 #demoLogin .no{background:#fff;color:#13293C}
 </style>

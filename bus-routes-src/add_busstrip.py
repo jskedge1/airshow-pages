@@ -42,13 +42,13 @@ FN = r'''  /* road strip bus: the kind of bus the company usually runs on this r
       o += '<rect x="2" y="' + (top + 20.5) + '" width="' + (L - 2) + '" height="1" fill="rgba(0,0,0,.25)"/>';
       o += row(top + 26, 11, 6, dx - 3, 5);
       o += '<path d="M' + (L - 17) + ' ' + (top + 25) + ' H' + (L - 2) + ' V' + (top + 39) + ' H' + (L - 17) + ' Z" fill="' + glass + '"/>';
-      o += '<rect x="' + (L - 20) + '" y="' + (top + 1.2) + '" width="15" height="3.4" rx="1" fill="#101214"/><text x="' + (L - 12.5) + '" y="' + (top + 4) + '" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="3.4" fill="#FFB000">' + (CFG.num || '') + '</text>';
-      o += '<text x="' + (L * .22) + '" y="' + (top + 24.6) + '" font-family="Barlow,sans-serif" font-weight="700" font-size="4.6" letter-spacing=".25" fill="' + ink + '">' + name + '</text>';
+      o += '<rect x="' + (L - 20) + '" y="' + (top + 1.2) + '" width="15" height="3.4" rx="1" fill="#101214"/><text x="' + (L - 12.5) + '" y="' + (top + 4) + '" text-anchor="middle" font-family="Barlow" font-weight="700" font-size="3.4" fill="#FFB000">' + (CFG.num || '') + '</text>';
+      o += '<text x="' + (L * .22) + '" y="' + (top + 24.6) + '" font-family="Barlow" font-weight="700" font-size="4.6" letter-spacing=".25" fill="' + ink + '">' + name + '</text>';
     } else {
       o += row(top + 7, 12, 6, dx - 3, kind === 'mini' ? 3 : 5);
       o += '<path d="M' + (L - 17) + ' ' + (top + 6) + ' H' + (L - 6) + ' Q' + (L - 2.5) + ' ' + (top + 7) + ' ' + (L - 2) + ' ' + (top + 21) + ' H' + (L - 17) + ' Z" fill="' + glass + '"/>';
-      o += '<rect x="' + (L - 26) + '" y="' + (top + 1.4) + '" width="21" height="4" rx="1" fill="#101214"/><text x="' + (L - 15.5) + '" y="' + (top + 4.7) + '" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="3.8" fill="#FFB000">' + (CFG.num || '') + '</text>';
-      o += '<text x="8" y="' + (fl - 9.6) + '" font-family="Barlow,sans-serif" font-weight="700" font-size="' + (kind === 'mini' ? 4 : 4.8) + '" letter-spacing=".25" fill="' + ink + '">' + name + '</text>';
+      o += '<rect x="' + (L - 26) + '" y="' + (top + 1.4) + '" width="21" height="4" rx="1" fill="#101214"/><text x="' + (L - 15.5) + '" y="' + (top + 4.7) + '" text-anchor="middle" font-family="Barlow" font-weight="700" font-size="3.8" fill="#FFB000">' + (CFG.num || '') + '</text>';
+      o += '<text x="8" y="' + (fl - 9.6) + '" font-family="Barlow" font-weight="700" font-size="' + (kind === 'mini' ? 4 : 4.8) + '" letter-spacing=".25" fill="' + ink + '">' + name + '</text>';
     }
     /* doors: two leaves that slide apart, with the lit doorway behind */
     var dy = kind === 'double' ? top + 25 : top + 6, dh = fl - dy - 1;

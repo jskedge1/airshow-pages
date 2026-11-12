@@ -85,12 +85,12 @@
      the site's page element, where styles in the head do not reach the buttons. */
   var CSS =
       '.br-box{margin:18px 0 8px;background:#fff;color:#13293C;border-left:5px solid #F2B233;padding:16px 18px 18px;border-radius:0}' +
-      '.br-box h4.br-h{margin:0!important;padding:0!important;font-family:Barlow,sans-serif!important;font-weight:700!important;font-size:24px!important;line-height:26px!important;text-transform:uppercase!important;letter-spacing:0!important;color:#13293C!important}' +
-      '.br-box p.br-p{margin:6px 0 12px!important;font-family:Barlow,sans-serif!important;font-weight:500!important;font-size:15px!important;line-height:22px!important;color:#4E5D68!important;text-transform:none!important}' +
+      '.br-box h4.br-h{margin:0!important;padding:0!important;font-family:Barlow!important;font-weight:700!important;font-size:24px!important;line-height:26px!important;text-transform:uppercase!important;letter-spacing:0!important;color:#13293C!important}' +
+      '.br-box p.br-p{margin:6px 0 12px!important;font-family:Barlow!important;font-weight:500!important;font-size:15px!important;line-height:22px!important;color:#4E5D68!important;text-transform:none!important}' +
       '.br-list{display:flex;flex-wrap:wrap;gap:8px}' +
-      'a.br-btn{display:inline-flex;align-items:stretch;background:var(--b1,#13293C);color:var(--bi,#fff)!important;text-decoration:none!important;border-radius:0;font-family:Barlow,sans-serif;font-weight:700;font-size:15px;line-height:20px;text-transform:none;letter-spacing:0;transition:transform .3s cubic-bezier(.22,.61,.36,1),filter .3s cubic-bezier(.22,.61,.36,1)}' +
+      'a.br-btn{display:inline-flex;align-items:stretch;background:var(--b1,#13293C);color:var(--bi,#fff)!important;text-decoration:none!important;border-radius:0;font-family:Barlow;font-weight:700;font-size:15px;line-height:20px;text-transform:none;letter-spacing:0;transition:transform .3s cubic-bezier(.22,.61,.36,1),filter .3s cubic-bezier(.22,.61,.36,1)}' +
       'a.br-btn:hover,a.br-btn:focus-visible{transform:translateY(-2px);filter:brightness(1.08)}' +
-      '.br-num{display:inline-flex;align-items:center;justify-content:center;min-width:52px;padding:0 10px;background:#050607;color:#F2B233;font-family:Barlow,sans-serif;font-weight:700;font-size:22px;letter-spacing:.01em;text-shadow:0 0 8px rgba(242,178,51,.45)}' +
+      '.br-num{display:inline-flex;align-items:center;justify-content:center;min-width:52px;padding:0 10px;background:#050607;color:#F2B233;font-family:Barlow;font-weight:700;font-size:22px;letter-spacing:.01em;text-shadow:0 0 8px rgba(242,178,51,.45)}' +
       '.br-txt{display:flex;flex-direction:column;justify-content:center;padding:7px 12px;border-bottom:4px solid var(--b2,#F2B233)}' +
       '.br-txt small{font-weight:500;font-size:12.5px;line-height:15px;opacity:.85}' +
       'a.br-btn i{font-style:normal;display:flex;align-items:center;padding:0 12px 0 2px;border-bottom:4px solid var(--b2,#F2B233);transition:transform .3s cubic-bezier(.22,.61,.36,1)}' +

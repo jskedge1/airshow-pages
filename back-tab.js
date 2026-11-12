@@ -226,7 +226,7 @@
   /* ---------- draw it ---------- */
   var col = cfg.colour;
   var css =
-    ".ukbt{--ukbt:" + col + ";font-family:Barlow,sans-serif;background:#F1F4F6;display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:12px max(18px,calc((100% - 1200px)/2)) 0;border-bottom:3px solid var(--ukbt);position:relative;z-index:5;box-sizing:border-box;width:100%}" +
+    ".ukbt{--ukbt:" + col + ";font-family:Barlow;background:#F1F4F6;display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:12px max(18px,calc((100% - 1200px)/2)) 0;border-bottom:3px solid var(--ukbt);position:relative;z-index:5;box-sizing:border-box;width:100%}" +
     ".ukbt *{box-sizing:border-box}" +
     ".ukbt.ukbt-b{border-bottom:0;border-top:3px solid var(--ukbt);padding-top:0;padding-bottom:12px;align-items:flex-start}" +
     ".ukbt a.ukbt-tab{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:#13293C;background:#fff;border:1px solid #D7DEE3;border-bottom:none;border-radius:12px 12px 0 0;padding:11px 20px 11px 12px;position:relative;top:3px;cursor:pointer;transition:background .25s ease,color .25s ease,box-shadow .25s ease;max-width:100%}" +
