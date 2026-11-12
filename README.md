@@ -583,3 +583,26 @@ were added to shows without one.
 
 ## Feature page publish, 10 Nov 2026
 The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, Eastbourne, Wales, Shuttleworth, Little Gransden, Southport, Blackpool, Ayr, Headcorn; RIAT unchanged) now carry the design work done through the preview artifacts: Box Tab 4 and clean info boxes, solid colour where to watch tabs, one line section menu with arrows, operator coloured train boxes and facts, the shuttle bus design, the Clacton header text, Keep reading hover with red READ, Good to know hover, checklist groups on the Cosford plan, the detailed crowd line view and aerial map, and the "Coming by train?" banner at the top of Getting There. The added styles and scripts sit at the end of each page. Images that were only in the previews are saved as `camping-layout/img/inl-*.{webp,jpg}`. The page sources from before this publish are kept in `backups/feature-src-2026-11-10/`.
+
+## Speed, sizing and search tag pass (12 Nov 2026)
+- Photos written inside page code were moved out with `tools-images.py` (now also run over the older show pages
+  at the top level, both photography pages, road-routes/clacton, contact, landing, riat-moving, riat and the
+  templates). They live in camping-layout/img/ as WebP files named by content, about 20 MB lighter in all.
+  Photos under 3 KB (icons) stay inside the page. Run it on any new page that embeds photos.
+- Every page was checked at 13 screen sizes: 280px (folding phone cover), 320px (Wix phone box), 360, 390, 430,
+  Surface Duo single (540x720) and spanned (1114x720), folding phones open (600x904, 884x1104), tablet,
+  landscape phone (844x390), laptop and desktop. Rules to keep:
+  - Card grids use `repeat(auto-fit,minmax(min(260px,100%),1fr))`, never a bare px minimum, so a card can't
+    push a narrow screen sideways. Single and two column phone grids use `minmax(0,1fr)` rather than `1fr`.
+  - Long words, web addresses and emails in buttons need `min-width:0` on the flex child that holds them.
+  - Sticky bars stay short on phones: the calendar filters scroll with the page under 760px wide or 600px tall,
+    and the section tabs on the planning guides are one swipe row under 600px (the lit tab slides into view).
+- The "Page height" sizing helpers only show when a page is opened on its own from GitHub, never on
+  ukairshowguide.co.uk (pages drawn by the airshow-page element are the top window there too).
+- Search tags: `tools-seo.py` is out of date. Many pages' titles and descriptions were improved by hand after its
+  `W` list was written, and three pages carry noindex it would remove. Running it as it stands puts the old
+  wording back, so copy the current wording into `W` first. It no longer stops on missing pages.
+- `qa-src/` is behind questions-and-answers.html (the page has 60 questions, the source 59). Add the missing
+  question to qa-src/questions.py before running qa-src/build.py again, or it will be lost.
+- YouTube page: when a video has no large thumbnail the Latest player now drops to the standard one instead of
+  showing YouTube's small grey placeholder.
