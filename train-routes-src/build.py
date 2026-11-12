@@ -22,7 +22,7 @@ for show in shows:
     A, B = '<!-- seo: matches the Wix page on ukairshowguide.co.uk -->', '<!-- /seo -->'
     if os.path.exists(out):
         old = open(out).read()
-        if A in old and A in page and 'canonical' in old[old.index(A):old.index(B)]:
+        if A in old and A in page and ('canonical' in old[old.index(A):old.index(B)] or 'name="description"' in old[old.index(A):old.index(B)]):
             page = page[:page.index(A)] + old[old.index(A):old.index(B)] + page[page.index(B):]
     page = _tb.add(page, 'train', show)  # Back to Transport tab (transport-back.js)
     page = _sg.add(page, show)  # Station guide box (tools-station-guide.py)

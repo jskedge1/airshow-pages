@@ -1,6 +1,10 @@
 # Puts the same title, description, canonical address and share tags as the Wix page into each page file here,
 # so search engines credit ukairshowguide.co.uk rather than jskedge1.github.io. Rerun after changing SEO in Wix (update W below).
-import json, re, html, glob, sys
+# WARNING (12 Nov 2026): many pages have had their title and description edited by hand since W was written
+# (home, riat, community, the join and team pages, planning guides, volunteer hub and more), and some carry
+# robots noindex that this script would remove (team-admin, volunteer-hub, train-routes/riat). Running it as it
+# stands puts the older wording back. Copy the current wording from each page into W before running it again.
+import json, os, re, html, glob, sys
 W = {
  '/youtube': ("Airshow Videos | The Big Guide to UK Airshows","Airshow videos from The Big Guide to UK Airshows, with flying displays and show day advice from airshows around the UK."),
  '/first-airshow-which-show': ("Which Airshow Suits You? | The Big Guide to UK Airshows","Compare the different kinds of UK airshow, from big military shows to seaside and historic displays, and find the one that suits you and your family."),
@@ -93,6 +97,7 @@ def block(title, desc, url, robots=None):
     L.append(END)
     return '\n'.join(L)
 def apply(fn, title, desc, url, robots=None):
+    if not os.path.exists(fn): return 'missing'
     s = open(fn, encoding='utf-8').read()
     s = re.sub(r'\n?' + re.escape(START) + r'.*?' + re.escape(END), '', s, flags=re.S)
     h = s.lower().find('</head>')
@@ -124,7 +129,10 @@ for fn in sorted(glob.glob('bus-routes/*.html')):
         t = 'Bus Route Maps for UK Airshows | The Big Guide to UK Airshows'
         d = 'Route maps for every bus to the UK airshows we cover, with the roads each bus takes, every stop, the times on show days and the closest stop to the show.'
     else:
-        c = json.loads(re.search(r'var CFG=(\{.*?\});\nvar DATA', s, re.S).group(1))
+        m = re.search(r'var CFG=(\{.*?\});\nvar DATA', s, re.S)
+        if not m:  # retired route (a short notice page): leave its tags as they are
+            done[fn] = 'ok'; continue
+        c = json.loads(m.group(1))
         t = f'{c["title"]} for the {c["showName"]} | The Big Guide to UK Airshows'
         d = f'The {c["num"]} bus to the {c["showName"]}: the roads it takes, every stop, times on show days and the closest stop to the show. Run by {c["operator"]}.'
     rid = fn.split('/')[-1][:-5]
