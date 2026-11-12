@@ -269,7 +269,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   render("all");
 
   // Page height helper for sizing the Wix embed box
-  if (window.self === window.top) {
+  if (window.self === window.top && !/ukairshowguide|wix/i.test(location.hostname)) {
     var h=document.createElement("div"); h.className="helper"; document.body.appendChild(h);
     function upd(){ h.textContent="Page height: "+document.documentElement.scrollHeight+"px at "+window.innerWidth+"px wide. Set the Wix box about 60px taller."; }
     window.addEventListener("resize",upd); window.addEventListener("load",upd); upd();

@@ -266,7 +266,7 @@ a:hover{color:var(--red)}
 
   function tidy(){ /* page height helper, only when opened on its own */
     try{
-      if(window.top!==window.self) return;
+      if(window.top!==window.self||/ukairshowguide|wix/i.test(location.hostname)) return;
       var h=document.getElementById('hgt');
       h.style.display='block';
       h.textContent='Page height '+document.documentElement.scrollHeight+'px';
