@@ -93,7 +93,7 @@
     var me=here();
     var shows=PAGES.filter(function(p){return p.live && p.key!==me;});
     var guides=GUIDES.filter(function(p){return p.live && p.key!==me;});
-    var css='#xl-band{background:#13293C;color:#FFFFFF;font-family:"Barlow",Arial,sans-serif;padding:56px 0 52px}'
+    var css='#xl-band{background:#13293C;color:#FFFFFF;font-family:Barlow,sans-serif;padding:56px 0 52px}'
       +'#xl-band .xl-wrap{max-width:1200px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:32px 48px;align-items:start}'
       +'#xl-band h2{margin:0;font-family:inherit;font-weight:700;font-size:clamp(30px,4vw,44px);line-height:1;letter-spacing:.01em;text-transform:uppercase;color:#FFFFFF}'
       +'#xl-band h2 span{color:#32B4AF}'
@@ -104,10 +104,10 @@
       +'#xl-band li{border-bottom:1px solid #2C4A63}'
       +'#xl-band li a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 4px;color:#FFFFFF;text-decoration:none;transition:background .25s ease,padding .25s ease}'
       +'#xl-band li a:hover{background:#1B3A52;padding-left:12px}'
-      +'#xl-band li b{display:block;font-size:17px;font-weight:600;line-height:1.25}'
+      +'#xl-band li b{display:block;font-size:17px;font-weight:700;line-height:1.25}'
       +'#xl-band li small{display:block;font-size:14px;font-weight:500;color:#9FB4C4;margin-top:2px}'
       +'#xl-band li i{font-style:normal;color:#32B4AF;font-weight:700}'
-      +'#xl-band h3{margin:28px 0 10px;text-transform:none;letter-spacing:0;font-family:inherit;font-size:18px;font-weight:600;color:#32B4AF}'
+      +'#xl-band h3{margin:28px 0 10px;text-transform:none;letter-spacing:0;font-family:inherit;font-size:18px;font-weight:700;color:#32B4AF}'
       +'#xl-band a:focus-visible{outline:3px solid #32B4AF;outline-offset:2px}'
       /* inside the show page's shadow root the page's own heading and text rules reach the band, so pin the look */
       +'#xl-band h2{text-transform:uppercase!important;line-height:1!important;letter-spacing:.01em!important}'

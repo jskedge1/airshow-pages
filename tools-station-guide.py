@@ -22,14 +22,14 @@ ICONS = {
 CSS = """<style id="sgStyle">
 .sg{background:#E4E8EB;margin-top:6px}
 .sg-top{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#13293C;padding:14px 28px;flex-wrap:wrap}
-.sg-top span{font-weight:600;font-size:18px;color:#fff}.sg-top em{font-style:normal;font-weight:600;font-size:16px;color:#44AED6}
+.sg-top span{font-weight:700;font-size:18px;color:#fff}.sg-top em{font-style:normal;font-weight:700;font-size:16px;color:#44AED6}
 .sg-red{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#D74949;padding:12px 28px;flex-wrap:wrap}
-.sg-red h2{margin:0;font-weight:600;font-size:32px;line-height:1.1;color:#fff;letter-spacing:0;text-transform:none}
+.sg-red h2{margin:0;font-weight:700;font-size:32px;line-height:1.1;color:#fff;letter-spacing:0;text-transform:none}
 .sg-red span{font-size:24px;color:#fff}
 .sg-plat{background:#23272B;position:relative;overflow:hidden;padding-top:64px}
-.sg-board{position:absolute;right:28px;top:16px;background:#fff;border:3px solid #0B1824;padding:5px 16px 0;font-family:"Barlow Condensed",Barlow,sans-serif;font-weight:800;font-size:26px;line-height:1.1;color:#0B1824;text-transform:uppercase;z-index:2}
+.sg-board{position:absolute;right:28px;top:16px;background:#fff;border:3px solid #0B1824;padding:5px 16px 0;font-family:Barlow,sans-serif;font-weight:700;font-size:26px;line-height:1.1;color:#0B1824;text-transform:uppercase;z-index:2}
 .sg-board i{display:block;height:7px;background:#D74949;margin:4px -16px 0}
-.sg-tag{position:absolute;left:20px;top:20px;background:#D74949;color:#fff;font-weight:600;font-size:14px;padding:5px 12px;z-index:2}
+.sg-tag{position:absolute;left:20px;top:20px;background:#D74949;color:#fff;font-weight:700;font-size:14px;padding:5px 12px;z-index:2}
 .sg-train{width:42%;max-width:470px;margin-left:auto;margin-right:6%;transform:translateX(-80%);opacity:0;transition:transform 3s cubic-bezier(.15,.75,.25,1),opacity .6s ease}
 .sg.in .sg-train{transform:none;opacity:1}
 .sg-train svg{display:block;width:100%;height:auto}

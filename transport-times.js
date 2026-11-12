@@ -4134,7 +4134,7 @@ var CSS = '.ttx{margin-top:14px;padding:14px;border-radius:12px;background:#F6F9
  +'.ttx .ttx-row em{grid-column:2;font-style:normal!important;color:#44535F!important;font-size:13px}'
  +'.ttx .ttx-note,.ttx .ttx-foot{font-size:13px!important;color:#44535F!important;margin:6px 0 0!important;line-height:1.45!important;opacity:1!important;transform:none!important}'
  +'.ttx .ttx-foot{margin:0!important}'
- +'.ttx a{color:#13293C!important;font-weight:600;text-decoration:underline}'
+ +'.ttx a{color:#13293C!important;font-weight:700;text-decoration:underline}'
  +'@media (max-width:420px){.ttx{padding:12px}.ttx .ttx-row{grid-template-columns:1fr}.ttx .ttx-row em{grid-column:1}}';
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}

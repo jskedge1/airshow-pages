@@ -15,7 +15,7 @@ CSS = '''<style id="rs-names">
 .rs-name.off{right:max(16px,calc(50% - 574px))}
 .rs-name span{flex:none;display:flex;align-items:center;padding:0 9px;font:700 14px/1 var(--f);color:#fff;background:#1F7F7B;white-space:nowrap}
 .rs-name.off span{background:#D74949}
-.rs-name b{padding:6px 10px 5px;font:800 17px/1.1 var(--c,var(--f));text-transform:uppercase;letter-spacing:.01em;color:#15181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rs-name b{padding:6px 10px 5px;font:700 17px/1.1 var(--c,var(--f));text-transform:uppercase;letter-spacing:.01em;color:#15181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:700px){
   .roadstrip{height:104px}
   .roadstrip .lane{display:none}

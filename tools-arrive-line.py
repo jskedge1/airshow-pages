@@ -18,11 +18,11 @@ BLOCK = r'''<!-- arrive-line: Ways to arrive drawn as a route line, matching the
 .dl-ar .dl-card:hover .dl-pin{transform:translateY(-4px);background:#32B4AF;color:#fff;border-color:#32B4AF}
 .dl-ar .dl-c0 .dl-pin{background:#D74949;border-color:#D74949;color:#fff}
 .dl-ar .dl-cols,.dl-ar .dl-row{grid-template-columns:72px minmax(0,1.4fr) minmax(0,1fr) 150px 34px}
-.dl-ar .dl-name small{display:block;font:600 13px/1.3 "Barlow",sans-serif;color:#4F6272;margin-bottom:2px;transition:color .35s .1s}
+.dl-ar .dl-name small{display:block;font:700 13px/1.3 Barlow,sans-serif;color:#4F6272;margin-bottom:2px;transition:color .35s .1s}
 .dl-ar .dl-row:hover .dl-name small,.dl-ar .dl-row:focus-visible .dl-name small{color:#BFD3DE}
 .dl-ar .dl-key{display:grid;gap:2px}
-.dl-ar .dl-key b{font:700 15px/1.25 "Barlow",sans-serif;color:#13293C;transition:color .35s .1s}
-.dl-ar .dl-key small{font:500 13px/1.2 "Barlow",sans-serif;color:#4F6272;transition:color .35s .1s}
+.dl-ar .dl-key b{font:700 15px/1.25 Barlow,sans-serif;color:#13293C;transition:color .35s .1s}
+.dl-ar .dl-key small{font:500 13px/1.2 Barlow,sans-serif;color:#4F6272;transition:color .35s .1s}
 .dl-ar .dl-row:hover .dl-key b,.dl-ar .dl-row:focus-visible .dl-key b{color:#fff}
 .dl-ar .dl-row:hover .dl-key small,.dl-ar .dl-row:focus-visible .dl-key small{color:#BFD3DE}
 .dl-ar .dl-tag:empty{visibility:hidden}

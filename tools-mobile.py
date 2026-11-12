@@ -59,7 +59,7 @@ HOME = """
   .btable .bst{font-size:13px;padding:5px 7px}
   .btable .brow>:nth-child(4){grid-column:3;grid-row:1/span 2;align-self:center}
   .cd{margin-left:0}
-  .season::before{content:"Swipe sideways to see the whole season \\2192";display:block;font-size:15px;font-weight:600;color:var(--navy);margin-bottom:12px}
+  .season::before{content:"Swipe sideways to see the whole season \\2192";display:block;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px}
   .gscale span:nth-child(even){display:none}
   .ftag{font-size:14px}
 }

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Show Day Live | The Big Guide to UK Airshows</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Barlow:wght@500;700&display=swap">
 <!--
   Show Day Live for The Big Guide to UK Airshows.
   Lives in a Wix HTML embed (Website address) and talks to the Wix page code with postMessage, source "ukag-showday".
@@ -15,7 +15,7 @@
     show-day.html?mode=hub           My Airshow Hub: only the member's saved shows
   Running orders come from the FlyingProgrammes collection. Member uploads go to ProgrammeUploads for Jack to approve.
 -->
-<style>
+<style>html{font-synthesis-weight:none}body{font-weight:500}b,strong{font-weight:700}button,input,select,textarea{font-family:inherit;font-weight:500}
 :root{
   color-scheme:dark;
   --bg:#071420;
@@ -33,9 +33,9 @@
   --fg:#E8F1F6;
   --mut:#A9BDCB;
   --ink:#061019;
-  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
-  --f-body:"Barlow","Helvetica Neue",Arial,sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --f-display:Barlow,sans-serif;
+  --f-body:Barlow,sans-serif;
+  --f-mono:Assistant,sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;scrollbar-width:none}
@@ -74,21 +74,21 @@ h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:700;text-transform:up
 .clock{padding:14px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .clock-time{font-size:clamp(30px,5vw,42px);line-height:1;color:#fff;text-shadow:0 0 18px rgba(95,227,220,.45)}
 .seg{display:inline-flex;border:1px solid var(--teal);padding:2px;flex-wrap:wrap}
-.seg button{min-height:38px;padding:0 12px;border:0;background:transparent;font-weight:600;font-size:14px}
+.seg button{min-height:38px;padding:0 12px;border:0;background:transparent;font-weight:700;font-size:14px}
 .seg button[aria-pressed="true"]{background:var(--teal);color:var(--ink)}
 .test-row{display:flex;gap:10px;align-items:center}
 .test-row input[type=range]{flex:1;min-width:110px;accent-color:var(--teal)}
 .iconbtn{width:40px;height:40px;display:grid;place-items:center;background:var(--panel-2);border:1px solid var(--line);flex:none}
 
 .shows{display:flex;flex-wrap:wrap;gap:6px}
-.shows button{min-height:44px;padding:0 16px;border:1px solid var(--line);background:rgba(19,41,60,.55);font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;transition:padding .4s ease,background .4s ease}
+.shows button{min-height:44px;padding:0 16px;border:1px solid var(--line);background:rgba(19,41,60,.55);font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px;transition:padding .4s ease,background .4s ease}
 .shows button:hover{padding-left:22px;padding-right:22px;background:rgba(50,180,175,.22)}
 .shows button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--ink)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--mut)}
 .dot.on{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
 .shows button[aria-pressed="true"] .dot{background:var(--ink);box-shadow:none}
 .days{display:flex;flex-wrap:wrap;gap:6px}
-.days button{min-height:40px;padding:0 14px;border:1px solid var(--line);background:transparent;font-weight:600;font-size:14px}
+.days button{min-height:40px;padding:0 14px;border:1px solid var(--line);background:transparent;font-weight:700;font-size:14px}
 .days button[aria-pressed="true"]{border-color:var(--cyan);background:rgba(50,180,175,.22)}
 
 /* board */
@@ -97,7 +97,7 @@ h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:700;text-transform:up
 .panel{padding:22px 24px;display:flex;flex-direction:column;gap:14px}
 .ph{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .ph h2{font-size:22px}
-.tag{display:inline-block;font-size:13px;font-weight:600;padding:2px 9px;white-space:nowrap}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:2px 9px;white-space:nowrap}
 .tag.teal{background:var(--teal);color:var(--ink)}
 .tag.purple{background:var(--purple);color:#fff}
 .tag.red{background:var(--red);color:#fff;font-weight:700}
@@ -136,7 +136,7 @@ h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:700;text-transform:up
 .thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 .thumb button{position:absolute;top:4px;right:4px;width:30px;height:30px;border:0;background:rgba(6,16,25,.85);font-size:18px;line-height:1}
 .form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.form label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px;min-width:0}
+.form label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;min-width:0}
 .field{height:44px;padding:0 10px;background:rgba(6,16,25,.7);border:1px solid var(--line);min-width:0;width:100%}
 .btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .btn{min-height:46px;padding:0 20px;border:0;font-weight:700;display:inline-grid;place-items:center;text-decoration:none}
@@ -158,7 +158,7 @@ h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:700;text-transform:up
 .btn.big svg{flex:none}
 .checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .chk{display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 12px;align-items:start;padding:12px 14px;background:rgba(6,16,25,.6);border:1px solid var(--line);transition:border-color .4s,background .4s}
-.chk i{grid-row:span 2;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);font-style:normal;font-family:"Share Tech Mono",ui-monospace,monospace;font-size:16px;color:#8FA6B6}
+.chk i{grid-row:span 2;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);font-style:normal;font-family:Assistant,sans-serif;font-size:16px;color:#8FA6B6}
 .chk b{font-size:16px}
 .chk span{font-size:14px;color:#C9D8E2;line-height:1.4}
 .chk.run i{border-color:var(--cyan);border-top-color:transparent;border-radius:50%;animation:rot 1s linear infinite;color:transparent}
@@ -173,7 +173,7 @@ h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:700;text-transform:up
 .crowd-img::-webkit-scrollbar{display:none}
 .crowd-img img{display:block;width:100%;height:auto;pointer-events:none;user-select:none}
 .crowd-meta{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:14px;color:#C9D8E2}
-.crowd-meta .ok{color:#7CFF9E;font-family:"Share Tech Mono",ui-monospace,monospace}
+.crowd-meta .ok{color:#7CFF9E;font-family:Assistant,sans-serif}
 .crowd-pages{display:flex;gap:8px;flex-wrap:wrap}
 .linkbtn{background:none;border:0;padding:0;color:#8FA6B6;text-decoration:underline;font-size:14px;cursor:pointer}
 @media (max-width:640px){.checks{grid-template-columns:minmax(0,1fr)}.up-cta b{font-size:22px}.btn.big{width:100%;justify-content:center}}
@@ -192,10 +192,10 @@ h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:700;text-transform:up
 .report{padding:16px;display:flex;flex-direction:column;gap:8px;background:var(--panel-2);border:1px solid var(--line-soft);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .report:hover{transform:translateY(-3px)}
 .inline-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:end;margin-top:6px}
-.inline-form label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px;min-width:0}
+.inline-form label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;min-width:0}
 .toggle{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px;padding:10px 14px;background:rgba(6,16,25,.5);border:1px solid rgba(255,138,138,.35);cursor:pointer;position:relative}
 .toggle input{width:22px;height:22px;accent-color:var(--red);flex:none}
-details.full summary{cursor:pointer;font-weight:600;color:var(--cyan);min-height:40px;display:flex;align-items:center}
+details.full summary{cursor:pointer;font-weight:700;color:var(--cyan);min-height:40px;display:flex;align-items:center}
 details.full[open] summary{margin-bottom:6px}
 
 /* single show and hub modes are tighter */
@@ -448,15 +448,15 @@ function compassPanel(d){
     '<div class="compass-wrap"><div class="compass"><svg viewBox="0 0 300 300" role="img" aria-label="Sky compass turned to the way you are facing">'+
       '<circle cx="150" cy="150" r="146" fill="rgba(6,16,25,.7)" stroke="rgba(95,227,220,.4)"/>'+
       '<circle cx="150" cy="150" r="134" fill="none" stroke="rgba(95,227,220,.28)" stroke-dasharray="2 7"/>'+
-      '<g class="rose" id="rose"><text x="150" y="34" text-anchor="middle" fill="#5FE3DC" font-family="JetBrains Mono" font-size="16">N</text>'+
-      '<text x="270" y="155" text-anchor="middle" fill="#A9BDCB" font-family="JetBrains Mono" font-size="14">E</text>'+
-      '<text x="150" y="278" text-anchor="middle" fill="#A9BDCB" font-family="JetBrains Mono" font-size="14">S</text>'+
-      '<text x="30" y="155" text-anchor="middle" fill="#A9BDCB" font-family="JetBrains Mono" font-size="14">W</text><g id="rose-dyn"></g></g>'+
-      '<path d="M150 128 L160 160 L150 154 L140 160 Z" fill="#FFFFFF"/><text x="150" y="186" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono" font-size="11">You</text>'+
+      '<g class="rose" id="rose"><text x="150" y="34" text-anchor="middle" fill="#5FE3DC" font-family="Assistant" font-size="16">N</text>'+
+      '<text x="270" y="155" text-anchor="middle" fill="#A9BDCB" font-family="Assistant" font-size="14">E</text>'+
+      '<text x="150" y="278" text-anchor="middle" fill="#A9BDCB" font-family="Assistant" font-size="14">S</text>'+
+      '<text x="30" y="155" text-anchor="middle" fill="#A9BDCB" font-family="Assistant" font-size="14">W</text><g id="rose-dyn"></g></g>'+
+      '<path d="M150 128 L160 160 L150 154 L140 160 Z" fill="#FFFFFF"/><text x="150" y="186" text-anchor="middle" fill="#FFFFFF" font-family="Assistant" font-size="11">You</text>'+
     '</svg></div>'+
     '<div style="flex:1 1 200px;display:flex;flex-direction:column;gap:10px;min-width:0">'+
       '<div class="cell" style="padding:12px 14px"><div class="mut" style="font-size:14px">You Are Facing</div><div class="mono" style="font-size:30px;color:#fff" id="hdg-val">0°</div></div>'+
-      '<label for="hdg" style="font-weight:600;font-size:15px">Try it: turn to face</label>'+
+      '<label for="hdg" style="font-weight:700;font-size:15px">Try it: turn to face</label>'+
       '<input id="hdg" type="range" min="0" max="359" value="'+Math.round(st.heading)+'" style="width:100%;accent-color:#32B4AF;min-height:40px">'+
       '<div class="cell" style="padding:12px 14px;font-size:15px" id="facing-tip"></div>'+
       '<button class="btn primary" id="compass-btn">Use My Phone\'s Compass</button>'+
@@ -505,7 +505,7 @@ function buildBoard(){
       '<div class="glass panel alert boot" style="--d:.3s" id="alert-panel" data-state="calm"><span class="alert-glow" aria-hidden="true"></span><div class="ph"><h2>Ear Defender Alert</h2>'+
         '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FF8A8A" stroke-width="1.8" aria-hidden="true"><path d="M7 14v-3a5 5 0 0 1 10 0v3"/><rect x="3" y="13" width="4" height="7"/><rect x="17" y="13" width="4" height="7"/></svg></div>'+
         '<div id="alert-body" style="display:flex;flex-direction:column;gap:10px"></div>'+
-        '<label class="toggle" for="fam-alerts"><span><span style="display:block;font-weight:600">Family Alerts</span><span class="mut" style="font-size:14px">Warn me ten minutes before loud jets</span></span>'+
+        '<label class="toggle" for="fam-alerts"><span><span style="display:block;font-weight:700">Family Alerts</span><span class="mut" style="font-size:14px">Warn me ten minutes before loud jets</span></span>'+
         '<input type="checkbox" id="fam-alerts" '+(st.alerts?'checked':'')+'></label></div>'+
     '</div>';
   }
@@ -530,8 +530,8 @@ function tick(){
   }else if(up.length){
     var before=t<items[0].start;
     nowTag='<span class="tag ghost">Between Displays</span>';
-    nowHtml='<div class="mut" style="font-weight:600">'+(before?'Flying starts in':'Next display in')+'</div><div class="big-count mono">'+fmtLeft(up[0].start*60-sec)+'</div>'+
-      '<div style="font-weight:600">'+esc(up[0].name)+' at <span class="mono">'+hhmm(up[0].start)+'</span></div>'+
+    nowHtml='<div class="mut" style="font-weight:700">'+(before?'Flying starts in':'Next display in')+'</div><div class="big-count mono">'+fmtLeft(up[0].start*60-sec)+'</div>'+
+      '<div style="font-weight:700">'+esc(up[0].name)+' at <span class="mono">'+hhmm(up[0].start)+'</span></div>'+
       '<div class="note">'+(before?'I would advise heading to the crowd line now and saving your pitch, then using the toilet before the flying starts.':'If this next one is not on your list, this would be a good moment for a toilet or food break.')+'</div>';
   }else{
     nowTag='<span class="tag ghost">Finished</span>';
@@ -545,23 +545,23 @@ function tick(){
     ah='<p style="margin:0" class="mut">Family alerts are off. Switch them back on below to get a warning before the loud jets.</p>';
   }else if(cur&&cur.loud){
     state='on';
-    ah='<p style="margin:0;font-weight:600">Ear defenders on now</p><div class="big-count mono">'+fmtLeft(cur.end*60-sec)+'</div><div>'+esc(cur.name)+' until <span class="mono">'+hhmm(cur.end)+'</span></div>';
+    ah='<p style="margin:0;font-weight:700">Ear defenders on now</p><div class="big-count mono">'+fmtLeft(cur.end*60-sec)+'</div><div>'+esc(cur.name)+' until <span class="mono">'+hhmm(cur.end)+'</span></div>';
   }else if(loudNext){
     var left=loudNext.start*60-sec;
-    if(left<=600){state='warn';ah='<p style="margin:0;font-weight:600">Loud fast jet coming up. Ear defenders on for the little ones.</p><div class="big-count mono">'+fmtLeft(left)+'</div><div style="font-weight:600">'+esc(loudNext.name)+' at <span class="mono">'+hhmm(loudNext.start)+'</span></div>';}
+    if(left<=600){state='warn';ah='<p style="margin:0;font-weight:700">Loud fast jet coming up. Ear defenders on for the little ones.</p><div class="big-count mono">'+fmtLeft(left)+'</div><div style="font-weight:700">'+esc(loudNext.name)+' at <span class="mono">'+hhmm(loudNext.start)+'</span></div>';}
     else ah='<p style="margin:0" class="mut">All quiet for now. The next loud display is</p><div style="font-family:var(--f-display);font-weight:700;font-size:30px;text-transform:uppercase;line-height:1">'+esc(loudNext.name)+'</div><div class="mono big-count" style="font-size:40px">'+fmtLeft(left)+'</div><div class="mono" style="color:var(--cyan)">Starts '+hhmm(loudNext.start)+'</div>';
   }else ah='<p style="margin:0" class="mut">No more loud displays on this running order.</p>';
   var ap=$('#alert-panel');if(ap.dataset.state!==state)ap.dataset.state=state;
   $('#alert-body').innerHTML=ah;
 
-  $('#next-body').innerHTML=up.length?up.slice(0,3).map(function(i){return '<div class="next-item"><span class="mono">'+hhmm(i.start)+'</span><span style="font-weight:600;overflow-wrap:anywhere">'+esc(i.name)+'</span>'+(i.loud?'<span class="tag red">Loud</span>':'<span></span>')+'</div>';}).join(''):'<p class="mut" style="margin:0">Nothing else to come today.</p>';
+  $('#next-body').innerHTML=up.length?up.slice(0,3).map(function(i){return '<div class="next-item"><span class="mono">'+hhmm(i.start)+'</span><span style="font-weight:700;overflow-wrap:anywhere">'+esc(i.name)+'</span>'+(i.loud?'<span class="tag red">Loud</span>':'<span></span>')+'</div>';}).join(''):'<p class="mut" style="margin:0">Nothing else to come today.</p>';
 
   $('#order-count').textContent=items.length+' displays';
   var nextOne=up[0];
   $('#order-body').innerHTML=items.map(function(i){
     var cls=t>=i.end?'done':(cur===i?'now':'');
     var status=cur===i?'<span class="tag teal">Flying Now</span>':(i===nextOne?'<span class="tag purple">Next</span>':(t>=i.end?'<span class="tag ghost">Done</span>':''));
-    return '<div class="order-row '+cls+'"><span class="mono">'+hhmm(i.start)+' to '+hhmm(i.end)+'</span><span style="font-weight:600;overflow-wrap:anywhere">'+esc(i.name)+'</span><span class="acts">'+(i.loud?'<span class="tag red">Loud</span>':'')+status+'</span></div>';
+    return '<div class="order-row '+cls+'"><span class="mono">'+hhmm(i.start)+' to '+hhmm(i.end)+'</span><span style="font-weight:700;overflow-wrap:anywhere">'+esc(i.name)+'</span><span class="acts">'+(i.loud?'<span class="tag red">Loud</span>':'')+status+'</span></div>';
   }).join('');
 }
 function jumpToFirst(){
@@ -597,7 +597,7 @@ function renderCompass(){
     var c=polar(geo.face,72),f=geo.face*Math.PI/180,dx=Math.cos(f)*92,dy=Math.sin(f)*92;
     var lab=polar(geo.face,96);
     dyn+='<line x1="'+(c[0]-dx).toFixed(1)+'" y1="'+(c[1]-dy).toFixed(1)+'" x2="'+(c[0]+dx).toFixed(1)+'" y2="'+(c[1]+dy).toFixed(1)+'" stroke="#32B4AF" stroke-width="3" stroke-dasharray="8 6"/>';
-    dyn+='<text x="'+lab[0].toFixed(1)+'" y="'+lab[1].toFixed(1)+'" text-anchor="middle" fill="#32B4AF" font-family="JetBrains Mono" font-size="11">Display</text>';
+    dyn+='<text x="'+lab[0].toFixed(1)+'" y="'+lab[1].toFixed(1)+'" text-anchor="middle" fill="#32B4AF" font-family="Assistant" font-size="11">Display</text>';
     var diff=((h-geo.face+540)%360)-180;
     tips.push(Math.abs(diff)<30?'The display is right in front of you.':(Math.abs(diff)>150?'The display is behind you, turn round.':'Turn a little to your '+(diff>0?'left':'right')+' to face the display.'));
   }else tips.push('I am still adding the display line for this show. For now, the sun is shown where it sits at the moment.');
@@ -607,7 +607,7 @@ function renderCompass(){
     if(s.alt>0){
       var sp=polar(s.az,112);
       dyn+='<circle cx="'+sp[0].toFixed(1)+'" cy="'+sp[1].toFixed(1)+'" r="12" fill="#F5C76B" style="filter:drop-shadow(0 0 10px rgba(245,199,107,.8))"/>';
-      dyn+='<text x="'+sp[0].toFixed(1)+'" y="'+(sp[1]-18).toFixed(1)+'" text-anchor="middle" fill="#F5C76B" font-family="JetBrains Mono" font-size="11">Sun</text>';
+      dyn+='<text x="'+sp[0].toFixed(1)+'" y="'+(sp[1]-18).toFixed(1)+'" text-anchor="middle" fill="#F5C76B" font-family="Assistant" font-size="11">Sun</text>';
       if(geo.face!=null){var sd=Math.abs(((s.az-geo.face+540)%360)-180);if(sd<45&&s.alt<45)tips.push('The sun is over the display, so expect silhouettes for photos.');else if(sd>135)tips.push('The sun is behind you, so you should get good light on the aircraft.');}
     }else tips.push('The sun is below the horizon at this time.');
   }
@@ -641,7 +641,7 @@ function renderReports(){
   box.innerHTML=list.length?list.map(function(r){
     var k=statusKind(r.status),done=!!st.confirmed[r.id];
     var mins=Math.max(1,Math.round((Date.now()-new Date(r.at).getTime())/60000));
-    return '<div class="report"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span style="font-weight:600">'+esc(r.place)+'</span><span class="tag '+(k==='r'?'red':k==='c'?'teal':'purple')+'">'+esc(r.status)+'</span></div>'+
+    return '<div class="report"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span style="font-weight:700">'+esc(r.place)+'</span><span class="tag '+(k==='r'?'red':k==='c'?'teal':'purple')+'">'+esc(r.status)+'</span></div>'+
       '<span class="mut" style="font-size:14px">Reported '+mins+' min'+(mins>1?'s':'')+' ago.'+(r.note?' '+esc(r.note):'')+'</span>'+
       '<button class="btn ghost" style="min-height:40px;margin-top:auto" data-confirm="'+esc(r.id)+'" '+(done||!(st.member&&st.member.loggedIn)?'disabled':'')+'>'+(done?'Thanks · ':'Still true · ')+(r.confirms||0)+'</button></div>';
   }).join(''):'<p class="mut" style="margin:0">No reports in the last 45 minutes. On show day, you will see members post car park, toilet and queue updates here.</p>';

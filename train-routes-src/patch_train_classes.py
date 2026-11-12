@@ -2,7 +2,7 @@
 draws the class of train that usually works each leg, and swaps it at each change. Safe to run again."""
 import glob, sys
 JS = open('train-routes-src/v2-parts/train-classes.js').read()
-CSS = ('.rs-cls{position:absolute;left:16px;bottom:9px;z-index:4;display:flex;align-items:center;gap:8px;font:600 14px/1.2 var(--f);color:#fff;'
+CSS = ('.rs-cls{position:absolute;left:16px;bottom:9px;z-index:4;display:flex;align-items:center;gap:8px;font:700 14px/1.2 var(--f);color:#fff;'
        'background:rgba(5,6,7,.55);padding:6px 10px;border-radius:4px;white-space:nowrap}.rs-cls span{color:#F4C21B}.rs-cls i{font-style:normal;color:#C9CED2}'
        '@media(max-width:640px){.rs-cls{left:8px;bottom:6px;font-size:12.5px;padding:4px 8px}}\n')
 def patch(f):

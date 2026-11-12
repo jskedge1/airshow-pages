@@ -606,3 +606,6 @@ The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, 
   question to qa-src/questions.py before running qa-src/build.py again, or it will be lost.
 - YouTube page: when a video has no large thumbnail the Latest player now drops to the standard one instead of
   showing YouTube's small grey placeholder.
+- Fonts: the site uses only Barlow Medium (500), Barlow Bold (700) and Assistant Medium (500). Assistant takes the
+  place of the old Share Tech Mono and JetBrains Mono labels; Barlow Condensed and Caveat are gone. Every page loads
+  `family=Assistant:wght@500&family=Barlow:wght@500;700`. Use font-weight 500 or 700 only in new work.

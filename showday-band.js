@@ -30,13 +30,13 @@
     var file=(location.pathname.split('/').pop()||'').replace(/\.html$/,'').replace(/-v\d+$/,'');
     var s=SHOWS[file];
     if(!s||document.getElementById('sd-band')) return;
-    var css='#sd-band{position:relative;overflow:hidden;background:#061019;background-image:radial-gradient(900px 400px at 85% 0,rgba(50,180,175,.22),transparent 60%),linear-gradient(rgba(95,227,220,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(95,227,220,.05) 1px,transparent 1px);background-size:auto,40px 40px,40px 40px;color:#E8F1F6;font-family:"Barlow",Arial,sans-serif;padding:48px 0}'
+    var css='#sd-band{position:relative;overflow:hidden;background:#061019;background-image:radial-gradient(900px 400px at 85% 0,rgba(50,180,175,.22),transparent 60%),linear-gradient(rgba(95,227,220,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(95,227,220,.05) 1px,transparent 1px);background-size:auto,40px 40px,40px 40px;color:#E8F1F6;font-family:Barlow,sans-serif;padding:48px 0}'
       +'#sd-band .sd-wrap{max-width:1200px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:24px 48px;align-items:center}'
       +'#sd-band h2{margin:0;font-weight:700;font-size:clamp(30px,4vw,44px);line-height:1;text-transform:uppercase;color:#FFFFFF}'
       +'#sd-band h2 span{color:#32B4AF}'
       +'#sd-band p{margin:12px 0 0;font-size:16px;line-height:1.55;font-weight:500;color:#C9D8E2;max-width:56ch}'
       +'#sd-band ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}'
-      +'#sd-band li{border:1px solid rgba(95,227,220,.25);background:rgba(22,52,74,.5);padding:10px 12px;font-weight:600;font-size:15px;color:#E8F1F6}'
+      +'#sd-band li{border:1px solid rgba(95,227,220,.25);background:rgba(22,52,74,.5);padding:10px 12px;font-weight:700;font-size:15px;color:#E8F1F6}'
       +'#sd-band a.sd-go{display:inline-block;margin-top:20px;background:#32B4AF;color:#061019;font-weight:700;font-size:15px;padding:12px 18px;text-decoration:none;transition:background .25s ease}'
       +'#sd-band a.sd-go:hover{background:#5FE3DC}'
       +'#sd-band a:focus-visible{outline:3px solid #5FE3DC;outline-offset:2px}'
