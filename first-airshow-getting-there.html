@@ -278,6 +278,7 @@ button{font-family:var(--f)}
 .ptgo .pt-btn i{font-style:normal;display:inline-block;transition:transform .3s ease}
 .ptgo:hover .pt-btn i{transform:translateX(4px)}
 @media (max-width:680px){.ptgo{grid-template-columns:44px minmax(0,1fr)}.ptgo .pt-ic{width:44px;height:44px}.ptgo .pt-btn{grid-column:1/-1;text-align:center}}
+@media (max-width:600px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.tabs::-webkit-scrollbar{display:none}.tabs a{white-space:nowrap;flex:none}}
 </style>
 <style id="device-fix">
 html,body{overflow-x:clip;scrollbar-width:none}
@@ -508,5 +509,12 @@ count();
 </script>
 <script src="https://jskedge1.github.io/airshow-pages/kit-link.js"></script>
 <script src="https://jskedge1.github.io/airshow-pages/back-tab.js" defer></script>
+<script id="tabs-follow">
+/* phones: the section tabs sit in one sideways row, so keep the lit tab in view */
+(function(){var t=document.querySelector('.tabsbar .tabs');if(!t||!('MutationObserver' in window))return;var last=null;
+new MutationObserver(function(){var a=t.querySelector('a.on');if(!a||a===last||t.scrollWidth<=t.clientWidth+1)return;last=a;
+var tr=t.getBoundingClientRect(),ar=a.getBoundingClientRect();t.scrollTo({left:t.scrollLeft+ar.left-tr.left-(tr.width-ar.width)/2,behavior:'smooth'});})
+.observe(t,{subtree:true,attributes:true,attributeFilter:['class']});})();
+</script>
 </body>
 </html>

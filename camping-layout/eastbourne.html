@@ -4656,7 +4656,7 @@ h1,h2,h3,h4,h5,h6,.sg h2,.sg h3,.stay-group h3,.panel-head h2,.panel-head h2 *,l
 
   /* height helper: open this file on its own in Chrome, resize the window
      to the width of your Wix box, and type the number into Wix */
-  if(window.parent===window){
+  if(window.parent===window && !/ukairshowguide|wix/i.test(location.hostname)){
     var h=document.createElement('div'); h.id='pageHeight'; document.body.appendChild(h);
     var upd=function(){
       h.innerHTML='Page height at '+window.innerWidth+'px wide: <b>'+document.documentElement.scrollHeight+'px</b>';
@@ -5609,7 +5609,7 @@ body .hp-list summary,body .hp-list summary *{text-transform:none!important}
 @media(max-width:900px){.wt-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* kit list */
-.kit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.kit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:12px}
 .kit-g{border:1px solid #CBD5DD;background:#fff}
 .kit-g h4{background:#32B4AF;color:#fff;margin:0;padding:11px 14px;font:800 20px/1 "Barlow Condensed","Barlow",sans-serif!important;letter-spacing:.005em!important}
 .kit-g ul{list-style:none;margin:0;padding:4px 12px 8px}
@@ -6834,7 +6834,7 @@ body h1.cg-title{text-transform:none!important}
     '.xd-jh{margin:26px 0 4px;font-family:"Barlow",sans-serif;font-weight:700;font-size:19px;color:#13293C}' +
     '.xd-jt .xd-jp[hidden]{display:none}' +
     '.xd-tt{display:grid;gap:0}' +
-    '.xd-tt-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin:0 0 18px}' +
+    '.xd-tt-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:8px;margin:0 0 18px}' +
     '.xd-tt-link{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#13293C;color:#fff!important;text-decoration:none!important;border-left:6px solid var(--c);border-radius:4px;transition:background .3s ' + EASE + ',padding .35s ' + EASE + '}' +
     '.xd-tt-link b{display:block;font-weight:700;font-size:16px}' +
     '.xd-tt-link small{display:block;font-weight:500;font-size:14px;color:#C9DCEA}' +
@@ -6944,7 +6944,7 @@ body h1.cg-title{text-transform:none!important}
   var CSS_HERO =
     '#travel .gt-hero{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important;gap:40px 56px!important;align-items:start!important}' +
     '#travel .gt-hero h2 small{color:#00A6E2!important;font-family:"Barlow",sans-serif;font-weight:600;font-size:.4em;letter-spacing:0}' +
-    '#travel .gt-hero .btns{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:26px!important}' +
+    '#travel .gt-hero .btns{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:10px;margin-top:26px!important}' +
     '#travel .gt-hero .btns .btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:stretch;background:#13293C;color:#fff;min-height:64px;position:relative;border-radius:4px;overflow:visible;box-shadow:0 4px 0 rgba(19,41,60,.25);transition:transform .25s ' + EASE + ',box-shadow .25s ' + EASE + ',background .25s ' + EASE + '}' +
     '#travel .gt-hero .btns .btn:before{content:"";flex:none;width:64px;background:var(--bc,#00A6E2);border-radius:4px 0 0 4px}' +
     '#travel .gt-hero .btns .btn .xd-bi{position:absolute;left:0;top:0;bottom:0;width:64px;display:flex;align-items:center;justify-content:center;color:#fff}' +
@@ -7661,7 +7661,7 @@ LAYOUTS[2]=function(){
   '<div class="l2-hero"><div class="clockc"><div style="display:flex;justify-content:space-between;align-items:start;gap:10px;flex-wrap:wrap"><p class="h-box">The tide clock</p><span class="tag">Drag the hand</span></div><div data-c="days" style="margin-bottom:6px"></div><div data-c="clock"></div><p style="margin:4px 0 0;font-size:14px;color:#C7D7DF">The outer purple arcs show the flying. The further the teal shape reaches out, the higher the tide.</p></div>'+
   '<div class="l2-side"><div class="card light"><p class="h-box h-red">How much beach will you have?</p><p style="margin:0 0 8px" data-c="insight"></p><div data-c="section"></div></div><div class="l2-band light"><div data-c="spring"></div></div></div></div>'+
   '<div class="l2-mapgrid"><div data-c="map"></div><div class="l2-steps"><p class="h-box" style="margin:0">Pick your pitch</p><div data-c="picker"></div><ul class="slist" data-c="slist"></ul></div></div>'+
-  '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px"><div class="card light" data-c="verdictL"></div><div class="card light" data-c="factsL"></div><div class="card navy" data-c="tip"></div></div>'+
+  '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:24px"><div class="card light" data-c="verdictL"></div><div class="card light" data-c="factsL"></div><div class="card navy" data-c="tip"></div></div>'+
   '</div></div></section>';};
 LAYOUTS[3]=function(){
   var rows=SF.order.map(function(k){var l=SF.loc[k],d=l.tides.days[0],hi=dayEvents(d).filter(function(e){return e.t==='High';})[0],h=level(d,900),w=beachWord(beachFrac(l,h));
@@ -7671,7 +7671,7 @@ LAYOUTS[3]=function(){
   '<div class="cards" data-c="cards"></div>'+
   '<div class="dry"><div class="l light"><p class="h-box h-red">Will my pitch stay dry?</p><p style="margin:0 0 8px">Drag the chair to where you plan to sit, then pick a show day. I’ll show you when the water gets close.</p><div data-c="days" class="light" style="margin-bottom:10px"></div><div data-c="section"></div></div>'+
   '<div class="r"><p class="h-box">Through the day</p><div class="dryres" data-c="dry"></div><div class="hours" data-c="hours"></div><p style="margin:10px 0 0;font-size:13.5px;color:#C7D7DF">Each bar shows how much beach is left that hour. Purple times are flying.</p></div></div>'+
-  '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px"><div class="tile light" data-c="verdictL" style="background:#fff;border:1px solid var(--line);padding:18px"></div><div class="tile light" style="background:#fff;border:1px solid var(--line);padding:18px" data-c="factsL"></div><div class="tile navy" style="background:var(--navy);color:#E8F1F5;padding:18px;border-top:4px solid var(--purple)" data-c="tip"></div></div>'+
+  '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:24px"><div class="tile light" data-c="verdictL" style="background:#fff;border:1px solid var(--line);padding:18px"></div><div class="tile light" style="background:#fff;border:1px solid var(--line);padding:18px" data-c="factsL"></div><div class="tile navy" style="background:var(--navy);color:#E8F1F5;padding:18px;border-top:4px solid var(--purple)" data-c="tip"></div></div>'+
   '</div></section>';};
 LAYOUTS[4]=function(){
   var seg=SF.order.map(function(k){var l=SF.loc[k];return '<button type="button" data-loc="'+k+'" class="'+(k===S.loc?'on':'')+'"><b>'+l.short+'</b><small>'+l.ds+'</small>'+sparkline(l.tides.days[0],64,16,k===S.loc?'#0E5F5B':'#6FE0DA')+'</button>';}).join('');
@@ -8073,7 +8073,7 @@ a{color:inherit}
 .q legend span{display:block;font-size:13px;font-weight:700;color:var(--sc);margin-bottom:1px}
 .q legend small{display:block;font-weight:500;font-size:14px;color:var(--muted);margin-top:2px}
 fieldset{border:0;min-width:0}
-.opts{clear:both;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px}
+.opts{clear:both;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(160px,100%),1fr));gap:6px}
 .opts button{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);border-left:4px solid #C4CED6;border-radius:3px;background:var(--mist);padding:9px 12px;font-weight:600;font-size:15px;line-height:1.25;color:var(--navy);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .opts button:after{content:"";flex:none;width:14px;height:14px;box-sizing:border-box;border-radius:50%;border:2px solid #A9B6C0;transition:background .2s,border-color .2s}
 .opts button:hover{background:#fff;border-left-color:var(--sc)}
@@ -9361,7 +9361,7 @@ body.part .fold-body,body.part .fold-in{transition:none}
     '#travel #explore .ft-extra .xd-good .xd-note{position:relative;margin:0 24px 18px!important;padding:16px 18px 16px 58px!important;background:#FFF6E0;border-left:6px solid #F2B233;font:600 17px/1.5 Barlow,sans-serif!important;color:#13293C!important}',
     '#travel #explore .ft-extra .xd-good .xd-note:before{content:"!";position:absolute;left:16px;top:16px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:#F2B233;color:#0B0F14;font:800 18px/1 Barlow,sans-serif;border-radius:50%}',
     '#travel #explore .ft-extra .xd-good .xd-info{padding:0 24px!important}',
-    '#travel #explore .ft-extra .xd-good .detail-meta{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px!important;margin:0 0 18px!important;padding:0!important;background:none!important}',
+    '#travel #explore .ft-extra .xd-good .detail-meta{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:10px!important;margin:0 0 18px!important;padding:0!important;background:none!important}',
     '#travel #explore .ft-extra .xd-good .detail-meta span{display:flex!important;flex-direction:column;gap:4px;padding:12px 14px!important;background:#F5F8FA!important;border:0!important;border-top:4px solid #44AED6!important;font:500 14px/1.2 Barlow,sans-serif!important;color:#13293C!important}',
     '#travel #explore .ft-extra .xd-good .detail-meta span b{font:800 24px/1.1 "Barlow Condensed","Barlow",sans-serif!important;color:#13293C!important}',
     '#travel #explore .ft-extra .xd-good .detail-meta span.ft-dup{display:none!important}',
@@ -9942,7 +9942,7 @@ body nav.tabbar .tb-arrow[hidden]{display:none}
 </script>
 <style id="ph-jump-tabs3">
 /* Photography "In this section" links in the Tabs 3 design: numbered square tabs with a colour strip (10 Nov) */
-body #photo nav.ph-jump{counter-reset:phj;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0!important;padding:10px 10px 0!important;margin:0 0 28px!important;background:#D3D8DC!important;border:0!important;box-shadow:none!important;flex-wrap:nowrap}
+body #photo nav.ph-jump{counter-reset:phj;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:0!important;padding:10px 10px 0!important;margin:0 0 28px!important;background:#D3D8DC!important;border:0!important;box-shadow:none!important;flex-wrap:nowrap}
 body #photo nav.ph-jump a{counter-increment:phj;position:relative;display:flex!important;align-items:center;gap:10px;min-height:58px;margin:0!important;padding:12px 14px!important;background:#FFFFFF!important;border:0!important;border-radius:0!important;box-shadow:inset 0 6px 0 var(--c),inset -1px 0 0 #D3D8DC!important;color:#13293C!important;font:700 16px/1.2 "Barlow",sans-serif!important;text-decoration:none!important;transition:transform .25s ease,background .25s ease}
 body #photo nav.ph-jump a:before{content:counter(phj);flex:none;display:grid;place-items:center;width:28px;height:28px;background:#13293C;color:#FFFFFF;font:700 15px/1 "Barlow",sans-serif}
 body #photo nav.ph-jump a:hover,body #photo nav.ph-jump a:focus-visible{transform:translateY(-3px);background:#E3F1F8!important}
@@ -10614,7 +10614,7 @@ body nav.tabbar .tb-arrow[hidden]{display:none}
 </script>
 <style id="ph-jump-tabs3">
 /* Photography "In this section" links in the Tabs 3 design: numbered square tabs with a colour strip (10 Nov) */
-body #photo nav.ph-jump{counter-reset:phj;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0!important;padding:10px 10px 0!important;margin:0 0 28px!important;background:#D3D8DC!important;border:0!important;box-shadow:none!important;flex-wrap:nowrap}
+body #photo nav.ph-jump{counter-reset:phj;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:0!important;padding:10px 10px 0!important;margin:0 0 28px!important;background:#D3D8DC!important;border:0!important;box-shadow:none!important;flex-wrap:nowrap}
 body #photo nav.ph-jump a{counter-increment:phj;position:relative;display:flex!important;align-items:center;gap:10px;min-height:58px;margin:0!important;padding:12px 14px!important;background:#FFFFFF!important;border:0!important;border-radius:0!important;box-shadow:inset 0 6px 0 var(--c),inset -1px 0 0 #D3D8DC!important;color:#13293C!important;font:700 16px/1.2 "Barlow",sans-serif!important;text-decoration:none!important;transition:transform .25s ease,background .25s ease}
 body #photo nav.ph-jump a:before{content:counter(phj);flex:none;display:grid;place-items:center;width:28px;height:28px;background:#13293C;color:#FFFFFF;font:700 15px/1 "Barlow",sans-serif}
 body #photo nav.ph-jump a:hover,body #photo nav.ph-jump a:focus-visible{transform:translateY(-3px);background:#E3F1F8!important}

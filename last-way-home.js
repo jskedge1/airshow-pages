@@ -34,7 +34,7 @@
     + '.lwhb-hi svg{width:30px;height:30px}'
     + '.lwhb .lwhb-sign h3{margin:0!important;padding:0!important;font-family:"Barlow Condensed",Barlow,sans-serif!important;font-weight:800!important;font-size:clamp(26px,3.4vw,40px)!important;line-height:1!important;letter-spacing:.005em!important;text-transform:uppercase!important;color:#fff!important}'
     + '.lwhb-sign p{margin:3px 0 0;font-weight:500;font-size:15.5px;line-height:1.4;color:#FFE3E3}'
-    + '.lwhb-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-top:12px}'
+    + '.lwhb-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:12px;margin-top:12px}'
     + '.lwhb-card{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 16px;align-items:center;background:#fff;box-shadow:0 6px 18px rgba(19,41,60,.10);padding:16px;border-top:6px solid var(--c);transition:transform .3s ease,box-shadow .3s ease;font-family:inherit}'
     + '.lwhb-card:hover,.lwhb-card:focus-visible{transform:translateY(-2px);box-shadow:0 12px 28px rgba(19,41,60,.18)}'
     + '.lwhb-card:focus-visible{outline:3px solid #00A6E2;outline-offset:2px}'

@@ -100,7 +100,7 @@
       +'#xl-band .xl-lede{margin:14px 0 0;font-size:16px;line-height:1.55;font-weight:500;color:#C9D6E0;max-width:34ch}'
       +'#xl-band .xl-find{display:inline-block;margin-top:20px;background:#D74949;color:#FFFFFF;font-weight:700;font-size:15px;padding:12px 18px;text-decoration:none}'
       +'#xl-band .xl-find:hover{background:#B83A3A}'
-      +'#xl-band ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0;border-top:1px solid #2C4A63}'
+      +'#xl-band ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:0;border-top:1px solid #2C4A63}'
       +'#xl-band li{border-bottom:1px solid #2C4A63}'
       +'#xl-band li a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 4px;color:#FFFFFF;text-decoration:none;transition:background .25s ease,padding .25s ease}'
       +'#xl-band li a:hover{background:#1B3A52;padding-left:12px}'

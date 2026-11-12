@@ -519,7 +519,7 @@
     + '.ukag-jp .jq-lvb i,.ukag-jp .jq-pulse i{width:9px;height:9px;border-radius:50%;background:#22C55E;animation:jqpulse 1.8s ease-out infinite;flex:none}'
     + '.ukag-jp .jq-lvb[aria-expanded="true"]{background:#0F2E1B!important;color:#7CF0A6!important}'
     + '@keyframes jqpulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}100%{box-shadow:0 0 0 8px rgba(34,197,94,0)}}'
-    + '.ukag-jp .jq-lvp{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;padding-top:4px}'
+    + '.ukag-jp .jq-lvp{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:10px;padding-top:4px}'
     + '.ukag-jp .jq-lvp[hidden]{display:none}'
     + '.ukag-jp .jq-lb2{background:var(--n);color:#fff;border-top:4px solid var(--c);display:flex;flex-direction:column}'
     + '.ukag-jp .jq-lbh{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12)}'

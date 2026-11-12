@@ -390,7 +390,7 @@
     '.xd-jh{margin:26px 0 4px;font-family:"Barlow",sans-serif;font-weight:700;font-size:19px;color:#13293C}' +
     '.xd-jt .xd-jp[hidden]{display:none}' +
     '.xd-tt{display:grid;gap:0}' +
-    '.xd-tt-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin:0 0 18px}' +
+    '.xd-tt-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:8px;margin:0 0 18px}' +
     '.xd-tt-link{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#13293C;color:#fff!important;text-decoration:none!important;border-left:6px solid var(--c);border-radius:4px;transition:background .3s ' + EASE + ',padding .35s ' + EASE + '}' +
     '.xd-tt-link b{display:block;font-weight:700;font-size:16px}' +
     '.xd-tt-link small{display:block;font-weight:500;font-size:14px;color:#C9DCEA}' +
@@ -500,7 +500,7 @@
   var CSS_HERO =
     '#travel .gt-hero{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important;gap:40px 56px!important;align-items:start!important}' +
     '#travel .gt-hero h2 small{color:#00A6E2!important;font-family:"Barlow",sans-serif;font-weight:600;font-size:.4em;letter-spacing:0}' +
-    '#travel .gt-hero .btns{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:26px!important}' +
+    '#travel .gt-hero .btns{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:10px;margin-top:26px!important}' +
     '#travel .gt-hero .btns .btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:stretch;background:#13293C;color:#fff;min-height:64px;position:relative;border-radius:4px;overflow:visible;box-shadow:0 4px 0 rgba(19,41,60,.25);transition:transform .25s ' + EASE + ',box-shadow .25s ' + EASE + ',background .25s ' + EASE + '}' +
     '#travel .gt-hero .btns .btn:before{content:"";flex:none;width:64px;background:var(--bc,#00A6E2);border-radius:4px 0 0 4px}' +
     '#travel .gt-hero .btns .btn .xd-bi{position:absolute;left:0;top:0;bottom:0;width:64px;display:flex;align-items:center;justify-content:center;color:#fff}' +

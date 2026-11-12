@@ -278,6 +278,7 @@ button{font-family:var(--f)}
 .prose a b,.note a b,.tip a{text-decoration:underline;text-underline-offset:3px}
 .prose a,.note a{transition:color .25s ease}
 .prose a:hover b,.note a:hover b{color:var(--teal-dark)}
+@media (max-width:600px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.tabs::-webkit-scrollbar{display:none}.tabs a{white-space:nowrap;flex:none}}
 </style>
 <style id="device-fix">
 html,body{overflow-x:clip;scrollbar-width:none}
@@ -658,6 +659,13 @@ btns.forEach(function(b){b.addEventListener('click',function(){pick(b.getAttribu
 })();
 </script>
 <script src="https://jskedge1.github.io/airshow-pages/links.js"></script>
+<script id="tabs-follow">
+/* phones: the section tabs sit in one sideways row, so keep the lit tab in view */
+(function(){var t=document.querySelector('.tabsbar .tabs');if(!t||!('MutationObserver' in window))return;var last=null;
+new MutationObserver(function(){var a=t.querySelector('a.on');if(!a||a===last||t.scrollWidth<=t.clientWidth+1)return;last=a;
+var tr=t.getBoundingClientRect(),ar=a.getBoundingClientRect();t.scrollTo({left:t.scrollLeft+ar.left-tr.left-(tr.width-ar.width)/2,behavior:'smooth'});})
+.observe(t,{subtree:true,attributes:true,attributeFilter:['class']});})();
+</script>
 <!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
 <style id="mobile-fit">
   img,video,iframe,canvas{max-width:100%}

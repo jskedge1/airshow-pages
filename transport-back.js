@@ -134,7 +134,7 @@
     + '.tb-tab:focus-visible{outline:2px solid #13293C;outline-offset:2px}'
     + '.tb-where{margin-left:auto;padding-bottom:12px;font-size:15px;color:#4A5B68}'
     + '.tb-where b{color:#13293C;font-weight:600}'
-    + '@media (max-width:640px){.tb-in{padding:10px 16px 0}.tb-end .tb-in{padding:0 16px 12px}.tb-tab{flex:1;min-width:0}.tb-txt span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tb-where{display:none}}'
+    + '@media (max-width:640px){.tb-in{padding:10px 16px 0}.tb-end .tb-in{padding:0 16px 12px}.tb-tab{flex:1;min-width:0}.tb-txt{min-width:0}.tb-txt span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tb-where{display:none}}'
     + '@media (prefers-reduced-motion:reduce){.tb-tab,.tb-ring,.tb-ring svg,.tb-txt b i,.tb-txt span{transition:none}}';
 
   function bar(end) {

@@ -15,7 +15,7 @@
     '.sx-checked b{color:#32B4AF;font-weight:700}',
     '.sx-gtk-h{font:800 26px/1.05 "Barlow Condensed","Barlow",sans-serif;color:#13293C;margin:0 0 6px;text-transform:uppercase;letter-spacing:.01em}',
     '.sx-gtk-p{margin:0 0 16px;font-size:16px;line-height:1.55;color:#33424F;max-width:70ch}',
-    '.sx-gtk{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:0 0 34px}',
+    '.sx-gtk{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(230px,100%),1fr));gap:12px;margin:0 0 34px}',
     '.sx-gtk article{background:#fff;border:1px solid #DCE3E8;border-top:5px solid #32B4AF;padding:14px 16px 16px;box-shadow:0 6px 18px rgba(19,41,60,.06);transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s}',
     '.sx-gtk article:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(19,41,60,.12)}',
     '.sx-gtk article.no{border-top-color:#D74949}.sx-gtk article.check{border-top-color:#6950A1}',

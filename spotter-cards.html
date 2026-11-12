@@ -386,6 +386,7 @@ body>*:not(#printSheets){display:none!important}
 .ptick{margin-top:auto;display:flex;align-items:center;gap:2.4mm;font-weight:700;font-size:11pt;color:#13293C}
 .ptick i{display:block;width:6mm;height:6mm;border:.7mm solid #13293C;background:#fff}
 }
+@media (max-width:600px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.tabs::-webkit-scrollbar{display:none}.tabs a{white-space:nowrap;flex:none}}
 </style>
 <style id="device-fix">
 html,body{overflow-x:clip;scrollbar-width:none}
@@ -735,6 +736,13 @@ update();applyFilter();
 })();
 </script>
 <script src="https://jskedge1.github.io/airshow-pages/links.js"></script>
+<script id="tabs-follow">
+/* phones: the section tabs sit in one sideways row, so keep the lit tab in view */
+(function(){var t=document.querySelector('.tabsbar .tabs');if(!t||!('MutationObserver' in window))return;var last=null;
+new MutationObserver(function(){var a=t.querySelector('a.on');if(!a||a===last||t.scrollWidth<=t.clientWidth+1)return;last=a;
+var tr=t.getBoundingClientRect(),ar=a.getBoundingClientRect();t.scrollTo({left:t.scrollLeft+ar.left-tr.left-(tr.width-ar.width)/2,behavior:'smooth'});})
+.observe(t,{subtree:true,attributes:true,attributeFilter:['class']});})();
+</script>
 <!-- mobile-fit: keeps every part of the page inside the screen on phones and tablets. Same block in every page and template. -->
 <style id="mobile-fit">
   img,video,iframe,canvas{max-width:100%}
