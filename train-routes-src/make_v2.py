@@ -42,7 +42,7 @@ planner = t[planner_start:planner_end]
 hubrow = re.search(r'        <div class="row full" id="hubrow">.*?</div></div>\n', planner).group(0)
 rest = planner.replace(hubrow, '').replace('<div class="planner rise">', '<div class="planner pickctl">').replace('<div class="pin">', '<div class="pin" style="counter-reset:pk 2">', 1)
 new = ('    <div class="pickcard rise"><div class="planner hubbox"><div class="pin">' + hubrow.strip() + '</div></div></div>\n'
-       '    <div class="routein" id="route"><div class="pin" style="counter-reset:pk 1"><div class="row full"><div class="lb">Route map<small>Every station on the train you picked. Tap a station in the list to find it on the map. The red sign is where you get off for the show.</small></div>\n'
+       '    <div class="routein" id="route"><div class="pin" style="counter-reset:pk 1"><div class="row full"><div class="lb">Route map<small>Every station on the train you picked. Tap a station in the list to find it on the map. The red sign is where you get off for the show. <a href="https://jskedge1.github.io/airshow-pages/train-map.html" target="_blank" rel="noopener">See every line on the UK Airshow Train Map</a>.</small></div>\n'
        + stage + '    </div></div></div>\n' + rest)
 t = t[:planner_start] + new + t[planner_end:]
 

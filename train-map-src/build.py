@@ -60,20 +60,11 @@ COLOURS = {
     'West Midlands Railway': '#E8891C',
 }
 
-# Stations some route pages place on a namesake elsewhere, or on a stand in
-# point in London. Each use picks the place nearest its neighbours on the trip.
-PLACES = {
-    'Reedham': [(52.5643, 1.5597), (51.3311, -0.1234)],
-    'Brampton': [(52.3953, 1.5434), (54.9322, -2.7039)],
-    'Whitchurch': [(51.2378, -1.3377), (52.9684, -2.6717), (51.5205, -3.2235)],
-    'Bramley': [(51.3300, -1.0608), (53.8053, -1.6371)],
-    'Millbrook': [(52.0542, -0.5324), (50.9114, -1.4338)],
-    'Swinton': [(53.5147, -2.3361), (53.4870, -1.3080)],
-    'Radcliffe-on-Trent': [(52.9473, -1.0379)],
-    'James St': [(53.4048, -2.9918)],
-    'Moreton in Marsh': [(51.9922, -1.7004)],
-    'Newton Le Willows': [(53.4532, -2.6204)],
-}
+# Stations the scraped data places on a namesake elsewhere, shared with the
+# train route pages (train-routes-src/station_fixes.py).
+sys.path.insert(0, os.path.join(ROOT, 'train-routes-src'))
+import station_fixes  # noqa: E402
+PLACES = station_fixes.PLACES
 
 # Hops the route pages list as a train leg where there is no railway.
 NOT_RAIL = {frozenset(('Bedford', 'St Neots'))}
@@ -98,10 +89,13 @@ CITY_TERMINI = {
 def load(path):
     p = os.path.join(ROOT, path)
     if p.endswith('.json'):
-        return json.load(open(p))
-    s = open(p).read()
-    i = s.index('var DATA=') + len('var DATA=')
-    return json.JSONDecoder().raw_decode(s[i:])[0]
+        d = json.load(open(p))
+    else:
+        s = open(p).read()
+        i = s.index('var DATA=') + len('var DATA=')
+        d = json.JSONDecoder().raw_decode(s[i:])[0]
+    station_fixes.fix(d)
+    return d
 
 
 def planner():

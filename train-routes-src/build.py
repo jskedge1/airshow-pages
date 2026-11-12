@@ -6,6 +6,8 @@ import json, os, sys, glob, importlib
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 _tb = importlib.import_module('tools-transport-back')
 _sg = importlib.import_module('tools-station-guide')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import station_fixes
 here = os.path.dirname(os.path.abspath(__file__))
 shows = sys.argv[1:] or sorted(os.path.basename(f)[:-9] for f in glob.glob(os.path.join(here, '*-cfg.json')))
 src = open(os.path.join(here, '..', 'previews', 'bus-route-layout', '132-duxford.html')).read()
@@ -13,7 +15,9 @@ mf = src[src.index('<!-- mobile-fit'):src.index('<!-- /mobile-fit -->') + len('<
 for show in shows:
     cfg = json.load(open(os.path.join(here, show + '-cfg.json')))
     page = open(os.path.join(here, cfg.get('template', 'template.html'))).read()
-    data = open(os.path.join(here, show + '-data.json')).read()
+    data = json.load(open(os.path.join(here, show + '-data.json')))
+    station_fixes.fix(data)  # stations the scraped data puts in the wrong place (station_fixes.py)
+    data = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
     page = page.replace('__CFG__', json.dumps(cfg, ensure_ascii=False)).replace('__DATA__', data)
     page = page.replace('<title>Train to Clacton | The Big Guide to UK Airshows</title>', '<title>' + cfg['title'].replace('Trains', 'Train') + ' | The Big Guide to UK Airshows</title>')
     page = page.replace('</body>', mf + '\n</body>')

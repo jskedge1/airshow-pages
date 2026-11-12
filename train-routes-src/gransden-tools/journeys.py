@@ -17,6 +17,8 @@ def clean(js):
         if tot>240 or len(legs)>3: continue
         if any(legs[i]['calls'][-1][0]!=legs[i+1]['calls'][0][0] for i in range(len(legs)-1)): continue  # no walks between stations
         if any(gap(legs[i]['calls'][-1][1], legs[i+1]['calls'][0][2] or legs[i+1]['calls'][0][1])>60 for i in range(len(legs)-1)): continue
+        # St Neots to Bedford is a bus, not a train: there is no railway between them
+        if any({c[0] for c in l['calls']}>={'St Neots','Bedford'} for l in legs): continue
         out.append((d,a,tot,legs))
     keep=[]
     for x in out:

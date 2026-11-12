@@ -32,7 +32,7 @@
 
   /* ---------- sign pieces ---------- */
   var signA = document.createElement('div'); signA.className = 'px-sign';
-  signA.innerHTML = '<div class="px-band"><h2>Airshows by public transport</h2><span>All zones</span></div><div class="px-mapwrap"><div class="px-mapbox"><div class="px-map" id="px-map"></div></div><aside class="px-side" id="px-side"></aside></div>';
+  signA.innerHTML = '<div class="px-band"><h2>Airshows by public transport</h2><span>All zones</span></div><div class="px-mapwrap"><div class="px-mapbox"><div class="px-map" id="px-map"></div></div><aside class="px-side" id="px-side"></aside></div><a class="px-trainmap" href="https://jskedge1.github.io/airshow-pages/train-map.html" target="_blank" rel="noopener"><b>UK Airshow Train Map</b><span>Every train company, its stops, the terminal stations and major hubs on the way to every show</span><i aria-hidden="true">&rarr;</i></a>';
   var KEY = '<div class="px-key"><b>Key</b><span class="ln"><u></u>The line links every show</span><span class="st"><u></u>Tap a show</span><span class="ys"><u></u>Your show</span><span class="ap"><u></u>Airport</span><span class="sn"><u></u>Feature page coming soon</span></div>';
   var signB = document.createElement('div'); signB.className = 'px-sign';
   signB.innerHTML = '<div class="px-band"><h2 id="px-name"></h2><span id="px-zone"></span></div><div class="px-screen" id="px-screen"></div>';
