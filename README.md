@@ -23,6 +23,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
 | UK Airshow Map (Find your Air Show page) | https://jskedge1.github.io/airshow-pages/airshow-map.html |
+| UK Airshow Train Map (12 Nov 2026), every train company on the train route pages with their stops, the journey planner's lines to every UK airshow, terminal stations, major hubs and each show's last leg (no Wix page yet; built from train-map-src/) | https://jskedge1.github.io/airshow-pages/train-map.html |
 | Find your Air Show (top HTML embed on /air-shows-guides, by website address since 30 Oct; photos in find-img/) | https://jskedge1.github.io/airshow-pages/find-your-airshow.html |
 | YouTube (Wix page /youtube; videos come from youtube/videos.json, refreshed every hour by .github/workflows/youtube.yml and tools-youtube.py. To move a video to another show or topic, edit it in videos.json and set "fixed": true) | https://jskedge1.github.io/airshow-pages/youtube.html |
 | Site map footer (goes in an HTML embed in the Wix footer, on every page; holds its own page list, so add new pages to it too; replaced the old About footer on 20 Oct 2026, whose pasted code stays at https://073f6961-6a1c-4313-a30e-a850cc8c3512.filesusr.com/html/a0546b_ef8a36c9e66a9c145f110a95db863b8a.html) | https://jskedge1.github.io/airshow-pages/footer.html |
@@ -606,3 +607,13 @@ The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, 
   question to qa-src/questions.py before running qa-src/build.py again, or it will be lost.
 - YouTube page: when a video has no large thumbnail the Latest player now drops to the standard one instead of
   showing YouTube's small grey placeholder.
+
+## UK Airshow Train Map (12 Nov 2026)
+
+`train-map.html` is one Leaflet map of every train company on the train route pages (Ayr, Blackpool, Clacton, Cosford, Duxford, Eastbourne, Little Gransden, Midlands, Southport, Wales, Shuttleworth, Headcorn) with the stations they call at, plus the national lines from `journey-planner.js` (LINES) that lead to every show in SHOWS, RIAT at Boscombe Down included. Terminal stations are square edged rings, major hubs are bold rings, show stations are gold, and each show has a plane marker with its last leg (walk, bus, taxi or shuttle) drawn dotted. Panel: pick an airshow (highlights its route page lines and shows the last leg), find a station, layer toggles, and the company list (tick boxes, Only, and the named lines for one company). Tap a station for its companies, the shows it serves, live departures and Google Maps; tap a line for the companies on that stretch.
+
+Rebuild with `python3 train-map-src/build.py` after changing any route page data or the journey planner. It reads `train-routes-src/<show>-data.json`, the `var DATA=` inside `train-routes/shuttleworth.html` and `headcorn.html`, and STA, LINES and SHOWS from `journey-planner.js` (through node), then fills `train-map-src/template.html`. Solid lines are the real track from the route pages; express runs are sent along that track where possible, and anything else is dashed, station to station. Company colours are in `COLOURS` (colours only, no logos).
+
+Data problems in the route pages found while building it (the map works round them in `PLACES` and `NOT_RAIL`; the route pages themselves still have them): Reedham, Brampton, Whitchurch, Bramley, Millbrook and Swinton sit on a namesake in the wrong part of the country; Radcliffe-on-Trent, James St, Moreton in Marsh and Newton Le Willows sit on a stand in point in London (51.5, -0.1); and the Little Gransden page shows St Neots to Bedford as a Great Northern train, though there is no railway there.
+
+Still to do: a Wix page (for example /airshow-train-map) with its path in AE_GH_PAGES, and links from the Public Transport page and the train route pages.

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UK Airshow Train Map | The Big Guide to UK Airshows</title>
+<meta name="description" content="Map of every train company on our airshow train route pages, with their stops, the lines that lead to every UK airshow, the terminal stations and the major hubs where you change.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--ink:#1B2430;--sub:#5A6675;--line:#DDE2E8;--bg:#F4F6F8;--card:#fff;--navy:#14213D;--gold:#F2B705;--rad:10px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Barlow,system-ui,sans-serif}
+a{color:#0B5CAD}
+.top{background:var(--navy);color:#fff;padding:18px 20px 16px;border-bottom:4px solid var(--gold)}
+.top h1{margin:0;font:800 30px/1.05 'Barlow Condensed',sans-serif;letter-spacing:.3px;text-transform:uppercase}
+.top p{margin:6px 0 0;color:#C9D3E3;max-width:900px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stats span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:3px 11px;font-weight:600;font-size:13px}
+.stats b{color:var(--gold)}
+.wrap{display:grid;grid-template-columns:340px 1fr;height:760px}
+.panel{background:var(--card);border-right:1px solid var(--line);overflow:auto;padding:14px 14px 30px}
+#map{height:100%;background:#E8ECEF}
+h2{font:700 15px/1.1 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.6px;color:var(--sub);margin:18px 0 8px}
+h2:first-child{margin-top:2px}
+select,input[type=search]{width:100%;font:inherit;padding:9px 10px;border:1px solid #C5CDD6;border-radius:8px;background:#fff}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.btn{font:600 13px Barlow,sans-serif;border:1px solid #C5CDD6;background:#fff;border-radius:7px;padding:5px 10px;cursor:pointer;color:var(--ink)}
+.btn:hover{background:#EEF2F6}
+.btn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ops{list-style:none;margin:6px 0 0;padding:0}
+.ops li{display:flex;align-items:center;gap:8px;padding:4px 4px;border-radius:7px}
+.ops li:hover{background:#F2F5F8}
+.ops input{margin:0;width:16px;height:16px;accent-color:var(--navy)}
+.sw{width:22px;height:6px;border-radius:3px;flex:none}
+.ops .nm{flex:1;cursor:pointer;font-weight:600;font-size:14px}
+.ops .ct{color:var(--sub);font-size:12px}
+.ops .only{font-size:11px;padding:2px 7px}
+.lines{margin:4px 0 0 30px;padding:0;list-style:none;font-size:13px}
+.lines li{padding:2px 0;cursor:pointer;color:#0B5CAD}
+.lines li:hover{text-decoration:underline}
+.tog label{display:flex;align-items:center;gap:8px;padding:3px 2px;font-weight:600;font-size:14px;cursor:pointer}
+.key{display:inline-block;flex:none}
+.k-t{width:12px;height:12px;background:#fff;border:3px solid var(--ink);border-radius:2px}
+.k-h{width:13px;height:13px;background:#fff;border:3px solid var(--ink);border-radius:50%}
+.k-s{width:8px;height:8px;background:#fff;border:2px solid #555;border-radius:50%}
+.k-a{width:18px;height:18px;background:var(--gold);border:2px solid var(--navy);border-radius:50%}
+.k-d{width:22px;border-top:3px dashed #555}
+.k-l{width:22px;border-top:3px dotted #2E7D32}
+.note{font-size:12.5px;color:var(--sub);margin-top:10px}
+.showcard{background:#F7F9FB;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;margin-top:10px;font-size:14px}
+.showcard>b{display:block;font:700 17px/1.15 'Barlow Condensed',sans-serif}
+.showcard .ll{margin:6px 0 0;padding-left:16px}
+/* popups */
+.leaflet-popup-content{margin:12px 14px;font:14px/1.4 Barlow,sans-serif;min-width:220px}
+.pp h3{margin:0 0 4px;font:700 18px/1.1 'Barlow Condensed',sans-serif}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 8px}
+.tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;border-radius:4px;padding:2px 6px;background:#E9EDF2;color:var(--ink)}
+.tag.t{background:var(--ink);color:#fff}.tag.a{background:var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0 8px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:1px 8px 1px 4px;background:#fff}
+.chip i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.pp .lbl{font-size:11.5px;font-weight:700;text-transform:uppercase;color:var(--sub);letter-spacing:.4px}
+.pp .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pp .acts a{font-weight:700;font-size:13px;text-decoration:none;background:var(--navy);color:#fff;border-radius:6px;padding:5px 9px}
+.pp .acts a.alt{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+.pp ul{margin:2px 0 6px;padding-left:16px}
+/* labels */
+.leaflet-tooltip.lab{background:rgba(255,255,255,.88);border:0;box-shadow:none;padding:0 4px;border-radius:3px;font:700 11.5px/1.3 Barlow,sans-serif;color:var(--ink)}
+.leaflet-tooltip.lab:before{display:none}
+.leaflet-tooltip.lab.h{font-weight:600;font-size:11px}
+#map.zl-t .lab.t,#map.zl-h .lab.h{display:block}
+.lab.t,.lab.h{display:none}
+.plane{background:none;border:0}
+.plane div{width:30px;height:30px;border-radius:50%;background:var(--gold);border:2px solid var(--navy);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.plane svg{width:18px;height:18px;fill:var(--navy)}
+.plane span{position:absolute;left:34px;top:5px;white-space:nowrap;font:800 12px 'Barlow Condensed',sans-serif;text-transform:uppercase;background:var(--navy);color:#fff;padding:2px 6px;border-radius:4px}
+#map.nolab .plane span{display:none}
+@media (max-width:899px){
+  .wrap{grid-template-columns:1fr;height:auto}
+  #map{height:520px;order:-1}
+  .panel{border-right:0;border-top:1px solid var(--line)}
+  .top h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>UK Airshow Train Map</h1>
+  <p>Every train company on our airshow train route pages, with the stops they call at, plus the lines that lead to every UK airshow we cover, the terminal stations and the major hubs where you change. Pick a show to see its way in, or tap any line or station.</p>
+  <div class="stats" id="stats"></div>
+</header>
+<div class="wrap">
+  <aside class="panel">
+    <h2>Pick an airshow</h2>
+    <select id="show"><option value="">All airshows</option></select>
+    <div id="showcard"></div>
+
+    <h2>Find a station</h2>
+    <input type="search" id="find" list="stlist" placeholder="Type a station name" autocomplete="off">
+    <datalist id="stlist"></datalist>
+
+    <h2>Show on the map</h2>
+    <div class="tog">
+      <label><input type="checkbox" id="tg-a" checked><span class="key k-a"></span>Airshows and the last leg</label>
+      <label><input type="checkbox" id="tg-t" checked><span class="key k-t"></span>Terminal stations</label>
+      <label><input type="checkbox" id="tg-h" checked><span class="key k-h"></span>Major hubs</label>
+      <label><input type="checkbox" id="tg-s" checked><span class="key k-s"></span>Other stops (zoom in)</label>
+      <label><input type="checkbox" id="tg-d" checked><span class="key k-d"></span>Lines drawn station to station</label>
+    </div>
+
+    <h2>Train companies</h2>
+    <div class="row"><button class="btn" id="all">Show all</button><button class="btn" id="none">Hide all</button></div>
+    <ul class="ops" id="ops"></ul>
+    <p class="note">Solid lines follow the real track, taken from our train route pages. Dashed lines are drawn station to station where we do not hold the track shape, so they show the link, not the exact way. Stops are the stations each company calls at on our route pages and our journey planner. Times and fares are on each show's train route page.</p>
+  </aside>
+  <div id="map"></div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+var D=/*DATA*/null;
+var OPS=D.ops, SH=D.shows, ST=D.st, ED=D.ed, LN=D.lines;
+var GH='https://jskedge1.github.io/airshow-pages/train-routes/', SITE='https://www.ukairshowguide.co.uk/';
+var HOW={walk:['Walk','#2E7D32'],bus:['Bus','#E65100'],taxi:['Taxi','#455A64'],shuttle:['Shuttle bus','#6A1B9A']};
+var KIND={t:'Terminal station',h:'Major hub',s:'Stop'};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+var map=L.map(document.getElementById('map'),{zoomSnap:.5,minZoom:5,maxZoom:15,preferCanvas:true});
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+map.fitBounds([[50.0,-5.6],[56.2,1.8]]);
+map.createPane('lines').style.zIndex=410;
+map.createPane('top').style.zIndex=420;
+var rL=L.canvas({pane:'lines',padding:.3}), rT=L.canvas({pane:'top',padding:.3,tolerance:4});
+
+// draw order: busiest companies underneath so the smaller ones show
+var cnt=OPS.map(function(){return 0}), stc=OPS.map(function(){return 0});
+ED.forEach(function(e){e[2].forEach(function(o){cnt[o]++})});
+ST.forEach(function(s){s[4].forEach(function(o){stc[o]++})});
+var order=OPS.map(function(_,i){return i}).sort(function(a,b){return cnt[b]-cnt[a]});
+var on=OPS.map(function(){return true}), opLayer=[], selShow=-1;
+
+var dashLayer=[];
+order.forEach(function(o){
+  var solid=[],dash=[];
+  ED.forEach(function(e){ if(e[2].indexOf(o)<0)return; (e[4]?solid:dash).push(e[5]); });
+  opLayer[o]=L.polyline(solid,{renderer:rL,color:OPS[o][1],weight:3.2,opacity:.9,interactive:false,lineCap:'round'});
+  dashLayer[o]=L.polyline(dash,{renderer:rL,color:OPS[o][1],weight:2.6,opacity:.85,dashArray:'6 6',interactive:false});
+});
+
+// invisible wide lines to tap a stretch of track
+var hits=L.layerGroup().addTo(map);
+ED.forEach(function(e,i){
+  var h=L.polyline(e[5],{renderer:rT,weight:14,opacity:0,color:'#000'});
+  h._e=i; h.on('click',function(ev){edgePopup(i,ev.latlng)}); h.on('mouseover',function(){h.setStyle({opacity:.18})}); h.on('mouseout',function(){h.setStyle({opacity:0})});
+  hits.addLayer(h); e.hit=h;
+});
+
+function chips(list){return '<div class="chips">'+list.map(function(o){return '<span class="chip"><i style="background:'+OPS[o][1]+'"></i>'+esc(OPS[o][0])+'</span>'}).join('')+'</div>'}
+function showLinks(list){return '<ul>'+list.map(function(i){var s=SH[i];return '<li><a href="#" data-show="'+i+'">'+esc(s.name)+'</a></li>'}).join('')+'</ul>'}
+function edgePopup(i,ll){
+  var e=ED[i],a=ST[e[0]],b=ST[e[1]];
+  var h='<div class="pp"><h3>'+esc(a[0])+' and '+esc(b[0])+'</h3>'+(e[4]?'':'<div class="tags"><span class="tag">Drawn station to station</span></div>')+
+    '<div class="lbl">Train companies on this stretch</div>'+chips(e[2].filter(function(o){return on[o]}).length?e[2].filter(function(o){return on[o]}):e[2])+
+    (e[3].length?'<div class="lbl">On the way to</div>'+showLinks(e[3]):'')+'</div>';
+  L.popup().setLatLng(ll).setContent(h).openOn(map);
+}
+
+// stations
+var sm=[];
+ST.forEach(function(s,i){
+  var k=s[3].charAt(0), air=s[3].length>1;
+  var st={t:{radius:5.5,weight:3,color:'#1B2430',fillColor:'#fff',fillOpacity:1},h:{radius:5,weight:2.6,color:'#1B2430',fillColor:'#fff',fillOpacity:1},s:{radius:3,weight:1.5,color:'#555',fillColor:'#fff',fillOpacity:1}}[k];
+  if(air){st=Object.assign({},st,{fillColor:'#F2B705',radius:st.radius+1})}
+  var m=L.circleMarker([s[1],s[2]],Object.assign({renderer:rT},st));
+  m._k=k; m._i=i;
+  if(k!=='s'||air) m.bindTooltip(esc(s[0]),{permanent:true,direction:'right',offset:[6,0],className:'lab '+(k==='t'||air?'t':'h')});
+  m.on('click',function(){stPopup(i)});
+  sm[i]=m;
+});
+function stPopup(i){
+  var s=ST[i],k=s[3].charAt(0),air=s[3].length>1;
+  var nb=[]; ED.forEach(function(e){ if(e[0]===i)nb.push(e[1]); else if(e[1]===i)nb.push(e[0]); });
+  var showsHere=SH.map(function(x,j){return j}).filter(function(j){return SH[j].arr.some(function(a){return a[0]===s[0]})});
+  var h='<div class="pp"><h3>'+esc(s[0])+'</h3><div class="tags"><span class="tag '+(k==='t'?'t':'')+'">'+KIND[k]+'</span>'+(air?'<span class="tag a">Airshow station</span>':'')+'</div>';
+  if(showsHere.length){h+='<div class="lbl">The last leg from here</div><ul>'+showsHere.map(function(j){var a=SH[j].arr.filter(function(a){return a[0]===s[0]})[0];return '<li><b>'+esc(SH[j].name)+'</b>: '+(HOW[a[1]]||[a[1]])[0]+', about '+a[2]+' minutes</li>'}).join('')+'</ul>'}
+  if(s[4].length)h+='<div class="lbl">Train companies calling here</div>'+chips(s[4]);
+  if(s[5].length)h+='<div class="lbl">On our train route pages for</div>'+showLinks(s[5]);
+  if(nb.length)h+='<div class="lbl">Next stations on the map</div><div style="font-size:13px;margin-bottom:6px">'+nb.map(function(n){return esc(ST[n][0])}).filter(function(v,j,a){return a.indexOf(v)===j}).join(', ')+'</div>';
+  var q=encodeURIComponent(s[0]);
+  h+='<div class="acts">'+(s[6]?'<a href="https://www.nationalrail.co.uk/live-trains/departures/'+s[6]+'/" target="_blank" rel="noopener">Live departures</a>':'<a href="https://www.nationalrail.co.uk/" target="_blank" rel="noopener">National Rail</a>')+
+     '<a class="alt" href="https://www.google.com/maps/search/?api=1&query='+q+'+station" target="_blank" rel="noopener">Google Maps</a></div></div>';
+  L.popup({offset:[0,-4]}).setLatLng([s[1],s[2]]).setContent(h).openOn(map);
+}
+
+// airshows
+var planeSvg='<svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>';
+var airL=L.layerGroup().addTo(map), legL=L.layerGroup().addTo(map), am=[];
+SH.forEach(function(s,i){
+  s.arr.forEach(function(a){
+    var t=ST.filter(function(x){return x[0]===a[0]})[0]; if(!t)return;
+    var c=(HOW[a[1]]||['', '#455A64'])[1];
+    legL.addLayer(L.polyline([[t[1],t[2]],s.ll],{color:c,weight:3.5,dashArray:'2 7',lineCap:'round',interactive:false}));
+  });
+  var m=L.marker(s.ll,{icon:L.divIcon({className:'plane',html:'<div>'+planeSvg+'</div><span>'+esc(s.name)+'</span>',iconSize:[30,30],iconAnchor:[15,15]}),zIndexOffset:1000,title:s.name});
+  m.on('click',function(){pickShow(i,true)});
+  airL.addLayer(m); am[i]=m;
+});
+function showHtml(i){
+  var s=SH[i];
+  var h='<b>'+esc(s.name)+'</b>';
+  h+='<div class="lbl" style="margin-top:6px;font-size:11.5px;font-weight:700;text-transform:uppercase;color:#5A6675">The last leg</div><ul class="ll">'+s.arr.map(function(a){return '<li><b>'+esc(a[0])+'</b>, '+(HOW[a[1]]||[a[1]])[0].toLowerCase()+' about '+a[2]+' minutes. '+esc(a[3])+'</li>'}).join('')+'</ul>';
+  var ops=[]; ED.forEach(function(e){ if(e[3].indexOf(i)>=0)e[2].forEach(function(o){if(ops.indexOf(o)<0)ops.push(o)}) });
+  if(ops.length){ops.sort(function(a,b){return OPS[a][0]<OPS[b][0]?-1:1});h+='<div style="font-size:11.5px;font-weight:700;text-transform:uppercase;color:#5A6675">Train companies on its route page</div>'+chips(ops)}
+  h+='<div class="pp"><div class="acts">'+(s.route?'<a href="'+GH+s.route+'.html" target="_blank" rel="noopener">Train route and times</a>':'')+'<a class="alt" href="'+SITE+s.page+'" target="_top">Show guide</a></div></div>';
+  if(!s.route)h+='<p class="note">No train route page yet. The Royal International Air Tattoo moves to MOD Boscombe Down from 2027, so its route page will follow the new travel plan.</p>';
+  return h;
+}
+
+// highlight layer for a picked show
+var hiL=L.layerGroup().addTo(map);
+function pickShow(i,fromMap){
+  selShow=i; document.getElementById('show').value=i<0?'':String(i);
+  hiL.clearLayers(); var card=document.getElementById('showcard');
+  if(i<0){card.innerHTML='';restyle();return}
+  var b=L.latLngBounds([SH[i].ll]);
+  ED.forEach(function(e){
+    if(e[3].indexOf(i)<0)return;
+    e[2].forEach(function(o){ if(on[o]) hiL.addLayer(L.polyline(e[5],{renderer:rL,color:OPS[o][1],weight:5,opacity:1,dashArray:e[4]?null:'6 6',interactive:false})) });
+  });
+  SH[i].arr.forEach(function(a){var t=ST.filter(function(x){return x[0]===a[0]})[0]; if(t)b.extend([t[1],t[2]])});
+  // fit to the show and its nearest hubs, not the whole country
+  var near=[]; ST.forEach(function(s){ if(s[5].indexOf(i)>=0 && s[3].charAt(0)!=='s') near.push([s[1],s[2]]) });
+  near.sort(function(p,q){return dist(p,SH[i].ll)-dist(q,SH[i].ll)}); near.slice(0,8).forEach(function(p){b.extend(p)});
+  card.innerHTML='<div class="showcard">'+showHtml(i)+'</div>';
+  restyle();
+  map.fitBounds(b.pad(.15),{maxZoom:11});
+  if(fromMap) L.popup({offset:[0,-12]}).setLatLng(SH[i].ll).setContent('<div class="pp">'+showHtml(i)+'</div>').openOn(map);
+}
+function dist(p,q){var dx=(p[1]-q[1])*Math.cos(p[0]*Math.PI/180);return Math.sqrt(dx*dx+(p[0]-q[0])*(p[0]-q[0]))}
+
+// visibility
+function tg(id){return document.getElementById('tg-'+id).checked}
+function restyle(){
+  var dim=selShow>=0;
+  order.forEach(function(o){
+    [[opLayer[o],on[o],.9],[dashLayer[o],on[o]&&tg('d'),.85]].forEach(function(x){
+      var l=x[0]; if(x[1]&&!map.hasLayer(l))l.addTo(map); if(!x[1]&&map.hasLayer(l))map.removeLayer(l);
+      l.setStyle({opacity:dim?.18:x[2]});
+    });
+  });
+  ED.forEach(function(e){ var v=e[2].some(function(o){return on[o]})&&(e[4]||tg('d')); if(v&&!hits.hasLayer(e.hit))hits.addLayer(e.hit); if(!v&&hits.hasLayer(e.hit))hits.removeLayer(e.hit) });
+  var z=map.getZoom();
+  sm.forEach(function(m,i){
+    var s=ST[i],air=s[3].length>1;
+    var v=air&&tg('a') || s[4].some(function(o){return on[o]});
+    if(v) v=air&&tg('a') || (m._k==='t'?tg('t'):m._k==='h'?(tg('h')&&z>=6.5):(tg('s')&&z>=9));
+    if(v&&dim&&s[5].indexOf(selShow)<0&&!air) m.setStyle({opacity:.35,fillOpacity:.35}); else m.setStyle({opacity:1,fillOpacity:1});
+    if(v&&!map.hasLayer(m))m.addTo(map); if(!v&&map.hasLayer(m))map.removeLayer(m);
+  });
+  var on2=tg('a'); [airL,legL].forEach(function(l){ if(on2&&!map.hasLayer(l))l.addTo(map); if(!on2&&map.hasLayer(l))map.removeLayer(l) });
+  var el=document.getElementById('map'); el.classList.toggle('zl-t',z>=7.5); el.classList.toggle('zl-h',z>=10); el.classList.toggle('nolab',z<6.5);
+  document.querySelectorAll('#ops li[data-o]').forEach(function(li){ li.querySelector('input').checked=on[+li.dataset.o] });
+}
+map.on('zoomend',restyle);
+
+// panel: companies
+var ul=document.getElementById('ops');
+OPS.map(function(_,i){return i}).sort(function(a,b){return OPS[a][0]<OPS[b][0]?-1:1}).forEach(function(o){
+  var li=document.createElement('li'); li.dataset.o=o;
+  li.innerHTML='<input type="checkbox" checked aria-label="'+esc(OPS[o][0])+'"><span class="sw" style="background:'+OPS[o][1]+'"></span><span class="nm">'+esc(OPS[o][0])+'</span><span class="ct">'+stc[o]+' stops</span><button class="btn only" title="Show only this company">Only</button>';
+  li.querySelector('input').onchange=function(){on[o]=this.checked;restyle();if(selShow>=0)pickShow(selShow)};
+  li.querySelector('.only').onclick=function(){only(o)};
+  li.querySelector('.nm').onclick=function(){only(o)};
+  ul.appendChild(li);
+  var mine=LN.filter(function(l){return l[0]===o});
+  if(mine.length){ var sub=document.createElement('ul'); sub.className='lines'; sub.hidden=true; sub.dataset.o=o;
+    mine.forEach(function(l){ var x=document.createElement('li'); x.textContent=l[1]; x.onclick=function(){ var b=L.latLngBounds(l[2].map(function(n){return [ST[n][1],ST[n][2]]})); map.fitBounds(b.pad(.2)); }; sub.appendChild(x) });
+    ul.appendChild(sub); }
+});
+function only(o){
+  on=on.map(function(_,i){return i===o});
+  document.querySelectorAll('.lines').forEach(function(s){s.hidden=+s.dataset.o!==o});
+  restyle(); if(selShow>=0)pickShow(selShow);
+  var b=null; ED.forEach(function(e){ if(e[2].indexOf(o)>=0){ e[5].forEach(function(p){ b=b?b.extend(p):L.latLngBounds([p]) }) } });
+  if(b&&selShow<0)map.fitBounds(b.pad(.1));
+}
+document.getElementById('all').onclick=function(){on=on.map(function(){return true});document.querySelectorAll('.lines').forEach(function(s){s.hidden=true});restyle();if(selShow>=0)pickShow(selShow)};
+document.getElementById('none').onclick=function(){on=on.map(function(){return false});document.querySelectorAll('.lines').forEach(function(s){s.hidden=true});restyle();if(selShow>=0)pickShow(selShow)};
+['a','t','h','s','d'].forEach(function(k){document.getElementById('tg-'+k).onchange=restyle});
+
+// panel: shows
+var sel=document.getElementById('show');
+SH.map(function(_,i){return i}).sort(function(a,b){return SH[a].name<SH[b].name?-1:1}).forEach(function(i){var o=document.createElement('option');o.value=i;o.textContent=SH[i].name;sel.appendChild(o)});
+sel.onchange=function(){ map.closePopup(); if(this.value===''){pickShow(-1);map.fitBounds([[50.0,-5.6],[56.2,1.8]])} else pickShow(+this.value) };
+document.addEventListener('click',function(ev){ var a=ev.target.closest&&ev.target.closest('a[data-show]'); if(a){ev.preventDefault();map.closePopup();pickShow(+a.dataset.show,true)} });
+
+// panel: station search
+var dl=document.getElementById('stlist'), seen={};
+ST.map(function(s){return s[0]}).sort().forEach(function(n){ if(seen[n])return; seen[n]=1; var o=document.createElement('option'); o.value=n; dl.appendChild(o) });
+document.getElementById('find').addEventListener('change',function(){
+  var v=this.value.trim().toLowerCase(); if(!v)return;
+  var i=ST.findIndex(function(s){return s[0].toLowerCase()===v}); if(i<0)i=ST.findIndex(function(s){return s[0].toLowerCase().indexOf(v)===0}); if(i<0)return;
+  var m=sm[i]; if(!map.hasLayer(m))m.addTo(map);
+  map.setView([ST[i][1],ST[i][2]],Math.max(map.getZoom(),11)); stPopup(i);
+});
+
+// stats
+var n={t:0,h:0,s:0}; ST.forEach(function(s){n[s[3].charAt(0)]++});
+document.getElementById('stats').innerHTML='<span><b>'+OPS.length+'</b> train companies</span><span><b>'+SH.length+'</b> airshows</span><span><b>'+ST.length+'</b> stations</span><span><b>'+n.t+'</b> terminal stations</span><span><b>'+n.h+'</b> major hubs</span>';
+
+restyle();
+})();
+</script>
+</body>
+</html>
