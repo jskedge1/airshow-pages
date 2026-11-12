@@ -373,6 +373,8 @@ function setLatest(v,play){
   var sc=$('screen'),fr=sc.querySelector('iframe');if(fr)fr.remove();
   var img=$('latestImg');img.style.display='';$('latestPlay').style.display='';
   img.onerror=function(){if(img.src.indexOf('maxres')>-1)img.src=thumb(v,false);};
+  /* with no large thumbnail YouTube sends a 120px grey placeholder instead of an error */
+  img.onload=function(){if(img.naturalWidth<=120&&img.src.indexOf('maxres')>-1)img.src=thumb(v,false);};
   img.src=thumb(v,true);img.alt='';
   var ch=$('latestChips');ch.innerHTML='';
   if(v===VIDEOS[0]){var n=document.createElement('span');n.className='chip r';n.textContent='Newest';ch.appendChild(n);}
