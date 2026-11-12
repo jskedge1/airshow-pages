@@ -10,7 +10,11 @@ the GitHub Pages copy instead.
 Photos below the first two on a page also get loading="lazy" so a phone only
 downloads them when the reader scrolls near them.
 
+Photos under 3 KB (small icons) stay inside the page.
+
 Usage: python3 tools-images.py [files...]   (no files = every show page)
+Run on 12 Nov 2026 over the older show pages, the photography pages, road-routes/clacton.html,
+contact, landing, riat-moving and the templates as well.
 """
 import base64, hashlib, io, pathlib, re, sys
 from PIL import Image
@@ -19,6 +23,7 @@ ROOT = pathlib.Path(__file__).parent
 OUT = ROOT / 'camping-layout' / 'img'
 BASE = 'https://jskedge1.github.io/airshow-pages/camping-layout/img/'
 MAX_W = 1800
+MIN_BYTES = 3000  # tiny icons stay inside the page (a request costs more than they do)
 DATA = re.compile(r'data:image/(jpeg|jpg|png|webp|gif);base64,([A-Za-z0-9+/=]+)')
 
 
@@ -61,7 +66,12 @@ def apply(path):
     p = ROOT / path
     h = p.read_text(encoding='utf8')
     before = len(h)
-    h = DATA.sub(lambda m: BASE + save(base64.b64decode(m.group(2))), h)
+    def swap(m):
+        raw = base64.b64decode(m.group(2))
+        if len(raw) < MIN_BYTES:
+            return m.group(0)
+        return BASE + save(raw)
+    h = DATA.sub(swap, h)
     h = lazy(h)
     p.write_text(h, encoding='utf8')
     return path, before, len(h)
