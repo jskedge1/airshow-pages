@@ -40,7 +40,9 @@
     {key:'faq',     name:'FAQ',            file:'faq.html',              slug:'faq',            ic:'help'}
   ];
   var framed=false;try{framed=window.self!==window.top}catch(e){framed=true}
-  function href(p){return framed?RIAT_SITE+p.slug:p.file}
+  /* one file preview (preview.html built by tools-riat-preview.py): every page is a section, switched by #key */
+  var PREVIEW=!!window.RG_PREVIEW;if(PREVIEW)framed=false;
+  function href(p){return PREVIEW?'#'+p.key:framed?RIAT_SITE+p.slug:p.file}
   function attrs(p){return 'href="'+href(p)+'"'+(framed?' target="_top"':'')}
   function page(key){for(var i=0;i<PAGES.length;i++)if(PAGES[i].key===key)return PAGES[i]}
   var here=document.body.getAttribute('data-page');
@@ -89,7 +91,7 @@
   Array.prototype.forEach.call(document.querySelectorAll('[data-go]'),function(a){
     var p=page(a.getAttribute('data-go'));if(!p)return;
     var h=a.getAttribute('data-hash')||'';
-    a.setAttribute('href',href(p)+h);if(framed)a.setAttribute('target','_top');
+    a.setAttribute('href',PREVIEW?(h||href(p)):href(p)+h);if(framed)a.setAttribute('target','_top');
   });
 
   /* ---------- in-page tabs ---------- */
@@ -115,15 +117,14 @@
   });
 
   /* ---------- countdown ---------- */
-  var c=document.getElementById('count');
-  if(c){
+  [].slice.call(document.querySelectorAll('#count')).forEach(function(c){
     var show=new Date('2027-07-16T00:00:00+01:00').getTime();
     var tick=function(){
       var d=Math.max(0,show-Date.now()),days=Math.floor(d/864e5),hrs=Math.floor(d/36e5)%24,mins=Math.floor(d/6e4)%60;
       c.innerHTML='<div><b>'+days+'</b><small>days</small></div><div><b>'+hrs+'</b><small>hours</small></div><div><b>'+mins+'</b><small>mins</small></div>';
     };
     tick();setInterval(tick,30000);
-  }
+  });
 
   /* ---------- saved tick lists ---------- */
   function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem('rg-'+k)||'null');localStorage.setItem('rg-'+k,JSON.stringify(v))}catch(e){return null}}
@@ -206,5 +207,24 @@
     var ps=ph.querySelector('select'),pr=ph.querySelector('.result');
     function phshow(){var r=P[ps.value];pr.innerHTML='<h3>'+r[0]+'</h3><dl class="kv"><div><dt>Shutter</dt><dd>'+r[1]+'</dd></div><div><dt>Settings</dt><dd>'+r[2]+'</dd></div></dl><p>'+r[3]+'</p>'}
     ps.addEventListener('change',phshow);phshow();
+  }
+
+  /* ---------- preview router ---------- */
+  if(PREVIEW){
+    var views=[].slice.call(document.querySelectorAll('[data-view]'));
+    var route=function(){
+      var h=location.hash.slice(1),v=null;
+      views.forEach(function(x){if(x.getAttribute('data-view')===h)v=x});
+      if(!v&&h){var el=document.getElementById(h);if(el)views.forEach(function(x){if(x.contains(el))v=x})}
+      v=v||views[0];
+      var changed=v.hidden;
+      views.forEach(function(x){x.hidden=x!==v});
+      var key=v.getAttribute('data-view');
+      [].slice.call(document.querySelectorAll('.cats a')).forEach(function(a){
+        if(a.getAttribute('href')==='#'+key)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
+      });
+      if(changed&&views.indexOf(v)>-1&&(!h||h===key))window.scrollTo(0,0);
+    };
+    window.addEventListener('hashchange',route);route();
   }
 })();
