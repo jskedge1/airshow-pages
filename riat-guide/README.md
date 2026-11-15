@@ -6,11 +6,21 @@ on the RIAT guide, so they stay here, with red leading.
 
 | Page | Wix page on thebigguidetoriat.co.uk | Address for the Wix HTML embed |
 |---|---|---|
-| Home, RIAT 2027 overview | / (home) | https://jskedge1.github.io/airshow-pages/riat-guide/index.html |
-| Getting there | /getting-there | https://jskedge1.github.io/airshow-pages/riat-guide/getting-there.html |
+| Overview | / (home) | https://jskedge1.github.io/airshow-pages/riat-guide/index.html |
+| Tickets | /tickets | https://jskedge1.github.io/airshow-pages/riat-guide/tickets.html |
+| Transport | /getting-there | https://jskedge1.github.io/airshow-pages/riat-guide/getting-there.html |
+| Parking | /parking | https://jskedge1.github.io/airshow-pages/riat-guide/parking.html |
 | Camping and hotels | /camping-and-stay | https://jskedge1.github.io/airshow-pages/riat-guide/camping-and-stay.html |
+| Park & View | /park-and-view | https://jskedge1.github.io/airshow-pages/riat-guide/park-and-view.html |
+| Photography | /photography | https://jskedge1.github.io/airshow-pages/riat-guide/photography.html |
+| Planning tools | /planner | https://jskedge1.github.io/airshow-pages/riat-guide/planner.html |
 | FAQ and first timers | /faq | https://jskedge1.github.io/airshow-pages/riat-guide/faq.html |
 
+- Working project on the `riat-guide-site` branch. Not merged to main, so not live yet.
+- Category tab bar across the top of every page (PAGES in site.js). In-page tabs use `data-tabs`; a link to `#panel-id` opens that tab.
+- Planning tools (all in site.js, each runs only if its markup is on the page): countdown (#count), saved tick lists
+  (`data-store`, kept in the visitor's browser), trip cost planner (#budget), station finder (#station-tool), camera settings helper (#photo-tool).
+- Facts come from RIAT's announcements and FAQs; anything from the Fairford years (RIAT26 prices, camping rules) is labelled as such.
 - `site.css` styles every page. `site.js` draws the header, menu and footer, and holds the page list.
   To add a page: add a row to PAGES in site.js, then make the Wix page with that slug.
 - Inside a Wix embed, links open the matching Wix page in the whole window; opened straight from

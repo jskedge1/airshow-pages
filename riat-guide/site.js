@@ -109,9 +109,9 @@
         if(n===null)return;e.preventDefault();show(tabs[(n+tabs.length)%tabs.length],true);
       });
     });
-    var start=tabs[0];
-    tabs.forEach(function(t){if(location.hash==='#'+t.getAttribute('aria-controls'))start=t});
-    show(start);
+    function fromHash(){var hit=null;tabs.forEach(function(t){if(location.hash==='#'+t.getAttribute('aria-controls'))hit=t});return hit}
+    show(fromHash()||tabs[0]);
+    window.addEventListener('hashchange',function(){var t=fromHash();if(t){show(t);box.scrollIntoView({behavior:'smooth',block:'start'})}});
   });
 
   /* ---------- countdown ---------- */
@@ -127,8 +127,11 @@
 
   /* ---------- saved tick lists ---------- */
   function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem('rg-'+k)||'null');localStorage.setItem('rg-'+k,JSON.stringify(v))}catch(e){return null}}
-  Array.prototype.forEach.call(document.querySelectorAll('[data-store]'),function(list){
-    var key=list.getAttribute('data-store'),boxes=[].slice.call(list.querySelectorAll('input[type="checkbox"]'));
+  var keys=[];
+  Array.prototype.forEach.call(document.querySelectorAll('[data-store]'),function(l){var k=l.getAttribute('data-store');if(keys.indexOf(k)<0)keys.push(k)});
+  keys.forEach(function(key){
+    /* one key can span several lists (the packing list is split into columns) */
+    var boxes=[].slice.call(document.querySelectorAll('[data-store="'+key+'"] input[type="checkbox"]'));
     var saved=store(key)||{};
     var bar=document.querySelector('[data-progress="'+key+'"]');
     function update(){
