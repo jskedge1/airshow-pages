@@ -1,0 +1,107 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;800&display=swap">
+<!-- "Log in header" design (asked to save, 15 Nov 2026), from the Volunteer Hub log in screen.
+     Use it whenever a page asks someone to log in, and as the header for a new information page
+     (swap the log in box for a Key details box of label/value rows).
+     Parts: full width photo header that fades into navy (.hd, .hd-photo), purple tag, big white
+     condensed title with a teal word, pale intro, button row, and a glass box on the right
+     (.glass) with a teal top edge. Log in box: two tabs (Log in / I'm new), a short line,
+     white sign in buttons (email, Google, Facebook) that nudge right on hover, label/value rows
+     with one red highlight row, and a small note with a teal link. A thin teal light runs along
+     the bottom of the header. Swap join-img/hero-wildcat.webp for the page's own photo. -->
+<style>
+:root{
+  --navy:#13293C;--navy2:#0E2131;--teal:#32B4AF;--tealtext:#0E5F5B;--red:#D74949;--purple:#6950A1;--blue:#1D63B7;--sky:#00A6E2;--green:#2BA84A;--coach:#C2255C;
+  --ink:#0B1722;--soft:#41586B;--line:#DCE3E8;--pale:#F2F4F5;
+  --c:"Barlow Condensed","Barlow",Arial,sans-serif;--b:"Barlow","Segoe UI",Arial,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{font:400 17px/1.6 var(--b);color:var(--ink)}
+.in{max-width:1200px;margin:0 auto;padding:0 28px}
+.tag{display:inline-block;background:var(--purple);color:#fff;font:600 15px var(--b);padding:6px 12px;margin-bottom:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font:700 17px var(--b);padding:13px 20px;background:var(--teal);color:#fff;border:2px solid var(--teal);cursor:pointer;transition:transform .3s var(--ease),background .3s,border-color .3s,color .3s}
+.btn:hover{transform:translateY(-2px);background:var(--blue);border-color:var(--blue)}
+.btn.ol{background:transparent;border-color:#fff}
+.btn.ol:hover{background:#fff;color:var(--navy);border-color:#fff}
+.btn.line{background:#fff;color:var(--navy);border-color:var(--navy)}
+.btn.line:hover{background:var(--navy);color:#fff}
+.btn.red{background:var(--red);border-color:var(--red)}
+.btn.small{font-size:15px;padding:8px 13px}
+.btn .ar{transition:transform .3s var(--ease)}
+.btn:hover .ar{transform:translateX(4px)}
+.st{font:800 clamp(32px,4vw,46px)/1 var(--c);color:var(--red);text-transform:uppercase;margin:0 0 10px;padding-left:16px;border-left:6px solid var(--red);letter-spacing:.005em}
+.st-p{color:var(--soft);max-width:62ch;margin:0 0 28px 22px}
+.rows{display:grid;gap:4px}
+.rows div{display:flex;justify-content:space-between;align-items:baseline;gap:14px;background:rgba(255,255,255,.07);padding:10px 12px;font-size:16px}
+.rows span{color:#8FDCD8;font-weight:500}
+.rows b{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.rows div.hl{background:rgba(215,73,73,.92)}
+.rows div.hl span{color:#fff}
+.glass{background:rgba(14,33,49,.92);border-top:4px solid var(--teal);box-shadow:0 18px 40px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:20px}
+.glass h2{font:800 24px/1 var(--c);color:var(--teal);text-transform:uppercase;margin:0 0 12px;letter-spacing:.01em}
+.teal-rule{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:.7}
+.hd{position:relative;background:var(--navy);color:#fff;overflow:hidden}
+.hd-photo{position:absolute;inset:0;background:url(https://jskedge1.github.io/airshow-pages/join-img/hero-wildcat.webp) 70% 45%/cover no-repeat;animation:drift 22s var(--ease) both}
+.hd-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#13293C 0%,rgba(19,41,60,.95) 36%,rgba(19,41,60,.6) 64%,rgba(19,41,60,.2) 100%),linear-gradient(0deg,#13293C 0%,rgba(19,41,60,0) 42%)}
+@keyframes drift{from{transform:scale(1.08)}to{transform:scale(1)}}
+.hd .in{position:relative;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.85fr);gap:44px;align-items:end;padding-top:100px;padding-bottom:44px}
+.hd h1{font:800 clamp(50px,7.6vw,96px)/.9 var(--c);letter-spacing:.005em;text-transform:uppercase;margin:0 0 14px}
+.hd h1 span{color:var(--teal)}
+.sub{font:700 clamp(17px,1.8vw,21px)/1.25 var(--b);color:var(--teal);text-transform:uppercase;letter-spacing:.02em;margin:0 0 20px}
+.intro{max-width:56ch;color:#DCE6EE;margin:0 0 14px}
+.intro b{color:#fff;font-weight:600}
+
+/* login box */
+.login .tabs2{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:14px}
+.login .tabs2 button{border:1px solid rgba(255,255,255,.18);background:transparent;color:#fff;font:700 16px var(--b);padding:10px;cursor:pointer;transition:background .3s}
+.login .tabs2 button[aria-selected=true]{background:var(--teal);border-color:var(--teal)}
+.login p{margin:0 0 12px;color:#DCE6EE;font-size:16px}
+.how3{display:grid;gap:6px;margin-bottom:14px}
+.how3 button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:#fff;color:#333;font:600 16px var(--b);padding:11px 14px;cursor:pointer;transition:transform .25s var(--ease)}
+.how3 button:hover{transform:translateX(4px)}
+.how3 svg{width:18px;height:18px;flex:none}
+.login .fine{font-size:14px;color:#9FB3C3;margin:10px 0 0}
+.login .fine a{color:#8FDCD8}
+@media(max-width:1000px){
+  .hd .in{grid-template-columns:minmax(0,1fr);padding-top:170px}
+  .glass{max-width:480px}
+}
+@media(max-width:700px){
+  .hd .in{padding-top:130px;padding-bottom:32px}
+  .hd-photo::after{background:linear-gradient(0deg,#13293C 0%,rgba(19,41,60,.93) 55%,rgba(19,41,60,.35) 100%)}
+}
+@media(prefers-reduced-motion:reduce){.hd-photo{animation:none}.btn,.how3 button{transition:none}}
+</style>
+  <header class="hd">
+    <div class="hd-photo" role="img" aria-label="A Royal Navy Wildcat helicopter on the grass with its crew chatting beside it"></div>
+    <div class="in">
+      <div>
+        <span class="tag">For the team</span>
+        <h1>Volunteer <span>Hub</span></h1>
+        <p class="sub">Your photos, videos and write ups in one place</p>
+        <p class="intro">This is where the team sends me their work. <b>Log in, pick what you are sending, and you can see where it is on the guide from then on.</b></p>
+        <p class="intro">Not on the team yet? Have a read of the Join the team page first. It takes two minutes.</p>
+      </div>
+      <aside class="glass login" aria-label="Volunteer log in">
+        <h2>Volunteer Log In</h2>
+        <div class="tabs2" role="tablist">
+          <button role="tab" aria-selected="true" id="tLog">Log in</button>
+          <button role="tab" aria-selected="false" id="tNew">I'm new</button>
+        </div>
+        <p id="logText">Use the same log in as My Airshow Hub and the forum. It opens the secure members window.</p>
+        <div class="how3">
+          <button type="button" data-login><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="2"><rect x="3" y="5" width="18" height="14"/><path d="M3 7l9 6 9-6"/></svg>Log in with email</button>
+          <button type="button" data-login><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.6a4.8 4.8 0 0 1-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-7.5z"/><path fill="#34A853" d="M12 22c2.8 0 5.2-.9 6.9-2.5l-3.4-2.6c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.7v2.7A10 10 0 0 0 12 22z"/><path fill="#FBBC05" d="M6.2 13.6a6 6 0 0 1 0-3.8V7.1H2.7a10 10 0 0 0 0 9z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.9.5 4 1.6l3-3A10 10 0 0 0 2.7 7.1l3.5 2.7C7 7.7 9.3 5.9 12 5.9z"/></svg>Log in with Google</button>
+          <button type="button" data-login><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877F2" d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>Log in with Facebook</button>
+        </div>
+        <div class="rows">
+          <div><span>Who can log in</span><b>Team members</b></div>
+          <div class="hl"><span>Cost</span><b>Free, always</b></div>
+        </div>
+        <p class="fine">Not on the team? <a href="join-the-team.html">Join the team</a> first, and I'll switch your account on.</p>
+      </aside>
+    </div>
+    <div class="teal-rule"></div>
+  </header>
