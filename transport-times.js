@@ -518,7 +518,7 @@ var DATA = {
   ]
  },
  "duxford": {
-  "checked": "2026-10-29",
+  "checked": "2026-11-15",
   "bus-local": [
    {
     "title": "Bus 132 on Sundays and bank holidays",
@@ -909,7 +909,7 @@ var DATA = {
   ]
  },
  "shuttleworth": {
-  "checked": "2026-10-29",
+  "checked": "2026-11-15",
   "rail-shuttle": [
    {
     "title": "Saturday trains to catch the shuttle",
@@ -3824,7 +3824,7 @@ var DATA = {
   ]
  },
  "headcorn": {
-  "checked": "2026-10-29",
+  "checked": "2026-11-15",
   "rail-headcorn": [
    {
     "title": "Getting there on Saturday",
