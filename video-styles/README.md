@@ -59,6 +59,21 @@ Any video can be made in several of these sizes at once.
 18. **Animated poster / GIF**: a poster with a little movement (for example clouds, a jet trail or
     blinking text), short enough to use as a GIF or a looping post.
 
+### Sample frames (YouTube 16:9)
+
+Still frames showing how five styles look in the UK Airshow Guide brand (Barlow fonts, navy, teal
+and amber, the logo and your own photos). Each one would move in the finished video.
+
+| Style | Sample |
+|---|---|
+| Countdown teaser | [samples/1-countdown-teaser.jpg](samples/1-countdown-teaser.jpg) |
+| Website walkthrough | [samples/2-website-walkthrough.jpg](samples/2-website-walkthrough.jpg) |
+| Top 5 list video | [samples/3-top-5-list.jpg](samples/3-top-5-list.jpg) |
+| Guess the aircraft quiz | [samples/4-guess-the-aircraft.jpg](samples/4-guess-the-aircraft.jpg) |
+| Kinetic typography | [samples/5-kinetic-typography.jpg](samples/5-kinetic-typography.jpg) |
+
+All five on one page: [samples/contact-sheet.jpg](samples/contact-sheet.jpg)
+
 ### Extras for any style
 
 - Voice-over (written for you, or your own recording)
