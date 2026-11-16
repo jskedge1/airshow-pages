@@ -82,6 +82,28 @@ All five on one page: [samples/contact-sheet.jpg](samples/contact-sheet.jpg)
 - Your logo, colours and fonts from the brand folder
 - A YouTube thumbnail, title, description and hashtags
 
+## YouTube videos made (16 November 2026)
+
+Made in the approved look from the sample frames, 1920 x 1080 at 60 fps, music and sound effects made
+for each one (no voice-over), mastered to YouTube loudness (-14 LUFS). Each was checked over at least
+three review rounds (scores in `films/<name>/critique.md`).
+
+| Video | Style | Length | File | Poster |
+|---|---|---|---|---|
+| RAF Cosford countdown | Countdown teaser | 30 s | [videos/cosford-countdown.mp4](videos/cosford-countdown.mp4) | [poster](videos/cosford-countdown-poster.png) |
+| Find your airshow: the calendar in six steps | Website walkthrough | 75 s | [videos/calendar-walkthrough.mp4](videos/calendar-walkthrough.mp4) | [poster](videos/calendar-walkthrough-poster.png) |
+| 5 mistakes at your first airshow | Top 5 list | 90 s | [videos/top5-mistakes.mp4](videos/top5-mistakes.mp4) | [poster](videos/top5-mistakes-poster.png) |
+
+Things to know before posting:
+- The countdown says **209 days to go**, which is right on 16 November 2026 only. Ask for a new
+  render with today's number on the day you post it (it takes about 15 minutes).
+- The Cosford 2027 date is still to be confirmed, and the video says so. The times (gates 08:00,
+  flying from about 11:30) are from the 2026 show, and the video says that too.
+- The Top 5 guide photos are the site's AI images, so each has a small "AI generated image" note.
+- The walkthrough uses real captures of the calendar page from 16 November 2026 (46 shows confirmed).
+- The source for each film (code, shot list, review notes) is in `films/`, so any of them can be
+  changed and rendered again.
+
 ## Trailers made (16 November 2026)
 
 These files are on the Mac, in the folders the trailer sessions used. They are listed here so they
