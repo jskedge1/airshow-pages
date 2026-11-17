@@ -16,7 +16,7 @@ window.FILM = {
       { lines: [['big', 'Check'], ['big', 'the rules'], ['mid', 'cars, dogs, generators, barbecues'], ['small', 'Every campsite is different']], pics: ['checkin'] },
       { lines: [['big', 'Know your'], ['big', '*pitch size*'], ['mid', 'before you pack the car']], pics: ['c-field-sunny'] },
     ]],
-    ['Pitch|it right', 'Narrow end into the wind', [
+    ['Pitch|it right', 'Pitching tips', [
       { lines: [['big', 'Narrow end'], ['big', '*into the wind*'], ['mid', 'and use every guy line']], bg: PITCHES },
       { lines: [['big', 'Pegs at'], ['huge', '45°'], ['mid', 'angled away']] },
       { lines: [['big', '_Check for_'], ['big', '_trees_'], ['small', 'In 2023 a storm brought a big tree down in a Fairford campsite']], pics: ['c-base-storm'] },
@@ -26,7 +26,7 @@ window.FILM = {
       { lines: [['big', 'Windbreaks'], ['big', '*and a flag*'], ['mid', 'a pitch you can find in the dark']], pics: ['c-pitch-windbreaks'] },
       { lines: [['big', 'Section off'], ['big', '*car space*'], ['mid', 'early, or get boxed in']], pics: ['carrows'] },
     ]],
-    ['Kit|list', 'Lay it all out at home', [
+    ['Kit|list', 'What to pack', [
       { lines: [['big', 'Lay it'], ['big', '*all out*'], ['mid', 'at home and check it'], ['small', 'Practise pitching in the garden first']], pics: ['c-kit-laid-out'] },
       { lines: [['big', 'Wipes'], ['big', 'hand gel'], ['mid', 'and a bucket with a lid']], pics: ['c-toilet-row'] },
       { lines: [['big', 'Ice packs?'], ['mid', 'some campsites freeze them'], ['big', '*just ask*']], pics: ['c-freezer'] },

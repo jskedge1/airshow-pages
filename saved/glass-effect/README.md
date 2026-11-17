@@ -58,6 +58,8 @@ Needs Node with Playwright, ffmpeg, and Python with numpy.
 
 ## House rules for information videos
 - Step cards say "Step 1", "Step 2" in Barlow bold. Never "STEP 1 OF 5".
+- The small black box on a step card names the topic ("Plan your day", "Tickets, parking and the train"). It never repeats a price, time or fact that the slides after it show.
+- Flying times: say "flying starts early afternoon" (or "late morning"), not a clock time. The show's programme sets the exact times.
 - Leave room around the words: the engine adds line spacing and padding so nothing touches or gets cropped. Keep lines short rather than shrinking the type.
 - Every fact comes from the matching guide on ukairshowguide.co.uk. Nothing is made up.
 - Anything based on the 2026 show, or not announced yet, says so on screen ("in 2026", "dates to be confirmed").

@@ -18,14 +18,14 @@ window.FILM = {
       { lines: [['big', 'MiG-17'], ['mid', 'its first UK display'], ['small', 'Plus US warbirds in 2026']], pics: ['bp-mig|MiG-17'] },
       { lines: [['big', 'Red Arrows?'], ['mid', 'they usually headline'], ['big', '_not in 2026_'], ['small', 'They were on a North America tour']] },
     ]],
-    ['Getting|there', 'Promenade closed to traffic', [
+    ['Getting|there', 'Train, car or tram', [
       { lines: [['big', 'Train'], ['mid', 'to Blackpool North'], ['big', '*15 minutes*'], ['small', 'walk to the Tower']] },
       { lines: [['big', 'Driving?'], ['mid', 'paid council car parks'], ['big', '_prom closed_'], ['small', '10:30 to 19:00 in 2026']] },
       { lines: [['big', 'Trams'], ['mid', 'run in two sections'], ['big', '*no stop*'], ['small', 'at the Tower or Central Pier in 2026']] },
     ]],
-    ['On the|day', 'Flying about 14:00 to 17:40', [
+    ['On the|day', 'Plan your day', [
       { lines: [['big', 'Village'], ['huge', '11:00'], ['mid', 'Tower Festival Headland'], ['small', 'Open 11:00 to 18:00 in 2026']] },
-      { lines: [['big', 'Flying'], ['huge', '14:00'], ['mid', 'show radio on DAB'], ['small', 'About when it started in 2026']], pics: ['bp-wing|Aerosuperbatics Wingwalkers', 'bp-raven|Team Raven'] },
+      { lines: [['big', 'Flying starts'], ['big', '*early*'], ['big', '*afternoon*'], ['small', 'The programme sets the times'], ['mid', 'show radio on DAB']], pics: ['bp-wing|Aerosuperbatics Wingwalkers', 'bp-raven|Team Raven'] },
       { lines: [['big', 'North Pier'], ['mid', 'charges on show days'], ['big', '_no own food_'], ['small', 'Bags are searched']] },
     ]],
     ['Where to|watch', 'Between the piers', [

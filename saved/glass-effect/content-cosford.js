@@ -13,7 +13,7 @@ window.FILM = {
       { lines: [['big', '[Red Arrows|p:cosredloop]'], ['big', '[Typhoon|p:costyphoon]'], ['big', '[BBMF|p:bbmf]'], ['small', 'Plus the Falcons and visiting warbirds in 2026']] },
       { lines: [['big', 'Static park'], ['mid', 'hangars, STEM and the RAF Museum'], ['big', '*one ticket*']], pics: ['cosjaguars'] },
     ]],
-    ['Tickets', 'Ticket only, in advance', [
+    ['Tickets', 'Prices and how to buy', [
       { lines: [['big', 'Ticket'], ['big', 'only'], ['big', '*in advance*'], ['small', 'Nothing is sold at the gate']] },
       { lines: [['big', 'Sold out'], ['mid', 'in 2026'], ['big', '_buy on day one_']], pics: ['coschinook'] },
       { lines: [['huge', '£44'], ['mid', 'in 2026'], ['big', '*under 16s free*'], ['small', 'Parking is included']] },
@@ -23,9 +23,9 @@ window.FILM = {
       { lines: [['big', 'Driving?'], ['big', '*parking*'], ['big', 'included'], ['small', 'Satnav TF11 8UP, then follow the signs']] },
       { lines: [['big', 'Blue Badge?'], ['mid', 'disabled car park by the showground'], ['big', '_first come,_'], ['big', '_first served_'], ['small', 'Cosford station has no step free access']] },
     ]],
-    ['On the|day', 'Gates 08:00 to 19:00', [
+    ['On the|day', 'Plan your day', [
       { lines: [['big', 'Gates'], ['huge', '08:00'], ['mid', 'arrive as they open, walk the static']], pics: ['coschinookstatic'] },
-      { lines: [['big', 'Flying'], ['huge', '11:30'], ['small', 'About when it started in 2026'], ['mid', 'toilet stop before it starts']] },
+      { lines: [['big', 'Flying starts'], ['big', '*late*'], ['big', '*morning*'], ['small', 'The programme sets the times'], ['mid', 'toilet stop before it starts']] },
       { lines: [['big', 'Bring'], ['mid', 'folding chairs, blankets, food'], ['big', '*and cash*'], ['small', 'Card machines can lose signal']] },
     ]],
     ['Where to|watch', 'Crowd line faces south south east', [
@@ -33,7 +33,7 @@ window.FILM = {
       { lines: [['big', 'Into the'], ['huge', '[sun|p:sun]'], ['mid', 'around the middle of the day']] },
       { lines: [['big', '300 to'], ['big', '500mm'], ['mid', 'is plenty, displays are close in']], pics: ['cosf35'] },
     ]],
-    ['Getting|home', 'Flying ends about 17:30', [
+    ['Getting|home', 'After the flying', [
       { lines: [['big', 'Give the'], ['big', 'car parks'], ['big', '*an hour*'], ['small', 'to clear after the flying']] },
       { lines: [['big', 'Last walk'], ['mid', 'round the static park'], ['big', '*eat while*'], ['big', '*queues drop*']], pics: ['costyphoonstatic'] },
       { lines: [['big', 'Showground'], ['big', 'open until'], ['huge', '19:00'], ['small', '2026 times, check before you go']] },

@@ -23,7 +23,7 @@ window.FILM = {
       { lines: [['big', 'Cliffs'], ['mid', 'and higher ground'], ['big', '*whole view*']], pics: ['eastprom'] },
       { lines: [['big', 'Bring a'], ['big', 'low folding'], ['big', 'chair']] },
     ]],
-    ['Pay for|a seat?', 'Enclosures and Park and View', [
+    ['Pay for|a seat?', 'The paid options', [
       { lines: [['big', 'Enclosures'], ['mid', 'reserved seat, private toilets'], ['big', '_can double_'], ['big', '_the cost_']] },
       { lines: [['big', 'Photographers'], ['big', '*enclosures*'], ['mid', 'at RIAT and Cosford']], pics: ['stepladder'] },
       { lines: [['big', 'Park and'], ['big', '*View*'], ['mid', 'cheaper, on the approaches'], ['small', 'At RIAT, with a different view']], pics: ['c17'] },

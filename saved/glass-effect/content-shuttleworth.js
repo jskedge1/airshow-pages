@@ -18,14 +18,14 @@ window.FILM = {
       { lines: [['big', '26 to 27'], ['big', 'June'], ['mid', 'Festival of Flight'], ['small', 'Then 24 July Summer, 14 August Wings & Wheels']] },
       { lines: [['big', 'Flying'], ['big', '*Proms*'], ['mid', '28 August, live orchestra'], ['small', 'The Finale is on 25 September']], pics: ['sw-anson|Avro Anson'] },
     ]],
-    ['Tickets', 'From £35', [
+    ['Tickets', 'Tickets, parking and the train', [
       { lines: [['big', 'From'], ['huge', '£35'], ['big', '*children free*'], ['small', 'at most shows']] },
       { lines: [['big', 'Parking'], ['huge', 'free'], ['mid', 'in via Alder Drive'], ['small', 'Expect a holding queue at the entrance']] },
       { lines: [['big', 'Train?'], ['mid', 'Biggleswade, 3 miles away'], ['big', '*shuttle bus*']] },
     ]],
-    ['On the|day', 'Gates 09:00', [
+    ['On the|day', 'Plan your day', [
       { lines: [['big', 'Gates'], ['huge', '09:00'], ['small', '10:00 at the Flying Proms']] },
-      { lines: [['big', 'Flying'], ['huge', '14:00'], ['mid', 'from about'], ['small', 'Walk the hangars in the morning']] },
+      { lines: [['big', 'Flying starts'], ['big', '*early*'], ['big', '*afternoon*'], ['small', 'The programme sets the times'], ['mid', 'walk the hangars in the morning']] },
       { lines: [['big', 'Evening'], ['big', '*displays*'], ['mid', 'sun behind the crowd']], pics: ['sw-speedsix|Miles Hawk Speed Six'] },
     ]],
     ['What you|might see', 'Photos from Old Warden', [
