@@ -40,6 +40,7 @@ This skill is the checklist that keeps every new film in the same house style.
   1. Jack's own photos.
   2. Mac's shared 2026 folders on Google Drive (Blackpool, Shuttleworth Military, Midlands, Scarborough).
   3. The real photos already on the site's guide pages.
+- A photo beside a specific show, date or place must be from that show or place. If you can't confirm where or when a photo was taken, leave the slide without a picture rather than guess. No photos on road or junction slides.
 - Skip any image the site marks "AI generated", and never put a personal name on a photo.
 - Downloads from Drive must be under 10 MB.
 - Jack's 2026 Duxford footage is on his external drive (`Jacks Drive/Duxford 2026`), which a cloud session can't reach. Ask for JPEG exports in Drive if they're needed.

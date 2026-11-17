@@ -16,9 +16,9 @@ window.FILM = {
       { lines: [['big', 'Museum'], ['big', 'hangars'], ['big', '*included*'], ['small', 'Plus the American Air Museum']], pics: ['dx-tornado|Tornado GR4 in the hangars'] },
     ]],
     ['Pick your|show', 'Seven events in 2027', [
-      { lines: [['big', 'Summer'], ['big', 'Air Show'], ['mid', '19 and 20 June']], pics: ['dx-wildcat|Grumman Wildcat'] },
-      { lines: [['big', 'Battle of'], ['big', 'Britain'], ['mid', 'Air Show'], ['mid', '11 and 12 September']], pics: ['dx-buchon|Hispano Buchón'] },
-      { lines: [['big', 'Flying'], ['big', '*Days*'], ['mid', 'plus an Evening and a Finale'], ['small', 'Smaller and calmer, same aircraft']], pics: ['dx-chipmunk|Chipmunk'] },
+      { lines: [['big', 'Summer'], ['big', 'Air Show'], ['mid', '19 and 20 June']] },
+      { lines: [['big', 'Battle of'], ['big', 'Britain'], ['mid', 'Air Show'], ['mid', '11 and 12 September']] },
+      { lines: [['big', 'Flying'], ['big', '*Days*'], ['mid', 'plus an Evening and a Finale'], ['small', 'Smaller and calmer, same aircraft']] },
     ]],
     ['Tickets', 'Prices and how to book', [
       { lines: [['big', 'Advance'], ['big', '*only*'], ['mid', 'no tickets on the gate'], ['small', 'At any Duxford show']] },
@@ -26,7 +26,7 @@ window.FILM = {
       { lines: [['big', 'IWM'], ['big', 'members'], ['big', '*free*'], ['mid', 'at the Flying Days'], ['small', 'And 10% off the Air Shows']] },
     ]],
     ['Getting|there', 'Car, train or shuttle', [
-      { lines: [['big', 'M11'], ['big', '~junction 10~'], ['mid', 'then follow the event signs'], ['small', 'Not the sat nav']], pics: ['dx-carpark2'] },
+      { lines: [['big', 'M11'], ['big', '~junction 10~'], ['mid', 'then follow the event signs'], ['small', 'Not the sat nav']] },
       { lines: [['big', 'Parking'], ['big', '~permit~'], ['mid', 'booked with your ticket'], ['small', 'At the two Big Air Shows']] },
       { lines: [['big', 'Free'], ['big', '~shuttle~'], ['mid', 'from Cambridge station'], ['small', 'And Trumpington Park & Ride']] },
     ]],
