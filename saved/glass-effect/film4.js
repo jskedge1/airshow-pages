@@ -45,6 +45,8 @@ function phrase(t0, t1, lines, o = {}) {
     if (w > maxW) s = Math.floor(s * maxW / w);
     return { k, K, m, s, lo, txt, hlPad };
   });
+  // uniform: every line of the same kind on this slide gets the same (smallest fitting) size, for lists
+  if (o.uniform) for (const k of Object.keys(KIND)) { const m = Math.min(...L.filter(l => l.k === k).map(l => l.s)); L.forEach(l => { if (l.k === k) l.s = m; }); }
   const gap = o.gap ?? (LAND ? 28 : 30);
   let H = L.reduce((a, l) => a + l.s * l.K.lh, 0) + gap * (L.length - 1);
   if (H > maxH) { const f = maxH / H; L.forEach(l => l.s = Math.floor(l.s * f)); H = maxH; }
@@ -88,7 +90,7 @@ function background(t0, t1, bg) {
 // one point: words, optional photo panels, optional background
 function point(t0, t1, pt, exit) {
   const hasPics = pt.pics && pt.pics.length;
-  phrase(t0, t1, pt.lines, Object.assign({ exit }, hasPics ? F.textWithPanel : {}));
+  phrase(t0, t1, pt.lines, Object.assign({ exit }, hasPics ? F.textWithPanel : {}, pt.o || {}));
   if (hasPics) panels(t0, t1, pt.pics, exit);
   if (pt.bg) background(t0 - .1, t1 + .3, pt.bg);
 }
@@ -103,13 +105,15 @@ window.BUILD = function () {
     phrase(b0 * B + (b0 ? 0 : .2), b1 * B, lines, Object.assign({ cy: LAND ? 560 : 900 }, o));
   });
   const t = C.introBeats * B;
-  const TITLE = 4 * B, PT = 4.5 * B, SLEN = TITLE + 3 * PT, N = C.stops.length;
+  const TITLE = 4 * B, PT = (C.pointBeats || 4.5) * B, N = C.stops.length;
+  // each step lasts its title card plus one slot per point, so a step can hold any number of points
+  const SL = C.stops.map(st => TITLE + st[2].length * PT), S0 = SL.map((_, i) => t + SL.slice(0, i).reduce((a, b) => a + b, 0));
   const EXITS = ['up', 'zoom', 'left'], T = F.title;
   C.stops.forEach(([title, when, pts], i) => {
-    const s = t + i * SLEN;
+    const s = S0[i];
     CUES.scenes.push(s);
     item(world, -40, -40, `<div style="width:${SW + 80}px;height:${SH + 80}px;background:${C.cardColour || RED}"></div>`, { t0: s, t1: s + TITLE - .25, enter: 'left', exit: 'left', ed: .35, xd: .3 });
-    item(world, T.lbl[0], T.lbl[1], `<div class="b" style="font-weight:700;font-size:${LAND ? 70 : 84}px;line-height:1.1;color:#fff;padding:6px 0">${C.stepLabel || 'Step'} ${i + 1}</div>`, { t0: s + .2, t1: s + TITLE - .25, enter: 'up', exit: 'left', mask: true, xd: .3 });
+    item(world, T.lbl[0], T.lbl[1], `<div class="b" style="font-weight:700;font-size:${LAND ? 70 : 84}px;line-height:1.1;color:#fff;padding:6px 0">${C.stepLabel === false ? '' : (C.stepLabel || 'Step') + ' ' + (i + 1)}</div>`, { t0: s + .2, t1: s + TITLE - .25, enter: 'up', exit: 'left', mask: true, xd: .3 });
     const words = LAND ? [title.replace('|', ' ')] : title.split('|');
     words.forEach((w, k) => {
       const size = Math.min(T.size, Math.floor(T.size * T.maxW / textW(w.toUpperCase(), T.size)));
@@ -117,10 +121,10 @@ window.BUILD = function () {
     });
     item(world, T.when[0], T.when[1], `<div style="background:${NAVY};color:#fff;font-family:Assistant;font-weight:700;font-size:${LAND ? 50 : 44}px;padding:10px 22px;white-space:nowrap">${when}</div>`, { t0: s + .35 + 1.5 * B, t1: s + TITLE - .25, enter: 'wipe', exit: 'left', xd: .3 });
     CAM.push([s, s + .7, { s: 1.06, r: -2.5, x: 0, y: 0 }, { s: 1, r: 0, x: 0, y: 0 }]);
-    pts.forEach((pt, k) => { const a = s + TITLE + k * PT; point(a + .05, a + PT - .3, pt, EXITS[k]); });
+    pts.forEach((pt, k) => { const a = s + TITLE + k * PT; point(a + .05, a + PT - .3, pt, EXITS[k % 3]); });
   });
   // outro
-  const o = t + N * SLEN;
+  const o = S0[N - 1] + SL[N - 1];
   CUES.scenes.push(o); CUES.cines.push([o, o + 4 * B]);
   phrase(o, o + 4 * B, C.outro, { stagger: B / 2, exit: 'zoom' });
   // end card: the swish logo from the airshow trailers in the centre, the guide link under it, socials along the bottom
@@ -157,7 +161,7 @@ window.BUILD = function () {
     const on = tt >= t && tt < o;
     topLayer.style.visibility = on ? 'visible' : 'hidden';
     if (!on) return;
-    segs.forEach((sg, k) => { const f = clamp((tt - (t + k * SLEN)) / SLEN); sg.firstChild.style.width = (f * 100).toFixed(1) + '%'; });
+    segs.forEach((sg, k) => { sg.firstChild.style.width = (clamp((tt - S0[k]) / SL[k]) * 100).toFixed(1) + '%'; });
   };
 };
 

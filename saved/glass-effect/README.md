@@ -17,6 +17,8 @@ One engine, one content file per film, two formats:
 | Camping at airshows | `index-camping.html` | 5 |
 | Where to watch an airshow | `index-watch.html` | 5 |
 | Airshow photography for beginners | `index-photography.html` | 5 |
+| Featured air shows 2027 (not the full calendar) | `index-featured.html` | 7 |
+| UK air show calendar 2027 (every show on the site) | `index-calendar.html` | 7 |
 | Starter for a new film | `index-template.html` | 1 |
 
 - Portrait 1080 x 1920: open the page as it is.
@@ -32,7 +34,10 @@ Every film finishes on the same card, built by `film4.js`, so there is nothing t
 
 ## Make a new film
 1. Copy `content-template.js` to `content-<topic>.js` and `index-template.html` to `index-<topic>.html`, then point the page at the new content file.
-2. Change `intro`, `stops` and `outro`. Any number of steps works, and the story bar and the "Step 1", "Step 2" labels follow the list.
+2. Change `intro`, `stops` and `outro`. Any number of steps works, and each step can hold any number of points; the story bar and the "Step 1", "Step 2" labels follow the list.
+   - `stepLabel: false` hides the Step label (the featured and calendar films use months as titles).
+   - `pointBeats` sets how long each point stays up (default 4.5 beats; the calendar uses 9 so the lists can be read).
+   - A point's `o: { uniform: true }` gives every line of the same size the same type size, for lists.
 3. Each step is `['Title|second line', 'When line', [three points]]`. Each point has:
    - `lines`: `[size, words]`, where size is `huge`, `big`, `mid` or `small`
    - `pics`: one or two photo panels, the file names in `photos/` without `p-` (for example `['cosjaguars']`). Add a caption after a bar to name what is in the photo: `['bp-mig|MiG-17']`
@@ -68,6 +73,11 @@ Needs Node with Playwright, ffmpeg, and Python with numpy.
 - Real photos first, and each photo matches the line it sits beside. Caption aircraft by name. Flag any AI image.
 - No personal names on photos.
 - Deliver both formats: portrait for Reels, Shorts and TikTok, landscape for YouTube and the site.
+
+## The calendar film
+`content-calendar.js` is generated from the live calendar page, so names and dates always match the site:
+`node gen-calendar.js ../../uk-airshow-calendar.html > content-calendar.js`
+Shows with no 2027 date are listed under "Date to be confirmed" with no date or month. Run it again whenever the calendar changes, then re-render.
 
 ## Notes
 - Fonts are Barlow and Assistant, in `fonts/`.
