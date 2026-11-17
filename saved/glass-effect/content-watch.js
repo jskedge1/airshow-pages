@@ -1,6 +1,6 @@
 // Where to watch at your first airshow. Facts from the where to watch guide.
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Read my full where to watch guide at', stepWord: 'STEP',
+  url: 'ukairshowguide.co.uk', readLine: 'Read my full where to watch guide at', stepLabel: 'Step',
   introBeats: 12,
   intro: [
     [0, 4, [['big', 'Where to'], ['huge', 'watch'], ['big', 'an airshow']], { stagger: B / 2, exit: 'zoom' }],

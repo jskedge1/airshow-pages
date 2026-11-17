@@ -1,6 +1,6 @@
 // Blackpool Air Show 2027. Facts from the Blackpool guide page. Times, travel and acts are from the 2026 show.
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Read my full Blackpool guide at', stepWord: 'STEP',
+  url: 'ukairshowguide.co.uk', readLine: 'Read my full Blackpool guide at', stepLabel: 'Step',
   introBeats: 12,
   intro: [
     [0, 4, [['big', 'Blackpool'], ['huge', 'Air Show'], ['big', '2027']], { stagger: B / 2, exit: 'zoom' }],

@@ -10,19 +10,19 @@ const CLIPDEFS = [];
 const imgUrl = k => k.startsWith('c:') ? `cine/${k.slice(2)}.jpg` : k.startsWith('l:') ? `photos/l-${k.slice(2)}.jpg` : `photos/p-${k.slice(2)}.jpg`;
 // layout per format
 const F = LAND ? {
-  x: 110, maxW: 1640, cy: 540, maxH: 880, kind: { huge: 300, big: 225, mid: 92, small: 56 }, center: true,
-  panel: { x: 1080, maxW: 790, cy: 540 }, textWithPanel: { maxW: 880, cy: 540, maxH: 860, center: false },
-  title: { lbl: [110, 380], y0: 450, step: 200, size: 210, maxW: 1700, when: [110, 700] }, bar: { x: 110, y: 70, w: 205, gap: 8 },
+  x: 120, maxW: 1600, cy: 545, maxH: 860, kind: { huge: 250, big: 185, mid: 84, small: 52 }, center: true,
+  panel: { x: 1080, maxW: 760, cy: 545 }, textWithPanel: { maxW: 840, cy: 545, maxH: 840, center: false },
+  title: { lbl: [120, 330], y0: 430, step: 205, size: 190, maxW: 1680, when: [120, 690] }, bar: { x: 110, y: 70, w: 205, gap: 8 },
 } : {
-  x: 80, maxW: 920, cy: 960, maxH: 1300, kind: { huge: 340, big: 250, mid: 104, small: 64 },
-  panel: { x: 80, maxW: 920, cy: 1440 }, textWithPanel: { maxW: 920, cy: 690, maxH: 820 },
-  title: { lbl: [80, 520], y0: 600, step: 235, size: 250, maxW: 920, when: [80, 1120] }, bar: { x: 80, y: 110, w: 107, gap: 10 },
+  x: 90, maxW: 900, cy: 960, maxH: 1340, kind: { huge: 300, big: 210, mid: 96, small: 60 },
+  panel: { x: 90, maxW: 900, cy: 1460 }, textWithPanel: { maxW: 900, cy: 680, maxH: 840 },
+  title: { lbl: [90, 500], y0: 640, step: 250, size: 230, maxW: 900, when: [90, 1190] }, bar: { x: 80, y: 110, w: 107, gap: 10 },
 };
 const KIND = {
-  huge: { f: 'Barlow', w: 800, max: F.kind.huge, lh: .9, col: '#fff', up: true },
-  big: { f: 'Barlow', w: 800, max: F.kind.big, lh: .92, col: '#fff', up: true },
-  mid: { f: 'Barlow', w: 700, max: F.kind.mid, lh: 1.08, col: MINT, up: false },
-  small: { f: 'Assistant', w: 600, max: F.kind.small, lh: 1.25, col: '#C9D6E0', up: false },
+  huge: { f: 'Barlow', w: 800, max: F.kind.huge, lh: 1.0, col: '#fff', up: true },
+  big: { f: 'Barlow', w: 800, max: F.kind.big, lh: 1.0, col: '#fff', up: true },
+  mid: { f: 'Barlow', w: 700, max: F.kind.mid, lh: 1.18, col: MINT, up: false },
+  small: { f: 'Assistant', w: 600, max: F.kind.small, lh: 1.35, col: '#C9D6E0', up: false },
 };
 function plain(m) { return m.replace(/\[([^|\]]+)\|[^\]]+\]/g, '$1').replace(/[*_]/g, ''); }
 function render(m, t) {
@@ -45,7 +45,7 @@ function phrase(t0, t1, lines, o = {}) {
     if (w > maxW) s = Math.floor(s * maxW / w);
     return { k, K, m, s, lo, txt, hlPad };
   });
-  const gap = o.gap ?? (LAND ? 10 : 14);
+  const gap = o.gap ?? (LAND ? 28 : 30);
   let H = L.reduce((a, l) => a + l.s * l.K.lh, 0) + gap * (L.length - 1);
   if (H > maxH) { const f = maxH / H; L.forEach(l => l.s = Math.floor(l.s * f)); H = maxH; }
   let y = (o.cy ?? F.cy) - H / 2;
@@ -53,10 +53,10 @@ function phrase(t0, t1, lines, o = {}) {
   L.forEach((l, i) => {
     const te = t0 + (o.stagger ?? B * .4) * i + (l.lo.delay || 0);
     const enter = l.lo.enter || o.enter || (l.K.up ? 'up' : 'wipe');
-    const html = `<div style="font-family:${l.K.f};font-weight:${l.K.w};font-size:${l.s}px;line-height:${l.K.lh};color:${l.lo.col || l.K.col};white-space:nowrap;${l.K.up ? 'text-transform:uppercase;' : ''}padding:${(l.s * .06).toFixed(0)}px 0">${render(l.m, te + .15)}</div>`;
+    const html = `<div style="font-family:${l.K.f};font-weight:${l.K.w};font-size:${l.s}px;line-height:${l.K.lh};color:${l.lo.col || l.K.col};white-space:nowrap;${l.K.up ? 'text-transform:uppercase;' : ''}padding:${(l.s * .1).toFixed(0)}px 0">${render(l.m, te + .15)}</div>`;
     const center = o.center ?? F.center;
     const lx = center && o.x == null ? Math.round((SW - (textW(l.txt, l.s, l.K.w, l.K.f) + l.hlPad * l.s)) / 2) : x;
-    const it = item(world, lx, y - l.s * .06, html, { t0: te, t1: t1 + i * .03, enter, exit: o.exit || 'up', mask: enter === 'up' || enter === 'down', ed: l.lo.ed, z: 5 });
+    const it = item(world, lx, y - l.s * .1, html, { t0: te, t1: t1 + i * .03, enter, exit: o.exit || 'up', mask: enter === 'up' || enter === 'down', ed: l.lo.ed, z: 5 });
     register(it.inner);
     out.push(it); y += l.s * l.K.lh + gap;
   });
@@ -109,11 +109,11 @@ window.BUILD = function () {
     const s = t + i * SLEN;
     CUES.scenes.push(s);
     item(world, -40, -40, `<div style="width:${SW + 80}px;height:${SH + 80}px;background:${C.cardColour || RED}"></div>`, { t0: s, t1: s + TITLE - .25, enter: 'left', exit: 'left', ed: .35, xd: .3 });
-    item(world, T.lbl[0], T.lbl[1], `<div class="b" style="font-weight:700;font-size:${LAND ? 44 : 50}px;letter-spacing:6px;color:#fff;padding:4px 0">${(C.stepWord || 'STOP')} ${i + 1} OF ${N}</div>`, { t0: s + .2, t1: s + TITLE - .25, enter: 'up', exit: 'left', mask: true, xd: .3 });
+    item(world, T.lbl[0], T.lbl[1], `<div class="b" style="font-weight:700;font-size:${LAND ? 70 : 84}px;line-height:1.1;color:#fff;padding:6px 0">${C.stepLabel || 'Step'} ${i + 1}</div>`, { t0: s + .2, t1: s + TITLE - .25, enter: 'up', exit: 'left', mask: true, xd: .3 });
     const words = LAND ? [title.replace('|', ' ')] : title.split('|');
     words.forEach((w, k) => {
       const size = Math.min(T.size, Math.floor(T.size * T.maxW / textW(w.toUpperCase(), T.size)));
-      item(world, T.lbl[0], T.y0 + k * T.step, `<div class="b" style="font-weight:800;font-size:${size}px;line-height:.92;color:#fff;text-transform:uppercase;white-space:nowrap">${w}</div>`, { t0: s + .35 + k * B / 2, t1: s + TITLE - .25, enter: 'slam', exit: 'left', xd: .3, z: 3 });
+      item(world, T.lbl[0], T.y0 + k * T.step, `<div class="b" style="font-weight:800;font-size:${size}px;line-height:1.05;color:#fff;text-transform:uppercase;white-space:nowrap">${w}</div>`, { t0: s + .35 + k * B / 2, t1: s + TITLE - .25, enter: 'slam', exit: 'left', xd: .3, z: 3 });
     });
     item(world, T.when[0], T.when[1], `<div style="background:${NAVY};color:#fff;font-family:Assistant;font-weight:700;font-size:${LAND ? 50 : 44}px;padding:10px 22px;white-space:nowrap">${when}</div>`, { t0: s + .35 + 1.5 * B, t1: s + TITLE - .25, enter: 'wipe', exit: 'left', xd: .3 });
     CAM.push([s, s + .7, { s: 1.06, r: -2.5, x: 0, y: 0 }, { s: 1, r: 0, x: 0, y: 0 }]);
@@ -123,17 +123,18 @@ window.BUILD = function () {
   const o = t + N * SLEN;
   CUES.scenes.push(o); CUES.cines.push([o, o + 4 * B]);
   phrase(o, o + 4 * B, C.outro, { stagger: B / 2, exit: 'zoom' });
-  // end card: the trade video logo in the centre, the guide link under it, socials along the bottom
+  // end card: the swish logo from the airshow trailers in the centre, the guide link under it, socials along the bottom
   const e = o + 4 * B, CX = SW / 2;
-  const L0 = LAND ? { logoW: 1150, logo: 230, read: 500, btn: 550, line: 735, lbl: 765, ico: 825, icoS: 110, gap: 340 }
-                  : { logoW: 940, logo: 660, read: 880, btn: 940, line: 1430, lbl: 1470, ico: 1545, icoS: 140, gap: 330 };
+  const L0 = LAND ? { logoW: 740, logo: 105, read: 565, btn: 612, line: 770, lbl: 798, ico: 855, icoS: 106, gap: 340 }
+                  : { logoW: 860, logo: 420, read: 960, btn: 1020, line: 1430, lbl: 1470, ico: 1545, icoS: 140, gap: 330 };
+  const logoH = L0.logoW * 711 / 1409;
   const centred = (html, y, o2) => item(world, 0, y, `<div style="width:${SW}px;display:flex;justify-content:center">${html}</div>`, Object.assign({ t1: 99, origin: '50% 50%' }, o2));
   // soft glow behind the logo
-  centred(`<div style="width:${LAND ? 1500 : 1000}px;height:${LAND ? 700 : 800}px;background:radial-gradient(closest-side,rgba(95,227,214,.13),rgba(95,227,214,0))"></div>`, L0.logo + L0.logoW * 175 / 2350 - (LAND ? 350 : 400), { t0: e, enter: 'fade', ed: .8, z: 1 });
+  centred(`<div style="width:${LAND ? 1500 : 1000}px;height:${LAND ? 700 : 800}px;background:radial-gradient(closest-side,rgba(95,227,214,.13),rgba(95,227,214,0))"></div>`, L0.logo + logoH / 2 - (LAND ? 350 : 400), { t0: e, enter: 'fade', ed: .8, z: 1 });
   // the Typhoon crosses once, behind the logo
   item(world, -760, L0.logo - (LAND ? 150 : 330), `<img src="photos/typhoon-cut-s.png" style="width:${LAND ? 620 : 560}px;display:block">`, { t0: e + .1, t1: e + 2.7, enter: 'none', exit: 'cut', drift: [(SW + 1600) / 2.6, -40, 0], z: 2 });
   CUES.cines.push([e + .1, e + 1]);
-  centred(`<img src="photos/logo-trade.png" style="width:${L0.logoW}px;display:block">`, L0.logo, { t0: e + .25, enter: 'zoomin', ed: .6, drift: [0, 0, .006], z: 4 });
+  centred(`<img src="photos/logo-swish.png" style="width:${L0.logoW}px;display:block;filter:drop-shadow(0 14px 0 rgba(0,0,0,.3))">`, L0.logo, { t0: e + .25, enter: 'zoomin', ed: .6, drift: [0, 0, .006], z: 4 });
   phrase(e + .7, 99, [['small', C.readLine || 'Read the full guide at']], { cy: L0.read, center: true });
   centred(`<div class="btn" style="font-size:${LAND ? 46 : 48}px;padding:18px 44px">${C.url}</div>`, L0.btn, { t0: e + 1.0, enter: 'pop', z: 4 });
   // socials

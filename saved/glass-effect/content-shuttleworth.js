@@ -1,6 +1,6 @@
 // Shuttleworth air shows 2027 at Old Warden. Facts from the Shuttleworth guide page and the 2027 calendar.
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Read my full Shuttleworth guide at', stepWord: 'STEP',
+  url: 'ukairshowguide.co.uk', readLine: 'Read my full Shuttleworth guide at', stepLabel: 'Step',
   introBeats: 12,
   intro: [
     [0, 4, [['big', 'The'], ['huge', 'Shuttleworth'], ['big', 'air shows']], { stagger: B / 2, exit: 'zoom' }],

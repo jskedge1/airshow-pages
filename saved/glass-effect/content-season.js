@@ -1,6 +1,6 @@
 // How to plan your 2027 season. Dates from the UK Airshow Dates 2027 calendar (updated 5 November 2026).
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Every 2027 date on one calendar at', stepWord: 'STEP',
+  url: 'ukairshowguide.co.uk', readLine: 'Every 2027 date on one calendar at', stepLabel: 'Step',
   introBeats: 12,
   intro: [
     [0, 4, [['huge', 'How'], ['huge', 'to plan'], ['huge', '_your_']], { stagger: B / 2, exit: 'zoom' }],

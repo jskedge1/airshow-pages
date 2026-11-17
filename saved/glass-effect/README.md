@@ -2,7 +2,7 @@
 
 The house style for every UK Airshow Guide information video (saved 17 Nov 2026). Use it for any new explainer, show guide or tips video, so they all look like one series.
 
-Big uppercase words slam, rise and whip in on the beat over navy. Key words are filled with real photos and have a white outline. Mint highlight bars sweep in behind the important phrases, and warnings are in red. Each step opens with a red full screen card ("STEP 1 OF 6" and a huge title). Photos sit in white print frames beside the words. A mint story bar runs along the top, there is film grain, and every film ends on the same end card (below). Music and sound effects are made in code and timed to the words.
+Big uppercase words slam, rise and whip in on the beat over navy. Key words are filled with real photos and have a white outline. Mint highlight bars sweep in behind the important phrases, and warnings are in red. Each step opens with a red full screen card: a plain "Step 1" label in Barlow bold, then a huge title. No "of 6" count. Photos sit in white print frames beside the words. A mint story bar runs along the top, there is film grain, and every film ends on the same end card (below). Music and sound effects are made in code and timed to the words.
 
 One engine, one content file per film, two formats:
 
@@ -24,14 +24,14 @@ One engine, one content file per film, two formats:
 
 ## The end card
 Every film finishes on the same card, built by `film4.js`, so there is nothing to set up for it:
-- The Typhoon crosses the screen once, then the UK Airshow Guide logo from the trade videos (`photos/logo-trade.png`) zooms in, centred, with a soft mint glow behind it.
+- The Typhoon crosses the screen once, then the UK Airshow Guide swish logo from the airshow trailers (`photos/logo-swish.png`, from `logo-2026-new.png`) zooms in, centred, with a soft mint glow behind it.
 - Under the logo: the film's `readLine` ("Read my full camping guide at") and the red ukairshowguide.co.uk button.
 - Along the bottom: "FOLLOW FOR MORE TIPS" over Instagram, Facebook and YouTube icons. Change the order or drop one with `socials: ['Instagram', 'YouTube']` in the content file.
 - The Instagram handle is @ukairshowguide and the YouTube channel is @TheBigGuidetoUKAirShows. They are different, so the card names the platforms and does not show one handle for all three.
 
 ## Make a new film
 1. Copy `content-template.js` to `content-<topic>.js` and `index-template.html` to `index-<topic>.html`, then point the page at the new content file.
-2. Change `intro`, `stops` and `outro`. Any number of steps works, and the story bar and "STEP 1 OF N" follow the list.
+2. Change `intro`, `stops` and `outro`. Any number of steps works, and the story bar and the "Step 1", "Step 2" labels follow the list.
 3. Each step is `['Title|second line', 'When line', [three points]]`. Each point has:
    - `lines`: `[size, words]`, where size is `huge`, `big`, `mid` or `small`
    - `pics`: one or two photo panels, the file names in `photos/` without `p-` (for example `['cosjaguars']`). Add a caption after a bar to name what is in the photo: `['bp-mig|MiG-17']`
@@ -57,6 +57,8 @@ Needs Node with Playwright, ffmpeg, and Python with numpy.
    For landscape, use `outL/frames` with the same `out/mix_norm.wav`.
 
 ## House rules for information videos
+- Step cards say "Step 1", "Step 2" in Barlow bold. Never "STEP 1 OF 5".
+- Leave room around the words: the engine adds line spacing and padding so nothing touches or gets cropped. Keep lines short rather than shrinking the type.
 - Every fact comes from the matching guide on ukairshowguide.co.uk. Nothing is made up.
 - Anything based on the 2026 show, or not announced yet, says so on screen ("in 2026", "dates to be confirmed").
 - Plain English, an advisory tone, and no dashes in the text.

@@ -1,6 +1,6 @@
 // How to plan the RAF Cosford Air Show 2027. Facts from the RAF Cosford guide page (based on the 2026 show).
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Read my full Cosford guide at', stepWord: 'STEP',
+  url: 'ukairshowguide.co.uk', readLine: 'Read my full Cosford guide at', stepLabel: 'Step',
   introBeats: 12,
   intro: [
     [0, 4, [['big', 'The RAF'], ['huge', 'Cosford'], ['big', 'Air Show']], { stagger: B / 2, exit: 'zoom' }],

@@ -3,7 +3,7 @@ const CAMP = { clip: 'cine/camp', clipL: 'cine/campL', n: 77 };
 const PITCHES = { clip: 'cine/pitches', clipL: 'cine/pitchesL', n: 77 };
 const SHELTER = { clip: 'cine/shelter', clipL: 'cine/shelterL', n: 77 };
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Read my full camping guide at', stepWord: 'STEP',
+  url: 'ukairshowguide.co.uk', readLine: 'Read my full camping guide at', stepLabel: 'Step',
   introBeats: 12,
   intro: [
     [0, 4, [['big', 'Camping at'], ['huge', 'airshows'], ['big', '2027']], { stagger: B / 2, exit: 'zoom' }],

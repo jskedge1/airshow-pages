@@ -1,7 +1,7 @@
 // How to plan your 2027 airshow: the eight stops. Wording from the Plan your 2027 airshow page.
 const CAMP = { clip: 'cine/camp', clipL: 'cine/campL', n: 77 };
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Read every stop in full at', stepWord: 'STOP',
+  url: 'ukairshowguide.co.uk', readLine: 'Read every stop in full at', stepLabel: 'Stop',
   introBeats: 12,
   intro: [
     [0, 4, [['huge', 'How'], ['huge', 'to plan'], ['huge', '_your_']], { stagger: B / 2, exit: 'zoom' }],

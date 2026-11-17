@@ -1,6 +1,6 @@
 // Airshow photography for beginners. Facts from the new to aviation photography guide.
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Read my full photography guide at', stepWord: 'STEP',
+  url: 'ukairshowguide.co.uk', readLine: 'Read my full photography guide at', stepLabel: 'Step',
   introBeats: 12,
   intro: [
     [0, 4, [['big', 'Airshow'], ['huge', 'photos'], ['big', 'for beginners']], { stagger: B / 2, exit: 'zoom' }],
