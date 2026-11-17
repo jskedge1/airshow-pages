@@ -77,7 +77,7 @@ Needs Node with Playwright, ffmpeg, and Python with numpy.
 ## The calendar film
 `content-calendar.js` is generated from the live calendar page, so names and dates always match the site:
 `node gen-calendar.js ../../uk-airshow-calendar.html > content-calendar.js`
-Shows with no 2027 date are listed under "Date to be confirmed" with no date or month. Run it again whenever the calendar changes, then re-render.
+Shows with no 2027 date are listed under "Date to be confirmed" with no date or month. Southport and Old Buckenham are left out of the videos on request (the `SKIP` line in `gen-calendar.js`), and Southport is not in the featured film. Run it again whenever the calendar changes, then re-render.
 
 ## Notes
 - Fonts are Barlow and Assistant, in `fonts/`.

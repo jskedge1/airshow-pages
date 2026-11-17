@@ -5,8 +5,8 @@ window.FILM = {
   introBeats: 12,
   intro: [
     [0, 4, [['big', 'The'], ['huge', 'featured'], ['big', 'air shows 2027']], { stagger: B / 2, exit: 'zoom' }],
-    [4, 8.5, [['huge', '[13|p:cosredloop]', { size: 380, enter: 'slam' }], ['big', 'shows with full guides', { enter: 'slam', delay: B / 2 }], ['small', 'This is not the full calendar']], { stagger: B, exit: 'zoom', boom: true }],
-    [8.5, 12, [['small', 'The full calendar on the site has'], ['huge', '*68 shows*', { enter: 'pop' }], ['mid', 'month by month']], { stagger: B / 2, exit: 'left' }],
+    [4, 8.5, [['huge', '[12|p:cosredloop]', { size: 380, enter: 'slam' }], ['big', 'shows with full guides', { enter: 'slam', delay: B / 2 }], ['small', 'This is not the full calendar']], { stagger: B, exit: 'zoom', boom: true }],
+    [8.5, 12, [['small', 'The full calendar on the site has'], ['huge', '*66 shows*', { enter: 'pop' }], ['mid', 'month by month']], { stagger: B / 2, exit: 'left' }],
   ],
   stops: [
     ['May', 'Two seasons open', [
@@ -31,12 +31,11 @@ window.FILM = {
     ]],
     ['Date to be|confirmed', 'Watch this space', [
       { lines: [['big', 'Blackpool'], ['mid', 'Blackpool seafront, Lancashire'], ['big', '_Date to be confirmed_'], ['small', 'Free to watch']], pics: ['bp-wing|Aerosuperbatics Wingwalkers'] },
-      { lines: [['big', 'Southport'], ['mid', 'Southport seafront, Merseyside'], ['big', '_Date to be confirmed_'], ['small', 'Free to watch']] },
       { lines: [['big', 'Wales'], ['mid', 'Wales National Airshow, Swansea Bay'], ['big', '_Date to be confirmed_'], ['small', 'Free to watch']] },
     ]],
     ['Not the full|calendar', 'Every show is on the site', [
       { lines: [['big', 'These are'], ['big', 'my featured'], ['big', 'guides'], ['mid', 'each with a full planning page']] },
-      { lines: [['big', '46 shows'], ['mid', 'have 2027 dates'], ['big', '*22 more*'], ['mid', 'dates to be confirmed']] },
+      { lines: [['big', '46 shows'], ['mid', 'have 2027 dates'], ['big', '*20 more*'], ['mid', 'dates to be confirmed']] },
       { lines: [['big', 'The full'], ['big', '*calendar*'], ['mid', 'is on the website']] },
     ]],
   ],

@@ -1,7 +1,9 @@
 // node gen-calendar.js /path/to/uk-airshow-calendar.html > content-calendar.js
 const fs = require('fs');
 const t = fs.readFileSync(process.argv[2], 'utf8');
-const D = JSON.parse(t.match(/var D=(\[\[.*?\]\]);/s)[1]), T = JSON.parse(t.match(/var T=(\[\[.*?\]\]);/s)[1]);
+// shows left out of the video on request
+const SKIP = /Southport|Old Buckenham/i;
+const D = JSON.parse(t.match(/var D=(\[\[.*?\]\]);/s)[1]).filter(d => !SKIP.test(d[6])), T = JSON.parse(t.match(/var T=(\[\[.*?\]\]);/s)[1]).filter(x => !SKIP.test(x[0]));
 const M = ['May', 'June', 'July', 'August', 'September', 'October'];
 const MS = { Jan: 'January', Feb: 'February', Mar: 'March', Apr: 'April', May: 'May', Jun: 'June', Jul: 'July', Aug: 'August', Sep: 'September', Oct: 'October' };
 const BG = ['dx-formation', 'cosredloop', 'typhoon', 'eastbourne', 'bp-wing', 'sw-speedsix'];
