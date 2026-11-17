@@ -20,6 +20,7 @@ One engine, one content file per film, two formats:
 | Airshow photography for beginners | `index-photography.html` | 5 |
 | Featured air shows 2027 (not the full calendar) | `index-featured.html` | 7 |
 | UK air show calendar 2027 (every show on the site) | `index-calendar.html` | 7 |
+| Website walkthrough 2027 (two minutes, real pages in a phone or browser) | `index-walkthrough.html` | 8 |
 | Starter for a new film | `index-template.html` | 1 |
 
 - Portrait 1080 x 1920: open the page as it is.
@@ -82,6 +83,12 @@ Needs Node with Playwright, ffmpeg, and Python with numpy.
 - Real photos first, and each photo matches the line it sits beside. Caption aircraft by name. Flag any AI image.
 - No personal names on photos.
 - Deliver both formats: portrait for Reels, Shorts and TikTok, landscape for YouTube and the site.
+
+## Website screens (the walkthrough)
+A point can show a real page of the site: `screen: { m: ['home', 0, 250], d: ['home', 0, 300] }` gives the page, and the scroll from and to in CSS pixels, for the phone (m, portrait) and desktop (d, landscape) shots. The page sits in a phone or a browser window that tilts in, then scrolls smoothly to the part being described, with the words above or beside it.
+1. Shoot the pages: `node shoot3.mjs m home duxford` and `node shoot3.mjs d home duxford` (it scrolls a normal window down the page and stitches each screenful, because very tall full page shots come out blank).
+2. Crop each screen to `screens/<page>-<from>-<to>-m.jpg` and `-d.jpg` (the crops for the walkthrough are in `screens/`).
+3. Keep anything you don't want shown (for example Southport) outside the scroll range.
 
 ## The calendar film
 `content-calendar.js` is generated from the live calendar page, so names and dates always match the site:

@@ -63,5 +63,8 @@ This skill is the checklist that keeps every new film in the same house style.
 6. Check each file with ffprobe (size, 60 fps, duration, audio present) and pull frames from the encoded file.
 7. Then send portrait and landscape together.
 
+## Website walkthroughs
+For a tour of the site, give points a `screen` (see the README section "Website screens"). Shoot real pages from jskedge1.github.io/airshow-pages with `shoot3.mjs`, hide nothing but the page height helper, never mock a screen, and keep shows that must not appear (Southport) out of the scroll range.
+
 ## Save
 Copy the new content file, index page and any new photos into `saved/glass-effect/`, add a row to the README table, then commit and push to the working branch.

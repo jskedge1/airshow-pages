@@ -18,6 +18,9 @@ const F = LAND ? {
   panel: { x: 90, maxW: 900, cy: 1460 }, textWithPanel: { maxW: 900, cy: 680, maxH: 840 },
   title: { lbl: [90, 500], y0: 640, step: 250, size: 230, maxW: 900, when: [90, 1190] }, bar: { x: 80, y: 110, w: 107, gap: 10 },
 };
+// slides with a website screen: text above a phone (portrait) or beside a browser window (landscape)
+const SCR = LAND ? { x: 960, y: 140, w: 840, h: 800, bar: 46, pad: 12, text: { x: 120, maxW: 760, cy: 545, maxH: 860, center: false } }
+                 : { x: 290, y: 820, w: 500, h: 1000, bar: 0, pad: 20, text: { maxW: 900, cy: 485, maxH: 640 } };
 const KIND = {
   huge: { f: 'Barlow', w: 800, max: F.kind.huge, lh: 1.0, col: '#fff', up: true },
   big: { f: 'Barlow', w: 800, max: F.kind.big, lh: 1.0, col: '#fff', up: true },
@@ -109,10 +112,33 @@ function background(t0, t1, bg) {
   item(bgLayer, 0, 0, `<div style="width:${SW}px;height:${SH}px;filter:saturate(.9) brightness(${bg.bright || .5})">${inner}</div><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,33,49,.55),rgba(14,33,49,.2) 40%,rgba(14,33,49,.7))"></div>`,
     { t0, t1, enter: 'fade', exit: 'fade', ed: .3, xd: .3, drift: [0, 0, .015], origin: '50% 50%' });
 }
-// one point: words, optional photo panels, optional background
+// a real website screen in a device frame: it tilts in, then the page scrolls to the part being described
+const SCREENS = [];
+function screenPanel(t0, t1, sc) {
+  const [pg, y0, y1] = LAND ? sc.d : sc.m, iw = SCR.w - 2 * SCR.pad, ih = SCR.h - SCR.bar - 2 * SCR.pad;
+  const k = iw / (LAND ? 1440 : 430), src = `screens/${pg}-${y0}-${y1}-${LAND ? 'd' : 'm'}.jpg`;
+  const bar = LAND ? `<div style="height:${SCR.bar}px;display:flex;align-items:center;gap:9px;padding:0 16px"><i style="width:12px;height:12px;border-radius:50%;background:#D74949"></i><i style="width:12px;height:12px;border-radius:50%;background:#F2B233"></i><i style="width:12px;height:12px;border-radius:50%;background:#5FE3D6"></i><span style="margin-left:14px;flex:1;height:28px;border-radius:14px;background:#14283A;color:#C9D6E0;font-family:Assistant;font-weight:600;font-size:17px;line-height:28px;padding-left:16px">ukairshowguide.co.uk</span></div>` : '';
+  const html = `<div class="scr" style="width:${SCR.w}px;height:${SCR.h}px;border-radius:${LAND ? 18 : 64}px;background:${LAND ? '#0B1A27' : '#04101A'};padding:${LAND ? `0 ${SCR.pad}px ${SCR.pad}px` : SCR.pad + 'px'};box-shadow:0 34px 70px rgba(0,0,0,.55),0 0 0 2px rgba(95,227,214,.22);transform-origin:50% 60%">${bar}<div style="width:${iw}px;height:${ih}px;border-radius:${LAND ? 6 : 46}px;overflow:hidden;position:relative;background:#fff"><img src="${src}" style="position:absolute;left:0;top:0;width:${iw}px;will-change:transform"></div></div>`;
+  const it = item(world, SCR.x, SCR.y, html, { t0: t0 + .2, t1, enter: 'fade', exit: 'fade', ed: .5, xd: .35, z: 4, origin: '50% 50%' });
+  SCREENS.push({ el: it.inner.querySelector('.scr'), img: it.inner.querySelector('img'), t0: t0 + .2, t1, y0, y1, k });
+  CUES.pops.push(t0 + .2);
+}
+function updScreens(t) {
+  for (const s of SCREENS) {
+    if (t < s.t0 || t > s.t1 + .4) continue;
+    const p = eo5(clamp((t - s.t0) / .9)), q = eio(clamp((t - s.t0 - .7) / (s.t1 - s.t0 - 1.0)));
+    // tilt in from the side (landscape) or from below (portrait), then a slow drift for depth
+    const drift = Math.sin((t - s.t0) * .8) * 1.2;
+    s.el.style.transform = LAND ? `perspective(1800px) translateX(${(90 * (1 - p)).toFixed(1)}px) rotateY(${(-16 * (1 - p) - 4 + drift).toFixed(2)}deg) scale(${(.94 + .06 * p).toFixed(4)})`
+                                : `perspective(1800px) translateY(${(120 * (1 - p)).toFixed(1)}px) rotateX(${(14 * (1 - p) + 3 + drift * .6).toFixed(2)}deg) scale(${(.94 + .06 * p).toFixed(4)})`;
+    s.img.style.transform = `translateY(${(-(s.y1 - s.y0) * q * s.k).toFixed(1)}px)`;
+  }
+}
+// one point: words, optional photo panels, optional website screen, optional background
 function point(t0, t1, pt, exit) {
   const hasPics = pt.pics && pt.pics.length;
-  phrase(t0, t1, pt.lines, Object.assign({ exit }, hasPics ? F.textWithPanel : {}, pt.o || {}));
+  phrase(t0, t1, pt.lines, Object.assign({ exit }, hasPics ? F.textWithPanel : {}, pt.screen ? SCR.text : {}, pt.o || {}));
+  if (pt.screen) screenPanel(t0, t1, pt.screen);
   if (hasPics) panels(t0, t1, pt.pics, exit);
   if (pt.bg) background(t0 - .1, t1 + .3, pt.bg);
 }
@@ -180,6 +206,7 @@ window.BUILD = function () {
   const segs = [], BR = F.bar, span = LAND ? 1700 : 920, sw = (span - (N - 1) * BR.gap) / N;
   for (let k = 0; k < N; k++) segs.push(div(topLayer, `left:${BR.x + k * (sw + BR.gap)}px;top:${BR.y}px;width:${sw}px;height:8px;background:rgba(255,255,255,.22);overflow:hidden`, `<div style="width:0;height:100%;background:${MINT}"></div>`));
   window.UPD = function (tt) {
+    updScreens(tt);
     const on = tt >= t && tt < o;
     topLayer.style.visibility = on ? 'visible' : 'hidden';
     if (!on) return;
