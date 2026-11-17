@@ -40,8 +40,13 @@ window.FILM = {
       { lines: [['big', 'Camera'], ['big', '*settings*'], ['mid', 'fast jets to helicopters']], screen: Z('hub-briefing', 1017, 1750, 1790, 2.2) },
     ]],
     ['Show|day', 'Leave it open on your phone', [
-      { lines: [['big', 'Show day'], ['big', '*mode*'], ['mid', 'flying now and next'], ['small', 'From the flying display page in your programme']], screen: Z('hub-showday', 760, 900, 930, 1.5) },
-      { lines: [['big', 'Ear'], ['big', '*defender*'], ['big', '*alerts*'], ['mid', 'before the loudest jets'], ['small', 'And a check on your pre flight list']], screen: Z('hub-overview', 320, 1715, 1750, 2.6) },
+      { lines: [['big', 'Show day'], ['big', '*mode*'], ['mid', 'preview the day'], ['small', 'Then switch to the live clock on the day']], screen: Z('hub-showday2', 1190, 100, 120, 2.8) },
+      { lines: [['big', 'Running'], ['big', '*orders*'], ['mid', 'in the week of the show'], ['small', 'Times appear here once they are out']], screen: Z('hub-showday2', 370, 475, 500, 2.6) },
+      { lines: [['big', 'Sky'], ['big', '*compass*'], ['mid', 'where the display is'], ['small', 'And where the sun sits']], screen: Z('hub-showday2', 415, 850, 880, 2.3) },
+      { lines: [['big', 'Live'], ['big', '*radar*'], ['mid', 'on in the days before'], ['small', 'Treat it as a rough guide']], screen: Z('hub-showday2', 1050, 850, 880, 2.3) },
+      { lines: [['big', 'Crowd'], ['big', '*reports*'], ['mid', 'car parks, toilets, queues'], ['small', 'Posted by members on site']], screen: Z('hub-showday2', 420, 1235, 1260, 2.4) },
+      { lines: [['big', 'Share the'], ['big', '*running*'], ['big', '*order*'], ['mid', 'snap your programme'], ['small', 'Checked, then live for everyone']], screen: Z('hub-showday2', 720, 1625, 1655, 2.3) },
+      { lines: [['big', 'Pre flight'], ['big', '*checks*'], ['mid', 'pack ear defenders'], ['small', 'Tick them off on your Overview']], screen: Z('hub-overview', 320, 1715, 1750, 2.6) },
       { lines: [['big', 'Updates'], ['mid', 'line up and show news'], ['small', 'Choose what you get told about']], screen: Z('hub-updates', 1091, 1010, 1040, 2.2) },
     ]],
     ['Kit and|group', 'Pack it, share it', [

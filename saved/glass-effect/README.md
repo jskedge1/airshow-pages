@@ -94,6 +94,10 @@ A point can show a real page of the site: `screen: { m: ['home', 0, 250], d: ['h
 Zoom mode, used for the hub film: `screen: Z(page, x, y from, y to, zoom)` loads the whole page (`screens/<page>-full-d.jpg`), opens on the full width and pushes in on the panel centred at (x, y), drifting from y to y. Use it when the detail matters.
 The hub screens come from the working preview `previews/hub-login-demo.html`, filled in like a member by `hubcap.mjs`: RIAT and Eastbourne saved, a few ticks, shown as the example member Alex (the name the hub's own explainer uses), the preview banner hidden and the Southport labels hidden. History, Hangar and Group need the live site, so they show as a new member sees them.
 
+The hub's own Show Day tab only says "Loading the running orders" in the preview, because running orders come from the live site. So the Show Day slides use `screens/hub-showday2-full-d.jpg`, shot by `showdaycap.mjs` from `previews/show-day-harness.html` (the Show Day panel in hub mode, no test photo). It shows the preview clock, the running order notice, the sky compass, live radar, crowd reports and the programme upload. No running order with act names and times exists anywhere yet, so the film never shows one: don't make one up.
+
+End card items stay on until the very end (`t1: 1e6`). They used to stop at 99 seconds, which blanked the end card on anything longer.
+
 ## The calendar film
 `content-calendar.js` is generated from the live calendar page, so names and dates always match the site:
 `node gen-calendar.js ../../uk-airshow-calendar.html > content-calendar.js`

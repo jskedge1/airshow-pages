@@ -187,12 +187,12 @@ window.BUILD = function () {
   const L0 = LAND ? { logoW: 740, logo: 105, read: 565, btn: 612, line: 770, lbl: 798, ico: 855, icoS: 106, gap: 340 }
                   : { logoW: 860, logo: 420, read: 960, btn: 1020, line: 1430, lbl: 1470, ico: 1545, icoS: 140, gap: 330 };
   const logoH = L0.logoW * 711 / 1409;
-  const centred = (html, y, o2) => item(world, 0, y, `<div style="width:${SW}px;display:flex;justify-content:center">${html}</div>`, Object.assign({ t1: 99, origin: '50% 50%' }, o2));
+  const centred = (html, y, o2) => item(world, 0, y, `<div style="width:${SW}px;display:flex;justify-content:center">${html}</div>`, Object.assign({ t1: 1e6, origin: '50% 50%' }, o2));
   // soft glow behind the logo
   centred(`<div style="width:${LAND ? 1500 : 1000}px;height:${LAND ? 700 : 800}px;background:radial-gradient(closest-side,rgba(95,227,214,.13),rgba(95,227,214,0))"></div>`, L0.logo + logoH / 2 - (LAND ? 350 : 400), { t0: e, enter: 'fade', ed: .8, z: 1 });
   CUES.cines.push([e + .25, e + 1]);
   centred(`<img src="photos/logo-swish.png" style="width:${L0.logoW}px;display:block;filter:drop-shadow(0 14px 0 rgba(0,0,0,.3))">`, L0.logo, { t0: e + .25, enter: 'zoomin', ed: .6, drift: [0, 0, .006], z: 4 });
-  phrase(e + .7, 99, [['small', C.readLine || 'Read the full guide at']], { cy: L0.read, center: true });
+  phrase(e + .7, 1e6, [['small', C.readLine || 'Read the full guide at']], { cy: L0.read, center: true });
   centred(`<div class="btn" style="font-size:${LAND ? 46 : 48}px;padding:18px 44px">${C.url}</div>`, L0.btn, { t0: e + 1.0, enter: 'pop', z: 4 });
   // socials
   centred(`<div style="width:${LAND ? 900 : 760}px;height:3px;background:linear-gradient(90deg,rgba(95,227,214,0),${MINT},rgba(95,227,214,0))"></div>`, L0.line, { t0: e + 1.3, enter: 'stretch', ed: .6 });
@@ -206,7 +206,7 @@ window.BUILD = function () {
     const S = L0.icoS, x = CX + (k - (all.length - 1) / 2) * L0.gap - 150;
     item(world, x, L0.ico, `<div style="width:300px;display:flex;flex-direction:column;align-items:center;gap:${LAND ? 14 : 18}px">
       <div style="width:${S}px;height:${S}px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 0 rgba(0,0,0,.3)"><svg viewBox="0 0 24 24" style="width:${S * .56}px;height:${S * .56}px"><path fill="${NAVY}" d="${ICON[s]}"/></svg></div>
-      <div class="b" style="font-weight:700;font-size:${LAND ? 36 : 44}px;color:#fff">${s}</div></div>`, { t0: e + 1.6 + k * B / 2, t1: 99, enter: 'pop', origin: '50% 30%', z: 4 });
+      <div class="b" style="font-weight:700;font-size:${LAND ? 36 : 44}px;color:#fff">${s}</div></div>`, { t0: e + 1.6 + k * B / 2, t1: 1e6, enter: 'pop', origin: '50% 30%', z: 4 });
   });
   DUR = e + 5.5;
   // progress bar, one segment per stop
