@@ -13,6 +13,7 @@ One engine, one content file per film, two formats:
 | How to plan the RAF Cosford Air Show 2027 | `index-cosford.html` | 6 |
 | Blackpool Air Show 2027 | `index-blackpool.html` | 5 |
 | Shuttleworth air shows 2027 | `index-shuttleworth.html` | 5 |
+| Duxford air shows 2027 | `index-duxford.html` | 6 |
 | Camping at airshows | `index-camping.html` | 5 |
 | Where to watch an airshow | `index-watch.html` | 5 |
 | Airshow photography for beginners | `index-photography.html` | 5 |
@@ -75,5 +76,6 @@ Needs Node with Playwright, ffmpeg, and Python with numpy.
 - The Cosford facts in `content-cosford.js` are from the RAF Cosford guide and based on the 2026 show. Update them when the 2027 details are announced.
 - The Blackpool facts are from the Blackpool guide. The 2027 dates are not announced, so times, travel and the line up are from the 2026 show and say so on screen.
 - The Shuttleworth facts and the seven 2027 dates are from the Shuttleworth guide.
+- The Duxford facts are from the Duxford guide (2027 calendar checked 11 October 2026). Photos named `p-dx-*` are the real Duxford photos from that guide.
 - The camping, where to watch and photography films use the tips from those guides on the site.
 - Photos named `p-bp-*` (Blackpool) and `p-sw-*` (Old Warden) are from Mac's airshow folders. Photos named `p-c-*` are the real campsite photos from the camping guide.
