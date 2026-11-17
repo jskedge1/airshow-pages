@@ -2,7 +2,7 @@
 // One script, two formats: portrait 1080 x 1920 (default) and landscape 1920 x 1080 (?fmt=land). 24 fps, 104 bpm grid.
 // Line markup: [WORD|p:name] fills the word with a photo, *WORD* gets a mint highlight bar, _WORD_ is red.
 // Each point can have photo panels (pics) and a background (bg) photo or clip.
-const NAVY = '#0E2131', RED = '#D74949', MINT = '#5FE3D6';
+const NAVY = '#0E2131', RED = '#D74949', MINT = '#5FE3D6', PURPLE = '#6950A1';
 const bgLayer = div(stage, `left:0;top:0;width:${SW}px;height:${SH}px`);
 stage.insertBefore(bgLayer, world);
 const topLayer = div(stage, `left:0;top:0;width:${SW}px;height:${SH}px;z-index:40;pointer-events:none`);
@@ -24,11 +24,13 @@ const KIND = {
   mid: { f: 'Barlow', w: 700, max: F.kind.mid, lh: 1.18, col: MINT, up: false },
   small: { f: 'Assistant', w: 600, max: F.kind.small, lh: 1.35, col: '#C9D6E0', up: false },
 };
-function plain(m) { return m.replace(/\[([^|\]]+)\|[^\]]+\]/g, '$1').replace(/[*_]/g, ''); }
+function plain(m) { return m.replace(/\[([^|\]]+)\|[^\]]+\]/g, '$1').replace(/[*_~]/g, ''); }
 function render(m, t) {
   return m.replace(/\[([^|\]]+)\|([^\]]+)\]/g, (_, w, k) => `<span class="fill" data-t="${t}" style="background-image:url(${imgUrl(k)})">${w}</span>`)
     .replace(/\*([^*]+)\*/g, `<span class="hl" data-t="${t}">$1</span>`)
-    .replace(/_([^_]+)_/g, `<span style="color:${RED}">$1</span>`);
+    .replace(/_([^_]+)_/g, `<span style="color:${RED}">$1</span>`)
+    // ~word~: a purple highlight bar, the transport page colour, for travel and getting there
+    .replace(/~([^~]+)~/g, `<span class="hl" data-t="${t}" style="color:#fff;background-image:linear-gradient(${PURPLE},${PURPLE})">$1</span>`);
 }
 function register(node) {
   node.querySelectorAll('.hl').forEach(e => HL.push({ el: e, t: +e.dataset.t }));
@@ -39,7 +41,7 @@ function register(node) {
 // huge and big are the same large size; a line too wide for the slide wraps onto the next line
 // instead of shrinking. Hero words with an explicit size (the photo filled intro and outro words) keep it.
 const TS = LAND ? { big: 138, mid: 62, small: 44 } : { big: 148, mid: 70, small: 50 };
-function tokens(m) { return m.match(/\[[^\]]+\]|\*[^*]+\*|_[^_]+_|\S+/g) || []; }
+function tokens(m) { return m.match(/\[[^\]]+\]|\*[^*]+\*|_[^_]+_|~[^~]+~|\S+/g) || []; }
 function phrase(t0, t1, lines, o = {}) {
   const maxW = o.maxW || F.maxW, x = o.x ?? F.x, maxH = o.maxH || F.maxH;
   const fixed = window.FILM && window.FILM.typeScale;
@@ -48,10 +50,10 @@ function phrase(t0, t1, lines, o = {}) {
     for (const [k0, m, lo = {}] of lines) {
       const k = k0 === 'huge' && !lo.size ? 'big' : k0, K = KIND[k], s = lo.size ? null : TS[k] || TS.big;
       if (!s) { out.push([k, m, lo]); continue; }
-      const wOf = mm => { const tt = K.up ? plain(mm).toUpperCase() : plain(mm); return textW(tt, s, K.w, K.f) + (mm.match(/\*/g) || []).length / 2 * .24 * s; };
+      const wOf = mm => { const tt = K.up ? plain(mm).toUpperCase() : plain(mm); return textW(tt, s, K.w, K.f) + (mm.match(/[*~]/g) || []).length / 2 * .24 * s; };
       let cur = '';
       // a highlighted or red phrase that is too wide on its own is split word by word, keeping its colour
-      const tks = []; for (const tk of tokens(m)) { const mk = /^[*_]/.test(tk) ? tk[0] : ''; if (mk && tk.includes(' ') && wOf(tk) > maxW) tk.slice(1, -1).split(' ').forEach(w => tks.push(mk + w + mk)); else tks.push(tk); }
+      const tks = []; for (const tk of tokens(m)) { const mk = /^[*_~]/.test(tk) ? tk[0] : ''; if (mk && tk.includes(' ') && wOf(tk) > maxW) tk.slice(1, -1).split(' ').forEach(w => tks.push(mk + w + mk)); else tks.push(tk); }
       for (const tk of tks) { const nx = cur ? cur + ' ' + tk : tk; if (cur && wOf(nx) > maxW) { out.push([k, cur, Object.assign({}, lo, { _fix: s })]); cur = tk; } else cur = nx; }
       if (cur) out.push([k, cur, Object.assign({}, lo, { _fix: s })]);
     }
@@ -59,7 +61,7 @@ function phrase(t0, t1, lines, o = {}) {
   }
   let L = lines.map(([k, m, lo = {}]) => {
     const K = KIND[k], txt = K.up ? plain(m).toUpperCase() : plain(m);
-    const hlPad = (m.match(/\*/g) || []).length / 2 * .24;
+    const hlPad = (m.match(/[*~]/g) || []).length / 2 * .24;
     let s = lo._fix || Math.min((lo.size || K.max) * (lo.size && LAND ? .75 : 1), K.max);
     const w = textW(txt, s, K.w, K.f) + hlPad * s;
     if (w > maxW) { if (lo._fix) console.warn('type scale: line too wide, shrinking', txt); s = Math.floor(s * maxW / w); }

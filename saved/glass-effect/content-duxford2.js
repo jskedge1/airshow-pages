@@ -26,9 +26,9 @@ window.FILM = {
       { lines: [['big', 'IWM'], ['big', 'members'], ['big', '*free*'], ['mid', 'at the Flying Days'], ['small', 'And 10% off the Air Shows']] },
     ]],
     ['Getting|there', 'Car, train or shuttle', [
-      { lines: [['big', 'M11'], ['big', '*junction 10*'], ['mid', 'then follow the event signs'], ['small', 'Not the sat nav']], pics: ['dx-carpark2'] },
-      { lines: [['big', 'Parking'], ['big', '_permit_'], ['mid', 'booked with your ticket'], ['small', 'At the two Big Air Shows']] },
-      { lines: [['big', 'Free'], ['big', '*shuttle*'], ['mid', 'from Cambridge station'], ['small', 'And Trumpington Park & Ride']] },
+      { lines: [['big', 'M11'], ['big', '~junction 10~'], ['mid', 'then follow the event signs'], ['small', 'Not the sat nav']], pics: ['dx-carpark2'] },
+      { lines: [['big', 'Parking'], ['big', '~permit~'], ['mid', 'booked with your ticket'], ['small', 'At the two Big Air Shows']] },
+      { lines: [['big', 'Free'], ['big', '~shuttle~'], ['mid', 'from Cambridge station'], ['small', 'And Trumpington Park & Ride']] },
     ]],
     ['On the|day', 'Plan your day', [
       { lines: [['big', 'Arrive'], ['big', '*early*'], ['mid', 'car parks open at 07:00'], ['small', 'IWM recommends arriving before 11:00']], pics: ['dx-queue'] },

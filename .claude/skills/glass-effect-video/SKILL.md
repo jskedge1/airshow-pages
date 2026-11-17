@@ -18,7 +18,7 @@ This skill is the checklist that keeps every new film in the same house style.
   - small: Assistant 600, grey
 
   Don't use extra sizes or extra fonts. A line too wide wraps instead of shrinking, so break long phrases by hand at natural points (`['big', 'Summer'], ['big', 'Air Show']`), and keep a highlighted phrase to one or two words per line.
-- Mint highlight bars (`*word*`) for the key phrase, red (`_word_`) for warnings only.
+- Mint highlight bars (`*word*`) for the key phrase, red (`_word_`) for warnings only, and purple highlight bars (`~word~`, #6950A1, the transport page colour) for travel and getting there.
 - Real photos in white print frames, with a caption that names the aircraft (`'pic|Grumman Wildcat'`).
 - **End card:**
   - The swish logo from the airshow trailers sits centred (`photos/logo-swish.png`).

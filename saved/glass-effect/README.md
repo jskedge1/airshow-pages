@@ -53,6 +53,7 @@ Every film finishes on the same card, built by `film4.js`, so there is nothing t
    - `[WORD|p:name]` fills the word with `photos/p-name.jpg`
    - `*WORD*` puts a mint highlight bar behind it
    - `_WORD_` makes it red
+   - `~WORD~` puts a purple highlight bar behind it (white text). Purple (#6950A1) is the transport page colour: use it for travel and getting there (trains, shuttles, parking, roads).
 5. New photos: 16:9 crops about 1000 px wide, saved as `photos/p-name.jpg`. Use real photos where you can.
 
 ## Render a video
@@ -89,7 +90,7 @@ Shows with no 2027 date are listed under "Date to be confirmed" with no date or 
 
 ## Notes
 - Fonts are Barlow and Assistant, in `fonts/`.
-- Colours: navy #0E2131, red #D74949, mint #5FE3D6.
+- Colours: navy #0E2131, red #D74949, mint #5FE3D6, purple #6950A1 (from the transport page, for travel).
 - The chairs, trolley and toddler photos (`p-chairsfam`, `p-trolley`, `p-toddler`) are AI images from the image album. Every other photo is real.
 - The Cosford facts in `content-cosford.js` are from the RAF Cosford guide and based on the 2026 show. Update them when the 2027 details are announced.
 - The Blackpool facts are from the Blackpool guide. The 2027 dates are not announced, so times, travel and the line up are from the 2026 show and say so on screen.
