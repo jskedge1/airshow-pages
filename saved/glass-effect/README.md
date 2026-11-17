@@ -1,8 +1,8 @@
 # The glass effect
 
-The saved design for UK Airshow Guide kinetic typography explainer videos (saved 17 Nov 2026).
+The house style for every UK Airshow Guide information video (saved 17 Nov 2026). Use it for any new explainer, show guide or tips video, so they all look like one series.
 
-Big uppercase words slam, rise and whip in on the beat over navy. Key words are filled with real photos and have a white outline. Mint highlight bars sweep in behind the important phrases, and warnings are in red. Each step opens with a red full screen card ("STEP 1 OF 6" and a huge title). Photos sit in white print frames beside the words. A mint story bar runs along the top, there is film grain, and every film ends on the same card: logo, the ukairshowguide.co.uk button and @ukairshowguide. Music and sound effects are made in code and timed to the words.
+Big uppercase words slam, rise and whip in on the beat over navy. Key words are filled with real photos and have a white outline. Mint highlight bars sweep in behind the important phrases, and warnings are in red. Each step opens with a red full screen card ("STEP 1 OF 6" and a huge title). Photos sit in white print frames beside the words. A mint story bar runs along the top, there is film grain, and every film ends on the same end card (below). Music and sound effects are made in code and timed to the words.
 
 One engine, one content file per film, two formats:
 
@@ -16,13 +16,21 @@ One engine, one content file per film, two formats:
 | Camping at airshows | `index-camping.html` | 5 |
 | Where to watch an airshow | `index-watch.html` | 5 |
 | Airshow photography for beginners | `index-photography.html` | 5 |
+| Starter for a new film | `index-template.html` | 1 |
 
 - Portrait 1080 x 1920: open the page as it is.
 - Landscape 1920 x 1080: add `?fmt=land` to the address.
 - Open any page in a browser to watch a live preview, for example https://jskedge1.github.io/airshow-pages/saved/glass-effect/index-cosford.html
 
+## The end card
+Every film finishes on the same card, built by `film4.js`, so there is nothing to set up for it:
+- The Typhoon crosses the screen once, then the UK Airshow Guide logo from the trade videos (`photos/logo-trade.png`) zooms in, centred, with a soft mint glow behind it.
+- Under the logo: the film's `readLine` ("Read my full camping guide at") and the red ukairshowguide.co.uk button.
+- Along the bottom: "FOLLOW FOR MORE TIPS" over Instagram, Facebook and YouTube icons. Change the order or drop one with `socials: ['Instagram', 'YouTube']` in the content file.
+- The Instagram handle is @ukairshowguide and the YouTube channel is @TheBigGuidetoUKAirShows. They are different, so the card names the platforms and does not show one handle for all three.
+
 ## Make a new film
-1. Copy a content file (for example `content-cosford.js` to `content-duxford.js`) and copy its `index-*.html` to load the new file.
+1. Copy `content-template.js` to `content-<topic>.js` and `index-template.html` to `index-<topic>.html`, then point the page at the new content file.
 2. Change `intro`, `stops` and `outro`. Any number of steps works, and the story bar and "STEP 1 OF N" follow the list.
 3. Each step is `['Title|second line', 'When line', [three points]]`. Each point has:
    - `lines`: `[size, words]`, where size is `huge`, `big`, `mid` or `small`
@@ -47,6 +55,14 @@ Needs Node with Playwright, ffmpeg, and Python with numpy.
 5. Encode:
    `ffmpeg -framerate 24 -i out/frames/f%05d.jpg -i out/mix_norm.wav -vf format=yuv420p -c:v libx264 -crf 20 -c:a aac -b:a 256k -cutoff 18000 -shortest -movflags +faststart video.mp4`
    For landscape, use `outL/frames` with the same `out/mix_norm.wav`.
+
+## House rules for information videos
+- Every fact comes from the matching guide on ukairshowguide.co.uk. Nothing is made up.
+- Anything based on the 2026 show, or not announced yet, says so on screen ("in 2026", "dates to be confirmed").
+- Plain English, an advisory tone, and no dashes in the text.
+- Real photos first, and each photo matches the line it sits beside. Caption aircraft by name. Flag any AI image.
+- No personal names on photos.
+- Deliver both formats: portrait for Reels, Shorts and TikTok, landscape for YouTube and the site.
 
 ## Notes
 - Fonts are Barlow and Assistant, in `fonts/`.

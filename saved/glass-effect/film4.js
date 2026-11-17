@@ -123,13 +123,34 @@ window.BUILD = function () {
   const o = t + N * SLEN;
   CUES.scenes.push(o); CUES.cines.push([o, o + 4 * B]);
   phrase(o, o + 4 * B, C.outro, { stagger: B / 2, exit: 'zoom' });
-  const e = o + 4 * B, L0 = LAND ? { x: 110, logo: 200, read: 520, btn: 580, foot: 830 } : { x: 80, logo: 520, read: 880, btn: 940, foot: 1290 };
-  item(world, L0.x, L0.logo, `<img src="photos/logo-new.png" style="width:620px;display:block">`, { t0: e, t1: 99, enter: 'wipe', ed: .5 });
-  phrase(e + .3, 99, [['small', C.readLine || 'Read the full guide at']], { cy: L0.read, x: L0.x });
-  item(world, L0.x, L0.btn, `<div class="btn">${C.url}</div>`, { t0: e + .6, t1: 99, enter: 'pop', origin: '0 50%' });
-  phrase(e + 1.2, 99, [['mid', 'Follow for more tips'], ['mid', '@ukairshowguide', { col: '#fff', size: 104 }], ['small', 'See you on the crowd line.']], { cy: L0.foot, x: L0.x, stagger: B / 2 });
-  item(world, LAND ? 900 : 0, LAND ? 560 : 1500, `<img src="photos/typhoon-cut-s.png" style="width:${LAND ? 640 : 520}px;display:block">`, { t0: e + .4, t1: 99, enter: 'none', drift: [LAND ? 260 : 380, LAND ? -50 : -60, 0], origin: '50% 50%' });
-  DUR = e + 5.0;
+  // end card: the trade video logo in the centre, the guide link under it, socials along the bottom
+  const e = o + 4 * B, CX = SW / 2;
+  const L0 = LAND ? { logoW: 1150, logo: 230, read: 500, btn: 550, line: 735, lbl: 765, ico: 825, icoS: 110, gap: 340 }
+                  : { logoW: 940, logo: 660, read: 880, btn: 940, line: 1430, lbl: 1470, ico: 1545, icoS: 140, gap: 330 };
+  const centred = (html, y, o2) => item(world, 0, y, `<div style="width:${SW}px;display:flex;justify-content:center">${html}</div>`, Object.assign({ t1: 99, origin: '50% 50%' }, o2));
+  // soft glow behind the logo
+  centred(`<div style="width:${LAND ? 1500 : 1000}px;height:${LAND ? 700 : 800}px;background:radial-gradient(closest-side,rgba(95,227,214,.13),rgba(95,227,214,0))"></div>`, L0.logo + L0.logoW * 175 / 2350 - (LAND ? 350 : 400), { t0: e, enter: 'fade', ed: .8, z: 1 });
+  // the Typhoon crosses once, behind the logo
+  item(world, -760, L0.logo - (LAND ? 150 : 330), `<img src="photos/typhoon-cut-s.png" style="width:${LAND ? 620 : 560}px;display:block">`, { t0: e + .1, t1: e + 2.7, enter: 'none', exit: 'cut', drift: [(SW + 1600) / 2.6, -40, 0], z: 2 });
+  CUES.cines.push([e + .1, e + 1]);
+  centred(`<img src="photos/logo-trade.png" style="width:${L0.logoW}px;display:block">`, L0.logo, { t0: e + .25, enter: 'zoomin', ed: .6, drift: [0, 0, .006], z: 4 });
+  phrase(e + .7, 99, [['small', C.readLine || 'Read the full guide at']], { cy: L0.read, center: true });
+  centred(`<div class="btn" style="font-size:${LAND ? 46 : 48}px;padding:18px 44px">${C.url}</div>`, L0.btn, { t0: e + 1.0, enter: 'pop', z: 4 });
+  // socials
+  centred(`<div style="width:${LAND ? 900 : 760}px;height:3px;background:linear-gradient(90deg,rgba(95,227,214,0),${MINT},rgba(95,227,214,0))"></div>`, L0.line, { t0: e + 1.3, enter: 'stretch', ed: .6 });
+  centred(`<div class="b" style="font-weight:700;font-size:${LAND ? 34 : 38}px;letter-spacing:6px;color:${MINT}">FOLLOW FOR MORE TIPS</div>`, L0.lbl, { t0: e + 1.4, enter: 'up', mask: true });
+  const ICON = {
+    Instagram: 'M12 7.3A4.7 4.7 0 1 0 16.7 12 4.7 4.7 0 0 0 12 7.3zm0 7.7a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm4.9-9a1.1 1.1 0 1 0 1.1 1.1 1.1 1.1 0 0 0-1.1-1.1zM21 7.6a5.3 5.3 0 0 0-1.4-3.8A5.4 5.4 0 0 0 15.8 2.4C14.3 2.3 9.7 2.3 8.2 2.4a5.4 5.4 0 0 0-3.8 1.4A5.3 5.3 0 0 0 3 7.6c-.1 1.5-.1 6.1 0 7.6a5.3 5.3 0 0 0 1.4 3.8 5.4 5.4 0 0 0 3.8 1.4c1.5.1 6.1.1 7.6 0a5.3 5.3 0 0 0 3.8-1.4 5.3 5.3 0 0 0 1.4-3.8c.1-1.5.1-6.1 0-7.6zm-2 9.2a3 3 0 0 1-1.7 1.7c-1.2.5-4 .4-5.3.4s-4.1.1-5.3-.4A3 3 0 0 1 5 16.8c-.5-1.2-.4-4-.4-5.3s-.1-4.1.4-5.3A3 3 0 0 1 6.7 4.5C7.9 4 10.7 4.1 12 4.1s4.1-.1 5.3.4A3 3 0 0 1 19 6.2c.5 1.2.4 4 .4 5.3s.1 4.1-.4 5.3z',
+    Facebook: 'M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21z',
+    YouTube: 'M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z',
+  };
+  (C.socials || ['Instagram', 'Facebook', 'YouTube']).forEach((s, k, all) => {
+    const S = L0.icoS, x = CX + (k - (all.length - 1) / 2) * L0.gap - 150;
+    item(world, x, L0.ico, `<div style="width:300px;display:flex;flex-direction:column;align-items:center;gap:${LAND ? 14 : 18}px">
+      <div style="width:${S}px;height:${S}px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 0 rgba(0,0,0,.3)"><svg viewBox="0 0 24 24" style="width:${S * .56}px;height:${S * .56}px"><path fill="${NAVY}" d="${ICON[s]}"/></svg></div>
+      <div class="b" style="font-weight:700;font-size:${LAND ? 36 : 44}px;color:#fff">${s}</div></div>`, { t0: e + 1.6 + k * B / 2, t1: 99, enter: 'pop', origin: '50% 30%', z: 4 });
+  });
+  DUR = e + 5.5;
   // progress bar, one segment per stop
   const segs = [], BR = F.bar, span = LAND ? 1700 : 920, sw = (span - (N - 1) * BR.gap) / N;
   for (let k = 0; k < N; k++) segs.push(div(topLayer, `left:${BR.x + k * (sw + BR.gap)}px;top:${BR.y}px;width:${sw}px;height:8px;background:rgba(255,255,255,.22);overflow:hidden`, `<div style="width:0;height:100%;background:${MINT}"></div>`));
