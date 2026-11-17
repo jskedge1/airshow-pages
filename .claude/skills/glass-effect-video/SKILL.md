@@ -9,7 +9,7 @@ The design, engine and every film so far live in `saved/glass-effect/`. Read its
 This skill is the checklist that keeps every new film in the same house style.
 
 ## The look (keep it the same every time)
-- Navy background (#0E2131), film grain, a mint story bar along the top.
+- Navy background (#0E2131) and a mint story bar along the top. No grain: set `smooth: true` in the content file for the clean, smooth look (gentle slams and zooms, no camera tilt).
 - **The glass:** hero words filled with a real photo and given a white outline (`[WORD|p:photo]`), used for the intro and outro words.
 - **Titles:** a red full-screen card for each step. It says "Step 1", "Step 2" in Barlow bold (never "STEP 1 OF 5"), with a huge uppercase title and a small black topic box.
 - **Type scale:** set `typeScale: true` in the content file. That gives three sizes only:
@@ -52,13 +52,13 @@ This skill is the checklist that keeps every new film in the same house style.
    - Render a still of every settled slide in both formats (`render.mjs stills`) and look at them at phone size.
    - Fix the worst three problems: wrapped orphan words, shrunk lines, wrong photo for a line, or a box that repeats a slide.
    - The renderer prints `PAGE WARN type scale` for any line that still doesn't fit. Fix every one.
-4. Render frames at 60 fps for both formats:
+4. Render frames at 60 fps with `JPGQ=98` for both formats:
    - Portrait: `FPS=60 ... render.mjs frames`
    - Landscape: add `?fmt=land` with `VW=1920 VH=1080`
 5. Make the sound and encode:
    - `score.py` for music and effects.
    - Master to about -14 LUFS with the chain in the README.
-   - Encode with `-framerate 60`, H.264 yuv420p.
+   - Encode with `-framerate 60 -crf 16`, H.264 yuv420p.
 6. Check each file with ffprobe (size, 60 fps, duration, audio present) and pull frames from the encoded file.
 7. Then send portrait and landscape together.
 

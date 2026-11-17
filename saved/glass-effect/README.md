@@ -2,7 +2,7 @@
 
 The house style for every UK Airshow Guide information video (saved 17 Nov 2026). Use it for any new explainer, show guide or tips video, so they all look like one series.
 
-Big uppercase words slam, rise and whip in on the beat over navy. Key words are filled with real photos and have a white outline. Mint highlight bars sweep in behind the important phrases, and warnings are in red. Each step opens with a red full screen card: a plain "Step 1" label in Barlow bold, then a huge title. No "of 6" count. Photos sit in white print frames beside the words. A mint story bar runs along the top, there is film grain, and every film ends on the same end card (below). Music and sound effects are made in code and timed to the words.
+Big uppercase words slam, rise and whip in on the beat over navy. Key words are filled with real photos and have a white outline. Mint highlight bars sweep in behind the important phrases, and warnings are in red. Each step opens with a red full screen card: a plain "Step 1" label in Barlow bold, then a huge title. No "of 6" count. Photos sit in white print frames beside the words. A mint story bar runs along the top, and every film ends on the same end card (below). Music and sound effects are made in code and timed to the words.
 
 One engine, one content file per film, two formats:
 
@@ -28,6 +28,9 @@ One engine, one content file per film, two formats:
 
 ## Type scale (use this for new films)
 Set `typeScale: true` in the content file. The whole film then uses three sizes only: large (Barlow 800 uppercase, white), medium (Barlow 700, mint) and small (Assistant 600, grey). `huge` and `big` are the same large size. A line too wide for the slide wraps onto the next line instead of shrinking, and the renderer prints `PAGE WARN type scale` for anything that still does not fit. Photo filled hero words with an explicit `size` keep it. Break long phrases by hand at natural points. The project skill `.claude/skills/glass-effect-video` has the full checklist.
+
+## Smooth and clear (use this for new films)
+Set `smooth: true` in the content file. It turns the film grain off, makes the slams and zoom exits gentler, takes the overshoot and tilt out of drops, and stops the camera tilt on the step cards. Render frames with `JPGQ=98` and encode with `-crf 16` so the picture stays clean.
 
 ## The end card
 Every film finishes on the same card, built by `film4.js`, so there is nothing to set up for it:

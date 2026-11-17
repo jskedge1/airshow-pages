@@ -2,7 +2,7 @@
 // Duxford air shows 2027 at IWM Duxford. Facts from the Duxford guide page (2027 calendar checked 11 October 2026).
 // Photos are the real Duxford photos used on that guide.
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Read my full Duxford guide at', stepLabel: 'Step', typeScale: true,
+  url: 'ukairshowguide.co.uk', readLine: 'Read my full Duxford guide at', stepLabel: 'Step', typeScale: true, smooth: true,
   introBeats: 12,
   intro: [
     [0, 4, [['big', 'The'], ['huge', '[Duxford|p:dx-formation]', { size: 340, enter: 'slam' }], ['big', 'air shows']], { stagger: B / 2, exit: 'zoom' }],

@@ -2,7 +2,7 @@
 // copy index-template.html to index-<topic>.html and point it at the new file.
 // Use only facts from the matching guide on ukairshowguide.co.uk. Mark 2026 details and dates to be confirmed on screen.
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Read my full guide at', stepLabel: 'Step', typeScale: true,
+  url: 'ukairshowguide.co.uk', readLine: 'Read my full guide at', stepLabel: 'Step', typeScale: true, smooth: true,
   introBeats: 12,
   // intro: three phrases on the beat grid, [startBeat, endBeat, lines, options]
   intro: [

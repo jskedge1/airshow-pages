@@ -37,7 +37,7 @@ try {
     let done = 0;
     await Promise.all(pages.map(async (p, w) => {
       for (let n = w; n < N; n += W) {
-        await shot(p, n / FPS, `${fd}/f${String(n).padStart(5, '0')}.jpg`, 93);
+        await shot(p, n / FPS, `${fd}/f${String(n).padStart(5, '0')}.jpg`, +(process.env.JPGQ || 93));
         if (++done % 120 === 0) console.log('frames', done, '/', N);
       }
     }));

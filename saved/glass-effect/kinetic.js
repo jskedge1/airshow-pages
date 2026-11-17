@@ -28,7 +28,10 @@ function item(parent, x, y, html, o) {
   else if (o.enter && o.enter !== 'none' && o.enter !== 'fade') CUES.pops.push(o.t0);
   return it;
 }
+// FILM.smooth: no grain, gentler slams and zoom exits, a softer camera (clean, smooth house look)
+const SM = () => !!(window.FILM && window.FILM.smooth);
 function setT(t) {
+  const sm = SM();
   for (const it of IT) {
     const end = it.t1 + (it.exit === 'cut' ? 0 : it.xd);
     if (t < it.t0 || t >= end) { it.w.style.visibility = 'hidden'; continue; }
@@ -38,20 +41,20 @@ function setT(t) {
     switch (it.enter) {
       case 'up': iy = 115 * (1 - eo5(p)); break;
       case 'down': iy = -115 * (1 - eo5(p)); break;
-      case 'slam': ws = 1 + 1.8 * (1 - eo5(p)); op = clamp(p * 4); break;
+      case 'slam': ws = sm ? 1 + .45 * (1 - eo3(p)) : 1 + 1.8 * (1 - eo5(p)); op = clamp(p * (sm ? 2.5 : 4)); break;
       case 'left': wx = -1300 * (1 - eo5(p)); break;
       case 'right': wx = 1300 * (1 - eo5(p)); break;
       case 'pop': ws = Math.max(0, ebk(p)); break;
       case 'stretch': sx = eo5(p); break;
       case 'wipe': clip = `inset(-20% ${(100 * (1 - eo5(p))).toFixed(2)}% -20% 0)`; break;
       case 'fade': op = p; break;
-      case 'drop': { const b = p < 1 ? ebk(p) : 1; wy = -1500 * (1 - b); wr = 6 * (1 - p); break; }
+      case 'drop': { const b = p < 1 ? (sm ? eo3(p) : ebk(p)) : 1; wy = -1500 * (1 - b); wr = (sm ? 0 : 6) * (1 - p); break; }
       case 'zoomin': ws = .2 + .8 * eo5(p); op = clamp(p * 3); break;
     }
     if (t >= it.t1) switch (it.exit) {
       case 'up': iy -= 115 * ei3(q); break;
       case 'down': iy += 115 * ei3(q); break;
-      case 'zoom': ws *= 1 + 5 * ei3(q); op *= 1 - q; break;
+      case 'zoom': ws *= sm ? 1 + .6 * eio(q) : 1 + 5 * ei3(q); op *= sm ? Math.pow(1 - q, 3) : 1 - q; break;
       case 'left': wx -= 1400 * ei3(q); break;
       case 'right': wx += 1400 * ei3(q); break;
       case 'fade': op *= 1 - q; break;
@@ -73,10 +76,10 @@ function setT(t) {
   }
   // camera: list of [t0, t1, fromTransform, toTransform] numbers {s, r, x, y}
   let cam = { s: 1, r: 0, x: 0, y: 0 };
-  for (const c of CAM) if (t >= c[0]) { const f = eio(clamp((t - c[0]) / (c[1] - c[0]))); cam = { s: c[2].s + (c[3].s - c[2].s) * f, r: c[2].r + (c[3].r - c[2].r) * f, x: c[2].x + (c[3].x - c[2].x) * f, y: c[2].y + (c[3].y - c[2].y) * f }; }
+  for (const c of CAM) if (t >= c[0] && !sm) { const f = eio(clamp((t - c[0]) / (c[1] - c[0]))); cam = { s: c[2].s + (c[3].s - c[2].s) * f, r: c[2].r + (c[3].r - c[2].r) * f, x: c[2].x + (c[3].x - c[2].x) * f, y: c[2].y + (c[3].y - c[2].y) * f }; }
   world.style.transform = `translate(${cam.x}px,${cam.y}px) rotate(${cam.r}deg) scale(${cam.s})`;
   if (window.UPD) window.UPD(t);
-  grain(Math.floor(t * 12));
+  if (sm) gc.style.display = 'none'; else grain(Math.floor(t * 12));
 }
 const gc = document.getElementById('grain'), gx = gc.getContext('2d'), GR = [];
 (function () {
