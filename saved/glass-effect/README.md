@@ -11,6 +11,11 @@ One engine, one content file per film, two formats:
 | How to plan your 2027 airshow | `index-plan.html` | 8 |
 | How to plan your 2027 season | `index-season.html` | 6 |
 | How to plan the RAF Cosford Air Show 2027 | `index-cosford.html` | 6 |
+| Blackpool Air Show 2027 | `index-blackpool.html` | 5 |
+| Shuttleworth air shows 2027 | `index-shuttleworth.html` | 5 |
+| Camping at airshows | `index-camping.html` | 5 |
+| Where to watch an airshow | `index-watch.html` | 5 |
+| Airshow photography for beginners | `index-photography.html` | 5 |
 
 - Portrait 1080 x 1920: open the page as it is.
 - Landscape 1920 x 1080: add `?fmt=land` to the address.
@@ -21,7 +26,7 @@ One engine, one content file per film, two formats:
 2. Change `intro`, `stops` and `outro`. Any number of steps works, and the story bar and "STEP 1 OF N" follow the list.
 3. Each step is `['Title|second line', 'When line', [three points]]`. Each point has:
    - `lines`: `[size, words]`, where size is `huge`, `big`, `mid` or `small`
-   - `pics`: one or two photo panels, the file names in `photos/` without `p-` (for example `['cosjaguars']`)
+   - `pics`: one or two photo panels, the file names in `photos/` without `p-` (for example `['cosjaguars']`). Add a caption after a bar to name what is in the photo: `['bp-mig|MiG-17']`
    - `bg`: a dimmed photo or clip behind the words
 4. Inside the words:
    - `[WORD|p:name]` fills the word with `photos/p-name.jpg`
@@ -31,7 +36,7 @@ One engine, one content file per film, two formats:
 
 ## Render a video
 Needs Node with Playwright, ffmpeg, and Python with numpy.
-1. `sh make-frames.sh` once, to rebuild the campsite clip frames from `clips/campsite-pan.mp4` (they are not stored in the repo).
+1. `sh make-frames.sh` once, to rebuild the clip frames from `clips/` (campsite pan, shelter and pitches; they are not stored in the repo).
 2. Frames:
    - Portrait: `PAGE=index-cosford.html OUT=out FPS=24 node render.mjs frames`
    - Landscape: `PAGE='index-cosford.html?fmt=land' OUT=outL VW=1920 VH=1080 FPS=24 node render.mjs frames`
@@ -48,3 +53,7 @@ Needs Node with Playwright, ffmpeg, and Python with numpy.
 - Colours: navy #0E2131, red #D74949, mint #5FE3D6.
 - The chairs, trolley and toddler photos (`p-chairsfam`, `p-trolley`, `p-toddler`) are AI images from the image album. Every other photo is real.
 - The Cosford facts in `content-cosford.js` are from the RAF Cosford guide and based on the 2026 show. Update them when the 2027 details are announced.
+- The Blackpool facts are from the Blackpool guide. The 2027 dates are not announced, so times, travel and the line up are from the 2026 show and say so on screen.
+- The Shuttleworth facts and the seven 2027 dates are from the Shuttleworth guide.
+- The camping, where to watch and photography films use the tips from those guides on the site.
+- Photos named `p-bp-*` (Blackpool) and `p-sw-*` (Old Warden) are from Mac's airshow folders. Photos named `p-c-*` are the real campsite photos from the camping guide.

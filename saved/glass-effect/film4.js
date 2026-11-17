@@ -66,8 +66,11 @@ function phrase(t0, t1, lines, o = {}) {
 function panels(t0, t1, pics, exit) {
   const P = F.panel, n = pics.length;
   const w = n === 1 ? P.maxW : Math.round(P.maxW * .62), h = Math.round(w * 9 / 16);
-  pics.forEach((p, k) => {
-    const html = `<div style="background:#fff;padding:${LAND ? 12 : 14}px;box-shadow:12px 14px 0 rgba(0,0,0,.4)"><img src="photos/p-${p}.jpg" style="display:block;width:${w}px;height:${h}px;object-fit:cover"></div>`;
+  pics.forEach((pc, k) => {
+    // 'name|caption': the caption names what is in the photo, under the picture
+    const [p, cap] = pc.split('|');
+    const capHtml = cap ? `<div style="font-family:Barlow;font-weight:700;font-size:${n === 1 ? (LAND ? 26 : 30) : (LAND ? 20 : 24)}px;color:#13293C;padding:${LAND ? 8 : 10}px 2px 0;line-height:1.1;width:${w}px">${cap}</div>` : '';
+    const html = `<div style="background:#fff;padding:${LAND ? 12 : 14}px;box-shadow:12px 14px 0 rgba(0,0,0,.4)"><img src="photos/p-${p}.jpg" style="display:block;width:${w}px;height:${h}px;object-fit:cover">${capHtml}</div>`;
     let px = P.x, py = P.cy - h / 2;
     if (n === 2) { px = P.x + (k ? P.maxW - w - 10 : 0); py = P.cy - h * .78 + k * h * .62; }
     const rot = n === 1 ? (LAND ? 1.5 : -1.5) : (k ? 3 : -3);
