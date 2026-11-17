@@ -24,7 +24,7 @@ One engine, one content file per film, two formats:
 
 ## The end card
 Every film finishes on the same card, built by `film4.js`, so there is nothing to set up for it:
-- The Typhoon crosses the screen once, then the UK Airshow Guide swish logo from the airshow trailers (`photos/logo-swish.png`, from `logo-2026-new.png`) zooms in, centred, with a soft mint glow behind it.
+- The UK Airshow Guide swish logo from the airshow trailers (`photos/logo-swish.png`, from `logo-2026-new.png`) zooms in, centred, with a soft mint glow behind it.
 - Under the logo: the film's `readLine` ("Read my full camping guide at") and the red ukairshowguide.co.uk button.
 - Along the bottom: "FOLLOW FOR MORE TIPS" over Instagram, Facebook and YouTube icons. Change the order or drop one with `socials: ['Instagram', 'YouTube']` in the content file.
 - The Instagram handle is @ukairshowguide and the YouTube channel is @TheBigGuidetoUKAirShows. They are different, so the card names the platforms and does not show one handle for all three.

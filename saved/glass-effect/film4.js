@@ -131,9 +131,7 @@ window.BUILD = function () {
   const centred = (html, y, o2) => item(world, 0, y, `<div style="width:${SW}px;display:flex;justify-content:center">${html}</div>`, Object.assign({ t1: 99, origin: '50% 50%' }, o2));
   // soft glow behind the logo
   centred(`<div style="width:${LAND ? 1500 : 1000}px;height:${LAND ? 700 : 800}px;background:radial-gradient(closest-side,rgba(95,227,214,.13),rgba(95,227,214,0))"></div>`, L0.logo + logoH / 2 - (LAND ? 350 : 400), { t0: e, enter: 'fade', ed: .8, z: 1 });
-  // the Typhoon crosses once, behind the logo
-  item(world, -760, L0.logo - (LAND ? 150 : 330), `<img src="photos/typhoon-cut-s.png" style="width:${LAND ? 620 : 560}px;display:block">`, { t0: e + .1, t1: e + 2.7, enter: 'none', exit: 'cut', drift: [(SW + 1600) / 2.6, -40, 0], z: 2 });
-  CUES.cines.push([e + .1, e + 1]);
+  CUES.cines.push([e + .25, e + 1]);
   centred(`<img src="photos/logo-swish.png" style="width:${L0.logoW}px;display:block;filter:drop-shadow(0 14px 0 rgba(0,0,0,.3))">`, L0.logo, { t0: e + .25, enter: 'zoomin', ed: .6, drift: [0, 0, .006], z: 4 });
   phrase(e + .7, 99, [['small', C.readLine || 'Read the full guide at']], { cy: L0.read, center: true });
   centred(`<div class="btn" style="font-size:${LAND ? 46 : 48}px;padding:18px 44px">${C.url}</div>`, L0.btn, { t0: e + 1.0, enter: 'pop', z: 4 });
