@@ -21,6 +21,7 @@ One engine, one content file per film, two formats:
 | Featured air shows 2027 (not the full calendar) | `index-featured.html` | 7 |
 | UK air show calendar 2027 (every show on the site) | `index-calendar.html` | 7 |
 | Website walkthrough 2027 (two minutes, real pages in a phone or browser) | `index-walkthrough.html` | 8 |
+| How My Airshow Hub works (landscape only, about 2.5 minutes) | `index-hub.html?fmt=land` | 8 |
 | Starter for a new film | `index-template.html` | 1 |
 
 - Portrait 1080 x 1920: open the page as it is.
@@ -89,6 +90,9 @@ A point can show a real page of the site: `screen: { m: ['home', 0, 250], d: ['h
 1. Shoot the pages: `node shoot3.mjs m home duxford` and `node shoot3.mjs d home duxford` (it scrolls a normal window down the page and stitches each screenful, because very tall full page shots come out blank).
 2. Crop each screen to `screens/<page>-<from>-<to>-m.jpg` and `-d.jpg` (the crops for the walkthrough are in `screens/`).
 3. Keep anything you don't want shown (for example Southport) outside the scroll range.
+
+Zoom mode, used for the hub film: `screen: Z(page, x, y from, y to, zoom)` loads the whole page (`screens/<page>-full-d.jpg`), opens on the full width and pushes in on the panel centred at (x, y), drifting from y to y. Use it when the detail matters.
+The hub screens come from the working preview `previews/hub-login-demo.html`, filled in like a member by `hubcap.mjs`: RIAT and Eastbourne saved, a few ticks, shown as the example member Alex (the name the hub's own explainer uses), the preview banner hidden and the Southport labels hidden. History, Hangar and Group need the live site, so they show as a new member sees them.
 
 ## The calendar film
 `content-calendar.js` is generated from the live calendar page, so names and dates always match the site:

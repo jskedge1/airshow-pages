@@ -116,11 +116,12 @@ function background(t0, t1, bg) {
 const SCREENS = [];
 function screenPanel(t0, t1, sc) {
   const [pg, y0, y1] = LAND ? sc.d : sc.m, iw = SCR.w - 2 * SCR.pad, ih = SCR.h - SCR.bar - 2 * SCR.pad;
-  const k = iw / (LAND ? 1440 : 430), src = `screens/${pg}-${y0}-${y1}-${LAND ? 'd' : 'm'}.jpg`;
+  const k = iw / (LAND ? 1440 : 430), src = sc.z ? `screens/${pg}-full-${LAND ? 'd' : 'm'}.jpg` : `screens/${pg}-${y0}-${y1}-${LAND ? 'd' : 'm'}.jpg`;
   const bar = LAND ? `<div style="height:${SCR.bar}px;display:flex;align-items:center;gap:9px;padding:0 16px"><i style="width:12px;height:12px;border-radius:50%;background:#D74949"></i><i style="width:12px;height:12px;border-radius:50%;background:#F2B233"></i><i style="width:12px;height:12px;border-radius:50%;background:#5FE3D6"></i><span style="margin-left:14px;flex:1;height:28px;border-radius:14px;background:#14283A;color:#C9D6E0;font-family:Assistant;font-weight:600;font-size:17px;line-height:28px;padding-left:16px">ukairshowguide.co.uk</span></div>` : '';
   const html = `<div class="scr" style="width:${SCR.w}px;height:${SCR.h}px;border-radius:${LAND ? 18 : 64}px;background:${LAND ? '#0B1A27' : '#04101A'};padding:${LAND ? `0 ${SCR.pad}px ${SCR.pad}px` : SCR.pad + 'px'};box-shadow:0 34px 70px rgba(0,0,0,.55),0 0 0 2px rgba(95,227,214,.22);transform-origin:50% 60%">${bar}<div style="width:${iw}px;height:${ih}px;border-radius:${LAND ? 6 : 46}px;overflow:hidden;position:relative;background:#fff"><img src="${src}" style="position:absolute;left:0;top:0;width:${iw}px;will-change:transform"></div></div>`;
   const it = item(world, SCR.x, SCR.y, html, { t0: t0 + .2, t1, enter: 'fade', exit: 'fade', ed: .5, xd: .35, z: 4, origin: '50% 50%' });
-  SCREENS.push({ el: it.inner.querySelector('.scr'), img: it.inner.querySelector('img'), t0: t0 + .2, t1, y0, y1, k });
+  // zoom mode (sc.z): the whole page is loaded, the view opens on the full width and pushes in on the panel at (cx, y)
+  SCREENS.push({ el: it.inner.querySelector('.scr'), img: it.inner.querySelector('img'), t0: t0 + .2, t1, y0, y1, k, z: sc.z, cx: sc.cx, iw, ih });
   CUES.pops.push(t0 + .2);
 }
 function updScreens(t) {
@@ -131,7 +132,13 @@ function updScreens(t) {
     const drift = Math.sin((t - s.t0) * .8) * 1.2;
     s.el.style.transform = LAND ? `perspective(1800px) translateX(${(90 * (1 - p)).toFixed(1)}px) rotateY(${(-16 * (1 - p) - 4 + drift).toFixed(2)}deg) scale(${(.94 + .06 * p).toFixed(4)})`
                                 : `perspective(1800px) translateY(${(120 * (1 - p)).toFixed(1)}px) rotateX(${(14 * (1 - p) + 3 + drift * .6).toFixed(2)}deg) scale(${(.94 + .06 * p).toFixed(4)})`;
-    s.img.style.transform = `translateY(${(-(s.y1 - s.y0) * q * s.k).toFixed(1)}px)`;
+    if (!s.z) { s.img.style.transform = `translateY(${(-(s.y1 - s.y0) * q * s.k).toFixed(1)}px)`; continue; }
+    const W = LAND ? 1440 : 430, H = s.img.naturalHeight / (LAND ? 1 : 2) || 3000;
+    const sz = 1 + (s.z - 1) * eio(clamp((t - s.t0 - .35) / 1.6)), sc2 = s.k * sz;
+    const cy = s.y0 + (s.y1 - s.y0) * q;
+    const left = clamp(s.iw / 2 - s.cx * sc2, s.iw - W * sc2, 0), top = clamp(s.ih / 2 - cy * sc2, Math.min(0, s.ih - H * sc2), 0);
+    s.img.style.width = (W * sc2).toFixed(1) + 'px';
+    s.img.style.transform = `translate(${left.toFixed(1)}px,${top.toFixed(1)}px)`;
   }
 }
 // one point: words, optional photo panels, optional website screen, optional background
