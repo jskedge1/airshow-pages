@@ -35,21 +35,41 @@ function register(node) {
   node.querySelectorAll('.fill').forEach(e => FILL.push({ el: e, t: +e.dataset.t, url: e.style.backgroundImage.slice(5, -2) }));
 }
 // lines: [kind, markup, opts]
+// Fixed type scale (FILM.typeScale): one large, one medium and one small size for the whole film.
+// huge and big are the same large size; a line too wide for the slide wraps onto the next line
+// instead of shrinking. Hero words with an explicit size (the photo filled intro and outro words) keep it.
+const TS = LAND ? { big: 138, mid: 62, small: 44 } : { big: 148, mid: 70, small: 50 };
+function tokens(m) { return m.match(/\[[^\]]+\]|\*[^*]+\*|_[^_]+_|\S+/g) || []; }
 function phrase(t0, t1, lines, o = {}) {
   const maxW = o.maxW || F.maxW, x = o.x ?? F.x, maxH = o.maxH || F.maxH;
+  const fixed = window.FILM && window.FILM.typeScale;
+  if (fixed) {
+    const out = [];
+    for (const [k0, m, lo = {}] of lines) {
+      const k = k0 === 'huge' && !lo.size ? 'big' : k0, K = KIND[k], s = lo.size ? null : TS[k] || TS.big;
+      if (!s) { out.push([k, m, lo]); continue; }
+      const wOf = mm => { const tt = K.up ? plain(mm).toUpperCase() : plain(mm); return textW(tt, s, K.w, K.f) + (mm.match(/\*/g) || []).length / 2 * .24 * s; };
+      let cur = '';
+      // a highlighted or red phrase that is too wide on its own is split word by word, keeping its colour
+      const tks = []; for (const tk of tokens(m)) { const mk = /^[*_]/.test(tk) ? tk[0] : ''; if (mk && tk.includes(' ') && wOf(tk) > maxW) tk.slice(1, -1).split(' ').forEach(w => tks.push(mk + w + mk)); else tks.push(tk); }
+      for (const tk of tks) { const nx = cur ? cur + ' ' + tk : tk; if (cur && wOf(nx) > maxW) { out.push([k, cur, Object.assign({}, lo, { _fix: s })]); cur = tk; } else cur = nx; }
+      if (cur) out.push([k, cur, Object.assign({}, lo, { _fix: s })]);
+    }
+    lines = out;
+  }
   let L = lines.map(([k, m, lo = {}]) => {
     const K = KIND[k], txt = K.up ? plain(m).toUpperCase() : plain(m);
     const hlPad = (m.match(/\*/g) || []).length / 2 * .24;
-    let s = Math.min((lo.size || K.max) * (lo.size && LAND ? .75 : 1), K.max);
+    let s = lo._fix || Math.min((lo.size || K.max) * (lo.size && LAND ? .75 : 1), K.max);
     const w = textW(txt, s, K.w, K.f) + hlPad * s;
-    if (w > maxW) s = Math.floor(s * maxW / w);
+    if (w > maxW) { if (lo._fix) console.warn('type scale: line too wide, shrinking', txt); s = Math.floor(s * maxW / w); }
     return { k, K, m, s, lo, txt, hlPad };
   });
   // uniform: every line of the same kind on this slide gets the same (smallest fitting) size, for lists
   if (o.uniform) for (const k of Object.keys(KIND)) { const m = Math.min(...L.filter(l => l.k === k).map(l => l.s)); L.forEach(l => { if (l.k === k) l.s = m; }); }
   const gap = o.gap ?? (LAND ? 28 : 30);
   let H = L.reduce((a, l) => a + l.s * l.K.lh, 0) + gap * (L.length - 1);
-  if (H > maxH) { const f = maxH / H; L.forEach(l => l.s = Math.floor(l.s * f)); H = maxH; }
+  if (H > maxH) { if (fixed) console.warn('type scale: slide too tall', H | 0, '>', maxH); else { const f = maxH / H; L.forEach(l => l.s = Math.floor(l.s * f)); H = maxH; } }
   let y = (o.cy ?? F.cy) - H / 2;
   const out = [];
   L.forEach((l, i) => {

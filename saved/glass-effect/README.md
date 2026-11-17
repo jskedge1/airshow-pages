@@ -14,6 +14,7 @@ One engine, one content file per film, two formats:
 | Blackpool Air Show 2027 | `index-blackpool.html` | 5 |
 | Shuttleworth air shows 2027 | `index-shuttleworth.html` | 5 |
 | Duxford air shows 2027 | `index-duxford.html` | 6 |
+| Duxford air shows 2027, type scale version (60 fps) | `index-duxford2.html` | 6 |
 | Camping at airshows | `index-camping.html` | 5 |
 | Where to watch an airshow | `index-watch.html` | 5 |
 | Airshow photography for beginners | `index-photography.html` | 5 |
@@ -24,6 +25,9 @@ One engine, one content file per film, two formats:
 - Portrait 1080 x 1920: open the page as it is.
 - Landscape 1920 x 1080: add `?fmt=land` to the address.
 - Open any page in a browser to watch a live preview, for example https://jskedge1.github.io/airshow-pages/saved/glass-effect/index-cosford.html
+
+## Type scale (use this for new films)
+Set `typeScale: true` in the content file. The whole film then uses three sizes only: large (Barlow 800 uppercase, white), medium (Barlow 700, mint) and small (Assistant 600, grey). `huge` and `big` are the same large size. A line too wide for the slide wraps onto the next line instead of shrinking, and the renderer prints `PAGE WARN type scale` for anything that still does not fit. Photo filled hero words with an explicit `size` keep it. Break long phrases by hand at natural points. The project skill `.claude/skills/glass-effect-video` has the full checklist.
 
 ## The end card
 Every film finishes on the same card, built by `film4.js`, so there is nothing to set up for it:
@@ -52,14 +56,15 @@ Every film finishes on the same card, built by `film4.js`, so there is nothing t
 Needs Node with Playwright, ffmpeg, and Python with numpy.
 1. `sh make-frames.sh` once, to rebuild the clip frames from `clips/` (campsite pan, shelter and pitches; they are not stored in the repo).
 2. Frames:
-   - Portrait: `PAGE=index-cosford.html OUT=out FPS=24 node render.mjs frames`
-   - Landscape: `PAGE='index-cosford.html?fmt=land' OUT=outL VW=1920 VH=1080 FPS=24 node render.mjs frames`
+   - Portrait: `PAGE=index-cosford.html OUT=out FPS=60 node render.mjs frames`
+   - Landscape: `PAGE='index-cosford.html?fmt=land' OUT=outL VW=1920 VH=1080 FPS=60 node render.mjs frames`
+   - 60 fps is the standard from the Duxford type scale version on (older films were 24 fps).
    - To check first, use `sheet 1` instead of `frames` for a contact sheet.
 3. Music and effects: `OUT=out python3 score.py` writes `out/mix.wav`.
 4. Master the sound to about -14 LUFS:
    `ffmpeg -i out/mix.wav -af "highpass=f=28,lowpass=f=14000,aformat=channel_layouts=stereo,aresample=192000,volume=5.6dB,alimiter=limit=0.7:attack=1:release=80:level=false,aresample=48000" out/mix_norm.wav`
 5. Encode:
-   `ffmpeg -framerate 24 -i out/frames/f%05d.jpg -i out/mix_norm.wav -vf format=yuv420p -c:v libx264 -crf 20 -c:a aac -b:a 256k -cutoff 18000 -shortest -movflags +faststart video.mp4`
+   `ffmpeg -framerate 60 -i out/frames/f%05d.jpg -i out/mix_norm.wav -vf format=yuv420p -c:v libx264 -crf 20 -c:a aac -b:a 256k -cutoff 18000 -shortest -movflags +faststart video.mp4`
    For landscape, use `outL/frames` with the same `out/mix_norm.wav`.
 
 ## House rules for information videos

@@ -15,6 +15,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
 async function page(browser) {
   const p = await browser.newPage({ viewport: { width: +(process.env.VW || 1080), height: +(process.env.VH || 1920) }, deviceScaleFactor: 1 });
+  if (!browser._warned) { browser._warned = 1; const seen = new Set(); p.on('console', m => { if (m.type() === 'warning' && !seen.has(m.text())) { seen.add(m.text()); console.log('PAGE WARN', m.text()); } }); }
   await p.goto(URL_);
   await p.waitForFunction(() => typeof window.ready === 'function');
   await p.evaluate(() => window.ready());
