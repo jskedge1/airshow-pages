@@ -22,6 +22,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Show pages, camping style layout (live on Wix since 19 Oct) | https://jskedge1.github.io/airshow-pages/camping-layout/<show>.html |
 | New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
+| My Train to Work (personal phone app, not a Wix page: live times for the 05:45 Benfleet to West Ham c2c train, from the Huxley2 National Rail feed) | https://jskedge1.github.io/airshow-pages/my-commute/ |
 | UK Airshow Map (Find your Air Show page) | https://jskedge1.github.io/airshow-pages/airshow-map.html |
 | Find your Air Show (top HTML embed on /air-shows-guides, by website address since 30 Oct; photos in find-img/) | https://jskedge1.github.io/airshow-pages/find-your-airshow.html |
 | YouTube (Wix page /youtube; videos come from youtube/videos.json, refreshed every hour by .github/workflows/youtube.yml and tools-youtube.py. To move a video to another show or topic, edit it in videos.json and set "fixed": true) | https://jskedge1.github.io/airshow-pages/youtube.html |
