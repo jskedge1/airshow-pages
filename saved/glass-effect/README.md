@@ -23,6 +23,8 @@ One engine, one content file per film, two formats:
 | Website walkthrough 2027 (two minutes, real pages in a phone or browser) | `index-walkthrough.html` | 8 |
 | How My Airshow Hub works (landscape only, about 2.5 minutes) | `index-hub.html?fmt=land` | 8 |
 | Aircraft restoration projects: an outreach film for organisations with a restoration under way (landscape only, about 2 minutes) | `index-restoration.html?fmt=land` | 7 |
+| UK Airshow Guide advert, glass effect cut (about 44 seconds) | `index-advert.html` | 5 |
+| UK Airshow Guide advert, cinematic cut (trailer style, about 45 seconds) | `index-advert-cine.html` | 7 |
 | Starter for a new film | `index-template.html` | 1 |
 
 - Portrait 1080 x 1920: open the page as it is.
@@ -120,3 +122,10 @@ Shows with no 2027 date are listed under "Date to be confirmed" with no date or 
 - The screens are the Restoration Projects preview page (Jaguar GR3A "Phoenix"), shot at 1440 wide into `screens/restoration-full-d.jpg` and used in zoom mode. That page is a sample: its jet, people, dates and photos are made up and its photos are AI generated. The film says "Example page" and "The jet and photos are a sample" on screen, and never presents Phoenix as a real project. Reshoot the screen when a real project page exists.
 - The photo panels and photo filled words are real photos only (Jaguars at Cosford, Chinook, Tornado, Swordfish, Lancaster, Spitfire, Hurricanes).
 - Two files are delivered: the 60 fps master, and an email copy (1280 x 720, 30 fps) small enough to attach.
+
+## The advert (two cuts)
+An advert for the whole site: everything you need for UK air shows in one place. Every claim is from the live pages (home, the 2027 calendar, public transport, camping, photography and My Airshow Hub, "free for everyone, no card, no catch").
+- `content-advert.js` is the glass effect cut: red title cards (no Step label), photo prints, real site screens, the standard end card.
+- `content-advert-cine.js` is the cinematic cut, built by `cine.js` on the same engine: letterbox bars, full screen graded shots with slow big push ins, huge trailer titles with impact flashes, then the glass effect words landing over the dimmed shots, and the same end card (`endCard()` in `film4.js`). Its score is `score-cine.py` (drone and heartbeat, a rising string ostinato with an impact on every cut, a driving section under the words). Render it like any film, but make the sound with `OUT=... python3 score-cine.py`.
+- Shots and photos are Jack's own RIAT 2025 photos (`photos/f-j*.jpg` landscape 2400 wide, `fp-j*.jpg` portrait crops, `p-j*.jpg` print panels), from Drive, Air Shows, RIAT 2025. The display pilot's name on the Typhoon is blurred. Captions name the aircraft and the show.
+- Video clips: when the Z6 footage is available, swap the shots for clips (a shot can become a `bg: { clip, clipL, n }` frame folder made by `make-frames.sh`).
