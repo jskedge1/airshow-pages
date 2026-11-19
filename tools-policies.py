@@ -52,6 +52,7 @@ def inline(text, own):
     t = re.sub(r"([\w.]+@[\w.]+\.[a-z]{2,})", r'<a href="mailto:\1">\1</a>', t)
     t = re.sub(r"\b(www\.[\w.]+\.(?:co\.uk|com|org))", r'<a href="https://\1" target="_blank" rel="noopener">\1</a>', t)
     t = re.sub(r"\b(ico\.org\.uk)\b", r'<a href="https://ico.org.uk" target="_blank" rel="noopener">\1</a>', t)
+    t = re.sub(r"\b(ofcom\.org\.uk)\b", r'<a href="https://www.ofcom.org.uk" target="_blank" rel="noopener">\1</a>', t)
     t = re.sub(r"\b(0303 123 1113)\b", r'<a href="tel:03031231113">\1</a>', t)
     for phrase, key in CROSS:
         if key == own:
