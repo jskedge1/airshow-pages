@@ -5,11 +5,13 @@
 import * as M from './lib/motion.js';
 
 const { W, H, E, prog, lerp, clamp, springU, springKeys, SPRING, wobble, font, layout, glyph, text,
-  cover, crop, rrect, zoomAbout, mulberry32, noise1 } = M;
+  cover, crop, zoomAbout, mulberry32, noise1 } = M;
 
 // Brand tokens (advertise-with-us.html / home.html): navy, one accent teal, white type.
 const C = { navy: '#26343E', navy2: '#33424D', teal: '#32B4AF', tealSoft: '#9FD8D5', white: '#FFFFFF' };
 const D = 'Display', UI = 'UI';
+// Square corners everywhere (client request): every panel, tab and pill is a plain rectangle.
+const rrect = (ctx, x, y, w, h) => { ctx.beginPath(); ctx.rect(x, y, w, h); };
 
 // Every visual accent: [beat, label, sfx, opts]. sfx.mjs voices them.
 const HITS = [
@@ -216,7 +218,7 @@ function sceneGuide(ctx, u) {
   ctx.save();
   rrect(ctx, px, py, pw, ph, 16); ctx.clip();
   ctx.fillStyle = 'rgba(244,247,250,0.94)'; ctx.fillRect(px, py, pw, 46);
-  ['#D7E3EA', '#D7E3EA', '#D7E3EA'].forEach((c, i) => { ctx.beginPath(); ctx.arc(px + 26 + i * 22, py + 23, 6.5, 0, 7); ctx.fillStyle = c; ctx.fill(); });
+  ['#D7E3EA', '#D7E3EA', '#D7E3EA'].forEach((c, i) => { ctx.fillStyle = c; ctx.fillRect(px + 20 + i * 22, py + 17, 12, 12); });
   rrect(ctx, px + 110, py + 10, 420, 26, 13); ctx.fillStyle = '#E8EEF2'; ctx.fill();
   text(ctx, 'ukairshowguide.co.uk', px + 128, py + 30, font(17, 500, UI), '#4E5D68');
   if (IM.home) cover(ctx, IM.home, px, py + 46, pw, ph - 46, { fx: 0.15, fy: 0.45, zoom: logzoom(1, 1.12, prog(u, 12, 16)) });
@@ -237,7 +239,7 @@ function sceneGuide(ctx, u) {
 // ------------------------------------------------------------------ S3 prepared visitors (u 16..24)
 function camS3(u) { return { z: logzoom(1.05, 1.16, (u - 15) / 9), fx: 0.25, fy: 0.5 }; }
 function icon(ctx, kind, cx, cy, s, color) {
-  ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = s * 0.09; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = s * 0.09; ctx.lineCap = 'square'; ctx.lineJoin = 'miter';
   if (kind === 'park') {
     rrect(ctx, cx - s / 2, cy - s / 2, s, s, s * 0.22); ctx.stroke();
     ctx.font = font(s * 0.72, 800, D); ctx.textAlign = 'center'; ctx.fillText('P', cx, cy + s * 0.25);
@@ -308,7 +310,7 @@ function sceneSteps(ctx, u) {
   STEPS.forEach((s, i) => {
     const cx = x0 + i * pitch;
     const on = clamp(1 - Math.abs(pos - i));
-    ctx.beginPath(); ctx.arc(cx, railY, lerp(9, 15, on), 0, 7); ctx.fillStyle = pos >= i - 0.05 ? C.teal : 'rgba(255,255,255,0.5)'; ctx.fill();
+    { const r = lerp(9, 14, on); ctx.fillStyle = pos >= i - 0.05 ? C.teal : 'rgba(255,255,255,0.5)'; ctx.fillRect(cx - r, railY - r, 2 * r, 2 * r); }
     // card
     const sc = lerp(0.86, 1, on);
     const w = CARD.w * sc, h = CARD.h * sc, x = cx - w / 2, y = 560 - h / 2 + 30;
