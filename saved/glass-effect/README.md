@@ -26,6 +26,7 @@ One engine, one content file per film, two formats:
 | UK Airshow Guide advert, glass effect cut (about 44 seconds) | `index-advert.html` | 5 |
 | UK Airshow Guide advert, cinematic cut (trailer style, about 45 seconds) | `index-advert-cine.html` | 7 |
 | Starter for a new film | `index-template.html` | 1 |
+| Starter for a new film in the cinematic layout | `index-cine-template.html` | 1 |
 
 - Portrait 1080 x 1920: open the page as it is.
 - Landscape 1920 x 1080: add `?fmt=land` to the address.
@@ -75,6 +76,20 @@ Needs Node with Playwright, ffmpeg, and Python with numpy.
 5. Encode:
    `ffmpeg -framerate 60 -i out/frames/f%05d.jpg -i out/mix_norm.wav -vf format=yuv420p -c:v libx264 -crf 20 -c:a aac -b:a 256k -cutoff 18000 -shortest -movflags +faststart video.mp4`
    For landscape, use `outL/frames` with the same `out/mix_norm.wav`.
+
+## The cinematic layout (information films)
+A second layout for information videos and adverts, saved from the advert's cinematic cut (19 Nov 2026). It uses the same engine, words, colours, type scale and end card as the glass effect, with a trailer look:
+- Black letterbox bars, and full screen graded shots with a slow push in and a small kick on each cut.
+- Huge trailer titles that track in from wide letter spacing, with a white impact flash on each hard cut. Small titles ("Step 1", a lead in) fade in quietly.
+- The glass effect words land over the shots, which dim behind them.
+- The standard end card (`endCard()` in `film4.js`).
+- The score is `score-cine.py`: a drone and heartbeat, a rising string ostinato with an impact on every cut, and a driving section under the words.
+
+Make one:
+1. Copy `content-cine-template.js` to `content-<topic>.js` and `index-cine-template.html` to `index-<topic>-cine.html`, and point the page at the new file.
+2. Fill in `shots`, `titles` and `glass`, all in beats at 104 bpm. Shots can be Jack's photos (`img: 'jtyphoon'` uses `photos/f-` and `fp-`), any image path (`src`, `srcP`), or a real site screen (`screen: true`, softened so the words read).
+3. **Every shot must match the words over it.** Camping goes over a show campsite (`l-flyby`, `cine/flyby`), photography over the photographers' line (`l-stepladder`, `cine/stepladder`), and the calendar, transport and Hub over their real pages in `screens/`. Aircraft shots go behind general lines only, never behind a topic they don't show. Captions name the aircraft and the show, or the page.
+4. Render as usual, then make the sound with `OUT=<dir> python3 score-cine.py`. Master with the README chain using `volume=2.2dB` (not 5.6dB) for this score, and encode with `-crf 16`.
 
 ## House rules for information videos
 - Step cards say "Step 1", "Step 2" in Barlow bold. Never "STEP 1 OF 5".

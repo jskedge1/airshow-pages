@@ -13,9 +13,10 @@ stage.insertBefore(shotLayer, bgLayer);
 function shot(b0, b1, sh) {
   const t0 = b0 * B, t1 = b1 * B;
   if (sh.black) { const w = div(shotLayer, `left:0;top:0;width:${SW}px;height:${SH}px;background:#05090D;visibility:hidden`); SHOTS.push({ w, img: null, t0, t1, s: [1, 1], x: [0, 0], y: [0, 0] }); return; }
-  const src = LAND ? `photos/f-${sh.img}.jpg` : `photos/fp-${sh.imgP || sh.img}.jpg`;
+  // src / srcP give any image path (a show photo or a real site screen), otherwise photos/f-<img>.jpg and fp-<img>.jpg
+  const src = LAND ? (sh.src || `photos/f-${sh.img}.jpg`) : (sh.srcP || sh.src || `photos/fp-${sh.imgP || sh.img}.jpg`);
   const w = div(shotLayer, `left:0;top:0;width:${SW}px;height:${SH}px;overflow:hidden;visibility:hidden`,
-    `<img src="${src}" style="position:absolute;left:0;top:0;width:${SW}px;height:${SH}px;object-fit:cover;filter:${GRADE};transform-origin:${sh.o || '50% 50%'};will-change:transform">
+    `<img src="${src}" style="position:absolute;left:0;top:0;width:${SW}px;height:${SH}px;object-fit:cover;object-position:${sh.pos || '50% 50%'};filter:${sh.screen ? 'blur(3px) saturate(.9)' : GRADE};transform-origin:${sh.o || '50% 50%'};will-change:transform">
      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,40,60,.35),rgba(0,0,0,0) 45%,rgba(60,30,0,.18));mix-blend-mode:soft-light"></div>
      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 45%,rgba(0,0,0,.55) 100%)"></div>
      <div class="dim" style="position:absolute;inset:0;background:${sh.dim ? `rgba(8,20,32,${sh.dim})` : 'transparent'}"></div>`);

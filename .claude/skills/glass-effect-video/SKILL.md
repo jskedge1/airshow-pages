@@ -63,6 +63,12 @@ This skill is the checklist that keeps every new film in the same house style.
 6. Check each file with ffprobe (size, 60 fps, duration, audio present) and pull frames from the encoded file.
 7. Then send portrait and landscape together.
 
+## The cinematic layout
+When Jack asks for the cinematic or trailer style, build it in the cinematic layout instead (README, "The cinematic layout"). Start from `content-cine-template.js` and `index-cine-template.html`.
+- Every rule above still applies: the facts, plain English, the type scale and the end card.
+- Each shot must match the words over it. Use a campsite for camping, photographers for photography, and the real site screens for the calendar, transport and Hub. Never put an aircraft behind a topic it doesn't show.
+- The score is `score-cine.py`. Master with `volume=2.2dB`.
+
 ## Website walkthroughs
 For a tour of the site, give points a `screen` (see the README section "Website screens"). Shoot real pages from jskedge1.github.io/airshow-pages with `shoot3.mjs`, hide nothing but the page height helper, never mock a screen, and keep shows that must not appear (Southport) out of the scroll range.
 
