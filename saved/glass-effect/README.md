@@ -88,7 +88,7 @@ A second layout for information videos and adverts, saved from the advert's cine
 Make one:
 1. Copy `content-cine-template.js` to `content-<topic>.js` and `index-cine-template.html` to `index-<topic>-cine.html`, and point the page at the new file.
 2. Fill in `shots`, `titles` and `glass`, all in beats at 104 bpm. Shots can be Jack's photos (`img: 'jtyphoon'` uses `photos/f-` and `fp-`), any image path (`src`, `srcP`), or a real site screen (`screen: true`, softened so the words read).
-3. **Every shot must match the words over it.** Camping goes over a show campsite (`l-flyby`, `cine/flyby`), photography over the photographers' line (`l-stepladder`, `cine/stepladder`), and the calendar, transport and Hub over their real pages in `screens/`. Aircraft shots go behind general lines only, never behind a topic they don't show. Captions name the aircraft and the show, or the page.
+3. **Every shot must match the words over it.** Camping goes over a show campsite (`l-flyby`, `cine/flyby`), and the calendar, transport, photography (camera settings) and Hub over their real pages in `screens/`. Aircraft shots go behind general lines only, never behind a topic they don't show. Captions name the aircraft and the show, or the page.
 4. Render as usual, then make the sound with `OUT=<dir> python3 score-cine.py`. Master with the README chain using `volume=2.2dB` (not 5.6dB) for this score, and encode with `-crf 16`.
 
 ## House rules for information videos

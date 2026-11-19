@@ -1,7 +1,7 @@
 // Cinematic cut of the UK Airshow Guide advert (same design and facts as content-advert.js), built by cine.js.
 // [startBeat, endBeat, ...] at 104 bpm. Shots are Jack's own RIAT 2025 photos (photos/f-j*.jpg landscape, fp-j*.jpg portrait)
 // with slow camera moves. Captions name the aircraft. Each glass slide sits on a matching shot: real site screens for the
-// calendar, transport and Hub, a show campsite for camping, the photographers' line for camera settings. Swap in video clips when the Z6 footage is available.
+// calendar, transport and Hub, a show campsite for camping, the photography hub for camera settings. Swap in video clips when the Z6 footage is available.
 window.CINE = window.FILM = {
   url: 'ukairshowguide.co.uk', readLine: 'Plan your 2027 air shows at', typeScale: true, smooth: true,
   ts: { mid: 62, small: 50 },
@@ -23,7 +23,7 @@ window.CINE = window.FILM = {
     [40, 44.5, { img: 'japache', cap: 'AH-64E Apache, RIAT 2025', dim: .55, s: [1.0, 1.1], soft: true }],
     [44.5, 49, { src: 'screens/public-transport-400-500-d.jpg', srcP: 'screens/public-transport-0-350-m.jpg', pos: '50% 0%', screen: true, cap: 'The public transport guide', dim: .76, s: [1.0, 1.08], y: [0, -3], soft: true }],
     [49, 53.5, { src: 'photos/l-flyby.jpg', srcP: 'cine/flyby.jpg', cap: 'A show campsite', dim: .5, s: [1.0, 1.1], soft: true }],
-    [53.5, 58, { src: 'photos/l-stepladder.jpg', srcP: 'cine/stepladder.jpg', cap: 'The photographers along the crowd line', dim: .55, s: [1.0, 1.1], soft: true }],
+    [53.5, 58, { src: 'screens/photography-hub-0-100-d.jpg', srcP: 'screens/photography-hub-0-300-m.jpg', pos: '50% 0%', screen: true, cap: 'The photography hub', dim: .76, s: [1.0, 1.08], y: [0, -3], soft: true }],
     [58, 62.5, { src: 'screens/my-airshow-hub-0-0-d.jpg', srcP: 'screens/my-airshow-hub-0-0-m.jpg', pos: '50% 0%', screen: true, cap: 'My Airshow Hub', dim: .76, s: [1.0, 1.08], y: [0, -3], soft: true }],
     [62.5, 68.5, { img: 'jlancaster', cap: 'BBMF Lancaster, RIAT 2025', s: [1.06, 1.24], x: [-2, 2] }],
   ],
