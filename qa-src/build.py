@@ -68,9 +68,10 @@ def check_copy():
 def more_link(more):
     if not more:
         return ''
-    text, path = more
-    return ('<a class="more" href="%s%s" target="_top"><span class="r">More</span> in %s <span class="r">›</span></a>'
-            % (SITE, path, e(text)))
+    text, path = more[0], more[1]
+    word = more[2] if len(more) > 2 else 'in'  # a third item swaps "in" for another word, such as "on"
+    return ('<a class="more" href="%s%s" target="_top"><span class="r">More</span> %s %s <span class="r">›</span></a>'
+            % (SITE, path, word, e(text)))
 
 
 def group_html(g, first):

@@ -331,6 +331,10 @@ GROUPS = [
             ('join-cost', 'Does it cost anything to join?', [
                 "No, joining is free.",
             ], ('Join My Airshow Hub', '/my-airshow-hub')),
+            ('messages', 'Can I message other members?', [
+                "Yes. Tap someone's name on the forum, or find them on the Members page, then press Message. Only the two of you can read the chat.",
+                "You choose who can message you in the Settings tab of My Profile: any member, only people you follow, or nobody. If anyone makes you uneasy, block them or report the chat from the three dots at the top of it, and I will take a look.",
+            ], ('the Members page', '/community-forum?v=members', 'on')),
             ('ask', 'My question isn\'t here. Where can I ask?', [
                 "Ask in the forum, where other visitors can help, or send me a message. I read every one, and if a question keeps coming up I'll add it to this page.",
             ], ('Send me a message', '/contact-us')),
