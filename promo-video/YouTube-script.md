@@ -1,112 +1,143 @@
 # The Big Guide to UK Airshows: YouTube launch video
 
+**Style:** presented in the manner of James May's pieces on Top Gear and The Grand Tour. Dry, unhurried, a bit pedantic and quietly enthusiastic. It's still you, as yourself: no impression of his voice, no mention of him or his shows, none of their music or footage.
+
 **Title ideas**
 1. I Built a Free Guide to Every Big UK Airshow (Here's Why)
 2. Every UK Airshow, One Easy Guide | The Big Guide to UK Airshows
-3. Stop Getting Airshow Days Wrong: The Free UK Airshow Guide
+3. How Not To Do An Airshow, and the Guide That Fixes It
 
-**Length:** 2:00, 16:9 · **Music:** original score (in `ukag-promo/audio/music.wav`), quiet under your talking slots
+**Length:** 2:00, 16:9 · **Music:** original score made in code, so no copyright claims
 
 There are two versions on one timeline:
-- **Standalone:** no presenter. On-screen story cards say what you would have said, so it can go up today.
-- **Presenter template:** the same edit with a slate in each talking slot. Film the three pieces to camera below, lay them over the slates, and record the voice-over lines over the B-roll.
+- **Standalone:** no presenter. On-screen cards carry the lines, so it can go up today.
+- **Presenter template:** the same edit with a slate wherever you appear. Film the three pieces to camera, lay them over the slates, then record the voice-over lines.
 
 ---
 
-## Filming notes for your talking slots
+## How to present like this
 
-- Shoot **landscape, 4K or 1080p, 25 or 30 fps**. Put the camera at eye level, about an arm and a half away.
-- **Background:** airshow kit makes the best set: a camera bag, a show programme, a model aircraft, a crowd line chair. If you can, film outdoors at an airfield fence or museum (Duxford member!) on a bright overcast day.
-- **Light:** face a window, never have one behind you.
-- **Sound matters more than picture.** A £20 clip-on mic plugged into your phone beats the built-in mic every time.
-- Do each slot 3 or 4 times. Pick the take where you sound like you're telling a mate, not reading.
-- Leave 2 seconds of silence before and after each take so the editor has room to trim.
-- Word counts are set for a relaxed pace of about 2.5 words a second. If a line runs long, cut words rather than speed up.
+What makes his style work, and how to borrow it without copying him.
+
+**1. Slow down.** He speaks at roughly 2 words a second, slower than most YouTubers, and leaves real pauses. Every slot below is written for that pace. Where it says *(beat)*, stop for a full second and hold eye contact with the lens. The silence is part of the joke.
+
+**2. Build it up, then let it down gently.** The signature move is bathos. Say something with real warmth or grandeur, then finish on something mundane or honest:
+> "The finest way to spend a British summer's day. *(beat)* Provided you've actually managed to get here."
+
+Deliver the second half flatter and quieter than the first. Never laugh at your own line.
+
+**3. Be specific. Pedantically specific.** Not "loads of buses", but "fifty four buses". Not "years", but "since 2006". Precise numbers sound authoritative and funny at the same time. Correct yourself occasionally: "Thirteen airshows. Well. Thirteen in depth."
+
+**4. Admit your failures cheerfully.** Much of his appeal is being the one who gets lost and gets things wrong. Your mistakes at airshows are the best material you have. The lines below are placeholders; **swap in your real stories**, the more specific and mildly humiliating the better.
+
+**5. Mean it.** Under the dryness is real enthusiasm for how things work. When you talk about the bus maps or the camera guides, let yourself sound pleased. Sincere delight in something slightly nerdy is the heart of the style.
+
+**6. Let the world interrupt you.** A jet drowning out the presenter, who waits, glances up, then carries on, is a perfect airshow version of his deadpan. It's built into the cold open.
+
+### Shooting it like a TV piece to camera
+
+- **Open wide.** First shot: you small in the frame at a crowd line fence or museum hangar (Duxford), with sky and aircraft around you. Then cut to a mid shot (waist up) for the talking.
+- **Walk and talk.** At least one slot should be you walking slowly towards the camera, stopping on your key line. Use a gimbal or have someone walk backwards with the phone.
+- **Hold a prop.** A show programme, a flask, a pair of ear defenders. Pick it up and use it on a line.
+- **The look.** After a dry line, hold a still, neutral look into the lens for a second before the cut. The editor needs that second.
+- **Kit:** landscape, 4K or 1080p, 25 fps, a clip-on mic (wind is the enemy outdoors, so use a furry windshield), and a bright overcast day.
+- Do each slot 3 or 4 times. Leave 2 seconds of silence at each end.
 
 ---
 
 ## The script
 
-Timings match both videos exactly.
+*(beat)* is a one second pause. Timings match the edit.
 
-### 0:00 to 0:08 · COLD OPEN (B-roll, music hits)
-**Picture:** fast cuts on the beat. Typhoon pulling vapour, Red Arrows smoke, F-16 afterburner, Apache. The words land on the cuts: **"Every UK airshow."** then **"One easy guide."**
-**Audio:** music and jet pass sound effects only. No voice.
-
-### 0:08 to 0:24 · TALKING SLOT 1, "Who I am" (16 s, about 40 words)
-> Hi, I'm Jack. I've been going to airshows for years, RIAT since 2006, and I've made just about every planning mistake going. Wrong car park. Missed the last train home. Turned up without half the kit.
+### 0:00 to 0:14 · SLOT 1: cold open at the crowd line (about 28 words)
+**Picture:** wide shot, you at the fence, aircraft on the apron behind. Cut to mid shot.
+> This is an airshow. *(beat)* And it is, I think, the finest way to spend a British summer's day.
 >
-> *(optional, smile)* And I'm a train driver, so I really should have known better.
+> *(beat)* Provided you've actually managed to get here.
+>
+> *(a jet thunders overhead and drowns you out. Look up. Wait. Look back at the lens.)*
+>
+> ...As I was saying.
 
-**Standalone version shows:** *I'm Jack.* / *I've been going to RIAT since 2006.* / *And I've made plenty of mistakes along the way.* / *Poor planning. Turning up unprepared.*
+**In the edit:** a jet pass sound effect and a quick cutaway of a jet at the moment you're drowned out. You don't need a real jet: just stop talking, look up, then look back.
+**Standalone shows:** *This is an airshow.* / *The finest way to spend a British summer's day.* / a jet roars across and blows the card away / *Provided you can actually get here.*
 
-### 0:24 to 0:32 · THE REVEAL (B-roll + voice-over)
-**Picture:** the live home page slides up in a browser window and the camera glides down it.
-**VO:**
-> So I built the guide I wish I'd had. The Big Guide to UK Airshows.
+### 0:14 to 0:20 · TITLE (music kicks in)
+**Picture:** fast cuts on the beat: Typhoon vapour, Red Arrows, F-16 afterburner, Apache. **"Every UK airshow."** then **"One easy guide."**
 
-**On screen:** *So I built the guide I wish I'd had.*
+### 0:20 to 0:38 · SLOT 2: "how not to do an airshow" (about 40 words)
+**Picture:** walk and talk along the static park or crowd line, stopping on the last line.
+> I've been going to airshows since 2006. And in that time, I've got it wrong in almost every way available.
+>
+> Two hours queuing to get *out* of a car park. An entire display, facing straight into the sun.
+>
+> And I'm a train driver. *(beat)* Who once missed the last train home.
 
-### 0:32 to 0:40 · TALKING SLOT 2, "What it is" (8 s, about 20 words)
-> It covers thirteen of the UK's best airshows, written for visitors, not just aviation buffs. And it's free. Always.
+*(Swap the middle two mistakes for your own. Keep the train driver line: it's the punchline.)*
+**Standalone shows:** *Going since 2006.* / *Got it wrong in almost every way available.* / *Two hours queuing to get out of a car park.* / *A train driver who once missed the last train home.*
 
-**Standalone version shows:** *13 UK airshows. Written for every visitor.* / *Free. Always.*
+### 0:38 to 0:44 · THE REVEAL (voice-over)
+**Picture:** the live home page rises up in a browser window and glides down.
+> So I've built a website. *(beat)* I know. Try to contain yourselves.
 
-### 0:40 to 1:32 · THE FEATURE TOUR (B-roll + voice-over)
-Real screenshots in a browser window, cut with aircraft between sections. The label on screen names each feature.
+**On screen:** *So I built a website.* then, small: *Try to contain yourselves.*
+
+### 0:44 to 1:30 · THE TOUR (voice-over, documentary calm)
+Read it like a nature documentary about something slightly ridiculous: measured, warm, completely straight.
 
 | Time | Picture | On screen | Voice-over |
 |---|---|---|---|
-| 0:40 | Typhoon flypast (music drops in) | | |
-| 0:42 | Find Your Airshow page, then the UK Airshow Map | **Find your airshow** · 13 featured shows, every UK airshow on one map | "Start by finding your show. Every UK airshow is on the map, and thirteen have a full guide." |
-| 0:48 | Eastbourne show guide, scrolling | **Every show, in depth** · Where to watch, line ups, honest verdicts | "Each guide tells you who the show suits, where to watch, and what's flying." |
-| 0:54 | Red Arrows flypast | | |
-| 0:56 | Train to Eastbourne page, public transport map, bus route maps | **Getting there, sorted** · Trains, buses and parking, planned from your door | "Getting there is where most days go wrong, so there are train and bus guides for the shows, right down to the stop to get off at." |
-| 1:04 | F-16 afterburner | | |
-| 1:06 | Photography Hub, then the 3D camera guide spinning | **Photography, made simple** · 3D camera guides and settings by aircraft | "Bringing a camera? The Photography Hub has 3D guides to eleven cameras and the settings for whatever's flying." |
-| 1:14 | Camping hub | **Camp confidently** · Campsites, pitches and what to pack | "Making a weekend of it? Every campsite option, and what to pack." |
-| 1:18 | Apache flypast | | |
-| 1:20 | Visitor Planning Guides, Aircraft A to Z | **Plan the whole day** · First timers, families, budgets, rainy days | "Plus planning guides for first timers, families, rainy days and doing it on a budget." |
-| 1:26 | Airshow Forum, How My Airshow Hub Works | **Join the community** · Airshow Forum and My Airshow Hub | "And when you sign up, you get your own Airshow Hub and a forum full of people who love this as much as you do." |
+| 0:44 | Typhoon flypast, music drops in | | |
+| 0:46 | Find Your Airshow, then the UK Airshow Map | **Find your airshow** · every UK airshow on one map | "This is the map. Every UK airshow I know of, colour coded by type. *(beat)* Because I'm that sort of person." |
+| 0:52 | Eastbourne show guide, scrolling | **Every show, in depth** · 13 full guides | "Thirteen of them get a full guide. Where to park, where to sit, and where the sun will be. Which matters more than you'd think." |
+| 0:58 | Red Arrows flypast | | |
+| 1:00 | Train to Eastbourne page, bus route maps | **Getting there, sorted** · 54 bus routes, mapped stop by stop | "Then there are the buses. Fifty four of them, mapped, stop by stop. I'd like to tell you this was tedious. *(beat)* It wasn't. I loved it." |
+| 1:08 | F-16 afterburner | | |
+| 1:10 | Photography Hub, then the 3D camera turning | **Photography, made simple** · 3D guides to 11 cameras | "There are 3D models of eleven cameras, so you can learn every button. *(beat)* Even the ones nobody has ever pressed." |
+| 1:18 | Camping hub, Visitor Planning Guides | **Plan the whole day** · camping, first timers, rainy days, budgets | "Camping. First timers. Rainy days. Doing the whole thing on a budget. All covered." |
+| 1:24 | Airshow Forum, My Airshow Hub | **Join the community** · Airshow Forum and My Airshow Hub | "And there's a forum, where people who care about this as much as I do can discuss it. *(beat)* At length." |
 
-### 1:32 to 1:46 · TALKING SLOT 3, "Why it matters" (14 s, about 35 words)
-> I write every guide and keep it checked through the season. But it's grown into something bigger than one person. There's a team now, a forum, and there's room for you too.
+### 1:30 to 1:46 · SLOT 3: the sincere bit (about 32 words)
+**Picture:** mid shot, quieter. This is the one moment to drop the dryness and mean it.
+> Now. I write every page of this, and I keep it checked right through the season. But it's grown a bit beyond one bloke in a field. There's a team now. And there's room for you.
+>
+> *(beat)* Bring a chair.
 
-**Standalone version shows:** *Checked through the season.* / *Built with the airshow community.* / *And there's room for you too.*
+**Standalone shows:** *Checked right through the season.* / *It's grown beyond one bloke in a field.* / *There's room for you.* / *Bring a chair.*
 
-### 1:46 to 2:00 · CALL TO ACTION AND END SCREEN (voice-over)
-**Picture:** a fast final burst of aircraft, then the end card with the logo and **ukairshowguide.co.uk** (light background, matching the site).
-**VO:**
-> Your next airshow starts right here. ukairshowguide.co.uk. Subscribe for show guides all season, and I'll see you on the crowd line.
+### 1:46 to 2:00 · SIGN OFF (voice-over over the end card)
+> It's free, it always will be, and it's at ukairshowguide.co.uk. Subscribe, if you like. I won't be offended if you don't. *(beat)* Much.
 
-The last 10 seconds leave the right half of the frame clear. In YouTube Studio, add the **Subscribe** element and a **Best for viewer** video there.
+**Picture:** a fast final burst of aircraft, then the end card: logo, **ukairshowguide.co.uk**, and the right half kept clear for YouTube's Subscribe and video elements (add those in YouTube Studio).
 
 ---
 
 ## Description (paste into YouTube)
 
-Every UK airshow, one easy guide. I'm Jack. I've been going to airshows since 2006, and after plenty of badly planned days I built the guide I wish I'd had.
+This is an airshow. The finest way to spend a British summer's day, provided you can actually get there.
 
-The Big Guide to UK Airshows is free, and covers 13 of the UK's best airshows in depth:
-✈ Find your airshow: every UK show on one map
-✈ Getting there: trains, buses, parking and park and ride, planned from your door
-✈ Where to watch, line ups and honest verdicts on who each show suits
-✈ Photography Hub with 3D camera guides and settings by aircraft
-✈ Camping, places to stay, food and what to pack
+I'm Jack. I've been going to airshows since 2006 and I've got it wrong in almost every way available, so I built the guide I wish I'd had. The Big Guide to UK Airshows is free, and always will be.
+
+✈ Every UK airshow on one map, with 13 full show guides
+✈ Getting there: trains, 54 mapped bus routes, parking and park and ride
+✈ Where to watch, where the sun will be, and who each show suits
+✈ Photography Hub with 3D guides to 11 cameras
+✈ Camping, first timers, rainy days and airshows on a budget
 ✈ Airshow Forum and your own My Airshow Hub
 
 Start planning: https://www.ukairshowguide.co.uk
 Facebook and Instagram: @theukairshowguide
 
-0:00 Every UK airshow
-0:08 Why I built it
-0:40 Find your airshow
-0:56 Getting there
-1:06 Photography Hub
-1:14 Camping and planning
-1:26 Join the community
+0:00 This is an airshow
+0:20 How not to do an airshow
+0:38 So I built a website
+0:46 Find your airshow
+1:00 Getting there
+1:10 Photography Hub
+1:18 Planning and camping
+1:24 Join the community
 1:46 Start planning
 
 **Tags:** uk airshows 2027, airshow guide, riat 2027, royal international air tattoo, duxford air show, eastbourne airshow, raf cosford air show, red arrows, airshow photography, airshow camping, how to plan an airshow trip
 
-**Thumbnail idea:** you on the left, pointing, with the Red Arrows trailing smoke behind. Text: "EVERY UK AIRSHOW" in white Barlow Condensed with "FREE GUIDE" in teal.
+**Thumbnail idea:** you at the crowd line, deadpan, ear defenders on, a Typhoon roaring past behind you. Text: "HOW NOT TO DO AN AIRSHOW" in white Barlow Condensed, "FREE GUIDE" in teal.

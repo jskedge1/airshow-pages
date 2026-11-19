@@ -1,33 +1,34 @@
 # Shot list: The Big Guide to UK Airshows promo (16:9, 120 s, 120 BPM, 1 beat = 0.5 s)
 
-Look: site navy (#0E2131 / #13293C), one accent teal (#32B4AF), white type. Display face Barlow Condensed
-800, UI face Barlow 500/600 (the site's own pair). Logo only on the light end card (its navy type needs a
-light ground). Real screenshots only, shown in a plain browser window with the real ukairshowguide.co.uk path.
-Aircraft B-roll is the site's own photos with a camera move that follows the direction of flight.
+Tone: dry, unhurried presenter piece in the manner of a British motoring show. Comedy comes from timing,
+so the music stops or drops out under punchlines and the edit holds a beat after each dry line.
+
+Look: site navy (#0E2131 / #13293C), one accent teal (#32B4AF), white type. Display Barlow Condensed 800,
+UI Barlow 500/600 (the site's own pair). Logo only on the light end card. Real screenshots only, in a plain
+browser window showing the real ukairshowguide.co.uk path. Aircraft B-roll is the site's own photos with a
+camera move that follows the direction of flight.
 
 VARIANT: `standalone` shows story cards in the talking slots; `presenter` shows a slate (slot number,
-time, first line of the script) in the same frames. Everything else is identical.
+time, first line) in the same frames. Everything else is identical.
 
-| # | Beats (s) | Shot | Asset | Motion | Transition in | SFX |
+Music sections (score.py): 0-14 s near silence (wind, distant crowd); 14-20 hook; 20-38 soft; 38-44 lift;
+44-90 tour groove; 90-106 soft; 106-120 end groove and resolve.
+
+| # | Beats (s) | Shot | Asset | Motion | In | SFX |
 |---|---|---|---|---|---|---|
-| 1 | 0-4 (0-2) | Typhoon pull, vapour | v2/ac-typhoon-pull | push in along flight line | cut on 0 | impact + jet pass |
-| 2 | 4-8 (2-4) | "EVERY UK AIRSHOW." over Red Arrows smoke | v2/hero-arrows-riat23 | slide with smoke, words drop in per word | whip | pops on words |
-| 3 | 8-12 (4-6) | F-16 afterburner | photography-hub/f16-burner | fast lateral drift | cut | whoosh |
-| 4 | 12-16 (6-8) | "ONE EASY GUIDE." teal, over Apache | youtube/apache | push in | whip | thud |
-| 5 | 16-48 (8-24) | TALKING SLOT 1: 4 cards on 8 beats each | slow photos: crowd line, family, car park, gate queue | slow push, card type rises per line | cut on 16 | soft ticks |
-| 6 | 48-64 (24-32) | Reveal: "So I built the guide I wish I'd had." then live home page rises in browser window, glide down | live_home, home_full | card rises from below, scroll on spring | drop on 48 | impact, whoosh |
-| 7 | 64-80 (32-40) | TALKING SLOT 2: "13 UK airshows. Written for every visitor." / "Free. Always." | blenheim smoke, about-family | slow push | cut | ticks |
-| 8 | 80-84 (40-42) | Typhoon flypast, tour drops | v2/guide-photo-typhoon | drift | riser into drop | impact |
-| 9 | 84-96 (42-48) | Find your airshow: page then map | find_full, map | browser rises, scroll, swap | slide | whoosh |
-| 10 | 96-108 (48-54) | Every show, in depth: Eastbourne guide scroll | show_full | long scroll | slide | tick |
-| 11 | 108-112 (54-56) | Red Arrows | v2/hero-arrows-riat18 | drift | whip | jet pass |
-| 12 | 112-128 (56-64) | Getting there, sorted: train page, transport map, bus routes | train, transport_full, busidx | three windows stack in | slide | ticks |
-| 13 | 128-132 (64-66) | F-16 burner / spray | f16-spray | drift | whip | jet |
-| 14 | 132-148 (66-74) | Photography, made simple: hub, then 3D camera turntable | photo_full, spin/ | scroll then turntable | slide | whoosh |
-| 15 | 148-156 (74-78) | Camp confidently | camping_full | scroll | slide | tick |
-| 16 | 156-160 (78-80) | Apache / A400M | a400m-bank | drift | whip | jet |
-| 17 | 160-172 (80-86) | Plan the whole day: planning guides, A to Z | guides_full, atoz | scroll, swap | slide | ticks |
-| 18 | 172-184 (86-92) | Join the community: forum, hub | forum_full, hub_full | two windows | slide | whoosh |
-| 19 | 184-212 (92-106) | TALKING SLOT 3: 3 cards | static, crowd line, Red Arrows band | slow push | cut | ticks |
-| 20 | 212-220 (106-110) | Final burst: 4 aircraft on beats, "Your next airshow starts right here." | ac shots | cuts each 2 beats | riser into 212 | impacts |
-| 21 | 220-240 (110-120) | End card: logo, ukairshowguide.co.uk, Subscribe; right half clear for YouTube end screen | logo | logo lands, URL types | cut | impact, bell |
+| 1 | 0-28 (0-14) | SLOT 1 cold open. Standalone: "This is an airshow." / "The finest way to spend a British summer's day." / jet cutaway blows the card off / "Provided you can actually get here." | crowd line, Typhoon cutaway at 16-20 | slow push; jet whip at 16 | fade from black | wind bed, jet pass at 16 |
+| 2 | 28-40 (14-20) | TITLE: 4 aircraft on 2-beat cuts, "EVERY UK AIRSHOW." "ONE EASY GUIDE." | ac-typhoon-pull, arrows-riat23, f16-burner, apache | push / drift | hard cut on 28, music in | impact, pops |
+| 3 | 40-76 (20-38) | SLOT 2 "how not to". Standalone: 4 cards, 9 beats each | car-park, gate-queue, crowd line into sun, fact-train | slow push | cut | ticks |
+| 4 | 76-88 (38-44) | REVEAL "So I built a website." / "Try to contain yourselves." then home page in browser | live_home, home_full | window rises, glide down | cut | whoosh |
+| 5 | 88-92 (44-46) | Typhoon flypast, tour drops | guide-photo-typhoon | drift | riser | impact |
+| 6 | 92-104 (46-52) | Find your airshow: page then map | find_full, map | rise, scroll, swap | slide | whoosh |
+| 7 | 104-116 (52-58) | Every show, in depth | show_full | long scroll | slide | tick |
+| 8 | 116-120 (58-60) | Red Arrows | hero-arrows-riat18 | drift | whip | jet pass |
+| 9 | 120-136 (60-68) | Getting there, sorted: train page, bus routes; "54" counts up | train, busidx, transport_full | windows stack | slide | ticks |
+| 10 | 136-140 (68-70) | F-16 | f16-spray | drift | whip | jet |
+| 11 | 140-156 (70-78) | Photography: hub then 3D turntable | photo_full, spin/ | scroll, turntable | slide | whoosh |
+| 12 | 156-168 (78-84) | Plan the whole day: camping, planning guides | camping_full, guides_full | scroll, swap | slide | ticks |
+| 13 | 168-180 (84-90) | Join the community | forum_full, hub_full | two windows | slide | whoosh |
+| 14 | 180-212 (90-106) | SLOT 3 sincere. Standalone: 4 cards, last "Bring a chair." lands alone in silence | static park, crowd line, band-arrows | slow push | cut | music drops for last card |
+| 15 | 212-220 (106-110) | Final burst: 4 aircraft on 2-beat cuts | ac shots | cuts | riser into 212 | impacts |
+| 16 | 220-240 (110-120) | End card: logo, ukairshowguide.co.uk; right half clear for YouTube end screen | logo | logo lands, URL types | cut | impact, bell |
