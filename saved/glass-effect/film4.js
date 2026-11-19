@@ -7,7 +7,7 @@ const bgLayer = div(stage, `left:0;top:0;width:${SW}px;height:${SH}px`);
 stage.insertBefore(bgLayer, world);
 const topLayer = div(stage, `left:0;top:0;width:${SW}px;height:${SH}px;z-index:40;pointer-events:none`);
 const CLIPDEFS = [];
-const imgUrl = k => k.startsWith('c:') ? `cine/${k.slice(2)}.jpg` : k.startsWith('l:') ? `photos/l-${k.slice(2)}.jpg` : `photos/p-${k.slice(2)}.jpg`;
+const imgUrl = k => k.startsWith('fp:') ? `photos/fp-${k.slice(3)}.jpg` : k.startsWith('f:') ? `photos/f-${k.slice(2)}.jpg` : k.startsWith('c:') ? `cine/${k.slice(2)}.jpg` : k.startsWith('l:') ? `photos/l-${k.slice(2)}.jpg` : `photos/p-${k.slice(2)}.jpg`;
 // layout per format
 const F = LAND ? {
   x: 120, maxW: 1600, cy: 545, maxH: 860, kind: { huge: 250, big: 185, mid: 84, small: 52 }, center: true,
@@ -151,40 +151,10 @@ function point(t0, t1, pt, exit) {
   if (pt.bg) background(t0 - .1, t1 + .3, pt.bg);
 }
 
-// ---------- build from the content file (window.FILM) ----------
-window.BUILD = function () {
-  const C = window.FILM;
-  // intro: a list of phrases, each [startBeat, endBeat, lines, opts]
-  item(world, F.x, LAND ? 120 : 300, `<img src="photos/logo-new.png" style="width:${LAND ? 280 : 300}px;display:block">`, { t0: .1, t1: 4 * B, enter: 'wipe', exit: 'up', mask: true });
-  C.intro.forEach(([b0, b1, lines, o = {}]) => {
-    if (o.boom) CUES.cines.push([b0 * B, b1 * B]);
-    phrase(b0 * B + (b0 ? 0 : .2), b1 * B, lines, Object.assign({ cy: LAND ? 560 : 900 }, o));
-  });
-  const t = C.introBeats * B;
-  const TITLE = 4 * B, PT = (C.pointBeats || 4.5) * B, N = C.stops.length;
-  // each step lasts its title card plus one slot per point, so a step can hold any number of points
-  const SL = C.stops.map(st => TITLE + st[2].length * PT), S0 = SL.map((_, i) => t + SL.slice(0, i).reduce((a, b) => a + b, 0));
-  const EXITS = ['up', 'zoom', 'left'], T = F.title;
-  C.stops.forEach(([title, when, pts], i) => {
-    const s = S0[i];
-    CUES.scenes.push(s);
-    item(world, -40, -40, `<div style="width:${SW + 80}px;height:${SH + 80}px;background:${C.cardColour || RED}"></div>`, { t0: s, t1: s + TITLE - .25, enter: 'left', exit: 'left', ed: .35, xd: .3 });
-    item(world, T.lbl[0], T.lbl[1], `<div class="b" style="font-weight:700;font-size:${LAND ? 70 : 84}px;line-height:1.1;color:#fff;padding:6px 0">${C.stepLabel === false ? '' : (C.stepLabel || 'Step') + ' ' + (i + 1)}</div>`, { t0: s + .2, t1: s + TITLE - .25, enter: 'up', exit: 'left', mask: true, xd: .3 });
-    const words = LAND ? [title.replace('|', ' ')] : title.split('|');
-    words.forEach((w, k) => {
-      const size = Math.min(T.size, Math.floor(T.size * T.maxW / textW(w.toUpperCase(), T.size)));
-      item(world, T.lbl[0], T.y0 + k * T.step, `<div class="b" style="font-weight:800;font-size:${size}px;line-height:1.05;color:#fff;text-transform:uppercase;white-space:nowrap">${w}</div>`, { t0: s + .35 + k * B / 2, t1: s + TITLE - .25, enter: 'slam', exit: 'left', xd: .3, z: 3 });
-    });
-    item(world, T.when[0], T.when[1], `<div style="background:${NAVY};color:#fff;font-family:Assistant;font-weight:700;font-size:${LAND ? 50 : 44}px;padding:10px 22px;white-space:nowrap">${when}</div>`, { t0: s + .35 + 1.5 * B, t1: s + TITLE - .25, enter: 'wipe', exit: 'left', xd: .3 });
-    CAM.push([s, s + .7, { s: 1.06, r: -2.5, x: 0, y: 0 }, { s: 1, r: 0, x: 0, y: 0 }]);
-    pts.forEach((pt, k) => { const a = s + TITLE + k * PT; point(a + .05, a + PT - .3, pt, EXITS[k % 3]); });
-  });
-  // outro
-  const o = S0[N - 1] + SL[N - 1];
-  CUES.scenes.push(o); CUES.cines.push([o, o + 4 * B]);
-  phrase(o, o + 4 * B, C.outro, { stagger: B / 2, exit: 'zoom' });
+// the end card, shared by every film (the cinematic advert calls it too)
+function endCard(e, C) {
   // end card: the swish logo from the airshow trailers in the centre, the guide link under it, socials along the bottom
-  const e = o + 4 * B, CX = SW / 2;
+  const CX = SW / 2;
   const L0 = LAND ? { logoW: 740, logo: 105, read: 565, btn: 612, line: 770, lbl: 798, ico: 855, icoS: 106, gap: 340 }
                   : { logoW: 860, logo: 420, read: 960, btn: 1020, line: 1430, lbl: 1470, ico: 1545, icoS: 140, gap: 330 };
   const logoH = L0.logoW * 711 / 1409;
@@ -209,6 +179,44 @@ window.BUILD = function () {
       <div style="width:${S}px;height:${S}px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 0 rgba(0,0,0,.3)"><svg viewBox="0 0 24 24" style="width:${S * .56}px;height:${S * .56}px"><path fill="${NAVY}" d="${ICON[s]}"/></svg></div>
       <div class="b" style="font-weight:700;font-size:${LAND ? 36 : 44}px;color:#fff">${s}</div></div>`, { t0: e + 1.6 + k * B / 2, t1: 1e6, enter: 'pop', origin: '50% 30%', z: 4 });
   });
+  DUR = e + 5.5;
+}
+// ---------- build from the content file (window.FILM) ----------
+window.BUILD = function () {
+  const C = window.FILM;
+  // intro: a list of phrases, each [startBeat, endBeat, lines, opts]
+  item(world, F.x, LAND ? 120 : 300, `<img src="photos/logo-new.png" style="width:${LAND ? 280 : 300}px;display:block">`, { t0: .1, t1: 4 * B, enter: 'wipe', exit: 'up', mask: true });
+  C.intro.forEach(([b0, b1, lines, o = {}]) => {
+    if (o.boom) CUES.cines.push([b0 * B, b1 * B]);
+    phrase(b0 * B + (b0 ? 0 : .2), b1 * B, lines, Object.assign({ cy: LAND ? 560 : 900 }, o));
+    // an intro phrase can sit over a dimmed photo or clip (the advert uses real 2026 show photos)
+    if (o.bg) background(b0 * B - .1, b1 * B + .3, o.bg);
+  });
+  const t = C.introBeats * B;
+  const TITLE = 4 * B, PT = (C.pointBeats || 4.5) * B, N = C.stops.length;
+  // each step lasts its title card plus one slot per point, so a step can hold any number of points
+  const SL = C.stops.map(st => TITLE + st[2].length * PT), S0 = SL.map((_, i) => t + SL.slice(0, i).reduce((a, b) => a + b, 0));
+  const EXITS = ['up', 'zoom', 'left'], T = F.title;
+  C.stops.forEach(([title, when, pts], i) => {
+    const s = S0[i];
+    CUES.scenes.push(s);
+    item(world, -40, -40, `<div style="width:${SW + 80}px;height:${SH + 80}px;background:${C.cardColour || RED}"></div>`, { t0: s, t1: s + TITLE - .25, enter: 'left', exit: 'left', ed: .35, xd: .3 });
+    item(world, T.lbl[0], T.lbl[1], `<div class="b" style="font-weight:700;font-size:${LAND ? 70 : 84}px;line-height:1.1;color:#fff;padding:6px 0">${C.stepLabel === false ? '' : (C.stepLabel || 'Step') + ' ' + (i + 1)}</div>`, { t0: s + .2, t1: s + TITLE - .25, enter: 'up', exit: 'left', mask: true, xd: .3 });
+    const words = LAND ? [title.replace('|', ' ')] : title.split('|');
+    words.forEach((w, k) => {
+      const size = Math.min(T.size, Math.floor(T.size * T.maxW / textW(w.toUpperCase(), T.size)));
+      item(world, T.lbl[0], T.y0 + k * T.step, `<div class="b" style="font-weight:800;font-size:${size}px;line-height:1.05;color:#fff;text-transform:uppercase;white-space:nowrap">${w}</div>`, { t0: s + .35 + k * B / 2, t1: s + TITLE - .25, enter: 'slam', exit: 'left', xd: .3, z: 3 });
+    });
+    item(world, T.when[0], T.when[1], `<div style="background:${NAVY};color:#fff;font-family:Assistant;font-weight:700;font-size:${LAND ? 50 : 44}px;padding:10px 22px;white-space:nowrap">${when}</div>`, { t0: s + .35 + 1.5 * B, t1: s + TITLE - .25, enter: 'wipe', exit: 'left', xd: .3 });
+    CAM.push([s, s + .7, { s: 1.06, r: -2.5, x: 0, y: 0 }, { s: 1, r: 0, x: 0, y: 0 }]);
+    pts.forEach((pt, k) => { const a = s + TITLE + k * PT; point(a + .05, a + PT - .3, pt, EXITS[k % 3]); });
+  });
+  // outro
+  const o = S0[N - 1] + SL[N - 1];
+  CUES.scenes.push(o); CUES.cines.push([o, o + 4 * B]);
+  phrase(o, o + 4 * B, C.outro, { stagger: B / 2, exit: 'zoom' });
+  const e = o + 4 * B;
+  endCard(e, C);
   DUR = e + 5.5;
   // progress bar, one segment per stop
   const segs = [], BR = F.bar, span = LAND ? 1700 : 920, sw = (span - (N - 1) * BR.gap) / N;
