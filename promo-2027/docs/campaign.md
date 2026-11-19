@@ -30,9 +30,9 @@ Proof points, all taken from the live pages (re-check them before each post, sin
 
 | File | Shape | Where it goes |
 |---|---|---|
-| `out/promo-2027/final.mp4` | 9:16, 1080x1920 | Instagram Reels, TikTok, YouTube Shorts, Facebook Reels, Stories |
-| `out/promo-2027/final_1x1.mp4` | 1:1, 1080x1080 | Instagram and Facebook feed, X, LinkedIn |
-| `out/promo-2027/final_16x9.mp4` | 16:9, 1920x1080 | YouTube channel, website, Facebook video |
+| `promo-2027/video/plan-2027-promo_9x16.mp4` | 9:16, 1080x1920 | Instagram Reels, TikTok, YouTube Shorts, Facebook Reels, Stories |
+| `promo-2027/video/plan-2027-promo_1x1.mp4` | 1:1, 1080x1080 | Instagram and Facebook feed, X, LinkedIn |
+| `promo-2027/video/plan-2027-promo_16x9.mp4` | 16:9, 1920x1080 | YouTube channel, website, Facebook video |
 
 Running order (20 s, 132 bpm, original synthesized score, no voice-over, so it works with the sound off):
 Red Arrows hook "Every UK airshow, one easy guide" → Red Hawk smoke wipe → **46 shows confirmed**
