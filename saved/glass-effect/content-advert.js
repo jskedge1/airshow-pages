@@ -9,13 +9,13 @@
 // Pictures match the line beside them: real site screens for the calendar, show guide, transport and hub; a camping photo from the camping guide;
 // Jack's own RIAT 2025 photos where an aircraft makes the point (a jet and a propeller fighter for camera settings, a Typhoon on the flight line).
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Plan your 2027 air shows at', stepLabel: false, typeScale: true, smooth: true, pointBeats: 3.6,
+  url: 'ukairshowguide.co.uk', readLine: 'Plan your 2027 air shows at', stepLabel: false, typeScale: true, smooth: true, pointBeats: 5.5,
   ts: { mid: 62, small: 50 },
-  introBeats: 10,
+  introBeats: 12,
   intro: [
-    [0, 3.5, [['big', 'Off to an'], ['huge', '[air show?|f:jf16]', { size: 290, enter: 'slam' }]], { stagger: B / 2, exit: 'zoom' }],
-    [3.5, 7, [['huge', '[Everything|f:jredarrows]', { size: 300, enter: 'slam' }], ['big', 'you need', { enter: 'slam', delay: B / 2 }], ['mid', 'in one place']], { stagger: B, exit: 'zoom', boom: true }],
-    [7, 10, [['small', 'Every UK air show'], ['huge', '*one easy guide*', { enter: 'pop' }], ['mid', 'ukairshowguide.co.uk']], { stagger: B / 2, exit: 'left' }],
+    [0, 4, [['big', 'Off to an'], ['huge', '[air show?|f:jf16]', { size: 290, enter: 'slam' }]], { stagger: B / 2, exit: 'zoom' }],
+    [4, 8.5, [['huge', '[Everything|f:jredarrows]', { size: 300, enter: 'slam' }], ['big', 'you need', { enter: 'slam', delay: B / 2 }], ['mid', 'in one place']], { stagger: B, exit: 'zoom', boom: true }],
+    [8.5, 12, [['small', 'Every UK air show'], ['huge', '*one easy guide*', { enter: 'pop' }], ['mid', 'ukairshowguide.co.uk']], { stagger: B / 2, exit: 'left' }],
   ],
   stops: [
     ['The 2027|calendar', 'Find your show', [
@@ -23,7 +23,7 @@ window.FILM = {
       { lines: [['big', 'New dates'], ['big', '*added*'], ['mid', 'as organisers confirm'], ['small', 'The rest say dates to be confirmed']], screen: { m: ['uk-airshow-calendar', 1250, 1450], d: ['uk-airshow-calendar', 1700, 1900] } },
     ]],
     ['A guide for|every show', 'Your day, planned', [
-      { lines: [['big', 'Parking'], ['big', '*line up*'], ['mid', 'and where to watch']], screen: { m: ['duxford', 0, 350], d: ['duxford', 150, 250] } },
+      { lines: [['big', 'Where to'], ['big', '*park*'], ['mid', 'the aircraft flying'], ['small', 'And the best places to watch']], screen: { m: ['duxford', 0, 350], d: ['duxford', 150, 250] } },
       { lines: [['big', 'A sun guide'], ['big', '*for the*'], ['big', '*crowd line*'], ['mid', 'how the light moves']], pics: ['jtyphoon2|RAF Typhoon on the flight line, RIAT 2025'] },
     ]],
     ['Getting|there', 'Leave the car at home', [
