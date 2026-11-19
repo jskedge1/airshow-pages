@@ -28,10 +28,10 @@ GROUPS = [
             ], ('Which airshow suits you?', '/first-airshow-which-show')),
             ('book-early', 'Do I need to buy tickets in advance?', [
                 "For the big ticketed shows, yes. Some sell out, some don't sell on the gate at all, and advance tickets are often cheaper. Parking is usually booked at the same time.",
-                "The seafront shows are free to watch, so there's nothing to book apart from a car park or a paid seat if the show offers one.",
+                "Most seafront shows are free to watch, so there's nothing to book apart from a car park or a paid seat if the show offers one. Southport is the exception, as you need a ticket to get in.",
             ], None),
             ('cost', 'How much does a day at an airshow cost?', [
-                "It can vary a lot. A seafront show costs nothing to get in, so you are only paying for travel, parking and food.",
+                "It can vary a lot. Most seafront shows cost nothing to get in, so you are only paying for travel, parking and food.",
                 "A big airfield show adds up quickly for a family once tickets, parking and lunch are counted. I would advise taking a picnic and booking early. That's where most of the savings are.",
             ], ('Food and drink at airshows', '/foodanddrinkatairshows')),
             ('free-vs-paid', 'Are the free seafront shows as good as the paid ones?', [
@@ -118,7 +118,7 @@ GROUPS = [
             ], None),
             ('come-back', 'Can I leave and come back in?', [
                 "At most airfield shows, once you are out you are out, so please see the rules before you go.",
-                "Seafront shows are on public ground, so you can come and go as you like.",
+                "Free seafront shows are on public ground, so you can come and go as you like.",
             ], None),
             ('phone-signal', 'Will my phone work?', [
                 "Signal often drops at the big shows, with thousands of people on the same masts. I would agree a meeting point with your group and save your tickets to your phone before you leave home.",
@@ -146,7 +146,7 @@ GROUPS = [
             ], ('Safety and show rules', '/first-airshow-safety')),
             ('pushchair', 'Can I bring a pushchair?', [
                 "Yes. Airfields are mostly grass, so a buggy that copes with grass will make your day a lot easier.",
-                "A folding trolley or wagon is handy for chairs and bags, but some shows limit them. Check the rules for your show first.",
+                "A folding trolley or wagon is handy for chairs and bags, but some shows limit them. The Air Tattoo has said camping trolleys will no longer be permitted on show days from 2027. Check the rules for your show first.",
             ], None),
             ('kids-free', 'Do children get in free?', [
                 "At many ticketed shows younger children get in free or cheaper with a paying adult. The ages and limits change from show to show, so take a look at the ticket page before you book.",
@@ -194,7 +194,7 @@ GROUPS = [
         'guide': ('Airshow security and bag searches', '/airshow-security'),
         'qs': [
             ('bag-search', 'Will my bag be searched?', [
-                "At the big ticketed shows and military bases, expect it. Smaller airfield shows may take a quick look, and seafront shows rarely check at all.",
+                "At the big ticketed shows and military bases, expect it. Smaller airfield shows may take a quick look, and free seafront shows rarely check at all.",
                 "I've written a guide on packing so you get through the gate quicker.",
             ], ('Airshow security and bag searches', '/airshow-security')),
             ('banned', 'What am I not allowed to bring?', [
@@ -202,7 +202,7 @@ GROUPS = [
                 "Each show publishes its own list in the ticket terms.",
             ], ('Safety and show rules', '/first-airshow-safety')),
             ('dogs', 'Can I bring my dog?', [
-                "It varies a lot. Most airfield shows only allow assistance dogs. Seafront shows are on public ground, so dogs can come along.",
+                "It varies a lot. Most airfield shows only allow assistance dogs. Free seafront shows are on public ground, so dogs can come along, but many beaches don't allow dogs in summer, so check the council's rules.",
                 "I would think hard about it though. Fast jets are very loud and a lot of dogs hate it.",
             ], None),
             ('chairs', 'Can I bring chairs, a blanket or a windbreak?', [
