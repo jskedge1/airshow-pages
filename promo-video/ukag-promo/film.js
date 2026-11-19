@@ -20,15 +20,16 @@ const D = 'Display', U = 'UI';
 
 // what the viewer reads, where it differs from what the voice says
 const SHOW = [
-  ['two thousand and six', '2006'], ['U K airshow guide dot co dot U K', 'ukairshowguide.co.uk'],
-  ['Every U K', 'Every UK'], ['three D', '3D'], ['Fifty four', '54'], ['Thirteen of them', '13 of them'],
+  ['U K airshow guide dot co dot U K', 'ukairshowguide.co.uk'], ['two thousand and six', '2006'],
+  ['twenty twenty seven', '2027'], ['three D', '3D'], ['fifty four', '54'], ['Thirteen shows', '13 shows'], ['U K', 'UK'],
 ];
 const disp = (s) => SHOW.reduce((a, [x, y]) => a.split(x).join(y), s);
-const ACCENT = ['2006', 'train driver.', 'a website.', 'Bring a chair.', 'room for you.'];
+const ACCENT = ['four million', '2006', 'train driver.', 'The Big Guide to UK Airshows.', 'The aeroplanes.', 'fourth biggest'];
 
 const sp = (t, t0, cfg = M.SPRING.gentle) => M.spring(t - t0, cfg);
 const linesIn = (id) => LINES.filter((l) => l.section === id);
 const L = (id, i) => linesIn(id)[i];
+const MARK = (m) => LINES.find((l) => l.mark === m);
 
 // ------------------------------------------------------------------ helpers
 
@@ -74,8 +75,9 @@ function wrap(ctx, str, f, maxW) {
 }
 
 // A story card: the words rise row by row out of a mask, timed to the voice. Exits up at tExit.
-function card(ctx, t, str, tIn, tExit, { x = 120, bottom = 900, size = 92, maxW = 1180, color = C.white, top = null } = {}) {
+function card(ctx, t, str, tIn, tExit, { x = 120, bottom = 900, size = null, maxW = 1180, color = C.white, top = null } = {}) {
   if (t < tIn - 0.1 || t > tExit + 0.3) return;
+  size = size || (str.length > 95 ? 74 : str.length > 55 ? 86 : str.length > 24 ? 100 : 124);
   const f = font(size, 800, D);
   const rows = wrap(ctx, str, f, maxW);
   const lh = size * 1.02;
@@ -171,7 +173,7 @@ const pageH = (img, w) => (img ? img.height * (w / img.width) : 0);
 // ------------------------------------------------------------------ backgrounds (pre-blurred once)
 const BLUR = {};
 function makeBlurs(IMG) {
-  for (const k of ['blenheim', 'arrows_band', 'train_platform', 'kit', 'campsite', 'seafront', 'hornet', 'typhoon_photo']) {
+  for (const k of ['blenheim', 'arrows_band', 'train_platform', 'kit', 'campsite', 'seafront', 'hornet', 'typhoon_photo', 'family', 'laptop']) {
     const cv = document.createElement('canvas'); cv.width = W / 2; cv.height = H / 2;
     const c = cv.getContext('2d');
     c.filter = 'blur(18px) saturate(0.8)';
@@ -208,31 +210,31 @@ function slate(ctx, t, n, sec) {
 // ------------------------------------------------------------------ scenes
 
 function sceneOpen(ctx, t, IMG) {
-  const s = SEC.open, here = L('open', 2), saying = L('open', 3);
+  const s = SEC.open, l = linesIn('open'), here = MARK('jet'), saying = l[l.indexOf(here) + 1];
   const jetIn = here.end - 0.25, jetOut = saying.start - 0.35;
   if (VARIANT === 'presenter') {
     slate(ctx, t, 1, s);
   } else if (t >= jetIn && t < jetOut) {
-    // the jet: a fast pan with the Typhoon, shaking the frame
+    // the Red Arrows: a fast pan with the formation, shaking the frame
     const p = (t - jetIn) / (jetOut - jetIn);
     ctx.save(); M.shake(ctx, t, jetIn, 18, 5, 0.9);
-    photo(ctx, IMG.typhoon_pan, E.inOutSine(p), [0.1, 0.5, 1.5], [0.85, 0.45, 1.35]);
+    photo(ctx, IMG.arrows18, E.inOutSine(p), [0.05, 0.5, 1.45], [0.9, 0.45, 1.3]);
     ctx.restore();
   } else {
     photo(ctx, IMG.seafront, E.linear(clamp(t / s.end)), [0.5, 0.55, 1.04], [0.42, 0.62, 1.2]);
     shade(ctx, 0.95);
   }
   if (VARIANT !== 'presenter') {
-    card(ctx, t, disp(L('open', 0).text), L('open', 0).start, L('open', 1).start - 0.2, { size: 120 });
-    card(ctx, t, disp(L('open', 1).text), L('open', 1).start, here.start - 0.2, { size: 92 });
+    const before = l.slice(0, l.indexOf(here));
+    before.forEach((x, i) => card(ctx, t, disp(x.text), x.start, (i + 1 < before.length ? before[i + 1] : here).start - 0.2));
     // the jet blows this card away
-    if (t < jetIn + 0.2) card(ctx, t, disp(here.text), here.start, 1e9, { size: 92 });
+    if (t < jetIn + 0.2) card(ctx, t, disp(here.text), here.start, 1e9);
     else if (t < jetIn + 1.2) {
       const k = E.inCubic(prog(t, jetIn + 0.2, jetIn + 0.75));
       ctx.save(); ctx.translate(k * 1600, -k * 60); ctx.transform(1, 0, -0.25 * k, 1, 0, 0);
-      card(ctx, 1e3, disp(here.text), 0, 2e3, { size: 92 }); ctx.restore();
+      card(ctx, 1e3, disp(here.text), 0, 2e3); ctx.restore();
     }
-    card(ctx, t, '...As I was saying.', saying.start, s.end + 1, { size: 72 });
+    card(ctx, t, '...' + disp(saying.text), saying.start, s.end + 1, { size: 96 });
   }
   // open from black
   const fi = 1 - clamp(t / 0.7);
@@ -271,19 +273,20 @@ function sceneTitle(ctx, t, IMG) {
 const STORY2 = () => {
   const l = linesIn('slot2');
   return [
-    { t0: SEC.slot2.start, img: 'crowdline', a: [0.5, 0.5, 1.05], b: [0.6, 0.45, 1.18] },
-    { t0: l[1].start - 0.1, img: 'static', a: [0.4, 0.5, 1.08], b: [0.55, 0.5, 1.2] },
-    { t0: l[2].start - 0.1, img: 'carpark', a: [0.6, 0.5, 1.05], b: [0.7, 0.4, 1.25] },
-    { t0: l[3].start - 0.1, img: 'leaving', a: [0.5, 0.3, 1.1], b: [0.65, 0.25, 1.25] },
-    { t0: l[4].start - 0.1, img: 'train_platform', a: [0.4, 0.5, 1.05], b: [0.6, 0.45, 1.2] },
-    { t0: l[5].start - 0.1, img: 'train_platform', a: [0.6, 0.45, 1.2], b: [0.85, 0.4, 1.55], grade: 'rgba(10,20,45,0.45)' },
+    { t0: SEC.slot2.start, img: 'family', a: [0.5, 0.5, 1.05], b: [0.45, 0.55, 1.18] },
+    { t0: l[1].start - 0.1, img: 'hub_ready', a: [0.5, 0.5, 1.05], b: [0.5, 0.6, 1.2] },
+    { t0: l[2].start - 0.1, img: 'phone', a: [0.5, 0.5, 1.05], b: [0.6, 0.45, 1.22] },
+    { t0: l[3].start - 0.1, img: 'laptop', a: [0.4, 0.5, 1.08], b: [0.3, 0.55, 1.3] },
+    { t0: l[4].start - 0.1, img: 'carpark', a: [0.6, 0.5, 1.05], b: [0.7, 0.4, 1.25] },
+    { t0: l[5].start - 0.1, img: 'train_platform', a: [0.4, 0.5, 1.05], b: [0.6, 0.45, 1.2] },
+    { t0: l[6].start - 0.1, img: 'train_platform', a: [0.6, 0.45, 1.2], b: [0.85, 0.4, 1.55], grade: 'rgba(10,20,45,0.45)' },
   ];
 };
 function sceneSlot2(ctx, t, IMG) {
   const s = SEC.slot2;
   if (VARIANT === 'presenter') return slate(ctx, t, 2, s);
   track(ctx, t, IMG, STORY2(), s.end); shade(ctx);
-  tag(ctx, t, 'HOW NOT TO DO AN AIRSHOW', s.start + 0.2, s.end);
+  tag(ctx, t, 'THE PLANNING PROBLEM', s.start + 0.2, s.end);
   const l = linesIn('slot2');
   l.forEach((x, i) => card(ctx, t, disp(x.text), x.start, i + 1 < l.length ? l[i + 1].start - 0.2 : s.end + 1));
 }
@@ -291,14 +294,15 @@ function sceneSlot2(ctx, t, IMG) {
 function sceneReveal(ctx, t, IMG) {
   const s = SEC.reveal, l = linesIn('reveal');
   fill(ctx, C.navy); bg(ctx, t, 'hornet', s.start);
-  card(ctx, t, disp(l[0].text), l[0].start, s.end + 1, { size: 104, maxW: 560, top: 300 });
-  card(ctx, t, disp(l[1].text), l[1].start, s.end + 1, { size: 46, maxW: 560, top: 545, color: C.mute });
-  const tw = l[1].start + 0.35;
+  card(ctx, t, disp(l[0].text), l[0].start, s.end + 1, { size: 96, maxW: 560, top: 230 });
+  card(ctx, t, disp(l[1].text), l[1].start, l[2].start - 0.2, { size: 44, maxW: 540, top: 560, color: C.mute });
+  card(ctx, t, disp(l[2].text), l[2].start, s.end + 1, { size: 44, maxW: 540, top: 560, color: C.mute });
+  const tw = l[0].end + 0.2;
   const k = sp(t, tw, { stiffness: 140, damping: 19 });
   if (k > 0) {
     const w = 1120, h = 700, x = 720, y = 190 + (1 - k) * 900;
     const img = IMG.home_full;
-    const scr = E.inOutCubic(prog(t, tw + 1.6, s.end + 0.2)) * (pageH(img, w) * 0.42);
+    const scr = E.inOutSine(prog(t, tw + 1.6, s.end + 0.2)) * (pageH(img, w) * 0.62);
     browser(ctx, img, x, y, w, h, 'ukairshowguide.co.uk', { scroll: scr });
   }
 }
@@ -312,22 +316,25 @@ function sceneJet(ctx, t, IMG, key, a, b, sec) {
 // ---- the tour: one window per page, the label on the left
 const FEAT = {
   map: { n: '01', title: 'Find your\nairshow', sub: 'Every UK airshow on one map', bg: 'blenheim', wins: [
-    { at: 0, img: 'find_full', url: 'ukairshowguide.co.uk/air-shows-guides', scroll: [0, 0.32] },
-    { at: 3.4, img: 'map', url: 'ukairshowguide.co.uk/air-shows-guides', zoom: [1.0, 1.55], fx: 0.42, fy: 0.62 }] },
-  guide: { n: '02', title: 'Every show,\nin depth', sub: '13 full show guides', bg: 'arrows_band', wins: [
-    { at: 0, img: 'show_full', url: 'ukairshowguide.co.uk/eastbourneairshow', scroll: [0, 0.55] }] },
+    { at: 0, img: 'find_full', url: 'ukairshowguide.co.uk/air-shows-guides', scroll: [0, 0.3] },
+    { at: 3.6, img: 'map', url: 'ukairshowguide.co.uk/air-shows-guides', zoom: [1.0, 1.55], fx: 0.42, fy: 0.62 }] },
+  budget: { n: '02', title: 'Budget the\nwhole day', sub: 'The airshow budget calculator', bg: 'arrows_band', wins: [
+    { at: 0, img: 'budget_full', url: 'ukairshowguide.co.uk/airshows-on-a-budget', scroll: [0, 0.2] },
+    { at: 8.6, img: 'kitcalc_full', url: 'ukairshowguide.co.uk/build-your-kit-calculator', scroll: [0, 0.22] }] },
   buses: { n: '03', title: 'Getting there,\nsorted', sub: '54 bus routes, mapped stop by stop', bg: 'train_platform', wins: [
     { at: 0, img: 'train', url: 'ukairshowguide.co.uk/train-to-eastbourne', scroll: [0, 0.4] },
-    { at: 4.6, img: 'busidx', url: 'ukairshowguide.co.uk/bus-route', zoom: [1.0, 1.3], fx: 0.5, fy: 0.15 }] },
-  cams: { n: '04', title: 'Photography,\nmade simple', sub: '3D guides to 11 cameras', bg: 'kit', wins: [
+    { at: 5.4, img: 'busidx', url: 'ukairshowguide.co.uk/bus-route', zoom: [1.0, 1.3], fx: 0.5, fy: 0.15 }] },
+  kit: { n: '04', title: 'Kit and\nphotography', sub: 'What to buy, and 3D guides to 11 cameras', bg: 'kit', wins: [
     { at: 0, img: 'photo_full', url: 'ukairshowguide.co.uk/airshow-photography-hub', scroll: [0, 0.45] },
-    { at: 4.2, img: 'cams', url: 'ukairshowguide.co.uk/airshow-photography-hub', zoom: [1.0, 1.4], fx: 0.42, fy: 0.55 }] },
-  plan: { n: '05', title: 'Plan the\nwhole day', sub: 'Camping, first timers, rainy days, budgets', bg: 'campsite', wins: [
-    { at: 0, img: 'camping_full', url: 'ukairshowguide.co.uk/camping-at-airshows', scroll: [0, 0.35] },
-    { at: 3.6, img: 'guides_full', url: 'ukairshowguide.co.uk/visitorplanningguides', scroll: [0.05, 0.4] }] },
-  forum: { n: '06', title: 'Join the\ncommunity', sub: 'Airshow Forum and My Airshow Hub', bg: 'seafront', wins: [
+    { at: 7.2, img: 'cams', url: 'ukairshowguide.co.uk/airshow-photography-hub', zoom: [1.0, 1.4], fx: 0.42, fy: 0.55 }] },
+  camp: { n: '05', title: 'Camp\nconfidently', sub: 'Campsites, pitches and what to pack', bg: 'campsite', wins: [
+    { at: 0, img: 'camping_full', url: 'ukairshowguide.co.uk/camping-at-airshows', scroll: [0, 0.3] }] },
+  kids: { n: '06', title: 'Bringing\nthe kids', sub: 'Family verdicts, ear advice and spotter cards', bg: 'family', wins: [
+    { at: 0, img: 'which_full', url: 'ukairshowguide.co.uk/first-airshow-which-show', scroll: [0, 0.3] },
+    { at: 4.6, img: 'spotter_full', url: 'ukairshowguide.co.uk/aircraft-spotter-cards', scroll: [0.08, 0.36] }] },
+  forum: { n: '07', title: 'Join the\ncommunity', sub: 'Airshow Forum and My Airshow Hub', bg: 'seafront', wins: [
     { at: 0, img: 'forum_full', url: 'ukairshowguide.co.uk/community-forum', scroll: [0, 0.3] },
-    { at: 3.8, img: 'hub_full', url: 'ukairshowguide.co.uk/how-my-airshow-hub-works', scroll: [0, 0.3] }] },
+    { at: 3.2, img: 'hub_full', url: 'ukairshowguide.co.uk/how-my-airshow-hub-works', scroll: [0, 0.3] }] },
 };
 const WX = 700, WY = 130, WW = 1124, WH = 760;
 
@@ -374,7 +381,7 @@ function feature(ctx, t, IMG, id, dx = 0, enterFromBelow = false) {
   });
   ctx.restore();
 }
-const ORDER = ['map', 'guide', 'buses', 'cams', 'plan', 'forum'];
+const ORDER = ['map', 'budget', 'buses', 'kit', 'camp', 'kids', 'forum'];
 function sceneTour(ctx, t, IMG, id) {
   const s = SEC[id];
   fill(ctx, C.navy); bg(ctx, t, FEAT[id].bg, s.start);
@@ -391,24 +398,22 @@ function sceneTour(ctx, t, IMG, id) {
 const STORY3 = () => {
   const l = linesIn('slot3');
   return [
-    { t0: SEC.slot3.start, img: 'tornado_taxi', a: [0.5, 0.5, 1.05], b: [0.4, 0.5, 1.15] },
-    { t0: l[1].start - 0.1, img: 'hub_ready', a: [0.5, 0.5, 1.05], b: [0.5, 0.6, 1.18] },
-    { t0: l[2].start - 0.1, img: 'crowdline', a: [0.55, 0.5, 1.08], b: [0.62, 0.45, 1.3] },
-    { t0: l[3].start - 0.1, img: 'family', a: [0.5, 0.5, 1.05], b: [0.45, 0.55, 1.15] },
+    { t0: SEC.slot3.start, img: 'crowdline', a: [0.55, 0.5, 1.05], b: [0.62, 0.45, 1.2] },
+    { t0: l[1].start - 0.1, img: 'family', a: [0.5, 0.5, 1.05], b: [0.45, 0.55, 1.18] },
   ];
 };
 function sceneSlot3(ctx, t, IMG) {
-  const s = SEC.slot3, l = linesIn('slot3'), chair = l[4];
-  if (VARIANT === 'presenter') { if (t < chair.start - 0.3) return slate(ctx, t, 3, s); }
-  if (t >= chair.start - 0.3) {
-    // the punchline, in the silence: push in on the folding chairs
-    photo(ctx, IMG.front_row, E.outCubic(clamp((t - chair.start + 0.3) / 3.5)), [0.38, 0.75, 1.6], [0.36, 0.8, 1.9]);
-    shade(ctx, 0.7);
-    card(ctx, t, disp(chair.text), chair.start, s.end + 1, { size: 130 });
+  const s = SEC.slot3, l = linesIn('slot3'), drop = MARK('drop');
+  if (t >= drop.start - 0.05) {
+    // the punchline, out of the silence: the aeroplanes
+    photo(ctx, IMG.typhoon_photo, E.outCubic(clamp((t - drop.start) / 4)), [0.5, 0.5, 1.0], [0.52, 0.46, 1.15]);
+    if (VARIANT !== 'presenter') { shade(ctx, 0.6); card(ctx, t, disp(drop.text), drop.start, s.end + 1, { size: 124 }); }
     return;
   }
-  track(ctx, t, IMG, STORY3(), chair.start - 0.3); shade(ctx);
-  l.slice(0, 4).forEach((x, i) => card(ctx, t, disp(x.text), x.start, i < 3 ? l[i + 1].start - 0.2 : chair.start - 0.3));
+  if (VARIANT === 'presenter') return slate(ctx, t, 3, s);
+  track(ctx, t, IMG, STORY3(), drop.start); shade(ctx);
+  const before = l.slice(0, l.indexOf(drop));
+  before.forEach((x, i) => card(ctx, t, disp(x.text), x.start, i + 1 < before.length ? before[i + 1].start - 0.2 : drop.start - 0.6));
 }
 
 function sceneEnd(ctx, t, IMG) {
@@ -443,7 +448,7 @@ function sceneEnd(ctx, t, IMG) {
   // the address types on as it is said
   const urlLine = L('end', 0);
   const url = 'ukairshowguide.co.uk';
-  const n = Math.round(clamp((t - (urlLine.end - 2.0)) / 1.3) * url.length);
+  const n = Math.round(clamp((t - urlLine.start) / Math.max(1, urlLine.end - urlLine.start - 0.2)) * url.length);
   const uf = font(78, 800, D);
   text(ctx, url.slice(0, n), 118, 610, uf, C.ink);
   if (n > 0 && n < url.length) { ctx.font = uf; ctx.fillStyle = C.teal; ctx.fillRect(118 + ctx.measureText(url.slice(0, n)).width + 6, 548, 6, 70); }
@@ -467,26 +472,27 @@ const IMAGES = {
   show_full: 'assets/web/show_full.jpg', train: 'assets/web/train.jpg', busidx: 'assets/web/busidx.jpg',
   photo_full: 'assets/web/photo_full.jpg', cams: 'assets/web/cams.jpg', camping_full: 'assets/web/camping_full.jpg',
   guides_full: 'assets/web/guides_full.jpg', forum_full: 'assets/web/forum_full.jpg', hub_full: 'assets/web/hub_full.jpg',
+  budget_full: 'assets/web/budget_full.jpg', kitcalc_full: 'assets/web/kitcalc_full.jpg', which_full: 'assets/web/which_full.jpg', spotter_full: 'assets/web/spotter_full.jpg',
 };
 for (const k of ['typhoon_pull', 'arrows23', 'arrows18', 'arrows_band', 'f16_burner', 'f16_spray', 'apache', 'typhoon_photo', 'a400m',
   'hornet', 'blenheim', 'typhoon_pan', 'phantom', 'jet_vapour', 'crowdline', 'family', 'carpark', 'train_platform', 'front_row',
-  'seafront', 'static', 'hub_ready', 'tornado_taxi', 'leaving', 'campsite', 'kit']) IMAGES[k] = `assets/photos/${k}.jpg`;
+  'seafront', 'static', 'hub_ready', 'tornado_taxi', 'leaving', 'campsite', 'kit', 'laptop', 'phone']) IMAGES[k] = `assets/photos/${k}.jpg`;
 
 // hits for sfx.mjs (in beats on the 120 BPM grid: seconds x 2)
 const b = (s) => +(s * 2).toFixed(2);
 const HITS = [];
 for (const s of TL.sections) {
-  if (['map', 'guide', 'buses', 'cams', 'plan', 'forum'].includes(s.id)) {
+  if (ORDER.includes(s.id)) {
     HITS.push([b(s.start), `${s.id} in`, 'whoosh', { len: 0.45, from: 500, to: 2200 }]);
     for (const w of FEAT[s.id].wins.slice(1)) HITS.push([b(s.start + w.at), `${s.id} next page`, 'whoosh', { len: 0.35, from: 2400, to: 700, pan: 0.3 }]);
   }
 }
 for (const id of ['open', 'slot2', 'slot3']) for (const l of linesIn(id)) HITS.push([b(l.start - 0.05), 'card', 'tick']);
 HITS.push([b(SEC.title.start), 'title', 'impact'], [b(SEC.title.start + 3), 'one easy guide', 'thud']);
-HITS.push([b(SEC.reveal.start + 3.0), 'site rises', 'whoosh', { len: 0.6, from: 400, to: 1800 }]);
+HITS.push([b(L('reveal', 0).end + 0.4), 'site rises', 'whoosh', { len: 0.6, from: 400, to: 1800 }]);
+HITS.push([b(MARK('drop').start), 'the aeroplanes', 'sub', { len: 1.4 }]);
 HITS.push([b(SEC.end.start + 4), 'end card', 'impact'], [b(SEC.end.start + 4.2), 'logo', 'bell', { pitch: 'D6' }]);
-const urlEnd = L('end', 0).end;
-HITS.push([b(urlEnd - 2.0), 'url types', 'type', { len: 1.3, n: 20 }]);
+HITS.push([b(L('end', 0).start), 'url types', 'type', { len: L('end', 0).end - L('end', 0).start - 0.2, n: 20 }]);
 HITS.sort((x, y) => x[0] - y[0]);
 
 M.film({
@@ -496,10 +502,10 @@ M.film({
   samples: (t) => {
     const fast = (a, w) => Math.abs(t - a) < w;
     const jet = TL.sections.some((s) => s.kind === 'jet' && t >= s.start && t < s.end);
-    const here = L('open', 2);
-    if (jet || (t > here.end - 0.3 && t < L('open', 3).start)) return 8;
-    if (TL.sections.some((s) => fast(s.start, 0.8))) return 6;
-    return 3;
+    const here = MARK('jet'), nx = LINES[LINES.indexOf(here) + 1];
+    if (jet || (t > here.end - 0.3 && t < nx.start)) return 8;
+    if (TL.sections.some((s) => fast(s.start, 0.8))) return 5;
+    return 2;
   },
   init(ctx, IMG) { makeBlurs(IMG); },
   draw(ctx, u, t, IMG) {
@@ -510,15 +516,15 @@ M.film({
       case 'slot2': sceneSlot2(ctx, t, IMG); break;
       case 'reveal': sceneReveal(ctx, t, IMG); break;
       case 'drop': sceneJet(ctx, t, IMG, 'typhoon_photo', [0.5, 0.5, 1.0], [0.55, 0.45, 1.3], s); break;
-      case 'jet1': sceneJet(ctx, t, IMG, 'arrows18', [0.2, 0.5, 1.1], [0.6, 0.5, 1.25], s); break;
+      case 'jet1': sceneJet(ctx, t, IMG, 'arrows23', [0.2, 0.5, 1.1], [0.6, 0.45, 1.3], s); break;
       case 'jet2': sceneJet(ctx, t, IMG, 'f16_spray', [0.3, 0.5, 1.15], [0.6, 0.5, 1.3], s); break;
       case 'jet3': sceneJet(ctx, t, IMG, 'a400m', [0.5, 0.5, 1.05], [0.45, 0.4, 1.35], s); break;
       case 'slot3': sceneSlot3(ctx, t, IMG); break;
       case 'end': sceneEnd(ctx, t, IMG); break;
       default: sceneTour(ctx, t, IMG, s.id);
     }
-    if (['map', 'guide', 'buses', 'cams', 'plan', 'forum', 'end', 'drop', 'jet1', 'jet2', 'jet3'].includes(s.id) && VARIANT === 'standalone') {
-      subtitles(ctx, t, ['map', 'guide', 'buses', 'cams', 'plan', 'forum', 'end']);
+    if ([...ORDER, 'end', 'drop', 'jet1', 'jet2', 'jet3'].includes(s.id) && VARIANT === 'standalone') {
+      subtitles(ctx, t, [...ORDER, 'end']);
     }
   },
 });

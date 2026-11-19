@@ -12,7 +12,7 @@ The arrangement follows timeline.json (written by vo.py), so the music always ma
   jet    aircraft interludes: full groove (the first one is the tour's drop)
   tour   feature tour: full groove, counter line in the second half
   end    full groove, resolving on the last bar
-Comic timing: the music cuts out under the pause before "Bring a chair." and comes back on the end card.
+Comic timing: the music cuts out under the pause before the line marked "drop" in vo.py and comes back on the end card.
 Also writes audio/jets.wav: synthesized jet passes, mixed into the SFX stem by fx.py.
 
     MOTION_REEL_SKILL=<skill> uv run ukag-promo/audio/score.py
@@ -57,7 +57,7 @@ tour_start = next(s["start"] for s in SECS if s["kind"] == "jet")
 tour_end = max(s["end"] for s in SECS if s["kind"] in ("tour", "jet"))
 tour_mid = (tour_start + tour_end) / 2
 end_sec = SECS[-1]
-chair = next(l for l in LINES if l["text"].startswith("Bring a chair"))
+chair = next(l for l in LINES if l.get("mark") == "drop")
 silence = (chair["start"] - 1.25, end_sec["start"])          # music out for the punchline
 
 drums, bass, music, fx = (Bus(DUR, BPM) for _ in range(4))
@@ -174,8 +174,8 @@ def jet_pass(length=4.0, peak_at=0.55, big=1.0):
 jets = np.zeros((2, N + SR * 5))
 def put(sig, t):
     i = int(t * SR); m = min(sig.shape[1], jets.shape[1] - i); jets[:, i:i + m] += sig[:, :m]
-# the gag: the jet drowns him out in the pause after "...managed to get here."
-here = next(l for l in LINES if l["text"].startswith("Provided"))
+# the gag: the jet drowns him out after the line marked "jet" in vo.py
+here = next(l for l in LINES if l.get("mark") == "jet")
 put(jet_pass(4.2, 0.45, 1.0), here["end"] - 0.5)
 for s in SECS:
     if s["kind"] == "jet":

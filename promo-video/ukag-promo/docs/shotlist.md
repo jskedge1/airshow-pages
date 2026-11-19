@@ -1,34 +1,33 @@
-# Shot list: The Big Guide to UK Airshows promo (16:9, 120 s, 120 BPM, 1 beat = 0.5 s)
+# Shot list: The Big Guide to UK Airshows launch video (16:9, 3:18, 120 BPM)
 
-Tone: dry, unhurried presenter piece in the manner of a British motoring show. Comedy comes from timing,
-so the music stops or drops out under punchlines and the edit holds a beat after each dry line.
+The edit is built from the voice: `audio/vo.py` reads the script, places every line and writes
+`timeline.json`. The score (`audio/score.py`) and the picture (`film.js`) both follow that file, so
+changing a line and re-running vo.py, score.py and the render keeps everything in sync.
 
-Look: site navy (#0E2131 / #13293C), one accent teal (#32B4AF), white type. Display Barlow Condensed 800,
-UI Barlow 500/600 (the site's own pair). Logo only on the light end card. Real screenshots only, in a plain
-browser window showing the real ukairshowguide.co.uk path. Aircraft B-roll is the site's own photos with a
-camera move that follows the direction of flight.
+Look: site navy (#0E2131 / #13293C), one accent teal (#32B4AF), white type. Barlow Condensed 800 for
+display, Barlow for UI. Real screenshots only, in a plain browser window showing the real
+ukairshowguide.co.uk path. Aircraft B-roll is the site's own photos with camera moves.
 
-VARIANT: `standalone` shows story cards in the talking slots; `presenter` shows a slate (slot number,
-time, first line) in the same frames. Everything else is identical.
+Music: quiet ambience under the cold open, groove from the title, soft under the talking slots, full
+under the tour, silence before "The aeroplanes.", resolve on the end card. Jet passes on the gag, the
+title and each aircraft interlude.
 
-Music sections (score.py): 0-14 s near silence (wind, distant crowd); 14-20 hook; 20-38 soft; 38-44 lift;
-44-90 tour groove; 90-106 soft; 106-120 end groove and resolve.
-
-| # | Beats (s) | Shot | Asset | Motion | In | SFX |
-|---|---|---|---|---|---|---|
-| 1 | 0-28 (0-14) | SLOT 1 cold open. Standalone: "This is an airshow." / "The finest way to spend a British summer's day." / jet cutaway blows the card off / "Provided you can actually get here." | crowd line, Typhoon cutaway at 16-20 | slow push; jet whip at 16 | fade from black | wind bed, jet pass at 16 |
-| 2 | 28-40 (14-20) | TITLE: 4 aircraft on 2-beat cuts, "EVERY UK AIRSHOW." "ONE EASY GUIDE." | ac-typhoon-pull, arrows-riat23, f16-burner, apache | push / drift | hard cut on 28, music in | impact, pops |
-| 3 | 40-76 (20-38) | SLOT 2 "how not to". Standalone: 4 cards, 9 beats each | car-park, gate-queue, crowd line into sun, fact-train | slow push | cut | ticks |
-| 4 | 76-88 (38-44) | REVEAL "So I built a website." / "Try to contain yourselves." then home page in browser | live_home, home_full | window rises, glide down | cut | whoosh |
-| 5 | 88-92 (44-46) | Typhoon flypast, tour drops | guide-photo-typhoon | drift | riser | impact |
-| 6 | 92-104 (46-52) | Find your airshow: page then map | find_full, map | rise, scroll, swap | slide | whoosh |
-| 7 | 104-116 (52-58) | Every show, in depth | show_full | long scroll | slide | tick |
-| 8 | 116-120 (58-60) | Red Arrows | hero-arrows-riat18 | drift | whip | jet pass |
-| 9 | 120-136 (60-68) | Getting there, sorted: train page, bus routes; "54" counts up | train, busidx, transport_full | windows stack | slide | ticks |
-| 10 | 136-140 (68-70) | F-16 | f16-spray | drift | whip | jet |
-| 11 | 140-156 (70-78) | Photography: hub then 3D turntable | photo_full, spin/ | scroll, turntable | slide | whoosh |
-| 12 | 156-168 (78-84) | Plan the whole day: camping, planning guides | camping_full, guides_full | scroll, swap | slide | ticks |
-| 13 | 168-180 (84-90) | Join the community | forum_full, hub_full | two windows | slide | whoosh |
-| 14 | 180-212 (90-106) | SLOT 3 sincere. Standalone: 4 cards, last "Bring a chair." lands alone in silence | static park, crowd line, band-arrows | slow push | cut | music drops for last card |
-| 15 | 212-220 (106-110) | Final burst: 4 aircraft on 2-beat cuts | ac shots | cuts | riser into 212 | impacts |
-| 16 | 220-240 (110-120) | End card: logo, ukairshowguide.co.uk; right half clear for YouTube end screen | logo | logo lands, URL types | cut | impact, bell |
+| Section | Time | Music | Picture |
+|---|---|---|---|
+| open | 0:00 to 0:24 | quiet | Seafront crowd line, slow push; the Red Arrows whip across on the gag (cards: the lines; the gag card is blown away) |
+| title | 0:24 to 0:30 | hook | Red Arrows, F-16 afterburner, Apache, Hornet on 1.5 s cuts; "Every UK airshow." / "One easy guide." |
+| slot2 | 0:30 to 1:00 | soft | Story cards over: family at the crowd line, packed bags, planning on a phone, laptop and tickets, car park, train platform (dusk grade on the last line) |
+| reveal | 1:00 to 1:16 | lift | "So I built The Big Guide to UK Airshows." then the live home page rises in a browser window and scrolls |
+| drop | 1:16 to 1:18 | jet | Typhoon, fast push and shake: the tour drops |
+| map | 1:18 to 1:28 | tour | 01 Find your airshow: Find Your Airshow page, then the UK Airshow Map zooming |
+| budget | 1:28 to 1:46 | tour | 02 Budget the whole day: Airshows On A Budget (Day Cost Planner), then the Build Your Kit Calculator |
+| jet1 | 1:46 to 1:48 | jet | Red Arrows smoke |
+| buses | 1:48 to 2:00 | tour | 03 Getting there, sorted: Train to Eastbourne, then the bus route maps |
+| jet2 | 2:00 to 2:02 | jet | F-16 afterburner take off |
+| kit | 2:02 to 2:18 | tour | 04 Kit and photography: Photography Hub, then the 3D camera guide |
+| camp | 2:18 to 2:24 | tour | 05 Camp confidently: Camping hub |
+| kids | 2:24 to 2:40 | tour | 06 Bringing the kids: Which airshow suits you, then the Aircraft Spotter Cards |
+| jet3 | 2:40 to 2:42 | jet | A400M |
+| forum | 2:42 to 2:48 | tour | 07 Join the community: Airshow Forum, then How My Airshow Hub Works |
+| slot3 | 2:48 to 3:04 | soft | Story cards over the crowd line and a family; music stops; cut to a Typhoon on "The aeroplanes." |
+| end | 3:04 to 3:18 | end | Four aircraft on 1 s cuts, then the end card: logo, ukairshowguide.co.uk typing on, Free. Always., Red Arrows panel for the YouTube end screen |
