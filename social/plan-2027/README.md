@@ -9,6 +9,12 @@ Nine slides in two sizes, made 19 Nov 2026 from `slides.html`.
 | `plan-2027-landscape.mp4` | 1920x1080, 45 s | Silent slideshow with fades, for Facebook or YouTube |
 | `plan-2027-tiktok.mp4` | 1080x1920, 45 s | Silent slideshow with fades. Add a sound in the TikTok app |
 
+## Glass effect videos (19 Nov 2026)
+
+`glass-plan-2027-tiktok.mp4` (1080x1920) and `glass-plan-2027-landscape.mp4` (1920x1080) are the same five steps plus the two bonus steps,
+made in the glass effect house style (kinetic type, red step cards, real photos only, music and the standard end card), 90 seconds at 60 fps.
+They are built from `saved/glass-effect/content-plan5.js` and `index-plan5.html`. See `saved/glass-effect/README.md` to change and re-render them.
+
 ## The slides
 
 0. Cover: How to plan your 2027 airshow (5 steps plus 2 bonus)

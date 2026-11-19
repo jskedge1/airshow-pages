@@ -1,0 +1,10 @@
+import { createRequire } from 'module';
+const { chromium } = createRequire(import.meta.url)('playwright');
+const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 2700 } });
+await p.goto('https://jskedge1.github.io/airshow-pages/previews/show-day-harness.html'); await p.waitForTimeout(9000);
+await p.evaluate(()=>{document.getElementById('log').style.display='none';});
+const f = p.frames()[1];
+const r = await f.evaluate(() => { const o = {}; const want = ['13:00:00','Got the programme?','Sky compass','Live radar','Crowd reports','RIAT']; document.querySelectorAll('h1,h2,h3,h4,div,span,button').forEach(e => { const t = e.textContent.trim(); if (want.some(w => t.toLowerCase() === w.toLowerCase()) && !o[t]) { const b = e.getBoundingClientRect(); o[t] = [Math.round(b.x), Math.round(b.y), Math.round(b.width), Math.round(b.height)]; } }); o.H = document.documentElement.scrollHeight; return o; });
+console.log(JSON.stringify(r));
+await p.screenshot({ path: 'hub/showday-harness.png' });
+await b.close();
