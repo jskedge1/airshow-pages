@@ -119,7 +119,19 @@ The Big Guide to UK Airshows is free, and always will be:
 Start planning your 2027 season: https://www.ukairshowguide.co.uk
 Facebook and Instagram: @theukairshowguide
 
-*(Chapter times: copy them from `timeline.json` once the final edit is locked: Hello, The problem, So I built a guide, Find your airshow, Budget the day, Getting there, Kit and photography, Camping, Bringing the kids, Join the community, Start planning.)*
+0:00 Hello
+0:30 The planning problem
+1:00 So I built a guide
+1:18 Find your airshow
+1:28 Budget the whole day
+1:48 Getting there
+2:02 Kit and photography
+2:18 Camping
+2:24 Bringing the kids
+2:42 Join the community
+3:04 Start planning
+
+*(These match the preview. Re-check them against your own recording.)*
 
 **Tags:** uk airshows 2027, airshow guide, airshow budget, airshow with kids, riat 2027, duxford air show, eastbourne airshow, raf cosford air show, red arrows, airshow photography, airshow camping, how to plan an airshow trip
 
