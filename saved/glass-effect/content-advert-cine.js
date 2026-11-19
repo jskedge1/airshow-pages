@@ -1,15 +1,18 @@
 // Cinematic cut of the UK Airshow Guide advert (same design and facts as content-advert.js), built by cine.js.
 // [startBeat, endBeat, ...] at 104 bpm. Shots are Jack's own RIAT 2025 photos (photos/f-j*.jpg landscape, fp-j*.jpg portrait)
 // with slow camera moves. Captions name the aircraft. Each glass slide sits on a matching shot: real site screens for the
-// calendar, transport and Hub, a show campsite for camping, the photography hub for camera settings. Swap in video clips when the Z6 footage is available.
+// calendar, transport and Hub, a show campsite for camping, the photography hub for camera settings. The Z6 video version is content-advert-cine-video.js.
 window.CINE = window.FILM = {
   url: 'ukairshowguide.co.uk', readLine: 'Plan your 2027 air shows at', typeScale: true, smooth: true,
   ts: { mid: 62, small: 50 },
   socials: ['Instagram', 'Facebook', 'YouTube'],
   barsAt: 0,
+  // the RAF Cosford Hollywood trailer look (19 Nov 2026): glass titles cut out of black, no flash, cuts on the beats of The Battlefield (140 bpm)
+  titleStyle: 'glass', flash: false, snapBpm: 140,
   shots: [
     [0, 5, { black: true, soft: true }],
-    [27, 31, { black: true, soft: true }],
+    // the P-40 Kittyhawk (RIAT 2025) behind the glass letters of the title card, so no photo repeats
+    [27, 31, { img: 'jp40', soft: true, s: [1.0, 1.06] }],
     [5, 11, { img: 'jtyphoon', cap: 'RAF Typhoon display, RIAT 2025', s: [1.04, 1.22], x: [2, -2] }],
     [11, 17, { img: 'jchinook', cap: 'RAF Chinook, RIAT 2025', s: [1.02, 1.2], y: [1, -1] }],
     [17, 23, { img: 'jlancaster', cap: 'BBMF Lancaster, RIAT 2025', s: [1.0, 1.16] }],
@@ -32,10 +35,8 @@ window.CINE = window.FILM = {
     [5.4, 10.8, 'The sky'],
     [11.3, 16.8, 'comes'],
     [17.3, 22.8, 'alive'],
-    [27.3, 29.4, 'The 2027 season', { small: true }],
-    [29, 31, 'is coming'],
-    [62.8, 65.5, 'Your summer'],
-    [65.5, 68.5, 'starts here'],
+    [27, 31, 'The 2027 season|is coming', { black: 1 }],
+    [63.3, 68.5, 'Your summer|starts here', { black: .75 }],
   ],
   glass: [
     [31, 35.5, [['huge', '[Everything|f:jredarrows]', { size: 260, enter: 'slam' }], ['big', 'you need', { enter: 'slam', delay: B / 2 }], ['mid', '*in one place*']], { stagger: B }],

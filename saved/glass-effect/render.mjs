@@ -6,8 +6,9 @@ const { chromium } = createRequire(import.meta.url)('playwright');
 import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';
-const DIR = path.dirname(new URL(import.meta.url).pathname);
-const URL_ = 'file://' + DIR + '/' + (process.env.PAGE || 'index.html');
+import { fileURLToPath, pathToFileURL } from 'url';
+const DIR = path.dirname(fileURLToPath(import.meta.url));   // works in folders with spaces
+const URL_ = pathToFileURL(DIR + '/').href + (process.env.PAGE || 'index.html');
 const FPS = +(process.env.FPS || 12);
 const mode = process.argv[2] || 'stills';
 const OUT = DIR + '/' + (process.env.OUT || 'out');
@@ -22,10 +23,12 @@ async function page(browser) {
   return p;
 }
 async function shot(p, t, file, q = 90) {
-  await p.evaluate(t => setT(t), t);
+  // SETTLE (cine.js) waits for video clip frames to load
+  await p.evaluate(async t => { setT(t); if (window.SETTLE) await window.SETTLE(); }, t);
   await p.screenshot({ path: file, type: 'jpeg', quality: q });
 }
-const browser = await chromium.launch();
+// CHROME=<path> uses an installed Chrome instead of Playwright's own (on Jack's Mac: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome)
+const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {});
 try {
   const p0 = await page(browser);
   const DUR = await p0.evaluate(() => DUR);
@@ -47,7 +50,7 @@ try {
     const sd = OUT + '/sheet'; fs.rmSync(sd, { recursive: true, force: true }); fs.mkdirSync(sd, { recursive: true });
     const ts = []; for (let t = 0.5; t < DUR; t += every) ts.push(+t.toFixed(2));
     for (const t of ts) await shot(p0, t, `${sd}/t${String(t.toFixed(1)).padStart(5, '0')}.jpg`, 80);
-    const files = fs.readdirSync(sd).sort();
+    const files = fs.readdirSync(sd).filter(f => !f.startsWith('.')).sort();   // skip ._ files on exFAT drives
     const per = 30;
     for (let i = 0; i * per < files.length; i++) {
       const list = files.slice(i * per, (i + 1) * per);
