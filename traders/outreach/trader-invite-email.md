@@ -276,3 +276,37 @@ The contact list is `uk-airshow-traders.csv` (and the same list as a spreadsheet
 * `status`: to contact, emailed, followed up, replied, listed, no thanks (do not contact again)
 * `date_contacted`
 * `outreach_notes`
+
+The contact list is kept out of the repository on purpose (see `.gitignore`), because this repository feeds the public GitHub Pages site. Keep your copy somewhere private, such as your own Google Drive.
+
+---
+
+## 11. Organisers to ask to pass the invite on
+
+At several big shows, food and drink is run by one caterer or concession, so independent food vans are booked through them, not the show. These are the people to ask to forward the invite (or to list their traders for you):
+
+| Show | Who handles traders | How to reach them |
+|---|---|---|
+| Royal International Air Tattoo | Freemans Event Partners run all public catering (the RIAT trader forms send caterers to them). Trade stands are booked through the RIAT trading team | The trading pages and forms on airtattoo.com |
+| RAF Cosford Air Show | A catering concession runs the food; trade stands are booked through the show | The catering email in the official Traders and Exhibitors Guide on cosfordairshow.co.uk |
+| IWM Duxford air shows | IWM publishes a "Shopping at the air show" exhibitor list for each show | iwm.org.uk, search "exhibitors shops Duxford" |
+| Clacton Airshow | Tendring District Council events team (their press releases name the trade stalls each year) | tendringdc.gov.uk |
+| Airbourne Eastbourne | Eastbourne Borough Council events team (trader forms and a local traders list) | visiteastbourne.com |
+| Bournemouth Air Festival | The festival team (they run a traders call each spring) | bournemouthair.co.uk |
+| International Ayr Show | South Ayrshire Council (Festival Village and the Local Trade Village tent) | south-ayrshire.gov.uk |
+| Midlands Air Festival | The festival team; many of its bars and caterers are booked through Togather | midlandsairfestival.com |
+| Wales National Airshow | Swansea Council (catering concessions go out to tender on Sell2Wales and Find a Tender, and the award notices name the winners) | swansea.gov.uk |
+
+---
+
+## 12. How the list was built, and how to grow it
+
+The first version (19 Nov 2026) has 51 traders, each with an evidence link to the page that ties them to a UK airshow. 36 are marked confirmed (the page names the show) and 15 likely. It is a starting list, not every trader on the circuit: the research could only read search results, not open the show and trader websites, so many traders have a website but no email or phone yet.
+
+Ways to grow it, best first:
+
+1. Open each trader's website from the list and copy the email or phone from their own contact page into the sheet.
+2. Ask the organisers in section 11 to forward the invite. This reaches food vans that don't publish anything online.
+3. Look at each show's Facebook page in the month before the show. Most organisers post "meet our traders" posts naming every food van and stall.
+4. Trader directories that list "events attended": Togather, NCASS and the Nationwide Caterers Association.
+5. Walk the trade village at the first 2027 shows with a card that has a QR code to the sign up form.
