@@ -8,12 +8,12 @@
 const Z = (pg, cx, a, b, z) => ({ m: [pg, a, b], d: [pg, a, b], z, cx });
 const R = (cx, a, b, z) => Z('restoration', cx, a, b, z);
 window.FILM = {
-  url: 'ukairshowguide.co.uk', readLine: 'Tell me about your project at', stepLabel: 'Stop', typeScale: true, smooth: true, pointBeats: 7,
+  url: 'ukairshowguide.co.uk', readLine: 'It is free. Tell me about your project at', stepLabel: 'Stop', typeScale: true, smooth: true, pointBeats: 7,
   introBeats: 12,
   intro: [
     [0, 4, [['big', 'Restoring an'], ['huge', '[aircraft?|p:cosjaguars]', { size: 300, enter: 'slam' }]], { stagger: B / 2, exit: 'zoom' }],
     [4, 8.5, [['huge', '[History|p:lancaster]', { size: 380, enter: 'slam' }], ['big', 'deserves a crowd', { enter: 'slam', delay: B / 2 }], ['small', 'Planes, helicopters, jet engines and more']], { stagger: B, exit: 'zoom', boom: true }],
-    [8.5, 12, [['small', 'Let me help you'], ['huge', '*tell its story*', { enter: 'pop' }], ['mid', 'on the UK Airshow Guide']], { stagger: B / 2, exit: 'left' }],
+    [8.5, 12, [['small', 'Free help to'], ['huge', '*tell its story*', { enter: 'pop' }], ['mid', 'on the UK Airshow Guide']], { stagger: B / 2, exit: 'left' }],
   ],
   stops: [
     ['Who it|is for', 'Any piece of aviation history', [
@@ -51,10 +51,12 @@ window.FILM = {
     ]],
     ['Get in|touch', 'Your project could be next', [
       { lines: [['big', 'Your'], ['big', '*project*'], ['mid', 'could be next'], ['small', 'Under way now, or about to start']], screen: R(720, 12890, 12890, 1.3) },
+      { lines: [['big', 'Completely'], ['big', '*free*'], ['mid', 'no cost to you'], ['small', 'A free service for restoration groups']], pics: ['dx-spitcockpit|Supermarine Spitfire'] },
+      { lines: [['big', 'Just send'], ['big', '*the details*'], ['mid', 'I upload it for you'], ['small', 'Your story, photos, dates and team']], pics: ['coshurricane|Hawker Hurricane'] },
       { lines: [['big', 'Needs'], ['big', '*saving?*'], ['mid', 'tell me about it'], ['small', 'It could be the next one on the page']], screen: R(720, 12594, 12594, 1.35) },
       { lines: [['big', 'Let more'], ['big', '*people*'], ['mid', 'see it, visit it'], ['mid', 'and support it']], pics: ['hurricanes|Hawker Hurricanes'] },
     ]],
   ],
-  outro: [['big', 'From the hangar'], ['huge', '[to the sky|p:spitfire]', { size: 340, enter: 'slam' }], ['big', 'Let me help']],
+  outro: [['big', 'From the hangar'], ['huge', '[to the sky|p:spitfire]', { size: 340, enter: 'slam' }], ['big', 'Let me help'], ['mid', 'completely free']],
   socials: ['Instagram', 'Facebook', 'YouTube'],
 };
