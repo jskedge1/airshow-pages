@@ -43,7 +43,8 @@ function register(node) {
 // Fixed type scale (FILM.typeScale): one large, one medium and one small size for the whole film.
 // huge and big are the same large size; a line too wide for the slide wraps onto the next line
 // instead of shrinking. Hero words with an explicit size (the photo filled intro and outro words) keep it.
-const TS = LAND ? { big: 138, mid: 62, small: 44 } : { big: 148, mid: 70, small: 50 };
+// FILM.ts can override sizes for one film (the restoration film sets mid and small to one size)
+const TS = Object.assign(LAND ? { big: 138, mid: 62, small: 44 } : { big: 148, mid: 70, small: 50 }, (window.FILM && window.FILM.ts) || {});
 function tokens(m) { return m.match(/\[[^\]]+\]|\*[^*]+\*|_[^_]+_|~[^~]+~|\S+/g) || []; }
 function phrase(t0, t1, lines, o = {}) {
   const maxW = o.maxW || F.maxW, x = o.x ?? F.x, maxH = o.maxH || F.maxH;
