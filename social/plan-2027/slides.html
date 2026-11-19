@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Plan your 2027 airshow: social slides</title>
+<!--
+  Source for the "Plan your 2027 airshow" social graphics.
+  Open with ?f=land (1920x1080) or ?f=tok (1080x1920, TikTok / Reels / Shorts) and &s=0..8 for one slide.
+  With no s, every slide is shown one after another (handy for checking).
+  render.js turns each slide into a PNG, then makes the MP4s.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--red:#E4051F;--navy:#001A4B;--navy2:#062A66;--ink:#13293C;--teal:#0097A5;--teal2:#32B4AF;--pale:#E6F4F3;--amber:#F5B82E;--txt:#DCE6F2}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#222;font-family:Barlow,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.cond{font-family:"Barlow Condensed",Barlow,sans-serif}
+.slide{position:relative;overflow:hidden;background:var(--navy);color:#fff;margin:0 auto 40px}
+body.one .slide{margin:0}
+.land .slide{width:1920px;height:1080px}
+.tok .slide{width:1080px;height:1920px}
+
+/* photo */
+.ph{position:absolute;background:center/cover no-repeat}
+.ph .ai{position:absolute;background:rgba(0,26,75,.78);color:#C9D6E6;font-weight:600;font-size:20px;padding:6px 12px;letter-spacing:.3px}
+.land .ph{right:0;top:0;bottom:0;width:62%}
+.land .ph:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--navy) 0%,rgba(0,26,75,.85) 14%,rgba(0,26,75,.15) 42%,rgba(0,26,75,0) 60%)}
+.land .ph .ai{right:24px;top:24px}
+.tok .ph{left:0;right:0;top:0;height:900px}
+.tok .ph:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--navy) 0,rgba(0,26,75,.75) 180px,rgba(0,26,75,0) 420px),linear-gradient(180deg,rgba(0,26,75,.8) 0,rgba(0,26,75,.35) 300px,rgba(0,26,75,0) 420px)}
+.tok .ph .ai{right:150px;top:150px}
+
+/* faint contrail rings, like the site's pale sections */
+.rings{position:absolute;pointer-events:none;opacity:.5;background:radial-gradient(circle,transparent 0 120px,rgba(50,180,175,.12) 121px 123px,transparent 124px 220px,rgba(50,180,175,.1) 221px 223px,transparent 224px 330px,rgba(50,180,175,.08) 331px 333px,transparent 334px)}
+.land .rings{left:-260px;bottom:-300px;width:800px;height:800px}
+.tok .rings{right:-300px;bottom:-200px;width:800px;height:800px}
+
+/* logo */
+.logo{position:absolute;display:block}
+.land .logo{left:80px;top:56px;width:330px}
+.tok .logo{left:60px;top:150px;width:300px;filter:drop-shadow(0 4px 14px rgba(0,0,0,.45))}
+
+/* main text panel */
+.panel{position:absolute;z-index:2}
+.land .panel{left:80px;top:170px;bottom:120px;width:900px;display:flex;flex-direction:column;justify-content:center}
+.tok .panel{left:60px;right:130px;bottom:400px}
+
+.label{display:inline-flex;align-items:center;gap:12px;background:var(--red);color:#fff;font-weight:800;text-transform:uppercase;letter-spacing:2px;padding:8px 16px 8px 14px}
+.label.bonus{background:var(--amber);color:var(--navy)}
+.land .label{font-size:24px}
+.tok .label{font-size:26px}
+.when{display:inline-block;margin-left:12px;color:var(--teal2);font-weight:700;text-transform:uppercase;letter-spacing:1.6px}
+.land .when{font-size:24px}
+.tok .when{font-size:26px}
+
+.big{display:flex;align-items:center;gap:26px;margin-top:22px}
+.num{flex:none;display:grid;place-items:center;border-radius:50%;background:var(--sc,var(--teal));box-shadow:0 0 0 6px var(--navy),0 0 0 11px var(--sc,var(--teal));font-family:"Barlow Condensed";font-weight:800;color:#fff;line-height:1}
+.land .num{width:118px;height:118px;font-size:76px}
+.tok .num{width:124px;height:124px;font-size:80px}
+h1{font-family:"Barlow Condensed";font-weight:800;text-transform:uppercase;line-height:.92;letter-spacing:.3px}
+.land h1{font-size:92px}
+.tok h1{font-size:98px}
+h1 span{color:var(--teal2)}
+
+.list{list-style:none;margin-top:30px;display:grid}
+.land .list{gap:16px}
+.tok .list{gap:18px;margin-top:34px}
+.list li{position:relative;color:var(--txt);font-weight:600;line-height:1.28}
+.land .list li{font-size:31px;padding-left:58px}
+.tok .list li{font-size:37px;padding-left:66px}
+.list li b{color:#fff;font-weight:800}
+.list li:before{content:"";position:absolute;left:0;top:2px;border-radius:50%;background:var(--sc,var(--teal)) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.2 4.2L19 7' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/64% no-repeat}
+.land .list li:before{width:40px;height:40px}
+.tok .list li:before{width:46px;height:46px}
+
+/* chips: stay types, transport, kit */
+.chips{display:flex;flex-wrap:wrap;margin-top:26px}
+.land .chips{gap:12px}
+.tok .chips{gap:14px;margin-top:30px}
+.chip{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.22);color:#fff;font-weight:700;border-radius:999px}
+.land .chip{font-size:26px;padding:8px 20px 8px 14px}
+.tok .chip{font-size:31px;padding:10px 22px 10px 16px}
+.chip i{font-style:normal;line-height:1}
+.chip small{font-size:.72em;color:var(--amber);font-weight:800;text-transform:uppercase;letter-spacing:1px}
+
+/* kit grid (step 5) */
+.kit{display:grid;margin-top:28px}
+.land .kit{grid-template-columns:repeat(3,1fr);gap:12px}
+.tok .kit{grid-template-columns:repeat(2,1fr);gap:14px}
+.kit div{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.08);border-left:6px solid var(--sc,var(--teal));font-weight:700;color:#fff}
+.land .kit div{font-size:27px;padding:11px 14px}
+.tok .kit div{font-size:31px;padding:13px 14px}
+.kit i{font-style:normal;width:1.35em;text-align:center}
+.kit small{margin-left:auto;font-size:.66em;color:var(--amber);font-weight:800;text-transform:uppercase;letter-spacing:1px}
+
+/* tip box */
+.tip{position:relative;margin-top:30px;background:#fff;color:var(--ink);font-weight:600;line-height:1.3;border-left:10px solid var(--red)}
+.land .tip{font-size:28px;padding:18px 24px 18px 26px}
+.tok .tip{font-size:34px;padding:22px 26px 22px 28px;margin-top:36px}
+.tip b{color:var(--red);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-right:8px}
+.tip.wx{border-left-color:var(--teal)}
+.tip.wx b{color:var(--teal)}
+
+/* flight path progress */
+.path{position:absolute;z-index:3;display:flex;align-items:center;justify-content:space-between}
+.land .path{left:80px;width:860px;bottom:62px}
+.tok .path{left:60px;right:160px;top:1572px}
+.path:before{content:"";position:absolute;left:20px;right:20px;top:50%;height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 16px,transparent 16px 26px)}
+.path span{position:relative;display:grid;place-items:center;border-radius:50%;background:var(--navy);border:3px solid rgba(255,255,255,.4);color:rgba(255,255,255,.65);font-family:"Barlow Condensed";font-weight:800}
+.land .path span{width:56px;height:56px;font-size:28px}
+.tok .path span{width:62px;height:62px;font-size:30px}
+.path span.b{border-style:dashed;border-color:rgba(245,184,46,.6);color:rgba(245,184,46,.85)}
+.path span.done{background:var(--sc2);border-color:var(--sc2);color:#fff}
+.path span.on{background:var(--sc2);border-color:#fff;color:#fff;box-shadow:0 0 0 6px rgba(255,255,255,.18);transform:scale(1.22)}
+.path span.b.on,.path span.b.done{background:var(--amber);border-color:var(--amber);border-style:solid;color:var(--navy)}
+.path span.b.on{border-color:#fff}
+.path .jet{position:absolute;top:50%;width:40px;height:40px;margin-top:-20px;color:#fff;font-size:34px;line-height:40px;text-align:center}
+
+/* footer strip */
+.foot{position:absolute;z-index:3;font-weight:700;letter-spacing:.6px;color:#C9D6E6}
+.land .foot{right:40px;bottom:52px;font-size:24px;background:rgba(0,26,75,.8);padding:10px 18px}
+.tok .foot{left:60px;top:1668px;font-size:28px}
+.foot b{color:#fff}
+
+/* cover + end */
+.cover .panel,.end .panel{z-index:2}
+.land .cover .ph,.land .end .ph{width:70%}
+.land .cover .panel,.land .end .panel{top:150px;bottom:60px;width:860px;align-items:flex-start}
+.land .steps5{width:100%}
+.cover h1{line-height:.9}
+.land .cover h1{font-size:150px}
+.tok .cover h1{font-size:150px}
+.cover h1 em{display:block;font-style:normal;color:var(--red);font-size:.6em;letter-spacing:1px;margin-bottom:6px}
+.cover .lead,.end .lead{color:var(--txt);font-weight:600;line-height:1.35}
+.land .cover .lead,.land .end .lead{font-size:36px;margin-top:28px;max-width:760px}
+.tok .cover .lead,.tok .end .lead{font-size:42px;margin-top:30px}
+.lead b{color:#fff}
+.steps5{display:grid;margin-top:34px;counter-reset:n}
+.land .steps5{grid-template-columns:repeat(5,1fr);gap:10px;max-width:860px}
+.tok .steps5{grid-template-columns:1fr 1fr;gap:12px}
+.steps5 div{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.09);border-top:5px solid var(--sc);font-weight:800;color:#fff;line-height:1.1}
+.land .steps5 div{flex-direction:column;align-items:flex-start;font-size:24px;padding:12px 14px 14px}
+.tok .steps5 div{font-size:32px;padding:14px 16px}
+.steps5 div b{font-family:"Barlow Condensed";font-size:1.5em;color:var(--sc)}
+.tok .steps5 div:last-child{grid-column:1/-1}
+.swipe{display:inline-flex;align-items:center;gap:14px;margin-top:34px;background:var(--red);color:#fff;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;border-bottom:5px solid #A80016}
+.land .swipe{font-size:28px;padding:14px 24px}
+.tok .swipe{font-size:34px;padding:16px 28px}
+
+.land .end h1{font-size:118px}
+.tok .end h1{font-size:122px}
+.url{display:inline-block;margin-top:34px;background:#fff;color:var(--navy);font-weight:800;letter-spacing:.5px;border-left:10px solid var(--red)}
+.land .url{font-size:40px;padding:16px 26px}
+.tok .url{font-size:44px;padding:18px 26px}
+.acts{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+.acts span{display:inline-flex;align-items:center;gap:10px;border:2px solid rgba(255,255,255,.35);color:#fff;font-weight:700;border-radius:999px}
+.land .acts span{font-size:28px;padding:10px 22px}
+.tok .acts span{font-size:34px;padding:12px 24px}
+</style>
+</head>
+<body>
+<div id="out"></div>
+<script>
+var IMG='../../plan-2027-img/', GI='../../guide-img/';
+var C={navy:'#4F7FD6',teal:'#32B4AF',red:'#E4051F',amber:'#F5B82E'};
+
+var STEPS=[
+  {n:1,c:C.teal,short:'Pick your show'},
+  {n:2,c:C.teal,short:'Book tickets'},
+  {n:3,c:C.red,short:'Book a bed'},
+  {n:4,c:C.red,short:'Plan the route'},
+  {n:5,c:C.navy,short:'Build your kit'},
+  {n:6,c:C.amber,short:'Night before',bonus:true},
+  {n:7,c:C.amber,short:'Show day',bonus:true}
+];
+
+var SLIDES=[
+ {type:'cover',file:'00-cover',img:IMG+'ai-hero.jpg'},
+ {n:1,file:'01-pick-your-show',img:IMG+'ai-plan.jpg',when:'November to February',
+  title:'Pick your <span>airshow</span>',
+  list:['<b>Start with the fixed dates.</b> RIAT is 16 to 18 July 2027.',
+        '<b>Pick your kind of day.</b> Airfield, seaside or vintage.',
+        '<b>One main show,</b> then one or two smaller ones around it.'],
+  tip:['My tip','Seaside shows often confirm over the winter. Be patient.']},
+ {n:2,file:'02-book-tickets',img:GI+'check-before-travel.jpg',when:'As soon as they go on sale',
+  title:'Book your <span>tickets</span>',
+  list:['<b>Early bird is cheapest.</b> Prices rise as the day gets closer.',
+        '<b>Car park and enclosure passes</b> sell out. Buy them with your ticket.',
+        '<b>Free seafront show?</b> No ticket needed, but paid seats can be worth it.'],
+  tip:['My tip','Put the on sale date in your phone calendar.']},
+ {n:3,file:'03-book-accommodation',img:GI+'camping-setup.jpg',when:'Travelling down? Book next',
+  title:'Book a place <span>to stay</span>',
+  chips:[['⛺','Campsites'],['🏨','Hotels'],['🛏️','B&amp;Bs'],['🍺','Inns'],['🚐','Caravans']],
+  list:['<b>Show campsites sell out first.</b> Book the day they open.',
+        '<b>Hotels near the big shows</b> fill up months ahead.',
+        '<b>Pick free cancellation</b> in case plans change.'],
+  tip:['My tip','Staying further out is cheaper. Just add it to your travel time.']},
+ {n:4,file:'04-plan-your-route',img:IMG+'ai-train.jpg',when:'Spring, once you have tickets',
+  title:'Plan your <span>route down</span>',
+  chips:[['🚗','Car'],['🚆','Train'],['🚌','Shuttle bus'],['🅿️','Park and ride'],['🚍','Coach']],
+  list:['<b>Driving?</b> Pre-book parking and follow the show’s route, not the sat nav.',
+        '<b>Train?</b> Check the shuttle bus and the last train home.',
+        '<b>Park and ride?</b> Easy in, but expect a queue after the finale.'],
+  tip:['My tip','Check for weekend rail engineering works the week before.']},
+ {n:5,file:'05-build-your-kit',img:IMG+'ai-pack.jpg',when:'The week before',
+  title:'Build your <span>airshow kit</span>',
+  kit:[['🪑','Folding chairs'],['🧺','Picnic'],['☕','Flask'],['🍽️','Small table'],['🧴','Sun cream'],['🧢','Hats'],
+       ['🕶️','Sunglasses'],['🧥','Waterproofs'],['💧','Water'],['🔋','Power bank'],['🎧','Ear defenders'],['🔭','Binoculars','optional']],
+  tip:['Check the weather','Rain due? Waterproofs on top. Pack the sun cream anyway.','wx']},
+ {n:6,file:'06-bonus-night-before',img:IMG+'ai-night.jpg',when:'The evening before',bonus:true,
+  title:'Night before <span>checks</span>',
+  list:['<b>Check the forecast</b> and the show’s own news.',
+        '<b>Tickets saved</b> on your phone, plus a printed copy.',
+        '<b>Charge everything.</b> Phone, power bank, camera.',
+        '<b>Bag by the door,</b> car keys on top.'],
+  tip:['My tip','Signal at the gate is often poor. Paper tickets save the day.']},
+ {n:7,file:'07-bonus-show-day',img:IMG+'ai-arrive.jpg',when:'Show day morning',bonus:true,
+  title:'Show day: <span>arrive early</span>',
+  list:['<b>Be there as the gates open.</b> Short queues, best spots.',
+        '<b>Find the toilets</b> and a meeting point first.',
+        '<b>Walk the static display</b> before the flying starts.',
+        '<b>Decide your getaway.</b> Leave before the finale, or stay an hour after.'],
+  tip:['My tip','Sit near the middle of the crowd line. That’s where the display is flown.']},
+ {type:'end',file:'08-save-this',img:IMG+'ai-home.jpg'}
+];
+
+var q=new URLSearchParams(location.search), F=q.get('f')==='tok'?'tok':'land', S=q.get('s');
+document.body.className=F+(S!==null?' one':'');
+
+function path(n){
+  var h='<div class="path">';
+  STEPS.forEach(function(s){
+    var cls=(s.bonus?'b ':'')+(s.n<n?'done':s.n===n?'on':'');
+    h+='<span class="'+cls+'" style="--sc2:'+s.c+'">'+s.n+'</span>';
+  });
+  return h+'</div>';
+}
+function foot(){return '<div class="foot">Full planner at <b>ukairshowguide.co.uk</b></div>'}
+function photo(src){return '<div class="ph" style="background-image:url(\''+src+'\')"><span class="ai">AI illustration</span></div>'}
+var LOGO='<img class="logo" src="../../brand/ukag-header-logo.png" alt="UK Airshow Guide">';
+
+function build(d){
+  if(d.type==='cover'){
+    var s5=STEPS.filter(function(s){return !s.bonus}).map(function(s){return '<div style="--sc:'+s.c+'"><b>'+s.n+'</b>'+s.short+'</div>'}).join('');
+    return '<div class="slide cover">'+photo(d.img)+'<div class="rings"></div>'+LOGO+
+      '<div class="panel"><span class="label">✈ The 2027 season</span>'+
+      '<h1><em>How to plan your</em>2027 airshow</h1>'+
+      '<p class="lead"><b>5 steps</b> from picking a show to packing the kit, <b>plus 2 bonus tips</b> for the big day.</p>'+
+      '<div class="steps5">'+s5+'</div>'+
+      '<span class="swipe">'+(F==='tok'?'Swipe for each step →':'Save this for later ✓')+'</span></div></div>';
+  }
+  if(d.type==='end'){
+    return '<div class="slide end">'+photo(d.img)+'<div class="rings"></div>'+LOGO+
+      '<div class="panel"><span class="label">✈ Ready for 2027</span>'+
+      '<h1>See you on the <span style="color:var(--teal2)">crowd line</span></h1>'+
+      '<p class="lead">Every step has a full guide, with dates, maps, tick lists and a kit calculator.</p>'+
+      '<span class="url">ukairshowguide.co.uk</span>'+
+      '<div class="acts"><span>🔖 Save this</span><span>📤 Send it to your airshow buddy</span><span>➕ Follow for 2027 dates</span></div>'+
+      '</div></div>';
+  }
+  var st=STEPS[d.n-1], sc='--sc:'+st.c;
+  var h='<div class="slide step" style="'+sc+'">'+photo(d.img)+'<div class="rings"></div>'+LOGO+'<div class="panel">';
+  h+='<div class="hd"><span class="label'+(d.bonus?' bonus':'')+'">'+(d.bonus?'Bonus step':'Step '+d.n+' of 5')+'</span><span class="when">'+d.when+'</span></div>';
+  h+='<div class="big"><div class="num">'+d.n+'</div><h1>'+d.title+'</h1></div>';
+  if(d.chips) h+='<div class="chips">'+d.chips.map(function(c){return '<span class="chip"><i>'+c[0]+'</i>'+c[1]+'</span>'}).join('')+'</div>';
+  if(d.list) h+='<ul class="list">'+d.list.map(function(l){return '<li>'+l+'</li>'}).join('')+'</ul>';
+  if(d.kit) h+='<div class="kit">'+d.kit.map(function(k){return '<div><i>'+k[0]+'</i>'+k[1]+(k[2]?'<small>'+k[2]+'</small>':'')+'</div>'}).join('')+'</div>';
+  if(d.tip) h+='<div class="tip'+(d.tip[2]?' '+d.tip[2]:'')+'"><b>'+d.tip[0]+'</b>'+d.tip[1]+'</div>';
+  h+='</div>'+path(d.n)+foot()+'</div>';
+  return h;
+}
+
+var list=S!==null?[SLIDES[+S]]:SLIDES;
+document.getElementById('out').innerHTML=list.map(build).join('');
+if(F==='tok'){fit();document.fonts.ready.then(fit);}
+function fit(){document.querySelectorAll('.slide').forEach(function(sl){var p=sl.querySelector('.panel'),ph=sl.querySelector('.ph');ph.style.height=(p.offsetTop+260)+'px'})}
+window.SLIDE_FILES=SLIDES.map(function(d){return d.file});
+</script>
+</body>
+</html>
