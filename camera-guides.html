@@ -283,8 +283,8 @@ const PRESETS = [
    text:'This is my starting point for Typhoons and F-35s on a bright day. A handy rule: double your focal length for the shutter speed, so 1/1250 covers most lenses up to 600mm. Go faster with a longer lens if you need to.',
    rows:[['Mode','Shutter priority, or M with Auto ISO'],['Shutter speed','1/1250'],['Aperture','Around f/8'],['ISO','Around 200 to 400'],['Focus','Continuous AF, a small zone'],['Burst','High speed, short bursts'],['Exposure','+0.3 to +0.7']]},
   {id:'grey', name:'Fast jets, grey sky', scr:{mode:'S',sh:'1000',f:'5.6',iso:'1000',af:'AF-C',area:'Zone',rel:'High',meter:'Matrix',ec:'+0.7'},
-   text:'On a dull day there is a lot less light, so I would drop the shutter speed a little rather than push the ISO past my limit. 1/800 to 1/1000 still freezes a jet if you pan smoothly. Your lens will most likely be wide open, and a grey sky fools the meter, so add more plus.',
-   rows:[['Mode','Shutter priority, or M with Auto ISO'],['Shutter speed','1/800 to 1/1000'],['Aperture','Wide open, often f/5.6 to f/6.3'],['ISO','Up to 1000'],['Focus','Continuous AF, zone or wide'],['Burst','High speed, short bursts'],['Exposure','+0.7 to +1.0']]},
+   text:'On a dull day there is a lot less light, so I would drop the shutter speed a little rather than push the ISO past my limit. 1/800 to 1/1000 still freezes a jet if you pan smoothly, but never go below double your focal length, so 1/800 is only for 400mm or shorter, 1/1000 at 500mm and 1/1250 at 600mm. Your lens will most likely be wide open, and a grey sky fools the meter, so add more plus.',
+   rows:[['Mode','Shutter priority, or M with Auto ISO'],['Shutter speed','1/800 to 1/1000, never below double your focal length'],['Aperture','Wide open, often f/5.6 to f/6.3'],['ISO','Up to 1000'],['Focus','Continuous AF, zone or wide'],['Burst','High speed, short bursts'],['Exposure','+0.7 to +1.0']]},
   {id:'props', name:'Warbirds and props', scr:{mode:'S',sh:'250',f:'13',iso:'100',af:'AF-C',area:'Zone',rel:'Low',meter:'Matrix',ec:'+0.3'},
    text:'Spitfires and Mustangs look far better with a blurred propeller. Start around 1/250 and work down to 1/125 or 1/160 for a full disc as your panning improves.',
    rows:[['Mode','Shutter priority'],['Shutter speed','1/250 to 1/320 to start'],['Aperture','f/11 to f/16 on a sunny day'],['ISO','100'],['Focus','Continuous AF, a small zone'],['Burst','Low speed, about 3 to 5 a second'],['Exposure','+0.3']]},
@@ -843,7 +843,7 @@ CAMS.push({
       face: 'top', u: 0.485, v: 1.3, label: '', area: 'front', use: 1,
       what: 'The lens on the front. Full frame means no extra reach, so focal length matters.',
       helps: 'The RF 100 to 500mm suits this body for flying. Use my double your focal length rule, so 1/1250 covers you up to 600mm. You have the pixels to crop in when a jet stays distant.',
-      rows: [['Fast jets', '1/1250 and above'], ['Grey sky jets', '1/800 to 1/1000 wide open'], ['Props', '1/250 to 1/320, work down to 1/125'], ['Helicopters', '1/125, work down to 1/60']],
+      rows: [['Fast jets', '1/1250 and above'], ['Grey sky jets', '1/1000 wide open at 500mm, 1/800 only at 400mm or shorter'], ['Props', '1/250 to 1/320, work down to 1/125'], ['Helicopters', '1/125, work down to 1/60']],
       tip: 'At the static park, Av at about f/8 with ISO 100 to 400 and One-Shot AF. A 24 to 105mm is ideal there.'
     }
   ]
@@ -1099,7 +1099,7 @@ CAMS.push({
       face: 'top', u: 0.45, v: 1.3, label: '', area: 'front', use: 1,
       what: 'The lens on the front. On this body every lens gives you 1.6 times the reach.',
       helps: 'The RF 100 to 400mm is light and works at 160 to 640mm on the R7, which suits most displays. Follow my double your focal length rule using the effective figure, so at 400mm I would go 1/1600 for jets.',
-      rows: [['Fast jets', '1/1600 at 400mm'], ['Grey sky jets', '1/800 to 1/1000 wide open'], ['Props', '1/250 to 1/320, work down to 1/125'], ['Helicopters', '1/125, work down to 1/60']],
+      rows: [['Fast jets', '1/1600 at 400mm'], ['Grey sky jets', '1/800 to 1/1000 wide open, never below 1/800 at 400mm'], ['Props', '1/250 to 1/320, work down to 1/125'], ['Helicopters', '1/125, work down to 1/60']],
       tip: 'At the static park, Av at about f/8 with ISO 100 to 400 and One-Shot AF will do the job.'
     }
   ]
@@ -1171,7 +1171,7 @@ CAMS.push({
       area: 'top', use: 1,
       how: 'Press it and turn the rear command dial to choose a value or AUTO1, AUTO2 or AUTO3.',
       what: 'Sets the sensitivity. Standard range starts at ISO 160 on this camera.',
-      helps: 'I would suggest setting AUTO1 with a maximum of 1000. ISO steps in thirds here, 800 then 1000 then 1250, so 1000 keeps you under 1200.',
+      helps: 'I would suggest setting AUTO1 with a maximum of 1000. ISO steps in thirds here, 800 then 1000 then 1250, so 1000 keeps you under 1200. If the MAX. SENSITIVITY list on your camera only offers 800 and 1600, pick 800.',
       rows: [['Set the limit', 'SHOOTING SETTING, ISO, AUTO, MAX. SENSITIVITY 1000'], ['Blue sky jets', 'Auto lands around 200 to 400'], ['Grey sky jets', 'Up to 1000'], ['Static park', '160 to 400']]
     },
     {
@@ -4567,7 +4567,7 @@ CAMS.push({
       what: 'The ON/OFF collar around the shutter button turns the camera on and off.',
       helps: 'You can flick it on with your shooting finger as the camera comes up to your eye, so you never miss a surprise low pass.',
       rows: [['Between displays', 'Leave it on, it wakes quickly'], ['Changing lenses', 'Turn it off first']],
-      tip: 'This body has a small battery. I would advise carrying at least two spares, as a full show day with the viewfinder in use will drain one well before the finale.'
+      tip: 'This body takes the large NP-FZ100 battery, rated at around 550 shots through the viewfinder. A full show day of bursts can still drain one before the finale, so I would advise carrying a spare.'
     },
     {
       id: 'front-dial', name: 'Front dial',
