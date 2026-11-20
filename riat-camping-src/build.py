@@ -198,6 +198,7 @@ ICON = {
     "back": '<path d="M19 12H5M11 6l-6 6 6 6"/>',
     "plus": '<path d="M12 5v14M5 12h14"/>',
     "chev": '<path d="M9 5l7 7-7 7"/>',
+    "search": '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',
     "bolt": '<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',
     "food": '<path d="M6 3v7a2 2 0 0 0 4 0V3M8 12v9M17 21v-8M17 13c-2.5-1-2.5-9 0-10z"/>',
     "list": '<rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/>',
@@ -450,14 +451,14 @@ section[id]{scroll-margin-top:20px}
 .tagp{display:inline-flex;align-items:center;font:700 16px/1 "Barlow",sans-serif;padding:8px 12px;background:var(--purple);color:#fff}
 
 /* the campsite strip: one link per campsite page */
-.strip{background:var(--sky)}
+.strip{background:var(--navy);border-bottom:4px solid var(--sky)}
 .strip .wrap{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
 .strip .wrap::-webkit-scrollbar{display:none}
-.strip .lab{flex:none;align-self:center;font:800 18px/1 "Barlow",sans-serif;color:var(--navy);margin-right:20px}
-.st{position:relative;flex:none;display:inline-flex;align-items:center;gap:9px;padding:17px 20px;font-weight:700;color:var(--navy);text-decoration:none;white-space:nowrap;border-left:1px solid rgba(19,41,60,.2)}
-.st:last-child{border-right:1px solid rgba(19,41,60,.2)}
-.st:hover{background:#4CC3EE}
-.st.on{background:var(--navy);color:#fff}
+.strip .lab{flex:none;align-self:center;font:800 18px/1 "Barlow",sans-serif;color:#fff;margin-right:20px}
+.st{position:relative;flex:none;display:inline-flex;align-items:center;gap:9px;padding:17px 20px;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;border-left:1px solid rgba(255,255,255,.16)}
+.st:last-child{border-right:1px solid rgba(255,255,255,.16)}
+.st:hover{background:#24486A}
+.st.on{background:var(--sky);color:var(--navy)}
 .st small{font-weight:500;font-size:14.5px;opacity:.85}
 .dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block;box-shadow:0 0 0 2px #fff}
 .dot.av-ok{background:var(--green)}.dot.av-mid{background:var(--amber)}.dot.av-full{background:var(--red)}
@@ -469,13 +470,16 @@ section[id]{scroll-margin-top:20px}
 
 /* offset photo with the dark stat box, and the text beside it */
 .about{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1fr);gap:64px;align-items:center}
-.ab-ph{position:relative;padding:46px 0 0 86px}
-.ab-ph img{width:100%;aspect-ratio:4/5;object-fit:cover}
-.statbox{position:absolute;left:0;top:0;width:208px;background:var(--navy);color:#fff;text-align:center;padding:30px 16px 26px}
-.statbox svg{width:52px;height:52px;color:var(--or-l);margin:0 auto 12px;display:block}
-.statbox b{display:block;font:800 46px/1 "Barlow",sans-serif}
-.statbox b sup{font-size:22px;color:var(--or-l);margin-left:6px}
-.statbox span{display:block;margin-top:10px;font-size:16px;line-height:1.3}
+/* two photos, one overlapping the other, with a red fact flag on the edge */
+.ab-ph{position:relative;padding:0 64px 64px 0}
+.ab-ph.one{padding:0}
+.ab-ph .p1{width:100%;aspect-ratio:4/5;object-fit:cover}
+.ab-ph .p2{position:absolute;right:0;bottom:0;width:56%;aspect-ratio:4/3;object-fit:cover;border:8px solid #fff;box-shadow:0 20px 36px -18px rgba(19,41,60,.65)}
+.statbox{position:absolute;left:-14px;top:30px;display:flex;align-items:center;gap:14px;background:var(--or);color:#fff;padding:14px 22px 14px 16px;max-width:88%;box-shadow:0 16px 28px -14px rgba(19,41,60,.7)}
+.statbox::after{content:"";position:absolute;left:0;top:100%;border:7px solid transparent;border-top-color:#8E2A2A;border-right-color:#8E2A2A}
+.statbox svg{width:36px;height:36px;color:#fff;flex:none}
+.statbox b{font:800 50px/1 "Barlow",sans-serif}
+.statbox span{font-weight:600;font-size:17px;line-height:1.25;max-width:14ch}
 .feat{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:30px 0 36px}
 .feat>div{background:var(--soft);border-top:5px solid var(--teal);padding:20px 20px 18px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
 .feat>div:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(10,27,39,.5)}
@@ -524,18 +528,29 @@ section[id]{scroll-margin-top:20px}
 .none h3{font-size:21px;font-weight:600}
 .none p{margin-top:4px}
 .nomatch{display:none;grid-column:1/-1;background:var(--soft);padding:24px 28px;color:var(--ink)}
-.nomatch button,.shown button{font:700 16px/1.2 "Barlow",sans-serif;color:var(--or-ink);background:none;border:0;border-bottom:2px solid var(--or);padding:0 0 3px;cursor:pointer;margin-left:10px}
+.nomatch button{font:700 16px/1.2 "Barlow",sans-serif;color:var(--or-ink);background:none;border:0;border-bottom:2px solid var(--or);padding:0 0 3px;cursor:pointer;margin-left:10px}
 
 /* finder: a plain row of fields above the cards */
-.finder{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px 34px;align-items:end;padding:26px 30px 28px;background:var(--soft);margin-bottom:26px}
-.ff label,.ff .lg{display:block;font:700 18px/1.2 "Barlow",sans-serif;color:var(--ink);margin-bottom:6px}
-.ff select{width:100%;font:500 17px/1.3 "Barlow",sans-serif;color:var(--ink);padding:10px 2px 8px;background:transparent;border:0;border-bottom:1px solid #AEBBC4;border-radius:0}
+.finder{background:var(--navy);color:#fff;margin-bottom:30px;border-top:5px solid var(--teal);box-shadow:0 22px 40px -26px rgba(19,41,60,.7)}
+.fhead{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 16px;align-items:center;padding:20px 26px;border-bottom:1px solid rgba(255,255,255,.16)}
+.fhead>i{width:50px;height:50px;background:var(--teal);color:var(--navy);display:grid;place-items:center}
+.fhead>i svg{width:26px;height:26px}
+.fhead h3{color:#fff;font-size:25px;font-weight:700}
+.fhead h3+span{display:block;color:#C9D6E0;font-size:16px;margin-top:2px}
+.shown{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end;font-weight:700;font-size:17px;color:#fff}
+.shown #shownText{background:rgba(255,255,255,.1);padding:10px 14px}
+.shown button{font:700 16px/1 "Barlow",sans-serif;color:#fff;background:var(--or);border:0;padding:11px 14px;cursor:pointer;margin:0}
+.shown button:hover{background:#fff;color:var(--navy)}
+.fin{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.5fr);gap:18px;padding:22px 26px 26px}
+.ff{background:rgba(255,255,255,.07);padding:16px 16px 18px}
+.ff label,.ff .lg{display:flex;align-items:center;gap:9px;font:700 18px/1.2 "Barlow",sans-serif;color:#fff;margin-bottom:12px}
+.ff label svg,.ff .lg svg{width:19px;height:19px;color:var(--teal);flex:none}
+.ff select{width:100%;font:600 17px/1.3 "Barlow",sans-serif;color:var(--navy);padding:13px 12px;background:#fff;border:0;border-radius:0;cursor:pointer}
 .fc-row{display:flex;flex-wrap:wrap;gap:8px}
-.fchk{display:inline-flex;align-items:center;gap:9px;padding:10px 14px;background:#fff;border:1px solid #C6D0D7;cursor:pointer;font:500 15px/1 "Barlow",sans-serif;color:var(--ink)}
-.fchk::before{content:"";width:14px;height:14px;border:2px solid #8FA1AF;flex:none}
-.fchk[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
-.fchk[aria-pressed=true]::before{border-color:#fff;background:var(--teal)}
-.shown{margin:0 0 22px;font-weight:600;color:var(--ink)}
+.fchk{display:inline-flex;align-items:center;gap:9px;padding:13px 14px;background:#fff;border:0;cursor:pointer;font:600 16px/1 "Barlow",sans-serif;color:var(--navy)}
+.fchk::before{content:"";width:15px;height:15px;border:2px solid #8FA1AF;flex:none}
+.fchk[aria-pressed=true]{background:var(--teal);color:var(--navy)}
+.fchk[aria-pressed=true]::before{border-color:var(--navy);background:var(--navy);box-shadow:inset 0 0 0 2px var(--teal)}
 
 /* compare table */
 .swipe{display:none}
@@ -673,8 +688,10 @@ fieldset.fld{border:0}
   .formrow>img{min-height:300px;height:300px}
   .fpanel{grid-column:1/-1;order:-1}
   .ft .cols{grid-template-columns:1fr 1fr}
-  .finder{grid-template-columns:1fr 1fr}
-  .ff.need{grid-column:1/-1;margin-top:12px}
+  .fin{grid-template-columns:1fr 1fr}
+  .ff.need{grid-column:1/-1}
+  .fhead{grid-template-columns:auto minmax(0,1fr)}
+  .shown{grid-column:1/-1;justify-content:flex-start}
   .swipe{display:inline}
   .nav{flex-wrap:wrap;row-gap:0;padding-top:14px}
   .nav ul{order:3;flex-basis:100%;overflow-x:auto;scrollbar-width:none;height:48px;margin-top:12px;border-top:1px solid rgba(255,255,255,.22)}
@@ -691,11 +708,15 @@ fieldset.fld{border:0}
   .nav{min-height:72px}
   .nav .btn{padding:11px 11px;font-size:15px}
   .ttl{padding:54px 0 66px}
-  .ab-ph{padding:34px 0 0 34px}
-  .statbox{width:164px;padding:22px 12px 18px}
-  .statbox b{font-size:34px}
-  .statbox svg{width:40px;height:40px}
-  .feat,.minis,.cards,.maps,.steps,.finder,.pc{grid-template-columns:1fr}
+  .ab-ph{padding:0 34px 44px 0}
+  .ab-ph .p2{border-width:6px}
+  .statbox{left:-10px;top:20px;padding:11px 16px 11px 12px;gap:10px}
+  .statbox b{font-size:38px}
+  .statbox svg{width:28px;height:28px}
+  .statbox span{font-size:15.5px}
+  .feat,.minis,.cards,.maps,.steps,.fin,.pc{grid-template-columns:1fr}
+  .fhead{padding:18px}
+  .fin{padding:18px}
   .steps{row-gap:56px}
   .pc-card{margin:0}
   .pc img{min-height:240px;height:240px}
@@ -728,11 +749,10 @@ fieldset.fld{border:0}
 .more::after{content:"";display:inline-block;width:7px;height:7px;border:solid currentColor;border-width:2px 2px 0 0;transform:rotate(45deg);margin-left:8px;position:relative;top:-2px;transition:margin .3s}
 .more:hover::after{margin-left:14px}
 .st{transition:background .25s,color .25s}
-.statbox{transition:transform .4s cubic-bezier(.22,.61,.36,1),box-shadow .4s}
-.ab-ph:hover .statbox{transform:translate(-6px,-6px);box-shadow:14px 14px 0 var(--teal)}
-.ab-ph{overflow:visible}
-.ab-ph img{transition:filter .5s}
-.ab-ph:hover img{filter:saturate(1.15)}
+.statbox{transition:transform .4s cubic-bezier(.22,.61,.36,1)}
+.ab-ph:hover .statbox{transform:translateX(10px)}
+.ab-ph .p2{transition:transform .5s cubic-bezier(.22,.61,.36,1),box-shadow .5s}
+.ab-ph:hover .p2{transform:translate(-8px,-8px);box-shadow:0 30px 44px -20px rgba(19,41,60,.7)}
 .feat h3 i{transition:transform .3s}
 .feat>div:hover h3 i{transform:translateX(5px) scale(1.12)}
 .feat>div:hover h3{color:var(--or-ink)}
@@ -757,8 +777,8 @@ fieldset.fld{border:0}
 .gal figure:hover img{transform:scale(1.07)}
 .gal figcaption{transition:padding .35s}
 .gal figure:hover figcaption{padding-bottom:22px}
-.fchk{transition:background .2s,color .2s,border-color .2s}
-.fchk:hover{border-color:var(--navy)}
+.fchk{transition:background .2s,color .2s,transform .2s}
+.fchk:hover{transform:translateY(-2px)}
 .board tbody td,.board tbody th{transition:background .2s}
 .board tbody tr:hover td,.board tbody tr:hover th{background:#E4F4F3}
 .rmap a.mk circle,.rmap a.mk path{transition:fill .25s,stroke .25s}
@@ -792,7 +812,7 @@ fieldset.fld{border:0}
 MOTION_JS = r"""<script>
 (function(){
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-var sel='.sec-head,.about>*,.finder,.shown,.cc,.none,.board-scroll,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules-h,.rules>div,.where>*,.formrow>*,.gal figure,.ft .cols>div';
+var sel='.sec-head,.about>*,.finder,.cc,.none,.board-scroll,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules-h,.rules>div,.where>*,.formrow>*,.gal figure,.ft .cols>div';
 var els=[].slice.call(document.querySelectorAll(sel));
 if(!els.length||!('IntersectionObserver' in window))return;
 els.forEach(function(el){var sibs=[].filter.call(el.parentNode.children,function(x){return els.indexOf(x)>-1});
@@ -1043,20 +1063,23 @@ def build_home(live):
         chks = "".join(f'<button type="button" class="fchk" data-n="{k}" data-l="{e(lab)}" aria-pressed="false">{e(lab)}</button>'
                        for k, lab in (("hookup", "Electric hook up"), ("dogs", "Dogs welcome"), ("shuttle", "Shuttle to the show")))
         finder = f"""<div class="finder" role="group" aria-label="Find your campsite">
-      <div class="ff"><label for="fArea">Where to stay</label>
+      <div class="fhead"><i>{icon("search")}</i><div><h3>Find your campsite</h3><span>Pick what you need and the list below narrows down.</span></div>
+        <p class="shown" aria-live="polite"><span id="shownText"></span><button type="button" id="shownClear" hidden>Clear my choices</button></p></div>
+      <div class="fin">
+      <div class="ff"><label for="fArea">{icon("pin")}Where to stay</label>
         <select id="fArea"><option value="all">All areas</option><option value="boscombe">Near MOD Boscombe Down</option><option value="fairford">Around Fairford</option></select></div>
-      <div class="ff"><label for="fKind">What you are bringing</label>
+      <div class="ff"><label for="fKind">{icon("tent")}What you are bringing</label>
         <select id="fKind"><option value="">Anything</option><option value="tent">Tent</option><option value="van">Campervan</option><option value="caravan">Caravan or tourer</option><option value="glamping">Glamping, ready pitched</option></select></div>
-      <div class="ff need"><span class="lg">I also need</span><div class="fc-row">{chks}</div></div>
-    </div>
-    <p class="shown" aria-live="polite"><span id="shownText"></span><button type="button" id="shownClear" hidden>Clear my choices</button></p>"""
+      <div class="ff need"><span class="lg">{icon("tick")}I also need</span><div class="fc-row">{chks}</div></div>
+      </div>
+    </div>"""
     else:
         stat = '<b>2027</b><span>The first Air Tattoo at Boscombe Down</span>'
         finder = ""
 
     compare = ""
     if n >= 2:
-        compare = f"""<section class="sec tint" id="compare" aria-label="Compare the campsites">
+        compare = f"""<section class="sec" id="compare" aria-label="Compare the campsites">
   <div class="wrap">
     {sec_head("Side by side", "Compare The Campsites", "Every campsite in one table, so you can see what each one has. Your choices above work here too.")}
     <p class="swipe" style="margin:-24px 0 16px">Swipe sideways to see it all.</p>
@@ -1071,7 +1094,8 @@ def build_home(live):
 <main>
 <section class="sec" id="about" aria-label="Camping for the Air Tattoo">
   <div class="wrap about">
-    <div class="ab-ph"><img src="{IMG}pitch-spot.jpg" alt="A pitch on flat grass with a tent, flag pole, solar panel and camera tripods inside striped windbreaks" decoding="async">
+    <div class="ab-ph"><img class="p1" src="{IMG}group-pitch.jpg" alt="Three tents on one pitch with camping chairs and a table" decoding="async">
+      <img class="p2" src="{IMG}event-shelter-night.jpg" alt="A Coleman event shelter lit with green lights at night, with chairs, a table and solar path lights" loading="lazy" decoding="async">
       <div class="statbox">{icon("tent")}{stat}</div></div>
     <div>
       <span class="kick">RIAT 2027</span>
@@ -1419,7 +1443,9 @@ def build_site(s, live):
 <main>
 <section class="sec" id="about" aria-label="About the site">
   <div class="wrap about">
-    <div class="ab-ph"><img src="{e(p0[0])}" alt="{e(p0[1])}" decoding="async"><div class="statbox">{icon("pin")}{stat}</div></div>
+    <div class="ab-ph{"" if len(photos) > 1 else " one"}"><img class="p1" src="{e(p0[0])}" alt="{e(p0[1])}" decoding="async">
+      {f'<img class="p2" src="{e(photos[1]["src"])}" alt="{e(photos[1].get("alt"))}" loading="lazy" decoding="async">' if len(photos) > 1 else ""}
+      <div class="statbox">{icon("pin")}{stat}</div></div>
     <div>
       <span class="kick">{e(s.get("kind"))}</span>
       <h2 class="h">About {e(s["name"])}</h2>
