@@ -652,3 +652,12 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - Above the sections sits a dark photo band ("Everything you need for the day") holding the page's own Open all and Close all buttons, and the section strip is navy with a teal block on the open section (Jack's comments, 20 Nov 2026).
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
+
+## The Big Guide to RIAT (preview, 20 Nov 2026)
+
+`previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
+
+- Pages: `index.html` (home), `what-we-know.html`, `still-to-come.html`, `already-booked.html`, and `camping/` (the camping home page and one page per campsite, copied from `riat-camping/` with their links pointed inside the section). Every page carries a "The Big Guide to RIAT" strip linking the pages, and the camping pages keep their own campsite strip under it.
+- Built by `python3 previews/big-guide-to-riat-src/build.py`. Run `riat-camping-src/build.py` first if the camping pages have changed. The script borrows the styles, icons and motion from `riat-camping-src/build.py`, so the two always match.
+- The words come from the live RIAT page (checked 15 November 2026). Nothing was added that is not on that page. Photos are Jack's (the F-16, Hornet and C-17 from `camping-layout/img/`, and the camping photos from `camping-hub-img/`), copied into `img/`.
+- Links between the pages are relative, so the preview works anywhere. To go live each page needs its own Wix page and the links and image addresses need to be the full ones (see the note at the top of the build script).
