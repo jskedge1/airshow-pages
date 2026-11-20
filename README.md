@@ -19,6 +19,8 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Airshow Photography Hub (live on Wix since 19 Oct, photos in photography-hub-img/) | https://jskedge1.github.io/airshow-pages/photography-hub.html |
 | Airshow Photography Hub (previous version) | https://jskedge1.github.io/airshow-pages/airshow-photography-hub.html |
 | Camping at Airshows hub (live on Wix since 19 Oct, photos in camping-hub-img/) | https://jskedge1.github.io/airshow-pages/camping-hub.html |
+| RIAT camping home page: campsite tabs, cards, show maps for Boscombe Down and Fairford, and the "List your campsite" section (no Wix page yet, planned /riat-camping; built by riat-camping-src/build.py) | https://jskedge1.github.io/airshow-pages/riat-camping/index.html |
+| RIAT campsite pages, one per campsite (sample.html shows owners what a listing looks like) | https://jskedge1.github.io/airshow-pages/riat-camping/<slug>.html |
 | Show pages, camping style layout (live on Wix since 19 Oct) | https://jskedge1.github.io/airshow-pages/camping-layout/<show>.html |
 | New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
@@ -610,3 +612,15 @@ The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, 
   question to qa-src/questions.py before running qa-src/build.py again, or it will be lost.
 - YouTube page: when a video has no large thumbnail the Latest player now drops to the standard one instead of
   showing YouTube's small grey placeholder.
+
+## RIAT camping pages (20 Nov 2026)
+
+A home page for campsites near MOD Boscombe Down (and those still running around Fairford), with a tab and a page for each campsite. Built from the "Campsite partners wanted" poster.
+
+- Source: one JSON file per campsite in `riat-camping-src/sites/`. Start from `riat-camping-src/new-site.json`, save it as `sites/<slug>.json`, fill it in from the owner's reply, then run `python3 riat-camping-src/build.py`. It writes `riat-camping/index.html` and `riat-camping/<slug>.html`. Don't edit the HTML by hand.
+- `"live": true` puts a campsite on the home page, in the campsite tabs and on the maps. Drafts still build their own page (with their own tab) so they can be sent to the owner to check. `area` is `boscombe` or `fairford`; distances are worked out from `lat` and `lng`.
+- `sites/_sample.json` is a made-up campsite that builds `riat-camping/sample.html` with a yellow "Sample page" bar. The owner email links to it. Never set it live.
+- `python3 riat-camping-src/build.py --preview <folder>` builds a copy with every site treated as live, to see the tabs and maps filled in.
+- Owner email: `riat-camping-src/email-to-campsites.md` (the email, a follow up, and a table of which answer goes in which JSON field).
+- Owner photos go in `riat-camping/img/` as `<slug>-1.jpg` and so on, linked by full https address.
+- Wix: when the home page gets a Wix page (planned /riat-camping), set `HOME_WIX` in build.py and add the path to `AE_GH_PAGES`. When a campsite gets its own Wix page, set its `wixPath`; until then its tab opens the GitHub page in a new tab. Once campsites are live, link the home page from the camping card on the RIAT page and the RIAT entry on the Camping hub.
