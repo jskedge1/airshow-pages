@@ -1094,8 +1094,8 @@ def build_home(live):
 <main>
 <section class="sec" id="about" aria-label="Camping for the Air Tattoo">
   <div class="wrap about">
-    <div class="ab-ph"><img class="p1" src="{IMG}group-pitch.jpg" alt="Three tents on one pitch with camping chairs and a table" decoding="async">
-      <img class="p2" src="{IMG}event-shelter-night.jpg" alt="A Coleman event shelter lit with green lights at night, with chairs, a table and solar path lights" loading="lazy" decoding="async">
+    <div class="ab-ph"><img class="p1" src="{IMG}tent-and-kit.jpg" alt="A blue family tent with kit boxes and a table outside" style="object-position:38% 50%" decoding="async">
+      <img class="p2" src="{IMG}bell-tent.jpg" alt="A cream bell tent on a camping field" style="object-position:70% 50%" loading="lazy" decoding="async">
       <div class="statbox">{icon("tent")}{stat}</div></div>
     <div>
       <span class="kick">RIAT 2027</span>
