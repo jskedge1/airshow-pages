@@ -197,6 +197,7 @@ ICON = {
     "arrow": '<path d="M5 12h14M13 6l6 6-6 6"/>',
     "back": '<path d="M19 12H5M11 6l-6 6 6 6"/>',
     "plus": '<path d="M12 5v14M5 12h14"/>',
+    "chev": '<path d="M9 5l7 7-7 7"/>',
     "list": '<rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/>',
     "tag": '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/>',
     "drop": '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
@@ -273,15 +274,17 @@ def ring_map(area, sites, highlight=None, cls="rmap"):
 
 
 # ---------------------------------------------------------------- shared bits
-# Look: clean white boxes with coloured sign headers and a compare board (from the Public transport page),
-# coloured tiles under a campsite name (from the Duxford page), and a camping layer on top (skyline, canvas, contours).
+# Layout: photo led, in the style of a charter site "about" page. Photo header with the menu on it, an offset
+# photo with a dark stat box, small orange kickers over big headings, numbered step cards on a photo band,
+# a dark form between two photos, photo cards with the text over them, and a dark footer with link columns.
+# All photos are Jack's own from camping-hub-img/ (or the campsite's own).
 KIND_COL = {"tent": "k-tent", "van": "k-van", "caravan": "k-caravan", "glamping": "k-glamping"}
-
+IMG = "https://jskedge1.github.io/airshow-pages/camping-hub-img/"
 
 def camp_scene(mode="colour"):
     """A flat campsite skyline: pines, tents, windbreaks, a campervan and a caravan. Ground is the bottom edge.
-    mode "light" draws it in one colour (the tab strip colour) for the bottom of the photo header."""
-    one = "#DDD8CC" if mode == "light" else None
+    Pass a colour such as "#0A1B27" as mode to draw it as a one colour silhouette."""
+    one = mode if mode.startswith("#") else None
     G = 120
 
     def c(col):
@@ -367,165 +370,317 @@ def camp_scene(mode="colour"):
     return (f'<svg viewBox="0 0 2400 {G}" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">'
             + "".join(out) + '</svg>')
 
+
 CSS = r"""
-:root{--navy:#13293C;--navy2:#1C3850;--deep:#0B1A27;--black:#0B0D0F;--teal:#32B4AF;--teal-ink:#0E5F5B;--purple:#6950A1;
---red:#D74949;--sky:#00A6E2;--sky-ink:#006F99;--green:#2BA84A;--green-d:#1E8540;--amber:#F2B233;--orange:#E07A1F;--pink:#C2255C;
---mist:#F3F6F8;--line:#DCE4EA;--ink:#14212C;--soft:#4A5C6B;--canvas:#F4F1EA;--canvas-d:#DDD8CC;--wood:#8C6B3F}
+:root{--navy:#0E2433;--deep:#0A1B27;--or:#D9480F;--or-l:#FF7A3D;--ink:#10212C;--body:#56636D;--line:#E3E8EC;--soft:#F4F6F7;
+--green:#1E8540;--amber:#F2B233;--red:#C93A3A}
 *{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 html,body{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
-body{font:400 17px/1.55 "Barlow",system-ui,sans-serif;color:var(--ink);background:var(--canvas) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420' viewBox='0 0 640 420'%3E%3Cg fill='none' stroke='%2313293C' stroke-opacity='.055' stroke-width='1.6'%3E%3Cpath d='M0 60C110 20 210 110 320 60S530 10 640 60'/%3E%3Cpath d='M0 96C120 60 200 150 320 100S520 52 640 96'/%3E%3Cpath d='M0 236C90 190 230 280 320 236S550 192 640 236'/%3E%3Cpath d='M0 276C100 236 220 326 320 280S540 236 640 276'/%3E%3Cpath d='M0 390C130 350 190 430 320 390S510 350 640 390'/%3E%3Cpath d='M150 168c40-26 96-22 120 6s4 60-40 66-86-8-98-30 0-30 18-42z'/%3E%3Cpath d='M176 184c24-14 54-12 68 4s2 32-22 36-46-4-54-16 0-18 8-24z'/%3E%3Cpath d='M452 322c30-20 80-14 96 10s-6 46-44 48-66-10-72-28 6-22 20-30z'/%3E%3C/g%3E%3C/svg%3E");-webkit-font-smoothing:antialiased}
+body{font:400 16px/1.65 "Overpass",system-ui,sans-serif;color:var(--body);background:#fff;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 img{display:block;max-width:100%;pointer-events:none;user-select:none}
 [hidden]{display:none!important}
-.wrap{max-width:1212px;margin:0 auto;padding:0 24px}
+.wrap{max-width:1188px;margin:0 auto;padding:0 24px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.cond{font-family:"Barlow Condensed","Barlow",sans-serif}
-a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+h1,h2,h3{color:var(--ink);font-weight:700;line-height:1.12}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--or-l);outline-offset:2px}
+section[id]{scroll-margin-top:20px}
 
-/* brand bar and the campsite strip: one tab per campsite page */
-.bar{background:var(--navy);color:#fff}
-.bar .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:52px}
-.brand{text-decoration:none;display:flex;align-items:baseline;gap:10px;white-space:nowrap}
-.brand b{font:800 22px/1 "Barlow Condensed",sans-serif;letter-spacing:.01em}
-.brand span{font-size:15px;color:#C9D6E0}
-.bar .back{font:600 15px/1 "Barlow",sans-serif;color:#fff;text-decoration:none;border-bottom:2px solid var(--teal);padding-bottom:2px;white-space:nowrap}
-.bar .back:hover{border-color:#fff}
-.strip{background:var(--navy2);position:relative}
-.strip .wrap{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.kick{display:block;font:600 13px/1.2 "Overpass",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--or)}
+.h{font-size:clamp(31px,4.3vw,46px);margin-top:14px;letter-spacing:-.005em}
+.lede{margin-top:18px;max-width:62ch}
+.sec{padding:96px 0}
+.sec.tint{background:var(--soft)}
+.sec-head{max-width:720px;margin-bottom:44px}
+.sec-head.mid{margin-left:auto;margin-right:auto;text-align:center}
+.sec-head.mid .lede{margin-left:auto;margin-right:auto}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:600 13px/1 "Overpass",sans-serif;letter-spacing:.16em;text-transform:uppercase;padding:18px 30px 16px;text-decoration:none;border:0;cursor:pointer;transition:background .2s,color .2s}
+.btn svg{width:16px;height:16px;flex:none}
+.btn.or{background:var(--or);color:#fff}.btn.or:hover{background:var(--navy)}
+.btn.nv{background:var(--navy);color:#fff}.btn.nv:hover{background:var(--or)}
+.on-dark .btn.or:hover,.btn.or.inv:hover{background:#fff;color:var(--navy)}
+.btn.wh{background:#fff;color:var(--navy)}.btn.wh:hover{background:var(--or);color:#fff}
+.btns{display:flex;flex-wrap:wrap;gap:14px}
+.more{display:inline-block;font:600 13px/1 "Overpass",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--or);text-decoration:none;padding-bottom:3px;border-bottom:2px solid transparent}
+.more:hover{border-bottom-color:var(--or)}
+
+/* top bar and photo header */
+.top{background:var(--deep);color:#fff;font-size:14px}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:8px 26px;flex-wrap:wrap;min-height:50px;padding-top:8px;padding-bottom:8px}
+.top span,.top a{display:inline-flex;align-items:center;gap:9px;text-decoration:none}
+.top svg{width:16px;height:16px;color:var(--or-l)}
+.top .l{display:flex;gap:8px 26px;flex-wrap:wrap}
+.top a:hover{color:var(--or-l)}
+.hd{position:relative;color:#fff;background:var(--navy) center/cover no-repeat}
+.hd::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,27,39,.72),rgba(14,36,51,.62) 60%,rgba(14,36,51,.8))}
+.hd .wrap{position:relative}
+.nav{display:flex;align-items:center;gap:20px;min-height:84px;border-bottom:1px solid rgba(255,255,255,.22)}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;font:700 25px/1 "Overpass",sans-serif;color:#fff;white-space:nowrap;margin-right:auto}
+.logo svg{width:34px;height:34px;color:var(--or-l)}
+.nav ul{list-style:none;display:flex;gap:4px;align-self:stretch}
+.nav li{display:flex}
+.nav li a{display:flex;align-items:center;padding:0 14px;font-weight:500;font-size:15px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.nav li a:hover{border-bottom-color:var(--or-l)}
+.ttl{padding:78px 0 96px}
+.ttl h1{color:#fff;font-size:clamp(38px,5.6vw,58px)}
+.crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:16px;font-size:17px}
+.crumbs a{text-decoration:none}
+.crumbs a:hover{color:var(--or-l)}
+.crumbs svg{width:14px;height:14px;color:var(--or-l)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.tagp{display:inline-flex;align-items:center;font:600 13px/1 "Overpass",sans-serif;letter-spacing:.08em;padding:9px 12px 7px;background:rgba(255,255,255,.16);color:#fff}
+
+/* the campsite strip: one link per campsite page */
+.strip{border-bottom:1px solid var(--line);background:#fff}
+.strip .wrap{display:flex;align-items:center;gap:6px 28px;overflow-x:auto;scrollbar-width:none}
 .strip .wrap::-webkit-scrollbar{display:none}
-.strip .lab{flex:none;align-self:center;font:600 14px/1 "Barlow",sans-serif;color:#9FB6C8;margin-right:12px}
-.st{position:relative;flex:none;display:flex;align-items:center;gap:8px;padding:13px 16px;color:#E3EAF0;text-decoration:none;font:600 15px/1.2 "Barlow",sans-serif;white-space:nowrap;border-left:1px solid rgba(255,255,255,.09)}
-.st:hover{background:rgba(255,255,255,.08);color:#fff}
-.st.on{background:#fff;color:var(--navy)}
-.st svg{width:17px;height:17px}
-.st small{font:500 13px/1 "Barlow",sans-serif;opacity:.75}
-.st .dot{width:10px;height:10px;border-radius:50%;flex:none}
-.dot.av-ok{background:#4FD39A}.dot.av-mid{background:var(--amber)}.dot.av-full{background:#E87070}
-.st.on .dot.av-ok{background:var(--green-d)}.st.on .dot.av-full{background:var(--red)}
-.st.add{background:var(--purple);color:#fff;border-left:0;margin-left:auto}
-.st.add:hover{background:#7A62B5}
-
-/* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font:700 16px/1 "Barlow",sans-serif;padding:15px 20px;text-decoration:none;border:2px solid transparent;cursor:pointer;background:none}
-.btn svg{width:18px;height:18px;flex:none}
-.btn.purple{background:var(--purple);color:#fff}.btn.purple:hover{background:#584190}
-.btn.navy{background:var(--navy);color:#fff}.btn.navy:hover{background:var(--deep)}
-.btn.red{background:var(--red);color:#fff}.btn.red:hover{background:#BD3A3A}
-.btn.teal{background:var(--teal);color:var(--navy)}.btn.teal:hover{background:#4CC6C1}
-.btn.sky{background:var(--sky);color:var(--navy)}.btn.sky:hover{background:#33B8EA}
-.btn.line{border-color:var(--navy);color:var(--navy);background:#fff}.btn.line:hover{background:var(--navy);color:#fff}
-.btn.ghost{border-color:#fff;color:#fff}.btn.ghost:hover{background:#fff;color:var(--navy)}
-
-/* section menu: one plain line of links */
-html{scroll-behavior:smooth}
-.menu{position:sticky;top:0;z-index:30;background:var(--canvas-d);border-bottom:1px solid #C9C3B5}
-.menu .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
-.menu .wrap::-webkit-scrollbar{display:none}
-.menu a{flex:none;padding:15px 16px 13px;font:700 16px/1 "Barlow",sans-serif;color:var(--navy);text-decoration:none;border-bottom:4px solid transparent;white-space:nowrap}
-.menu a:first-child{padding-left:0}
-.menu a:hover{border-bottom-color:var(--navy)}
-.c-sky{--c:var(--sky)}.c-red{--c:var(--red)}.c-green{--c:var(--green)}.c-purple{--c:var(--purple)}.c-amber{--c:var(--amber)}.c-teal{--c:var(--teal)}
-
-/* panels and sign headers */
-.panel{padding:32px 0 0;scroll-margin-top:52px}
-main{display:block;padding-bottom:56px}
-.windbreak,.sheet::before{display:block;height:14px;background:
-  repeating-linear-gradient(90deg,var(--navy) 0 4px,transparent 4px 132px),
-  linear-gradient(180deg,var(--red) 0 25%,var(--amber) 25% 50%,var(--sky) 50% 75%,var(--green) 75% 100%)}
-.sheet{background:#fff;box-shadow:0 1px 2px rgba(19,41,60,.05),0 10px 28px -14px rgba(19,41,60,.16)}
-.sheet::before{content:""}
-.sheet+.sheet{margin-top:28px}
-.sign-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px 18px;padding:14px 24px 14px 14px;background:var(--c,var(--purple));color:#fff}
-.sign-h i{width:54px;height:54px;background:#fff;color:var(--navy);display:grid;place-items:center}
-.sign-h i svg{width:28px;height:28px}
-.sign-h h2{font:800 clamp(27px,3.6vw,38px)/1.05 "Barlow",sans-serif;letter-spacing:-.005em}
-.sign-h span{font:400 clamp(18px,2.2vw,26px)/1.1 "Barlow",sans-serif;opacity:.9}
-.sign-h.c-sky,.sign-h.c-amber,.sign-h.c-teal{color:var(--navy)}
-.sign-h.c-green{background:var(--green-d)}
-.sheet-in{padding:24px}
-.intro{max-width:74ch;margin-bottom:20px}
-
-/* camping skyline: sits on the bottom edge of the photo header and above the guide links */
-.scene{position:absolute;left:0;right:0;bottom:-1px;height:74px;overflow:hidden;pointer-events:none}
-.scene svg,.camp svg{position:absolute;bottom:0;left:50%;height:100%;width:auto;min-width:100%;transform:translateX(-50%)}
-.camp{position:relative;height:104px;overflow:hidden;pointer-events:none}
-@media (max-width:720px){.scene{height:52px}.camp{height:78px}}
+.strip .lab{flex:none;font:600 13px/1 "Overpass",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--or)}
+.st{position:relative;flex:none;display:inline-flex;align-items:center;gap:8px;padding:19px 0 16px;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
+.st:hover,.st.on{border-bottom-color:var(--or)}
+.st small{font-weight:400;font-size:14px;color:var(--body)}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block}
+.dot.av-ok{background:var(--green)}.dot.av-mid{background:var(--amber)}.dot.av-full{background:var(--red)}
 
 /* availability */
-.av{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 "Barlow",sans-serif;padding:8px 11px}
-.av::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor;flex:none}
-.av-ok{background:var(--green-d);color:#fff}
-.av-mid{background:var(--amber);color:var(--navy)}
-.av-full{background:var(--red);color:#fff}
+.av{display:inline-flex;align-items:center;gap:8px;font:600 13px/1 "Overpass",sans-serif;letter-spacing:.06em;padding:9px 12px 7px}
+.av::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
+.av-ok{background:var(--green);color:#fff}.av-mid{background:var(--amber);color:var(--ink)}.av-full{background:var(--red);color:#fff}
 
-/* pitch type colours, used like the train, bus and coach colours on the transport page */
-.kd{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;color:#fff;flex:none;position:relative}
-.kd svg{width:17px;height:17px}
-.k-tent{background:var(--green)}.k-van{background:var(--sky)}.k-caravan{background:var(--purple)}.k-glamping{background:var(--orange)}
+/* offset photo with the dark stat box, and the text beside it */
+.about{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1fr);gap:64px;align-items:center}
+.ab-ph{position:relative;padding:46px 0 0 86px}
+.ab-ph img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.statbox{position:absolute;left:0;top:0;width:208px;background:var(--navy);color:#fff;text-align:center;padding:30px 16px 26px}
+.statbox svg{width:52px;height:52px;color:var(--or-l);margin:0 auto 12px;display:block}
+.statbox b{display:block;font:700 44px/1 "Overpass",sans-serif}
+.statbox b sup{font-size:22px;color:var(--or-l);margin-left:6px}
+.statbox span{display:block;margin-top:10px;font-size:16px;line-height:1.3}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:26px 34px;margin:30px 0 36px}
+.feat h3{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:600}
+.feat h3 i,.ticks2 li i{flex:none;width:20px;height:20px;border-radius:50%;background:var(--or);color:#fff;display:grid;place-items:center}
+.feat h3 i svg,.ticks2 li i svg{width:11px;height:11px}
+.feat p{margin-top:8px;font-size:15.5px}
+.quote{margin-top:34px;border-left:4px solid var(--or);padding:4px 0 4px 20px;color:var(--ink);font-size:19px;line-height:1.5;font-weight:500}
+.quote cite{display:block;margin-top:8px;font-style:normal;font-size:15px;font-weight:600;color:var(--or)}
 
-/* notice box */
-.notice{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);background:#fff;border:1px solid var(--line);margin-top:24px}
-.notice .nh{background:var(--navy);color:#fff;padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
-.notice .nh span{color:var(--teal);font-weight:600;font-size:15px}
-.notice .nh b{font:800 26px/1.05 "Barlow Condensed",sans-serif;margin-top:4px}
-.notice .nb{padding:18px 22px;display:flex;gap:16px 24px;align-items:center;flex-wrap:wrap}
-.notice .nb p{flex:1 1 320px;font-size:16px;line-height:25px}
+/* photo band with numbered step cards */
+.band{position:relative;color:#fff;background:var(--navy) center/cover no-repeat;padding:100px 0 110px;text-align:center}
+.band::before{content:"";position:absolute;inset:0;background:rgba(12,40,56,.86)}
+.band .wrap{position:relative}
+.band .h{color:#fff}
+.band .lede{color:#E6EDF1;margin-left:auto;margin-right:auto}
+.steps{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:36px;margin-top:76px}
+.step{position:relative;background:rgba(255,255,255,.1);padding:46px 18px 32px}
+.step .no{position:absolute;top:-30px;left:18px;width:60px;height:60px;border-radius:50%;background:var(--or);color:#fff;font:700 25px/1 "Overpass",sans-serif;display:grid;place-items:center;box-shadow:0 0 0 5px rgba(217,72,15,.32);padding-top:3px}
+.step>svg{width:46px;height:46px;margin:0 auto 16px;display:block;stroke-width:1.4}
+.step h3{color:#fff;font-size:21px;font-weight:600}
+.step p{margin-top:8px;color:#E6EDF1;font-size:15.5px}
 
-/* ring map */
-.rmap{width:100%;height:auto;display:block;overflow:visible}
-.rmap .ring{fill:none;stroke:var(--teal);stroke-opacity:.6;stroke-width:1.5;stroke-dasharray:5 7}
-.rmap .rl{fill:var(--teal);font:500 13px "Barlow",sans-serif;text-anchor:middle}
-.rmap .road{fill:none;stroke:#8C9DAD;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
-.rmap .rdl{fill:#B9CAD8;font:600 12px "Barlow",sans-serif;text-anchor:middle}
-.rmap .town{fill:#9FD9D6}
-.rmap .tl{fill:#D6E2EA;font:500 14px "Barlow",sans-serif}
-.rmap .runway{stroke:var(--amber);stroke-width:9;stroke-linecap:round}
+/* photo cards with the text over them */
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.cc{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:452px;padding:28px;color:#fff;background:var(--navy);overflow:hidden}
+.cc>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cc::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,36,51,.05) 20%,rgba(14,36,51,.82) 62%,rgba(10,27,39,.97))}
+.cc>*:not(img){position:relative;z-index:1}
+.cc .av{position:absolute;top:0;left:0}
+.cc h3{color:#fff;font-size:23px;font-weight:600}
+.cc h3 a{text-decoration:none}
+.cc h3 a:hover{color:var(--or-l)}
+.cc p{margin-top:8px;color:#E6EDF1;font-size:15.5px;line-height:1.55}
+.cc .meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-weight:600;color:#fff;font-size:15px}
+.cc .meta span{display:inline-flex;align-items:center;gap:7px}
+.cc .meta svg{width:16px;height:16px;color:var(--or-l)}
+.cc .more{margin-top:18px;color:var(--or-l);align-self:flex-start}
+.cc .more:hover{border-bottom-color:var(--or-l)}
+.cc.plain{min-height:0;justify-content:flex-start;background:var(--soft);color:var(--body);border:2px dashed #C6D0D7;padding:30px}
+.cc.plain::after{display:none}
+.cc.plain h3{color:var(--ink)}
+.cc.plain p{color:var(--body)}
+.none{grid-column:1/-1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:22px;align-items:center;background:var(--soft);padding:28px 30px}
+.none>svg{width:46px;height:46px;color:var(--or)}
+.none h3{font-size:21px;font-weight:600}
+.none p{margin-top:4px}
+.nomatch{display:none;grid-column:1/-1;background:var(--soft);padding:24px 28px;color:var(--ink)}
+.nomatch button,.shown button{font:600 13px/1 "Overpass",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--or);background:none;border:0;border-bottom:2px solid var(--or);padding:0 0 3px;cursor:pointer;margin-left:10px}
+
+/* finder: a plain row of fields above the cards */
+.finder{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px 34px;align-items:end;padding:26px 30px 28px;background:var(--soft);margin-bottom:26px}
+.ff label,.ff .lg{display:block;font:600 13px/1.2 "Overpass",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--or);margin-bottom:6px}
+.ff select{width:100%;font:500 17px/1.3 "Overpass",sans-serif;color:var(--ink);padding:10px 2px 8px;background:transparent;border:0;border-bottom:1px solid #AEBBC4;border-radius:0}
+.fc-row{display:flex;flex-wrap:wrap;gap:8px}
+.fchk{display:inline-flex;align-items:center;gap:9px;padding:11px 14px 9px;background:#fff;border:1px solid #C6D0D7;cursor:pointer;font:500 15px/1 "Overpass",sans-serif;color:var(--ink)}
+.fchk::before{content:"";width:14px;height:14px;border:2px solid #8FA1AF;flex:none;margin-top:-2px}
+.fchk[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+.fchk[aria-pressed=true]::before{border-color:#fff;background:var(--or)}
+.shown{margin:0 0 22px;font-weight:600;color:var(--ink)}
+
+/* compare table */
+.swipe{display:none}
+.board-scroll{overflow-x:auto;border:1px solid var(--line)}
+.board{border-collapse:collapse;width:100%;min-width:940px;font-size:15.5px;line-height:1.4;color:var(--ink)}
+.board th,.board td{padding:15px 8px 13px;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
+.board thead th{position:relative;background:var(--navy);color:#fff;font:600 13px/1.3 "Overpass",sans-serif;letter-spacing:.08em;border-top:0;white-space:normal;vertical-align:middle}
+.board .no{font:700 20px/1 "Overpass",sans-serif;color:var(--or);width:56px}
+.board tbody th{text-align:left;font-weight:600;white-space:normal;min-width:200px;position:sticky;left:0;background:#fff;box-shadow:1px 0 0 var(--line)}
+.board thead th:nth-child(2){text-align:left;position:sticky;left:0;z-index:1}
+.board tbody th a{text-decoration:none}
+.board tbody th a:hover{color:var(--or)}
+.board tbody th small{display:block;font:400 14px/1.3 "Overpass",sans-serif;color:var(--body)}
+.board tbody tr:nth-child(even) td,.board tbody tr:nth-child(even) th{background:var(--soft)}
+.board .y,.board .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;position:relative}
+.board .y{background:var(--or);color:#fff}
+.board .n{color:#B4BEC6}
+.board .y svg{width:13px;height:13px;stroke-width:3}.board .n svg{width:15px;height:15px}
+.board .pr{font-weight:700;font-size:18px}
+.board td.sp .av{white-space:nowrap;background:none;padding:0;color:var(--ink);letter-spacing:0;font-size:15px}
+.board td.sp .av-ok::before{background:var(--green)}.board td.sp .av-mid::before{background:var(--amber)}.board td.sp .av-full::before{background:var(--red)}
+
+/* show map on a dark band */
+.mapband{background:var(--navy);color:#fff;padding:96px 0}
+.mapband .h{color:#fff}
+.mapband .lede{color:#D5DEE4}
+.maps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px;margin-top:20px}
+.mapbox h3{color:#fff;font-size:22px;font-weight:600;text-align:center}
+.mapbox p{color:#D5DEE4;text-align:center;font-size:15.5px;margin-top:4px}
+.rmap{width:100%;height:auto;display:block;overflow:visible;max-width:520px;margin:0 auto}
+.rmap .ring{fill:none;stroke:#fff;stroke-opacity:.35;stroke-width:1.5;stroke-dasharray:5 7}
+.rmap .rl{fill:#C2CED6;font:500 13px "Overpass",sans-serif;text-anchor:middle}
+.rmap .road{fill:none;stroke:#8C9DAD;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.5}
+.rmap .rdl{fill:#B9CAD8;font:600 12px "Overpass",sans-serif;text-anchor:middle}
+.rmap .town{fill:#fff}
+.rmap .tl{fill:#E3EAF0;font:500 14px "Overpass",sans-serif}
+.rmap .runway{stroke:#fff;stroke-width:9;stroke-linecap:round}
 .rmap .ctr{fill:var(--navy);stroke:#fff;stroke-width:3}
 .rmap .ctr-dot{fill:#fff}
-.rmap .cl{fill:#fff;font:700 15px "Barlow",sans-serif}
-.rmap .mk circle{fill:var(--sky);stroke:#fff;stroke-width:2.5}
-.rmap .mk path{fill:none;stroke:var(--navy);stroke-width:2;stroke-linejoin:round}
-.rmap a.mk:hover circle,.rmap .mk.on circle{fill:var(--amber)}
-.rmap .mk.ghost circle{fill:none;stroke-dasharray:4 4;stroke:#9FD9D6}
-.rmap .mk.ghost path{stroke:#9FD9D6}
-.rmap .ghost-l{fill:#9FD9D6;font:600 14px "Barlow",sans-serif}
+.rmap .cl{fill:#fff;font:700 15px "Overpass",sans-serif}
+.rmap .mk circle{fill:var(--or);stroke:#fff;stroke-width:2.5}
+.rmap .mk path{fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round}
+.rmap a.mk:hover circle,.rmap .mk.on circle{fill:#fff}
+.rmap a.mk:hover path,.rmap .mk.on path{stroke:var(--or)}
+.rmap .mk.ghost circle{fill:none;stroke-dasharray:4 4;stroke:#C2CED6}
+.rmap .mk.ghost path{stroke:#C2CED6}
+.rmap .ghost-l{fill:#C2CED6;font:600 14px "Overpass",sans-serif}
 
-/* links to the other guides: one plain band */
-.guides{background:var(--navy);color:#fff;padding:30px 0 34px;border-top:6px solid var(--wood)}
-.guides .wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 40px;align-items:center}
-.guides h2{font:800 26px/1.1 "Barlow",sans-serif}
-.guides ul{list-style:none;display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:flex-end}
-.guides a{display:inline-flex;align-items:center;gap:8px;font:600 17px/1.2 "Barlow",sans-serif;color:#fff;text-decoration:none;border-bottom:2px solid var(--teal);padding-bottom:3px}
-.guides a svg{width:17px;height:17px;color:var(--teal)}
-.guides a:hover{border-bottom-color:#fff}
+/* text on the left, dark card and photo on the right */
+.offer{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:56px;align-items:center}
+.minis{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:30px;padding-top:30px;border-top:1px solid var(--line)}
+.mini>svg{width:42px;height:42px;color:var(--or);stroke-width:1.4}
+.mini h3{font-size:20px;font-weight:600;margin-top:12px}
+.mini p{margin:6px 0 12px;font-size:15.5px}
+.pc{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:center}
+.pc-card{position:relative;z-index:1;background:var(--navy);color:#fff;padding:42px 38px 38px;margin:-12px 0}
+.pc-card .flag{position:absolute;top:22px;right:38px;background:var(--or);color:#fff;font-size:14px;padding:7px 12px 5px}
+.pc-card h3{color:#fff;font-size:22px;font-weight:600;max-width:10ch}
+.pc-card .big{font:700 40px/1 "Overpass",sans-serif;margin-top:14px;padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.2)}
+.pc-card .big small{font-size:15px;font-weight:400;color:var(--or-l);margin-left:4px}
+.chev{list-style:none;margin:20px 0 24px;display:grid;gap:9px}
+.chev li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;align-items:start}
+.chev li svg{width:14px;height:14px;color:var(--or-l);margin-top:5px;stroke-width:3}
+.pc-card .btn{width:100%}
+.pc-card .fine{margin-top:16px;font-size:14px;text-align:center;color:#D5DEE4}
+.pc img{width:100%;height:100%;min-height:420px;object-fit:cover}
 
-.small{background:var(--deep);color:#AFC0CD;font-size:14px;line-height:22px;padding:22px 0}
-.small p+p{margin-top:8px}
-.small a{color:#fff}
-.sample-bar{background:var(--amber);color:var(--navy);font:600 15px/1.4 "Barlow",sans-serif;text-align:center;padding:9px 18px}
+/* dark form between two photos */
+.formrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr)}
+.formrow>img{width:100%;height:100%;min-height:560px;object-fit:cover}
+.fpanel{background:var(--navy);color:#fff;padding:54px clamp(22px,4vw,60px) 56px}
+.fpanel h2{color:#fff;font-size:30px;font-weight:600}
+.fpanel>p{margin-top:8px;color:#D5DEE4;font-size:15.5px}
+.fpanel form{margin-top:22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 26px}
+.fld{display:grid;gap:2px;align-content:start}
+.fld.wide{grid-column:1/-1}
+.fld label,.fld legend{font-size:14.5px;color:#B8C6CF}
+.fld label i{font-style:normal;color:var(--or-l)}
+.fld input[type=text],.fld input[type=email],.fld input[type=tel],.fld select,.fld textarea{font:400 16px/1.4 "Overpass",sans-serif;color:#fff;padding:8px 0 8px;border:0;border-bottom:1px solid rgba(255,255,255,.3);background:transparent;width:100%;border-radius:0}
+.fld select option{color:var(--ink);background:#fff}
+.fld textarea{min-height:76px;resize:vertical}
+.fld input::placeholder{color:#8FA1AF}
+.fld .bad{border-bottom-color:var(--or-l)}
+fieldset.fld{border:0}
+.ticks{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px}
+.ticks label{display:inline-flex;align-items:center;gap:8px;color:#fff;font-size:15.5px;cursor:pointer}
+.ticks input{width:17px;height:17px;accent-color:var(--or)}
+.fpanel .go{grid-column:1/-1;display:grid;gap:12px}
+.fpanel .go .btn{width:100%}
+.fpanel .go small{color:#B8C6CF;font-size:14.5px;line-height:1.5}
+.fpanel .err{grid-column:1/-1;color:#FFB59A;font-weight:600;display:none}
+.made{display:none;margin-top:22px;border-top:1px solid rgba(255,255,255,.2);padding-top:20px}
+.made b{color:#fff;font-size:19px}
+.made p{margin-top:4px;color:#D5DEE4;font-size:15.5px}
+.made textarea{margin-top:12px;width:100%;min-height:190px;font:400 14px/1.5 ui-monospace,Menlo,Consolas,monospace;padding:12px;border:0;background:#fff;color:var(--ink)}
+.made .btns{margin-top:12px}
+
+/* footer */
+.sky{position:relative;height:92px;overflow:hidden;pointer-events:none;background:#fff}
+.sky.tint{background:var(--soft)}
+.sky svg{position:absolute;bottom:-1px;left:50%;height:100%;width:auto;min-width:100%;transform:translateX(-50%)}
+.ft{background:var(--deep);color:#fff;padding:76px 0 64px}
+.ft .cols{display:grid;grid-template-columns:1.25fr .9fr .9fr 1.3fr;gap:40px}
+.ft .logo{margin-bottom:22px}
+.ft h3{color:#fff;font-size:22px;font-weight:600;margin-bottom:18px}
+.ft p{color:#D5DEE4;font-size:15px}
+.ft .ct{display:grid;gap:12px;font-size:15px}
+.ft .ct span,.ft .ct a{display:flex;gap:11px;align-items:center;text-decoration:none}
+.ft .ct svg{width:17px;height:17px;color:var(--or-l);flex:none}
+.ft ul{list-style:none;display:grid;gap:13px;font-size:15px}
+.ft li a{display:inline-flex;gap:9px;align-items:center;text-decoration:none}
+.ft li a:hover,.ft .ct a:hover{color:var(--or-l)}
+.ft li svg{width:13px;height:13px;color:var(--or-l);stroke-width:3;flex:none}
+.ft .btn{margin-top:18px}
+.fbar{background:#06131C;color:#C2CED6;font-size:14px;line-height:1.6;padding:22px 0}
+.fbar p+p{margin-top:6px}
+.fbar a{color:#fff}
+.sample-bar{background:var(--amber);color:var(--ink);font:600 15px/1.4 "Overpass",sans-serif;text-align:center;padding:10px 18px 8px}
 
 @media (max-width:1000px){
-  .guides .wrap{grid-template-columns:1fr}
-  .guides ul{justify-content:flex-start}
+  .sec,.mapband{padding:72px 0}
+  .about,.offer{grid-template-columns:1fr;gap:44px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:62px}
+  .formrow{grid-template-columns:1fr 1fr}
+  .formrow>img{min-height:300px;height:300px}
+  .fpanel{grid-column:1/-1;order:-1}
+  .ft .cols{grid-template-columns:1fr 1fr}
+  .finder{grid-template-columns:1fr 1fr}
+  .ff.need{grid-column:1/-1;margin-top:12px}
+  .swipe{display:inline}
+  .nav{flex-wrap:wrap;row-gap:0;padding-top:14px}
+  .nav ul{order:3;flex-basis:100%;overflow-x:auto;scrollbar-width:none;height:48px;margin-top:12px;border-top:1px solid rgba(255,255,255,.22)}
+  .nav ul::-webkit-scrollbar{display:none}
+  .nav li:first-child a{padding-left:0}
 }
 @media (max-width:720px){
-  .wrap{padding:0 16px}
-  .brand span,.strip .lab{display:none}
-  .menu a{padding:13px 12px 11px;font-size:15px}
-  .panel{padding-top:20px}
-  main{padding-bottom:40px}
-  .sheet-in{padding:18px 16px}
-  .sign-h{grid-template-columns:auto minmax(0,1fr);padding:12px 16px 12px 12px;gap:2px 12px}
-  .sign-h i{width:44px;height:44px;grid-row:span 2}
-  .sign-h i svg{width:23px;height:23px}
-  .sign-h span{grid-column:2}
-  .notice{grid-template-columns:1fr}
-  .guides ul{flex-direction:column;gap:12px}
+  .wrap{padding:0 18px}
+  .sec,.mapband,.band{padding:60px 0}
+  .band{padding-bottom:70px}
+  .top .r{display:none}
+  .logo{font-size:21px}
+  .nav{min-height:72px}
+  .nav .btn{padding:14px 16px 12px;letter-spacing:.1em}
+  .ttl{padding:54px 0 66px}
+  .ab-ph{padding:34px 0 0 34px}
+  .statbox{width:164px;padding:22px 12px 18px}
+  .statbox b{font-size:34px}
+  .statbox svg{width:40px;height:40px}
+  .feat,.minis,.cards,.maps,.steps,.finder,.pc{grid-template-columns:1fr}
+  .steps{row-gap:56px}
+  .pc-card{margin:0}
+  .pc img{min-height:240px;height:240px}
+  .none{grid-template-columns:1fr}
+  .formrow{grid-template-columns:1fr}
+  .formrow>img:last-child{display:none}
+  .fpanel form{grid-template-columns:1fr}
+  .ft .cols{grid-template-columns:1fr}
+  .cc{min-height:400px}
+  .sky{height:66px}
 }
 """
 
-def head(title, desc, extra_css, canonical=""):
+
+def head(title, desc, extra_css="", canonical=""):
     can = f'<link rel="canonical" href="{e(canonical)}">\n' if canonical else ""
     return f"""<!doctype html>
 <html lang="en-GB">
@@ -537,26 +692,41 @@ def head(title, desc, extra_css, canonical=""):
 <meta name="description" content="{e(desc)}">
 {can}<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>{CSS}{extra_css}</style>
 </head>
 <body>
 """
 
 
-def top_bar():
+def logo():
     h, t = home_href()
-    return (f'<div class="bar"><div class="wrap"><a class="brand" href="{e(h)}" target="{t}"><b>Airshow Camping</b>'
-            f'<span>by The Big Guide to UK Airshows</span></a>'
-            f'<a class="back" href="{SITE}{RIAT_WIX}" target="_top">Back to the RIAT guide</a></div></div>')
+    return f'<a class="logo" href="{e(h)}" target="{t}">{icon("tent")}Airshow Camping</a>'
+
+
+def top_bar():
+    return (f'<div class="top"><div class="wrap"><div class="l"><span>{icon("pin")}MOD Boscombe Down, Wiltshire</span>'
+            f'<span>{icon("cal")}16 to 18 July 2027</span>'
+            f'<a href="mailto:{CONTACT}?subject=RIAT%20campsite%20listing">{icon("mail")}{CONTACT}</a></div>'
+            f'<div class="r"><a href="{SITE}{RIAT_WIX}" target="_top">Back to the RIAT guide {icon("arrow")}</a></div></div></div>')
+
+
+def header(photo, nav_items, title, crumbs, tags="", button=None):
+    """Photo header: logo and menu on the photo, then the page title and breadcrumb."""
+    nav = "".join(f'<li><a href="{e(href)}">{e(lab)}</a></li>' for href, lab in nav_items)
+    btn = f'<a class="btn or inv" href="{e(button[0])}"{button[2] if len(button) > 2 else ""}>{e(button[1])}</a>' if button else ""
+    cr = f'{icon("chev")}'.join(f'<a href="{e(h)}" target="{t}">{e(l)}</a>' if h else f'<span>{e(l)}</span>' for l, h, t in crumbs)
+    bg = f" style=\"background-image:url('{e(photo)}')\"" if photo else ""
+    return (f'<header class="hd"{bg}><div class="wrap"><nav class="nav" aria-label="On this page">{logo()}<ul>{nav}</ul>{btn}</nav>'
+            f'<div class="ttl">{tags}<h1>{e(title)}</h1><p class="crumbs">{cr}</p></div></div></header>')
 
 
 def site_strip(live, current=None):
-    """The campsite tabs: home first, then one tab per campsite page."""
+    """The campsite links: home first, then one per campsite page."""
     h, t = home_href()
     on = " on" if current == "home" else ""
-    out = ['<nav class="strip" aria-label="RIAT campsites"><div class="wrap">',
-           f'<a class="st{on}" href="{e(h)}" target="{t}"{" aria-current=page" if on else ""}>{icon("tent")}RIAT camping</a>']
+    out = ['<nav class="strip" aria-label="RIAT campsites"><div class="wrap"><span class="lab">Campsites</span>',
+           f'<a class="st{on}" href="{e(h)}" target="{t}"{" aria-current=page" if on else ""}>All campsites</a>']
     for s in live:
         href, tgt = page_href(s)
         on = " on" if current == s["slug"] else ""
@@ -564,45 +734,35 @@ def site_strip(live, current=None):
         a = avail(s)
         dot = f'<i class="dot {a[1]}"></i><span class="vh">{a[0]}: </span>' if a else ""
         out.append(f'<a class="st{on}" href="{e(href)}" target="{tgt}"{cur}>{dot}{e(s["name"])} <small>{e(dist_text(s))}</small></a>')
-    if current == "home":
-        out.append(f'<a class="st add" href="#list">{icon("plus")}List your campsite</a>')
-    else:
-        out.append(f'<a class="st add" href="{e(h)}#list" target="{t}">{icon("plus")}List your campsite</a>')
     out.append('</div></nav>')
     return "".join(out)
 
 
-def section_menu(items):
-    """items: (section id, label). One plain line of links to the sections of the page."""
-    return ('<nav class="menu" aria-label="On this page"><div class="wrap">'
-            + "".join(f'<a href="#{pid}">{e(label)}</a>' for pid, label in items) + '</div></nav>')
+def sec_head(kick, title, lede="", mid=False):
+    return (f'<div class="sec-head{" mid" if mid else ""}"><span class="kick">{e(kick)}</span><h2 class="h">{e(title)}</h2>'
+            f'{"<p class=lede>" + e(lede) + "</p>" if lede else ""}</div>')
 
 
-def sign(col, ic, title, right, right_id=""):
-    rid = f' id="{right_id}"' if right_id else ""
-    return f'<div class="sign-h {col}"><i>{icon(ic)}</i><h2>{e(title)}</h2><span{rid}>{e(right)}</span></div>'
+def chev_list(items):
+    return '<ul class="chev">' + "".join(f'<li>{icon("chev")}<span>{e(x)}</span></li>' for x in items if x) + '</ul>'
 
 
-def kind_dots(kinds, labels=False):
-    out = []
-    for k in KINDS:
-        if k in kinds:
-            lab = f'<span>{KINDS[k]}</span>' if labels else f'<span class="vh">{KINDS[k]}</span>'
-            out.append(f'<span class="kp"><i class="kd {KIND_COL[k]}">{icon(k if k != "tent" else "tent")}</i>{lab}</span>')
-    return "".join(out)
-
-
-def guides():
-    links = "".join(f'<li><a href="{SITE}{path}" target="_top">{e(name)}{icon("arrow")}</a></li>' for path, ic, name, sub in GUIDES)
-    return (f'<div class="camp">{camp_scene()}</div><section class="guides" aria-labelledby="plan-h"><div class="wrap">'
-            f'<h2 id="plan-h">Plan your camping trip</h2><ul>{links}</ul></div></section>')
-
-
-def small_print(extra=""):
-    return f"""<footer class="small"><div class="wrap">
-<p>The Big Guide to UK Airshows is independent and not part of the Royal International Air Tattoo. Campsite details come from the owners. Please check prices, dates and rules with the campsite before you book.</p>
-{extra}<p>Running a campsite near Boscombe Down or Fairford? Email <a href="mailto:{CONTACT}?subject=RIAT%20campsite%20listing">{CONTACT}</a>.</p>
-</div></footer>"""
+def footer(live, extra=""):
+    h, t = home_href()
+    camps = "".join(f'<li><a href="{e(page_href(s)[0])}" target="{page_href(s)[1]}">{icon("chev")}{e(s["name"])}</a></li>' for s in live[:6])
+    if not camps:
+        camps = f'<li><a href="{e(h)}#list" target="{t}">{icon("chev")}Campsites are being added</a></li>'
+    guides = "".join(f'<li><a href="{SITE}{path}" target="_top">{icon("chev")}{e(name)}</a></li>' for path, ic, name, sub in GUIDES)
+    return f"""<div class="sky{extra}">{camp_scene("#0A1B27")}</div>
+<footer class="ft"><div class="wrap cols">
+  <div>{logo()}<div class="ct"><span>{icon("pin")}MOD Boscombe Down, Wiltshire</span><span>{icon("cal")}RIAT, 16 to 18 July 2027</span>
+    <a href="mailto:{CONTACT}?subject=RIAT%20campsite%20listing">{icon("mail")}{CONTACT}</a></div></div>
+  <div><h3>Campsites</h3><ul>{camps}</ul></div>
+  <div><h3>Plan your trip</h3><ul>{guides}</ul></div>
+  <div><h3>Running a campsite?</h3><p>If you run a campsite near Boscombe Down or Fairford, I would love to add it to these pages. It is free.</p>
+    <a class="btn or inv" href="{e(h)}#list" target="{t}">List your campsite</a></div>
+</div></footer>
+<div class="fbar"><div class="wrap"><p>The Big Guide to UK Airshows is independent and not part of the Royal International Air Tattoo. Campsite details come from the owners. Please check prices, dates and rules with the campsite before you book.</p></div></div>"""
 
 
 def mailto(subject="RIAT campsite listing"):
@@ -610,194 +770,6 @@ def mailto(subject="RIAT campsite listing"):
 
 
 # ---------------------------------------------------------------- home page
-HOME_CSS = r"""
-.hero{position:relative;color:#fff;background:var(--navy) center/cover no-repeat}
-.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,26,39,.62) 0%,rgba(19,41,60,.7) 55%,rgba(19,41,60,.9) 100%)}
-.hero-in{position:relative;text-align:center;padding-top:44px;padding-bottom:112px}
-.crumb{font:500 15px/1.4 "Barlow",sans-serif;color:#C9D6E0;margin-bottom:18px}
-.crumb a{color:#fff;text-decoration:none;border-bottom:2px solid var(--teal)}
-.crumb i{font-style:normal;margin:0 8px;color:var(--teal)}
-.hero .new{display:inline-block;background:var(--purple);color:#fff;font:700 15px/1 "Barlow",sans-serif;padding:8px 12px;margin-bottom:14px}
-.hero h1{font:800 clamp(44px,7vw,88px)/.96 "Barlow Condensed","Barlow",sans-serif;letter-spacing:.005em;text-shadow:0 2px 18px rgba(0,0,0,.35)}
-.hero h1 em{font-style:normal;color:var(--teal);display:block}
-.hero .lead{margin:18px auto 0;max-width:62ch;color:#F1F5F8;font-size:19px;line-height:29px}
-.hero .when{margin-top:14px;font:700 18px/1.4 "Barlow",sans-serif;color:var(--amber)}
-
-/* the finder bar, like the one on the Camping hub */
-.finder{margin:30px auto 0;max-width:1100px;text-align:left;background:var(--navy);color:#fff;box-shadow:0 24px 50px -18px rgba(0,0,0,.6)}
-.finder .fin{display:grid;grid-template-columns:minmax(206px,1fr) minmax(206px,1fr) auto auto;align-items:stretch}
-.ff{padding:14px 18px 16px;border-right:1px solid rgba(255,255,255,.14);min-width:0}
-.ff label,.ff .lg{display:block;font:600 15px/1.3 "Barlow",sans-serif;color:#9FD9D6;margin-bottom:6px}
-.ff select{width:100%;font:600 17px/1.3 "Barlow",sans-serif;color:#fff;padding:7px 2px;background:transparent;border:0;border-bottom:2px solid var(--teal);border-radius:0}
-.ff select option{color:var(--ink);background:#fff}
-.fc-row{display:flex;flex-wrap:wrap;gap:6px}
-.fchk{display:inline-flex;align-items:center;gap:8px;padding:9px 11px;background:rgba(255,255,255,.09);border:0;cursor:pointer;font:600 15px/1 "Barlow",sans-serif;color:#fff}
-.fchk::before{content:"";width:14px;height:14px;border:2px solid #9FB6C8;flex:none}
-.fchk:hover{background:rgba(255,255,255,.16)}
-.fchk[aria-pressed=true]{background:var(--teal);color:var(--navy)}
-.fchk[aria-pressed=true]::before{border-color:var(--navy);background:var(--navy);box-shadow:inset 0 0 0 2px var(--teal)}
-.finder .btn{font-size:18px;padding:16px 26px;white-space:nowrap}
-.finder.soon .fin{grid-template-columns:minmax(0,1fr) auto auto}
-.finder.soon p{padding:16px 20px;font-size:16px;line-height:24px;align-self:center}
-.finder.soon p b{display:block;font-size:19px}
-.hero .runit{margin-top:16px;font-size:16px;color:#E3EAF0}
-.hero .runit a{color:#fff;font-weight:700;text-decoration:none;border-bottom:2px solid var(--teal)}
-
-/* box header used by the owner form */
-.fh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;background:var(--purple);color:#fff;padding:18px 22px}
-.fh i{width:42px;height:42px;border-radius:50%;background:#fff;color:var(--purple);display:grid;place-items:center}
-.fh i svg{width:22px;height:22px}
-.fh b{display:block;font:700 22px/1.1 "Barlow",sans-serif}
-.fh span{display:block;font-size:15px;margin-top:2px}
-
-/* new to camping card, like the Camping hub */
-.newto{position:relative;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.25fr);align-items:center;margin-top:36px}
-.nt-card{position:relative;z-index:1;background:#fff;padding:34px 30px 30px;margin-right:-70px;box-shadow:0 18px 40px -22px rgba(19,41,60,.5)}
-.nt-card .badge{position:absolute;top:-22px;left:-18px;width:52px;height:52px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center;border:4px solid #fff;box-shadow:0 4px 12px rgba(19,41,60,.25)}
-.nt-card .badge svg{width:24px;height:24px}
-.nt-card h2{font:800 clamp(30px,3.6vw,40px)/1.02 "Barlow Condensed","Barlow",sans-serif;color:var(--navy)}
-.nt-card p{margin-top:12px;font-size:16px;line-height:25px}
-.nt-card .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-.nt-card .by{margin-top:14px;font-weight:600;color:var(--purple)}
-.newto figure img{width:100%;aspect-ratio:16/9;object-fit:cover}
-.newto figcaption{font:500 14px/1.4 "Barlow",sans-serif;color:var(--soft);margin-top:6px;text-align:right}
-
-/* campsite cards */
-.shown{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:-6px 0 18px;font-weight:600;color:var(--navy)}
-.shown button{font:600 15px/1 "Barlow",sans-serif;color:var(--navy);background:#fff;border:2px solid var(--navy);padding:7px 11px;cursor:pointer}
-.shown button:hover{background:var(--navy);color:#fff}
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-.cc{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line)}
-.cc .ph{position:relative;aspect-ratio:16/10;background:var(--navy);overflow:hidden}
-.cc .ph img{width:100%;height:100%;object-fit:cover}
-.cc .flag{position:absolute;left:0;bottom:0;background:var(--navy);color:#fff;font:700 15px/1 "Barlow",sans-serif;padding:9px 12px;border-left:6px solid var(--amber)}
-.cc .bd{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
-.cc h3{font:700 23px/1.15 "Barlow",sans-serif;color:var(--navy)}
-.cc h3 a{text-decoration:none}
-.cc h3 a:hover{text-decoration:underline;text-decoration-color:var(--teal);text-decoration-thickness:3px}
-.cc .kind{color:var(--soft);font-size:16px;margin-top:-6px}
-.kps{display:flex;flex-wrap:wrap;gap:6px 14px}
-.kp{display:inline-flex;align-items:center;gap:7px;font:600 15px/1 "Barlow",sans-serif;color:var(--navy);position:relative}
-.cc .has{font-size:16px;line-height:23px}
-.cc .ft{margin-top:auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding-top:12px;border-top:1px solid var(--line)}
-.cc .pr{font:600 15px/1.2 "Barlow",sans-serif;color:var(--soft)}
-.cc .pr b{display:block;font:800 30px/1 "Barlow Condensed",sans-serif;color:var(--navy)}
-.cc .ft .btn{padding:12px 15px;font-size:15px}
-.cc .av{width:100%;padding:11px 18px}
-.none{grid-column:1/-1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;background:#fff;border:2px dashed #B3C3CF;padding:22px}
-.none i{width:54px;height:54px;border-radius:50%;background:var(--navy);color:var(--amber);display:grid;place-items:center}
-.none i svg{width:26px;height:26px}
-.none h3{font:700 21px/1.2 "Barlow",sans-serif;color:var(--navy)}
-.none p{font-size:16px;line-height:24px;margin-top:3px}
-.nomatch{display:none;grid-column:1/-1;background:#fff;border:2px dashed #B3C3CF;padding:20px 22px}
-
-/* compare board */
-.swipe{display:none}
-.board-scroll{overflow-x:auto}
-.board{border-collapse:collapse;width:100%;min-width:940px;font-size:16px;line-height:22px}
-.board th,.board td{padding:13px 10px;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
-.board thead th{background:var(--navy);color:#fff;font:600 14px/1.2 "Barlow",sans-serif;border-top:0;vertical-align:middle;white-space:normal}
-.board thead .kd{width:28px;height:28px}
-.board thead th{position:relative}
-.board .no{width:60px;padding-top:9px;padding-bottom:17px}
-.board .no b{position:relative;display:inline-grid;place-items:center;width:40px;height:30px;background:var(--navy);color:#fff;font:800 20px/1 "Barlow Condensed",sans-serif;border-bottom:4px solid var(--amber)}
-.board .no b::after{content:"";position:absolute;left:50%;top:calc(100% + 4px);width:4px;height:9px;margin-left:-2px;background:var(--wood)}
-.board tbody th{text-align:left;font-weight:700;color:var(--navy);white-space:normal;min-width:190px;position:sticky;left:0;background:#fff;box-shadow:1px 0 0 var(--line)}
-.board thead th:nth-child(2){text-align:left;position:sticky;left:0;z-index:1}
-.board tbody th a{text-decoration:none}
-.board tbody th a:hover{text-decoration:underline;text-decoration-color:var(--teal);text-decoration-thickness:3px}
-.board tbody th small{display:block;font:500 14px/1.3 "Barlow",sans-serif;color:var(--soft)}
-.board tbody tr:hover td,.board tbody tr:hover th{background:#F1EDF8}
-.board .y,.board .n{display:inline-grid;place-items:center;width:26px;height:26px;position:relative}
-.board .y{background:var(--green-d);color:#fff}
-.board .n{color:#A9B6C0}
-.board .y svg,.board .n svg{width:17px;height:17px}
-.board .pr{font:800 22px/1 "Barlow Condensed",sans-serif;color:var(--navy)}
-.board td.sp{padding:0;width:150px}
-.board td.sp .av{width:100%;height:100%;min-height:52px;justify-content:center;white-space:nowrap}
-.key{display:flex;flex-wrap:wrap;gap:10px 22px;background:var(--purple);color:#fff;padding:12px 20px;font:600 15px/1 "Barlow",sans-serif}
-.key .kp{color:#fff}
-.key .kd{box-shadow:0 0 0 2px #fff}
-
-/* maps */
-.maps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-.mapbox{background:var(--navy);color:#fff}
-.mapbox header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 18px;background:var(--deep);border-bottom:4px solid var(--c,var(--sky))}
-.mapbox h3{font:700 21px/1.1 "Barlow",sans-serif}
-.mapbox header span{font-size:15px;color:#C9D6E0}
-.mapbox .mb{padding:10px 18px 18px}
-.mapbox p{font-size:15px;line-height:22px;color:#C9D6E0;margin:6px 0 4px}
-
-/* owners */
-.own{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:start}
-.own h3.big{font:800 clamp(30px,4vw,44px)/1 "Barlow Condensed",sans-serif;color:var(--navy)}
-.own h3.big em{font-style:normal;color:var(--purple)}
-.own .txt p{margin-top:12px;max-width:56ch}
-.gets{margin-top:20px;border:1px solid var(--line)}
-.get{display:grid;grid-template-columns:56px minmax(0,1fr);border-top:1px solid var(--line);background:#fff}
-.get:first-child{border-top:0}
-.get i{background:var(--c);color:#fff;display:grid;place-items:center}
-.get i svg{width:24px;height:24px}
-.get div{padding:12px 16px}
-.get b{display:block;font:700 18px/1.2 "Barlow",sans-serif;color:var(--navy)}
-.get span{font-size:16px;color:var(--soft)}
-.who{display:grid;gap:8px;margin-top:20px}
-.who div{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;padding:12px 14px;background:var(--mist);border-left:6px solid var(--c)}
-.who svg{width:26px;height:26px;color:var(--c);margin-top:2px}
-.who b{display:block;font:700 17px/1.2 "Barlow",sans-serif;color:var(--navy)}
-.who span{font-size:16px;line-height:23px}
-.say{margin-top:20px;background:var(--navy);color:#fff;padding:20px 22px;font:600 20px/1.35 "Barlow",sans-serif;border-left:6px solid var(--teal)}
-.say cite{display:block;margin-top:8px;font:600 15px/1.3 "Barlow",sans-serif;font-style:normal;color:var(--teal)}
-.form{background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px -20px rgba(19,41,60,.4)}
-.form form{padding:20px 22px 22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px}
-.fld{display:grid;gap:6px;align-content:start}
-.fld.wide{grid-column:1/-1}
-.fld label,.fld legend{font:600 15px/1.3 "Barlow",sans-serif;color:var(--navy)}
-.fld label i{font-style:normal;color:var(--red)}
-.fld input[type=text],.fld input[type=email],.fld input[type=tel],.fld select,.fld textarea{font:400 16px/1.4 "Barlow",sans-serif;color:var(--ink);padding:12px;border:0;border-bottom:2px solid #C3D1DB;background:var(--mist);width:100%;border-radius:0}
-.fld textarea{min-height:84px;resize:vertical}
-.fld .bad{border-bottom-color:var(--red);background:#FBEDED}
-fieldset.fld{border:0}
-.ticks{display:flex;flex-wrap:wrap;gap:6px}
-.ticks label{display:inline-flex;align-items:center;gap:8px;font-weight:500;color:var(--ink);background:var(--mist);padding:9px 12px;cursor:pointer}
-.ticks input{width:18px;height:18px;accent-color:var(--purple)}
-.form .go{grid-column:1/-1;display:grid;gap:10px}
-.form .go .btn{width:100%;font-size:18px;padding:17px 20px}
-.form .go small{color:var(--soft);font-size:15px;line-height:22px}
-.form .err{grid-column:1/-1;color:#A32424;font-weight:600;display:none}
-.made{display:none;margin:0 22px 22px;background:#EAF6F5;border-left:6px solid var(--teal);padding:18px}
-.made b{color:var(--navy);font-size:18px}
-.made p{margin-top:6px;font-size:16px;line-height:25px}
-.made textarea{margin-top:12px;width:100%;min-height:200px;font:400 15px/1.5 ui-monospace,Menlo,Consolas,monospace;padding:12px;border:1px solid #B9C6D1;background:#fff;color:var(--ink)}
-.made .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-
-@media (max-width:1000px){
-  .hero-in{padding-top:34px;padding-bottom:96px}
-  .finder .fin,.finder.soon .fin{grid-template-columns:1fr 1fr}
-  .ff.need{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.14)}
-  .finder .btn{grid-column:1/-1}
-  .finder.soon p{grid-column:1/-1}
-  .newto{grid-template-columns:1fr}
-  .nt-card{margin:0 0 -30px 18px;order:2}
-  .newto figure{order:1}
-  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .own{grid-template-columns:1fr}
-  .swipe{display:inline}
-}
-@media (max-width:720px){
-  .cards,.maps{grid-template-columns:1fr}
-  .none{grid-template-columns:1fr}
-  .form form{grid-template-columns:1fr;padding:16px}
-  .made{margin:0 16px 16px}
-  .fh{padding-left:16px;padding-right:16px}
-  .finder .fin{grid-template-columns:1fr}
-  .ff{border-right:0;border-top:1px solid rgba(255,255,255,.14)}
-  .ff:first-child{border-top:0}
-  .nt-card{margin-left:0;padding:28px 20px 22px}
-  .nt-card .badge{left:14px}
-}
-"""
-
 HOME_JS = r"""<script>
 (function(){
 /* finder: one area, any number of needs. Works on the cards and the compare board. */
@@ -872,30 +844,27 @@ def site_card(s):
     ph = s["photos"][0] if s.get("photos") else None
     img = f'<img src="{e(ph["src"])}" alt="{e(ph.get("alt"))}" loading="lazy" decoding="async">' if ph else ""
     d = dist_text(s)
-    flag = f'<span class="flag">{e(d)} from {e(AREAS[s["area"]]["label"])}</span>' if d else ""
     tags = site_tags(s)
-    has = [FAC_LABEL[k] for k in ("hot-showers", "electric-hookup", "hardstanding", "food-van", "dogs")
-           if fac_state(s.get("facilities", {}).get(k))[0]]
-    if "shuttle" in tags:
-        has.append("Shuttle to the show")
-    has_txt = (has[0] + "".join(", " + h.lower() for h in has[1:4]) + ".") if has else ""
+    takes = ", ".join(KINDS[k] for k in KINDS if k in tags)
     fp = from_price(s)
-    price = f'<span class="pr">From<b>{e(fp[1])}</b>{e(fp[2])}</span>' if fp else '<span class="pr">Ask for prices</span>'
-    return (f'<article class="cc" data-area="{e(s["area"])}" data-tags="{" ".join(sorted(tags))}">'
-            f'<div class="ph">{img}{flag}</div><div class="bd">'
-            f'<h3><a href="{e(href)}" target="{tgt}">{e(s["name"])}</a></h3><p class="kind">{e(s.get("kind"))}</p>'
-            f'<div class="kps">{kind_dots(tags, labels=True)}</div>'
-            f'{"<p class=has>" + e(has_txt) + "</p>" if has_txt else ""}'
-            f'<div class="ft">{price}<a class="btn navy" href="{e(href)}" target="{tgt}">View campsite {icon("arrow")}</a></div></div>'
-            f'{avail_badge(s)}</article>')
+    meta = ""
+    if d:
+        meta += f'<span>{icon("pin")}{e(d)} from {e(AREAS[s["area"]]["label"])}</span>'
+    if fp:
+        meta += f'<span>{icon("tag")}From {e(fp[1])} {e(fp[2])}</span>'
+    return (f'<article class="cc" data-area="{e(s["area"])}" data-tags="{" ".join(sorted(tags))}">{img}{avail_badge(s)}'
+            f'<h3><a href="{e(href)}" target="{tgt}">{e(s["name"])}</a></h3>'
+            f'<p>{e(s.get("kind"))}{". " + e(takes) + "." if takes else ""}</p>'
+            f'<div class="meta">{meta}</div>'
+            f'<a class="more" href="{e(href)}" target="{tgt}">View campsite</a></article>')
 
 
 def empty_card(area_key):
     where = {"boscombe": "near Boscombe Down", "fairford": "around Fairford"}[area_key]
-    return (f'<div class="none" data-area="{area_key}"><i>{icon("tent")}</i><div>'
+    return (f'<div class="none" data-area="{area_key}">{icon("tent")}<div>'
             f'<h3>No campsites listed {e(where)} yet</h3>'
             f'<p>I am adding campsites as owners get in touch. If you run one, I would love to hear from you.</p></div>'
-            f'<a class="btn purple" href="#list">List your campsite</a></div>')
+            f'<a class="btn nv" href="#list">List your campsite</a></div>')
 
 
 def compare_board(live):
@@ -910,19 +879,17 @@ def compare_board(live):
         cells = [yes if k in tags else no for k in ("tent", "van", "caravan", "glamping", "hookup")]
         cells += [yes if showers else no] + [yes if k in tags else no for k in ("dogs", "shuttle")]
         price = f'<span class="pr">{e(fp[1])}</span>' if fp else "Ask"
-        rows.append(f'<tr data-area="{e(s["area"])}" data-tags="{" ".join(sorted(tags))}"><td class="no"><b>{i + 1:02d}</b></td>'
+        rows.append(f'<tr data-area="{e(s["area"])}" data-tags="{" ".join(sorted(tags))}"><td class="no">{i + 1:02d}</td>'
                     f'<th scope="row"><a href="{e(href)}" target="{tgt}">{e(s["name"])}</a>'
                     f'<small>{e(AREAS[s["area"]]["long"])}</small></th>'
                     f'<td>{e(dist_text(s)) or "Ask"}</td><td>{price}</td>'
                     + "".join(f"<td>{c}</td>" for c in cells)
                     + f'<td class="sp">{avail_badge(s) or "Ask"}</td></tr>')
-    kh = "".join(f'<th scope="col"><i class="kd {KIND_COL[k]}">{icon(k)}</i><span class="vh">{KINDS[k]}</span></th>' for k in KINDS)
-    heads = ('<th scope="col">Pitch</th><th scope="col">Campsite</th><th scope="col">Distance</th><th scope="col">From, per night</th>'
-             + kh + '<th scope="col">Electric hook up</th><th scope="col">Hot showers</th><th scope="col">Dogs</th>'
-             '<th scope="col">Shuttle</th><th scope="col">Spaces</th>')
-    return (f'<div class="board-scroll" tabindex="0" role="region" aria-label="Campsite comparison board">'
-            f'<table class="board"><thead><tr>{heads}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
-            f'<div class="key">{kind_dots(set(KINDS), labels=True)}</div>')
+    heads = "".join(f'<th scope="col">{h}</th>' for h in (
+        "No.", "Campsite", "Distance", "From, per night", "Tents", "Campervans", "Caravans and tourers", "Glamping",
+        "Electric hook up", "Hot showers", "Dogs", "Shuttle", "Spaces"))
+    return (f'<div class="board-scroll" tabindex="0" role="region" aria-label="Campsite comparison table">'
+            f'<table class="board"><thead><tr>{heads}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
 
 
 def build_home(live):
@@ -935,158 +902,157 @@ def build_home(live):
             "Pitches, prices, facilities and how to get to the show.")
     n = len(live)
     sample_href = GH + "sample.html"
-    hero_img = "https://jskedge1.github.io/airshow-pages/camping-hub-img/hero-flyby.jpg"
 
-    if live:
+    nav = [("#campsites", "Campsites")]
+    if n >= 2:
+        nav.append(("#compare", "Compare"))
+    nav += [("#map", "Show map"), ("#new", "New to camping"), ("#owners", "For owners")]
+
+    if n:
+        stat = f'<b>{n}</b><span>Campsite{"s" if n != 1 else ""} listed for RIAT 2027</span>'
         chks = "".join(f'<button type="button" class="fchk" data-n="{k}" data-l="{e(lab)}" aria-pressed="false">{e(lab)}</button>'
                        for k, lab in (("hookup", "Electric hook up"), ("dogs", "Dogs welcome"), ("shuttle", "Shuttle to the show")))
-        finder = f"""<div class="finder" role="group" aria-label="Find your campsite"><span class="windbreak"></span><div class="fin">
-        <div class="ff"><label for="fArea">Where to stay</label>
-          <select id="fArea"><option value="all">All areas</option><option value="boscombe">Near MOD Boscombe Down</option><option value="fairford">Around Fairford</option></select></div>
-        <div class="ff"><label for="fKind">What you are bringing</label>
-          <select id="fKind"><option value="">Anything</option><option value="tent">Tent</option><option value="van">Campervan</option><option value="caravan">Caravan or tourer</option><option value="glamping">Glamping, ready pitched</option></select></div>
-        <div class="ff need"><span class="lg">I also need</span><div class="fc-row">{chks}</div></div>
-        <button type="button" class="btn red" id="fGo">Show {n} campsite{"s" if n != 1 else ""} {icon("arrow")}</button>
-      </div></div>
-      <p class="runit">Run a campsite near the show? <a href="#list">List it here</a>.</p>"""
-        shown = ('<p class="shown" aria-live="polite"><span id="shownText"></span>'
-                 '<button type="button" id="shownClear" hidden>Clear my choices</button></p>')
+        finder = f"""<div class="finder" role="group" aria-label="Find your campsite">
+      <div class="ff"><label for="fArea">Where to stay</label>
+        <select id="fArea"><option value="all">All areas</option><option value="boscombe">Near MOD Boscombe Down</option><option value="fairford">Around Fairford</option></select></div>
+      <div class="ff"><label for="fKind">What you are bringing</label>
+        <select id="fKind"><option value="">Anything</option><option value="tent">Tent</option><option value="van">Campervan</option><option value="caravan">Caravan or tourer</option><option value="glamping">Glamping, ready pitched</option></select></div>
+      <div class="ff need"><span class="lg">I also need</span><div class="fc-row">{chks}</div></div>
+    </div>
+    <p class="shown" aria-live="polite"><span id="shownText"></span><button type="button" id="shownClear" hidden>Clear my choices</button></p>"""
     else:
-        finder = f"""<div class="finder soon"><span class="windbreak"></span><div class="fin">
-        <p><b>Campsites are being added</b>I am adding campsites as owners get in touch, so check back as the list grows.</p>
-        <a class="btn red" href="#list">List your campsite {icon("arrow")}</a>
-        <a class="btn teal" href="{OFFICIAL_CAMPING}" target="_blank" rel="noopener">Official RIAT camping</a>
-      </div></div>"""
-        shown = ""
+        stat = '<b>2027</b><span>The first Air Tattoo at Boscombe Down</span>'
+        finder = ""
 
-    when = "16 to 18 July 2027 at MOD Boscombe Down. " + (f"{n} campsite{'s' if n != 1 else ''} listed." if n else "Listings are opening now.")
-    menu_items = [("campsites", "Campsites")]
+    compare = ""
     if n >= 2:
-        menu_items.append(("compare", "Compare"))
-    menu_items += [("map", "Show map"), ("list", "List your campsite")]
-
-    compare_panel = ""
-    if n >= 2:
-        compare_panel = f"""<section class="panel" id="compare" aria-label="Compare the campsites">
-  <div class="wrap"><div class="sheet">
-    {sign("c-red", "cols", "Compare the campsites", "Side by side")}
-    <div class="sheet-in"><p class="intro">Every campsite on one board, so you can see what each one has. Your choices in the finder work here too.<span class="swipe"> Swipe sideways to see it all.</span></p></div>
+        compare = f"""<section class="sec tint" id="compare" aria-label="Compare the campsites">
+  <div class="wrap">
+    {sec_head("Side by side", "Compare The Campsites", "Every campsite in one table, so you can see what each one has. Your choices above work here too.")}
+    <p class="swipe" style="margin:-24px 0 16px">Swipe sideways to see it all.</p>
     {compare_board(live)}
-  </div></div>
+  </div>
 </section>"""
 
-    body = f"""{head(h_title, desc, HOME_CSS, SITE + HOME_WIX if HOME_WIX else "")}
+    body = f"""{head(h_title, desc, "", SITE + HOME_WIX if HOME_WIX else "")}
 {top_bar()}
+{header(IMG + "hero-flyby.jpg", nav, "RIAT Camping", [("RIAT", SITE + RIAT_WIX, "_top"), ("Camping", "", "")], button=("#list", "List your campsite"))}
 {site_strip(live, "home")}
-<header class="hero" style="background-image:url('{hero_img}')">
-  <div class="wrap hero-in">
-    <p class="crumb"><a href="{SITE}{RIAT_WIX}" target="_top">Royal International Air Tattoo</a><i>/</i>Camping</p>
-    <span class="new">RIAT 2027</span>
-    <h1>Camping for the Air Tattoo <em>near Boscombe Down</em></h1>
-    <p class="lead">From 2027 the Air Tattoo moves to MOD Boscombe Down, and a lot of visitors will be looking for somewhere to pitch up nearby. I list the campsites around the new showground here, plus the ones still running around Fairford.</p>
-    <p class="when">{e(when)}</p>
-    {finder}
-  </div>
-  <div class="scene">{camp_scene("light")}</div>
-</header>
-{section_menu(menu_items)}
 <main>
-<section class="panel" id="campsites" aria-label="Campsites">
-  <div class="wrap">
-    <div class="sheet">
-      {sign("c-green", "tent", "Campsites for RIAT 2027", "All areas", "areaLab")}
-      <div class="sheet-in">
-        <p class="intro">Every campsite has its own page with pitch sizes and prices, facilities, rules and the best way to the showground. Distances are as the crow flies from the airfield.</p>
-        {shown}
-        <div class="cards">{"".join(cards)}<p class="nomatch"><b>No campsites match all of those yet.</b> Try taking one off, or <button type="button" class="btn line" id="noClear" style="padding:8px 12px;margin-left:6px">clear my choices</button></p></div>
+<section class="sec" id="about" aria-label="Camping for the Air Tattoo">
+  <div class="wrap about">
+    <div class="ab-ph"><img src="{IMG}pitch-spot.jpg" alt="A pitch on flat grass with a tent, flag pole, solar panel and camera tripods inside striped windbreaks" decoding="async">
+      <div class="statbox">{icon("tent")}{stat}</div></div>
+    <div>
+      <span class="kick">RIAT 2027</span>
+      <h2 class="h">Camping For The Air Tattoo Near Boscombe Down</h2>
+      <p class="lede">From 2027 the Air Tattoo moves to MOD Boscombe Down, and a lot of visitors will be looking for somewhere to pitch up nearby. I list the campsites around the new showground here, plus the ones still running around Fairford.</p>
+      <div class="feat">
+        <div><h3><i>{icon("chev")}</i>Pitches and prices</h3><p>Pitch sizes and what a night costs, for tents, campervans, tourers and glamping.</p></div>
+        <div><h3><i>{icon("chev")}</i>Facilities</h3><p>Showers, hook ups, food and the site rules, so there are no surprises.</p></div>
+        <div><h3><i>{icon("chev")}</i>Getting to the show</h3><p>How far each site is from the airfield, and the best way in.</p></div>
+        <div><h3><i>{icon("chev")}</i>Spaces</h3><p>See which sites have space, which are filling up and which are full.</p></div>
       </div>
-    </div>
-    <div class="notice">
-      <div class="nh"><span>Good to know</span><b>The official RIAT campsite</b></div>
-      <div class="nb"><p>RIAT has its own campsite beside the airfield at Boscombe Down, and rollover bookings get first pick. The campsites on this page are run independently by local owners.</p>
-      <a class="btn teal" href="{OFFICIAL_CAMPING}" target="_blank" rel="noopener">Official camping {icon("arrow")}</a></div>
-    </div>
-    <div class="newto">
-      <div class="nt-card"><span class="badge">{icon("tent")}</span>
-        <h2>New to camping at an airshow?</h2>
-        <p>My first airshow camping trip was RIAT in 2014, and I got plenty wrong. My camping guides are everything I wish someone had told me, from where to pitch to what to pack.</p>
-        <div class="btns"><a class="btn red" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read the camping guides</a><a class="btn line" href="{SITE}/build-your-kit-calculator?list=camping" target="_top">Camping kit calculator</a></div>
-        <p class="by">Jack Skedge</p>
-      </div>
-      <figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/pitch-spot.jpg" alt="A pitch on flat grass with a tent, flag pole, solar panel and camera tripods inside striped windbreaks" loading="lazy" decoding="async"><figcaption>Flat ground, windbreaks up and cameras facing the display line</figcaption></figure>
+      <div class="btns"><a class="btn or" href="#campsites">See the campsites</a><a class="btn nv" href="#list">List your campsite</a></div>
     </div>
   </div>
 </section>
-{compare_panel}
-<section class="panel" id="map" aria-label="Show map">
-  <div class="wrap"><div class="sheet">
-    {sign("c-sky", "sign", "On the show map", "5 and 10 mile rings")}
-    <div class="sheet-in">
-      <p class="intro">Each tent is a campsite. Tap one to open its page. The rings are 5 and 10 miles from the airfield, as the crow flies.</p>
-      <div class="maps">
-        <div class="mapbox" style="--c:var(--sky)"><header><h3>Near Boscombe Down</h3><span>RIAT from 2027</span></header><div class="mb"><p>{e(AREAS["boscombe"]["blurb"])}</p>{ring_map("boscombe", live)}</div></div>
-        <div class="mapbox" style="--c:var(--purple)"><header><h3>Around Fairford</h3><span>RIAT until 2026</span></header><div class="mb"><p>{e(AREAS["fairford"]["blurb"])}</p>{ring_map("fairford", live)}</div></div>
-      </div>
-    </div>
-  </div></div>
+
+<section class="sec tint" id="campsites" aria-label="Campsites">
+  <div class="wrap">
+    {sec_head("Where to stay", "Campsites For RIAT 2027", "Every campsite has its own page. Distances are as the crow flies from the airfield.")}
+    {finder}
+    <div class="cards">{"".join(cards)}<p class="nomatch"><b>No campsites match all of those yet.</b> Try taking one off.<button type="button" id="noClear">Clear my choices</button></p></div>
+  </div>
 </section>
-<section class="panel" id="list" aria-label="List your campsite">
-  <div class="wrap"><div class="sheet">
-    {sign("c-purple", "plus", "List your campsite", "Free for campsite owners")}
-    <div class="sheet-in own">
-      <div class="txt">
-        <h3 class="big">Running a campsite near <em>Boscombe Down?</em></h3>
-        <p>If you are opening a campsite for the show, or you already run one in the area, I would love to hear from you. Still running a campsite around Fairford? I want to work with you too.</p>
-        <div class="gets">
-          <div class="get" style="--c:var(--green)"><i>{icon("tent")}</i><div><b>A listing on the guide</b><span>Your own page on the RIAT camping pages</span></div></div>
-          <div class="get" style="--c:var(--sky)"><i>{icon("sign")}</i><div><b>On the show map</b><span>Distance to the show and how to get in</span></div></div>
-          <div class="get" style="--c:var(--orange)"><i>{icon("fire")}</i><div><b>Seen by people planning</b><span>Families, photographers and first timers</span></div></div>
-          <div class="get" style="--c:var(--pink)"><i>{icon("share")}</i><div><b>Shared on our socials</b><span>Over 12,000 airshow followers</span></div></div>
-        </div>
-        <div class="who">
-          <div style="--c:var(--navy)">{icon("tent")}<p><b>Opening a new site</b><span>Setting up a field for show week? Tell me early.</span></p></div>
-          <div style="--c:var(--purple)">{icon("caravan")}<p><b>Already running one</b><span>Caravan park, farm site or glamping nearby.</span></p></div>
-          <div style="--c:var(--red)">{icon("van")}<p><b>Campervans and tourers</b><span>Hardstanding or hook ups? Visitors ask for these.</span></p></div>
-        </div>
-        <blockquote class="say">I would like to work with you and add your site to the website.<cite>Jack Skedge, Founder and Managing Editor</cite></blockquote>
-      </div>
-      <div class="form">
-        <div class="fh"><i>{icon("list")}</i><div><b>Tell me about your campsite</b><span>This writes an email to me. Nothing is sent until you press send.</span></div></div>
-        <form id="listForm" novalidate>
-          <div class="fld"><label for="lf-campsite">Campsite name <i>*</i></label><input type="text" id="lf-campsite" name="campsite" autocomplete="organization" required></div>
-          <div class="fld"><label for="lf-owner">Your name <i>*</i></label><input type="text" id="lf-owner" name="owner" autocomplete="name" required></div>
-          <div class="fld"><label for="lf-email">Your email <i>*</i></label><input type="email" id="lf-email" name="email" autocomplete="email" required></div>
-          <div class="fld"><label for="lf-phone">Phone</label><input type="tel" id="lf-phone" name="phone" autocomplete="tel"></div>
-          <div class="fld"><label for="lf-area">Nearest to</label><select id="lf-area" name="area"><option>MOD Boscombe Down</option><option>Fairford</option></select></div>
-          <div class="fld"><label for="lf-kind">Type of site</label><select id="lf-kind" name="kind"><option>New site for show week</option><option>Caravan park</option><option>Farm site</option><option>Glamping</option><option>Campervans and tourers</option><option>Something else</option></select></div>
-          <fieldset class="fld wide"><legend>Pitches you offer</legend><div class="ticks">
-            <label><input type="checkbox" name="pitch" value="Tents">Tents</label>
-            <label><input type="checkbox" name="pitch" value="Campervans">Campervans</label>
-            <label><input type="checkbox" name="pitch" value="Caravans and tourers">Caravans and tourers</label>
-            <label><input type="checkbox" name="pitch" value="Electric hook up">Electric hook up</label>
-            <label><input type="checkbox" name="pitch" value="Hardstanding">Hardstanding</label>
-            <label><input type="checkbox" name="pitch" value="Glamping">Glamping</label>
-          </div></fieldset>
-          <div class="fld"><label for="lf-dates">Dates open for show week</label><input type="text" id="lf-dates" name="dates" placeholder="For example 14 to 19 July 2027"></div>
-          <div class="fld"><label for="lf-web">Website or Facebook page</label><input type="text" id="lf-web" name="web" autocomplete="url"></div>
-          <div class="fld wide"><label for="lf-more">Anything else you would like to tell me</label><textarea id="lf-more" name="more"></textarea></div>
-          <p class="err" role="alert">Please add your campsite name, your name and an email address I can reply to.</p>
-          <div class="go"><button class="btn purple" type="submit">Write my email {icon("arrow")}</button>
-          <small>Prefer to email? I am at <a href="{mailto()}">{CONTACT}</a>. You can also <a href="{sample_href}" target="_blank" rel="noopener">see a sample campsite page</a> first.</small></div>
-        </form>
-        <div class="made" id="made" aria-live="polite">
-          <b>Your email is ready</b>
-          <p>Your email app should open with this filled in. If it doesn't, copy it and send it to {CONTACT}.</p>
-          <textarea id="madeText" readonly aria-label="Your email, ready to copy"></textarea>
-          <div class="acts"><a class="btn navy" id="madeOpen" href="{mailto()}">{icon("mail")}Open in my email</a><button class="btn line" type="button" id="madeCopy">Copy the email</button></div>
-        </div>
+{compare}
+<section class="mapband" id="map" aria-label="Show map">
+  <div class="wrap">
+    {sec_head("On the show map", "How Far From The Airfield", "Each tent is a campsite. Tap one to open its page. The rings are 5 and 10 miles from the airfield, as the crow flies.", mid=True)}
+    <div class="maps">
+      <div class="mapbox"><h3>Near Boscombe Down</h3><p>RIAT from 2027, just south east of Amesbury.</p>{ring_map("boscombe", live)}</div>
+      <div class="mapbox"><h3>Around Fairford</h3><p>RIAT until 2026, on the edge of the Cotswolds.</p>{ring_map("fairford", live)}</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="new" aria-label="New to camping">
+  <div class="wrap offer">
+    <div>
+      <span class="kick">Plan your trip</span>
+      <h2 class="h">New To Camping At An Airshow?</h2>
+      <p class="lede">My first airshow camping trip was RIAT in 2014, and I got plenty wrong. My camping guides are everything I wish someone had told me, from where to pitch to what to pack.</p>
+      <div class="minis">
+        <div class="mini">{icon("tent")}<h3>Camping guides</h3><p>Where to camp, pitching up and staying comfortable.</p><a class="more" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read the guides</a></div>
+        <div class="mini">{icon("list")}<h3>Kit calculator</h3><p>Tick your tent, beds and cooking kit and see the cost.</p><a class="more" href="{SITE}/build-your-kit-calculator?list=camping" target="_top">Open the calculator</a></div>
       </div>
     </div>
-  </div></div>
+    <div class="pc">
+      <div class="pc-card"><span class="flag">Official</span><h3>The RIAT campsite</h3>
+        <p class="big">2027<small>at Boscombe Down</small></p>
+        {chev_list(["Beside the airfield", "Run by RIAT, not by local owners", "Rollover bookings get first pick", "Then the waitlist, then general sale", "Details on the Air Tattoo website"])}
+        <a class="btn or inv" href="{OFFICIAL_CAMPING}" target="_blank" rel="noopener">Official camping</a>
+        <p class="fine">The campsites on this page are run independently.</p>
+      </div>
+      <img src="{IMG}field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" loading="lazy" decoding="async">
+    </div>
+  </div>
+</section>
+
+<section class="band" id="owners" aria-label="For campsite owners" style="background-image:url('{IMG}tents-night.jpg')">
+  <div class="wrap">
+    <span class="kick">Campsite owners</span>
+    <h2 class="h">Running A Campsite Near Boscombe Down?</h2>
+    <p class="lede">If you are opening a campsite for the show, or you already run one in the area, I would love to hear from you. Still running a campsite around Fairford? I want to work with you too. This is what you get, free of charge.</p>
+    <div class="steps">
+      <div class="step"><span class="no">01</span>{icon("tent")}<h3>A listing on the guide</h3><p>Your own page on the RIAT camping pages.</p></div>
+      <div class="step"><span class="no">02</span>{icon("sign")}<h3>On the show map</h3><p>Distance to the show and how to get in.</p></div>
+      <div class="step"><span class="no">03</span>{icon("fire")}<h3>Seen by people planning</h3><p>Families, photographers and first timers.</p></div>
+      <div class="step"><span class="no">04</span>{icon("share")}<h3>Shared on our socials</h3><p>Over 12,000 airshow followers.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="list" aria-label="List your campsite">
+  <div class="formrow">
+    <img src="{IMG}pitch-windbreaks.jpg" alt="A pitch circled by striped windbreaks with a flag" loading="lazy" decoding="async">
+    <div class="fpanel">
+      <h2>Tell Me About Your Campsite</h2>
+      <p>This writes an email to me with your answers filled in. Nothing is sent until you press send in your own email.</p>
+      <form id="listForm" novalidate>
+        <div class="fld"><label for="lf-campsite">Campsite name <i>*</i></label><input type="text" id="lf-campsite" name="campsite" autocomplete="organization" required></div>
+        <div class="fld"><label for="lf-owner">Your name <i>*</i></label><input type="text" id="lf-owner" name="owner" autocomplete="name" required></div>
+        <div class="fld"><label for="lf-email">Your email <i>*</i></label><input type="email" id="lf-email" name="email" autocomplete="email" required></div>
+        <div class="fld"><label for="lf-phone">Phone</label><input type="tel" id="lf-phone" name="phone" autocomplete="tel"></div>
+        <div class="fld"><label for="lf-area">Nearest to</label><select id="lf-area" name="area"><option>MOD Boscombe Down</option><option>Fairford</option></select></div>
+        <div class="fld"><label for="lf-kind">Type of site</label><select id="lf-kind" name="kind"><option>New site for show week</option><option>Caravan park</option><option>Farm site</option><option>Glamping</option><option>Campervans and tourers</option><option>Something else</option></select></div>
+        <fieldset class="fld wide"><legend>Pitches you offer</legend><div class="ticks">
+          <label><input type="checkbox" name="pitch" value="Tents">Tents</label>
+          <label><input type="checkbox" name="pitch" value="Campervans">Campervans</label>
+          <label><input type="checkbox" name="pitch" value="Caravans and tourers">Caravans and tourers</label>
+          <label><input type="checkbox" name="pitch" value="Electric hook up">Electric hook up</label>
+          <label><input type="checkbox" name="pitch" value="Hardstanding">Hardstanding</label>
+          <label><input type="checkbox" name="pitch" value="Glamping">Glamping</label>
+        </div></fieldset>
+        <div class="fld"><label for="lf-dates">Dates open for show week</label><input type="text" id="lf-dates" name="dates" placeholder="14 to 19 July 2027"></div>
+        <div class="fld"><label for="lf-web">Website or Facebook page</label><input type="text" id="lf-web" name="web" autocomplete="url"></div>
+        <div class="fld wide"><label for="lf-more">Anything else you would like to tell me</label><textarea id="lf-more" name="more"></textarea></div>
+        <p class="err" role="alert">Please add your campsite name, your name and an email address I can reply to.</p>
+        <div class="go"><button class="btn or inv" type="submit">Write my email</button>
+        <small>Prefer to email? I am at <a href="{mailto()}">{CONTACT}</a>. You can also <a href="{sample_href}" target="_blank" rel="noopener">see a sample campsite page</a> first.</small></div>
+      </form>
+      <div class="made" id="made" aria-live="polite">
+        <b>Your email is ready</b>
+        <p>Your email app should open with this filled in. If it doesn't, copy it and send it to {CONTACT}.</p>
+        <textarea id="madeText" readonly aria-label="Your email, ready to copy"></textarea>
+        <div class="btns"><a class="btn or inv" id="madeOpen" href="{mailto()}">Open in my email</a><button class="btn wh" type="button" id="madeCopy">Copy the email</button></div>
+      </div>
+    </div>
+    <img src="{IMG}group-basecamp.jpg" alt="A big group base camp with windbreaks all the way along" loading="lazy" decoding="async">
+  </div>
 </section>
 </main>
-{guides()}
-{small_print()}
+{footer(live)}
 {HOME_JS.replace("__CONTACT__", CONTACT)}
 </body>
 </html>
@@ -1096,133 +1062,69 @@ def build_home(live):
 
 # ---------------------------------------------------------------- campsite page
 SITE_CSS = r"""
-.hero{position:relative;background:var(--navy) center/cover no-repeat;color:#fff}
-.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,26,39,.94) 0%,rgba(19,41,60,.8) 48%,rgba(19,41,60,.28) 100%)}
-.hero-in{position:relative;padding-top:44px}
-.crumb{font:500 15px/1.4 "Barlow",sans-serif;color:#C9D6E0;margin-bottom:14px}
-.crumb a{color:#fff;text-decoration:none;border-bottom:2px solid var(--teal)}
-.crumb i{font-style:normal;margin:0 8px;color:var(--teal)}
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.tagp{display:inline-flex;align-items:center;font:700 15px/1 "Barlow",sans-serif;padding:8px 11px;background:var(--purple);color:#fff}
-.hero h1{font:800 clamp(40px,6.2vw,74px)/.98 "Barlow Condensed","Barlow",sans-serif;max-width:16ch}
-.hero .kindl{font:700 clamp(18px,2.2vw,22px)/1.3 "Barlow",sans-serif;color:var(--teal);margin-top:10px}
-.hero .lead{margin-top:12px;max-width:58ch;color:#E9EFF4;font-size:18px;line-height:28px}
-.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:64px;position:relative;top:44px}
-.tile{position:relative;text-align:center;padding:42px 16px 20px;background:var(--c);color:#fff;border-bottom:6px solid rgba(0,0,0,.24);box-shadow:0 16px 30px -18px rgba(11,26,39,.6)}
-.tile i{position:absolute;top:-32px;left:50%;margin-left:-32px;width:64px;height:64px;border-radius:50%;background:#fff;border:7px solid var(--c);display:grid;place-items:center;color:var(--navy)}
-.tile i svg{width:26px;height:26px}
-.tile b{display:block;font:800 25px/1.1 "Barlow Condensed",sans-serif}
-.tile span{display:block;font:600 17px/1.3 "Barlow",sans-serif;margin-top:4px}
-.tile.dark{color:var(--navy)}
-.under{padding:64px 0 16px;font-size:16px}
-.under b{color:var(--teal-ink)}
-
-.about{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:32px;align-items:start}
-.about .txt p+p{margin-top:14px}
-.owner{margin-top:22px;background:var(--navy);color:#fff;padding:20px 22px;font:600 19px/1.4 "Barlow",sans-serif;border-left:6px solid var(--teal)}
-.owner cite{display:block;margin-top:8px;font:600 15px/1.3 "Barlow",sans-serif;font-style:normal;color:var(--teal)}
-.facts{margin-top:22px;border:1px solid var(--line)}
-.facts div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:11px 14px;border-top:1px solid var(--line)}
-.facts div:first-child{border-top:0}
-.facts dt{color:var(--soft)}
-.facts dd{font-weight:600;color:var(--navy)}
-.gal{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
-.gal figure{grid-column:span 3}
-.gal figure:first-child{grid-column:1/-1}
-.gal.odd figure:nth-last-child(-n+3){grid-column:span 2}
-.gal img{width:100%;aspect-ratio:4/3;object-fit:cover}
-.gal figure:first-child img{aspect-ratio:16/9}
-.gal figcaption{font:500 14px/1.35 "Barlow",sans-serif;color:var(--soft);margin-top:4px}
-
-.pitches{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
-.pitch{border:1px solid var(--line);background:#fff;display:flex;flex-direction:column}
-.pitch header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;color:#fff;background:var(--c)}
-.pitch header i{width:40px;height:40px;border-radius:50%;background:#fff;color:var(--navy);display:grid;place-items:center}
-.pitch header i svg{width:21px;height:21px}
-.pitch h3{font:700 19px/1.15 "Barlow",sans-serif}
-.pitch.k-tent{--c:var(--green-d)}.pitch.k-van{--c:var(--sky)}.pitch.k-caravan{--c:var(--purple)}.pitch.k-glamping{--c:var(--orange)}
-.pitch.k-tent,.pitch.k-van,.pitch.k-caravan,.pitch.k-glamping{background:#fff}
-.pitch.k-van header,.pitch.k-glamping header{color:var(--navy)}
-.pitch .pp{padding:14px 16px 4px;font:800 44px/1 "Barlow Condensed",sans-serif;color:var(--navy)}
-.pitch .pp small{font:600 16px/1 "Barlow",sans-serif;color:var(--soft);margin-left:8px}
-.pitch dl{padding:8px 16px 16px;display:grid;gap:0;font-size:16px;line-height:23px}
-.pitch dl div{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px;border-top:1px solid var(--line);padding:7px 0}
-.pitch dt{color:var(--soft)}
-.pitch dd{font-weight:600}
-.dates{margin-top:24px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:var(--navy);color:#fff}
-.dates div{padding:14px 16px;border-left:1px solid rgba(255,255,255,.14)}
+.prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px}
+.price{position:relative;background:var(--navy);color:#fff;padding:38px 32px 30px}
+.price .flag{position:absolute;top:0;right:0;background:var(--or);color:#fff;font-size:14px;padding:7px 12px 5px}
+.price h3{color:#fff;font-size:21px;font-weight:600;padding-right:70px}
+.price .big{font:700 42px/1 "Overpass",sans-serif;margin-top:14px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.2)}
+.price .big small{font-size:15px;font-weight:400;color:var(--or-l);margin-left:5px}
+.price .chev{margin-bottom:0}
+.dates{margin-top:34px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line);background:#fff}
+.dates div{padding:20px 20px 16px;border-left:1px solid var(--line)}
 .dates div:first-child{border-left:0}
-.dates dt{font:600 15px/1.2 "Barlow",sans-serif;color:var(--amber)}
-.dates dd{font:700 18px/1.25 "Barlow",sans-serif;margin-top:4px}
+.dates dt{font:600 13px/1.2 "Overpass",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--or)}
+.dates dd{font-weight:600;font-size:18px;line-height:1.3;color:var(--ink);margin-top:8px}
 
-.facs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.fg{background:#fff;border:1px solid var(--line);border-top:6px solid var(--c)}
-.fg h3{font:700 19px/1.2 "Barlow",sans-serif;color:var(--navy);padding:13px 16px 11px}
+.facs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:36px}
+.fg h3{font-size:20px;font-weight:600;padding-bottom:12px;border-bottom:2px solid var(--ink);margin-bottom:6px}
 .fg ul{list-style:none}
-.fg li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;padding:9px 16px;border-top:1px solid var(--line);font-size:16px;line-height:22px}
-.fg li>svg{width:22px;height:22px;padding:3px}
-.fg li.y>svg{background:var(--green-d);color:#fff}
-.fg li.n{color:#7E8C97}
-.fg li.n>svg{color:#A9B6C0}
-.fg li b{display:block;font-weight:600}
-.fg li small{display:block;color:var(--soft);font-size:15px}
-.rules{margin-top:24px;border:1px solid var(--line)}
-.rules h3{background:var(--navy);color:#fff;font:700 19px/1.2 "Barlow",sans-serif;padding:13px 16px}
-.rules dl div{display:grid;grid-template-columns:170px minmax(0,1fr);gap:16px;padding:13px 16px;border-top:1px solid var(--line)}
-.rules dt{font-weight:700;color:var(--navy)}
+.fg li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;padding:9px 0;color:var(--ink);align-items:start}
+.fg li>svg{width:14px;height:14px;margin-top:6px;color:var(--or);stroke-width:3}
+.fg li.n{color:#93A0AA}
+.fg li.n>svg{color:#B4BEC6}
+.fg li b{display:block;font-weight:500}
+.fg li small{display:block;color:var(--body);font-size:14.5px;line-height:1.4}
+.rules{margin-top:56px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px}
+.rules div{padding:18px 0;border-top:1px solid var(--line)}
+.rules dt{font-weight:600;font-size:18px;color:var(--ink)}
+.rules dd{margin-top:4px}
 
-.getto{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:24px;align-items:start}
-.ways{border:1px solid var(--line)}
-.ways h3,.where h3{background:var(--black);color:#fff;font:700 18px/1.2 "Barlow",sans-serif;padding:13px 16px}
-.way{display:grid;grid-template-columns:132px minmax(0,1fr);border-top:1px solid var(--line);background:#fff}
-.way .wl{background:var(--c);color:#fff;font:700 16px/1.2 "Barlow",sans-serif;padding:14px 12px;display:flex;align-items:center;gap:8px}
-.way .wl svg{width:20px;height:20px;flex:none}
-.way.dark .wl{color:var(--navy)}
-.way p{padding:13px 16px;font-size:16px;line-height:24px}
-.where{background:var(--navy);color:#fff}
-.where .wb{padding:16px 18px 18px}
-.where .big{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;font:800 50px/1 "Barlow Condensed",sans-serif;color:var(--amber)}
-.where .big span{font:600 16px/1.2 "Barlow",sans-serif;color:#C9D6E0}
-.where address{font-style:normal;color:#E9EFF4;margin:8px 0 12px;font-size:16px;line-height:24px}
-.where .lk{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.where{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+.where .mapcard{background:var(--navy);padding:26px}
+.where .bigd{font:700 clamp(44px,6vw,64px)/1 "Overpass",sans-serif;color:var(--ink);margin-top:14px}
+.where .bigd small{display:block;font-size:17px;font-weight:400;color:var(--body);margin-top:10px;line-height:1.4}
+.where address{font-style:normal;margin:20px 0 26px;color:var(--ink);font-size:17px}
 
-.book{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
-.bookbox{border:1px solid var(--line)}
-.bookbox .fh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;background:var(--purple);color:#fff;padding:16px 20px}
-.bookbox .fh i{width:42px;height:42px;border-radius:50%;background:#fff;color:var(--purple);display:grid;place-items:center}
-.bookbox .fh i svg{width:22px;height:22px}
-.bookbox .fh b{display:block;font:700 21px/1.1 "Barlow",sans-serif}
-.bookbox .fh span{display:block;font-size:15px;margin-top:2px}
-.acts{padding:18px 20px 20px;display:grid;gap:10px}
-.acts .btn{justify-content:flex-start}
-.offer{background:var(--red);color:#fff;padding:18px 20px;font-weight:600}
-.offer b{display:block;font:800 26px/1 "Barlow Condensed",sans-serif;margin-bottom:6px}
-.terms{border:1px solid var(--line);margin-top:16px}
-.terms div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
-.terms div:first-child{border-top:0}
-.terms dt{color:var(--soft)}
-.terms dd{font-weight:600;color:var(--navy)}
-.more{padding:0 0 48px;margin-top:-16px}
-.more h2{font:800 28px/1.1 "Barlow",sans-serif;color:var(--navy);margin-bottom:14px}
-.more .ml{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
-.more a{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-left:6px solid var(--sky);padding:14px 16px;text-decoration:none;font-weight:700;color:var(--navy)}
-.more a span{display:block;font:500 15px/1.3 "Barlow",sans-serif;color:var(--soft)}
-.more a svg{width:20px;height:20px}
-.more a:hover{border-left-color:var(--purple);background:#F7F5FB}
+.bookpanel{background:var(--navy);color:#fff;padding:54px clamp(22px,4vw,56px) 56px;display:flex;flex-direction:column;justify-content:center}
+.bookpanel h2{color:#fff;font-size:30px;font-weight:600}
+.bookpanel>p{margin-top:8px;color:#D5DEE4}
+.bookpanel .acts{display:grid;gap:12px;margin-top:24px}
+.bookpanel .offerline{margin-top:24px;border-left:4px solid var(--or);padding-left:16px}
+.bookpanel .offerline b{display:block;color:var(--or-l);font:600 13px/1.2 "Overpass",sans-serif;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px}
+.terms{margin-top:24px;border-top:1px solid rgba(255,255,255,.2)}
+.terms div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.2)}
+.terms dt{color:#B8C6CF}
+.terms dd{font-weight:500}
+
+.gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.gal figure{position:relative;overflow:hidden;background:var(--navy)}
+.gal img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:44px 20px 16px;color:#fff;font-weight:500;background:linear-gradient(180deg,rgba(10,27,39,0),rgba(10,27,39,.9))}
 
 @media (max-width:1000px){
   .facs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dates{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .about,.getto,.book{grid-template-columns:1fr}
+  .dates div:nth-child(4){border-left:0}
+  .dates div:nth-child(n+4){border-top:1px solid var(--line)}
+  .where{grid-template-columns:1fr}
+  .gal{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:720px){
-  .hero-in{padding-top:30px}
-  .tiles{grid-template-columns:1fr;gap:46px;margin-top:56px;top:0;padding-bottom:28px}
-  .under{padding-top:16px}
-  .facs{grid-template-columns:1fr}
-  .dates{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .way{grid-template-columns:104px minmax(0,1fr)}
-  .rules dl div{grid-template-columns:1fr;gap:2px}
+  .facs,.rules,.gal{grid-template-columns:1fr}
+  .dates{grid-template-columns:1fr 1fr}
+  .dates div{border-left:0;border-top:1px solid var(--line)}
+  .dates div:nth-child(-n+2){border-top:0}
+  .dates div:nth-child(even){border-left:1px solid var(--line)}
 }
 """
 
@@ -1237,46 +1139,44 @@ def build_site(s, live):
     bk = s.get("booking", {})
     av = avail(s)
     tags = site_tags(s)
-    hero_bg = f" style=\"background-image:url('{e(photos[0]['src'])}')\"" if photos else ""
+    h, t = home_href()
 
-    # tiles under the heading
-    open_txt = " to ".join(x for x in (dates.get("open"), dates.get("close")) if x) or "Ask the campsite"
-    t1 = (f'<div class="tile" style="--c:var(--purple)"><i>{icon("pin")}</i><b>How far</b>'
-          f'<span>{e(d + " from " + a["label"]) if d else e(a["long"])}</span></div>')
-    t2 = f'<div class="tile" style="--c:var(--navy2)"><i>{icon("cal")}</i><b>When it is open</b><span>{e(open_txt)}</span></div>'
-    t3 = (f'<div class="tile dark" style="--c:var(--sky)"><i>{icon("tent")}</i><b>Pitches</b>'
-          f'<span>{"From " + e(fp[1]) + " " + e(fp[2]) if fp else "Ask the campsite for prices"}</span></div>')
+    def ph(i, fallback):
+        p = photos[i] if len(photos) > i else None
+        return (p["src"], p.get("alt", "")) if p else (IMG + fallback[0], fallback[1])
 
     # about
-    about = "".join(f"<p>{e(p)}</p>" for p in s.get("about", []) if p)
+    about = "".join(f'<p class="lede">{e(p)}</p>' for p in s.get("about", []) if p)
     ow = s.get("owner", {})
-    owner = (f'<blockquote class="owner">{e(ow["quote"])}<cite>{e(ow.get("name"))}{", " + e(ow.get("role")) if ow.get("role") else ""}</cite></blockquote>'
+    owner = (f'<blockquote class="quote">{e(ow["quote"])}<cite>{e(ow.get("name"))}{", " + e(ow.get("role")) if ow.get("role") else ""}</cite></blockquote>'
              if ow.get("quote") else "")
-    facts = []
-    if d:
-        facts.append(("Distance", f"{d} from {a['label']}"))
+    open_txt = " to ".join(x for x in (dates.get("open"), dates.get("close")) if x)
+    feats = []
+    if open_txt:
+        feats.append(("Open", open_txt))
     if ts.get("driveMins"):
-        facts.append(("Drive", ts["driveMins"]))
+        feats.append(("Drive to the show", ts["driveMins"]))
     if tags & set(KINDS):
-        facts.append(("Takes", ", ".join(KINDS[k] for k in KINDS if k in tags)))
-    if ts.get("shuttle"):
-        facts.append(("Shuttle", "Yes, see Getting to the show"))
+        feats.append(("Takes", ", ".join(KINDS[k] for k in KINDS if k in tags)))
     if av:
-        facts.append(("Spaces", av[0]))
-    facts_html = ('<dl class="facts">' + "".join(f"<div><dt>{e(k)}</dt><dd>{e(v)}</dd></div>" for k, v in facts) + "</dl>") if facts else ""
-    gal = "".join(f'<figure><img src="{e(p["src"])}" alt="{e(p.get("alt"))}" loading="lazy" decoding="async">'
-                  f'{"<figcaption>" + e(p["caption"]) + "</figcaption>" if p.get("caption") else ""}</figure>'
-                  for p in photos[:6])
+        feats.append(("Spaces", av[0]))
+    elif fp:
+        feats.append(("Pitches", f"From {fp[1]} {fp[2]}"))
+    feat_html = "".join(f'<div><h3><i>{icon("chev")}</i>{e(k)}</h3><p>{e(v)}</p></div>' for k, v in feats[:4])
+    p0 = ph(0, ("field-sunny.jpg", "Pitches along the edge of a sunny camping field"))
+    if d:
+        num, unit = d.split(" ", 1)
+        stat = f'<b>{e(num)}</b><span>{e(unit)} from {e(a["label"])}</span>'
+    else:
+        stat = f'<b>2027</b><span>{e(a["long"])}</span>'
 
     # pitches
-    pitch_html = []
+    price_html = []
     for p in s.get("pitches", []):
         k = p.get("kind") if p.get("kind") in KINDS else "tent"
-        dl = "".join(f"<div><dt>{lab}</dt><dd>{e(p.get(key))}</dd></div>"
-                     for lab, key in (("Size", "size"), ("Includes", "includes"), ("Note", "note")) if p.get(key))
-        price = f'<p class="pp">{e(p.get("price"))}<small>{e(p.get("per"))}</small></p>' if p.get("price") else ""
-        pitch_html.append(f'<article class="pitch k-{k}"><header><i>{icon(k)}</i><h3>{e(p.get("name"))}</h3></header>'
-                          f'{price}<dl>{dl}</dl></article>')
+        price = f'<p class="big">{e(p.get("price"))}<small>{e(p.get("per"))}</small></p>' if p.get("price") else ""
+        price_html.append(f'<article class="price"><span class="flag">{e(KINDS[k])}</span><h3>{e(p.get("name"))}</h3>{price}'
+                          f'{chev_list([p.get("size"), p.get("includes"), p.get("note")])}</article>')
     date_rows = [("Opens", dates.get("open")), ("Closes", dates.get("close")), ("Minimum stay", dates.get("minNights")),
                  ("Arrive", dates.get("arrive")), ("Leave", dates.get("leave"))]
     dates_html = "".join(f"<div><dt>{k}</dt><dd>{e(v)}</dd></div>" for k, v in date_rows if v)
@@ -1284,70 +1184,74 @@ def build_site(s, live):
 
     # facilities and rules
     fac = s.get("facilities", {})
-    fcols = ["var(--sky)", "var(--green)", "var(--orange)", "var(--purple)"]
     groups = []
-    for (title, items), col in zip(FAC_GROUPS, fcols):
+    for title, items in FAC_GROUPS:
         lis = []
         for key, label in items:
             ok, note = fac_state(fac.get(key))
             if ok is None:
                 continue
             nt = f"<small>{e(note)}</small>" if note else ("<small>Not available</small>" if not ok else "")
-            lis.append(f'<li class="{"y" if ok else "n"}">{icon("tick" if ok else "cross")}<span><b>{e(label)}</b>{nt}</span></li>')
+            lis.append(f'<li class="{"y" if ok else "n"}">{icon("chev" if ok else "cross")}<span><b>{e(label)}</b>{nt}</span></li>')
         if lis:
-            groups.append(f'<div class="fg" style="--c:{col}"><h3>{e(title)}</h3><ul>{"".join(lis)}</ul></div>')
+            groups.append(f'<div class="fg"><h3>{e(title)}</h3><ul>{"".join(lis)}</ul></div>')
     gtk = "".join(f"<div><dt>{e(k)}</dt><dd>{e(v)}</dd></div>" for k, v in s.get("goodToKnow", []) if v)
-    rules = f'<div class="rules"><h3>Good to know</h3><dl>{gtk}</dl></div>' if gtk else ""
+    rules = f'<dl class="rules">{gtk}</dl>' if gtk else ""
 
-    # getting to the show: coloured rows like the transport status list
-    way_defs = [("driveMins", "car", "Driving", "var(--navy)", ""), ("shuttle", "bus", "Shuttle", "var(--sky)", " dark"),
-                ("walk", "walk", "Walking", "var(--green-d)", ""), ("taxi", "taxi", "Taxi", "var(--amber)", " dark"),
-                ("parking", "park", "Your car", "var(--purple)", "")]
-    ways = "".join(f'<div class="way{dk}" style="--c:{col}"><span class="wl">{icon(ic)}{lab}</span><p>{e(ts[key])}</p></div>'
-                   for key, ic, lab, col, dk in way_defs if ts.get(key))
-    ways = f'<div class="ways"><h3>Ways to the showground</h3>{ways}</div>' if ways else "<p>Travel details coming soon.</p>"
+    # getting to the show: numbered cards on a photo band
+    way_defs = [("driveMins", "car", "Driving"), ("shuttle", "bus", "Shuttle"), ("walk", "walk", "Walking"),
+                ("taxi", "taxi", "Taxi"), ("parking", "park", "Your car")]
+    ways = [(ic, lab, ts[key]) for key, ic, lab in way_defs if ts.get(key)]
+    steps = "".join(f'<div class="step"><span class="no">{i + 1:02d}</span>{icon(ic)}<h3>{lab}</h3><p>{e(txt)}</p></div>'
+                    for i, (ic, lab, txt) in enumerate(ways))
+    p1 = ph(1, ("car-pitches.jpg", ""))
+    band = (f'<div class="steps" style="--n:{min(len(ways), 5)}">{steps}</div>' if ways
+            else '<p class="lede">Travel details coming soon.</p>')
     lk = []
     if has_pos(s):
-        lk.append(f'<a class="btn sky" href="https://www.google.com/maps/dir/?api=1&amp;destination={s["lat"]},{s["lng"]}" target="_blank" rel="noopener">{icon("pin")}Directions</a>')
+        lk.append(f'<a class="btn or" href="https://www.google.com/maps/dir/?api=1&amp;destination={s["lat"]},{s["lng"]}" target="_blank" rel="noopener">Get directions</a>')
     if s.get("what3words"):
         w3 = e(s["what3words"].lstrip("/"))
-        lk.append(f'<a class="btn ghost" href="https://what3words.com/{w3}" target="_blank" rel="noopener">///{w3}</a>')
+        lk.append(f'<a class="btn nv" href="https://what3words.com/{w3}" target="_blank" rel="noopener">///{w3}</a>')
     addr = ", ".join(x for x in (s.get("address"), s.get("postcode")) if x)
-    big = f'<p class="big">{e(d)}<span>from {e(a["label"])}, as the crow flies</span></p>' if d else ""
-    where = (f'<div class="where"><h3>Where it is</h3><div class="wb">{big}<address>{e(addr)}</address>'
-             f'<div class="lk">{"".join(lk)}</div>{ring_map(s["area"], [s], s["slug"])}</div></div>')
+    bigd = f'<p class="bigd">{e(d)}<small>from {e(a["label"])}, as the crow flies</small></p>' if d else ""
 
     # booking
     acts = []
-    if av and av[1] == "av-full":
-        acts.append('<p><b>Fully booked for show week.</b> It is still worth asking the campsite about cancellations.</p>')
     if bk.get("url"):
-        acts.append(f'<a class="btn red" href="{e(bk["url"])}" target="_blank" rel="noopener">{icon("link")}Book on the campsite website</a>')
+        acts.append(f'<a class="btn or inv" href="{e(bk["url"])}" target="_blank" rel="noopener">Book on the campsite website</a>')
     if bk.get("phone"):
         tel = "".join(ch for ch in bk["phone"] if ch.isdigit() or ch == "+")
-        acts.append(f'<a class="btn navy" href="tel:{e(tel)}">{icon("phone")}Call {e(bk["phone"])}</a>')
+        acts.append(f'<a class="btn wh" href="tel:{e(tel)}">Call {e(bk["phone"])}</a>')
     if bk.get("email"):
-        acts.append(f'<a class="btn navy" href="mailto:{e(bk["email"])}?subject=RIAT%20camping%20booking">{icon("mail")}Email {e(bk["email"])}</a>')
+        acts.append(f'<a class="btn wh" href="mailto:{e(bk["email"])}?subject=RIAT%20camping%20booking">Email {e(bk["email"])}</a>')
     if s.get("website") and s.get("website") != bk.get("url"):
-        acts.append(f'<a class="btn line" href="{e(s["website"])}" target="_blank" rel="noopener">{icon("link")}Campsite website</a>')
+        acts.append(f'<a class="btn wh" href="{e(s["website"])}" target="_blank" rel="noopener">Campsite website</a>')
     for net in ("facebook", "instagram"):
         if s.get("socials", {}).get(net):
-            acts.append(f'<a class="btn line" href="{e(s["socials"][net])}" target="_blank" rel="noopener">{net.title()}</a>')
-    if not any("<a " in x for x in acts):
-        acts.append('<p>Booking details coming soon.</p>')
-    offer = f'<div class="offer"><b>Guide reader offer</b>{e(bk["offer"])}</div>' if bk.get("offer") else ""
+            acts.append(f'<a class="btn wh" href="{e(s["socials"][net])}" target="_blank" rel="noopener">{net.title()}</a>')
+    acts_html = f'<div class="acts">{"".join(acts)}</div>' if acts else '<p>Booking details coming soon.</p>'
+    full = '<p><b>Fully booked for show week.</b> It is still worth asking the campsite about cancellations.</p>' if av and av[1] == "av-full" else ""
+    offer = f'<p class="offerline"><b>Guide reader offer</b>{e(bk["offer"])}</p>' if bk.get("offer") else ""
     terms = "".join(f"<div><dt>{k}</dt><dd>{e(bk.get(key))}</dd></div>"
                     for k, key in (("Booking", "opens"), ("Payment", "deposit"), ("Cancellation", "cancellation")) if bk.get(key))
-    terms = f'<dl class="terms"{" style=margin-top:0" if not offer else ""}>{terms}</dl>' if terms else ""
+    terms = f'<dl class="terms">{terms}</dl>' if terms else ""
+    p2 = ph(2, ("bell-tents.jpg", "A row of white bell tents along a campsite track"))
+    p3 = ph(3, ("lit-pitches.jpg", "Pitches lit up with coloured light poles at dusk"))
+
+    # photos
+    gal = "".join(f'<figure><img src="{e(p["src"])}" alt="{e(p.get("alt"))}" loading="lazy" decoding="async">'
+                  f'{"<figcaption>" + e(p["caption"]) + "</figcaption>" if p.get("caption") else ""}</figure>'
+                  for p in photos[:6])
+    gallery = (f'<section class="sec" id="photos" aria-label="Photos"><div class="wrap">{sec_head("Photos", "Around The Site")}'
+               f'<div class="gal">{gal}</div></div></section>') if len(photos) > 1 else ""
 
     others = [o for o in live if o["slug"] != s["slug"]]
     more = ""
     if others:
-        links = []
-        for o in sorted(others, key=lambda o: (o["area"] != s["area"], dist(o) or 99))[:6]:
-            href, tgt = page_href(o)
-            links.append(f'<a href="{e(href)}" target="{tgt}"><p>{e(o["name"])}<span>{e(dist_text(o))} from {e(AREAS[o["area"]]["label"])}</span></p>{icon("arrow")}</a>')
-        more = f'<section class="more"><div class="wrap"><h2>More campsites</h2><div class="ml">{"".join(links)}</div></div></section>'
+        cards = "".join(site_card(o) for o in sorted(others, key=lambda o: (o["area"] != s["area"], dist(o) or 99))[:3])
+        more = (f'<section class="sec tint" aria-label="More campsites"><div class="wrap">{sec_head("Keep looking", "More Campsites")}'
+                f'<div class="cards">{cards}</div></div></section>')
 
     title = f'{s["name"]}: camping for RIAT 2027 | The Big Guide to UK Airshows'
     if s["area"] == "fairford":
@@ -1355,76 +1259,80 @@ def build_site(s, live):
     desc = s.get("tagline") or f'{s["name"]}, a campsite {d} from {a["label"]}.'
     sample_bar = ('<div class="sample-bar">Sample page. This is not a real campsite: it shows owners what their listing will look like.</div>'
                   if s.get("sample") else "")
-    h, t = home_href()
-    checked = f'<b>Last checked</b> {e(s.get("checked"))}. ' if s.get("checked") else ""
-    menu_items = [("about", "About"), ("pitches", "Pitches and prices"), ("facilities", "Facilities"),
-                  ("getting-there", "Getting to the show"), ("book", "Book")]
+    checked = f'Last checked {e(s.get("checked"))}. ' if s.get("checked") else ""
+    nav = [("#about", "About"), ("#pitches", "Pitches and prices"), ("#facilities", "Facilities"), ("#getting-there", "Getting to the show")]
+    tagrow = f'<div class="tags"><span class="tagp">{e(a["long"])}</span>{avail_badge(s)}</div>'
+    last_tint = " tint" if others else ""
 
     body = f"""{head(title, desc, SITE_CSS, SITE + s["wixPath"] if s.get("wixPath") else "")}
 {sample_bar}
 {top_bar()}
+{header(p0[0] if photos else IMG + "hero-flyby.jpg", nav, s["name"], [("RIAT", SITE + RIAT_WIX, "_top"), ("Camping", h, t), (s["name"], "", "")], tags=tagrow, button=("#book", "Book"))}
 {site_strip(live if s in live else live + [s], s["slug"])}
-<header class="hero"{hero_bg}>
-  <div class="wrap hero-in">
-    <p class="crumb"><a href="{SITE}{RIAT_WIX}" target="_top">RIAT</a><i>/</i><a href="{e(h)}" target="{t}">RIAT camping</a><i>/</i>{e(a["name"])}</p>
-    <div class="tags"><span class="tagp">{e(a["long"])}</span>{avail_badge(s)}</div>
-    <h1>{e(s["name"])}</h1>
-    <p class="kindl">{e(s.get("kind"))}</p>
-    <p class="lead">{e(s.get("tagline"))}</p>
-    <div class="tiles">{t1}{t2}{t3}</div>
-  </div>
-</header>
-<div class="under"><div class="wrap"><p>{checked}Details come from the campsite, so please check prices and dates with them before you book.</p></div></div>
-{section_menu(menu_items)}
 <main>
-<section class="panel" id="about" aria-label="About the site">
-  <div class="wrap"><div class="sheet">
-    {sign("c-sky", "tent", "About the site", a["long"])}
-    <div class="sheet-in about"><div class="txt">{about}{owner}{facts_html}</div><div class="gal{" odd" if len(photos[:6]) >= 4 and len(photos[:6]) % 2 == 0 else ""}">{gal}</div></div>
-  </div></div>
-</section>
-<section class="panel" id="pitches" aria-label="Pitches and prices">
-  <div class="wrap"><div class="sheet">
-    {sign("c-green", "tag", "Pitches and prices", "Show week 2027")}
-    <div class="sheet-in">
-      <p class="intro">Prices are for show week 2027, as given by the campsite. I would check the latest when you book.</p>
-      <div class="pitches">{"".join(pitch_html) or "<p>Pitch details coming soon.</p>"}</div>
-      {dates_html}
+<section class="sec" id="about" aria-label="About the site">
+  <div class="wrap about">
+    <div class="ab-ph"><img src="{e(p0[0])}" alt="{e(p0[1])}" decoding="async"><div class="statbox">{icon("pin")}{stat}</div></div>
+    <div>
+      <span class="kick">{e(s.get("kind"))}</span>
+      <h2 class="h">About {e(s["name"])}</h2>
+      {"<p class=lede style=color:var(--ink);font-weight:500>" + e(s["tagline"]) + "</p>" if s.get("tagline") else ""}
+      {about}
+      <div class="feat">{feat_html}</div>
+      <div class="btns"><a class="btn or" href="#book">How to book</a><a class="btn nv" href="#getting-there">Getting to the show</a></div>
+      {owner}
     </div>
-  </div></div>
+  </div>
 </section>
-<section class="panel" id="facilities" aria-label="Facilities">
-  <div class="wrap"><div class="sheet">
-    {sign("c-purple", "drop", "Facilities", "On site in show week")}
-    <div class="sheet-in">
-      <div class="facs">{"".join(groups) or "<p>Facility details coming soon.</p>"}</div>
-      {rules}
+
+<section class="sec tint" id="pitches" aria-label="Pitches and prices">
+  <div class="wrap">
+    {sec_head("Show week 2027", "Pitches And Prices", "Prices are as given by the campsite. I would check the latest when you book.")}
+    <div class="prices">{"".join(price_html) or "<p>Pitch details coming soon.</p>"}</div>
+    {dates_html}
+  </div>
+</section>
+
+<section class="sec" id="facilities" aria-label="Facilities">
+  <div class="wrap">
+    {sec_head("On site in show week", "Facilities And Good To Know")}
+    <div class="facs">{"".join(groups) or "<p>Facility details coming soon.</p>"}</div>
+    {rules}
+  </div>
+</section>
+
+<section class="band" id="getting-there" aria-label="Getting to the show" style="background-image:url('{e(p1[0])}')">
+  <div class="wrap">
+    <span class="kick">From your pitch to the gate</span>
+    <h2 class="h">Getting To The Show</h2>
+    <p class="lede">How to get from your pitch to the showground at {e(a["label"])}. RIAT's own travel plan for 2027 is still to be announced, so I would check back nearer the show.</p>
+    {band}
+  </div>
+</section>
+
+<section class="sec" id="where" aria-label="Where it is">
+  <div class="wrap where">
+    <div class="mapcard">{ring_map(s["area"], [s], s["slug"])}</div>
+    <div><span class="kick">Where it is</span>{bigd}<address>{e(addr)}</address><div class="btns">{"".join(lk)}</div></div>
+  </div>
+</section>
+
+<section id="book" aria-label="Book">
+  <div class="formrow">
+    <img src="{e(p2[0])}" alt="{e(p2[1])}" loading="lazy" decoding="async">
+    <div class="bookpanel">
+      <h2>Book With {e(s["name"])}</h2>
+      <p>You book direct with the campsite. The guide does not take bookings or payments.</p>
+      {full}{acts_html}{offer}{terms}
     </div>
-  </div></div>
+    <img src="{e(p3[0])}" alt="{e(p3[1])}" loading="lazy" decoding="async">
+  </div>
 </section>
-<section class="panel" id="getting-there" aria-label="Getting to the show">
-  <div class="wrap"><div class="sheet">
-    {sign("c-red", "sign", "Getting to the show", a["label"])}
-    <div class="sheet-in">
-      <p class="intro">How to get from your pitch to the showground. RIAT's own travel plan for 2027 is still to be announced, so I would check back nearer the show.</p>
-      <div class="getto">{ways}{where}</div>
-    </div>
-  </div></div>
-</section>
-<section class="panel" id="book" aria-label="Book">
-  <div class="wrap"><div class="sheet">
-    {sign("c-amber", "cal", "Book your pitch", av[0] if av else "Direct with the campsite")}
-    <div class="sheet-in book">
-      <div class="bookbox"><div class="fh"><i>{icon("tent")}</i><div><b>Book with {e(s["name"])}</b><span>You book direct. The guide does not take bookings or payments.</span></div></div>
-      <div class="acts">{"".join(acts)}</div></div>
-      <div>{offer}{terms}</div>
-    </div>
-  </div></div>
-</section>
-</main>
+{gallery}
 {more}
-{guides()}
-{small_print()}
+</main>
+{footer(live, last_tint)}
+<div class="fbar" style="padding-top:0"><div class="wrap"><p>{checked}Details on this page come from {e(s["name"])}.</p></div></div>
 </body>
 </html>
 """
