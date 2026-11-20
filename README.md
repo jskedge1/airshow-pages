@@ -107,6 +107,9 @@ Each task has one job, so no two tasks change the same thing.
 - Weekly visitor facts check, Wednesdays 10:37: timings, tickets, costs, parking, trains, buses, taxis and accessible travel on the pages, bus route pages and the Clacton and Cosford train pages. Accommodation, food, bag rules and venue details on the first Wednesday of each month.
 - Weekly debug and fix, Sundays 07:13: script errors, pages that fail to load, phone overflow, dead links and Jack's page rules. Fills AdminChecks. Never changes facts.
 - Train to Eastbourne checks, 14:23 on the 12th, January to June 2027, then Mondays in July and August: the Eastbourne train page.
+- RIAT confirmed aircraft check, Thursdays 12:05 from February 2027: RIAT aircraft (AircraftParticipation rows with showSlug riat and the RIAT page's own list). The Morning show check never touches RIAT aircraft.
+
+Aircraft line-ups go live after every check (Jack, 20 Nov 2026). Whenever an aircraft check (the Morning show check's line-up job, weekly on Fridays and daily from March, or the Thursday RIAT check) adds, cancels or changes an aircraft, it publishes the Wix rows, updates the line-up built into the show page (the items in `var FALLBACK={type:"aircraftLineup",...}` in camping-layout/<show>.html, plus midlands-air-festival.html for Midlands, matched to each SW_SHOWS `event` by eventName), pushes to main, then opens the live GitHub Pages address to confirm the new aircraft are showing. The same applies when a line-up is updated by hand in a chat.
 Every task adds a row to AdminLog for each change. Pull with rebase before pushing, as several tasks push to this repository.
 
 ## Train and bus times (29 Oct 2026)
