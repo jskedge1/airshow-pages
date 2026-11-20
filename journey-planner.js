@@ -260,7 +260,7 @@
     southport: { name: 'Southport Air Show', page: 'southport-air-show', train: 'train-to-southport', dest: [53.6510, -3.0100], pc: 'PR8 1RY', time: '10:00',
       arr: [{ c: 'SOP', m: 10, how: 'walk', t: 'From Southport station it is about 10 minutes on foot to the seafront.' }] },
     blackpool: { name: 'Blackpool Air Show', page: 'blackpool-air-show', train: 'train-to-blackpool', dest: [53.8100, -3.0560], pc: 'FY1 4BJ', time: '10:00',
-      arr: [{ c: 'BPN', m: 25, how: 'walk', t: 'From Blackpool North it is about 15 minutes to the Tower and a bit further to Central Pier. The trams along the front are handy if you have little legs with you.' },
+      arr: [{ c: 'BPN', m: 25, how: 'walk', t: 'From Blackpool North it is about 15 minutes to the Tower and a bit further to Central Pier. On the 2026 show days the trams ran in two sections and did not stop at the Tower or Central Pier, so plan on walking this bit.' },
             { c: 'BPS', m: 20, how: 'walk', t: 'Blackpool South and Pleasure Beach get trains from Preston, hourly on Saturdays and every two hours on Sundays, then it is a walk or tram up the front.' }] },
     ayr: { name: 'International Ayr Show', page: 'international-ayr-show', train: 'train-to-ayr', dest: [55.4630, -4.6340], pc: 'KA7 2UP', time: '10:00',
       arr: [{ c: 'AYR', m: 20, how: 'walk', t: 'From Ayr station it is about 15 to 20 minutes on foot to the Low Green.' }] },
