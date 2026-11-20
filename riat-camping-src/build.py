@@ -283,7 +283,7 @@ IMG = "https://jskedge1.github.io/airshow-pages/camping-hub-img/"
 
 def camp_scene(mode="colour"):
     """A flat campsite skyline: pines, tents, windbreaks, a campervan and a caravan. Ground is the bottom edge.
-    Pass a colour such as "#0A1B27" as mode to draw it as a one colour silhouette."""
+    Pass a colour such as "#0B1A27" as mode to draw it as a one colour silhouette."""
     one = mode if mode.startswith("#") else None
     G = 120
 
@@ -372,23 +372,23 @@ def camp_scene(mode="colour"):
 
 
 CSS = r"""
-:root{--navy:#0E2433;--deep:#0A1B27;--or:#D9480F;--or-l:#FF7A3D;--ink:#10212C;--body:#56636D;--line:#E3E8EC;--soft:#F4F6F7;
+:root{--navy:#13293C;--deep:#0B1A27;--or:#D74949;--or-ink:#BF3636;--or-l:#32B4AF;--teal:#32B4AF;--teal-ink:#0E5F5B;--purple:#6950A1;--ink:#13293C;--body:#4F5D68;--line:#DDE3E8;--soft:#F2F4F5;
 --green:#1E8540;--amber:#F2B233;--red:#C93A3A}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 html,body{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
-body{font:400 16px/1.65 "Overpass",system-ui,sans-serif;color:var(--body);background:#fff;-webkit-font-smoothing:antialiased}
+body{font:400 17px/1.6 "Barlow",system-ui,sans-serif;color:var(--body);background:#fff;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 img{display:block;max-width:100%;pointer-events:none;user-select:none}
 [hidden]{display:none!important}
 .wrap{max-width:1188px;margin:0 auto;padding:0 24px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-h1,h2,h3{color:var(--ink);font-weight:700;line-height:1.12}
+h1,h2,h3{color:var(--ink);font-weight:700;line-height:1.1}
 a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--or-l);outline-offset:2px}
 section[id]{scroll-margin-top:20px}
 
-.kick{display:block;font:700 21px/1.25 "Overpass",sans-serif;color:var(--or)}
+.kick{display:block;font:700 21px/1.25 "Barlow",sans-serif;color:var(--or-ink)}
 .h{font-size:clamp(31px,4.3vw,46px);margin-top:8px}
 .band .kick,.mapband .kick{color:var(--or-l)}
 .lede{margin-top:18px;max-width:62ch}
@@ -398,15 +398,15 @@ section[id]{scroll-margin-top:20px}
 .sec-head.mid{margin-left:auto;margin-right:auto;text-align:center}
 .sec-head.mid .lede{margin-left:auto;margin-right:auto}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:700 17px/1 "Overpass",sans-serif;padding:18px 28px 15px;text-decoration:none;border:0;cursor:pointer;transition:background .2s,color .2s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:700 17px/1 "Barlow",sans-serif;padding:17px 28px;text-decoration:none;border:0;cursor:pointer;transition:background .2s,color .2s}
 .btn svg{width:16px;height:16px;flex:none}
 .btn.or{background:var(--or);color:#fff}.btn.or:hover{background:var(--navy)}
 .btn.nv{background:var(--navy);color:#fff}.btn.nv:hover{background:var(--or)}
 .on-dark .btn.or:hover,.btn.or.inv:hover{background:#fff;color:var(--navy)}
 .btn.wh{background:#fff;color:var(--navy)}.btn.wh:hover{background:var(--or);color:#fff}
 .btns{display:flex;flex-wrap:wrap;gap:14px}
-.more{display:inline-block;font:700 17px/1.2 "Overpass",sans-serif;color:var(--or);text-decoration:none;padding-bottom:3px;border-bottom:2px solid transparent}
-.more:hover{border-bottom-color:var(--or)}
+.more{display:inline-block;font:700 17px/1.2 "Barlow",sans-serif;color:var(--or-ink);text-decoration:none;padding-bottom:3px;border-bottom:2px solid transparent}
+.more:hover{border-bottom-color:var(--or-ink)}
 
 /* top bar and photo header */
 .top{background:var(--deep);color:#fff;font-size:14px}
@@ -418,9 +418,11 @@ section[id]{scroll-margin-top:20px}
 .hd{position:relative;color:#fff;background:var(--navy) center/cover no-repeat}
 .hd::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,27,39,.72),rgba(14,36,51,.62) 60%,rgba(14,36,51,.8))}
 .hd .wrap{position:relative}
-.nav{display:flex;align-items:center;gap:20px;min-height:84px;border-bottom:1px solid rgba(255,255,255,.22)}
-.logo{display:flex;align-items:center;gap:11px;text-decoration:none;font:700 25px/1 "Overpass",sans-serif;color:#fff;white-space:nowrap;margin-right:auto}
-.logo svg{width:34px;height:34px;color:var(--or-l)}
+.nav{display:flex;align-items:center;gap:20px;min-height:92px;border-bottom:1px solid rgba(255,255,255,.22)}
+.logo{display:flex;align-items:center;text-decoration:none;margin-right:auto;flex:none}
+.logo img{height:64px;width:auto;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.logo:hover img{transform:scale(1.04)}
+.ft .logo img{height:78px}
 .nav ul{list-style:none;display:flex;gap:4px;align-self:stretch}
 .nav li{display:flex}
 .nav li a{display:flex;align-items:center;padding:0 14px;font-weight:500;font-size:15px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
@@ -432,21 +434,21 @@ section[id]{scroll-margin-top:20px}
 .crumbs a:hover{color:var(--or-l)}
 .crumbs svg{width:14px;height:14px;color:var(--or-l)}
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.tagp{display:inline-flex;align-items:center;font:700 16px/1 "Overpass",sans-serif;padding:9px 12px 7px;background:rgba(255,255,255,.16);color:#fff}
+.tagp{display:inline-flex;align-items:center;font:700 16px/1 "Barlow",sans-serif;padding:8px 12px;background:var(--purple);color:#fff}
 
 /* the campsite strip: one link per campsite page */
 .strip{border-bottom:1px solid var(--line);background:#fff}
 .strip .wrap{display:flex;align-items:center;gap:6px 28px;overflow-x:auto;scrollbar-width:none}
 .strip .wrap::-webkit-scrollbar{display:none}
-.strip .lab{flex:none;font:700 17px/1 "Overpass",sans-serif;color:var(--or)}
-.st{position:relative;flex:none;display:inline-flex;align-items:center;gap:8px;padding:19px 0 16px;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
-.st:hover,.st.on{border-bottom-color:var(--or)}
+.strip .lab{flex:none;font:700 17px/1 "Barlow",sans-serif;color:var(--purple)}
+.st{position:relative;flex:none;display:inline-flex;align-items:center;gap:8px;padding:18px 0 15px;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
+.st:hover,.st.on{border-bottom-color:var(--teal)}
 .st small{font-weight:400;font-size:14px;color:var(--body)}
 .dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block}
 .dot.av-ok{background:var(--green)}.dot.av-mid{background:var(--amber)}.dot.av-full{background:var(--red)}
 
 /* availability */
-.av{display:inline-flex;align-items:center;gap:8px;font:700 16px/1 "Overpass",sans-serif;padding:9px 12px 7px}
+.av{display:inline-flex;align-items:center;gap:8px;font:700 16px/1 "Barlow",sans-serif;padding:8px 12px}
 .av::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
 .av-ok{background:var(--green);color:#fff}.av-mid{background:var(--amber);color:var(--ink)}.av-full{background:var(--red);color:#fff}
 
@@ -456,18 +458,18 @@ section[id]{scroll-margin-top:20px}
 .ab-ph img{width:100%;aspect-ratio:4/5;object-fit:cover}
 .statbox{position:absolute;left:0;top:0;width:208px;background:var(--navy);color:#fff;text-align:center;padding:30px 16px 26px}
 .statbox svg{width:52px;height:52px;color:var(--or-l);margin:0 auto 12px;display:block}
-.statbox b{display:block;font:700 44px/1 "Overpass",sans-serif}
+.statbox b{display:block;font:800 46px/1 "Barlow",sans-serif}
 .statbox b sup{font-size:22px;color:var(--or-l);margin-left:6px}
 .statbox span{display:block;margin-top:10px;font-size:16px;line-height:1.3}
 .feat{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:30px 0 36px}
-.feat>div{background:var(--soft);border-top:5px solid var(--or);padding:20px 20px 18px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
+.feat>div{background:var(--soft);border-top:5px solid var(--teal);padding:20px 20px 18px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
 .feat>div:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(10,27,39,.5)}
 .feat h3{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:600}
-.feat h3 i,.ticks2 li i{flex:none;width:20px;height:20px;border-radius:50%;background:var(--or);color:#fff;display:grid;place-items:center}
+.feat h3 i,.ticks2 li i{flex:none;width:20px;height:20px;border-radius:50%;background:var(--teal);color:var(--navy);display:grid;place-items:center}
 .feat h3 i svg,.ticks2 li i svg{width:11px;height:11px}
 .feat p{margin-top:10px;font-size:15.5px}
-.quote{margin-top:34px;border-left:4px solid var(--or);padding:4px 0 4px 20px;color:var(--ink);font-size:19px;line-height:1.5;font-weight:500}
-.quote cite{display:block;margin-top:8px;font-style:normal;font-size:15px;font-weight:600;color:var(--or)}
+.quote{margin-top:34px;border-left:4px solid var(--teal);padding:4px 0 4px 20px;color:var(--ink);font-size:19px;line-height:1.5;font-weight:500}
+.quote cite{display:block;margin-top:8px;font-style:normal;font-size:15px;font-weight:600;color:var(--or-ink)}
 
 /* photo band with numbered step cards */
 .band{position:relative;color:#fff;background:var(--navy) center/cover no-repeat;padding:100px 0 110px;text-align:center}
@@ -477,7 +479,7 @@ section[id]{scroll-margin-top:20px}
 .band .lede{color:#E6EDF1;margin-left:auto;margin-right:auto}
 .steps{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:36px;margin-top:76px}
 .step{position:relative;background:rgba(255,255,255,.1);padding:46px 18px 32px}
-.step .no{position:absolute;top:-30px;left:18px;width:60px;height:60px;border-radius:50%;background:var(--or);color:#fff;font:700 25px/1 "Overpass",sans-serif;display:grid;place-items:center;box-shadow:0 0 0 5px rgba(217,72,15,.32);padding-top:3px}
+.step .no{position:absolute;top:-30px;left:18px;width:60px;height:60px;border-radius:50%;background:var(--or);color:#fff;font:700 25px/1 "Barlow",sans-serif;display:grid;place-items:center;box-shadow:0 0 0 5px rgba(215,73,73,.32)}
 .step>svg{width:46px;height:46px;margin:0 auto 16px;display:block;stroke-width:1.4}
 .step h3{color:#fff;font-size:21px;font-weight:600}
 .step p{margin-top:8px;color:#E6EDF1;font-size:15.5px}
@@ -503,38 +505,38 @@ section[id]{scroll-margin-top:20px}
 .cc.plain h3{color:var(--ink)}
 .cc.plain p{color:var(--body)}
 .none{grid-column:1/-1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:22px;align-items:center;background:var(--soft);padding:28px 30px}
-.none>svg{width:46px;height:46px;color:var(--or)}
+.none>svg{width:46px;height:46px;color:var(--purple)}
 .none h3{font-size:21px;font-weight:600}
 .none p{margin-top:4px}
 .nomatch{display:none;grid-column:1/-1;background:var(--soft);padding:24px 28px;color:var(--ink)}
-.nomatch button,.shown button{font:700 16px/1.2 "Overpass",sans-serif;color:var(--or);background:none;border:0;border-bottom:2px solid var(--or);padding:0 0 3px;cursor:pointer;margin-left:10px}
+.nomatch button,.shown button{font:700 16px/1.2 "Barlow",sans-serif;color:var(--or-ink);background:none;border:0;border-bottom:2px solid var(--or);padding:0 0 3px;cursor:pointer;margin-left:10px}
 
 /* finder: a plain row of fields above the cards */
 .finder{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px 34px;align-items:end;padding:26px 30px 28px;background:var(--soft);margin-bottom:26px}
-.ff label,.ff .lg{display:block;font:700 18px/1.2 "Overpass",sans-serif;color:var(--ink);margin-bottom:6px}
-.ff select{width:100%;font:500 17px/1.3 "Overpass",sans-serif;color:var(--ink);padding:10px 2px 8px;background:transparent;border:0;border-bottom:1px solid #AEBBC4;border-radius:0}
+.ff label,.ff .lg{display:block;font:700 18px/1.2 "Barlow",sans-serif;color:var(--ink);margin-bottom:6px}
+.ff select{width:100%;font:500 17px/1.3 "Barlow",sans-serif;color:var(--ink);padding:10px 2px 8px;background:transparent;border:0;border-bottom:1px solid #AEBBC4;border-radius:0}
 .fc-row{display:flex;flex-wrap:wrap;gap:8px}
-.fchk{display:inline-flex;align-items:center;gap:9px;padding:11px 14px 9px;background:#fff;border:1px solid #C6D0D7;cursor:pointer;font:500 15px/1 "Overpass",sans-serif;color:var(--ink)}
-.fchk::before{content:"";width:14px;height:14px;border:2px solid #8FA1AF;flex:none;margin-top:-2px}
+.fchk{display:inline-flex;align-items:center;gap:9px;padding:10px 14px;background:#fff;border:1px solid #C6D0D7;cursor:pointer;font:500 15px/1 "Barlow",sans-serif;color:var(--ink)}
+.fchk::before{content:"";width:14px;height:14px;border:2px solid #8FA1AF;flex:none}
 .fchk[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
-.fchk[aria-pressed=true]::before{border-color:#fff;background:var(--or)}
+.fchk[aria-pressed=true]::before{border-color:#fff;background:var(--teal)}
 .shown{margin:0 0 22px;font-weight:600;color:var(--ink)}
 
 /* compare table */
 .swipe{display:none}
 .board-scroll{overflow-x:auto;border:1px solid var(--line)}
 .board{border-collapse:collapse;width:100%;min-width:940px;font-size:15.5px;line-height:1.4;color:var(--ink)}
-.board th,.board td{padding:15px 8px 13px;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
-.board thead th{position:relative;background:var(--navy);color:#fff;font:700 15px/1.3 "Overpass",sans-serif;border-top:0;white-space:normal;vertical-align:middle}
-.board .no{font:700 20px/1 "Overpass",sans-serif;color:var(--or);width:56px}
+.board th,.board td{padding:14px 8px;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
+.board thead th{position:relative;background:var(--navy);color:#fff;font:700 15px/1.3 "Barlow",sans-serif;border-top:0;white-space:normal;vertical-align:middle}
+.board .no{font:700 20px/1 "Barlow",sans-serif;color:var(--or-ink);width:56px}
 .board tbody th{text-align:left;font-weight:600;white-space:normal;min-width:200px;position:sticky;left:0;background:#fff;box-shadow:1px 0 0 var(--line)}
 .board thead th:nth-child(2){text-align:left;position:sticky;left:0;z-index:1}
 .board tbody th a{text-decoration:none}
-.board tbody th a:hover{color:var(--or)}
-.board tbody th small{display:block;font:400 14px/1.3 "Overpass",sans-serif;color:var(--body)}
+.board tbody th a:hover{color:var(--or-ink)}
+.board tbody th small{display:block;font:400 14px/1.3 "Barlow",sans-serif;color:var(--body)}
 .board tbody tr:nth-child(even) td,.board tbody tr:nth-child(even) th{background:var(--soft)}
 .board .y,.board .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;position:relative}
-.board .y{background:var(--or);color:#fff}
+.board .y{background:var(--teal);color:var(--navy)}
 .board .n{color:#B4BEC6}
 .board .y svg{width:13px;height:13px;stroke-width:3}.board .n svg{width:15px;height:15px}
 .board .pr{font-weight:700;font-size:18px}
@@ -550,34 +552,34 @@ section[id]{scroll-margin-top:20px}
 .mapbox p{color:#D5DEE4;text-align:center;font-size:15.5px;margin-top:4px}
 .rmap{width:100%;height:auto;display:block;overflow:visible;max-width:520px;margin:0 auto}
 .rmap .ring{fill:none;stroke:#fff;stroke-opacity:.35;stroke-width:1.5;stroke-dasharray:5 7}
-.rmap .rl{fill:#C2CED6;font:500 13px "Overpass",sans-serif;text-anchor:middle}
+.rmap .rl{fill:#C2CED6;font:500 13px "Barlow",sans-serif;text-anchor:middle}
 .rmap .road{fill:none;stroke:#8C9DAD;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.5}
-.rmap .rdl{fill:#B9CAD8;font:600 12px "Overpass",sans-serif;text-anchor:middle}
+.rmap .rdl{fill:#B9CAD8;font:600 12px "Barlow",sans-serif;text-anchor:middle}
 .rmap .town{fill:#fff}
-.rmap .tl{fill:#E3EAF0;font:500 14px "Overpass",sans-serif}
+.rmap .tl{fill:#E3EAF0;font:500 14px "Barlow",sans-serif}
 .rmap .runway{stroke:#fff;stroke-width:9;stroke-linecap:round}
 .rmap .ctr{fill:var(--navy);stroke:#fff;stroke-width:3}
 .rmap .ctr-dot{fill:#fff}
-.rmap .cl{fill:#fff;font:700 15px "Overpass",sans-serif}
+.rmap .cl{fill:#fff;font:700 15px "Barlow",sans-serif}
 .rmap .mk circle{fill:var(--or);stroke:#fff;stroke-width:2.5}
 .rmap .mk path{fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round}
 .rmap a.mk:hover circle,.rmap .mk.on circle{fill:#fff}
 .rmap a.mk:hover path,.rmap .mk.on path{stroke:var(--or)}
 .rmap .mk.ghost circle{fill:none;stroke-dasharray:4 4;stroke:#C2CED6}
 .rmap .mk.ghost path{stroke:#C2CED6}
-.rmap .ghost-l{fill:#C2CED6;font:600 14px "Overpass",sans-serif}
+.rmap .ghost-l{fill:#C2CED6;font:600 14px "Barlow",sans-serif}
 
 /* text on the left, dark card and photo on the right */
 .offer{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:56px;align-items:center}
 .minis{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:30px;padding-top:30px;border-top:1px solid var(--line)}
-.mini>svg{width:42px;height:42px;color:var(--or);stroke-width:1.4}
+.mini>svg{width:42px;height:42px;color:var(--purple);stroke-width:1.4}
 .mini h3{font-size:20px;font-weight:600;margin-top:12px}
 .mini p{margin:6px 0 12px;font-size:15.5px}
 .pc{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:center}
 .pc-card{position:relative;z-index:1;background:var(--navy);color:#fff;padding:42px 38px 38px;margin:-12px 0}
-.pc-card .flag{position:absolute;top:22px;right:38px;background:var(--or);color:#fff;font:700 16px/1 "Overpass",sans-serif;padding:8px 12px 6px}
+.pc-card .flag{position:absolute;top:22px;right:38px;background:var(--purple);color:#fff;font:700 16px/1 "Barlow",sans-serif;padding:7px 12px}
 .pc-card h3{color:#fff;font-size:22px;font-weight:600;max-width:10ch}
-.pc-card .big{font:700 40px/1 "Overpass",sans-serif;margin-top:14px;padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.2)}
+.pc-card .big{font:700 40px/1 "Barlow",sans-serif;margin-top:14px;padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.2)}
 .pc-card .big small{font-size:15px;font-weight:400;color:var(--or-l);margin-left:4px}
 .chev{list-style:none;margin:20px 0 24px;display:grid;gap:9px}
 .chev li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;align-items:start}
@@ -597,7 +599,7 @@ section[id]{scroll-margin-top:20px}
 .fld.wide{grid-column:1/-1}
 .fld label,.fld legend{font-size:14.5px;color:#B8C6CF}
 .fld label i{font-style:normal;color:var(--or-l)}
-.fld input[type=text],.fld input[type=email],.fld input[type=tel],.fld select,.fld textarea{font:400 16px/1.4 "Overpass",sans-serif;color:#fff;padding:8px 0 8px;border:0;border-bottom:1px solid rgba(255,255,255,.3);background:transparent;width:100%;border-radius:0}
+.fld input[type=text],.fld input[type=email],.fld input[type=tel],.fld select,.fld textarea{font:400 16px/1.4 "Barlow",sans-serif;color:#fff;padding:8px 0 8px;border:0;border-bottom:1px solid rgba(255,255,255,.3);background:transparent;width:100%;border-radius:0}
 .fld select option{color:var(--ink);background:#fff}
 .fld textarea{min-height:76px;resize:vertical}
 .fld input::placeholder{color:#8FA1AF}
@@ -605,11 +607,11 @@ section[id]{scroll-margin-top:20px}
 fieldset.fld{border:0}
 .ticks{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px}
 .ticks label{display:inline-flex;align-items:center;gap:8px;color:#fff;font-size:15.5px;cursor:pointer}
-.ticks input{width:17px;height:17px;accent-color:var(--or)}
+.ticks input{width:17px;height:17px;accent-color:var(--teal)}
 .fpanel .go{grid-column:1/-1;display:grid;gap:12px}
 .fpanel .go .btn{width:100%}
 .fpanel .go small{color:#B8C6CF;font-size:14.5px;line-height:1.5}
-.fpanel .err{grid-column:1/-1;color:#FFB59A;font-weight:600;display:none}
+.fpanel .err{grid-column:1/-1;color:#FFB8B8;font-weight:600;display:none}
 .made{display:none;margin-top:22px;border-top:1px solid rgba(255,255,255,.2);padding-top:20px}
 .made b{color:#fff;font-size:19px}
 .made p{margin-top:4px;color:#D5DEE4;font-size:15.5px}
@@ -633,10 +635,10 @@ fieldset.fld{border:0}
 .ft li a:hover,.ft .ct a:hover{color:var(--or-l)}
 .ft li svg{width:13px;height:13px;color:var(--or-l);stroke-width:3;flex:none}
 .ft .btn{margin-top:18px}
-.fbar{background:#06131C;color:#C2CED6;font-size:14px;line-height:1.6;padding:22px 0}
+.fbar{background:#07121B;color:#C2CED6;font-size:14px;line-height:1.6;padding:22px 0}
 .fbar p+p{margin-top:6px}
 .fbar a{color:#fff}
-.sample-bar{background:var(--amber);color:var(--ink);font:600 15px/1.4 "Overpass",sans-serif;text-align:center;padding:10px 18px 8px}
+.sample-bar{background:var(--amber);color:var(--ink);font:600 15px/1.4 "Barlow",sans-serif;text-align:center;padding:9px 18px}
 
 @media (max-width:1000px){
   .sec,.mapband{padding:72px 0}
@@ -660,10 +662,10 @@ fieldset.fld{border:0}
   .sec,.mapband,.band{padding:60px 0}
   .band{padding-bottom:70px}
   .top .r{display:none}
-  .logo{font-size:19px;gap:8px}
-  .logo svg{width:27px;height:27px}
+  .logo img{height:50px}
+  .ft .logo img{height:66px}
   .nav{min-height:72px}
-  .nav .btn{padding:12px 11px 10px;font-size:15px}
+  .nav .btn{padding:11px 11px;font-size:15px}
   .ttl{padding:54px 0 66px}
   .ab-ph{padding:34px 0 0 34px}
   .statbox{width:164px;padding:22px 12px 18px}
@@ -687,7 +689,7 @@ fieldset.fld{border:0}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 @keyframes drift{from{background-position:50% 44%}to{background-position:50% 56%}}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.14)}100%{transform:scale(1)}}
-@keyframes ring{0%{box-shadow:0 0 0 5px rgba(217,72,15,.32),0 0 0 5px rgba(255,122,61,.5)}100%{box-shadow:0 0 0 5px rgba(217,72,15,.32),0 0 0 22px rgba(255,122,61,0)}}
+@keyframes ring{0%{box-shadow:0 0 0 5px rgba(215,73,73,.32),0 0 0 5px rgba(255,130,130,.5)}100%{box-shadow:0 0 0 5px rgba(215,73,73,.32),0 0 0 22px rgba(255,130,130,0)}}
 .hd{animation:drift 26s ease-in-out infinite alternate}
 .ttl .tags{animation:rise .7s .05s both}
 .ttl h1{animation:rise .8s .15s both}
@@ -702,15 +704,15 @@ fieldset.fld{border:0}
 .more::after{content:"";display:inline-block;width:7px;height:7px;border:solid currentColor;border-width:2px 2px 0 0;transform:rotate(45deg);margin-left:8px;position:relative;top:-2px;transition:margin .3s}
 .more:hover::after{margin-left:14px}
 .st{transition:border-color .25s,color .25s}
-.st:hover{color:var(--or)}
+.st:hover{color:var(--or-ink)}
 .statbox{transition:transform .4s cubic-bezier(.22,.61,.36,1),box-shadow .4s}
-.ab-ph:hover .statbox{transform:translate(-6px,-6px);box-shadow:14px 14px 0 rgba(217,72,15,.9)}
+.ab-ph:hover .statbox{transform:translate(-6px,-6px);box-shadow:14px 14px 0 var(--teal)}
 .ab-ph{overflow:visible}
 .ab-ph img{transition:filter .5s}
 .ab-ph:hover img{filter:saturate(1.15)}
 .feat h3 i{transition:transform .3s}
 .feat>div:hover h3 i{transform:translateX(5px) scale(1.12)}
-.feat>div:hover h3{color:var(--or)}
+.feat>div:hover h3{color:var(--or-ink)}
 .feat h3{transition:color .25s}
 
 .step{transition:transform .4s cubic-bezier(.22,.61,.36,1),background .35s,box-shadow .4s,opacity .75s cubic-bezier(.22,.61,.36,1)}
@@ -735,7 +737,7 @@ fieldset.fld{border:0}
 .fchk{transition:background .2s,color .2s,border-color .2s}
 .fchk:hover{border-color:var(--navy)}
 .board tbody td,.board tbody th{transition:background .2s}
-.board tbody tr:hover td,.board tbody tr:hover th{background:#FDEEE6}
+.board tbody tr:hover td,.board tbody tr:hover th{background:#E4F4F3}
 .rmap a.mk circle,.rmap a.mk path{transition:fill .25s,stroke .25s}
 .mini>svg{transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
 .mini:hover>svg{transform:translateY(-6px) rotate(-6deg)}
@@ -753,8 +755,6 @@ fieldset.fld{border:0}
 .ft li a:hover{transform:translateX(5px)}
 .top a svg{transition:transform .25s}
 .top a:hover svg{transform:translateX(4px)}
-.logo svg{transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
-.logo:hover svg{transform:rotate(-8deg) scale(1.1)}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -794,16 +794,20 @@ def head(title, desc, extra_css="", canonical=""):
 <meta name="description" content="{e(desc)}">
 {can}<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>{CSS}{extra_css}</style>
 </head>
 <body>
 """
 
 
+LOGO = "https://jskedge1.github.io/airshow-pages/brand/ukag-header-logo.png"   # white version, for dark backgrounds
+
+
 def logo():
-    h, t = home_href()
-    return f'<a class="logo" href="{e(h)}" target="{t}">{icon("tent")}Airshow Camping</a>'
+    """The UK Airshow Guide logo, linking to the site's home page."""
+    return (f'<a class="logo" href="{SITE}/" target="_top"><img src="{LOGO}" width="750" height="249" '
+            f'alt="UK Airshow Guide, by The Big Guide to UK Airshows" decoding="async"></a>')
 
 
 def top_bar():
@@ -855,7 +859,7 @@ def footer(live, extra=""):
     if not camps:
         camps = f'<li><a href="{e(h)}#list" target="{t}">{icon("chev")}Campsites are being added</a></li>'
     guides = "".join(f'<li><a href="{SITE}{path}" target="_top">{icon("chev")}{e(name)}</a></li>' for path, ic, name, sub in GUIDES)
-    return f"""<div class="sky{extra}">{camp_scene("#0A1B27")}</div>
+    return f"""<div class="sky{extra}">{camp_scene("#0B1A27")}</div>
 <footer class="ft"><div class="wrap cols">
   <div>{logo()}<div class="ct"><span>{icon("pin")}MOD Boscombe Down, Wiltshire</span><span>{icon("cal")}RIAT, 16 to 18 July 2027</span>
     <a href="mailto:{CONTACT}?subject=RIAT%20campsite%20listing">{icon("mail")}{CONTACT}</a></div></div>
@@ -1167,39 +1171,39 @@ def build_home(live):
 SITE_CSS = r"""
 .prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px}
 .price{position:relative;background:var(--navy);color:#fff;padding:38px 32px 30px}
-.price .flag{position:absolute;top:0;right:0;background:var(--or);color:#fff;font:700 16px/1 "Overpass",sans-serif;padding:8px 12px 6px}
+.price .flag{position:absolute;top:0;right:0;background:var(--purple);color:#fff;font:700 16px/1 "Barlow",sans-serif;padding:7px 12px}
 .price h3{color:#fff;font-size:21px;font-weight:600;margin-top:18px}
-.price .big{font:700 42px/1 "Overpass",sans-serif;margin-top:14px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.2)}
+.price .big{font:700 42px/1 "Barlow",sans-serif;margin-top:14px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.2)}
 .price .big small{font-size:15px;font-weight:400;color:var(--or-l);margin-left:5px}
 .price .chev{margin-bottom:0}
 .dates{margin-top:34px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line);background:#fff}
 .dates div{padding:20px 20px 16px;border-left:1px solid var(--line)}
 .dates div:first-child{border-left:0}
-.dates dt{font:700 17px/1.2 "Overpass",sans-serif;color:var(--or)}
+.dates dt{font:700 17px/1.2 "Barlow",sans-serif;color:var(--purple)}
 .dates dd{font-weight:600;font-size:18px;line-height:1.3;color:var(--ink);margin-top:8px}
 
 .facs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:36px}
 .fg h3{font-size:20px;font-weight:600;padding-bottom:12px;border-bottom:2px solid var(--ink);margin-bottom:6px}
 .fg ul{list-style:none}
 .fg li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;padding:9px 0;color:var(--ink);align-items:start}
-.fg li>svg{width:14px;height:14px;margin-top:6px;color:var(--or);stroke-width:3}
+.fg li>svg{width:14px;height:14px;margin-top:6px;color:var(--teal-ink);stroke-width:3}
 .fg li.n{color:#93A0AA}
 .fg li.n>svg{color:#B4BEC6}
 .fg li b{display:block;font-weight:500}
 .fg li small{display:block;color:var(--body);font-size:14.5px;line-height:1.4}
 .rules-h{font-size:26px;margin-top:60px}
 .rules{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px}
-.rules div{background:var(--soft);border-top:5px solid var(--or);padding:24px 24px 22px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s,opacity .75s cubic-bezier(.22,.61,.36,1)}
+.rules div{background:var(--soft);border-top:5px solid var(--teal);padding:24px 24px 22px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s,opacity .75s cubic-bezier(.22,.61,.36,1)}
 .rules div:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(10,27,39,.5)}
 .rules dt{display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px;line-height:1.2;color:var(--ink)}
-.rules dt i{flex:none;width:22px;height:22px;border-radius:50%;background:var(--or);color:#fff;display:grid;place-items:center;transition:transform .3s}
+.rules dt i{flex:none;width:22px;height:22px;border-radius:50%;background:var(--teal);color:var(--navy);display:grid;place-items:center;transition:transform .3s}
 .rules dt i svg{width:12px;height:12px;stroke-width:3}
 .rules div:hover dt i{transform:scale(1.15)}
 .rules dd{margin-top:10px}
 
 .where{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
 .where .mapcard{background:var(--navy);padding:26px}
-.where .bigd{font:700 clamp(44px,6vw,64px)/1 "Overpass",sans-serif;color:var(--ink);margin-top:14px}
+.where .bigd{font:700 clamp(44px,6vw,64px)/1 "Barlow",sans-serif;color:var(--ink);margin-top:14px}
 .where .bigd small{display:block;font-size:17px;font-weight:400;color:var(--body);margin-top:10px;line-height:1.4}
 .where address{font-style:normal;margin:20px 0 26px;color:var(--ink);font-size:17px}
 
@@ -1207,8 +1211,8 @@ SITE_CSS = r"""
 .bookpanel h2{color:#fff;font-size:30px;font-weight:600}
 .bookpanel>p{margin-top:8px;color:#D5DEE4}
 .bookpanel .acts{display:grid;gap:12px;margin-top:24px}
-.bookpanel .offerline{margin-top:24px;border-left:4px solid var(--or);padding-left:16px}
-.bookpanel .offerline b{display:block;color:var(--or-l);font:700 19px/1.2 "Overpass",sans-serif;margin-bottom:4px}
+.bookpanel .offerline{margin-top:24px;border-left:4px solid var(--teal);padding-left:16px}
+.bookpanel .offerline b{display:block;color:var(--or-l);font:700 19px/1.2 "Barlow",sans-serif;margin-bottom:4px}
 .terms{margin-top:24px;border-top:1px solid rgba(255,255,255,.2)}
 .terms div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.2)}
 .terms dt{color:#B8C6CF}
