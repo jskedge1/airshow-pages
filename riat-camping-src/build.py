@@ -273,8 +273,8 @@ def ring_map(area, sites, highlight=None, cls="rmap"):
 
 
 # ---------------------------------------------------------------- shared bits
-# Look: borrowed from the Public transport page (numbered colour tabs, black ticker, sign headers,
-# board tables, coloured mode rows) and the Duxford page (coloured tiles with round icon badges).
+# Look: clean white boxes with coloured sign headers and a compare board (from the Public transport page),
+# coloured tiles under a campsite name (from the Duxford page), and a camping layer on top (skyline, canvas, contours).
 KIND_COL = {"tent": "k-tent", "van": "k-van", "caravan": "k-caravan", "glamping": "k-glamping"}
 
 
@@ -405,29 +405,19 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .btn.line{border-color:var(--navy);color:var(--navy);background:#fff}.btn.line:hover{background:var(--navy);color:#fff}
 .btn.ghost{border-color:#fff;color:#fff}.btn.ghost:hover{background:#fff;color:var(--navy)}
 
-/* numbered section tabs with a coloured top edge, then the black ticker */
-.stabs{position:sticky;top:0;z-index:30;background:var(--canvas-d);box-shadow:0 10px 22px -14px rgba(11,26,39,.45)}
-.stabs .row{display:flex;gap:0;padding-top:10px}
-.stab{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:12px;text-align:left;background:#fff;color:var(--navy);border:0;border-top:5px solid var(--c,var(--sky));border-right:1px solid var(--line);padding:11px 14px 12px;cursor:pointer;font:inherit}
-.stab:last-child{border-right:0}
-.stab .n{flex:none;width:30px;height:30px;display:grid;place-items:center;background:var(--navy);color:#fff;font:700 16px/1 "Barlow",sans-serif}
-.stab b{display:block;font:700 17px/1.15 "Barlow",sans-serif}
-.stab span span{display:block;font-size:14px;line-height:1.2;color:var(--soft);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stab>span:last-child{min-width:0}
-.stab:hover{background:#F3F6F8}
-.stab.on{background:var(--navy);color:#fff}
-.stab.on .n{background:var(--c,var(--sky));color:var(--navy)}
-.stab.on span span{color:#C9D6E0}
+/* section menu: one plain line of links */
+html{scroll-behavior:smooth}
+.menu{position:sticky;top:0;z-index:30;background:var(--canvas-d);border-bottom:1px solid #C9C3B5}
+.menu .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.menu .wrap::-webkit-scrollbar{display:none}
+.menu a{flex:none;padding:15px 16px 13px;font:700 16px/1 "Barlow",sans-serif;color:var(--navy);text-decoration:none;border-bottom:4px solid transparent;white-space:nowrap}
+.menu a:first-child{padding-left:0}
+.menu a:hover{border-bottom-color:var(--navy)}
 .c-sky{--c:var(--sky)}.c-red{--c:var(--red)}.c-green{--c:var(--green)}.c-purple{--c:var(--purple)}.c-amber{--c:var(--amber)}.c-teal{--c:var(--teal)}
-.stab.c-red.on .n,.stab.c-purple.on .n{color:#fff}
-.ticker{background:var(--black);color:var(--amber);font:600 15px/1.35 "Barlow",sans-serif}
-.ticker .wrap{display:flex;gap:14px;align-items:center;min-height:36px;padding-top:6px;padding-bottom:6px}
-.ticker b{color:#fff;flex:none}
-.ticker button{margin-left:auto;flex:none;font:600 14px/1 "Barlow",sans-serif;color:#fff;background:none;border:1px solid rgba(255,255,255,.5);padding:6px 10px;cursor:pointer}
-.ticker button:hover{background:#fff;color:var(--black)}
 
 /* panels and sign headers */
-.panel{padding:30px 0 56px}
+.panel{padding:32px 0 0;scroll-margin-top:52px}
+main{display:block;padding-bottom:56px}
 .sheet{background:#fff;border-top:8px solid var(--navy);box-shadow:0 1px 2px rgba(19,41,60,.05),0 10px 28px -14px rgba(19,41,60,.16)}
 .sheet+.sheet{margin-top:28px}
 .sign-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px 18px;padding:14px 24px 14px 14px;background:var(--c,var(--purple));color:#fff}
@@ -485,18 +475,14 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .rmap .mk.ghost path{stroke:#9FD9D6}
 .rmap .ghost-l{fill:#9FD9D6;font:600 14px "Barlow",sans-serif}
 
-/* links to the other guides: coloured tiles with a round icon badge */
-.guides{background:var(--navy);color:#fff;padding:40px 0 48px;border-top:6px solid var(--wood)}
-.guides h2{font:800 clamp(27px,3.6vw,36px)/1.05 "Barlow",sans-serif}
-.guides>.wrap>p{color:#C9D6E0;margin-top:6px;max-width:70ch}
-.gt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:52px}
-.g{position:relative;display:block;text-decoration:none;text-align:center;padding:44px 16px 20px;background:var(--c);color:#fff;border-bottom:6px solid rgba(0,0,0,.22)}
-.g i{position:absolute;top:-32px;left:50%;margin-left:-32px;width:64px;height:64px;border-radius:50%;background:#fff;border:7px solid var(--c);display:grid;place-items:center;color:var(--navy)}
-.g i svg{width:26px;height:26px}
-.g b{display:block;font:800 23px/1.1 "Barlow Condensed",sans-serif}
-.g span{display:block;font-size:15px;line-height:21px;margin-top:5px}
-.g.dark{color:var(--navy)}
-.g:hover{filter:brightness(1.08)}
+/* links to the other guides: one plain band */
+.guides{background:var(--navy);color:#fff;padding:30px 0 34px;border-top:6px solid var(--wood)}
+.guides .wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 40px;align-items:center}
+.guides h2{font:800 26px/1.1 "Barlow",sans-serif}
+.guides ul{list-style:none;display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:flex-end}
+.guides a{display:inline-flex;align-items:center;gap:8px;font:600 17px/1.2 "Barlow",sans-serif;color:#fff;text-decoration:none;border-bottom:2px solid var(--teal);padding-bottom:3px}
+.guides a svg{width:17px;height:17px;color:var(--teal)}
+.guides a:hover{border-bottom-color:#fff}
 
 .small{background:var(--deep);color:#AFC0CD;font-size:14px;line-height:22px;padding:22px 0}
 .small p+p{margin-top:8px}
@@ -504,53 +490,24 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .sample-bar{background:var(--amber);color:var(--navy);font:600 15px/1.4 "Barlow",sans-serif;text-align:center;padding:9px 18px}
 
 @media (max-width:1000px){
-  .gt{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:50px}
-  .stab span span{display:none}
+  .guides .wrap{grid-template-columns:1fr}
+  .guides ul{justify-content:flex-start}
 }
 @media (max-width:720px){
   .wrap{padding:0 16px}
   .brand span,.strip .lab{display:none}
-  .stabs .row{overflow-x:auto;scrollbar-width:none;padding-top:8px}
-  .stabs .row::-webkit-scrollbar{display:none}
-  .stab{flex:1 0 auto;padding:10px 12px 11px;gap:8px}
-  .stab .n{width:26px;height:26px;font-size:14px}
-  .stab b{font-size:15px;white-space:nowrap}
-  .panel{padding:20px 0 40px}
+  .menu a{padding:13px 12px 11px;font-size:15px}
+  .panel{padding-top:20px}
+  main{padding-bottom:40px}
   .sheet-in{padding:18px 16px}
   .sign-h{grid-template-columns:auto minmax(0,1fr);padding:12px 16px 12px 12px;gap:2px 12px}
   .sign-h i{width:44px;height:44px;grid-row:span 2}
   .sign-h i svg{width:23px;height:23px}
   .sign-h span{grid-column:2}
   .notice{grid-template-columns:1fr}
-  .gt{grid-template-columns:1fr}
-  .ticker button{margin-left:0}
-  .ticker .wrap{flex-wrap:wrap;gap:6px 12px}
+  .guides ul{flex-direction:column;gap:12px}
 }
 """
-
-# Tabs: shared by the home page and the campsite pages. #name in the address opens that tab.
-TABS_JS = r"""<script>
-(function(){
-var tabs=[].slice.call(document.querySelectorAll('.stab')),panels=[].slice.call(document.querySelectorAll('.panel')),top=document.getElementById('tabsTop');
-function show(id,jump){
-  if(!tabs.some(function(t){return t.getAttribute('data-p')===id}))return false;
-  tabs.forEach(function(t){var on=t.getAttribute('data-p')===id;t.classList.toggle('on',on);t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;
-    if(on&&t.scrollIntoView&&t.parentNode.scrollWidth>t.parentNode.clientWidth){t.parentNode.scrollLeft=Math.max(0,t.offsetLeft-40)}});
-  panels.forEach(function(p){p.hidden=p.id!==id});
-  if(jump&&top){var r=top.getBoundingClientRect();if(r.top<0||r.top>window.innerHeight*0.7)window.scrollTo(0,r.top+(window.pageYOffset||document.documentElement.scrollTop))}
-  return true}
-tabs.forEach(function(t,i){
-  t.addEventListener('click',function(){show(t.getAttribute('data-p'),true)});
-  t.addEventListener('keydown',function(ev){var d=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;if(!d)return;ev.preventDefault();
-    var n=tabs[(i+d+tabs.length)%tabs.length];show(n.getAttribute('data-p'),false);n.focus()})});
-document.addEventListener('click',function(ev){var a=ev.target.closest?ev.target.closest('[data-go]'):null;if(!a)return;
-  if(show(a.getAttribute('data-go'),true))ev.preventDefault()});
-function fromHash(){var h=(location.hash||'').replace('#','');if(h)show(h,true)}
-window.addEventListener('hashchange',fromHash);fromHash();
-window.ukagTab=show;
-})();
-</script>"""
-
 
 def head(title, desc, extra_css, canonical=""):
     can = f'<link rel="canonical" href="{e(canonical)}">\n' if canonical else ""
@@ -592,23 +549,17 @@ def site_strip(live, current=None):
         dot = f'<i class="dot {a[1]}"></i><span class="vh">{a[0]}: </span>' if a else ""
         out.append(f'<a class="st{on}" href="{e(href)}" target="{tgt}"{cur}>{dot}{e(s["name"])} <small>{e(dist_text(s))}</small></a>')
     if current == "home":
-        out.append(f'<a class="st add" href="#list" data-go="list">{icon("plus")}List your campsite</a>')
+        out.append(f'<a class="st add" href="#list">{icon("plus")}List your campsite</a>')
     else:
         out.append(f'<a class="st add" href="{e(h)}#list" target="{t}">{icon("plus")}List your campsite</a>')
     out.append('</div></nav>')
     return "".join(out)
 
 
-def section_tabs(items):
-    """items: (panel id, colour class, title, sub)."""
-    out = ['<div id="tabsTop"></div><div class="stabs"><div class="wrap"><div class="row" role="tablist" aria-label="Sections">']
-    for i, (pid, col, title, sub) in enumerate(items):
-        on = i == 0
-        out.append(f'<button type="button" role="tab" class="stab {col}{" on" if on else ""}" data-p="{pid}" id="tab-{pid}" '
-                   f'aria-controls="{pid}" aria-selected="{"true" if on else "false"}" tabindex="{0 if on else -1}">'
-                   f'<span class="n">{i + 1}</span><span><b>{e(title)}</b><span>{e(sub)}</span></span></button>')
-    out.append('</div></div></div>')
-    return "".join(out)
+def section_menu(items):
+    """items: (section id, label). One plain line of links to the sections of the page."""
+    return ('<nav class="menu" aria-label="On this page"><div class="wrap">'
+            + "".join(f'<a href="#{pid}">{e(label)}</a>' for pid, label in items) + '</div></nav>')
 
 
 def sign(col, ic, title, right, right_id=""):
@@ -626,15 +577,9 @@ def kind_dots(kinds, labels=False):
 
 
 def guides():
-    cols = ["var(--purple)", "var(--sky)", "var(--teal)", "var(--red)"]
-    out = []
-    for (path, ic, name, sub), c in zip(GUIDES, cols):
-        dark = " dark" if c in ("var(--sky)", "var(--teal)") else ""
-        out.append(f'<a class="g{dark}" style="--c:{c}" href="{SITE}{path}" target="_top"><i>{icon(ic)}</i>'
-                   f'<b>{e(name)}</b><span>{e(sub)}</span></a>')
-    return (f'<div class="camp">{camp_scene()}</div><section class="guides" aria-labelledby="plan-h"><div class="wrap"><h2 id="plan-h">Plan your camping trip</h2>'
-            f'<p>More from the guide, for working out what to bring and what the weekend will cost.</p>'
-            f'<div class="gt">{"".join(out)}</div></div></section>')
+    links = "".join(f'<li><a href="{SITE}{path}" target="_top">{e(name)}{icon("arrow")}</a></li>' for path, ic, name, sub in GUIDES)
+    return (f'<div class="camp">{camp_scene()}</div><section class="guides" aria-labelledby="plan-h"><div class="wrap">'
+            f'<h2 id="plan-h">Plan your camping trip</h2><ul>{links}</ul></div></section>')
 
 
 def small_print(extra=""):
@@ -659,12 +604,8 @@ HOME_CSS = r"""
 .hero h1{font:800 clamp(42px,6.4vw,78px)/.98 "Barlow Condensed","Barlow",sans-serif;letter-spacing:.005em}
 .hero h1 em{font-style:normal;color:var(--teal);display:block}
 .hero .lead{margin-top:18px;max-width:56ch;color:#E9EFF4;font-size:19px;line-height:29px}
-.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:26px;max-width:640px}
-.stat{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;padding:10px 14px 10px 12px;background:rgba(19,41,60,.6);border:1px solid rgba(255,255,255,.28);text-decoration:none;color:#fff;font:600 16px/1.25 "Barlow",sans-serif}
-.stat i{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#fff}
-.stat i svg{width:19px;height:19px}
-.stat b{font:800 23px/1 "Barlow Condensed",sans-serif;margin-right:6px}
-a.stat:hover{background:rgba(19,41,60,.85);border-color:#fff}
+.hero .when{margin-top:18px;font:700 18px/1.4 "Barlow",sans-serif;color:var(--amber)}
+.hero .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
 
 /* the finder box, like the journey planner */
 .finder{background:#fff;color:var(--ink);box-shadow:0 24px 50px -18px rgba(0,0,0,.55)}
@@ -676,10 +617,6 @@ a.stat:hover{background:rgba(19,41,60,.85);border-color:#fff}
 .fb{padding:20px 22px 22px;display:grid;gap:16px}
 .fb label,.fb .lg{display:block;font:600 15px/1.3 "Barlow",sans-serif;color:var(--navy);margin-bottom:8px}
 .fb select{width:100%;font:600 17px/1.3 "Barlow",sans-serif;color:var(--navy);padding:13px 12px;background:var(--mist);border:0;border-bottom:2px solid #C3D1DB;border-radius:0}
-.ft-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.ftile{display:flex;flex-direction:column;align-items:center;gap:7px;padding:11px 4px 10px;background:var(--mist);border:0;border-bottom:3px solid transparent;cursor:pointer;font:600 14px/1.15 "Barlow",sans-serif;color:var(--navy);text-align:center}
-.ftile:hover{background:#E6ECF1}
-.ftile[aria-pressed=true]{background:#fff;border-bottom-color:var(--purple);box-shadow:0 0 0 2px var(--purple) inset}
 .fc-row{display:flex;flex-wrap:wrap;gap:6px}
 .fchk{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;background:var(--mist);border:0;cursor:pointer;font:600 15px/1 "Barlow",sans-serif;color:var(--navy)}
 .fchk::before{content:"";width:14px;height:14px;border:2px solid #8FA1AF;background:#fff;flex:none}
@@ -689,6 +626,9 @@ a.stat:hover{background:rgba(19,41,60,.85);border-color:#fff}
 .fb p{font-size:16px;line-height:25px}
 
 /* campsite cards */
+.shown{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:-6px 0 18px;font-weight:600;color:var(--navy)}
+.shown button{font:600 15px/1 "Barlow",sans-serif;color:var(--navy);background:#fff;border:2px solid var(--navy);padding:7px 11px;cursor:pointer}
+.shown button:hover{background:var(--navy);color:#fff}
 .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 .cc{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line)}
 .cc .ph{position:relative;aspect-ratio:16/10;background:var(--navy);overflow:hidden}
@@ -721,6 +661,7 @@ a.stat:hover{background:rgba(19,41,60,.85);border-color:#fff}
 .board th,.board td{padding:13px 10px;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
 .board thead th{background:var(--navy);color:#fff;font:600 14px/1.2 "Barlow",sans-serif;border-top:0;vertical-align:middle;white-space:normal}
 .board thead .kd{width:28px;height:28px}
+.board thead th{position:relative}
 .board .no{width:60px;padding-top:9px;padding-bottom:17px}
 .board .no b{position:relative;display:inline-grid;place-items:center;width:40px;height:30px;background:var(--navy);color:#fff;font:800 20px/1 "Barlow Condensed",sans-serif;border-bottom:4px solid var(--amber)}
 .board .no b::after{content:"";position:absolute;left:50%;top:calc(100% + 4px);width:4px;height:9px;margin-left:-2px;background:var(--wood)}
@@ -801,7 +742,6 @@ fieldset.fld{border:0}
 }
 @media (max-width:720px){
   .cards,.maps{grid-template-columns:1fr}
-  .stats{grid-template-columns:1fr}
   .none{grid-template-columns:1fr}
   .form form{grid-template-columns:1fr;padding:16px}
   .made{margin:0 16px 16px}
@@ -812,39 +752,41 @@ fieldset.fld{border:0}
 HOME_JS = r"""<script>
 (function(){
 /* finder: one area, any number of needs. Works on the cards and the compare board. */
-var area='all',need=[];
-var sel=document.getElementById('fArea'),needBtns=document.querySelectorAll('.finder [data-n]'),goBtn=document.getElementById('fGo');
+var area='all',kind='',need=[];
+var sel=document.getElementById('fArea'),ksel=document.getElementById('fKind'),needBtns=document.querySelectorAll('.finder [data-n]'),goBtn=document.getElementById('fGo');
 var cards=document.querySelectorAll('.cards .cc'),rows=document.querySelectorAll('.board tbody tr'),
     empties=document.querySelectorAll('.cards .none'),nomatch=document.querySelector('.nomatch'),
-    tick=document.getElementById('tickText'),clr=document.getElementById('tickClear'),lab=document.getElementById('areaLab');
+    shown=document.getElementById('shownText'),clr=document.getElementById('shownClear'),lab=document.getElementById('areaLab');
 var AREA={all:'All areas',boscombe:'Near Boscombe Down',fairford:'Around Fairford'},total=cards.length;
 function ok(el){
   if(area!=='all'&&el.getAttribute('data-area')!==area)return false;
-  var tags=' '+(el.getAttribute('data-tags')||'')+' ';
-  for(var i=0;i<need.length;i++){if(tags.indexOf(' '+need[i]+' ')<0)return false}
+  var tags=' '+(el.getAttribute('data-tags')||'')+' ',all=need.concat(kind?[kind]:[]);
+  for(var i=0;i<all.length;i++){if(tags.indexOf(' '+all[i]+' ')<0)return false}
   return true}
 function plural(n){return n+' campsite'+(n===1?'':'s')}
 function apply(){
-  var shown=0,inArea=0;
-  cards.forEach(function(c){var a=area==='all'||c.getAttribute('data-area')===area;if(a)inArea++;var v=ok(c);c.style.display=v?'':'none';if(v)shown++});
+  var n=0,inArea=0;
+  cards.forEach(function(c){var a=area==='all'||c.getAttribute('data-area')===area;if(a)inArea++;var v=ok(c);c.style.display=v?'':'none';if(v)n++});
   rows.forEach(function(r){r.style.display=ok(r)?'':'none'});
   empties.forEach(function(x){x.style.display=(area==='all'||x.getAttribute('data-area')===area)?'':'none'});
-  if(nomatch)nomatch.style.display=(inArea>0&&shown===0)?'block':'none';
+  if(nomatch)nomatch.style.display=(inArea>0&&n===0)?'block':'none';
   if(!total)return;
-  var filtered=area!=='all'||need.length>0;
-  if(goBtn)goBtn.firstChild.nodeValue='Show '+plural(shown)+' ';
+  var filtered=area!=='all'||kind!==''||need.length>0;
+  if(goBtn)goBtn.firstChild.nodeValue='Show '+plural(n)+' ';
   if(lab)lab.textContent=AREA[area];
-  if(tick){var names=[];needBtns.forEach(function(b){if(b.getAttribute('aria-pressed')==='true')names.push(b.getAttribute('data-l'))});
-    tick.textContent=filtered?(shown+' of '+plural(total)+'. '+AREA[area]+(names.length?'. With '+names.join(', ').toLowerCase():'')+'.'):('All '+plural(total)+', near Boscombe Down and around Fairford.')}
+  if(shown){var names=[];if(kind)names.push(ksel.options[ksel.selectedIndex].text);
+    needBtns.forEach(function(b){if(b.getAttribute('aria-pressed')==='true')names.push(b.getAttribute('data-l'))});
+    shown.textContent=filtered?('Showing '+n+' of '+plural(total)+(names.length?', with '+names.join(', ').toLowerCase():'')+'.'):('Showing all '+plural(total)+'.')}
   if(clr)clr.hidden=!filtered}
 if(sel)sel.addEventListener('change',function(){area=sel.value;apply()});
+if(ksel)ksel.addEventListener('change',function(){kind=ksel.value;apply()});
 needBtns.forEach(function(b){b.addEventListener('click',function(){var on=b.getAttribute('aria-pressed')!=='true';
   b.setAttribute('aria-pressed',on?'true':'false');var k=b.getAttribute('data-n');
   need=need.filter(function(x){return x!==k});if(on)need.push(k);apply()})});
-function clear(){need=[];area='all';if(sel)sel.value='all';needBtns.forEach(function(x){x.setAttribute('aria-pressed','false')});apply()}
+function clear(){need=[];area='all';kind='';if(sel)sel.value='all';if(ksel)ksel.value='';needBtns.forEach(function(x){x.setAttribute('aria-pressed','false')});apply()}
 if(clr)clr.addEventListener('click',clear);
 var c2=document.getElementById('noClear');if(c2)c2.addEventListener('click',clear);
-if(goBtn)goBtn.addEventListener('click',function(){if(window.ukagTab)window.ukagTab('campsites',true)});
+if(goBtn)goBtn.addEventListener('click',function(){var el=document.getElementById('campsites');if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'start'})});
 apply();
 
 /* list your campsite form: writes an email for the owner to send. Nothing is sent from this page. */
@@ -904,7 +846,7 @@ def empty_card(area_key):
     return (f'<div class="none" data-area="{area_key}"><i>{icon("tent")}</i><div>'
             f'<h3>No campsites listed {e(where)} yet</h3>'
             f'<p>I am adding campsites as owners get in touch. If you run one, I would love to hear from you.</p></div>'
-            f'<a class="btn purple" href="#list" data-go="list">List your campsite</a></div>')
+            f'<a class="btn purple" href="#list">List your campsite</a></div>')
 
 
 def compare_board(live):
@@ -947,9 +889,6 @@ def build_home(live):
     hero_img = "https://jskedge1.github.io/airshow-pages/camping-hub-img/hero-flyby.jpg"
 
     if live:
-        tiles = "".join(f'<button type="button" class="ftile" data-n="{k}" data-l="{e(KINDS[k])}" aria-pressed="false">'
-                        f'<i class="kd {KIND_COL[k]}">{icon(k)}</i>{e(lab)}</button>'
-                        for k, lab in (("tent", "Tent"), ("van", "Campervan"), ("caravan", "Caravan or tourer"), ("glamping", "Glamping")))
         chks = "".join(f'<button type="button" class="fchk" data-n="{k}" data-l="{e(lab)}" aria-pressed="false">{e(lab)}</button>'
                        for k, lab in (("hookup", "Electric hook up"), ("dogs", "Dogs welcome"), ("shuttle", "Shuttle to the show")))
         finder = f"""<aside class="finder" aria-label="Find your campsite">
@@ -957,40 +896,34 @@ def build_home(live):
       <div class="fb">
         <div><label for="fArea">Where would you like to stay?</label>
           <select id="fArea"><option value="all">All areas</option><option value="boscombe">Near MOD Boscombe Down</option><option value="fairford">Around Fairford</option></select></div>
-        <div><span class="lg">What are you bringing?</span><div class="ft-row">{tiles}</div></div>
+        <div><label for="fKind">What are you bringing?</label>
+          <select id="fKind"><option value="">Anything</option><option value="tent">Tent</option><option value="van">Campervan</option><option value="caravan">Caravan or tourer</option><option value="glamping">Glamping, ready pitched</option></select></div>
         <div><span class="lg">I also need</span><div class="fc-row">{chks}</div></div>
         <button type="button" class="btn purple" id="fGo">Show {n} campsite{"s" if n != 1 else ""} {icon("arrow")}</button>
       </div>
     </aside>"""
-        ticker = (f'<div class="ticker"><div class="wrap"><b>Showing</b><span id="tickText">All {n} campsite{"s" if n != 1 else ""}.</span>'
-                  f'<button type="button" id="tickClear" hidden>Clear my choices</button></div></div>')
+        shown = ('<p class="shown" aria-live="polite"><span id="shownText"></span>'
+                 '<button type="button" id="shownClear" hidden>Clear my choices</button></p>')
     else:
         finder = f"""<aside class="finder" aria-label="Campsites are being added">
       <div class="fh"><i>{icon("tent")}</i><div><b>Campsites are being added</b><span>Listings are opening now for RIAT 2027</span></div></div>
       <div class="fb">
         <p>I am adding campsites as owners get in touch, so check back as the list grows. RIAT also has its own official campsite beside the airfield.</p>
-        <a class="btn purple" href="#list" data-go="list">List your campsite {icon("arrow")}</a>
+        <a class="btn purple" href="#list">List your campsite {icon("arrow")}</a>
         <a class="btn line" href="{OFFICIAL_CAMPING}" target="_blank" rel="noopener">Official RIAT camping</a>
       </div>
     </aside>"""
-        ticker = ('<div class="ticker"><div class="wrap"><b>Latest</b><span>Listings are opening now. '
-                  'Campsite owners near Boscombe Down and Fairford can add their site in the last tab.</span></div></div>')
+        shown = ""
 
-    stats = (f'<a class="stat" style="--c:var(--green)" href="#campsites" data-go="campsites"><i>{icon("tent")}</i><span><b>{n}</b>campsite{"s" if n != 1 else ""} listed</span></a>'
-             if n else f'<a class="stat" style="--c:var(--green)" href="#campsites" data-go="campsites"><i>{icon("tent")}</i><span>Listings opening now</span></a>')
-    stats += (f'<a class="stat" style="--c:var(--sky)" href="#map" data-go="map"><i>{icon("pin")}</i><span><b>2</b>areas on the show map</span></a>'
-              f'<span class="stat" style="--c:var(--red)"><i>{icon("cal")}</i><span><b>16 to 18</b>July 2027</span></span>'
-              f'<a class="stat" style="--c:var(--orange)" href="#list" data-go="list"><i>{icon("plus")}</i><span>List your campsite</span></a>')
-
-    tab_items = [("campsites", "c-sky", "Campsites", "Pitches, prices and spaces")]
+    when = "16 to 18 July 2027 at MOD Boscombe Down. " + (f"{n} campsite{'s' if n != 1 else ''} listed." if n else "Listings are opening now.")
+    menu_items = [("campsites", "Campsites")]
     if n >= 2:
-        tab_items.append(("compare", "c-red", "Compare", "Every campsite side by side"))
-    tab_items += [("map", "c-green", "Show map", "How far from the airfield"),
-                  ("list", "c-purple", "List your campsite", "For campsite owners")]
+        menu_items.append(("compare", "Compare"))
+    menu_items += [("map", "Show map"), ("list", "List your campsite")]
 
     compare_panel = ""
     if n >= 2:
-        compare_panel = f"""<section class="panel" id="compare" role="tabpanel" aria-labelledby="tab-compare" hidden>
+        compare_panel = f"""<section class="panel" id="compare" aria-label="Compare the campsites">
   <div class="wrap"><div class="sheet">
     {sign("c-red", "cols", "Compare the campsites", "Side by side")}
     <div class="sheet-in"><p class="intro">Every campsite on one board, so you can see what each one has. Your choices in the finder work here too.<span class="swipe"> Swipe sideways to see it all.</span></p></div>
@@ -1007,21 +940,22 @@ def build_home(live):
       <p class="crumb"><a href="{SITE}{RIAT_WIX}" target="_top">Royal International Air Tattoo</a><i>/</i>Camping</p>
       <h1>Camping for the Air Tattoo <em>near Boscombe Down</em></h1>
       <p class="lead">From 2027 the Air Tattoo moves to MOD Boscombe Down, and a lot of visitors will be looking for somewhere to pitch up nearby. I list the campsites around the new showground here, plus the ones still running around Fairford.</p>
-      <div class="stats">{stats}</div>
+      <p class="when">{e(when)}</p>
+      <div class="btns"><a class="btn teal" href="#campsites">See the campsites {icon("arrow")}</a><a class="btn ghost" href="#list">List your campsite</a></div>
     </div>
     {finder}
   </div>
   <div class="scene">{camp_scene("light")}</div>
 </header>
-{section_tabs(tab_items)}
-{ticker}
+{section_menu(menu_items)}
 <main>
-<section class="panel" id="campsites" role="tabpanel" aria-labelledby="tab-campsites">
+<section class="panel" id="campsites" aria-label="Campsites">
   <div class="wrap">
     <div class="sheet">
       {sign("c-sky", "tent", "Campsites for RIAT 2027", "All areas", "areaLab")}
       <div class="sheet-in">
         <p class="intro">Every campsite has its own page with pitch sizes and prices, facilities, rules and the best way to the showground. Distances are as the crow flies from the airfield.</p>
+        {shown}
         <div class="cards">{"".join(cards)}<p class="nomatch"><b>No campsites match all of those yet.</b> Try taking one off, or <button type="button" class="btn line" id="noClear" style="padding:8px 12px;margin-left:6px">clear my choices</button></p></div>
       </div>
     </div>
@@ -1033,7 +967,7 @@ def build_home(live):
   </div>
 </section>
 {compare_panel}
-<section class="panel" id="map" role="tabpanel" aria-labelledby="tab-map" hidden>
+<section class="panel" id="map" aria-label="Show map">
   <div class="wrap"><div class="sheet">
     {sign("c-green", "sign", "On the show map", "5 and 10 mile rings")}
     <div class="sheet-in">
@@ -1045,7 +979,7 @@ def build_home(live):
     </div>
   </div></div>
 </section>
-<section class="panel" id="list" role="tabpanel" aria-labelledby="tab-list" hidden>
+<section class="panel" id="list" aria-label="List your campsite">
   <div class="wrap"><div class="sheet">
     {sign("c-purple", "plus", "List your campsite", "Free for campsite owners")}
     <div class="sheet-in own">
@@ -1102,7 +1036,6 @@ def build_home(live):
 </main>
 {guides()}
 {small_print()}
-{TABS_JS}
 {HOME_JS.replace("__CONTACT__", CONTACT)}
 </body>
 </html>
@@ -1218,7 +1151,7 @@ SITE_CSS = r"""
 .terms div:first-child{border-top:0}
 .terms dt{color:var(--soft)}
 .terms dd{font-weight:600;color:var(--navy)}
-.more{padding:0 0 48px}
+.more{padding:0 0 48px;margin-top:-16px}
 .more h2{font:800 28px/1.1 "Barlow",sans-serif;color:var(--navy);margin-bottom:14px}
 .more .ml{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .more a{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-left:6px solid var(--sky);padding:14px 16px;text-decoration:none;font-weight:700;color:var(--navy)}
@@ -1373,13 +1306,8 @@ def build_site(s, live):
                   if s.get("sample") else "")
     h, t = home_href()
     checked = f'<b>Last checked</b> {e(s.get("checked"))}. ' if s.get("checked") else ""
-    tick_bits = [x for x in (s["name"], f'{d} from {a["label"]}' if d else "", av[0] if av else "",
-                             f"From {fp[1]} {fp[2]}" if fp else "") if x]
-    tab_items = [("about", "c-sky", "About", "The site and photos"),
-                 ("pitches", "c-green", "Pitches and prices", "Sizes, prices and dates"),
-                 ("facilities", "c-purple", "Facilities", "On site, and the rules"),
-                 ("getting-there", "c-red", "Getting to the show", "Pitch to the gate"),
-                 ("book", "c-amber", "Book", "Direct with the site")]
+    menu_items = [("about", "About"), ("pitches", "Pitches and prices"), ("facilities", "Facilities"),
+                  ("getting-there", "Getting to the show"), ("book", "Book")]
 
     body = f"""{head(title, desc, SITE_CSS, SITE + s["wixPath"] if s.get("wixPath") else "")}
 {sample_bar}
@@ -1396,16 +1324,15 @@ def build_site(s, live):
   </div>
 </header>
 <div class="under"><div class="wrap"><p>{checked}Details come from the campsite, so please check prices and dates with them before you book.</p></div></div>
-{section_tabs(tab_items)}
-<div class="ticker"><div class="wrap"><b>This campsite</b><span>{e(". ".join(tick_bits))}.</span></div></div>
+{section_menu(menu_items)}
 <main>
-<section class="panel" id="about" role="tabpanel" aria-labelledby="tab-about">
+<section class="panel" id="about" aria-label="About the site">
   <div class="wrap"><div class="sheet">
     {sign("c-sky", "tent", "About the site", a["long"])}
     <div class="sheet-in about"><div class="txt">{about}{owner}{facts_html}</div><div class="gal{" odd" if len(photos[:6]) >= 4 and len(photos[:6]) % 2 == 0 else ""}">{gal}</div></div>
   </div></div>
 </section>
-<section class="panel" id="pitches" role="tabpanel" aria-labelledby="tab-pitches" hidden>
+<section class="panel" id="pitches" aria-label="Pitches and prices">
   <div class="wrap"><div class="sheet">
     {sign("c-green", "tag", "Pitches and prices", "Show week 2027")}
     <div class="sheet-in">
@@ -1415,7 +1342,7 @@ def build_site(s, live):
     </div>
   </div></div>
 </section>
-<section class="panel" id="facilities" role="tabpanel" aria-labelledby="tab-facilities" hidden>
+<section class="panel" id="facilities" aria-label="Facilities">
   <div class="wrap"><div class="sheet">
     {sign("c-purple", "drop", "Facilities", "On site in show week")}
     <div class="sheet-in">
@@ -1424,7 +1351,7 @@ def build_site(s, live):
     </div>
   </div></div>
 </section>
-<section class="panel" id="getting-there" role="tabpanel" aria-labelledby="tab-getting-there" hidden>
+<section class="panel" id="getting-there" aria-label="Getting to the show">
   <div class="wrap"><div class="sheet">
     {sign("c-red", "sign", "Getting to the show", a["label"])}
     <div class="sheet-in">
@@ -1433,7 +1360,7 @@ def build_site(s, live):
     </div>
   </div></div>
 </section>
-<section class="panel" id="book" role="tabpanel" aria-labelledby="tab-book" hidden>
+<section class="panel" id="book" aria-label="Book">
   <div class="wrap"><div class="sheet">
     {sign("c-amber", "cal", "Book your pitch", av[0] if av else "Direct with the campsite")}
     <div class="sheet-in book">
@@ -1447,7 +1374,6 @@ def build_site(s, live):
 {more}
 {guides()}
 {small_print()}
-{TABS_JS}
 </body>
 </html>
 """
