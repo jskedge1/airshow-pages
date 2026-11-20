@@ -215,6 +215,7 @@ def icon(name, cls=""):
 
 # ---------------------------------------------------------------- map
 SCALE = 20  # px per mile
+RADAR_SECS = 6   # one turn of the radar sweep on the ring maps
 
 
 def proj(area, lat, lng):
@@ -236,6 +237,14 @@ def ring_map(area, sites, highlight=None, cls="rmap"):
         lx, ly = proj(area, *pts[-2])
         out.append(f'<text class="rdl" x="{lx:.0f}" y="{ly - 8:.0f}">{e(name)}</text>')
     out.append('</g>')
+    R = 10 * SCALE
+    out.append(f'<path class="cross" d="M0 {-R}V{R}M{-R} 0H{R}"/>')
+    wedges = []
+    for i in range(12):                      # twelve 5 degree slices, fading behind the leading edge
+        a0, a1 = math.radians(-5 * i), math.radians(-5 * (i + 1))
+        wedges.append(f'<path d="M0 0L{R * math.sin(a0):.1f} {-R * math.cos(a0):.1f}A{R} {R} 0 0 0 {R * math.sin(a1):.1f} {-R * math.cos(a1):.1f}Z" '
+                      f'opacity="{0.36 * (1 - i / 12) ** 1.6:.3f}"/>')
+    out.append(f'<g class="sweep" aria-hidden="true">{"".join(wedges)}<path class="edge" d="M0 0V{-R}"/></g>')
     for r, lab in ((5, "5 miles"), (10, "10 miles")):
         out.append(f'<circle class="ring" r="{r * SCALE}"/>')
         out.append(f'<text class="rl" x="0" y="{-r * SCALE - 8}">{lab}</text>')
@@ -262,6 +271,8 @@ def ring_map(area, sites, highlight=None, cls="rmap"):
         x, y = max(-235, min(235, x)), max(-235, min(235, y))
         href, tgt = page_href(s)
         on = " on" if highlight == s["slug"] else ""
+        bearing = math.degrees(math.atan2(x, -y)) % 360          # clockwise from north, like the sweep
+        out.append(f'<circle class="ping" cx="{x:.1f}" cy="{y:.1f}" r="15" style="animation-delay:{bearing / 360 * RADAR_SECS:.2f}s"/>')
         out.append(f'<a href="{e(href)}" target="{tgt}" class="mk{on}"><title>{e(s["name"])}, {e(dist_text(s))}</title>'
                    f'<g transform="translate({x:.1f} {y:.1f})"><circle r="15"/>'
                    f'<path d="M-7 5L0 -7L7 5Z M0 -7V5"/></g></a>')
@@ -561,6 +572,12 @@ section[id]{scroll-margin-top:20px}
 .rmap .ctr{fill:var(--navy);stroke:#fff;stroke-width:3}
 .rmap .ctr-dot{fill:#fff}
 .rmap .cl{fill:#fff;font:700 15px "Barlow",sans-serif}
+.rmap .cross{fill:none;stroke:#fff;stroke-opacity:.12;stroke-width:1}
+.rmap .sweep{fill:var(--teal);transform-origin:0 0;animation:radar 6s linear infinite}
+.rmap .sweep .edge{fill:none;stroke:var(--teal);stroke-width:2.5;stroke-linecap:round}
+.rmap .ping{fill:none;stroke:var(--teal);stroke-width:2.5;opacity:0;transform-box:fill-box;transform-origin:center;animation:ping 6s linear infinite}
+@keyframes radar{to{transform:rotate(360deg)}}
+@keyframes ping{0%{opacity:0;transform:scale(1)}1%{opacity:1;transform:scale(1)}22%{opacity:0;transform:scale(2.8)}100%{opacity:0;transform:scale(2.8)}}
 .rmap .mk circle{fill:var(--or);stroke:#fff;stroke-width:2.5}
 .rmap .mk path{fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round}
 .rmap a.mk:hover circle,.rmap .mk.on circle{fill:#fff}
@@ -760,6 +777,7 @@ fieldset.fld{border:0}
   *,*::before,*::after{animation:none!important;transition:none!important}
   .rv{opacity:1;transform:none}
   .step.rv .no{transform:none}
+  .rmap .sweep,.rmap .ping{display:none}
 }
 """
 
