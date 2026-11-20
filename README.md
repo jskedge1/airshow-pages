@@ -639,10 +639,10 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 
 ## Duxford page in the new design (preview, 20 Nov 2026)
 
-`previews/duxford-new-design.html` is a preview of the Duxford feature page in the new design made for the RIAT camping pages, in the brand colours (navy, teal as the main accent, red for the main button, purple and sky as second accents). It is not live and is not on any Wix page. The live page is still `camping-layout/duxford.html` and was not changed.
+`previews/duxford-new-design.html` is a preview of the Duxford feature page in the new design made for the RIAT camping pages, with the same branding the camping pages now carry: the UK Airshow Guide logo in the photo header and footer, Barlow, navy for dark panels, red for buttons and label lines, teal for accents, purple and sky as second accents. It is not live and is not on any Wix page. The live page is still `camping-layout/duxford.html` and was not changed.
 
 - Built by `python3 previews/duxford-new-design-src/build.py`. It reads the live page and adds the new look on top, so nothing is retyped: every section, script and data block (the 2027 calendar, the line-up `FALLBACK` and Wix bridge, the topic explorer, train and bus times, planner, sun guide, traders block and the rest) is carried over as it is. Run it again after the live page changes to pick the changes up. Do not edit the built file.
 - `chrome.html` holds the new top bar, photo header, intro (offset photo with the dark stat box and four fact boxes), section heading and dark footer. `new-design.css` is the new look. `new-design.js` fills the new parts from the page's own words and adds the scroll and hover motion (off for reduced motion).
-- The build also swaps Barlow for Overpass, takes out capitals and wide letter spacing in the page's own styles (Jack's text rule), and tells the scripts that read the file name which show they are on (`NZ_PATH`), because the preview is not called `duxford.html`.
+- The build also swaps the condensed heading font for Barlow, takes out capitals and wide letter spacing in the page's own styles (Jack's text rule), and tells the scripts that read the file name which show they are on (`NZ_PATH`), because the preview is not called `duxford.html`.
 - The 20 collapsible sections are kept, restyled as boxes with a coloured top edge. Getting there keeps its transport look.
-- To go live: Jack to approve the look and the font (the rest of the site uses Barlow), then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
+- To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.

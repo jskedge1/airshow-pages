@@ -3,7 +3,7 @@
 (the layout made for the RIAT camping pages, in the site's brand colours).
 
 It does not retype the page. It reads the live page, camping-layout/duxford.html, and
-  1. swaps the fonts to Overpass and takes out capitals and wide letter spacing,
+  1. keeps the site font (Barlow) and takes out capitals and wide letter spacing,
   2. adds the new top bar, photo header, intro, section heading and footer (chrome.html),
   3. adds the new look on top of the page's own styles (new-design.css),
   4. adds a small script that fills the new parts from the page's own content (new-design.js).
@@ -22,17 +22,17 @@ ROOT = HERE.parent.parent
 SRC = ROOT / "camping-layout" / "duxford.html"
 OUT = ROOT / "previews" / "duxford-new-design.html"
 
-FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700;800'
+FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
+LOGO = ROOT / "brand" / "ukag-header-logo.png"   # the white UK Airshow Guide logo, as on the camping pages
 
 BLOB = re.compile(r"data:(?:image|application|font)/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+")
 
 
 def restyle_text(s):
     """Font, capitals and letter spacing, changed in the page's own styles and scripts."""
-    # fonts: Barlow and Barlow Condensed become Overpass
-    s = re.sub(r"family=Barlow[^\"'&]*(&family=Barlow\+Condensed[^\"'&]*)?", "family=Overpass:wght@400;500;600;700;800", s)
-    s = s.replace("Barlow Condensed", "Overpass").replace("Barlow", "Overpass")
+    # font: Barlow throughout, as on the camping pages and the rest of the site (no condensed headings)
+    s = s.replace("Barlow Condensed", "Barlow")
     # Jack's rule: no capitals with wide letter spacing. Capitals go, so labels read as they were typed
     # (sentence case). Headings keep the page's own title case rule.
     s = re.sub(r"text-transform:\s*uppercase", "text-transform:none", s)
@@ -63,6 +63,8 @@ def main():
     print("file name lookups pointed at the live page:", n)
 
     chrome = (HERE / "chrome.html").read_text(encoding="utf8")
+    import base64
+    chrome = chrome.replace("@@LOGO@@", "data:image/png;base64," + base64.b64encode(LOGO.read_bytes()).decode("ascii"))
     top, bottom = chrome.split("<!-- SPLIT -->")
     css = (HERE / "new-design.css").read_text(encoding="utf8")
     js = (HERE / "new-design.js").read_text(encoding="utf8")

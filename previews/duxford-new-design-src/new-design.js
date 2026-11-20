@@ -115,6 +115,7 @@
         }).join(' ');
       });
     });
+    $$('img[data-nz-logo]').forEach(function (i) { var l = D.getElementById('nzLogo'); if (l && !i.getAttribute('src')) i.src = l.src; });
     /* how many sections */
     var n = $$('section.fold').length;
     if (n && NUM[n]) D.getElementById('nzCount').textContent = NUM[n];
