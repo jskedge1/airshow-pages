@@ -10,330 +10,386 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#13293C;--navy-deep:#0E2131;--teal:#32B4AF;--teal-ink:#0E5F5B;--purple:#6950A1;--red:#D74949;
---mist:#F2F4F5;--ice:#E6F2F3;--line:#DDE3E8;--ink:#1B1B1B;--muted:#55626D;--ease:cubic-bezier(.22,.61,.36,1)}
+:root{--navy:#13293C;--navy2:#1C3850;--deep:#0B1A27;--black:#0B0D0F;--teal:#32B4AF;--teal-ink:#0E5F5B;--purple:#6950A1;
+--red:#D74949;--sky:#00A6E2;--sky-ink:#006F99;--green:#2BA84A;--green-d:#1E8540;--amber:#F2B233;--orange:#E07A1F;--pink:#C2255C;
+--mist:#F3F6F8;--line:#DCE4EA;--ink:#14212C;--soft:#4A5C6B}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
-body{font:400 17px/1.6 "Barlow",system-ui,sans-serif;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+body{font:400 17px/1.55 "Barlow",system-ui,sans-serif;color:var(--ink);background:var(--mist);-webkit-font-smoothing:antialiased}
 a{color:inherit}
-.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
-img{display:block;max-width:100%}
-h1,h2,.cond{font-family:"Barlow Condensed","Barlow",sans-serif;text-transform:uppercase}
-.tag{display:inline-block;background:var(--purple);color:#fff;font:600 15px/1 "Barlow",sans-serif;padding:8px 12px}
-.crumb{font:500 15px/1.4 "Barlow",sans-serif;color:#C9D6E0;margin-bottom:14px}
-.crumb a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
-.crumb a:hover{border-color:var(--teal)}
-.crumb span{margin:0 8px;color:var(--teal)}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
-.btn{display:inline-flex;align-items:center;gap:8px;font:600 16px/1 "Barlow",sans-serif;padding:14px 20px;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .3s var(--ease),background .3s var(--ease),color .3s var(--ease)}
-.btn svg{width:18px;height:18px}
-.btn:hover{transform:translateY(-2px)}
-.btn.teal{background:var(--teal);color:var(--navy)}
-.btn.navy{background:var(--navy);color:#fff}
-.btn.red{background:var(--red);color:#fff}
-.btn.outline{border-color:#fff;color:#fff}
-.btn.outline:hover{background:#fff;color:var(--navy)}
-.btn.line{border-color:var(--navy);color:var(--navy)}
-.btn.line:hover{background:var(--navy);color:#fff}
-.btn:focus-visible,a:focus-visible,button:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+img{display:block;max-width:100%;pointer-events:none;user-select:none}
+[hidden]{display:none!important}
+.wrap{max-width:1212px;margin:0 auto;padding:0 24px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.cond{font-family:"Barlow Condensed","Barlow",sans-serif}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
 
-/* campsite tabs: one tab per campsite page */
-.tabs{position:sticky;top:0;z-index:20;background:var(--navy-deep);border-bottom:4px solid var(--teal)}
-.tabs .wrap{display:flex;align-items:stretch;gap:0;overflow-x:auto;scrollbar-width:none}
-.tabs .wrap::-webkit-scrollbar{display:none}
-.tab{flex:none;display:flex;align-items:center;gap:8px;padding:14px 18px;color:#C9D6E0;text-decoration:none;font:600 15px/1.2 "Barlow",sans-serif;border-right:1px solid rgba(255,255,255,.08);white-space:nowrap;transition:background .25s var(--ease),color .25s var(--ease)}
-.tab svg{width:17px;height:17px;color:var(--teal)}
-.tab:hover{background:rgba(50,180,175,.14);color:#fff}
-.tab.on{background:var(--teal);color:var(--navy)}
-.tab.on svg{color:var(--navy)}
-.tab small{font-weight:500;opacity:.75}
-.tab.add{color:#fff;background:var(--purple)}
-.tab.add svg{color:#fff}
-.tab.add:hover{background:#7a62b5}
+/* brand bar and the campsite strip: one tab per campsite page */
+.bar{background:var(--navy);color:#fff}
+.bar .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:52px}
+.brand{text-decoration:none;display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+.brand b{font:800 22px/1 "Barlow Condensed",sans-serif;letter-spacing:.01em}
+.brand span{font-size:15px;color:#C9D6E0}
+.bar .back{font:600 15px/1 "Barlow",sans-serif;color:#fff;text-decoration:none;border-bottom:2px solid var(--teal);padding-bottom:2px;white-space:nowrap}
+.bar .back:hover{border-color:#fff}
+.strip{background:var(--navy2);position:relative}
+.strip .wrap{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.strip .wrap::-webkit-scrollbar{display:none}
+.strip .lab{flex:none;align-self:center;font:600 14px/1 "Barlow",sans-serif;color:#9FB6C8;margin-right:12px}
+.st{position:relative;flex:none;display:flex;align-items:center;gap:8px;padding:13px 16px;color:#E3EAF0;text-decoration:none;font:600 15px/1.2 "Barlow",sans-serif;white-space:nowrap;border-left:1px solid rgba(255,255,255,.09)}
+.st:hover{background:rgba(255,255,255,.08);color:#fff}
+.st.on{background:#fff;color:var(--navy)}
+.st svg{width:17px;height:17px}
+.st small{font:500 13px/1 "Barlow",sans-serif;opacity:.75}
+.st .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.dot.av-ok{background:#4FD39A}.dot.av-mid{background:var(--amber)}.dot.av-full{background:#E87070}
+.st.on .dot.av-ok{background:var(--green-d)}.st.on .dot.av-full{background:var(--red)}
+.st.add{background:var(--purple);color:#fff;border-left:0;margin-left:auto}
+.st.add:hover{background:#7A62B5}
 
-.sec{padding:72px 0}
-.sec.mist{background:var(--mist)}
-.sec.ice{background:var(--ice)}
-.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:16px 48px;align-items:end;margin-bottom:32px}
-.sec-head h2{font-weight:800;font-size:clamp(30px,4vw,44px);line-height:1;color:var(--red);padding-left:16px;border-left:5px solid var(--red)}
-.sec-head p{max-width:58ch}
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font:700 16px/1 "Barlow",sans-serif;padding:15px 20px;text-decoration:none;border:2px solid transparent;cursor:pointer;background:none}
+.btn svg{width:18px;height:18px;flex:none}
+.btn.purple{background:var(--purple);color:#fff}.btn.purple:hover{background:#584190}
+.btn.navy{background:var(--navy);color:#fff}.btn.navy:hover{background:var(--deep)}
+.btn.red{background:var(--red);color:#fff}.btn.red:hover{background:#BD3A3A}
+.btn.teal{background:var(--teal);color:var(--navy)}.btn.teal:hover{background:#4CC6C1}
+.btn.sky{background:var(--sky);color:var(--navy)}.btn.sky:hover{background:#33B8EA}
+.btn.line{border-color:var(--navy);color:var(--navy);background:#fff}.btn.line:hover{background:var(--navy);color:#fff}
+.btn.ghost{border-color:#fff;color:#fff}.btn.ghost:hover{background:#fff;color:var(--navy)}
+
+/* numbered section tabs with a coloured top edge, then the black ticker */
+.stabs{position:sticky;top:0;z-index:30;background:#D5DEE5;box-shadow:0 10px 22px -14px rgba(11,26,39,.45)}
+.stabs .row{display:flex;gap:0;padding-top:10px}
+.stab{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:12px;text-align:left;background:#fff;color:var(--navy);border:0;border-top:5px solid var(--c,var(--sky));border-right:1px solid var(--line);padding:11px 14px 12px;cursor:pointer;font:inherit}
+.stab:last-child{border-right:0}
+.stab .n{flex:none;width:30px;height:30px;display:grid;place-items:center;background:var(--navy);color:#fff;font:700 16px/1 "Barlow",sans-serif}
+.stab b{display:block;font:700 17px/1.15 "Barlow",sans-serif}
+.stab span span{display:block;font-size:14px;line-height:1.2;color:var(--soft);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stab>span:last-child{min-width:0}
+.stab:hover{background:#F3F6F8}
+.stab.on{background:var(--navy);color:#fff}
+.stab.on .n{background:var(--c,var(--sky));color:var(--navy)}
+.stab.on span span{color:#C9D6E0}
+.c-sky{--c:var(--sky)}.c-red{--c:var(--red)}.c-green{--c:var(--green)}.c-purple{--c:var(--purple)}.c-amber{--c:var(--amber)}.c-teal{--c:var(--teal)}
+.stab.c-red.on .n,.stab.c-purple.on .n{color:#fff}
+.ticker{background:var(--black);color:var(--amber);font:600 15px/1.35 "Barlow",sans-serif}
+.ticker .wrap{display:flex;gap:14px;align-items:center;min-height:36px;padding-top:6px;padding-bottom:6px}
+.ticker b{color:#fff;flex:none}
+.ticker button{margin-left:auto;flex:none;font:600 14px/1 "Barlow",sans-serif;color:#fff;background:none;border:1px solid rgba(255,255,255,.5);padding:6px 10px;cursor:pointer}
+.ticker button:hover{background:#fff;color:var(--black)}
+
+/* panels and sign headers */
+.panel{padding:30px 0 56px}
+.sheet{background:#fff;border-top:8px solid var(--navy);box-shadow:0 1px 2px rgba(19,41,60,.05),0 10px 28px -14px rgba(19,41,60,.16)}
+.sheet+.sheet{margin-top:28px}
+.sign-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px 24px;flex-wrap:wrap;padding:18px 24px 20px;background:var(--c,var(--purple));color:#fff}
+.sign-h h2{font:800 clamp(27px,3.6vw,38px)/1.05 "Barlow",sans-serif;letter-spacing:-.005em}
+.sign-h span{font:400 clamp(18px,2.2vw,26px)/1.1 "Barlow",sans-serif;opacity:.9}
+.sign-h.c-sky,.sign-h.c-amber,.sign-h.c-teal{color:var(--navy)}
+.sign-h.c-green{background:var(--green-d)}
+.sheet-in{padding:24px}
+.intro{max-width:74ch;margin-bottom:20px}
+
+/* availability */
+.av{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 "Barlow",sans-serif;padding:8px 11px}
+.av::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor;flex:none}
+.av-ok{background:var(--green-d);color:#fff}
+.av-mid{background:var(--amber);color:var(--navy)}
+.av-full{background:var(--red);color:#fff}
+
+/* pitch type colours, used like the train, bus and coach colours on the transport page */
+.kd{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;color:#fff;flex:none;position:relative}
+.kd svg{width:17px;height:17px}
+.k-tent{background:var(--green)}.k-van{background:var(--sky)}.k-caravan{background:var(--purple)}.k-glamping{background:var(--orange)}
+
+/* notice box */
+.notice{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);background:#fff;border:1px solid var(--line);margin-top:24px}
+.notice .nh{background:var(--navy);color:#fff;padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
+.notice .nh span{color:var(--teal);font-weight:600;font-size:15px}
+.notice .nh b{font:800 26px/1.05 "Barlow Condensed",sans-serif;margin-top:4px}
+.notice .nb{padding:18px 22px;display:flex;gap:16px 24px;align-items:center;flex-wrap:wrap}
+.notice .nb p{flex:1 1 320px;font-size:16px;line-height:25px}
 
 /* ring map */
 .rmap{width:100%;height:auto;display:block;overflow:visible}
-.rmap .ring{fill:none;stroke:var(--teal);stroke-opacity:.55;stroke-width:1.5;stroke-dasharray:5 7}
+.rmap .ring{fill:none;stroke:var(--teal);stroke-opacity:.6;stroke-width:1.5;stroke-dasharray:5 7}
 .rmap .rl{fill:var(--teal);font:500 13px "Barlow",sans-serif;text-anchor:middle}
 .rmap .road{fill:none;stroke:#8C9DAD;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
 .rmap .rdl{fill:#B9CAD8;font:600 12px "Barlow",sans-serif;text-anchor:middle}
 .rmap .town{fill:#9FD9D6}
 .rmap .tl{fill:#D6E2EA;font:500 14px "Barlow",sans-serif}
-.rmap .runway{stroke:var(--teal);stroke-width:9;stroke-linecap:round}
-.rmap .ctr{fill:none;stroke:#fff;stroke-width:3}
+.rmap .runway{stroke:var(--amber);stroke-width:9;stroke-linecap:round}
+.rmap .ctr{fill:var(--navy);stroke:#fff;stroke-width:3}
 .rmap .ctr-dot{fill:#fff}
 .rmap .cl{fill:#fff;font:700 15px "Barlow",sans-serif}
-.rmap .mk circle{fill:var(--navy-deep);stroke:#fff;stroke-width:2.5;transition:fill .25s}
-.rmap .mk path{fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round}
-.rmap a.mk:hover circle,.rmap .mk.on circle{fill:var(--red)}
+.rmap .mk circle{fill:var(--sky);stroke:#fff;stroke-width:2.5}
+.rmap .mk path{fill:none;stroke:var(--navy);stroke-width:2;stroke-linejoin:round}
+.rmap a.mk:hover circle,.rmap .mk.on circle{fill:var(--amber)}
 .rmap .mk.ghost circle{fill:none;stroke-dasharray:4 4;stroke:#9FD9D6}
 .rmap .mk.ghost path{stroke:#9FD9D6}
 .rmap .ghost-l{fill:#9FD9D6;font:600 14px "Barlow",sans-serif}
-.light .rmap .tl{fill:var(--navy)}
-.light .rmap .cl{fill:var(--navy)}
-.light .rmap .ctr{stroke:var(--navy)}
-.light .rmap .ctr-dot{fill:var(--navy)}
-.light .rmap .town{fill:var(--teal-ink)}
-.light .rmap .rdl{fill:var(--muted)}
-.light .rmap .mk circle{fill:var(--navy)}
 
-/* availability badge */
-.av{display:inline-flex;align-items:center;gap:7px;font:700 13px/1 "Barlow",sans-serif;padding:8px 10px;text-transform:uppercase;letter-spacing:.03em}
-.av::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
-.av-ok{background:#DDF3EA;color:#0B5A3C}
-.av-mid{background:#FFE9A8;color:#5A4500}
-.av-full{background:#F6D5D5;color:#8E1F1F}
-.tab .dot{width:9px;height:9px;border-radius:50%;flex:none}
-.tab .dot.av-ok{background:#4FD39A}
-.tab .dot.av-mid{background:#F2C230}
-.tab .dot.av-full{background:#E87070}
-.tab.on .dot{box-shadow:0 0 0 2px var(--navy)}
-.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.tab,.cmp .y,.cmp .n{position:relative}
-.cmp .y,.cmp .n{display:inline-block}
-.cmp .av{white-space:nowrap}
+/* links to the other guides: coloured tiles with a round icon badge */
+.guides{background:var(--navy);color:#fff;padding:40px 0 48px}
+.guides h2{font:800 clamp(27px,3.6vw,36px)/1.05 "Barlow",sans-serif}
+.guides>.wrap>p{color:#C9D6E0;margin-top:6px;max-width:70ch}
+.gt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:52px}
+.g{position:relative;display:block;text-decoration:none;text-align:center;padding:44px 16px 20px;background:var(--c);color:#fff;border-bottom:6px solid rgba(0,0,0,.22)}
+.g i{position:absolute;top:-32px;left:50%;margin-left:-32px;width:64px;height:64px;border-radius:50%;background:#fff;border:7px solid var(--c);display:grid;place-items:center;color:var(--navy)}
+.g i svg{width:26px;height:26px}
+.g b{display:block;font:800 23px/1.1 "Barlow Condensed",sans-serif}
+.g span{display:block;font-size:15px;line-height:21px;margin-top:5px}
+.g.dark{color:var(--navy)}
+.g:hover{filter:brightness(1.08)}
 
-/* links to the other guides */
-.follow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.sign{display:grid;grid-template-columns:52px minmax(0,1fr) 36px;align-items:stretch;background:var(--navy);color:#fff;text-decoration:none;border-bottom:4px solid var(--teal);box-shadow:0 8px 20px rgba(11,26,39,.14);transition:transform .3s var(--ease)}
-.sign:hover{transform:translateY(-2px);border-bottom-color:var(--red)}
-.sign .si{background:var(--teal);display:grid;place-items:center}
-.sign .si svg{width:24px;height:24px;color:#fff}
-.sign .st{padding:14px 14px}
-.sign .st b{display:block;font:700 17px/1.2 "Barlow",sans-serif}
-.sign .st span{display:block;font-size:14px;line-height:20px;color:#B9CAD8;margin-top:3px}
-.sign .sa{display:grid;place-items:center;border-left:1px solid rgba(255,255,255,.14)}
-.sign .sa svg{width:18px;height:18px}
-@media (max-width:1000px){.follow{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.follow{grid-template-columns:1fr}}
-
-.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.reveal.in{opacity:1;transform:none}
-.small{background:var(--navy-deep);color:#AFC0CD;font-size:14px;line-height:22px;padding:24px 0}
+.small{background:var(--deep);color:#AFC0CD;font-size:14px;line-height:22px;padding:22px 0}
 .small p+p{margin-top:8px}
 .small a{color:#fff}
-.sample-bar{background:#FFE9A8;color:#4A3B00;font:600 15px/1.4 "Barlow",sans-serif;text-align:center;padding:10px 18px;border-bottom:2px solid #E2C35A}
-@media (max-width:720px){
-  .wrap{padding:0 18px}
-  .sec{padding:52px 0}
-  .sec-head{grid-template-columns:1fr}
-  .btn{flex:1 1 auto;justify-content:center}
-}
-@media (prefers-reduced-motion:reduce){
-  .reveal{opacity:1;transform:none;transition:none}
-  .btn,.tab{transition:none}
-}
-
-.hero{position:relative;background:var(--navy);color:#fff;overflow:hidden}
-.hero-photo{position:relative;height:clamp(240px,46vh,460px);overflow:hidden}
-.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%}
-.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,41,60,0) 35%,rgba(19,41,60,.65) 75%,var(--navy) 100%),linear-gradient(90deg,rgba(19,41,60,.55),rgba(19,41,60,0) 60%)}
-.hero-body{position:relative;margin-top:-110px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:40px;align-items:end;padding-bottom:48px}
-.hero h1{font-weight:800;font-size:clamp(38px,6vw,68px);line-height:.98;margin-top:14px}
-.kind{font:700 16px/1.4 "Barlow",sans-serif;color:var(--teal);text-transform:uppercase;letter-spacing:.04em;margin-top:12px}
-.lead{margin-top:14px;max-width:60ch;color:#E3EAF0;font-size:18px;line-height:28px}
-.glass{background:rgba(14,33,49,.92);border-top:4px solid var(--teal);box-shadow:0 20px 40px rgba(0,0,0,.28)}
-.glass h2{font:700 20px/1 "Barlow",sans-serif;text-transform:uppercase;letter-spacing:.03em;color:var(--teal);padding:18px 20px 12px}
-.rows{padding:0 20px 20px;display:grid;gap:4px}
-.row{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;padding:10px 12px;background:rgba(255,255,255,.04)}
-.row dt{color:#9FD9D6;font-weight:500}
-.row dd{color:#fff;font-weight:700}
-.row.hl{background:var(--red)}
-.row.hl dt{color:#fff}
-
-.sub{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:53px;z-index:15}
-.sub .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
-.sub .wrap::-webkit-scrollbar{display:none}
-.sub a{flex:none;padding:14px 14px;font:600 15px/1 "Barlow",sans-serif;color:var(--navy);text-decoration:none;border-bottom:3px solid transparent}
-.sub a:hover,.sub a.on{border-bottom-color:var(--red);color:var(--red)}
-
-.about{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:40px;align-items:start}
-.about .txt p+p{margin-top:14px}
-.owner{margin-top:22px;background:var(--navy);color:#fff;padding:22px 24px;font:600 19px/1.4 "Barlow",sans-serif}
-.owner::before{content:"";display:block;width:40px;height:5px;background:var(--teal);margin-bottom:12px}
-.owner cite{display:block;margin-top:10px;font:600 15px/1.3 "Barlow",sans-serif;font-style:normal;color:var(--teal)}
-.gal{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.gal figure:first-child{grid-column:1/-1}
-.gal img{width:100%;aspect-ratio:4/3;object-fit:cover}
-.gal figure:first-child img{aspect-ratio:16/9}
-.gal figcaption{font:500 13px/1.35 "Barlow",sans-serif;color:var(--muted);margin-top:4px}
-
-.pitches{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.pitch{background:#fff;border:1px solid var(--line);border-top:5px solid var(--teal);padding:20px;display:flex;flex-direction:column;gap:6px}
-.pitch.k-van{border-top-color:var(--purple)}
-.pitch.k-caravan{border-top-color:var(--navy)}
-.pitch.k-glamping{border-top-color:var(--red)}
-.pitch .pi{width:44px;height:44px;border-radius:50%;background:var(--navy);color:var(--teal);display:grid;place-items:center;margin-bottom:6px}
-.pitch .pi svg{width:22px;height:22px}
-.pitch h3{font:700 20px/1.2 "Barlow",sans-serif;color:var(--navy)}
-.pitch .pr{font:800 34px/1 "Barlow Condensed",sans-serif;color:var(--navy)}
-.pitch .pr small{font:600 15px/1 "Barlow",sans-serif;color:var(--muted);margin-left:6px}
-.pitch dl{display:grid;gap:4px;font-size:15px;line-height:22px;margin-top:6px}
-.pitch dl div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;border-top:1px solid var(--line);padding-top:6px}
-.pitch dt{color:var(--muted)}
-.pitch dd{font-weight:600}
-.dates{margin-top:20px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;background:var(--line);border:1px solid var(--line)}
-.dates div{background:#fff;padding:14px 16px}
-.dates dt{font:600 13px/1 "Barlow",sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--purple)}
-.dates dd{font-weight:700;color:var(--navy);margin-top:6px}
-
-.facs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.fg{background:#fff;border:1px solid var(--line)}
-.fg h3{background:var(--navy);color:#fff;font:700 16px/1.2 "Barlow",sans-serif;text-transform:uppercase;letter-spacing:.03em;padding:12px 16px}
-.fg ul{list-style:none}
-.fg li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;padding:10px 16px;border-top:1px solid var(--line);font-size:15px;line-height:21px}
-.fg li:first-child{border-top:0}
-.fg li svg{width:20px;height:20px;margin-top:1px}
-.fg li.y svg{color:var(--teal-ink)}
-.fg li.n{color:#8A96A0}
-.fg li.n svg{color:#B3BDC5}
-.fg li b{display:block;font-weight:600}
-.fg li small{display:block;color:var(--muted);font-size:14px}
-
-.getto{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.9fr);gap:28px;align-items:start}
-.ways{display:grid;gap:10px}
-.way{display:grid;grid-template-columns:52px minmax(0,1fr);background:#fff;border:1px solid var(--line)}
-.way i{background:var(--teal);color:#fff;display:grid;place-items:center}
-.way i svg{width:24px;height:24px}
-.way div{padding:14px 16px}
-.way b{display:block;color:var(--navy);font-weight:700}
-.way p{font-size:16px;line-height:24px}
-.where{background:var(--navy);color:#fff;padding:20px}
-.where .big{display:flex;align-items:baseline;gap:10px;font:800 46px/1 "Barlow Condensed",sans-serif;color:var(--teal)}
-.where .big span{font:600 16px/1.2 "Barlow",sans-serif;color:#C9D6E0}
-.where address{font-style:normal;color:#E3EAF0;margin:8px 0 6px;font-size:16px;line-height:24px}
-.where .lk{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
-.where .lk a{font:600 14px/1 "Barlow",sans-serif;padding:9px 11px;background:rgba(255,255,255,.08);text-decoration:none}
-.where .lk a:hover{background:rgba(50,180,175,.25)}
-
-.gtk{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px}
-.gtk div{padding:16px 0;border-bottom:1px solid var(--line)}
-.gtk dt{font:700 17px/1.2 "Barlow",sans-serif;color:var(--navy)}
-.gtk dd{margin-top:4px;font-size:16px;line-height:24px}
-
-.book{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px;align-items:start}
-.book .acts{display:grid;gap:10px}
-.book .acts .btn{justify-content:flex-start}
-.offer{background:var(--red);color:#fff;padding:20px 22px;font-weight:600}
-.offer b{display:block;font:800 24px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin-bottom:6px}
-.terms{margin-top:14px;background:#fff;border:1px solid var(--line)}
-.terms div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
-.terms div:first-child{border-top:0}
-.terms dt{color:var(--muted)}
-.terms dd{font-weight:600}
-.others{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:8px}
-.others a{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;background:var(--navy);color:#fff;text-decoration:none;padding:14px 16px;border-bottom:4px solid var(--teal);font-weight:700}
-.others a span{display:block;font:500 14px/1.3 "Barlow",sans-serif;color:#B9CAD8}
-.others a svg{width:20px;height:20px}
-.others a:hover{border-bottom-color:var(--red)}
+.sample-bar{background:var(--amber);color:var(--navy);font:600 15px/1.4 "Barlow",sans-serif;text-align:center;padding:9px 18px}
 
 @media (max-width:1000px){
-  .hero-body{grid-template-columns:1fr;gap:28px;margin-top:-80px}
+  .gt{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:50px}
+  .stab span span{display:none}
+}
+@media (max-width:720px){
+  .wrap{padding:0 16px}
+  .brand span,.strip .lab{display:none}
+  .stabs .row{overflow-x:auto;scrollbar-width:none;padding-top:8px}
+  .stabs .row::-webkit-scrollbar{display:none}
+  .stab{flex:1 0 auto;padding:10px 12px 11px;gap:8px}
+  .stab .n{width:26px;height:26px;font-size:14px}
+  .stab b{font-size:15px;white-space:nowrap}
+  .panel{padding:20px 0 40px}
+  .sheet-in{padding:18px 16px}
+  .sign-h{padding:14px 16px 16px}
+  .notice{grid-template-columns:1fr}
+  .gt{grid-template-columns:1fr}
+  .ticker button{margin-left:0}
+  .ticker .wrap{flex-wrap:wrap;gap:6px 12px}
+}
+
+.hero{position:relative;background:var(--navy) center/cover no-repeat;color:#fff}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,26,39,.94) 0%,rgba(19,41,60,.8) 48%,rgba(19,41,60,.28) 100%)}
+.hero-in{position:relative;padding-top:44px}
+.crumb{font:500 15px/1.4 "Barlow",sans-serif;color:#C9D6E0;margin-bottom:14px}
+.crumb a{color:#fff;text-decoration:none;border-bottom:2px solid var(--teal)}
+.crumb i{font-style:normal;margin:0 8px;color:var(--teal)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tagp{display:inline-flex;align-items:center;font:700 15px/1 "Barlow",sans-serif;padding:8px 11px;background:var(--purple);color:#fff}
+.hero h1{font:800 clamp(40px,6.2vw,74px)/.98 "Barlow Condensed","Barlow",sans-serif;max-width:16ch}
+.hero .kindl{font:700 clamp(18px,2.2vw,22px)/1.3 "Barlow",sans-serif;color:var(--teal);margin-top:10px}
+.hero .lead{margin-top:12px;max-width:58ch;color:#E9EFF4;font-size:18px;line-height:28px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:64px;position:relative;top:44px}
+.tile{position:relative;text-align:center;padding:42px 16px 20px;background:var(--c);color:#fff;border-bottom:6px solid rgba(0,0,0,.24);box-shadow:0 16px 30px -18px rgba(11,26,39,.6)}
+.tile i{position:absolute;top:-32px;left:50%;margin-left:-32px;width:64px;height:64px;border-radius:50%;background:#fff;border:7px solid var(--c);display:grid;place-items:center;color:var(--navy)}
+.tile i svg{width:26px;height:26px}
+.tile b{display:block;font:800 25px/1.1 "Barlow Condensed",sans-serif}
+.tile span{display:block;font:600 17px/1.3 "Barlow",sans-serif;margin-top:4px}
+.tile.dark{color:var(--navy)}
+.under{background:#fff;padding:64px 0 16px;font-size:16px}
+.under b{color:var(--teal-ink)}
+
+.about{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:32px;align-items:start}
+.about .txt p+p{margin-top:14px}
+.owner{margin-top:22px;background:var(--navy);color:#fff;padding:20px 22px;font:600 19px/1.4 "Barlow",sans-serif;border-left:6px solid var(--teal)}
+.owner cite{display:block;margin-top:8px;font:600 15px/1.3 "Barlow",sans-serif;font-style:normal;color:var(--teal)}
+.facts{margin-top:22px;border:1px solid var(--line)}
+.facts div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:11px 14px;border-top:1px solid var(--line)}
+.facts div:first-child{border-top:0}
+.facts dt{color:var(--soft)}
+.facts dd{font-weight:600;color:var(--navy)}
+.gal{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.gal figure{grid-column:span 3}
+.gal figure:first-child{grid-column:1/-1}
+.gal.odd figure:nth-last-child(-n+3){grid-column:span 2}
+.gal img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.gal figure:first-child img{aspect-ratio:16/9}
+.gal figcaption{font:500 14px/1.35 "Barlow",sans-serif;color:var(--soft);margin-top:4px}
+
+.pitches{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.pitch{border:1px solid var(--line);background:#fff;display:flex;flex-direction:column}
+.pitch header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;color:#fff;background:var(--c)}
+.pitch header i{width:40px;height:40px;border-radius:50%;background:#fff;color:var(--navy);display:grid;place-items:center}
+.pitch header i svg{width:21px;height:21px}
+.pitch h3{font:700 19px/1.15 "Barlow",sans-serif}
+.pitch.k-tent{--c:var(--green-d)}.pitch.k-van{--c:var(--sky)}.pitch.k-caravan{--c:var(--purple)}.pitch.k-glamping{--c:var(--orange)}
+.pitch.k-tent,.pitch.k-van,.pitch.k-caravan,.pitch.k-glamping{background:#fff}
+.pitch.k-van header,.pitch.k-glamping header{color:var(--navy)}
+.pitch .pp{padding:14px 16px 4px;font:800 44px/1 "Barlow Condensed",sans-serif;color:var(--navy)}
+.pitch .pp small{font:600 16px/1 "Barlow",sans-serif;color:var(--soft);margin-left:8px}
+.pitch dl{padding:8px 16px 16px;display:grid;gap:0;font-size:16px;line-height:23px}
+.pitch dl div{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px;border-top:1px solid var(--line);padding:7px 0}
+.pitch dt{color:var(--soft)}
+.pitch dd{font-weight:600}
+.dates{margin-top:24px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:var(--navy);color:#fff}
+.dates div{padding:14px 16px;border-left:1px solid rgba(255,255,255,.14)}
+.dates div:first-child{border-left:0}
+.dates dt{font:600 15px/1.2 "Barlow",sans-serif;color:var(--amber)}
+.dates dd{font:700 18px/1.25 "Barlow",sans-serif;margin-top:4px}
+
+.facs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.fg{background:#fff;border:1px solid var(--line);border-top:6px solid var(--c)}
+.fg h3{font:700 19px/1.2 "Barlow",sans-serif;color:var(--navy);padding:13px 16px 11px}
+.fg ul{list-style:none}
+.fg li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;padding:9px 16px;border-top:1px solid var(--line);font-size:16px;line-height:22px}
+.fg li>svg{width:22px;height:22px;padding:3px}
+.fg li.y>svg{background:var(--green-d);color:#fff}
+.fg li.n{color:#7E8C97}
+.fg li.n>svg{color:#A9B6C0}
+.fg li b{display:block;font-weight:600}
+.fg li small{display:block;color:var(--soft);font-size:15px}
+.rules{margin-top:24px;border:1px solid var(--line)}
+.rules h3{background:var(--navy);color:#fff;font:700 19px/1.2 "Barlow",sans-serif;padding:13px 16px}
+.rules dl div{display:grid;grid-template-columns:170px minmax(0,1fr);gap:16px;padding:13px 16px;border-top:1px solid var(--line)}
+.rules dt{font-weight:700;color:var(--navy)}
+
+.getto{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:24px;align-items:start}
+.ways{border:1px solid var(--line)}
+.ways h3,.where h3{background:var(--black);color:#fff;font:700 18px/1.2 "Barlow",sans-serif;padding:13px 16px}
+.way{display:grid;grid-template-columns:132px minmax(0,1fr);border-top:1px solid var(--line);background:#fff}
+.way .wl{background:var(--c);color:#fff;font:700 16px/1.2 "Barlow",sans-serif;padding:14px 12px;display:flex;align-items:center;gap:8px}
+.way .wl svg{width:20px;height:20px;flex:none}
+.way.dark .wl{color:var(--navy)}
+.way p{padding:13px 16px;font-size:16px;line-height:24px}
+.where{background:var(--navy);color:#fff}
+.where .wb{padding:16px 18px 18px}
+.where .big{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;font:800 50px/1 "Barlow Condensed",sans-serif;color:var(--amber)}
+.where .big span{font:600 16px/1.2 "Barlow",sans-serif;color:#C9D6E0}
+.where address{font-style:normal;color:#E9EFF4;margin:8px 0 12px;font-size:16px;line-height:24px}
+.where .lk{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+
+.book{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+.bookbox{border:1px solid var(--line)}
+.bookbox .fh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;background:var(--purple);color:#fff;padding:16px 20px}
+.bookbox .fh i{width:42px;height:42px;border-radius:50%;background:#fff;color:var(--purple);display:grid;place-items:center}
+.bookbox .fh i svg{width:22px;height:22px}
+.bookbox .fh b{display:block;font:700 21px/1.1 "Barlow",sans-serif}
+.bookbox .fh span{display:block;font-size:15px;margin-top:2px}
+.acts{padding:18px 20px 20px;display:grid;gap:10px}
+.acts .btn{justify-content:flex-start}
+.offer{background:var(--red);color:#fff;padding:18px 20px;font-weight:600}
+.offer b{display:block;font:800 26px/1 "Barlow Condensed",sans-serif;margin-bottom:6px}
+.terms{border:1px solid var(--line);margin-top:16px}
+.terms div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.terms div:first-child{border-top:0}
+.terms dt{color:var(--soft)}
+.terms dd{font-weight:600;color:var(--navy)}
+.more{padding:0 0 48px}
+.more h2{font:800 28px/1.1 "Barlow",sans-serif;color:var(--navy);margin-bottom:14px}
+.more .ml{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.more a{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-left:6px solid var(--sky);padding:14px 16px;text-decoration:none;font-weight:700;color:var(--navy)}
+.more a span{display:block;font:500 15px/1.3 "Barlow",sans-serif;color:var(--soft)}
+.more a svg{width:20px;height:20px}
+.more a:hover{border-left-color:var(--purple);background:#F7F5FB}
+
+@media (max-width:1000px){
   .facs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dates{grid-template-columns:repeat(3,minmax(0,1fr))}
   .about,.getto,.book{grid-template-columns:1fr}
 }
 @media (max-width:720px){
-  .hero-photo{height:clamp(240px,60vw,340px)}
-  .hero-body{margin-top:-24px;padding-bottom:36px}
-  .facs,.gtk{grid-template-columns:1fr}
+  .hero-in{padding-top:30px}
+  .tiles{grid-template-columns:1fr;gap:46px;margin-top:56px;top:0;padding-bottom:28px}
+  .under{padding-top:16px}
+  .facs{grid-template-columns:1fr}
   .dates{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .row{grid-template-columns:96px minmax(0,1fr)}
-  .sub{top:49px}
+  .way{grid-template-columns:104px minmax(0,1fr)}
+  .rules dl div{grid-template-columns:1fr;gap:2px}
 }
 </style>
 </head>
 <body>
 
 <div class="sample-bar">Sample page. This is not a real campsite: it shows owners what their listing will look like.</div>
-<header class="hero">
-  <div class="hero-photo"><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" decoding="async"></div>
-  <div class="wrap hero-body">
-    <div>
-      <p class="crumb"><a href="https://www.ukairshowguide.co.uk/riat" target="_top">RIAT</a><span>/</span><a href="https://jskedge1.github.io/airshow-pages/riat-camping/index.html" target="_top">RIAT camping</a><span>/</span>Boscombe Down</p>
-      <span class="tag">Near MOD Boscombe Down</span> <span class="av av-ok">Spaces available</span>
-      <h1>Sample Farm Campsite</h1>
-      <p class="kind">Farm site, open for show week</p>
-      <p class="lead">A quiet farm field a short drive from the showground, with hot showers and space for campervans.</p>
-      <div class="btns">
-        <a class="btn teal" href="#book">How to book</a>
-        <a class="btn outline" href="#getting-there">Getting to the show</a>
-      </div>
-    </div>
-    <aside class="glass" aria-labelledby="kd"><h2 id="kd">Key details</h2><dl class="rows"><div class="row hl"><dt>Distance</dt><dd>2.7 miles from MOD Boscombe Down</dd></div><div class="row"><dt>Spaces</dt><dd>Spaces available</dd></div><div class="row"><dt>Drive</dt><dd>About 10 minutes</dd></div><div class="row"><dt>Open</dt><dd>Wednesday 14 July 2027 to Monday 19 July 2027</dd></div><div class="row"><dt>Pitches</dt><dd>From £25 per night</dd></div><div class="row"><dt>Shuttle</dt><dd>Yes, see Getting to the show</dd></div><div class="row"><dt>Booking</dt><dd>Bookings open now</dd></div></dl></aside>
+<div class="bar"><div class="wrap"><a class="brand" href="https://jskedge1.github.io/airshow-pages/riat-camping/index.html" target="_top"><b>Airshow Camping</b><span>by The Big Guide to UK Airshows</span></a><a class="back" href="https://www.ukairshowguide.co.uk/riat" target="_top">Back to the RIAT guide</a></div></div>
+<nav class="strip" aria-label="RIAT campsites"><div class="wrap"><a class="st" href="https://jskedge1.github.io/airshow-pages/riat-camping/index.html" target="_top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg>RIAT camping</a><a class="st on" href="https://jskedge1.github.io/airshow-pages/riat-camping/sample.html" target="_blank" aria-current="page"><i class="dot av-ok"></i><span class="vh">Spaces available: </span>Sample Farm Campsite <small>2.7 miles</small></a><a class="st add" href="https://jskedge1.github.io/airshow-pages/riat-camping/index.html#list" target="_top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>List your campsite</a></div></nav>
+<header class="hero" style="background-image:url('https://jskedge1.github.io/airshow-pages/camping-hub-img/field-sunny.jpg')">
+  <div class="wrap hero-in">
+    <p class="crumb"><a href="https://www.ukairshowguide.co.uk/riat" target="_top">RIAT</a><i>/</i><a href="https://jskedge1.github.io/airshow-pages/riat-camping/index.html" target="_top">RIAT camping</a><i>/</i>Boscombe Down</p>
+    <div class="tags"><span class="tagp">Near MOD Boscombe Down</span><span class="av av-ok">Spaces available</span></div>
+    <h1>Sample Farm Campsite</h1>
+    <p class="kindl">Farm site, open for show week</p>
+    <p class="lead">A quiet farm field a short drive from the showground, with hot showers and space for campervans.</p>
+    <div class="tiles"><div class="tile" style="--c:var(--purple)"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></i><b>How far</b><span>2.7 miles from MOD Boscombe Down</span></div><div class="tile" style="--c:var(--navy2)"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></i><b>When it is open</b><span>Wednesday 14 July 2027 to Monday 19 July 2027</span></div><div class="tile dark" style="--c:var(--sky)"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></i><b>Pitches</b><span>From £25 per night</span></div></div>
   </div>
 </header>
-<nav class="tabs" aria-label="RIAT campsites"><div class="wrap"><a class="tab" href="https://jskedge1.github.io/airshow-pages/riat-camping/index.html" target="_top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg>RIAT camping</a><a class="tab on" href="https://jskedge1.github.io/airshow-pages/riat-camping/sample.html" target="_blank" aria-current="page" data-area="boscombe"><i class="dot av-ok"></i><span class="vh">Spaces available: </span>Sample Farm Campsite <small>2.7 miles</small></a><a class="tab add" href="https://jskedge1.github.io/airshow-pages/riat-camping/index.html#list" target="_top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>List your campsite</a></div></nav>
-<nav class="sub" aria-label="On this page"><div class="wrap"><a href="#about">About</a><a href="#pitches">Pitches and prices</a><a href="#facilities">Facilities</a><a href="#getting-there">Getting to the show</a><a href="#good-to-know">Good to know</a><a href="#book">Book</a></div></nav>
+<div class="under"><div class="wrap"><p><b>Last checked</b> 20 November 2026. Details come from the campsite, so please check prices and dates with them before you book.</p></div></div>
+<div id="tabsTop"></div><div class="stabs"><div class="wrap"><div class="row" role="tablist" aria-label="Sections"><button type="button" role="tab" class="stab c-sky on" data-p="about" id="tab-about" aria-controls="about" aria-selected="true" tabindex="0"><span class="n">1</span><span><b>About</b><span>The site and photos</span></span></button><button type="button" role="tab" class="stab c-green" data-p="pitches" id="tab-pitches" aria-controls="pitches" aria-selected="false" tabindex="-1"><span class="n">2</span><span><b>Pitches and prices</b><span>Sizes, prices and dates</span></span></button><button type="button" role="tab" class="stab c-purple" data-p="facilities" id="tab-facilities" aria-controls="facilities" aria-selected="false" tabindex="-1"><span class="n">3</span><span><b>Facilities</b><span>On site, and the rules</span></span></button><button type="button" role="tab" class="stab c-red" data-p="getting-there" id="tab-getting-there" aria-controls="getting-there" aria-selected="false" tabindex="-1"><span class="n">4</span><span><b>Getting to the show</b><span>Pitch to the gate</span></span></button><button type="button" role="tab" class="stab c-amber" data-p="book" id="tab-book" aria-controls="book" aria-selected="false" tabindex="-1"><span class="n">5</span><span><b>Book</b><span>Direct with the site</span></span></button></div></div></div>
+<div class="ticker"><div class="wrap"><b>This campsite</b><span>Sample Farm Campsite. 2.7 miles from MOD Boscombe Down. Spaces available. From £25 per night.</span></div></div>
 <main>
-<section class="sec" id="about" aria-labelledby="about-h">
-  <div class="wrap">
-    <div class="sec-head reveal"><h2 id="about-h">About the site</h2><p>Farm site, open for show week, 2.7 miles from MOD Boscombe Down.</p></div>
-    <div class="about"><div class="txt reveal"><p>This is a sample page. It shows campsite owners what their listing on the guide will look like once they send their details over.</p><p>Your own words go here: what the site is like, how long you have been running it, what makes it a good base for the Air Tattoo, and anything visitors always ask about.</p><blockquote class="owner">A line or two from you, in your own words, sits here.<cite>The site owner, Owner</cite></blockquote></div><div class="gal reveal"><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" loading="lazy" decoding="async"><figcaption>Your photos go here. Up to six, the first is the big one at the top.</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/car-pitches.jpg" alt="Cars parked beside small tents on a busy camping field" loading="lazy" decoding="async"><figcaption>Pitches with the car beside the tent</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/showers.jpg" alt="Shower units on a farm campsite" loading="lazy" decoding="async"><figcaption>The shower block</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/bell-tents.jpg" alt="A row of white bell tents along a campsite track" loading="lazy" decoding="async"><figcaption>Ready pitched bell tents</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/lit-pitches.jpg" alt="Pitches lit up with coloured light poles at dusk" loading="lazy" decoding="async"><figcaption>The field after dark</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/hero-flyby.jpg" alt="Aircraft flying over an airshow campsite" loading="lazy" decoding="async"><figcaption>Arrivals day over the field</figcaption></figure></div></div>
-  </div>
+<section class="panel" id="about" role="tabpanel" aria-labelledby="tab-about">
+  <div class="wrap"><div class="sheet">
+    <div class="sign-h c-sky"><h2>About the site</h2><span>Near MOD Boscombe Down</span></div>
+    <div class="sheet-in about"><div class="txt"><p>This is a sample page. It shows campsite owners what their listing on the guide will look like once they send their details over.</p><p>Your own words go here: what the site is like, how long you have been running it, what makes it a good base for the Air Tattoo, and anything visitors always ask about.</p><blockquote class="owner">A line or two from you, in your own words, sits here.<cite>The site owner, Owner</cite></blockquote><dl class="facts"><div><dt>Distance</dt><dd>2.7 miles from MOD Boscombe Down</dd></div><div><dt>Drive</dt><dd>About 10 minutes</dd></div><div><dt>Takes</dt><dd>Tents, Campervans, Caravans and tourers, Glamping</dd></div><div><dt>Shuttle</dt><dd>Yes, see Getting to the show</dd></div><div><dt>Spaces</dt><dd>Spaces available</dd></div></dl></div><div class="gal odd"><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" loading="lazy" decoding="async"><figcaption>Your photos go here. Up to six, the first is the big one at the top.</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/car-pitches.jpg" alt="Cars parked beside small tents on a busy camping field" loading="lazy" decoding="async"><figcaption>Pitches with the car beside the tent</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/showers.jpg" alt="Shower units on a farm campsite" loading="lazy" decoding="async"><figcaption>The shower block</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/bell-tents.jpg" alt="A row of white bell tents along a campsite track" loading="lazy" decoding="async"><figcaption>Ready pitched bell tents</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/lit-pitches.jpg" alt="Pitches lit up with coloured light poles at dusk" loading="lazy" decoding="async"><figcaption>The field after dark</figcaption></figure><figure><img src="https://jskedge1.github.io/airshow-pages/camping-hub-img/hero-flyby.jpg" alt="Aircraft flying over an airshow campsite" loading="lazy" decoding="async"><figcaption>Arrivals day over the field</figcaption></figure></div></div>
+  </div></div>
 </section>
-<section class="sec mist" id="pitches" aria-labelledby="pitches-h">
-  <div class="wrap">
-    <div class="sec-head reveal"><h2 id="pitches-h">Pitches and prices</h2><p>Prices are for show week 2027, as given by the campsite. Check the latest when you book.</p></div>
-    <div class="pitches"><article class="pitch k-tent reveal"><span class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></span><h3>Tent pitch</h3><span class="pr">£25<small>per night</small></span><dl><div><dt>Size</dt><dd>8m by 8m</dd></div><div><dt>Includes</dt><dd>Up to 4 people and 1 car</dd></div></dl></article><article class="pitch k-van reveal"><span class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 17V7h12l4 4h4v6z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/><path d="M14 7v4h4"/></svg></span><h3>Campervan pitch</h3><span class="pr">£30<small>per night</small></span><dl><div><dt>Size</dt><dd>8m by 10m</dd></div><div><dt>Includes</dt><dd>Up to 4 people</dd></div><div><dt>Note</dt><dd>Grass, level</dd></div></dl></article><article class="pitch k-caravan reveal"><span class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16V8a2 2 0 0 1 2-2h11a4 4 0 0 1 4 4v6zM20 16h2"/><circle cx="9" cy="17" r="1.8"/><rect x="6" y="9" width="5" height="3"/></svg></span><h3>Tourer with hook up</h3><span class="pr">£40<small>per night</small></span><dl><div><dt>Size</dt><dd>10m by 10m</dd></div><div><dt>Includes</dt><dd>16 amp electric hook up</dd></div><div><dt>Note</dt><dd>Limited numbers</dd></div></dl></article><article class="pitch k-glamping reveal"><span class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3L3 20h18z"/><path d="M12 3v3M9 20l3-6 3 6"/></svg></span><h3>Bell tent, ready pitched</h3><span class="pr">£95<small>per night</small></span><dl><div><dt>Size</dt><dd>5m bell tent</dd></div><div><dt>Includes</dt><dd>Sleeps 4, beds and lighting</dd></div></dl></article></div>
-    <dl class="dates reveal"><div><dt>Opens</dt><dd>Wednesday 14 July 2027</dd></div><div><dt>Closes</dt><dd>Monday 19 July 2027</dd></div><div><dt>Minimum stay</dt><dd>2 nights</dd></div><div><dt>Arrive</dt><dd>From 12:00</dd></div><div><dt>Leave</dt><dd>By 11:00</dd></div></dl>
-  </div>
+<section class="panel" id="pitches" role="tabpanel" aria-labelledby="tab-pitches" hidden>
+  <div class="wrap"><div class="sheet">
+    <div class="sign-h c-green"><h2>Pitches and prices</h2><span>Show week 2027</span></div>
+    <div class="sheet-in">
+      <p class="intro">Prices are for show week 2027, as given by the campsite. I would check the latest when you book.</p>
+      <div class="pitches"><article class="pitch k-tent"><header><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></i><h3>Tent pitch</h3></header><p class="pp">£25<small>per night</small></p><dl><div><dt>Size</dt><dd>8m by 8m</dd></div><div><dt>Includes</dt><dd>Up to 4 people and 1 car</dd></div></dl></article><article class="pitch k-van"><header><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 17V7h12l4 4h4v6z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/><path d="M14 7v4h4"/></svg></i><h3>Campervan pitch</h3></header><p class="pp">£30<small>per night</small></p><dl><div><dt>Size</dt><dd>8m by 10m</dd></div><div><dt>Includes</dt><dd>Up to 4 people</dd></div><div><dt>Note</dt><dd>Grass, level</dd></div></dl></article><article class="pitch k-caravan"><header><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16V8a2 2 0 0 1 2-2h11a4 4 0 0 1 4 4v6zM20 16h2"/><circle cx="9" cy="17" r="1.8"/><rect x="6" y="9" width="5" height="3"/></svg></i><h3>Tourer with hook up</h3></header><p class="pp">£40<small>per night</small></p><dl><div><dt>Size</dt><dd>10m by 10m</dd></div><div><dt>Includes</dt><dd>16 amp electric hook up</dd></div><div><dt>Note</dt><dd>Limited numbers</dd></div></dl></article><article class="pitch k-glamping"><header><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3L3 20h18z"/><path d="M12 3v3M9 20l3-6 3 6"/></svg></i><h3>Bell tent, ready pitched</h3></header><p class="pp">£95<small>per night</small></p><dl><div><dt>Size</dt><dd>5m bell tent</dd></div><div><dt>Includes</dt><dd>Sleeps 4, beds and lighting</dd></div></dl></article></div>
+      <dl class="dates"><div><dt>Opens</dt><dd>Wednesday 14 July 2027</dd></div><div><dt>Closes</dt><dd>Monday 19 July 2027</dd></div><div><dt>Minimum stay</dt><dd>2 nights</dd></div><div><dt>Arrive</dt><dd>From 12:00</dd></div><div><dt>Leave</dt><dd>By 11:00</dd></div></dl>
+    </div>
+  </div></div>
 </section>
-<section class="sec" id="facilities" aria-labelledby="fac-h">
-  <div class="wrap">
-    <div class="sec-head reveal"><h2 id="fac-h">Facilities</h2><p>What is on site during show week.</p></div>
-    <div class="facs"><div class="fg reveal"><h3>Toilets and washing</h3><ul><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Flush toilets</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Portable toilets</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hot showers</b><small>Free, 06:00 to 23:00</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Accessible toilet</b></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Accessible shower</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Washing up area</b></span></li></ul></div><div class="fg reveal"><h3>Power and water</h3><ul><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Drinking water</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Electric hook up</b><small>Tourer pitches only</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Phone charging</b><small>Phone charging point by reception</small></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Wi-Fi</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Chemical toilet disposal</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Grey water disposal</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Ice pack freezing</b><small>Free ice pack freezing</small></span></li></ul></div><div class="fg reveal"><h3>Food and drink</h3><ul><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Food vans</b><small>Breakfast and evening food van</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Shop or essentials</b><small>Small shop for essentials</small></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Bar</b><small>Not available</small></span></li></ul></div><div class="fg reveal"><h3>On the field</h3><ul><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Car by your tent</b></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Hardstanding</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Lighting at night</b><small>Lit paths to the toilets</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Overnight security</b><small>Staff on site overnight</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Barbecues</b><small>Raised barbecues only</small></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Campfires</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Dogs welcome</b><small>On leads, £5 per stay</small></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Generators</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Late arrivals</b><small>Until 22:00</small></span></li></ul></div></div>
-  </div>
+<section class="panel" id="facilities" role="tabpanel" aria-labelledby="tab-facilities" hidden>
+  <div class="wrap"><div class="sheet">
+    <div class="sign-h c-purple"><h2>Facilities</h2><span>On site in show week</span></div>
+    <div class="sheet-in">
+      <div class="facs"><div class="fg" style="--c:var(--sky)"><h3>Toilets and washing</h3><ul><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Flush toilets</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Portable toilets</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hot showers</b><small>Free, 06:00 to 23:00</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Accessible toilet</b></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Accessible shower</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Washing up area</b></span></li></ul></div><div class="fg" style="--c:var(--green)"><h3>Power and water</h3><ul><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Drinking water</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Electric hook up</b><small>Tourer pitches only</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Phone charging</b><small>Phone charging point by reception</small></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Wi-Fi</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Chemical toilet disposal</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Grey water disposal</b></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Ice pack freezing</b><small>Free ice pack freezing</small></span></li></ul></div><div class="fg" style="--c:var(--orange)"><h3>Food and drink</h3><ul><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Food vans</b><small>Breakfast and evening food van</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Shop or essentials</b><small>Small shop for essentials</small></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Bar</b><small>Not available</small></span></li></ul></div><div class="fg" style="--c:var(--purple)"><h3>On the field</h3><ul><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Car by your tent</b></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Hardstanding</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Lighting at night</b><small>Lit paths to the toilets</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Overnight security</b><small>Staff on site overnight</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Barbecues</b><small>Raised barbecues only</small></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Campfires</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Dogs welcome</b><small>On leads, £5 per stay</small></span></li><li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Generators</b><small>Not available</small></span></li><li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Late arrivals</b><small>Until 22:00</small></span></li></ul></div></div>
+      <div class="rules"><h3>Good to know</h3><dl><div><dt>Quiet time</dt><dd>Please keep it down from 23:00 to 07:00.</dd></div><div><dt>Families</dt><dd>Children welcome. There is a small play area by the farm gate.</dd></div><div><dt>Groups</dt><dd>Groups of up to 4 pitches can be booked together. Bigger groups, please ask.</dd></div><div><dt>Accessibility</dt><dd>Level grass, with an accessible toilet near the entrance. No accessible shower yet.</dd></div><div><dt>Arrivals</dt><dd>You can see the arrivals on Wednesday and Thursday from the top of the field.</dd></div></dl></div>
+    </div>
+  </div></div>
 </section>
-<section class="sec ice" id="getting-there" aria-labelledby="gt-h">
-  <div class="wrap">
-    <div class="sec-head reveal"><h2 id="gt-h">Getting to the show</h2><p>How to get from your pitch to the showground at MOD Boscombe Down. RIAT's own travel plan for 2027 is still to be announced.</p></div>
-    <div class="getto"><div class="ways"><div class="way reveal"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16v-4l2-5h14l2 5v4z"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="16.5" r="1.8"/><path d="M3 12h18"/></svg></i><div><b>Driving</b><p>About 10 minutes</p></div></div><div class="way reveal"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l1.5-4M15 21l-1.5-4"/></svg></i><div><b>Shuttle</b><p>Our own minibus to the show car park, every 30 minutes on show days. £5 return.</p></div></div><div class="way reveal"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4.5" r="1.8"/><path d="M10 21l2-6-3-3 1-5 4 3 3 1M12 15l3 6"/></svg></i><div><b>Walking</b><p>No safe walking route, so please drive or use the shuttle.</p></div></div><div class="way reveal"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16v-4l2-5h14l2 5v4z"/><path d="M9 7l1-3h4l1 3"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="16.5" r="1.8"/></svg></i><div><b>Taxi</b><p>Local taxi firms will pick up from the gate. Book early for the evening.</p></div></div><div class="way reveal"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16"/><path d="M10 16V8h3a2.5 2.5 0 0 1 0 5h-3"/></svg></i><div><b>Your car</b><p>Your car stays on your pitch all week.</p></div></div></div><div class="where reveal"><p class="big">2.7 miles<span>from MOD Boscombe Down, as the crow flies</span></p><address>Sample address, near Amesbury, Wiltshire, SP4 0XX</address><div class="lk"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=51.172,-1.695" target="_blank" rel="noopener">Directions</a></div><svg class="rmap" viewBox="-250 -250 500 500" role="img" aria-label="Map of campsites within 10 miles of MOD Boscombe Down"><defs><clipPath id="clip-boscombe"><circle r="248"/></clipPath></defs><g clip-path="url(#clip-boscombe)"><path class="road" d="M-262.2 3.5 L-175.5 -17.3 L-114.7 -24.2 L-71.3 -32.5 L-19.3 -24.2 L41.5 -45.0 L110.9 -65.7 L171.6 -72.6 L249.7 -79.5"/><text class="rdl" x="172" y="-81">A303</text><path class="road" d="M-41.0 115.5 L-23.6 72.6 L-14.9 17.3 L-27.9 -27.0 L-23.6 -65.7 L-19.3 -121.0"/><text class="rdl" x="-24" y="-74">A345</text><path class="road" d="M-41.0 115.5 L41.5 31.1 L58.8 -65.7 L72.7 -118.3"/><text class="rdl" x="59" y="-74">A338</text></g><circle class="ring" r="100"/><text class="rl" x="0" y="-108">5 miles</text><circle class="ring" r="200"/><text class="rl" x="0" y="-208">10 miles</text><circle class="town" cx="-27.9" cy="-28.4" r="4"/><text class="tl" x="-18.9" y="-36.4" text-anchor="start">Amesbury</text><circle class="town" cx="-40.5" cy="115.8" r="4"/><text class="tl" x="-49.5" y="119.8" text-anchor="end">Salisbury</text><circle class="town" cx="-68.0" cy="-36.5" r="4"/><text class="tl" x="-77.0" y="-32.5" text-anchor="end">Stonehenge</text><circle class="town" cx="72.8" cy="-118.7" r="4"/><text class="tl" x="81.8" y="-114.7" text-anchor="start">Tidworth</text><circle class="town" cx="-96.5" cy="101.7" r="4"/><text class="tl" x="-105.5" y="105.7" text-anchor="end">Wilton</text><path class="runway" d="M-19.9 16.7L19.9 -16.7"/><circle class="ctr" r="13"/><circle class="ctr-dot" r="6"/><text class="cl" x="0" y="40" text-anchor="middle">MOD Boscombe Down</text><a href="https://jskedge1.github.io/airshow-pages/riat-camping/sample.html" target="_blank" class="mk on"><title>Sample Farm Campsite, 2.7 miles</title><g transform="translate(45.8 -27.0)"><circle r="15"/><path d="M-7 5L0 -7L7 5Z M0 -7V5"/></g></a></svg></div></div>
-  </div>
+<section class="panel" id="getting-there" role="tabpanel" aria-labelledby="tab-getting-there" hidden>
+  <div class="wrap"><div class="sheet">
+    <div class="sign-h c-red"><h2>Getting to the show</h2><span>MOD Boscombe Down</span></div>
+    <div class="sheet-in">
+      <p class="intro">How to get from your pitch to the showground. RIAT's own travel plan for 2027 is still to be announced, so I would check back nearer the show.</p>
+      <div class="getto"><div class="ways"><h3>Ways to the showground</h3><div class="way" style="--c:var(--navy)"><span class="wl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16v-4l2-5h14l2 5v4z"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="16.5" r="1.8"/><path d="M3 12h18"/></svg>Driving</span><p>About 10 minutes</p></div><div class="way dark" style="--c:var(--sky)"><span class="wl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l1.5-4M15 21l-1.5-4"/></svg>Shuttle</span><p>Our own minibus to the show car park, every 30 minutes on show days. £5 return.</p></div><div class="way" style="--c:var(--green-d)"><span class="wl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4.5" r="1.8"/><path d="M10 21l2-6-3-3 1-5 4 3 3 1M12 15l3 6"/></svg>Walking</span><p>No safe walking route, so please drive or use the shuttle.</p></div><div class="way dark" style="--c:var(--amber)"><span class="wl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16v-4l2-5h14l2 5v4z"/><path d="M9 7l1-3h4l1 3"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="16.5" r="1.8"/></svg>Taxi</span><p>Local taxi firms will pick up from the gate. Book early for the evening.</p></div><div class="way" style="--c:var(--purple)"><span class="wl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16"/><path d="M10 16V8h3a2.5 2.5 0 0 1 0 5h-3"/></svg>Your car</span><p>Your car stays on your pitch all week.</p></div></div><div class="where"><h3>Where it is</h3><div class="wb"><p class="big">2.7 miles<span>from MOD Boscombe Down, as the crow flies</span></p><address>Sample address, near Amesbury, Wiltshire, SP4 0XX</address><div class="lk"><a class="btn sky" href="https://www.google.com/maps/dir/?api=1&amp;destination=51.172,-1.695" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Directions</a></div><svg class="rmap" viewBox="-250 -250 500 500" role="img" aria-label="Map of campsites within 10 miles of MOD Boscombe Down"><defs><clipPath id="clip-boscombe"><circle r="248"/></clipPath></defs><g clip-path="url(#clip-boscombe)"><path class="road" d="M-262.2 3.5 L-175.5 -17.3 L-114.7 -24.2 L-71.3 -32.5 L-19.3 -24.2 L41.5 -45.0 L110.9 -65.7 L171.6 -72.6 L249.7 -79.5"/><text class="rdl" x="172" y="-81">A303</text><path class="road" d="M-41.0 115.5 L-23.6 72.6 L-14.9 17.3 L-27.9 -27.0 L-23.6 -65.7 L-19.3 -121.0"/><text class="rdl" x="-24" y="-74">A345</text><path class="road" d="M-41.0 115.5 L41.5 31.1 L58.8 -65.7 L72.7 -118.3"/><text class="rdl" x="59" y="-74">A338</text></g><circle class="ring" r="100"/><text class="rl" x="0" y="-108">5 miles</text><circle class="ring" r="200"/><text class="rl" x="0" y="-208">10 miles</text><circle class="town" cx="-27.9" cy="-28.4" r="4"/><text class="tl" x="-18.9" y="-36.4" text-anchor="start">Amesbury</text><circle class="town" cx="-40.5" cy="115.8" r="4"/><text class="tl" x="-49.5" y="119.8" text-anchor="end">Salisbury</text><circle class="town" cx="-68.0" cy="-36.5" r="4"/><text class="tl" x="-77.0" y="-32.5" text-anchor="end">Stonehenge</text><circle class="town" cx="72.8" cy="-118.7" r="4"/><text class="tl" x="81.8" y="-114.7" text-anchor="start">Tidworth</text><circle class="town" cx="-96.5" cy="101.7" r="4"/><text class="tl" x="-105.5" y="105.7" text-anchor="end">Wilton</text><path class="runway" d="M-19.9 16.7L19.9 -16.7"/><circle class="ctr" r="13"/><circle class="ctr-dot" r="6"/><text class="cl" x="0" y="40" text-anchor="middle">MOD Boscombe Down</text><a href="https://jskedge1.github.io/airshow-pages/riat-camping/sample.html" target="_blank" class="mk on"><title>Sample Farm Campsite, 2.7 miles</title><g transform="translate(45.8 -27.0)"><circle r="15"/><path d="M-7 5L0 -7L7 5Z M0 -7V5"/></g></a></svg></div></div></div>
+    </div>
+  </div></div>
 </section>
-<section class="sec" id="good-to-know" aria-labelledby="gtk-h">
-  <div class="wrap">
-    <div class="sec-head reveal"><h2 id="gtk-h">Good to know</h2><p>Site rules and the things visitors usually ask.</p></div>
-    <dl class="gtk reveal"><div><dt>Quiet time</dt><dd>Please keep it down from 23:00 to 07:00.</dd></div><div><dt>Families</dt><dd>Children welcome. There is a small play area by the farm gate.</dd></div><div><dt>Groups</dt><dd>Groups of up to 4 pitches can be booked together. Bigger groups, please ask.</dd></div><div><dt>Accessibility</dt><dd>Level grass, with an accessible toilet near the entrance. No accessible shower yet.</dd></div><div><dt>Arrivals</dt><dd>You can see the arrivals on Wednesday and Thursday from the top of the field.</dd></div></dl>
-  </div>
-</section>
-<section class="sec mist" id="book" aria-labelledby="book-h">
-  <div class="wrap">
-    <div class="sec-head reveal"><h2 id="book-h">Book</h2><p>You book directly with the campsite. The guide does not take bookings or payments.</p></div>
-    <div class="book"><div class="acts reveal"><p>Booking details coming soon.</p></div><div><div class="offer reveal"><b>Guide reader offer</b>Any offer for guide readers goes here.</div><dl class="terms reveal"><div><dt>Booking</dt><dd>Bookings open now</dd></div><div><dt>Payment</dt><dd>Full payment when you book</dd></div><div><dt>Cancellation</dt><dd>Full refund up to 30 days before arrival</dd></div></dl></div></div>
-    
-  </div>
-</section>
-<section class="sec" id="plan" aria-labelledby="plan-h">
-  <div class="wrap">
-    <div class="sec-head reveal"><h2 id="plan-h">Plan your camping trip</h2><p>More from the guide, for working out what to bring and what the weekend will cost.</p></div>
-    <div class="follow"><a class="sign reveal" href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></span><span class="st"><b>Camping at Airshows</b><span>What to pack, pitching up and staying comfortable</span></span><span class="sa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="sign reveal" href="https://www.ukairshowguide.co.uk/build-your-kit-calculator?list=camping" target="_top"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span class="st"><b>Camping kit calculator</b><span>Tick your tent, beds and cooking kit and see the cost</span></span><span class="sa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="sign reveal" href="https://www.ukairshowguide.co.uk/riat" target="_top"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14l9-3 3-7 2 1-1 6 6 2v2l-6-1-3 6h-2l1-6-8 1z"/></svg></span><span class="st"><b>RIAT 2027 guide</b><span>What we know about Boscombe Down so far</span></span><span class="sa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="sign reveal" href="https://www.ukairshowguide.co.uk/airshow-questions" target="_top"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h0"/></svg></span><span class="st"><b>Questions and answers</b><span>Camping and places to stay, answered</span></span><span class="sa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></div>
-  </div>
+<section class="panel" id="book" role="tabpanel" aria-labelledby="tab-book" hidden>
+  <div class="wrap"><div class="sheet">
+    <div class="sign-h c-amber"><h2>Book your pitch</h2><span>Spaces available</span></div>
+    <div class="sheet-in book">
+      <div class="bookbox"><div class="fh"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></i><div><b>Book with Sample Farm Campsite</b><span>You book direct. The guide does not take bookings or payments.</span></div></div>
+      <div class="acts"><p>Booking details coming soon.</p></div></div>
+      <div><div class="offer"><b>Guide reader offer</b>Any offer for guide readers goes here.</div><dl class="terms"><div><dt>Booking</dt><dd>Bookings open now</dd></div><div><dt>Payment</dt><dd>Full payment when you book</dd></div><div><dt>Cancellation</dt><dd>Full refund up to 30 days before arrival</dd></div></dl></div>
+    </div>
+  </div></div>
 </section>
 </main>
+
+<section class="guides" aria-labelledby="plan-h"><div class="wrap"><h2 id="plan-h">Plan your camping trip</h2><p>More from the guide, for working out what to bring and what the weekend will cost.</p><div class="gt"><a class="g" style="--c:var(--purple)" href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></i><b>Camping at Airshows</b><span>What to pack, pitching up and staying comfortable</span></a><a class="g dark" style="--c:var(--sky)" href="https://www.ukairshowguide.co.uk/build-your-kit-calculator?list=camping" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></i><b>Camping kit calculator</b><span>Tick your tent, beds and cooking kit and see the cost</span></a><a class="g dark" style="--c:var(--teal)" href="https://www.ukairshowguide.co.uk/riat" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14l9-3 3-7 2 1-1 6 6 2v2l-6-1-3 6h-2l1-6-8 1z"/></svg></i><b>RIAT 2027 guide</b><span>What we know about Boscombe Down so far</span></a><a class="g" style="--c:var(--red)" href="https://www.ukairshowguide.co.uk/airshow-questions" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h0"/></svg></i><b>Questions and answers</b><span>Camping and places to stay, answered</span></a></div></div></section>
 <footer class="small"><div class="wrap">
 <p>The Big Guide to UK Airshows is independent and not part of the Royal International Air Tattoo. Campsite details come from the owners. Please check prices, dates and rules with the campsite before you book.</p>
-<p>Details from Sample Farm Campsite, last checked 20 November 2026.</p><p>Running a campsite near Boscombe Down or Fairford? Email <a href="mailto:contactus@ukairshowguide.co.uk?subject=RIAT%20campsite%20listing">contactus@ukairshowguide.co.uk</a>.</p>
+<p>Running a campsite near Boscombe Down or Fairford? Email <a href="mailto:contactus@ukairshowguide.co.uk?subject=RIAT%20campsite%20listing">contactus@ukairshowguide.co.uk</a>.</p>
 </div></footer>
 <script>
-(function(){var ls=document.querySelectorAll('.sub a'),ids=[].map.call(ls,function(a){return a.getAttribute('href').slice(1)});
-function f(){var y=window.scrollY+140,cur=ids[0];ids.forEach(function(id){var el=document.getElementById(id);if(el&&el.offsetTop<=y)cur=id});
-ls.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur)})}
-window.addEventListener('scroll',f,{passive:true});f()})();
-</script>
-<script>
-(function(){var els=document.querySelectorAll('.reveal');
-if(!('IntersectionObserver' in window)){els.forEach(function(x){x.classList.add('in')});return}
-var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{rootMargin:'0px 0px -40px 0px'});
-els.forEach(function(x){io.observe(x)});setTimeout(function(){els.forEach(function(x){x.classList.add('in')})},2500)})();
+(function(){
+var tabs=[].slice.call(document.querySelectorAll('.stab')),panels=[].slice.call(document.querySelectorAll('.panel')),top=document.getElementById('tabsTop');
+function show(id,jump){
+  if(!tabs.some(function(t){return t.getAttribute('data-p')===id}))return false;
+  tabs.forEach(function(t){var on=t.getAttribute('data-p')===id;t.classList.toggle('on',on);t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;
+    if(on&&t.scrollIntoView&&t.parentNode.scrollWidth>t.parentNode.clientWidth){t.parentNode.scrollLeft=Math.max(0,t.offsetLeft-40)}});
+  panels.forEach(function(p){p.hidden=p.id!==id});
+  if(jump&&top){var r=top.getBoundingClientRect();if(r.top<0||r.top>window.innerHeight*0.7)window.scrollTo(0,r.top+(window.pageYOffset||document.documentElement.scrollTop))}
+  return true}
+tabs.forEach(function(t,i){
+  t.addEventListener('click',function(){show(t.getAttribute('data-p'),true)});
+  t.addEventListener('keydown',function(ev){var d=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;if(!d)return;ev.preventDefault();
+    var n=tabs[(i+d+tabs.length)%tabs.length];show(n.getAttribute('data-p'),false);n.focus()})});
+document.addEventListener('click',function(ev){var a=ev.target.closest?ev.target.closest('[data-go]'):null;if(!a)return;
+  if(show(a.getAttribute('data-go'),true))ev.preventDefault()});
+function fromHash(){var h=(location.hash||'').replace('#','');if(h)show(h,true)}
+window.addEventListener('hashchange',fromHash);fromHash();
+window.ukagTab=show;
+})();
 </script>
 </body>
 </html>
