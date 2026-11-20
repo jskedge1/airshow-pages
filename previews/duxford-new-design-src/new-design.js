@@ -116,6 +116,13 @@
       });
     });
     $$('img[data-nz-logo]').forEach(function (i) { var l = D.getElementById('nzLogo'); if (l && !i.getAttribute('src')) i.src = l.src; });
+    /* the guide band: its photo, numbers, and the page's own open all and close all buttons */
+    var bb = D.getElementById('nzBandBg');
+    if (bb && !bb.getAttribute('src')) { var bp = $('img[data-pic="buchon_pan"]:not([data-dup])') || $('img[data-pic="p40"]:not([data-dup])') || $('img[data-pic="formation"]:not([data-dup])'); if (bp && bp.getAttribute('src')) bb.src = bp.getAttribute('src'); }
+    var fbs = D.getElementById('nzFoldBtns'), grp = $('.fold-bar .grp');
+    if (fbs && grp && !fbs.children.length) { fbs.appendChild(grp); }
+    var nsec = $$('section.fold').length; if (nsec) D.getElementById('nzStatSec').textContent = nsec;
+    D.getElementById('nzStatEv').textContent = D.getElementById('nzStatN').textContent;
     /* how many sections */
     var n = $$('section.fold').length;
     if (n && NUM[n]) D.getElementById('nzCount').textContent = NUM[n];
@@ -144,7 +151,7 @@
   }, { rootMargin: '0px 0px -6% 0px', threshold: .06 });
   function show(el) { el.classList.add('nz-in'); setTimeout(function () { el.style.transitionDelay = ''; }, 1100); }
   function arm() {
-    var sel = '.nz-sec-head,.nz-about>*,.nz-facts>div,.nz-feat3 .h1x-card,.nz-notice-slot .cbx,.folds>section.fold>.fold-h,.cg-next h2,.cg-next .cg-tiles>button,.useful li,.nz-ft .cols>div';
+    var sel = '.nz-band-tx,.nz-band-stats>div,.nz-sec-head,.nz-about>*,.nz-facts>div,.nz-feat3 .h1x-card,.nz-notice-slot .cbx,.folds>section.fold>.fold-h,.cg-next h2,.cg-next .cg-tiles>button,.useful li,.nz-ft .cols>div';
     $$(sel).forEach(function (el) {
       if (done.indexOf(el) > -1) return; done.push(el);
       var sibs = [].filter.call(el.parentNode.children, function (x) { return x.matches(sel); });
