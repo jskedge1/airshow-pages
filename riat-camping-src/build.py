@@ -199,6 +199,9 @@ ICON = {
     "plus": '<path d="M12 5v14M5 12h14"/>',
     "chev": '<path d="M9 5l7 7-7 7"/>',
     "search": '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',
+    "quote": '<path d="M10 7H6v6h4v2a3 3 0 0 1-3 3M19 7h-4v6h4v2a3 3 0 0 1-3 3"/>',
+    "shower": '<path d="M5 21V8a4 4 0 0 1 8 0M9 10h8M11 14v1M15 14v1M13 17v1M17 17v1"/>',
+    "dog": '<path d="M5 9l2-4 3 3h4l3-3 2 4-1 6a5 5 0 0 1-5 4h-2a5 5 0 0 1-5-4z"/><path d="M10 12h0M14 12h0M12 15v1"/>',
     "bolt": '<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',
     "food": '<path d="M6 3v7a2 2 0 0 0 4 0V3M8 12v9M17 21v-8M17 13c-2.5-1-2.5-9 0-10z"/>',
     "list": '<rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/>',
@@ -446,7 +449,7 @@ section[id]{scroll-margin-top:20px}
 .hd.home::before{z-index:1;background:linear-gradient(90deg,rgba(11,26,39,.93) 0%,rgba(19,41,60,.78) 40%,rgba(19,41,60,.2) 78%,rgba(19,41,60,.1) 100%),linear-gradient(180deg,rgba(11,26,39,.6),rgba(11,26,39,0) 26%)}
 .hd-bg{position:absolute;inset:0;background:center 58%/cover no-repeat}
 .hd.home .wrap{z-index:2}
-.hero-in{padding:60px 0 150px}
+.hero-in{padding:56px 0 48px}
 .hero-kick{display:inline-flex;align-items:center;gap:10px;background:var(--or);color:#fff;font:700 19px/1 "Barlow",sans-serif;padding:11px 15px}
 .hero-kick svg{width:19px;height:19px}
 .hd.home h1{color:#fff;font-size:clamp(40px,5.7vw,74px);font-weight:800;line-height:1.02;margin-top:18px;text-shadow:0 2px 22px rgba(0,0,0,.35)}
@@ -455,11 +458,125 @@ section[id]{scroll-margin-top:20px}
 .hero-in .btns{margin-top:26px}
 .btn.ghost{border:2px solid #fff;color:#fff;padding:15px 26px}
 .btn.ghost:hover{background:#fff;color:var(--navy)}
-.count{display:inline-flex;align-items:center;gap:14px;margin-top:26px;padding:12px 18px 12px 14px;background:rgba(11,26,39,.72);border-left:5px solid var(--teal);color:#fff;font-weight:600;font-size:18px;line-height:1.3}
-.count b{font:800 40px/1 "Barlow",sans-serif;color:var(--teal);min-width:1.6em;text-align:center}
-.scene{position:absolute;left:0;right:0;bottom:-1px;z-index:2;height:88px;overflow:hidden;pointer-events:none}
-.scene svg{position:absolute;bottom:0;left:50%;height:100%;width:auto;min-width:100%;transform:translateX(-50%)}
-.ttl{padding:78px 0 96px}
+/* feature row along the bottom of the opening screen */
+.hx-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding-bottom:44px}
+.hx{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:190px;padding:26px 28px;background:rgba(19,41,60,.62);color:#fff;text-decoration:none;border-left:1px solid rgba(255,255,255,.14);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);transition:background .3s,transform .35s cubic-bezier(.22,.61,.36,1)}
+.hx:first-child{border-left:0}
+a.hx:hover{background:var(--or);transform:translateY(-8px)}
+.hx h3{color:#fff;font-size:22px;font-weight:700}
+.hx p{margin-top:8px;font-size:16px;line-height:1.45;color:#E6EDF1}
+.hx .go{margin-top:14px;font-weight:700;font-size:16px;color:var(--teal);display:inline-flex;align-items:center;gap:8px}
+.hx .go svg{width:15px;height:15px;transition:transform .3s}
+a.hx:hover .go{color:#fff}
+a.hx:hover .go svg{transform:translateX(6px)}
+.hx.count{background:var(--navy) center/cover no-repeat;align-items:center;text-align:center;overflow:hidden}
+.hx.count::before{content:"";position:absolute;inset:0;background:rgba(11,26,39,.62)}
+.hx.count>*{position:relative}
+.hx.count b{font:800 68px/1 "Barlow",sans-serif;color:#fff}
+.hx.count span{margin-top:6px;font-weight:600;font-size:16.5px;line-height:1.3;max-width:18ch}
+
+/* counters under the intro photos */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:34px}
+.stats div{border-top:4px solid var(--teal);padding-top:12px}
+.stats b{display:block;font:800 clamp(30px,3.2vw,40px)/1 "Barlow",sans-serif;color:var(--navy)}
+.stats b sup{font-size:.55em;color:var(--or);margin-left:3px}
+.stats span{display:block;margin-top:6px;font-size:15.5px;line-height:1.3}
+
+/* campsite cards: photo on top, facts underneath */
+.fc{display:flex;flex-direction:column;background:#fff;box-shadow:0 14px 34px -22px rgba(19,41,60,.55);transition:transform .4s cubic-bezier(.22,.61,.36,1),box-shadow .4s,opacity .75s cubic-bezier(.22,.61,.36,1)}
+.fc:hover{transform:translateY(-8px);box-shadow:0 30px 44px -24px rgba(19,41,60,.7)}
+.fc .ph{position:relative;aspect-ratio:3/2;overflow:hidden;background:var(--navy)}
+.fc .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.22,.61,.36,1)}
+.fc:hover .ph img{transform:scale(1.08)}
+.fc .ph .area{position:absolute;left:0;bottom:0;background:#fff;color:var(--or-ink);font-weight:700;font-size:15.5px;padding:8px 14px 6px}
+.fc .bd{padding:24px 26px 22px;display:flex;flex-direction:column;flex:1}
+.fc h3{font-size:23px;font-weight:700}
+.fc h3 a{text-decoration:none}
+.fc h3 a:hover{color:var(--or-ink)}
+.fc .kind{margin-top:4px;font-size:16px}
+.fc ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:16px 0 18px;color:var(--ink);font-size:15.5px;line-height:1.3}
+.fc li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;align-items:center}
+.fc li svg{width:18px;height:18px;color:var(--or)}
+.fc li.no{color:#8593A0}
+.fc li.no svg{color:#B4BEC6}
+.fc .foot{margin-top:auto;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fc .foot .av{background:none;padding:0;color:var(--ink)}
+.fc .foot .av-ok::before{background:var(--green)}.fc .foot .av-mid::before{background:var(--amber)}.fc .foot .av-full::before{background:var(--red)}
+.fc .pr{font:800 26px/1 "Barlow",sans-serif;color:var(--navy);white-space:nowrap}
+.fc .pr small{font:600 15px/1 "Barlow",sans-serif;color:var(--or-ink)}
+.fc .view{display:block;text-align:center;background:var(--navy);color:#fff;font-weight:700;text-decoration:none;padding:15px;transition:background .25s}
+.fc .view:hover,.fc:hover .view{background:var(--or)}
+
+/* featured: the official campsite on the left, pick your area on the right */
+.feature{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1fr);gap:56px;align-items:start}
+.fe-ph{position:relative;overflow:hidden}
+.fe-ph img{width:100%;aspect-ratio:3/2;object-fit:cover;transition:transform 1s cubic-bezier(.22,.61,.36,1)}
+.fe-main:hover .fe-ph img{transform:scale(1.05)}
+.fe-ph span{position:absolute;left:0;top:0;background:var(--purple);color:#fff;font-weight:700;font-size:16px;padding:8px 14px}
+.fe-t{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:22px}
+.fe-t h3{font-size:25px;font-weight:700}
+.fe-t b{font:800 26px/1 "Barlow",sans-serif;color:var(--navy)}
+.fe-t b small{font:600 15px/1 "Barlow",sans-serif;color:var(--or-ink)}
+.fe-m{display:flex;flex-wrap:wrap;gap:8px 24px;margin:14px 0 16px;padding-bottom:16px;border-bottom:1px solid var(--line);color:var(--ink);font-weight:600;font-size:15.5px}
+.fe-m span{display:inline-flex;align-items:center;gap:8px}
+.fe-m svg{width:17px;height:17px;color:var(--or)}
+.fe-main .btns{margin-top:22px}
+.rowlist{display:grid;gap:18px;margin-top:30px}
+.rowi{display:grid;grid-template-columns:136px minmax(0,1fr) auto;gap:20px;align-items:center;padding:14px;background:#fff;box-shadow:0 10px 30px -20px rgba(19,41,60,.55);transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s}
+.rowi:hover{transform:translateX(8px);box-shadow:0 18px 34px -20px rgba(19,41,60,.7)}
+.rowi img{width:136px;height:92px;object-fit:cover}
+.rowi b{display:block;font-size:19px;color:var(--ink)}
+.rowi span{display:block;font-size:15.5px;line-height:1.35;margin-top:2px}
+.rowi .btn{padding:14px 18px;font-size:16px;white-space:nowrap}
+
+/* photo band with a photo on the right and a quote card hanging off the bottom */
+.qband{position:relative;color:#fff;background:var(--navy) center/cover no-repeat;padding:96px 0 0;margin-bottom:150px}
+.qband::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,26,39,.93),rgba(19,41,60,.78) 60%,rgba(19,41,60,.6))}
+.qband .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:56px;align-items:end}
+.qband .kick{color:var(--teal)}
+.qband .h{color:#fff}
+.qband .lede{color:#E6EDF1}
+.qband .btns{margin:26px 0 190px}
+.qband .qp{position:relative;margin-bottom:-70px}
+.qband .qp img{width:100%;aspect-ratio:4/4.2;object-fit:cover;box-shadow:0 30px 50px -26px rgba(0,0,0,.8)}
+.qcard{position:absolute;left:36%;bottom:-150px;width:min(440px,56%);background:#fff;color:var(--body);padding:46px 36px 30px;box-shadow:0 26px 50px -24px rgba(19,41,60,.6);z-index:2;transition:transform .4s cubic-bezier(.22,.61,.36,1)}
+.qcard:hover{transform:translateY(-6px)}
+.qcard i{position:absolute;top:-34px;left:50%;margin-left:-38px;width:76px;height:68px;border-radius:38px;background:var(--or);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 6px rgba(215,73,73,.28)}
+.qcard i svg{width:34px;height:34px}
+.qcard p{font-size:19px;line-height:1.55;font-style:italic}
+.qcard b{display:block;margin-top:16px;font-size:21px;color:var(--ink)}
+.qcard span{display:block;font-size:15.5px;color:var(--or-ink);font-weight:600}
+
+/* tips: a checkerboard of photos and colour tiles */
+.mosaic{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.mosaic>*{aspect-ratio:1/1.08;min-height:0;overflow:hidden;position:relative}
+.mosaic img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.22,.61,.36,1)}
+.mosaic figure:hover img{transform:scale(1.08)}
+.tip{display:flex;flex-direction:column;justify-content:center;padding:clamp(22px,3vw,44px);transition:filter .3s}
+.tip:hover{filter:brightness(1.1)}
+.tip p{font-size:clamp(18px,1.75vw,24px);line-height:1.45;font-style:italic}
+.tip b{display:block;margin-top:18px;font-size:21px}
+.tip.t-red{background:var(--or);color:#fff}
+.tip.t-navy{background:var(--navy);color:#fff}
+.tip.t-soft{background:var(--soft);color:var(--body)}
+.tip.t-soft b{color:var(--ink)}
+.tip.t-teal{background:var(--teal);color:var(--navy)}
+
+/* guide cards */
+.gh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:40px}
+.gh .sec-head{margin-bottom:0}
+.gcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px}
+.gc{display:flex;flex-direction:column;text-decoration:none;transition:transform .4s cubic-bezier(.22,.61,.36,1),opacity .75s cubic-bezier(.22,.61,.36,1)}
+.gc:hover{transform:translateY(-8px)}
+.gc .ph{position:relative;overflow:hidden;aspect-ratio:4/3}
+.gc .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.22,.61,.36,1)}
+.gc:hover .ph img{transform:scale(1.08)}
+.gc .ph span{position:absolute;left:0;bottom:0;background:#fff;color:var(--or-ink);font-weight:700;font-size:15.5px;padding:8px 16px 6px}
+.gc h3{font-size:23px;font-weight:700;margin-top:20px}
+.gc p{margin:8px 0 14px;font-size:16px}
+.gc .more{align-self:flex-start;margin-top:auto}
+
+.ttl{padding:78px 0 96px}.ttl{padding:78px 0 96px}
 .ttl h1{color:#fff;font-size:clamp(38px,5.6vw,58px)}
 .crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:16px;font-size:17px}
 .crumbs a{text-decoration:none}
@@ -695,13 +812,40 @@ fieldset.fld{border:0}
 .fbar{background:#07121B;color:#C2CED6;font-size:14px;line-height:1.6;padding:22px 0}
 .fbar p+p{margin-top:6px}
 .fbar a{color:#fff}
+@media (max-width:1000px){
+  .hx-row{grid-template-columns:1fr 1fr}
+  .hx:nth-child(3){border-left:0}
+  .hx:nth-child(n+3){border-top:1px solid rgba(255,255,255,.14)}
+  .feature{grid-template-columns:1fr}
+  .qband .wrap{grid-template-columns:1fr;gap:0}
+  .qband .btns{margin-bottom:40px}
+  .qband .qp{margin-bottom:-60px}
+  .qcard{left:auto;right:24px;width:min(430px,80%)}
+  .mosaic{grid-template-columns:1fr 1fr}
+  .gcards{grid-template-columns:1fr 1fr}
+}
 @media (max-width:720px){
-  .hero-in{padding:44px 0 124px}
+  .hero-in{padding:40px 0 34px}
   .hero-kick{font-size:17px}
-  .count{font-size:16px}
-  .count b{font-size:32px}
-  .scene{height:60px}
   .hd.home::before{background:linear-gradient(180deg,rgba(11,26,39,.88),rgba(19,41,60,.72) 55%,rgba(19,41,60,.5))}
+  .hx-row{padding-bottom:28px}
+  .hx{min-height:0;padding:18px 16px}
+  .hx h3{font-size:18px}
+  .hx p{display:none}
+  .hx .go{margin-top:8px;font-size:15px}
+  .hx.count b{font-size:44px}
+  .hx.count span{font-size:14.5px}
+  .stats{grid-template-columns:1fr 1fr;gap:18px 14px}
+  .rowi{grid-template-columns:92px minmax(0,1fr)}
+  .rowi img{width:92px;height:76px}
+  .rowi .btn{grid-column:1/-1}
+  .qband{padding-top:60px;margin-bottom:210px}
+  .qcard{right:18px;left:18px;width:auto;bottom:-210px;padding:42px 22px 24px}
+  .mosaic>*{aspect-ratio:1/1.15}
+  .tip{padding:16px}
+  .tip p{font-size:15.5px;line-height:1.4}
+  .tip b{font-size:16px;margin-top:10px}
+  .gcards{grid-template-columns:1fr}
 }
 .sample-bar{background:var(--amber);color:var(--ink);font:600 15px/1.4 "Barlow",sans-serif;text-align:center;padding:9px 18px}
 
@@ -768,7 +912,7 @@ fieldset.fld{border:0}
 .hd.home h1{animation:rise .8s .15s both}
 .hero-lead{animation:rise .8s .3s both}
 .hero-in .btns{animation:rise .8s .45s both}
-.count{animation:rise .8s .6s both}
+.hx-row{animation:rise .9s .6s both}
 .ttl .tags{animation:rise .7s .05s both}
 .ttl h1{animation:rise .8s .15s both}
 .ttl .crumbs{animation:rise .8s .3s both}
@@ -845,7 +989,7 @@ fieldset.fld{border:0}
 MOTION_JS = r"""<script>
 (function(){
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-var sel='.sec-head,.about>*,.finder,.cc,.none,.board-scroll,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules-h,.rules>div,.where>*,.formrow>*,.gal figure,.ft .cols>div';
+var sel='.sec-head,.about>*,.finder,.cc,.fc,.none,.board-scroll,.stats>div,.fe-main,.fe-side>*,.rowi,.qband .wrap>*,.gh,.gc,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules-h,.rules>div,.where>*,.formrow>*,.gal figure,.ft .cols>div';
 var els=[].slice.call(document.querySelectorAll(sel));
 if(!els.length||!('IntersectionObserver' in window))return;
 els.forEach(function(el){var sibs=[].filter.call(el.parentNode.children,function(x){return els.indexOf(x)>-1});
@@ -914,21 +1058,34 @@ def home_header(nav_items, n):
       <h1>Camping For The Air Tattoo <em>Near Boscombe Down</em></h1>
       <p class="hero-lead">Find somewhere to pitch up for the first Air Tattoo at MOD Boscombe Down. Compare pitches, prices and facilities, and see how far each campsite is from the show.</p>
       <div class="btns"><a class="btn or inv" href="#campsites">{"Find a campsite" if n else "See what is coming"} {icon("arrow")}</a><a class="btn ghost" href="#list">List your campsite</a></div>
-      <p class="count" id="count" hidden><b id="countDays"></b><span>days until the first Air Tattoo<br>at MOD Boscombe Down</span></p>
+    </div>
+    <div class="hx-row">
+      <div class="hx count" style="background-image:url('{IMG}tents-night.jpg')"><b id="countDays">2027</b><span id="countLab">The first Air Tattoo at MOD Boscombe Down</span></div>
+      <a class="hx" href="#campsites"><h3>{"Find a campsite" if n else "Campsites"}</h3><p>Pitches, prices and spaces for every campsite I list.</p><span class="go">{"See the campsites" if n else "See what is coming"}{icon("arrow")}</span></a>
+      <a class="hx" href="{"#compare" if n >= 2 else "#official"}"><h3>{"Compare them" if n >= 2 else "Official campsite"}</h3><p>{"Every campsite side by side, in one table." if n >= 2 else "RIAT has its own campsite beside the airfield."}</p><span class="go">{"Open the table" if n >= 2 else "Read more"}{icon("arrow")}</span></a>
+      <a class="hx" href="#map"><h3>On the show map</h3><p>See how far each one is from the airfield.</p><span class="go">Open the map{icon("arrow")}</span></a>
     </div>
   </div>
-  <div class="scene">{camp_scene("#13293C")}</div>
 </header>"""
 
 
 COUNT_JS = r"""<script>
-(function(){var box=document.getElementById('count'),out=document.getElementById('countDays');if(!box||!out)return;
-var show=Date.UTC(2027,6,16),now=new Date(),today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
-var days=Math.round((show-today)/864e5);if(days<1)return;
-box.hidden=false;
-if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches){out.textContent=days;return}
-var t0=null,dur=1400;function step(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/dur),v=Math.round(days*(1-Math.pow(1-k,3)));out.textContent=v;if(k<1)requestAnimationFrame(step)}
-out.textContent='0';setTimeout(function(){requestAnimationFrame(step)},700);
+(function(){
+var still=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+function run(el,to,delay){if(still){el.firstChild.nodeValue=to.toLocaleString('en-GB');return}
+  var t0=null,dur=1400;function step(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/dur);el.firstChild.nodeValue=Math.round(to*(1-Math.pow(1-k,3))).toLocaleString('en-GB');if(k<1)requestAnimationFrame(step)}
+  el.firstChild.nodeValue='0';setTimeout(function(){requestAnimationFrame(step)},delay||0)}
+/* days to go, in the opening screen */
+var out=document.getElementById('countDays'),lab=document.getElementById('countLab');
+if(out&&lab){var show=Date.UTC(2027,6,16),now=new Date(),today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()),days=Math.round((show-today)/864e5);
+  if(days>=1){lab.textContent=(days===1?'day':'days')+' until the first Air Tattoo at MOD Boscombe Down';run(out,days,800)}}
+/* the counters under the intro photos count up when they come into view */
+var nums=[].slice.call(document.querySelectorAll('[data-count]'));
+if(nums.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){run(x.target,+x.target.getAttribute('data-count'),150);io.unobserve(x.target)}})},{threshold:.6});
+  nums.forEach(function(el){io.observe(el)})}
+/* pick your area: sets the finder and jumps to the campsites */
+document.addEventListener('click',function(ev){var a=ev.target.closest?ev.target.closest('[data-pick]'):null;if(!a)return;
+  var sel=document.getElementById('fArea');if(sel){sel.value=a.getAttribute('data-pick');sel.dispatchEvent(new Event('change'))}});
 })();
 </script>"""
 
@@ -987,7 +1144,7 @@ HOME_JS = r"""<script>
 /* finder: one area, any number of needs. Works on the cards and the compare board. */
 var area='all',kind='',need=[];
 var sel=document.getElementById('fArea'),ksel=document.getElementById('fKind'),needBtns=document.querySelectorAll('.finder [data-n]'),goBtn=document.getElementById('fGo');
-var cards=document.querySelectorAll('.cards .cc'),rows=document.querySelectorAll('.board tbody tr'),
+var cards=document.querySelectorAll('.cards [data-tags]'),rows=document.querySelectorAll('.board tbody tr'),
     empties=document.querySelectorAll('.cards .none'),nomatch=document.querySelector('.nomatch'),
     shown=document.getElementById('shownText'),clr=document.getElementById('shownClear'),lab=document.getElementById('areaLab');
 var AREA={all:'All areas',boscombe:'Near Boscombe Down',fairford:'Around Fairford'},total=cards.length;
@@ -1071,6 +1228,31 @@ def site_card(s):
             f'<a class="more" href="{e(href)}" target="{tgt}">View campsite</a></article>')
 
 
+def fleet_card(s):
+    """Home page campsite card: photo on top, six facts, then spaces and the price."""
+    href, tgt = page_href(s)
+    ph = s["photos"][0] if s.get("photos") else None
+    img = f'<img src="{e(ph["src"])}" alt="{e(ph.get("alt"))}" loading="lazy" decoding="async">' if ph else ""
+    tags = site_tags(s)
+    fac = s.get("facilities", {})
+    d = dist_text(s)
+    kinds = [KINDS[k] for k in KINDS if k in tags]
+    facts = [("pin", f"{d} away" if d else "Ask for distance", True),
+             ("tent", (kinds[0] if len(kinds) == 1 else f"{len(kinds)} pitch types") if kinds else "Ask for pitches", True),
+             ("shower", "Hot showers", bool(fac_state(fac.get("hot-showers"))[0])),
+             ("bolt", "Electric hook up", "hookup" in tags),
+             ("dog", "Dogs welcome", "dogs" in tags),
+             ("bus", "Shuttle to the show", "shuttle" in tags)]
+    lis = "".join(f'<li{"" if ok else " class=no"}>{icon(ic)}<span>{e(lab) if ok else "No " + e(lab[0].lower() + lab[1:])}</span></li>' for ic, lab, ok in facts)
+    fp = from_price(s)
+    price = f'<span class="pr">{e(fp[1])}<small>/night</small></span>' if fp else '<span class="pr"><small>Ask for prices</small></span>'
+    return (f'<article class="fc" data-area="{e(s["area"])}" data-tags="{" ".join(sorted(tags))}">'
+            f'<div class="ph">{img}<span class="area">{e(AREAS[s["area"]]["long"])}</span></div>'
+            f'<div class="bd"><h3><a href="{e(href)}" target="{tgt}">{e(s["name"])}</a></h3><p class="kind">{e(s.get("kind"))}</p>'
+            f'<ul>{lis}</ul><div class="foot">{avail_badge(s) or "<span></span>"}{price}</div></div>'
+            f'<a class="view" href="{e(href)}" target="{tgt}">View campsite</a></article>')
+
+
 def empty_card(area_key):
     where = {"boscombe": "near Boscombe Down", "fairford": "around Fairford"}[area_key]
     return (f'<div class="none" data-area="{area_key}">{icon("tent")}<div>'
@@ -1108,7 +1290,7 @@ def build_home(live):
     cards = []
     for key in AREAS:
         group = sorted([s for s in live if s["area"] == key], key=lambda s: dist(s) or 99)
-        cards += [site_card(s) for s in group] or [empty_card(key)]
+        cards += [fleet_card(s) for s in group] or [empty_card(key)]
     h_title = "RIAT camping: campsites near Boscombe Down and Fairford | The Big Guide to UK Airshows"
     desc = ("Campsites near MOD Boscombe Down for the Royal International Air Tattoo 2027, and campsites around Fairford. "
             "Pitches, prices, facilities and how to get to the show.")
@@ -1139,6 +1321,11 @@ def build_home(live):
         stat = '<b>2027</b><span>The first Air Tattoo at Boscombe Down</span>'
         finder = ""
 
+    def _count(key):
+        k = sum(1 for s in live if s["area"] == key)
+        return f"{k} campsite{'s' if k != 1 else ''} listed" if k else "Campsites are being added"
+    area_n = {key: _count(key) for key in AREAS}
+
     compare = ""
     if n >= 2:
         compare = f"""<section class="sec" id="compare" aria-label="Compare the campsites">
@@ -1156,9 +1343,15 @@ def build_home(live):
 <main>
 <section class="sec" id="about" aria-label="Camping for the Air Tattoo">
   <div class="wrap about">
-    <div class="ab-ph"><img class="p1" src="{IMG}tent-and-kit.jpg" alt="A blue family tent with kit boxes and a table outside" style="object-position:38% 50%" decoding="async">
+    <div><div class="ab-ph"><img class="p1" src="{IMG}tent-and-kit.jpg" alt="A blue family tent with kit boxes and a table outside" style="object-position:38% 50%" decoding="async">
       <img class="p2" src="{IMG}bell-tent.jpg" alt="A cream bell tent on a camping field" style="object-position:70% 50%" loading="lazy" decoding="async">
       <div class="statbox">{icon("tent")}{stat}</div></div>
+      <div class="stats">
+        <div><b data-count="3">3</b><span>Show days, 16 to 18 July</span></div>
+        <div><b data-count="2">2</b><span>Areas covered</span></div>
+        <div><b data-count="10">10</b><span>Mile show map</span></div>
+        <div><b><span data-count="12000" style="display:inline;margin:0;font-size:inherit">12,000</span><sup>+</sup></b><span>Airshow followers</span></div>
+      </div></div>
     <div>
       <span class="kick">Welcome</span>
       <h2 class="h">Your Guide To Camping At RIAT</h2>
@@ -1176,12 +1369,33 @@ def build_home(live):
 
 <section class="sec tint" id="campsites" aria-label="Campsites">
   <div class="wrap">
-    {sec_head("Where to stay", "Campsites For RIAT 2027", "Every campsite has its own page. Distances are as the crow flies from the airfield.")}
+    {sec_head("Where to stay", "Campsites For RIAT 2027", "Every campsite has its own page with pitches, prices, facilities and the best way to the show. Distances are as the crow flies from the airfield.", mid=True)}
     {finder}
     <div class="cards">{"".join(cards)}<p class="nomatch"><b>No campsites match all of those yet.</b> Try taking one off.<button type="button" id="noClear">Clear my choices</button></p></div>
   </div>
 </section>
 {compare}
+<section class="sec tint" id="official" aria-label="The official campsite and where to camp">
+  <div class="wrap feature">
+    <div class="fe-main">
+      <div class="fe-ph"><img src="{IMG}field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" loading="lazy" decoding="async"><span>Official</span></div>
+      <div class="fe-t"><h3>The official RIAT campsite</h3><b>2027<small> at Boscombe Down</small></b></div>
+      <div class="fe-m"><span>{icon("pin")}Beside the airfield</span><span>{icon("tent")}Run by RIAT</span><span>{icon("cal")}Rollover bookings first</span></div>
+      <p>RIAT has secured its own campsite beside the airfield at Boscombe Down. Rollover bookings get first pick, then the waitlist, then general sale. Pitch sizes, facilities and prices have not been released yet.</p>
+      <div class="btns"><a class="btn or" href="{OFFICIAL_CAMPING}" target="_blank" rel="noopener">Official camping</a><a class="btn nv" href="#campsites">Independent campsites</a></div>
+    </div>
+    <div class="fe-side">
+      <div><span class="kick">Pick your area</span><h2 class="h">Where Would You Like To Camp?</h2>
+      <p class="lede">The campsites on these pages are run independently by local owners. I list them by the airfield they are closest to.</p></div>
+      <div class="rowlist">
+        <div class="rowi"><img src="{IMG}hero-flyby.jpg" alt="Aircraft flying over an airshow campsite" loading="lazy" decoding="async"><p><b>Near Boscombe Down</b><span>RIAT from 2027. {area_n["boscombe"]}.</span></p><a class="btn nv" href="#campsites" data-pick="boscombe">View campsites</a></div>
+        <div class="rowi"><img src="{IMG}kempsford-camping.jpg" alt="Welcome to Kempsford Camping sign on the fence" loading="lazy" decoding="async"><p><b>Around Fairford</b><span>RIAT until 2026. {area_n["fairford"]}.</span></p><a class="btn or" href="#campsites" data-pick="fairford">View campsites</a></div>
+        <div class="rowi"><img src="{IMG}base-row.jpg" alt="A row of pitches behind windbreaks under a big sky" loading="lazy" decoding="async"><p><b>On the show map</b><span>See how far each campsite is from the airfield.</span></p><a class="btn or" href="#map">Open the map</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="mapband" id="map" aria-label="Show map">
   <div class="wrap">
     {sec_head("On the show map", "How Far From The Airfield", "Each tent is a campsite. Tap one to open its page. The rings are 5 and 10 miles from the airfield, as the crow flies.", mid=True)}
@@ -1192,25 +1406,40 @@ def build_home(live):
   </div>
 </section>
 
-<section class="sec" id="new" aria-label="New to camping">
-  <div class="wrap offer">
+<section class="qband" id="new" aria-label="New to camping" style="background-image:url('{IMG}event-shelter-night.jpg')">
+  <div class="wrap">
     <div>
-      <span class="kick">Plan your trip</span>
-      <h2 class="h">New To Camping At An Airshow?</h2>
-      <p class="lede">My first airshow camping trip was RIAT in 2014, and I got plenty wrong. My camping guides are everything I wish someone had told me, from where to pitch to what to pack.</p>
-      <div class="minis">
-        <div class="mini">{icon("tent")}<h3>Camping guides</h3><p>Where to camp, pitching up and staying comfortable.</p><a class="more" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read the guides</a></div>
-        <div class="mini" style="--c:var(--teal);--ic:var(--navy)">{icon("list")}<h3>Kit calculator</h3><p>Tick your tent, beds and cooking kit and see the cost.</p><a class="more" href="{SITE}/build-your-kit-calculator?list=camping" target="_top">Open the calculator</a></div>
-      </div>
+      <span class="kick">New to camping?</span>
+      <h2 class="h">Everything I Wish Someone Had Told Me</h2>
+      <p class="lede">If this is your first time camping at an airshow, I would start with my camping guides. They cover where to camp, how to pitch up and what to pack, and the kit calculator shows what it really costs compared with a hotel.</p>
+      <div class="btns"><a class="btn or inv" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read the camping guides</a><a class="btn wh" href="{SITE}/build-your-kit-calculator?list=camping" target="_top">Camping kit calculator</a></div>
     </div>
-    <div class="pc">
-      <div class="pc-card"><span class="flag">Official</span><h3>The RIAT campsite</h3>
-        <p class="big">2027<small>at Boscombe Down</small></p>
-        {chev_list(["Beside the airfield", "Run by RIAT, not by local owners", "Rollover bookings get first pick", "Then the waitlist, then general sale", "Details on the Air Tattoo website"])}
-        <a class="btn or inv" href="{OFFICIAL_CAMPING}" target="_blank" rel="noopener">Official camping</a>
-        <p class="fine">The campsites on this page are run independently.</p>
-      </div>
-      <img src="{IMG}field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" loading="lazy" decoding="async">
+    <div class="qp"><img src="{IMG}group-pitch.jpg" alt="Three tents on one pitch with camping chairs and a table" loading="lazy" decoding="async"></div>
+    <blockquote class="qcard"><i>{icon("quote")}</i><p>My first airshow camping trip was RIAT in 2014, and I got plenty wrong: forgotten kit, no plan and far too little research. These guides are everything I wish someone had told me.</p><b>Jack Skedge</b><span>Founder and Managing Editor</span></blockquote>
+  </div>
+</section>
+
+<section class="sec" id="tips" aria-label="Camping tips" style="padding-top:20px">
+  <div class="wrap">{sec_head("Camping tips", "Tips From My Own Pitch", "A few things I have learned from years of camping at the shows.", mid=True)}</div>
+  <div class="mosaic">
+    <figure><img src="{IMG}field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" loading="lazy" decoding="async"></figure>
+    <div class="tip t-red"><p>Arrive early and you get the pick of the field.</p><b>Arrive early</b></div>
+    <figure><img src="{IMG}lit-pitches.jpg" alt="Pitches lit up with coloured light poles at dusk" loading="lazy" decoding="async"></figure>
+    <div class="tip t-navy"><p>Light poles make finding your pitch at night so much easier.</p><b>Light it up</b></div>
+    <div class="tip t-navy sw"><p>Lay it all out at home and check it before it goes in the car.</p><b>Check your kit</b></div>
+    <figure><img src="{IMG}kit-laid-out.jpg" alt="Camping kit laid out on a lawn before packing" loading="lazy" decoding="async"></figure>
+    <div class="tip t-soft sw"><p>When the sky looks like this, check every guy line.</p><b>Watch the weather</b></div>
+    <figure><img src="{IMG}storm-sky.jpg" alt="Dark storm clouds over a row of pitches" loading="lazy" decoding="async"></figure>
+  </div>
+</section>
+
+<section class="sec" id="guides" aria-label="Plan your trip" style="padding-top:0">
+  <div class="wrap">
+    <div class="gh">{sec_head("Plan your trip", "More From The Guide")}<a class="btn or" href="{SITE}/airshow-questions" target="_top">Questions and answers</a></div>
+    <div class="gcards">
+      <a class="gc" href="{SITE}{CAMPING_HUB_WIX}" target="_top"><div class="ph"><img src="{IMG}base-row.jpg" alt="A row of pitches behind windbreaks under a big sky" loading="lazy" decoding="async"><span>Camping</span></div><h3>Camping At Airshows</h3><p>Where to camp, pitching a tent, kit, food and staying comfortable, from your first tent to a full base camp.</p><span class="more">Read the guides</span></a>
+      <a class="gc" href="{SITE}/build-your-kit-calculator?list=camping" target="_top"><div class="ph"><img src="{IMG}tent-and-kit.jpg" alt="A blue family tent with kit boxes and a table outside" loading="lazy" decoding="async"><span>Kit</span></div><h3>Camping Kit Calculator</h3><p>Tick your tent, beds and cooking kit, set how many are camping and see the cost before you buy.</p><span class="more">Open the calculator</span></a>
+      <a class="gc" href="{SITE}{RIAT_WIX}" target="_top"><div class="ph"><img src="{IMG}hero-flyby.jpg" alt="Aircraft flying over an airshow campsite" loading="lazy" decoding="async"><span>RIAT</span></div><h3>RIAT 2027 At Boscombe Down</h3><p>What is confirmed about the move so far, and what is still to be announced.</p><span class="more">Read the RIAT guide</span></a>
     </div>
   </div>
 </section>
