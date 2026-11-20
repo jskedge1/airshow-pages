@@ -69,6 +69,20 @@ FAC_GROUPS = [
 ]
 FAC_SHORT = ["hot-showers", "flush-toilets", "electric-hookup", "hardstanding", "food-van", "dogs", "car-by-tent"]
 
+# "availability" in a campsite file: available, filling or full (blank shows no badge)
+AVAIL = {"available": ("Spaces available", "av-ok"), "filling": ("Filling up", "av-mid"), "full": ("Fully booked", "av-full")}
+
+# What visitors can filter the campsites by on the home page
+FILTERS = [("tent", "Tents"), ("van", "Campervans"), ("caravan", "Caravans and tourers"), ("hookup", "Electric hook up"),
+           ("glamping", "Glamping"), ("dogs", "Dogs welcome"), ("shuttle", "Shuttle to the show")]
+
+GUIDES = [
+    ("/camping-at-airshows", "tent", "Camping at Airshows", "What to pack, pitching up and staying comfortable"),
+    ("/build-your-kit-calculator?list=camping", "list", "Camping kit calculator", "Tick your tent, beds and cooking kit and see the cost"),
+    ("/riat", "plane", "RIAT 2027 guide", "What we know about Boscombe Down so far"),
+    ("/airshow-questions", "ask", "Questions and answers", "Camping and places to stay, answered"),
+]
+
 
 def e(s):
     return html.escape(str(s or ""), quote=True)
@@ -124,6 +138,27 @@ def fac_state(v):
     return True, v
 
 
+def avail(s):
+    return AVAIL.get((s.get("availability") or "").strip().lower())
+
+
+def avail_badge(s):
+    a = avail(s)
+    return f'<span class="av {a[1]}">{a[0]}</span>' if a else ""
+
+
+def site_tags(s):
+    tags = {p.get("kind") for p in s.get("pitches", []) if p.get("kind") in KINDS}
+    fac = s.get("facilities", {})
+    if fac_state(fac.get("electric-hookup"))[0]:
+        tags.add("hookup")
+    if fac_state(fac.get("dogs"))[0]:
+        tags.add("dogs")
+    if (s.get("toShow", {}).get("shuttle") or "").strip():
+        tags.add("shuttle")
+    return tags
+
+
 def from_price(s):
     best = None
     for p in s.get("pitches", []):
@@ -162,6 +197,9 @@ ICON = {
     "arrow": '<path d="M5 12h14M13 6l6 6-6 6"/>',
     "back": '<path d="M19 12H5M11 6l-6 6 6 6"/>',
     "plus": '<path d="M12 5v14M5 12h14"/>',
+    "list": '<rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    "plane": '<path d="M2 14l9-3 3-7 2 1-1 6 6 2v2l-6-1-3 6h-2l1-6-8 1z"/>',
+    "ask": '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h0"/>',
 }
 
 
@@ -308,6 +346,36 @@ h1,h2,.cond{font-family:"Barlow Condensed","Barlow",sans-serif;text-transform:up
 .light .rmap .rdl{fill:var(--muted)}
 .light .rmap .mk circle{fill:var(--navy)}
 
+/* availability badge */
+.av{display:inline-flex;align-items:center;gap:7px;font:700 13px/1 "Barlow",sans-serif;padding:8px 10px;text-transform:uppercase;letter-spacing:.03em}
+.av::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
+.av-ok{background:#DDF3EA;color:#0B5A3C}
+.av-mid{background:#FFE9A8;color:#5A4500}
+.av-full{background:#F6D5D5;color:#8E1F1F}
+.tab .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.tab .dot.av-ok{background:#4FD39A}
+.tab .dot.av-mid{background:#F2C230}
+.tab .dot.av-full{background:#E87070}
+.tab.on .dot{box-shadow:0 0 0 2px var(--navy)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tab,.cmp .y,.cmp .n{position:relative}
+.cmp .y,.cmp .n{display:inline-block}
+.cmp .av{white-space:nowrap}
+
+/* links to the other guides */
+.follow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.sign{display:grid;grid-template-columns:52px minmax(0,1fr) 36px;align-items:stretch;background:var(--navy);color:#fff;text-decoration:none;border-bottom:4px solid var(--teal);box-shadow:0 8px 20px rgba(11,26,39,.14);transition:transform .3s var(--ease)}
+.sign:hover{transform:translateY(-2px);border-bottom-color:var(--red)}
+.sign .si{background:var(--teal);display:grid;place-items:center}
+.sign .si svg{width:24px;height:24px;color:#fff}
+.sign .st{padding:14px 14px}
+.sign .st b{display:block;font:700 17px/1.2 "Barlow",sans-serif}
+.sign .st span{display:block;font-size:14px;line-height:20px;color:#B9CAD8;margin-top:3px}
+.sign .sa{display:grid;place-items:center;border-left:1px solid rgba(255,255,255,.14)}
+.sign .sa svg{width:18px;height:18px}
+@media (max-width:1000px){.follow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.follow{grid-template-columns:1fr}}
+
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in{opacity:1;transform:none}
 .small{background:var(--navy-deep);color:#AFC0CD;font-size:14px;line-height:22px;padding:24px 0}
@@ -362,7 +430,9 @@ def tabs(live, current=None):
         href, tgt = page_href(s)
         on = " on" if current == s["slug"] else ""
         cur = ' aria-current="page"' if on else ""
-        out.append(f'<a class="tab{on}" href="{e(href)}" target="{tgt}"{cur} data-area="{e(s["area"])}">{e(s["name"])} '
+        a = avail(s)
+        dot = f'<i class="dot {a[1]}"></i><span class="vh">{a[0]}: </span>' if a else ""
+        out.append(f'<a class="tab{on}" href="{e(href)}" target="{tgt}"{cur} data-area="{e(s["area"])}">{dot}{e(s["name"])} '
                    f'<small>{e(dist_text(s))}</small></a>')
     out.append(f'<a class="tab add" href="{e(home_href()[0])}#list" target="{home_href()[1]}">{icon("plus")}List your campsite</a>')
     out.append('</div></nav>')
@@ -374,6 +444,16 @@ def small_print(extra=""):
 <p>The Big Guide to UK Airshows is independent and not part of the Royal International Air Tattoo. Campsite details come from the owners. Please check prices, dates and rules with the campsite before you book.</p>
 {extra}<p>Running a campsite near Boscombe Down or Fairford? Email <a href="mailto:{CONTACT}?subject=RIAT%20campsite%20listing">{CONTACT}</a>.</p>
 </div></footer>"""
+
+
+def guides(skip=""):
+    out = []
+    for path, ic, name, sub in GUIDES:
+        if path == skip:
+            continue
+        out.append(f'<a class="sign reveal" href="{SITE}{path}" target="_top"><span class="si">{icon(ic)}</span>'
+                   f'<span class="st"><b>{e(name)}</b><span>{e(sub)}</span></span><span class="sa">{icon("arrow")}</span></a>')
+    return f'<div class="follow">{"".join(out)}</div>'
 
 
 def mailto(subject="RIAT campsite listing"):
@@ -398,6 +478,61 @@ HOME_CSS = r"""
 .filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
 .filter button{font:600 15px/1 "Barlow",sans-serif;padding:11px 16px;border:2px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer}
 .filter button[aria-pressed=true]{background:var(--navy);color:#fff}
+.filter.feat{margin-top:-12px}
+.filter.feat::before{content:"I need";align-self:center;font:600 15px/1 "Barlow",sans-serif;color:var(--muted);margin-right:4px}
+.filter.feat button{border-color:var(--line);font-weight:600;padding:9px 13px 9px 11px;display:inline-flex;align-items:center;gap:7px}
+.filter.feat button::before{content:"";width:13px;height:13px;border:2px solid #9AA8B4;flex:none}
+.filter.feat button[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.filter.feat button[aria-pressed=true]::before{border-color:var(--navy);background:var(--navy);box-shadow:inset 0 0 0 2px var(--teal)}
+.nomatch{display:none;grid-column:1/-1;background:#fff;border:2px dashed #B9CAD8;padding:22px 24px}
+.nomatch b{color:var(--navy)}
+.nomatch button{margin-left:8px;font:600 15px/1 "Barlow",sans-serif;background:none;border:0;color:var(--red);text-decoration:underline;cursor:pointer;padding:0}
+.site .ph .av{position:absolute;top:0;right:0}
+.cmp-wrap{margin-top:36px}
+.cmp-wrap h3{font:800 28px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--navy);margin-bottom:6px}
+.cmp-wrap>p{color:var(--muted);font-size:16px;margin-bottom:14px}
+.swipe{display:none}
+@media (max-width:1000px){.swipe{display:inline}}
+.cmp-scroll{overflow-x:auto;border:1px solid var(--line);background:#fff}
+.cmp{border-collapse:collapse;width:100%;min-width:900px;font-size:15px;line-height:21px}
+.cmp th,.cmp td{padding:12px 12px;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
+.cmp thead th{background:var(--navy);color:#fff;font:600 14px/1.2 "Barlow",sans-serif;border-top:0;white-space:normal;vertical-align:bottom}
+.cmp th:first-child,.cmp td:first-child{text-align:left;position:sticky;left:0;z-index:1;white-space:normal;min-width:190px}
+.cmp tbody th{background:#fff;font-weight:700;color:var(--navy);box-shadow:1px 0 0 var(--line)}
+.cmp tbody th a{text-decoration:none;border-bottom:2px solid var(--teal)}
+.cmp tbody th a:hover{border-color:var(--red)}
+.cmp tbody th small{display:block;font:500 13px/1.3 "Barlow",sans-serif;color:var(--muted);margin-top:2px}
+.cmp tbody tr:nth-child(even) td,.cmp tbody tr:nth-child(even) th{background:#F8FAFB}
+.cmp svg{width:20px;height:20px;vertical-align:middle}
+.cmp .y{color:var(--teal-ink)}
+.cmp .n{color:#B3BDC5}
+.cmp .pr{font-weight:700;color:var(--navy)}
+.cmp .av{font-size:12px;padding:6px 8px}
+
+.form{margin-top:28px;background:#fff;border:1px solid var(--line);border-top:6px solid var(--purple);padding:28px}
+.form h3{font:800 30px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--navy)}
+.form>p{margin-top:8px;max-width:70ch}
+.form form{margin-top:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px}
+.fld{display:grid;gap:6px;align-content:start}
+.fld.wide{grid-column:1/-1}
+.fld label,.fld legend{font:600 15px/1.3 "Barlow",sans-serif;color:var(--navy)}
+.fld label i{font-style:normal;color:var(--red)}
+.fld input[type=text],.fld input[type=email],.fld input[type=tel],.fld select,.fld textarea{font:400 16px/1.4 "Barlow",sans-serif;color:var(--ink);padding:12px 12px;border:2px solid #B9C6D1;background:#fff;width:100%;border-radius:0}
+.fld textarea{min-height:96px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:3px solid var(--teal);outline-offset:1px;border-color:var(--navy)}
+.fld .bad{border-color:var(--red)}
+fieldset.fld{border:0}
+.ticks{display:flex;flex-wrap:wrap;gap:8px}
+.ticks label{display:inline-flex;align-items:center;gap:8px;font-weight:500;color:var(--ink);background:var(--mist);padding:9px 12px;cursor:pointer}
+.ticks input{width:18px;height:18px;accent-color:var(--navy)}
+.form .go{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+.form .go small{color:var(--muted);font-size:15px;line-height:22px;flex:1 1 280px}
+.form .err{grid-column:1/-1;color:#A32424;font-weight:600;display:none}
+.made{display:none;margin-top:20px;background:var(--ice);border-left:5px solid var(--teal);padding:20px}
+.made b{color:var(--navy);font-size:18px}
+.made p{margin-top:6px;font-size:16px;line-height:25px}
+.made textarea{margin-top:12px;width:100%;min-height:210px;font:400 15px/1.5 ui-monospace,Menlo,Consolas,monospace;padding:12px;border:1px solid #B9C6D1;background:#fff;color:var(--ink)}
+.made .btns{margin-top:12px}
 .sites{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .site{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);text-decoration:none;color:inherit;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
 .site:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(11,26,39,.12)}
@@ -460,6 +595,9 @@ HOME_CSS = r"""
   .sites,.who,.maps,.get,.quote{grid-template-columns:1fr}
   .empty,.official{grid-template-columns:1fr}
   .hero-in{padding:40px 0 48px}
+  .form{padding:20px 18px}
+  .form form{grid-template-columns:1fr}
+  .filter.feat::before{flex-basis:100%}
 }
 """
 
@@ -479,8 +617,9 @@ def site_card(s):
     chips = [KINDS[k] for k in kinds] + chips
     fp = from_price(s)
     price = f'From {e(fp[1])} {e(fp[2])}' if fp else "See prices"
-    return (f'<a class="site reveal" href="{e(href)}" target="{tgt}" data-area="{e(s["area"])}">'
-            f'<div class="ph">{img}{dist_html}</div><div class="bd">'
+    return (f'<a class="site reveal" href="{e(href)}" target="{tgt}" data-area="{e(s["area"])}" '
+            f'data-tags="{" ".join(sorted(site_tags(s)))}">'
+            f'<div class="ph">{img}{dist_html}{avail_badge(s)}</div><div class="bd">'
             f'<span class="kd">{e(s.get("kind"))}</span><h3>{e(s["name"])}</h3><p>{e(s.get("tagline"))}</p>'
             f'<ul>{"".join("<li>" + e(c) + "</li>" for c in chips[:6])}</ul>'
             f'<div class="ft"><span>{price}</span><span>View campsite {icon("arrow")}</span></div></div></a>')
@@ -494,6 +633,90 @@ def empty_card(area_key=None):
             f'<a class="btn navy" href="#list">List your campsite</a></div>')
 
 
+def compare_table(live):
+    """Side by side table, shown once two or more campsites are live."""
+    if len(live) < 2:
+        return ""
+    yes = f'<span class="y">{icon("tick")}<span class="vh">Yes</span></span>'
+    no = f'<span class="n">{icon("cross")}<span class="vh">No</span></span>'
+    rows = []
+    for s in live:
+        href, tgt = page_href(s)
+        tags = site_tags(s)
+        fp = from_price(s)
+        showers = fac_state(s.get("facilities", {}).get("hot-showers"))[0]
+        cells = [yes if k in tags else no for k in ("tent", "van", "caravan", "hookup", "glamping")]
+        cells += [yes if showers else no] + [yes if k in tags else no for k in ("dogs", "shuttle")]
+        price = f'<span class="pr">{e(fp[1])}</span>' if fp else "Ask"
+        rows.append(f'<tr data-area="{e(s["area"])}" data-tags="{" ".join(sorted(tags))}">'
+                    f'<th scope="row"><a href="{e(href)}" target="{tgt}">{e(s["name"])}</a>'
+                    f'<small>{e(AREAS[s["area"]]["name"])}</small></th>'
+                    f'<td>{e(dist_text(s)) or "Ask"}</td><td>{price}</td>'
+                    + "".join(f"<td>{c}</td>" for c in cells)
+                    + f'<td>{avail_badge(s) or "Ask"}</td></tr>')
+    heads = ["Campsite", "Distance", "From, per night", "Tents", "Campervans", "Caravans and tourers", "Electric hook up",
+             "Glamping", "Hot showers", "Dogs", "Shuttle", "Spaces"]
+    return (f'<div class="cmp-wrap reveal" id="compare"><h3>Compare the campsites</h3>'
+            f'<p>Side by side, so you can see what each one has. The filters above work on this table too.<span class="swipe"> Swipe sideways to see it all.</span></p>'
+            f'<div class="cmp-scroll" tabindex="0" role="region" aria-label="Campsite comparison table">'
+            f'<table class="cmp"><thead><tr>{"".join(f"<th scope=col>{h}</th>" for h in heads)}</tr></thead>'
+            f'<tbody>{"".join(rows)}</tbody></table></div></div>')
+
+
+HOME_JS = r"""<script>
+(function(){
+/* filters: one area, any number of needs. Works on the cards and the compare table. */
+var area='all',need=[];
+var areaBtns=document.querySelectorAll('.filter.area button'),needBtns=document.querySelectorAll('.filter.feat button');
+var cards=document.querySelectorAll('.sites .site'),rows=document.querySelectorAll('.cmp tbody tr'),
+    empties=document.querySelectorAll('.sites .empty'),nomatch=document.querySelector('.nomatch');
+function ok(el){
+  if(area!=='all'&&el.getAttribute('data-area')!==area)return false;
+  var tags=' '+(el.getAttribute('data-tags')||'')+' ';
+  for(var i=0;i<need.length;i++){if(tags.indexOf(' '+need[i]+' ')<0)return false}
+  return true}
+function apply(){
+  var shown=0,inArea=0;
+  cards.forEach(function(c){var a=area==='all'||c.getAttribute('data-area')===area;if(a)inArea++;
+    var v=ok(c);c.style.display=v?'':'none';if(v)shown++});
+  rows.forEach(function(r){r.style.display=ok(r)?'':'none'});
+  empties.forEach(function(x){x.style.display=(area==='all'||x.getAttribute('data-area')===area)?'':'none'});
+  if(nomatch)nomatch.style.display=(inArea>0&&shown===0)?'block':'none'}
+areaBtns.forEach(function(b){b.addEventListener('click',function(){area=b.getAttribute('data-f');
+  areaBtns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});apply()})});
+needBtns.forEach(function(b){b.addEventListener('click',function(){var on=b.getAttribute('aria-pressed')!=='true';
+  b.setAttribute('aria-pressed',on?'true':'false');var k=b.getAttribute('data-n');
+  need=need.filter(function(x){return x!==k});if(on)need.push(k);apply()})});
+var clr=document.querySelector('.nomatch button');
+if(clr)clr.addEventListener('click',function(){need=[];needBtns.forEach(function(x){x.setAttribute('aria-pressed','false')});apply()});
+
+/* list your campsite form: writes an email for the owner to send. Nothing is sent from this page. */
+var form=document.getElementById('listForm');if(!form)return;
+var TO='__CONTACT__',made=document.getElementById('made'),out=document.getElementById('madeText'),
+    open=document.getElementById('madeOpen'),copy=document.getElementById('madeCopy'),err=form.querySelector('.err');
+function val(n){var el=form.elements[n];return el?(el.value||'').trim():''}
+form.addEventListener('submit',function(ev){ev.preventDefault();
+  var bad=null;['campsite','owner','email'].forEach(function(n){var el=form.elements[n],b=!el.value.trim()||(n==='email'&&!/^\S+@\S+\.\S+$/.test(el.value.trim()));
+    el.classList.toggle('bad',b);el.setAttribute('aria-invalid',b?'true':'false');if(b&&!bad)bad=el});
+  if(bad){err.style.display='block';bad.focus();return}
+  err.style.display='none';
+  var pitches=[].filter.call(form.querySelectorAll('input[name=pitch]'),function(x){return x.checked}).map(function(x){return x.value});
+  var lines=['Hello Jack,','','I would like to add my campsite to the RIAT camping pages.','',
+    'Campsite name: '+val('campsite'),'My name: '+val('owner'),'Email: '+val('email'),'Phone: '+(val('phone')||'Not given'),
+    'Nearest to: '+val('area'),'Type of site: '+val('kind'),'Pitches: '+(pitches.join(', ')||'Not given'),
+    'Dates open for show week: '+(val('dates')||'Not decided yet'),'Website or Facebook: '+(val('web')||'Not given'),
+    '','Anything else:',val('more')||'Nothing to add yet.','','Thanks,',val('owner')];
+  var body=lines.join('\n'),subject='RIAT campsite listing: '+val('campsite');
+  out.value='To: '+TO+'\nSubject: '+subject+'\n\n'+body;
+  open.href='mailto:'+TO+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  made.style.display='block';made.scrollIntoView({behavior:'smooth',block:'nearest'});
+  try{open.click()}catch(x){}});
+copy.addEventListener('click',function(){var done=function(){copy.textContent='Copied';setTimeout(function(){copy.textContent='Copy the email'},1800)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(out.value).then(done,function(){out.select()})}else{out.select()}});
+})();
+</script>"""
+
+
 def build_home(live):
     cards = []
     for key in AREAS:
@@ -502,6 +725,11 @@ def build_home(live):
     h_title = "RIAT camping: campsites near Boscombe Down and Fairford | The Big Guide to UK Airshows"
     desc = ("Campsites near MOD Boscombe Down for the Royal International Air Tattoo 2027, and campsites around Fairford. "
             "Pitches, prices, facilities and how to get to the show.")
+    feat_filter = ""
+    if live:
+        feat_filter = ('<div class="filter feat" role="group" aria-label="Only show campsites with">'
+                       + "".join(f'<button type="button" data-n="{k}" aria-pressed="false">{e(v)}</button>' for k, v in FILTERS)
+                       + '</div>')
     n = len(live)
     count = f"{n} campsite{'s' if n != 1 else ''} listed" if n else "Listings opening now"
     sample_href = GH + "sample.html"
@@ -530,12 +758,14 @@ def build_home(live):
       <h2 id="sites-h">Campsites</h2>
       <p>Every campsite has its own page with pitch sizes and prices, facilities, rules and the best way to the showground. Distances are as the crow flies from the airfield.</p>
     </div>
-    <div class="filter" role="group" aria-label="Show campsites">
+    <div class="filter area" role="group" aria-label="Show campsites by area">
       <button type="button" data-f="all" aria-pressed="true">All campsites</button>
       <button type="button" data-f="boscombe" aria-pressed="false">Near Boscombe Down</button>
       <button type="button" data-f="fairford" aria-pressed="false">Around Fairford</button>
     </div>
-    <div class="sites">{"".join(cards)}</div>
+    {feat_filter}
+    <div class="sites">{"".join(cards)}<p class="nomatch"><b>No campsites match all of those yet.</b> Try taking one off.<button type="button">Clear what I need</button></p></div>
+    {compare_table(live)}
     <div class="official reveal">
       <p><b>The official RIAT campsite.</b> RIAT has its own campsite beside the airfield at Boscombe Down, and rollover bookings get first pick. Its details are on the Air Tattoo website. The campsites on this page are run independently by local owners.</p>
       <a class="btn teal" href="{OFFICIAL_CAMPING}" target="_blank" rel="noopener">Official camping</a>
@@ -553,6 +783,16 @@ def build_home(live):
       <div class="mapbox reveal"><h3>Near Boscombe Down</h3><p>{e(AREAS["boscombe"]["blurb"])}</p>{ring_map("boscombe", live)}</div>
       <div class="mapbox reveal"><h3>Around Fairford</h3><p>{e(AREAS["fairford"]["blurb"])}</p>{ring_map("fairford", live)}</div>
     </div>
+  </div>
+</section>
+
+<section class="sec" id="plan" aria-labelledby="plan-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 id="plan-h">Plan your camping trip</h2>
+      <p>The rest of the guide, for working out what to bring and what the weekend will cost.</p>
+    </div>
+    {guides()}
   </div>
 </section>
 
@@ -577,23 +817,49 @@ def build_home(live):
       <blockquote class="reveal">I would like to work with you and add your site to the website.<cite>Jack Skedge, Founder and Managing Editor</cite></blockquote>
       <div class="ask reveal">
         <b>What happens next</b>
-        <p>Email me and I will send over a short list of questions: your pitches and prices, facilities, dates and how visitors get to the show. Send a few photos and I will build your page and check it with you before it goes live.</p>
+        <p>Fill in the short form below, or email me at <a href="{mailto()}">{CONTACT}</a>. I will send over a few more questions about your pitches, prices and facilities. Send a few photos and I will build your page and check it with you before it goes live.</p>
         <div class="btns">
-          <a class="btn red" href="{mailto()}">{icon("mail")}Email me</a>
+          <a class="btn red" href="#listForm">{icon("list")}Fill in the form</a>
           <a class="btn line" href="{sample_href}" target="_blank" rel="noopener">See a sample page</a>
         </div>
+      </div>
+    </div>
+    <div class="form reveal">
+      <h3>Tell me about your campsite</h3>
+      <p>This writes an email to me with your answers filled in. Nothing is sent until you press send in your own email.</p>
+      <form id="listForm" novalidate>
+        <div class="fld"><label for="lf-campsite">Campsite name <i>*</i></label><input type="text" id="lf-campsite" name="campsite" autocomplete="organization" required></div>
+        <div class="fld"><label for="lf-owner">Your name <i>*</i></label><input type="text" id="lf-owner" name="owner" autocomplete="name" required></div>
+        <div class="fld"><label for="lf-email">Your email <i>*</i></label><input type="email" id="lf-email" name="email" autocomplete="email" required></div>
+        <div class="fld"><label for="lf-phone">Phone</label><input type="tel" id="lf-phone" name="phone" autocomplete="tel"></div>
+        <div class="fld"><label for="lf-area">Nearest to</label><select id="lf-area" name="area"><option>MOD Boscombe Down</option><option>Fairford</option></select></div>
+        <div class="fld"><label for="lf-kind">Type of site</label><select id="lf-kind" name="kind"><option>New site for show week</option><option>Caravan park</option><option>Farm site</option><option>Glamping</option><option>Campervans and tourers</option><option>Something else</option></select></div>
+        <fieldset class="fld wide"><legend>Pitches you offer</legend><div class="ticks">
+          <label><input type="checkbox" name="pitch" value="Tents">Tents</label>
+          <label><input type="checkbox" name="pitch" value="Campervans">Campervans</label>
+          <label><input type="checkbox" name="pitch" value="Caravans and tourers">Caravans and tourers</label>
+          <label><input type="checkbox" name="pitch" value="Electric hook up">Electric hook up</label>
+          <label><input type="checkbox" name="pitch" value="Hardstanding">Hardstanding</label>
+          <label><input type="checkbox" name="pitch" value="Glamping">Glamping</label>
+        </div></fieldset>
+        <div class="fld"><label for="lf-dates">Dates open for show week</label><input type="text" id="lf-dates" name="dates" placeholder="For example 14 to 19 July 2027"></div>
+        <div class="fld"><label for="lf-web">Website or Facebook page</label><input type="text" id="lf-web" name="web" autocomplete="url"></div>
+        <div class="fld wide"><label for="lf-more">Anything else you would like to tell me</label><textarea id="lf-more" name="more"></textarea></div>
+        <p class="err" role="alert">Please add your campsite name, your name and an email address I can reply to.</p>
+        <div class="go"><button class="btn red" type="submit">{icon("mail")}Write my email</button><small>The show is Friday 16 to Sunday 18 July 2027. Your details stay on your device until you send the email.</small></div>
+      </form>
+      <div class="made" id="made" aria-live="polite">
+        <b>Your email is ready</b>
+        <p>Your email app should open with this filled in. If it doesn't, copy it and send it to {CONTACT}.</p>
+        <textarea id="madeText" readonly aria-label="Your email, ready to copy"></textarea>
+        <div class="btns"><a class="btn navy" id="madeOpen" href="{mailto()}">{icon("mail")}Open in my email</a><button class="btn line" type="button" id="madeCopy">Copy the email</button></div>
       </div>
     </div>
   </div>
 </section>
 </main>
 {small_print()}
-<script>
-(function(){{var bs=document.querySelectorAll('.filter button'),items=document.querySelectorAll('.sites [data-area]');
-bs.forEach(function(b){{b.addEventListener('click',function(){{var f=b.getAttribute('data-f');
-bs.forEach(function(x){{x.setAttribute('aria-pressed',x===b?'true':'false')}});
-items.forEach(function(it){{it.style.display=(f==='all'||it.getAttribute('data-area')===f)?'':'none'}})}})}})}})();
-</script>
+{HOME_JS.replace("__CONTACT__", CONTACT)}
 {REVEAL_JS}
 </body>
 </html>
@@ -735,8 +1001,11 @@ def build_site(s, live):
     bk = s.get("booking", {})
 
     rows = []
+    av = avail(s)
     if d:
         rows.append(("Distance", f"{d} from {a['label']}", True))
+    if av:
+        rows.append(("Spaces", av[0], False))
     if ts.get("driveMins"):
         rows.append(("Drive", ts["driveMins"], False))
     if dates.get("open") or dates.get("close"):
@@ -822,6 +1091,8 @@ def build_site(s, live):
             acts.append(f'<a class="btn line" href="{e(s["socials"][net])}" target="_blank" rel="noopener">{net.title()}</a>')
     if not acts:
         acts.append('<p>Booking details coming soon.</p>')
+    if av and av[1] == "av-full":
+        acts.insert(0, '<p><b>Fully booked for show week.</b> It is still worth asking the campsite about cancellations.</p>')
     offer = (f'<div class="offer reveal"><b>Guide reader offer</b>{e(bk["offer"])}</div>' if bk.get("offer") else "")
     terms = "".join(f"<div><dt>{k}</dt><dd>{e(bk.get(key))}</dd></div>"
                     for k, key in (("Booking", "opens"), ("Payment", "deposit"), ("Cancellation", "cancellation")) if bk.get(key))
@@ -858,7 +1129,7 @@ def build_site(s, live):
   <div class="wrap hero-body">
     <div>
       <p class="crumb"><a href="{SITE}{RIAT_WIX}" target="_top">RIAT</a><span>/</span><a href="{e(h)}" target="{t}">RIAT camping</a><span>/</span>{e(a["name"])}</p>
-      <span class="tag">{e(a["long"])}</span>
+      <span class="tag">{e(a["long"])}</span> {avail_badge(s)}
       <h1>{e(s["name"])}</h1>
       <p class="kind">{e(s.get("kind"))}</p>
       <p class="lead">{e(s.get("tagline"))}</p>
@@ -911,6 +1182,12 @@ def build_site(s, live):
     {others_html}
   </div>
 </section>
+<section class="sec" id="plan" aria-labelledby="plan-h">
+  <div class="wrap">
+    <div class="sec-head reveal"><h2 id="plan-h">Plan your camping trip</h2><p>More from the guide, for working out what to bring and what the weekend will cost.</p></div>
+    {guides()}
+  </div>
+</section>
 </main>
 {small_print(checked)}
 <script>
@@ -926,9 +1203,9 @@ window.addEventListener('scroll',f,{{passive:true}});f()}})();
     (OUT / f'{s["slug"]}.html').write_text(body, encoding="utf-8")
 
 
-def load_sites():
+def load_sites(extra=None):
     sites = []
-    for p in sorted(SRC.glob("*.json")):
+    for p in sorted(SRC.glob("*.json")) + (sorted(extra.glob("*.json")) if extra else []):
         s = json.loads(p.read_text(encoding="utf-8"))
         if not s.get("slug"):
             print(f"skip {p.name}: no slug")
@@ -948,7 +1225,8 @@ def main():
         OUT = pathlib.Path(sys.argv[sys.argv.index("--preview") + 1]).resolve()
         GH = OUT.as_uri() + "/"
     OUT.mkdir(parents=True, exist_ok=True)
-    sites = load_sites()
+    # preview-sites/ holds extra made-up campsites, only ever used by --preview
+    sites = load_sites(SRC.parent / "preview-sites" if preview else None)
     live = [s for s in sites if preview or (s.get("live") and not s.get("sample"))]
     live.sort(key=lambda s: (list(AREAS).index(s["area"]), dist(s) or 99))
     build_home(live)

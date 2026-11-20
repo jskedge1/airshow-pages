@@ -166,3 +166,4 @@ Jack
 | 9. Online | Book section buttons | `website`, `socials.facebook`, `socials.instagram` |
 | 10. Photos | Header photo and gallery | `photos` (save as `riat-camping/img/<slug>-1.jpg` and so on, full https addresses) |
 | 11. Permission | Not shown | Set `live` to `true` only once the owner has checked the page |
+| Later, when they tell you how bookings are going | Badge on the tab, card and page | `availability`: `available`, `filling` or `full` |

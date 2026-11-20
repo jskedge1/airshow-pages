@@ -85,6 +85,36 @@ h1,h2,.cond{font-family:"Barlow Condensed","Barlow",sans-serif;text-transform:up
 .light .rmap .rdl{fill:var(--muted)}
 .light .rmap .mk circle{fill:var(--navy)}
 
+/* availability badge */
+.av{display:inline-flex;align-items:center;gap:7px;font:700 13px/1 "Barlow",sans-serif;padding:8px 10px;text-transform:uppercase;letter-spacing:.03em}
+.av::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
+.av-ok{background:#DDF3EA;color:#0B5A3C}
+.av-mid{background:#FFE9A8;color:#5A4500}
+.av-full{background:#F6D5D5;color:#8E1F1F}
+.tab .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.tab .dot.av-ok{background:#4FD39A}
+.tab .dot.av-mid{background:#F2C230}
+.tab .dot.av-full{background:#E87070}
+.tab.on .dot{box-shadow:0 0 0 2px var(--navy)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tab,.cmp .y,.cmp .n{position:relative}
+.cmp .y,.cmp .n{display:inline-block}
+.cmp .av{white-space:nowrap}
+
+/* links to the other guides */
+.follow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.sign{display:grid;grid-template-columns:52px minmax(0,1fr) 36px;align-items:stretch;background:var(--navy);color:#fff;text-decoration:none;border-bottom:4px solid var(--teal);box-shadow:0 8px 20px rgba(11,26,39,.14);transition:transform .3s var(--ease)}
+.sign:hover{transform:translateY(-2px);border-bottom-color:var(--red)}
+.sign .si{background:var(--teal);display:grid;place-items:center}
+.sign .si svg{width:24px;height:24px;color:#fff}
+.sign .st{padding:14px 14px}
+.sign .st b{display:block;font:700 17px/1.2 "Barlow",sans-serif}
+.sign .st span{display:block;font-size:14px;line-height:20px;color:#B9CAD8;margin-top:3px}
+.sign .sa{display:grid;place-items:center;border-left:1px solid rgba(255,255,255,.14)}
+.sign .sa svg{width:18px;height:18px}
+@media (max-width:1000px){.follow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.follow{grid-template-columns:1fr}}
+
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in{opacity:1;transform:none}
 .small{background:var(--navy-deep);color:#AFC0CD;font-size:14px;line-height:22px;padding:24px 0}
@@ -118,6 +148,61 @@ h1,h2,.cond{font-family:"Barlow Condensed","Barlow",sans-serif;text-transform:up
 .filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
 .filter button{font:600 15px/1 "Barlow",sans-serif;padding:11px 16px;border:2px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer}
 .filter button[aria-pressed=true]{background:var(--navy);color:#fff}
+.filter.feat{margin-top:-12px}
+.filter.feat::before{content:"I need";align-self:center;font:600 15px/1 "Barlow",sans-serif;color:var(--muted);margin-right:4px}
+.filter.feat button{border-color:var(--line);font-weight:600;padding:9px 13px 9px 11px;display:inline-flex;align-items:center;gap:7px}
+.filter.feat button::before{content:"";width:13px;height:13px;border:2px solid #9AA8B4;flex:none}
+.filter.feat button[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.filter.feat button[aria-pressed=true]::before{border-color:var(--navy);background:var(--navy);box-shadow:inset 0 0 0 2px var(--teal)}
+.nomatch{display:none;grid-column:1/-1;background:#fff;border:2px dashed #B9CAD8;padding:22px 24px}
+.nomatch b{color:var(--navy)}
+.nomatch button{margin-left:8px;font:600 15px/1 "Barlow",sans-serif;background:none;border:0;color:var(--red);text-decoration:underline;cursor:pointer;padding:0}
+.site .ph .av{position:absolute;top:0;right:0}
+.cmp-wrap{margin-top:36px}
+.cmp-wrap h3{font:800 28px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--navy);margin-bottom:6px}
+.cmp-wrap>p{color:var(--muted);font-size:16px;margin-bottom:14px}
+.swipe{display:none}
+@media (max-width:1000px){.swipe{display:inline}}
+.cmp-scroll{overflow-x:auto;border:1px solid var(--line);background:#fff}
+.cmp{border-collapse:collapse;width:100%;min-width:900px;font-size:15px;line-height:21px}
+.cmp th,.cmp td{padding:12px 12px;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
+.cmp thead th{background:var(--navy);color:#fff;font:600 14px/1.2 "Barlow",sans-serif;border-top:0;white-space:normal;vertical-align:bottom}
+.cmp th:first-child,.cmp td:first-child{text-align:left;position:sticky;left:0;z-index:1;white-space:normal;min-width:190px}
+.cmp tbody th{background:#fff;font-weight:700;color:var(--navy);box-shadow:1px 0 0 var(--line)}
+.cmp tbody th a{text-decoration:none;border-bottom:2px solid var(--teal)}
+.cmp tbody th a:hover{border-color:var(--red)}
+.cmp tbody th small{display:block;font:500 13px/1.3 "Barlow",sans-serif;color:var(--muted);margin-top:2px}
+.cmp tbody tr:nth-child(even) td,.cmp tbody tr:nth-child(even) th{background:#F8FAFB}
+.cmp svg{width:20px;height:20px;vertical-align:middle}
+.cmp .y{color:var(--teal-ink)}
+.cmp .n{color:#B3BDC5}
+.cmp .pr{font-weight:700;color:var(--navy)}
+.cmp .av{font-size:12px;padding:6px 8px}
+
+.form{margin-top:28px;background:#fff;border:1px solid var(--line);border-top:6px solid var(--purple);padding:28px}
+.form h3{font:800 30px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;color:var(--navy)}
+.form>p{margin-top:8px;max-width:70ch}
+.form form{margin-top:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px}
+.fld{display:grid;gap:6px;align-content:start}
+.fld.wide{grid-column:1/-1}
+.fld label,.fld legend{font:600 15px/1.3 "Barlow",sans-serif;color:var(--navy)}
+.fld label i{font-style:normal;color:var(--red)}
+.fld input[type=text],.fld input[type=email],.fld input[type=tel],.fld select,.fld textarea{font:400 16px/1.4 "Barlow",sans-serif;color:var(--ink);padding:12px 12px;border:2px solid #B9C6D1;background:#fff;width:100%;border-radius:0}
+.fld textarea{min-height:96px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:3px solid var(--teal);outline-offset:1px;border-color:var(--navy)}
+.fld .bad{border-color:var(--red)}
+fieldset.fld{border:0}
+.ticks{display:flex;flex-wrap:wrap;gap:8px}
+.ticks label{display:inline-flex;align-items:center;gap:8px;font-weight:500;color:var(--ink);background:var(--mist);padding:9px 12px;cursor:pointer}
+.ticks input{width:18px;height:18px;accent-color:var(--navy)}
+.form .go{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+.form .go small{color:var(--muted);font-size:15px;line-height:22px;flex:1 1 280px}
+.form .err{grid-column:1/-1;color:#A32424;font-weight:600;display:none}
+.made{display:none;margin-top:20px;background:var(--ice);border-left:5px solid var(--teal);padding:20px}
+.made b{color:var(--navy);font-size:18px}
+.made p{margin-top:6px;font-size:16px;line-height:25px}
+.made textarea{margin-top:12px;width:100%;min-height:210px;font:400 15px/1.5 ui-monospace,Menlo,Consolas,monospace;padding:12px;border:1px solid #B9C6D1;background:#fff;color:var(--ink)}
+.made .btns{margin-top:12px}
 .sites{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .site{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);text-decoration:none;color:inherit;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
 .site:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(11,26,39,.12)}
@@ -180,6 +265,9 @@ h1,h2,.cond{font-family:"Barlow Condensed","Barlow",sans-serif;text-transform:up
   .sites,.who,.maps,.get,.quote{grid-template-columns:1fr}
   .empty,.official{grid-template-columns:1fr}
   .hero-in{padding:40px 0 48px}
+  .form{padding:20px 18px}
+  .form form{grid-template-columns:1fr}
+  .filter.feat::before{flex-basis:100%}
 }
 </style>
 </head>
@@ -209,12 +297,14 @@ h1,h2,.cond{font-family:"Barlow Condensed","Barlow",sans-serif;text-transform:up
       <h2 id="sites-h">Campsites</h2>
       <p>Every campsite has its own page with pitch sizes and prices, facilities, rules and the best way to the showground. Distances are as the crow flies from the airfield.</p>
     </div>
-    <div class="filter" role="group" aria-label="Show campsites">
+    <div class="filter area" role="group" aria-label="Show campsites by area">
       <button type="button" data-f="all" aria-pressed="true">All campsites</button>
       <button type="button" data-f="boscombe" aria-pressed="false">Near Boscombe Down</button>
       <button type="button" data-f="fairford" aria-pressed="false">Around Fairford</button>
     </div>
-    <div class="sites"><div class="empty reveal" data-area="boscombe"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></span><div><h3>No campsites listed near Boscombe Down yet</h3><p>I am adding campsites as owners get in touch. If you run one, I would love to hear from you.</p></div><a class="btn navy" href="#list">List your campsite</a></div><div class="empty reveal" data-area="fairford"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></span><div><h3>No campsites listed around Fairford yet</h3><p>I am adding campsites as owners get in touch. If you run one, I would love to hear from you.</p></div><a class="btn navy" href="#list">List your campsite</a></div></div>
+    
+    <div class="sites"><div class="empty reveal" data-area="boscombe"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></span><div><h3>No campsites listed near Boscombe Down yet</h3><p>I am adding campsites as owners get in touch. If you run one, I would love to hear from you.</p></div><a class="btn navy" href="#list">List your campsite</a></div><div class="empty reveal" data-area="fairford"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></span><div><h3>No campsites listed around Fairford yet</h3><p>I am adding campsites as owners get in touch. If you run one, I would love to hear from you.</p></div><a class="btn navy" href="#list">List your campsite</a></div><p class="nomatch"><b>No campsites match all of those yet.</b> Try taking one off.<button type="button">Clear what I need</button></p></div>
+    
     <div class="official reveal">
       <p><b>The official RIAT campsite.</b> RIAT has its own campsite beside the airfield at Boscombe Down, and rollover bookings get first pick. Its details are on the Air Tattoo website. The campsites on this page are run independently by local owners.</p>
       <a class="btn teal" href="https://www.airtattoo.com/camping/" target="_blank" rel="noopener">Official camping</a>
@@ -232,6 +322,16 @@ h1,h2,.cond{font-family:"Barlow Condensed","Barlow",sans-serif;text-transform:up
       <div class="mapbox reveal"><h3>Near Boscombe Down</h3><p>RIAT&#x27;s new home from 2027, just south east of Amesbury in Wiltshire.</p><svg class="rmap" viewBox="-250 -250 500 500" role="img" aria-label="Map of campsites within 10 miles of MOD Boscombe Down"><defs><clipPath id="clip-boscombe"><circle r="248"/></clipPath></defs><g clip-path="url(#clip-boscombe)"><path class="road" d="M-262.2 3.5 L-175.5 -17.3 L-114.7 -24.2 L-71.3 -32.5 L-19.3 -24.2 L41.5 -45.0 L110.9 -65.7 L171.6 -72.6 L249.7 -79.5"/><text class="rdl" x="172" y="-81">A303</text><path class="road" d="M-41.0 115.5 L-23.6 72.6 L-14.9 17.3 L-27.9 -27.0 L-23.6 -65.7 L-19.3 -121.0"/><text class="rdl" x="-24" y="-74">A345</text><path class="road" d="M-41.0 115.5 L41.5 31.1 L58.8 -65.7 L72.7 -118.3"/><text class="rdl" x="59" y="-74">A338</text></g><circle class="ring" r="100"/><text class="rl" x="0" y="-108">5 miles</text><circle class="ring" r="200"/><text class="rl" x="0" y="-208">10 miles</text><circle class="town" cx="-27.9" cy="-28.4" r="4"/><text class="tl" x="-18.9" y="-36.4" text-anchor="start">Amesbury</text><circle class="town" cx="-40.5" cy="115.8" r="4"/><text class="tl" x="-49.5" y="119.8" text-anchor="end">Salisbury</text><circle class="town" cx="-68.0" cy="-36.5" r="4"/><text class="tl" x="-77.0" y="-32.5" text-anchor="end">Stonehenge</text><circle class="town" cx="72.8" cy="-118.7" r="4"/><text class="tl" x="81.8" y="-114.7" text-anchor="start">Tidworth</text><circle class="town" cx="-96.5" cy="101.7" r="4"/><text class="tl" x="-105.5" y="105.7" text-anchor="end">Wilton</text><path class="runway" d="M-19.9 16.7L19.9 -16.7"/><circle class="ctr" r="13"/><circle class="ctr-dot" r="6"/><text class="cl" x="0" y="40" text-anchor="middle">MOD Boscombe Down</text><g class="mk ghost" transform="translate(-120 -110)"><circle r="15"/><path d="M-7 5L0 -7L7 5Z M0 -7V5"/></g><g class="mk ghost" transform="translate(150 60)"><circle r="15"/><path d="M-7 5L0 -7L7 5Z M0 -7V5"/></g><g class="mk ghost" transform="translate(60 170)"><circle r="15"/><path d="M-7 5L0 -7L7 5Z M0 -7V5"/></g><text class="ghost-l" x="-120" y="-134" text-anchor="middle">Your site here?</text></svg></div>
       <div class="mapbox reveal"><h3>Around Fairford</h3><p>RIAT&#x27;s home until 2026, on the edge of the Cotswolds.</p><svg class="rmap" viewBox="-250 -250 500 500" role="img" aria-label="Map of campsites within 10 miles of RAF Fairford"><defs><clipPath id="clip-fairford"><circle r="248"/></clipPath></defs><g clip-path="url(#clip-fairford)"><path class="road" d="M-152.7 -50.9 L-60.0 -31.5 L6.9 -35.7 L84.1 -14.9 L163.0 -10.8"/><text class="rdl" x="84" y="-23">A417</text><path class="road" d="M-152.7 -50.9 L-85.8 30.7 L-25.7 86.0 L25.7 169.1"/><text class="rdl" x="-26" y="78">A419</text></g><circle class="ring" r="100"/><text class="rl" x="0" y="-108">5 miles</text><circle class="ring" r="200"/><text class="rl" x="0" y="-208">10 miles</text><circle class="town" cx="6.9" cy="-35.7" r="4"/><text class="tl" x="15.9" y="-31.7" text-anchor="start">Fairford</text><circle class="town" cx="84.1" cy="-14.9" r="4"/><text class="tl" x="93.1" y="-10.9" text-anchor="start">Lechlade</text><circle class="town" cx="17.2" cy="14.1" r="4"/><text class="tl" x="26.2" y="18.1" text-anchor="start">Kempsford</text><circle class="town" cx="-152.7" cy="-50.9" r="4"/><text class="tl" x="-161.7" y="-46.9" text-anchor="end">Cirencester</text><circle class="town" cx="7.7" cy="170.4" r="4"/><text class="tl" x="16.7" y="174.4" text-anchor="start">Swindon</text><circle class="town" cx="66.9" cy="72.2" r="4"/><text class="tl" x="75.9" y="76.2" text-anchor="start">Highworth</text><circle class="town" cx="-118.4" cy="11.3" r="4"/><text class="tl" x="-127.4" y="15.3" text-anchor="end">South Cerney</text><circle class="town" cx="-56.6" cy="57.0" r="4"/><text class="tl" x="-65.6" y="61.0" text-anchor="end">Cricklade</text><path class="runway" d="M-26.0 0.0L26.0 -0.0"/><circle class="ctr" r="13"/><circle class="ctr-dot" r="6"/><text class="cl" x="0" y="40" text-anchor="middle">RAF Fairford</text><g class="mk ghost" transform="translate(-120 -110)"><circle r="15"/><path d="M-7 5L0 -7L7 5Z M0 -7V5"/></g><g class="mk ghost" transform="translate(-100 130)"><circle r="15"/><path d="M-7 5L0 -7L7 5Z M0 -7V5"/></g><g class="mk ghost" transform="translate(160 -90)"><circle r="15"/><path d="M-7 5L0 -7L7 5Z M0 -7V5"/></g><text class="ghost-l" x="-120" y="-134" text-anchor="middle">Your site here?</text></svg></div>
     </div>
+  </div>
+</section>
+
+<section class="sec" id="plan" aria-labelledby="plan-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 id="plan-h">Plan your camping trip</h2>
+      <p>The rest of the guide, for working out what to bring and what the weekend will cost.</p>
+    </div>
+    <div class="follow"><a class="sign reveal" href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></span><span class="st"><b>Camping at Airshows</b><span>What to pack, pitching up and staying comfortable</span></span><span class="sa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="sign reveal" href="https://www.ukairshowguide.co.uk/build-your-kit-calculator?list=camping" target="_top"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span class="st"><b>Camping kit calculator</b><span>Tick your tent, beds and cooking kit and see the cost</span></span><span class="sa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="sign reveal" href="https://www.ukairshowguide.co.uk/riat" target="_top"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14l9-3 3-7 2 1-1 6 6 2v2l-6-1-3 6h-2l1-6-8 1z"/></svg></span><span class="st"><b>RIAT 2027 guide</b><span>What we know about Boscombe Down so far</span></span><span class="sa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="sign reveal" href="https://www.ukairshowguide.co.uk/airshow-questions" target="_top"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h0"/></svg></span><span class="st"><b>Questions and answers</b><span>Camping and places to stay, answered</span></span><span class="sa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></div>
   </div>
 </section>
 
@@ -256,11 +356,42 @@ h1,h2,.cond{font-family:"Barlow Condensed","Barlow",sans-serif;text-transform:up
       <blockquote class="reveal">I would like to work with you and add your site to the website.<cite>Jack Skedge, Founder and Managing Editor</cite></blockquote>
       <div class="ask reveal">
         <b>What happens next</b>
-        <p>Email me and I will send over a short list of questions: your pitches and prices, facilities, dates and how visitors get to the show. Send a few photos and I will build your page and check it with you before it goes live.</p>
+        <p>Fill in the short form below, or email me at <a href="mailto:contactus@ukairshowguide.co.uk?subject=RIAT%20campsite%20listing">contactus@ukairshowguide.co.uk</a>. I will send over a few more questions about your pitches, prices and facilities. Send a few photos and I will build your page and check it with you before it goes live.</p>
         <div class="btns">
-          <a class="btn red" href="mailto:contactus@ukairshowguide.co.uk?subject=RIAT%20campsite%20listing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></svg>Email me</a>
+          <a class="btn red" href="#listForm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Fill in the form</a>
           <a class="btn line" href="https://jskedge1.github.io/airshow-pages/riat-camping/sample.html" target="_blank" rel="noopener">See a sample page</a>
         </div>
+      </div>
+    </div>
+    <div class="form reveal">
+      <h3>Tell me about your campsite</h3>
+      <p>This writes an email to me with your answers filled in. Nothing is sent until you press send in your own email.</p>
+      <form id="listForm" novalidate>
+        <div class="fld"><label for="lf-campsite">Campsite name <i>*</i></label><input type="text" id="lf-campsite" name="campsite" autocomplete="organization" required></div>
+        <div class="fld"><label for="lf-owner">Your name <i>*</i></label><input type="text" id="lf-owner" name="owner" autocomplete="name" required></div>
+        <div class="fld"><label for="lf-email">Your email <i>*</i></label><input type="email" id="lf-email" name="email" autocomplete="email" required></div>
+        <div class="fld"><label for="lf-phone">Phone</label><input type="tel" id="lf-phone" name="phone" autocomplete="tel"></div>
+        <div class="fld"><label for="lf-area">Nearest to</label><select id="lf-area" name="area"><option>MOD Boscombe Down</option><option>Fairford</option></select></div>
+        <div class="fld"><label for="lf-kind">Type of site</label><select id="lf-kind" name="kind"><option>New site for show week</option><option>Caravan park</option><option>Farm site</option><option>Glamping</option><option>Campervans and tourers</option><option>Something else</option></select></div>
+        <fieldset class="fld wide"><legend>Pitches you offer</legend><div class="ticks">
+          <label><input type="checkbox" name="pitch" value="Tents">Tents</label>
+          <label><input type="checkbox" name="pitch" value="Campervans">Campervans</label>
+          <label><input type="checkbox" name="pitch" value="Caravans and tourers">Caravans and tourers</label>
+          <label><input type="checkbox" name="pitch" value="Electric hook up">Electric hook up</label>
+          <label><input type="checkbox" name="pitch" value="Hardstanding">Hardstanding</label>
+          <label><input type="checkbox" name="pitch" value="Glamping">Glamping</label>
+        </div></fieldset>
+        <div class="fld"><label for="lf-dates">Dates open for show week</label><input type="text" id="lf-dates" name="dates" placeholder="For example 14 to 19 July 2027"></div>
+        <div class="fld"><label for="lf-web">Website or Facebook page</label><input type="text" id="lf-web" name="web" autocomplete="url"></div>
+        <div class="fld wide"><label for="lf-more">Anything else you would like to tell me</label><textarea id="lf-more" name="more"></textarea></div>
+        <p class="err" role="alert">Please add your campsite name, your name and an email address I can reply to.</p>
+        <div class="go"><button class="btn red" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></svg>Write my email</button><small>The show is Friday 16 to Sunday 18 July 2027. Your details stay on your device until you send the email.</small></div>
+      </form>
+      <div class="made" id="made" aria-live="polite">
+        <b>Your email is ready</b>
+        <p>Your email app should open with this filled in. If it doesn't, copy it and send it to contactus@ukairshowguide.co.uk.</p>
+        <textarea id="madeText" readonly aria-label="Your email, ready to copy"></textarea>
+        <div class="btns"><a class="btn navy" id="madeOpen" href="mailto:contactus@ukairshowguide.co.uk?subject=RIAT%20campsite%20listing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></svg>Open in my email</a><button class="btn line" type="button" id="madeCopy">Copy the email</button></div>
       </div>
     </div>
   </div>
@@ -271,10 +402,56 @@ h1,h2,.cond{font-family:"Barlow Condensed","Barlow",sans-serif;text-transform:up
 <p>Running a campsite near Boscombe Down or Fairford? Email <a href="mailto:contactus@ukairshowguide.co.uk?subject=RIAT%20campsite%20listing">contactus@ukairshowguide.co.uk</a>.</p>
 </div></footer>
 <script>
-(function(){var bs=document.querySelectorAll('.filter button'),items=document.querySelectorAll('.sites [data-area]');
-bs.forEach(function(b){b.addEventListener('click',function(){var f=b.getAttribute('data-f');
-bs.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
-items.forEach(function(it){it.style.display=(f==='all'||it.getAttribute('data-area')===f)?'':'none'})})})})();
+(function(){
+/* filters: one area, any number of needs. Works on the cards and the compare table. */
+var area='all',need=[];
+var areaBtns=document.querySelectorAll('.filter.area button'),needBtns=document.querySelectorAll('.filter.feat button');
+var cards=document.querySelectorAll('.sites .site'),rows=document.querySelectorAll('.cmp tbody tr'),
+    empties=document.querySelectorAll('.sites .empty'),nomatch=document.querySelector('.nomatch');
+function ok(el){
+  if(area!=='all'&&el.getAttribute('data-area')!==area)return false;
+  var tags=' '+(el.getAttribute('data-tags')||'')+' ';
+  for(var i=0;i<need.length;i++){if(tags.indexOf(' '+need[i]+' ')<0)return false}
+  return true}
+function apply(){
+  var shown=0,inArea=0;
+  cards.forEach(function(c){var a=area==='all'||c.getAttribute('data-area')===area;if(a)inArea++;
+    var v=ok(c);c.style.display=v?'':'none';if(v)shown++});
+  rows.forEach(function(r){r.style.display=ok(r)?'':'none'});
+  empties.forEach(function(x){x.style.display=(area==='all'||x.getAttribute('data-area')===area)?'':'none'});
+  if(nomatch)nomatch.style.display=(inArea>0&&shown===0)?'block':'none'}
+areaBtns.forEach(function(b){b.addEventListener('click',function(){area=b.getAttribute('data-f');
+  areaBtns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});apply()})});
+needBtns.forEach(function(b){b.addEventListener('click',function(){var on=b.getAttribute('aria-pressed')!=='true';
+  b.setAttribute('aria-pressed',on?'true':'false');var k=b.getAttribute('data-n');
+  need=need.filter(function(x){return x!==k});if(on)need.push(k);apply()})});
+var clr=document.querySelector('.nomatch button');
+if(clr)clr.addEventListener('click',function(){need=[];needBtns.forEach(function(x){x.setAttribute('aria-pressed','false')});apply()});
+
+/* list your campsite form: writes an email for the owner to send. Nothing is sent from this page. */
+var form=document.getElementById('listForm');if(!form)return;
+var TO='contactus@ukairshowguide.co.uk',made=document.getElementById('made'),out=document.getElementById('madeText'),
+    open=document.getElementById('madeOpen'),copy=document.getElementById('madeCopy'),err=form.querySelector('.err');
+function val(n){var el=form.elements[n];return el?(el.value||'').trim():''}
+form.addEventListener('submit',function(ev){ev.preventDefault();
+  var bad=null;['campsite','owner','email'].forEach(function(n){var el=form.elements[n],b=!el.value.trim()||(n==='email'&&!/^\S+@\S+\.\S+$/.test(el.value.trim()));
+    el.classList.toggle('bad',b);el.setAttribute('aria-invalid',b?'true':'false');if(b&&!bad)bad=el});
+  if(bad){err.style.display='block';bad.focus();return}
+  err.style.display='none';
+  var pitches=[].filter.call(form.querySelectorAll('input[name=pitch]'),function(x){return x.checked}).map(function(x){return x.value});
+  var lines=['Hello Jack,','','I would like to add my campsite to the RIAT camping pages.','',
+    'Campsite name: '+val('campsite'),'My name: '+val('owner'),'Email: '+val('email'),'Phone: '+(val('phone')||'Not given'),
+    'Nearest to: '+val('area'),'Type of site: '+val('kind'),'Pitches: '+(pitches.join(', ')||'Not given'),
+    'Dates open for show week: '+(val('dates')||'Not decided yet'),'Website or Facebook: '+(val('web')||'Not given'),
+    '','Anything else:',val('more')||'Nothing to add yet.','','Thanks,',val('owner')];
+  var body=lines.join('\n'),subject='RIAT campsite listing: '+val('campsite');
+  out.value='To: '+TO+'\nSubject: '+subject+'\n\n'+body;
+  open.href='mailto:'+TO+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  made.style.display='block';made.scrollIntoView({behavior:'smooth',block:'nearest'});
+  try{open.click()}catch(x){}});
+copy.addEventListener('click',function(){var done=function(){copy.textContent='Copied';setTimeout(function(){copy.textContent='Copy the email'},1800)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(out.value).then(done,function(){out.select()})}else{out.select()}});
+})();
 </script>
 <script>
 (function(){var els=document.querySelectorAll('.reveal');
