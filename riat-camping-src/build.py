@@ -385,7 +385,7 @@ def camp_scene(mode="colour"):
 
 
 CSS = r"""
-:root{--navy:#13293C;--deep:#0B1A27;--or:#D74949;--or-ink:#BF3636;--or-l:#32B4AF;--teal:#32B4AF;--teal-ink:#0E5F5B;--purple:#6950A1;--ink:#13293C;--body:#4F5D68;--line:#DDE3E8;--soft:#F2F4F5;
+:root{--navy:#13293C;--deep:#0B1A27;--or:#D74949;--or-ink:#BF3636;--or-l:#32B4AF;--teal:#32B4AF;--teal-ink:#0E5F5B;--sky:#00A6E2;--purple:#6950A1;--ink:#13293C;--body:#4F5D68;--line:#DDE3E8;--soft:#F2F4F5;
 --green:#1E8540;--amber:#F2B233;--red:#C93A3A}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -450,14 +450,16 @@ section[id]{scroll-margin-top:20px}
 .tagp{display:inline-flex;align-items:center;font:700 16px/1 "Barlow",sans-serif;padding:8px 12px;background:var(--purple);color:#fff}
 
 /* the campsite strip: one link per campsite page */
-.strip{border-bottom:1px solid var(--line);background:#fff}
-.strip .wrap{display:flex;align-items:center;gap:6px 28px;overflow-x:auto;scrollbar-width:none}
+.strip{background:var(--sky)}
+.strip .wrap{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
 .strip .wrap::-webkit-scrollbar{display:none}
-.strip .lab{flex:none;font:700 17px/1 "Barlow",sans-serif;color:var(--purple)}
-.st{position:relative;flex:none;display:inline-flex;align-items:center;gap:8px;padding:18px 0 15px;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
-.st:hover,.st.on{border-bottom-color:var(--teal)}
-.st small{font-weight:400;font-size:14px;color:var(--body)}
-.dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block}
+.strip .lab{flex:none;align-self:center;font:800 18px/1 "Barlow",sans-serif;color:var(--navy);margin-right:20px}
+.st{position:relative;flex:none;display:inline-flex;align-items:center;gap:9px;padding:17px 20px;font-weight:700;color:var(--navy);text-decoration:none;white-space:nowrap;border-left:1px solid rgba(19,41,60,.2)}
+.st:last-child{border-right:1px solid rgba(19,41,60,.2)}
+.st:hover{background:#4CC3EE}
+.st.on{background:var(--navy);color:#fff}
+.st small{font-weight:500;font-size:14.5px;opacity:.85}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block;box-shadow:0 0 0 2px #fff}
 .dot.av-ok{background:var(--green)}.dot.av-mid{background:var(--amber)}.dot.av-full{background:var(--red)}
 
 /* availability */
@@ -725,8 +727,7 @@ fieldset.fld{border:0}
 .more:hover{background-size:100% 2px}
 .more::after{content:"";display:inline-block;width:7px;height:7px;border:solid currentColor;border-width:2px 2px 0 0;transform:rotate(45deg);margin-left:8px;position:relative;top:-2px;transition:margin .3s}
 .more:hover::after{margin-left:14px}
-.st{transition:border-color .25s,color .25s}
-.st:hover{color:var(--or-ink)}
+.st{transition:background .25s,color .25s}
 .statbox{transition:transform .4s cubic-bezier(.22,.61,.36,1),box-shadow .4s}
 .ab-ph:hover .statbox{transform:translate(-6px,-6px);box-shadow:14px 14px 0 var(--teal)}
 .ab-ph{overflow:visible}
