@@ -438,6 +438,11 @@ def copy_camping():
         h = h.replace(gh + "riat-camping/", "")
         h = re.sub(r'<a href="https://www\.ukairshowguide\.co\.uk/riat" target="_top">Back to the RIAT guide', '<a href="../index.html" target="_self">Back to The Big Guide to RIAT', h)
         h = h.replace('href="https://www.ukairshowguide.co.uk/riat" target="_top"', 'href="../index.html" target="_self"')
+        # Jack, 20 Nov 2026: a different tent in the main photo of the camping home page's intro
+        old = re.search(r'<img class="p1" src="\.\./img/tent-and-kit\.jpg" alt="[^"]*"( style="[^"]*")?', h)
+        if old:
+            shutil.copyfile(ROOT / "camping-hub-img" / "shelter-day.jpg", OUT / "img" / "shelter-day.jpg")
+            h = h.replace(old.group(0), '<img class="p1" src="../img/shelter-day.jpg" alt="A grey dome tent on a camping pitch with a folding table outside" style="object-position:30% 50%"', 1)
         # the section's own strip of pages goes above the campsite strip
         s = strip("camping", "../")
         if '<nav class="strip"' in h:
