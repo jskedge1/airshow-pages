@@ -265,7 +265,7 @@
     ayr: { name: 'International Ayr Show', page: 'international-ayr-show', train: 'train-to-ayr', dest: [55.4630, -4.6340], pc: 'KA7 2UP', time: '10:00',
       arr: [{ c: 'AYR', m: 20, how: 'walk', t: 'From Ayr station it is about 15 to 20 minutes on foot to the Low Green.' }] },
     riat: { name: 'Royal International Air Tattoo', page: 'riat', dest: [51.1520, -1.7470], time: '08:00', soon: true,
-      arr: [{ c: 'SAL', m: 30, how: 'taxi', t: 'RIAT moves to MOD Boscombe Down for 2027 and the travel plan isn’t out yet. Salisbury is the nearest big station, so I have planned to there for now. I will add the shuttles and Park and Ride as soon as they are announced.' }] }
+      arr: [{ c: 'SAL', m: 30, how: 'taxi', t: 'RIAT moves to MOD Boscombe Down for 2027. The organisers say rail shuttles will run from Swindon, Salisbury and Andover, but the times and prices aren’t out yet. Salisbury is the nearest big station, so I have planned to there for now. I will add the shuttles and Park and Ride as soon as the details are announced.' }] }
   };
   var ORDER = ['riat', 'cosford', 'midlands', 'eastbourne', 'clacton', 'wales', 'duxford', 'shuttleworth', 'gransden', 'headcorn', 'southport', 'blackpool', 'ayr'];
   /* ---------- every major station, by region: [name shown, [station codes]] ---------- */

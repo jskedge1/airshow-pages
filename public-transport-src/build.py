@@ -15,7 +15,7 @@ os.chdir(ROOT)
 
 SHOWS = [
     ('riat', 'RIAT', 'Royal International Air Tattoo', 'MOD Boscombe Down, Wiltshire', 'riat',
-     'RIAT moves from RAF Fairford to MOD Boscombe Down, near Amesbury in Wiltshire, from 2027. The organisers haven’t released the travel plan for the new airfield yet, so I have taken the old Fairford trains, buses and shuttles off this page. I will add the new ones in due course.'),
+     'RIAT moves from RAF Fairford to MOD Boscombe Down, near Amesbury in Wiltshire, from 2027. The organisers say rail shuttles will run from Swindon, Salisbury and Andover, with Park and Ride as well, but the times, stops and prices aren’t out yet. I have taken the old Fairford trains, buses and shuttles off this page and will add the new ones as soon as they are released.'),
     ('cosford', 'Cosford', 'RAF Cosford Air Show', 'RAF Cosford, Shropshire', 'cosfordairshow',
      'Cosford is the easy one for the train. The station is under 300 metres from the entrance, with a train an hour each way on the Birmingham to Shrewsbury line. There are no Sunday buses, so the train really is the way in.'),
     ('midlands', 'Midlands', 'Midlands Air Festival', 'Ragley Hall, Alcester', 'midlandsairfestival',
@@ -138,7 +138,7 @@ for k, name, full, place, slug, intro in SHOWS:
     if k == 'riat':
         # RIAT moves to MOD Boscombe Down from 2027: no confirmed public transport yet
         facts = [['Showground', place, 'By road'], ['Travel plans', 'Still to be announced', 'By train'], ['Bus route pages', 'Coming in due course', 'By bus']]
-        status = '<b>RIAT is moving to MOD Boscombe Down for 2027.</b> Shuttles, Park and Ride and the best stations will all change, so I would hold off booking trains until the travel plan is out.'
+        status = '<b>RIAT is moving to MOD Boscombe Down for 2027.</b> The organisers say rail shuttles will run from Swindon, Salisbury and Andover, but the times and Park and Ride sites aren’t out yet, so I would hold off booking trains until the travel plan is out.'
         note = 'The RIAT page has everything confirmed so far, and I will update this section as soon as the new travel details are released.'
         tag = 'Moving for 2027'
     data.append(dict(k=k, name=name, full=full, place=place, url=SITE + slug, intro=intro, trainPage=train_page,
