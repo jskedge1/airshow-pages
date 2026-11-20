@@ -441,6 +441,24 @@ section[id]{scroll-margin-top:20px}
 .nav li{display:flex}
 .nav li a{display:flex;align-items:center;padding:0 14px;font-weight:500;font-size:15px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
 .nav li a:hover{border-bottom-color:var(--or-l)}
+/* home page opening screen: tall photo, headline, buttons, countdown, tent skyline */
+.hd.home{overflow:hidden;background:var(--navy)}
+.hd.home::before{z-index:1;background:linear-gradient(90deg,rgba(11,26,39,.93) 0%,rgba(19,41,60,.78) 40%,rgba(19,41,60,.2) 78%,rgba(19,41,60,.1) 100%),linear-gradient(180deg,rgba(11,26,39,.6),rgba(11,26,39,0) 26%)}
+.hd-bg{position:absolute;inset:0;background:center 58%/cover no-repeat}
+.hd.home .wrap{z-index:2}
+.hero-in{padding:60px 0 150px}
+.hero-kick{display:inline-flex;align-items:center;gap:10px;background:var(--or);color:#fff;font:700 19px/1 "Barlow",sans-serif;padding:11px 15px}
+.hero-kick svg{width:19px;height:19px}
+.hd.home h1{color:#fff;font-size:clamp(40px,5.7vw,74px);font-weight:800;line-height:1.02;margin-top:18px;text-shadow:0 2px 22px rgba(0,0,0,.35)}
+.hd.home h1 em{display:block;font-style:normal;color:var(--teal)}
+.hero-lead{margin-top:18px;font-size:clamp(18px,1.7vw,21px);line-height:1.55;color:#EEF3F6;max-width:54ch}
+.hero-in .btns{margin-top:26px}
+.btn.ghost{border:2px solid #fff;color:#fff;padding:15px 26px}
+.btn.ghost:hover{background:#fff;color:var(--navy)}
+.count{display:inline-flex;align-items:center;gap:14px;margin-top:26px;padding:12px 18px 12px 14px;background:rgba(11,26,39,.72);border-left:5px solid var(--teal);color:#fff;font-weight:600;font-size:18px;line-height:1.3}
+.count b{font:800 40px/1 "Barlow",sans-serif;color:var(--teal);min-width:1.6em;text-align:center}
+.scene{position:absolute;left:0;right:0;bottom:-1px;z-index:2;height:88px;overflow:hidden;pointer-events:none}
+.scene svg{position:absolute;bottom:0;left:50%;height:100%;width:auto;min-width:100%;transform:translateX(-50%)}
 .ttl{padding:78px 0 96px}
 .ttl h1{color:#fff;font-size:clamp(38px,5.6vw,58px)}
 .crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:16px;font-size:17px}
@@ -677,6 +695,14 @@ fieldset.fld{border:0}
 .fbar{background:#07121B;color:#C2CED6;font-size:14px;line-height:1.6;padding:22px 0}
 .fbar p+p{margin-top:6px}
 .fbar a{color:#fff}
+@media (max-width:720px){
+  .hero-in{padding:44px 0 124px}
+  .hero-kick{font-size:17px}
+  .count{font-size:16px}
+  .count b{font-size:32px}
+  .scene{height:60px}
+  .hd.home::before{background:linear-gradient(180deg,rgba(11,26,39,.88),rgba(19,41,60,.72) 55%,rgba(19,41,60,.5))}
+}
 .sample-bar{background:var(--amber);color:var(--ink);font:600 15px/1.4 "Barlow",sans-serif;text-align:center;padding:9px 18px}
 
 @media (max-width:1000px){
@@ -736,6 +762,13 @@ fieldset.fld{border:0}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.14)}100%{transform:scale(1)}}
 @keyframes ring{0%{box-shadow:0 0 0 5px rgba(215,73,73,.32),0 0 0 5px rgba(255,130,130,.5)}100%{box-shadow:0 0 0 5px rgba(215,73,73,.32),0 0 0 22px rgba(255,130,130,0)}}
 .hd{animation:drift 26s ease-in-out infinite alternate}
+@keyframes zoom{from{transform:scale(1)}to{transform:scale(1.12)}}
+.hd-bg{animation:zoom 28s ease-in-out infinite alternate}
+.hero-kick{animation:rise .7s .05s both}
+.hd.home h1{animation:rise .8s .15s both}
+.hero-lead{animation:rise .8s .3s both}
+.hero-in .btns{animation:rise .8s .45s both}
+.count{animation:rise .8s .6s both}
 .ttl .tags{animation:rise .7s .05s both}
 .ttl h1{animation:rise .8s .15s both}
 .ttl .crumbs{animation:rise .8s .3s both}
@@ -869,6 +902,35 @@ def header(photo, nav_items, title, crumbs, tags="", button=None):
     bg = f" style=\"background-image:url('{e(photo)}')\"" if photo else ""
     return (f'<header class="hd"{bg}><div class="wrap"><nav class="nav" aria-label="On this page">{logo()}<ul>{nav}</ul>{btn}</nav>'
             f'<div class="ttl">{tags}<h1>{e(title)}</h1><p class="crumbs">{cr}</p></div></div></header>')
+
+
+def home_header(nav_items, n):
+    """The home page opening screen."""
+    nav = "".join(f'<li><a href="{e(href)}">{e(lab)}</a></li>' for href, lab in nav_items)
+    return f"""<header class="hd home"><div class="hd-bg" style="background-image:url('{IMG}hero-flyby.jpg')"></div>
+  <div class="wrap"><nav class="nav" aria-label="On this page">{logo()}<ul>{nav}</ul><a class="btn or inv" href="#list">List your campsite</a></nav>
+    <div class="hero-in">
+      <span class="hero-kick">{icon("cal")}RIAT 2027, 16 to 18 July</span>
+      <h1>Camping For The Air Tattoo <em>Near Boscombe Down</em></h1>
+      <p class="hero-lead">Find somewhere to pitch up for the first Air Tattoo at MOD Boscombe Down. Compare pitches, prices and facilities, and see how far each campsite is from the show.</p>
+      <div class="btns"><a class="btn or inv" href="#campsites">{"Find a campsite" if n else "See what is coming"} {icon("arrow")}</a><a class="btn ghost" href="#list">List your campsite</a></div>
+      <p class="count" id="count" hidden><b id="countDays"></b><span>days until the first Air Tattoo<br>at MOD Boscombe Down</span></p>
+    </div>
+  </div>
+  <div class="scene">{camp_scene("#13293C")}</div>
+</header>"""
+
+
+COUNT_JS = r"""<script>
+(function(){var box=document.getElementById('count'),out=document.getElementById('countDays');if(!box||!out)return;
+var show=Date.UTC(2027,6,16),now=new Date(),today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+var days=Math.round((show-today)/864e5);if(days<1)return;
+box.hidden=false;
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches){out.textContent=days;return}
+var t0=null,dur=1400;function step(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/dur),v=Math.round(days*(1-Math.pow(1-k,3)));out.textContent=v;if(k<1)requestAnimationFrame(step)}
+out.textContent='0';setTimeout(function(){requestAnimationFrame(step)},700);
+})();
+</script>"""
 
 
 def site_strip(live, current=None):
@@ -1089,7 +1151,7 @@ def build_home(live):
 
     body = f"""{head(h_title, desc, "", SITE + HOME_WIX if HOME_WIX else "")}
 {top_bar()}
-{header(IMG + "hero-flyby.jpg", nav, "RIAT Camping", [("RIAT", SITE + RIAT_WIX, "_top"), ("Camping", "", "")], button=("#list", "List your campsite"))}
+{home_header(nav, n)}
 {site_strip(live, "home")}
 <main>
 <section class="sec" id="about" aria-label="Camping for the Air Tattoo">
@@ -1098,8 +1160,8 @@ def build_home(live):
       <img class="p2" src="{IMG}bell-tent.jpg" alt="A cream bell tent on a camping field" style="object-position:70% 50%" loading="lazy" decoding="async">
       <div class="statbox">{icon("tent")}{stat}</div></div>
     <div>
-      <span class="kick">RIAT 2027</span>
-      <h2 class="h">Camping For The Air Tattoo Near Boscombe Down</h2>
+      <span class="kick">Welcome</span>
+      <h2 class="h">Your Guide To Camping At RIAT</h2>
       <p class="lede">From 2027 the Air Tattoo moves to MOD Boscombe Down, and a lot of visitors will be looking for somewhere to pitch up nearby. I list the campsites around the new showground here, plus the ones still running around Fairford.</p>
       <div class="feat">
         <div><h3><i>{icon("chev")}</i>Pitches and prices</h3><p>Pitch sizes and what a night costs, for tents, campervans, tourers and glamping.</p></div>
@@ -1208,6 +1270,7 @@ def build_home(live):
 </main>
 {footer(live)}
 {HOME_JS.replace("__CONTACT__", CONTACT)}
+{COUNT_JS}
 {MOTION_JS}
 </body>
 </html>

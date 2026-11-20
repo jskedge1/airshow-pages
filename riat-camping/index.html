@@ -65,6 +65,24 @@ section[id]{scroll-margin-top:20px}
 .nav li{display:flex}
 .nav li a{display:flex;align-items:center;padding:0 14px;font-weight:500;font-size:15px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
 .nav li a:hover{border-bottom-color:var(--or-l)}
+/* home page opening screen: tall photo, headline, buttons, countdown, tent skyline */
+.hd.home{overflow:hidden;background:var(--navy)}
+.hd.home::before{z-index:1;background:linear-gradient(90deg,rgba(11,26,39,.93) 0%,rgba(19,41,60,.78) 40%,rgba(19,41,60,.2) 78%,rgba(19,41,60,.1) 100%),linear-gradient(180deg,rgba(11,26,39,.6),rgba(11,26,39,0) 26%)}
+.hd-bg{position:absolute;inset:0;background:center 58%/cover no-repeat}
+.hd.home .wrap{z-index:2}
+.hero-in{padding:60px 0 150px}
+.hero-kick{display:inline-flex;align-items:center;gap:10px;background:var(--or);color:#fff;font:700 19px/1 "Barlow",sans-serif;padding:11px 15px}
+.hero-kick svg{width:19px;height:19px}
+.hd.home h1{color:#fff;font-size:clamp(40px,5.7vw,74px);font-weight:800;line-height:1.02;margin-top:18px;text-shadow:0 2px 22px rgba(0,0,0,.35)}
+.hd.home h1 em{display:block;font-style:normal;color:var(--teal)}
+.hero-lead{margin-top:18px;font-size:clamp(18px,1.7vw,21px);line-height:1.55;color:#EEF3F6;max-width:54ch}
+.hero-in .btns{margin-top:26px}
+.btn.ghost{border:2px solid #fff;color:#fff;padding:15px 26px}
+.btn.ghost:hover{background:#fff;color:var(--navy)}
+.count{display:inline-flex;align-items:center;gap:14px;margin-top:26px;padding:12px 18px 12px 14px;background:rgba(11,26,39,.72);border-left:5px solid var(--teal);color:#fff;font-weight:600;font-size:18px;line-height:1.3}
+.count b{font:800 40px/1 "Barlow",sans-serif;color:var(--teal);min-width:1.6em;text-align:center}
+.scene{position:absolute;left:0;right:0;bottom:-1px;z-index:2;height:88px;overflow:hidden;pointer-events:none}
+.scene svg{position:absolute;bottom:0;left:50%;height:100%;width:auto;min-width:100%;transform:translateX(-50%)}
 .ttl{padding:78px 0 96px}
 .ttl h1{color:#fff;font-size:clamp(38px,5.6vw,58px)}
 .crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:16px;font-size:17px}
@@ -301,6 +319,14 @@ fieldset.fld{border:0}
 .fbar{background:#07121B;color:#C2CED6;font-size:14px;line-height:1.6;padding:22px 0}
 .fbar p+p{margin-top:6px}
 .fbar a{color:#fff}
+@media (max-width:720px){
+  .hero-in{padding:44px 0 124px}
+  .hero-kick{font-size:17px}
+  .count{font-size:16px}
+  .count b{font-size:32px}
+  .scene{height:60px}
+  .hd.home::before{background:linear-gradient(180deg,rgba(11,26,39,.88),rgba(19,41,60,.72) 55%,rgba(19,41,60,.5))}
+}
 .sample-bar{background:var(--amber);color:var(--ink);font:600 15px/1.4 "Barlow",sans-serif;text-align:center;padding:9px 18px}
 
 @media (max-width:1000px){
@@ -360,6 +386,13 @@ fieldset.fld{border:0}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.14)}100%{transform:scale(1)}}
 @keyframes ring{0%{box-shadow:0 0 0 5px rgba(215,73,73,.32),0 0 0 5px rgba(255,130,130,.5)}100%{box-shadow:0 0 0 5px rgba(215,73,73,.32),0 0 0 22px rgba(255,130,130,0)}}
 .hd{animation:drift 26s ease-in-out infinite alternate}
+@keyframes zoom{from{transform:scale(1)}to{transform:scale(1.12)}}
+.hd-bg{animation:zoom 28s ease-in-out infinite alternate}
+.hero-kick{animation:rise .7s .05s both}
+.hd.home h1{animation:rise .8s .15s both}
+.hero-lead{animation:rise .8s .3s both}
+.hero-in .btns{animation:rise .8s .45s both}
+.count{animation:rise .8s .6s both}
 .ttl .tags{animation:rise .7s .05s both}
 .ttl h1{animation:rise .8s .15s both}
 .ttl .crumbs{animation:rise .8s .3s both}
@@ -434,7 +467,18 @@ fieldset.fld{border:0}
 <body>
 
 <div class="top"><div class="wrap"><div class="l"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>MOD Boscombe Down, Wiltshire</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>16 to 18 July 2027</span><a href="mailto:contactus@ukairshowguide.co.uk?subject=RIAT%20campsite%20listing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></svg>contactus@ukairshowguide.co.uk</a></div><div class="r"><a href="https://www.ukairshowguide.co.uk/riat" target="_top">Back to the RIAT guide <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div></div>
-<header class="hd" style="background-image:url('https://jskedge1.github.io/airshow-pages/camping-hub-img/hero-flyby.jpg')"><div class="wrap"><nav class="nav" aria-label="On this page"><a class="logo" href="https://www.ukairshowguide.co.uk/" target="_top"><img src="https://jskedge1.github.io/airshow-pages/brand/ukag-header-logo.png" width="750" height="249" alt="UK Airshow Guide, by The Big Guide to UK Airshows" decoding="async"></a><ul><li><a href="#campsites">Campsites</a></li><li><a href="#map">Show map</a></li><li><a href="#new">New to camping</a></li><li><a href="#owners">For owners</a></li></ul><a class="btn or inv" href="#list">List your campsite</a></nav><div class="ttl"><h1>RIAT Camping</h1><p class="crumbs"><a href="https://www.ukairshowguide.co.uk/riat" target="_top">RIAT</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg><span>Camping</span></p></div></div></header>
+<header class="hd home"><div class="hd-bg" style="background-image:url('https://jskedge1.github.io/airshow-pages/camping-hub-img/hero-flyby.jpg')"></div>
+  <div class="wrap"><nav class="nav" aria-label="On this page"><a class="logo" href="https://www.ukairshowguide.co.uk/" target="_top"><img src="https://jskedge1.github.io/airshow-pages/brand/ukag-header-logo.png" width="750" height="249" alt="UK Airshow Guide, by The Big Guide to UK Airshows" decoding="async"></a><ul><li><a href="#campsites">Campsites</a></li><li><a href="#map">Show map</a></li><li><a href="#new">New to camping</a></li><li><a href="#owners">For owners</a></li></ul><a class="btn or inv" href="#list">List your campsite</a></nav>
+    <div class="hero-in">
+      <span class="hero-kick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>RIAT 2027, 16 to 18 July</span>
+      <h1>Camping For The Air Tattoo <em>Near Boscombe Down</em></h1>
+      <p class="hero-lead">Find somewhere to pitch up for the first Air Tattoo at MOD Boscombe Down. Compare pitches, prices and facilities, and see how far each campsite is from the show.</p>
+      <div class="btns"><a class="btn or inv" href="#campsites">See what is coming <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn ghost" href="#list">List your campsite</a></div>
+      <p class="count" id="count" hidden><b id="countDays"></b><span>days until the first Air Tattoo<br>at MOD Boscombe Down</span></p>
+    </div>
+  </div>
+  <div class="scene"><svg viewBox="0 0 2400 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><path fill="none" stroke="#13293C" stroke-width="1.5" d="M559 38Q826 90 1092 53"/><circle cx="595" cy="47" r="4" fill="#13293C"/><circle cx="630" cy="53" r="4" fill="#13293C"/><circle cx="666" cy="58" r="4" fill="#13293C"/><circle cx="701" cy="62" r="4" fill="#13293C"/><circle cx="737" cy="66" r="4" fill="#13293C"/><circle cx="772" cy="68" r="4" fill="#13293C"/><circle cx="808" cy="70" r="4" fill="#13293C"/><circle cx="843" cy="71" r="4" fill="#13293C"/><circle cx="879" cy="71" r="4" fill="#13293C"/><circle cx="914" cy="71" r="4" fill="#13293C"/><circle cx="950" cy="69" r="4" fill="#13293C"/><circle cx="985" cy="67" r="4" fill="#13293C"/><circle cx="1021" cy="64" r="4" fill="#13293C"/><circle cx="1056" cy="60" r="4" fill="#13293C"/><path fill="none" stroke="#13293C" stroke-width="1.5" d="M1092 53Q1340 90 1587 38"/><circle cx="1125" cy="60" r="4" fill="#13293C"/><circle cx="1158" cy="64" r="4" fill="#13293C"/><circle cx="1191" cy="67" r="4" fill="#13293C"/><circle cx="1224" cy="69" r="4" fill="#13293C"/><circle cx="1257" cy="71" r="4" fill="#13293C"/><circle cx="1290" cy="71" r="4" fill="#13293C"/><circle cx="1323" cy="71" r="4" fill="#13293C"/><circle cx="1356" cy="70" r="4" fill="#13293C"/><circle cx="1389" cy="68" r="4" fill="#13293C"/><circle cx="1422" cy="66" r="4" fill="#13293C"/><circle cx="1455" cy="62" r="4" fill="#13293C"/><circle cx="1488" cy="58" r="4" fill="#13293C"/><circle cx="1521" cy="53" r="4" fill="#13293C"/><circle cx="1554" cy="47" r="4" fill="#13293C"/><path fill="#13293C" d="M36 36L50 76H43L57 108H40V120H32V108H15L29 76H22Z"/><path fill="#13293C" d="M76 58L88 88H81L93 108H80V120H72V108H59L71 88H64Z"/><path fill="#13293C" d="M428 40L442 78H435L449 108H432V120H424V108H407L421 78H414Z"/><path fill="#13293C" d="M466 24L482 70H473L489 108H470V120H462V108H443L459 70H450Z"/><path fill="#13293C" d="M896 46L909 82H902L915 108H900V120H892V108H877L890 82H883Z"/><path fill="#13293C" d="M1378 30L1393 73H1385L1400 108H1382V120H1374V108H1356L1371 73H1363Z"/><path fill="#13293C" d="M1418 54L1430 86H1424L1436 108H1422V120H1414V108H1400L1412 86H1406Z"/><path fill="#13293C" d="M1458 38L1472 77H1464L1478 108H1462V120H1454V108H1438L1452 77H1444Z"/><path fill="#13293C" d="M1896 42L1910 79H1902L1916 108H1900V120H1892V108H1876L1890 79H1882Z"/><path fill="#13293C" d="M1936 26L1952 71H1943L1959 108H1940V120H1932V108H1913L1929 71H1920Z"/><path fill="#13293C" d="M2326 50L2338 84H2332L2344 108H2330V120H2322V108H2308L2320 84H2314Z"/><path fill="#13293C" d="M2366 32L2381 74H2373L2388 108H2370V120H2362V108H2344L2359 74H2351Z"/><path fill="#13293C" d="M148 120L196 66L244 120Z"/><rect x="262" y="94" width="16" height="23" fill="#13293C"/><rect x="280" y="94" width="16" height="23" fill="#13293C" opacity=".72"/><rect x="298" y="94" width="16" height="23" fill="#13293C"/><rect x="316" y="94" width="16" height="23" fill="#13293C" opacity=".72"/><rect x="334" y="94" width="16" height="23" fill="#13293C"/><rect x="352" y="94" width="16" height="23" fill="#13293C" opacity=".72"/><rect x="260" y="89" width="3" height="31" fill="#13293C"/><rect x="278" y="89" width="3" height="31" fill="#13293C"/><rect x="296" y="89" width="3" height="31" fill="#13293C"/><rect x="314" y="89" width="3" height="31" fill="#13293C"/><rect x="332" y="89" width="3" height="31" fill="#13293C"/><rect x="350" y="89" width="3" height="31" fill="#13293C"/><rect x="368" y="89" width="3" height="31" fill="#13293C"/><rect x="556" y="36" width="3" height="84" fill="#13293C"/><path fill="#13293C" d="M559 36L586 44L559 52Z"/><path fill="#13293C" d="M576 120A52 46 0 0 1 680 120Z"/><path fill="#13293C" d="M724 112V74H786L808 94V112Z"/><circle cx="742" cy="112" r="8" fill="#13293C"/><circle cx="790" cy="112" r="8" fill="#13293C"/><path fill="#13293C" d="M1040 120L1092 62L1144 120Z"/><rect x="1160" y="94" width="16" height="23" fill="#13293C"/><rect x="1178" y="94" width="16" height="23" fill="#13293C" opacity=".72"/><rect x="1196" y="94" width="16" height="23" fill="#13293C"/><rect x="1214" y="94" width="16" height="23" fill="#13293C" opacity=".72"/><rect x="1232" y="94" width="16" height="23" fill="#13293C"/><rect x="1250" y="94" width="16" height="23" fill="#13293C" opacity=".72"/><rect x="1268" y="94" width="16" height="23" fill="#13293C"/><rect x="1158" y="89" width="3" height="31" fill="#13293C"/><rect x="1176" y="89" width="3" height="31" fill="#13293C"/><rect x="1194" y="89" width="3" height="31" fill="#13293C"/><rect x="1212" y="89" width="3" height="31" fill="#13293C"/><rect x="1230" y="89" width="3" height="31" fill="#13293C"/><rect x="1248" y="89" width="3" height="31" fill="#13293C"/><rect x="1266" y="89" width="3" height="31" fill="#13293C"/><rect x="1284" y="89" width="3" height="31" fill="#13293C"/><rect x="1584" y="36" width="3" height="84" fill="#13293C"/><path fill="#13293C" d="M1587 36L1614 44L1587 52Z"/><path fill="#13293C" d="M1606 120L1652 68L1698 120Z"/><rect x="1736" y="70" width="92" height="40" rx="8" fill="#13293C"/><path stroke="#13293C" stroke-width="3" d="M1828 104H1848"/><circle cx="1776" cy="112" r="8" fill="#13293C"/><path fill="#13293C" d="M2032 120A52 46 0 0 1 2136 120Z"/><path fill="#13293C" d="M2176 112V74H2238L2260 94V112Z"/><circle cx="2194" cy="112" r="8" fill="#13293C"/><circle cx="2242" cy="112" r="8" fill="#13293C"/></svg></div>
+</header>
 <nav class="strip" aria-label="RIAT campsites"><div class="wrap"><span class="lab">Campsites</span><a class="st on" href="https://jskedge1.github.io/airshow-pages/riat-camping/index.html" target="_top" aria-current=page>All campsites</a></div></nav>
 <main>
 <section class="sec" id="about" aria-label="Camping for the Air Tattoo">
@@ -443,8 +487,8 @@ fieldset.fld{border:0}
       <img class="p2" src="https://jskedge1.github.io/airshow-pages/camping-hub-img/bell-tent.jpg" alt="A cream bell tent on a camping field" style="object-position:70% 50%" loading="lazy" decoding="async">
       <div class="statbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg><b>2027</b><span>The first Air Tattoo at Boscombe Down</span></div></div>
     <div>
-      <span class="kick">RIAT 2027</span>
-      <h2 class="h">Camping For The Air Tattoo Near Boscombe Down</h2>
+      <span class="kick">Welcome</span>
+      <h2 class="h">Your Guide To Camping At RIAT</h2>
       <p class="lede">From 2027 the Air Tattoo moves to MOD Boscombe Down, and a lot of visitors will be looking for somewhere to pitch up nearby. I list the campsites around the new showground here, plus the ones still running around Fairford.</p>
       <div class="feat">
         <div><h3><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></i>Pitches and prices</h3><p>Pitch sizes and what a night costs, for tents, campervans, tourers and glamping.</p></div>
@@ -624,6 +668,16 @@ form.addEventListener('submit',function(ev){ev.preventDefault();
   try{open.click()}catch(x){}});
 copy.addEventListener('click',function(){var done=function(){copy.textContent='Copied';setTimeout(function(){copy.textContent='Copy the email'},1800)};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(out.value).then(done,function(){out.select()})}else{out.select()}});
+})();
+</script>
+<script>
+(function(){var box=document.getElementById('count'),out=document.getElementById('countDays');if(!box||!out)return;
+var show=Date.UTC(2027,6,16),now=new Date(),today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+var days=Math.round((show-today)/864e5);if(days<1)return;
+box.hidden=false;
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches){out.textContent=days;return}
+var t0=null,dur=1400;function step(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/dur),v=Math.round(days*(1-Math.pow(1-k,3)));out.textContent=v;if(k<1)requestAnimationFrame(step)}
+out.textContent='0';setTimeout(function(){requestAnimationFrame(step)},700);
 })();
 </script>
 <script>
