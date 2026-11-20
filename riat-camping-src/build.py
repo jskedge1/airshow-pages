@@ -198,6 +198,9 @@ ICON = {
     "back": '<path d="M19 12H5M11 6l-6 6 6 6"/>',
     "plus": '<path d="M12 5v14M5 12h14"/>',
     "list": '<rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    "tag": '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/>',
+    "drop": '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+    "cols": '<rect x="3" y="4" width="18" height="16"/><path d="M9 4v16M15 4v16M3 10h18"/>',
     "plane": '<path d="M2 14l9-3 3-7 2 1-1 6 6 2v2l-6-1-3 6h-2l1-6-8 1z"/>',
     "ask": '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h0"/>',
 }
@@ -274,14 +277,92 @@ def ring_map(area, sites, highlight=None, cls="rmap"):
 # board tables, coloured mode rows) and the Duxford page (coloured tiles with round icon badges).
 KIND_COL = {"tent": "k-tent", "van": "k-van", "caravan": "k-caravan", "glamping": "k-glamping"}
 
+
+def camp_scene(mode="colour"):
+    """A flat campsite skyline: pines, tents, windbreaks, a campervan and a caravan. Ground is the bottom edge.
+    mode "light" draws it in one colour (the tab strip colour) for the bottom of the photo header."""
+    one = "#DDD8CC" if mode == "light" else None
+    G = 120
+
+    def c(col):
+        return one or col
+
+    out = []
+
+    def pine(x, h=78, w=40, col="#0E5F5B"):
+        out.append(f'<path fill="{c(col)}" d="M{x} {G - h}L{x + w * .34:.0f} {G - h * .52:.0f}H{x + w * .16:.0f}L{x + w * .5:.0f} {G - 12}H{x + 4}V{G}H{x - 4}V{G - 12}H{x - w * .5:.0f}L{x - w * .16:.0f} {G - h * .52:.0f}H{x - w * .34:.0f}Z"/>')
+
+    def tent(x, w=96, h=54, col="#2BA84A"):
+        out.append(f'<path fill="{c(col)}" d="M{x - w / 2:.0f} {G}L{x} {G - h}L{x + w / 2:.0f} {G}Z"/>')
+        if not one:
+            out.append(f'<path fill="#13293C" d="M{x - 11} {G}L{x} {G - h * .62:.0f}L{x + 11} {G}Z"/>')
+            out.append(f'<path stroke="#13293C" stroke-width="2" d="M{x} {G - h}V{G - h - 9}M{x - w / 2 - 14:.0f} {G}L{x - w * .3:.0f} {G - h * .42:.0f}M{x + w / 2 + 14:.0f} {G}L{x + w * .3:.0f} {G - h * .42:.0f}"/>')
+
+    def dome(x, w=104, h=46, col="#E07A1F"):
+        out.append(f'<path fill="{c(col)}" d="M{x - w / 2:.0f} {G}A{w / 2:.0f} {h} 0 0 1 {x + w / 2:.0f} {G}Z"/>')
+        if not one:
+            out.append(f'<path fill="#13293C" d="M{x - 12} {G}A12 {h * .6:.0f} 0 0 1 {x + 12} {G}Z"/>')
+
+    def windbreak(x, n=6, pw=18, h=26):
+        cols = ["#D74949", "#F2B233", "#00A6E2", "#2BA84A"]
+        for i in range(n):
+            col = c(cols[i % 4])
+            op = ' opacity=".72"' if one and i % 2 else ""
+            out.append(f'<rect x="{x + i * pw}" y="{G - h}" width="{pw - 2}" height="{h - 3}" fill="{col}"{op}/>')
+        for i in range(n + 1):
+            out.append(f'<rect x="{x + i * pw - 2}" y="{G - h - 5}" width="3" height="{h + 5}" fill="{c("#13293C")}"/>')
+
+    def van(x, col="#00A6E2"):
+        out.append(f'<path fill="{c("#13293C")}" d="M{x} {G - 8}V{G - 46}H{x + 62}L{x + 84} {G - 26}V{G - 8}Z"/>')
+        if not one:
+            out.append(f'<rect x="{x}" y="{G - 30}" width="84" height="6" fill="{col}"/>')
+            out.append(f'<path fill="#F4F1EA" d="M{x + 8} {G - 40}H{x + 30}V{G - 32}H{x + 8}ZM{x + 38} {G - 40}H{x + 60}L{x + 68} {G - 32}H{x + 38}Z"/>')
+        for wx in (x + 18, x + 66):
+            out.append(f'<circle cx="{wx}" cy="{G - 8}" r="8" fill="{c("#13293C")}"/>')
+            if not one:
+                out.append(f'<circle cx="{wx}" cy="{G - 8}" r="3" fill="#F4F1EA"/>')
+
+    def caravan(x):
+        body = "#FFFFFF" if not one else one
+        st = ' stroke="#13293C" stroke-width="3"' if not one else ""
+        out.append(f'<rect x="{x}" y="{G - 50}" width="92" height="40" rx="8" fill="{body}"{st}/>')
+        out.append(f'<path stroke="{c("#13293C")}" stroke-width="3" d="M{x + 92} {G - 16}H{x + 112}"/>')
+        if not one:
+            out.append(f'<rect x="{x + 2}" y="{G - 30}" width="88" height="5" fill="#6950A1"/>')
+            out.append(f'<rect x="{x + 12}" y="{G - 43}" width="24" height="10" fill="#13293C"/><rect x="{x + 62}" y="{G - 43}" width="16" height="30" fill="#13293C"/>')
+        out.append(f'<circle cx="{x + 40}" cy="{G - 8}" r="8" fill="{c("#13293C")}"/>')
+
+    def flag(x, col="#D74949"):
+        out.append(f'<rect x="{x}" y="{G - 84}" width="3" height="84" fill="{c("#13293C")}"/>')
+        out.append(f'<path fill="{c(col)}" d="M{x + 3} {G - 84}L{x + 30} {G - 76}L{x + 3} {G - 68}Z"/>')
+
+    def fire(x):
+        if one:
+            return
+        out.append(f'<path fill="#F2B233" d="M{x - 9} {G - 4}Q{x - 12} {G - 18} {x} {G - 30}Q{x + 12} {G - 16} {x + 9} {G - 4}Z"/>')
+        out.append(f'<path fill="#D74949" d="M{x - 4} {G - 4}Q{x - 6} {G - 12} {x} {G - 18}Q{x + 6} {G - 12} {x + 4} {G - 4}Z"/>')
+        out.append(f'<path stroke="#8C6B3F" stroke-width="5" stroke-linecap="round" d="M{x - 13} {G - 3}H{x + 13}"/>')
+
+    for x, h, w, col in ((36, 84, 42, "#0E5F5B"), (76, 62, 34, "#13293C"), (428, 80, 42, "#13293C"), (466, 96, 46, "#0E5F5B"),
+                         (896, 74, 38, "#0E5F5B"), (1378, 90, 44, "#0E5F5B"), (1418, 66, 36, "#13293C"), (1458, 82, 40, "#0E5F5B"),
+                         (1896, 78, 40, "#13293C"), (1936, 94, 46, "#0E5F5B"), (2326, 70, 36, "#0E5F5B"), (2366, 88, 44, "#13293C")):
+        pine(x, h, w, col)
+    tent(196, col="#2BA84A"); windbreak(262, 6)
+    flag(556); dome(628, col="#E07A1F"); van(724)
+    fire(1012); tent(1092, 104, 58, "#00A6E2"); windbreak(1160, 7)
+    flag(1584, "#F2B233"); tent(1652, 92, 52, "#6950A1"); caravan(1736)
+    dome(2084, col="#2BA84A"); van(2176, "#D74949")
+    return (f'<svg viewBox="0 0 2400 {G}" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">'
+            + "".join(out) + '</svg>')
+
 CSS = r"""
 :root{--navy:#13293C;--navy2:#1C3850;--deep:#0B1A27;--black:#0B0D0F;--teal:#32B4AF;--teal-ink:#0E5F5B;--purple:#6950A1;
 --red:#D74949;--sky:#00A6E2;--sky-ink:#006F99;--green:#2BA84A;--green-d:#1E8540;--amber:#F2B233;--orange:#E07A1F;--pink:#C2255C;
---mist:#F3F6F8;--line:#DCE4EA;--ink:#14212C;--soft:#4A5C6B}
+--mist:#F3F6F8;--line:#DCE4EA;--ink:#14212C;--soft:#4A5C6B;--canvas:#F4F1EA;--canvas-d:#DDD8CC;--wood:#8C6B3F}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
-body{font:400 17px/1.55 "Barlow",system-ui,sans-serif;color:var(--ink);background:var(--mist);-webkit-font-smoothing:antialiased}
+body{font:400 17px/1.55 "Barlow",system-ui,sans-serif;color:var(--ink);background:var(--canvas) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420' viewBox='0 0 640 420'%3E%3Cg fill='none' stroke='%2313293C' stroke-opacity='.055' stroke-width='1.6'%3E%3Cpath d='M0 60C110 20 210 110 320 60S530 10 640 60'/%3E%3Cpath d='M0 96C120 60 200 150 320 100S520 52 640 96'/%3E%3Cpath d='M0 236C90 190 230 280 320 236S550 192 640 236'/%3E%3Cpath d='M0 276C100 236 220 326 320 280S540 236 640 276'/%3E%3Cpath d='M0 390C130 350 190 430 320 390S510 350 640 390'/%3E%3Cpath d='M150 168c40-26 96-22 120 6s4 60-40 66-86-8-98-30 0-30 18-42z'/%3E%3Cpath d='M176 184c24-14 54-12 68 4s2 32-22 36-46-4-54-16 0-18 8-24z'/%3E%3Cpath d='M452 322c30-20 80-14 96 10s-6 46-44 48-66-10-72-28 6-22 20-30z'/%3E%3C/g%3E%3C/svg%3E");-webkit-font-smoothing:antialiased}
 a{color:inherit}
 img{display:block;max-width:100%;pointer-events:none;user-select:none}
 [hidden]{display:none!important}
@@ -325,7 +406,7 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .btn.ghost{border-color:#fff;color:#fff}.btn.ghost:hover{background:#fff;color:var(--navy)}
 
 /* numbered section tabs with a coloured top edge, then the black ticker */
-.stabs{position:sticky;top:0;z-index:30;background:#D5DEE5;box-shadow:0 10px 22px -14px rgba(11,26,39,.45)}
+.stabs{position:sticky;top:0;z-index:30;background:var(--canvas-d);box-shadow:0 10px 22px -14px rgba(11,26,39,.45)}
 .stabs .row{display:flex;gap:0;padding-top:10px}
 .stab{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:12px;text-align:left;background:#fff;color:var(--navy);border:0;border-top:5px solid var(--c,var(--sky));border-right:1px solid var(--line);padding:11px 14px 12px;cursor:pointer;font:inherit}
 .stab:last-child{border-right:0}
@@ -349,13 +430,21 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .panel{padding:30px 0 56px}
 .sheet{background:#fff;border-top:8px solid var(--navy);box-shadow:0 1px 2px rgba(19,41,60,.05),0 10px 28px -14px rgba(19,41,60,.16)}
 .sheet+.sheet{margin-top:28px}
-.sign-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px 24px;flex-wrap:wrap;padding:18px 24px 20px;background:var(--c,var(--purple));color:#fff}
+.sign-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px 18px;padding:14px 24px 14px 14px;background:var(--c,var(--purple));color:#fff}
+.sign-h i{width:54px;height:54px;background:#fff;color:var(--navy);display:grid;place-items:center}
+.sign-h i svg{width:28px;height:28px}
 .sign-h h2{font:800 clamp(27px,3.6vw,38px)/1.05 "Barlow",sans-serif;letter-spacing:-.005em}
 .sign-h span{font:400 clamp(18px,2.2vw,26px)/1.1 "Barlow",sans-serif;opacity:.9}
 .sign-h.c-sky,.sign-h.c-amber,.sign-h.c-teal{color:var(--navy)}
 .sign-h.c-green{background:var(--green-d)}
 .sheet-in{padding:24px}
 .intro{max-width:74ch;margin-bottom:20px}
+
+/* camping skyline: sits on the bottom edge of the photo header and above the guide links */
+.scene{position:absolute;left:0;right:0;bottom:-1px;height:74px;overflow:hidden;pointer-events:none}
+.scene svg,.camp svg{position:absolute;bottom:0;left:50%;height:100%;width:auto;min-width:100%;transform:translateX(-50%)}
+.camp{position:relative;height:104px;overflow:hidden;pointer-events:none}
+@media (max-width:720px){.scene{height:52px}.camp{height:78px}}
 
 /* availability */
 .av{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 "Barlow",sans-serif;padding:8px 11px}
@@ -397,7 +486,7 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .rmap .ghost-l{fill:#9FD9D6;font:600 14px "Barlow",sans-serif}
 
 /* links to the other guides: coloured tiles with a round icon badge */
-.guides{background:var(--navy);color:#fff;padding:40px 0 48px}
+.guides{background:var(--navy);color:#fff;padding:40px 0 48px;border-top:6px solid var(--wood)}
 .guides h2{font:800 clamp(27px,3.6vw,36px)/1.05 "Barlow",sans-serif}
 .guides>.wrap>p{color:#C9D6E0;margin-top:6px;max-width:70ch}
 .gt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:52px}
@@ -428,7 +517,10 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
   .stab b{font-size:15px;white-space:nowrap}
   .panel{padding:20px 0 40px}
   .sheet-in{padding:18px 16px}
-  .sign-h{padding:14px 16px 16px}
+  .sign-h{grid-template-columns:auto minmax(0,1fr);padding:12px 16px 12px 12px;gap:2px 12px}
+  .sign-h i{width:44px;height:44px;grid-row:span 2}
+  .sign-h i svg{width:23px;height:23px}
+  .sign-h span{grid-column:2}
   .notice{grid-template-columns:1fr}
   .gt{grid-template-columns:1fr}
   .ticker button{margin-left:0}
@@ -519,6 +611,11 @@ def section_tabs(items):
     return "".join(out)
 
 
+def sign(col, ic, title, right, right_id=""):
+    rid = f' id="{right_id}"' if right_id else ""
+    return f'<div class="sign-h {col}"><i>{icon(ic)}</i><h2>{e(title)}</h2><span{rid}>{e(right)}</span></div>'
+
+
 def kind_dots(kinds, labels=False):
     out = []
     for k in KINDS:
@@ -535,7 +632,7 @@ def guides():
         dark = " dark" if c in ("var(--sky)", "var(--teal)") else ""
         out.append(f'<a class="g{dark}" style="--c:{c}" href="{SITE}{path}" target="_top"><i>{icon(ic)}</i>'
                    f'<b>{e(name)}</b><span>{e(sub)}</span></a>')
-    return (f'<section class="guides" aria-labelledby="plan-h"><div class="wrap"><h2 id="plan-h">Plan your camping trip</h2>'
+    return (f'<div class="camp">{camp_scene()}</div><section class="guides" aria-labelledby="plan-h"><div class="wrap"><h2 id="plan-h">Plan your camping trip</h2>'
             f'<p>More from the guide, for working out what to bring and what the weekend will cost.</p>'
             f'<div class="gt">{"".join(out)}</div></div></section>')
 
@@ -555,7 +652,7 @@ def mailto(subject="RIAT campsite listing"):
 HOME_CSS = r"""
 .hero{position:relative;color:#fff;background:var(--navy) center/cover no-repeat}
 .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,26,39,.93) 0%,rgba(19,41,60,.82) 45%,rgba(19,41,60,.45) 100%)}
-.hero-in{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(340px,.85fr);gap:48px;align-items:center;padding-top:56px;padding-bottom:64px}
+.hero-in{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(340px,.85fr);gap:48px;align-items:center;padding-top:56px;padding-bottom:118px}
 .crumb{font:500 15px/1.4 "Barlow",sans-serif;color:#C9D6E0;margin-bottom:16px}
 .crumb a{color:#fff;text-decoration:none;border-bottom:2px solid var(--teal)}
 .crumb i{font-style:normal;margin:0 8px;color:var(--teal)}
@@ -624,7 +721,9 @@ a.stat:hover{background:rgba(19,41,60,.85);border-color:#fff}
 .board th,.board td{padding:13px 10px;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
 .board thead th{background:var(--navy);color:#fff;font:600 14px/1.2 "Barlow",sans-serif;border-top:0;vertical-align:middle;white-space:normal}
 .board thead .kd{width:28px;height:28px}
-.board .no{font:800 24px/1 "Barlow Condensed",sans-serif;color:var(--navy);width:52px}
+.board .no{width:60px;padding-top:9px;padding-bottom:17px}
+.board .no b{position:relative;display:inline-grid;place-items:center;width:40px;height:30px;background:var(--navy);color:#fff;font:800 20px/1 "Barlow Condensed",sans-serif;border-bottom:4px solid var(--amber)}
+.board .no b::after{content:"";position:absolute;left:50%;top:calc(100% + 4px);width:4px;height:9px;margin-left:-2px;background:var(--wood)}
 .board tbody th{text-align:left;font-weight:700;color:var(--navy);white-space:normal;min-width:190px;position:sticky;left:0;background:#fff;box-shadow:1px 0 0 var(--line)}
 .board thead th:nth-child(2){text-align:left;position:sticky;left:0;z-index:1}
 .board tbody th a{text-decoration:none}
@@ -695,7 +794,7 @@ fieldset.fld{border:0}
 .made .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
 
 @media (max-width:1000px){
-  .hero-in{grid-template-columns:1fr;gap:28px;padding-top:40px;padding-bottom:44px}
+  .hero-in{grid-template-columns:1fr;gap:28px;padding-top:40px;padding-bottom:104px}
   .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
   .own{grid-template-columns:1fr}
   .swipe{display:inline}
@@ -820,14 +919,14 @@ def compare_board(live):
         cells = [yes if k in tags else no for k in ("tent", "van", "caravan", "glamping", "hookup")]
         cells += [yes if showers else no] + [yes if k in tags else no for k in ("dogs", "shuttle")]
         price = f'<span class="pr">{e(fp[1])}</span>' if fp else "Ask"
-        rows.append(f'<tr data-area="{e(s["area"])}" data-tags="{" ".join(sorted(tags))}"><td class="no">{i + 1:02d}</td>'
+        rows.append(f'<tr data-area="{e(s["area"])}" data-tags="{" ".join(sorted(tags))}"><td class="no"><b>{i + 1:02d}</b></td>'
                     f'<th scope="row"><a href="{e(href)}" target="{tgt}">{e(s["name"])}</a>'
                     f'<small>{e(AREAS[s["area"]]["long"])}</small></th>'
                     f'<td>{e(dist_text(s)) or "Ask"}</td><td>{price}</td>'
                     + "".join(f"<td>{c}</td>" for c in cells)
                     + f'<td class="sp">{avail_badge(s) or "Ask"}</td></tr>')
     kh = "".join(f'<th scope="col"><i class="kd {KIND_COL[k]}">{icon(k)}</i><span class="vh">{KINDS[k]}</span></th>' for k in KINDS)
-    heads = ('<th scope="col">No.</th><th scope="col">Campsite</th><th scope="col">Distance</th><th scope="col">From, per night</th>'
+    heads = ('<th scope="col">Pitch</th><th scope="col">Campsite</th><th scope="col">Distance</th><th scope="col">From, per night</th>'
              + kh + '<th scope="col">Electric hook up</th><th scope="col">Hot showers</th><th scope="col">Dogs</th>'
              '<th scope="col">Shuttle</th><th scope="col">Spaces</th>')
     return (f'<div class="board-scroll" tabindex="0" role="region" aria-label="Campsite comparison board">'
@@ -893,7 +992,7 @@ def build_home(live):
     if n >= 2:
         compare_panel = f"""<section class="panel" id="compare" role="tabpanel" aria-labelledby="tab-compare" hidden>
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-red"><h2>Compare the campsites</h2><span>Side by side</span></div>
+    {sign("c-red", "cols", "Compare the campsites", "Side by side")}
     <div class="sheet-in"><p class="intro">Every campsite on one board, so you can see what each one has. Your choices in the finder work here too.<span class="swipe"> Swipe sideways to see it all.</span></p></div>
     {compare_board(live)}
   </div></div>
@@ -912,6 +1011,7 @@ def build_home(live):
     </div>
     {finder}
   </div>
+  <div class="scene">{camp_scene("light")}</div>
 </header>
 {section_tabs(tab_items)}
 {ticker}
@@ -919,7 +1019,7 @@ def build_home(live):
 <section class="panel" id="campsites" role="tabpanel" aria-labelledby="tab-campsites">
   <div class="wrap">
     <div class="sheet">
-      <div class="sign-h c-sky"><h2>Campsites for RIAT 2027</h2><span id="areaLab">All areas</span></div>
+      {sign("c-sky", "tent", "Campsites for RIAT 2027", "All areas", "areaLab")}
       <div class="sheet-in">
         <p class="intro">Every campsite has its own page with pitch sizes and prices, facilities, rules and the best way to the showground. Distances are as the crow flies from the airfield.</p>
         <div class="cards">{"".join(cards)}<p class="nomatch"><b>No campsites match all of those yet.</b> Try taking one off, or <button type="button" class="btn line" id="noClear" style="padding:8px 12px;margin-left:6px">clear my choices</button></p></div>
@@ -935,7 +1035,7 @@ def build_home(live):
 {compare_panel}
 <section class="panel" id="map" role="tabpanel" aria-labelledby="tab-map" hidden>
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-green"><h2>On the show map</h2><span>5 and 10 mile rings</span></div>
+    {sign("c-green", "sign", "On the show map", "5 and 10 mile rings")}
     <div class="sheet-in">
       <p class="intro">Each tent is a campsite. Tap one to open its page. The rings are 5 and 10 miles from the airfield, as the crow flies.</p>
       <div class="maps">
@@ -947,7 +1047,7 @@ def build_home(live):
 </section>
 <section class="panel" id="list" role="tabpanel" aria-labelledby="tab-list" hidden>
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-purple"><h2>List your campsite</h2><span>Free for campsite owners</span></div>
+    {sign("c-purple", "plus", "List your campsite", "Free for campsite owners")}
     <div class="sheet-in own">
       <div class="txt">
         <h3 class="big">Running a campsite near <em>Boscombe Down?</em></h3>
@@ -1030,7 +1130,7 @@ SITE_CSS = r"""
 .tile b{display:block;font:800 25px/1.1 "Barlow Condensed",sans-serif}
 .tile span{display:block;font:600 17px/1.3 "Barlow",sans-serif;margin-top:4px}
 .tile.dark{color:var(--navy)}
-.under{background:#fff;padding:64px 0 16px;font-size:16px}
+.under{padding:64px 0 16px;font-size:16px}
 .under b{color:var(--teal-ink)}
 
 .about{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:32px;align-items:start}
@@ -1301,13 +1401,13 @@ def build_site(s, live):
 <main>
 <section class="panel" id="about" role="tabpanel" aria-labelledby="tab-about">
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-sky"><h2>About the site</h2><span>{e(a["long"])}</span></div>
+    {sign("c-sky", "tent", "About the site", a["long"])}
     <div class="sheet-in about"><div class="txt">{about}{owner}{facts_html}</div><div class="gal{" odd" if len(photos[:6]) >= 4 and len(photos[:6]) % 2 == 0 else ""}">{gal}</div></div>
   </div></div>
 </section>
 <section class="panel" id="pitches" role="tabpanel" aria-labelledby="tab-pitches" hidden>
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-green"><h2>Pitches and prices</h2><span>Show week 2027</span></div>
+    {sign("c-green", "tag", "Pitches and prices", "Show week 2027")}
     <div class="sheet-in">
       <p class="intro">Prices are for show week 2027, as given by the campsite. I would check the latest when you book.</p>
       <div class="pitches">{"".join(pitch_html) or "<p>Pitch details coming soon.</p>"}</div>
@@ -1317,7 +1417,7 @@ def build_site(s, live):
 </section>
 <section class="panel" id="facilities" role="tabpanel" aria-labelledby="tab-facilities" hidden>
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-purple"><h2>Facilities</h2><span>On site in show week</span></div>
+    {sign("c-purple", "drop", "Facilities", "On site in show week")}
     <div class="sheet-in">
       <div class="facs">{"".join(groups) or "<p>Facility details coming soon.</p>"}</div>
       {rules}
@@ -1326,7 +1426,7 @@ def build_site(s, live):
 </section>
 <section class="panel" id="getting-there" role="tabpanel" aria-labelledby="tab-getting-there" hidden>
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-red"><h2>Getting to the show</h2><span>{e(a["label"])}</span></div>
+    {sign("c-red", "sign", "Getting to the show", a["label"])}
     <div class="sheet-in">
       <p class="intro">How to get from your pitch to the showground. RIAT's own travel plan for 2027 is still to be announced, so I would check back nearer the show.</p>
       <div class="getto">{ways}{where}</div>
@@ -1335,7 +1435,7 @@ def build_site(s, live):
 </section>
 <section class="panel" id="book" role="tabpanel" aria-labelledby="tab-book" hidden>
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-amber"><h2>Book your pitch</h2><span>{e(av[0]) if av else "Direct with the campsite"}</span></div>
+    {sign("c-amber", "cal", "Book your pitch", av[0] if av else "Direct with the campsite")}
     <div class="sheet-in book">
       <div class="bookbox"><div class="fh"><i>{icon("tent")}</i><div><b>Book with {e(s["name"])}</b><span>You book direct. The guide does not take bookings or payments.</span></div></div>
       <div class="acts">{"".join(acts)}</div></div>

@@ -12,11 +12,11 @@
 <style>
 :root{--navy:#13293C;--navy2:#1C3850;--deep:#0B1A27;--black:#0B0D0F;--teal:#32B4AF;--teal-ink:#0E5F5B;--purple:#6950A1;
 --red:#D74949;--sky:#00A6E2;--sky-ink:#006F99;--green:#2BA84A;--green-d:#1E8540;--amber:#F2B233;--orange:#E07A1F;--pink:#C2255C;
---mist:#F3F6F8;--line:#DCE4EA;--ink:#14212C;--soft:#4A5C6B}
+--mist:#F3F6F8;--line:#DCE4EA;--ink:#14212C;--soft:#4A5C6B;--canvas:#F4F1EA;--canvas-d:#DDD8CC;--wood:#8C6B3F}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
-body{font:400 17px/1.55 "Barlow",system-ui,sans-serif;color:var(--ink);background:var(--mist);-webkit-font-smoothing:antialiased}
+body{font:400 17px/1.55 "Barlow",system-ui,sans-serif;color:var(--ink);background:var(--canvas) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420' viewBox='0 0 640 420'%3E%3Cg fill='none' stroke='%2313293C' stroke-opacity='.055' stroke-width='1.6'%3E%3Cpath d='M0 60C110 20 210 110 320 60S530 10 640 60'/%3E%3Cpath d='M0 96C120 60 200 150 320 100S520 52 640 96'/%3E%3Cpath d='M0 236C90 190 230 280 320 236S550 192 640 236'/%3E%3Cpath d='M0 276C100 236 220 326 320 280S540 236 640 276'/%3E%3Cpath d='M0 390C130 350 190 430 320 390S510 350 640 390'/%3E%3Cpath d='M150 168c40-26 96-22 120 6s4 60-40 66-86-8-98-30 0-30 18-42z'/%3E%3Cpath d='M176 184c24-14 54-12 68 4s2 32-22 36-46-4-54-16 0-18 8-24z'/%3E%3Cpath d='M452 322c30-20 80-14 96 10s-6 46-44 48-66-10-72-28 6-22 20-30z'/%3E%3C/g%3E%3C/svg%3E");-webkit-font-smoothing:antialiased}
 a{color:inherit}
 img{display:block;max-width:100%;pointer-events:none;user-select:none}
 [hidden]{display:none!important}
@@ -60,7 +60,7 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .btn.ghost{border-color:#fff;color:#fff}.btn.ghost:hover{background:#fff;color:var(--navy)}
 
 /* numbered section tabs with a coloured top edge, then the black ticker */
-.stabs{position:sticky;top:0;z-index:30;background:#D5DEE5;box-shadow:0 10px 22px -14px rgba(11,26,39,.45)}
+.stabs{position:sticky;top:0;z-index:30;background:var(--canvas-d);box-shadow:0 10px 22px -14px rgba(11,26,39,.45)}
 .stabs .row{display:flex;gap:0;padding-top:10px}
 .stab{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:12px;text-align:left;background:#fff;color:var(--navy);border:0;border-top:5px solid var(--c,var(--sky));border-right:1px solid var(--line);padding:11px 14px 12px;cursor:pointer;font:inherit}
 .stab:last-child{border-right:0}
@@ -84,13 +84,21 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .panel{padding:30px 0 56px}
 .sheet{background:#fff;border-top:8px solid var(--navy);box-shadow:0 1px 2px rgba(19,41,60,.05),0 10px 28px -14px rgba(19,41,60,.16)}
 .sheet+.sheet{margin-top:28px}
-.sign-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px 24px;flex-wrap:wrap;padding:18px 24px 20px;background:var(--c,var(--purple));color:#fff}
+.sign-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px 18px;padding:14px 24px 14px 14px;background:var(--c,var(--purple));color:#fff}
+.sign-h i{width:54px;height:54px;background:#fff;color:var(--navy);display:grid;place-items:center}
+.sign-h i svg{width:28px;height:28px}
 .sign-h h2{font:800 clamp(27px,3.6vw,38px)/1.05 "Barlow",sans-serif;letter-spacing:-.005em}
 .sign-h span{font:400 clamp(18px,2.2vw,26px)/1.1 "Barlow",sans-serif;opacity:.9}
 .sign-h.c-sky,.sign-h.c-amber,.sign-h.c-teal{color:var(--navy)}
 .sign-h.c-green{background:var(--green-d)}
 .sheet-in{padding:24px}
 .intro{max-width:74ch;margin-bottom:20px}
+
+/* camping skyline: sits on the bottom edge of the photo header and above the guide links */
+.scene{position:absolute;left:0;right:0;bottom:-1px;height:74px;overflow:hidden;pointer-events:none}
+.scene svg,.camp svg{position:absolute;bottom:0;left:50%;height:100%;width:auto;min-width:100%;transform:translateX(-50%)}
+.camp{position:relative;height:104px;overflow:hidden;pointer-events:none}
+@media (max-width:720px){.scene{height:52px}.camp{height:78px}}
 
 /* availability */
 .av{display:inline-flex;align-items:center;gap:8px;font:700 15px/1 "Barlow",sans-serif;padding:8px 11px}
@@ -132,7 +140,7 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .rmap .ghost-l{fill:#9FD9D6;font:600 14px "Barlow",sans-serif}
 
 /* links to the other guides: coloured tiles with a round icon badge */
-.guides{background:var(--navy);color:#fff;padding:40px 0 48px}
+.guides{background:var(--navy);color:#fff;padding:40px 0 48px;border-top:6px solid var(--wood)}
 .guides h2{font:800 clamp(27px,3.6vw,36px)/1.05 "Barlow",sans-serif}
 .guides>.wrap>p{color:#C9D6E0;margin-top:6px;max-width:70ch}
 .gt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:52px}
@@ -163,7 +171,10 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
   .stab b{font-size:15px;white-space:nowrap}
   .panel{padding:20px 0 40px}
   .sheet-in{padding:18px 16px}
-  .sign-h{padding:14px 16px 16px}
+  .sign-h{grid-template-columns:auto minmax(0,1fr);padding:12px 16px 12px 12px;gap:2px 12px}
+  .sign-h i{width:44px;height:44px;grid-row:span 2}
+  .sign-h i svg{width:23px;height:23px}
+  .sign-h span{grid-column:2}
   .notice{grid-template-columns:1fr}
   .gt{grid-template-columns:1fr}
   .ticker button{margin-left:0}
@@ -172,7 +183,7 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 
 .hero{position:relative;color:#fff;background:var(--navy) center/cover no-repeat}
 .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,26,39,.93) 0%,rgba(19,41,60,.82) 45%,rgba(19,41,60,.45) 100%)}
-.hero-in{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(340px,.85fr);gap:48px;align-items:center;padding-top:56px;padding-bottom:64px}
+.hero-in{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(340px,.85fr);gap:48px;align-items:center;padding-top:56px;padding-bottom:118px}
 .crumb{font:500 15px/1.4 "Barlow",sans-serif;color:#C9D6E0;margin-bottom:16px}
 .crumb a{color:#fff;text-decoration:none;border-bottom:2px solid var(--teal)}
 .crumb i{font-style:normal;margin:0 8px;color:var(--teal)}
@@ -241,7 +252,9 @@ a.stat:hover{background:rgba(19,41,60,.85);border-color:#fff}
 .board th,.board td{padding:13px 10px;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
 .board thead th{background:var(--navy);color:#fff;font:600 14px/1.2 "Barlow",sans-serif;border-top:0;vertical-align:middle;white-space:normal}
 .board thead .kd{width:28px;height:28px}
-.board .no{font:800 24px/1 "Barlow Condensed",sans-serif;color:var(--navy);width:52px}
+.board .no{width:60px;padding-top:9px;padding-bottom:17px}
+.board .no b{position:relative;display:inline-grid;place-items:center;width:40px;height:30px;background:var(--navy);color:#fff;font:800 20px/1 "Barlow Condensed",sans-serif;border-bottom:4px solid var(--amber)}
+.board .no b::after{content:"";position:absolute;left:50%;top:calc(100% + 4px);width:4px;height:9px;margin-left:-2px;background:var(--wood)}
 .board tbody th{text-align:left;font-weight:700;color:var(--navy);white-space:normal;min-width:190px;position:sticky;left:0;background:#fff;box-shadow:1px 0 0 var(--line)}
 .board thead th:nth-child(2){text-align:left;position:sticky;left:0;z-index:1}
 .board tbody th a{text-decoration:none}
@@ -312,7 +325,7 @@ fieldset.fld{border:0}
 .made .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
 
 @media (max-width:1000px){
-  .hero-in{grid-template-columns:1fr;gap:28px;padding-top:40px;padding-bottom:44px}
+  .hero-in{grid-template-columns:1fr;gap:28px;padding-top:40px;padding-bottom:104px}
   .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
   .own{grid-template-columns:1fr}
   .swipe{display:inline}
@@ -348,6 +361,7 @@ fieldset.fld{border:0}
       </div>
     </aside>
   </div>
+  <div class="scene"><svg viewBox="0 0 2400 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><path fill="#DDD8CC" d="M36 36L50 76H43L57 108H40V120H32V108H15L29 76H22Z"/><path fill="#DDD8CC" d="M76 58L88 88H81L93 108H80V120H72V108H59L71 88H64Z"/><path fill="#DDD8CC" d="M428 40L442 78H435L449 108H432V120H424V108H407L421 78H414Z"/><path fill="#DDD8CC" d="M466 24L482 70H473L489 108H470V120H462V108H443L459 70H450Z"/><path fill="#DDD8CC" d="M896 46L909 82H902L915 108H900V120H892V108H877L890 82H883Z"/><path fill="#DDD8CC" d="M1378 30L1393 73H1385L1400 108H1382V120H1374V108H1356L1371 73H1363Z"/><path fill="#DDD8CC" d="M1418 54L1430 86H1424L1436 108H1422V120H1414V108H1400L1412 86H1406Z"/><path fill="#DDD8CC" d="M1458 38L1472 77H1464L1478 108H1462V120H1454V108H1438L1452 77H1444Z"/><path fill="#DDD8CC" d="M1896 42L1910 79H1902L1916 108H1900V120H1892V108H1876L1890 79H1882Z"/><path fill="#DDD8CC" d="M1936 26L1952 71H1943L1959 108H1940V120H1932V108H1913L1929 71H1920Z"/><path fill="#DDD8CC" d="M2326 50L2338 84H2332L2344 108H2330V120H2322V108H2308L2320 84H2314Z"/><path fill="#DDD8CC" d="M2366 32L2381 74H2373L2388 108H2370V120H2362V108H2344L2359 74H2351Z"/><path fill="#DDD8CC" d="M148 120L196 66L244 120Z"/><rect x="262" y="94" width="16" height="23" fill="#DDD8CC"/><rect x="280" y="94" width="16" height="23" fill="#DDD8CC" opacity=".72"/><rect x="298" y="94" width="16" height="23" fill="#DDD8CC"/><rect x="316" y="94" width="16" height="23" fill="#DDD8CC" opacity=".72"/><rect x="334" y="94" width="16" height="23" fill="#DDD8CC"/><rect x="352" y="94" width="16" height="23" fill="#DDD8CC" opacity=".72"/><rect x="260" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="278" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="296" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="314" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="332" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="350" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="368" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="556" y="36" width="3" height="84" fill="#DDD8CC"/><path fill="#DDD8CC" d="M559 36L586 44L559 52Z"/><path fill="#DDD8CC" d="M576 120A52 46 0 0 1 680 120Z"/><path fill="#DDD8CC" d="M724 112V74H786L808 94V112Z"/><circle cx="742" cy="112" r="8" fill="#DDD8CC"/><circle cx="790" cy="112" r="8" fill="#DDD8CC"/><path fill="#DDD8CC" d="M1040 120L1092 62L1144 120Z"/><rect x="1160" y="94" width="16" height="23" fill="#DDD8CC"/><rect x="1178" y="94" width="16" height="23" fill="#DDD8CC" opacity=".72"/><rect x="1196" y="94" width="16" height="23" fill="#DDD8CC"/><rect x="1214" y="94" width="16" height="23" fill="#DDD8CC" opacity=".72"/><rect x="1232" y="94" width="16" height="23" fill="#DDD8CC"/><rect x="1250" y="94" width="16" height="23" fill="#DDD8CC" opacity=".72"/><rect x="1268" y="94" width="16" height="23" fill="#DDD8CC"/><rect x="1158" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="1176" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="1194" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="1212" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="1230" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="1248" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="1266" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="1284" y="89" width="3" height="31" fill="#DDD8CC"/><rect x="1584" y="36" width="3" height="84" fill="#DDD8CC"/><path fill="#DDD8CC" d="M1587 36L1614 44L1587 52Z"/><path fill="#DDD8CC" d="M1606 120L1652 68L1698 120Z"/><rect x="1736" y="70" width="92" height="40" rx="8" fill="#DDD8CC"/><path stroke="#DDD8CC" stroke-width="3" d="M1828 104H1848"/><circle cx="1776" cy="112" r="8" fill="#DDD8CC"/><path fill="#DDD8CC" d="M2032 120A52 46 0 0 1 2136 120Z"/><path fill="#DDD8CC" d="M2176 112V74H2238L2260 94V112Z"/><circle cx="2194" cy="112" r="8" fill="#DDD8CC"/><circle cx="2242" cy="112" r="8" fill="#DDD8CC"/></svg></div>
 </header>
 <div id="tabsTop"></div><div class="stabs"><div class="wrap"><div class="row" role="tablist" aria-label="Sections"><button type="button" role="tab" class="stab c-sky on" data-p="campsites" id="tab-campsites" aria-controls="campsites" aria-selected="true" tabindex="0"><span class="n">1</span><span><b>Campsites</b><span>Pitches, prices and spaces</span></span></button><button type="button" role="tab" class="stab c-green" data-p="map" id="tab-map" aria-controls="map" aria-selected="false" tabindex="-1"><span class="n">2</span><span><b>Show map</b><span>How far from the airfield</span></span></button><button type="button" role="tab" class="stab c-purple" data-p="list" id="tab-list" aria-controls="list" aria-selected="false" tabindex="-1"><span class="n">3</span><span><b>List your campsite</b><span>For campsite owners</span></span></button></div></div></div>
 <div class="ticker"><div class="wrap"><b>Latest</b><span>Listings are opening now. Campsite owners near Boscombe Down and Fairford can add their site in the last tab.</span></div></div>
@@ -355,7 +369,7 @@ fieldset.fld{border:0}
 <section class="panel" id="campsites" role="tabpanel" aria-labelledby="tab-campsites">
   <div class="wrap">
     <div class="sheet">
-      <div class="sign-h c-sky"><h2>Campsites for RIAT 2027</h2><span id="areaLab">All areas</span></div>
+      <div class="sign-h c-sky"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></i><h2>Campsites for RIAT 2027</h2><span id="areaLab">All areas</span></div>
       <div class="sheet-in">
         <p class="intro">Every campsite has its own page with pitch sizes and prices, facilities, rules and the best way to the showground. Distances are as the crow flies from the airfield.</p>
         <div class="cards"><div class="none" data-area="boscombe"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></i><div><h3>No campsites listed near Boscombe Down yet</h3><p>I am adding campsites as owners get in touch. If you run one, I would love to hear from you.</p></div><a class="btn purple" href="#list" data-go="list">List your campsite</a></div><div class="none" data-area="fairford"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></i><div><h3>No campsites listed around Fairford yet</h3><p>I am adding campsites as owners get in touch. If you run one, I would love to hear from you.</p></div><a class="btn purple" href="#list" data-go="list">List your campsite</a></div><p class="nomatch"><b>No campsites match all of those yet.</b> Try taking one off, or <button type="button" class="btn line" id="noClear" style="padding:8px 12px;margin-left:6px">clear my choices</button></p></div>
@@ -371,7 +385,7 @@ fieldset.fld{border:0}
 
 <section class="panel" id="map" role="tabpanel" aria-labelledby="tab-map" hidden>
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-green"><h2>On the show map</h2><span>5 and 10 mile rings</span></div>
+    <div class="sign-h c-green"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M6 6h11l2 2.5-2 2.5H6zM18 13H7l-2 2.5L7 18h11"/></svg></i><h2>On the show map</h2><span>5 and 10 mile rings</span></div>
     <div class="sheet-in">
       <p class="intro">Each tent is a campsite. Tap one to open its page. The rings are 5 and 10 miles from the airfield, as the crow flies.</p>
       <div class="maps">
@@ -383,7 +397,7 @@ fieldset.fld{border:0}
 </section>
 <section class="panel" id="list" role="tabpanel" aria-labelledby="tab-list" hidden>
   <div class="wrap"><div class="sheet">
-    <div class="sign-h c-purple"><h2>List your campsite</h2><span>Free for campsite owners</span></div>
+    <div class="sign-h c-purple"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i><h2>List your campsite</h2><span>Free for campsite owners</span></div>
     <div class="sheet-in own">
       <div class="txt">
         <h3 class="big">Running a campsite near <em>Boscombe Down?</em></h3>
@@ -436,7 +450,7 @@ fieldset.fld{border:0}
   </div></div>
 </section>
 </main>
-<section class="guides" aria-labelledby="plan-h"><div class="wrap"><h2 id="plan-h">Plan your camping trip</h2><p>More from the guide, for working out what to bring and what the weekend will cost.</p><div class="gt"><a class="g" style="--c:var(--purple)" href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></i><b>Camping at Airshows</b><span>What to pack, pitching up and staying comfortable</span></a><a class="g dark" style="--c:var(--sky)" href="https://www.ukairshowguide.co.uk/build-your-kit-calculator?list=camping" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></i><b>Camping kit calculator</b><span>Tick your tent, beds and cooking kit and see the cost</span></a><a class="g dark" style="--c:var(--teal)" href="https://www.ukairshowguide.co.uk/riat" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14l9-3 3-7 2 1-1 6 6 2v2l-6-1-3 6h-2l1-6-8 1z"/></svg></i><b>RIAT 2027 guide</b><span>What we know about Boscombe Down so far</span></a><a class="g" style="--c:var(--red)" href="https://www.ukairshowguide.co.uk/airshow-questions" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h0"/></svg></i><b>Questions and answers</b><span>Camping and places to stay, answered</span></a></div></div></section>
+<div class="camp"><svg viewBox="0 0 2400 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><path fill="#0E5F5B" d="M36 36L50 76H43L57 108H40V120H32V108H15L29 76H22Z"/><path fill="#13293C" d="M76 58L88 88H81L93 108H80V120H72V108H59L71 88H64Z"/><path fill="#13293C" d="M428 40L442 78H435L449 108H432V120H424V108H407L421 78H414Z"/><path fill="#0E5F5B" d="M466 24L482 70H473L489 108H470V120H462V108H443L459 70H450Z"/><path fill="#0E5F5B" d="M896 46L909 82H902L915 108H900V120H892V108H877L890 82H883Z"/><path fill="#0E5F5B" d="M1378 30L1393 73H1385L1400 108H1382V120H1374V108H1356L1371 73H1363Z"/><path fill="#13293C" d="M1418 54L1430 86H1424L1436 108H1422V120H1414V108H1400L1412 86H1406Z"/><path fill="#0E5F5B" d="M1458 38L1472 77H1464L1478 108H1462V120H1454V108H1438L1452 77H1444Z"/><path fill="#13293C" d="M1896 42L1910 79H1902L1916 108H1900V120H1892V108H1876L1890 79H1882Z"/><path fill="#0E5F5B" d="M1936 26L1952 71H1943L1959 108H1940V120H1932V108H1913L1929 71H1920Z"/><path fill="#0E5F5B" d="M2326 50L2338 84H2332L2344 108H2330V120H2322V108H2308L2320 84H2314Z"/><path fill="#13293C" d="M2366 32L2381 74H2373L2388 108H2370V120H2362V108H2344L2359 74H2351Z"/><path fill="#2BA84A" d="M148 120L196 66L244 120Z"/><path fill="#13293C" d="M185 120L196 87L207 120Z"/><path stroke="#13293C" stroke-width="2" d="M196 66V57M134 120L167 97M258 120L225 97"/><rect x="262" y="94" width="16" height="23" fill="#D74949"/><rect x="280" y="94" width="16" height="23" fill="#F2B233"/><rect x="298" y="94" width="16" height="23" fill="#00A6E2"/><rect x="316" y="94" width="16" height="23" fill="#2BA84A"/><rect x="334" y="94" width="16" height="23" fill="#D74949"/><rect x="352" y="94" width="16" height="23" fill="#F2B233"/><rect x="260" y="89" width="3" height="31" fill="#13293C"/><rect x="278" y="89" width="3" height="31" fill="#13293C"/><rect x="296" y="89" width="3" height="31" fill="#13293C"/><rect x="314" y="89" width="3" height="31" fill="#13293C"/><rect x="332" y="89" width="3" height="31" fill="#13293C"/><rect x="350" y="89" width="3" height="31" fill="#13293C"/><rect x="368" y="89" width="3" height="31" fill="#13293C"/><rect x="556" y="36" width="3" height="84" fill="#13293C"/><path fill="#D74949" d="M559 36L586 44L559 52Z"/><path fill="#E07A1F" d="M576 120A52 46 0 0 1 680 120Z"/><path fill="#13293C" d="M616 120A12 28 0 0 1 640 120Z"/><path fill="#13293C" d="M724 112V74H786L808 94V112Z"/><rect x="724" y="90" width="84" height="6" fill="#00A6E2"/><path fill="#F4F1EA" d="M732 80H754V88H732ZM762 80H784L792 88H762Z"/><circle cx="742" cy="112" r="8" fill="#13293C"/><circle cx="742" cy="112" r="3" fill="#F4F1EA"/><circle cx="790" cy="112" r="8" fill="#13293C"/><circle cx="790" cy="112" r="3" fill="#F4F1EA"/><path fill="#F2B233" d="M1003 116Q1000 102 1012 90Q1024 104 1021 116Z"/><path fill="#D74949" d="M1008 116Q1006 108 1012 102Q1018 108 1016 116Z"/><path stroke="#8C6B3F" stroke-width="5" stroke-linecap="round" d="M999 117H1025"/><path fill="#00A6E2" d="M1040 120L1092 62L1144 120Z"/><path fill="#13293C" d="M1081 120L1092 84L1103 120Z"/><path stroke="#13293C" stroke-width="2" d="M1092 62V53M1026 120L1061 96M1158 120L1123 96"/><rect x="1160" y="94" width="16" height="23" fill="#D74949"/><rect x="1178" y="94" width="16" height="23" fill="#F2B233"/><rect x="1196" y="94" width="16" height="23" fill="#00A6E2"/><rect x="1214" y="94" width="16" height="23" fill="#2BA84A"/><rect x="1232" y="94" width="16" height="23" fill="#D74949"/><rect x="1250" y="94" width="16" height="23" fill="#F2B233"/><rect x="1268" y="94" width="16" height="23" fill="#00A6E2"/><rect x="1158" y="89" width="3" height="31" fill="#13293C"/><rect x="1176" y="89" width="3" height="31" fill="#13293C"/><rect x="1194" y="89" width="3" height="31" fill="#13293C"/><rect x="1212" y="89" width="3" height="31" fill="#13293C"/><rect x="1230" y="89" width="3" height="31" fill="#13293C"/><rect x="1248" y="89" width="3" height="31" fill="#13293C"/><rect x="1266" y="89" width="3" height="31" fill="#13293C"/><rect x="1284" y="89" width="3" height="31" fill="#13293C"/><rect x="1584" y="36" width="3" height="84" fill="#13293C"/><path fill="#F2B233" d="M1587 36L1614 44L1587 52Z"/><path fill="#6950A1" d="M1606 120L1652 68L1698 120Z"/><path fill="#13293C" d="M1641 120L1652 88L1663 120Z"/><path stroke="#13293C" stroke-width="2" d="M1652 68V59M1592 120L1624 98M1712 120L1680 98"/><rect x="1736" y="70" width="92" height="40" rx="8" fill="#FFFFFF" stroke="#13293C" stroke-width="3"/><path stroke="#13293C" stroke-width="3" d="M1828 104H1848"/><rect x="1738" y="90" width="88" height="5" fill="#6950A1"/><rect x="1748" y="77" width="24" height="10" fill="#13293C"/><rect x="1798" y="77" width="16" height="30" fill="#13293C"/><circle cx="1776" cy="112" r="8" fill="#13293C"/><path fill="#2BA84A" d="M2032 120A52 46 0 0 1 2136 120Z"/><path fill="#13293C" d="M2072 120A12 28 0 0 1 2096 120Z"/><path fill="#13293C" d="M2176 112V74H2238L2260 94V112Z"/><rect x="2176" y="90" width="84" height="6" fill="#D74949"/><path fill="#F4F1EA" d="M2184 80H2206V88H2184ZM2214 80H2236L2244 88H2214Z"/><circle cx="2194" cy="112" r="8" fill="#13293C"/><circle cx="2194" cy="112" r="3" fill="#F4F1EA"/><circle cx="2242" cy="112" r="8" fill="#13293C"/><circle cx="2242" cy="112" r="3" fill="#F4F1EA"/></svg></div><section class="guides" aria-labelledby="plan-h"><div class="wrap"><h2 id="plan-h">Plan your camping trip</h2><p>More from the guide, for working out what to bring and what the weekend will cost.</p><div class="gt"><a class="g" style="--c:var(--purple)" href="https://www.ukairshowguide.co.uk/camping-at-airshows" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/></svg></i><b>Camping at Airshows</b><span>What to pack, pitching up and staying comfortable</span></a><a class="g dark" style="--c:var(--sky)" href="https://www.ukairshowguide.co.uk/build-your-kit-calculator?list=camping" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></i><b>Camping kit calculator</b><span>Tick your tent, beds and cooking kit and see the cost</span></a><a class="g dark" style="--c:var(--teal)" href="https://www.ukairshowguide.co.uk/riat" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14l9-3 3-7 2 1-1 6 6 2v2l-6-1-3 6h-2l1-6-8 1z"/></svg></i><b>RIAT 2027 guide</b><span>What we know about Boscombe Down so far</span></a><a class="g" style="--c:var(--red)" href="https://www.ukairshowguide.co.uk/airshow-questions" target="_top"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h0"/></svg></i><b>Questions and answers</b><span>Camping and places to stay, answered</span></a></div></div></section>
 <footer class="small"><div class="wrap">
 <p>The Big Guide to UK Airshows is independent and not part of the Royal International Air Tattoo. Campsite details come from the owners. Please check prices, dates and rules with the campsite before you book.</p>
 <p>Running a campsite near Boscombe Down or Fairford? Email <a href="mailto:contactus@ukairshowguide.co.uk?subject=RIAT%20campsite%20listing">contactus@ukairshowguide.co.uk</a>.</p>
