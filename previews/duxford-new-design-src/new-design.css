@@ -1,0 +1,299 @@
+/* New design for the Duxford page: the layout made for the RIAT camping pages, in the brand colours.
+   navy for dark panels and the footer, teal as the main accent, red for the main action button,
+   purple and sky as second accents. Everything here starts .nz- or sits under html.nz, so it only
+   adds to the page's own styles. */
+:root{--nz-navy:#13293C;--nz-navy2:#1C3850;--nz-deep:#0B1A27;--nz-teal:#32B4AF;--nz-teal-ink:#0E5F5B;--nz-purple:#6950A1;
+--nz-red:#D74949;--nz-sky:#00A6E2;--nz-amber:#F2B233;--nz-ink:#13293C;--nz-body:#4A5A66;--nz-line:#DCE3E8;--nz-soft:#F3F6F8;
+--nz-f:"Overpass",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+
+html.nz body{font-family:var(--nz-f);background:#fff}
+.nz-wrap{max-width:1188px;margin:0 auto;padding:0 24px;box-sizing:border-box}
+.nz-top,.nz-hd,.nz-sec,.nz-ft,.nz-fbar{font-family:var(--nz-f);box-sizing:border-box}
+.nz-top *,.nz-hd *,.nz-sec *,.nz-ft *,.nz-fbar *{box-sizing:border-box}
+.nz-top svg,.nz-hd svg,.nz-sec svg,.nz-ft svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nz-hd img,.nz-sec img{pointer-events:none;user-select:none;-webkit-user-drag:none}
+
+/* the page's old header parts are replaced by the new ones */
+html.nz body > nav.ukbt,html.nz body > nav.sitebar,html.nz body > header#top.cg-hero{display:none!important}
+
+/* buttons */
+.nz-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:700 17px/1 var(--nz-f);padding:18px 28px 15px;text-decoration:none;border:0;border-radius:0;cursor:pointer;transition:background .2s,color .2s,transform .3s cubic-bezier(.22,.61,.36,1),box-shadow .3s}
+.nz-btn.red{background:var(--nz-red);color:#fff}.nz-btn.red:hover{background:var(--nz-navy);color:#fff}
+.nz-btn.red.inv:hover{background:#fff;color:var(--nz-navy)}
+.nz-btn.nv{background:var(--nz-navy);color:#fff}.nz-btn.nv:hover{background:var(--nz-teal);color:var(--nz-navy)}
+.nz-btn:hover{transform:translateY(-3px);box-shadow:0 12px 22px -12px rgba(11,26,39,.55)}
+.nz-btn:focus-visible,.nz-nav button:focus-visible,.nz-ft button:focus-visible,.nz-ft a:focus-visible,.nz-top a:focus-visible,.nz-logo:focus-visible{outline:3px solid var(--nz-amber);outline-offset:2px}
+.nz-btns{display:flex;flex-wrap:wrap;gap:14px}
+
+/* dark top bar */
+.nz-top{background:var(--nz-deep);color:#fff;font-size:14px;line-height:1.4}
+.nz-top .nz-wrap{display:flex;justify-content:space-between;align-items:center;gap:8px 26px;flex-wrap:wrap;min-height:50px;padding-top:8px;padding-bottom:8px}
+.nz-top .l{display:flex;gap:8px 26px;flex-wrap:wrap}
+.nz-top .l>span,.nz-top a{display:inline-flex;align-items:center;gap:9px;color:#fff;text-decoration:none}
+.nz-top svg{width:16px;height:16px;color:var(--nz-teal);flex:none;transition:transform .3s}
+.nz-top a:hover{color:var(--nz-teal)}
+.nz-top a:hover svg{transform:translateX(4px)}
+
+/* photo header: logo, menu and one button on the photo, then the title and breadcrumb */
+.nz-hd{position:relative;color:#fff;background:var(--nz-navy);overflow:hidden}
+.nz-hd-bg{position:absolute;inset:-4% 0;width:100%;height:108%;object-fit:cover;object-position:70% 40%}
+.nz-hd-bg:not([src]){display:none}
+.nz-hd::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(11,26,39,.78),rgba(19,41,60,.6) 55%,rgba(19,41,60,.86))}
+.nz-hd .nz-wrap{position:relative;z-index:2}
+.nz-nav{display:flex;align-items:center;gap:20px;min-height:84px;border-bottom:1px solid rgba(255,255,255,.22)}
+.nz-logo{display:flex;align-items:center;gap:11px;text-decoration:none;font:700 25px/1 var(--nz-f);color:#fff;white-space:nowrap;margin-right:auto}
+.nz-logo svg{width:32px;height:32px;color:var(--nz-teal);transition:transform .35s}
+.nz-logo:hover svg{transform:rotate(-8deg) scale(1.1)}
+.nz-nav ul{list-style:none;display:flex;gap:2px;align-self:stretch;margin:0;padding:0}
+.nz-nav li{display:flex}
+.nz-nav .nz-btn{white-space:nowrap;flex:none}
+.nz-nav li button{display:flex;align-items:center;padding:0 10px;font:500 14.5px/1.2 var(--nz-f);color:#fff;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;cursor:pointer;transition:color .2s,border-color .2s}
+.nz-nav li button:hover{border-bottom-color:var(--nz-teal);color:#8FE0DC}
+.nz-ttl{padding:70px 0 150px}
+.nz-ttl h1{color:#fff;font:700 clamp(38px,5.6vw,60px)/1.1 var(--nz-f);margin:0;text-transform:none;letter-spacing:0}
+.nz-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.nz-tagp{display:inline-flex;align-items:center;font:700 16px/1 var(--nz-f);padding:9px 12px 7px;background:var(--nz-red);color:#fff}
+.nz-crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:16px 0 0;font-size:17px;color:#fff}
+.nz-crumbs a{color:#fff;text-decoration:none}
+.nz-crumbs a:hover{color:#8FE0DC}
+.nz-crumbs svg{width:14px;height:14px;color:var(--nz-teal)}
+
+/* three big buttons on the bottom edge of the photo (the page's own When to go, Where to watch, Getting there) */
+.nz-feat3{margin-top:-104px;padding-bottom:0;position:relative}
+html.nz .nz-feat3 .h1x-cards{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;margin:0!important;padding:0!important;width:auto!important;max-width:none!important;transform:none!important}
+html.nz .nz-feat3 .h1x-card{position:relative!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:flex-start!important;text-align:left!important;margin:0!important;padding:26px 26px 24px 92px!important;min-height:148px!important;height:auto!important;border:0!important;border-radius:0!important;box-shadow:none!important;cursor:pointer;
+  background:rgba(255,255,255,.14)!important;color:#fff!important;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transform:none;transition:background .35s,transform .35s cubic-bezier(.22,.61,.36,1)!important;border-top:5px solid var(--nz-teal)!important}
+html.nz .nz-feat3 .h1x-card:nth-child(2){background:rgba(255,255,255,.22)!important;border-top-color:var(--nz-sky)!important}
+html.nz .nz-feat3 .h1x-card:nth-child(3){border-top-color:var(--nz-amber)!important}
+html.nz .nz-feat3 .h1x-card:hover{background:var(--nz-navy)!important;transform:translateY(-8px)!important}
+html.nz .nz-feat3 .h1x-card .h1x-ic{position:absolute!important;left:24px!important;top:26px!important;width:48px!important;height:48px!important;margin:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:#fff!important;display:block!important;transform:none!important;transition:transform .35s,color .35s!important}
+html.nz .nz-feat3 .h1x-card .h1x-ic svg{width:44px!important;height:44px!important;stroke:currentColor!important;stroke-width:1.4!important;fill:none!important}
+html.nz .nz-feat3 .h1x-card:hover .h1x-ic{color:var(--nz-teal)!important;transform:scale(1.12) rotate(-6deg)!important}
+html.nz .nz-feat3 .h1x-card > *:not(.h1x-ic){flex:0 0 auto!important;width:auto!important;max-width:100%!important;position:static!important;padding-left:0!important;text-align:left!important}
+html.nz .nz-feat3 .h1x-card{flex-wrap:nowrap!important;gap:0!important;aspect-ratio:auto!important}
+html.nz .nz-feat3 .h1x-card h3{font:700 22px/1.2 var(--nz-f)!important;color:#fff!important;margin:0 0 6px!important;text-transform:none!important}
+html.nz .nz-feat3 .h1x-card b{display:block!important;font:400 15.5px/1.5 var(--nz-f)!important;color:#E6EDF1!important;margin:0!important}
+html.nz .nz-feat3 .h1x-card > span:not(.h1x-ic){display:block!important;font:400 14.5px/1.5 var(--nz-f)!important;color:#C9D6DE!important;margin-top:4px!important}
+html.nz .nz-feat3 .h1x-card em.h1x-free{display:inline-block!important;font:700 15px/1.2 var(--nz-f)!important;font-style:normal!important;background:var(--nz-red)!important;color:#fff!important;padding:7px 10px 5px!important;margin-top:10px!important;border-radius:0!important}
+.nz-hd{padding-bottom:0}
+.nz-hd .nz-wrap{padding-bottom:44px}
+
+/* sections, label line and big heading */
+.nz-sec{padding:96px 0;background:#fff;color:var(--nz-body);font-size:16px;line-height:1.65}
+.nz-kick{display:block;font:700 21px/1.25 var(--nz-f);color:var(--nz-teal-ink)}
+.nz-h{font:700 clamp(30px,4.2vw,46px)/1.12 var(--nz-f);color:var(--nz-ink);margin:8px 0 0;text-transform:none;letter-spacing:0}
+.nz-lede{margin:18px 0 0;max-width:62ch;font:400 16.5px/1.65 var(--nz-f);color:var(--nz-body)}
+.nz-lede b,.nz-lede strong{color:var(--nz-ink)}
+.nz-sec-head{max-width:720px}
+.nz-sec-head.mid{margin-left:auto;margin-right:auto;text-align:center}
+.nz-sec-head.mid .nz-lede{margin-left:auto;margin-right:auto}
+
+/* offset photo with the dark stat box, and the text beside it */
+.nz-about{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1fr);gap:64px;align-items:center}
+.nz-abph{position:relative;padding:46px 0 0 86px}
+.nz-abph img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;transition:filter .5s}
+.nz-abph img:not([src]){background:var(--nz-soft)}
+.nz-stat{position:absolute;left:0;top:0;width:208px;background:var(--nz-navy);color:#fff;text-align:center;padding:30px 16px 26px;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s}
+.nz-stat svg{width:50px;height:50px;color:var(--nz-teal);margin:0 auto 12px;display:block;stroke-width:1.4}
+.nz-stat b{display:block;font:700 46px/1 var(--nz-f)}
+.nz-stat span{display:block;margin-top:10px;font-size:16px;line-height:1.3}
+.nz-abph:hover .nz-stat{transform:translate(-6px,-6px);box-shadow:14px 14px 0 var(--nz-teal)}
+.nz-abph:hover img{filter:saturate(1.15)}
+.nz-facts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:30px 0 34px}
+.nz-facts>div{background:var(--nz-soft);border-top:5px solid var(--nz-teal);padding:18px 20px 16px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
+.nz-facts>div.c1{border-top-color:var(--nz-purple)}.nz-facts>div.c2{border-top-color:var(--nz-red)}.nz-facts>div.c3{border-top-color:var(--nz-sky)}
+.nz-facts>div:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(11,26,39,.5)}
+.nz-facts h3{font:700 17px/1.25 var(--nz-f);color:var(--nz-teal-ink);margin:0;text-transform:none;letter-spacing:0}
+.nz-facts>div.c1 h3{color:var(--nz-purple)}.nz-facts>div.c2 h3{color:#B93636}.nz-facts>div.c3 h3{color:#006F99}
+.nz-facts p{margin:6px 0 0;font:600 17px/1.4 var(--nz-f);color:var(--nz-ink)}
+.nz-checked{margin:22px 0 0;font-size:14.5px;line-height:1.55;color:var(--nz-body)}
+.nz-checked b{color:var(--nz-ink)}
+
+/* the tickets notice: a dark panel */
+.nz-notice-slot{background:var(--nz-soft);padding:0}
+html.nz .nz-notice-slot .notice{background:transparent!important;border:0!important;padding:56px 0!important;margin:0!important}
+html.nz .nz-notice-slot .notice .wrap{max-width:1188px!important}
+html.nz .nz-notice-slot .cbx{display:grid!important;grid-template-columns:minmax(0,300px) minmax(0,1fr)!important;background:var(--nz-navy)!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:#fff!important;border-top:5px solid var(--nz-red)!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s}
+html.nz .nz-notice-slot .cbx:hover{transform:translateY(-4px);box-shadow:0 26px 36px -24px rgba(11,26,39,.8)}
+html.nz .nz-notice-slot .cbx header{background:var(--nz-deep)!important;padding:30px 28px!important;border:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+html.nz .nz-notice-slot .cbx header .cbx-op{font:700 17px/1.3 var(--nz-f)!important;color:#8FE0DC!important;background:none!important;padding:0!important;text-transform:none!important}
+html.nz .nz-notice-slot .cbx header h3{font:700 30px/1.15 var(--nz-f)!important;color:#fff!important;margin:6px 0 0!important;text-transform:none!important}
+html.nz .nz-notice-slot .cbx > p{padding:30px 32px!important;margin:0!important;font:400 16px/1.65 var(--nz-f)!important;color:#E6EDF1!important;background:none!important}
+html.nz .nz-notice-slot .cbx > p b{color:#fff!important}
+html.nz body .nz-notice-slot .notice.cbx-n .cbx p .inline-link{color:#8FE0DC!important;text-decoration:none!important;border-bottom:2px solid var(--nz-teal)!important;padding:0 0 2px!important}
+html.nz body .nz-notice-slot .notice.cbx-n .cbx p .inline-link:hover{color:#fff!important}
+html.nz .nz-notice-slot .cbx .inline-link{font:700 16px/1.3 var(--nz-f)!important;color:#8FE0DC!important;background:none!important;border:0!important;border-bottom:2px solid var(--nz-teal)!important;padding:0 0 2px!important;cursor:pointer}
+html.nz .nz-notice-slot .cbx .inline-link:hover{color:#fff!important}
+.nz-guide-head{padding-bottom:40px}
+
+/* the strip of section links (the page's own tab bar) */
+html.nz body nav.tabbar{background:#fff!important;border-top:1px solid var(--nz-line)!important;border-bottom:1px solid var(--nz-line)!important;box-shadow:none!important;transition:box-shadow .3s}
+html.nz body nav.tabbar.nz-stuck{box-shadow:0 14px 24px -18px rgba(11,26,39,.45)!important}
+html.nz body nav.tabbar .tablist{gap:4px 22px!important}
+html.nz body nav.tabbar .tab{font:600 15.5px/1.2 var(--nz-f)!important;color:var(--nz-ink)!important;background:none!important;padding:19px 0 15px!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;text-transform:none!important;box-shadow:none!important;white-space:nowrap}
+html.nz body nav.tabbar .tab:hover{color:var(--nz-teal-ink)!important;border-bottom-color:var(--nz-teal)!important}
+html.nz body nav.tabbar .tab[aria-selected="true"],html.nz body nav.tabbar .tab.active{color:var(--nz-teal-ink)!important;border-bottom-color:var(--nz-teal)!important;background:none!important}
+html.nz body nav.tabbar .tab::before,html.nz body nav.tabbar .tab::after{display:none!important}
+html.nz body nav.tabbar .cg-jet{display:none!important}
+html.nz body nav.tabbar .cg-read{background:var(--nz-teal)!important}
+
+/* open all, close all */
+html.nz body .fold-bar{background:#fff!important}
+html.nz body .fold-bar .wrap{max-width:1188px!important;justify-content:center!important;padding-top:26px!important;padding-bottom:10px!important}
+html.nz body .fold-bar button,html.nz body .fold-end button{font:700 15.5px/1.2 var(--nz-f)!important;background:var(--nz-soft)!important;color:var(--nz-ink)!important;border:0!important;border-radius:0!important;padding:13px 18px 11px!important;transition:background .2s,color .2s!important}
+html.nz body .fold-bar button:hover,html.nz body .fold-end button:hover{background:var(--nz-navy)!important;color:#fff!important}
+
+/* the collapsible sections: a box with a coloured top edge, dark when open */
+html.nz body .folds{background:#fff;padding:16px 0 80px}
+html.nz body .folds > section.fold{margin:0 0 14px!important}
+html.nz body .folds > section.fold + section.fold:before{display:none!important}
+html.nz body .fold-btn,html.nz body .fold.open .fold-btn{background:transparent!important;box-shadow:none!important;color:var(--nz-ink)!important;padding:0 24px!important;display:block!important;width:100%!important}
+html.nz body .fold-btn .wrap{max-width:1140px!important;margin:0 auto!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:20px!important;align-items:center!important;
+  background:var(--nz-soft)!important;border-top:5px solid var(--sl,var(--fc,var(--nz-teal)))!important;padding:22px 26px 20px!important;transform:none!important;transition:background .3s,box-shadow .35s,transform .35s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body .fold-btn:hover .wrap{background:#fff!important;box-shadow:0 22px 34px -22px rgba(11,26,39,.5)!important;transform:translateY(-4px)!important}
+html.nz body .fold.open .fold-btn .wrap{background:var(--nz-navy)!important;box-shadow:none!important;transform:none!important}
+html.nz body .fold-btn .st-stop,html.nz body .fold-btn .fold-ic,html.nz body .fold-btn .fold-n{display:none!important}
+html.nz body .fold .fold-btn .fold-t{display:block!important;font:700 clamp(21px,2.4vw,27px)/1.2 var(--nz-f)!important;color:var(--nz-ink)!important;text-transform:capitalize!important;letter-spacing:0!important}
+html.nz body .fold .fold-btn .fold-d{display:block!important;font:400 15.5px/1.5 var(--nz-f)!important;color:var(--nz-body)!important;margin-top:4px!important;opacity:1!important}
+html.nz body .fold.open .fold-btn .fold-t{color:#fff!important}
+html.nz body .fold.open .fold-btn .fold-d{color:#D5DEE4!important}
+html.nz body .fold-btn .fold-x i{width:46px!important;height:46px!important;flex:0 0 46px!important;border-radius:0!important;background:var(--nz-navy)!important;border:0!important;transition:background .3s,transform .35s!important}
+html.nz body .fold-btn .fold-x i::before,html.nz body .fold-btn .fold-x i::after{background:#fff!important}
+html.nz body .fold-btn:hover .fold-x i{background:var(--nz-teal)!important;transform:rotate(90deg)!important}
+html.nz body .fold.open .fold-btn .fold-x i{background:var(--nz-teal)!important;transform:none!important}
+html.nz body .fold.open .fold-btn .fold-x i::before,html.nz body .fold.open .fold-btn .fold-x i::after{background:var(--nz-navy)!important}
+html.nz body .fold-btn:focus-visible{outline:0!important}
+html.nz body .fold-btn:focus-visible .wrap{outline:3px solid var(--nz-amber)!important;outline-offset:2px}
+
+/* ---- inside the sections: clean white panels, a label line above a big heading, no black bars ---- */
+html.nz body main:not(#nz0):not(#nz1) section.panel:not(#travel){background:#fff!important;background-image:none!important}
+html.nz body main:not(#nz0):not(#nz1) .fold.open .fold-in{background:#fff!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head{display:block!important;max-width:780px!important;margin:0 0 40px!important;padding:0!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head > div{border:0!important;padding:0!important;margin:0!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head h2{font:700 clamp(30px,4.2vw,46px)/1.12 var(--nz-f)!important;color:var(--nz-ink)!important;background:none!important;padding:0!important;margin:8px 0 0!important;min-height:0!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head h2::before,html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head > div::before{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head > p{margin:18px 0 0!important;padding:0!important;max-width:62ch!important;font:400 16.5px/1.65 var(--nz-f)!important;color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) :is(.cal-h,.sub-h,.fl-h,.hp-h,.kc-h,.xf-h,.sx-gtk-h,.stay-group>h3,.sec-head h3,.tl-head h3,.fl-text>h3,.ww-head h3,.pmap-head h3,.band>h3,.row>h3){font:700 clamp(25px,3vw,34px)/1.15 var(--nz-f)!important;color:var(--nz-ink)!important;background:none!important;padding:0!important;min-height:0!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) :is(.cal-h,.sub-h,.fl-h,.hp-h,.kc-h,.xf-h,.sx-gtk-h,.stay-group>h3,.sec-head h3,.tl-head h3,.fl-text>h3,.ww-head h3,.pmap-head h3,.band>h3,.row>h3)::before{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) :is(.cal-h,.sub-h,.fl-h,.hp-h,.kc-h,.xf-h,.stay-group>h3,.sec-head h3,.tl-head h3,.band>h3)::after{content:"";display:block;width:56px;height:4px;background:var(--nz-teal);margin:12px 0 0;position:static}
+html.nz body main:not(#nz0):not(#nz1) #overview .band{box-shadow:none!important;background:var(--nz-soft)!important;border-top:5px solid var(--nz-purple)!important;padding:26px 28px 24px!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .band > div{padding:14px 0 0!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .ov-side .kicker{background:var(--nz-navy)!important;padding:18px 22px 15px!important;min-height:0!important;font:700 22px/1.2 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .ov-side .kicker::before{display:none!important}
+
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head h2 *{color:inherit!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .jump.boxes::before{background:none!important;border:0!important;padding:0 0 6px!important;color:var(--nz-ink)!important;font:700 clamp(25px,3vw,34px)/1.15 var(--nz-f)!important;display:block!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .jump.boxes{margin-top:44px!important}
+
+html.nz body main:not(#nz0):not(#nz1) #overview .sec-head h3 *,html.nz body main:not(#nz0):not(#nz1) #overview .band>h3 *{color:inherit!important}
+
+/* headings in title case everywhere, labels as typed */
+html.nz body :is(main,section.useful,#xl-band):not(#nz0):not(#nz1) :is(h2,h3,h4){text-transform:capitalize!important;letter-spacing:0!important}
+html.nz body :is(main,section.useful,#xl-band):not(#nz0):not(#nz1) :is(h2,h3,h4) *{text-transform:inherit!important}
+
+/* keep reading: photo cards with the text over the photo */
+html.nz body section.cg-next{background:var(--nz-soft)!important;padding:90px 0!important}
+html.nz body section.cg-next .wrap{max-width:1188px!important}
+html.nz body section.cg-next h2{font:700 clamp(30px,4.2vw,46px)/1.12 var(--nz-f)!important;color:var(--nz-ink)!important;text-transform:none!important;margin:0 0 40px!important;padding:0!important;background:none!important;position:relative}
+html.nz body section.cg-next h2::before{content:"More in this guide";display:block;position:static!important;font:700 21px/1.25 var(--nz-f)!important;color:var(--nz-teal-ink)!important;-webkit-text-stroke:0!important;opacity:1!important;transform:none!important;margin-bottom:8px;text-transform:none!important}
+html.nz body section.cg-next h2::after{display:none!important}
+html.nz body section.cg-next .cg-tiles{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:28px!important}
+html.nz body section.cg-next .cg-tiles > button{position:relative!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;min-height:400px!important;padding:0!important;border:0!important;border-radius:0!important;background:var(--nz-navy)!important;color:#fff!important;overflow:hidden!important;text-align:left!important;box-shadow:none!important;cursor:pointer;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s!important}
+html.nz body section.cg-next .cg-tiles > button .ph{position:absolute!important;inset:0!important;height:auto!important;width:auto!important;margin:0!important}
+html.nz body section.cg-next .cg-tiles > button .ph img{width:100%!important;height:100%!important;object-fit:cover!important;transition:transform .8s cubic-bezier(.22,.61,.36,1)!important;-webkit-mask:none!important;mask:none!important;opacity:1!important}
+html.nz body section.cg-next .cg-tiles > button .ph::after{content:""!important;display:block!important;position:absolute!important;inset:0!important;background:linear-gradient(180deg,rgba(19,41,60,.05) 20%,rgba(19,41,60,.82) 62%,rgba(11,26,39,.97))!important}
+html.nz body section.cg-next .cg-tiles > button .tx{position:relative!important;z-index:1!important;background:none!important;padding:28px!important;margin:0!important;height:auto!important;width:auto!important}
+html.nz body section.cg-next .cg-tiles > button .tx b{display:block!important;font:700 23px/1.2 var(--nz-f)!important;color:#fff!important;text-transform:none!important}
+html.nz body section.cg-next .cg-tiles > button .tx small{display:block!important;font:400 15.5px/1.55 var(--nz-f)!important;color:#E6EDF1!important;margin-top:8px!important}
+html.nz body section.cg-next .cg-tiles > button .ix-more{display:inline-block!important;margin-top:16px!important;font:700 16px/1.2 var(--nz-f)!important;color:#8FE0DC!important;text-transform:none!important;width:auto!important;height:auto!important}
+html.nz body section.cg-next .cg-tiles > button:hover{transform:translateY(-6px)!important;box-shadow:0 26px 40px -24px rgba(11,26,39,.7)!important}
+html.nz body section.cg-next .cg-tiles > button:hover .ph img{transform:scale(1.08)!important}
+
+/* useful links: boxes with a coloured top edge */
+html.nz body section.useful{background:#fff!important;padding:90px 0!important;color:var(--nz-body)!important}
+html.nz body section.useful .wrap{max-width:1188px!important}
+html.nz body section.useful h2{font:700 clamp(30px,4.2vw,46px)/1.12 var(--nz-f)!important;color:var(--nz-ink)!important;text-transform:none!important;margin:0 0 36px!important}
+html.nz body section.useful h2::before{content:"Official sources";display:block;font:700 21px/1.25 var(--nz-f);color:var(--nz-teal-ink);margin-bottom:8px}
+html.nz body section.useful ul{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important;list-style:none!important;margin:0!important;padding:0!important}
+html.nz body section.useful li{margin:0!important;padding:0!important}
+html.nz body section.useful li a{display:block!important;background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;border-radius:0!important;padding:20px 20px 18px!important;font:700 17px/1.3 var(--nz-f)!important;color:var(--nz-ink)!important;text-decoration:none!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s,color .2s!important}
+html.nz body section.useful li:nth-child(4n+2) a{border-top-color:var(--nz-purple)!important}
+html.nz body section.useful li:nth-child(4n+3) a{border-top-color:var(--nz-sky)!important}
+html.nz body section.useful li:nth-child(4n+4) a{border-top-color:var(--nz-red)!important}
+html.nz body section.useful li a:hover{transform:translateY(-6px)!important;background:#fff!important;box-shadow:0 22px 34px -22px rgba(11,26,39,.5)!important;color:var(--nz-teal-ink)!important}
+html.nz body footer.small-print{display:none!important}
+
+/* dark footer with link columns */
+.nz-ft{background:var(--nz-deep);color:#fff;padding:76px 0 64px;font-size:15px;line-height:1.6}
+.nz-ft .cols{display:grid;grid-template-columns:1.25fr .9fr .9fr 1.3fr;gap:40px}
+.nz-ft .cols>div{background:none!important;padding:0!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+.nz-ft .nz-logo{margin-bottom:22px;display:inline-flex}
+.nz-ft h3{color:#fff;font:600 22px/1.2 var(--nz-f);margin:0 0 18px;text-transform:none;letter-spacing:0}
+.nz-ft p{color:#D5DEE4;font-size:15px;margin:0}
+.nz-ft .ct{display:grid;gap:12px}
+.nz-ft .ct>span{display:flex;gap:11px;align-items:center}
+.nz-ft .ct svg{width:17px;height:17px;color:var(--nz-teal);flex:none}
+.nz-ft ul{list-style:none;display:grid;gap:13px;margin:0;padding:0}
+.nz-ft li a,.nz-ft li button{display:inline-flex;gap:9px;align-items:center;text-decoration:none;color:#fff;font:400 15px/1.4 var(--nz-f);background:none;border:0;padding:0;cursor:pointer;text-align:left;transition:transform .25s,color .25s}
+.nz-ft li a::before,.nz-ft li button::before{content:"";width:6px;height:6px;border:solid var(--nz-teal);border-width:2px 2px 0 0;transform:rotate(45deg);flex:none;margin-right:3px}
+.nz-ft li a:hover,.nz-ft li button:hover{color:#8FE0DC;transform:translateX(5px)}
+.nz-ft .nz-btn{margin-top:18px}
+.nz-fbar{background:#06121B;color:#C2CED6;font-size:14px;line-height:1.6;padding:22px 0}
+.nz-fbar p{margin:0}
+.nz-fbar p+p{margin-top:6px}
+.nz-fbar a{color:#fff}
+.nz-fbar a:hover{color:#8FE0DC}
+
+/* motion: things rise into place as you scroll */
+.nz-rv{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
+.nz-rv.nz-in{opacity:1;transform:none}
+@keyframes nz-rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes nz-drift{from{transform:translateY(-2%) scale(1.02)}to{transform:translateY(2%) scale(1.06)}}
+.nz-hd-bg{animation:nz-drift 26s ease-in-out infinite alternate}
+.nz-ttl .nz-tags{animation:nz-rise .7s .05s both}
+.nz-ttl h1{animation:nz-rise .8s .15s both}
+.nz-ttl .nz-crumbs{animation:nz-rise .8s .3s both}
+
+@media (max-width:1100px){
+  .nz-nav ul{display:none}
+  .nz-about{grid-template-columns:1fr;gap:44px}
+  .nz-abph{max-width:520px}
+  .nz-ft .cols{grid-template-columns:1fr 1fr}
+  html.nz body section.useful ul{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media (max-width:820px){
+  html.nz .nz-feat3 .h1x-cards{grid-template-columns:1fr!important}
+  .nz-ttl{padding:48px 0 40px}
+  .nz-feat3{margin-top:0}
+  html.nz .nz-feat3 .h1x-card{min-height:0!important;padding:20px 20px 18px 84px!important}
+  html.nz .nz-feat3 .h1x-card .h1x-ic{top:20px!important;left:20px!important}
+  html.nz .nz-feat3 .h1x-cards{gap:10px!important}
+  html.nz body section.cg-next .cg-tiles{grid-template-columns:1fr!important}
+  html.nz body section.cg-next .cg-tiles > button{min-height:300px!important}
+  html.nz .nz-notice-slot .cbx{grid-template-columns:1fr!important}
+  .nz-sec{padding:64px 0}
+}
+@media (max-width:640px){
+  .nz-wrap{padding:0 18px}
+  .nz-top .r{display:none}
+  .nz-top{font-size:13px}
+  .nz-logo{font-size:21px}
+  .nz-nav{min-height:70px;gap:10px}
+  .nz-nav .nz-btn{padding:14px 16px 11px;font-size:15px}
+  .nz-abph{padding:34px 0 0 34px}
+  .nz-stat{width:150px;padding:20px 10px 18px}
+  .nz-stat b{font-size:36px}.nz-stat svg{width:38px;height:38px}
+  .nz-facts{grid-template-columns:1fr}
+  .nz-btns .nz-btn{flex:1 1 100%}
+  .nz-ft .cols{grid-template-columns:1fr}
+  html.nz body section.useful ul{grid-template-columns:1fr!important}
+  html.nz body .fold-btn,html.nz body .fold.open .fold-btn{padding:0 12px!important}
+  html.nz body .fold-btn .wrap{padding:18px 16px 16px!important;gap:12px!important}
+}
+@media (prefers-reduced-motion:reduce){
+  .nz-rv{opacity:1!important;transform:none!important;transition:none!important}
+  .nz-hd-bg,.nz-ttl .nz-tags,.nz-ttl h1,.nz-ttl .nz-crumbs{animation:none!important}
+  .nz-btn,.nz-facts>div,.nz-stat,.nz-abph img,.nz-ft li a,.nz-ft li button,.nz-logo svg,.nz-top svg{transition:none!important}
+  .nz-btn:hover,.nz-facts>div:hover,.nz-abph:hover .nz-stat,.nz-ft li a:hover,.nz-ft li button:hover{transform:none!important}
+  html.nz .nz-feat3 .h1x-card,html.nz .nz-feat3 .h1x-card .h1x-ic,html.nz body .fold-btn .wrap,html.nz body .fold-btn .fold-x i,html.nz body section.cg-next .cg-tiles > button,html.nz body section.cg-next .cg-tiles > button .ph img,html.nz body section.useful li a,html.nz .nz-notice-slot .cbx{transition:none!important;transform:none!important}
+}
