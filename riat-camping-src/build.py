@@ -198,6 +198,8 @@ ICON = {
     "back": '<path d="M19 12H5M11 6l-6 6 6 6"/>',
     "plus": '<path d="M12 5v14M5 12h14"/>',
     "chev": '<path d="M9 5l7 7-7 7"/>',
+    "bolt": '<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',
+    "food": '<path d="M6 3v7a2 2 0 0 0 4 0V3M8 12v9M17 21v-8M17 13c-2.5-1-2.5-9 0-10z"/>',
     "list": '<rect x="5" y="3" width="14" height="18"/><path d="M8 8h8M8 12h8M8 16h5"/>',
     "tag": '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/>',
     "drop": '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
@@ -399,8 +401,8 @@ h1,h2,h3{color:var(--ink);font-weight:700;line-height:1.1}
 a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--or-l);outline-offset:2px}
 section[id]{scroll-margin-top:20px}
 
-.kick{display:block;font:700 21px/1.25 "Barlow",sans-serif;color:var(--or-ink)}
-.h{font-size:clamp(31px,4.3vw,46px);margin-top:8px}
+.kick{display:block;font:700 clamp(25px,2.5vw,30px)/1.2 "Barlow",sans-serif;color:var(--or-ink)}
+.h{font-size:clamp(33px,4.5vw,48px);margin-top:6px}
 .band .kick,.mapband .kick{color:var(--or-l)}
 .lede{margin-top:18px;max-width:62ch}
 .sec{padding:96px 0}
@@ -588,10 +590,13 @@ section[id]{scroll-margin-top:20px}
 
 /* text on the left, dark card and photo on the right */
 .offer{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:56px;align-items:center}
-.minis{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:30px;padding-top:30px;border-top:1px solid var(--line)}
-.mini>svg{width:42px;height:42px;color:var(--purple);stroke-width:1.4}
-.mini h3{font-size:20px;font-weight:600;margin-top:12px}
-.mini p{margin:6px 0 12px;font-size:15.5px}
+.minis{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+.mini{display:flex;flex-direction:column;align-items:flex-start;background:var(--soft);border-top:5px solid var(--c,var(--purple));padding:24px 22px 22px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
+.mini:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(19,41,60,.5)}
+.mini>svg{width:52px;height:52px;padding:11px;background:var(--c,var(--purple));color:var(--ic,#fff);stroke-width:1.8}
+.mini h3{font-size:21px;font-weight:700;margin-top:16px}
+.mini p{margin:8px 0 16px;font-size:16px}
+.mini .more{margin-top:auto}
 .pc{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:center}
 .pc-card{position:relative;z-index:1;background:var(--navy);color:#fff;padding:42px 38px 38px;margin:-12px 0}
 .pc-card .flag{position:absolute;top:22px;right:38px;background:var(--purple);color:#fff;font:700 16px/1 "Barlow",sans-serif;padding:7px 12px}
@@ -1108,7 +1113,7 @@ def build_home(live):
       <p class="lede">My first airshow camping trip was RIAT in 2014, and I got plenty wrong. My camping guides are everything I wish someone had told me, from where to pitch to what to pack.</p>
       <div class="minis">
         <div class="mini">{icon("tent")}<h3>Camping guides</h3><p>Where to camp, pitching up and staying comfortable.</p><a class="more" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read the guides</a></div>
-        <div class="mini">{icon("list")}<h3>Kit calculator</h3><p>Tick your tent, beds and cooking kit and see the cost.</p><a class="more" href="{SITE}/build-your-kit-calculator?list=camping" target="_top">Open the calculator</a></div>
+        <div class="mini" style="--c:var(--teal);--ic:var(--navy)">{icon("list")}<h3>Kit calculator</h3><p>Tick your tent, beds and cooking kit and see the cost.</p><a class="more" href="{SITE}/build-your-kit-calculator?list=camping" target="_top">Open the calculator</a></div>
       </div>
     </div>
     <div class="pc">
@@ -1200,13 +1205,21 @@ SITE_CSS = r"""
 .dates dt{font:700 17px/1.2 "Barlow",sans-serif;color:var(--purple)}
 .dates dd{font-weight:600;font-size:18px;line-height:1.3;color:var(--ink);margin-top:8px}
 
-.facs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:36px}
-.fg h3{font-size:20px;font-weight:600;padding-bottom:12px;border-bottom:2px solid var(--ink);margin-bottom:6px}
-.fg ul{list-style:none}
-.fg li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;padding:9px 0;color:var(--ink);align-items:start}
-.fg li>svg{width:14px;height:14px;margin-top:6px;color:var(--teal-ink);stroke-width:3}
-.fg li.n{color:#93A0AA}
-.fg li.n>svg{color:#B4BEC6}
+.facs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;align-items:start}
+.fg{background:#fff;border:1px solid var(--line);border-top:5px solid var(--c,var(--teal));box-shadow:0 16px 30px -24px rgba(19,41,60,.5);transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,opacity .75s cubic-bezier(.22,.61,.36,1)}
+.fg:hover{transform:translateY(-6px);box-shadow:0 28px 40px -24px rgba(19,41,60,.6)}
+.fg header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center;padding:16px 18px;background:var(--soft);border-bottom:1px solid var(--line)}
+.fg header i{grid-row:span 2;width:46px;height:46px;background:var(--c,var(--teal));color:var(--ic,#fff);display:grid;place-items:center;transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.fg:hover header i{transform:rotate(-6deg) scale(1.08)}
+.fg header i svg{width:24px;height:24px}
+.fg h3{font-size:20px;font-weight:700;line-height:1.15;align-self:end}
+.fg header span{font-weight:600;font-size:15.5px;line-height:1.2;color:var(--body);align-self:start}
+.fg ul{list-style:none;padding:4px 18px 8px}
+.fg li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;padding:12px 0;color:var(--ink);align-items:start;border-top:1px solid var(--line)}
+.fg li:first-child{border-top:0}
+.fg li>svg{width:22px;height:22px;padding:5px;border-radius:50%;background:var(--teal);color:var(--navy);stroke-width:3.4;margin-top:1px}
+.fg li.n{color:#8593A0}
+.fg li.n>svg{background:#E6EAED;color:#8593A0}
 .fg li b{display:block;font-weight:500}
 .fg li small{display:block;color:var(--body);font-size:14.5px;line-height:1.4}
 .rules-h{font-size:26px;margin-top:60px}
@@ -1315,16 +1328,19 @@ def build_site(s, live):
     # facilities and rules
     fac = s.get("facilities", {})
     groups = []
-    for title, items in FAC_GROUPS:
-        lis = []
+    looks = [("drop", "var(--teal)", "var(--navy)"), ("bolt", "#00A6E2", "var(--navy)"), ("food", "var(--purple)", "#fff"), ("tent", "var(--or)", "#fff")]
+    for (title, items), (ic, col, icol) in zip(FAC_GROUPS, looks):
+        lis, have = [], 0
         for key, label in items:
             ok, note = fac_state(fac.get(key))
             if ok is None:
                 continue
+            have += 1 if ok else 0
             nt = f"<small>{e(note)}</small>" if note else ("<small>Not available</small>" if not ok else "")
-            lis.append(f'<li class="{"y" if ok else "n"}">{icon("chev" if ok else "cross")}<span><b>{e(label)}</b>{nt}</span></li>')
+            lis.append(f'<li class="{"y" if ok else "n"}">{icon("tick" if ok else "cross")}<span><b>{e(label)}</b>{nt}</span></li>')
         if lis:
-            groups.append(f'<div class="fg"><h3>{e(title)}</h3><ul>{"".join(lis)}</ul></div>')
+            groups.append(f'<div class="fg" style="--c:{col};--ic:{icol}"><header><i>{icon(ic)}</i><h3>{e(title)}</h3>'
+                          f'<span>{have} of {len(lis)} on site</span></header><ul>{"".join(lis)}</ul></div>')
     gtk = "".join(f'<div><dt><i>{icon("chev")}</i>{e(k)}</dt><dd>{e(v)}</dd></div>' for k, v in s.get("goodToKnow", []) if v)
     rules = f'<h3 class="rules-h">Good to know</h3><dl class="rules">{gtk}</dl>' if gtk else ""
 
