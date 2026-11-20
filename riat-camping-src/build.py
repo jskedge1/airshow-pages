@@ -459,11 +459,13 @@ section[id]{scroll-margin-top:20px}
 .statbox b{display:block;font:700 44px/1 "Overpass",sans-serif}
 .statbox b sup{font-size:22px;color:var(--or-l);margin-left:6px}
 .statbox span{display:block;margin-top:10px;font-size:16px;line-height:1.3}
-.feat{display:grid;grid-template-columns:1fr 1fr;gap:26px 34px;margin:30px 0 36px}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:30px 0 36px}
+.feat>div{background:var(--soft);border-top:5px solid var(--or);padding:20px 20px 18px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
+.feat>div:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(10,27,39,.5)}
 .feat h3{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:600}
 .feat h3 i,.ticks2 li i{flex:none;width:20px;height:20px;border-radius:50%;background:var(--or);color:#fff;display:grid;place-items:center}
 .feat h3 i svg,.ticks2 li i svg{width:11px;height:11px}
-.feat p{margin-top:8px;font-size:15.5px}
+.feat p{margin-top:10px;font-size:15.5px}
 .quote{margin-top:34px;border-left:4px solid var(--or);padding:4px 0 4px 20px;color:var(--ink);font-size:19px;line-height:1.5;font-weight:500}
 .quote cite{display:block;margin-top:8px;font-style:normal;font-size:15px;font-weight:600;color:var(--or)}
 
@@ -766,7 +768,7 @@ fieldset.fld{border:0}
 MOTION_JS = r"""<script>
 (function(){
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-var sel='.sec-head,.about>*,.finder,.shown,.cc,.none,.board-scroll,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules,.where>*,.formrow>*,.gal figure,.ft .cols>div';
+var sel='.sec-head,.about>*,.finder,.shown,.cc,.none,.board-scroll,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules-h,.rules>div,.where>*,.formrow>*,.gal figure,.ft .cols>div';
 var els=[].slice.call(document.querySelectorAll(sel));
 if(!els.length||!('IntersectionObserver' in window))return;
 els.forEach(function(el){var sibs=[].filter.call(el.parentNode.children,function(x){return els.indexOf(x)>-1});
@@ -1185,10 +1187,15 @@ SITE_CSS = r"""
 .fg li.n>svg{color:#B4BEC6}
 .fg li b{display:block;font-weight:500}
 .fg li small{display:block;color:var(--body);font-size:14.5px;line-height:1.4}
-.rules{margin-top:56px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px}
-.rules div{padding:18px 0;border-top:1px solid var(--line)}
-.rules dt{font-weight:600;font-size:18px;color:var(--ink)}
-.rules dd{margin-top:4px}
+.rules-h{font-size:26px;margin-top:60px}
+.rules{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px}
+.rules div{background:var(--soft);border-top:5px solid var(--or);padding:24px 24px 22px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s,opacity .75s cubic-bezier(.22,.61,.36,1)}
+.rules div:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(10,27,39,.5)}
+.rules dt{display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px;line-height:1.2;color:var(--ink)}
+.rules dt i{flex:none;width:22px;height:22px;border-radius:50%;background:var(--or);color:#fff;display:grid;place-items:center;transition:transform .3s}
+.rules dt i svg{width:12px;height:12px;stroke-width:3}
+.rules div:hover dt i{transform:scale(1.15)}
+.rules dd{margin-top:10px}
 
 .where{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
 .where .mapcard{background:var(--navy);padding:26px}
@@ -1296,8 +1303,8 @@ def build_site(s, live):
             lis.append(f'<li class="{"y" if ok else "n"}">{icon("chev" if ok else "cross")}<span><b>{e(label)}</b>{nt}</span></li>')
         if lis:
             groups.append(f'<div class="fg"><h3>{e(title)}</h3><ul>{"".join(lis)}</ul></div>')
-    gtk = "".join(f"<div><dt>{e(k)}</dt><dd>{e(v)}</dd></div>" for k, v in s.get("goodToKnow", []) if v)
-    rules = f'<dl class="rules">{gtk}</dl>' if gtk else ""
+    gtk = "".join(f'<div><dt><i>{icon("chev")}</i>{e(k)}</dt><dd>{e(v)}</dd></div>' for k, v in s.get("goodToKnow", []) if v)
+    rules = f'<h3 class="rules-h">Good to know</h3><dl class="rules">{gtk}</dl>' if gtk else ""
 
     # getting to the show: numbered cards on a photo band
     way_defs = [("driveMins", "car", "Driving"), ("shuttle", "bus", "Shuttle"), ("walk", "walk", "Walking"),
