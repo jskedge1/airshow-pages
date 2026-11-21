@@ -732,6 +732,92 @@ spotter('spitfire', 'Supermarine Spitfire', 'Historic', 'Spitfire', 'Supermarine
         'camping-layout/img/efcf15b014547919.webp')
 
 
+# =============================================================================================
+# Social media banners (profile headers). Same logo and colours as the posters, with the logo's three
+# swishes drawn large under the tagline. Tagline: the headline on home.html. Photo: home-img/v2.
+# Each platform crops or covers part of its banner, so the logo and wording sit inside its safe area:
+#   X         1500 x 500   the profile picture covers the bottom left corner
+#   Facebook  1640 x 720   phones crop the sides, computers crop the top and bottom
+#   YouTube   2560 x 1440  only the middle 1546 x 423 shows on every device, and YouTube puts the
+#                          channel's links over the bottom right, so this one has no web address
+BANNER_PAGE = """<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>{title} | UK Airshow Guide banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&display=swap">
+<style>
+/* Social media banner, {w} x {h}. Built by posters-src/build.py, so change it there, not here. */
+:root{{--navy:#13293C;--deep:#0E2131;--teal:#32B4AF;--red:#D74949;--mute:#9FB4C4;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;color-scheme:dark}}
+*{{box-sizing:border-box}}
+html,body{{margin:0;height:100%;background:#081520;overflow:hidden}}
+.stage{{position:fixed;inset:0;display:grid;place-items:center}}
+.poster{{position:relative;width:{w}px;height:{h}px;flex:none;overflow:hidden;background:var(--deep);color:#fff;font-family:var(--display);-webkit-font-smoothing:antialiased}}
+.bg{{position:absolute;top:0;right:0;width:{pw}%;height:100%;object-fit:cover;object-position:{pos}}}
+.shade{{position:absolute;inset:0;background:
+  linear-gradient(90deg,var(--deep) 0%,var(--deep) {s1}%,rgba(14,33,49,.8) {s2}%,rgba(14,33,49,.18) {s3}%,rgba(14,33,49,0) 100%),
+  linear-gradient(180deg,rgba(14,33,49,.18),rgba(14,33,49,0) 30%,rgba(14,33,49,0) 72%,rgba(14,33,49,.35))}}
+.swish{{position:absolute;{swish}}}
+.mark{{position:absolute;left:{mx}px;top:{my}px}}
+.mark img{{display:block;width:{lw}px;height:auto}}
+.line{{margin-top:{lg}px;font-weight:800;font-size:{ts}px;line-height:1;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}}
+.line em{{font-style:normal;color:var(--teal)}}
+.url{{display:{ud};position:absolute;right:{ux}px;bottom:{uy}px;padding:{up}px;background:var(--deep);border-left:8px solid var(--red);
+  font-weight:700;font-size:{us}px;line-height:1;letter-spacing:.14em;text-transform:uppercase}}
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="poster" id="poster" data-w="{w}" data-h="{h}">
+  <img class="bg" src="../{photo}" alt="">
+  <div class="shade"></div>
+  <!-- the three swishes from the logo: red, white and teal -->
+  <svg class="swish" viewBox="0 0 900 200" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="sr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B92D3A"/><stop offset=".6" stop-color="#E8303C"/><stop offset="1" stop-color="#FF4A52"/></linearGradient>
+      <linearGradient id="sw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#C9D6E0"/><stop offset=".5" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+      <linearGradient id="st" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1E8F8B"/><stop offset=".6" stop-color="#32B4AF"/><stop offset="1" stop-color="#5FE0DA"/></linearGradient>
+    </defs>
+    <path d="M250 92 Q 600 150 880 0 Q 620 112 250 92 Z" fill="url(#sr)"/>
+    <path d="M130 108 Q 570 185 895 22 Q 595 150 130 108 Z" fill="url(#sw)"/>
+    <path d="M0 120 Q 520 235 900 40 Q 560 190 0 120 Z" fill="url(#st)"/>
+  </svg>
+  <div class="mark">
+    <img src="../brand/ukag-header-logo.png" alt="UK Airshow Guide">
+    <div class="line">Every UK airshow, <em>one easy guide</em></div>
+  </div>
+  <div class="url">ukairshowguide.co.uk</div>
+</div>
+</div>
+<script>
+(function(){{
+  var p=document.getElementById('poster');
+  function fit(){{var s=Math.min(window.innerWidth/{w},window.innerHeight/{h},1);p.style.transform=s<1?'scale('+s+')':'';}}
+  window.addEventListener('resize',fit);fit();
+}})();
+</script>
+</body>
+</html>
+"""
+
+BANNERS = [
+    dict(slug='banner-x', title='X header', w=1500, h=500, photo='home-img/v2/band-arrows.jpg', pw=60, pos='40% 50%',
+         s1=40, s2=52, s3=70, swish='left:70px;top:292px;width:850px;height:190px',
+         mx=96, my=54, lw=470, lg=22, ts=50, ud='block', ux=56, uy=44, up='13px 20px 15px', us=30),
+    dict(slug='banner-facebook', title='Facebook cover', w=1640, h=720, photo='home-img/v2/band-arrows.jpg', pw=60, pos='40% 50%',
+         s1=40, s2=52, s3=70, swish='left:190px;top:400px;width:830px;height:205px',
+         mx=220, my=120, lw=520, lg=26, ts=56, ud='block', ux=220, uy=92, up='14px 22px 16px', us=32),
+    dict(slug='banner-youtube', title='YouTube banner', w=2560, h=1440, photo='home-img/v2/band-arrows.jpg', pw=60, pos='40% 50%',
+         s1=40, s2=50, s3=66, swish='left:525px;top:752px;width:860px;height:172px',
+         mx=540, my=518, lw=440, lg=20, ts=48, ud='none', ux=540, uy=524, up='13px 20px 15px', us=30),
+]
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     for slug, title, extra, body in POSTERS:
@@ -739,6 +825,10 @@ def main():
         with open(os.path.join(OUT, slug + '.html'), 'w', encoding='utf-8') as f:
             f.write(html)
         print('wrote posters/%s.html' % slug)
+    for b in BANNERS:
+        with open(os.path.join(OUT, b['slug'] + '.html'), 'w', encoding='utf-8') as f:
+            f.write(BANNER_PAGE.format(**b))
+        print('wrote posters/%s.html' % b['slug'])
 
 
 if __name__ == '__main__':

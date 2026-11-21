@@ -643,6 +643,10 @@ Poster rules: the swish logo, no rounded corners anywhere, real photos and cut-o
 | pack-seafront, pack-children, pack-photographers, pack-camping | The other four packing top tens | first-airshow-what-to-pack.html |
 | spotter-typhoon, spotter-chinook, spotter-spitfire | More spotter cards | aircraft-a-to-z.html |
 
+Social media banners are in the same folder and built by the same script: `banner-x` (1500 x 500), `banner-facebook` (1640 x 720)
+and `banner-youtube` (2560 x 1440). Each keeps the logo and tagline inside the part of the banner its platform always shows,
+and has the logo's three swishes drawn large under the tagline. The tagline is the headline from home.html.
+
 season-2027 and free-to-watch-2027 copy the calendar as it stood on 21 Nov 2026, so update their lists in build.py when the calendar changes.
 The show spotlights copy each show page as it stood on 21 Nov 2026, so update them when dates, prices or tickets change.
 Two things on the site disagreed that day, and the posters took the cautious side:

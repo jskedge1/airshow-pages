@@ -21,13 +21,17 @@ const outDir = process.argv.includes('--draft') ? path.join(dir, '.draft') : dir
       // hand written, kept as PNG, with a square version
       jobs.push([f, '', 1080, 1350, slug + '.png']);
       jobs.push([f, '?size=square', 1080, 1080, slug + '-square.png']);
+    } else if (slug.startsWith('banner-')) {
+      // banners are exported at their own size, which is the size each platform asks for
+      const m = fs.readFileSync(path.join(dir, f), 'utf8').match(/data-w="(\d+)" data-h="(\d+)"/);
+      jobs.push([f, '', Number(m[1]), Number(m[2]), slug + '.jpg', 1]);
     } else {
       jobs.push([f, '', 1080, 1350, slug + '.jpg']);
     }
   }
   const browser = await chromium.launch();
-  for (const [file, query, w, h, out] of jobs) {
-    const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: scale });
+  for (const [file, query, w, h, out, fixed] of jobs) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: fixed || scale });
     const page = await ctx.newPage();
     page.on('requestfailed', r => console.log('  COULD NOT LOAD', r.url()));
     await page.goto('file://' + path.join(dir, file) + query, { waitUntil: 'networkidle' });
