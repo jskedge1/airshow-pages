@@ -128,6 +128,21 @@ EXTRA_CSS = r"""
 .bgr-key dl>div:hover i{background:var(--teal);color:var(--navy);transform:rotate(-6deg) scale(1.08)}
 .bgr-key dt{font-weight:700;font-size:16px;color:var(--teal);line-height:1.2}
 .bgr-key dd{font-weight:600;font-size:17.5px;line-height:1.35;color:#fff;margin:2px 0 0}
+.bgr-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.bgr-tiles>div{padding:22px 22px 20px;color:#fff;background:var(--navy);box-shadow:0 18px 28px -22px rgba(11,26,39,.6);transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s}
+.bgr-tiles>div:hover{transform:translateY(-6px);box-shadow:0 26px 36px -22px rgba(11,26,39,.7)}
+.bgr-tiles i{display:grid;place-items:center;width:44px;height:44px;background:rgba(255,255,255,.2);margin-bottom:14px;transition:transform .35s}
+.bgr-tiles>div:hover i{transform:rotate(-6deg) scale(1.1)}
+.bgr-tiles i svg{width:22px;height:22px}
+.bgr-tiles h3{font-size:18px;font-weight:700;color:inherit}
+.bgr-tiles p{margin-top:5px;font-weight:700;font-size:21px;line-height:1.25;color:inherit}
+.bgr-tiles .t-teal{background:var(--teal);color:var(--navy)}
+.bgr-tiles .t-purple{background:var(--purple)}
+.bgr-tiles .t-sky{background:var(--sky);color:var(--navy)}
+.bgr-tiles .t-red{background:var(--or)}
+.bgr-tiles .t-amber{background:var(--amber);color:var(--navy)}
+.bgr-tiles .t-teal i,.bgr-tiles .t-sky i,.bgr-tiles .t-amber i{background:rgba(19,41,60,.14)}
+@media (max-width:520px){.bgr-tiles{grid-template-columns:1fr}}
 .bgr-story{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:64px;align-items:center}
 .bgr-story .lede+.lede{margin-top:14px}
 .bgr-story .ph{position:relative}
@@ -193,14 +208,14 @@ a.step{text-decoration:none;color:inherit;display:block}
 .feat .v{margin-top:8px;font-weight:600;font-size:17px;color:var(--ink);line-height:1.4}
 @media (max-width:1100px){.bgr-pages{grid-template-columns:repeat(2,minmax(0,1fr))}.bgr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bgr-chips{grid-template-columns:repeat(3,minmax(0,1fr))}.bgr-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:700px){.bgr-pages,.bgr-grid,.bgr-grid.two,.bgr-next,.bgr-links{grid-template-columns:1fr}.bgr-chips{grid-template-columns:repeat(2,minmax(0,1fr))}.bgr-pg{min-height:320px}.bgr-advice{grid-template-columns:1fr;padding:26px 22px}.bgr-advice h3{white-space:normal}.bgr-next a.r{text-align:left}}
-@media (prefers-reduced-motion:reduce){.bgr-pg,.bgr-pg>img,.bgr-box,.bgr-chips div,.bgr-next a,.bgr-links a{transition:none!important;transform:none!important}}
+@media (prefers-reduced-motion:reduce){.bgr-pg,.bgr-pg>img,.bgr-box,.bgr-chips div,.bgr-next a,.bgr-links a,.bgr-tiles>div,.bgr-tiles i,.bgr-key i{transition:none!important;transform:none!important}}
 """
 
 MOTION_MORE = r"""<script>
 (function(){
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
 if(!('IntersectionObserver' in window))return;
-var els=[].slice.call(document.querySelectorAll('.bgr-pg,.bgr-box,.bgr-chips div,.bgr-advice,.bgr-next a,.bgr-links a'));
+var els=[].slice.call(document.querySelectorAll('.bgr-tiles>div,.bgr-key,.bgr-pg,.bgr-box,.bgr-chips div,.bgr-advice,.bgr-next a,.bgr-links a'));
 els.forEach(function(el){if(el.classList.contains('rv'))return;var sibs=[].slice.call(el.parentNode.children);el.classList.add('rv');var d=Math.min(sibs.indexOf(el),5)*90;if(d)el.style.transitionDelay=d+'ms'});
 var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);setTimeout(function(){x.target.style.transitionDelay=''},1100)}})},{rootMargin:'0px 0px -6% 0px',threshold:.06});
 els.forEach(function(el){io.observe(el)});
@@ -290,6 +305,13 @@ KEY_ICON = {"When": "cal", "Where": "pin", "Children": "tick", "Tickets": "tag",
 def key_boxes(six=True):
     rows = "".join(f'<div><i>{icon(KEY_ICON.get(k, "tick"))}</i><dt>{e(k)}</dt><dd>{e(v)}</dd></div>' for k, v in KEY)
     return f'<div class="bgr-key"><h3>{icon("list")}Key details</h3><dl>{rows}</dl></div>'
+
+
+def key_tiles():
+    """Key details as six separate coloured boxes (Jack, 21 Nov 2026), on the What we know page."""
+    cols = ["navy", "teal", "purple", "sky", "red", "amber"]
+    return ('<div class="bgr-tiles">' + "".join(
+        f'<div class="t-{cols[i % 6]}"><i>{icon(KEY_ICON.get(k, "tick"))}</i><h3>{e(k)}</h3><p>{e(v)}</p></div>' for i, (k, v) in enumerate(KEY)) + "</div>")
 
 
 def build_home():
@@ -421,7 +443,7 @@ def build_know():
   <div class="wrap about" style="align-items:start">
     <div>{camp.sec_head("At a glance", "Key Details", "The dates and the basics for RIAT27, as they stand today.")}
       <div class="btns"><a class="btn or" href="{RIAT}tickets" target="_blank" rel="noopener">RIAT27 tickets</a><a class="btn nv" href="{href("come")}" target="{LINK_TARGET}">Still to come</a></div></div>
-    <div>{key_boxes().replace('class="bgr-key"', 'class="bgr-key" style="margin:0"')}</div>
+    <div>{key_tiles()}</div>
   </div>
 </section>
 {next_prev("know")}
