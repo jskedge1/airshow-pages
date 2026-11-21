@@ -617,5 +617,27 @@ Always use the new logo with the swishes. Never use the old header with the red 
 - `brand/UK-Airshow-Guide-logo-transparent.png`: full colour, navy lettering. For white and light backgrounds.
 - `brand/ukag-header-logo.png`: the same logo with white lettering. For navy and dark backgrounds, where the navy lettering would vanish.
 
-`posters/` holds social posters. `now-on-x.html` is the "We're now on X" poster (`?size=square` gives the square one);
-the PNGs beside it are exported from it at double size and have to be exported again after any edit.
+`posters/` holds social posters, all 1080 x 1350 (4:5 portrait) with the image beside each one exported at double size.
+Poster rules: the swish logo, no rounded corners anywhere, real photos and cut-outs rather than drawn aircraft
+(the Red Arrows Hawk is `camping-layout/img/dl-hawk.webp`), and every fact taken from a page on the site.
+
+- `now-on-x.html` is the "We're now on X" poster, written by hand (`?size=square` gives the square one).
+- The other ten are built by `posters-src/build.py`, which holds their wording, so change them there and not in `posters/`.
+  The comment above each one names the site page its facts came from.
+- After any change run `python3 posters-src/build.py` then `node posters-src/export.js` (add a poster's name to export just
+  that one). The export also warns when wording has run out of room.
+
+| Poster | What it is | Facts from |
+|---|---|---|
+| date-little-gransden-2027 | Date announced, Sunday 29 August 2027 | airshow-news.html, uk-airshow-calendar.html |
+| lineup-midlands-2027 | First aircraft confirmed, Team Raven and Hawker Fury FB.11 | midlands-air-festival.html |
+| season-2027 | The featured shows' 2027 dates | uk-airshow-calendar.html |
+| free-to-watch-2027 | The twelve free to watch shows | uk-airshow-calendar.html |
+| watch-on-youtube | The YouTube channel | youtube.html |
+| what-to-pack | The airfield show top ten | first-airshow-what-to-pack.html |
+| shutter-speeds | Starting shutter speeds | new-to-aviation-photography.html |
+| spotter-red-arrows | Spotter card | aircraft-a-to-z.html |
+| join-the-team | Volunteer recruitment | join-the-team.html |
+| my-airshow-hub | The hub, free to join | join-my-airshow-hub.html |
+
+season-2027 and free-to-watch-2027 copy the calendar as it stood on 21 Nov 2026, so update their lists in build.py when the calendar changes.
