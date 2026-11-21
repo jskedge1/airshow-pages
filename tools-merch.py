@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Builds brand/merch-concepts.html: merch mock-ups drawn around the UK Airshow Guide swoosh logo.
+"""Builds two pages of merch mock-ups drawn around the UK Airshow Guide swoosh logo:
+brand/merch-concepts.html (the full range) and brand/merch-tees-jumpers-mugs.html (the core range
+in seven designs).
 
 Run:  python3 tools-merch.py
 Reads the transparent logo masters in brand/ (uk-airshow-guide-swoosh-*.png) and embeds
@@ -705,6 +707,7 @@ header p{{position:relative;max-width:660px;margin:16px auto 0;color:#cfe0f7;fon
 .tally span{{font-family:var(--st);font-size:14px;letter-spacing:.14em;text-transform:uppercase;border:1.5px solid rgba(255,255,255,.4);
 border-radius:4px;padding:5px 12px;background:rgba(2,13,36,.45)}}
 .tally span b{{color:#ffd23c;font-weight:400}}
+.tally a{{font-family:var(--st);font-size:14px;letter-spacing:.14em;text-transform:uppercase;border-radius:4px;padding:6px 14px;background:#ffd23c;color:#12151b;text-decoration:none}}
 main{{max-width:1240px;margin:0 auto;padding:6px 20px 70px}}
 section{{margin-top:58px}}
 .sechead{{display:flex;gap:18px;align-items:flex-end;margin-bottom:22px;border-bottom:2px solid var(--line);padding-bottom:14px}}
@@ -760,6 +763,7 @@ footer{{text-align:center;color:var(--mute);font-size:13.5px;padding:0 20px 40px
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 {SYM}
+<pattern id="knit" width="7" height="6" patternUnits="userSpaceOnUse"><path d="M0,0 L3.5,5 L7,0" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="1.4"/><path d="M0,-3 L3.5,2 L7,-3" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="1"/></pattern>
 <pattern id="twill" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="2" fill="#000" opacity=".12"/><rect y="2.4" width="5" height=".8" fill="#fff" opacity=".1"/></pattern>
 <linearGradient id="sideShade" x1="0" x2="1" y1="0" y2="0"><stop offset=".2" stop-color="#000" stop-opacity=".24"/><stop offset=".36" stop-color="#000" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".07"/><stop offset=".66" stop-color="#000" stop-opacity="0"/><stop offset=".8" stop-color="#000" stop-opacity=".24"/></linearGradient>
 <linearGradient id="cyl" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".3"/><stop offset=".18" stop-color="#000" stop-opacity="0"/><stop offset=".3" stop-color="#fff" stop-opacity=".28"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/><stop offset=".8" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".36"/></linearGradient>
@@ -775,7 +779,7 @@ footer{{text-align:center;color:var(--mute);font-size:13.5px;padding:0 20px 40px
 <filter id="shBig" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000814" flood-opacity=".55"/></filter>
 <filter id="blur6"><feGaussianBlur stdDeviation="7"/></filter>
 <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="7" result="n"/>
-<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .5 -.19" result="s"/><feComposite in="s" in2="SourceAlpha" operator="in" result="sc"/>
+<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .32 -.12" result="s"/><feComposite in="s" in2="SourceAlpha" operator="in" result="sc"/>
 <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="sc"/></feMerge></filter>
 <filter id="emb" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency=".05 1.1" numOctaves="1" seed="4" result="n"/>
 <feDiffuseLighting in="n" surfaceScale="1.5" diffuseConstant="1.25" lighting-color="#fff" result="lit"><feDistantLight azimuth="250" elevation="52"/></feDiffuseLighting>
@@ -820,7 +824,7 @@ footer{{text-align:center;color:var(--mute);font-size:13.5px;padding:0 20px 40px
 <svg class="hl" viewBox="0 0 {SIZE['sqS'][0]} {SIZE['sqS'][1]}" role="img" aria-label="UK Airshow Guide logo"><use href="#sqS"/></svg>
 <h1>The merch <em>hangar</em></h1>
 <p>{n_items} concepts built around the swoosh logo from the video end cards. Patches, coins, a flight jacket and kit for the crowdline. These are drawn mock-ups to choose from, not finished print files.</p>
-<div class="tally"><span><b>{len(patches)}</b> patches</span><span><b>{len(pins)}</b> pins and coins</span><span><b>{len(clothing)}</b> clothing</span><span><b>{len(headwear)}</b> hats</span><span><b>{len(drink)}</b> drinkware</span><span><b>{len(kit)}</b> show-day kit</span></div>
+<div class="tally"><span><b>{len(patches)}</b> patches</span><span><b>{len(pins)}</b> pins and coins</span><span><b>{len(clothing)}</b> clothing</span><span><b>{len(headwear)}</b> hats</span><span><b>{len(drink)}</b> drinkware</span><span><b>{len(kit)}</b> show-day kit</span><a href="merch-tees-jumpers-mugs.html">Tees, jumpers and mugs &#8594;</a></div>
 </header>
 <div class="stripe"></div>
 
@@ -859,7 +863,243 @@ footer{{text-align:center;color:var(--mute);font-size:13.5px;padding:0 20px 40px
     out = ROOT / "brand" / "merch-concepts.html"
     out.write_text(html, encoding="utf-8")
     print(f"wrote {out} ({len(html) // 1024} KB), {n_items} items")
+    return html
+
+
+# =====================================================================
+# Page two: T-shirts, jumpers and mugs in seven designs
+# =====================================================================
+def place(art, cx, cy, w):
+    """Artwork is drawn in a 200 x 200 box; place it centred on cx,cy at width w."""
+    return f'<g transform="translate({cx - w / 2},{cy - w / 2}) scale({w / 200:.4f})">{art}</g>'
+
+
+def d_phonetic(ink, accent=RED):
+    """U and K in the phonetic alphabet, with their Morse code along the top."""
+    morse = (f'<circle cx="34" cy="24" r="5" fill="{ink}"/><circle cx="50" cy="24" r="5" fill="{ink}"/><rect x="60" y="19" width="26" height="10" rx="5" fill="{ink}"/>'
+             f'<rect x="114" y="19" width="26" height="10" rx="5" fill="{accent}"/><circle cx="150" cy="24" r="5" fill="{accent}"/><rect x="160" y="19" width="26" height="10" rx="5" fill="{accent}"/>')
+    return (morse + f'<rect x="10" y="38" width="180" height="3" fill="{ink}"/>'
+            + text("UNIFORM", 100, 84, 46, ink, ls=1, span=180, font=ST, weight=400)
+            + text("KILO", 100, 154, 86, accent, ls=1, span=180, font=ST, weight=400)
+            + f'<rect x="10" y="164" width="180" height="3" fill="{ink}"/>'
+            + text("AIRSHOW GUIDE", 100, 190, 21, ink, ls=3, span=180))
+
+
+def d_blueprint(ink):
+    """A spotter's general-arrangement drawing with unhelpful labels."""
+    ln = f'stroke="{ink}" fill="none"'
+    return (f'<line x1="100" y1="6" x2="100" y2="186" {ln} stroke-width=".9" stroke-dasharray="9 3 2 3" opacity=".75"/>'
+            + jet(100, 96, 150, 0, "none", f'stroke="{ink}" stroke-width="2.3" stroke-linejoin="round"')
+            + f'<ellipse cx="100" cy="50" rx="4" ry="11" {ln} stroke-width="1.6"/>'
+            f'<path d="M51,112 L51,58 M149,112 L149,58 M51,63 L149,63 M51,63 l7,-3 v6Z M149,63 l-7,-3 v6Z" {ln} stroke-width="1.1"/>'
+            + text("WIDE BIT", 91, 58, 11, ink, "end", 1.5, 600)
+            + f'<path d="M104,24 L138,24 M104,168 L138,168 M84,150 L50,150" {ln} stroke-width="1.1"/>'
+            f'<circle cx="104" cy="24" r="2" fill="{ink}"/><circle cx="104" cy="168" r="2" fill="{ink}"/><circle cx="84" cy="150" r="2" fill="{ink}"/>'
+            + text("POINTY END", 141, 28, 12, ink, "start", 1, 700)
+            + text("LOUD END", 141, 172, 12, ink, "start", 1, 700)
+            + text("WAVE HERE", 47, 154, 12, ink, "end", 1, 700)
+            + text("FIG. 1", 4, 16, 12, ink, "start", 2, 600)
+            + f'<rect x="2" y="184" width="196" height="15" {ln} stroke-width="1"/>'
+            + text("FAST JET &#183; GENERAL ARRANGEMENT &#183; UK AIRSHOW GUIDE", 100, 195, 8.5, ink, ls=1, weight=600, span=186))
+
+
+def d_runway(ink, accent=RED):
+    """Runway 27 for the 2027 season."""
+    dash = "".join(f'<rect x="{100 - w / 2}" y="{y}" width="{w}" height="{h}" fill="#fff"/>'
+                   for y, h, w in ((128, 16, 5), (108, 12, 4), (93, 9, 3), (82, 6, 2.4), (74, 4, 2)))
+    keys = "".join(f'<rect x="{x}" y="176" width="7" height="11" fill="#fff"/>' for x in (40, 52, 64, 76, 117, 129, 141, 153))
+    return (text("CLEARED FOR", 4, 22, 15, ink, "start", 3, 700, span=96)
+            + text("TAKE-OFF", 4, 52, 31, accent, "start", 1, 400, span=104, font=ST)
+            + f'<path d="M100,70 Q116,68 134,44" fill="none" stroke="{accent}" stroke-width="4" stroke-linecap="round"/>'
+            f'<path d="M104,74 Q120,72 138,50" fill="none" stroke="{BLUE}" stroke-width="4" stroke-linecap="round"/>'
+            + jet(150, 30, 46, 52, ink)
+            + f'<path d="M25,192 L175,192 L118,70 L82,70 Z" fill="#2b313b" stroke="{ink}" stroke-width="2"/>'
+            f'<line x1="4" y1="70" x2="196" y2="70" stroke="{ink}" stroke-width="2"/>'
+            + dash + keys + text("27", 100, 170, 30, WHITE, ls=2, font=ST, weight=400))
+
+
+def d_sunset(ink):
+    """A 1970s striped sun with a three-ship climbing through it."""
+    i = uid("s")
+    bands = "".join(f'<rect x="20" y="{y}" width="160" height="{h}" fill="{c}"/>' for y, h, c in
+                    ((8, 46, "#ffd23c"), (54, 26, "#ffb01f"), (84, 20, "#ff8a1a"), (109, 15, "#ff6a13"), (130, 11, RED), (148, 8, "#c2081a")))
+    ships = ""
+    for x, y in ((100, 52), (72, 84), (128, 84)):
+        ships += f'<line x1="{x}" y1="{y + 10}" x2="{x}" y2="170" stroke="#fff" stroke-width="3"/>' + jet(x, y, 40, 0, DEEP)
+    return (f'<clipPath id="{i}"><circle cx="100" cy="84" r="76"/></clipPath><g clip-path="url(#{i})">{bands}{ships}</g>'
+            + text("EYES TO THE SKIES", 100, 186, 21, ink, ls=1, span=178, font=ST, weight=400)
+            + text("UK AIRSHOW GUIDE", 100, 199, 9.5, ink, ls=4, weight=600, span=124))
+
+
+def d_altimeter(ink):
+    """A cockpit altimeter with 2027 in the pressure window."""
+    cx, cy = 100, 88
+    ticks = ""
+    for k in range(50):
+        a = math.radians(k * 7.2 - 90)
+        r0 = 66 if k % 5 == 0 else 72
+        ticks += (f'<line x1="{cx + r0 * math.cos(a):.1f}" y1="{cy + r0 * math.sin(a):.1f}" x2="{cx + 78 * math.cos(a):.1f}" '
+                  f'y2="{cy + 78 * math.sin(a):.1f}" stroke="#fff" stroke-width="{2.4 if k % 5 == 0 else 1.1}"/>')
+    nums = "".join(text(str(k), cx + 54 * math.cos(math.radians(k * 36 - 90)), cy + 54 * math.sin(math.radians(k * 36 - 90)) + 6, 17, WHITE, ls=0)
+                   for k in range(10))
+    return (f'<circle cx="{cx}" cy="{cy}" r="86" fill="{ink}"/><circle cx="{cx}" cy="{cy}" r="80" fill="#0a0f18"/>' + ticks + nums
+            + text("ALT", cx, 62, 10, "#9fb4d6", ls=3, weight=600)
+            + f'<rect x="112" y="80" width="34" height="16" rx="2" fill="#fff"/>' + text("2027", 129, 93, 13, DEEP, ls=1)
+            + text("UKAG", cx, 126, 9, TEAL, ls=3)
+            + f'<path d="M{cx - 3},{cy + 8} L{cx},{cy - 70} L{cx + 3},{cy + 8}Z" fill="#fff" transform="rotate(64 {cx} {cy})"/>'
+            f'<path d="M{cx - 5},{cy + 6} L{cx},{cy - 44} L{cx + 5},{cy + 6}Z" fill="#fff" transform="rotate(-128 {cx} {cy})"/>'
+            f'<path d="M{cx - 4},{cy - 58} L{cx + 4},{cy - 58} L{cx},{cy - 68}Z" fill="{RED}" transform="rotate(-20 {cx} {cy})"/>'
+            f'<circle cx="{cx}" cy="{cy}" r="7" fill="#fff"/><circle cx="{cx}" cy="{cy}" r="2.5" fill="#0a0f18"/>'
+            + text("ALWAYS LOOKING UP", 100, 196, 18, ink, ls=1, span=172, font=ST, weight=400))
+
+
+def d_heart(ink):
+    """Two jets drawing a smoke heart."""
+    return (f'<path d="M100,166 C52,128 14,92 30,56 C44,26 82,30 87,56" fill="none" stroke="{RED}" stroke-width="10" stroke-linecap="round"/>'
+            f'<path d="M100,166 C148,128 186,92 170,56 C156,26 118,30 113,56" fill="none" stroke="{BLUE}" stroke-width="10" stroke-linecap="round"/>'
+            + jet(86, 70, 32, 172, ink) + jet(114, 70, 32, 188, ink)
+            + text("AIRSHOW SEASON", 100, 196, 20, ink, ls=1, span=176, font=ST, weight=400))
+
+
+SWEAT = "M150,56 C170,78 230,78 250,56 L340,84 L394,250 L348,270 L316,196 L316,376 L84,376 L84,196 L52,270 L6,250 L60,84 Z"
+
+
+def sweat(colour, inner, knit=False):
+    over = ('<path d="M150,56 C170,78 230,78 250,56 L259,61 C232,96 168,96 141,61Z" fill="rgba(0,0,0,.22)" stroke="rgba(0,0,0,.3)" stroke-width="1"/>'
+            '<rect x="84" y="354" width="232" height="22" fill="rgba(0,0,0,.2)"/>'
+            '<path d="M13,230 L59,250 L52,270 L6,250Z M387,230 L341,250 L348,270 L394,250Z" fill="rgba(0,0,0,.22)"/>'
+            '<path d="M141,61 L84,196 M259,61 L316,196" stroke="rgba(0,0,0,.2)" stroke-width="1.5" fill="none"/>')
+    if knit:
+        inner += '<rect width="400" height="400" fill="url(#knit)"/>'
+    return cloth(SWEAT, colour, inner, over)
+
+
+def fairisle():
+    def zig(y, c, amp=6):
+        pts = " ".join(f"{x},{y + (amp if (x // 10) % 2 else -amp)}" for x in range(0, 401, 10))
+        return f'<polyline points="{pts}" fill="none" stroke="{c}" stroke-width="3.2"/>'
+    jets = "".join(jet(x, 142, 24, 0, WHITE) for x in range(14, 400, 31))
+    dia = "".join(f'<path d="M{x},176 l8,10 l-8,10 l-8,-10Z" fill="#fff"/>' for x in range(10, 400, 22))
+    stars = "".join(star(x, 232, 9, WHITE if k % 2 else "#6fd3ff") for k, x in enumerate(range(12, 400, 27)))
+    return (zig(116, WHITE) + jets + zig(160, "#6fd3ff") + f'<rect y="170" width="400" height="32" fill="{RED}"/>' + dia
+            + zig(212, "#6fd3ff") + stars + zig(252, WHITE)
+            + f'<rect y="266" width="400" height="5" fill="{RED}"/><rect y="276" width="400" height="5" fill="{BLUE}"/>')
+
+
+def build_range(first_page):
+    head = first_page[:first_page.index('<div class="stripe"></div>\n<header>')]
+    head = head.replace("<title>UK Airshow Guide merch concepts</title>", "<title>UK Airshow Guide tees, jumpers and mugs</title>")
+    PALE, GREY, CREAM, ROYAL, SKYB, LINE = "#fbfbf9", "#c3c8cf", "#f6efdc", "#0d3f9c", "#bfe3fb", "#cfe8ff"
+
+    def tile(art, dark=True):
+        bg = (f'<rect x="30" y="30" width="340" height="340" rx="20" fill="{INK if dark else PALE}" filter="url(#sh)"/>'
+              f'<rect x="42" y="42" width="316" height="316" rx="12" fill="none" stroke="{"#fff" if dark else NAVY}" stroke-opacity=".25" stroke-dasharray="6 5"/>')
+        return svg(bg + art)
+    designs = [
+        card("A", "The logo", "The swoosh logo on its own. On dark items it sits on its white cut-out backing.",
+             ["All three products"], tile(logo(200, 200, 280, "sqS")), "bp"),
+        card("B", "Uniform Kilo", "U and K in the pilots' phonetic alphabet, with their Morse code across the top.",
+             ["2 colour print"], tile(place(d_phonetic(NAVY), 200, 200, 270), False), "red"),
+        card("C", "Spotter's blueprint", "A technical drawing of a fast jet with labels a seven-year-old would write.",
+             ["1 colour line print"], tile(place(d_blueprint(LINE), 200, 200, 280)), "bp"),
+        card("D", "Runway 27", "Cleared for take-off on runway 27, for the 2027 season. Next year it becomes runway 28.",
+             ["4 colour print", "Yearly edition"], tile(place(d_runway(NAVY), 200, 200, 270), False), "tarmac"),
+        card("E", "Retro sunset", "A 1970s striped sun with a three-ship climbing through it.",
+             ["6 colour print"], tile(place(d_sunset(WHITE), 200, 200, 280)), "sky"),
+        card("F", "Altimeter", "A cockpit altimeter with 2027 in the pressure window.",
+             ["3 colour print"], tile(place(d_altimeter(NAVY), 200, 200, 270), False), "night"),
+        card("G", "Smoke heart", "Two jets drawing a heart in red and blue smoke, a display favourite.",
+             ["3 colour print"], tile(place(d_heart(NAVY), 200, 200, 270), False), "sky"),
+    ]
+    tees = [
+        card("T-01", "Logo tee, navy", "Design A across the chest.", ["Navy", "Unisex S to 3XL"],
+             svg(tee(NAVY, logo(200, 146, 186, "sqS"))), "tarmac"),
+        card("T-02", "Logo tee, white", "Design A printed straight onto white.", ["White", "Unisex S to 3XL"],
+             svg(tee(PALE, logo(200, 146, 176, "sqL"), "#ececE6")), "sky"),
+        card("T-03", "Uniform Kilo tee", "Design B on heather grey.", ["Heather grey", "Navy and red ink"],
+             svg(tee(GREY, place(d_phonetic(NAVY), 200, 168, 150), NAVY)), "red"),
+        card("T-04", "Blueprint tee", "Design C in pale blue line on royal blue, like a real blueprint.", ["Royal blue", "1 colour"],
+             svg(tee(ROYAL, place(d_blueprint(LINE), 200, 172, 168))), "studio"),
+        card("T-05", "Runway 27 tee", "Design D on sand.", ["Sand", "Yearly edition"],
+             svg(tee(SAND, place(d_runway(NAVY), 200, 170, 156), NAVY)), "tarmac"),
+        card("T-06", "Retro sunset tee", "Design E on black, where the sun colours glow.", ["Black", "6 colour"],
+             svg(tee("#0b0d12", place(d_sunset(WHITE), 200, 172, 162))), "sky"),
+        card("T-07", "Altimeter tee", "Design F on signal red.", ["Red", "3 colour"],
+             svg(tee("#d3101a", place(d_altimeter(WHITE), 200, 170, 152))), "night"),
+        card("T-08", "Smoke heart tee", "Design G on sky blue.", ["Sky blue", "Fitted cut option"],
+             svg(tee(SKYB, place(d_heart(NAVY), 200, 170, 150), NAVY)), "skyrays"),
+    ]
+    jumpers = [
+        card("J-01", "Logo sweatshirt", "Design A on a navy crew-neck.", ["Navy", "Heavyweight fleece"],
+             svg(sweat(NAVY, logo(200, 196, 178, "sqS"))), "bp"),
+        card("J-02", "Uniform Kilo hoodie", "Design B on heather grey with navy cords.", ["Heather grey", "Kangaroo pocket"],
+             svg(hoodie(GREY, NAVY, place(d_phonetic(NAVY), 200, 226, 116))), "red"),
+        card("J-03", "Retro sunset sweatshirt", "Design E on cream, the vintage-shop look.", ["Cream", "6 colour"],
+             svg(sweat(CREAM, place(d_sunset(NAVY), 200, 206, 158))), "sky"),
+        card("J-04", "Blueprint sweatshirt", "Design C large on royal blue.", ["Royal blue", "1 colour"],
+             svg(sweat(ROYAL, place(d_blueprint(LINE), 200, 208, 166))), "studio"),
+        card("J-05", "Airshow knit", "A proper knitted jumper with rows of jets, stars and smoke-trail zigzags. The Christmas jumper for people who would rather it were July.",
+             ["Knitted, not printed", "Woven logo label"],
+             svg(sweat(NAVY, fairisle() + f'<rect x="262" y="330" width="42" height="18" rx="2" fill="#fff"/>' + logo(283, 339, 34, "wdL"), True)), "night", wild=True),
+        card("J-06", "Runway 27 hoodie", "Design D on teal with white cords.", ["Teal", "Yearly edition"],
+             svg(hoodie("#078a78", WHITE, place(d_runway(WHITE), 200, 228, 116))), "tarmac"),
+    ]
+    grid = "".join(f'<line x1="{x}" y1="80" x2="{x}" y2="340" stroke="#fff" stroke-opacity=".12"/>' for x in range(70, 310, 20)) \
+        + "".join(f'<line x1="60" y1="{y}" x2="310" y2="{y}" stroke="#fff" stroke-opacity=".12"/>' for y in range(100, 340, 20))
+    mugs = [
+        card("G-01", "Logo mug", "Design A on white with a red handle and rim.", ["11 oz ceramic", "Both sides"],
+             svg(mug(PALE, logo(185, 210, 186, "sqL"), RED, RED)), "sky"),
+        card("G-02", "Blueprint mug", "Design C on royal blue with the drawing-paper grid wrapping all the way round.", ["11 oz ceramic", "Full wrap"],
+             svg(mug(ROYAL, place(d_blueprint(LINE), 185, 212, 176), None, ROYAL, grid)), "studio"),
+        card("G-03", "Uniform Kilo mug", "Design B on white with a navy handle.", ["11 oz ceramic", "2 colour"],
+             svg(mug(PALE, place(d_phonetic(NAVY), 185, 212, 168), None, NAVY)), "red"),
+        card("G-04", "Altimeter mug", "Design F on matt black. The dial faces out when you drink.", ["Matt black", "3 colour"],
+             svg(mug("#12151b", place(d_altimeter(WHITE), 185, 214, 178), None, "#12151b")), "night"),
+        card("G-05", "Retro sunset mug", "Design E on cream with an orange handle.", ["Cream glaze", "6 colour"],
+             svg(mug(CREAM, place(d_sunset(NAVY), 185, 214, 176), None, ORANGE)), "sky"),
+        card("G-06", "Smoke heart mug", "Design G on white with a blue handle. The obvious gift.", ["11 oz ceramic", "3 colour"],
+             svg(mug(PALE, place(d_heart(NAVY), 185, 214, 170), None, BLUE)), "skyrays"),
+    ]
+    body = f"""<div class="stripe"></div>
+<header>
+<div class="rays"></div>
+<svg class="hl" viewBox="0 0 {SIZE['sqS'][0]} {SIZE['sqS'][1]}" role="img" aria-label="UK Airshow Guide logo"><use href="#sqS"/></svg>
+<h1>Tees, jumpers <em>and mugs</em></h1>
+<p>Seven designs, the logo and six aviation themes, shown on {len(tees)} T-shirts, {len(jumpers)} jumpers and {len(mugs)} mugs. Any design can go on any product. These are drawn mock-ups to choose from, not finished print files.</p>
+<div class="tally"><span><b>7</b> designs</span><span><b>{len(tees)}</b> T-shirts</span><span><b>{len(jumpers)}</b> jumpers</span><span><b>{len(mugs)}</b> mugs</span><a href="merch-concepts.html">Full merch hangar &#8594;</a></div>
+</header>
+<div class="stripe"></div>
+
+<main>
+{section("01", "The seven designs", "The artwork on its own, before it goes on anything.", designs, True)}
+{section("02", "T-shirts", "One of each design, plus the logo on both navy and white.", tees, True)}
+{section("03", "Jumpers", "Crew-neck sweatshirts, hoodies and one knitted jumper.", jumpers)}
+{section("04", "Mugs", "All standard 11 oz mugs, so any print-on-demand supplier can make them.", mugs)}
+
+<section><div class="sechead"><span class="num">05</span><div><h2>Good to know</h2><p>Before any of these go to a printer.</p></div></div>
+<div class="two">
+<div class="panel"><h3>Mix and match</h3>
+<ul>
+<li><b>Every design fits every product.</b> The combinations here are suggestions. Tell me which pairings you want and I will redraw them.</li>
+<li><b>Colours can change.</b> Each design works in a dark-ink and a light-ink version, so it can go on any cloth or glaze colour.</li>
+<li><b>Runway 27 is this season's number.</b> It can be reissued as runway 28 for 2028, which gives people a reason to buy again.</li>
+</ul></div>
+<div class="panel"><h3>Before ordering</h3>
+<ul>
+<li><b>Designs B to G are drawn as vectors,</b> so they scale to any print size. I can export each one as a print-ready file.</li>
+<li><b>The logo still needs a vector version.</b> The current PNG is fine for a chest print or a mug, but not for anything larger than about 14 cm.</li>
+<li><b>The knitted jumper is made to order</b> by a knitwear supplier, usually with a minimum run of about 50.</li>
+<li><b>The jets are generic shapes</b> I drew, not any real aircraft type or display team.</li>
+</ul></div>
+</div></section>
+</main>
+<footer>UK Airshow Guide by The Big Guide to UK Airshows. Concept sheet for internal use.</footer>
+</body></html>
+"""
+    out = ROOT / "brand" / "merch-tees-jumpers-mugs.html"
+    out.write_text(head + body, encoding="utf-8")
+    print(f"wrote {out} ({len(head + body) // 1024} KB)")
 
 
 if __name__ == "__main__":
-    build()
+    build_range(build())
