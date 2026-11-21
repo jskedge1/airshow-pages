@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8">
+<!-- "The glass effect" design (asked to save, 17 Nov 2026): the house style for every UK Airshow Guide information video.
+     Big uppercase Barlow words slam, rise and whip in on a 104 bpm beat over navy, key words filled with real photos
+     (white outline so they read), mint highlight bars that sweep in, red warnings, a red full screen card for each step
+     ("Step 1" in Barlow bold and a huge title), photo panels in white print frames beside the words, a mint story progress bar,
+     film grain, and an end card with the swish logo from the airshow trailers in the centre, the ukairshowguide.co.uk button under it,
+     and Instagram, Facebook and YouTube along the bottom.
+     One engine (kinetic.js + film4.js), one content file per film. Portrait 1080 x 1920, or ?fmt=land for 1920 x 1080.
+     Open this page in a browser to watch a live preview. See README.md to render a video. -->
+
+<title>The glass effect: How to plan your 2027 airshow</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+html,body{margin:0;background:#000;overflow:hidden}
+*{box-sizing:border-box;font-family:inherit}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;background:#0E2131;overflow:hidden;font-family:'Assistant';font-weight:600;color:#fff;transform-origin:0 0}
+.b{font-family:'Barlow'}
+.a{position:absolute;visibility:hidden}
+#grain{position:absolute;left:0;top:0;width:1080px;height:1920px;opacity:.07;pointer-events:none;z-index:90}
+.paper{background:#fff;color:#13293C;box-shadow:8px 10px 0 rgba(0,0,0,.35)}
+.print{background:#fff;padding:16px 16px 16px;box-shadow:10px 12px 0 rgba(0,0,0,.4)}
+.print img,.print canvas{display:block;width:100%;object-fit:cover}
+.print .cap{font-family:'Barlow';font-weight:700;font-size:26px;color:#13293C;padding:12px 4px 0;line-height:1.1}
+.roundel{width:120px;height:120px;border-radius:50%;background:#D74949;color:#fff;font-family:'Barlow';font-weight:800;font-size:70px;display:flex;align-items:center;justify-content:center;box-shadow:6px 8px 0 rgba(0,0,0,.35)}
+.steplbl{font-family:'Barlow';font-weight:700;font-size:28px;letter-spacing:3px;color:#32B4AF;white-space:nowrap}
+.chip{background:rgba(50,180,175,.16);color:#5FE3D6;font-family:'Barlow';font-weight:700;font-size:28px;padding:7px 16px;border-left:6px solid #32B4AF;white-space:nowrap}
+.note{font-family:'Assistant';font-weight:600;font-size:36px;line-height:1.3;color:#C9D6E0}
+.mint{color:#5FE3D6}.teal{color:#32B4AF}.red{color:#D74949}
+.stamp{border:6px solid #D74949;color:#D74949;font-family:'Barlow';font-weight:800;font-size:44px;letter-spacing:3px;padding:4px 18px;white-space:nowrap;background:rgba(255,255,255,.92)}
+.btn{background:#D74949;color:#fff;font-family:'Barlow';font-weight:700;font-size:40px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 #9c2f2f;padding:16px 34px;white-space:nowrap}
+.bul{font-family:'Barlow';font-weight:700;font-size:42px;line-height:1.1;color:#fff;width:800px}
+.box{width:62px;height:62px;border:6px solid #C9D6E0}
+.guide{background:#fff;color:#13293C;font-family:'Barlow';font-weight:700;font-size:33px;padding:10px 20px 10px 18px;border-left:10px solid #D74949;white-space:nowrap;box-shadow:6px 8px 0 rgba(0,0,0,.35)}
+.guide span{color:#5a6b78;font-family:'Assistant';font-weight:600;font-size:27px;display:block;line-height:1.1}
+.dot{width:54px;height:54px;border-radius:50%;border:5px solid #32B4AF;font-family:'Barlow';font-weight:800;font-size:28px;color:#32B4AF;display:flex;align-items:center;justify-content:center;background:#0E2131}
+.dot.on{background:#D74949;border-color:#D74949;color:#fff}
+.pth{font-family:'Barlow';font-weight:700;font-size:44px;white-space:nowrap}
+.when{font-family:'Assistant';font-weight:700;font-size:33px;color:#5FE3D6;white-space:nowrap}
+.fill{background-size:cover;background-position:50% 50%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;-webkit-text-stroke:3px rgba(255,255,255,.9)}
+.hl{color:#0E2131;background:linear-gradient(#5FE3D6,#5FE3D6) no-repeat 0 0 / 0% 100%;padding:0 .12em}
+</style></head>
+<body>
+<div id="stage"><canvas id="grain" width="540" height="960"></canvas></div>
+<script src="kinetic.js"></script>
+<script src="content-plan.js"></script>
+<script src="film4.js"></script>
+<script>
+// live preview in a browser (the renderer drives setT itself)
+if (!navigator.webdriver) window.ready().then(() => {
+  const st = document.getElementById('stage'), fit = () => { const s = Math.min(innerWidth / SW, innerHeight / SH); st.style.transform = `scale(${s})`; };
+  fit(); addEventListener('resize', fit);
+  const t0 = performance.now(); (function f() { setT(((performance.now() - t0) / 1000) % DUR); requestAnimationFrame(f); })();
+});
+</script>
+</body></html>
