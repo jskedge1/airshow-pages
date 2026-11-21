@@ -199,6 +199,9 @@ ICON = {
     "plus": '<path d="M12 5v14M5 12h14"/>',
     "chev": '<path d="M9 5l7 7-7 7"/>',
     "search": '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',
+    "clock": '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    "bulb": '<path d="M9 18h6M10 21h4M8.5 14.5a6 6 0 1 1 7 0c-.6.5-1 1.2-1 2H9.500c0-.8-.4-1.500-1-2z"/>',
+    "cloud": '<path d="M7 17a4 4 0 0 1 .500-7.970A5.500 5.500 0 0 1 18 10.500 3.250 3.250 0 0 1 17.500 17zM9 20l-1 2M13 20l-1 2M17 20l-1 2"/>',
     "quote": '<path d="M10 7H6v6h4v2a3 3 0 0 1-3 3M19 7h-4v6h4v2a3 3 0 0 1-3 3"/>',
     "shower": '<path d="M5 21V8a4 4 0 0 1 8 0M9 10h8M11 14v1M15 14v1M13 17v1M17 17v1"/>',
     "dog": '<path d="M5 9l2-4 3 3h4l3-3 2 4-1 6a5 5 0 0 1-5 4h-2a5 5 0 0 1-5-4z"/><path d="M10 12h0M14 12h0M12 15v1"/>',
@@ -547,15 +550,28 @@ a.hx:hover .go svg{transform:translateX(6px)}
 .qcard b{display:block;margin-top:16px;font-size:21px;color:var(--ink)}
 .qcard span{display:block;font-size:15.5px;color:var(--or-ink);font-weight:600}
 
-/* tips: a checkerboard of photos and colour tiles */
+/* tips: a header joined to a checkerboard of photos and colour tiles */
+.tipsec{padding-top:40px}
+.tips-h{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr);gap:8px 26px;align-items:center;background:var(--navy);color:#fff;padding:30px 34px;border-top:6px solid var(--or)}
+.tips-h>i{width:72px;height:72px;background:var(--or);color:#fff;display:grid;place-items:center}
+.tips-h>i svg{width:36px;height:36px}
+.tips-h .kick{color:var(--teal)}
+.tips-h .h{color:#fff;margin-top:2px}
+.tips-h p{font-size:18px;line-height:1.5;color:#E6EDF1;border-left:4px solid var(--teal);padding-left:22px}
+.tips-f{margin-top:26px;text-align:center;font-size:18px;color:var(--ink);font-weight:500}
+.tips-f .more{margin-left:8px}
 .mosaic{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 .mosaic>*{aspect-ratio:1/1.08;min-height:0;overflow:hidden;position:relative}
 .mosaic img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.22,.61,.36,1)}
 .mosaic figure:hover img{transform:scale(1.08)}
-.tip{display:flex;flex-direction:column;justify-content:center;padding:clamp(22px,3vw,44px);transition:filter .3s}
-.tip:hover{filter:brightness(1.1)}
-.tip p{font-size:clamp(18px,1.75vw,24px);line-height:1.45;font-style:italic}
-.tip b{display:block;margin-top:18px;font-size:21px}
+.tip{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:clamp(22px,3vw,44px);transition:filter .3s}
+.tip:hover{filter:brightness(1.08)}
+.tip i{width:58px;height:58px;border-radius:50%;background:#fff;color:var(--navy);display:grid;place-items:center;margin-bottom:18px;flex:none;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.tip:hover i{transform:scale(1.12) rotate(-8deg)}
+.tip i svg{width:28px;height:28px}
+.tip.t-soft i{background:var(--navy);color:#fff}
+.tip b{display:block;font:800 clamp(22px,2.2vw,30px)/1.1 "Barlow",sans-serif}
+.tip p{margin-top:10px;font-size:clamp(17px,1.5vw,20px);line-height:1.45}
 .tip.t-red{background:var(--or);color:#fff}
 .tip.t-navy{background:var(--navy);color:#fff}
 .tip.t-soft{background:var(--soft);color:var(--body)}
@@ -822,6 +838,8 @@ fieldset.fld{border:0}
   .qband .qp{margin-bottom:-60px}
   .qcard{left:auto;right:24px;width:min(430px,80%)}
   .mosaic{grid-template-columns:1fr 1fr}
+  .tips-h{grid-template-columns:auto minmax(0,1fr)}
+  .tips-h p{grid-column:1/-1}
   .gcards{grid-template-columns:1fr 1fr}
 }
 @media (max-width:720px){
@@ -842,9 +860,17 @@ fieldset.fld{border:0}
   .qband{padding-top:60px;margin-bottom:210px}
   .qcard{right:18px;left:18px;width:auto;bottom:-210px;padding:42px 22px 24px}
   .mosaic>*{aspect-ratio:1/1.15}
-  .tip{padding:16px}
-  .tip p{font-size:15.5px;line-height:1.4}
-  .tip b{font-size:16px;margin-top:10px}
+  .tip{padding:14px}
+  .tip i{width:40px;height:40px;margin-bottom:10px}
+  .tip i svg{width:20px;height:20px}
+  .tip b{font-size:18px}
+  .tip p{font-size:15px;line-height:1.35;margin-top:6px}
+  .tips-h{grid-template-columns:auto minmax(0,1fr);padding:20px 18px}
+  .tips-h>i{width:52px;height:52px}
+  .tips-h>i svg{width:26px;height:26px}
+  .tips-h p{grid-column:1/-1;font-size:16.5px;margin-top:8px;padding-left:14px}
+  .tipsec{padding-top:24px}
+  .tips-f .more{display:block;margin:8px 0 0}
   .gcards{grid-template-columns:1fr}
 }
 .sample-bar{background:var(--amber);color:var(--ink);font:600 15px/1.4 "Barlow",sans-serif;text-align:center;padding:9px 18px}
@@ -989,7 +1015,7 @@ fieldset.fld{border:0}
 MOTION_JS = r"""<script>
 (function(){
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-var sel='.sec-head,.about>*,.finder,.cc,.fc,.none,.board-scroll,.stats>div,.fe-main,.fe-side>*,.rowi,.qband .wrap>*,.gh,.gc,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules-h,.rules>div,.where>*,.formrow>*,.gal figure,.ft .cols>div';
+var sel='.sec-head,.about>*,.finder,.cc,.fc,.none,.board-scroll,.stats>div,.fe-main,.fe-side>*,.rowi,.qband .wrap>*,.gh,.gc,.tips-h,.mosaic>*,.tips-f,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules-h,.rules>div,.where>*,.formrow>*,.gal figure,.ft .cols>div';
 var els=[].slice.call(document.querySelectorAll(sel));
 if(!els.length||!('IntersectionObserver' in window))return;
 els.forEach(function(el){var sibs=[].filter.call(el.parentNode.children,function(x){return els.indexOf(x)>-1});
@@ -1414,26 +1440,31 @@ def build_home(live):
       <p class="lede">If this is your first time camping at an airshow, I would start with my camping guides. They cover where to camp, how to pitch up and what to pack, and the kit calculator shows what it really costs compared with a hotel.</p>
       <div class="btns"><a class="btn or inv" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read the camping guides</a><a class="btn wh" href="{SITE}/build-your-kit-calculator?list=camping" target="_top">Camping kit calculator</a></div>
     </div>
-    <div class="qp"><img src="{IMG}group-pitch.jpg" alt="Three tents on one pitch with camping chairs and a table" loading="lazy" decoding="async"></div>
+    <div class="qp"><img src="{IMG}bell-tents.jpg" alt="Bell tents and cars on a camping field, with bunting along the track" loading="lazy" decoding="async"></div>
     <blockquote class="qcard"><i>{icon("quote")}</i><p>My first airshow camping trip was RIAT in 2014, and I got plenty wrong: forgotten kit, no plan and far too little research. These guides are everything I wish someone had told me.</p><b>Jack Skedge</b><span>Founder and Managing Editor</span></blockquote>
   </div>
 </section>
 
-<section class="sec" id="tips" aria-label="Camping tips" style="padding-top:20px">
-  <div class="wrap">{sec_head("Camping tips", "Tips From My Own Pitch", "A few things I have learned from years of camping at the shows.", mid=True)}</div>
+<section class="tipsec" id="tips" aria-label="Camping tips">
+  <div class="wrap"><div class="tips-h">
+    <i>{icon("tent")}</i>
+    <div><span class="kick">Camping tips</span><h2 class="h">Tips From My Own Pitch</h2></div>
+    <p>Four things I have learned from years of camping at the shows. They are small, but they make the weekend a lot easier.</p>
+  </div></div>
   <div class="mosaic">
     <figure><img src="{IMG}field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" loading="lazy" decoding="async"></figure>
-    <div class="tip t-red"><p>Arrive early and you get the pick of the field.</p><b>Arrive early</b></div>
+    <div class="tip t-red"><i>{icon("clock")}</i><b>Arrive early</b><p>Arrive early and you get the pick of the field.</p></div>
     <figure><img src="{IMG}lit-pitches.jpg" alt="Pitches lit up with coloured light poles at dusk" loading="lazy" decoding="async"></figure>
-    <div class="tip t-navy"><p>Light poles make finding your pitch at night so much easier.</p><b>Light it up</b></div>
-    <div class="tip t-navy sw"><p>Lay it all out at home and check it before it goes in the car.</p><b>Check your kit</b></div>
+    <div class="tip t-navy"><i>{icon("bulb")}</i><b>Light it up</b><p>Making it bright and loud can make your pitch stand out, and it is fun too.</p></div>
+    <div class="tip t-teal"><i>{icon("list")}</i><b>Check your kit</b><p>Lay it all out at home and check it before it goes in the car.</p></div>
     <figure><img src="{IMG}kit-laid-out.jpg" alt="Camping kit laid out on a lawn before packing" loading="lazy" decoding="async"></figure>
-    <div class="tip t-soft sw"><p>When the sky looks like this, check every guy line.</p><b>Watch the weather</b></div>
+    <div class="tip t-soft"><i>{icon("cloud")}</i><b>Watch the weather</b><p>When the sky looks like this, check every guy line.</p></div>
     <figure><img src="{IMG}storm-sky.jpg" alt="Dark storm clouds over a row of pitches" loading="lazy" decoding="async"></figure>
   </div>
+  <div class="wrap"><p class="tips-f">There is a lot more where these came from. <a class="more" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read all my camping guides</a></p></div>
 </section>
 
-<section class="sec" id="guides" aria-label="Plan your trip" style="padding-top:0">
+<section class="sec" id="guides" aria-label="Plan your trip">
   <div class="wrap">
     <div class="gh">{sec_head("Plan your trip", "More From The Guide")}<a class="btn or" href="{SITE}/airshow-questions" target="_top">Questions and answers</a></div>
     <div class="gcards">
