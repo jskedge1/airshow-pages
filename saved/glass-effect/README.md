@@ -26,6 +26,7 @@ One engine, one content file per film, two formats:
 | UK Airshow Guide advert, glass effect cut (about 44 seconds) | `index-advert.html` | 5 |
 | UK Airshow Guide advert, cinematic cut (trailer style, about 45 seconds) | `index-advert-cine.html` | 7 |
 | UK Airshow Guide advert, cinematic cut, Z6 video version (Cosford trailer look, about 45 seconds) | `index-advert-cine-video.html` | 7 |
+| UK Airshow Guide 2027 season trailer (Hollywood trailer style, black cards, about 90 seconds) | `index-trailer-2027.html` | 6 parts |
 | Starter for a new film | `index-template.html` | 1 |
 | Starter for a new film in the cinematic layout | `index-cine-template.html` | 1 |
 
@@ -101,6 +102,23 @@ Make one:
 - Master with `sh master.sh <dir>` (about -14 LUFS, true peak under -1 dBFS), encode at 60 fps with `-crf 16`.
 
 **Video clips in cine.js.** A shot can be a video clip: `{ clip: 'cine/<name>L', clipP: 'cine/<name>', n }` is a folder of 60 fps frames (`0001.jpg` on), shown frame by frame with the same grade, push in, dim and caption. Build the folders from Jack's Z6 4K clips with `uv run --with numpy python3 make-clip-frames.py clips-<film>.json` (needs ffmpeg). The JSON lists each clip's source on Jacks Drive, in point, length, zoom (`cw`) and slow motion (`speed`). The script runs the cinematic trailer clean up: it tracks the aircraft and keeps it centred (which also steadies the shot), removes sensor dust on plain sky, matches white balance on neutral sky, sets exposure and lifts the shadows, and lightly denoises. It writes 1920 x 1080 frames and a 1080 x 1920 crop around the aircraft. The frames are not stored in git (`cine/v-*` is ignored), so run it again after cloning. `render.mjs` waits for each clip frame to load (`window.SETTLE`). Set `CHROME=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` to render with an installed Chrome.
+
+## The 2027 season trailer (the trailer layout, 21 Nov 2026)
+`content-trailer-2027.js` (`index-trailer-2027.html`) is a 90 second Hollywood style trailer for the whole site, in the Cosford trailer look, with footage from four of Jack's shows: RAF Cosford, Eastbourne, Duxford and Shuttleworth. Use it as the starting point for any new trailer.
+- **The story:** the season is full of very different days out, there are 46 shows and one summer, and the guide is the one place that helps you choose and plan them.
+  1. Black, "Every summer", then two slow motion hero shots under "The sky comes alive", and the full black glass card "The 2027 season is coming".
+  2. Four show chapters of 16 beats each: a black card with the show name and the site's own description (4 beats), then four shots (4, 4, 2 and 2 beats).
+  3. The turn, on black: "46 shows, confirmed for 2027 so far", "One summer", then the glass title "Every UK airshow, one easy guide" (the home page headline).
+  4. What the guide gives you: six glass slides of 8 beats each (3.4 s, Jack's reading pace) on matching pictures: the calendar, a show guide, transport, where to watch, camera settings and My Airshow Hub.
+  5. The climax: four two beat cuts and eight one beat cuts round the four shows, then one long slow motion shot under "Plan your 2027 season".
+  6. The full black glass card "Your summer starts here", then the standard end card.
+- **Times are music beats.** The content file writes every time as `M(beat)` at 140 bpm (a bar is 4 beats, 1.714 s), so the shot list reads like the music. 196 beats is 84 s, then 5.5 s of end card.
+- **Black cards (`slam: true` on a title, new in `cine.js`):** a full black screen with huge bold white Barlow 800 capitals that are there on the first frame of the beat, no fade. `'Line one|line two'` puts a smaller mint line under a mint rule half a beat later. Use them for show names and short punchy lines. The glass lockups stay for the big title moments, so it still looks like the Cosford trailer.
+- **Captions** give the show and the year only ("RAF Cosford Air Show 2026"). No aircraft names in a trailer, and nothing on cuts shorter than two beats.
+- **Clips:** `clips-trailer-2027.json` has one slot per shot, in film order, with what each shot is for. Eleven are filled with the known Cosford and Eastbourne clips from the cinematic advert. The rest need picking on the Mac from the clips already used in the show trailers (Jack: use those, "because they're already known"). `make-clip-frames.py` skips a slot with no source and says so. Video only, no photos.
+- **Sound:** `score-trailer-2027.py`. The Battlefield edited on its bars to the six parts, Mission One's big hit on "Your summer starts here", The Battlefield's real ending under the end card, and Jack's new Epidemic Sound hits and stingers (Downloads, 18 Nov 2026): one on every black card and title, a build under the black open, a downer on "46 shows", a riser into the slides and into the last card. It finds the files by name in `AUDIO=<folder>`, `~/Downloads` and Music for Videos on Jacks Drive. With `CLIPS=clips-trailer-2027.json` the real engine sound sits under the music (`"sound": "roar"` clips louder with the music ducked). Master with `sh master.sh <dir>`.
+- **Titles and sound preview without the footage:** add `clips=off` to the address (`index-trailer-2027.html?fmt=land&clips=off`). Each clip shot becomes a plain sky plate that names its slot. A cloud session can render that, because the Z6 footage is only on Jacks Drive.
+- **Render on the Mac:** `uv run --with numpy python3 make-clip-frames.py clips-trailer-2027.json`, check the clip sheets, then the usual 60 fps frames for both formats into `rv-trL` and `rv-trP`, `OUT=rv-trL CLIPS=clips-trailer-2027.json uv run --with numpy python3 score-trailer-2027.py`, `sh master.sh rv-trL`, and encode both formats with the one mix at `-crf 16`.
 
 ## House rules for information videos
 - Step cards say "Step 1", "Step 2" in Barlow bold. Never "STEP 1 OF 5".

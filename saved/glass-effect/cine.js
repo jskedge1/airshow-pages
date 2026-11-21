@@ -5,6 +5,7 @@
 // Times are in beats (104 bpm, B seconds) so the score lines up. Cues for score-cine.py: CUES.impacts, CUES.hits.
 CUES.impacts = []; CUES.hits = [];
 const SHOTS = [], TITLES = [], FLASH = [];
+const NOCLIP = new URLSearchParams(location.search).get('clips') === 'off';
 // snapBpm in the content file: every cut, title and slide time snaps to that tempo's beat grid, so the cuts land on the
 // beats of a real music track (The Battlefield, 140 bpm) while the content keeps its beat numbers at 104 bpm
 const SN = x => { const g = window.CINE && window.CINE.snapBpm; return g ? Math.round(x / (60 / g) + 1e-6) * (60 / g) : x; };
@@ -20,6 +21,15 @@ function shot(b0, b1, sh) {
   // src / srcP give any image path (a show photo or a real site screen), otherwise photos/f-<img>.jpg and fp-<img>.jpg.
   // clip / clipP give a video clip as a folder of 60 fps frames (cine/<name>L/0001.jpg landscape, cine/<name>/ portrait,
   // built by make-clip-frames.py); n = frames in the folder. The frame for the current time is shown, with the same grade and push.
+  // ?clips=off (titles and sound preview, for a machine without the footage): a clip shot becomes a dark plate naming its slot
+  if (sh.clip && NOCLIP) {
+    const w = div(shotLayer, `left:0;top:0;width:${SW}px;height:${SH}px;background:linear-gradient(180deg,#3E6E92,#86AFCB 62%,#C4D6E2);visibility:hidden`,
+      `<div style="position:absolute;inset:0;background:${sh.dim ? `rgba(8,20,32,${sh.dim})` : 'transparent'}"></div>
+       <div style="position:absolute;left:0;right:0;top:${LAND ? 70 : 74}%;font-family:Barlow;font-weight:600;font-size:${LAND ? 26 : 30}px;letter-spacing:.22em;color:rgba(255,255,255,.5);text-transform:uppercase;text-align:center;line-height:1.5">${sh.slot || 'Footage'}</div>`);
+    SHOTS.push({ w, img: null, t0, t1, s: [1, 1], x: [0, 0], y: [0, 0], clip: sh.clip, n: sh.n || 1 });
+    if (!sh.soft) CUES.impacts.push(t0);
+    return;
+  }
   const clip = sh.clip ? (LAND ? sh.clip : (sh.clipP || sh.clip)) : null;
   const src = clip ? `${clip}/0001.jpg` : LAND ? (sh.src || `photos/f-${sh.img}.jpg`) : (sh.srcP || sh.src || `photos/fp-${sh.imgP || sh.img}.jpg`);
   const w = div(shotLayer, `left:0;top:0;width:${SW}px;height:${SH}px;overflow:hidden;visibility:hidden`,
@@ -39,6 +49,7 @@ function shot(b0, b1, sh) {
 }
 // a huge trailer title: tracks in from wide letter spacing and settles while the shot pushes
 function title(b0, b1, text, o = {}) {
+  if (o.slam) return slamTitle(SN(b0 * B), SN(b1 * B), text, o);
   if (window.CINE.titleStyle === 'glass' && !o.small) return glassTitle(SN(b0 * B), SN(b1 * B), text, o);
   const t0 = SN(b0 * B), t1 = SN(b1 * B), sp = o.small ? [.9, .5] : [.22, .06], maxW = SW - (LAND ? 240 : 120);
   // fit the title to the frame at its widest letter spacing, so it never runs off the edge
@@ -48,6 +59,33 @@ function title(b0, b1, text, o = {}) {
     `<div class="tt" style="font-family:Barlow;font-weight:${o.small ? (window.CINE.titleStyle === 'glass' ? 700 : 600) : 800};font-size:${o.small ? (LAND ? 58 : 52) : size}px;line-height:1;color:#fff;text-transform:uppercase;white-space:nowrap;text-shadow:0 0 40px rgba(0,0,0,.45),0 6px 24px rgba(0,0,0,.5)">${text}</div>`);
   TITLES.push({ el, tt: el.firstChild, t0, t1, small: !!o.small, sp });
   if (!o.small) CUES.hits.push(t0);
+}
+// The black card (o.slam, for trailers, 21 Nov 2026): a full black screen with huge bold white capitals that are there on
+// the first frame of the beat (no fade, the card is the hit), settling from 7 % big in a tenth of a second.
+// 'Line one|line two' puts a smaller mint line under a short mint rule, landing half a beat later (o.sub2 sets that delay in s).
+// In portrait a first line with a space splits onto two lines when it would otherwise shrink. o.red makes the big line red.
+// Cues for the score: CUES.slams (every card), so each one can carry an impact.
+function slamTitle(t0, t1, text, o) {
+  const L = text.toUpperCase().split('|'), maxW = SW - (LAND ? 300 : 110);
+  const tr = .012;                                           // tracking of the big line, in em
+  const wOf = (str, sz) => textW(str, sz, 800) + str.length * tr * sz;
+  const lay = big => { let s1 = o.size || (LAND ? 270 : 250); const w = Math.max(...big.map(b => wOf(b, s1))); if (w > maxW) s1 *= maxW / w; return { big, s1 }; };
+  let P = lay([L[0]]);
+  if (!LAND && L[0].includes(' ')) {
+    const w = L[0].split(' '), half = Math.ceil(w.length / 2), Q = lay([w.slice(0, half).join(' '), w.slice(half).join(' ')]);
+    if (Q.s1 > P.s1 * 1.15) P = Q;
+  }
+  const { big, s1 } = P;
+  let s2 = Math.min(LAND ? 62 : 54, s1 * .42);
+  if (L[1]) { const w2 = textW(L[1], s2, 700) + L[1].length * .16 * s2; if (w2 > maxW) s2 *= maxW / w2; }
+  const el = div(stage, `left:0;top:0;width:${SW}px;height:${SH}px;z-index:43;background:#000;visibility:hidden;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center`,
+    `<div class="sb" style="display:flex;flex-direction:column;align-items:center;transform-origin:50% 50%">${big.map(b =>
+      `<div style="font-family:Barlow;font-weight:800;font-size:${s1.toFixed(1)}px;line-height:.92;letter-spacing:${tr}em;color:${o.red ? '#D74949' : '#fff'};white-space:nowrap">${b}</div>`).join('')}</div>` +
+    (L[1] ? `<div class="s2" style="display:flex;flex-direction:column;align-items:center;opacity:0">
+       <i style="display:block;width:${Math.round(s1 * .9)}px;height:${Math.max(4, Math.round(s1 / 40))}px;background:#5FE3D6;margin:${Math.round(s1 * .2)}px 0 ${Math.round(s1 * .15)}px"></i>
+       <div style="font-family:Barlow;font-weight:700;font-size:${s2.toFixed(1)}px;line-height:1;letter-spacing:.16em;margin-right:-.16em;color:#5FE3D6;white-space:nowrap">${L[1]}</div></div>` : ''));
+  TITLES.push({ el, slam: true, t0, t1, sb: el.querySelector('.sb'), s2: el.querySelector('.s2'), sub2: o.sub2 == null ? (window.CINE.snapBpm ? 30 / window.CINE.snapBpm : B / 2) : o.sub2 });
+  (CUES.slams = CUES.slams || []).push(t0);
 }
 // The Cosford trailer title (titleStyle: 'glass', from the RAF Cosford Hollywood trailer v5, 18 Nov 2026):
 // Barlow 700 capitals cut out of black, so the footage shows through the letters, frosted (blur, colour lift) with a
@@ -138,6 +176,12 @@ function updCine(t) {
     T.el.style.visibility = on ? 'visible' : 'hidden';
     if (!on) continue;
     if (T.glass) { updGlassTitle(T, t); continue; }
+    if (T.slam) {
+      const k = clamp((t - T.t0) / .1);
+      T.sb.style.transform = `scale(${(1.07 - .07 * (1 - (1 - k) ** 3) + .012 * clamp((t - T.t0) / (T.t1 - T.t0))).toFixed(4)})`;
+      if (T.s2) T.s2.style.opacity = t >= T.t0 + T.sub2 - 1e-6 ? 1 : 0;
+      continue;
+    }
     const f = clamp((t - T.t0) / (T.t1 - T.t0)), a = Math.min(1, (t - T.t0) / (T.small ? .6 : .18), (T.t1 - t) / .3);
     const sp = T.sp[0] + (T.sp[1] - T.sp[0]) * eo3(f);
     T.tt.style.letterSpacing = sp.toFixed(3) + 'em';
@@ -176,13 +220,14 @@ window.BUILD = function () {
   });
   T_END = SN(C.endAt * B);
   // the score script reads the shots (clip sources for the engine sound) and the tempo
-  CUES.cine = { snapBpm: C.snapBpm || 0, shots: SHOTS.map(s => ({ t0: s.t0, t1: s.t1, clip: s.clip || null, black: !s.img })), end: T_END };
+  CUES.cine = { snapBpm: C.snapBpm || 0, shots: SHOTS.map(s => ({ t0: s.t0, t1: s.t1, clip: s.clip || null, black: !s.img })), end: T_END,
+    titles: TITLES.map(T => ({ t0: T.t0, t1: T.t1, kind: T.slam ? 'slam' : T.glass ? 'glass' : T.small ? 'small' : 'track' })) };
   CUES.scenes.push(T_END);
   endCard(T_END, C);
   window.UPD = t => { updScreens(t); updCine(t); };
 };
 // the renderer waits for this after each setT, so a clip frame has finished loading before the screenshot
-window.SETTLE = () => Promise.all(SHOTS.filter(s => s.clip && s.w.style.visibility === 'visible').map(s => s.img.decode().catch(() => 0)));
+window.SETTLE = () => Promise.all(SHOTS.filter(s => s.clip && s.img && s.w.style.visibility === 'visible').map(s => s.img.decode().catch(() => 0)));
 const _pre = window.PRELOAD;
 window.PRELOAD = async function () {
   await Promise.all([...shotLayer.querySelectorAll('img')].map(i => i.decode().catch(() => 0)));

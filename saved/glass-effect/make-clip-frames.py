@@ -40,7 +40,9 @@ def smooth(v, k):
 for c in spec['clips']:
     name = c['name']
     if only and name not in only: continue
-    src = os.path.join(ROOT, c['src'])
+    if not c.get('src'):
+        print(f"{name}: NO SOURCE YET, pick a clip for this slot ({c.get('pick', '')})", flush=True); continue
+    src = c['src'] if os.path.isabs(c['src']) else os.path.join(c.get('root', ROOT), c['src'])
     fps = c['fps']; speed = c.get('speed', 1.0)
     span = c['dur'] * speed + 0.25                       # source seconds used
     cw = c.get('cw', 1920); chh = round(cw * 9 / 16)
