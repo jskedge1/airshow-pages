@@ -686,7 +686,7 @@ def build():
 <meta name="robots" content="noindex">
 <title>UK Airshow Guide merch concepts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Saira+Stencil+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Saira+Stencil+One&family=Share+Tech+Mono&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{{--navy:{NAVY};--red:{RED};--blue:{BLUE};--teal:{TEAL};--deep:{DEEP};--ink:{INK};--line:rgba(140,175,235,.2);
 --txt:#e9f0fb;--mute:#9fb4d6;--hf:{HF};--st:{ST};--bf:'Barlow',Arial,sans-serif}}
@@ -719,6 +719,8 @@ h2{{font-family:var(--hf);font-style:italic;font-weight:800;font-size:clamp(34px
 display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(0,0,0,.35)}}
 .card.wide{{grid-column:span 8}}
 .four .card,.card.s3{{grid-column:span 3}}
+.card.half{{grid-column:span 6}}
+.half .mock{{aspect-ratio:2.05}}
 .four h3,.s3 h3{{font-size:23px}}
 .mock{{position:relative;border-radius:12px;aspect-ratio:1;overflow:hidden}}
 .wide .mock{{aspect-ratio:2.05}}
@@ -756,8 +758,8 @@ h3{{font-family:var(--hf);font-style:italic;font-weight:800;font-size:27px;lette
 .sw b{{display:block;font-size:14px;margin-top:6px}}
 .sw span{{font-size:12.5px;color:var(--mute);font-family:ui-monospace,Menlo,monospace}}
 footer{{text-align:center;color:var(--mute);font-size:13.5px;padding:0 20px 40px}}
-@media (max-width:980px){{.card,.four .card,.card.s3{{grid-column:span 6}}.card.wide{{grid-column:span 12}}}}
-@media (max-width:620px){{.card,.card.wide,.four .card,.card.s3{{grid-column:span 12}}.num{{font-size:48px}}}}
+@media (max-width:980px){{.card.half{{grid-column:span 12}}.card,.four .card,.card.s3{{grid-column:span 6}}.card.wide{{grid-column:span 12}}}}
+@media (max-width:620px){{.card,.card.wide,.four .card,.card.s3,.card.half{{grid-column:span 12}}.num{{font-size:48px}}}}
 @media (prefers-reduced-motion:reduce){{animateTransform{{display:none}}}}
 </style></head><body>
 
@@ -1177,11 +1179,15 @@ RENAME = {"Airbourne: Eastbourne International Airshow": "Eastbourne Internation
           "Royal Air Force Air Show": "RAF Cosford Air Show",
           "Shuttleworth Season Premiere Air Show": "Shuttleworth Season Premiere",
           "Shuttleworth Season Finale Air Show": "Shuttleworth Season Finale"}
+SHORT = {"Shuttleworth": "OLD WARDEN", "English Riviera": "TORBAY", "Midlands Air Festival": "RAGLEY HALL",
+         "Royal Air Force Air Show": "COSFORD", "Duxford": "DUXFORD", "Headcorn": "HEADCORN",
+         "Royal International Air Tattoo": "BOSCOMBE DOWN", "Eastbourne": "EASTBOURNE", "Clacton": "CLACTON",
+         "Little Gransden": "LITTLE GRANSDEN", "Ayr Show": "AYR", "Jersey": "JERSEY"}
 TBA_PICK = ["Wales National Airshow", "Blackpool Airshow", "Southport Air Show", "Guernsey Air Display"]
 
 
 def season():
-    """(date text, show, county, free to watch) for the picked shows, plus the picked shows still awaiting a date."""
+    """(date text, show, county, free to watch, short place) for the picked shows, plus the picked shows still awaiting a date."""
     import json
     lines = (ROOT / "uk-airshow-calendar.html").read_text(encoding="utf-8").split("\n")
     D = json.loads(next(l for l in lines if l.strip().startswith("var D=")).strip()[6:].rstrip(";"))
@@ -1197,7 +1203,8 @@ def season():
             when = f"{d[1]:02d}-{d[3]:02d} {mon[d[0]]}"
         else:
             when = f"{d[1]:02d} {mon[d[0]]}-{d[3]:02d} {mon[d[2]]}"
-        rows.append((when, RENAME.get(d[6], d[6]).upper().replace("&", "&amp;"), d[8].upper(), bool(d[12])))
+        rows.append((when, RENAME.get(d[6], d[6]).upper().replace("&", "&amp;"), d[8].upper(), bool(d[12]),
+                     next(v for k, v in SHORT.items() if k in d[6])))
     tba = [t[0].upper() for t in T if t[0] in TBA_PICK]
     return rows, tba
 
@@ -1210,7 +1217,7 @@ def d_board(rows, tba):
            + text("DISPLAY SEASON 2027", 390, 21, 11, WHITE, "end", 3, 600)
            + "".join(text(t, x, 36, 6.5, "#8d97a8", "start", 2, 600) for x, t in ((12, "DATE"), (66, "AIRSHOW"), (236, "COUNTY"), (322, "REMARKS"))))
     step = min(10.2, 150 / (len(rows) + 1))
-    for i, (when, name, county, free) in enumerate(rows):
+    for i, (when, name, county, free, short) in enumerate(rows):
         y = 40 + i * step
         out += f'<rect x="8" y="{y:.1f}" width="384" height="{step - 1.2:.1f}" rx="1.5" fill="#161a23"/>'
         r = "FREE TO WATCH" if free else ("LAST CALL" if i == len(rows) - 1 else remarks[i % len(remarks)])
@@ -1229,7 +1236,7 @@ def d_tour(rows, tba, ink, accent=RED, sub="#6fd3ff"):
     out = (text("THE 2027", 100, 14, 14, ink, ls=6, span=110) + text("DISPLAY SEASON", 100, 40, 29, accent, ls=1, span=192, font=ST, weight=400)
            + f'<rect x="4" y="47" width="192" height="2" fill="{ink}"/>')
     step = min(12.4, 170 / len(rows))
-    for i, (when, name, county, free) in enumerate(rows):
+    for i, (when, name, county, free, short) in enumerate(rows):
         y = 62 + i * step
         out += text(when, 54, y, 9.6, sub, "end", 0.3, 400, font=MONO) + text(name, 60, y, 10.6, ink, "start", 0.6, 700, span=min(136, len(name) * 4.6))
     y = 62 + len(rows) * step + 2
@@ -1237,6 +1244,127 @@ def d_tour(rows, tba, ink, accent=RED, sub="#6fd3ff"):
             + text("DATES TO COME: " + " &#183; ".join(t.replace(" AIRSHOW", "").replace(" AIR SHOW", "").replace(" AIR DISPLAY", "").replace(" NATIONAL", "") for t in tba),
                    100, y + 4, 8, sub, ls=1, weight=600, span=190)
             + text("I WAS ON THE CROWDLINE", 100, y + 20, 11, accent, ls=3, span=150))
+
+
+HAND = "'Caveat','Segoe Script','Comic Sans MS',cursive"
+TBA_SHORT = (" AIRSHOW", " AIR SHOW", " AIR DISPLAY", " NATIONAL")
+
+
+def _tba(tba):
+    out = []
+    for t in tba:
+        for cut in TBA_SHORT:
+            t = t.replace(cut, "")
+        out.append(t)
+    return " &#183; ".join(out)
+
+
+def place_top(art, cx, top, w):
+    """For the taller date artwork (200 wide, about 256 tall): centre on cx, hang from `top`."""
+    return f'<g transform="translate({cx - w / 2},{top}) scale({w / 200:.4f})">{art}</g>'
+
+
+def d_route(rows, tba, ink, accent=RED, sub="#6fd3ff"):
+    """Idea 1: the season as a flight plan, one waypoint per show."""
+    n = len(rows)
+    step = (236 - 60) / (n - 1)
+    pts = [(78 if i % 2 == 0 else 122, 60 + i * step) for i in range(n)]
+    d = f"M{pts[0][0]},{pts[0][1] - 10} L{pts[0][0]},{pts[0][1]:.1f}"
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        d += f" C{x0},{y0 + step * .6:.1f} {x1},{y1 - step * .6:.1f} {x1},{y1:.1f}"
+    lx, ly = pts[-1]
+    d += f" L{lx},{ly + 8:.1f}"
+    out = (text("FLIGHT PLAN", 100, 26, 32, ink, ls=1, span=176, font=ST, weight=400)
+           + text("DISPLAY SEASON 2027", 100, 41, 11.5, sub, ls=4, span=150)
+           + f'<path d="{d}" fill="none" stroke="{BLUE}" stroke-width="2.6" transform="translate(3.5,1.5)"/>'
+           f'<path d="{d}" fill="none" stroke="{accent}" stroke-width="3.2"/>')
+    for i, ((x, y), r) in enumerate(zip(pts, rows)):
+        left = i % 2 == 0
+        tx, anc = (x - 9, "end") if left else (x + 9, "start")
+        out += (f'<circle cx="{x}" cy="{y:.1f}" r="4" fill="{ink}" stroke="{accent}" stroke-width="1.6"/>'
+                + text(r[4], tx, y + 1, 10.5, ink, anc, 0.6, 700, span=min(64, len(r[4]) * 4.9))
+                + text(r[0], tx, y + 9.5, 7.4, sub, anc, 0.2, 400, font=MONO))
+    return (out + jet(lx, ly + 16, 22, 180, ink)
+            + text("STILL TO FILE: " + _tba(tba), 100, 266, 7.6, sub, ls=1, weight=600, span=188))
+
+
+def d_ticks(rows, tba, ink, accent=RED, sub="#6fd3ff"):
+    """Idea 2: a list to tick off with a fabric pen."""
+    out = (text("BEEN THERE.", 100, 24, 28, ink, ls=1, span=188, font=ST, weight=400)
+           + text("HEARD THAT.", 100, 50, 28, accent, ls=1, span=188, font=ST, weight=400)
+           + text("2027 DISPLAY SEASON &#183; TICK THEM OFF", 100, 63, 9.5, sub, ls=2, span=188))
+    for i, r in enumerate(rows):
+        y = 80 + i * 11.6
+        out += f'<rect x="6" y="{y - 8.2:.1f}" width="9.4" height="9.4" rx="1.5" fill="none" stroke="{ink}" stroke-width="1.4"/>'
+        if i == 0:
+            out += f'<path d="M7.5,{y - 3.5:.1f} l3.2,3.4 l6.6,-9" fill="none" stroke="{accent}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'
+        out += (text(r[0], 21, y, 8, sub, "start", 0.2, 400, font=MONO)
+                + text(r[1], 66, y, 10.4, ink, "start", 0.5, 700, span=min(130, len(r[1]) * 4.5)))
+    y = 80 + len(rows) * 11.6 + 6
+    return out + text("FABRIC PEN INCLUDED", 100, y, 10, accent, ls=4, span=150)
+
+
+def d_months(rows, tba, ink, accent=RED, sub="#6fd3ff"):
+    """Idea 3: the season month by month."""
+    out = (text("2027", 4, 36, 38, accent, "start", 1, 400, font=ST, span=92)
+           + text("THE SEASON", 196, 17, 12, ink, "end", 3, 700, span=88) + text("AT A GLANCE", 196, 36, 17, ink, "end", 1, 400, font=ST, span=88)
+           + f'<rect x="4" y="42" width="192" height="2.2" fill="{ink}"/>')
+    groups = []
+    for r in rows:
+        mth = r[0].split()[-1]
+        if not groups or groups[-1][0] != mth:
+            groups.append((mth, []))
+        groups[-1][1].append(r)
+    y = 51
+    for gi, (mth, rs) in enumerate(groups):
+        h = len(rs) * 11.6 - 2
+        out += (f'<rect x="4" y="{y:.1f}" width="38" height="{h:.1f}" rx="3" fill="{accent if gi % 2 == 0 else BLUE}"/>'
+                + text(mth, 23, y + h / 2 + min(15, h * .78) * .36, min(15, h * .78), WHITE, ls=0.5, font=ST, weight=400))
+        for k, r in enumerate(rs):
+            ry = y + 8 + k * 11.6
+            out += (text(" ".join(r[0].split()[:-1]), 48, ry, 8.6, sub, "start", 0.2, 400, font=MONO)
+                    + text(r[1], 80, ry, 10.2, ink, "start", 0.5, 700, span=min(116, len(r[1]) * 4.4)))
+        y += len(rs) * 11.6 + 3
+    return out + text("DATES TO COME: " + _tba(tba), 100, y + 8, 7.6, sub, ls=1, weight=600, span=188)
+
+
+def d_pass(rows, tba, bg, accent=RED):
+    """Idea 4: a season pass, printed as a solid ticket."""
+    bars = "".join(f'<rect x="{22 + k * 3.6:.1f}" y="208" width="{1.2 if k % 3 else 2.4}" height="28" fill="{NAVY}"/>' for k in range(24))
+    out = ('<rect x="10" y="4" width="180" height="252" rx="10" fill="#fbf6e6"/>'
+           f'<rect x="10" y="4" width="180" height="38" rx="10" fill="{NAVY}"/><rect x="10" y="26" width="180" height="16" fill="{NAVY}"/>'
+           + jet(30, 23, 24, 45, "#ffd23c") + text("SEASON PASS 2027", 112, 30, 19, WHITE, ls=1, span=140, font=ST, weight=400)
+           + text("ADMIT ONE AIRSHOW FAN", 100, 54, 9, NAVY, ls=4, span=150))
+    for i, r in enumerate(rows):
+        y = 67 + i * 8.7
+        out += (text(r[0], 20, y, 6.6, accent, "start", 0.1, 400, font=MONO)
+                + text(r[1], 58, y, 8.4, NAVY, "start", 0.4, 700, span=min(124, len(r[1]) * 3.7)))
+    return (out + f'<circle cx="10" cy="198" r="7" fill="{bg}"/><circle cx="190" cy="198" r="7" fill="{bg}"/>'
+            f'<line x1="22" y1="198" x2="178" y2="198" stroke="{NAVY}" stroke-width="1.2" stroke-dasharray="4 3"/>'
+            + bars + text("UKAG 2027", 64, 247, 7, NAVY, ls=3, weight=600)
+            + text("GATE", 122, 213, 6.5, "#6b7785", "start", 2, 600) + text("CROWDLINE", 122, 224, 11, NAVY, "start", 0.5, 700)
+            + text("SEAT", 122, 236, 6.5, "#6b7785", "start", 2, 600) + text("BYO CHAIR", 122, 247, 11, NAVY, "start", 0.5, 700))
+
+
+def d_logbook(rows, tba):
+    """Idea 5: a page from a spotter's logbook, filled in by hand."""
+    INKB, RULE = "#1d3b8f", "#bfae7c"
+    notes = ["took the chair", "arrive early", "sun cream", "ear defenders", "long lens", "flask of tea"]
+    out = ('<rect x="6" y="4" width="188" height="252" rx="4" fill="#f4ecd2" stroke="#c9b98a"/>'
+           + text("SPOTTER'S LOGBOOK", 12, 23, 15, NAVY, "start", 1, 400, font=ST, span=128) + text("2027", 188, 23, 15, RED, "end", 1, 400, font=ST)
+           + f'<rect x="6" y="30" width="188" height="11" fill="{NAVY}"/>'
+           + "".join(text(t, x, 38.2, 6.4, WHITE, "start", 2, 600) for x, t in ((12, "DATE"), (58, "AIRFIELD"), (128, "REMARKS")))
+           + f'<path d="M54,41 V236 M124,41 V236" stroke="{RULE}" stroke-width=".7" fill="none"/>')
+    for i, r in enumerate(rows):
+        y = 53 + i * 12.2
+        days, mth = r[0].rsplit(" ", 1)
+        when = "-".join(str(int(p)) for p in days.split("-")) + " " + mth.title()
+        note = "free to watch!" if r[3] else notes[i % len(notes)]
+        out += (f'<line x1="6" y1="{y + 3:.1f}" x2="194" y2="{y + 3:.1f}" stroke="{RULE}" stroke-width=".7"/>'
+                + "".join(text(t, x, y, 12, INKB, "start", 0, 700, font=HAND, span=(w if len(t) > n else None))
+                          for x, t, w, n in ((11, when, 40, 8), (58, r[4].title(), 62, 11), (128, note, 62, 14))))
+    return (out + text("SIGNED", 12, 249, 6.4, NAVY, "start", 2, 600) + text("one happy spotter", 44, 250, 13, INKB, "start", 0, 700, font=HAND)
+            + f'<line x1="42" y1="252" x2="130" y2="252" stroke="{RULE}" stroke-width=".7"/>')
 
 
 SWEAT = "M150,56 C170,78 230,78 250,56 L340,84 L394,250 L348,270 L316,196 L316,376 L84,376 L84,196 L52,270 L6,250 L60,84 Z"
@@ -1327,20 +1455,38 @@ def build_range(first_page):
              f'<g filter="url(#grain)"><rect x="96" y="28" width="208" height="348" rx="4" fill="{CREAM}"/></g>'
              f'<rect x="104" y="36" width="192" height="332" fill="none" stroke="{RED}" stroke-width="3"/><rect x="110" y="42" width="180" height="320" fill="none" stroke="{BLUE}" stroke-width="1.5"/>'
              + logo(200, 84, 120, "sqL") + place(d_tour(rows, tba, NAVY, RED, BLUE), 200, 226, 164) + "</g>")
+    def dated(code, name, blurb, chips, art, colour, trim, bg, art_h=268, wild=False):
+        """A wide card: the design on a tee, and the same artwork large beside it."""
+        k = min(350 / art_h, 1.66)
+        flat = (f'<rect x="436" y="14" width="370" height="372" rx="18" fill="{colour}" filter="url(#sh)"/>'
+                f'<g transform="translate({621 - 100 * k:.1f},{200 - art_h * k / 2:.1f}) scale({k:.3f})">{art()}</g>')
+        c = card(code, name, blurb, chips, svg(tee(colour, place_top(art(), 200, 100, 150), trim) + flat, "0 0 820 400"), bg, wild=wild)
+        return c.replace('class="card"', 'class="card half"', 1)
+
+    OLIVE = "#4f5a2a"
     dates = [
-        card("S-1", "Departures board", f"{len(rows)} of the season's big shows as an airport departures board. The dates are read from the airshow calendar on the site, so the artwork updates when the calendar does.",
+        dated("S-1", "Flight plan", "The season drawn as a route, with one waypoint per show and a jet at the end of it. Uses place names, so it reads from a distance.",
+              ["T-shirt", "Back or front", "Yearly edition"], lambda: d_route(rows, tba, WHITE), NAVY, None, "sky"),
+        dated("S-2", "Been there. Heard that.", "Every show with a box beside it, to tick off with a fabric pen as the season goes on.",
+              ["T-shirt", "Comes with a fabric pen"], lambda: d_ticks(rows, tba, NAVY, RED, BLUE), PALE, "#ececE6", "red"),
+        dated("S-3", "Season at a glance", "The shows grouped under big month blocks, like a wall planner.",
+              ["T-shirt", "Yearly edition"], lambda: d_months(rows, tba, WHITE), BLACK, None, "tarmac"),
+        dated("S-4", "Season pass", "A giant ticket printed on the shirt, with all the dates and a tear-off stub.",
+              ["T-shirt", "Solid print block"], lambda: d_pass(rows, tba, ROYAL), ROYAL, None, "sky", art_h=260),
+        dated("S-5", "Spotter's logbook", "A logbook page filled in by hand, on an olive drab shirt.",
+              ["T-shirt", "Olive drab"], lambda: d_logbook(rows, tba), OLIVE, None, "tarmac", art_h=260),
+        dated("S-6", "Tour list", "The gig-tour version from before, for the back of a shirt.",
+              ["T-shirt", "Back print"], lambda: d_tour(rows, tba, WHITE), "#7a0d14", None, "night", art_h=270),
+        card("S-7", "Departures board", f"{len(rows)} of the season's big shows as an airport departures board. The dates are read from the airshow calendar on the site, so the artwork updates when the calendar does.",
              ["Design", "Yearly edition", "Dates from the site calendar"], svg(f'<g transform="translate(20,10) scale(1.95)" filter="url(#sh)">{d_board(rows, tba)}</g>', "0 0 820 410"), "tarmac", wide=True),
-        card("S-2", "Season tour list", "The same dates as a gig-tour list.", ["Design", "Yearly edition"],
-             tile(place(d_tour(rows, tba, WHITE), 200, 166, 206)), "red"),
-        card("S-3", "Tour tee, back print", "Logo small on the front, the full list down the back.", ["T-shirt"],
-             svg(tee(BLACK, place(d_tour(rows, tba, WHITE), 200, 184, 178), BLACK)), "red"),
-        card("S-4", "Departures tee", "The board across the chest.", ["T-shirt"],
+        card("S-8", "Departures tee", "The board across the chest.", ["T-shirt"],
              svg(tee(NAVY, f'<g transform="translate(94,112) scale(.53)">{d_board(rows, tba)}</g>')), "tarmac"),
-        card("S-5", "Departures mug", "The board wraps the mug: dates on one side, remarks on the other.", ["Mug", "Full wrap"],
+        card("S-9", "Departures mug", "The board wraps the mug: dates on one side, remarks on the other.", ["Mug", "Full wrap"],
              svg(mug(BLACK, "", None, "#ffd23c", f'<g transform="translate(64,138) scale(.86)">{d_board(rows, tba)}</g>')), "night"),
-        card("S-6", "Season tea towel", "The souvenir every British day out needs. The tour list in the logo colours.", ["Tea towel", "Cotton"], svg(towel), "sky", wild=True),
+        card("S-10", "Season tea towel", "The souvenir every British day out needs. The tour list in the logo colours.", ["Tea towel", "Cotton"], svg(towel), "sky"),
+        card("S-11", "Logbook mug", "The logbook page on a cream mug.", ["Mug"],
+             svg(mug(CREAM, f'<g transform="translate(108,104) scale(.78)">{d_logbook(rows, tba)}</g>', None, OLIVE)), "tarmac"),
     ]
-    dates = dates[:2] + [c.replace('class="card"', 'class="card s3"', 1) for c in dates[2:]]
     grid = "".join(f'<line x1="{x}" y1="80" x2="{x}" y2="340" stroke="#fff" stroke-opacity=".12"/>' for x in range(70, 310, 20)) \
         + "".join(f'<line x1="60" y1="{y}" x2="310" y2="{y}" stroke="#fff" stroke-opacity=".12"/>' for y in range(100, 340, 20))
     more = [
@@ -1359,15 +1505,15 @@ def build_range(first_page):
              ["Jumper", "Knitted"], svg(sweat(NAVY, fairisle() + f'<rect x="262" y="330" width="42" height="18" rx="2" fill="#fff"/>' + logo(283, 339, 34, "wdL"), True)), "night", wild=True),
     ]
     groups = (logos, radio, inst, dates, more)
-    n_designs = 1 + 6 + 6 + 2 + 7
-    n_products = sum(len(g) for g in groups) - (n_designs - 1)
+    n_designs = 1 + 6 + 6 + 7 + 7
+    n_products = 4 + 6 + 6 + 10 + 5
     body = f"""<div class="stripe"></div>
 <header>
 <div class="rays"></div>
 <svg class="hl" viewBox="0 0 {SIZE['sqS'][0]} {SIZE['sqS'][1]}" role="img" aria-label="UK Airshow Guide logo"><use href="#sqS"/></svg>
 <h1>Tees, jumpers <em>and mugs</em></h1>
 <p>{n_designs} designs in five collections, shown on {n_products} T-shirts, jumpers and mugs. Any design can go on any product. These are drawn mock-ups to choose from, not finished print files.</p>
-<div class="tally"><span><b>6</b> radio talk</span><span><b>6</b> instruments</span><span><b>{len(rows)}</b> show dates</span><span><b>7</b> more ideas</span><a href="merch-concepts.html">Full merch hangar &#8594;</a></div>
+<div class="tally"><span><b>6</b> radio talk</span><span><b>6</b> instruments</span><span><b>7</b> ways to print the dates</span><span><b>7</b> more ideas</span><a href="merch-concepts.html">Full merch hangar &#8594;</a></div>
 </header>
 <div class="stripe"></div>
 
@@ -1375,7 +1521,7 @@ def build_range(first_page):
 {section("01", "The logo", "The swoosh logo on its own, on each product.", logos, True)}
 {section("02", "Radio talk", "Six designs in the pilots' phonetic alphabet, then six ways to wear them.", radio, True)}
 {section("03", "Instruments", "Six cockpit dials, led by the season's own altitude: 27,000 feet.", inst, True)}
-{section("04", "Season dates", "The 2027 season's big shows, including the English Riviera Airshow at Torbay and the Jersey International Air Display.", dates)}
+{section("04", "Season dates", f"Five new ways to put the {len(rows)} dates on a T-shirt, each shown on the shirt and as flat artwork, then the departures board and tour list.", dates)}
 {section("05", "More ideas", "Seven more designs and five ways to use them.", more, True)}
 
 <section><div class="sechead"><span class="num">06</span><div><h2>Good to know</h2><p>Before any of these go to a printer.</p></div></div>
