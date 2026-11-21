@@ -686,7 +686,7 @@ def build():
 <meta name="robots" content="noindex">
 <title>UK Airshow Guide merch concepts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Saira+Stencil+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{{--navy:{NAVY};--red:{RED};--blue:{BLUE};--teal:{TEAL};--deep:{DEEP};--ink:{INK};--line:rgba(140,175,235,.2);
 --txt:#e9f0fb;--mute:#9fb4d6;--hf:{HF};--st:{ST};--bf:'Barlow',Arial,sans-serif}}
@@ -718,8 +718,8 @@ h2{{font-family:var(--hf);font-style:italic;font-weight:800;font-size:clamp(34px
 .card{{grid-column:span 4;background:linear-gradient(180deg,#0c2452,#071a3c);border:1px solid var(--line);border-radius:18px;padding:12px 12px 18px;
 display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(0,0,0,.35)}}
 .card.wide{{grid-column:span 8}}
-.four .card{{grid-column:span 3}}
-.four h3{{font-size:23px}}
+.four .card,.card.s3{{grid-column:span 3}}
+.four h3,.s3 h3{{font-size:23px}}
 .mock{{position:relative;border-radius:12px;aspect-ratio:1;overflow:hidden}}
 .wide .mock{{aspect-ratio:2.05}}
 .mock svg{{position:absolute;inset:0;width:100%;height:100%;display:block}}
@@ -756,8 +756,8 @@ h3{{font-family:var(--hf);font-style:italic;font-weight:800;font-size:27px;lette
 .sw b{{display:block;font-size:14px;margin-top:6px}}
 .sw span{{font-size:12.5px;color:var(--mute);font-family:ui-monospace,Menlo,monospace}}
 footer{{text-align:center;color:var(--mute);font-size:13.5px;padding:0 20px 40px}}
-@media (max-width:980px){{.card,.four .card{{grid-column:span 6}}.card.wide{{grid-column:span 12}}}}
-@media (max-width:620px){{.card,.card.wide,.four .card{{grid-column:span 12}}.num{{font-size:48px}}}}
+@media (max-width:980px){{.card,.four .card,.card.s3{{grid-column:span 6}}.card.wide{{grid-column:span 12}}}}
+@media (max-width:620px){{.card,.card.wide,.four .card,.card.s3{{grid-column:span 12}}.num{{font-size:48px}}}}
 @media (prefers-reduced-motion:reduce){{animateTransform{{display:none}}}}
 </style></head><body>
 
@@ -867,13 +867,22 @@ footer{{text-align:center;color:var(--mute);font-size:13.5px;padding:0 20px 40px
 
 
 # =====================================================================
-# Page two: T-shirts, jumpers and mugs in seven designs
+# Page two: design collections on T-shirts, jumpers and mugs
 # =====================================================================
-def place(art, cx, cy, w):
-    """Artwork is drawn in a 200 x 200 box; place it centred on cx,cy at width w."""
-    return f'<g transform="translate({cx - w / 2},{cy - w / 2}) scale({w / 200:.4f})">{art}</g>'
+MONO = "'Share Tech Mono','DejaVu Sans Mono',monospace"
+PH = dict(A="ALPHA", B="BRAVO", C="CHARLIE", D="DELTA", E="ECHO", F="FOXTROT", G="GOLF", H="HOTEL", I="INDIA",
+          J="JULIETT", K="KILO", L="LIMA", M="MIKE", N="NOVEMBER", O="OSCAR", P="PAPA", Q="QUEBEC", R="ROMEO",
+          S="SIERRA", T="TANGO", U="UNIFORM", V="VICTOR", W="WHISKEY", X="X-RAY", Y="YANKEE", Z="ZULU")
+FACE = "#0a0f18"
 
 
+def place(art, cx, cy, w, box=200):
+    """Artwork is drawn in a box 200 wide (or `box` wide); place it centred on cx,cy at width w."""
+    s = w / box
+    return f'<g transform="translate({cx - w / 2},{cy - 100 * s:.1f}) scale({s:.4f})">{art}</g>'
+
+
+# ---------- radio talk ----------
 def d_phonetic(ink, accent=RED):
     """U and K in the phonetic alphabet, with their Morse code along the top."""
     morse = (f'<circle cx="34" cy="24" r="5" fill="{ink}"/><circle cx="50" cy="24" r="5" fill="{ink}"/><rect x="60" y="19" width="26" height="10" rx="5" fill="{ink}"/>'
@@ -885,6 +894,187 @@ def d_phonetic(ink, accent=RED):
             + text("AIRSHOW GUIDE", 100, 190, 21, ink, ls=3, span=180))
 
 
+def d_spell(word, ink, accent=RED, foot=None):
+    """Any word spelled out the way a pilot would say it."""
+    n = len(word)
+    top, bottom = 4, (176 if foot else 198)
+    h = min(62, (bottom - top) / n)
+    y0 = top + ((bottom - top) - h * n) / 2
+    out = ""
+    for i, ch in enumerate(word):
+        y = y0 + i * h
+        b = h * 0.84
+        out += (f'<rect x="6" y="{y:.1f}" width="{b:.1f}" height="{b:.1f}" rx="3" fill="{accent}"/>'
+                + text(ch, 6 + b / 2, y + b * 0.8, b * 0.86, WHITE, ls=0, font=ST, weight=400)
+                + text(PH[ch], 14 + b, y + b * 0.82, b * 0.92, ink, "start", 1, 400, font=ST,
+                       span=min(180 - b, len(PH[ch]) * b * 0.56)))
+    if foot:
+        out += f'<rect x="6" y="180" width="188" height="2" fill="{ink}"/>' + text(foot, 100, 196, 12, ink, ls=3, span=188)
+    return out
+
+
+def d_chart(ink, accent=RED):
+    """The whole alphabet, as a reference chart."""
+    out = text("THE PILOT'S ALPHABET", 100, 11, 11.5, ink, ls=3, span=190) + f'<rect x="4" y="15" width="192" height="2" fill="{accent}"/>'
+    for i, ch in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ"):
+        x, y = 5 + (i % 3) * 65, 34 + (i // 3) * 20
+        out += text(ch, x + 7, y, 16, accent, ls=0, font=ST, weight=400) + text(PH[ch], x + 18, y - 1, 11.5, ink, "start", 1, 600, span=42 if len(PH[ch]) > 7 else None)
+    return out + jet(170, 191, 20, 90, accent) + f'<path d="M136,191 h22" stroke="{ink}" stroke-width="2" stroke-dasharray="4 3"/>'
+
+
+def d_lima(ink, accent=RED):
+    """Lima Charlie: radio shorthand for loud and clear."""
+    waves = "".join(f'<path d="M{82 + k * 22},{50 - 14 - k * 9} Q{98 + k * 26},50 {82 + k * 22},{50 + 14 + k * 9}" fill="none" stroke="{accent}" stroke-width="{6 - k}" stroke-linecap="round"/>'
+                    for k in range(4))
+    return (jet(46, 50, 62, 90, ink) + waves
+            + text("LIMA", 100, 132, 58, ink, ls=1, span=180, font=ST, weight=400)
+            + text("CHARLIE", 100, 172, 42, accent, ls=1, span=180, font=ST, weight=400)
+            + text("LOUD AND CLEAR", 100, 194, 15, ink, ls=5, span=180))
+
+
+def d_wtf(ink, accent=RED):
+    """Whiskey Tango Foxtrot."""
+    return (text("WHISKEY", 100, 44, 40, ink, ls=1, span=180, font=ST, weight=400)
+            + text("TANGO", 100, 98, 60, accent, ls=1, span=180, font=ST, weight=400)
+            + text("FOXTROT", 100, 140, 40, ink, ls=1, span=180, font=ST, weight=400)
+            + f'<rect x="10" y="150" width="180" height="3" fill="{ink}"/>'
+            + text("WAS THAT A FLYPAST?", 100, 172, 16, ink, ls=2, span=180)
+            + f'<path d="M12,188 h126" stroke="{accent}" stroke-width="3" stroke-dasharray="14 5 6 5 2 5" stroke-linecap="round"/>'
+            + jet(166, 188, 30, 90, ink))
+
+
+# ---------- instruments ----------
+def bezel(cx, cy, r, ink):
+    screws = "".join(f'<circle cx="{cx + (r + 1) * math.cos(a):.1f}" cy="{cy + (r + 1) * math.sin(a):.1f}" r="{r * .04:.1f}" fill="{FACE}" opacity=".55"/>'
+                     for a in (math.radians(d) for d in (45, 135, 225, 315)))
+    return f'<circle cx="{cx}" cy="{cy}" r="{r + 6}" fill="{ink}"/>{screws}<circle cx="{cx}" cy="{cy}" r="{r}" fill="{FACE}"/>'
+
+
+def ticks(cx, cy, r, n, major, l1, l2, w1=2.2, w2=1, col=WHITE):
+    out = ""
+    for k in range(n):
+        a = math.radians(k * 360 / n - 90)
+        r0 = r - (l1 if k % major == 0 else l2)
+        out += (f'<line x1="{cx + r0 * math.cos(a):.1f}" y1="{cy + r0 * math.sin(a):.1f}" x2="{cx + r * math.cos(a):.1f}" '
+                f'y2="{cy + r * math.sin(a):.1f}" stroke="{col}" stroke-width="{w1 if k % major == 0 else w2}"/>')
+    return out
+
+
+def alt_dial(cx, cy, r, ink, detail=True):
+    """A three-pointer altimeter reading 27,000 ft: short pointer between 2 and 3, middle on 7, long on 0."""
+    k = r / 80
+    out = bezel(cx, cy, r, ink) + ticks(cx, cy, r - 2 * k, 50, 5, 12 * k, 6 * k, 2.4 * k, 1.1 * k)
+    out += "".join(text(str(n), cx + 54 * k * math.cos(math.radians(n * 36 - 90)), cy + 54 * k * math.sin(math.radians(n * 36 - 90)) + 6 * k, 17 * k, WHITE, ls=0)
+                   for n in range(10))
+    if detail:
+        out += (text("ALT", cx, cy - 24 * k, 9 * k, "#9fb4d6", ls=3, weight=600) + text("FEET", cx, cy + 42 * k, 7 * k, "#9fb4d6", ls=3, weight=600)
+                + f'<rect x="{cx - 22 * k}" y="{cy + 16 * k}" width="{44 * k}" height="{15 * k}" rx="2" fill="#fff"/>'
+                + text("27000", cx, cy + 28 * k, 13 * k, FACE, ls=1, font=MONO, weight=400))
+    out += (f'<path d="M{cx - 1.5 * k},{cy} L{cx - 1.5 * k},{cy - 62 * k} L{cx - 5 * k},{cy - 66 * k} L{cx},{cy - 76 * k} L{cx + 5 * k},{cy - 66 * k} L{cx + 1.5 * k},{cy - 62 * k} L{cx + 1.5 * k},{cy}Z" fill="{RED}" transform="rotate(97.2 {cx} {cy})"/>'
+            f'<path d="M{cx - 6 * k},{cy + 6 * k} L{cx},{cy - 44 * k} L{cx + 6 * k},{cy + 6 * k}Z" fill="#fff" transform="rotate(252 {cx} {cy})"/>'
+            f'<path d="M{cx - 3 * k},{cy + 10 * k} L{cx},{cy - 70 * k} L{cx + 3 * k},{cy + 10 * k}Z" fill="#fff"/>'
+            f'<circle cx="{cx}" cy="{cy}" r="{7 * k}" fill="#fff"/><circle cx="{cx}" cy="{cy}" r="{2.5 * k}" fill="{FACE}"/>')
+    return out
+
+
+def d_altimeter(ink):
+    return alt_dial(100, 88, 80, ink) + text("ALWAYS LOOKING UP", 100, 196, 18, ink, ls=1, span=172, font=ST, weight=400)
+
+
+def d_alt27(ink, accent=RED):
+    """Altitude 27,000 this season: an altitude tape with the big number beside it."""
+    tape = f'<rect x="6" y="6" width="40" height="188" rx="4" fill="{FACE}"/>'
+    for i in range(19):
+        y = 12 + i * 9.8
+        tape += f'<line x1="{34 if i % 3 else 28}" y1="{y:.1f}" x2="46" y2="{y:.1f}" stroke="#fff" stroke-width="{1 if i % 3 else 1.8}"/>'
+    for y, t in ((41.4, "280"), (159, "260")):
+        tape += text(t, 24, y + 4, 10, "#9fb4d6", "end", 0, 400, font=MONO)
+    tape += (f'<path d="M2,88 H40 L48,100 L40,112 H2Z" fill="{accent}"/>' + text("270", 21, 105, 13, WHITE, ls=0, font=MONO, weight=400))
+    return (tape + text("ALTITUDE", 124, 46, 22, ink, ls=7, span=140)
+            + text("27,000", 124, 110, 64, accent, ls=0, span=142, font=ST, weight=400)
+            + text("FEET THIS SEASON", 124, 136, 16.5, ink, ls=2, span=142)
+            + f'<rect x="54" y="148" width="140" height="2.5" fill="{ink}"/>'
+            + f'<path d="M58,180 Q110,186 150,166" fill="none" stroke="{accent}" stroke-width="3.5" stroke-linecap="round"/>'
+            f'<path d="M62,186 Q116,192 156,172" fill="none" stroke="{BLUE}" stroke-width="3.5" stroke-linecap="round"/>'
+            + jet(170, 162, 34, 62, ink))
+
+
+def d_fl270(ink):
+    """A glass-cockpit display climbing through flight level 270."""
+    i = uid("f")
+    lad = "".join(f'<line x1="{72 - w}" y1="{84 + dy}" x2="{72 + w}" y2="{84 + dy}" stroke="#fff" stroke-width="1.5"/>' for dy, w in ((-40, 16), (-20, 9), (20, 9), (40, 16)))
+    tape = "".join(text(t, 172, y, 9.5, "#9fb4d6", "end", 0, 400, font=MONO) + f'<line x1="130" y1="{y - 3}" x2="137" y2="{y - 3}" stroke="#9fb4d6" stroke-width="1"/>'
+                   for y, t in ((50, "27200"), (66, "27100"), (116, "26900"), (134, "26800")))
+    return (f'<rect x="6" y="6" width="188" height="150" rx="12" fill="{ink}"/><rect x="12" y="12" width="176" height="138" rx="8" fill="{FACE}"/>'
+            f'<clipPath id="{i}"><rect x="20" y="20" width="104" height="122" rx="4"/></clipPath>'
+            f'<g clip-path="url(#{i})"><g transform="rotate(-9 72 84)"><rect x="-40" y="-60" width="230" height="144" fill="#2f8fe6"/>'
+            f'<rect x="-40" y="84" width="230" height="144" fill="#7a4b22"/><line x1="-40" y1="84" x2="190" y2="84" stroke="#fff" stroke-width="2"/>{lad}</g></g>'
+            f'<path d="M38,84 h22 l12,10 l12,-10 h22" fill="none" stroke="#ffd23c" stroke-width="4" stroke-linejoin="round"/><circle cx="72" cy="84" r="2.5" fill="#ffd23c"/>'
+            f'<rect x="130" y="20" width="50" height="122" rx="4" fill="#161d2b"/>' + tape
+            + text("FL270", 155, 33, 11, "#4dfff0", ls=1, font=MONO, weight=400)
+            + f'<path d="M124,81 l8,-8 h48 v24 h-48Z" fill="#000" stroke="#fff" stroke-width="1.5"/>' + text("27000", 157, 90, 14, "#5dff8f", ls=0, font=MONO, weight=400)
+            + text("FLIGHT LEVEL TWO SEVEN ZERO", 100, 178, 14.5, ink, ls=0.5, span=188, font=ST, weight=400)
+            + text("SEASON 2027", 100, 196, 12, ink, ls=6, span=120))
+
+
+def att_face(cx, cy, r, bank=-12):
+    i = uid("h")
+    k = r / 80
+    lad = "".join(f'<line x1="{cx - w * k}" y1="{cy + dy * k}" x2="{cx + w * k}" y2="{cy + dy * k}" stroke="#fff" stroke-width="{1.6 * k}"/>'
+                  for dy, w in ((-36, 20), (-18, 11), (18, 11), (36, 20)))
+    return (f'<clipPath id="{i}"><circle cx="{cx}" cy="{cy}" r="{r}"/></clipPath><g clip-path="url(#{i})"><g transform="rotate({bank} {cx} {cy})">'
+            f'<rect x="{cx - 2 * r}" y="{cy - 2 * r}" width="{4 * r}" height="{2 * r}" fill="#2f8fe6"/><rect x="{cx - 2 * r}" y="{cy}" width="{4 * r}" height="{2 * r}" fill="#7a4b22"/>'
+            f'<line x1="{cx - 2 * r}" y1="{cy}" x2="{cx + 2 * r}" y2="{cy}" stroke="#fff" stroke-width="{2.4 * k}"/>{lad}</g></g>'
+            f'<path d="M{cx - 46 * k},{cy} h{28 * k} l{18 * k},{14 * k} l{18 * k},{-14 * k} h{28 * k}" fill="none" stroke="#ffd23c" stroke-width="{5 * k}" stroke-linejoin="round"/>'
+            f'<circle cx="{cx}" cy="{cy}" r="{3.5 * k}" fill="#ffd23c"/>'
+            f'<path d="M{cx},{cy - r + 2 * k} l{-6 * k},{11 * k} h{12 * k}Z" fill="#ffd23c"/>')
+
+
+def d_attitude(ink):
+    return bezel(100, 88, 80, ink) + att_face(100, 88, 80) + text("GOOD ATTITUDE", 100, 196, 21, ink, ls=1, span=160, font=ST, weight=400)
+
+
+def hdg_face(cx, cy, r, ink, labels=True):
+    k = r / 80
+    out = f'<g transform="rotate(-270 {cx} {cy})">' + ticks(cx, cy, r - 2 * k, 72, 2, 11 * k, 6 * k, 2 * k, 1 * k)
+    if labels:
+        for d, t in ((0, "N"), (30, "3"), (60, "6"), (90, "E"), (120, "12"), (150, "15"), (180, "S"), (210, "21"), (240, "24"), (270, "W"), (300, "30"), (330, "33")):
+            big = t in "NESW"
+            out += (f'<g transform="rotate({d} {cx} {cy})">' + text(t, cx, cy - 50 * k, (19 if big else 13) * k, "#ffd23c" if t == "W" else WHITE, ls=0) + "</g>")
+    out += "</g>"
+    return (out + jet(cx, cy, 56 * k, 0, "none", f'stroke="#fff" stroke-width="{2.4 / k if k < 1 else 2.4}" stroke-linejoin="round"')
+            + f'<path d="M{cx},{cy - r + 16 * k} l{-7 * k},{-14 * k} h{14 * k}Z" fill="{ORANGE}"/>')
+
+
+def d_heading(ink):
+    return (bezel(100, 88, 80, ink) + hdg_face(100, 88, 80, ink)
+            + text("HEADING: AIRSHOW", 100, 196, 19, ink, ls=1, span=172, font=ST, weight=400))
+
+
+def d_sixpack(ink):
+    """The six standard flight instruments."""
+    r = 27
+    cs = [(34, 38), (100, 38), (166, 38), (34, 106), (100, 106), (166, 106)]
+    out = "".join(bezel(x, y, r, ink) for x, y in cs)
+    x, y = cs[0]    # airspeed
+    out += (cres(x, y, r - 2, r - 2, -60, 120, 4, "#2ecc71") + cres(x, y, r - 2, r - 2, 120, 200, 4, "#ffd23c") + ticks(x, y, r - 7, 12, 1, 4, 4, 1.2, 1.2)
+            + f'<path d="M{x - 2},{y + 4} L{x},{y - 20} L{x + 2},{y + 4}Z" fill="#fff" transform="rotate(205 {x} {y})"/><circle cx="{x}" cy="{y}" r="2.5" fill="#fff"/>')
+    out += att_face(*cs[1], r)
+    x, y = cs[2]
+    out += alt_dial(x, y, r, ink, False)
+    x, y = cs[3]    # turn co-ordinator
+    out += (ticks(x, y, r - 2, 12, 3, 6, 0, 1.6, 0)
+            + f'<g transform="rotate(-18 {x} {y - 2})"><path d="M{x - 18},{y - 2} h36 M{x},{y - 2} v-9" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="{x}" cy="{y - 2}" r="4" fill="#fff"/></g>'
+            f'<rect x="{x - 12}" y="{y + 10}" width="24" height="8" rx="4" fill="none" stroke="#fff" stroke-width="1.2"/><circle cx="{x + 3}" cy="{y + 14}" r="3" fill="#fff"/>')
+    out += hdg_face(*cs[4], r, ink, False)
+    x, y = cs[5]    # vertical speed
+    out += (ticks(x, y, r - 2, 16, 2, 6, 3, 1.4, 1) + text("0", x - 15, y + 4, 9, WHITE, ls=0) + text("UP", x - 3, y - 9, 6.5, "#9fb4d6", ls=1)
+            + f'<path d="M{x - 2},{y + 3} L{x},{y - 20} L{x + 2},{y + 3}Z" fill="#fff" transform="rotate(-52 {x} {y})"/><circle cx="{x}" cy="{y}" r="2.5" fill="#fff"/>')
+    return (out + text("THE SIX PACK", 100, 168, 26, ink, ls=2, span=170, font=ST, weight=400)
+            + text("EVERYTHING A PILOT NEEDS. NO TEA GAUGE.", 100, 188, 10.5, ink, ls=1.5, span=186, weight=600))
+
+
+# ---------- more ideas ----------
 def d_blueprint(ink):
     """A spotter's general-arrangement drawing with unhelpful labels."""
     ln = f'stroke="{ink}" fill="none"'
@@ -931,34 +1121,122 @@ def d_sunset(ink):
             + text("UK AIRSHOW GUIDE", 100, 199, 9.5, ink, ls=4, weight=600, span=124))
 
 
-def d_altimeter(ink):
-    """A cockpit altimeter with 2027 in the pressure window."""
-    cx, cy = 100, 88
-    ticks = ""
-    for k in range(50):
-        a = math.radians(k * 7.2 - 90)
-        r0 = 66 if k % 5 == 0 else 72
-        ticks += (f'<line x1="{cx + r0 * math.cos(a):.1f}" y1="{cy + r0 * math.sin(a):.1f}" x2="{cx + 78 * math.cos(a):.1f}" '
-                  f'y2="{cy + 78 * math.sin(a):.1f}" stroke="#fff" stroke-width="{2.4 if k % 5 == 0 else 1.1}"/>')
-    nums = "".join(text(str(k), cx + 54 * math.cos(math.radians(k * 36 - 90)), cy + 54 * math.sin(math.radians(k * 36 - 90)) + 6, 17, WHITE, ls=0)
-                   for k in range(10))
-    return (f'<circle cx="{cx}" cy="{cy}" r="86" fill="{ink}"/><circle cx="{cx}" cy="{cy}" r="80" fill="#0a0f18"/>' + ticks + nums
-            + text("ALT", cx, 62, 10, "#9fb4d6", ls=3, weight=600)
-            + f'<rect x="112" y="80" width="34" height="16" rx="2" fill="#fff"/>' + text("2027", 129, 93, 13, DEEP, ls=1)
-            + text("UKAG", cx, 126, 9, TEAL, ls=3)
-            + f'<path d="M{cx - 3},{cy + 8} L{cx},{cy - 70} L{cx + 3},{cy + 8}Z" fill="#fff" transform="rotate(64 {cx} {cy})"/>'
-            f'<path d="M{cx - 5},{cy + 6} L{cx},{cy - 44} L{cx + 5},{cy + 6}Z" fill="#fff" transform="rotate(-128 {cx} {cy})"/>'
-            f'<path d="M{cx - 4},{cy - 58} L{cx + 4},{cy - 58} L{cx},{cy - 68}Z" fill="{RED}" transform="rotate(-20 {cx} {cy})"/>'
-            f'<circle cx="{cx}" cy="{cy}" r="7" fill="#fff"/><circle cx="{cx}" cy="{cy}" r="2.5" fill="#0a0f18"/>'
-            + text("ALWAYS LOOKING UP", 100, 196, 18, ink, ls=1, span=172, font=ST, weight=400))
-
-
 def d_heart(ink):
     """Two jets drawing a smoke heart."""
     return (f'<path d="M100,166 C52,128 14,92 30,56 C44,26 82,30 87,56" fill="none" stroke="{RED}" stroke-width="10" stroke-linecap="round"/>'
             f'<path d="M100,166 C148,128 186,92 170,56 C156,26 118,30 113,56" fill="none" stroke="{BLUE}" stroke-width="10" stroke-linecap="round"/>'
             + jet(86, 70, 32, 172, ink) + jet(114, 70, 32, 188, ink)
             + text("AIRSHOW SEASON", 100, 196, 20, ink, ls=1, span=176, font=ST, weight=400))
+
+
+def d_cavok(ink, accent=RED):
+    """CAVOK: the forecast every airshow wants."""
+    rays = "".join(f'<line x1="{152 + 30 * math.cos(a):.1f}" y1="{42 + 30 * math.sin(a):.1f}" x2="{152 + 40 * math.cos(a):.1f}" y2="{42 + 40 * math.sin(a):.1f}" '
+                   f'stroke="#ffb01f" stroke-width="4" stroke-linecap="round"/>' for a in (math.radians(k * 30) for k in range(12)))
+    return (rays + '<circle cx="152" cy="42" r="24" fill="#ffd23c"/>'
+            + f'<path d="M8,56 Q50,60 82,36" fill="none" stroke="{accent}" stroke-width="4" stroke-linecap="round"/>'
+            f'<path d="M12,63 Q56,66 88,42" fill="none" stroke="{BLUE}" stroke-width="4" stroke-linecap="round"/>' + jet(98, 30, 36, 58, ink)
+            + text("CAVOK", 100, 128, 62, ink, ls=1, span=186, font=ST, weight=400)
+            + text("CEILING AND VISIBILITY OK", 100, 148, 14, ink, ls=2, span=186)
+            + f'<rect x="7" y="158" width="186" height="19" rx="3" fill="none" stroke="{ink}" stroke-width="1.5"/>'
+            + text("METAR EGXX 27010KT CAVOK 22/12 Q1027", 100, 171, 8.6, ink, ls=0, font=MONO, weight=400, span=176)
+            + text("THE BEST AIRSHOW FORECAST THERE IS", 100, 194, 10.5, accent, ls=1.5, span=186))
+
+
+def d_checklist(ink, accent=RED):
+    """A pre-flight checklist for the crowdline."""
+    out = text("PRE-FLIGHT CHECKLIST", 100, 20, 18, ink, ls=1, span=188, font=ST, weight=400) + f'<rect x="6" y="27" width="188" height="2.5" fill="{accent}"/>'
+    items = ["FOLDING CHAIR", "FLASK OF TEA", "SUN CREAM", "EAR DEFENDERS", "LONG LENS", "WATERPROOFS, JUST IN CASE", "PATIENCE FOR THE CAR PARK"]
+    for i, t in enumerate(items):
+        y = 40 + i * 22.5
+        out += f'<rect x="8" y="{y}" width="14" height="14" rx="2" fill="none" stroke="{ink}" stroke-width="2"/>'
+        if i < 6:
+            out += f'<path d="M10,{y + 7} l5,5 l10,-13" fill="none" stroke="{accent}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'
+        out += text(t, 30, y + 13, 16, ink, "start", 1.5, 700, span=min(162, len(t) * 7.2))
+    return out
+
+
+def d_bagtag(ink, accent=RED):
+    """A luggage tag for the destination that matters."""
+    bars = "".join(f'<rect x="{58 + k * 4.2:.1f}" y="150" width="{1.4 if k % 3 else 2.8}" height="24" fill="{DEEP}"/>' for k in range(21))
+    return (f'<path d="M100,30 C80,-6 132,-8 124,26" fill="none" stroke="{ink}" stroke-width="2.5"/>'
+            '<g transform="rotate(-6 100 110)"><rect x="42" y="22" width="116" height="170" rx="12" fill="#fbfbf9" stroke="' + ink + '" stroke-width="2"/>'
+            f'<rect x="42" y="50" width="116" height="26" fill="{accent}"/><circle cx="100" cy="36" r="6" fill="{FACE}"/>'
+            + text("FLIGHT SEASON 27", 100, 68, 14, WHITE, ls=2, span=100)
+            + text("UKAG", 100, 120, 48, DEEP, ls=1, span=100, font=ST, weight=400)
+            + text("TO: THE CROWDLINE", 100, 140, 11, DEEP, ls=2, span=100) + bars
+            + text("HEAVY: CAMERA KIT", 100, 186, 8.5, accent, ls=2, span=92) + "</g>")
+
+
+# ---------- season dates, read from the site's own calendar ----------
+PICK = ["Shuttleworth Season Premiere", "English Riviera", "Midlands Air Festival", "Royal Air Force Air Show", "Duxford Summer",
+        "Headcorn", "Royal International Air Tattoo", "Shuttleworth Summer", "Eastbourne", "Clacton Airshow", "Little Gransden",
+        "Ayr Show", "Jersey", "Duxford Battle of Britain", "Shuttleworth Season Finale"]
+RENAME = {"Airbourne: Eastbourne International Airshow": "Eastbourne International Airshow",
+          "International Ayr Show: Festival of Flight": "International Ayr Show",
+          "Royal Air Force Air Show": "RAF Cosford Air Show",
+          "Shuttleworth Season Premiere Air Show": "Shuttleworth Season Premiere",
+          "Shuttleworth Season Finale Air Show": "Shuttleworth Season Finale"}
+TBA_PICK = ["Wales National Airshow", "Blackpool Airshow", "Southport Air Show", "Guernsey Air Display"]
+
+
+def season():
+    """(date text, show, county, free to watch) for the picked shows, plus the picked shows still awaiting a date."""
+    import json
+    lines = (ROOT / "uk-airshow-calendar.html").read_text(encoding="utf-8").split("\n")
+    D = json.loads(next(l for l in lines if l.strip().startswith("var D=")).strip()[6:].rstrip(";"))
+    T = json.loads(next(l for l in lines if l.strip().startswith("var T=")).strip()[6:].rstrip(";"))
+    mon = ["MAY", "JUN", "JUL", "AUG", "SEP", "OCT"]
+    rows = []
+    for d in D:
+        if not any(p in d[6] for p in PICK):
+            continue
+        if d[0] == d[2] and d[1] == d[3]:
+            when = f"{d[1]:02d} {mon[d[0]]}"
+        elif d[0] == d[2]:
+            when = f"{d[1]:02d}-{d[3]:02d} {mon[d[0]]}"
+        else:
+            when = f"{d[1]:02d} {mon[d[0]]}-{d[3]:02d} {mon[d[2]]}"
+        rows.append((when, RENAME.get(d[6], d[6]).upper().replace("&", "&amp;"), d[8].upper(), bool(d[12])))
+    tba = [t[0].upper() for t in T if t[0] in TBA_PICK]
+    return rows, tba
+
+
+def d_board(rows, tba):
+    """A departures board, 400 x 200."""
+    remarks = ["ON TIME", "BRING CHAIR", "GO TO GATE", "ON TIME", "PACK SUN CREAM", "EARLY START"]
+    out = (f'<rect width="400" height="200" rx="8" fill="#0b0d12"/><rect x="4" y="4" width="392" height="192" rx="5" fill="none" stroke="#2a3040" stroke-width="1.5"/>'
+           + jet(18, 17, 16, 45, "#ffd23c") + text("DEPARTURES", 32, 22, 15, "#ffd23c", "start", 3, 400, font=ST)
+           + text("DISPLAY SEASON 2027", 390, 21, 11, WHITE, "end", 3, 600)
+           + "".join(text(t, x, 36, 6.5, "#8d97a8", "start", 2, 600) for x, t in ((12, "DATE"), (66, "AIRSHOW"), (236, "COUNTY"), (322, "REMARKS"))))
+    step = min(10.2, 150 / (len(rows) + 1))
+    for i, (when, name, county, free) in enumerate(rows):
+        y = 40 + i * step
+        out += f'<rect x="8" y="{y:.1f}" width="384" height="{step - 1.2:.1f}" rx="1.5" fill="#161a23"/>'
+        r = "FREE TO WATCH" if free else ("LAST CALL" if i == len(rows) - 1 else remarks[i % len(remarks)])
+        for x, t, c in ((12, when, WHITE), (66, name, "#ffd23c"), (236, county, "#ffd23c"), (322, r, "#5dff8f" if r in ("ON TIME", "FREE TO WATCH") else "#ffb01f")):
+            out += text(t, x, y + step - 3.4, 7.6, c, "start", 0.4, 400, font=MONO)
+    y = 40 + len(rows) * step
+    out += (f'<rect x="8" y="{y:.1f}" width="384" height="{step - 1.2:.1f}" rx="1.5" fill="#2a1216"/>'
+            + text("TBA", 12, y + step - 3.4, 7.6, WHITE, "start", 0.4, 400, font=MONO)
+            + text(" / ".join(tba), 66, y + step - 3.4, 7.6, "#ff8a8a", "start", 0.2, 400, font=MONO, span=250)
+            + text("DELAYED", 322, y + step - 3.4, 7.6, "#ff6a6a", "start", 0.4, 400, font=MONO))
+    return out
+
+
+def d_tour(rows, tba, ink, accent=RED, sub="#6fd3ff"):
+    """A gig-tour list, drawn 200 wide and about 250 tall."""
+    out = (text("THE 2027", 100, 14, 14, ink, ls=6, span=110) + text("DISPLAY SEASON", 100, 40, 29, accent, ls=1, span=192, font=ST, weight=400)
+           + f'<rect x="4" y="47" width="192" height="2" fill="{ink}"/>')
+    step = min(12.4, 170 / len(rows))
+    for i, (when, name, county, free) in enumerate(rows):
+        y = 62 + i * step
+        out += text(when, 54, y, 9.6, sub, "end", 0.3, 400, font=MONO) + text(name, 60, y, 10.6, ink, "start", 0.6, 700, span=min(136, len(name) * 4.6))
+    y = 62 + len(rows) * step + 2
+    return (out + f'<rect x="4" y="{y - 8:.1f}" width="192" height="1.2" fill="{ink}" opacity=".5"/>'
+            + text("DATES TO COME: " + " &#183; ".join(t.replace(" AIRSHOW", "").replace(" AIR SHOW", "").replace(" AIR DISPLAY", "").replace(" NATIONAL", "") for t in tba),
+                   100, y + 4, 8, sub, ls=1, weight=600, span=190)
+            + text("I WAS ON THE CROWDLINE", 100, y + 20, 11, accent, ls=3, span=150))
 
 
 SWEAT = "M150,56 C170,78 230,78 250,56 L340,84 L394,250 L348,270 L316,196 L316,376 L84,376 L84,196 L52,270 L6,250 L60,84 Z"
@@ -989,106 +1267,130 @@ def fairisle():
 def build_range(first_page):
     head = first_page[:first_page.index('<div class="stripe"></div>\n<header>')]
     head = head.replace("<title>UK Airshow Guide merch concepts</title>", "<title>UK Airshow Guide tees, jumpers and mugs</title>")
-    PALE, GREY, CREAM, ROYAL, SKYB, LINE = "#fbfbf9", "#c3c8cf", "#f6efdc", "#0d3f9c", "#bfe3fb", "#cfe8ff"
+    PALE, GREY, CREAM, ROYAL, SKYB, LINE, BLACK = "#fbfbf9", "#c3c8cf", "#f6efdc", "#0d3f9c", "#bfe3fb", "#cfe8ff", "#0b0d12"
+    rows, tba = season()
 
     def tile(art, dark=True):
         bg = (f'<rect x="30" y="30" width="340" height="340" rx="20" fill="{INK if dark else PALE}" filter="url(#sh)"/>'
               f'<rect x="42" y="42" width="316" height="316" rx="12" fill="none" stroke="{"#fff" if dark else NAVY}" stroke-opacity=".25" stroke-dasharray="6 5"/>')
         return svg(bg + art)
-    designs = [
-        card("A", "The logo", "The swoosh logo on its own. On dark items it sits on its white cut-out backing.",
-             ["All three products"], tile(logo(200, 200, 280, "sqS")), "bp"),
-        card("B", "Uniform Kilo", "U and K in the pilots' phonetic alphabet, with their Morse code across the top.",
-             ["2 colour print"], tile(place(d_phonetic(NAVY), 200, 200, 270), False), "red"),
-        card("C", "Spotter's blueprint", "A technical drawing of a fast jet with labels a seven-year-old would write.",
-             ["1 colour line print"], tile(place(d_blueprint(LINE), 200, 200, 280)), "bp"),
-        card("D", "Runway 27", "Cleared for take-off on runway 27, for the 2027 season. Next year it becomes runway 28.",
-             ["4 colour print", "Yearly edition"], tile(place(d_runway(NAVY), 200, 200, 270), False), "tarmac"),
-        card("E", "Retro sunset", "A 1970s striped sun with a three-ship climbing through it.",
-             ["6 colour print"], tile(place(d_sunset(WHITE), 200, 200, 280)), "sky"),
-        card("F", "Altimeter", "A cockpit altimeter with 2027 in the pressure window.",
-             ["3 colour print"], tile(place(d_altimeter(NAVY), 200, 200, 270), False), "night"),
-        card("G", "Smoke heart", "Two jets drawing a heart in red and blue smoke, a display favourite.",
-             ["3 colour print"], tile(place(d_heart(NAVY), 200, 200, 270), False), "sky"),
+
+    def T(art, colour, trim=None, w=152, cy=170):
+        return svg(tee(colour, place(art, 200, cy, w), trim))
+
+    def S(art, colour, w=160, cy=208):
+        return svg(sweat(colour, place(art, 200, cy, w)))
+
+    def Hd(art, colour, cord, w=128, cy=228):
+        return svg(hoodie(colour, cord, place(art, 200, cy, w)))
+
+    def M(art, colour, handle=None, w=172, rim=None, wrap=""):
+        return svg(mug(colour, place(art, 185, 213, w), rim, handle or colour, wrap))
+
+    logos = [
+        card("L-1", "Logo tee, navy", "The logo on its white cut-out backing.", ["T-shirt", "Navy"], svg(tee(NAVY, logo(200, 146, 186, "sqS"))), "tarmac"),
+        card("L-2", "Logo tee, white", "Printed straight onto white.", ["T-shirt", "White"], svg(tee(PALE, logo(200, 146, 176, "sqL"), "#ececE6")), "sky"),
+        card("L-3", "Logo sweatshirt", "Navy crew-neck.", ["Jumper", "Navy"], svg(sweat(NAVY, logo(200, 196, 178, "sqS"))), "bp"),
+        card("L-4", "Logo mug", "White with a red handle and rim.", ["Mug", "11 oz"], svg(mug(PALE, logo(185, 210, 186, "sqL"), RED, RED)), "sky"),
     ]
-    tees = [
-        card("T-01", "Logo tee, navy", "Design A across the chest.", ["Navy", "Unisex S to 3XL"],
-             svg(tee(NAVY, logo(200, 146, 186, "sqS"))), "tarmac"),
-        card("T-02", "Logo tee, white", "Design A printed straight onto white.", ["White", "Unisex S to 3XL"],
-             svg(tee(PALE, logo(200, 146, 176, "sqL"), "#ececE6")), "sky"),
-        card("T-03", "Uniform Kilo tee", "Design B on heather grey.", ["Heather grey", "Navy and red ink"],
-             svg(tee(GREY, place(d_phonetic(NAVY), 200, 168, 150), NAVY)), "red"),
-        card("T-04", "Blueprint tee", "Design C in pale blue line on royal blue, like a real blueprint.", ["Royal blue", "1 colour"],
-             svg(tee(ROYAL, place(d_blueprint(LINE), 200, 172, 168))), "studio"),
-        card("T-05", "Runway 27 tee", "Design D on sand.", ["Sand", "Yearly edition"],
-             svg(tee(SAND, place(d_runway(NAVY), 200, 170, 156), NAVY)), "tarmac"),
-        card("T-06", "Retro sunset tee", "Design E on black, where the sun colours glow.", ["Black", "6 colour"],
-             svg(tee("#0b0d12", place(d_sunset(WHITE), 200, 172, 162))), "sky"),
-        card("T-07", "Altimeter tee", "Design F on signal red.", ["Red", "3 colour"],
-             svg(tee("#d3101a", place(d_altimeter(WHITE), 200, 170, 152))), "night"),
-        card("T-08", "Smoke heart tee", "Design G on sky blue.", ["Sky blue", "Fitted cut option"],
-             svg(tee(SKYB, place(d_heart(NAVY), 200, 170, 150), NAVY)), "skyrays"),
+    radio = [
+        card("R-1", "Uniform Kilo", "U and K as pilots say them, with their Morse code across the top.", ["Design"], tile(place(d_phonetic(NAVY), 200, 200, 270), False), "red"),
+        card("R-2", "A-I-R-S-H-O-W", "The word airshow spelled out over the radio.", ["Design"], tile(place(d_spell("AIRSHOW", WHITE, RED, "UK AIRSHOW GUIDE"), 200, 200, 270)), "bp"),
+        card("R-3", "The pilot's alphabet", "All 26 code words as a reference chart. People buy these to learn it.", ["Design"], tile(place(d_chart(NAVY), 200, 200, 280), False), "sky"),
+        card("R-4", "Lima Charlie", "Radio shorthand for loud and clear, which is every jet display.", ["Design"], tile(place(d_lima(WHITE), 200, 200, 270)), "tarmac"),
+        card("R-5", "Whiskey Tango Foxtrot", "What you say when a jet arrives from behind the crowd.", ["Design", "The cheeky one"], tile(place(d_wtf(NAVY), 200, 200, 270), False), "red", wild=True),
+        card("R-6", "Any name, spelled out", "Made to order: Dad becomes Delta Alpha Delta. Works for names, callsigns and squadron nicknames.", ["Design", "Personalised"],
+             tile(place(d_spell("DAD", WHITE, RED, "WORLD'S BEST CO-PILOT"), 200, 200, 270)), "night", wild=True),
+        card("R-7", "Uniform Kilo tee", "On heather grey.", ["T-shirt"], T(d_phonetic(NAVY), GREY, NAVY, 150, 168), "red"),
+        card("R-8", "Airshow hoodie", "Spelled out down the chest in white and red.", ["Jumper"], Hd(d_spell("AIRSHOW", WHITE, RED), NAVY, RED, 126, 228), "bp"),
+        card("R-9", "Alphabet mug", "The full chart, for learning over a brew.", ["Mug"], M(d_chart(NAVY), PALE, NAVY, 178), "sky"),
+        card("R-10", "Lima Charlie tee", "White and gold on red.", ["T-shirt"], T(d_lima(WHITE, "#ffd23c"), "#d3101a", None, 150, 168), "tarmac"),
+        card("R-11", "Whiskey Tango Foxtrot sweatshirt", "On cream.", ["Jumper"], S(d_wtf(NAVY), CREAM, 154, 206), "red"),
+        card("R-12", "Delta Alpha Delta mug", "The Father's Day one, which falls in airshow season.", ["Mug", "Personalised"],
+             M(d_spell("DAD", WHITE, RED, "WORLD'S BEST CO-PILOT"), NAVY, RED, 164), "night"),
     ]
-    jumpers = [
-        card("J-01", "Logo sweatshirt", "Design A on a navy crew-neck.", ["Navy", "Heavyweight fleece"],
-             svg(sweat(NAVY, logo(200, 196, 178, "sqS"))), "bp"),
-        card("J-02", "Uniform Kilo hoodie", "Design B on heather grey with navy cords.", ["Heather grey", "Kangaroo pocket"],
-             svg(hoodie(GREY, NAVY, place(d_phonetic(NAVY), 200, 226, 116))), "red"),
-        card("J-03", "Retro sunset sweatshirt", "Design E on cream, the vintage-shop look.", ["Cream", "6 colour"],
-             svg(sweat(CREAM, place(d_sunset(NAVY), 200, 206, 158))), "sky"),
-        card("J-04", "Blueprint sweatshirt", "Design C large on royal blue.", ["Royal blue", "1 colour"],
-             svg(sweat(ROYAL, place(d_blueprint(LINE), 200, 208, 166))), "studio"),
-        card("J-05", "Airshow knit", "A proper knitted jumper with rows of jets, stars and smoke-trail zigzags. The Christmas jumper for people who would rather it were July.",
-             ["Knitted, not printed", "Woven logo label"],
-             svg(sweat(NAVY, fairisle() + f'<rect x="262" y="330" width="42" height="18" rx="2" fill="#fff"/>' + logo(283, 339, 34, "wdL"), True)), "night", wild=True),
-        card("J-06", "Runway 27 hoodie", "Design D on teal with white cords.", ["Teal", "Yearly edition"],
-             svg(hoodie("#078a78", WHITE, place(d_runway(WHITE), 200, 228, 116))), "tarmac"),
+    inst = [
+        card("I-1", "Altitude 27,000", "The season as a height: 27,000 feet for 2027, with the altitude tape reading flight level 270.", ["Design", "Yearly edition"], tile(place(d_alt27(NAVY), 200, 200, 280), False), "sky"),
+        card("I-2", "Altimeter", "A classic three-pointer dial, set correctly to 27,000 feet.", ["Design"], tile(place(d_altimeter(WHITE), 200, 200, 270)), "night"),
+        card("I-3", "Flight level 270", "A glass-cockpit screen levelling off at FL270.", ["Design", "Yearly edition"], tile(place(d_fl270(NAVY), 200, 200, 270), False), "bp"),
+        card("I-4", "Good attitude", "An attitude indicator, the instrument that shows which way is up.", ["Design"], tile(place(d_attitude(WHITE), 200, 200, 270)), "sky"),
+        card("I-5", "Heading: airshow", "A compass set to 270 degrees, due west.", ["Design"], tile(place(d_heading(NAVY), 200, 200, 270), False), "tarmac"),
+        card("I-6", "The six pack", "The six standard flight instruments in their proper layout.", ["Design"], tile(place(d_sixpack(WHITE), 200, 200, 280)), "bp"),
+        card("I-7", "Altitude 27,000 tee", "White and red on navy.", ["T-shirt"], T(d_alt27(WHITE), NAVY, None, 160, 170), "sky"),
+        card("I-8", "Altimeter mug", "On matt black.", ["Mug"], M(d_altimeter(WHITE), "#12151b", None, 176), "night"),
+        card("I-9", "Flight level 270 hoodie", "On black with red cords.", ["Jumper"], Hd(d_fl270(WHITE), BLACK, RED, 128, 230), "bp"),
+        card("I-10", "Good attitude tee", "On sky blue.", ["T-shirt"], T(d_attitude(NAVY), SKYB, NAVY, 150, 170), "skyrays"),
+        card("I-11", "Six pack mug", "On white with a navy handle.", ["Mug"], M(d_sixpack(NAVY), PALE, NAVY, 176), "tarmac"),
+        card("I-12", "Heading sweatshirt", "On teal.", ["Jumper"], S(d_heading(WHITE), "#078a78", 156, 208), "studio"),
     ]
+    towel = ('<g filter="url(#shBig)"><path d="M186,30 C186,6 214,6 214,30" fill="none" stroke="#c9ced3" stroke-width="5"/>'
+             f'<g filter="url(#grain)"><rect x="96" y="28" width="208" height="348" rx="4" fill="{CREAM}"/></g>'
+             f'<rect x="104" y="36" width="192" height="332" fill="none" stroke="{RED}" stroke-width="3"/><rect x="110" y="42" width="180" height="320" fill="none" stroke="{BLUE}" stroke-width="1.5"/>'
+             + logo(200, 84, 120, "sqL") + place(d_tour(rows, tba, NAVY, RED, BLUE), 200, 226, 164) + "</g>")
+    dates = [
+        card("S-1", "Departures board", f"{len(rows)} of the season's big shows as an airport departures board. The dates are read from the airshow calendar on the site, so the artwork updates when the calendar does.",
+             ["Design", "Yearly edition", "Dates from the site calendar"], svg(f'<g transform="translate(20,10) scale(1.95)" filter="url(#sh)">{d_board(rows, tba)}</g>', "0 0 820 410"), "tarmac", wide=True),
+        card("S-2", "Season tour list", "The same dates as a gig-tour list.", ["Design", "Yearly edition"],
+             tile(place(d_tour(rows, tba, WHITE), 200, 166, 206)), "red"),
+        card("S-3", "Tour tee, back print", "Logo small on the front, the full list down the back.", ["T-shirt"],
+             svg(tee(BLACK, place(d_tour(rows, tba, WHITE), 200, 184, 178), BLACK)), "red"),
+        card("S-4", "Departures tee", "The board across the chest.", ["T-shirt"],
+             svg(tee(NAVY, f'<g transform="translate(94,112) scale(.53)">{d_board(rows, tba)}</g>')), "tarmac"),
+        card("S-5", "Departures mug", "The board wraps the mug: dates on one side, remarks on the other.", ["Mug", "Full wrap"],
+             svg(mug(BLACK, "", None, "#ffd23c", f'<g transform="translate(64,138) scale(.86)">{d_board(rows, tba)}</g>')), "night"),
+        card("S-6", "Season tea towel", "The souvenir every British day out needs. The tour list in the logo colours.", ["Tea towel", "Cotton"], svg(towel), "sky", wild=True),
+    ]
+    dates = dates[:2] + [c.replace('class="card"', 'class="card s3"', 1) for c in dates[2:]]
     grid = "".join(f'<line x1="{x}" y1="80" x2="{x}" y2="340" stroke="#fff" stroke-opacity=".12"/>' for x in range(70, 310, 20)) \
         + "".join(f'<line x1="60" y1="{y}" x2="310" y2="{y}" stroke="#fff" stroke-opacity=".12"/>' for y in range(100, 340, 20))
-    mugs = [
-        card("G-01", "Logo mug", "Design A on white with a red handle and rim.", ["11 oz ceramic", "Both sides"],
-             svg(mug(PALE, logo(185, 210, 186, "sqL"), RED, RED)), "sky"),
-        card("G-02", "Blueprint mug", "Design C on royal blue with the drawing-paper grid wrapping all the way round.", ["11 oz ceramic", "Full wrap"],
-             svg(mug(ROYAL, place(d_blueprint(LINE), 185, 212, 176), None, ROYAL, grid)), "studio"),
-        card("G-03", "Uniform Kilo mug", "Design B on white with a navy handle.", ["11 oz ceramic", "2 colour"],
-             svg(mug(PALE, place(d_phonetic(NAVY), 185, 212, 168), None, NAVY)), "red"),
-        card("G-04", "Altimeter mug", "Design F on matt black. The dial faces out when you drink.", ["Matt black", "3 colour"],
-             svg(mug("#12151b", place(d_altimeter(WHITE), 185, 214, 178), None, "#12151b")), "night"),
-        card("G-05", "Retro sunset mug", "Design E on cream with an orange handle.", ["Cream glaze", "6 colour"],
-             svg(mug(CREAM, place(d_sunset(NAVY), 185, 214, 176), None, ORANGE)), "sky"),
-        card("G-06", "Smoke heart mug", "Design G on white with a blue handle. The obvious gift.", ["11 oz ceramic", "3 colour"],
-             svg(mug(PALE, place(d_heart(NAVY), 185, 214, 170), None, BLUE)), "skyrays"),
+    more = [
+        card("X-1", "CAVOK", "Ceiling and visibility OK: the weather code every airshow hopes for, with a real-format weather report underneath.", ["Design"], tile(place(d_cavok(NAVY), 200, 200, 270), False), "sky"),
+        card("X-2", "Pre-flight checklist", "Six boxes ticked and one that never will be.", ["Design"], tile(place(d_checklist(WHITE), 200, 200, 270)), "tarmac"),
+        card("X-3", "Spotter's blueprint", "A technical drawing with labels a seven-year-old would write.", ["Design"], tile(place(d_blueprint(LINE), 200, 200, 280)), "bp"),
+        card("X-4", "Runway 27", "Cleared for take-off on runway 27, for the 2027 season.", ["Design", "Yearly edition"], tile(place(d_runway(NAVY), 200, 200, 270), False), "tarmac"),
+        card("X-5", "Retro sunset", "A 1970s striped sun with a three-ship climbing through it.", ["Design"], tile(place(d_sunset(WHITE), 200, 200, 280)), "sky"),
+        card("X-6", "Smoke heart", "Two jets drawing a heart in red and blue smoke.", ["Design"], tile(place(d_heart(NAVY), 200, 200, 270), False), "skyrays"),
+        card("X-7", "Baggage tag", "Destination: the crowdline.", ["Design"], tile(place(d_bagtag(WHITE), 200, 200, 280)), "night"),
+        card("X-8", "CAVOK tee", "On white, for the sunny days.", ["T-shirt"], T(d_cavok(NAVY), PALE, "#ececE6", 156, 172), "sky"),
+        card("X-9", "Checklist mug", "On navy with a red handle.", ["Mug"], M(d_checklist(WHITE), NAVY, RED, 170), "tarmac"),
+        card("X-10", "Runway 27 hoodie", "On teal with white cords.", ["Jumper"], Hd(d_runway(WHITE), "#078a78", WHITE), "tarmac"),
+        card("X-11", "Retro sunset sweatshirt", "On cream.", ["Jumper"], S(d_sunset(NAVY), CREAM, 158, 206), "sky"),
+        card("X-12", "Airshow knit", "A knitted jumper with rows of jets, stars and zigzags. The Christmas jumper for people who would rather it were July.",
+             ["Jumper", "Knitted"], svg(sweat(NAVY, fairisle() + f'<rect x="262" y="330" width="42" height="18" rx="2" fill="#fff"/>' + logo(283, 339, 34, "wdL"), True)), "night", wild=True),
     ]
+    groups = (logos, radio, inst, dates, more)
+    n_designs = 1 + 6 + 6 + 2 + 7
+    n_products = sum(len(g) for g in groups) - (n_designs - 1)
     body = f"""<div class="stripe"></div>
 <header>
 <div class="rays"></div>
 <svg class="hl" viewBox="0 0 {SIZE['sqS'][0]} {SIZE['sqS'][1]}" role="img" aria-label="UK Airshow Guide logo"><use href="#sqS"/></svg>
 <h1>Tees, jumpers <em>and mugs</em></h1>
-<p>Seven designs, the logo and six aviation themes, shown on {len(tees)} T-shirts, {len(jumpers)} jumpers and {len(mugs)} mugs. Any design can go on any product. These are drawn mock-ups to choose from, not finished print files.</p>
-<div class="tally"><span><b>7</b> designs</span><span><b>{len(tees)}</b> T-shirts</span><span><b>{len(jumpers)}</b> jumpers</span><span><b>{len(mugs)}</b> mugs</span><a href="merch-concepts.html">Full merch hangar &#8594;</a></div>
+<p>{n_designs} designs in five collections, shown on {n_products} T-shirts, jumpers and mugs. Any design can go on any product. These are drawn mock-ups to choose from, not finished print files.</p>
+<div class="tally"><span><b>6</b> radio talk</span><span><b>6</b> instruments</span><span><b>{len(rows)}</b> show dates</span><span><b>7</b> more ideas</span><a href="merch-concepts.html">Full merch hangar &#8594;</a></div>
 </header>
 <div class="stripe"></div>
 
 <main>
-{section("01", "The seven designs", "The artwork on its own, before it goes on anything.", designs, True)}
-{section("02", "T-shirts", "One of each design, plus the logo on both navy and white.", tees, True)}
-{section("03", "Jumpers", "Crew-neck sweatshirts, hoodies and one knitted jumper.", jumpers)}
-{section("04", "Mugs", "All standard 11 oz mugs, so any print-on-demand supplier can make them.", mugs)}
+{section("01", "The logo", "The swoosh logo on its own, on each product.", logos, True)}
+{section("02", "Radio talk", "Six designs in the pilots' phonetic alphabet, then six ways to wear them.", radio, True)}
+{section("03", "Instruments", "Six cockpit dials, led by the season's own altitude: 27,000 feet.", inst, True)}
+{section("04", "Season dates", "The 2027 season's big shows, including the English Riviera Airshow at Torbay and the Jersey International Air Display.", dates)}
+{section("05", "More ideas", "Seven more designs and five ways to use them.", more, True)}
 
-<section><div class="sechead"><span class="num">05</span><div><h2>Good to know</h2><p>Before any of these go to a printer.</p></div></div>
+<section><div class="sechead"><span class="num">06</span><div><h2>Good to know</h2><p>Before any of these go to a printer.</p></div></div>
 <div class="two">
-<div class="panel"><h3>Mix and match</h3>
+<div class="panel"><h3>About the dates</h3>
 <ul>
-<li><b>Every design fits every product.</b> The combinations here are suggestions. Tell me which pairings you want and I will redraw them.</li>
-<li><b>Colours can change.</b> Each design works in a dark-ink and a light-ink version, so it can go on any cloth or glaze colour.</li>
-<li><b>Runway 27 is this season's number.</b> It can be reissued as runway 28 for 2028, which gives people a reason to buy again.</li>
+<li><b>They come from your own calendar page.</b> The {len(rows)} dated shows and the {len(tba)} still to be announced are read from uk-airshow-calendar.html, which says its dates are correct as of 10 October 2026.</li>
+<li><b>Check them again before printing.</b> A date that moves after the print run cannot be fixed, so print close to the season.</li>
+<li><b>Show names belong to their organisers.</b> Listing real show names on something you sell is worth a quick email to each organiser first. The designs elsewhere on this page use only your own name.</li>
 </ul></div>
 <div class="panel"><h3>Before ordering</h3>
 <ul>
-<li><b>Designs B to G are drawn as vectors,</b> so they scale to any print size. I can export each one as a print-ready file.</li>
-<li><b>The logo still needs a vector version.</b> The current PNG is fine for a chest print or a mug, but not for anything larger than about 14 cm.</li>
-<li><b>The knitted jumper is made to order</b> by a knitwear supplier, usually with a minimum run of about 50.</li>
+<li><b>Every design fits every product.</b> The pairings here are suggestions, and each design works in a dark-ink and a light-ink version.</li>
+<li><b>All designs except the logo are drawn as vectors,</b> so they scale to any print size.</li>
+<li><b>Three designs are tied to 2027:</b> Altitude 27,000, Flight level 270 and Runway 27. Each has an obvious 2028 version, which gives people a reason to buy again.</li>
 <li><b>The jets are generic shapes</b> I drew, not any real aircraft type or display team.</li>
 </ul></div>
 </div></section>
@@ -1098,7 +1400,7 @@ def build_range(first_page):
 """
     out = ROOT / "brand" / "merch-tees-jumpers-mugs.html"
     out.write_text(head + body, encoding="utf-8")
-    print(f"wrote {out} ({len(head + body) // 1024} KB)")
+    print(f"wrote {out} ({len(head + body) // 1024} KB), {n_designs} designs, {n_products} products, {len(rows)} dated shows")
 
 
 if __name__ == "__main__":
