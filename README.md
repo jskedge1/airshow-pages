@@ -610,3 +610,12 @@ The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, 
   question to qa-src/questions.py before running qa-src/build.py again, or it will be lost.
 - YouTube page: when a video has no large thumbnail the Latest player now drops to the standard one instead of
   showing YouTube's small grey placeholder.
+
+## Logo and posters (21 Nov 2026)
+
+Always use the new logo with the swishes. Never use the old header with the red jet (`brand/uk-airshow-guide-header.png`).
+- `brand/UK-Airshow-Guide-logo-transparent.png`: full colour, navy lettering. For white and light backgrounds.
+- `brand/ukag-header-logo.png`: the same logo with white lettering. For navy and dark backgrounds, where the navy lettering would vanish.
+
+`posters/` holds social posters. `now-on-x.html` is the "We're now on X" poster (`?size=square` gives the square one);
+the PNGs beside it are exported from it at double size and have to be exported again after any edit.
