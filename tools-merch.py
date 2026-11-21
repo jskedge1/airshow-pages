@@ -1328,10 +1328,11 @@ def d_months(rows, tba, ink, accent=RED, sub="#6fd3ff"):
     return out + text("DATES TO COME: " + _tba(tba), 100, y + 8, 7.6, sub, ls=1, weight=600, span=188)
 
 
-def d_pass(rows, tba, bg, accent=RED):
+def d_pass(rows, tba, bg, accent=RED, edge=None):
     """Idea 4: a season pass, printed as a solid ticket."""
     bars = "".join(f'<rect x="{22 + k * 3.6:.1f}" y="208" width="{1.2 if k % 3 else 2.4}" height="28" fill="{NAVY}"/>' for k in range(24))
-    out = ('<rect x="10" y="4" width="180" height="252" rx="10" fill="#fbf6e6"/>'
+    line = f' stroke="{edge}" stroke-width="1.6"' if edge else ""
+    out = (f'<rect x="10" y="4" width="180" height="252" rx="10" fill="#fbf6e6"{line}/>'
            f'<rect x="10" y="4" width="180" height="38" rx="10" fill="{NAVY}"/><rect x="10" y="26" width="180" height="16" fill="{NAVY}"/>'
            + jet(30, 23, 24, 45, "#ffd23c") + text("SEASON PASS 2027", 112, 30, 19, WHITE, ls=1, span=140, font=ST, weight=400)
            + text("ADMIT ONE AIRSHOW FAN", 100, 54, 9, NAVY, ls=4, span=150))
@@ -1339,18 +1340,19 @@ def d_pass(rows, tba, bg, accent=RED):
         y = 67 + i * 8.7
         out += (text(r[0], 20, y, 6.6, accent, "start", 0.1, 400, font=MONO)
                 + text(r[1], 58, y, 8.4, NAVY, "start", 0.4, 700, span=min(124, len(r[1]) * 3.7)))
-    return (out + f'<circle cx="10" cy="198" r="7" fill="{bg}"/><circle cx="190" cy="198" r="7" fill="{bg}"/>'
-            f'<line x1="22" y1="198" x2="178" y2="198" stroke="{NAVY}" stroke-width="1.2" stroke-dasharray="4 3"/>'
+    return (out + f'<circle cx="10" cy="198" r="7" fill="{bg}"{line}/><circle cx="190" cy="198" r="7" fill="{bg}"{line}/>'
+            + (f'<rect x="1" y="188" width="8.2" height="20" fill="{bg}"/><rect x="190.8" y="188" width="8.2" height="20" fill="{bg}"/>' if edge else "")
+            + f'<line x1="22" y1="198" x2="178" y2="198" stroke="{NAVY}" stroke-width="1.2" stroke-dasharray="4 3"/>'
             + bars + text("UKAG 2027", 64, 247, 7, NAVY, ls=3, weight=600)
             + text("GATE", 122, 213, 6.5, "#6b7785", "start", 2, 600) + text("CROWDLINE", 122, 224, 11, NAVY, "start", 0.5, 700)
             + text("SEAT", 122, 236, 6.5, "#6b7785", "start", 2, 600) + text("BYO CHAIR", 122, 247, 11, NAVY, "start", 0.5, 700))
 
 
-def d_logbook(rows, tba):
+def d_logbook(rows, tba, edge="#c9b98a"):
     """Idea 5: a page from a spotter's logbook, filled in by hand."""
     INKB, RULE = "#1d3b8f", "#bfae7c"
     notes = ["took the chair", "arrive early", "sun cream", "ear defenders", "long lens", "flask of tea"]
-    out = ('<rect x="6" y="4" width="188" height="252" rx="4" fill="#f4ecd2" stroke="#c9b98a"/>'
+    out = ('<rect x="6" y="4" width="188" height="252" rx="4" fill="#f4ecd2" stroke="' + edge + '" stroke-width="1.4"/>'
            + text("SPOTTER'S LOGBOOK", 12, 23, 15, NAVY, "start", 1, 400, font=ST, span=128) + text("2027", 188, 23, 15, RED, "end", 1, 400, font=ST)
            + f'<rect x="6" y="30" width="188" height="11" fill="{NAVY}"/>'
            + "".join(text(t, x, 38.2, 6.4, WHITE, "start", 2, 600) for x, t in ((12, "DATE"), (58, "AIRFIELD"), (128, "REMARKS")))
@@ -1468,7 +1470,7 @@ def build_range(first_page):
         dated("S-1", "Flight plan", "The season drawn as a route, with one waypoint per show and a jet at the end of it. Uses place names, so it reads from a distance.",
               ["T-shirt", "Back or front", "Yearly edition"], lambda: d_route(rows, tba, WHITE), NAVY, None, "sky"),
         dated("S-2", "Been there. Heard that.", "Every show with a box beside it, to tick off with a fabric pen as the season goes on.",
-              ["T-shirt", "Comes with a fabric pen"], lambda: d_ticks(rows, tba, NAVY, RED, BLUE), PALE, "#ececE6", "red"),
+              ["T-shirt", "Comes with a fabric pen"], lambda: d_ticks(rows, tba, WHITE, "#ffd23c", "#ffe1e1"), "#c40e18", None, "tarmac"),
         dated("S-3", "Season at a glance", "The shows grouped under big month blocks, like a wall planner.",
               ["T-shirt", "Yearly edition"], lambda: d_months(rows, tba, WHITE), BLACK, None, "tarmac"),
         dated("S-4", "Season pass", "A giant ticket printed on the shirt, with all the dates and a tear-off stub.",
@@ -1477,6 +1479,18 @@ def build_range(first_page):
               ["T-shirt", "Olive drab"], lambda: d_logbook(rows, tba), OLIVE, None, "tarmac", art_h=260),
         dated("S-6", "Tour list", "The gig-tour version from before, for the back of a shirt.",
               ["T-shirt", "Back print"], lambda: d_tour(rows, tba, WHITE), "#7a0d14", None, "night", art_h=270),
+        dated("W-1", "Flight plan, white", "Navy lettering with the red and blue route.",
+              ["White T-shirt"], lambda: d_route(rows, tba, NAVY, RED, BLUE), PALE, "#ececE6", "sky"),
+        dated("W-2", "Been there. Heard that., white", "Navy and red, with plenty of room for the pen ticks to show.",
+              ["White T-shirt", "Comes with a fabric pen"], lambda: d_ticks(rows, tba, NAVY, RED, BLUE), PALE, "#ececE6", "red"),
+        dated("W-3", "Season at a glance, white", "The month blocks keep their red and blue; the lettering turns navy.",
+              ["White T-shirt"], lambda: d_months(rows, tba, NAVY, RED, BLUE), PALE, "#ececE6", "bp"),
+        dated("W-4", "Season pass, white", "The ticket gets a navy outline so its edge shows on white.",
+              ["White T-shirt"], lambda: d_pass(rows, tba, PALE, RED, NAVY), PALE, "#ececE6", "tarmac", art_h=260),
+        dated("W-5", "Spotter's logbook, white", "The cream page with a navy edge.",
+              ["White T-shirt"], lambda: d_logbook(rows, tba, NAVY), PALE, "#ececE6", "night", art_h=260),
+        dated("W-6", "Tour list, white", "Navy list, red title, blue dates.",
+              ["White T-shirt", "Back print"], lambda: d_tour(rows, tba, NAVY, RED, BLUE), PALE, "#ececE6", "skyrays", art_h=270),
         card("S-7", "Departures board", f"{len(rows)} of the season's big shows as an airport departures board. The dates are read from the airshow calendar on the site, so the artwork updates when the calendar does.",
              ["Design", "Yearly edition", "Dates from the site calendar"], svg(f'<g transform="translate(20,10) scale(1.95)" filter="url(#sh)">{d_board(rows, tba)}</g>', "0 0 820 410"), "tarmac", wide=True),
         card("S-8", "Departures tee", "The board across the chest.", ["T-shirt"],
@@ -1506,7 +1520,7 @@ def build_range(first_page):
     ]
     groups = (logos, radio, inst, dates, more)
     n_designs = 1 + 6 + 6 + 7 + 7
-    n_products = 4 + 6 + 6 + 10 + 5
+    n_products = 4 + 6 + 6 + 16 + 5
     body = f"""<div class="stripe"></div>
 <header>
 <div class="rays"></div>
@@ -1521,7 +1535,7 @@ def build_range(first_page):
 {section("01", "The logo", "The swoosh logo on its own, on each product.", logos, True)}
 {section("02", "Radio talk", "Six designs in the pilots' phonetic alphabet, then six ways to wear them.", radio, True)}
 {section("03", "Instruments", "Six cockpit dials, led by the season's own altitude: 27,000 feet.", inst, True)}
-{section("04", "Season dates", f"Five new ways to put the {len(rows)} dates on a T-shirt, each shown on the shirt and as flat artwork, then the departures board and tour list.", dates)}
+{section("04", "Season dates", f"Five new ways to put the {len(rows)} dates on a T-shirt, each shown on the shirt and as flat artwork. S-1 to S-6 are on coloured shirts, W-1 to W-6 are the same six on white, then the departures board.", dates)}
 {section("05", "More ideas", "Seven more designs and five ways to use them.", more, True)}
 
 <section><div class="sechead"><span class="num">06</span><div><h2>Good to know</h2><p>Before any of these go to a printer.</p></div></div>
