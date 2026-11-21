@@ -44,6 +44,9 @@ PHOTOS = {
     "f16": ("camping-layout/img/riat-f16-danish.webp", "A Royal Danish Air Force F-16 turning hard in full afterburner"),
     "c17": ("camping-layout/img/88b504a8957bc276.webp", "RAF C-17 Globemaster ZZ177 on a flypast"),
     "hornet": ("camping-layout/img/riat-hornet-finnish.webp", "Finnish Air Force F/A-18C Hornet on a banking pass"),
+    "f16flag": ("home-img/v2/type-military-riat25.jpg", "A Danish F-16 in red and white flag colours, seen from below at RIAT 2025"),
+    "reds18": ("home-img/v2/hero-arrows-riat18.jpg", "Three Red Arrows Hawks trailing red and white smoke at RIAT 2018"),
+    "reds23": ("home-img/v2/hero-arrows-riat23.jpg", "The Red Arrows breaking apart with red, white and blue smoke at RIAT 2023"),
     "camp": ("camping-hub-img/hero-flyby.jpg", "Aircraft flying over an airshow campsite"),
     "tents": ("camping-hub-img/tents-night.jpg", "Tents on an airshow campsite at night"),
     "logo": ("brand/ukag-header-logo.png", "UK Airshow Guide, by The Big Guide to UK Airshows"),
@@ -105,6 +108,37 @@ USEFUL = [("Royal International Air Tattoo", RIAT), ("RIAT27 tickets", "https://
 
 EXTRA_CSS = r"""
 /* The Big Guide to RIAT: the few parts the camping pages do not have */
+/* Jack, 21 Nov 2026: the menu links in the photo header sit in boxes */
+.nav ul{align-items:center;gap:8px}
+.nav li a{padding:11px 14px 10px;border:1px solid rgba(255,255,255,.45);border-bottom-width:1px;margin:0;background:rgba(11,26,39,.42);transition:background .25s,color .25s,border-color .25s,transform .25s}
+.nav li a:hover{background:var(--teal);border-color:var(--teal);color:var(--navy);transform:translateY(-2px)}
+.bgr-mark{display:flex;flex-direction:column;justify-content:center;border-left:2px solid rgba(255,255,255,.35);padding-left:16px;margin:0 auto 0 4px;color:#fff;white-space:nowrap;line-height:1}
+.bgr-mark b{font:600 15.5px/1 "Barlow",sans-serif}
+.bgr-mark em{font:800 30px/1 "Barlow",sans-serif;font-style:normal;color:var(--teal);margin-top:3px}
+.nav .logo{margin-right:0}
+.bgr-key{background:var(--navy);color:#fff;border-top:5px solid var(--or);margin:30px 0 34px;box-shadow:0 26px 40px -28px rgba(11,26,39,.7)}
+.bgr-key h3{display:flex;align-items:center;gap:12px;color:#fff;font-size:23px;font-weight:700;padding:20px 24px 18px;background:var(--deep)}
+.bgr-key h3 svg{width:22px;height:22px;color:var(--teal)}
+.bgr-key dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.bgr-key dl>div{display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 14px;align-items:center;padding:17px 22px;border-top:1px solid rgba(255,255,255,.14);transition:background .3s}
+.bgr-key dl>div:nth-child(odd){border-right:1px solid rgba(255,255,255,.14)}
+.bgr-key dl>div:hover{background:#1C3850}
+.bgr-key i{grid-row:1/3;width:44px;height:44px;display:grid;place-items:center;background:rgba(50,180,175,.18);color:var(--teal);transition:transform .35s,background .3s,color .3s}
+.bgr-key i svg{width:22px;height:22px}
+.bgr-key dl>div:hover i{background:var(--teal);color:var(--navy);transform:rotate(-6deg) scale(1.08)}
+.bgr-key dt{font-weight:700;font-size:16px;color:var(--teal);line-height:1.2}
+.bgr-key dd{font-weight:600;font-size:17.5px;line-height:1.35;color:#fff;margin:2px 0 0}
+.bgr-story{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:64px;align-items:center}
+.bgr-story .lede+.lede{margin-top:14px}
+.bgr-story .ph{position:relative}
+.bgr-story .ph img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.bgr-story .ph span{position:absolute;left:0;bottom:0;background:var(--or);color:#fff;font-weight:700;font-size:17px;padding:11px 16px 10px}
+.bgr-story .bgr-grid{grid-template-columns:1fr;gap:14px;margin-top:18px}
+.bgr-story .bgr-box{padding:18px 20px 16px}
+.bgr-story .bgr-box h3{font-size:20px}
+.bgr-story .bgr-box p{margin-top:5px;font-size:16px}
+@media (max-width:1100px){.bgr-story{grid-template-columns:1fr;gap:40px}.bgr-mark{display:none}}
+@media (max-width:700px){.bgr-key dl{grid-template-columns:1fr}.bgr-key dl>div:nth-child(odd){border-right:0}}
 .strip .lab{color:#fff}
 .bgr-pages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
 .bgr-pg{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:420px;padding:26px;color:#fff;background:var(--navy);overflow:hidden;text-decoration:none;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s}
@@ -185,7 +219,8 @@ def href(key, depth=""):
 
 def logo(depth=""):
     return (f'<a class="logo" href="{SITE}/" target="_top"><img src="{img("logo", depth)}" width="750" height="249" '
-            f'alt="{e(PHOTOS["logo"][1])}" decoding="async"></a>')
+            f'alt="{e(PHOTOS["logo"][1])}" decoding="async"></a>'
+            f'<a class="bgr-mark" href="{href("home", depth)}" target="{LINK_TARGET}" style="text-decoration:none"><b>The Big Guide to</b><em>RIAT</em></a>')
 
 
 def top_bar():
@@ -249,8 +284,12 @@ def next_prev(key):
             f'<a class="r" href="{href(nxt)}" target="{LINK_TARGET}"><small>Next page</small><b>{e(names[nxt])}</b></a></div></section>')
 
 
+KEY_ICON = {"When": "cal", "Where": "pin", "Children": "tick", "Tickets": "tag", "Park & View": "park", "Travel": "bus"}
+
+
 def key_boxes(six=True):
-    return ('<div class="feat six">' + "".join(f'<div><h3><i>{icon("tick")}</i>{e(k)}</h3><p class="v">{e(v)}</p></div>' for k, v in KEY) + "</div>")
+    rows = "".join(f'<div><i>{icon(KEY_ICON.get(k, "tick"))}</i><dt>{e(k)}</dt><dd>{e(v)}</dd></div>' for k, v in KEY)
+    return f'<div class="bgr-key"><h3>{icon("list")}Key details</h3><dl>{rows}</dl></div>'
 
 
 def build_home():
@@ -287,13 +326,9 @@ def build_home():
 <section class="sec" id="about" aria-label="The Big Guide to RIAT">
   <div class="wrap about">
     <div><div class="ab-ph"><img class="p1" src="{img("hornet")}" alt="{e(PHOTOS["hornet"][1])}" decoding="async">
-      <img class="p2" src="{img("c17")}" alt="{e(PHOTOS["c17"][1])}" loading="lazy" decoding="async">
-      <div class="statbox">{icon("plane")}<b>2027</b><span>The first Air Tattoo at Boscombe Down</span></div></div>
-      <div class="stats" style="grid-template-columns:repeat(3,minmax(0,1fr))">
-        <div><b data-count="3">3</b><span>Show days, 16 to 18 July</span></div>
-        <div><b data-count="{len(KNOW)}">{len(KNOW)}</b><span>Things confirmed so far</span></div>
-        <div><b data-count="{len(COME)}">{len(COME)}</b><span>Still to be announced</span></div>
-      </div></div>
+      <img class="p2" src="{img("reds18")}" alt="{e(PHOTOS["reds18"][1])}" loading="lazy" decoding="async">
+      <div class="statbox"><b>2027</b><span>The first Air Tattoo at Boscombe Down</span></div></div>
+      </div>
     <div>
       <span class="kick">Welcome</span>
       <h2 class="h">Your Guide To The Air Tattoo’s New Home</h2>
@@ -304,7 +339,29 @@ def build_home():
   </div>
 </section>
 
-<section class="sec tint" id="pages" aria-label="Inside the guide">
+<section class="sec tint" id="story" aria-label="Where it all started">
+  <div class="wrap bgr-story">
+    <div>
+      <span class="kick">Where it all started</span>
+      <h2 class="h">The Big Guide To RIAT Has A New Home</h2>
+      <p class="lede">The Big Guide to RIAT is the website where it all started. I built it to help people plan their days at the Air Tattoo, and The Big Guide to UK Airshows grew out of it.</p>
+      <p class="lede">Now that RIAT is moving to MOD Boscombe Down, I have decided to merge the two into one website. <b>Everything for RIAT now lives here</b>, next to my guides for airshows right across the UK, which should make it easier to plan your trip.</p>
+      <p class="lede">Of course, it is not as big as it was when the show was at RAF Fairford. Most of what I had written was about Fairford, and it doesn’t help you any more. Over the next few years my aim is to grow these pages again for you all, adding each part as the organisers release the details.</p>
+      <p class="lede">Thank you to everyone who visited The Big Guide to RIAT over the years. I really hope it helped you plan your days at the show.</p>
+      <div class="btns" style="margin-top:26px"><a class="btn or" href="{href("come")}" target="{LINK_TARGET}">What I’ll be adding</a><a class="btn nv" href="{SITE}/air-shows-guides" target="_top">My other airshow guides</a></div>
+    </div>
+    <div>
+      <div class="ph"><img src="{img("reds23")}" alt="{e(PHOTOS["reds23"][1])}" loading="lazy" decoding="async"><span>The Big Guide to RIAT</span></div>
+      <div class="bgr-grid">
+        <div class="bgr-box"><h3>One website</h3><p>RIAT and my other airshow guides, all in one place.</p></div>
+        <div class="bgr-box"><h3>Easier to plan</h3><p>The show, the camping and the travel, a click apart.</p></div>
+        <div class="bgr-box"><h3>Growing with the show</h3><p>New pages as each part of RIAT27 is confirmed.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="pages" aria-label="Inside the guide">
   <div class="wrap">
     {camp.sec_head("Inside the guide", "Four Parts, One Guide", "Each part has its own page, and the camping part has a page for every campsite. Pick the one you need.", mid=True)}
     <div class="bgr-pages">{cards}</div>
@@ -320,7 +377,7 @@ def build_home():
       <p class="lede">As the organisers release each piece, I’ll build it into a full guide like the rest of the shows on this site. <b>Think about how you’d like to get there and who’s coming with you</b>, and the guide will help you plan the rest.</p>
       <div class="btns"><a class="btn or inv" href="{href("come")}" target="{LINK_TARGET}">See what is still to come</a></div>
     </div>
-    <div class="qp"><img src="{img("c17")}" alt="{e(PHOTOS["c17"][1])}" loading="lazy" decoding="async"></div>
+    <div class="qp"><img src="{img("f16flag")}" alt="{e(PHOTOS["f16flag"][1])}" loading="lazy" decoding="async"></div>
     <blockquote class="qcard"><i>{icon("quote")}</i><p>I’ve been going to RIAT since 2006, so this move is a big one for me too.</p><b>Jack Skedge</b><span>Founder and Managing Editor</span></blockquote>
   </div>
 </section>
@@ -364,7 +421,7 @@ def build_know():
   <div class="wrap about" style="align-items:start">
     <div>{camp.sec_head("At a glance", "Key Details", "The dates and the basics for RIAT27, as they stand today.")}
       <div class="btns"><a class="btn or" href="{RIAT}tickets" target="_blank" rel="noopener">RIAT27 tickets</a><a class="btn nv" href="{href("come")}" target="{LINK_TARGET}">Still to come</a></div></div>
-    <div>{key_boxes().replace('class="feat six"', 'class="feat six" style="margin-top:0"')}</div>
+    <div>{key_boxes().replace('class="bgr-key"', 'class="bgr-key" style="margin:0"')}</div>
   </div>
 </section>
 {next_prev("know")}
@@ -419,6 +476,18 @@ def build_booked():
                 "What RIAT has said about refunds, pre-paid parking, campsites near Fairford and enclosure bookings now the show is moving to MOD Boscombe Down.", body)
 
 
+CAMPING_OVER = r"""<style id="bgr-over">
+/* Jack, 21 Nov 2026: the menu links in the photo header sit in boxes */
+.nav ul{align-items:center;gap:8px}
+.nav li a{padding:11px 14px 10px;border:1px solid rgba(255,255,255,.45);border-bottom-width:1px;margin:0;background:rgba(11,26,39,.42);transition:background .25s,color .25s,border-color .25s,transform .25s}
+.nav li a:hover{background:var(--teal);border-color:var(--teal);color:var(--navy);transform:translateY(-2px)}
+/* Jack, 21 Nov 2026: the links under the guide cards are red buttons */
+.gc .more{display:inline-flex;align-items:center;background:var(--or);color:#fff;font-weight:700;font-size:17px;padding:14px 20px 13px;border:0;background-image:none;transition:background .2s,transform .3s}
+.gc:hover .more{background:var(--navy);transform:translateY(-2px)}
+.gc .more::after{border-color:#fff}
+</style>"""
+
+
 def copy_camping():
     """The camping pages, copied from riat-camping/ with their links pointed inside this section."""
     src = ROOT / "riat-camping"
@@ -443,6 +512,14 @@ def copy_camping():
         if old:
             shutil.copyfile(ROOT / "camping-hub-img" / "shelter-day.jpg", OUT / "img" / "shelter-day.jpg")
             h = h.replace(old.group(0), '<img class="p1" src="../img/shelter-day.jpg" alt="A grey dome tent on a camping pitch with a folding table outside" style="object-position:30% 50%"', 1)
+        # Jack, 21 Nov 2026: a different photo beside "Everything I wish someone had told me"
+        old = re.search(r'<div class="qp"><img src="\.\./img/group-pitch\.jpg" alt="[^"]*"', h)
+        if old:
+            shutil.copyfile(ROOT / "camping-hub-img" / "bell-tents.jpg", OUT / "img" / "bell-tents.jpg")
+            h = h.replace(old.group(0), '<div class="qp"><img src="../img/bell-tents.jpg" alt="Bell tents and cars on a camping field, with bunting along the track"', 1)
+        h = h.replace("</head>", CAMPING_OVER + "\n</head>", 1)
+        # Jack, 21 Nov 2026: his own words for the light poles tip
+        h = h.replace("Light poles make finding your pitch at night so much easier.", "Making it bright and loud can make your pitch stand out, and it is fun too.")
         # the section's own strip of pages goes above the campsite strip
         s = strip("camping", "../")
         if '<nav class="strip"' in h:
