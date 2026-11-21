@@ -622,7 +622,7 @@ Poster rules: the swish logo, no rounded corners anywhere, real photos and cut-o
 (the Red Arrows Hawk is `camping-layout/img/dl-hawk.webp`), and every fact taken from a page on the site.
 
 - `now-on-x.html` is the "We're now on X" poster, written by hand (`?size=square` gives the square one).
-- The other ten are built by `posters-src/build.py`, which holds their wording, so change them there and not in `posters/`.
+- The other thirty are built by `posters-src/build.py`, which holds their wording, so change them there and not in `posters/`.
   The comment above each one names the site page its facts came from.
 - After any change run `python3 posters-src/build.py` then `node posters-src/export.js` (add a poster's name to export just
   that one). The export also warns when wording has run out of room.
@@ -639,5 +639,12 @@ Poster rules: the swish logo, no rounded corners anywhere, real photos and cut-o
 | spotter-red-arrows | Spotter card | aircraft-a-to-z.html |
 | join-the-team | Volunteer recruitment | join-the-team.html |
 | my-airshow-hub | The hub, free to join | join-my-airshow-hub.html |
+| show-riat, show-cosford, show-midlands, show-eastbourne, show-clacton, show-wales, show-duxford, show-shuttleworth, show-headcorn, show-little-gransden, show-southport, show-blackpool, show-ayr | Show spotlights, one for each featured show | each show's own page (Key details) |
+| pack-seafront, pack-children, pack-photographers, pack-camping | The other four packing top tens | first-airshow-what-to-pack.html |
+| spotter-typhoon, spotter-chinook, spotter-spitfire | More spotter cards | aircraft-a-to-z.html |
 
 season-2027 and free-to-watch-2027 copy the calendar as it stood on 21 Nov 2026, so update their lists in build.py when the calendar changes.
+The show spotlights copy each show page as it stood on 21 Nov 2026, so update them when dates, prices or tickets change.
+Two things on the site disagreed that day, and the posters took the cautious side:
+- Wales: wales-national-airshow.html says 24 and 25 July 2027 are confirmed, but the calendar and airshow-news.html still say to be announced. show-wales says "July 2027, dates to be confirmed".
+- Southport: southport.html says adults £13 (2026), but find-your-airshow.html lists it as free to watch. show-southport follows the show page.

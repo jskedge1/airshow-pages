@@ -484,6 +484,254 @@ h1{font-size:100px;margin-top:14px;white-space:nowrap}
 """ % free_rows)
 
 
+# =============================================================================================
+# Show spotlights, one for each featured show. Facts and wording: the "Key details" and the opening
+# lines of each show's own page (riat.html, raf-cosford.html and so on), read on 21 Nov 2026.
+# Photos: the ones find-your-airshow.html uses for each show, or a larger one from the same show.
+SHOW_CSS = """
+.body{justify-content:space-between;padding-bottom:14px}
+.photo{height:270px}
+.tags{display:flex;gap:12px}
+h1{margin-top:16px;white-space:nowrap}
+.lead{margin-top:14px;font-size:32px}
+.tbl{border-top:3px solid var(--line)}
+.kv{display:flex;align-items:baseline;gap:18px;padding:7px 0 9px;border-bottom:3px solid var(--line)}
+.kv .k{flex:none;width:170px;font-family:var(--display);font-weight:700;font-size:27px;line-height:1;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.kv .v{font-weight:600;font-size:29px;line-height:1.2}
+"""
+
+
+def show(slug, title, kind, entry, h1, size, lead, rows, photo, pos='50% 50%', fine='Details can change. Check the official website before you book.'):
+    kv = ''.join('      <div class="kv"><span class="k">%s</span><span class="v">%s</span></div>\n' % r for r in rows)
+    free = entry.lower().startswith('free')
+    poster('show-' + slug, title, SHOW_CSS + 'h1{font-size:%dpx}\n.photo img{object-position:%s}\n' % (size, pos), """
+    <div class="photo"><img src="../%s" alt=""></div>
+    <div class="pad">
+      <div class="tags"><span class="tag purple">%s</span><span class="tag%s">%s</span></div>
+      <h1>%s</h1>
+      <p class="lead">%s</p>
+    </div>
+    <div class="pad"><div class="tbl">
+%s    </div></div>
+    <p class="fine pad">%s</p>
+""" % (photo, kind, ' teal' if free else '', entry, h1, lead, kv, fine))
+
+
+show('riat', 'Royal International Air Tattoo 2027', 'Military', 'New home for 2027',
+     'Royal International<br><em>Air Tattoo</em>', 108,
+     'After more than forty years at RAF Fairford, RIAT is moving to MOD Boscombe Down in Wiltshire.',
+     [('When', 'Friday 16 to Sunday 18 July 2027'), ('Where', 'MOD Boscombe Down, Wiltshire'),
+      ('Tickets', 'On sale now, advance only'), ('Children', 'Under 18s free with an adult')],
+     'home-img/v2/riat-hornet.jpg', '60% 50%',
+     'Parking, shuttles and camping are still to be announced.')
+
+show('cosford', 'RAF Cosford Air Show', 'Military', 'Ticket only',
+     'RAF Cosford<br><em>Air Show</em>', 128,
+     'The Royal Air Force’s own air show, on a working station next to the RAF Museum Midlands.',
+     [('When', 'Sunday 13 June 2027, to be confirmed'), ('Where', 'RAF Cosford, Shropshire'),
+      ('Entry', 'Ticket only, in advance'), ('Station', 'Cosford, under 300 m from the gate')],
+     'home-img/v2/hero-arrows-cosford23.jpg', '30% 60%',
+     'The 2026 show sold out in advance. Tickets for 2027 haven’t gone on sale yet.')
+
+show('midlands', 'Midlands Air Festival', 'Festival', 'Ticketed',
+     'Midlands<br><em>Air Festival</em>', 128,
+     'Over 100 hot air balloons, an afternoon air display and the Friday Nightfire.',
+     [('When', 'Friday 4 to Sunday 6 June 2027'), ('Where', 'Ragley Hall, Alcester'),
+      ('Tickets', 'Advance only, none on the gate'), ('Parking', 'Standard parking free')],
+     'find-img/thunderbolt.jpg', '50% 50%')
+
+show('eastbourne', 'Eastbourne Airshow', 'Seafront', 'Free to watch',
+     'Eastbourne<br><em>Airshow</em>', 128,
+     'Four days of warbirds, jets and display teams over Eastbourne seafront.',
+     [('When', 'Thursday 12 to Sunday 15 August 2027'), ('Where', 'Eastbourne seafront, East Sussex'),
+      ('Entry', 'Free'), ('Station', 'Eastbourne, 10 to 15 min walk')],
+     'find-img/blenheim-smoke.jpg', '50% 40%')
+
+show('clacton', 'Clacton Airshow', 'Seafront', 'Free to watch',
+     'Clacton<br><em>Airshow</em>', 128,
+     'A free seaside air show on the Essex coast, with warbirds, fast jets and display teams out over the North Sea.',
+     [('When', 'Thursday 26 and Friday 27 August 2027'), ('Where', 'West Greensward, Clacton-on-Sea'),
+      ('Entry', 'Free'), ('Station', 'Clacton-on-Sea, about 15 min walk')],
+     'find-img/pitts.jpg', '50% 28%')
+
+# The Wales page says 24 and 25 July 2027 are confirmed, but the calendar and the news page still list
+# the show as to be announced, so this poster stays with the cautious wording until they agree.
+show('wales', 'Wales National Airshow', 'Seafront', 'Free to watch',
+     'Wales National<br><em>Airshow</em>', 126,
+     'The biggest free air show in Wales, right over Swansea Bay.',
+     [('When', 'July 2027, dates to be confirmed'), ('Where', 'Swansea Bay'),
+      ('Entry', 'Free'), ('Station', 'Swansea')],
+     'find-img/chinook.jpg', '50% 45%')
+
+show('duxford', 'Duxford Air Shows', 'Historic', 'Ticketed',
+     'Duxford<br><em>Air Shows</em>', 128,
+     'Seven flying events at IWM Duxford in 2027, from Flying Days to the two big Air Shows.',
+     [('When', 'Seven events, 8 May to 2 October 2027'), ('Where', 'IWM Duxford, Cambridgeshire'),
+      ('Tickets', 'Advance only, from £37.50'), ('Station', 'Cambridge, with a free Air Show shuttle')],
+     'find-img/b17.jpg', '50% 45%')
+
+show('shuttleworth', 'Shuttleworth Air Shows', 'Historic', 'Ticketed',
+     'Shuttleworth<br><em>Air Shows</em>', 128,
+     'Vintage aircraft flying from a grass airfield in the Bedfordshire countryside.',
+     [('When', 'Seven shows, 9 May to 25 September 2027'), ('Where', 'Old Warden Aerodrome, Bedfordshire'),
+      ('Tickets', 'From £35, children free at most shows'), ('Station', 'Biggleswade, 3 miles, with a shuttle bus')],
+     'find-img/swordfish.jpg', '50% 22%')
+
+show('headcorn', 'Headcorn Airshow', 'Historic', 'Ticketed',
+     'Headcorn<br><em>Airshow</em>', 128,
+     'Warbirds on a grass airfield in the Kent Weald, with camping on the airfield for the whole weekend.',
+     [('When', 'Saturday 26 and Sunday 27 June 2027'), ('Where', 'Headcorn Aerodrome, Kent'),
+      ('Tickets', 'Advance only, from £30'), ('Parking', 'Free, no booking needed')],
+     'camping-layout/img/e0c95ed4bee341b0.webp', '50% 55%')
+
+show('little-gransden', 'Little Gransden Air and Car Show', 'Airfield', 'Ticketed',
+     'Little Gransden<br><em>Air &amp; Car Show</em>', 116,
+     'A charity air show and car show on a grass airfield, with more than 300 classic and specialist vehicles.',
+     [('When', 'Sunday 29 August 2027'), ('Where', 'Little Gransden Airfield, Cambridgeshire'),
+      ('Tickets', 'Online through the official site'), ('Station', 'St Neots, then a taxi')],
+     'find-img/spitfire.jpg', '50% 50%')
+
+show('southport', 'Southport Air Show', 'Seafront', 'Ticketed',
+     'Southport<br><em>Air Show</em>', 128,
+     'Two days on the seafront on the August bank holiday weekend, flying over the Sefton coast since 1991.',
+     [('When', '2027 dates to be confirmed'), ('Where', 'Southport seafront, Merseyside'),
+      ('Entry', 'Adults £13, under 16s free (2026)'), ('Station', 'Southport, about 10 min walk')],
+     'find-img/apache.jpg', '50% 40%',
+     'The 2026 show ran on Saturday 29 and Sunday 30 August.')
+
+show('blackpool', 'Blackpool Air Show', 'Seafront', 'Free to watch',
+     'Blackpool<br><em>Air Show</em>', 128,
+     'Free on the seafront, two days every August, with the flying out over the Irish Sea.',
+     [('When', 'August 2027, dates to be confirmed'), ('Where', 'Blackpool Promenade, Lancashire'),
+      ('Entry', 'Free, no tickets needed'), ('Station', 'Blackpool North, about 15 minutes’ walk')],
+     'find-img/jaguar.jpg', '50% 45%',
+     'In 2026 it ran on Saturday 8 and Sunday 9 August.')
+
+show('ayr', 'International Ayr Show', 'Seafront', 'Free to watch',
+     'International<br><em>Ayr Show</em>', 128,
+     'Festival of Flight. A Friday evening display into the sunset over the Firth of Clyde, then a full Saturday afternoon.',
+     [('When', 'Friday 3 and Saturday 4 September 2027'), ('Where', 'Low Green, Ayr, South Ayrshire'),
+      ('Entry', 'Free, no tickets needed'), ('Station', 'Ayr, about 15 to 20 minutes’ walk')],
+     'find-img/c17.jpg', '50% 50%')
+
+# =============================================================================================
+# More packing lists. Facts and wording: first-airshow-what-to-pack.html, the other four top tens.
+PACK_CSS = [p for p in POSTERS if p[0] == 'what-to-pack'][0][2]
+
+
+def pack(slug, title, tag, h1, lead, items, size=124):
+    rows = ''.join('      <div class="it"><span class="bx">%s</span><div><div class="t">%s</div><div class="n">%s</div></div></div>\n' % (TICK, t, n) for t, n in items)
+    poster('pack-' + slug, title, PACK_CSS + '\n.body{padding-top:16px}\nh1{font-size:%dpx;white-space:nowrap}\n.lead{font-size:30px}\n.grid{row-gap:12px}\n' % size, """
+    <div>
+      <span class="tag teal">%s</span>
+      <h1>%s</h1>
+      <p class="lead">%s</p>
+    </div>
+    <div class="grid">
+%s    </div>
+    <p class="fine">Pack the night before and leave the bags by the door.</p>
+""" % (tag, h1, lead, rows))
+
+
+pack('seafront', 'What to pack for a seafront airshow', 'Seaside show?', 'Seafront <em>top ten</em>',
+     'For the free promenade shows such as Eastbourne, Clacton, Wales, Blackpool, Southport and Ayr.', [
+    ('Layers', 'It is colder on the seafront than in town, even in August'),
+    ('Windproof jacket', 'Sea breezes build through the afternoon'),
+    ('Something to sit on', 'The beach is shingle at some of them. A blanket or a low chair'),
+    ('Sun cream and a hat', 'Sea light burns faster than you expect'),
+    ('Cash and card', 'Card machines fail when the signal goes'),
+    ('Water', 'Easy to buy, but queues are long at the busy spots'),
+    ('Binoculars', 'The display line is further out over the water than on an airfield'),
+    ('Train times', 'Check the last train and the engineering work before you leave'),
+    ('A plan for the toilets', 'Town toilets and temporary units, both busy. Know where they are'),
+    ('Patience for the roads', 'The promenade closes. Arrive mid morning or take the train'),
+])
+
+pack('children', 'What to pack for an airshow with children', 'Bringing children?', 'Kids’ <em>top ten</em>',
+     'Toddlers right up to teenagers. Build the day around them and everyone enjoys it.', [
+    ('Ear defenders', 'The single best buy for a child at an airshow'),
+    ('Snack bag', 'A bag of their favourites that lasts all day'),
+    ('Refillable bottle each', 'Keeps them drinking without you buying bottles every hour'),
+    ('Wipes and a small first aid kit', 'Plasters, antihistamine, their medication'),
+    ('A buggy that copes with grass', 'Big wheels. Small wheels stop dead in a wet field'),
+    ('Contact details on them', 'A wristband or a note with your mobile number'),
+    ('Something for the quiet bits', 'A book, a colouring set, a tablet with downloads'),
+    ('Spare clothes', 'Mud, ice cream and rain. Usually all three'),
+    ('A small treat budget', 'Agree one bought treat and stick to it'),
+    ('A meeting point agreed on arrival', 'Say it out loud and point at it'),
+])
+
+pack('photographers', 'What to pack for airshow photography', 'Bringing a camera?', 'Camera bag <em>top ten</em>',
+     'The short list for photographers. The full kit guide is in the Photography Hub.', [
+    ('One or two bodies', 'Two saves lens changes in the dust. One is fine for most people'),
+    ('A long lens for the flying', 'Something in the 300mm to 600mm range'),
+    ('A wide lens for the static', 'The one that stays on the second body'),
+    ('Spare batteries and cards', 'More than you think. Cold and long days eat batteries'),
+    ('Lens cloths and a blower', 'Dust, rain and fingerprints all day'),
+    ('A monopod, not a tripod', 'Tripods take room on the crowd line and some shows limit them'),
+    ('A bag you can carry all day', 'Sling or backpack'),
+    ('The sun guide for the show', 'Know where the light is before you pick your pitch'),
+    ('A small step or stool', 'Gets you over heads if you are not on the front row'),
+    ('Rain cover for the camera', 'Shows still fly in drizzle'),
+], 112)
+
+pack('camping', 'What to pack for airshow camping', 'Camping weekend?', 'Camping <em>top ten</em>',
+     'For shows with camping on site or nearby, including RIAT, Duxford and the Midlands Air Festival.', [
+    ('Tent, pegs and a mallet', 'Hard ground in a dry summer, soft in a wet one. Bring both kinds of peg'),
+    ('Sleeping mat and warm bag', 'Summer nights in a field are colder than you think'),
+    ('Head torch', 'Hands free for the walk to the toilet block'),
+    ('Stove, fuel and a kettle', 'Breakfast and a brew before the queue for the gate'),
+    ('Cool box', 'Milk, lunch and the evening meal for two days'),
+    ('Camp chairs', 'They double as your crowd line chairs'),
+    ('Ear plugs', 'Campsites near airfields are noisy. So are campers'),
+    ('Wet wipes and a towel', 'Showers are limited or a long walk away'),
+    ('Bin bags', 'Rubbish, wet clothes and muddy boots'),
+    ('Power bank or a car charger', 'No sockets in a field'),
+])
+
+# =============================================================================================
+# More spotter cards. Facts and wording: aircraft-a-to-z.html. Photos: the ones that page uses.
+SPOT_CSS = [p for p in POSTERS if p[0] == 'spotter-red-arrows'][0][2]
+
+
+def spotter(slug, title, group, h1, kind, who, look, seen, photo, pos='50% 50%', plan=None):
+    side = '\n      <div class="plan"><img src="../%s" alt=""></div>' % plan if plan else ''
+    poster('spotter-' + slug, 'Spotter card: ' + title, SPOT_CSS + '\n.photo{height:296px}\n.photo img{object-position:%s}\n.facts dd{font-size:27.5px}\n' % pos, """
+    <div class="photo"><img src="../%s" alt=""></div>
+    <div class="pad">
+      <div class="tags"><span class="tag teal">Spotter card</span><span class="tag purple">%s</span></div>
+      <h1>%s</h1>
+      <div class="type">%s</div>
+    </div>
+    <div class="pad"><div class="facts">
+      <dl>
+        <div class="f"><dt>Who flies it</dt><dd>%s</dd></div>
+        <div class="f"><dt>Listen and look for</dt><dd>%s</dd></div>
+        <div class="f"><dt>Seen at</dt><dd>%s</dd></div>
+      </dl>%s
+    </div></div>
+""" % (photo, group, h1, kind, who, look, seen, side))
+
+
+spotter('typhoon', 'Eurofighter Typhoon', 'Modern military', 'Typhoon', 'Eurofighter <b>/</b> Multirole fighter',
+        'The RAF Typhoon Display Team, from 29 Squadron at RAF Coningsby.',
+        'Twin afterburners on the vertical climb, and on a damp day the vapour pouring off the wings.',
+        'Ayr, Blackpool, Cosford, Eastbourne, Southport, Wales and RIAT.',
+        'camping-layout/img/631d94c8d1c1b002.webp', '50% 50%', 'camping-layout/img/dl-typhoon.webp')
+
+spotter('chinook', 'Boeing Chinook', 'Helicopter', 'Chinook', 'Boeing <b>/</b> Twin rotor heavy lift helicopter',
+        'The RAF Chinook Display Team from RAF Odiham, plus flypasts from the front line fleet.',
+        'The famous wokka wokka of two rotors. You feel it in your chest as much as hear it.',
+        'Cosford, Ayr and RIAT.',
+        'camping-layout/img/3032a5373d27b445.webp')
+
+spotter('spitfire', 'Supermarine Spitfire', 'Historic', 'Spitfire', 'Supermarine <b>/</b> Second World War fighter',
+        'The Battle of Britain Memorial Flight, plus dozens of privately owned Spitfires.',
+        'The elliptical wing as it turns, and the Merlin. Once you know that sound you will pick it out every time.',
+        'Ayr, Blackpool, Clacton, Cosford, Eastbourne, Southport, Wales, RIAT, Duxford and Shuttleworth.',
+        'camping-layout/img/efcf15b014547919.webp')
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     for slug, title, extra, body in POSTERS:
