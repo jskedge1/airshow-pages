@@ -45,26 +45,27 @@ html,body{margin:0;height:100%;background:#081520;overflow:hidden}
   text-transform:uppercase;white-space:nowrap;
 }
 .xtile{
-  display:grid;place-items:center;width:124px;height:124px;border-radius:28px;flex:none;
+  display:grid;place-items:center;width:124px;height:124px;flex:none;
   background:#000;border:2px solid rgba(255,255,255,.22);
   box-shadow:0 14px 40px rgba(0,0,0,.45);
 }
 .xtile svg{width:66px;height:66px;fill:#fff}
 
 .handle{
-  display:inline-flex;align-items:center;gap:18px;margin-top:40px;padding:17px 40px 19px 32px;
-  border:3px solid var(--teal);border-radius:999px;background:rgba(14,33,49,.72);
+  display:inline-flex;align-items:stretch;margin-top:40px;
+  border:3px solid var(--teal);background:rgba(14,33,49,.82);
   font-weight:700;font-size:50px;line-height:1;letter-spacing:.005em;
 }
-.handle svg{width:36px;height:36px;fill:var(--teal);flex:none}
+.handle .hx{display:grid;place-items:center;width:90px;flex:none;background:var(--teal)}
+.handle .hx svg{width:40px;height:40px;fill:var(--deep)}
+.handle .hn{padding:18px 38px 22px 30px}
 
 .sub{margin:36px 0 0;font-weight:500;font-size:34px;line-height:1.3;color:var(--soft)}
 
 .foot{position:absolute;left:80px;right:80px;bottom:56px;text-align:center}
 .runway{display:flex;align-items:center;gap:18px;margin-bottom:26px}
-.runway i{display:block;height:5px;border-radius:3px;background:rgba(255,255,255,.34)}
 .runway .keys{display:flex;gap:6px;flex:none}
-.runway .keys b{display:block;width:6px;height:30px;border-radius:2px;background:rgba(255,255,255,.5)}
+.runway .keys b{display:block;width:6px;height:30px;background:rgba(255,255,255,.5)}
 .runway .dash{flex:1;height:5px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.34) 0 46px,transparent 46px 78px)}
 .url{font-family:var(--display);font-weight:700;font-size:34px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 
@@ -77,9 +78,12 @@ html,body{margin:0;height:100%;background:#081520;overflow:hidden}
 .sq .logo{top:44px;width:280px}
 .sq .copy{top:640px}
 .sq .head{font-size:120px}
-.sq .xtile{width:116px;height:116px;border-radius:26px}
+.sq .xtile{width:116px;height:116px}
 .sq .xtile svg{width:62px;height:62px}
-.sq .handle{margin-top:30px;font-size:46px;padding:15px 36px 17px 28px}
+.sq .handle{margin-top:30px;font-size:46px}
+.sq .handle .hx{width:82px}
+.sq .handle .hx svg{width:36px;height:36px}
+.sq .handle .hn{padding:15px 34px 19px 26px}
 .sq .sub{margin-top:26px;font-size:31px}
 .sq .foot{bottom:40px}
 .sq .runway{display:none}
@@ -90,7 +94,8 @@ html,body{margin:0;height:100%;background:#081520;overflow:hidden}
 <div class="stage">
 <div class="poster" id="poster">
 
-  <!-- Two jets cross and their smoke draws an X in the sky. -->
+  <!-- Two Red Arrows Hawks cross and their smoke draws an X in the sky. The Hawk is the site's own
+       top view cut-out (camping-layout/img/dl-hawk.webp). No rounded corners anywhere on the poster. -->
   <svg class="sky" id="sky" viewBox="0 0 1080 1350" aria-hidden="true">
     <defs>
       <linearGradient id="trailRed" x1="0" y1="0" x2="0" y2="1">
@@ -99,11 +104,11 @@ html,body{margin:0;height:100%;background:#081520;overflow:hidden}
         <stop offset=".78" stop-color="#D74949" stop-opacity=".2"/>
         <stop offset="1" stop-color="#D74949" stop-opacity="0"/>
       </linearGradient>
-      <linearGradient id="trailTeal" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#6FE3DD" stop-opacity="1"/>
-        <stop offset=".45" stop-color="#32B4AF" stop-opacity=".82"/>
-        <stop offset=".78" stop-color="#32B4AF" stop-opacity=".2"/>
-        <stop offset="1" stop-color="#32B4AF" stop-opacity="0"/>
+      <linearGradient id="trailWhite" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFFFFF" stop-opacity="1"/>
+        <stop offset=".45" stop-color="#EEF3F7" stop-opacity=".8"/>
+        <stop offset=".78" stop-color="#EEF3F7" stop-opacity=".2"/>
+        <stop offset="1" stop-color="#EEF3F7" stop-opacity="0"/>
       </linearGradient>
       <linearGradient id="trailCore" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#fff" stop-opacity=".9"/>
@@ -123,34 +128,23 @@ html,body{margin:0;height:100%;background:#081520;overflow:hidden}
       <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%">
         <feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#04101A" flood-opacity=".55"/>
       </filter>
-      <!-- Saab Gripen, top view, nose up (the site's own drawing, home-img/top/gripen.svg) -->
-      <g id="jet" stroke="#6F7D89" stroke-width=".7" stroke-linejoin="round">
-        <path d="M4 79 L25.5 47 L34.5 47 L56 79 L56 85 L34.5 83 L25.5 83 L4 85 Z" fill="#C3CCD4"/>
-        <path d="M3 76 h2 v11 h-2 z M55 76 h2 v11 h-2 z" fill="#9AA6B1"/>
-        <path d="M26 27 Q22.6 31 23.2 46 L36.8 46 Q37.4 31 34 27 Z" fill="#BCC6CE"/>
-        <path d="M25.5 33 L12.5 43 L13.5 46 L26 42 Z M34.5 33 L47.5 43 L46.5 46 L34 42 Z" fill="#B5BFC8"/>
-        <path d="M30 1.5 C31.6 6 33.4 13 34 20 L35 30 L35.6 50 L35.6 86 L34.2 93 L25.8 93 L24.4 86 L24.4 50 L25 30 L26 20 C26.6 13 28.4 6 30 1.5 Z" fill="#D2D9DF"/>
-        <path d="M30 14 C31.5 16.5 32 20 32 24.5 L28 24.5 C28 20 28.5 16.5 30 14 Z" fill="#22384B" stroke="#16293A" stroke-width=".5"/>
-        <path d="M29.3 62 L30 54 L30.7 62 L30.7 90 L29.3 90 Z" fill="#A9B4BE"/>
-        <path d="M26.4 93 h7.2 v2.6 h-7.2 z" fill="#5E6A75" stroke="none"/>
-      </g>
     </defs>
 
     <g id="cross" transform="translate(540 520)">
       <circle r="250" fill="url(#flash)"/>
       <g transform="rotate(45)">
         <g filter="url(#smoke)">
-          <path d="M-8 -372 L8 -372 L50 410 L-50 410 Z" fill="url(#trailRed)"/>
-          <path d="M-3 -372 L3 -372 L14 300 L-14 300 Z" fill="url(#trailCore)"/>
+          <path d="M-7 -348 L7 -348 L50 410 L-50 410 Z" fill="url(#trailRed)"/>
+          <path d="M-3 -348 L3 -348 L14 300 L-14 300 Z" fill="url(#trailCore)"/>
         </g>
-        <use href="#jet" transform="translate(-48 -520) scale(1.6)" filter="url(#shadow)"/>
+        <image href="../camping-layout/img/dl-hawk.webp" x="-75" y="-524" width="150" height="183" filter="url(#shadow)"/>
       </g>
       <g transform="rotate(-45)">
         <g filter="url(#smoke)">
-          <path d="M-8 -372 L8 -372 L50 410 L-50 410 Z" fill="url(#trailTeal)"/>
-          <path d="M-3 -372 L3 -372 L14 300 L-14 300 Z" fill="url(#trailCore)"/>
+          <path d="M-7 -348 L7 -348 L50 410 L-50 410 Z" fill="url(#trailWhite)"/>
+          <path d="M-3 -348 L3 -348 L14 300 L-14 300 Z" fill="url(#trailCore)"/>
         </g>
-        <use href="#jet" transform="translate(-48 -520) scale(1.6)" filter="url(#shadow)"/>
+        <image href="../camping-layout/img/dl-hawk.webp" x="-75" y="-524" width="150" height="183" filter="url(#shadow)"/>
       </g>
     </g>
   </svg>
@@ -163,8 +157,8 @@ html,body{margin:0;height:100%;background:#081520;overflow:hidden}
       <span class="xtile" role="img" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
     </h1>
     <div class="handle">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      <!-- HANDLE --><span>@ukairshowguide</span>
+      <span class="hx"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
+      <!-- HANDLE --><span class="hn">@ukairshowguide</span>
     </div>
     <p class="sub">Follow us for airshow news, line-ups and show dates.</p>
   </div>
