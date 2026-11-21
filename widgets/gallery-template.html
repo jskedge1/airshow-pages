@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Widget Gallery | UK Airshow Guide</title><meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html{scrollbar-width:none}html::-webkit-scrollbar{display:none}
+body{margin:0;font-family:'Barlow',Arial,sans-serif;background:#f3f6f8;color:#33444f;line-height:1.45;overflow-x:hidden}
+.hero{background:#13293c;color:#fff;text-align:center;padding:26px 18px 30px;border-bottom:4px solid #32b4af}
+.hero img{width:min(380px,78%);pointer-events:none;display:block;margin:0 auto 10px}
+.hero .k{font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.18em;color:#32b4af}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(32px,6vw,58px);line-height:1;text-transform:uppercase;margin:8px 0 10px}.hero h1 b{color:#32b4af}
+.hero p{max-width:660px;margin:0 auto;color:#c9d6e0;font-size:16px}
+.jump{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #dce6ee;padding:9px 10px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}.jump::-webkit-scrollbar{display:none}
+.jump a{flex:none;font:600 13px 'Barlow',sans-serif;color:#13293c;text-decoration:none;border:1.5px solid #dce6ee;border-radius:999px;padding:6px 11px;white-space:nowrap}.jump a:hover{background:#13293c;color:#fff;border-color:#13293c}
+.grid{max-width:1240px;margin:0 auto;padding:22px 14px 30px;display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(480px,100%),1fr));align-items:start}
+.item{background:#fff;border:1px solid #dce6ee;border-radius:16px;padding:16px;scroll-margin-top:60px;min-width:0}
+.item .top{display:flex;gap:12px;align-items:flex-start;margin-bottom:6px}
+.item .num{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:34px;line-height:.95;color:#32b4af}
+.item h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;line-height:1.05;margin:0;color:#13293c;text-transform:uppercase}
+.item p{margin:2px 0 0;font-size:15px}
+.pages{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 14px;align-items:center;font-size:12.5px}
+.pages b{font-family:'Share Tech Mono',monospace;font-weight:400;letter-spacing:.1em;color:#5a6b78;margin-right:2px}
+.pages span{background:#e6f5f4;color:#0e5f5b;font-weight:600;border-radius:999px;padding:3px 10px}
+.stage{background:#eef2f5;border-radius:12px;padding:14px 10px}
+details{margin-top:12px;border-top:1px solid #dce6ee;padding-top:10px}
+summary{font-weight:700;color:#13293c;cursor:pointer;font-size:14.5px}
+pre{font:12px/1.5 'Share Tech Mono',monospace;background:#0c1c2a;color:#c9f0ee;border-radius:9px;padding:11px 12px;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0}
+details small{display:block;color:#5a6b78;font-size:12.5px;margin-top:8px}
+.copy{font:700 13px 'Barlow',sans-serif;background:#13293c;color:#fff;border:0;border-radius:8px;padding:7px 12px;cursor:pointer}
+.foot{max-width:760px;margin:0 auto;padding:0 20px 44px;text-align:center;color:#5a6b78;font-size:14px}
+@media(max-width:380px){.grid{padding:14px 6px}.item{padding:12px 8px}.stage{padding:8px 4px}}
+</style></head><body>
+<header class="hero"><img alt="UK Airshow Guide" src="@@LOGO@@">
+<div class="k">WIDGET GALLERY</div><h1>20 Widgets For <b>The Guide</b></h1>
+<p>Every box on this page is a real, working widget, so try them. Under each one is the page I would put it on and the two lines of code that add it.</p></header>
+<nav class="jump" id="jump" aria-label="Jump to a widget"></nav>
+<main class="grid" id="grid"></main>
+<p class="foot">Show dates come from the calendar page. Postcodes are looked up with postcodes.io and the forecast comes from Open Meteo, both free and with no account needed. Nothing a visitor types is sent to the guide or stored anywhere but their own device.</p>
+<script>@@JS@@</script>
+<script>
+(function(){var L=window.UKAGWidgets.list,g=document.getElementById('grid'),j=document.getElementById('jump'),SRC='https://jskedge1.github.io/airshow-pages/widgets/';
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+L.forEach(function(w,i){var attr=w.attr?' '+w.attr:'',show=(w.attr.match(/data-show="(\w+)"/)||[])[1];
+  var code='<div class="ukag-widget" data-widget="'+w.id+'"'+attr+'></div>\n<script src="'+SRC+'ukag-widgets.js"><\/script>';
+  var s=document.createElement('section');s.className='item';s.id=w.id;
+  s.innerHTML='<div class="top"><span class="num">'+(i<9?'0':'')+(i+1)+'</span><div><h2>'+w.name+'</h2><p>'+w.about+'</p></div></div>'+
+   '<div class="pages"><b>WORKS ON</b>'+w.pages.map(function(p){return '<span>'+p+'</span>';}).join('')+'</div>'+
+   '<div class="stage"><div class="ukag-widget" data-widget="'+w.id+'"'+attr+'></div></div>'+
+   '<details><summary>How to add it</summary><pre>'+esc(code)+'</pre><button class="copy" type="button">Copy the code</button>'+
+   '<small>'+(show?'Change the show name to suit the page, or take it out to give visitors a picker. ':'')+'For a Wix HTML box set to Website address, use '+SRC+'embed.html?w='+w.id+(show?'&amp;show='+show:'')+'</small></details>';
+  s.querySelector('.copy').onclick=function(){var b=this;function done(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy the code';},1500);}
+    if(navigator.clipboard)navigator.clipboard.writeText(code).then(done,done);else done();};
+  g.appendChild(s);var a=document.createElement('a');a.href='#'+w.id;a.textContent=(i+1)+'. '+w.name;j.appendChild(a);});
+window.UKAGWidgets.mountAll();})();
+</script>
+<!-- mobile-fit -->
+<style>@media(max-width:340px){.hero{padding:18px 10px}.item h2{font-size:22px}}</style>
+<!-- mobile-fit end -->
+</body></html>

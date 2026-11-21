@@ -610,3 +610,13 @@ The 12 feature pages in `camping-layout/` (Clacton, Duxford, Cosford, Midlands, 
   question to qa-src/questions.py before running qa-src/build.py again, or it will be lost.
 - YouTube page: when a video has no large thumbnail the Latest player now drops to the standard one instead of
   showing YouTube's small grey placeholder.
+
+## Widgets (21 Nov 2026)
+
+Twenty small tools in one file, `widgets/ukag-widgets.js`. Not on any live page yet: Jack picks which ones go where.
+- Gallery with every widget working, the pages each one suits and the code to add it: https://jskedge1.github.io/airshow-pages/widgets/index.html (built by `python3 tools-widgets.py` from `widgets/gallery-template.html`, which also stops if widget copy has a dash or a banned word).
+- To add one to a page: `<div class="ukag-widget" data-widget="countdown" data-show="riat"></div>` and load `widgets/ukag-widgets.js` once. It also mounts inside the airshow-page element's shadow root. `data-show` is optional (keys: duxford, shuttleworth, midlands, cosford, headcorn, riat, eastbourne, clacton, gransden, ayr, wales, blackpool, southport); without it the visitor gets a show picker.
+- For a Wix HTML box set to Website address: `widgets/embed.html?w=countdown&show=riat`.
+- Names: countdown, nearest, weather, sun, leave, fuel, split, quiz, bingo, season, calendar, share, callsign, aircraft, speed, meetup, videos, card, panning, jargon.
+- Show dates are the `CAL` list at the top of the file, copied from the `D` list in uk-airshow-calendar.html on 21 Nov 2026. When the calendar changes, change `CAL` too, then run `python3 tools-widgets.py`. Show ground positions in `SHOWS` are approximate and only used for distance, weather and the sun compass.
+- Outside services, both free with no key: postcodes.io (nearest show) and Open Meteo (weather). The latest videos widget reads youtube/videos.json. Anything a visitor types stays on their device (localStorage keys starting `ukw-`).
