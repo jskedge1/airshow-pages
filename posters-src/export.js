@@ -21,8 +21,8 @@ const outDir = process.argv.includes('--draft') ? path.join(dir, '.draft') : dir
       // hand written, kept as PNG, with a square version
       jobs.push([f, '', 1080, 1350, slug + '.png']);
       jobs.push([f, '?size=square', 1080, 1080, slug + '-square.png']);
-    } else if (slug.startsWith('banner-')) {
-      // banners are exported at their own size, which is the size each platform asks for
+    } else if (/data-w="\d+" data-h="\d+"/.test(fs.readFileSync(path.join(dir, f), 'utf8'))) {
+      // banners, profile pictures and covers are exported at their own size, the one each platform asks for
       const m = fs.readFileSync(path.join(dir, f), 'utf8').match(/data-w="(\d+)" data-h="(\d+)"/);
       jobs.push([f, '', Number(m[1]), Number(m[2]), slug + '.jpg', 1]);
     } else {

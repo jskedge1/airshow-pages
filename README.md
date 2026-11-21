@@ -647,6 +647,11 @@ Social media banners are in the same folder and built by the same script: `banne
 and `banner-youtube` (2560 x 1440). Each keeps the logo and tagline inside the part of the banner its platform always shows,
 and has the logo's three swishes drawn large under the tagline. The tagline is the headline from home.html.
 
+The rest of the social media kit, also built by the same script (Instagram and TikTok have no banner):
+- `profile-picture` (1080 x 1080): the logo on navy, for every account. Platforms show it as a circle.
+- `cover-vertical` (1080 x 1920): a cover for TikTok videos, Reels and Stories, with everything in the middle so the profile grid's crop keeps it.
+- `highlight-shows`, `-dates`, `-news`, `-tips`, `-photos`, `-travel` (1080 x 1080): covers for Instagram story highlights. Add a word to the list in build.py for another.
+
 season-2027 and free-to-watch-2027 copy the calendar as it stood on 21 Nov 2026, so update their lists in build.py when the calendar changes.
 The show spotlights copy each show page as it stood on 21 Nov 2026, so update them when dates, prices or tickets change.
 Two things on the site disagreed that day, and the posters took the cautious side:

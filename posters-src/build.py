@@ -818,6 +818,108 @@ BANNERS = [
 ]
 
 
+# =============================================================================================
+# The rest of the social media kit. Instagram and TikTok have no banner, so what they take is a
+# profile picture, covers for story highlights and a tall cover for Reels, Stories and TikTok videos.
+# Everything that matters sits in the middle, because profile pictures and highlights are shown as
+# circles and tall covers are cropped to a square or 4:5 on the profile grid.
+SWISH_SVG = """<svg class="swish" viewBox="0 0 900 200" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="sr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B92D3A"/><stop offset=".6" stop-color="#E8303C"/><stop offset="1" stop-color="#FF4A52"/></linearGradient>
+      <linearGradient id="sw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#C9D6E0"/><stop offset=".5" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+      <linearGradient id="st" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1E8F8B"/><stop offset=".6" stop-color="#32B4AF"/><stop offset="1" stop-color="#5FE0DA"/></linearGradient>
+    </defs>
+    <path d="M250 92 Q 600 150 880 0 Q 620 112 250 92 Z" fill="url(#sr)"/>
+    <path d="M130 108 Q 570 185 895 22 Q 595 150 130 108 Z" fill="url(#sw)"/>
+    <path d="M0 120 Q 520 235 900 40 Q 560 190 0 120 Z" fill="url(#st)"/>
+  </svg>"""
+
+KIT_PAGE = """<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>%(title)s | UK Airshow Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&display=swap">
+<style>
+/* %(title)s, %(w)s x %(h)s. Built by posters-src/build.py, so change it there, not here. */
+:root{--navy:#13293C;--deep:#0E2131;--teal:#32B4AF;--red:#D74949;--mute:#9FB4C4;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%%;background:#081520;overflow:hidden}
+.stage{position:fixed;inset:0;display:grid;place-items:center}
+.poster{position:relative;width:%(w)spx;height:%(h)spx;flex:none;overflow:hidden;color:#fff;font-family:var(--display);-webkit-font-smoothing:antialiased;
+  background:radial-gradient(circle at 50%% 46%%, #1F4563 0%%, var(--navy) 46%%, var(--deep) 100%%)}
+.swish{position:absolute}
+%(css)s
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="poster" id="poster" data-w="%(w)s" data-h="%(h)s">
+%(body)s
+</div>
+</div>
+<script>
+(function(){
+  var p=document.getElementById('poster');
+  function fit(){var s=Math.min(window.innerWidth/%(w)s,window.innerHeight/%(h)s,1);p.style.transform=s<1?'scale('+s+')':'';}
+  window.addEventListener('resize',fit);fit();
+})();
+</script>
+</body>
+</html>
+"""
+
+KIT = []
+
+
+def kit(slug, title, w, h, css, body):
+    KIT.append((slug, KIT_PAGE % dict(title=title, w=w, h=h, css=css.strip(), body=body.strip('\n'))))
+
+
+# Profile picture for every account (Instagram, TikTok, X, Facebook, YouTube). Shown as a circle.
+kit('profile-picture', 'Profile picture', 1080, 1080, """
+.logo{position:absolute;left:50%;top:50%;width:800px;transform:translate(-50%,-52%)}
+.logo img{display:block;width:100%;height:auto}
+""", """
+  <div class="logo"><img src="../brand/ukag-header-logo.png" alt="UK Airshow Guide"></div>
+""")
+
+# Tall cover for TikTok videos, Reels and Stories. The profile grid crops it to the middle.
+kit('cover-vertical', 'Cover for TikTok, Reels and Stories', 1080, 1920, """
+.bg{position:absolute;left:0;top:0;width:100%;height:1010px;object-fit:cover;object-position:46% 50%}
+.shade{position:absolute;left:0;top:0;width:100%;height:1012px;background:linear-gradient(180deg,rgba(14,33,49,.2) 0%,rgba(14,33,49,0) 22%,rgba(14,33,49,.25) 55%,rgba(16,36,54,.86) 82%,#11283B 100%)}
+.poster{background:linear-gradient(180deg,#11283B 0%,var(--navy) 60%,var(--deep) 100%)}
+.logo{position:absolute;left:50%;top:812px;width:740px;transform:translateX(-50%)}
+.logo img{display:block;width:100%;height:auto}
+.line{position:absolute;left:0;right:0;top:1090px;text-align:center;font-weight:800;font-size:84px;line-height:.98;letter-spacing:.02em;text-transform:uppercase}
+.line em{font-style:normal;color:var(--teal)}
+.swish{left:150px;top:1262px;width:780px;height:170px}
+.url{position:absolute;left:0;right:0;top:1476px;text-align:center;font-weight:700;font-size:40px;line-height:1;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+""", """
+  <img class="bg" src="../home-img/v2/band-arrows.jpg" alt="">
+  <div class="shade"></div>
+  <div class="logo"><img src="../brand/ukag-header-logo.png" alt="UK Airshow Guide"></div>
+  <div class="line">Every UK airshow,<br><em>one easy guide</em></div>
+  %s
+  <div class="url">ukairshowguide.co.uk</div>
+""" % SWISH_SVG)
+
+# Covers for Instagram story highlights, one word each. Shown as small circles under the profile.
+for word in ('Shows', 'Dates', 'News', 'Tips', 'Photos', 'Travel'):
+    kit('highlight-' + word.lower(), 'Highlight cover: ' + word, 1080, 1080, """
+.word{position:absolute;left:0;right:0;top:372px;text-align:center;font-weight:800;font-size:212px;line-height:1;letter-spacing:.02em;text-transform:uppercase}
+.swish{left:200px;top:588px;width:680px;height:190px}
+""", """
+  <div class="word">%s</div>
+  %s
+""" % (word, SWISH_SVG))
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     for slug, title, extra, body in POSTERS:
@@ -829,6 +931,10 @@ def main():
         with open(os.path.join(OUT, b['slug'] + '.html'), 'w', encoding='utf-8') as f:
             f.write(BANNER_PAGE.format(**b))
         print('wrote posters/%s.html' % b['slug'])
+    for slug, html in KIT:
+        with open(os.path.join(OUT, slug + '.html'), 'w', encoding='utf-8') as f:
+            f.write(html)
+        print('wrote posters/%s.html' % slug)
 
 
 if __name__ == '__main__':
