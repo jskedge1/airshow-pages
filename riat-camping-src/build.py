@@ -223,6 +223,7 @@ def icon(name, cls=""):
 
 
 # ---------------------------------------------------------------- map
+SHOW_AT = "MOD Boscombe Down"   # where RIAT is held from 2027, whichever area a campsite is in
 SCALE = 20  # px per mile
 RADAR_SECS = 6   # one turn of the radar sweep on the ring maps
 
@@ -1708,7 +1709,11 @@ def build_site(s, live):
         w3 = e(s["what3words"].lstrip("/"))
         lk.append(f'<a class="btn nv" href="https://what3words.com/{w3}" target="_blank" rel="noopener">///{w3}</a>')
     addr = ", ".join(x for x in (s.get("address"), s.get("postcode")) if x)
-    bigd = f'<p class="bigd">{e(d)}<small>from {e(a["label"])}, as the crow flies</small></p>' if d else ""
+    # a campsite around Fairford is a long way from the show, so say how far
+    show_mi = round(miles(AREAS["boscombe"]["centre"], (s["lat"], s["lng"]))) if has_pos(s) and s["area"] != "boscombe" else None
+    far = f", about {show_mi} miles away as the crow flies" if show_mi else ""
+    bigd = (f'<p class="bigd">{e(d)}<small>from {e(a["label"])}, as the crow flies'
+            f'{". About " + str(show_mi) + " miles from the show at " + SHOW_AT if show_mi else ""}</small></p>') if d else ""
 
     # booking
     acts = []
@@ -1801,7 +1806,7 @@ def build_site(s, live):
   <div class="wrap">
     <span class="kick">From your pitch to the gate</span>
     <h2 class="h">Getting To The Show</h2>
-    <p class="lede">How to get from your pitch to the showground at {e(a["label"])}. RIAT's own travel plan for 2027 is still to be announced, so I would check back nearer the show.</p>
+    <p class="lede">How to get from your pitch to the showground at {SHOW_AT}{e(far)}. RIAT's own travel plan for 2027 is still to be announced, so I would check back nearer the show.</p>
     {band}
   </div>
 </section>
