@@ -666,6 +666,15 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+## Little Gransden page in the new design (preview, 22 Nov 2026)
+
+`previews/gransden-new-design.html` is the Little Gransden Air and Car Show feature page in the same new design, built from the Duxford template as `previews/NEW-DESIGN-ROLLOUT.md` sets out. It is not live. The live page `camping-layout/gransden.html` and the Duxford files were not changed. Private preview artifact: "Little Gransden Air and Car Show, new design preview".
+
+- Built by `python3 previews/gransden-new-design-src/build.py` from `camping-layout/gransden.html`. The Duxford only text fixes and photo swaps are taken out. No extra photos (`img/` is empty).
+- Words and photos come from the Gransden page itself. Header facts: When, Gates, Car show, Tickets. The stat box reads "300+ cars and motorbikes in the car show" and the guide band says "1 show day, Sunday 29 August 2027". Photos: Spartan beside the intro, crowd line behind the guide band, A-26 Invader over the Quick checker, Spitfire behind the line-up heading, biplanes behind the plan.
+- Section order follows Jack's list. Gransden has no Where to watch, Pick your show, Flightline walk, story or Experience flights sections, so those are skipped. Its own extras (Show your car or stall, The after show party, The ground show) come at the end. In the header and footer, The ground show takes the place of Where to watch.
+- Differences from Duxford, because the Gransden page is built differently: Latest news moves to the end of the Overview, where it sits on Duxford. The photographers' map is in Photography, and the live page hides the drawing, so only the spot list and the photo card show, side by side (photos for spots 1, 4 and 5). The page's own tab slider now opens at the first tab. Gransden has no sun guide.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
