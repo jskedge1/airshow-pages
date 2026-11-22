@@ -200,6 +200,13 @@ def restructure(s):
     s = _one(s, '\n\n  <div class="wrap"><section class="cdo reveal" id="cdo"',
              "\n\n" + (HERE / "fares.html").read_text(encoding="utf8") + '\n\n  <div class="wrap"><section class="cdo reveal" id="cdo"')
 
+    # ---- Getting there jump strip: the "On the day and getting home" box (.pbx) is not on the page, so its button
+    #      did nothing. Dropped, as on Duxford, so the strip reads Ways in, Fares, Questions. ----
+    s = _one(s, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+             "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];")
+    s = _one(s, "body #travel .tp-jump .wrap{grid-template-columns:repeat(4,minmax(0,1fr))}",
+             "body #travel .tp-jump .wrap{grid-template-columns:repeat(3,minmax(0,1fr))}")
+
     # ---- Food and facilities: Duxford's blocks (food, what to expect, boxes, traders, accessibility) ----
     a, z = _section(s, "facilities")
     f = s[a:z]
