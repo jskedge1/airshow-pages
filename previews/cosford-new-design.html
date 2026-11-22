@@ -13220,23 +13220,23 @@ window.LU_EXTRA = [
 </style>
 <script id="trlScript-cos">
 /* Train route header on the Cosford train topics, the same design as Duxford's (Jack, 22 Nov 2026).
-   Every fact is from the Cosford topics themselves. No example times: Cosford's page doesn't give any. */
+   Every fact is from the Cosford page itself: the topics and its show day train times (UKAG_TT, 2026). */
 (function(){
   var GO='<a class="trl-go" href="https://www.ukairshowguide.co.uk/train-to-cosford" target="_top"><span><b>See every train and live times</b><small>Your station, platforms, changes and the way home</small></span><i aria-hidden="true">→</i></a>';
   function kd(rows){return '<div class="trl-kd"><h4>Key details</h4>'+rows.map(function(r){return '<div'+(r[2]?' class="hl"':'')+'><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('')+'</div>';}
   function hero(o){
     return '<div class="trl-top"><div class="trl-hero"><div><span class="trl-tag">Train route</span><h3>Trains to <span>'+o.to+'</span></h3><p>'+o.p+'</p></div>'
-      +'<div><div class="trl-board" aria-label="Destination board"><b><span>'+o.board+'</span></b><small>'+o.via+'</small></div>'+kd(o.kd)+'</div></div>'
+      +'<div><div class="trl-board" aria-label="'+(o.dep?'Example departure board':'Destination board')+'"><b>'+(o.dep||'')+'<span>'+o.board+'</span></b><small>'+o.via+'</small></div>'+kd(o.kd)+'</div></div>'
       +'<div class="trl-jr"><div class="trl-jr-h"><b>Your journey</b><span>'+o.jr+'</span></div>'
-      +'<div class="trl-line"><div class="trl-stop"><i></i><b>'+o.from+'</b><small>'+o.fromNote+'</small></div><div class="trl-mid">'+o.mid+'</div><div class="trl-stop"><i></i><b>'+o.at+'</b><small>'+o.atNote+'</small></div></div></div>'
+      +'<div class="trl-line"><div class="trl-stop"><i></i><b>'+o.from+'</b><small>'+(o.dep?'Leave '+o.dep:o.fromNote)+'</small></div><div class="trl-mid">'+o.mid+'</div><div class="trl-stop"><i></i><b>'+o.at+'</b><small>'+(o.arr?'Arrive '+o.arr:o.atNote)+'</small></div></div></div>'
       +GO+'</div>';
   }
   var H={
-    'rail':hero({to:'Cosford',board:'COSFORD',via:'From Wolverhampton and Birmingham New Street',
+    'rail':hero({to:'Cosford',board:'COSFORD',dep:'08:25',arr:'09:02',via:'From Birmingham New Street',
       p:'Cosford station sits right beside the airfield on the Wolverhampton to Shrewsbury line, under 300 metres from the entrance. West Midlands Railway runs the service between Birmingham New Street, Wolverhampton, Cosford, Telford Central and Shrewsbury, with extra trains laid on for the show in past years.',
-      kd:[['How often','Hourly on a Sunday'],['Get off at','Cosford',1],['Then','Walk, a few minutes'],['Step-free','No step-free access'],['Run by','West Midlands Railway']],
-      jr:'Change at Wolverhampton or Birmingham New Street from most of the country. Trains normally run hourly on a Sunday, so I would check the times before you travel.',
-      from:'Wolverhampton',fromNote:'Change here from most of the country',at:'Cosford',atNote:'Under 300 m from the entrance',mid:'West Midlands Railway<br>about 15 minutes'}),
+      kd:[['Runs on','Show day, with extra trains'],['How often','Hourly on a Sunday'],['Get off at','Cosford',1],['Then','Walk, a few minutes'],['Step-free','No step-free access'],['Run by','West Midlands Railway']],
+      jr:'Birmingham New Street to Cosford, direct. These are the 2026 show day times, so check again nearer the show.',
+      from:'Birmingham New Street',at:'Cosford',mid:'West Midlands Railway, direct<br>37 min'}),
     'rail-change':hero({to:'Wolverhampton',board:'WOLVERHAMPTON',via:'Then West Midlands Railway to Cosford',
       p:'Most visitors change at Wolverhampton or Birmingham New Street. Both have frequent trains from London, Manchester, Liverpool, the North West, the South West and Wales, and West Midlands Railway runs the last leg to Cosford.',
       kd:[['From London','Avanti West Coast, about 2 hours'],['Change at','Wolverhampton or Birmingham',1],['Then','About 15 minutes to Cosford'],['Step-free','Telford Central, Wolverhampton']],
