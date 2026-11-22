@@ -32,6 +32,8 @@ LEFT_OUT = [
     ("duxford", "Where to watch: the Photographers' map (no photographers' spots on the Blackpool page)"),
     ("duxford", "Food and facilities: Duxford's own shuttle band, the What to expect on the day photos, and the Paying and Banned items boxes"),
     ("duxford", "Plan your day: Top ten things to take (no top ten list on the Blackpool page)"),
+    ("duxford", "Getting there: the More fares tabs (train, bus, coach, town parking, taxi) on the Fares board (no train, tram, bus, coach or taxi prices on the Blackpool page; the board shows its car park prices)"),
+    ("block", "Getting there: the \"On the day and getting home\" jump button (no such box on the Blackpool page)"),
 ]
 
 
@@ -230,4 +232,50 @@ def restructure(html):
         fig = '    <figure class="pic wide reveal"><img class="photo" data-k="pitts" alt=""><figcaption>The Jet Pitts trailing smoke.</figcaption></figure>\n'
         return s.replace(m.group(1), m.group(1) + fig, 1)
     html = edit(html, "photo", photo)
+
+    # ---- 11. Getting there (brief, 20:15): the dark train route header on the train topics, Duxford's trlStyle and
+    #          its script, with only the H data (from the Blackpool page's own Saturday train times, UKAG_TT, and its
+    #          train topics) and the link to the Blackpool train route page swapped. ----------------------------------
+    for fact in ('"09:02",\n', "Manchester Piccadilly to Blackpool North", "Northern, arrives 10:24", "then every 30 min",
+                 '"09:49",', "Preston to Blackpool Pleasure Beach", "Arrives 10:22, Blackpool South 10:25",
+                 "Northern, hourly on Saturdays, every two hours on Sundays", "train-to-blackpool",
+                 "{id:'rail',name:'Train to Blackpool North'", "{id:'rail-south',name:'Blackpool South and Pleasure Beach'"):
+        assert fact.replace("\n", "") in html.replace("\n", "") or fact in html, fact
+    ta = dux.index('<style id="trlStyle">')
+    tz = dux.index("</style>", ta) + len("</style>")
+    sa = dux.index('<script id="trlScript-dux">')
+    sz = dux.index("</script>", sa) + len("</script>")
+    trl = dux[sa:sz]
+    h0 = trl.index("  var H={")
+    h1 = trl.index("  function cur()")
+    bp_h = ("  var H={\n"
+            "    'rail':hero({to:'Blackpool North',board:'BLACKPOOL N',dep:'09:02',arr:'10:24',via:'From Manchester Piccadilly',\n"
+            "      p:'Blackpool North is the main station, at the top of Talbot Road, and it is about 15 minutes on foot to the Tower Festival Headland and the centre of the display. Northern runs direct trains from Manchester Piccadilly, Preston, Liverpool Lime Street, Bolton and York.',\n"
+            "      kd:[['How often','Every 30 minutes from Manchester'],['Get off at','Blackpool North',1],['Then','Walk to the Tower, about 15 minutes'],['From Manchester','About 1 hour 20 minutes'],['Run by','Northern, Avanti West Coast']],\n"
+            "      jr:'Manchester Piccadilly to Blackpool North, direct. These are Saturday times from the Northern timetable for 2026, so check again nearer the show.',\n"
+            "      from:'Manchester Piccadilly',at:'Blackpool North',mid:'Northern, direct<br>1h 22m'}),\n"
+            "    'rail-south':hero({to:'Pleasure Beach',board:'PLEASURE BCH',dep:'09:49',arr:'10:22',via:'From Preston',\n"
+            "      p:'Blackpool South and Blackpool Pleasure Beach stations are on the South Fylde line, with Northern trains from Preston via Kirkham and Lytham St Annes. They are handy if you are staying at the south end, but both are a long way from the display.',\n"
+            "      kd:[['How often','Hourly on Saturdays, every two hours on Sundays'],['Get off at','Blackpool Pleasure Beach',1],['Then','Tram to Manchester Square, then walk north'],['From Preston','About 33 minutes'],['Run by','Northern']],\n"
+            "      jr:'Preston to Blackpool Pleasure Beach, direct. These are Saturday times from the Northern timetable for 2026, so check again nearer the show.',\n"
+            "      from:'Preston',at:'Blackpool Pleasure Beach',mid:'Northern, direct<br>33 min'})\n"
+            "  };\n")
+    trl = trl[:h0] + bp_h + trl[h1:]
+    trl = trl.replace('<script id="trlScript-dux">', '<script id="trlScript-blackpool">', 1)
+    trl = trl.replace("/* Train route header on the Duxford train topics, the same design as the Clacton train topic (9 Nov) */",
+                      "/* Train route header on the train topics, the Duxford design, with the Blackpool train facts */", 1)
+    trl = rep(trl, "https://www.ukairshowguide.co.uk/train-to-duxford", "https://www.ukairshowguide.co.uk/train-to-blackpool")
+    html = rep(html, '<style id="jx-css-dux">', dux[ta:tz] + "\n" + trl + "\n" + '<style id="jx-css-dux">')
+
+    # ---- 12. Getting there (brief, 20:30): the Fares and Save money board, as on the Clacton and Wales round 2 pages,
+    #          with the hidden Ways in board its script needs (fares.html). Only the Blackpool page's own car park prices. --
+    html = rep(html, '\n\n  <div class="wrap"><section class="cdo reveal" id="cdo"',
+               "\n\n" + (HERE / "fares.html").read_text(encoding="utf8") + '\n\n  <div class="wrap"><section class="cdo reveal" id="cdo"')
+
+    # ---- 13. Getting there jump strip: there is no "On the day and getting home" box (.pbx) on the page, so its button
+    #          did nothing. Dropped, as on Duxford and Wales: Ways in, Fares, Questions. ----------------------------------
+    html = rep(html, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+               "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];")
+    html = rep(html, "body #travel .tp-jump .wrap{grid-template-columns:repeat(4,minmax(0,1fr))}",
+               "body #travel .tp-jump .wrap{grid-template-columns:repeat(3,minmax(0,1fr))}")
     return html

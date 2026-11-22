@@ -7391,6 +7391,223 @@ window.PHOTO_ALT={"bbmf": "Battle of Britain Memorial Flight Dakota, Spitfire an
 
   <div class="ukag-jp" data-show="blackpool"></div>
 
+<!-- Fares and Save money board (Jack, 22 Nov 2026: "add this to each page"), the Clacton round 2 board as on the Wales round 2 page, with the Blackpool page's own car park prices (October 2026) only. No train, tram, bus, coach or taxi prices are on the Blackpool page, so the More fares tabs are left out. The hidden Ways in board above it is needed by its script. -->
+<!-- Show day travel screen (next service screen design, 8 Nov 2026) -->
+<style>
+.nss{max-width:1200px;margin:34px auto 8px;padding:0 24px;box-sizing:border-box;font-family:"Barlow",sans-serif;color:#0B0F14}
+.nss *{box-sizing:border-box}
+.nss-in{background:#0B1A27;padding:14px;box-shadow:0 18px 40px rgba(11,15,20,.3)}
+.nss-scr{background:#E3F1F8}
+.nss-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px 24px;padding:14px 22px}
+.nss-brand b{display:block;font-size:26px;line-height:28px;color:#13293C}
+.nss-brand b span{font-weight:400}
+.nss-brand small{display:block;font-size:15px;color:#13293C}
+.nss-days{display:flex;align-items:flex-end;gap:26px}
+.nss-day{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:14px;font-weight:500;color:#13293C}
+.nss-day svg{width:28px;height:28px;transform:rotate(45deg)}
+.nss-clock{display:flex;flex-direction:column;align-items:flex-end;margin-left:8px}
+.nss-clock b{font-size:34px;line-height:34px;color:#13293C;font-variant-numeric:tabular-nums}
+.nss-clock small{font-size:13px;font-weight:500;color:#13293C}
+.nss-band{background:#6950A1;color:#fff;padding:8px 22px;font-weight:600;font-size:30px;line-height:38px}
+.nss-row{all:unset;box-sizing:border-box;display:flex;align-items:stretch;width:100%;min-height:58px;cursor:pointer;background:#0B0F14;color:#fff;border-top:1px solid rgba(255,255,255,.14);transition:background .25s ease}
+.nss-row:hover{background:#1C3850}
+.nss-row:focus-visible{outline:3px solid #32B4AF;outline-offset:-3px}
+.nss-row[aria-selected="true"]{background:#E3F1F8;color:#13293C}
+.nss-n{width:64px;display:flex;align-items:center;justify-content:center;font-size:28px;transition:transform .25s ease}
+.nss-row:hover .nss-n{transform:translateX(4px)}
+.nss-badge{width:150px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;background:var(--c);color:var(--i,#fff)}
+.nss-dest{flex:1;display:flex;align-items:center;padding:0 20px;font-size:26px;min-width:0}
+.nss-note{display:flex;align-items:center;padding:0 16px;font-size:18px;color:#F2B705;text-align:right}
+.nss-row[aria-selected="true"] .nss-note{color:#8A6400}
+.nss-when{font-size:28px!important;width:70px!important}
+.nss-row[aria-selected="true"] .nss-when:after{content:"";}
+.nss-dest{font-size:22px}
+.nss-note{font-size:16px}
+.nss-in.nss-inband{background:transparent;padding:0;box-shadow:0 14px 34px rgba(6,40,61,.25)}
+.tp-fares .nss-low{padding:22px}
+.nss-when{width:160px;flex:none;display:flex;align-items:center;justify-content:flex-end;padding-right:22px;font-size:20px}
+.nss-call{background:#0B1A27;color:#fff;padding:9px 22px;font-size:19px;line-height:27px}
+.nss-call[hidden]{display:none}
+.nss-low{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px;padding:22px}
+.nss-hd{display:flex;align-items:stretch;margin-bottom:16px}
+.nss-sq{width:80px;flex:none;display:flex;align-items:center;justify-content:center;background:#44AED6;color:#13293C;font:800 40px/1 "Barlow",sans-serif}
+.nss-sq svg{width:40px;height:40px}
+.nss-bar{flex:1;display:flex;align-items:center;gap:20px;padding:8px 18px;background:#0B0F14;color:#fff}
+.nss-bar b{font:800 52px/54px "Barlow","Barlow",sans-serif;text-transform:none}
+.nss-bar span{font-size:14px;line-height:19px;font-weight:600}
+.nss-fares{display:grid;grid-template-columns:190px minmax(0,1fr);gap:18px;align-items:start}
+.nss-pen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;padding-bottom:34px;background:#44AED6;clip-path:polygon(0 0,100% 0,100% 78%,50% 100%,0 78%);text-decoration:none!important;color:#13293C!important;text-align:center;transition:transform .3s cubic-bezier(.2,.7,.2,1),background .3s ease}
+.nss-pen:hover{transform:translateY(-3px);background:#2F9CC6}
+.nss-pen b{font:800 30px/30px "Barlow","Barlow",sans-serif;text-transform:none}
+.nss-pen small{font-size:13px;font-weight:600;margin-top:6px}
+.nss-sub{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;margin:0 0 10px;color:#13293C}
+.nss-sub em{font-style:normal;background:#44AED6;color:#13293C;font-size:12px;font-weight:700;padding:2px 7px}
+.nss-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.nss-tile{display:flex;align-items:center;gap:12px;background:#D7E4EC;padding:10px 12px;transition:transform .25s ease}
+.nss-tile:hover{transform:translateY(-2px)}
+.nss-tile i{flex:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:12px;background:var(--c);color:var(--i,#fff)}
+.nss-tile span{display:flex;flex-direction:column;font-size:13px;color:#13293C}
+.nss-tile span b{font-size:20px;line-height:24px}
+.nss-tile{background:#EEF2F5;background:color-mix(in srgb,var(--c) 14%,#FFFFFF)!important;border-left:5px solid var(--c);transition:transform .25s ease,background .25s ease}
+.nss-tile:hover{background:color-mix(in srgb,var(--c) 24%,#FFFFFF)!important}
+.nss-small{margin:0;font-size:13px;line-height:18px;color:#3E4A54}
+.nss-disc{background:#fff;display:flex;flex-direction:column}
+.nss-disc .nss-hd{margin:0}
+.nss-disc .nss-bar b{font-size:46px;line-height:50px}
+.nss-dl{padding:16px 18px;display:flex;flex-direction:column;gap:0}
+.nss-dr{padding:12px 0;border-top:1px solid #C6CDD2}
+.nss-dr:first-child{border-top:0;padding-top:0}
+.nss-dr b{display:block;font-size:22px;line-height:28px;color:#0B0F14}
+.nss-dr b span{font-weight:300}
+.nss-dr p{margin:2px 0 0!important;font-size:14px!important;line-height:20px!important;color:#3E4A54!important}
+@media(max-width:900px){.nss-low{grid-template-columns:minmax(0,1fr)}.nss-when{display:none}}
+@media(max-width:640px){.nss{padding:0 16px}.nss-in{padding:8px}.nss-days{gap:14px}.nss-clock b{font-size:26px}.nss-band{font-size:22px;line-height:30px;padding:8px 14px}.nss-n{width:40px;font-size:20px}.nss-badge{width:86px;font-size:16px}.nss-dest{font-size:18px;padding:0 12px}.nss-note{display:none}.nss-call{font-size:16px;line-height:23px;padding:8px 14px}.nss-low{padding:14px}.nss-fares{grid-template-columns:minmax(0,1fr)}.nss-pen{height:140px}.nss-bar b{font-size:38px;line-height:42px}.nss-bar span{display:none}.nss-tiles{grid-template-columns:minmax(0,1fr)}}
+.mf{background:#fff;margin:0 22px 22px}
+.mf-tabs{display:flex;flex-wrap:wrap;background:#0B0F14}
+.mf-tabs button{display:flex;align-items:center;gap:10px;padding:12px 18px;background:none;border:0;border-right:1px solid #22303C;color:#C9D3DA;font:700 15px/1 "Barlow",sans-serif;text-transform:none;letter-spacing:0;cursor:pointer}
+.mf-tabs button i{font-style:normal;font-size:11px;letter-spacing:0;padding:4px 6px;background:var(--c);color:var(--t,#fff)}
+.mf-tabs button[aria-selected="true"]{background:#fff;color:#13293C}
+.mf-tabs button{position:relative;transition:background .25s ease,color .25s ease}
+.mf-tabs button:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:#44AED6;transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.mf-tabs button:hover{background:#18222C;color:#fff}
+.mf-tabs button:hover:after,.mf-tabs button[aria-selected="true"]:after{transform:scaleX(1)}
+.mf-tabs button[aria-selected="true"]:hover{background:#fff;color:#13293C}
+.mf-tabs button i{transition:transform .25s ease}
+.mf-tabs button:hover i{transform:translateY(-2px)}
+.mf-tabs button:focus-visible{outline:3px solid #44AED6;outline-offset:-3px}
+.mf-t{transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease}
+.mf-t:hover{border-color:#44AED6;transform:translateY(-3px);box-shadow:0 8px 18px rgba(19,41,60,.10)}
+.mf-st button{transition:background .2s ease}
+.mf-st button:hover{background:#44AED6;color:#13293C}
+@media(prefers-reduced-motion:reduce){.mf-tabs button:after,.mf-t,.mf-tabs button i{transition:none}.mf-t:hover{transform:none}}
+.mf-p{padding:20px 22px}
+.mf-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.mf-t{border:1px solid #D3DCE2;border-top:4px solid #44AED6;padding:12px 14px;display:flex;flex-direction:column}
+.mf-t small{font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;color:#5A6873}
+.mf-t b{font:800 34px/40px "Barlow","Barlow",sans-serif;color:#13293C}
+.mf-t b sup{font:600 12px/1 "Barlow",sans-serif;margin-left:4px;vertical-align:top;position:relative;top:8px;text-transform:none}
+.mf-t span{font-size:13px;color:#3E4A54}
+.mf-l{margin:16px 0 0;padding:0;list-style:none}
+.mf-l li{position:relative;padding:0 0 8px 26px;font-size:15px;line-height:22px;color:#13293C}
+.mf-l li:before{content:"";position:absolute;left:2px;top:5px;width:8px;height:8px;border:3px solid #44AED6;border-radius:50%}
+.mf-calc{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.mf-st{display:flex;align-items:center;border:1px solid #D3DCE2}
+.mf-st span{padding:0 14px;font-weight:700;color:#13293C}
+.mf-st button{width:42px;height:42px;border:0;background:#13293C;color:#fff;font-size:22px;cursor:pointer}
+.mf-st b{width:44px;text-align:center;font:800 24px "Barlow",sans-serif;color:#13293C}
+.mf-bar{display:grid;grid-template-columns:170px minmax(0,1fr) 80px;align-items:center;gap:12px;margin-bottom:8px;font-weight:700;color:#13293C}
+.mf-bar div{height:30px;background:#E3F1F8}
+.mf-bar div i{display:block;height:100%;background:var(--c);transition:width .4s ease}
+.mf-bar b{font:800 24px "Barlow",sans-serif;text-align:right}
+.mf-bar.best b:after{content:" best";font:700 11px "Barlow",sans-serif;text-transform:none;color:#2BA84A}
+.mf-n{margin:10px 0 0;font-size:13px;color:#3E4A54}
+@media(max-width:900px){.mf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.mf{margin:0 14px 14px}.mf-tabs button{flex:1 1 50%;padding:10px 12px;font-size:13px}.mf-p{padding:14px}.mf-bar{grid-template-columns:110px minmax(0,1fr) 64px;font-size:13px}.mf-t b{font-size:28px;line-height:32px}}
+@media(prefers-reduced-motion:reduce){.nss-row,.nss-n,.nss-pen,.nss-tile{transition:none}.nss-pen:hover,.nss-tile:hover{transform:none}}
+</style>
+<div class="nss">
+<div class="nss-in"><div class="nss-scr">
+<div class="nss-top">
+<div class="nss-brand"><b>Ways in</b><small>Blackpool Air Show, <b style="display:inline;font-size:15px">pick one to see the details</b></small></div>
+<div class="nss-days">
+<div class="nss-day">Saturday<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#13293C" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>August</div>
+<div class="nss-day">Sunday<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#13293C" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>August</div>
+<div class="nss-clock"><b id="nssClock">--:--</b><small>2027 show days</small></div>
+</div>
+</div>
+<div class="nss-band">Choose how you are getting there</div>
+<div class="nss-rows" id="nssRows" role="listbox" aria-label="Ways to get to the show"></div>
+</div></div>
+</div>
+<div class="nss tp-fares" id="tpFares"><div class="nss-in" style="background:#E3F1F8;padding:0"><div class="nss-scr">
+<div class="nss-low">
+<div>
+<div class="nss-hd"><span class="nss-sq"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/></svg></span><div class="nss-bar"><b>Fares</b><span>Every price for getting to and parking at the show, in one place.</span></div></div>
+<div class="nss-fares">
+<a class="nss-pen" href="https://www.ukairshowguide.co.uk/airshow-public-transport" target="_top"><b>Plan my<br>journey</b><small>All transport options</small></a>
+<div>
+<p class="nss-sub">Central, Bonny Street and Talbot Road</p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#13293C"><i>6 hr</i><span>6 hours<b>£9.30</b></span></div>
+<div class="nss-tile" style="--c:#13293C"><i>12 hr</i><span>12 hours<b>£14.50</b></span></div>
+</div>
+<p class="nss-sub">South car park and Bloomfield Road</p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#00A6E2"><i>6 hr</i><span>6 hours<b>£7.20</b></span></div>
+<div class="nss-tile" style="--c:#00A6E2"><i>12 hr</i><span>12 hours<b>£11.40</b></span></div>
+</div>
+<p class="nss-small">Council car park prices in October 2026. Blue Badge holders get 3 hours free with a clock, but not at Talbot Road.</p>
+</div>
+</div>
+</div>
+<div class="nss-disc">
+<div class="nss-hd"><span class="nss-sq" style="background:#6950A1;color:#fff">%</span><div class="nss-bar"><b>Save money</b></div></div>
+<div class="nss-dl">
+<div class="nss-dr"><b>Entry <span>| Free</span></b><p>Blackpool Air Show is free and there are no tickets or gates.</p></div>
+<div class="nss-dr"><b>Blue Badge <span>| 3 hours free</span></b><p>3 hours free with a clock in most council car parks, but not at Talbot Road.</p></div>
+</div>
+</div>
+</div>
+</div>
+</div></div>
+</div>
+<script>
+(function(){
+  var root=document.querySelector('.nss'); if(!root) return;
+  var MODE={'Park and Ride':['P+R','#2BA84A','#fff'],'By train':['Train','#D74949','#fff'],'Trams, buses & taxis':['Tram','#6950A1','#fff'],'Parking':['P','#13293C','#fff'],'Fuel':['Fuel','#F2B233','#13293C'],'By bus':['Bus','#00A6E2','#13293C'],'By coach':['Coach','#C2255C','#fff'],'By road':['Road','#F2B233','#13293C'],'Access & taxis':['Taxi','#6950A1','#fff']};
+  function tick(){ var d=new Date(),c=root.querySelector('#nssClock'); if(c) c.textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+  tick(); setInterval(tick,20000);
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function build(){
+    var pl=document.getElementById('parkList'), box=root.querySelector('#nssRows');
+    if(!pl||!pl.querySelector('button')) return false;
+    var g=null,n=0,html='';
+    [].forEach.call(pl.children,function(el){
+      if(el.tagName!=='BUTTON'){ g=MODE[el.textContent.trim()]||['Info','#13293C','#fff']; return; }
+      var sm=el.querySelector('small'), sub=sm?sm.textContent:'', name=el.querySelector('span')?el.querySelector('span').firstChild.textContent:el.textContent;
+      n++;
+      html+='<button type="button" class="nss-row" role="option" aria-selected="false" data-id="'+el.dataset.id+'" style="--c:'+g[1]+';--i:'+g[2]+'"><span class="nss-n">'+n+'</span><span class="nss-badge">'+g[0]+'</span><span class="nss-dest">'+esc(name.trim())+'</span><span class="nss-note">'+esc(sub)+'</span><span class="nss-when" aria-hidden="true">&rsaquo;</span></button>';
+    });
+    box.innerHTML=html;
+    mark();
+    return true;
+  }
+  function mark(){
+    var pl=document.getElementById('parkList'), cur=pl&&pl.querySelector('button[aria-pressed="true"]');
+    var id=cur?cur.dataset.id:null;
+    root.querySelectorAll('.nss-row').forEach(function(r){ r.setAttribute('aria-selected',String(r.dataset.id===id)); });
+  }
+  root.addEventListener('click',function(e){
+    var r=e.target.closest('.nss-row'); if(!r) return;
+    var b=document.querySelector('#parkList button[data-id="'+r.dataset.id+'"]'); if(b) b.click();
+    setTimeout(mark,30);
+    var card=document.querySelector('#travel .xd-card');
+    if(card){ setTimeout(function(){ var y=card.getBoundingClientRect().top+pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); },60); }
+  });
+  var tries=0; (function wait(){ if(build()) { var pl=document.getElementById('parkList'); new MutationObserver(mark).observe(pl,{attributes:true,subtree:true,attributeFilter:['aria-pressed']}); return; } if(++tries<80) setTimeout(wait,150); })();
+})();
+(function(){
+  var b=document.getElementById('mfBox'); if(!b) return;
+  b.querySelector('.mf-tabs').addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;
+    b.querySelectorAll('.mf-tabs button').forEach(function(x){x.setAttribute('aria-selected',String(x===t));});
+    b.querySelectorAll('.mf-p').forEach(function(p){p.hidden=p.dataset.p!==t.dataset.p;});});
+  var n={a:2,c:2};
+  function calc(){
+    if(!document.getElementById('mfBars')) return;
+    var a=n.a,c=n.c,ppl=a+c;
+    var pr=a*6+c*5;
+    var full=a*11.3+c*5.65, rc=(a&&c&&a<=4)?(a*11.3*2/3+c*5.65*0.4):full, tr=Math.min(full,rc)+ (a+c?0:0);
+    var dr=Math.max(1,Math.ceil(ppl/5))*10;
+    var rows=[['Park and Ride',pr,'#2BA84A'],['Train',tr,'#D70428'],['Drive and park',dr,'#13293C']];
+    var mx=Math.max.apply(null,rows.map(function(r){return r[1];}))||1, mn=Math.min.apply(null,rows.map(function(r){return r[1];}));
+    document.getElementById('mfA').textContent=a; document.getElementById('mfC').textContent=c;
+    document.getElementById('mfBars').innerHTML=rows.map(function(r){return '<div class="mf-bar'+(r[1]===mn&&ppl?' best':'')+'" style="--c:'+r[2]+'"><span>'+r[0]+'</span><div><i style="width:'+(ppl?r[1]/mx*100:0)+'%"></i></div><b>£'+(Math.round(r[1]*100)/100).toFixed(r[1]%1?2:0)+'</b></div>';}).join('');
+  }
+  b.addEventListener('click',function(e){var t=e.target.closest('.mf-st button');if(!t)return;var k=t.dataset.k;n[k]=Math.max(k==='a'?1:0,Math.min(12,n[k]+ +t.dataset.d));calc();});
+  calc();
+})();
+</script>
+
   <div class="wrap"><section class="cdo reveal" id="cdo" aria-labelledby="cdoTitle">
 <style>
 .cdo{background:#fff;box-shadow:0 2px 14px rgba(19,41,60,.09);padding:28px 30px;margin:28px 0;font-family:Barlow,system-ui,sans-serif;color:#13293C}
@@ -15054,7 +15271,7 @@ body #phCalc .sw-calc .pl-q legend{text-transform:none!important}
     else if (!content.contains(tc)) tc.hidden = true;
   }
   /* ---------- one tidy order for the whole section ---------- */
-  var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];
+  var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];
   function layout() {
     var tr = document.getElementById('travel'); if (!tr || tr.dataset.tpl) return;
     var hero = tr.querySelector('.gt-hero'), exp = tr.querySelector('#explore');
@@ -15623,7 +15840,7 @@ body #phCalc .sw-calc .pl-q legend{text-transform:none!important}
 @media (max-width:700px){#travel .gt-hero>div:first-child{padding:22px 18px!important}}
 </style>
 <style id="tpJump4">
-body #travel .tp-jump .wrap{grid-template-columns:repeat(4,minmax(0,1fr))}
+body #travel .tp-jump .wrap{grid-template-columns:repeat(3,minmax(0,1fr))}
 body #travel .tp-jump button:nth-child(1){box-shadow:inset 0 6px 0 #D74949,inset -1px 0 0 #D3D8DC}
 body #travel .tp-jump button:nth-child(2){box-shadow:inset 0 6px 0 #2BA84A,inset -1px 0 0 #D3D8DC}
 body #travel .tp-jump button:nth-child(3){box-shadow:inset 0 6px 0 #6950A1,inset -1px 0 0 #D3D8DC}
@@ -16423,6 +16640,93 @@ var h=document.createElement('h3');h.className='sub-h tr-sub';h.textContent='Foo
 t.parentNode.insertBefore(h,t);})();})();
 </script>
 <style id="noplane-kr">body section.cg-next:after{display:none!important;content:none!important}</style>
+<style id="trlStyle">
+#explore .xd-content.trl{--trc:#2F3238;--trd:#23272B;--trk:#17181A;--trr:#D2232A;--tra:#F2B233}
+#explore .xd-content.trl .tr-box,#explore .xd-content.trl>.xd-title,#explore .xd-content.trl>.ft-stats,#explore .xd-content.trl>.xd-blindbar{display:none!important}
+.trl-hero{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:28px;align-items:center;padding:34px 30px 30px;background-color:#2F3238;background-image:linear-gradient(45deg,rgba(255,255,255,.035) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.035) 75%),linear-gradient(-45deg,rgba(255,255,255,.035) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.035) 75%);background-size:22px 22px;border-bottom:4px solid #D2232A;font-family:Barlow,system-ui,sans-serif;color:#fff}
+.trl-tag{display:inline-block;background:#D2232A;color:#fff;font:600 13px/1 Barlow,sans-serif;padding:7px 10px;margin-bottom:14px}
+.trl-hero h3,#explore .xd-content.trl .trl-hero h3{margin:0 0 12px!important;font:800 54px/.95 'Barlow',Barlow,sans-serif!important;color:#fff!important;text-transform:none!important;letter-spacing:0}
+.trl-hero h3 span{color:#FF8A8A}
+.trl-hero p{margin:0;font-size:16px;line-height:1.65;color:#DCE1E5}
+.trl-board{background:#050607;border-top:3px solid #F2B233;padding:14px 16px 12px;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.trl-board b{display:block;font:800 40px/1 'Barlow',Barlow,sans-serif;color:#F2B233;letter-spacing:0}
+.trl-board b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.trl-board b span{font-size:20px;margin-left:8px}
+.trl-board small{display:block;margin-top:6px;font:600 12px/1.3 'Barlow',Barlow,sans-serif;color:#F2B233;opacity:.85;letter-spacing:0;text-transform:none}
+.trl-kd{margin-top:10px;background:#23272B;border-top:3px solid #D2232A}
+.trl-kd h4,#explore .xd-content.trl .trl-kd h4{margin:0!important;padding:12px 16px 6px!important;font:800 18px/1 'Barlow',Barlow,sans-serif!important;color:#FF8A8A!important;text-transform:none!important;border:0!important;background:none!important}
+.trl-kd div{display:flex;justify-content:space-between;gap:12px;padding:9px 16px;border-top:1px solid rgba(255,255,255,.08);font-size:14px;color:#C9CFD4}
+.trl-kd div span{white-space:nowrap}.trl-kd div b{color:#fff;text-align:right;font-weight:700}
+.trl-kd div.hl b{background:#D2232A;padding:2px 8px}
+.trl-jr{background:#1B1E21;padding:18px 30px 22px;font-family:Barlow,system-ui,sans-serif;color:#fff}
+.trl-jr-h{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin:-18px -30px 22px;padding:14px 30px;background:#D2232A;font-size:15px;color:#FFFFFF}
+.trl-jr-h b{font:800 22px/1 'Barlow',Barlow,sans-serif;color:#FFFFFF;text-transform:none}
+.trl-line{position:relative;display:flex;justify-content:space-between;align-items:flex-start}
+.trl-line:before{content:"";position:absolute;left:14px;right:14px;top:12px;height:6px;background:#D2232A;transform:scaleX(0);transform-origin:left;transition:transform 1.4s cubic-bezier(.22,.61,.36,1)}
+.trl.in-view .trl-line:before{transform:scaleX(1)}
+.trl-stop{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;width:160px;text-align:center}
+.trl-stop i{width:30px;height:30px;border-radius:50%;background:#D2232A;box-shadow:inset 0 0 0 5px #fff;border:3px solid #D2232A;box-sizing:border-box}
+.trl-stop b{font:800 16px/1.1 'Barlow',Barlow,sans-serif;text-transform:none}
+.trl-stop small{font-size:13px;color:#C9CFD4}
+.trl-mid{position:absolute;left:50%;top:26px;transform:translateX(-50%);text-align:center;font:600 13px/1.3 Barlow,sans-serif;color:#fff}
+.trl-go{display:flex;align-items:stretch;margin:0;background:#D2232A;color:#fff!important;text-decoration:none!important;font-family:Barlow,sans-serif;transition:background .3s ease}
+.trl-go:hover{background:#B51C22}
+.trl-go span{flex:1;padding:14px 20px}
+.trl-go b{display:block;font:800 22px/1.1 'Barlow',Barlow,sans-serif;text-transform:none}
+.trl-go small{display:block;font-size:14px;opacity:.9}
+.trl-go i{display:flex;align-items:center;justify-content:center;width:64px;font-style:normal;font-size:24px;background:rgba(0,0,0,.18);transition:padding .3s ease}
+.trl-go:hover i{padding-left:10px}
+#explore .xd-content.trl>.ft-tabs{background:#2F3238!important;border:0!important;padding:0 10px!important;gap:0!important;box-shadow:none!important}
+#explore .xd-content.trl>.ft-tabs button{background:transparent!important;color:#fff!important;border:0!important;border-bottom:4px solid transparent!important;border-radius:0!important;padding:14px 16px!important;font:600 15px/1.2 Barlow,sans-serif!important;box-shadow:none!important}
+#explore .xd-content.trl>.ft-tabs button[aria-selected="true"],#explore .xd-content.trl>.ft-tabs button:hover{border-bottom-color:#D2232A!important;background:rgba(255,255,255,.06)!important}
+#travel #explore .xd-content.trl>.xd-sec>h4{position:relative;padding-left:18px!important;font:800 34px/1 'Barlow',Barlow,sans-serif!important;color:#2F3238!important;text-transform:none!important;border:0!important;background:none!important}
+#explore .xd-content.trl>.xd-sec>h4:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:#D2232A}
+@media (max-width:860px){.trl-hero{grid-template-columns:minmax(0,1fr);padding:26px 18px}.trl-hero h3{font-size:42px!important}.trl-jr{padding:16px 18px 20px}.trl-jr-h{margin:-16px -18px 20px;padding:12px 18px}.trl-stop{width:110px}#explore .xd-content.trl>.ft-tabs{overflow-x:auto;flex-wrap:nowrap!important}#explore .xd-content.trl>.ft-tabs button{white-space:nowrap}}
+@media (prefers-reduced-motion:reduce){.trl-line:before{transition:none;transform:none}.trl-go,.trl-go i{transition:none}}
+</style>
+<script id="trlScript-blackpool">
+/* Train route header on the train topics, the Duxford design, with the Blackpool train facts */
+(function(){
+  var GO='<a class="trl-go" href="https://www.ukairshowguide.co.uk/train-to-blackpool" target="_top"><span><b>See every train and live times</b><small>Your station, platforms, changes and the way home</small></span><i aria-hidden="true">→</i></a>';
+  function kd(rows){return '<div class="trl-kd"><h4>Key details</h4>'+rows.map(function(r){return '<div'+(r[2]?' class="hl"':'')+'><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('')+'</div>';}
+  function hero(o){
+    return '<div class="trl-top"><div class="trl-hero"><div><span class="trl-tag">Train route</span><h3>Trains to <span>'+o.to+'</span></h3><p>'+o.p+'</p></div>'
+      +'<div><div class="trl-board" aria-label="Example departure board"><b>'+o.dep+'<span>'+o.board+'</span></b><small>'+o.via+'</small></div>'+kd(o.kd)+'</div></div>'
+      +'<div class="trl-jr"><div class="trl-jr-h"><b>Your journey</b><span>'+o.jr+'</span></div>'
+      +'<div class="trl-line"><div class="trl-stop"><i></i><b>'+o.from+'</b><small>Leave '+o.dep+'</small></div><div class="trl-mid">'+o.mid+'</div><div class="trl-stop"><i></i><b>'+o.at+'</b><small>Arrive '+o.arr+'</small></div></div></div>'
+      +GO+'</div>';
+  }
+  var H={
+    'rail':hero({to:'Blackpool North',board:'BLACKPOOL N',dep:'09:02',arr:'10:24',via:'From Manchester Piccadilly',
+      p:'Blackpool North is the main station, at the top of Talbot Road, and it is about 15 minutes on foot to the Tower Festival Headland and the centre of the display. Northern runs direct trains from Manchester Piccadilly, Preston, Liverpool Lime Street, Bolton and York.',
+      kd:[['How often','Every 30 minutes from Manchester'],['Get off at','Blackpool North',1],['Then','Walk to the Tower, about 15 minutes'],['From Manchester','About 1 hour 20 minutes'],['Run by','Northern, Avanti West Coast']],
+      jr:'Manchester Piccadilly to Blackpool North, direct. These are Saturday times from the Northern timetable for 2026, so check again nearer the show.',
+      from:'Manchester Piccadilly',at:'Blackpool North',mid:'Northern, direct<br>1h 22m'}),
+    'rail-south':hero({to:'Pleasure Beach',board:'PLEASURE BCH',dep:'09:49',arr:'10:22',via:'From Preston',
+      p:'Blackpool South and Blackpool Pleasure Beach stations are on the South Fylde line, with Northern trains from Preston via Kirkham and Lytham St Annes. They are handy if you are staying at the south end, but both are a long way from the display.',
+      kd:[['How often','Hourly on Saturdays, every two hours on Sundays'],['Get off at','Blackpool Pleasure Beach',1],['Then','Tram to Manchester Square, then walk north'],['From Preston','About 33 minutes'],['Run by','Northern']],
+      jr:'Preston to Blackpool Pleasure Beach, direct. These are Saturday times from the Northern timetable for 2026, so check again nearer the show.',
+      from:'Preston',at:'Blackpool Pleasure Beach',mid:'Northern, direct<br>33 min'})
+  };
+  function cur(){var b=document.querySelector('#parkList button[aria-pressed="true"]');return b?b.dataset.id:'';}
+  function apply(){
+    var c=document.querySelector('#explore .xd-content'); if(!c) return;
+    var id=cur(), h=H[id], t=c.querySelector(':scope > .trl-top');
+    if(h){
+      c.classList.add('trl');
+      if(!t||t.getAttribute('data-id')!==id){
+        if(t) t.remove();
+        var w=document.createElement('div'); w.innerHTML=h; var top=w.firstChild; top.setAttribute('data-id',id);
+        var tabs=c.querySelector(':scope > .ft-tabs');
+        if(tabs) c.insertBefore(top,tabs); else c.insertBefore(top,c.firstChild);
+        if('IntersectionObserver' in window){var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){c.classList.add('in-view');io.disconnect();}});},{threshold:.2});io.observe(top);} else c.classList.add('in-view');
+      }
+    } else { c.classList.remove('trl','in-view'); if(t) t.remove(); }
+  }
+  var busy=false;
+  function sched(){ if(busy) return; busy=true; setTimeout(function(){busy=false;apply();},60); }
+  var tries=0;(function wait(){var ex=document.getElementById('explore');if(ex){new MutationObserver(sched).observe(ex,{childList:true,subtree:true,attributes:true,attributeFilter:['aria-pressed']});apply();return;} if(++tries<80) setTimeout(wait,150);})();
+})();
+</script>
 <style id="jx-css-dux">
 /* transport design: roundel journey steps */
 .jx-steps{list-style:none;padding:0;margin:var(--gap,20px) 0 0;position:relative}
