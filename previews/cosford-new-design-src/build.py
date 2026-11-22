@@ -15,13 +15,15 @@ Run:  python3 previews/cosford-new-design-src/build.py
 The live page is never changed. Rebuild after the live page changes to pick the changes up.
 """
 import pathlib
+import sys as _sys
+_sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import re
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
-SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
-OUT = ROOT / "camping-layout" / "cosford.html"   # the live page
+SRC = HERE / "live-source.html"   # written by make_source.py: Cosford in the Duxford template (round 2)
+OUT = ROOT / "previews" / "cosford-new-design.html"   # round 2 preview (the parent session puts it live)
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
@@ -114,6 +116,8 @@ def restyle_text(s):
 
 
 def main():
+    import make_source
+    make_source.main()
     html = SRC.read_text(encoding="utf8")
     blobs = []
 

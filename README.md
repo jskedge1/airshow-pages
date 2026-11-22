@@ -672,15 +672,15 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
-## RAF Cosford Air Show page in the new design (preview, 22 Nov 2026)
+## RAF Cosford Air Show page in the new design (round 2 preview, 22 Nov 2026)
 
-`previews/cosford-new-design.html` is the Cosford feature page in the new design, built the same way as the Duxford page Jack signed off on 22 Nov 2026 (see `previews/NEW-DESIGN-ROLLOUT.md`). It is not live. The live page is still `camping-layout/cosford.html` and was not changed. Private preview: https://claude.ai/artifact/3v665Z7q2t7hDExMXf7sWP
+Round 2 (`previews/NEW-DESIGN-ROLLOUT-2.md`): the Cosford page built IN the Duxford template, not the old page with the new look on top. Output: `previews/cosford-new-design.html` only (not live; `camping-layout/cosford.html` is untouched). Private preview: https://claude.ai/artifact/3v665Z7q2t7hDExMXf7sWP
 
-- Built by `python3 previews/cosford-new-design-src/build.py` (a copy of the Duxford build with the Duxford only text and photo fixes taken out). Do not edit the built file.
-- Cosford keeps Jack's photos in `window.PHOTO` rather than on `data-pic` images, so `new-design.js` reads them from there (`P(key)`). Photos used: typhoon beside the intro, c17 behind the guide band, rafale behind the line-up heading, anson over the Quick checker, chinook behind Plan your day, p47 beside the Shooting at Cosford panel (the live page has no photo there, Duxford's has the P-40), and spitfire, pitts, jaguar, swordfish, merlin, apache and b17 on the seven Photography tabs (the seventh runs the full width).
-- The intro stat reads 1 day of flying and the guide band 50,000 people on the day, both from the page's own words. The address in the top bar and footer is the page's own (RAF Cosford, Shifnal, TF11 8UP).
-- Section order as Duxford. Cosford has no Pick your show, Flightline walk, story or Experience flights sections; its own Ticket day countdown, RAF Museum Midlands and The ground show come after Make a postcard. Cosford has no photographers' map, so the map spot cards and 3D map do nothing here.
-- To go live: Jack to approve the look, then copy the built file over `camping-layout/cosford.html`, or point the build's `OUT` at it.
+- Build: `python3 previews/cosford-new-design-src/build.py`. It runs `make_source.py` first, which writes `live-source.html` (Cosford laid out like Duxford) from `old-page.html` (the Cosford page before the new design, the only content source) and the parking block `#cpk` from the live page, then adds the Duxford chrome, CSS and JS exactly as Duxford's build does. Do not edit the built file or `live-source.html`.
+- Same sections, order, names and block layout as Duxford, checked side by side at 1280 and 390. Every reused line is checked against the old page by the build's asserts. Duxford's own design scripts and styles (glass tiles, Where to watch map tabs, train route header, Key places, guide index) are copied across; Cosford's train route header uses Cosford's own facts (no example times, as the page has none).
+- Left out, old Cosford parts Duxford does not have: Ticket day countdown, RAF Museum Midlands and The ground show sections (and the three links to them; some ground show facts now sit in Food and facilities), the packing list boxes in Food and facilities, the Plan my day here buttons and the line under each Where to watch map, the Cosford tag on the Key places heading, the hidden line-up design preview note.
+- Left out, Duxford blocks Cosford has no facts for: Pick your show, Flightline walk, the show's story and Experience flights sections, the 2027 calendar, the line-up show picker, Sun at each show and the photographers' map, the site shuttle bar, and the example times on the train route board.
+- To go live: the parent session checks it against Duxford and points `OUT` at `camping-layout/cosford.html`.
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
