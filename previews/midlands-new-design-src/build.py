@@ -59,6 +59,9 @@ FRAME_CHECK = (
     'html body .qs li{background:#F3F6F8!important;border:0!important;border-top:5px solid var(--sc,#32B4AF)!important;border-left:0!important;box-shadow:none!important;border-radius:0!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}'
     'html body .qs li:hover{background:#fff!important;transform:translateY(-4px);box-shadow:0 22px 34px -24px rgba(11,26,39,.5)!important}'
     'html body .qs li .sn{display:none!important}'
+    # with the number hidden, the question must span the whole box (on phones it was squeezed into the 44px number column)
+    'html body .qs li .q{grid-column:1/-1!important}'
+    'html body .qs li::before{display:none!important}html body .qs li .q{border-left:0!important;padding-left:20px!important}'
     'html body .qs .q legend{font:700 21px/1.25 "Barlow",sans-serif!important;color:#13293C!important}'
     'html body .qs .q legend span{display:block!important;font:700 15.5px/1.2 "Barlow",sans-serif!important;color:var(--sc,#0E5F5B)!important;margin-bottom:5px!important;text-transform:none!important;letter-spacing:0!important;filter:brightness(.8)}'
     'html body .qs .q legend small{display:block!important;font:400 15.5px/1.45 "Barlow",sans-serif!important;color:#4A5A66!important;margin-top:4px!important}'
@@ -113,6 +116,137 @@ def restyle_text(s):
     return s
 
 
+
+# ---- Round 2 (Jack, 22 Nov 2026): the page is built IN the Duxford template, not the old Midlands page with the new
+# look on top. See previews/NEW-DESIGN-ROLLOUT-2.md. The Midlands page was first made from the Duxford page, so its
+# sections already use Duxford's markup. This step takes out everything the Duxford page does not have, and lines the
+# rest up with Duxford (section names, ids). Only Midlands' own words are kept. Nothing is added. Every edit is checked.
+# Left out (listed for Jack in the README): The balloons, Camping at Ragley and The ground show sections; the Jack's tip
+# boxes in Overview and Where to watch; the Friday Nightfire evening block in Plan your day; the camping line in
+# Where to stay. Duxford blocks with no Midlands facts (not added): Flightline walk, the photographers' map, the
+# shuttle bus band in Food and facilities.
+
+def cut_block(html, start):
+    """Remove the element that starts with the exact text `start`, up to its matching closing tag."""
+    i = html.find(start)
+    assert i >= 0 and html.count(start) == 1, start
+    tag = re.match(r"<([a-z0-9]+)", start).group(1)
+    depth, j = 0, i
+    pat = re.compile(r"<(/?)%s\b[^>]*>" % tag)
+    for m in pat.finditer(html, i):
+        depth += -1 if m.group(1) else 1
+        if depth == 0:
+            j = m.end()
+            break
+    else:
+        raise AssertionError("no end for " + start)
+    # take the line break after it too
+    if html[j:j + 1] == "\n":
+        j += 1
+    return html[:i] + html[j:]
+
+
+def swap(html, old, new):
+    assert html.count(old) == 1, old
+    return html.replace(old, new, 1)
+
+
+def align_to_duxford(html):
+    # sections Duxford does not have
+    for sec in ("balloons", "camping", "ground"):
+        html = cut_block(html, '<section class="panel" id="%s"' % sec)
+        html = re.sub(r'\s*<button class="tab" role="tab" id="t-%s"[^>]*>[^<]*</button>' % sec, "", html, count=1)
+        assert 'id="t-%s"' % sec not in html, sec
+    html = cut_block(html, '<script id="balloons-js">')
+    # section names in the bars and the tab strip, as on Duxford
+    html = swap(html, 'aria-controls="days" aria-selected="false" tabindex="-1">Pick Your Day</button>',
+                'aria-controls="days" aria-selected="false" tabindex="-1">Pick Your Show</button>')
+    html = swap(html, 'aria-controls="flights" aria-selected="false" tabindex="-1">Balloon Flights</button>',
+                'aria-controls="flights" aria-selected="false" tabindex="-1">Experience Flights</button>')
+    # old header button (hidden in the new design) pointed at The balloons: as on Duxford
+    html = swap(html, '<button type="button" class="cg-go" data-goto="balloons">The balloons</button>',
+                '<button type="button" class="cg-go" data-goto="lineup">Aircraft line-up</button>')
+    # Overview: Duxford has no tip box in My view, and its box at the foot has no link
+    html = cut_block(html, '<div class="ns-note"><b>Jack&rsquo;s tip</b>Tickets are advance only, with none sold on the gate.')
+    html = swap(html, ' <button type="button" class="inline-link" data-goto="balloons">When and where to see them</button>', '')
+    # Pick your show tip: its links went to the removed sections. The camping line is Jack's own, from Camping at Ragley.
+    html = swap(html, 'Camping is only for 3 day ticket holders, so take a look at <button type="button" class="inlink" data-goto="camping">Camping At Ragley</button> before you book, and <button type="button" class="inlink" data-goto="balloons">The Balloons</button> for when they fly.',
+                'Camping is only for 3 day ticket holders, so I&rsquo;d book both together.')
+    # Where to stay: the line pointing to Camping at Ragley
+    html = cut_block(html, '<p class="vl-intro">Camping on the estate is covered in')
+    # Plan your day: the Friday Nightfire evening block is not on Duxford
+    html = cut_block(html, '<div class="wk-eve reveal"')
+    # Help on show days: drop the pointer to the removed section
+    html = swap(html, 'The balloons are weather permitting. Take a look at <button type="button" class="inlink" data-goto="balloons">The Balloons</button> for what happens if it&rsquo;s too windy.</p>',
+                'The balloons are weather permitting.</p>')
+    # Where to watch: no tip box on Duxford
+    html = cut_block(html, '<div class="ns-note"><b>Jack&rsquo;s tip</b>There&rsquo;s no seating, so I would bring a low chair or a blanket.')
+    # Story: Duxford's story tip is a line inside the card
+    html = swap(html, '<div class="ns-note"><b>Jack&rsquo;s tip</b>The house itself is now kept for events and filming rather than everyday visits, so I would suggest enjoying the view of it across Capability Brown&rsquo;s parkland while you wait for the balloons.</div>',
+                '<p class="st-tip">The house itself is now kept for events and filming rather than everyday visits, so I would suggest enjoying the view of it across Capability Brown&rsquo;s parkland while you wait for the balloons.</p>')
+    # Photography: Duxford's ids, so the same styles and links apply (sun guide #phSun, sun at each show #phShows)
+    html = swap(html, '<a href="#phGuide">Sun guide</a><a href="#phSun">Sun each day</a>', '<a href="#phSun">Sun guide</a><a href="#phShows">Sun each day</a>')
+    html = swap(html, '<section class="ph-sec" id="phSun"', '<section class="ph-sec" id="phShows"')
+    html = swap(html, '<div class="sun-embed reveal" id="phGuide">', '<div class="sun-embed reveal" id="phSun">')
+    # the page's own styles for its sun table follow it to its new id
+    for sel in ("#phSun .sun-table{", "#phSun .sun-card li{", "#phSun .sun-card li span{", "#phSun .sun-card li b{"):
+        html = swap(html, sel, sel.replace("#phSun", "#phShows"))
+    # Pick your show: Duxford ends the section with its "Official site" box. Midlands' own official site link and label.
+    html = swap(html, '<p class="note sf-src">Opening times are for 2027. Flying and balloon times haven&rsquo;t been published yet',
+                '<div class="sp-links"><a href="https://www.midlandsairfestival.com/" target="_blank" rel="noopener"><b>Official site</b><span>Midlands Air Festival</span></a></div><p class="note sf-src">Opening times are for 2027. Flying and balloon times haven&rsquo;t been published yet')
+    # Food and facilities: Duxford's boxes all have a photo. These two text only cards are not in Duxford's set, and their
+    # facts are already on the page (re-entry with a hand stamp in Good to know and Pick your show; layers and a torch in
+    # Plan your day's Bring list), so they are left out.
+    html = cut_block(html, '<div><h3>Leaving and coming back</h3>')
+    html = cut_block(html, '<div><h3>What to wear</h3>')
+    # Quick checker: "read next" only lists sections the page has
+    for old, new in ((",r:['kids','balloons','timeline','facilities']", ",r:['kids','timeline','facilities']"),
+                     (",r:['photo','balloons','watch','camping']", ",r:['photo','watch']"),
+                     (",r:['balloons','camping','timeline','flights']", ",r:['timeline','flights']")):
+        html = swap(html, old, new)
+    # ---- Getting there, added 22 Nov 2026 20:15 and 20:30 (round 2 brief: Jack's comments on the Wales and Clacton previews) ----
+    # Compare driving options (#cdo) and Car parks at Ragley Hall (#cpk) stay exactly as on the live page (untouched here).
+    # 1. The train topic gets Duxford's train route header (trlStyle and its script), as on the Wales page, filled with the
+    #    Midlands page's own train facts: the Train to Redditch topic and the first Saturday train in its train times data.
+    dux = (ROOT / "previews" / "duxford-new-design-src" / "live-source.html").read_text(encoding="utf8")
+    ta = dux.index('<style id="trlStyle">')
+    tz = dux.index("</style>", ta) + len("</style>")
+    sa = dux.index('<script id="trlScript-dux">')
+    sz = dux.index("</script>", sa) + len("</script>")
+    trl = dux[sa:sz]
+    h0, h1 = trl.index("  var H={"), trl.index("  function cur()")
+    for fact in ("id:'rail-red'", '"08:15",\n      "Birmingham New Street to Redditch",\n      "Arrives 08:53, in time for the 09:30 bus"',
+                 '"Every 30 minutes",\n      "West Midlands Railway, about 40 minutes"', "I would suggest Redditch as the most suitable station for the festival. From there, the Diamond 247 bus between Redditch and Evesham stops right by the Ragley Hall main entrance.",
+                 '"title": "Saturday, linking with the 247 bus"', "train-to-midlands"):
+        assert fact in html, fact
+    mid_h = ("  var H={\n"
+             "    'rail-red':hero({to:'Redditch',board:'REDDITCH',dep:'08:15',arr:'08:53',via:'From Birmingham New Street',\n"
+             "      p:'I would suggest Redditch as the most suitable station for the festival. From there, the Diamond 247 bus between Redditch and Evesham stops right by the Ragley Hall main entrance.',\n"
+             "      kd:[['How often','Every 30 minutes'],['Get off at','Redditch',1],['Then','Diamond 247 bus'],['From Birmingham','About 40 minutes'],['Run by','West Midlands Railway']],\n"
+             "      jr:'Birmingham New Street to Redditch, in time for the 09:30 bus. These are Saturday times from the 2026 timetable, so check again nearer the show.',\n"
+             "      from:'Birmingham New Street',at:'Redditch',mid:'West Midlands Railway<br>38 min'})\n"
+             "  };\n")
+    trl = trl[:h0] + mid_h + trl[h1:]
+    trl = trl.replace('<script id="trlScript-dux">', '<script id="trlScript-midlands">', 1)
+    trl = trl.replace("/* Train route header on the Duxford train topics, the same design as the Clacton train topic (9 Nov) */",
+                      "/* Train route header on the train topic, the Duxford design, with the Midlands train facts */", 1)
+    trl = swap(trl, "https://www.ukairshowguide.co.uk/train-to-duxford", "https://www.ukairshowguide.co.uk/train-to-midlands")
+    html = swap(html, '<style id="jx-css-dux">', dux[ta:tz] + "\n" + trl + "\n" + '<style id="jx-css-dux">')
+    # 2. The Fares and Save money board, as on the Clacton round 2 page (fares.html, from the Wales version), with the hidden
+    #    Ways in board its script needs. Midlands' only travel prices are its 2027 parking prices, so there are no More fares tabs.
+    for fact in ('<span class="cdo-cost">&pound;9.97</span>', "Premium and disabled parking are both chosen when you book your tickets. Premium is a price per day. These are the 2027 prices, so I would check them again before you go.",
+                 "Standard parking is free and included with your ticket.", "For 2027, children 12 and under go free."):
+        assert fact in html or fact.replace("&pound;", "£") in html, fact
+    html = swap(html, '\n  <div class="wrap"><section class="cdo reveal" id="cdo"',
+                "\n" + (HERE / "fares.html").read_text(encoding="utf8") + '\n  <div class="wrap"><section class="cdo reveal" id="cdo"')
+    # 3. The jump strip: the "On the day and getting home" button pointed at a .pbx box this page does not have.
+    html = swap(html, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+                "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];")
+    left = re.findall(r'data-goto="(balloons|camping|ground)"', html)
+    assert not left, left
+    return html
+
+
 def main():
     html = SRC.read_text(encoding="utf8")
     blobs = []
@@ -122,6 +256,7 @@ def main():
         return "@@BLOB%d@@" % (len(blobs) - 1)
 
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
+    html = align_to_duxford(html)
     html = restyle_text(html)
 
     # head: fonts, and keep the preview out of search results
