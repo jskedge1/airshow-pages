@@ -324,6 +324,85 @@ def train_header(t, dx):
     return sub1(t, '<style id="jx-css-dux">', css + "\n" + js + "\n" + '<style id="jx-css-dux">')
 
 
+FARES_SRC = __import__("pathlib").Path(__file__).resolve().parent.parent / "clacton-new-design-src" / "live-source.html"
+PLANE = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#13293C" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2'
+         'l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>')
+TICKET = ('<svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true">'
+          '<path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/></svg>')
+
+
+def fares(t):
+    """Jack, 22 Nov 2026 ("add this to each page", on the Clacton preview): the Fares and Save money board (#tpFares)
+    after Choose a topic, with the hidden Ways in board (.nss) its script needs, as on Clacton (e478a49). The styles and
+    script come from the Clacton page; every price on the board is from the Southport page's own Getting there answers
+    and car parks board (2026 prices). Southport has no bus, coach or taxi fares, so those tabs are not there."""
+    for fact in ("In 2026 adults paid &pound;13 plus a booking fee, groups of 10 or more paid &pound;12 each and under 16s went free. "
+                 "There was also a &pound;26 family ticket.",
+                 "carers went free with proof of Carer&rsquo;s Allowance, Attendance Allowance or DLA.",
+                 "On the 2026 show weekend Merseyrail offered £2 adult and £1 child returns to Southport. I would take a look at the "
+                 "Merseyrail event page nearer the 2027 show to see if the offer returns.",
+                 "The official car parks are on Marine Drive, Princes Park, the Esplanade and Victoria Park, about five minutes’ walk "
+                 "from the show, at £10 per car for the day.",
+                 "Blue Badge parking is first come, first served at the Esplanade, Marine Drive, Princes Park and Victoria Park car "
+                 "parks, at the normal £10 rate",
+                 "Pay on arrival for the day."):
+        assert fact in t, fact
+    cl = FARES_SRC.read_text(encoding="utf8")
+    s0 = cl.rindex("<style>", 0, cl.index(".nss{max-width:1200px"))
+    css = cl[s0:cl.index("</style>", s0) + len("</style>")]
+    assert "data:" not in css and "lacton" not in css
+    j0 = cl.index("<script>\n(function(){\n  var root=document.querySelector('.nss');")
+    js = cl[j0:cl.index("</script>", j0) + len("</script>")]
+    # the cost calculator under the fares is Clacton's own (its prices are in the code); Southport has none, so it goes
+    a = js.index("  var n={a:2,c:2};")
+    b = js.index("  calc();\n", a) + len("  calc();\n")
+    js = js[:a] + js[b:]
+    assert "lacton" not in js and "5.65" not in js
+    ways = ('<div class="nss">\n<div class="nss-in"><div class="nss-scr">\n<div class="nss-top">\n'
+            '<div class="nss-brand"><b>Ways in</b><small>Southport Air Show, <b style="display:inline;font-size:15px">pick one to see the details</b></small></div>\n'
+            '<div class="nss-days">\n<div class="nss-day">Saturday' + PLANE + 'Date TBC</div>\n<div class="nss-day">Sunday' + PLANE + 'Date TBC</div>\n'
+            '<div class="nss-clock"><b id="nssClock">--:--</b><small>2027 show days</small></div>\n</div>\n</div>\n'
+            '<div class="nss-band">Choose how you are getting there</div>\n'
+            '<div class="nss-rows" id="nssRows" role="listbox" aria-label="Ways to get to the show"></div>\n</div></div>\n</div>\n')
+    board = ('<div class="nss tp-fares" id="tpFares"><div class="nss-in" style="background:#E3F1F8;padding:0"><div class="nss-scr">\n'
+             '<div class="nss-low">\n<div>\n'
+             '<div class="nss-hd"><span class="nss-sq">' + TICKET + '</span><div class="nss-bar"><b>Fares</b><span>Every price for getting to and parking at the show, in one place.</span></div></div>\n'
+             '<div class="nss-fares">\n'
+             '<a class="nss-pen" href="https://www.ukairshowguide.co.uk/airshow-public-transport" target="_top"><b>Plan my<br>journey</b><small>All transport options</small></a>\n'
+             '<div>\n'
+             '<p class="nss-sub">Entry <em>2026 prices</em></p>\n<div class="nss-tiles">\n'
+             '<div class="nss-tile" style="--c:#E0592A"><i>Adult</i><span>Adult, plus a booking fee<b>£13</b></span></div>\n'
+             '<div class="nss-tile" style="--c:#6950A1"><i>Kids</i><span>Under 16s<b>Free</b></span></div>\n'
+             '<div class="nss-tile" style="--c:#2BA84A"><i>Family</i><span>Family ticket<b>£26</b></span></div>\n'
+             '<div class="nss-tile" style="--c:#44AED6;--i:#13293C"><i>Group</i><span>Groups of 10 or more, each<b>£12</b></span></div>\n'
+             '</div>\n'
+             '<p class="nss-sub">Parking</p>\n<div class="nss-tiles">\n'
+             '<div class="nss-tile" style="--c:#13293C"><i>Car</i><span>Any official car park, per car for the day<b>£10</b></span></div>\n'
+             '<div class="nss-tile" style="--c:#C2255C"><i>Badge</i><span>Blue Badge, the normal rate<b>£10</b></span></div>\n'
+             '</div>\n'
+             '<p class="nss-small">The official car parks are on Marine Drive, Princes Park, the Esplanade and Victoria Park. Pay on arrival for the day.</p>\n'
+             '</div>\n</div>\n</div>\n'
+             '<div class="nss-disc">\n'
+             '<div class="nss-hd"><span class="nss-sq" style="background:#6950A1;color:#fff">%</span><div class="nss-bar"><b>Save money</b></div></div>\n'
+             '<div class="nss-dl">\n'
+             '<div class="nss-dr"><b>Under 16s <span>| Free</span></b><p>Under 16s went free in 2026.</p></div>\n'
+             '<div class="nss-dr"><b>Carers <span>| Free</span></b><p>Carers went free with proof of Carer&rsquo;s Allowance, Attendance Allowance or DLA.</p></div>\n'
+             '<div class="nss-dr"><b>Merseyrail show returns <span>| £2</span></b><p>On the 2026 show weekend Merseyrail offered £2 adult and £1 child returns to Southport.</p></div>\n'
+             '</div>\n</div>\n</div>\n'
+             '<div class="mf" id="mfBox">\n'
+             '<div class="mf-tabs" role="tablist" aria-label="More fares">\n'
+             '<button type="button" role="tab" aria-selected="true" data-p="train"><i style="--c:#D70428">Rail</i>Train</button>\n'
+             '</div>\n'
+             '<div class="mf-p" data-p="train">\n<div class="mf-grid">\n'
+             '<div class="mf-t"><small>Merseyrail, adult</small><b>£2</b><span>Return to Southport, 2026 show weekend</span></div>\n'
+             '<div class="mf-t"><small>Merseyrail, child</small><b>£1</b><span>Return to Southport, 2026 show weekend</span></div>\n'
+             '</div>\n'
+             '<ul class="mf-l"><li>I would take a look at the Merseyrail event page nearer the 2027 show to see if the offer returns.</li></ul>\n'
+             '</div>\n\n</div>\n</div></div></div>\n')
+    block = css + "\n" + ways + board + js + "\n"
+    return sub1(t, '<div class="wrap"><section class="cpk reveal" id="cpk"', block + '<div class="wrap"><section class="cpk reveal" id="cpk"')
+
+
 def duxford_layout(t, dx):
     t = remove_old_sections(t)
     t = tab_names(t)
@@ -336,4 +415,5 @@ def duxford_layout(t, dx):
     t = duxford_styles(t, dx)
     t = duxford_glass(t, dx)
     t = train_header(t, dx)
+    t = fares(t)
     return t

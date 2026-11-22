@@ -692,6 +692,11 @@ Southport's own words, facts, photos and data. Built by `python3 previews/southp
   the live page; the train topics get Duxford's dark train route header (`trlStyle`, `trlScript-southport`), filled from
   Southport's own 2026 Saturday times (Merseyrail from Liverpool Central, Northern from Manchester Victoria). Compare driving
   options (`#cdo`) is left out: every official car park cost the same £10 a car in 2026, so there is nothing to compare.
+- Fares and Save money board (Jack, 22 Nov 2026, "add this to each page"): `#tpFares` after Choose a topic, with the hidden
+  Ways in board (`.nss`) its script needs; styles and script from the Clacton page (its own cost calculator taken out, as it
+  holds Clacton prices). Southport's 2026 prices only: entry (adult, under 16s, family, groups), parking (£10 any official car
+  park, Blue Badge at the normal rate) and the Merseyrail show weekend returns. No bus, coach or taxi fares on the page, so no
+  tabs for those.
 - Preview artifact: https://claude.ai/artifact/C253g9ig8xAJq1YtnGKKs6 (private).
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
