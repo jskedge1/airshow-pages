@@ -54,3 +54,21 @@ parent session checks every page against Duxford and puts them live together.
 
 Commit and push to your own branch, republish your preview artifact, and finish with: the artifact link, the list of
 things left out (old sections and Duxford blocks with no facts), and anything you were unsure of.
+
+## Added 22 Nov 2026, 20:15: the three Getting there blocks on every page
+
+Jack, in a comment on the Wales round 2 preview (Getting there): "add these to all pages", then "all of this".
+Every feature page's Getting there gets all three, each filled with that show's own facts only (nothing copied
+from Wales or Duxford, nothing invented):
+
+1. Compare driving options (`#cdo`): each car park with its price bar. Already on Ayr, Blackpool, Clacton,
+   Eastbourne, Midlands and Wales. Add it on the others from the show's own car park names and prices, where the
+   show has more than one car park option with a price. Where the show's facts don't support it (parking free,
+   included or one price), leave it out and list it.
+2. The car parks board (`#cpk`) with the three boxes under it. On every show except Little Gransden (no parking
+   details): keep it exactly as on the live page.
+3. The dark train route header on the train topic (departure board, key details, your journey): Duxford's
+   `trlStyle` and `trlScript`, filled per show from the show's own train data (a sample departure, arrival and
+   operator). The Wales version is the template: `previews/wales-new-design-src/restructure.py` on
+   `claude/wales-new-design` (search `trlScript-wales`); it swaps only the H data and the GO link. Where the show's
+   page has no train times, show the stations and legs without times, as Cosford does, and list it.
