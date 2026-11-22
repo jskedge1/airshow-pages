@@ -519,7 +519,7 @@ def copy_camping():
     n = 0
     for f in sorted(src.glob("*.html")):
         h = f.read_text(encoding="utf8")
-        for u in set(re.findall(re.escape(gh) + r"(?:camping-hub-img|brand)/[A-Za-z0-9._-]+", h)):
+        for u in set(re.findall(re.escape(gh) + r"(?:camping-hub-img|brand|camping-layout/img|home-img/v2|riat-camping/img/lu)/[A-Za-z0-9._-]+", h)):
             name = u.rsplit("/", 1)[1]
             s = ROOT / u[len(gh):]
             if s.exists():
