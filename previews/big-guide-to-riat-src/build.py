@@ -20,6 +20,7 @@ its own Wix page: set PAGES_BASE to the https://www.ukairshowguide.co.uk address
 and IMG to the full https://jskedge1.github.io/airshow-pages/... address.
 """
 import importlib.util
+import json
 import pathlib
 import re
 import shutil
@@ -58,6 +59,7 @@ PAGES = [  # key, file, name in the menu, one line
     ("come", "still-to-come.html", "Still to come", "Eight things the organisers have not announced yet."),
     ("booked", "already-booked.html", "Already booked?", "Refunds, parking, campsites and enclosures."),
     ("camping", "camping/index.html", "Camping", "Campsites near Boscombe Down and around Fairford."),
+    ("aircraft", "camping/aircraft.html", "Aircraft line-up", "Every aircraft confirmed for RIAT27."),
 ]
 
 KEY = [("When", "Friday 16 to Sunday 18 July 2027"), ("Where", "MOD Boscombe Down, Wiltshire"),
@@ -390,6 +392,36 @@ def build_home():
   </div>
 </section>
 
+<section class="sec tint" id="camping" aria-label="Camping at RIAT">
+  <div class="wrap feature">
+    <div class="fe-main">
+      <div class="fe-ph"><img src="{camp.IMG}field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" loading="lazy" decoding="async"><span>Official</span></div>
+      <div class="fe-t"><h3>The official RIAT campsite</h3><b>2027<small> at Boscombe Down</small></b></div>
+      <div class="fe-m"><span>{icon("pin")}Beside the airfield</span><span>{icon("tent")}Run by RIAT</span><span>{icon("cal")}Rollover bookings first</span></div>
+      <p>RIAT has secured its own campsite beside the airfield at Boscombe Down, big enough for everyone from the official Fairford site and the campsites around it. Rollover bookings get first pick, then the waitlist, then general sale.</p>
+      <div class="btns"><a class="btn or" href="{camp.OFFICIAL_CAMPING}" target="_blank" rel="noopener">Official camping</a><a class="btn nv" href="{href("camping")}" target="{LINK_TARGET}">Independent campsites</a></div>
+    </div>
+    <div class="fe-side">
+      <div><span class="kick">Camping at RIAT</span><h2 class="h">Where Would You Like To Camp?</h2>
+      <p class="lede">My camping pages list the campsites around the new showground, plus the ones still running around Fairford, each with its own page of pitches, prices and facilities.</p></div>
+      <div class="rowlist">
+        <div class="rowi"><img src="{camp.IMG}hero-flyby.jpg" alt="Aircraft flying over an airshow campsite" loading="lazy" decoding="async"><p><b>Near Boscombe Down</b><span>RIAT from 2027.</span></p><a class="btn nv" href="{href("camping")}#campsites" target="{LINK_TARGET}">View campsites</a></div>
+        <div class="rowi"><img src="{camp.IMG}kempsford-camping.jpg" alt="Welcome to Kempsford Camping sign on the fence" loading="lazy" decoding="async"><p><b>Around Fairford</b><span>RIAT until 2026, about an hour's drive from Boscombe Down.</span></p><a class="btn or" href="{href("camping")}#campsites" target="{LINK_TARGET}">View campsites</a></div>
+        <div class="rowi"><img src="{camp.IMG}base-row.jpg" alt="A row of pitches behind windbreaks under a big sky" loading="lazy" decoding="async"><p><b>On the show map</b><span>See how far each campsite is from the airfield.</span></p><a class="btn or" href="{href("camping")}#map" target="{LINK_TARGET}">Open the map</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="week" aria-label="Show week">
+  <div class="wrap">
+    {camp.sec_head("Show week", "Your RIAT 2027 Week", "The show runs from Friday 16 to Sunday 18 July, with Park & View days either side. Gate and flying times come nearer the show.", mid=True)}
+    {camp.show_week()}
+  </div>
+</section>
+
+{camp.aircraft_band(json.loads((ROOT / "riat-camping-src" / "aircraft.json").read_text(encoding="utf8")), img("reds23"))}
+
 <section class="qband bgr-q" id="coming" aria-label="My full guide is on its way" style="background-image:url('{img("f16")}')">
   <div class="wrap">
     <div>
@@ -410,6 +442,13 @@ def build_home():
     <h2 class="h">Hear When Each Part Goes Live</h2>
     <p class="lede">Follow along and you’ll hear when each part of the guide goes live. For anything about your own booking, go straight to RIAT.</p>
     <div class="steps" style="--n:3">{loop}</div>
+  </div>
+</section>
+
+<section class="sec tint" id="faq" aria-label="Camping questions">
+  <div class="wrap">
+    {camp.sec_head("Questions", "Camping At RIAT, Answered", "The things people ask me most about camping for the first Air Tattoo at Boscombe Down.", mid=True)}
+    {camp.faq_block(camp.HOME_FAQ)}
   </div>
 </section>
 
@@ -510,6 +549,18 @@ CAMPING_OVER = r"""<style id="bgr-over">
 </style>"""
 
 
+def localise(h, depth=""):
+    """Copy any camping photo the page uses into img/, and point links to the camping pages inside this section."""
+    gh = "https://jskedge1.github.io/airshow-pages/"
+    for u in set(re.findall(re.escape(gh) + r"(?:camping-hub-img|brand|camping-layout/img|home-img/v2|riat-camping/img/lu)/[A-Za-z0-9._-]+", h)):
+        s = ROOT / u[len(gh):]
+        if s.exists():
+            shutil.copyfile(s, OUT / "img" / s.name)
+            h = h.replace(u, depth + "img/" + s.name)
+    h = re.sub(re.escape(gh) + r'riat-camping/([a-z0-9-]+\.html(?:#[a-z]+)?)" target="_(?:top|blank)"', r'camping/\1" target="_self"', h)
+    return h
+
+
 def copy_camping():
     """The camping pages, copied from riat-camping/ with their links pointed inside this section."""
     src = ROOT / "riat-camping"
@@ -543,7 +594,7 @@ def copy_camping():
         # Jack, 21 Nov 2026: his own words for the light poles tip
         h = h.replace("Light poles make finding your pitch at night so much easier.", "Making it bright and loud can make your pitch stand out, and it is fun too.")
         # the section's own strip of pages goes above the campsite strip
-        s = strip("camping", "../")
+        s = strip("aircraft" if f.name == "aircraft.html" else "camping", "../")
         if '<nav class="strip"' in h:
             h = h.replace('<nav class="strip"', s + '<nav class="strip"', 1)
         else:
@@ -559,7 +610,7 @@ def main():
     for key, (path, alt) in PHOTOS.items():
         shutil.copyfile(ROOT / path, OUT / "img" / pathlib.Path(path).name)
     for name, fn in (("index.html", build_home), ("what-we-know.html", build_know), ("still-to-come.html", build_come), ("already-booked.html", build_booked)):
-        (OUT / name).write_text(fn(), encoding="utf8")
+        (OUT / name).write_text(localise(fn()), encoding="utf8")
         print("wrote", (OUT / name).relative_to(ROOT))
     print("camping pages copied:", copy_camping())
 
