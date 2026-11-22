@@ -33,6 +33,16 @@ One session builds one show. This file is the brief for each of those sessions.
 7. Publish as a NEW private artifact titled "<Show name>, new design preview" (`publish_files` with the built HTML as
    `index.html`). Commit and push to your own branch. Add a short note to `README.md` under the Duxford note.
 
+## Fixes added after the first pages (22 Nov 2026, all twelve built pages have them)
+
+- Quick checker on phones: the template hides the step number, which left each question squeezed into the 44px number
+  column at 390 wide. `build.py` (FRAME_CHECK) now carries the fix under the `.qs li .sn` line: the question spans the box,
+  and the number's connector line goes. It is in the Duxford source, so a fresh copy already has it.
+- Key places: some live pages put a show name tag beside the "Key places" heading in Getting there. Duxford has none, so
+  add this to your `new-design.css` if your page has one:
+  `html.nz body main:not(#nz0):not(#nz1) #travel .xd-kp-h > span + span{display:none!important}`
+- Check the quick checker at 390 wide: each question should fill its box, not sit in a thin column.
+
 ## Checks before you publish (all of them)
 
 - `python3 build.py` runs with no assert errors.

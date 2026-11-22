@@ -675,7 +675,7 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - Photos used by the new parts are Jack's own from the page (invader, hangars, static_line, harvard_static, beech18, vintage_bus, crowd_rain, queue). The `cm_` photos credited to Chris Murgatroyd are left where the live page has them and are not reused.
 - Shuttleworth has no photographers' map, so the Duxford map scripts (spot cards, 3D look) and the spot 4 photo are left out.
 - Added for this page: the Where to watch spot tabs here are built differently (`#wwMaps`), so the Duxford look is set on them in `new-design.css`; the extra "Shuttleworth" tag beside Key places is hidden to match Duxford.
-- Fix on top of the template: in the quick checker on phones the question was squeezed into a 44px column after the number was hidden. `build.py` now lets it span the box. The Duxford preview still has this at phone width.
+- Fix on top of the template: in the quick checker on phones the question was squeezed into a 44px column after the number was hidden. `build.py` now lets it span the box. The same fix went into the Duxford source and every other show's new design branch on 22 Nov 2026 (see the fixes section in `previews/NEW-DESIGN-ROLLOUT.md`).
 - Checks: build asserts pass, 74 inline scripts parse, all 868 text chunks of the live page are present, every section opens at 1280 and 390 with no sideways scroll, console errors only the live page's own (traders fetch CORS, Google Maps on file://), and the line-up, planner, sun guide, calculator, checklists, flightline tour checker, quick checker and What you'll see filters behave as on the live page.
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
