@@ -100,6 +100,7 @@ def main():
     facilities(p, dux)
     train_header(p)
     photo(p)
+    fares(p)
 
     OUT.write_text(p.text(), encoding="utf8")
     print("wrote", OUT.relative_to(ROOT))
@@ -521,6 +522,68 @@ def photo(p):
           + '    <figure class="pic wide reveal"><img class="photo" data-k="p47" alt=""><figcaption>P-47 Thunderbolt on a fast pass.</figcaption></figure>\n'
           + head.group(2))
     assert '"p47": "P-47 Thunderbolt on a fast pass"' in p.orig
+
+
+# 13. Fares and save money board (Jack, 22 Nov 2026, "add this to each page"): the Clacton board's design
+#     (fares-board.css and fares-board.js, taken from claude/clacton-new-design e478a49), with Cosford's own
+#     prices only. Cosford's page has no train, bus, coach or taxi prices, so the More fares tabs are left out.
+FARES = """
+<div class="nss tp-fares" id="tpFares"><div class="nss-in" style="background:#E3F1F8;padding:0"><div class="nss-scr">
+<div class="nss-low">
+<div>
+<div class="nss-hd"><span class="nss-sq"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/></svg></span><div class="nss-bar"><b>Fares</b><span>Every price for getting to and parking at the show, in one place.</span></div></div>
+<div class="nss-fares">
+<a class="nss-pen" href="https://www.ukairshowguide.co.uk/airshow-public-transport" target="_top"><b>Plan my<br>journey</b><small>All transport options</small></a>
+<div>
+<p class="nss-sub">Show ticket <em>Parking included</em></p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#E0592A"><i>Adult</i><span>Adult, 2026<b>£44</b></span></div>
+<div class="nss-tile" style="--c:#6950A1"><i>Child</i><span>Under 16s<b>Free</b></span></div>
+<div class="nss-tile" style="--c:#2BA84A"><i>Car</i><span>Airfield parking<b>Included</b></span></div>
+<div class="nss-tile" style="--c:#44AED6;--i:#13293C"><i>Prog</i><span>Programme<b>£10</b></span></div>
+</div>
+<p class="nss-sub">Parking outside the airfield <em>2026 prices</em></p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#13293C"><i>Car</i><span>Albrighton Trust<b>£25</b></span></div>
+<div class="nss-tile" style="--c:#C2255C"><i>Van</i><span>Albrighton Trust, camper van<b>£35</b></span></div>
+<div class="nss-tile" style="--c:#13293C"><i>Car</i><span>Shackerley Lane, car or van<b>£30</b></span></div>
+<div class="nss-tile" style="--c:#2BA84A"><i>Walk</i><span>Shackerley Lane, walk in<b>£5</b></span></div>
+</div>
+<p class="nss-small">Tickets are advance only and nothing is sold at the gate. These aren't official viewing areas, so you won't get the static park or the commentary.</p>
+</div>
+</div>
+</div>
+<div class="nss-disc">
+<div class="nss-hd"><span class="nss-sq" style="background:#6950A1;color:#fff">%</span><div class="nss-bar"><b>Save money</b></div></div>
+<div class="nss-dl">
+<div class="nss-dr"><b>Under 16s <span>| Free</span></b><p>Under 16s go free with a paying adult, but you do need to say how many children are coming when you book.</p></div>
+<div class="nss-dr"><b>Parking <span>| Included</span></b><p>Parking on the airfield is included in the admission price.</p></div>
+<div class="nss-dr"><b>Split train tickets</b><p>You can try booking advance tickets to Wolverhampton or Birmingham and a separate ticket on to Cosford, as it may be cheaper.</p></div>
+<div class="nss-dr"><b>Coach, then the train</b><p>A National Express coach into Birmingham, then the train to Cosford. This can work out a lot cheaper than the train the whole way.</p></div>
+</div>
+</div>
+</div>
+</div></div></div>
+"""
+FARES_FACTS = ["&pound;44 in 2026, advance only", "Under 16s go free with a paying adult, but you do need to say how many children are coming when you book.",
+               "Parking on the airfield is included in the admission price.", "The souvenir programme was &pound;10 in 2026",
+               "£25 a car and £35 a camper van", "£5 to walk in and £30 for a car or van",
+               "These aren't official viewing areas, so you won't get the static park or the commentary.",
+               "You can try booking advance tickets to Wolverhampton or Birmingham and a separate ticket on to Cosford, as it may be cheaper.",
+               "This can work out a lot cheaper than the train the whole way.", "No coach stops at Cosford, so I would take a National Express coach into Birmingham Coach Station and finish with the train."]
+
+
+def fares(p):
+    for t in FARES_FACTS:
+        assert t in p.orig, t
+    css = (HERE / "fares-board.css").read_text(encoding="utf8")
+    js = (HERE / "fares-board.js").read_text(encoding="utf8")
+    # straight after Choose a topic (the page's own layout script also puts #tpFares there)
+    i = p.s.index('<section class="explore" id="explore"')
+    j = p.s.index("</section>", i) + len("</section>")
+    p.s = p.s[:j] + "\n" + css + FARES + js + p.s[j:]
+    LEFT_OUT.append("Getting there, Fares board: the More fares tabs (train, bus, coach, town parking, taxi), as Cosford's page has no prices for them")
+    LEFT_OUT.append("Getting there: the hidden Ways in picker board (Duxford has none; the fares script is pointed at it so the page has no error)")
 
 
 LEFT_OUT = []
