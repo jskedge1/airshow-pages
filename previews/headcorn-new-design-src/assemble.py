@@ -17,6 +17,11 @@ BLOCK = re.compile(r"<(script|style|template)\b([^>]*)>(.*?)</\1>", re.S)
 LEFT_OUT = [
     "The Ground Show section (the old page's section in Duxford's Flightline walk place). Headcorn has no flightline "
     "walk, so the Flightline walk section is left out too.",
+    "Fares and save money board (Getting there): Headcorn's page has no travel fares (no train, bus, coach, taxi or "
+    "Park and Ride prices, and parking is free), so the board and its Fares jump button are left out.",
+    "On the day and getting home jump button (Getting there): the page has no block for it to go to.",
+    "Compare driving options (#cdo, Getting there): Headcorn has one car park price (free general parking), so "
+    "there is nothing to compare.",
 ]
 
 
@@ -110,6 +115,14 @@ def assemble(hc, dx):
     assert m, "entry queue photo"
     img = m.group(1).replace("<img ", "<img hidden ", 1)
     hc = hc[:m.start()] + '<div class="arrive-step"><span class="arrive-n">2</span><h3>The entry queue</h3><p>' + m.group(2) + '</p></div><div hidden style="display:none!important">' + img + '</div>' + hc[m.end():]
+
+    # Getting there jump strip (round 2 brief, 20:30): no Fares board (Headcorn has no travel fares) and no On the day
+    # and getting home box, so only the buttons that go somewhere stay, in a strip of two.
+    hc = one(hc, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+             "var JUMPS = [['Ways in', '#explore'], ['Questions', '#travel .acc']];", "jump strip")
+    hc = one(hc, '<style id="tpJump4">', '<style id="tpJump4">\nbody #travel .tp-jump .wrap{grid-template-columns:repeat(2,minmax(0,1fr))!important}', "jump strip style")
+    hc = one(hc, "@media (max-width:640px){body #travel .tp-jump .wrap{grid-template-columns:minmax(0,1fr)}}",
+             "@media (max-width:640px){body #travel .tp-jump .wrap{grid-template-columns:minmax(0,1fr)!important}}", "jump strip phone")
 
     # 4. left out: The Ground Show (no Flightline walk at Headcorn)
     hc = re.sub(r'\s*<button class="tab" role="tab" id="t-flightline"[^>]*>The Ground Show</button>', "", hc, count=1)
