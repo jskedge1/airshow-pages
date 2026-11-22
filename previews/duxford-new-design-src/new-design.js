@@ -379,3 +379,24 @@
   }
   var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
 })();
+
+/* Jack, 22 Nov 2026: section order. The sections named here come first, in this order, and the rest keep
+   their order after them. The section tab bar follows the same order. Add a name here to move another. */
+(function(){
+  var FIRST=['photo','watch','facilities'];
+  function run(){
+    var folds=[].slice.call(document.querySelectorAll('section.fold'));
+    if(!folds.length){return false;}
+    var box=folds[0].parentElement,anchor=folds[0];
+    FIRST.forEach(function(id){var f=document.getElementById('f-'+id);if(f&&f.parentElement===box){box.insertBefore(f,anchor);}});
+    folds=[].slice.call(box.querySelectorAll(':scope > section.fold'));
+    FIRST.slice().reverse().forEach(function(id){var f=document.getElementById('f-'+id);if(f){box.insertBefore(f,box.querySelector(':scope > section.fold'));}});
+    [].forEach.call(box.querySelectorAll(':scope > section.fold'),function(f,i){var n=f.querySelector('.st-stop,.fold-n');if(n){n.textContent=String(i+1);}});
+    var t=document.querySelector('#t-overview');
+    if(t){var list=t.parentElement;
+      FIRST.slice().reverse().forEach(function(id){var b=document.getElementById('t-'+id);if(b&&b.parentElement===list){list.insertBefore(b,list.firstElementChild);}});
+    }
+    return true;
+  }
+  if(!run()){document.addEventListener('DOMContentLoaded',run);}
+})();
