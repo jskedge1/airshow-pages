@@ -7645,7 +7645,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
 <script>
 (function(){
   var root=document.querySelector('.nss'); if(!root) return;
-  var MODE={'Park and Ride':['P+R','#2BA84A','#fff'],'By train':['Train','#D74949','#fff'],'By bus':['Bus','#00A6E2','#13293C'],'By coach':['Coach','#C2255C','#fff'],'By road':['Road','#F2B233','#13293C'],'Access & taxis':['Taxi','#6950A1','#fff']};
+  var MODE={'Park and Ride':['P+R','#2BA84A','#fff'],'By train':['Train','#D74949','#fff'],'By bus':['Bus','#00A6E2','#13293C'],'By coach':['Coach','#C2255C','#fff'],'By road':['Road','#F2B233','#13293C'],'Access & taxis':['Taxi','#6950A1','#fff'],'Taxis':['Taxi','#6950A1','#fff'],'Taxis & buses':['Taxi','#6950A1','#fff'],'Buses & taxis':['Bus','#00A6E2','#13293C'],'Trams, buses & taxis':['Tram','#00A6E2','#13293C'],'Show day parking':['Park','#32B4AF','#13293C'],'Festival parking':['Park','#32B4AF','#13293C'],'Parking':['Park','#32B4AF','#13293C'],'Beachy Head':['Park','#32B4AF','#13293C'],'On foot and by bike':['Walk','#2BA84A','#fff'],'Fuel':['Fuel','#F2B233','#13293C']};
   function tick(){ var d=new Date(),c=root.querySelector('#nssClock'); if(c) c.textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
   tick(); setInterval(tick,20000);
   function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
@@ -12783,7 +12783,7 @@ window.LU_EXTRA = [
     '.xd-jh{margin:26px 0 4px;font-family:"Barlow",sans-serif;font-weight:700;font-size:19px;color:#13293C}' +
     '.xd-jt .xd-jp[hidden]{display:none}' +
     '.xd-tt{display:grid;gap:0}' +
-    '.xd-tt-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin:0 0 18px}' +
+    '.xd-tt-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:8px;margin:0 0 18px}' +
     '.xd-tt-link{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#13293C;color:#fff!important;text-decoration:none!important;border-left:6px solid var(--c);border-radius:4px;transition:background .3s ' + EASE + ',padding .35s ' + EASE + '}' +
     '.xd-tt-link b{display:block;font-weight:700;font-size:16px}' +
     '.xd-tt-link small{display:block;font-weight:500;font-size:14px;color:#C9DCEA}' +
@@ -12893,7 +12893,7 @@ window.LU_EXTRA = [
   var CSS_HERO =
     '#travel .gt-hero{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important;gap:40px 56px!important;align-items:start!important}' +
     '#travel .gt-hero h2 small{color:#00A6E2!important;font-family:"Barlow",sans-serif;font-weight:600;font-size:.4em;letter-spacing:0}' +
-    '#travel .gt-hero .btns{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:26px!important}' +
+    '#travel .gt-hero .btns{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:10px;margin-top:26px!important}' +
     '#travel .gt-hero .btns .btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:stretch;background:#13293C;color:#fff;min-height:64px;position:relative;border-radius:4px;overflow:visible;box-shadow:0 4px 0 rgba(19,41,60,.25);transition:transform .25s ' + EASE + ',box-shadow .25s ' + EASE + ',background .25s ' + EASE + '}' +
     '#travel .gt-hero .btns .btn:before{content:"";flex:none;width:64px;background:var(--bc,#00A6E2);border-radius:4px 0 0 4px}' +
     '#travel .gt-hero .btns .btn .xd-bi{position:absolute;left:0;top:0;bottom:0;width:64px;display:flex;align-items:center;justify-content:center;color:#fff}' +
@@ -12976,7 +12976,7 @@ window.LU_EXTRA = [
     var out = { head: [], keep: [], journey: [], buses: [], times: [], tips: [], info: [] };
     Array.prototype.slice.call(detail.children).forEach(function (el) {
       if (el.matches('h3, .lead, .on-map')) out.head.push(el);
-      else if (el.matches('.br-box, .tr-box')) out.keep.push(el);
+      else if (el.matches('.br-box, .tr-box, .d-times')) out.keep.push(el);
       else if (el.matches('ol.route, ol.jx-steps')) out.journey.push(el);
       else if (el.matches('.areas')) out.buses.push(el);
       else if (el.matches('.ttx, .jx-dcard')) out.times.push(el);
@@ -13021,7 +13021,7 @@ window.LU_EXTRA = [
     decorateHero();
     /* on the live site the guide sits inside the site's own container, so the styles go next to it, not in the page head */
     var host = explore.getRootNode && explore.getRootNode();
-    if (host && host.nodeType === 11) host.appendChild(st); else document.head.appendChild(st);
+    if (host && host.nodeType === 11) host.appendChild(st); else (document.body||document.head).appendChild(st);
 
     explore.classList.add('xd-on');
     var hold = document.createElement('div'); hold.className = 'xd-hold';
@@ -15673,7 +15673,7 @@ body #phCalc .sw-calc .pl-q legend{text-transform:none!important}
   function start() {
     if (document.getElementById('transport-pier-css')) return;
     var st = document.createElement('style'); st.id = 'transport-pier-css'; st.textContent = CSS;
-    document.head.appendChild(st);
+    (document.body||document.head).appendChild(st);
     var tries = 0;
     (function wait() {
       var c = document.querySelector('#travel .xd-content');
@@ -15921,7 +15921,7 @@ body #phCalc .sw-calc .pl-q legend{text-transform:none!important}
     '#travel #explore .ft-extra .xd-good .xd-note{position:relative;margin:0 24px 18px!important;padding:16px 18px 16px 58px!important;background:#FFF6E0;border-left:6px solid #F2B233;font:600 17px/1.5 Barlow,sans-serif!important;color:#13293C!important}',
     '#travel #explore .ft-extra .xd-good .xd-note:before{content:"!";position:absolute;left:16px;top:16px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:#F2B233;color:#0B0F14;font:800 18px/1 Barlow,sans-serif;border-radius:50%}',
     '#travel #explore .ft-extra .xd-good .xd-info{padding:0 24px!important}',
-    '#travel #explore .ft-extra .xd-good .detail-meta{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px!important;margin:0 0 18px!important;padding:0!important;background:none!important}',
+    '#travel #explore .ft-extra .xd-good .detail-meta{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:10px!important;margin:0 0 18px!important;padding:0!important;background:none!important}',
     '#travel #explore .ft-extra .xd-good .detail-meta span{display:flex!important;flex-direction:column;gap:4px;padding:12px 14px!important;background:#F5F8FA!important;border:0!important;border-top:4px solid #44AED6!important;font:500 14px/1.2 Barlow,sans-serif!important;color:#13293C!important}',
     '#travel #explore .ft-extra .xd-good .detail-meta span b{font:800 24px/1.1 "Barlow","Barlow",sans-serif!important;color:#13293C!important}',
     '#travel #explore .ft-extra .xd-good .detail-meta span.ft-dup{display:none!important}',
@@ -15959,6 +15959,8 @@ body #phCalc .sw-calc .pl-q legend{text-transform:none!important}
     '@media(max-width:640px){#travel #explore .br-box.ft-feature{padding:20px 16px!important}#travel #explore .br-box.ft-feature h4.br-h{font-size:26px!important;line-height:28px!important}}',
     /* journey cards (9 Nov) */
     '#travel #explore .xd-tt-board{background:transparent!important;box-shadow:none!important;border:0!important;display:flex!important;flex-direction:column;gap:10px}',
+    '#travel #explore .xd-tt-board[hidden]{display:none!important}',
+    '#travel #explore .sw-shuttle .xd-tt-h{display:grid!important}',
     '#travel #explore .xd-tt-board .xd-tt-h{display:none!important}',
     '#travel #explore .xd-tt-board .xd-tt-row[data-jv]{display:grid!important;grid-template-columns:110px minmax(0,1fr) minmax(0,220px)!important;gap:0!important;align-items:stretch!important;padding:0!important;background:#FFFFFF!important;border:1px solid #DCE3E8!important;border-left:6px solid var(--c,#D74949)!important;box-shadow:0 6px 16px rgba(19,41,60,.06)!important;transition:transform .25s ease,box-shadow .25s ease}',
     '#travel #explore .xd-tt-board .xd-tt-row[data-jv]:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(19,41,60,.12)!important;background:#FFFFFF!important}',
@@ -15986,7 +15988,7 @@ body #phCalc .sw-calc .pl-q legend{text-transform:none!important}
     '@media(max-width:640px){.ft-stats{grid-template-columns:minmax(0,1fr);gap:12px}.ft-stat{padding:18px;grid-template-columns:48px minmax(0,1fr)}.ft-stat svg{width:46px;height:46px}.ft-band{padding:22px 18px}.ft-band button{width:100%;text-align:center}}',
     '@media(prefers-reduced-motion:reduce){.ft-nav button,.ft-nav button i{transition:none}}'
   ].join('\n');
-  var st = document.createElement('style'); st.id = 'topicFtCss'; st.textContent = css; document.head.appendChild(st);
+  var st = document.createElement('style'); st.id = 'topicFtCss'; st.textContent = css; (document.body||document.head).appendChild(st);
 
   var ICON = {
     walk: '<svg viewBox="0 0 64 64" fill="none" stroke="#D74949" stroke-width="2.2" aria-hidden="true"><circle cx="36" cy="10" r="5"/><path d="M33 18l-8 10 6 6-4 18M33 18l6 12 10 4M31 34l9 8 4 12M25 28l-9 2"/></svg>',
@@ -16022,6 +16024,7 @@ body #phCalc .sw-calc .pl-q legend{text-transform:none!important}
   function toMin(t) { var m = /^(\d{1,2}):(\d{2})$/.exec(t || ''); return m ? +m[1] * 60 + +m[2] : null; }
   function journeyCards(root) {
     [].forEach.call(root.querySelectorAll('.xd-tt-row:not([data-jv])'), function (row) {
+      if (row.closest('.sw-shuttle')) return;
       row.setAttribute('data-jv', '1');
       var t = (row.children[0] || {}).textContent || '', sv = (row.children[1] || {}).textContent || '', dt = (row.children[2] || {}).textContent || '';
       t = t.trim(); sv = sv.trim(); dt = dt.trim();

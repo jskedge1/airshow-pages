@@ -2,7 +2,7 @@
 
 All figures were copied from the show's own live page (which takes them from the official site). Nothing from Clacton was reused.
 
-Left out: RIAT (no Getting there section, Boscombe Down parking not published) and Little Gransden (on site parking only, no charge or details).
+Updated 22 Nov 2026: every page now has both blocks, including RIAT and Little Gransden, where the figures not yet published are marked as still to come. See "Getting there update" at the end.
 
 
 ## Eastbourne
@@ -135,7 +135,7 @@ Source: camping-layout/ayr.html, topics 'Official car parks', 'Blue Badge and ac
 Source: camping-layout/cosford.html, topics 'Driving and parking', 'Blue Badge parking', 'Watching from outside' (Albrighton Trust £25/£35, 2026), 'Taxis and drop-off', and the gate FAQ (2026).
 
 
-Compare Driving Options left out: nothing to compare.
+Compare Driving Options: added 22 Nov 2026, see the end of this file.
 
 **Parking at RAF Cosford** (column: Cost in 2026)
 
@@ -153,7 +153,7 @@ Compare Driving Options left out: nothing to compare.
 Source: camping-layout/duxford.html, topics 'Air Show parking permits', 'Accessible parking', 'Trumpington Park & Ride shuttle' (2026 times), and the parking FAQ. No permit price on the page; IWM's site refused my fetch.
 
 
-Compare Driving Options left out: nothing to compare.
+Compare Driving Options: added 22 Nov 2026, see the end of this file.
 
 **Parking at IWM Duxford** (column: How it works)
 
@@ -171,7 +171,7 @@ Compare Driving Options left out: nothing to compare.
 Source: camping-layout/shuttleworth.html, topics 'Free show car parks', 'Blue Badge parking', 'Train + Shuttleworth shuttle bus' (£10 return), How arrival works and the parking FAQ. Year: 2027.
 
 
-Compare Driving Options left out: nothing to compare.
+Compare Driving Options: added 22 Nov 2026, see the end of this file.
 
 **Parking at Old Warden** (column: Cost in 2027)
 
@@ -189,7 +189,7 @@ Compare Driving Options left out: nothing to compare.
 Source: camping-layout/headcorn.html, topics 'Free show parking', 'Blue Badge parking', campsite (2027 early bird), How arrival works. Parking year not stated on the page.
 
 
-Compare Driving Options left out: nothing to compare.
+Compare Driving Options: added 22 Nov 2026, see the end of this file.
 
 **Parking at Headcorn** (column: Cost when I last checked)
 
@@ -207,7 +207,7 @@ Compare Driving Options left out: nothing to compare.
 Source: camping-layout/southport.html, topics 'Driving and official parking', 'Accessible arrival', 'Coach groups', and the road closures FAQ (2025 closures, 2026 prices).
 
 
-Compare Driving Options left out: nothing to compare.
+Compare Driving Options: added 22 Nov 2026, see the end of this file.
 
 **Car Parks in Southport** (column: Cost in 2026)
 
@@ -219,3 +219,105 @@ Compare Driving Options left out: nothing to compare.
 - Box "Opening": Car parks open 09:00; Walk to the show About 5 minutes; Pre booking None in 2026
 - Box "Marine Drive": Closed in 2025 07:00 to 19:00; Esplanade One way north until 15:00
 - Box "Blue Badge": Hard standing Esplanade, Marine Drive; Grass Princes Park, Victoria Park; Cost The normal £10
+
+## Getting there update (22 Nov 2026)
+
+Every feature page now has Clacton's full Getting there: plan note, step tabs, Compare Driving Options, the car parks block, the explorer with a train route hero, Fares and the On the day and Getting home boxes. Built by `tools-getting-there.py` from `getting-there-src/`. Every figure in the new Fares, On the day, Getting home and train route parts, with its source and year, is listed in `getting-there-src/shows/<show>/sources.md`, with a Gaps list at the end of each. RIAT's are in `previews/big-guide-to-riat-src/travel.py`.
+
+### Cosford
+
+Source: camping-layout/cosford.html and the official sources in getting-there-src/shows/cosford/sources.md.
+
+**Compare Driving Options** (free rows have an empty bar, as the bars show cost)
+
+- Airfield car parks (Included in your ticket, on grass): Included
+- Disabled car park (Blue Badge, follow the wheelchair signs): Included
+- Albrighton Trust campervan (Blue House Lane, outside the airfield): £35
+- Albrighton Trust per car (Blue House Lane, outside the airfield): £25
+- Note: Vehicles on the airfield must be under 7 metres long and 7.5 tonnes, and Blue Badge spaces are first come first served. The Albrighton Trust opened from 09:00, was booked through Ticket Tailor and isn’t an official viewing area, so you won’t see the static park or hear the commentary. These were the 2026 prices, so I would check them again before you go.
+
+### Duxford
+
+Source: camping-layout/duxford.html and the official sources in getting-there-src/shows/duxford/sources.md.
+
+**Compare Driving Options** (free rows have an empty bar, as the bars show cost)
+
+- Air Show car parks (Summer and Battle of Britain, permit with your ticket): Not published
+- Trumpington Park & Ride (Free Air Show shuttle, big Air Shows only): Free bus
+- Smaller events car parks (Flying Days, Flying Evening and Flying Finale, no booking): Free
+- Motorbikes (Visitor centre car park, no permit): Free
+- Note: Spaces are limited at the big Air Shows, so I would book your permit as early as you can, and an accessible permit if you need one. The parking set up and the 2026 shuttle times are the latest I have, so I would check them again once IWM publishes the 2027 details.
+
+### Shuttleworth
+
+Source: camping-layout/shuttleworth.html and the official sources in getting-there-src/shows/shuttleworth/sources.md.
+
+**Compare Driving Options** (free rows have an empty bar, as the bars show cost)
+
+- Show car parks (Alder Drive, SG18 9DT, no booking): Free
+- Blue Badge parking (Central to the event area, spaces limited): Free
+- Note: Stewards check your tickets at the entrance, then you wait in a holding queue until the car parks open, so I would aim to arrive around 08:00. Car clubs can arrange display parking through Shuttleworth’s groups team. This is the 2027 parking plan, so I would check it again before you go.
+
+### Headcorn
+
+Source: camping-layout/headcorn.html and the official sources in getting-there-src/shows/headcorn/sources.md.
+
+**Compare Driving Options** (free rows have an empty bar, as the bars show cost)
+
+- General parking (Grass fields beside the site, TN27 9HX): Free
+- Blue Badge parking (Near the main entrance, spaces limited): Usually free
+- Mustang Lounge car park (For Mustang Lounge guests, from £140): Included
+- Note: Blue Badge parking is usually free, but spaces are limited. Overnight parking isn’t allowed in the day car parks. This is what the official site said when I last checked in November 2026, ahead of the 2027 show, so I would check the official parking page again before you go.
+
+### Southport
+
+Source: camping-layout/southport.html and the official sources in getting-there-src/shows/southport/sources.md.
+
+**Compare Driving Options** (free rows have an empty bar, as the bars show cost)
+
+- Marine Drive (The Promenade, hard standing): £10
+- Esplanade (Hard standing, coaches park here): £10
+- Princes Park (Grass): £10
+- Victoria Park (Grass): £10
+- Note: The car parks opened at 09:00 and you paid on arrival. Blue Badge holders paid the normal £10, first come first served, and there was no park and ride. These were the 2026 prices, so I would check them again before you go.
+
+### Little Gransden
+
+Source: camping-layout/gransden.html and the official sources in getting-there-src/shows/gransden/sources.md.
+
+**Compare Driving Options** (free rows have an empty bar, as the bars show cost)
+
+- On site parking (On the airfield, signposted from the road): None listed
+- Accessible bays (Beside the entry gate at a recent show): None listed
+- Note: This is from the 2026 show and the 2027 booking page, checked 3 November 2026. If a parking charge is published for 2027, I’ll add it here, so I would check the booking page again before you go.
+
+**Parking at Little Gransden** (column: Cost when I last checked)
+
+- On site parking, on the airfield: No charge or booking mentioned
+- Accessible bays, by the entry gate: Signed at a recent show, no booking mentioned
+- Car park opening time: Not out yet, I’ll add it when it is
+- Box "Car Parks": Postcode SG19 3BP; Gates open 10:00 (2026); Walk to the gate Short
+- Box "Leaving": Back to B1046, then the A1198; Getting back in Keep your wristband on
+- Box "Blue Badge": Proof Not stated, bring your Blue Badge; Booking Ask the organisers; Ground Grass, soft after rain
+
+### RIAT
+
+Source: the Big Guide to RIAT pages (build.py: KNOW, COME, BOOKED) and airtattoo.com (Boscombe Down FAQs, the move announcement of 4 Nov 2026, How to get here, Saturday and Sunday tickets), checked 22 Nov 2026. RIAT has not published the RIAT27 transport plan, parking prices, Park and Ride sites, shuttle times, accessible parking or gate and flying times yet.
+
+**Compare Driving Options**
+
+- Park and Ride (Sites to follow, free with your ticket): Free
+- Rail shuttles (Salisbury, Andover and Swindon): Free
+- Show car parks (MOD Boscombe Down, open 06:00): Not out yet
+- Note: The bars will fill in once RIAT publishes the RIAT27 prices. For the last show at Fairford, pre paid parking was £15 a car and £7.50 a motorbike, and that is being refunded. These are the 2027 plans as of November 2026, so I would check them again before you go.
+
+**Car Parks at Boscombe Down** (column: Cost in 2027)
+
+- Show car parks, MOD Boscombe Down: Prices aren’t out yet
+- Park and Ride: Free, sites to follow
+- Rail shuttles from Salisbury, Andover and Swindon: Free with a general admission ticket
+- Accessible parking: Details to follow
+- Pre paid parking for the Fairford show: Refunded, £15 a car, £7.50 a motorbike
+- Box "Opening Times": Car parks open 06:00 each show day; Gates and flying Nearer the show
+- Box "Park and Ride": Cost Free; Sites Not out yet; Times Not out yet
+- Box "Already Booked?": Refund Automatic, by end of December 2026; Boscombe Down Priority booking if offered

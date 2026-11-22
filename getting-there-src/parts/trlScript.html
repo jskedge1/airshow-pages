@@ -1,0 +1,33 @@
+<script id="trlScript">
+(function(){
+  var HERO='<div class="trl-top">'
+   +'<div class="trl-hero"><div><span class="trl-tag">Train route</span><h3>Trains to <span>Clacton</span></h3>'
+   +'<p>This is the train I would look at for the Clacton Air Show. Greater Anglia runs a direct train from London Liverpool Street to Clacton-on-Sea every hour, and you can join it at the other main stations on the way, with a change at Colchester if you need one. It’s the end of the line, so you can’t miss your stop.</p></div>'
+   +'<div><div class="trl-board" aria-label="Example departure board"><b>09:18<span>CLACTON-ON-SEA</span></b><small>Chelmsford, Witham, Colchester</small></div>'
+   +'<div class="trl-kd"><h4>Key details</h4><div><span>Runs on</span><b>Every day, both show days</b></div><div><span>How often</span><b>Every hour from London</b></div><div class="hl"><span>Get off at</span><b>Clacton-on-Sea</b></div><div><span>Then walk</span><b>10 to 15 minutes</b></div><div><span>From London</span><b>About 1h 26m</b></div><div><span>Run by</span><b>Greater Anglia</b></div></div></div></div>'
+   +'<div class="trl-jr"><div class="trl-jr-h"><b>Your journey</b><span>London Liverpool Street to Clacton-on-Sea, direct. Winter times, so check again nearer the show.</span></div>'
+   +'<div class="trl-line"><div class="trl-stop"><i></i><b>London Liverpool Street</b><small>Leave 09:18</small></div><div class="trl-mid">Train to Clacton-on-Sea<br>1h 26m</div><div class="trl-stop"><i></i><b>Clacton-on-Sea</b><small>Arrive 10:44</small></div></div></div>'
+   +'<a class="trl-go" href="https://www.ukairshowguide.co.uk/train-to-clacton" target="_top"><span><b>See every train and live times</b><small>Your station, platforms, changes and the way home</small></span><i aria-hidden="true">→</i></a>'
+   +'</div>';
+  function isRail(){var b=document.querySelector('#parkList button[aria-pressed="true"]');return b&&b.dataset.id==='rail';}
+  function apply(){
+    var c=document.querySelector('#explore .xd-content'); if(!c) return;
+    if(isRail()){
+      c.classList.add('trl');
+      if(!c.querySelector(':scope > .trl-top')){
+        var tabs=c.querySelector(':scope > .ft-tabs');
+        var w=document.createElement('div'); w.innerHTML=HERO; var top=w.firstChild;
+        if(tabs) c.insertBefore(top,tabs); else c.insertBefore(top,c.firstChild);
+        var io=('IntersectionObserver' in window)?new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){c.classList.add('in-view');io.disconnect();}});},{threshold:.2}):null;
+        if(io) io.observe(top); else c.classList.add('in-view');
+      }
+    } else {
+      c.classList.remove('trl','in-view');
+      var t=c.querySelector(':scope > .trl-top'); if(t) t.remove();
+    }
+  }
+  var busy=false;
+  function sched(){ if(busy) return; busy=true; setTimeout(function(){busy=false;apply();},60); }
+  var tries=0;(function wait(){var ex=document.getElementById('explore');if(ex){new MutationObserver(sched).observe(ex,{childList:true,subtree:true,attributes:true,attributeFilter:['aria-pressed']});apply();return;} if(++tries<80) setTimeout(wait,150);})();
+})();
+</script>

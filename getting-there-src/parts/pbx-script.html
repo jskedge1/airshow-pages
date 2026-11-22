@@ -1,0 +1,22 @@
+<script>
+(function(){
+  var root=document.querySelector('.pbx'); if(!root) return;
+  var tabs=root.querySelectorAll('.pbx-tab'), panes=root.querySelectorAll('.pbx-pane'), label=root.querySelector('#pbxBandLabel');
+  function pick(id){
+    tabs.forEach(function(t){ t.setAttribute('aria-selected', String(t.dataset.pane===id)); });
+    panes.forEach(function(p){ p.hidden = p.dataset.pane!==id; if(!p.hidden && label) label.textContent=p.dataset.label; });
+    var tr=document.getElementById('travel'); if(tr) tr.classList.toggle('pbx-home', id==='home');
+    if(window.secOpenFor) window.secOpenFor(root);
+  }
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ pick(t.dataset.pane); }); });
+  /* move the planner's "Train lines and connections" block into a holder; transport-pier.js puts it in the train topic */
+  var hold=document.createElement('div'); hold.className='ukag-jp tp-tc'; hold.setAttribute('data-on','1'); hold.id='tpTrainConn';
+  hold.innerHTML='<h4 class="tp-tc-h">Train connections</h4>';
+  var tries=0;
+  (function grab(){
+    var lines=document.querySelector('.ukag-jp:not(.tp-tc) .jq-lines');
+    if(lines && lines.querySelector('table')){ hold.appendChild(lines); document.body.appendChild(hold); hold.hidden=true; return; }
+    if(++tries<80) setTimeout(grab,150);
+  })();
+})();
+</script>

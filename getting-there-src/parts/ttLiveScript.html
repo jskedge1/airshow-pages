@@ -1,0 +1,48 @@
+<script id="ttLiveScript">
+/* Live Greater Anglia times for the Clacton train boards, from the same public National Rail
+   live departure boards the Train to Clacton page uses. Only trains already on the live boards get a badge. */
+(function(){
+  var HOSTS=['https://huxley2.azurewebsites.net','https://national-rail-api.davwheat.dev'];
+  var Q=[{crs:'LST',want:/clacton/i},{crs:'CLT',want:/liverpool street|london/i}];
+  var cache={},busy={};
+  function get(i,cb){
+    var q=Q[i],c=cache[q.crs];
+    if(c&&Date.now()-c.at<55000) return cb(c.list);
+    if(busy[q.crs]||!window.fetch) return;
+    busy[q.crs]=1;
+    (function go(h){
+      if(h>=HOSTS.length){busy[q.crs]=0;cache[q.crs]={at:Date.now(),list:[]};return cb([]);}
+      fetch(HOSTS[h]+'/departures/'+q.crs+'/40').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(js){
+        var list=(js.trainServices||[]).filter(function(s){return s.operatorCode==='LE'&&(s.destination||[]).some(function(d){return q.want.test(d.locationName);});});
+        busy[q.crs]=0;cache[q.crs]={at:Date.now(),list:list};cb(list);
+      }).catch(function(){go(h+1);});
+    })(0);
+  }
+  function badge(s){
+    var e=(s.etd||'').toLowerCase(), b=document.createElement('span'); b.className='tt-live';
+    if(s.isCancelled||e==='cancelled'){b.className+=' cx';b.textContent='Live: cancelled';}
+    else if(e==='on time'){b.textContent='Live: on time'+(s.platform?', platform '+s.platform:'');}
+    else if(/^\d\d:\d\d$/.test(e)){b.className+=' late';b.textContent='Live: expected '+e;}
+    else {b.className+=' late';b.textContent='Live: '+(s.etd||'delayed').toLowerCase();}
+    return b;
+  }
+  function paint(){
+    var rail=document.querySelector('#parkList button[aria-pressed="true"]');
+    if(!rail||rail.dataset.id!=='rail') return;
+    var boards=document.querySelectorAll('#explore .xd-tt-board'); if(!boards.length) return;
+    [0,1].forEach(function(i){
+      var bd=boards[i]; if(!bd) return;
+      get(i,function(list){
+        bd.querySelectorAll('.xd-tt-row').forEach(function(r){
+          var old=r.querySelector('.tt-live'); if(old) old.remove();
+          var tm=r.querySelector('b'); if(!tm) return;
+          var s=list.filter(function(x){return x.std===tm.textContent.trim();})[0]; if(!s) return;
+          var cell=r.querySelector('em')||r.lastElementChild; cell.appendChild(badge(s));
+        });
+      });
+    });
+  }
+  var t=null; function sched(){clearTimeout(t);t=setTimeout(paint,250);}
+  var n=0;(function wait(){var ex=document.getElementById('explore');if(ex){new MutationObserver(function(m){if(m.some(function(x){return !(x.target.classList&&x.target.classList.contains('tt-live'))&&![].some.call(x.addedNodes,function(a){return a.classList&&a.classList.contains('tt-live');});}))sched();}).observe(ex,{childList:true,subtree:true,attributes:true,attributeFilter:['aria-pressed','hidden']});setInterval(paint,60000);sched();return;} if(++n<80) setTimeout(wait,150);})();
+})();
+</script>

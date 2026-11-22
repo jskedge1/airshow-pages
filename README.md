@@ -700,3 +700,13 @@ using the Duxford page as the template (brief: `previews/NEW-DESIGN-ROLLOUT.md`)
   page. Before any rebuild, copy the current FALLBACK block from `camping-layout/<show>.html` into `live-source.html`
   first, or the rebuild puts the old line-up back.
 - To undo the new design for a show: `cp previews/<show>-new-design-src/live-source.html camping-layout/<show>.html`.
+
+## Getting there, the same on every feature page (22 Nov 2026)
+
+Jack asked (22 Nov 2026) for Clacton's Getting there on every feature page, with the same tabs, buttons and boxes. Every page in `camping-layout/` now has, top to bottom: the heading and intro with the Key places board, the Coming by train banner, the plan note (for example "2026 Plan"), the numbered step tabs (Ways in, Fares, On the day and getting home, Questions), Compare Driving Options (`#cdo`), the car parks block (`#cpk`), the Choose a topic explorer (`#explore`, with a train route hero on the main train topic and live train times where the station codes are known), Fares (`#tpFares`), the On the day and Getting home boxes (`.pbx`) and Questions. A page's own extras (How arrival works, Last way home) come after the On the day boxes.
+
+- `python3 tools-getting-there.py [show ...]` puts it in. Clacton's markup, styles and scripts are in `getting-there-src/parts/` (`shared-blocks.json` holds the one version of transport-pier-js, explore-designs-js, topic-fastrans-js, railban-css and tpJump4 that every page now uses). Each show's own words and figures are in `getting-there-src/shows/<show>/` (plan.json, fares.html, pbx.html, trl.json, nss.json, and cdo.html or cpk.html where the page had none). Change those and run the tool again; it replaces what it added before (the `<!-- gt:... -->` blocks), so it is safe to rerun.
+- Every figure with its source and year is in `getting-there-src/shows/<show>/sources.md`, with a Gaps list of what isn't published yet. Parking figures are also in `PARKING-FIGURES.md`.
+- Compare Driving Options shows cost as the bar length, so free or included parking has an empty bar and says so plainly.
+- Duxford keeps its own train route heroes (three train topics), in the same design.
+- RIAT: the Big Guide to RIAT has the same section on its home page (so `camping-layout/riat.html` has it) and as its own tab and page, Getting there (`big-guide-to-riat/getting-there.html`). It is built by `previews/big-guide-to-riat-src/travel.py`; its look comes from `travel.css`, made from Clacton's page by `node previews/big-guide-to-riat-src/make_travel_css.js` (run after build.py, then build.py and golive.py again). Most RIAT27 travel facts aren't out yet, so it says so and lists what is known.

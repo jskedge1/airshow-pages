@@ -1,0 +1,56 @@
+<script>
+(function(){
+  var root=document.querySelector('.nss'); if(!root) return;
+  var MODE={'Park and Ride':['P+R','#2BA84A','#fff'],'By train':['Train','#D74949','#fff'],'By bus':['Bus','#00A6E2','#13293C'],'By coach':['Coach','#C2255C','#fff'],'By road':['Road','#F2B233','#13293C'],'Access & taxis':['Taxi','#6950A1','#fff'],'Taxis':['Taxi','#6950A1','#fff'],'Taxis & buses':['Taxi','#6950A1','#fff'],'Buses & taxis':['Bus','#00A6E2','#13293C'],'Trams, buses & taxis':['Tram','#00A6E2','#13293C'],'Show day parking':['Park','#32B4AF','#13293C'],'Festival parking':['Park','#32B4AF','#13293C'],'Parking':['Park','#32B4AF','#13293C'],'Beachy Head':['Park','#32B4AF','#13293C'],'On foot and by bike':['Walk','#2BA84A','#fff'],'Fuel':['Fuel','#F2B233','#13293C']};
+  function tick(){ var d=new Date(),c=root.querySelector('#nssClock'); if(c) c.textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+  tick(); setInterval(tick,20000);
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function build(){
+    var pl=document.getElementById('parkList'), box=root.querySelector('#nssRows');
+    if(!pl||!pl.querySelector('button')) return false;
+    var g=null,n=0,html='';
+    [].forEach.call(pl.children,function(el){
+      if(el.tagName!=='BUTTON'){ g=MODE[el.textContent.trim()]||['Info','#13293C','#fff']; return; }
+      var sm=el.querySelector('small'), sub=sm?sm.textContent:'', name=el.querySelector('span')?el.querySelector('span').firstChild.textContent:el.textContent;
+      n++;
+      html+='<button type="button" class="nss-row" role="option" aria-selected="false" data-id="'+el.dataset.id+'" style="--c:'+g[1]+';--i:'+g[2]+'"><span class="nss-n">'+n+'</span><span class="nss-badge">'+g[0]+'</span><span class="nss-dest">'+esc(name.trim())+'</span><span class="nss-note">'+esc(sub)+'</span><span class="nss-when" aria-hidden="true">&rsaquo;</span></button>';
+    });
+    box.innerHTML=html;
+    mark();
+    return true;
+  }
+  function mark(){
+    var pl=document.getElementById('parkList'), cur=pl&&pl.querySelector('button[aria-pressed="true"]');
+    var id=cur?cur.dataset.id:null;
+    root.querySelectorAll('.nss-row').forEach(function(r){ r.setAttribute('aria-selected',String(r.dataset.id===id)); });
+  }
+  root.addEventListener('click',function(e){
+    var r=e.target.closest('.nss-row'); if(!r) return;
+    var b=document.querySelector('#parkList button[data-id="'+r.dataset.id+'"]'); if(b) b.click();
+    setTimeout(mark,30);
+    var card=document.querySelector('#travel .xd-card');
+    if(card){ setTimeout(function(){ var y=card.getBoundingClientRect().top+pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); },60); }
+  });
+  var tries=0; (function wait(){ if(build()) { var pl=document.getElementById('parkList'); new MutationObserver(mark).observe(pl,{attributes:true,subtree:true,attributeFilter:['aria-pressed']}); return; } if(++tries<80) setTimeout(wait,150); })();
+})();
+(function(){
+  var b=document.getElementById('mfBox'); if(!b) return;
+  b.querySelector('.mf-tabs').addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;
+    b.querySelectorAll('.mf-tabs button').forEach(function(x){x.setAttribute('aria-selected',String(x===t));});
+    b.querySelectorAll('.mf-p').forEach(function(p){p.hidden=p.dataset.p!==t.dataset.p;});});
+  var n={a:2,c:2};
+  function calc(){
+    if(!document.getElementById('mfBars')) return;
+    var a=n.a,c=n.c,ppl=a+c;
+    var pr=a*6+c*5;
+    var full=a*11.3+c*5.65, rc=(a&&c&&a<=4)?(a*11.3*2/3+c*5.65*0.4):full, tr=Math.min(full,rc)+ (a+c?0:0);
+    var dr=Math.max(1,Math.ceil(ppl/5))*10;
+    var rows=[['Park and Ride',pr,'#2BA84A'],['Train',tr,'#D70428'],['Drive and park',dr,'#13293C']];
+    var mx=Math.max.apply(null,rows.map(function(r){return r[1];}))||1, mn=Math.min.apply(null,rows.map(function(r){return r[1];}));
+    document.getElementById('mfA').textContent=a; document.getElementById('mfC').textContent=c;
+    document.getElementById('mfBars').innerHTML=rows.map(function(r){return '<div class="mf-bar'+(r[1]===mn&&ppl?' best':'')+'" style="--c:'+r[2]+'"><span>'+r[0]+'</span><div><i style="width:'+(ppl?r[1]/mx*100:0)+'%"></i></div><b>£'+(Math.round(r[1]*100)/100).toFixed(r[1]%1?2:0)+'</b></div>';}).join('');
+  }
+  b.addEventListener('click',function(e){var t=e.target.closest('.mf-st button');if(!t)return;var k=t.dataset.k;n[k]=Math.max(k==='a'?1:0,Math.min(12,n[k]+ +t.dataset.d));calc();});
+  calc();
+})();
+</script>

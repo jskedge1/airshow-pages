@@ -27,6 +27,10 @@ import json
 import pathlib
 import re
 import shutil
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import travel  # noqa: E402  Getting there and parking, in the feature page design
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
@@ -53,6 +57,7 @@ PHOTOS = {
     "reds23": ("home-img/v2/hero-arrows-riat23.jpg", "The Red Arrows breaking apart with red, white and blue smoke at RIAT 2023"),
     "camp": ("camping-hub-img/hero-flyby.jpg", "Aircraft flying over an airshow campsite"),
     "tents": ("camping-hub-img/tents-night.jpg", "Tents on an airshow campsite at night"),
+    "railban": ("camping-layout/img/inl-eb0b95406a973fec.webp", "Coming by train? A regional train running past a dry stone wall through green countryside"),
     "logo": ("brand/ukag-header-logo.png", "UK Airshow Guide, by The Big Guide to UK Airshows"),
 }
 
@@ -61,6 +66,7 @@ PAGES = [  # key, file, name in the menu, one line
     ("know", "what-we-know.html", "What we know", "Six things confirmed about the move to Boscombe Down."),
     ("come", "still-to-come.html", "Still to come", "Eight things the organisers have not announced yet."),
     ("booked", "already-booked.html", "Already booked?", "Refunds, parking, campsites and enclosures."),
+    ("travel", "getting-there.html", "Getting there", "Parking, Park and Ride, rail shuttles and fares."),
     ("camping", "camping/index.html", "Camping", "Campsites near Boscombe Down and around Fairford."),
     ("aircraft", "camping/aircraft.html", "Aircraft line-up", "Every aircraft confirmed for RIAT27."),
 ]
@@ -269,7 +275,7 @@ def top_bar():
 
 
 def nav_list(depth=""):
-    return "".join(f'<li><a href="{href(k, depth)}" target="{LINK_TARGET}">{e(n)}</a></li>' for k, f, n, s in PAGES if k != "home")
+    return "".join(f'<li><a href="{href(k, depth)}" target="{LINK_TARGET}">{e(n)}</a></li>' for k, f, n, s in PAGES if k not in ("home", "travel"))  # Getting there is in the tab strip; the header menu has no room
 
 
 def strip(current, depth=""):
@@ -411,6 +417,8 @@ def build_home():
     <div class="bgr-pages">{cards}</div>
   </div>
 </section>
+
+{travel.section(img("railban"))}
 
 <section class="sec tint" id="camping" aria-label="Camping at RIAT">
   <div class="wrap feature">
@@ -557,6 +565,19 @@ def build_booked():
                 "What RIAT has said about refunds, pre-paid parking, campsites near Fairford and enclosure bookings now the show is moving to MOD Boscombe Down.", body)
 
 
+def build_travel():
+    """Getting there and parking as its own tab and page (Jack's RIAT rule), the same section as on the home page."""
+    body = f"""{sub_header("travel", "Getting There And Parking", "c17", "Getting there")}
+{strip("travel")}
+<main>
+{travel.section(img("railban"))}
+{next_prev("travel")}
+</main>
+"""
+    return page("RIAT 2027: getting there and parking at MOD Boscombe Down | The Big Guide to RIAT",
+                "Parking, Park and Ride, free rail shuttles and fares for RIAT27 at MOD Boscombe Down, and what is still to be announced.", body)
+
+
 CAMPING_OVER = r"""<style id="bgr-over">
 /* Jack, 21 Nov 2026: the menu links in the photo header sit in boxes */
 .nav ul{align-items:center;gap:8px}
@@ -629,7 +650,7 @@ def main():
     (OUT / "img").mkdir(parents=True, exist_ok=True)
     for key, (path, alt) in PHOTOS.items():
         shutil.copyfile(ROOT / path, OUT / "img" / pathlib.Path(path).name)
-    for name, fn in (("index.html", build_home), ("what-we-know.html", build_know), ("still-to-come.html", build_come), ("already-booked.html", build_booked)):
+    for name, fn in (("index.html", build_home), ("what-we-know.html", build_know), ("still-to-come.html", build_come), ("already-booked.html", build_booked), ("getting-there.html", build_travel)):
         (OUT / name).write_text(localise(fn()), encoding="utf8")
         print("wrote", (OUT / name).relative_to(ROOT))
     print("camping pages copied:", copy_camping())
