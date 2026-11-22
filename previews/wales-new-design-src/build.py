@@ -21,7 +21,7 @@ import sys
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
-OUT = ROOT / "camping-layout" / "wales.html"   # the live page
+OUT = ROOT / "previews" / "wales-new-design.html"   # preview only, the parent session puts the pages live
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
@@ -122,6 +122,11 @@ def main():
         return "@@BLOB%d@@" % (len(blobs) - 1)
 
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
+
+    # Round 2 (Jack, 22 Nov 2026): the page built in the Duxford template. Same sections and blocks as Duxford,
+    # only the Wales content. See restructure.py for what moves and what is left out.
+    from restructure import restructure
+    html = restructure(html)
 
     # Wales only: the live page builds its sections with the older add-on (navy section bars, sec-toggle).
     # The new design is made for the newer one Duxford has (section.fold), so swap it in (folds.html).
