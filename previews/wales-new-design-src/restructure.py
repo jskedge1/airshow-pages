@@ -26,6 +26,7 @@ LEFT_OUT = [
     "Where to watch: the 'Plan my day here' buttons on each spot (Duxford's spot tabs do not have them).",
     "Food and facilities: the Comfort, Family and Camera packing boxes at the end (Duxford has none there; the same items are in Photography and Plan your day).",
     "Duxford blocks with no Wales facts: the 2027 calendar in Overview, Sun at each show in Photography, the Pick your spot filter cards and the outside the fence note in Where to watch, the site shuttle box in Food and facilities, Top ten things to take in Plan your day.",
+    "Fares board: the More fares tabs (train, bus, coach, town parking, taxi), as the Wales page has no fares for them.",
     "Duxford sections with no Wales facts: Flightline walk, Duxford's story (no Wales story), Experience flights.",
 ]
 
@@ -187,6 +188,17 @@ def restructure(s):
                       "/* Train route header on the train topic, the Duxford design, with the Wales train facts */", 1)
     trl = _one(trl, "https://www.ukairshowguide.co.uk/train-to-duxford", "https://www.ukairshowguide.co.uk/train-to-swansea")
     s = _one(s, '<style id="jx-css-dux">', dux[ta:tz] + "\n" + trl + "\n" + '<style id="jx-css-dux">')
+
+    # ---- Getting there: the Fares and Save money board (Jack, 22 Nov 2026, "add this to each page"), as on the Clacton
+    #      round 2 page, after Choose a topic (the page's own transport script moves it there, and its Fares jump button
+    #      points at it). Filled with the Wales page's own 2026 prices only (fares.html). No train, coach or taxi fares
+    #      on the Wales page, so the More fares tabs are left out. ----
+    for fact in ("&pound;10 a car (2026)", "Each ticket covered one car or small van with up to five people.",
+                 "local buses were free at weekends through the summer", "['Recreation Ground, SA2 0AT','£25",
+                 "['Singleton Hospital, SA2 8QG','£10", "['King George V Playing Fields, SA2 9AU','£17"):
+        assert fact in s, fact
+    s = _one(s, '\n\n  <div class="wrap"><section class="cdo reveal" id="cdo"',
+             "\n\n" + (HERE / "fares.html").read_text(encoding="utf8") + '\n\n  <div class="wrap"><section class="cdo reveal" id="cdo"')
 
     # ---- Food and facilities: Duxford's blocks (food, what to expect, boxes, traders, accessibility) ----
     a, z = _section(s, "facilities")
