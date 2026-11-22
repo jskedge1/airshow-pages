@@ -666,6 +666,14 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+## Headcorn page in the new design (preview, 22 Nov 2026)
+
+`previews/headcorn-new-design.html` is the Headcorn feature page in the same new design, built from the Duxford template by `python3 previews/headcorn-new-design-src/build.py` (see `previews/NEW-DESIGN-ROLLOUT.md`). It is not live; `camping-layout/headcorn.html` was not changed.
+
+- The Duxford only text fixes and photo swaps are taken out. The words in the header, intro and footer are Headcorn's own (Headcorn Aerodrome, "Warbirds on a grass airfield in the Kent Weald", 2 show days, 26 and 27 June 2027), and the photos are Headcorn's own keys: Swordfish beside the intro, panned Buchón behind the guide band, head on Buchón behind the line-up heading, Chinook over the Quick checker, formation behind Plan your day.
+- Most of Headcorn's photos are Jack's Wix addresses, not embedded, so the photo lookups in `new-design.js` take either. The claude.ai artifact viewer does not load remote images, so the artifact copy is built with `--artifact <file>`, which embeds those 12 photos; the preview file keeps the Wix addresses, as the live page does.
+- The photographers' map cards show text only: Headcorn has no photos tied to its three spots yet. Add one by key in `PIC` in `new-design.js`.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
