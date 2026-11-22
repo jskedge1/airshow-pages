@@ -238,3 +238,33 @@
   }
   var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
 })();
+
+/* Jack, 22 Nov 2026: "In this section" in Photography as clean photo tabs (his photos, navy fade, title on the photo). */
+(function(){
+  var PICS={phSun:'spitfire',phShows:'queue',phMap:'wildcat_side',phCreative:'formation',phCalc:'p40',phKit:'chipmunk',phPack:'tornado',phCheck:'buchon_front',phDl:'wildcat_front'};
+  var ORDER=['spitfire','queue','wildcat_side','formation','p40','chipmunk','tornado','buchon_front','wildcat_front'];
+  function src(k){
+    var i=document.querySelector('img[data-pic="'+k+'"][src^="data:"],img[data-k="'+k+'"][src^="data:"]');
+    return i?i.getAttribute('src'):'';
+  }
+  function setup(){
+    var nav=document.querySelector('#photo nav.ph-jump');if(!nav){return true;}
+    var links=nav.querySelectorAll('a');if(!links.length){return true;}
+    if(!src('spitfire')){return false;}
+    nav.classList.add('nz-jtabs');
+    [].forEach.call(links,function(a,n){
+      if(a.querySelector('.nz-jt-ph')){return;}
+      var id=(a.getAttribute('href')||'').replace('#',''),k=PICS[id]||ORDER[n%ORDER.length],s=src(k);
+      var label=a.textContent.trim();
+      a.textContent='';
+      var ph=document.createElement('span');ph.className='nz-jt-ph';ph.setAttribute('aria-hidden','true');
+      if(s){var im=document.createElement('img');im.src=s;im.alt='';im.decoding='async';im.loading='lazy';ph.appendChild(im);}
+      var tx=document.createElement('span');tx.className='nz-jt-tx';
+      tx.innerHTML='<b></b><i>Go to section <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i>';
+      tx.querySelector('b').textContent=label;
+      a.appendChild(ph);a.appendChild(tx);
+    });
+    return true;
+  }
+  var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
+})();

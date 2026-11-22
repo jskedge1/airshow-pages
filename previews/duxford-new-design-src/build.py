@@ -102,15 +102,25 @@ def main():
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
     html = restyle_text(html)
 
+    # Jack, 22 Nov 2026: the photo at the top of Photography changed to a head on shot (his Hispano Buchón photo at Duxford).
+    m_new = re.search(r'data-pic="buchon_front"[^>]*?src="(@@BLOB\d+@@)"', html) or re.search(r'src="(@@BLOB\d+@@)"[^>]*?data-pic="buchon_front"', html)
+    m_old = re.search(r'<img[^>]*data-pic="buchon_pan"[^>]*src="(@@BLOB\d+@@)"[^>]*alt="A Hispano Buch[^"]*panned with the background blurred"><figcaption>A slow shutter speed and a smooth pan give a blurred background and a full prop disc.</figcaption>', html)
+    assert m_new and m_old, "photo swap: pattern not found"
+    seg = m_old.group(0)
+    seg2 = seg.replace(m_old.group(1), m_new.group(1)).replace('data-pic="buchon_pan"', 'data-pic="buchon_front"')
+    seg2 = re.sub(r'alt="A Hispano Buch[^"]*panned with the background blurred"', 'alt="A Hispano Buchón head on, with its propeller turning, on the airfield at Duxford"', seg2)
+    seg2 = seg2.replace('<figcaption>A slow shutter speed and a smooth pan give a blurred background and a full prop disc.</figcaption>', '<figcaption>A Hispano Buchón head on, with its propeller turning, on the airfield at Duxford.</figcaption>')
+    html = html.replace(seg, seg2, 1)
+
     # Jack, 22 Nov 2026: the opening line of the overview did not read right. Name the two big shows plainly.
     old = "Duxford runs two Big two day Air Shows, the Summer Air Show in June and the Battle of Britain Air Show in September. These are the busy ones."
     new = "Duxford has two big air shows each year, and each one runs over two days. They are the Duxford Summer Air Show in June and the Duxford Battle of Britain Air Show in September. These are the busy ones."
     assert old in html
     html = html.replace(old, new, 1)
 
-    # Jack, 22 Nov 2026: the panned Buchón in Get creative was not clear. Use the formation photo instead.
+    # Jack, 22 Nov 2026: the panned Buchón in Get creative was not clear, and then not the formation photo either. Use the Spitfire cockpit close up.
     old = '<img data-k="buchon_pan" alt="" decoding="async"></span><figcaption>A Hispano Buch&oacute;n taking off, panned</figcaption>'
-    new = '<img data-k="formation" alt="" decoding="async"></span><figcaption>Three warbirds flying together in formation</figcaption>'
+    new = '<img data-k="spitfire" alt="" decoding="async"></span><figcaption>A close up of a Spitfire cockpit and canopy beside a hangar</figcaption>'
     assert old in html
     html = html.replace(old, new, 1)
 
