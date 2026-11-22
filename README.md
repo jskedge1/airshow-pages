@@ -666,6 +666,15 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+## International Ayr Show in the new design (preview, 22 Nov 2026)
+
+`previews/ayr-new-design.html` is the Ayr feature page in the Duxford new design, built from the same template as Jack's signed off Duxford preview (see `previews/NEW-DESIGN-ROLLOUT.md`). It is not live. The live page is still `camping-layout/ayr.html` and was not changed. Private preview: https://claude.ai/artifact/BNVpEjvqzcN3e6XBZoMc4D
+
+- Built by `python3 previews/ayr-new-design-src/build.py`, a copy of the Duxford build with the Duxford only text fixes and photo swaps taken out.
+- Ayr keeps Jack's photos in `window.PHOTO` (bbmf, typhoon, p47, stearman, dakota, chinook, spitfire, pitts), not in `data-pic` images, so `new-design.js` reads them from there. The intro uses the Spitfire, the guide band the Dakota, the Quick checker the P-47, the line-up heading the Chinook, Plan your day the Stearman, and the Photography opening the Typhoon (the live page has no photo there, so one is added with its own caption).
+- The top bar and stat use the page's own facts: Low Green, Ayr, Friday 3 and Saturday 4 September 2027, and two show days. Ayr has no photographers' map, flightline walk, story or experience flights, so those parts of the template are left out. The Ground Show and Seafront Information come after the template order.
+- One fix that Duxford does not have yet: on phones the Quick checker questions were squeezed into a narrow column. The build now gives each question the full width of its box (`.qs li > .q`). Duxford needs the same line.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
