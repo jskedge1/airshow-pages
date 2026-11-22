@@ -12,6 +12,9 @@ The words come from the live RIAT page, camping-layout/riat.html (checked 15 Nov
 added that is not on that page. The look is the camping pages' design: this script borrows the styles,
 icons and motion from riat-camping-src/build.py, so the two always match.
 
+Jack, 22 Nov 2026: this home page is where all RIAT information goes. Every new RIAT topic is a tab in the strip
+(a line in PAGES) that opens its own page, and every new tab and page follows this same format and template design.
+
 Run:  python3 previews/big-guide-to-riat-src/build.py
 Run riat-camping-src/build.py first if the camping pages have changed.
 
@@ -20,6 +23,7 @@ its own Wix page: set PAGES_BASE to the https://www.ukairshowguide.co.uk address
 and IMG to the full https://jskedge1.github.io/airshow-pages/... address.
 """
 import importlib.util
+import json
 import pathlib
 import re
 import shutil
@@ -58,6 +62,7 @@ PAGES = [  # key, file, name in the menu, one line
     ("come", "still-to-come.html", "Still to come", "Eight things the organisers have not announced yet."),
     ("booked", "already-booked.html", "Already booked?", "Refunds, parking, campsites and enclosures."),
     ("camping", "camping/index.html", "Camping", "Campsites near Boscombe Down and around Fairford."),
+    ("aircraft", "camping/aircraft.html", "Aircraft line-up", "Every aircraft confirmed for RIAT27."),
 ]
 
 KEY = [("When", "Friday 16 to Sunday 18 July 2027"), ("Where", "MOD Boscombe Down, Wiltshire"),
@@ -143,6 +148,25 @@ EXTRA_CSS = r"""
 .bgr-tiles .t-amber{background:var(--amber);color:var(--navy)}
 .bgr-tiles .t-teal i,.bgr-tiles .t-sky i,.bgr-tiles .t-amber i{background:rgba(19,41,60,.14)}
 @media (max-width:520px){.bgr-tiles{grid-template-columns:1fr}}
+/* Where it all started as a clean section (Jack, 22 Nov 2026), the same look as the feature page openings:
+   the words on a navy panel beside the photo, joined as one block under a teal top edge, then three boxes. */
+.bgr-story.nz-clean{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;align-items:stretch}
+.bgr-story.nz-clean .bgr-story-tx,.bgr-story.nz-clean .ph{border-top:5px solid #32B4AF}
+.bgr-story.nz-clean .bgr-story-tx{background:#13293C;color:#fff;padding:48px 44px 44px;display:flex;flex-direction:column;justify-content:center}
+.bgr-story.nz-clean .bgr-story-tx .h{color:#fff}
+.bgr-story.nz-clean .bgr-story-tx .lede{color:#E6EDF1}
+.bgr-story.nz-clean .bgr-story-tx .lede b{color:#fff}
+.bgr-story.nz-clean .bgr-story-tx .kick{color:#FF9A9A}
+.bgr-story.nz-clean .ph{position:relative;overflow:hidden;min-height:100%}
+.bgr-story.nz-clean .ph img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;transition:transform 1.2s cubic-bezier(.22,.61,.36,1)}
+.bgr-story.nz-clean .ph:hover img{transform:scale(1.04)}
+.bgr-story.nz-clean .bgr-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:20px}
+.bgr-story.nz-clean .bgr-box{background:#F3F6F8;border:0;border-top:5px solid #32B4AF;padding:20px 22px 18px;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s}
+.bgr-story.nz-clean .bgr-box:nth-child(2){border-top-color:#6950A1}
+.bgr-story.nz-clean .bgr-box:nth-child(3){border-top-color:#00A6E2}
+.bgr-story.nz-clean .bgr-box:hover{transform:translateY(-4px);background:#fff;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)}
+@media (max-width:900px){.bgr-story.nz-clean{grid-template-columns:1fr}.bgr-story.nz-clean .bgr-story-tx{padding:30px 22px}.bgr-story.nz-clean .ph{aspect-ratio:4/3;min-height:0}.bgr-story.nz-clean .bgr-grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.bgr-story.nz-clean .ph img,.bgr-story.nz-clean .bgr-box{transition:none;transform:none}}
 .bgr-story{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:64px;align-items:center}
 .bgr-story .lede+.lede{margin-top:14px}
 .bgr-story .ph{position:relative}
@@ -361,9 +385,9 @@ def build_home():
   </div>
 </section>
 
-<section class="sec tint" id="story" aria-label="Where it all started">
-  <div class="wrap bgr-story">
-    <div>
+<section class="sec" id="story" aria-label="Where it all started">
+  <div class="wrap bgr-story nz-clean">
+    <div class="bgr-story-tx">
       <span class="kick">Where it all started</span>
       <h2 class="h">The Big Guide To RIAT Has A New Home</h2>
       <p class="lede">The Big Guide to RIAT is the website where it all started. I built it to help people plan their days at the Air Tattoo, and The Big Guide to UK Airshows grew out of it.</p>
@@ -372,13 +396,11 @@ def build_home():
       <p class="lede">Thank you to everyone who visited The Big Guide to RIAT over the years. I really hope it helped you plan your days at the show.</p>
       <div class="btns" style="margin-top:26px"><a class="btn or" href="{href("come")}" target="{LINK_TARGET}">What I’ll be adding</a><a class="btn nv" href="{SITE}/air-shows-guides" target="_top">My other airshow guides</a></div>
     </div>
-    <div>
-      <div class="ph"><img src="{img("reds23")}" alt="{e(PHOTOS["reds23"][1])}" loading="lazy" decoding="async"><span>The Big Guide to RIAT</span></div>
-      <div class="bgr-grid">
+    <div class="ph"><img src="{img("reds23")}" alt="{e(PHOTOS["reds23"][1])}" loading="lazy" decoding="async"><span>The Big Guide to RIAT</span></div>
+    <div class="bgr-grid">
         <div class="bgr-box"><h3>One website</h3><p>RIAT and my other airshow guides, all in one place.</p></div>
         <div class="bgr-box"><h3>Easier to plan</h3><p>The show, the camping and the travel, a click apart.</p></div>
         <div class="bgr-box"><h3>Growing with the show</h3><p>New pages as each part of RIAT27 is confirmed.</p></div>
-      </div>
     </div>
   </div>
 </section>
@@ -389,6 +411,36 @@ def build_home():
     <div class="bgr-pages">{cards}</div>
   </div>
 </section>
+
+<section class="sec tint" id="camping" aria-label="Camping at RIAT">
+  <div class="wrap feature">
+    <div class="fe-main">
+      <div class="fe-ph"><img src="{camp.IMG}field-sunny.jpg" alt="Pitches along the edge of a sunny camping field" loading="lazy" decoding="async"><span>Official</span></div>
+      <div class="fe-t"><h3>The official RIAT campsite</h3><b>2027<small> at Boscombe Down</small></b></div>
+      <div class="fe-m"><span>{icon("pin")}Beside the airfield</span><span>{icon("tent")}Run by RIAT</span><span>{icon("cal")}Rollover bookings first</span></div>
+      <p>RIAT has secured its own campsite beside the airfield at Boscombe Down, big enough for everyone from the official Fairford site and the campsites around it. Rollover bookings get first pick, then the waitlist, then general sale.</p>
+      <div class="btns"><a class="btn or" href="{camp.OFFICIAL_CAMPING}" target="_blank" rel="noopener">Official camping</a><a class="btn nv" href="{href("camping")}" target="{LINK_TARGET}">Independent campsites</a></div>
+    </div>
+    <div class="fe-side">
+      <div><span class="kick">Camping at RIAT</span><h2 class="h">Where Would You Like To Camp?</h2>
+      <p class="lede">My camping pages list the campsites around the new showground, plus the ones still running around Fairford, each with its own page of pitches, prices and facilities.</p></div>
+      <div class="rowlist">
+        <div class="rowi"><img src="{camp.IMG}hero-flyby.jpg" alt="Aircraft flying over an airshow campsite" loading="lazy" decoding="async"><p><b>Near Boscombe Down</b><span>RIAT from 2027.</span></p><a class="btn nv" href="{href("camping")}#campsites" target="{LINK_TARGET}">View campsites</a></div>
+        <div class="rowi"><img src="{camp.IMG}kempsford-camping.jpg" alt="Welcome to Kempsford Camping sign on the fence" loading="lazy" decoding="async"><p><b>Around Fairford</b><span>RIAT until 2026, about an hour's drive from Boscombe Down.</span></p><a class="btn or" href="{href("camping")}#campsites" target="{LINK_TARGET}">View campsites</a></div>
+        <div class="rowi"><img src="{camp.IMG}base-row.jpg" alt="A row of pitches behind windbreaks under a big sky" loading="lazy" decoding="async"><p><b>On the show map</b><span>See how far each campsite is from the airfield.</span></p><a class="btn or" href="{href("camping")}#map" target="{LINK_TARGET}">Open the map</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="week" aria-label="Show week">
+  <div class="wrap">
+    {camp.sec_head("Show week", "Your RIAT 2027 Week", "The show runs from Friday 16 to Sunday 18 July, with Park & View days either side. Gate and flying times come nearer the show.", mid=True)}
+    {camp.show_week()}
+  </div>
+</section>
+
+{camp.aircraft_band(json.loads((ROOT / "riat-camping-src" / "aircraft.json").read_text(encoding="utf8")), img("reds23"))}
 
 <section class="qband bgr-q" id="coming" aria-label="My full guide is on its way" style="background-image:url('{img("f16")}')">
   <div class="wrap">
@@ -410,6 +462,13 @@ def build_home():
     <h2 class="h">Hear When Each Part Goes Live</h2>
     <p class="lede">Follow along and you’ll hear when each part of the guide goes live. For anything about your own booking, go straight to RIAT.</p>
     <div class="steps" style="--n:3">{loop}</div>
+  </div>
+</section>
+
+<section class="sec tint" id="faq" aria-label="Camping questions">
+  <div class="wrap">
+    {camp.sec_head("Questions", "Camping At RIAT, Answered", "The things people ask me most about camping for the first Air Tattoo at Boscombe Down.", mid=True)}
+    {camp.faq_block(camp.HOME_FAQ)}
   </div>
 </section>
 
@@ -510,6 +569,18 @@ CAMPING_OVER = r"""<style id="bgr-over">
 </style>"""
 
 
+def localise(h, depth=""):
+    """Copy any camping photo the page uses into img/, and point links to the camping pages inside this section."""
+    gh = "https://jskedge1.github.io/airshow-pages/"
+    for u in set(re.findall(re.escape(gh) + r"(?:camping-hub-img|brand|camping-layout/img|home-img/v2|riat-camping/img/lu)/[A-Za-z0-9._-]+", h)):
+        s = ROOT / u[len(gh):]
+        if s.exists():
+            shutil.copyfile(s, OUT / "img" / s.name)
+            h = h.replace(u, depth + "img/" + s.name)
+    h = re.sub(re.escape(gh) + r'riat-camping/([a-z0-9-]+\.html(?:#[a-z]+)?)" target="_(?:top|blank)"', r'camping/\1" target="_self"', h)
+    return h
+
+
 def copy_camping():
     """The camping pages, copied from riat-camping/ with their links pointed inside this section."""
     src = ROOT / "riat-camping"
@@ -519,7 +590,7 @@ def copy_camping():
     n = 0
     for f in sorted(src.glob("*.html")):
         h = f.read_text(encoding="utf8")
-        for u in set(re.findall(re.escape(gh) + r"(?:camping-hub-img|brand)/[A-Za-z0-9._-]+", h)):
+        for u in set(re.findall(re.escape(gh) + r"(?:camping-hub-img|brand|camping-layout/img|home-img/v2|riat-camping/img/lu)/[A-Za-z0-9._-]+", h)):
             name = u.rsplit("/", 1)[1]
             s = ROOT / u[len(gh):]
             if s.exists():
@@ -543,7 +614,7 @@ def copy_camping():
         # Jack, 21 Nov 2026: his own words for the light poles tip
         h = h.replace("Light poles make finding your pitch at night so much easier.", "Making it bright and loud can make your pitch stand out, and it is fun too.")
         # the section's own strip of pages goes above the campsite strip
-        s = strip("camping", "../")
+        s = strip("aircraft" if f.name == "aircraft.html" else "camping", "../")
         if '<nav class="strip"' in h:
             h = h.replace('<nav class="strip"', s + '<nav class="strip"', 1)
         else:
@@ -559,7 +630,7 @@ def main():
     for key, (path, alt) in PHOTOS.items():
         shutil.copyfile(ROOT / path, OUT / "img" / pathlib.Path(path).name)
     for name, fn in (("index.html", build_home), ("what-we-know.html", build_know), ("still-to-come.html", build_come), ("already-booked.html", build_booked)):
-        (OUT / name).write_text(fn(), encoding="utf8")
+        (OUT / name).write_text(localise(fn()), encoding="utf8")
         print("wrote", (OUT / name).relative_to(ROOT))
     print("camping pages copied:", copy_camping())
 
