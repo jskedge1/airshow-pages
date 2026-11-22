@@ -123,6 +123,17 @@
     if (fbs && grp && !fbs.children.length) { fbs.appendChild(grp); }
     var nsec = $$('section.fold').length; if (nsec) D.getElementById('nzStatSec').textContent = nsec;
     D.getElementById('nzStatEv').textContent = D.getElementById('nzStatN').textContent;
+    /* Jack, 22 Nov 2026: one of his aircraft photos across the top of the Quick checker */
+    var mc = D.getElementById('matchcheck');
+    if (mc && !$('.nz-qc-ph', mc)) {
+      var qp = $('img[data-pic="p40"]') || $('img[data-pic="spitfire"]');
+      if (qp && qp.getAttribute('src')) {
+        var fg = D.createElement('figure'); fg.className = 'nz-qc-ph';
+        fg.innerHTML = '<img alt="" decoding="async"><figcaption><span class="nz-kick">Quick checker</span><b>Six quick questions to see if this show suits your group.</b></figcaption>';
+        fg.firstChild.src = qp.getAttribute('src'); fg.firstChild.alt = qp.getAttribute('alt') || '';
+        mc.insertBefore(fg, mc.firstChild);
+      }
+    }
     /* how many sections */
     var n = $$('section.fold').length;
     if (n && NUM[n]) D.getElementById('nzCount').textContent = NUM[n];

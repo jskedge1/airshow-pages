@@ -62,6 +62,12 @@ def main():
     html = html.replace("<head>", '<head>\n<script>window.NZ_PATH="/airshow-pages/camping-layout/duxford.html";</script>', 1)
     print("file name lookups pointed at the live page:", n)
 
+    # The quick checker, scores, compare and the other framed parts are drawn from one template.
+    # Jack, 22 Nov 2026: no patterned background behind them, plain white like the rest of the page.
+    tpl = '<template id="rfySrc">'
+    assert tpl in html
+    html = html.replace(tpl, tpl + '<style id="nz-frame">html body div.panel{background:#fff!important;background-image:none!important}</style>', 1)
+
     chrome = (HERE / "chrome.html").read_text(encoding="utf8")
     import base64
     chrome = chrome.replace("@@LOGO@@", "data:image/png;base64," + base64.b64encode(LOGO.read_bytes()).decode("ascii"))
