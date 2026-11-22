@@ -236,9 +236,25 @@ def in_duxford_template(html):
       p:'This is the nearest station, 3 miles from Shuttleworth. Thameslink runs the trains on the line between London and Peterborough, and Great Northern adds a few peak time trains.',
       kd:[['Runs on','Every day'],['How often','Twice an hour on Saturdays'],['Get off at','Biggleswade',1],['Then','Taxi, about 10 minutes'],['From London','About 45 min'],['Run by','Thameslink']],
       jr:'London St Pancras to Biggleswade, direct. These are Saturday times from the November 2026 timetable, so check again nearer the show.',
-      from:'London St Pancras',at:'Biggleswade',mid:'Thameslink, direct<br>45 min'})
+      from:'London St Pancras',at:'Biggleswade',mid:'Thameslink, direct<br>45 min'}),
+    'rail-bed':heroNT({to:'Bedford',board:'BEDFORD',via:'Thameslink and East Midlands Railway',
+      p:'Bedford is 9.5 miles from Shuttleworth, about 20 minutes by taxi. It’s served by Thameslink (to London, Gatwick and Brighton) and East Midlands Railway (to London St Pancras and Corby), and I would suggest it if you’re coming from the Midlands.',
+      kd:[['Distance','9.5 miles'],['Get off at','Bedford',1],['Then','Taxi, about 20 minutes'],['Run by','Thameslink, East Midlands Railway']],
+      jr:'You’ll find taxis waiting at the station. It’s a good idea to allow at least 30 minutes to get back to the station after the show, longer at busy times.',
+      from:'Bedford',fromNote:'Thameslink and East Midlands Railway',at:'Shuttleworth',atNote:'Old Warden, 9.5 miles',mid:'Taxi<br>about 20 minutes',
+      go:'<a class="trl-go" href="https://www.nationalrail.co.uk" target="_blank" rel="noopener"><span><b>Check your train on National Rail</b><small>Times to Bedford, and the way home</small></span><i aria-hidden="true">→</i></a>'})
   };
 """
+    # Bedford has no train times on the page, so its header shows the stations and legs without times (as Cosford's does)
+    NT = """  function heroNT(o){
+    return '<div class="trl-top"><div class="trl-hero"><div><span class="trl-tag">Train route</span><h3>Trains to <span>'+o.to+'</span></h3><p>'+o.p+'</p></div>'
+      +'<div><div class="trl-board" aria-label="Destination board"><b><span>'+o.board+'</span></b><small>'+o.via+'</small></div>'+kd(o.kd)+'</div></div>'
+      +'<div class="trl-jr"><div class="trl-jr-h"><b>Your journey</b><span>'+o.jr+'</span></div>'
+      +'<div class="trl-line"><div class="trl-stop"><i></i><b>'+o.from+'</b><small>'+o.fromNote+'</small></div><div class="trl-mid">'+o.mid+'</div><div class="trl-stop"><i></i><b>'+o.at+'</b><small>'+o.atNote+'</small></div></div></div>'
+      +(o.go||GO)+'</div>';
+  }
+"""
+    H = NT + H
     trl = trl[:start] + H + trl[end:]
     trl = trl.replace('id="trlScript-dux"', 'id="trlScript-shuttleworth"').replace("train-to-duxford", "train-to-shuttleworth")
     trl = trl.replace("/* Train route header on the Duxford train topics", "/* Train route header on the Shuttleworth train topics, in the Duxford page's design")
