@@ -694,6 +694,20 @@ Private preview: https://claude.ai/artifact/4R6Qw3625sdYg17Tv7sHxj
 - Photographers' map: the spot cards are text only, as the page does not say where each photo was taken. To add one, set
   `PIC` in `new-design.js` (for example `{1:'redarrows'}`), or put a .webp of Jack's in `img/` and use its file name.
 
+Round 2 (22 Nov 2026, `previews/NEW-DESIGN-ROLLOUT-2.md`): the preview must look like the Duxford page and nothing else.
+`build.py` now reads `live-source.html`, writes only `previews/clacton-new-design.html`, and `round2_like_duxford()` takes out
+every part the Duxford page does not have, leaving a comment where each was. Left out (Jack can ask for any back):
+- Sections: The Ground Show, Seafront Information, Keep The Show Free.
+- Getting there: the Fares and Save money board, the On the day and Getting home box, the hidden Ways in picker board.
+- Food and facilities: the Comfort, Family and Camera lists.
+- Duxford's own list of hidden shared parts is used too (More air shows band, journey planner and the rest).
+- Duxford sections with no Clacton facts: Flightline walk, Duxford's story (no Clacton story), Experience flights.
+- Duxford blocks with no Clacton facts: the 2027 calendar (Overview), How arrival works and Last way home (Getting there),
+  The sun at each show (Photography), the Food and drink panel, the shuttle band and What to expect cards (Food and
+  facilities), the second row of show cards and the Official site links (Pick your show).
+Kept as on the live page: the parking blocks (`#cdo`, `#cpk`) and the train and bus topics. Where to stay opens with
+Duxford's "Search everything nearby" box, holding Clacton's own Booking.com, Airbnb and Visit Essex links.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 **Live since 22 Nov 2026 (Jack's go-ahead).** The Big Guide to RIAT replaced the RIAT holding page on the website. To publish a change: run `python3 riat-camping-src/build.py`, then `python3 previews/big-guide-to-riat-src/build.py`, then `python3 previews/big-guide-to-riat-src/golive.py`. The last one writes `big-guide-to-riat/` (every page with full web addresses, no noindex) and copies its home page over `camping-layout/riat.html` (what the Wix page /riat shows) and `riat.html`. Scheduled checks that change RIAT facts should change the build scripts and rerun these three, not edit `camping-layout/riat.html`, or the next build overwrites them. When a tab gets its own Wix page, point its links there in the build. The site home page (`home.html`) has a "The Big Guide To RIAT" section (`id="riat"`) in place of the old "RIAT is moving" box, with the key facts, a days to go count and a tile for each tab.
