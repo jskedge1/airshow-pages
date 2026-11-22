@@ -195,6 +195,12 @@ def main():
     if html.rstrip().endswith("</html>"):
         end = html.rstrip().rfind("</html>")
     tail = bottom + '\n<style id="nz-css">\n' + css + '\n</style>\n<script id="nz-js">\n' + js + "\n</script>\n"
+    # Extra photos of Jack's that the live page does not have (Jack, 22 Nov 2026), kept hidden and used by new-design.js.
+    # spot4-spitfire: Spitfire PT462 low over Duxford, for spot 4 on the photographers' map.
+    extra = ""
+    for f in sorted((HERE / "img").glob("*.webp")):
+        extra += '<img data-nzpic="%s" alt="" src="data:image/webp;base64,%s">' % (f.stem, base64.b64encode(f.read_bytes()).decode("ascii"))
+    tail = '<div hidden id="nzPics">' + extra + '</div>\n' + tail
     html = html[:end] + tail + html[end:]
 
     html = re.sub(r"@@BLOB(\d+)@@", lambda mm: blobs[int(mm.group(1))], html)

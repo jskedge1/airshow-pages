@@ -272,8 +272,8 @@
 /* Jack, 22 Nov 2026: photographers' map. Click a numbered spot on the map, or in the list, to see a card
    with a photo and that spot's details under the map. Photos are Jack's own; spots without one show text only. */
 (function(){
-  var PIC={1:'wildcat_front',2:'chipmunk',3:'formation',4:'spitfire'};
-  function src(k){var i=document.querySelector('img[data-pic="'+k+'"][src^="data:"],img[data-k="'+k+'"][src^="data:"]');return i?i.getAttribute('src'):'';}
+  var PIC={1:'wildcat_front',2:'chipmunk',3:'formation',4:'spot4-spitfire'};
+  function src(k){var i=document.querySelector('img[data-nzpic="'+k+'"],img[data-pic="'+k+'"][src^="data:"],img[data-k="'+k+'"][src^="data:"]');return i?i.getAttribute('src'):'';}
   function setup(){
     var map=document.getElementById('photoMap');if(!map){return true;}
     var svg=map.querySelector('.pmap-fig svg');if(!svg){return true;}
