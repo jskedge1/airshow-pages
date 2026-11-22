@@ -222,7 +222,9 @@ def in_duxford_template(html):
     # 8b. Getting there: no Fares and save money board (round 2 brief, 20:30). Shuttleworth's only transport prices
     #     are the shuttle bus (£10 return) and free parking, both already on the car parks board, and the Train to
     #     Shuttleworth page lists no fares. So the board is left out, and so is its dead "Fares" jump button.
-    html = one(html, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ", "var JUMPS = [['Ways in', '#explore'], ", "fares jump button")
+    html = one(html, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+               "var JUMPS = [['Ways in', '#explore'], ['Questions', '#travel .acc']];", "jump buttons")
+    #     "On the day and getting home" goes too: it points at a .pbx box that Shuttleworth's page doesn't have.
 
     # 9. Getting there: the train route header on the train topics, Duxford's design, with Shuttleworth facts.
     #    Times are from the site's own Train to Shuttleworth page (train-routes/shuttleworth.html): the 07:46
