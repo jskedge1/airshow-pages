@@ -288,7 +288,7 @@
     if(!Object.keys(spots).length){return true;}
     var card=document.createElement('div');card.className='nz-spot';card.setAttribute('aria-live','polite');
     card.innerHTML='<div class="nz-spot-ph"></div><div class="nz-spot-tx"><span class="nz-spot-n"></span><div><h4></h4><p></p><span class="nz-spot-k"></span></div></div>';
-    var fig=map.querySelector('.pmap-fig');fig.appendChild(card);
+    var fig=map.querySelector('.pmap-fig');fig.parentElement.insertBefore(card,fig.nextSibling);
     var cur=null;
     function show(n,scroll){
       var li=items[n];if(!li){return;}
