@@ -322,3 +322,60 @@
   }
   var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
 })();
+
+/* Jack, 22 Nov 2026: the photographers' map with more of a 3D look. The buildings get raised sides and
+   a roof shade, trees are dotted round the field edges, everything casts a soft shadow, and the map sits
+   at a slight tilt. The map's own content, labels and positions are unchanged. */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function el(n,a){var e=document.createElementNS(NS,n);for(var k in a){e.setAttribute(k,a[k]);}return e;}
+  function setup(){
+    var map=document.getElementById('photoMap');if(!map){return true;}
+    var svg=map.querySelector('.pmap-fig svg');if(!svg||svg.getAttribute('data-nz3d')){return true;}
+    svg.setAttribute('data-nz3d','1');
+    var defs=svg.querySelector('defs')||svg.insertBefore(el('defs',{}),svg.firstChild);
+    var f=el('filter',{id:'nz3dSh',x:'-30%',y:'-30%',width:'160%',height:'160%'});
+    f.appendChild(el('feDropShadow',{dx:'3',dy:'5',stdDeviation:'2.6','flood-color':'#0B1A27','flood-opacity':'.35'}));
+    defs.appendChild(f);
+    var f2=el('filter',{id:'nz3dSoft',x:'-20%',y:'-20%',width:'140%',height:'140%'});
+    f2.appendChild(el('feDropShadow',{dx:'0',dy:'3',stdDeviation:'3','flood-color':'#0B1A27','flood-opacity':'.22'}));
+    defs.appendChild(f2);
+    var g=el('radialGradient',{id:'nz3dTree',cx:'35%',cy:'30%',r:'75%'});
+    g.appendChild(el('stop',{offset:'0','stop-color':'#8DB86A'}));
+    g.appendChild(el('stop',{offset:'.6','stop-color':'#5E8F45'}));
+    g.appendChild(el('stop',{offset:'1','stop-color':'#3F6B30'}));
+    defs.appendChild(g);
+    var lg=el('linearGradient',{id:'nz3dLight',x1:'0',y1:'0',x2:'0',y2:'1'});
+    lg.appendChild(el('stop',{offset:'0','stop-color':'#FFFFFF','stop-opacity':'.18'}));
+    lg.appendChild(el('stop',{offset:'1','stop-color':'#0B1A27','stop-opacity':'.12'}));
+    defs.appendChild(lg);
+
+    /* buildings: a darker raised side under each roof */
+    var bld=[].filter.call(svg.querySelectorAll(':scope > g'),function(x){return x.getAttribute('fill')==='#AEB6BE';})[0];
+    if(bld){
+      var sides=el('g',{fill:'#7D8893'});
+      [].forEach.call(bld.querySelectorAll('rect'),function(r){
+        var s=r.cloneNode();s.removeAttribute('stroke');
+        var t=r.getAttribute('transform')||'';s.setAttribute('transform','translate(4 7) '+t);sides.appendChild(s);
+        var top=r.cloneNode();top.setAttribute('fill','url(#nz3dLight)');top.removeAttribute('stroke');bld.appendChild(top);
+      });
+      bld.parentNode.insertBefore(sides,bld);
+      sides.setAttribute('filter','url(#nz3dSh)');
+    }
+    /* trees round the edges of the airfield, kept clear of the labels and spots */
+    var trees=[[118,300],[108,318],[132,286],[540,412],[562,398],[585,383],[606,366],[575,175],[232,456],[612,300],[620,280],[52,370],[60,392],[700,470],[715,452],[470,92],[492,82]];
+    var tg=el('g',{filter:'url(#nz3dSh)'});
+    trees.forEach(function(p,i){var r=7+(i%3)*2;tg.appendChild(el('circle',{cx:p[0],cy:p[1],r:r,fill:'url(#nz3dTree)'}));});
+    var airfield=[].filter.call(svg.querySelectorAll(':scope > path'),function(x){return (x.getAttribute('fill')||'').indexOf('pmMow')>-1;})[0];
+    if(airfield){airfield.setAttribute('filter','url(#nz3dSoft)');airfield.parentNode.insertBefore(tg,airfield.nextSibling);}
+    else{svg.appendChild(tg);}
+    /* the runway and the numbered spots lift off the ground */
+    [].forEach.call(svg.querySelectorAll('path[stroke="#5A6570"]'),function(p){p.setAttribute('filter','url(#nz3dSoft)');});
+    [].forEach.call(svg.querySelectorAll('.nz-spot-pin, g[transform^="translate"] > circle[r="14"]'),function(c){
+      var p=c.closest('g[transform]');if(p){p.setAttribute('filter','url(#nz3dSh)');}
+    });
+    map.querySelector('.pmap-fig').classList.add('nz-3d');
+    return true;
+  }
+  var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
+})();
