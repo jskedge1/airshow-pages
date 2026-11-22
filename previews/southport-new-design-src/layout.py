@@ -280,6 +280,50 @@ def duxford_glass(t, dx):
     return sub1(t, '<script id="camping-layout-js">', css + "\n" + js + '\n<script id="camping-layout-js">')
 
 
+def train_header(t, dx):
+    """Jack, 22 Nov 2026 ("add these to all pages"): the dark train route header on the train topics, Duxford's trlStyle
+    and trlScript, as on the Wales page. Only the route data (H) and the link change, filled from the Southport page's
+    own train facts: its two train topics and the 2026 Saturday times in its train times data."""
+    for fact in ('"08:02",\n      "Liverpool Central to Southport",\n      "Arrives 08:49"',
+                 '"09:02",\n      "Liverpool Central to Southport",\n      "Arrives 09:49"',
+                 "Merseyrail, at 02, 17, 32 and 47 past the hour on Saturdays, about 47 minutes",
+                 '"08:09",\n      "Manchester Victoria to Southport",\n      "Via Atherton and Wigan Wallgate, arrives 09:25"',
+                 '"Two trains an hour",\n      "One via Atherton and one via Bolton, about 1 hour 15 minutes"',
+                 "Southport is the end of the Merseyrail Northern line, with trains from Liverpool Central every 15 minutes through the day.",
+                 "Formby, Ainsdale, Birkdale and Hillside are on the same line.",
+                 "Northern runs from Manchester Victoria, via Atherton, and Manchester Oxford Road, via Bolton, to Southport through Wigan Wallgate.",
+                 "Trains arrive at the same station as Merseyrail, so you have the same walk to the seafront",
+                 "meta:[['Walk','About 10 min'],['Frequency','Every 15 min, Sunday times to be confirmed'],['Operator','Merseyrail']]",
+                 "meta:[['From','Manchester and Wigan'],['Operator','Northern']]",
+                 "From the Merseytravel Northern Line booklet valid from 17 May 2026.",
+                 "From the Northern timetable valid 17 May to 12 December 2026.",
+                 "https://www.ukairshowguide.co.uk/train-to-southport"):
+        assert fact in t, fact
+    css = dx_chunk(dx, '<style id="trlStyle">', "</style>")
+    js = dx_chunk(dx, '<script id="trlScript-dux">', "</script>")
+    h0, h1 = js.index("  var H={"), js.index("  function cur()")
+    h = ("  var H={\n"
+         "    'rail':hero({to:'Southport',board:'SOUTHPORT',dep:'09:02',arr:'09:49',via:'From Liverpool Central',\n"
+         "      p:'Southport is the end of the Merseyrail Northern line, with trains from Liverpool Central every 15 minutes through the day. Formby, Ainsdale, Birkdale and Hillside are on the same line.',\n"
+         "      kd:[['How often','Every 15 minutes on Saturdays'],['Get off at','Southport',1],['Then','Walk to the seafront, about 10 min'],['From Liverpool','About 47 minutes'],['Run by','Merseyrail']],\n"
+         "      jr:'Liverpool Central to Southport, direct. These are 2026 Saturday times from the Merseytravel Northern Line booklet, so check again nearer the show.',\n"
+         "      from:'Liverpool Central',at:'Southport',mid:'Merseyrail, direct<br>47 min'}),\n"
+         "    'rail-manc':hero({to:'Southport',board:'SOUTHPORT',dep:'08:09',arr:'09:25',via:'From Manchester Victoria',\n"
+         "      p:'Northern runs from Manchester Victoria, via Atherton, and Manchester Oxford Road, via Bolton, to Southport through Wigan Wallgate. Trains arrive at the same station as Merseyrail, so you have the same walk to the seafront.',\n"
+         "      kd:[['How often','Two trains an hour'],['Get off at','Southport',1],['Then','Walk to the seafront, about 10 min'],['From Manchester','About 1 hour 15 minutes'],['Run by','Northern']],\n"
+         "      jr:'Manchester Victoria to Southport, via Atherton and Wigan Wallgate. These are 2026 Saturday times from the Northern timetable, so check again nearer the show.',\n"
+         "      from:'Manchester Victoria',at:'Southport',mid:'Northern, via Wigan Wallgate<br>1h 16m'})\n"
+         "  };\n")
+    js = js[:h0] + h + js[h1:]
+    js = sub1(js, '<script id="trlScript-dux">', '<script id="trlScript-southport">')
+    js = sub1(js, "/* Train route header on the Duxford train topics, the same design as the Clacton train topic (9 Nov) */",
+              "/* Train route header on the train topics, the Duxford design, with the Southport train facts */")
+    js = sub1(js, "https://www.ukairshowguide.co.uk/train-to-duxford", "https://www.ukairshowguide.co.uk/train-to-southport")
+    bad = re.findall(r".{60}(?:uxford|Cambridge).{40}", js)
+    assert not bad, bad
+    return sub1(t, '<style id="jx-css-dux">', css + "\n" + js + "\n" + '<style id="jx-css-dux">')
+
+
 def duxford_layout(t, dx):
     t = remove_old_sections(t)
     t = tab_names(t)
@@ -291,4 +335,5 @@ def duxford_layout(t, dx):
     t = postcard(t, dx)
     t = duxford_styles(t, dx)
     t = duxford_glass(t, dx)
+    t = train_header(t, dx)
     return t

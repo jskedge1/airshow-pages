@@ -688,6 +688,10 @@ Southport's own words, facts, photos and data. Built by `python3 previews/southp
 - Left out (Duxford blocks with no Southport facts): Flightline walk, the story section, Experience flights, the event calendar in
   Overview, the arrival steps and the train route card in Getting there, Sun at each show and the photographers' map in
   Photography, the food outlets list, the on site shuttle and What to expect in Food and facilities.
+- Getting there (Jack, 22 Nov 2026, "add these to all pages"): the car parks board (`#cpk`) and its three boxes stay as on
+  the live page; the train topics get Duxford's dark train route header (`trlStyle`, `trlScript-southport`), filled from
+  Southport's own 2026 Saturday times (Merseyrail from Liverpool Central, Northern from Manchester Victoria). Compare driving
+  options (`#cdo`) is left out: every official car park cost the same £10 a car in 2026, so there is nothing to compare.
 - Preview artifact: https://claude.ai/artifact/C253g9ig8xAJq1YtnGKKs6 (private).
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
