@@ -21,7 +21,7 @@ import sys
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
-OUT = ROOT / "camping-layout" / "midlands.html"   # the live page
+OUT = ROOT / "previews" / "midlands-new-design.html"   # round 2 preview (the live page is camping-layout/midlands.html)
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
@@ -113,6 +113,99 @@ def restyle_text(s):
     return s
 
 
+
+# ---- Round 2 (Jack, 22 Nov 2026): the page is built IN the Duxford template, not the old Midlands page with the new
+# look on top. See previews/NEW-DESIGN-ROLLOUT-2.md. The Midlands page was first made from the Duxford page, so its
+# sections already use Duxford's markup. This step takes out everything the Duxford page does not have, and lines the
+# rest up with Duxford (section names, ids). Only Midlands' own words are kept. Nothing is added. Every edit is checked.
+# Left out (listed for Jack in the README): The balloons, Camping at Ragley and The ground show sections; the Jack's tip
+# boxes in Overview and Where to watch; the Friday Nightfire evening block in Plan your day; the camping line in
+# Where to stay. Duxford blocks with no Midlands facts (not added): Flightline walk, the photographers' map, the
+# shuttle bus band in Food and facilities.
+
+def cut_block(html, start):
+    """Remove the element that starts with the exact text `start`, up to its matching closing tag."""
+    i = html.find(start)
+    assert i >= 0 and html.count(start) == 1, start
+    tag = re.match(r"<([a-z0-9]+)", start).group(1)
+    depth, j = 0, i
+    pat = re.compile(r"<(/?)%s\b[^>]*>" % tag)
+    for m in pat.finditer(html, i):
+        depth += -1 if m.group(1) else 1
+        if depth == 0:
+            j = m.end()
+            break
+    else:
+        raise AssertionError("no end for " + start)
+    # take the line break after it too
+    if html[j:j + 1] == "\n":
+        j += 1
+    return html[:i] + html[j:]
+
+
+def swap(html, old, new):
+    assert html.count(old) == 1, old
+    return html.replace(old, new, 1)
+
+
+def align_to_duxford(html):
+    # sections Duxford does not have
+    for sec in ("balloons", "camping", "ground"):
+        html = cut_block(html, '<section class="panel" id="%s"' % sec)
+        html = re.sub(r'\s*<button class="tab" role="tab" id="t-%s"[^>]*>[^<]*</button>' % sec, "", html, count=1)
+        assert 'id="t-%s"' % sec not in html, sec
+    html = cut_block(html, '<script id="balloons-js">')
+    # section names in the bars and the tab strip, as on Duxford
+    html = swap(html, 'aria-controls="days" aria-selected="false" tabindex="-1">Pick Your Day</button>',
+                'aria-controls="days" aria-selected="false" tabindex="-1">Pick Your Show</button>')
+    html = swap(html, 'aria-controls="flights" aria-selected="false" tabindex="-1">Balloon Flights</button>',
+                'aria-controls="flights" aria-selected="false" tabindex="-1">Experience Flights</button>')
+    # old header button (hidden in the new design) pointed at The balloons: as on Duxford
+    html = swap(html, '<button type="button" class="cg-go" data-goto="balloons">The balloons</button>',
+                '<button type="button" class="cg-go" data-goto="lineup">Aircraft line-up</button>')
+    # Overview: Duxford has no tip box in My view, and its box at the foot has no link
+    html = cut_block(html, '<div class="ns-note"><b>Jack&rsquo;s tip</b>Tickets are advance only, with none sold on the gate.')
+    html = swap(html, ' <button type="button" class="inline-link" data-goto="balloons">When and where to see them</button>', '')
+    # Pick your show tip: its links went to the removed sections. The camping line is Jack's own, from Camping at Ragley.
+    html = swap(html, 'Camping is only for 3 day ticket holders, so take a look at <button type="button" class="inlink" data-goto="camping">Camping At Ragley</button> before you book, and <button type="button" class="inlink" data-goto="balloons">The Balloons</button> for when they fly.',
+                'Camping is only for 3 day ticket holders, so I&rsquo;d book both together.')
+    # Where to stay: the line pointing to Camping at Ragley
+    html = cut_block(html, '<p class="vl-intro">Camping on the estate is covered in')
+    # Plan your day: the Friday Nightfire evening block is not on Duxford
+    html = cut_block(html, '<div class="wk-eve reveal"')
+    # Help on show days: drop the pointer to the removed section
+    html = swap(html, 'The balloons are weather permitting. Take a look at <button type="button" class="inlink" data-goto="balloons">The Balloons</button> for what happens if it&rsquo;s too windy.</p>',
+                'The balloons are weather permitting.</p>')
+    # Where to watch: no tip box on Duxford
+    html = cut_block(html, '<div class="ns-note"><b>Jack&rsquo;s tip</b>There&rsquo;s no seating, so I would bring a low chair or a blanket.')
+    # Story: Duxford's story tip is a line inside the card
+    html = swap(html, '<div class="ns-note"><b>Jack&rsquo;s tip</b>The house itself is now kept for events and filming rather than everyday visits, so I would suggest enjoying the view of it across Capability Brown&rsquo;s parkland while you wait for the balloons.</div>',
+                '<p class="st-tip">The house itself is now kept for events and filming rather than everyday visits, so I would suggest enjoying the view of it across Capability Brown&rsquo;s parkland while you wait for the balloons.</p>')
+    # Photography: Duxford's ids, so the same styles and links apply (sun guide #phSun, sun at each show #phShows)
+    html = swap(html, '<a href="#phGuide">Sun guide</a><a href="#phSun">Sun each day</a>', '<a href="#phSun">Sun guide</a><a href="#phShows">Sun each day</a>')
+    html = swap(html, '<section class="ph-sec" id="phSun"', '<section class="ph-sec" id="phShows"')
+    html = swap(html, '<div class="sun-embed reveal" id="phGuide">', '<div class="sun-embed reveal" id="phSun">')
+    # the page's own styles for its sun table follow it to its new id
+    for sel in ("#phSun .sun-table{", "#phSun .sun-card li{", "#phSun .sun-card li span{", "#phSun .sun-card li b{"):
+        html = swap(html, sel, sel.replace("#phSun", "#phShows"))
+    # Pick your show: Duxford ends the section with its "Official site" box. Midlands' own official site link and label.
+    html = swap(html, '<p class="note sf-src">Opening times are for 2027. Flying and balloon times haven&rsquo;t been published yet',
+                '<div class="sp-links"><a href="https://www.midlandsairfestival.com/" target="_blank" rel="noopener"><b>Official site</b><span>Midlands Air Festival</span></a></div><p class="note sf-src">Opening times are for 2027. Flying and balloon times haven&rsquo;t been published yet')
+    # Food and facilities: Duxford's boxes all have a photo. These two text only cards are not in Duxford's set, and their
+    # facts are already on the page (re-entry with a hand stamp in Good to know and Pick your show; layers and a torch in
+    # Plan your day's Bring list), so they are left out.
+    html = cut_block(html, '<div><h3>Leaving and coming back</h3>')
+    html = cut_block(html, '<div><h3>What to wear</h3>')
+    # Quick checker: "read next" only lists sections the page has
+    for old, new in ((",r:['kids','balloons','timeline','facilities']", ",r:['kids','timeline','facilities']"),
+                     (",r:['photo','balloons','watch','camping']", ",r:['photo','watch']"),
+                     (",r:['balloons','camping','timeline','flights']", ",r:['timeline','flights']")):
+        html = swap(html, old, new)
+    left = re.findall(r'data-goto="(balloons|camping|ground)"', html)
+    assert not left, left
+    return html
+
+
 def main():
     html = SRC.read_text(encoding="utf8")
     blobs = []
@@ -122,6 +215,7 @@ def main():
         return "@@BLOB%d@@" % (len(blobs) - 1)
 
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
+    html = align_to_duxford(html)
     html = restyle_text(html)
 
     # head: fonts, and keep the preview out of search results
