@@ -52,6 +52,27 @@ FRAME_CMP = (
     '@media (max-width:560px){html body .cmp-cards{grid-template-columns:1fr!important}html body .cmp-cards h3{min-height:0!important}}'
     '@media (prefers-reduced-motion:reduce){html body .cmp-cards article{transition:none!important;transform:none!important}}'
 )
+# Quick checker (Jack, 22 Nov 2026): the clean look, same layout. Question boxes with a coloured top edge,
+# borderless rounded answer buttons that turn navy when picked, and a smooth hover.
+FRAME_CHECK = (
+    'html body .qs li{background:#F3F6F8!important;border:0!important;border-top:5px solid var(--sc,#32B4AF)!important;border-left:0!important;box-shadow:none!important;border-radius:0!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}'
+    'html body .qs li:hover{background:#fff!important;transform:translateY(-4px);box-shadow:0 22px 34px -24px rgba(11,26,39,.5)!important}'
+    'html body .qs li .sn{display:none!important}'
+    'html body .qs .q legend{font:700 21px/1.25 "Barlow",sans-serif!important;color:#13293C!important}'
+    'html body .qs .q legend span{display:block!important;font:700 15.5px/1.2 "Barlow",sans-serif!important;color:var(--sc,#0E5F5B)!important;margin-bottom:5px!important;text-transform:none!important;letter-spacing:0!important;filter:brightness(.8)}'
+    'html body .qs .q legend small{display:block!important;font:400 15.5px/1.45 "Barlow",sans-serif!important;color:#4A5A66!important;margin-top:4px!important}'
+    'html body .qs .opts{gap:8px!important}'
+    'html body .qs .opts button{background:#E4EBF0!important;color:#13293C!important;border:0!important;border-left:0!important;border-radius:10px!important;box-shadow:none!important;font:600 16px/1.25 "Barlow",sans-serif!important;padding:13px 16px!important;transition:background .45s cubic-bezier(.22,.61,.36,1),color .45s,transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s!important}'
+    'html body .qs .opts button::before,html body .qs .opts button::after{display:none!important}'
+    'html body .qs .opts button:hover{background:#fff!important;transform:translateY(-3px)!important;box-shadow:0 0 0 2px #13293C,0 16px 24px -16px rgba(11,26,39,.55)!important}'
+    'html body .qs .opts button[aria-pressed="true"]{background:#13293C!important;color:#fff!important;box-shadow:inset 0 -4px 0 var(--sc,#32B4AF),0 12px 20px -14px rgba(11,26,39,.8)!important;transform:none!important}'
+    'html body aside.result{border-radius:6px!important;overflow:hidden!important;box-shadow:0 30px 50px -30px rgba(11,26,39,.85)!important;border:0!important}'
+    'html body aside.result .board-h{border-bottom:0!important}'
+    'html body aside.result .board-rows > div{border-bottom:1px solid rgba(255,255,255,.12)!important;border-top:0!important}'
+    'html body aside.result .board-rows dt{color:#8FE0DC!important;font:600 15.5px/1.3 "Barlow",sans-serif!important}'
+    'html body aside.result .bar i{border-radius:2px!important}'
+    '@media (prefers-reduced-motion:reduce){html body .qs li,html body .qs .opts button{transition:none!important;transform:none!important}}'
+)
 # What you'll see, and the headings of every framed part (Jack, 22 Nov 2026): a clean look.
 FRAME_SEE = (
     'html body .panel-head h2{color:#13293C!important;border-left:0!important;padding-left:0!important;font:700 clamp(30px,4.2vw,46px)/1.12 "Barlow",sans-serif!important;text-transform:capitalize!important}'
@@ -102,6 +123,22 @@ def main():
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
     html = restyle_text(html)
 
+    # Duxford's story (Jack, 22 Nov 2026): facts checked against IWM, Historic England, the RAF Museum and the
+    # American Air Museum. Two corrections, and more of Jack's photos.
+    fixes = [
+        ("19 Squadron received its first Spitfire, K9789, only the third one ever built.",
+         "19 Squadron received its first Spitfire, K9789, the third production Spitfire."),
+        ("In April 1943 the US Army Air Forces took over, and Duxford became Station 357, home of the 78th Fighter Group.",
+         "In April 1943 the US 78th Fighter Group arrived, and on 15 June 1943 Duxford was handed over to the US Eighth Air Force as Station 357."),
+        ('<figure class="pic st-pic"><img class="photo" data-k="buchon_pan" alt=""></figure>',
+         '<figure class="pic st-pic"><img class="photo" data-k="buchon_front" alt="A Hispano Buchón head on, with its propeller turning, at Duxford"></figure>'),
+        ("you&rsquo;re seeing it on the airfield where it all began.</p>",
+         'you&rsquo;re seeing it on the airfield where it all began.</p><figure class="pic st-pic"><img class="photo" data-k="wildcat_side" alt="A Grumman Wildcat taxiing on the airfield at Duxford"></figure>'),
+    ]
+    for old, new in fixes:
+        assert html.count(old) == 1, old
+        html = html.replace(old, new, 1)
+
     # Jack, 22 Nov 2026: the photo at the top of Photography changed to a head on shot (his Hispano Buchón photo at Duxford).
     # then (later the same morning) smaller, and a different photo: the P-40 Warhawk taxiing out.
     m_new = re.search(r'data-pic="p40"[^>]*?src="(@@BLOB\d+@@)"', html) or re.search(r'src="(@@BLOB\d+@@)"[^>]*?data-pic="p40"', html)
@@ -140,7 +177,7 @@ def main():
     # Jack, 22 Nov 2026: no patterned background behind them, plain white like the rest of the page.
     tpl = '<template id="rfySrc">'
     assert tpl in html
-    html = html.replace(tpl, tpl + '<style id="nz-frame">html body div.panel{background:#fff!important;background-image:none!important}' + FRAME_CMP + FRAME_SEE + '</style>', 1)
+    html = html.replace(tpl, tpl + '<style id="nz-frame">html body div.panel{background:#fff!important;background-image:none!important}' + FRAME_CMP + FRAME_SEE + FRAME_CHECK + '</style>', 1)
 
     chrome = (HERE / "chrome.html").read_text(encoding="utf8")
     import base64
