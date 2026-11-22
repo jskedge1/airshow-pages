@@ -219,6 +219,11 @@ def in_duxford_template(html):
     ge_js = one(ge_js, "PICS[k]||'formation'", "PICS[k]||'static_line'", "tile default photo")
     html = one(html, '<style id="mobile-fit">', ge_css + "\n" + ge_js + '\n<style id="mobile-fit">', "tiles")   # where Duxford has them, before the overview layout script
 
+    # 8b. Getting there: no Fares and save money board (round 2 brief, 20:30). Shuttleworth's only transport prices
+    #     are the shuttle bus (£10 return) and free parking, both already on the car parks board, and the Train to
+    #     Shuttleworth page lists no fares. So the board is left out, and so is its dead "Fares" jump button.
+    html = one(html, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ", "var JUMPS = [['Ways in', '#explore'], ", "fares jump button")
+
     # 9. Getting there: the train route header on the train topics, Duxford's design, with Shuttleworth facts.
     #    Times are from the site's own Train to Shuttleworth page (train-routes/shuttleworth.html): the 07:46
     #    Thameslink from London St Pancras, at Biggleswade 08:31, Saturday 14 November 2026 timetable.
