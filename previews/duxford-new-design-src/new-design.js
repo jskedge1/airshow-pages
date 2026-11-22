@@ -383,7 +383,7 @@
 /* Jack, 22 Nov 2026: section order. The sections named here come first, in this order, and the rest keep
    their order after them. The section tab bar follows the same order. Add a name here to move another. */
 (function(){
-  var FIRST=['photo','watch','facilities'];
+  var FIRST=['travel','photo','watch','facilities'];
   function run(){
     var folds=[].slice.call(document.querySelectorAll('section.fold'));
     if(!folds.length){return false;}
