@@ -672,14 +672,20 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
-## International Ayr Show in the new design (preview, 22 Nov 2026)
+## International Ayr Show in the new design, round 2 (preview, 22 Nov 2026)
 
-`previews/ayr-new-design.html` is the Ayr feature page in the Duxford new design, built from the same template as Jack's signed off Duxford preview (see `previews/NEW-DESIGN-ROLLOUT.md`). It is not live. The live page is still `camping-layout/ayr.html` and was not changed. Private preview: https://claude.ai/artifact/BNVpEjvqzcN3e6XBZoMc4D
+`previews/ayr-new-design.html` is the Ayr feature page built in the Duxford template (round 2, `previews/NEW-DESIGN-ROLLOUT-2.md`), with Jack's go-ahead to keep Ayr's own sections that suit the page. It is not live: the parent session checks every page against Duxford and puts them live together. Private preview: https://claude.ai/artifact/BNVpEjvqzcN3e6XBZoMc4D
 
-- Built by `python3 previews/ayr-new-design-src/build.py`, a copy of the Duxford build with the Duxford only text fixes and photo swaps taken out.
-- Ayr keeps Jack's photos in `window.PHOTO` (bbmf, typhoon, p47, stearman, dakota, chinook, spitfire, pitts), not in `data-pic` images, so `new-design.js` reads them from there. The intro uses the Spitfire, the guide band the Dakota, the Quick checker the P-47, the line-up heading the Chinook, Plan your day the Stearman, and the Photography opening the Typhoon (the live page has no photo there, so one is added with its own caption).
-- The top bar and stat use the page's own facts: Low Green, Ayr, Friday 3 and Saturday 4 September 2027, and two show days. Ayr has no photographers' map, flightline walk, story or experience flights, so those parts of the template are left out. The Ground Show and Seafront Information come after the template order.
-- One fix that Duxford does not have yet: on phones the Quick checker questions were squeezed into a narrow column. The build now gives each question the full width of its box (`.qs li > .q`). Duxford needs the same line.
+- Built by `python3 previews/ayr-new-design-src/build.py` from `live-source.html` (the Ayr page before the new design). `round2.py` rebuilds the sections that differed from Duxford in Duxford's own markup, using only Ayr's words, facts, links and photos:
+  - Overview: Jack's Dakota photo under the intro, and the four Where next boxes below the grid, as on Duxford.
+  - Where to watch: Ayr's five spots in Duxford's "Where to watch, on the map" tabs, spot card and map (styles and tab script copied from the Duxford page into `ww-duxford.html`).
+  - Food and facilities: a Food & drink block with the photo, then the Toilets, Shade and seating and Kids' activities boxes (the Kids' box gets Jack's wingwalker photo), the traders and the accordions.
+  - Pick your day: four fact boxes, the two days cards, then the picker with one box per question, Jack's tip and the official site link.
+  - Where to stay: the Booking.com, Airbnb and Destination South Ayrshire links in Duxford's "Search everything nearby" box.
+- Section order is Duxford's, with Ayr's own Seafront Information after Where to watch and The Ground Show after What you'll see (`var FIRST` in `new-design.js`).
+- Left out, as the Duxford page does not have them: Ayr's old Where to watch board and its "Plan my day here" buttons, and the small Comfort, Family and Camera lists under Food and facilities. Duxford blocks Ayr has no facts for, also left out: the 2027 calendar, How arrival works, Duxford's own shuttle, What to expect on the day, Sun at each show, the photographers' map, the line-up show picker, Flightline walk, the show's story and Experience flights.
+- Kept as they are on the live page: the parking blocks (`#cpk`, and `#cdo` Compare driving options) and the train and bus topics in Getting there.
+- The Quick checker phone fix from round 1 is still in the build (`.qs li > .q`).
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 

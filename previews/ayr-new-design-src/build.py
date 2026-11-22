@@ -17,10 +17,13 @@ import pathlib
 import re
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import round2  # noqa: E402
+
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
-OUT = ROOT / "camping-layout" / "ayr.html"   # the live page
+OUT = ROOT / "previews" / "ayr-new-design.html"   # the preview (round 2). The live page camping-layout/ayr.html is put live by the parent session
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
@@ -123,6 +126,7 @@ def main():
         return "@@BLOB%d@@" % (len(blobs) - 1)
 
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
+    html = round2.apply(html)            # round 2: Ayr's sections in the Duxford page's own markup (round2.py)
     html = restyle_text(html)
 
     # head: fonts, and keep the preview out of search results
@@ -146,7 +150,7 @@ def main():
     import base64
     chrome = chrome.replace("@@LOGO@@", "data:image/png;base64," + base64.b64encode(LOGO.read_bytes()).decode("ascii"))
     top, bottom = chrome.split("<!-- SPLIT -->")
-    css = (HERE / "new-design.css").read_text(encoding="utf8")
+    css = (HERE / "new-design.css").read_text(encoding="utf8") + round2.CSS
     js = (HERE / "new-design.js").read_text(encoding="utf8")
 
     m = re.search(r"<body[^>]*>", html)

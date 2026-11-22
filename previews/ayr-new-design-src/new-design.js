@@ -274,8 +274,8 @@
 /* Jack, 22 Nov 2026: section order. The sections named here come first, in this order, and the rest keep
    their order after them. The section tab bar follows the same order. Add a name here to move another. */
 (function(){
-  /* the same order as the Duxford page. This page has no flightline walk, story or experience flights; the ground show and seafront information follow on after */
-  var FIRST=['overview','travel','photo','lineup','watch','facilities','days','timeline','dayruns','stay','flightline','help','matchcheck','whatyousee','kids','scores','compare','story','flights','postcard'];
+  /* the same order as the Duxford page (round 2). Ayr has no flightline walk, story or experience flights. Its own Seafront Information follows Where to watch, and The Ground Show follows What you'll see */
+  var FIRST=['overview','travel','photo','lineup','watch','seafront','facilities','days','timeline','dayruns','stay','flightline','help','matchcheck','whatyousee','ground','kids','scores','compare','story','flights','postcard'];
   function run(){
     var folds=[].slice.call(document.querySelectorAll('section.fold'));
     if(!folds.length){return false;}
