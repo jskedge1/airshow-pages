@@ -202,6 +202,16 @@ def travel(p):
     p.rep("'<div class=\"xd-kp-h\"><span style=\"background:none;color:inherit;padding:0;font-size:inherit;font-family:inherit\">Key places</span>' + (place ? '<span>' + esc(place) + '</span>' : '') + '</div>'",
           "'<div class=\"xd-kp-h\"><span style=\"background:none;color:inherit;padding:0;font-size:inherit;font-family:inherit\">Key places</span></div>'")
     train_header(p)
+    # Jack, 22 Nov 2026 (rollout brief, 20:15 and 20:30): every page gets Compare driving options (#cdo), the car parks
+    # board (#cpk) and the Fares and save money board (#tpFares), each from the show's own facts. Little Gransden has
+    # one car park on site with no price, and no transport fares on its page, so none of the three fits. The jump strip's
+    # Fares button and its On the day and getting home button point at blocks the page does not have (.pbx is not on
+    # Duxford either), so they go rather than stay as dead buttons.
+    p.rep("var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+          "var JUMPS = [['Ways in', '#explore'], ['Questions', '#travel .acc']];")
+    LEFT_OUT.append("Getting there: Compare driving options (one car park on site, with no price on the page)")
+    LEFT_OUT.append("Getting there: the Fares and save money board and its hidden Ways in board (no train, bus, taxi, coach or parking prices on the page)")
+    LEFT_OUT.append("Getting there: the Fares and the On the day and getting home buttons in the jump strip (both pointed at blocks the page does not have)")
     LEFT_OUT.append("Getting there: Duxford's parking block (permits, car parks and opening times). Little Gransden's live page has no parking block, and its parking is covered in the topics")
 
 
