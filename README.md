@@ -705,6 +705,7 @@ every part the Duxford page does not have, leaving a comment where each was. Lef
 - Duxford blocks with no Clacton facts: the 2027 calendar (Overview), How arrival works and Last way home (Getting there),
   The sun at each show (Photography), the Food and drink panel, the shuttle band and What to expect cards (Food and
   facilities), the second row of show cards and the Official site links (Pick your show).
+Where to watch, on the map uses Duxford's board (its markup, styles and tab script, see `ww_board.py`), filled with Clacton's six spots.
 Kept as on the live page: the parking blocks (`#cdo`, `#cpk`) and the train and bus topics. Where to stay opens with
 Duxford's "Search everything nearby" box, holding Clacton's own Booking.com, Airbnb and Visit Essex links.
 

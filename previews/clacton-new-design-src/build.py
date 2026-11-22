@@ -161,6 +161,10 @@ def round2_like_duxford(html):
     k = html.find('<div class="stay-group reveal">\n      <h3>Hotels in Clacton</h3>')
     assert k > -1
     html = html[:k] + box + html[k:]
+    # Where to watch, on the map: Duxford's board in Duxford's markup, with Clacton's own spots (see ww_board.py)
+    sys.path.insert(0, str(HERE))
+    from ww_board import ww_like_duxford
+    html = ww_like_duxford(html, DUX_SRC.read_text(encoding="utf8"))
     # Duxford's own list of shared parts it keeps hidden (the More air shows band, the journey planner, the Up close
     # band, the news feed button, the top ten list, the old explore heading), taken from its source so they match.
     dux = DUX_SRC.read_text(encoding="utf8")
