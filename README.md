@@ -685,3 +685,18 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The words come from the live RIAT page (checked 15 November 2026). Nothing was added that is not on that page. Photos are Jack's (the F-16, Hornet and C-17 from `camping-layout/img/`, and the camping photos from `camping-hub-img/`), copied into `img/`.
 - Camping on the home page (Jack, 22 Nov 2026): the home page also carries the official campsite with "Where would you like to camp?", the show week, the aircraft line-up band and "Camping at RIAT, answered", all drawn from `riat-camping-src/build.py` (`show_week()`, `aircraft_band()`, `faq_block()`) so they stay the same as on the camping pages. "Aircraft line-up" is a sixth part in the strip, pointing at `camping/aircraft.html`. `localise()` copies the camping photos the home page uses into `img/` and points links to the live camping pages inside the section.
 - Links between the pages are relative, so the preview works anywhere. To go live each page needs its own Wix page and the links and image addresses need to be the full ones (see the note at the top of the build script).
+
+## Feature pages in the new design (live 22 Nov 2026)
+
+All 12 feature pages in `camping-layout/` (Duxford, Ayr, Blackpool, Clacton, Cosford, Eastbourne, Little Gransden,
+Headcorn, Midlands, Shuttleworth, Southport, Wales) went live in the new design on 22 Nov 2026, at Jack's request,
+using the Duxford page as the template (brief: `previews/NEW-DESIGN-ROLLOUT.md`). RIAT is unchanged.
+
+- Each page is built by `previews/<show>-new-design-src/build.py` from `previews/<show>-new-design-src/live-source.html`
+  (the page as it was before the new design) and written straight over `camping-layout/<show>.html`.
+- To change the look: edit `new-design.css`, `new-design.js` or `chrome.html` in that folder and run the build.
+- To change content (text, data blocks, the line-up): edit `live-source.html`, then run the build.
+- The aircraft line-up job edits `var FALLBACK` in `camping-layout/<show>.html` directly. That still works on the built
+  page. Before any rebuild, copy the current FALLBACK block from `camping-layout/<show>.html` into `live-source.html`
+  first, or the rebuild puts the old line-up back.
+- To undo the new design for a show: `cp previews/<show>-new-design-src/live-source.html camping-layout/<show>.html`.
