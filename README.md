@@ -666,6 +666,15 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+## Eastbourne page in the new design (preview, 22 Nov 2026)
+
+`previews/eastbourne-new-design.html` is the Eastbourne Airshow feature page in the new design, made from the Duxford template above (see `previews/NEW-DESIGN-ROLLOUT.md`). It is not live and is not on any Wix page. The live page is still `camping-layout/eastbourne.html` and was not changed.
+
+- Built by `python3 previews/eastbourne-new-design-src/build.py`, a copy of the Duxford build pointed at `camping-layout/eastbourne.html`, with the Duxford only text fixes and photo swaps taken out. Every text chunk and inline script of the live page is carried over.
+- Eastbourne keeps its photos in the page's own `PHOTO` store rather than in `<img>` tags, so `new-design.js` reads them from there. Photos used: the formation (photo header, the page's own), Spitfire (beside the intro), B-17 underside (guide band), Tracker (Quick checker), B-17 side on (line-up heading), Dakota (Plan your day), Typhoon (beside "Shooting at Eastbourne", which has no photo on the live page), and Beachy Head, B-17, Typhoon, Wildcat, pier, Spitfire and Dakota on the Photography photo tabs.
+- Section order as Jack chose for Duxford. Pick your day is `weekend`. Eastbourne has no flightline walk, story or experience flights, and its RAF Village, Seafront information and Keep Airbourne free come after the others.
+- The stat box reads "4 show days in August 2027" (Thursday 12 to Sunday 15 August 2027, from the page). Eastbourne has no photographers' map, so that part of the Duxford script is left out.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
