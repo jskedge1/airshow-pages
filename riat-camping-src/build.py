@@ -11,6 +11,7 @@ The sample (sites/_sample.json) always builds to riat-camping/sample.html so own
 """
 import html
 import json
+import re
 import math
 import pathlib
 
@@ -25,6 +26,11 @@ RIAT_WIX = "/riat"
 CAMPING_HUB_WIX = "/camping-at-airshows"
 CONTACT = "contactus@ukairshowguide.co.uk"
 OFFICIAL_CAMPING = "https://www.airtattoo.com/camping/"
+AIRCRAFT_WIX = ""        # set to the Wix path of the aircraft line-up page once it exists
+ROOT_GH = "https://jskedge1.github.io/airshow-pages/"
+AIRCRAFT_SRC = ROOT / "riat-camping-src" / "aircraft.json"              # the real RIAT 2027 line-up
+PREVIEW_AIRCRAFT = ROOT / "riat-camping-src" / "preview-aircraft.json"  # example list, --preview only
+LU_LIB_PAGE = ROOT / "camping-layout" / "cosford.html"                  # feature page whose line-up photo library is reused
 
 AREAS = {
     "boscombe": {
@@ -121,6 +127,13 @@ def page_href(s):
     return GH + s["slug"] + ".html", "_blank"
 
 
+def aircraft_href():
+    """Link to the aircraft line-up page: its Wix page if it has one, otherwise the GitHub page."""
+    if AIRCRAFT_WIX:
+        return SITE + AIRCRAFT_WIX, "_top"
+    return GH + "aircraft.html", "_top"
+
+
 def home_href():
     if HOME_WIX:
         return SITE + HOME_WIX, "_top"
@@ -202,6 +215,10 @@ ICON = {
     "clock": '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     "bulb": '<path d="M9 18h6M10 21h4M8.5 14.5a6 6 0 1 1 7 0c-.6.5-1 1.2-1 2H9.500c0-.8-.4-1.500-1-2z"/>',
     "cloud": '<path d="M7 17a4 4 0 0 1 .500-7.970A5.500 5.500 0 0 1 18 10.500 3.250 3.250 0 0 1 17.500 17zM9 20l-1 2M13 20l-1 2M17 20l-1 2"/>',
+    "planex": '<path d="M2 14l9-3 3-7 2 1-1 6 6 2v2l-6-1-3 6h-2l1-6-8 1z"/>',
+    "star": '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+    "users": '<circle cx="9" cy="8" r="3.5"/><path d="M2 21a7 7 0 0 1 14 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 4 7"/>',
+    "check": '<rect x="4" y="3" width="16" height="18"/><path d="M8 9l2 2 4-4M8 15h8"/>',
     "quote": '<path d="M10 7H6v6h4v2a3 3 0 0 1-3 3M19 7h-4v6h4v2a3 3 0 0 1-3 3"/>',
     "shower": '<path d="M5 21V8a4 4 0 0 1 8 0M9 10h8M11 14v1M15 14v1M13 17v1M17 17v1"/>',
     "dog": '<path d="M5 9l2-4 3 3h4l3-3 2 4-1 6a5 5 0 0 1-5 4h-2a5 5 0 0 1-5-4z"/><path d="M10 12h0M14 12h0M12 15v1"/>',
@@ -616,6 +633,86 @@ a.hx:hover .go svg{transform:translateX(6px)}
 .dot.av-ok{background:var(--green)}.dot.av-mid{background:var(--amber)}.dot.av-full{background:var(--red)}
 
 /* availability */
+
+/* tab row: the aircraft line-up tab */
+.st.ac{gap:8px;background:var(--or);color:#fff;border-left:0}
+.st.ac svg{width:18px;height:18px}
+.st.ac:hover{background:#BF3636}
+.st.ac.on{background:var(--sky);color:var(--navy)}
+
+/* show week: six days, the show days in red */
+.week{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:8px}
+.day{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-top:6px solid var(--navy);padding:18px 18px 20px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,opacity .75s cubic-bezier(.22,.61,.36,1)}
+.day:hover{transform:translateY(-6px);box-shadow:0 22px 34px -22px rgba(19,41,60,.55)}
+.day .dn{font:700 16px/1 "Barlow",sans-serif;color:var(--body)}
+.day .dd{font:800 46px/1 "Barlow",sans-serif;color:var(--navy);margin-top:6px}
+.day .dd small{font-size:17px;font-weight:700;margin-left:4px}
+.day h3{font-size:19px;margin-top:12px}
+.day p{margin-top:6px;font-size:15.5px;line-height:1.45}
+.day.show{border-top-color:var(--or);background:var(--navy);border-color:var(--navy)}
+.day.show .dn{color:#9FD9D6}
+.day.show .dd,.day.show h3{color:#fff}
+.day.show p{color:#D5DEE4}
+.day .open{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;margin-top:auto;padding:7px 10px;background:var(--teal);color:var(--navy);font-weight:700;font-size:14.5px;line-height:1}
+.day .open::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--navy)}
+.day p{margin-bottom:14px}
+.week-note{margin-top:18px;font-size:16px;color:var(--ink)}
+.week-note b{color:var(--or-ink)}
+
+/* aircraft line-up teaser band, on the home page and campsite pages */
+.acteaser{position:relative;color:#fff;background:var(--navy) center/cover no-repeat;overflow:hidden}
+.acteaser::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,26,39,.95),rgba(19,41,60,.82) 55%,rgba(19,41,60,.35))}
+.acteaser .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);gap:40px;align-items:center;padding-top:84px;padding-bottom:84px}
+.acteaser .kick{color:var(--teal)}
+.acteaser .h{color:#fff}
+.acteaser .lede{color:#E6EDF1}
+.acteaser .btns{margin-top:26px}
+.actile{background:#fff;color:var(--ink);border-top:6px solid var(--or);padding:26px 26px 22px;box-shadow:0 26px 50px -24px rgba(0,0,0,.7);transition:transform .4s cubic-bezier(.22,.61,.36,1)}
+.actile:hover{transform:translateY(-6px) rotate(-1deg)}
+.actile i{width:54px;height:54px;background:var(--or);color:#fff;display:grid;place-items:center}
+.actile i svg{width:28px;height:28px}
+.actile b{display:block;font:800 60px/1 "Barlow",sans-serif;color:var(--navy);margin-top:16px}
+.actile b.word{font-size:40px}
+.actile span{display:block;margin-top:6px;font-weight:600;color:var(--ink);font-size:17px;line-height:1.3}
+.actile small{display:block;margin-top:12px;font-size:14.5px;line-height:1.4;color:var(--body)}
+.acteaser.slim .wrap{padding-top:60px;padding-bottom:60px}
+
+/* questions and answers */
+.faq{max-width:900px;margin:0 auto;display:grid;gap:12px}
+.faq details{background:#fff;border:1px solid var(--line);border-left:6px solid var(--teal);transition:border-color .3s,box-shadow .3s}
+.faq details[open]{border-left-color:var(--or);box-shadow:0 18px 32px -24px rgba(19,41,60,.55)}
+.faq summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 34px;gap:16px;align-items:center;padding:18px 20px;font:700 19px/1.3 "Barlow",sans-serif;color:var(--ink)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{width:34px;height:34px;border-radius:50%;background:var(--soft);color:var(--navy);display:grid;place-items:center;transition:transform .3s,background .3s,color .3s}
+.faq summary i svg{width:16px;height:16px;stroke-width:3}
+.faq details[open] summary i{transform:rotate(90deg);background:var(--or);color:#fff}
+.faq summary:hover{color:var(--or-ink)}
+.faq .ans{padding:0 20px 20px;font-size:16.5px;line-height:1.6}
+.faq .ans p+p{margin-top:10px}
+
+/* before you book */
+.bcheck{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.bcheck>div{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;background:var(--soft);border-top:5px solid var(--teal);padding:20px;transition:transform .35s cubic-bezier(.22,.61,.36,1),background .35s,box-shadow .35s,opacity .75s cubic-bezier(.22,.61,.36,1)}
+.bcheck>div:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(19,41,60,.5)}
+.bcheck i{width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:19px}
+.bcheck b{display:block;font-size:18px;color:var(--ink);line-height:1.25}
+.bcheck p{margin-top:6px;font-size:15.5px;line-height:1.45}
+
+@media (max-width:1000px){
+  .week{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .acteaser .wrap{grid-template-columns:1fr}
+  .bcheck{grid-template-columns:1fr 1fr}
+}
+@media (max-width:720px){
+  .week{grid-template-columns:1fr 1fr;gap:10px}
+  .day{padding:14px}
+  .day .dd{font-size:36px}
+  .acteaser .wrap{padding-top:56px;padding-bottom:56px}
+  .actile b{font-size:46px}
+  .faq summary{font-size:17px;padding:15px 16px}
+  .faq .ans{padding:0 16px 16px}
+  .bcheck{grid-template-columns:1fr}
+}
 .av{display:inline-flex;align-items:center;gap:8px;font:700 16px/1 "Barlow",sans-serif;padding:8px 12px}
 .av::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
 .av-ok{background:var(--green);color:#fff}.av-mid{background:var(--amber);color:var(--ink)}.av-full{background:var(--red);color:#fff}
@@ -1016,7 +1113,7 @@ fieldset.fld{border:0}
 MOTION_JS = r"""<script>
 (function(){
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-var sel='.sec-head,.about>*,.finder,.cc,.fc,.none,.board-scroll,.stats>div,.fe-main,.fe-side>*,.rowi,.qband .wrap>*,.gh,.gc,.tips-h,.mosaic>*,.tips-f,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules-h,.rules>div,.where>*,.formrow>*,.gal figure,.ft .cols>div';
+var sel='.sec-head,.about>*,.finder,.cc,.fc,.none,.board-scroll,.stats>div,.fe-main,.fe-side>*,.rowi,.qband .wrap>*,.gh,.gc,.day,.acteaser .wrap>*,.faq details,.bcheck>div,.ac-know>div,.ac-group,.tips-h,.mosaic>*,.tips-f,.mapbox,.offer>*,.band .kick,.band .h,.band .lede,.step,.price,.dates,.fg,.rules-h,.rules>div,.where>*,.formrow>*,.gal figure,.ft .cols>div';
 var els=[].slice.call(document.querySelectorAll(sel));
 if(!els.length||!('IntersectionObserver' in window))return;
 els.forEach(function(el){var sibs=[].filter.call(el.parentNode.children,function(x){return els.indexOf(x)>-1});
@@ -1065,9 +1162,14 @@ def top_bar():
             f'<div class="r"><a href="{SITE}{RIAT_WIX}" target="_top">Back to the RIAT guide {icon("arrow")}</a></div></div></div>')
 
 
+def nav_links(items):
+    """Menu links; an item is (href, label) or (href, label, target)."""
+    return "".join(f'<li><a href="{e(i[0])}"{(" target=" + chr(34) + i[2] + chr(34)) if len(i) > 2 else ""}>{e(i[1])}</a></li>' for i in items)
+
+
 def header(photo, nav_items, title, crumbs, tags="", button=None):
     """Photo header: logo and menu on the photo, then the page title and breadcrumb."""
-    nav = "".join(f'<li><a href="{e(href)}">{e(lab)}</a></li>' for href, lab in nav_items)
+    nav = nav_links(nav_items)
     btn = f'<a class="btn or inv" href="{e(button[0])}"{button[2] if len(button) > 2 else ""}>{e(button[1])}</a>' if button else ""
     cr = f'{icon("chev")}'.join(f'<a href="{e(h)}" target="{t}">{e(l)}</a>' if h else f'<span>{e(l)}</span>' for l, h, t in crumbs)
     bg = f" style=\"background-image:url('{e(photo)}')\"" if photo else ""
@@ -1077,7 +1179,7 @@ def header(photo, nav_items, title, crumbs, tags="", button=None):
 
 def home_header(nav_items, n):
     """The home page opening screen."""
-    nav = "".join(f'<li><a href="{e(href)}">{e(lab)}</a></li>' for href, lab in nav_items)
+    nav = nav_links(nav_items)
     return f"""<header class="hd home"><div class="hd-bg" style="background-image:url('{IMG}hero-flyby.jpg')"></div>
   <div class="wrap"><nav class="nav" aria-label="On this page">{logo()}<ul>{nav}</ul><a class="btn or inv" href="#list">List your campsite</a></nav>
     <div class="hero-in">
@@ -1123,6 +1225,9 @@ def site_strip(live, current=None):
     on = " on" if current == "home" else ""
     out = ['<nav class="strip" aria-label="RIAT campsites"><div class="wrap"><span class="lab">Campsites</span>',
            f'<a class="st{on}" href="{e(h)}" target="{t}"{" aria-current=page" if on else ""}>All campsites</a>']
+    ah, at = aircraft_href()
+    on = " on" if current == "aircraft" else ""
+    out.append(f'<a class="st ac{on}" href="{e(ah)}" target="{at}"{" aria-current=page" if on else ""}>{icon("planex")}Aircraft line-up</a>')
     for s in live:
         href, tgt = page_href(s)
         on = " on" if current == s["slug"] else ""
@@ -1132,6 +1237,87 @@ def site_strip(live, current=None):
         out.append(f'<a class="st{on}" href="{e(href)}" target="{tgt}"{cur}>{dot}{e(s["name"])} <small>{e(dist_text(s))}</small></a>')
     out.append('</div></nav>')
     return "".join(out)
+
+
+SHOW_WEEK = [  # (day of July 2027, weekday, title, line, show day?) from the live RIAT page
+    (14, "Wed", "Park & View", "A Park & View day before the show. Enclosure locations are still to be revealed.", False),
+    (15, "Thu", "Park & View", "Another Park & View day, the day before the show opens.", False),
+    (16, "Fri", "Show day one", "A four hour plus flying display. Car parks open at 06:00.", True),
+    (17, "Sat", "Show day two", "A seven hour plus flying display. Car parks open at 06:00.", True),
+    (18, "Sun", "Show day three", "A seven hour plus flying display. Car parks open at 06:00.", True),
+    (19, "Mon", "Park & View", "A Park & View day after the show.", False),
+]
+
+
+def july_day(text):
+    m = re.search(r"\b(\d{1,2})(?:st|nd|rd|th)? July 2027", text or "")
+    return int(m.group(1)) if m else None
+
+
+def show_week(open_from=None, open_to=None):
+    """Six day cards for show week; marks the days a campsite is open when its dates are known."""
+    cards = []
+    for d, wd, title, line, show in SHOW_WEEK:
+        open_tag = '<span class="open">Campsite open</span>' if open_from and open_to and open_from <= d <= open_to else ""
+        cards.append(f'<div class="day{" show" if show else ""}"><span class="dn">{wd}</span><span class="dd">{d}<small>July</small></span>'
+                     f'<h3>{e(title)}</h3><p>{e(line)}</p>{open_tag}</div>')
+    return f'<div class="week">{"".join(cards)}</div>'
+
+
+def aircraft_counts(data):
+    items = [i for i in (data or {}).get("items", []) if i.get("status") != "Cancelled"]
+    return len(items)
+
+
+def aircraft_band(data, photo, slim=False):
+    """The aircraft line-up teaser, with a link to the line-up page."""
+    ah, at = aircraft_href()
+    n = aircraft_counts(data)
+    sample = bool((data or {}).get("preview"))
+    if n:
+        tile = (f'<b data-count="{n}">{n}</b><span>Aircraft confirmed so far</span>'
+                f'<small>{"An example list in this preview, not the real line-up." if sample else "I update the list as RIAT confirms each one."}</small>')
+        lede = ("Every aircraft confirmed for RIAT 2027, listed by the air force or operator sending it, with what is flying, "
+                "what is on static and what is new since the last update.")
+    else:
+        tile = ('<b class="word">February</b><span>When weekly line-up updates usually start</span>'
+                '<small>The Tiger Gathering is the headline theme for 2027.</small>')
+        lede = ("RIAT usually starts its weekly line-up updates in February, with the Tiger Gathering as the headline theme for 2027. "
+                "I will list every aircraft as it is confirmed, by the air force or operator sending it.")
+    return f"""<section class="acteaser{" slim" if slim else ""}" id="aircraft" aria-label="Aircraft line-up" style="background-image:url('{photo}')">
+  <div class="wrap">
+    <div><span class="kick">Aircraft line-up</span><h2 class="h">Who Is Coming To RIAT 2027?</h2>
+      <p class="lede">{e(lede)}</p>
+      <div class="btns"><a class="btn or inv" href="{e(ah)}" target="{at}">See the line-up {icon("arrow")}</a><a class="btn wh" href="{e(ah)}#key" target="{at}">How the list works</a></div></div>
+    <div class="actile"><i>{icon("planex")}</i>{tile}</div>
+  </div>
+</section>"""
+
+
+HOME_FAQ = [  # every answer is from the live RIAT page or Jack's own advice on it
+    ("Is there an official RIAT campsite?",
+     ["Yes. RIAT has secured its own campsite beside the airfield at Boscombe Down, big enough for everyone from the official Fairford site and the campsites around it.",
+      "Rollover bookings get first pick, then the waitlist, then general sale. Pitch sizes, facilities and prices have not been released yet."]),
+    ("I booked a campsite near Fairford. What happens now?",
+     ["If it was a non-refundable booking at an unofficial site, RIAT says you can claim a free standard plot at the official campsite. How to claim is still to come.",
+      "If you are thinking about a refund, RIAT asks you to wait for the transport, Park & Ride, hotel and camping details first."]),
+    ("How do I book the campsites on these pages?",
+     ["You book direct with each campsite, using the details on its page. The guide does not take bookings or payments, and the campsites are run independently by local owners."]),
+    ("How far is Fairford from Boscombe Down?",
+     ["RIAT puts Swindon and Fairford at about an hour's drive from Boscombe Down. RIAT says it will run a Swindon Shuttle to Boscombe Down, but nothing is confirmed from Fairford itself yet."]),
+    ("Will there be shuttles to the show?",
+     ["The organisers plan free rail shuttles from Salisbury, Andover and Swindon stations, plus Park & Ride. You will need a general admission ticket to board, and no routes or times are out yet.",
+      "Some campsites may run their own minibus, so I would check each campsite's page."]),
+    ("Should I book somewhere now?",
+     ["If you are travelling a long way, somewhere you can cancel for free might work well for you. I would hold off on anything non-refundable until the transport plan is published."]),
+]
+
+
+def faq_block(items):
+    out = []
+    for q, ans in items:
+        out.append(f'<details><summary>{e(q)}<i>{icon("chev")}</i></summary><div class="ans">{"".join("<p>" + e(a) + "</p>" for a in ans)}</div></details>')
+    return f'<div class="faq">{"".join(out)}</div>'
 
 
 def sec_head(kick, title, lede="", mid=False):
@@ -1149,6 +1335,8 @@ def footer(live, extra=""):
     if not camps:
         camps = f'<li><a href="{e(h)}#list" target="{t}">{icon("chev")}Campsites are being added</a></li>'
     guides = "".join(f'<li><a href="{SITE}{path}" target="_top">{icon("chev")}{e(name)}</a></li>' for path, ic, name, sub in GUIDES)
+    ah, at = aircraft_href()
+    guides = f'<li><a href="{e(ah)}" target="{at}">{icon("chev")}RIAT 2027 aircraft line-up</a></li>' + guides
     return f"""<div class="sky{extra}">{camp_scene("#0B1A27")}</div>
 <footer class="ft"><div class="wrap cols">
   <div>{logo()}<div class="ct"><span>{icon("pin")}MOD Boscombe Down, Wiltshire</span><span>{icon("cal")}RIAT, 16 to 18 July 2027</span>
@@ -1313,7 +1501,7 @@ def compare_board(live):
             f'<table class="board"><thead><tr>{heads}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
 
 
-def build_home(live):
+def build_home(live, ac_data=None):
     cards = []
     for key in AREAS:
         group = sorted([s for s in live if s["area"] == key], key=lambda s: dist(s) or 99)
@@ -1327,7 +1515,8 @@ def build_home(live):
     nav = [("#campsites", "Campsites")]
     if n >= 2:
         nav.append(("#compare", "Compare"))
-    nav += [("#map", "Show map"), ("#new", "New to camping"), ("#owners", "For owners")]
+    ah, at = aircraft_href()
+    nav += [("#map", "Show map"), (ah, "Aircraft", at), ("#faq", "Questions"), ("#owners", "For owners")]
 
     if n:
         stat = f'<b>{n}</b><span>Campsite{"s" if n != 1 else ""} listed for RIAT 2027</span>'
@@ -1433,18 +1622,15 @@ def build_home(live):
   </div>
 </section>
 
-<section class="qband" id="new" aria-label="New to camping" style="background-image:url('{IMG}event-shelter-night.jpg')">
+<section class="sec" id="week" aria-label="Show week">
   <div class="wrap">
-    <div>
-      <span class="kick">New to camping?</span>
-      <h2 class="h">Everything I Wish Someone Had Told Me</h2>
-      <p class="lede">If this is your first time camping at an airshow, I would start with my camping guides. They cover where to camp, how to pitch up and what to pack, and the kit calculator shows what it really costs compared with a hotel.</p>
-      <div class="btns"><a class="btn or inv" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read the camping guides</a><a class="btn wh" href="{SITE}/build-your-kit-calculator?list=camping" target="_top">Camping kit calculator</a></div>
-    </div>
-    <div class="qp"><img src="{IMG}bell-tents.jpg" alt="Bell tents and cars on a camping field, with bunting along the track" loading="lazy" decoding="async"></div>
-    <blockquote class="qcard"><i>{icon("quote")}</i><p>My first airshow camping trip was RIAT in 2014, and I got plenty wrong: forgotten kit, no plan and far too little research. These guides are everything I wish someone had told me.</p><b>Jack Skedge</b><span>Founder and Managing Editor</span></blockquote>
+    {sec_head("Show week", "Your RIAT 2027 Week", "The show runs from Friday 16 to Sunday 18 July, with Park & View days either side. Gate and flying times come nearer the show.", mid=True)}
+    {show_week()}
+    <p class="week-note" style="text-align:center"><b>Good to know.</b> Under 18s go free with a ticket holding adult, and tickets are advance only.</p>
   </div>
 </section>
+
+{aircraft_band(ac_data, ROOT_GH + "home-img/v2/hero-arrows-riat23.jpg")}
 
 <section class="tipsec" id="tips" aria-label="Camping tips">
   <div class="wrap"><div class="tips-h">
@@ -1465,6 +1651,19 @@ def build_home(live):
   <div class="wrap"><p class="tips-f">There is a lot more where these came from. <a class="more" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read all my camping guides</a></p></div>
 </section>
 
+<section class="qband" id="new" aria-label="New to camping" style="background-image:url('{IMG}event-shelter-night.jpg')">
+  <div class="wrap">
+    <div>
+      <span class="kick">New to camping?</span>
+      <h2 class="h">Everything I Wish Someone Had Told Me</h2>
+      <p class="lede">If this is your first time camping at an airshow, I would start with my camping guides. They cover where to camp, how to pitch up and what to pack, and the kit calculator shows what it really costs compared with a hotel.</p>
+      <div class="btns"><a class="btn or inv" href="{SITE}{CAMPING_HUB_WIX}" target="_top">Read the camping guides</a><a class="btn wh" href="{SITE}/build-your-kit-calculator?list=camping" target="_top">Camping kit calculator</a></div>
+    </div>
+    <div class="qp"><img src="{IMG}bell-tents.jpg" alt="Bell tents and cars on a camping field, with bunting along the track" loading="lazy" decoding="async"></div>
+    <blockquote class="qcard"><i>{icon("quote")}</i><p>My first airshow camping trip was RIAT in 2014, and I got plenty wrong: forgotten kit, no plan and far too little research. These guides are everything I wish someone had told me.</p><b>Jack Skedge</b><span>Founder and Managing Editor</span></blockquote>
+  </div>
+</section>
+
 <section class="sec" id="guides" aria-label="Plan your trip">
   <div class="wrap">
     <div class="gh">{sec_head("Plan your trip", "More From The Guide")}<a class="btn or" href="{SITE}/airshow-questions" target="_top">Questions and answers</a></div>
@@ -1473,6 +1672,13 @@ def build_home(live):
       <a class="gc" href="{SITE}/build-your-kit-calculator?list=camping" target="_top"><div class="ph"><img src="{IMG}tent-and-kit.jpg" alt="A blue family tent with kit boxes and a table outside" loading="lazy" decoding="async"><span>Kit</span></div><h3>Camping Kit Calculator</h3><p>Tick your tent, beds and cooking kit, set how many are camping and see the cost before you buy.</p><span class="more">Open the calculator</span></a>
       <a class="gc" href="{SITE}{RIAT_WIX}" target="_top"><div class="ph"><img src="{IMG}hero-flyby.jpg" alt="Aircraft flying over an airshow campsite" loading="lazy" decoding="async"><span>RIAT</span></div><h3>RIAT 2027 At Boscombe Down</h3><p>What is confirmed about the move so far, and what is still to be announced.</p><span class="more">Read the RIAT guide</span></a>
     </div>
+  </div>
+</section>
+
+<section class="sec tint" id="faq" aria-label="Questions">
+  <div class="wrap">
+    {sec_head("Questions", "Camping At RIAT, Answered", "The things people ask me most about camping for the first Air Tattoo at Boscombe Down.", mid=True)}
+    {faq_block(HOME_FAQ)}
   </div>
 </section>
 
@@ -1621,7 +1827,7 @@ SITE_CSS = r"""
 """
 
 
-def build_site(s, live):
+def build_site(s, live, ac_data=None):
     a = AREAS[s["area"]]
     photos = s.get("photos") or []
     d = dist_text(s)
@@ -1632,6 +1838,7 @@ def build_site(s, live):
     av = avail(s)
     tags = site_tags(s)
     h, t = home_href()
+    o_from, o_to = july_day(dates.get("open")), july_day(dates.get("close"))
 
     def ph(i, fallback):
         p = photos[i] if len(photos) > i else None
@@ -1811,6 +2018,13 @@ def build_site(s, live):
   </div>
 </section>
 
+<section class="sec tint" id="week" aria-label="Show week">
+  <div class="wrap">
+    {sec_head("Show week", "Your RIAT 2027 Week", "The three show days and the Park & View days either side." + (" The days marked are when " + s["name"] + " is open." if o_from and o_to else ""))}
+    {show_week(o_from, o_to)}
+  </div>
+</section>
+
 <section class="sec" id="where" aria-label="Where it is">
   <div class="wrap where">
     <div class="mapcard">{ring_map(s["area"], [s], s["slug"])}</div>
@@ -1829,7 +2043,21 @@ def build_site(s, live):
     <img src="{e(p3[0])}" alt="{e(p3[1])}" loading="lazy" decoding="async">
   </div>
 </section>
+<section class="sec tint" id="before" aria-label="Before you book">
+  <div class="wrap">
+    {sec_head("Before you book", "Six Things I Would Check", "Show week is busy, so these are the things I would ask any campsite before paying.")}
+    <div class="bcheck">
+      <div><i>1</i><p><b>Your dates</b>When you can arrive and leave, and whether there is a minimum stay.</p></div>
+      <div><i>2</i><p><b>What the price includes</b>How many people and cars, and whether electric costs extra.</p></div>
+      <div><i>3</i><p><b>The cancellation policy</b>RIAT's travel plan is still to come, so I would look for a booking you can change.</p></div>
+      <div><i>4</i><p><b>Getting to the show</b>How long the drive is, and whether the campsite runs its own shuttle.</p></div>
+      <div><i>5</i><p><b>The site rules</b>Barbecues, campfires, generators, dogs and quiet hours.</p></div>
+      <div><i>6</i><p><b>Late arrivals</b>How late you can arrive, if you are driving a long way after work.</p></div>
+    </div>
+  </div>
+</section>
 {gallery}
+{aircraft_band(ac_data, ROOT_GH + "camping-layout/img/riat-f16-danish.webp", slim=True)}
 {more}
 </main>
 {footer(live, last_tint)}
@@ -1839,6 +2067,361 @@ def build_site(s, live):
 </html>
 """
     (OUT / f'{s["slug"]}.html').write_text(body, encoding="utf-8")
+
+
+# ---------------------------------------------------------------- aircraft line-up page
+AC_CSS = r"""
+.acband{background:var(--navy);color:#fff;position:relative;overflow:hidden}
+.acband::after{content:"";position:absolute;right:-90px;top:-60px;width:460px;height:460px;border:60px solid rgba(50,180,175,.1);transform:rotate(45deg)}
+.acband .wrap{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:48px;align-items:center;padding-top:70px;padding-bottom:70px}
+.acband .kick{color:var(--teal)}
+.acband .h{color:#fff}
+.acband .lede{color:#E6EDF1}
+.ac-status{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:22px;font-size:16px;color:#D5DEE4}
+.ac-live{background:var(--or);color:#fff;font-weight:700;font-size:15px;padding:6px 11px;line-height:1}
+.ac-status b{color:#fff}
+.ac-panel{background:#fff;color:var(--ink);border-top:6px solid var(--or);padding:26px 26px 20px;box-shadow:0 26px 50px -24px rgba(0,0,0,.7)}
+.ac-panel .lab{font-weight:700;font-size:17px;color:var(--body)}
+.ac-panel .big{display:block;font:800 72px/1 "Barlow",sans-serif;color:var(--navy);margin-top:6px}
+.ac-split{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px;border-top:1px solid var(--line)}
+.ac-split div{padding:12px 0 4px;font-weight:600;font-size:15px;color:var(--body)}
+.ac-split div:not(:nth-child(3n+1)){padding-left:14px;border-left:1px solid var(--line)}
+.ac-split div:nth-child(n+4){border-top:1px solid var(--line)}
+.ac-split b{display:block;font:800 26px/1.1 "Barlow",sans-serif;color:var(--navy)}
+
+.ac-know{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.ac-know>div{background:var(--soft);border-top:5px solid var(--c,var(--teal));padding:22px 20px 20px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s,opacity .75s cubic-bezier(.22,.61,.36,1)}
+.ac-know>div:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(19,41,60,.5)}
+.ac-know i{width:50px;height:50px;background:var(--c,var(--teal));color:var(--ic,var(--navy));display:grid;place-items:center}
+.ac-know i svg{width:26px;height:26px}
+.ac-know h3{font-size:20px;margin-top:16px}
+.ac-know p{margin-top:8px;font-size:15.5px;line-height:1.5}
+
+.ac-tools{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.2fr);gap:14px 22px;align-items:end;background:var(--navy);color:#fff;padding:22px 24px;border-top:5px solid var(--teal)}
+.ac-tools label,.ac-tools .lg{display:block;font-weight:700;font-size:17px;margin-bottom:8px}
+.ac-tools input{width:100%;font:500 17px/1.3 "Barlow",sans-serif;color:var(--navy);background:#fff;border:0;padding:13px 14px;border-radius:0}
+.ac-tools input::placeholder{color:#7D8B96}
+.ac-filters{display:flex;flex-wrap:wrap;gap:8px}
+.ac-filters button{font:700 15.5px/1 "Barlow",sans-serif;color:var(--navy);background:#fff;border:0;padding:12px 14px;cursor:pointer;transition:background .2s,color .2s,transform .2s}
+.ac-filters button:hover{transform:translateY(-2px)}
+.ac-filters button[aria-pressed=true]{background:var(--teal);color:var(--navy)}
+.ac-filters button[data-lf=cancelled][aria-pressed=true]{background:var(--or);color:#fff}
+.ac-count{margin:18px 0 0;font-weight:700;color:var(--ink);font-size:17px}
+
+.ac-key{margin-top:22px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;scroll-margin-top:20px}
+.ac-key div{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);padding:12px;font-size:15px;line-height:1.25;color:var(--ink)}
+.code{display:inline-grid;place-items:center;min-width:36px;height:28px;padding:0 7px;font:800 14px/1 "Barlow",sans-serif;border:2px solid var(--navy);color:var(--navy);background:#fff;flex:none}
+.code.f{background:var(--navy);color:#fff}
+.code.fs{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.ac-tag{display:inline-block;font:700 14px/1 "Barlow",sans-serif;padding:6px 9px;white-space:nowrap}
+.ac-tag.new{background:var(--teal);color:var(--navy)}
+.ac-tag.tbc{border:2px solid var(--body);color:var(--ink);padding:4px 7px}
+.ac-tag.upd{background:var(--sky);color:var(--navy)}
+.ac-tag.x{background:var(--navy);color:#fff}
+
+.ac-jump{position:sticky;top:0;z-index:5;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;background:var(--soft);margin-top:26px;padding:12px 0;border-bottom:3px solid var(--navy)}
+.ac-jump::-webkit-scrollbar{display:none}
+.ac-jump span{align-self:center;font-weight:700;color:var(--ink);padding-right:4px;white-space:nowrap}
+.ac-jump a{flex:none;text-decoration:none;font-weight:700;font-size:15.5px;color:var(--navy);background:#fff;border:1px solid var(--line);padding:9px 12px;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+.ac-jump a:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.ac-jump a sup{color:var(--or-ink);margin-left:5px;font-size:12.5px}
+.ac-jump a:hover sup{color:var(--teal)}
+.ac-jump a.cx{color:var(--or-ink)}
+
+.ac-group{margin-top:38px;scroll-margin-top:72px}
+.ac-group h3{display:flex;align-items:center;gap:14px;font-size:clamp(23px,2.4vw,30px)}
+.ac-group h3::before{content:"";width:9px;height:32px;background:var(--teal);flex:none}
+.ac-group.civ h3::before{background:var(--purple)}
+.ac-group.tbc h3::before{background:var(--body)}
+.ac-group.cxl h3{color:var(--or-ink)}
+.ac-group.cxl h3::before{background:var(--or)}
+.ac-group h3 small{font-weight:600;font-size:16px;color:var(--body)}
+.ac-table{width:100%;table-layout:fixed;border-collapse:collapse;margin-top:12px;background:#fff;box-shadow:0 14px 34px -26px rgba(19,41,60,.6)}
+.ac-table thead th{text-align:left;font:700 15px/1.2 "Barlow",sans-serif;color:#fff;background:var(--navy);padding:12px 14px}
+.ac-table td{overflow-wrap:anywhere;padding:12px 14px;border-top:1px solid var(--line);vertical-align:middle;color:var(--ink)}
+.ac-table tbody tr{opacity:0;transform:translateY(8px);transition:opacity .45s cubic-bezier(.22,.61,.36,1),transform .45s cubic-bezier(.22,.61,.36,1)}
+.ac-table tbody tr.in{opacity:1;transform:none}
+.ac-table tbody tr:hover td{background:#E7F4F3}
+.ac-row{display:flex;align-items:center;gap:14px}
+.ac-ph{position:relative;flex:none;width:96px;height:56px;overflow:hidden;background:var(--soft);display:grid;place-items:center}
+.ac-ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.22,.61,.36,1)}
+.ac-table tr:hover .ac-ph img{transform:scale(1.1)}
+.ac-ph svg{width:28px;height:28px;color:#AEBBC4}
+.ac-cr{position:absolute;right:2px;bottom:2px;font:500 9px/1.2 "Barlow",sans-serif;color:#fff;background:rgba(19,41,60,.72);padding:1px 4px}
+.ac-nm{font-weight:700;font-size:18px;line-height:1.25;color:var(--navy)}
+.ac-nm .mk{color:var(--teal-ink);font-weight:700}
+.ac-note{font-size:14.5px;line-height:1.35;color:var(--body);margin-top:2px}
+.ac-table td.d{white-space:nowrap}
+.ac-table td.d .code{margin-right:8px}
+.ac-table td.n{text-align:right;white-space:nowrap}
+.ac-table td.n .ac-tag+.ac-tag{margin-left:6px}
+.cxl .ac-nm,.cxl td.u{text-decoration:line-through;text-decoration-color:var(--or)}
+.ac-empty{margin-top:30px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:center;background:#fff;border-left:8px solid var(--teal);padding:28px 30px;box-shadow:0 14px 34px -26px rgba(19,41,60,.6)}
+.ac-empty i{width:70px;height:70px;border-radius:50%;background:var(--navy);color:var(--teal);display:grid;place-items:center}
+.ac-empty i svg{width:34px;height:34px}
+.ac-empty h3{font-size:25px}
+.ac-empty p{margin-top:6px;max-width:66ch}
+.ac-prev{margin-top:20px;background:var(--amber);color:var(--ink);font-weight:600;padding:12px 16px}
+.ac-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:18px 30px;margin-top:40px;padding-top:24px;border-top:1px solid #CCD5DC}
+.ac-foot p{max-width:66ch;font-size:16px;color:var(--ink)}
+
+@media (max-width:1000px){
+  .acband .wrap{grid-template-columns:1fr;gap:30px}
+  .ac-know{grid-template-columns:1fr 1fr}
+  .ac-key{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ac-tools{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .acband .wrap{padding-top:44px;padding-bottom:44px}
+  .ac-panel .big{font-size:56px}
+  .ac-know{grid-template-columns:1fr}
+  .ac-key{grid-template-columns:1fr 1fr}
+  .ac-tools{padding:18px 16px}
+  .ac-table,.ac-table thead,.ac-table tbody,.ac-table tr,.ac-table td{display:block}
+  .ac-table thead{display:none}
+  .ac-table tbody tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;padding:14px;border-top:1px solid var(--line)}
+  .ac-table td{padding:0;border:0}
+  .ac-table td.a{grid-column:1/-1}
+  .ac-table td.u{grid-column:1/-1;font-size:15px;color:var(--body)}
+  .ac-table td.y{grid-column:1/-1;font-size:15px}
+  .ac-table td.y:empty{display:none}
+  .ac-table td.y::before{content:"Days: ";font-weight:700}
+  .ac-table td.n{text-align:right}
+  .ac-ph{width:84px;height:50px}
+  .ac-empty{grid-template-columns:1fr;padding:22px 18px}
+}
+@media (prefers-reduced-motion:reduce){.ac-table tbody tr{opacity:1;transform:none;transition:none}}
+"""
+
+AC_JS = r"""<script>
+(function(){
+var FALLBACK=__DATA__;
+var LIB=(window.LU_EXTRA||[]).concat(__LIB__).map(function(e){return [new RegExp(e[0],'i'),e[1],e[2],e[3]||''];});
+var PLANE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14l9-3 3-7 2 1-1 6 6 2v2l-6-1-3 6h-2l1-6-8 1z"/></svg>';
+var ORDER={"~civilian":1,"~tbc":2,"~cancelled":3};
+function E(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function cat(i){var c=String(i.category||"").toLowerCase();return c.indexOf("mil")===0?"military":c.indexOf("civ")===0?"civilian":"";}
+function isCx(i){return i.status==="Cancelled";}
+function isTbc(i){return i.status==="Provisional";}
+function groupOf(i){
+  if(isCx(i))return {key:"~cancelled",title:"Cancelled",kind:"cxl"};
+  var c=cat(i);
+  if(c==="civilian")return {key:"~civilian",title:"Civilian",kind:"civ"};
+  if(c==="military"){var arm=i.airArm||i.operator||"Air force to be confirmed";return {key:"0"+arm.toLowerCase(),title:arm,kind:"mil"};}
+  return {key:"~tbc",title:"Operator to be confirmed",kind:"tbc"};
+}
+function group(items){
+  var map={};
+  items.forEach(function(i){var g=groupOf(i);if(!map[g.key])map[g.key]={meta:g,items:[]};map[g.key].items.push(i);});
+  return Object.keys(map).sort(function(a,b){var oa=ORDER[a]||0,ob=ORDER[b]||0;return oa!==ob?oa-ob:a.localeCompare(b);}).map(function(k){return map[k];});
+}
+/* New: until the next official update, or one week after newSince, whichever comes first */
+function newNow(i){return !!i.isNew&&(!i.newSince||(Date.now()-new Date(i.newSince).getTime())/864e5<=7);}
+function counts(items){
+  var live=items.filter(function(i){return !isCx(i);}),forces={};
+  live.forEach(function(i){if(cat(i)==="military")forces[(i.airArm||i.operator||"").toLowerCase()]=1;});
+  return {total:live.length,flying:live.filter(function(i){return i.flying;}).length,statics:live.filter(function(i){return i.staticDisplay;}).length,
+    military:live.filter(function(i){return cat(i)==="military";}).length,civilian:live.filter(function(i){return cat(i)==="civilian";}).length,
+    forces:Object.keys(forces).filter(Boolean).length,news:live.filter(newNow).length};
+}
+function text(i){return [i.aircraftName,i.variant,i.squadron,i.airArm,i.operator,i.notes].join(" ").toLowerCase();}
+function matches(i,f,q){
+  var cx=isCx(i),ok;
+  switch(f){case "military":ok=cat(i)==="military"&&!cx;break;case "civilian":ok=cat(i)==="civilian"&&!cx;break;case "flying":ok=i.flying&&!cx;break;
+    case "static":ok=i.staticDisplay&&!cx;break;case "new":ok=newNow(i)&&!cx;break;case "cancelled":ok=cx;break;default:ok=true;}
+  return ok&&(!q||text(i).indexOf(q)>-1);
+}
+function photo(i){
+  if(!isCx(i)){var t=[i.aircraftName,i.variant,i.squadron,i.airArm,i.operator].join(" ");
+    for(var n=0;n<LIB.length;n++){if(LIB[n][0].test(t))return '<span class="ac-ph"><img src="'+E(LIB[n][1])+'" alt="'+E(LIB[n][2])+'" loading="lazy" decoding="async">'+(LIB[n][3]?'<span class="ac-cr">© '+E(LIB[n][3])+'</span>':'')+'</span>';}}
+  return '<span class="ac-ph">'+PLANE+'</span>';
+}
+function code(i){return i.flying&&i.staticDisplay?"F/S":i.flying?"F":i.staticDisplay?"S":"?";}
+function displayText(i){return i.flying&&i.staticDisplay?"Flying and static":i.flying?"Flying":i.staticDisplay?"Static":"To be confirmed";}
+function updTag(i){if(!i.updated)return "";var d=new Date(i.updated).toLocaleDateString("en-GB",{day:"numeric",month:"short"});return '<span class="ac-tag upd"'+(i.updatedNote?' title="'+E(i.updatedNote)+'"':'')+'>Updated '+d+'</span>';}
+function unit(i){return cat(i)==="military"?(i.squadron||""):(i.squadron||i.operator||"");}
+function checkedText(d){return d?"Last checked "+new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}):"I check this against the official list every week";}
+function $(id){return document.getElementById(id);}
+var st={items:[],f:"all",q:"",data:null};
+function render(){
+  var c=counts(st.items);
+  [["acTotal",c.total],["acFly",c.flying],["acSta",c.statics],["acMil",c.military],["acCiv",c.civilian],["acForces",c.forces]].forEach(function(p){$(p[0]).textContent=p[1];});
+  var shown=st.items.filter(function(i){return matches(i,st.f,st.q);}),groups=group(shown),hasDays=st.items.some(function(i){return i.days;});
+  var jump=$("acJump");
+  jump.innerHTML='<span>Jump to</span>'+groups.map(function(g,n){return '<a href="#acg'+n+'"'+(g.meta.kind==="cxl"?' class="cx"':'')+'>'+E(g.meta.title)+'<sup>'+g.items.length+'</sup></a>';}).join("");
+  jump.hidden=groups.length<2;
+  $("acTools").hidden=st.items.length===0;
+  $("acKey").hidden=st.items.length===0;
+  $("acCount").hidden=st.items.length===0;
+  $("acCount").textContent="Showing "+shown.length+" of "+st.items.length+" aircraft"+(st.q?' matching "'+st.q+'"':"")+".";
+  $("acGroups").innerHTML=groups.map(function(g,n){
+    var k=g.meta.kind,uHead=k==="civ"?"Owner or operator":k==="cxl"?"Unit or air arm":"Squadron or unit";
+    var rows=g.items.map(function(i){
+      var cc=i.flying&&i.staticDisplay?"fs":i.flying?"f":"";
+      var tag=(isCx(i)?"":newNow(i)?'<span class="ac-tag new">New</span>':isTbc(i)?'<span class="ac-tag tbc">To be confirmed</span>':"")+updTag(i);
+      var u=unit(i);if(k==="cxl")u=[i.squadron,i.airArm||i.operator].filter(Boolean).join(", ");
+      return '<tr><td class="a"><div class="ac-row">'+photo(i)+'<div><div class="ac-nm">'+E(i.aircraftName)+(i.variant?' <span class="mk">'+E(i.variant)+'</span>':'')
+        +(i.count>1?' <span class="ac-tag x">×'+(+i.count)+'</span>':'')+'</div>'+(i.notes?'<div class="ac-note">'+E(i.notes)+'</div>':'')+'</div></div></td>'
+        +'<td class="u">'+E(u||"To be confirmed")+'</td><td class="d"><span class="code '+cc+'">'+code(i)+'</span>'+displayText(i)+'</td>'
+        +(hasDays?'<td class="y">'+E(i.days||"")+'</td>':'')+'<td class="n">'+tag+'</td></tr>';
+    }).join("");
+    return '<section class="ac-group '+k+'" id="acg'+n+'"><h3>'+E(g.meta.title)+' <small>'+g.items.length+' aircraft</small></h3>'
+      +'<table class="ac-table"><colgroup><col style="width:'+(hasDays?'38%':'44%')+'"><col style="width:'+(hasDays?'24%':'28%')+'"><col style="width:16%">'+(hasDays?'<col style="width:11%">':'')+'<col></colgroup><thead><tr><th>Aircraft</th><th>'+uHead+'</th><th>Display</th>'+(hasDays?'<th>Days</th>':'')+'<th><span class="vh">Tags</span></th></tr></thead><tbody>'+rows+'</tbody></table></section>';
+  }).join("");
+  var still=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  document.querySelectorAll("#acGroups tbody tr").forEach(function(el,n){if(still){el.classList.add("in");return}setTimeout(function(){el.classList.add("in");},40*Math.min(n,18));});
+  var none=shown.length===0;
+  $("acEmpty").hidden=!none;
+  if(none){
+    $("acEmptyT").textContent=st.items.length?"Nothing matches that yet":"No aircraft announced yet";
+    $("acEmptyP").textContent=st.items.length?"Try another filter or a different search, or check back after the next announcement.":(st.data.emptyText||"As soon as the organisers confirm aircraft, they will appear here.");
+  }
+}
+function load(d){
+  st.data=d;st.items=d.items||[];
+  $("acLede").textContent=st.items.length?"Every aircraft confirmed for the "+d.showName+" "+d.year+", listed by the air force or operator sending it.":(d.emptyText||"");
+  $("acChecked").textContent=d.reference||checkedText(d.lastChecked);
+  $("acLive").textContent=d.reference?d.year+" list":d.preview?"Example list":"Live list";
+  var off=$("acOfficial");off.hidden=!d.officialUrl;if(d.officialUrl)off.href=d.officialUrl;
+  $("acPrev").hidden=!d.preview;
+  render();
+}
+var btns=document.querySelectorAll("#acFilters [data-lf]");
+btns.forEach(function(b){b.addEventListener("click",function(){btns.forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});st.f=b.getAttribute("data-lf");render();});});
+var q=$("acSearch"),qt;
+q.addEventListener("input",function(){clearTimeout(qt);qt=setTimeout(function(){st.q=q.value.trim().toLowerCase();render();},150);});
+$("acJump").addEventListener("click",function(ev){var a=ev.target.closest("a");if(!a)return;ev.preventDefault();var g=document.querySelector(a.getAttribute("href"));if(g)g.scrollIntoView({behavior:"smooth",block:"start"});});
+/* Wix bridge: page code can post {type:"aircraftLineup", ...} to replace the built in list */
+window.addEventListener("message",function(ev){var d=ev.data;if(typeof d==="string"){try{d=JSON.parse(d);}catch(err){return;}}if(d&&d.type==="aircraftLineup")load(d);});
+if(window.parent&&window.parent!==window)window.parent.postMessage("ready","*");
+load(FALLBACK);
+})();
+</script>"""
+
+
+def lineup_library():
+    """The line-up photo library from a feature page (its lu-lib block), saved as image files so this page stays light.
+    Two of Jack's RIAT photos go first. Returns [pattern, address, alt, credit] for each photo."""
+    lib = [[r"\bf-16\b|fighting falcon", ROOT_GH + "camping-layout/img/riat-f16-danish.webp", "A Royal Danish Air Force F-16 turning hard in full afterburner", ""],
+           [r"hornet|f/a-18", ROOT_GH + "camping-layout/img/riat-hornet-finnish.webp", "Finnish Air Force F/A-18C Hornet on a banking pass", ""]]
+    try:
+        page = LU_LIB_PAGE.read_text(encoding="utf-8")
+        i = page.index('<script id="lu-lib">'); j = page.index("</script>", i)
+        blk = page[i:j]
+        a = blk.index(".concat(") + len(".concat("); b = blk.index(").map(function(e)")
+        rows = json.loads(blk[a:b])
+    except (OSError, ValueError) as err:
+        print("line-up photo library not found:", err)
+        return lib
+    import base64, hashlib
+    d = OUT / "img" / "lu"
+    d.mkdir(parents=True, exist_ok=True)
+    for row in rows:
+        pat, src, alt = row[0], row[1], row[2]
+        credit = row[3] if len(row) > 3 else ""
+        m = re.match(r"data:image/([a-z]+);base64,(.*)", src, re.S)
+        if not m:
+            lib.append([pat, src, alt, credit])
+            continue
+        raw = base64.b64decode(m.group(2))
+        name = hashlib.sha1(raw).hexdigest()[:12] + "." + ("jpg" if m.group(1) == "jpeg" else m.group(1))
+        f = d / name
+        if not f.exists():
+            f.write_bytes(raw)
+        lib.append([pat, GH + "img/lu/" + name, alt, credit])
+    return lib
+
+
+def build_aircraft(live, data):
+    h, t = home_href()
+    lib = lineup_library()
+    ah, at = aircraft_href()
+    title = "RIAT 2027 aircraft line-up | The Big Guide to UK Airshows"
+    desc = "Every aircraft confirmed for the Royal International Air Tattoo 2027 at MOD Boscombe Down, by air force and operator."
+    nav = [("#lineup", "Line-up"), ("#know", "What we know"), ("#list", "The list"), (h + "#campsites", "Campsites", t)]
+    js = AC_JS.replace("__DATA__", json.dumps({k: v for k, v in data.items() if not k.startswith("_")}, ensure_ascii=False)).replace("__LIB__", json.dumps(lib, ensure_ascii=False))
+    know = [
+        ("star", "var(--or)", "#fff", "The Tiger Gathering", "The Tiger Gathering is the headline theme for 2027, with weekly updates once the announcements begin."),
+        ("cal", "var(--teal)", "var(--navy)", "Weekly updates", "RIAT usually starts its weekly line-up updates in February, and I check the list every week."),
+        ("clock", "var(--purple)", "#fff", "Long flying displays", "Friday is a four hour plus display, and Saturday and Sunday are seven hours plus."),
+        ("users", "var(--navy)", "#fff", "The static park", "The flying display, the big static park and the chance to meet crews from around the world are all staying."),
+    ]
+    know_html = "".join(f'<div style="--c:{c};--ic:{ic}"><i>{icon(i)}</i><h3>{e(hh)}</h3><p>{e(pp)}</p></div>' for i, c, ic, hh, pp in know)
+    key = [('<span class="code f">F</span>', "Flying display"), ('<span class="code">S</span>', "Static display"),
+           ('<span class="code fs">F/S</span>', "Flying and static"), ('<span class="ac-tag new">New</span>', "New since the last update"),
+           ('<span class="ac-tag upd">Updated</span>', "Changed, with the date"), ('<span class="ac-tag x">&times;2</span>', "Number attending")]
+    key_html = "".join(f"<div>{a}<span>{e(b)}</span></div>" for a, b in key)
+    filters = [("all", "All"), ("military", "Military"), ("civilian", "Civilian"), ("flying", "Flying"), ("static", "Static"), ("new", "New"), ("cancelled", "Cancelled")]
+    fil = "".join(f'<button type="button" data-lf="{k}" aria-pressed="{"true" if k == "all" else "false"}">{e(l)}</button>' for k, l in filters)
+    body = f"""{head(title, desc, AC_CSS, SITE + AIRCRAFT_WIX if AIRCRAFT_WIX else "")}
+{top_bar()}
+{header(ROOT_GH + "camping-layout/img/riat-f16-danish.webp", nav, "Aircraft Line-Up", [("RIAT", SITE + RIAT_WIX, "_top"), ("Camping", h, t), ("Aircraft line-up", "", "")], tags='<div class="tags"><span class="tagp">RIAT 2027</span><span class="tagp" style="background:var(--or)">MOD Boscombe Down</span></div>', button=(h + "#campsites", "Find a campsite", f' target="{t}"'))}
+{site_strip(live, "aircraft")}
+<main>
+<section class="acband" id="lineup" aria-label="Confirmed aircraft">
+  <div class="wrap">
+    <div>
+      <span class="kick">Confirmed aircraft</span>
+      <h2 class="h">Who Is Coming To RIAT 2027?</h2>
+      <p class="lede" id="acLede"></p>
+      <p class="ac-status"><span class="ac-live" id="acLive">Live list</span><b id="acChecked"></b><span>Line-ups can change right up to show day.</span></p>
+    </div>
+    <aside class="ac-panel" aria-label="Totals">
+      <span class="lab">Confirmed so far</span><b class="big" id="acTotal">0</b>
+      <div class="ac-split">
+        <div><b id="acFly">0</b>Flying</div><div><b id="acSta">0</b>Static</div><div><b id="acForces">0</b>Air forces</div>
+        <div><b id="acMil">0</b>Military</div><div><b id="acCiv">0</b>Civilian</div><div><b>3</b>Show days</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="sec" id="know" aria-label="What we know">
+  <div class="wrap">
+    {sec_head("What we know", "The 2027 Line-Up So Far", "This is what is confirmed about the flying at Boscombe Down so far, and how I keep the list.")}
+    <div class="ac-know">{know_html}</div>
+  </div>
+</section>
+
+<section class="sec tint" id="list" aria-label="The aircraft list">
+  <div class="wrap">
+    {sec_head("The list", "Every Confirmed Aircraft", "Grouped by the air force or operator sending it. Search for an aircraft, or pick what you would like to see.")}
+    <div class="ac-tools" id="acTools">
+      <div><label for="acSearch">Search the line-up</label><input type="search" id="acSearch" placeholder="For example Typhoon or Red Arrows" autocomplete="off"></div>
+      <div><span class="lg">Show me</span><div class="ac-filters" id="acFilters" role="group" aria-label="Filter the line-up">{fil}</div></div>
+    </div>
+    <p class="ac-count" id="acCount" aria-live="polite"></p>
+    <div id="key" style="scroll-margin-top:20px"></div>
+    <div class="ac-key" id="acKey" aria-label="Key to symbols">{key_html}</div>
+    <nav class="ac-jump" id="acJump" aria-label="Jump to air force"></nav>
+    <div id="acGroups"></div>
+    <div class="ac-empty" id="acEmpty" hidden><i>{icon("planex")}</i><div><h3 id="acEmptyT">No aircraft announced yet</h3><p id="acEmptyP"></p></div></div>
+    <p class="ac-prev" id="acPrev" hidden>Example list only. These aircraft show how the page looks once the line-up is announced. They are not the real RIAT 2027 line-up.</p>
+    <div class="ac-foot">
+      <p>Aircraft can withdraw at short notice, so I would always check the official list before you travel.</p>
+      <a class="btn or" id="acOfficial" href="https://www.airtattoo.com/" target="_blank" rel="noopener">Official RIAT website</a>
+    </div>
+  </div>
+</section>
+
+<section class="acteaser slim" aria-label="Where to stay" style="background-image:url('{IMG}tents-night.jpg')">
+  <div class="wrap">
+    <div><span class="kick">Staying for the weekend?</span><h2 class="h">Camp Close To The Flying</h2>
+      <p class="lede">Find a campsite near MOD Boscombe Down, with pitches, prices, facilities and how far each one is from the airfield.</p>
+      <div class="btns"><a class="btn or inv" href="{e(h)}#campsites" target="{t}">Find a campsite {icon("arrow")}</a><a class="btn wh" href="{e(h)}#map" target="{t}">Open the show map</a></div></div>
+    <div class="actile"><i>{icon("tent")}</i><b>{len(live) or "Soon"}</b><span>{"Campsites listed for RIAT 2027" if live else "Campsites are being added"}</span><small>Book direct with each campsite.</small></div>
+  </div>
+</section>
+</main>
+{footer(live)}
+<script src="{ROOT_GH}lineup-photos.js"></script>
+{js}
+{COUNT_JS}
+{MOTION_JS}
+</body>
+</html>
+"""
+    (OUT / "aircraft.html").write_text(body, encoding="utf-8")
 
 
 def load_sites(extra=None):
@@ -1867,10 +2450,13 @@ def main():
     sites = load_sites(SRC.parent / "preview-sites" if preview else None)
     live = [s for s in sites if preview or (s.get("live") and not s.get("sample"))]
     live.sort(key=lambda s: (list(AREAS).index(s["area"]), dist(s) or 99))
-    build_home(live)
+    ac_data = json.loads((PREVIEW_AIRCRAFT if preview else AIRCRAFT_SRC).read_text(encoding="utf-8"))
+    build_home(live, ac_data)
     print(f"index.html ({len(live)} live campsite{'s' if len(live) != 1 else ''})")
+    build_aircraft(live, ac_data)
+    print(f"aircraft.html ({aircraft_counts(ac_data)} aircraft{', example list' if ac_data.get('preview') else ''})")
     for s in sites:
-        build_site(s, live)
+        build_site(s, live, ac_data)
         state = "sample" if s.get("sample") else ("live" if s.get("live") else "draft, not in the tabs yet")
         print(f'{s["slug"]}.html ({state})')
 

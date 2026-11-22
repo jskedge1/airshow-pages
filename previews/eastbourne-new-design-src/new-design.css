@@ -1,0 +1,1233 @@
+/* New design for the Eastbourne Airshow page (from the Duxford template): the layout made for the RIAT camping pages, in the brand colours,
+   matching the camping pages as they stand: navy for dark panels and the footer, red for buttons and the label
+   lines (the darker red where it is text on white), teal for accents and everything on dark, purple and sky
+   as second accents. Font: Barlow. Everything here starts .nz- or sits under html.nz, so it only
+   adds to the page's own styles. */
+:root{--nz-navy:#13293C;--nz-navy2:#1C3850;--nz-deep:#0B1A27;--nz-teal:#32B4AF;--nz-teal-ink:#0E5F5B;--nz-purple:#6950A1;
+--nz-red:#D74949;--nz-sky:#00A6E2;--nz-amber:#F2B233;--nz-ink:#13293C;--nz-body:#4A5A66;--nz-line:#DCE3E8;--nz-soft:#F3F6F8;
+--nz-red-ink:#BF3636;--nz-f:"Barlow",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+
+html.nz body{font-family:var(--nz-f);background:#fff}
+.nz-wrap{max-width:1188px;margin:0 auto;padding:0 24px;box-sizing:border-box}
+.nz-top,.nz-hd,.nz-sec,.nz-ft,.nz-fbar{font-family:var(--nz-f);box-sizing:border-box}
+.nz-top *,.nz-hd *,.nz-sec *,.nz-ft *,.nz-fbar *{box-sizing:border-box}
+.nz-top svg,.nz-hd svg,.nz-sec svg,.nz-ft svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nz-hd img,.nz-sec img{pointer-events:none;user-select:none;-webkit-user-drag:none}
+
+/* the page's old header parts are replaced by the new ones */
+html.nz body > nav.ukbt,html.nz body > nav.sitebar,html.nz body > header#top.cg-hero{display:none!important}
+
+/* buttons */
+.nz-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:700 17px/1 var(--nz-f);padding:17px 28px;text-decoration:none;border:0;border-radius:0;cursor:pointer;transition:background .2s,color .2s,transform .3s cubic-bezier(.22,.61,.36,1),box-shadow .3s}
+.nz-btn.red{background:var(--nz-red);color:#fff}.nz-btn.red:hover{background:var(--nz-navy);color:#fff}
+.nz-btn.red.inv:hover{background:#fff;color:var(--nz-navy)}
+.nz-btn.nv{background:var(--nz-navy);color:#fff}.nz-btn.nv:hover{background:var(--nz-teal);color:var(--nz-navy)}
+.nz-btn:hover{transform:translateY(-3px);box-shadow:0 12px 22px -12px rgba(11,26,39,.55)}
+.nz-btn:focus-visible,.nz-nav button:focus-visible,.nz-ft button:focus-visible,.nz-ft a:focus-visible,.nz-top a:focus-visible,.nz-logo:focus-visible{outline:3px solid var(--nz-amber);outline-offset:2px}
+.nz-btns{display:flex;flex-wrap:wrap;gap:14px}
+
+/* dark top bar */
+.nz-top{background:var(--nz-deep);color:#fff;font-size:14px;line-height:1.4}
+.nz-top .nz-wrap{display:flex;justify-content:space-between;align-items:center;gap:8px 26px;flex-wrap:wrap;min-height:50px;padding-top:8px;padding-bottom:8px}
+.nz-top .l{display:flex;gap:8px 26px;flex-wrap:wrap}
+.nz-top .l>span,.nz-top a{display:inline-flex;align-items:center;gap:9px;color:#fff;text-decoration:none}
+.nz-top svg{width:16px;height:16px;color:var(--nz-teal);flex:none;transition:transform .3s}
+.nz-top a:hover{color:var(--nz-teal)}
+.nz-top a:hover svg{transform:translateX(4px)}
+
+/* photo header: logo, menu and one button on the photo, then the title and breadcrumb */
+.nz-hd{position:relative;color:#fff;background:var(--nz-navy);overflow:hidden}
+.nz-hd-bg{position:absolute;inset:-4% 0;width:100%;height:108%;object-fit:cover;object-position:70% 40%}
+.nz-hd-bg:not([src]){display:none}
+.nz-hd::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(11,26,39,.78),rgba(19,41,60,.6) 55%,rgba(19,41,60,.86))}
+.nz-hd .nz-wrap{position:relative;z-index:2}
+.nz-nav{display:flex;align-items:center;gap:20px;min-height:92px;border-bottom:1px solid rgba(255,255,255,.22)}
+.nz-logo{display:flex;align-items:center;text-decoration:none;margin-right:auto;flex:none}
+.nz-logo img{display:block;height:62px;width:auto;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.nz-logo:hover img{transform:scale(1.04)}
+.nz-ft .nz-logo img{height:76px}
+.nz-logo img:not([src]){visibility:hidden}
+.nz-nav ul{list-style:none;display:flex;gap:2px;align-self:stretch;margin:0;padding:0}
+.nz-nav li{display:flex}
+.nz-nav .nz-btn{white-space:nowrap;flex:none}
+.nz-nav li button{display:flex;align-items:center;padding:0 11px;font:500 16px/1.2 var(--nz-f);color:#fff;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;cursor:pointer;transition:color .2s,border-color .2s}
+.nz-nav li button:hover{border-bottom-color:var(--nz-teal);color:#8FE0DC}
+.nz-ttl{padding:70px 0 150px}
+.nz-ttl h1{color:#fff;font:700 clamp(38px,5.6vw,60px)/1.1 var(--nz-f);margin:0;text-transform:none;letter-spacing:0}
+.nz-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.nz-tagp{display:inline-flex;align-items:center;font:700 17px/1 var(--nz-f);padding:9px 12px;background:var(--nz-red);color:#fff}
+.nz-crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:16px 0 0;font-size:17px;color:#fff}
+.nz-crumbs a{color:#fff;text-decoration:none}
+.nz-crumbs a:hover{color:#8FE0DC}
+.nz-crumbs svg{width:14px;height:14px;color:var(--nz-teal)}
+
+/* three big buttons on the bottom edge of the photo (the page's own When to go, Where to watch, Getting there) */
+.nz-feat3{margin-top:-104px;padding-bottom:0;position:relative}
+html.nz .nz-feat3 .h1x-cards{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;margin:0!important;padding:0!important;width:auto!important;max-width:none!important;transform:none!important}
+html.nz .nz-feat3 .h1x-card{position:relative!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:flex-start!important;text-align:left!important;margin:0!important;padding:26px 26px 24px 92px!important;min-height:148px!important;height:auto!important;border:0!important;border-radius:0!important;box-shadow:none!important;cursor:pointer;
+  background:rgba(255,255,255,.14)!important;color:#fff!important;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transform:none;transition:background .35s,transform .35s cubic-bezier(.22,.61,.36,1)!important;border-top:5px solid var(--nz-teal)!important}
+html.nz .nz-feat3 .h1x-card:nth-child(2){background:rgba(255,255,255,.22)!important;border-top-color:var(--nz-sky)!important}
+html.nz .nz-feat3 .h1x-card:nth-child(3){border-top-color:var(--nz-amber)!important}
+html.nz .nz-feat3 .h1x-card:hover{background:var(--nz-navy)!important;transform:translateY(-8px)!important}
+html.nz .nz-feat3 .h1x-card .h1x-ic{position:absolute!important;left:24px!important;top:26px!important;width:48px!important;height:48px!important;margin:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:#fff!important;display:block!important;transform:none!important;transition:transform .35s,color .35s!important}
+html.nz .nz-feat3 .h1x-card .h1x-ic svg{width:44px!important;height:44px!important;stroke:currentColor!important;stroke-width:1.4!important;fill:none!important}
+html.nz .nz-feat3 .h1x-card:hover .h1x-ic{color:var(--nz-teal)!important;transform:scale(1.12) rotate(-6deg)!important}
+html.nz .nz-feat3 .h1x-card > *:not(.h1x-ic){flex:0 0 auto!important;width:auto!important;max-width:100%!important;position:static!important;padding-left:0!important;text-align:left!important}
+html.nz .nz-feat3 .h1x-card{flex-wrap:nowrap!important;gap:0!important;aspect-ratio:auto!important}
+html.nz .nz-feat3 .h1x-card h3{font:700 22px/1.2 var(--nz-f)!important;color:#fff!important;margin:0 0 6px!important;text-transform:none!important}
+html.nz .nz-feat3 .h1x-card b{display:block!important;font:400 15.5px/1.5 var(--nz-f)!important;color:#E6EDF1!important;margin:0!important}
+html.nz .nz-feat3 .h1x-card > span:not(.h1x-ic){display:block!important;font:400 14.5px/1.5 var(--nz-f)!important;color:#C9D6DE!important;margin-top:4px!important}
+html.nz .nz-feat3 .h1x-card em.h1x-free{align-self:flex-start!important;display:inline-block!important;font:700 15px/1.2 var(--nz-f)!important;font-style:normal!important;background:var(--nz-red)!important;color:#fff!important;padding:7px 10px 5px!important;margin-top:10px!important;border-radius:0!important}
+.nz-hd{padding-bottom:0}
+.nz-hd .nz-wrap{padding-bottom:44px}
+
+/* sections, label line and big heading */
+.nz-sec{padding:96px 0;background:#fff;color:var(--nz-body);font-size:16px;line-height:1.65}
+.nz-kick{display:block;font:700 clamp(22px,2.3vw,27px)/1.2 var(--nz-f);color:var(--nz-red-ink)}
+.nz-h{font:700 clamp(30px,4.2vw,46px)/1.12 var(--nz-f);color:var(--nz-ink);margin:8px 0 0;text-transform:none;letter-spacing:0}
+.nz-lede{margin:18px 0 0;max-width:62ch;font:400 17px/1.65 var(--nz-f);color:var(--nz-body)}
+.nz-lede b,.nz-lede strong{color:var(--nz-ink)}
+.nz-sec-head{max-width:720px}
+.nz-sec-head.mid{margin-left:auto;margin-right:auto;text-align:center}
+.nz-sec-head.mid .nz-lede{margin-left:auto;margin-right:auto}
+
+/* offset photo with the dark stat box, and the text beside it */
+.nz-about{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1fr);gap:64px;align-items:center}
+.nz-abph{position:relative;padding:46px 0 0 86px}
+.nz-abph img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;transition:filter .5s}
+.nz-abph img:not([src]){background:var(--nz-soft)}
+.nz-stat{position:absolute;left:0;top:0;width:208px;background:var(--nz-navy);color:#fff;text-align:center;padding:30px 16px 26px;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s}
+.nz-stat svg{width:50px;height:50px;color:var(--nz-teal);margin:0 auto 12px;display:block;stroke-width:1.4}
+.nz-stat b{display:block;font:800 84px/.95 var(--nz-f)}
+.nz-stat span{display:block;margin-top:10px;font-size:16px;line-height:1.3}
+.nz-abph:hover .nz-stat{transform:translate(-6px,-6px);box-shadow:14px 14px 0 var(--nz-teal)}
+.nz-abph:hover img{filter:saturate(1.15)}
+.nz-facts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:30px 0 34px}
+.nz-facts>div{background:var(--nz-soft);border-top:5px solid var(--nz-teal);padding:18px 20px 16px;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
+.nz-facts>div.c1{border-top-color:var(--nz-purple)}.nz-facts>div.c2{border-top-color:var(--nz-red)}.nz-facts>div.c3{border-top-color:var(--nz-sky)}
+.nz-facts>div:hover{transform:translateY(-6px);background:#fff;box-shadow:0 22px 34px -22px rgba(11,26,39,.5)}
+.nz-facts h3{font:700 17px/1.25 var(--nz-f);color:var(--nz-teal-ink);margin:0;text-transform:none;letter-spacing:0}
+.nz-facts>div.c1 h3{color:var(--nz-purple)}.nz-facts>div.c2 h3{color:#B93636}.nz-facts>div.c3 h3{color:#006F99}
+.nz-facts p{margin:6px 0 0;font:600 17px/1.4 var(--nz-f);color:var(--nz-ink)}
+.nz-checked{margin:22px 0 0;font-size:14.5px;line-height:1.55;color:var(--nz-body)}
+.nz-checked b{color:var(--nz-ink)}
+
+/* the tickets notice: a dark panel */
+.nz-notice-slot{background:var(--nz-soft);padding:0}
+html.nz .nz-notice-slot .notice{background:transparent!important;border:0!important;padding:56px 0!important;margin:0!important}
+html.nz .nz-notice-slot .notice .wrap{max-width:1188px!important}
+html.nz .nz-notice-slot .cbx{display:grid!important;grid-template-columns:minmax(0,300px) minmax(0,1fr)!important;background:var(--nz-navy)!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:#fff!important;border-top:5px solid var(--nz-red)!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s}
+html.nz .nz-notice-slot .cbx:hover{transform:translateY(-4px);box-shadow:0 26px 36px -24px rgba(11,26,39,.8)}
+html.nz .nz-notice-slot .cbx header{background:var(--nz-deep)!important;padding:30px 28px!important;border:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+html.nz .nz-notice-slot .cbx header .cbx-op{font:700 17px/1.3 var(--nz-f)!important;color:#8FE0DC!important;background:none!important;padding:0!important;text-transform:none!important}
+html.nz .nz-notice-slot .cbx header h3{font:700 30px/1.15 var(--nz-f)!important;color:#fff!important;margin:6px 0 0!important;text-transform:none!important}
+html.nz .nz-notice-slot .cbx > p{padding:30px 32px!important;margin:0!important;font:400 16px/1.65 var(--nz-f)!important;color:#E6EDF1!important;background:none!important}
+html.nz .nz-notice-slot .cbx > p b{color:#fff!important}
+html.nz body .nz-notice-slot .notice.cbx-n .cbx p .inline-link{color:#8FE0DC!important;text-decoration:none!important;border-bottom:2px solid var(--nz-teal)!important;padding:0 0 2px!important}
+html.nz body .nz-notice-slot .notice.cbx-n .cbx p .inline-link:hover{color:#fff!important}
+html.nz .nz-notice-slot .cbx .inline-link{font:700 16px/1.3 var(--nz-f)!important;color:#8FE0DC!important;background:none!important;border:0!important;border-bottom:2px solid var(--nz-teal)!important;padding:0 0 2px!important;cursor:pointer}
+html.nz .nz-notice-slot .cbx .inline-link:hover{color:#fff!important}
+/* Jack, 20 Nov 2026: the tickets notice runs the full width of the page */
+.nz-notice-slot{background:var(--nz-navy);border-top:5px solid var(--nz-red)}
+html.nz .nz-notice-slot .notice{padding:0!important}
+html.nz .nz-notice-slot .cbx,html.nz .nz-notice-slot .cbx:hover{background:transparent!important;border-top:0!important;transform:none!important;box-shadow:none!important}
+html.nz .nz-notice-slot .cbx header{background:transparent!important;padding:44px 28px 44px 0!important;border-right:1px solid rgba(255,255,255,.22)!important}
+html.nz .nz-notice-slot .cbx > p{padding:44px 0 44px 36px!important;align-self:center}
+@media (max-width:820px){
+  html.nz .nz-notice-slot .cbx header{padding:34px 0 0!important;border-right:0!important}
+  html.nz .nz-notice-slot .cbx > p{padding:16px 0 36px!important}
+}
+
+/* the guide band: a dark photo band with the heading, two numbers and the open and close buttons */
+.nz-band{position:relative;background:var(--nz-navy);color:#fff;overflow:hidden;font-family:var(--nz-f)}
+.nz-band *{box-sizing:border-box}
+.nz-band-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;pointer-events:none}
+.nz-band-bg:not([src]){display:none}
+.nz-band::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(11,26,39,.95),rgba(19,41,60,.86) 55%,rgba(19,41,60,.7))}
+.nz-band-in{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:56px;align-items:center;padding-top:84px;padding-bottom:84px}
+.nz-band .nz-kick{color:#8FE0DC}
+.nz-band .nz-h{color:#fff!important}
+.nz-band .nz-lede{color:#E6EDF1;max-width:56ch}
+.nz-band .nz-btns{margin-top:28px}
+html.nz body .nz-band .grp{display:flex!important;flex-wrap:wrap!important;gap:14px!important;width:auto!important}
+html.nz body .nz-band .grp button{flex:0 0 auto!important;font:700 17px/1 var(--nz-f)!important;padding:17px 26px!important;border:0!important;border-radius:0!important;cursor:pointer;background:var(--nz-red)!important;color:#fff!important;transition:background .2s,color .2s,transform .3s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body .nz-band .grp button + button{background:rgba(255,255,255,.16)!important}
+html.nz body .nz-band .grp button:hover{background:#fff!important;color:var(--nz-navy)!important;transform:translateY(-3px)}
+html.nz body .nz-band .grp button:focus-visible{outline:3px solid var(--nz-amber)!important;outline-offset:2px}
+.nz-band-stats{display:grid;gap:18px;width:230px}
+.nz-band-stats>div{background:rgba(255,255,255,.12);border-top:5px solid var(--nz-teal);padding:20px 22px 18px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:transform .35s cubic-bezier(.22,.61,.36,1),background .35s}
+.nz-band-stats>div + div{border-top-color:var(--nz-amber)}
+.nz-band-stats>div:hover{transform:translateY(-6px);background:rgba(255,255,255,.2)}
+.nz-band-stats b{display:block;font:700 46px/1 var(--nz-f);color:#fff}
+.nz-band-stats span{display:block;margin-top:8px;font:500 16px/1.3 var(--nz-f);color:#E6EDF1}
+html.nz body .fold-bar{display:none!important}
+
+/* the strip of section links (the page's own tab bar): navy, sits under the band, sticks to the top */
+html.nz body nav.tabbar{background:var(--nz-deep)!important;border:0!important;border-top:1px solid rgba(255,255,255,.14)!important;box-shadow:none!important;transition:box-shadow .3s}
+html.nz body nav.tabbar.nz-stuck{box-shadow:0 14px 24px -14px rgba(11,26,39,.6)!important}
+html.nz body nav.tabbar .wrap{max-width:1188px!important}
+html.nz body nav.tabbar .tablist{gap:0!important}
+html.nz body nav.tabbar .tab{font:600 16.5px/1.2 var(--nz-f)!important;color:#fff!important;background:none!important;padding:21px 17px 19px!important;border:0!important;border-bottom:4px solid transparent!important;border-radius:0!important;text-transform:none!important;box-shadow:none!important;white-space:nowrap;transition:background .2s,color .2s,border-color .2s!important}
+html.nz body nav.tabbar .tab:hover{color:#8FE0DC!important;background:rgba(255,255,255,.08)!important;border-bottom-color:var(--nz-teal)!important}
+html.nz body nav.tabbar .tab[aria-selected="true"],html.nz body nav.tabbar .tab.active{color:var(--nz-navy)!important;background:var(--nz-teal)!important;border-bottom-color:var(--nz-teal)!important}
+html.nz body nav.tabbar .tab::before,html.nz body nav.tabbar .tab::after{display:none!important}
+html.nz body nav.tabbar .cg-jet{display:none!important}
+html.nz body nav.tabbar .cg-read{background:var(--nz-amber)!important}
+html.nz body .folds{padding-top:44px!important}
+
+/* open all, close all */
+html.nz body .fold-bar{background:#fff!important}
+html.nz body .fold-bar .wrap{max-width:1188px!important;justify-content:center!important;padding-top:26px!important;padding-bottom:10px!important}
+html.nz body .fold-bar button,html.nz body .fold-end button{font:700 15.5px/1.2 var(--nz-f)!important;background:var(--nz-soft)!important;color:var(--nz-ink)!important;border:0!important;border-radius:0!important;padding:12px 18px!important;transition:background .2s,color .2s!important}
+html.nz body .fold-bar button:hover,html.nz body .fold-end button:hover{background:var(--nz-navy)!important;color:#fff!important}
+
+/* the collapsible sections: a box with a coloured top edge, dark when open */
+html.nz body .folds{background:#fff;padding:16px 0 80px}
+html.nz body .folds > section.fold{margin:0 0 14px!important}
+html.nz body .folds > section.fold + section.fold:before{display:none!important}
+html.nz body .fold-btn,html.nz body .fold.open .fold-btn{background:transparent!important;box-shadow:none!important;color:var(--nz-ink)!important;padding:0 24px!important;display:block!important;width:100%!important}
+html.nz body .fold-btn .wrap{max-width:1140px!important;margin:0 auto!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:20px!important;align-items:center!important;
+  background:var(--nz-soft)!important;border-top:5px solid var(--sl,var(--fc,var(--nz-teal)))!important;padding:22px 26px 20px!important;transform:none!important;transition:background .3s,box-shadow .35s,transform .35s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body .fold-btn:hover .wrap{background:#fff!important;box-shadow:0 22px 34px -22px rgba(11,26,39,.5)!important;transform:translateY(-4px)!important}
+html.nz body .fold.open .fold-btn .wrap{background:var(--nz-navy)!important;box-shadow:none!important;transform:none!important}
+html.nz body .fold-btn .st-stop,html.nz body .fold-btn .fold-ic,html.nz body .fold-btn .fold-n{display:none!important}
+html.nz body .fold .fold-btn .fold-t{display:block!important;font:700 clamp(21px,2.4vw,27px)/1.2 var(--nz-f)!important;color:var(--nz-ink)!important;text-transform:capitalize!important;letter-spacing:0!important}
+html.nz body .fold .fold-btn .fold-d{display:block!important;font:400 15.5px/1.5 var(--nz-f)!important;color:var(--nz-body)!important;margin-top:4px!important;opacity:1!important}
+html.nz body .fold.open .fold-btn .fold-t{color:#fff!important}
+html.nz body .fold.open .fold-btn .fold-d{color:#D5DEE4!important}
+html.nz body .fold-btn .fold-x i{width:46px!important;height:46px!important;flex:0 0 46px!important;border-radius:0!important;background:var(--nz-navy)!important;border:0!important;transition:background .3s,transform .35s!important}
+html.nz body .fold-btn .fold-x i::before,html.nz body .fold-btn .fold-x i::after{background:#fff!important}
+html.nz body .fold-btn:hover .fold-x i{background:var(--nz-teal)!important;transform:rotate(90deg)!important}
+html.nz body .fold.open .fold-btn .fold-x i{background:var(--nz-teal)!important;transform:none!important}
+html.nz body .fold.open .fold-btn .fold-x i::before,html.nz body .fold.open .fold-btn .fold-x i::after{background:var(--nz-navy)!important}
+html.nz body .fold-btn:focus-visible{outline:0!important}
+html.nz body .fold-btn:focus-visible .wrap{outline:3px solid var(--nz-amber)!important;outline-offset:2px}
+/* Jack, 20 Nov 2026: the section bars run the full width of the page, in navy */
+html.nz body .fold-btn,html.nz body .fold.open .fold-btn{background:var(--nz-navy)!important;padding:0!important;border-top:5px solid var(--sl,var(--fc,var(--nz-teal)))!important;transition:background .3s!important}
+html.nz body .fold-btn:hover{background:var(--nz-navy2)!important}
+html.nz body .fold.open .fold-btn{background:var(--nz-deep)!important}
+html.nz body .fold-btn .wrap,html.nz body .fold-btn:hover .wrap,html.nz body .fold.open .fold-btn .wrap{max-width:1188px!important;background:transparent!important;border-top:0!important;box-shadow:none!important;padding:22px 24px 21px!important;transform:none!important}
+html.nz body .fold-btn:hover .wrap{transform:translateX(6px)!important}
+html.nz body .fold .fold-btn .fold-t{color:#fff!important}
+html.nz body .fold .fold-btn .fold-d{color:#D5DEE4!important}
+html.nz body .fold-btn .fold-x i{background:var(--nz-teal)!important}
+html.nz body .fold-btn .fold-x i::before,html.nz body .fold-btn .fold-x i::after{background:var(--nz-navy)!important}
+html.nz body .fold-btn:hover .fold-x i{background:#fff!important}
+html.nz body .folds > section.fold{margin:0 0 10px!important}
+html.nz body .fold-btn:focus-visible{outline:3px solid var(--nz-amber)!important;outline-offset:-3px!important}
+
+/* ---- inside the sections: clean white panels, a label line above a big heading, no black bars ---- */
+html.nz body main:not(#nz0):not(#nz1) section.panel:not(#travel){background:#fff!important;background-image:none!important}
+html.nz body main:not(#nz0):not(#nz1) .fold.open .fold-in{background:#fff!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head{display:block!important;max-width:780px!important;margin:0 0 40px!important;padding:0!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head > div{border:0!important;padding:0!important;margin:0!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head h2{font:700 clamp(30px,4.2vw,46px)/1.12 var(--nz-f)!important;color:var(--nz-ink)!important;background:none!important;padding:0!important;margin:8px 0 0!important;min-height:0!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head h2::before,html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head > div::before{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head > p{margin:18px 0 0!important;padding:0!important;max-width:62ch!important;font:400 17px/1.65 var(--nz-f)!important;color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) :is(.cal-h,.sub-h,.fl-h,.hp-h,.kc-h,.xf-h,.sx-gtk-h,.stay-group>h3,.sec-head h3,.tl-head h3,.fl-text>h3,.ww-head h3,.pmap-head h3,.band>h3,.row>h3){font:700 clamp(25px,3vw,34px)/1.15 var(--nz-f)!important;color:var(--nz-ink)!important;background:none!important;padding:0!important;min-height:0!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) :is(.cal-h,.sub-h,.fl-h,.hp-h,.kc-h,.xf-h,.sx-gtk-h,.stay-group>h3,.sec-head h3,.tl-head h3,.fl-text>h3,.ww-head h3,.pmap-head h3,.band>h3,.row>h3)::before{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) :is(.cal-h,.sub-h,.fl-h,.hp-h,.kc-h,.xf-h,.stay-group>h3,.sec-head h3,.tl-head h3,.band>h3)::after{content:"";display:block;width:56px;height:4px;background:var(--nz-teal);margin:12px 0 0;position:static}
+html.nz body main:not(#nz0):not(#nz1) #overview .band{box-shadow:none!important;background:var(--nz-soft)!important;border-top:5px solid var(--nz-purple)!important;padding:26px 28px 24px!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .band > div{padding:14px 0 0!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .ov-side .kicker{background:var(--nz-navy)!important;padding:18px 22px 15px!important;min-height:0!important;font:700 22px/1.2 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .ov-side .kicker::before{display:none!important}
+
+html.nz body main:not(#nz0):not(#nz1) .panel:not(#travel) .panel-head h2 *{color:inherit!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .jump.boxes::before{background:none!important;border:0!important;padding:0 0 6px!important;color:var(--nz-ink)!important;font:700 clamp(25px,3vw,34px)/1.15 var(--nz-f)!important;display:block!important}
+html.nz body main:not(#nz0):not(#nz1) #overview .jump.boxes{margin-top:44px!important}
+
+html.nz body main:not(#nz0):not(#nz1) #overview .sec-head h3 *,html.nz body main:not(#nz0):not(#nz1) #overview .band>h3 *{color:inherit!important}
+
+/* headings in title case everywhere, labels as typed */
+html.nz body :is(main,section.useful,#xl-band):not(#nz0):not(#nz1) :is(h2,h3,h4){text-transform:capitalize!important;letter-spacing:0!important}
+html.nz body :is(main,section.useful,#xl-band):not(#nz0):not(#nz1) :is(h2,h3,h4) *{text-transform:inherit!important}
+
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) .fold-h .fold-d{text-transform:none!important}
+
+/* ---- Getting there, tidied (Jack, 20 Nov 2026: "clean this up, it looks cluttered").
+   Same parts and the same transport look for the topic explorer, with a white background, more room
+   between the blocks, the guide heading first and the rail banner moved below it. ---- */
+html.nz body main:not(#nz0):not(#nz1) #travel{background:#fff!important;padding-bottom:40px!important}
+html.nz body main:not(#nz0):not(#nz1) #travel > .tp-bar{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #travel > .wrap:first-of-type,html.nz body main:not(#nz0):not(#nz1) #travel > .tp-bar + .wrap{display:flex!important;flex-direction:column!important;padding-top:56px!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .rail-banner{order:2!important;margin:44px 0 0!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-hero{order:1!important;margin:0!important;box-shadow:none!important;background:none!important;gap:48px!important;align-items:start!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-hero > div:first-child{background:none!important;border:0!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-hero h2{font:700 clamp(30px,4.2vw,46px)/1.12 var(--nz-f)!important;color:var(--nz-ink)!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-hero h2 small{display:block!important;font:700 clamp(22px,2.3vw,27px)/1.2 var(--nz-f)!important;color:var(--nz-red-ink)!important;margin:0 0 8px!important;text-transform:none!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-hero .lead{margin:18px 0 0!important;font:400 17px/1.65 var(--nz-f)!important;color:var(--nz-body)!important;max-width:62ch!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts{box-shadow:none!important;background:var(--nz-soft)!important;border-top:5px solid var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts .xd-kp-h{background:none!important;color:var(--nz-ink)!important;padding:20px 22px 6px!important;min-height:0!important;height:auto!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts .xd-kp-h span{color:var(--nz-ink)!important;font:700 22px/1.2 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts dl > div{background:none!important;border:0!important;border-top:1px solid var(--nz-line)!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts dl > div:first-child{border-top:0!important}
+html.nz body main:not(#nz0):not(#nz1) #travel > .notice{margin:48px 0 0!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1) #travel > .notice .wrap{border:0!important;border-top:5px solid var(--nz-sky)!important;background:var(--nz-soft)!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1) #travel > .notice .tag{background:none!important;color:#006F99!important;font:700 19px/1.2 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel > nav.tp-jump{margin:40px 0 0!important;background:none!important;position:static!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1) #travel > nav.tp-jump .wrap{background:none!important;gap:14px!important;padding:0 24px!important}
+html.nz body main:not(#nz0):not(#nz1) #travel > nav.tp-jump button{background:var(--nz-soft)!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1) #travel > nav.tp-jump button:hover{background:var(--nz-navy)!important;color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1) #travel section.arrive{padding-top:80px!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .arrive-head h2,html.nz body main:not(#nz0):not(#nz1) #travel .xd-h2,html.nz body main:not(#nz0):not(#nz1) #travel #explore h2{color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .arrive-head h2{font:700 clamp(25px,3vw,34px)/1.15 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .arrive-head h2::after{content:"";display:block;width:56px;height:4px;background:var(--nz-teal);margin:12px 0 0}
+html.nz body main:not(#nz0):not(#nz1) #travel .arrive-head p{margin-top:14px!important;font:400 17px/1.65 var(--nz-f)!important;color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .arrive-grid{margin-top:28px!important;gap:18px!important}
+html.nz body main:not(#nz0):not(#nz1) #travel section.arrive .wrap > p{margin-top:22px!important;color:var(--nz-body)!important;max-width:80ch!important}
+html.nz body main:not(#nz0):not(#nz1) #travel #explore{margin-top:72px!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .lwhb{margin-top:64px!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .acc{margin-top:64px!important}
+
+/* flightline good manners: boxes with a coloured top edge (Jack, 20 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1) .fl-cards{gap:18px!important;margin-top:26px!important}
+html.nz body main:not(#nz0):not(#nz1) .fl-cards > div{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;padding:20px 20px 18px!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
+html.nz body main:not(#nz0):not(#nz1) .fl-cards > div:nth-child(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) .fl-cards > div:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) .fl-cards > div:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) .fl-cards > div:hover{transform:translateY(-6px);background:#fff!important;box-shadow:0 22px 34px -22px rgba(11,26,39,.5)}
+html.nz body main:not(#nz0):not(#nz1) .fl-cards > div b{display:block;font:700 19px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) .fl-cards > div p{margin-top:8px!important;font:400 16px/1.55 var(--nz-f)!important;color:var(--nz-body)!important}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1) .fl-cards > div{transition:none!important;transform:none!important}}
+
+/* train topic: the "Train route details" box as on the Cosford page (Jack, 20 Nov 2026), in place of the red link bar that opened the same page */
+html.nz body main:not(#nz0):not(#nz1) #travel #explore .xd-content.trl .tr-box{display:block!important}
+html.nz body main:not(#nz0):not(#nz1) #travel #explore .xd-content.trl .trl-go{display:none!important}
+
+/* the 2027 calendar, redesigned (Jack, 22 Nov 2026): white cards with a coloured top edge, a navy heading
+   with the date above the show name, clean rows for the times, and a red and a navy button */
+html.nz body main:not(#nz0):not(#nz1) #calGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:24px!important;margin-top:26px!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card{background:#fff!important;color:var(--nz-body)!important;border:1px solid var(--nz-line)!important;border-top:5px solid var(--nz-teal)!important;box-shadow:0 20px 32px -26px rgba(11,26,39,.5)!important;display:flex!important;flex-direction:column!important;transition:transform .4s cubic-bezier(.22,.61,.36,1),box-shadow .4s!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card:nth-child(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card:hover{transform:translateY(-8px)!important;box-shadow:0 30px 40px -24px rgba(11,26,39,.55)!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card header{background:var(--nz-navy)!important;padding:20px 22px 18px!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card header small{display:block!important;font:700 16px/1.3 var(--nz-f)!important;color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card header h4{font:700 24px/1.2 var(--nz-f)!important;color:#fff!important;margin:5px 0 0!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card dl{display:block!important;padding:8px 22px 0!important;margin:0!important;gap:0!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card dl > div{display:grid!important;grid-template-columns:82px minmax(0,1fr)!important;gap:12px!important;background:none!important;padding:12px 0 11px!important;border-bottom:1px solid var(--nz-line)!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card dt{font:700 16px/1.4 var(--nz-f)!important;color:var(--nz-teal-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card dd{font:600 16.5px/1.4 var(--nz-f)!important;color:var(--nz-ink)!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card .cal-extra{font:400 16px/1.55 var(--nz-f)!important;color:var(--nz-body)!important;padding:14px 22px 0!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card .cal-go{display:flex!important;flex-wrap:wrap!important;gap:10px!important;padding:18px 22px 22px!important;margin-top:auto!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card .cal-go .btn{font:700 16px/1 var(--nz-f)!important;padding:14px 18px!important;border:0!important;border-radius:0!important;background:var(--nz-red)!important;color:#fff!important;text-decoration:none!important;cursor:pointer;transition:background .2s,transform .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card .cal-go .btn.ghost{background:var(--nz-navy)!important}
+html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card .cal-go .btn:hover{background:var(--nz-teal)!important;color:var(--nz-navy)!important;transform:translateY(-2px)}
+@media (max-width:1000px){html.nz body main:not(#nz0):not(#nz1) #calGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width:640px){html.nz body main:not(#nz0):not(#nz1) #calGrid{grid-template-columns:1fr!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card,html.nz body main:not(#nz0):not(#nz1) #calGrid .cal-card .cal-go .btn{transition:none!important;transform:none!important}}
+
+/* Quick checker: a plane photo across the top (Jack, 22 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1) #matchcheck{background:#fff!important}
+.nz-qc-ph{position:relative;max-width:1188px;margin:44px auto 8px;padding:0 24px;box-sizing:border-box}
+.nz-qc-ph img{display:block;width:100%;height:340px;object-fit:cover;object-position:50% 45%;pointer-events:none;user-select:none}
+.nz-qc-ph figcaption{position:absolute;left:24px;bottom:0;background:var(--nz-navy);color:#fff;padding:20px 26px 18px;max-width:min(520px,calc(100% - 48px));border-top:5px solid var(--nz-red)}
+.nz-qc-ph figcaption .nz-kick{color:#8FE0DC;font-size:19px}
+.nz-qc-ph figcaption b{display:block;font:700 26px/1.2 var(--nz-f);margin-top:4px}
+@media (max-width:640px){.nz-qc-ph{margin-top:26px;padding:0 18px}.nz-qc-ph img{height:230px}.nz-qc-ph figcaption{position:static;max-width:none}.nz-qc-ph figcaption b{font-size:22px}}
+
+/* Getting there, Key places: a navy panel with a bigger heading (Jack, 22 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts{background:var(--nz-navy)!important;border-top:5px solid var(--nz-red)!important;box-shadow:0 26px 40px -28px rgba(11,26,39,.7)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts .xd-kp-h{background:var(--nz-deep)!important;padding:20px 24px 18px!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts .xd-kp-h span{color:#fff!important;font:700 30px/1.15 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts dl > div{border-top:1px solid rgba(255,255,255,.14)!important;padding:15px 24px!important;transition:background .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts dl > div:first-child{border-top:0!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts dl > div:hover{background:var(--nz-navy2)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts dt{color:#8FE0DC!important;font:700 16px/1.3 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts dd{color:#fff!important;font:700 20px/1.3 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts .xd-ri{transition:transform .35s!important}
+html.nz body main:not(#nz0):not(#nz1) #travel .gt-facts dl > div:hover .xd-ri{transform:scale(1.12) rotate(-6deg)}
+
+/* Jack, 22 Nov 2026: the Back to the sections and Close this section buttons are red */
+html.nz body main:not(#nz0):not(#nz1) .fold-end button{background:var(--nz-red)!important;color:#fff!important;font:700 16.5px/1.2 var(--nz-f)!important;padding:14px 20px!important}
+html.nz body main:not(#nz0):not(#nz1) .fold-end button:hover{background:var(--nz-navy)!important;color:#fff!important}
+
+/* Aircraft line-up (Jack, 22 Nov 2026): same parts and behaviour, with more of the new design in it:
+   a photo band for the heading, a glass numbers panel, the shows as boxes with a coloured top edge,
+   the key and the empty note as boxes, and a red button */
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-band{background:var(--nz-navy)!important;position:relative!important;overflow:hidden!important}
+.nz-lu-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 35%;pointer-events:none;user-select:none}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-band::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(11,26,39,.95),rgba(19,41,60,.86) 52%,rgba(19,41,60,.62))}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-band-in{position:relative!important;z-index:2!important;max-width:1188px!important;padding:72px 24px 72px!important;align-items:center!important;gap:56px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-band-foot{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-crumb,html.nz body main:not(#nz0):not(#nz1) #lineup .lu-crumb b{font:700 clamp(20px,2.1vw,25px)/1.2 var(--nz-f)!important;color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-h{font:700 clamp(34px,4.6vw,54px)/1.08 var(--nz-f)!important;color:#fff!important;margin:8px 0 0!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-h em{font-style:normal!important;color:var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-lede{font:400 18px/1.6 var(--nz-f)!important;color:#E6EDF1!important;margin-top:16px!important;max-width:52ch!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel{background:rgba(255,255,255,.13)!important;color:#fff!important;border-top:5px solid var(--nz-teal)!important;box-shadow:none!important;transform:none!important;margin:0!important;padding:24px 24px 20px!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-self:center!important;transition:transform .4s cubic-bezier(.22,.61,.36,1),background .35s}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel:hover{transform:translateY(-6px)!important;background:rgba(255,255,255,.2)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel .lu-k{font:700 17px/1.2 var(--nz-f)!important;color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel .lu-big{font:800 76px/1 var(--nz-f)!important;color:#fff!important;margin:6px 0 12px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel .lu-split{border-color:rgba(255,255,255,.22)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel .lu-split > div{border-color:rgba(255,255,255,.22)!important;color:#E6EDF1!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel .lu-split b{color:#fff!important;font:700 26px/1.1 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel .lu-split span,html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel .lu-split small{color:#E6EDF1!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-wrap{max-width:1188px!important;padding-top:56px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-flabel{font:700 clamp(22px,2.3vw,27px)/1.2 var(--nz-f)!important;color:var(--nz-red-ink)!important;margin-bottom:14px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows{gap:14px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;padding:16px 16px 14px!important;gap:4px!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button:nth-child(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button:hover{transform:translateY(-6px)!important;background:#fff!important;box-shadow:0 22px 34px -22px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button b{font:700 17.5px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button span{font:500 15.5px/1.3 var(--nz-f)!important;color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button i{font:700 15px/1.3 var(--nz-f)!important;color:var(--nz-teal-ink)!important;margin-top:4px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button[aria-pressed="true"]{background:var(--nz-navy)!important;border-top-color:var(--nz-red)!important;box-shadow:0 22px 34px -22px rgba(11,26,39,.7)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button[aria-pressed="true"] b{color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button[aria-pressed="true"] span{color:#E6EDF1!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button[aria-pressed="true"] i{color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-meta{margin-top:34px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-status{font:500 17px/1.5 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-live{background:var(--nz-purple)!important;color:#fff!important;font:700 15.5px/1 var(--nz-f)!important;padding:8px 11px 7px!important;border-radius:0!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-key{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-sky)!important;margin-top:18px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-key h3{background:none!important;border:0!important;font:700 20px/1.2 var(--nz-f)!important;color:var(--nz-ink)!important;padding:18px 22px 4px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-key ul{padding:10px 22px 18px!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-empty{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-purple)!important;padding:28px 30px 26px!important;margin-top:28px!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-empty:hover{transform:translateY(-4px);background:#fff!important;box-shadow:0 22px 34px -22px rgba(11,26,39,.5)}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-empty h3{font:700 clamp(25px,3vw,32px)/1.15 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-empty p{font:400 17px/1.65 var(--nz-f)!important;color:var(--nz-body)!important;margin-top:10px!important;max-width:64ch!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-foot{border-top:0!important;margin-top:28px!important;padding-top:0!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-btn{background:var(--nz-red)!important;color:#fff!important;font:700 17px/1 var(--nz-f)!important;padding:17px 26px!important;border:0!important;border-radius:0!important;text-decoration:none!important;transition:background .2s,transform .3s,box-shadow .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-btn:hover{background:var(--nz-navy)!important;transform:translateY(-3px);box-shadow:0 12px 22px -12px rgba(11,26,39,.55)}
+@media (max-width:900px){html.nz body main:not(#nz0):not(#nz1) #lineup .lu-band-in{grid-template-columns:1fr!important;padding:48px 18px!important;gap:28px!important}html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel .lu-big{font-size:60px!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1) #lineup .lu-panel,html.nz body main:not(#nz0):not(#nz1) #lineup .lu-shows button,html.nz body main:not(#nz0):not(#nz1) #lineup .lu-empty,html.nz body main:not(#nz0):not(#nz1) #lineup .lu-btn{transition:none!important;transform:none!important}}
+
+html.nz body main:not(#nz0):not(#nz1) #lineup .lu-meta > div{width:100%!important;max-width:none!important;flex:1 1 100%!important}
+
+/* Pick your show chooser, clean (Jack, 22 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick{gap:16px 34px!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick > .wk-q{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;padding:18px 20px 20px!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick > .wk-q:nth-of-type(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick > .wk-q:nth-of-type(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick > .wk-q:nth-of-type(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .pp-l{font:700 20px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important;margin:0 0 12px!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .pp-opts{gap:10px!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .xd-tt-tabs button[type]{background:#fff!important;color:var(--nz-ink)!important;border:1px solid #C6D0D7!important;border-radius:0!important;margin:0!important;padding:13px 14px!important;min-height:50px!important;font:600 16.5px/1.25 var(--nz-f)!important;transform:none!important;box-shadow:none!important;transition:background .25s,color .25s,border-color .25s,transform .3s!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .xd-tt-tabs button[type]:hover{border-color:var(--nz-navy)!important;transform:translateY(-2px)!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .xd-tt-tabs button[type]::before{width:18px!important;height:18px!important;border:2px solid #8FA1AF!important;background:#fff!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .xd-tt-tabs button[type].on{background:var(--nz-navy)!important;color:#fff!important;border-color:var(--nz-navy)!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .xd-tt-tabs button[type].on::before{background:var(--nz-teal)!important;border-color:#fff!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .xd-tt-tabs button[type].on::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .wk-day{border:1px solid var(--nz-line)!important;border-top:5px solid var(--nz-red)!important;box-shadow:0 22px 34px -26px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .wk-day h4{padding:22px 24px 20px!important;font:700 28px/1.15 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .wk-day h4::before{font:700 17px/1.3 var(--nz-f)!important;color:#8FE0DC!important;margin-bottom:6px!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .wk-day h4::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .wk-day ol{padding:16px 18px 10px!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .wk-day li{background:var(--nz-soft)!important;margin:0 0 10px!important;padding:14px 16px!important;font:400 16.5px/1.6 var(--nz-f)!important;color:var(--nz-body)!important;border-left:0!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .wk-day li > span:first-child{font:700 17px/1.3 var(--nz-f)!important;color:var(--nz-teal-ink)!important;margin-bottom:4px!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .wk-day li .inlink{background:var(--nz-red)!important;color:#fff!important;border:0!important;border-radius:0!important;font:700 16px/1 var(--nz-f)!important;padding:13px 16px!important;margin-top:10px!important}
+html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .wk-day li .inlink:hover{background:var(--nz-navy)!important}
+
+/* Plan your day planner, clean (Jack, 22 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1) #planner{gap:34px!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-q{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;padding:18px 20px 18px!important;margin:0 0 14px!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-q:nth-child(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-q:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-q:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-q legend{font:700 20px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important;margin-bottom:12px!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-chips{gap:8px!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-chips button{background:#fff!important;color:var(--nz-ink)!important;border:1px solid #C6D0D7!important;border-radius:0!important;padding:11px 14px!important;font:600 16px/1.2 var(--nz-f)!important;box-shadow:none!important;transition:background .25s,color .25s,border-color .25s,transform .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-chips button:hover{border-color:var(--nz-navy)!important;transform:translateY(-2px)}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-chips button[aria-checked="true"]{background:var(--nz-navy)!important;color:#fff!important;border-color:var(--nz-navy)!important;box-shadow:inset 0 -4px 0 var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-toggle{font:500 16.5px/1.4 var(--nz-f)!important;color:var(--nz-ink)!important;margin-top:12px!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-result{background:var(--nz-navy)!important;border:0!important;border-top:5px solid var(--nz-red)!important;padding:30px 30px 26px!important;box-shadow:0 26px 40px -28px rgba(11,26,39,.7)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-result h3{font:700 clamp(27px,3vw,36px)/1.15 var(--nz-f)!important;color:#fff!important;background:none!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-result h3::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-result h3 em{font-style:normal!important;color:var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-sum span{background:rgba(255,255,255,.14)!important;color:#fff!important;border:0!important;border-radius:0!important;font:600 15.5px/1 var(--nz-f)!important;padding:9px 11px 8px!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-steps li{background:rgba(255,255,255,.07)!important;border:0!important;margin-bottom:8px!important;transition:background .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-steps li:hover{background:rgba(255,255,255,.13)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-steps time{font:800 21px/1 var(--nz-f)!important;color:#8FE0DC!important;background:rgba(255,255,255,.06)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-steps li.key{box-shadow:inset 5px 0 0 var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-steps li.key time{color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-cols > div{background:rgba(255,255,255,.07)!important;border:0!important;border-top:4px solid var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-cols > div + div{border-top-color:var(--nz-amber)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-cols h4{font:700 19px/1.2 var(--nz-f)!important;color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-actions .btn{background:var(--nz-red)!important;color:#fff!important;border:0!important;border-radius:0!important;font:700 16.5px/1 var(--nz-f)!important;padding:15px 20px!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-actions .btn.ghost{background:rgba(255,255,255,.16)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-actions .btn:hover{background:#fff!important;color:var(--nz-navy)!important}
+html.nz body main:not(#nz0):not(#nz1) #planner .pl-foot{color:#D5DEE4!important;font:400 15px/1.5 var(--nz-f)!important}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1) :is(#days,#weekend) .wk-tool.sw-pick .xd-tt-tabs button[type],html.nz body main:not(#nz0):not(#nz1) #planner .pl-chips button{transition:none!important;transform:none!important}}
+
+/* section headings never stay hidden by a word by word reveal */
+html.nz body main:not(#nz0):not(#nz1) .panel-head h2 .cg-w,html.nz body main:not(#nz0):not(#nz1) .panel-head h2 .cg-w > span,html.nz body main:not(#nz0):not(#nz1) .panel-head h2 span{opacity:1!important;transform:none!important;clip-path:none!important;visibility:visible!important}
+
+/* Where to stay (Jack, 22 Nov 2026): a search panel with a red button, and each place as a card with a coloured top edge */
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-search{background:var(--nz-navy)!important;border:0!important;border-top:5px solid var(--nz-red)!important;padding:30px 32px!important;gap:24px!important;align-items:center!important;box-shadow:0 26px 40px -30px rgba(11,26,39,.7)!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-search h3{font:700 28px/1.15 var(--nz-f)!important;color:#fff!important;background:none!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-search h3::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-search p{font:400 17px/1.55 var(--nz-f)!important;color:#E6EDF1!important;margin-top:6px!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-links{gap:12px!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-links .btn{background:var(--nz-red)!important;color:#fff!important;border:0!important;border-radius:0!important;font:700 17px/1 var(--nz-f)!important;padding:17px 24px!important;transition:background .2s,color .2s,transform .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-links .btn.ghost-n{background:rgba(255,255,255,.16)!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-links .btn:hover{background:#fff!important;color:var(--nz-navy)!important;transform:translateY(-3px)}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-group{margin-top:56px!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-list{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important;margin-top:24px!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-list li{display:flex!important;flex-direction:column!important;align-items:flex-start!important;background:#fff!important;border:1px solid var(--nz-line)!important;border-top:5px solid var(--nz-teal)!important;padding:20px 20px 18px!important;margin:0!important;box-shadow:0 18px 28px -26px rgba(11,26,39,.5)!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-group:nth-child(5n+2) .stay-list li{border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-group:nth-child(5n+3) .stay-list li{border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-group:nth-child(5n+4) .stay-list li{border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-group:nth-child(5n+5) .stay-list li{border-top-color:var(--nz-amber)!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-list li:hover{transform:translateY(-6px)!important;box-shadow:0 26px 36px -24px rgba(11,26,39,.55)!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-list li b{font:700 19.5px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-list li span{font:400 16px/1.5 var(--nz-f)!important;color:var(--nz-body)!important;margin-top:6px!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-list li a{margin-top:auto!important;align-self:stretch!important;background:var(--nz-soft)!important;color:var(--nz-ink)!important;font:700 15.5px/1.2 var(--nz-f)!important;padding:13px 14px!important;border:0!important;border-radius:0!important;text-decoration:none!important;overflow-wrap:anywhere!important;position:relative;top:0;transition:background .2s,color .2s!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-list li span + a{margin-top:16px!important}
+html.nz body main:not(#nz0):not(#nz1) #stay .stay-list li a:hover{background:var(--nz-navy)!important;color:#fff!important}
+@media (max-width:1000px){html.nz body main:not(#nz0):not(#nz1) #stay .stay-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width:640px){html.nz body main:not(#nz0):not(#nz1) #stay .stay-list{grid-template-columns:1fr!important}html.nz body main:not(#nz0):not(#nz1) #stay .stay-search{padding:24px 20px!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1) #stay .stay-list li,html.nz body main:not(#nz0):not(#nz1) #stay .stay-links .btn{transition:none!important;transform:none!important}}
+
+/* Where to watch (Jack, 22 Nov 2026): the closing photo is removed, the map tabs and the spot list get the clean look */
+html.nz body main:not(#nz0):not(#nz1) #watch > .wrap > figure{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-tabs .xd-tt-tabs{gap:12px!important;margin-bottom:18px!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-tabs .xd-tt-tabs button[type]{background:var(--nz-soft)!important;color:var(--nz-ink)!important;border:0!important;border-top:5px solid var(--c,var(--nz-teal))!important;border-radius:0!important;box-shadow:none!important;outline:0!important;transform:none!important;padding:14px 16px 13px!important;min-height:64px!important;font:700 17px/1.2 var(--nz-f)!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .3s,color .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-tabs .xd-tt-tabs button[type]:hover{transform:translateY(-4px)!important;background:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-tabs .xd-tt-tabs button[type] .xd-tt-ic{background:var(--c,var(--nz-teal))!important;color:#fff!important;border-radius:50%!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-tabs .xd-tt-tabs button[aria-selected="true"]{background:var(--nz-navy)!important;color:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.7)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-panel{padding:0!important;gap:24px!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-txt{background:#fff!important;border:1px solid var(--nz-line)!important;border-top:5px solid var(--c,var(--nz-teal))!important;box-shadow:0 20px 32px -26px rgba(11,26,39,.5)!important;padding:28px 28px 26px!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-txt h4{font:700 28px/1.15 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-txt h4::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-where{font:700 15.5px/1.3 var(--nz-f)!important;padding:7px 11px 6px!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-txt > p:not(.ww-where){font:400 17px/1.65 var(--nz-f)!important;color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-facts{border:0!important;margin-top:8px!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-facts li{background:none!important;border:0!important;border-bottom:1px solid var(--nz-line)!important;padding:12px 0 11px!important;font:600 16.5px/1.4 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-facts li b{font:700 16px/1.4 var(--nz-f)!important;color:var(--nz-teal-ink)!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-go{background:var(--nz-red)!important;color:#fff!important;border:0!important;box-shadow:none!important;font:700 17px/1 var(--nz-f)!important;margin-top:20px!important;transition:background .2s,transform .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-go *{background:none!important;color:#fff!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-go:hover{background:var(--nz-navy)!important;transform:translateY(-3px)}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-map{border:1px solid var(--nz-line)!important;box-shadow:0 20px 32px -26px rgba(11,26,39,.5)!important;outline:0!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-map iframe{border:0!important}
+
+/* the spot list: one card per spot, like the calendar cards */
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-cols{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-card{background:#fff!important;border:1px solid var(--nz-line)!important;border-top:5px solid var(--nz-teal)!important;box-shadow:0 18px 28px -26px rgba(11,26,39,.5)!important;margin:0 0 14px!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-card:nth-of-type(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-card:nth-of-type(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-card:nth-of-type(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-card:hover{transform:translateY(-4px)!important;box-shadow:0 26px 36px -24px rgba(11,26,39,.55)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-row{padding:20px 22px!important;gap:20px!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-code{background:var(--nz-navy)!important;border:0!important;color:#fff!important;font:800 21px/1 var(--nz-f)!important;padding:13px 0 12px!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-name{font:700 22px/1.2 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-tag{font:600 16.5px/1.35 var(--nz-f)!important;color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-gauge small{font:500 15px/1.3 var(--nz-f)!important;color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-ticks i{height:9px!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-pm{background:var(--nz-navy)!important;color:#fff!important;border-radius:0!important;width:40px!important;height:40px!important;transition:background .3s,transform .35s!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-pm *{color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-card:hover .dl-pm{background:var(--nz-teal)!important;transform:rotate(90deg)}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-body{background:var(--nz-soft)!important;border-top:1px solid var(--nz-line)!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-pin{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #spotCards > .dl-cmp{display:none!important}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-tabs .xd-tt-tabs button[type],html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-card,html.nz body main:not(#nz0):not(#nz1) #watch #spotCards .dl-pm,html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-go{transition:none!important;transform:none!important}}
+
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-map{align-self:stretch!important;margin:0!important;min-height:420px!important;height:auto!important}
+html.nz body main:not(#nz0):not(#nz1) #watch #wwMap .ww-map iframe{height:100%!important;min-height:420px!important;display:block!important}
+
+/* Photography (Jack, 22 Nov 2026): the sun path guide (#phSun) is left exactly as it is.
+   Everything else gets the clean look: stacked headings, boxes with coloured top edges, calendar style cards. */
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-sec{margin-top:84px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-sec > .sec-head{display:block!important;max-width:780px!important;margin:0 0 28px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-sec > .sec-head > p,html.nz body main:not(#nz0):not(#nz1) #photo .ph-sec > .sec-head .note{margin:16px 0 0!important;max-width:66ch!important;font:400 17px/1.65 var(--nz-f)!important;color:var(--nz-body)!important;text-align:left!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump{background:none!important;padding:0!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:12px!important;margin:34px 0 0!important;border:0!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump a{background:var(--nz-soft)!important;color:var(--nz-ink)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;border-radius:0!important;box-shadow:none!important;padding:15px 16px 14px!important;font:700 16.5px/1.25 var(--nz-f)!important;text-decoration:none!important;min-height:0!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump a:nth-child(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump a:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump a:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump a:hover{transform:translateY(-5px)!important;background:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump a::before,html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump a::after{display:none!important;content:none!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump{margin-bottom:44px!important}
+/* the sun at each show: calendar cards */
+html.nz body main:not(#nz0):not(#nz1) #photo #sunTable{gap:20px!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card{background:#fff!important;color:var(--nz-body)!important;border:1px solid var(--nz-line)!important;border-top:5px solid var(--nz-teal)!important;padding:0 0 10px!important;box-shadow:0 18px 28px -26px rgba(11,26,39,.5)!important;display:flex!important;flex-direction:column!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card:nth-child(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card:hover{transform:translateY(-6px)!important;box-shadow:0 26px 36px -24px rgba(11,26,39,.55)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card h4{order:2;background:var(--nz-navy)!important;color:#fff!important;font:700 20px/1.2 var(--nz-f)!important;margin:0!important;padding:4px 18px 16px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card small{order:1;display:block!important;background:var(--nz-navy)!important;color:#8FE0DC!important;font:700 15px/1.3 var(--nz-f)!important;margin:0!important;padding:16px 18px 0!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card ul{order:3;padding:6px 18px 0!important;margin:0!important;gap:0!important;display:block!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card li{background:none!important;border-bottom:1px solid var(--nz-line)!important;padding:11px 0 10px!important;color:var(--nz-ink)!important;font:600 16px/1.3 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card li:last-child{border-bottom:0!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card li span{color:var(--nz-body)!important;font:500 16px/1.3 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .sun-card li b{color:var(--nz-ink)!important;font:700 16px/1.3 var(--nz-f)!important}
+/* get creative */
+html.nz body main:not(#nz0):not(#nz1) #photo .creative .tips{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-purple)!important;box-shadow:none!important;padding:24px 26px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .creative .tips h4{font:700 22px/1.2 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .creative .tips li{font:400 17px/1.6 var(--nz-f)!important;color:var(--nz-body)!important}
+/* settings calculator and kit planner: the same question boxes as the planner */
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-q,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-q{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;border-left:0!important;padding:18px 20px!important;margin:0 0 14px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-q:nth-child(4n+2),html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-q:nth-child(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-q:nth-child(4n+3),html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-q:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-q:nth-child(4n+4),html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-q:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-q legend,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-q legend{font:700 20px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important;border:0!important;padding:0!important;margin-bottom:12px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-q legend::before,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-q legend::before{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips{gap:8px!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips button{background:#fff!important;color:var(--nz-ink)!important;border:1px solid #C6D0D7!important;border-radius:0!important;margin:0!important;padding:12px 14px!important;font:600 16px/1.2 var(--nz-f)!important;box-shadow:none!important;transform:none!important;transition:background .25s,color .25s,border-color .25s!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button::after,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips button::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button:hover,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips button:hover{border-color:var(--nz-navy)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button[aria-checked="true"],html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button[aria-selected="true"],html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button.on,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips button[aria-checked="true"],html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips button.on{background:var(--nz-navy)!important;color:#fff!important;border-color:var(--nz-navy)!important;box-shadow:inset 0 -4px 0 var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc-out{border:1px solid var(--nz-line)!important;border-top:5px solid var(--nz-red)!important;box-shadow:0 22px 34px -26px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc-out h4{font:700 26px/1.2 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .other-wx h5{font:700 20px/1.2 var(--nz-f)!important;color:var(--nz-ink)!important;margin-bottom:12px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid{gap:12px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid button{background:var(--nz-soft)!important;color:var(--nz-ink)!important;border:0!important;border-top:5px solid var(--nz-sky)!important;border-radius:0!important;padding:14px 14px 12px!important;transition:transform .3s,background .3s!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid button *{color:inherit!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid button:hover{transform:translateY(-4px);background:#fff!important;box-shadow:0 18px 28px -22px rgba(11,26,39,.5)}
+html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid button[aria-pressed="true"],html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid button.on{background:var(--nz-navy)!important;color:#fff!important;border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .kit-card{border-top:5px solid var(--nz-teal)!important;box-shadow:0 22px 34px -28px rgba(11,26,39,.7)!important;transition:transform .35s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .kit-card:nth-child(4n+2){border-top-color:var(--nz-amber)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .kit-card:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .kit-card:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .kit-card:hover{transform:translateY(-5px)}
+html.nz body main:not(#nz0):not(#nz1) #photo .kit-card .lbl{color:#8FE0DC!important;font:700 16px/1.2 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .kit-card h4{font:700 23px/1.2 var(--nz-f)!important}
+/* packing list and settings checklist */
+html.nz body main:not(#nz0):not(#nz1) #photo .ticks-bar{border-top:5px solid var(--nz-red)!important;padding:16px 20px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ticks-bar b{font:700 19px/1.2 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ticks-bar button{background:var(--nz-red)!important;color:#fff!important;border:0!important;border-radius:0!important;font:700 15.5px/1 var(--nz-f)!important;padding:11px 14px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ticks-bar button:hover{background:#fff!important;color:var(--nz-navy)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .ticks{gap:18px!important;margin-top:18px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .tgroup{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;padding:18px 16px 14px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .tgroup:nth-child(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .tgroup:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .tgroup:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .tgroup h4{font:700 20px/1.2 var(--nz-f)!important;color:var(--nz-ink)!important;padding:0 4px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .titem{border:1px solid var(--nz-line)!important;border-radius:0!important;transition:border-color .2s,transform .25s!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .titem:hover{border-color:var(--nz-navy)!important;transform:translateX(3px)}
+html.nz body main:not(#nz0):not(#nz1) #photo .titem b{font:700 16px/1.3 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .titem small{font:400 14.5px/1.4 var(--nz-f)!important;color:var(--nz-body)!important}
+/* print */
+html.nz body main:not(#nz0):not(#nz1) #photo .dl{gap:0!important;box-shadow:0 26px 40px -30px rgba(11,26,39,.7)!important;border-top:5px solid var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .dl .dl-text{background:var(--nz-deep)!important;color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .dl .dl-text h3{font:700 28px/1.15 var(--nz-f)!important;color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .dl .dl-text p{color:#E6EDF1!important;font:400 16.5px/1.6 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .dl .dl-opt h4{font:700 22px/1.2 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .dl .dl-opt .btn{background:var(--nz-red)!important;color:#fff!important;border:0!important;border-radius:0!important;font:700 17px/1 var(--nz-f)!important;padding:16px 26px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .dl .dl-opt .btn:hover{background:#fff!important;color:var(--nz-navy)!important}
+@media (max-width:1000px){html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump{grid-template-columns:repeat(3,minmax(0,1fr))!important}html.nz body main:not(#nz0):not(#nz1) #photo #sunTable{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width:560px){html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump{grid-template-columns:repeat(2,minmax(0,1fr))!important}html.nz body main:not(#nz0):not(#nz1) #photo #sunTable{grid-template-columns:1fr!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1) #photo .ph-jump a,html.nz body main:not(#nz0):not(#nz1) #photo .sun-card,html.nz body main:not(#nz0):not(#nz1) #photo .kit-card,html.nz body main:not(#nz0):not(#nz1) #photo .titem,html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid button{transition:none!important;transform:none!important}}
+
+/* Jack, 22 Nov 2026: no short accent lines under headings, anywhere. Do not add them again. */
+html.nz body main h1::after,html.nz body main h2::after,html.nz body main h3::after,html.nz body main h4::after,html.nz body main h5::after{display:none!important;content:none!important}
+/* Jack, 22 Nov 2026: Choose a topic stretched to the full width of the page */
+html.nz body main:not(#nz0):not(#nz1) #explore .xd{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;box-sizing:border-box!important}
+html.nz body main:not(#nz0):not(#nz1) #explore .xd > .xd-top{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important}
+html.nz body main:not(#nz0):not(#nz1) #explore .xd .xd-wrap{max-width:none!important;width:100%!important;padding-left:clamp(16px,3vw,40px)!important;padding-right:clamp(16px,3vw,40px)!important;box-sizing:border-box!important;margin-left:0!important;margin-right:0!important}
+
+html.nz body main:not(#nz0):not(#nz1) #explore > .wrap{max-width:none!important;width:100%!important;padding-left:0!important;padding-right:0!important;margin-left:0!important;margin-right:0!important}
+html.nz body main:not(#nz0):not(#nz1) #explore > .wrap > .explore-head{max-width:1200px!important;margin-left:auto!important;margin-right:auto!important;padding-left:clamp(16px,3vw,40px)!important;padding-right:clamp(16px,3vw,40px)!important;box-sizing:border-box!important}
+html.nz body main:not(#nz0):not(#nz1) #explore .xd .xd-wrap{max-width:1560px!important;margin-left:auto!important;margin-right:auto!important}
+/* Jack, 22 Nov 2026: calculator and kit planner buttons. No border, a slight curve, navy when picked. */
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button:not(#nz2),html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips button:not(#nz2){background:#E4EBF0!important;color:var(--nz-ink)!important;border:0!important;outline-offset:3px;border-radius:10px!important;padding:14px 18px!important;font:600 16.5px/1.2 var(--nz-f)!important;box-shadow:none!important;transition:background .45s cubic-bezier(.22,.61,.36,1),color .45s,transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button:not(#nz2):hover,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips button:not(#nz2):hover{background:#fff!important;transform:translateY(-3px)!important;box-shadow:0 0 0 2px var(--nz-navy),0 16px 24px -16px rgba(11,26,39,.55)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button:not(#nz2)[aria-checked="true"],html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button:not(#nz2)[aria-selected="true"],html.nz body main:not(#nz0):not(#nz1) #photo .calc .pl-chips button:not(#nz2).on,html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips button:not(#nz2)[aria-checked="true"],html.nz body main:not(#nz0):not(#nz1) #photo .kit .pl-chips button:not(#nz2).on{background:var(--nz-navy)!important;color:#fff!important;box-shadow:0 12px 20px -14px rgba(11,26,39,.8)!important;transform:none!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid button{border-radius:10px!important;border-top:0!important;background:#E4EBF0!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid button[aria-pressed="true"],html.nz body main:not(#nz0):not(#nz1) #photo .other-wx .grid button.on{background:var(--nz-navy)!important}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1) #photo .pl-chips button{transition:none!important;transform:none!important}}
+
+/* sun guide aerial view: clickable (Jack, 22 Nov 2026) */
+html.nz body svg.nz-sg-click{cursor:pointer}
+html.nz body svg.nz-sg-click #planDots circle{transition:r .3s ease,fill .3s ease}
+html.nz body svg.nz-sg-click #planDots circle.nz-hot{r:6px;fill:#D74949}
+@media (prefers-reduced-motion:reduce){html.nz body svg.nz-sg-click #planDots circle{transition:none}}
+
+/* In this section: clean photo tabs (Jack, 22 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a{position:relative!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;min-height:190px!important;padding:0!important;border:0!important;background:var(--nz-navy)!important;color:#fff!important;overflow:hidden!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s!important}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-ph{position:absolute;inset:0}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.22,.61,.36,1)}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,41,60,.05) 15%,rgba(19,41,60,.78) 62%,rgba(11,26,39,.96))}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-tx{position:relative;z-index:1;padding:18px 20px}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-tx b{display:block;font:700 21px/1.2 var(--nz-f);color:#fff}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-tx i{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font:700 15px/1.2 var(--nz-f);font-style:normal;color:#8FE0DC}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-tx svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .35s}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a:hover{transform:translateY(-6px)!important;box-shadow:0 26px 40px -24px rgba(11,26,39,.7)!important;background:var(--nz-navy)!important}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a:hover .nz-jt-ph img{transform:scale(1.08)}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a:hover .nz-jt-tx svg{transform:translateX(4px)}
+@media (max-width:760px){html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a{min-height:150px!important}html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-tx{padding:14px}html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-tx b{font-size:17px}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a,html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a .nz-jt-ph img,html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a svg{transition:none!important;transform:none!important}}
+
+/* Get creative photos: the whole photo shows, no cropping (Jack, 22 Nov 2026). Jack's photos are 16:9. */
+html.nz body main:not(#nz0):not(#nz1) #photo .creative{align-items:start!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .creative figure{height:auto!important;min-height:0!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .creative figure .photo-btn{display:block!important;position:relative!important;inset:auto!important;width:100%!important;height:auto!important;aspect-ratio:16/9!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .creative figure{display:block!important;overflow:visible!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .creative figure figcaption{position:static!important}
+html.nz body main:not(#nz0):not(#nz1) #photo .creative figure img{width:100%!important;height:100%!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important}
+html.nz body main:not(#nz0):not(#nz1) #photo nav.ph-jump.nz-jtabs a{text-align:left!important;align-items:stretch!important}
+
+/* Food and facilities (Jack, 22 Nov 2026): clean look for Food and drink, hover effects through the section,
+   and the Accessibility answers as clear boxes. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food{display:grid!important;grid-template-columns:minmax(0,5fr) minmax(0,7fr)!important;gap:0!important;background:#fff!important;border:1px solid var(--nz-line)!important;border-top:5px solid var(--nz-teal)!important;box-shadow:0 26px 40px -34px rgba(11,26,39,.6)!important;padding:0!important;overflow:hidden!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-main{margin:0!important;position:relative!important;overflow:hidden!important;min-height:100%!important;background:var(--nz-navy)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-main img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;transition:transform 1s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food:hover .food-main img{transform:scale(1.05)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-main figcaption{position:absolute!important;left:0;right:0;bottom:0;margin:0!important;padding:40px 22px 18px!important;background:linear-gradient(180deg,rgba(11,26,39,0),rgba(11,26,39,.92))!important;color:#fff!important;font:500 15px/1.5 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-text{background:#fff!important;color:var(--nz-body)!important;padding:40px 40px 36px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-text h3{color:var(--nz-ink)!important;font:700 clamp(28px,3vw,36px)/1.15 var(--nz-f)!important;margin:0 0 14px!important;text-transform:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-text > p{color:var(--nz-body)!important;font:400 17px/1.65 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-text > p b{color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;list-style:none!important;padding:0!important;margin:22px 0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list li{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;margin:0!important;padding:18px 18px 16px!important;color:var(--nz-body)!important;font:400 15.5px/1.55 var(--nz-f)!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s cubic-bezier(.22,.61,.36,1),background .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list li:nth-child(2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list li:nth-child(3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list li:nth-child(4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list li::before{display:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list li b{display:block!important;margin-bottom:6px!important;font:700 18px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list li b a{color:var(--nz-ink)!important;text-decoration:none!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list li b a:hover{color:var(--nz-teal-ink)!important;text-decoration:underline!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list li:hover{transform:translateY(-4px);background:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-text > p:last-child{background:var(--nz-soft)!important;border-left:5px solid var(--nz-red)!important;padding:16px 20px!important;margin:0!important}
+@media (max-width:900px){html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food{grid-template-columns:1fr!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-main{aspect-ratio:16/10;min-height:0!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-text{padding:26px 20px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food .food-list{grid-template-columns:1fr!important}}
+
+/* hover effects through the section */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .gtk2 .row,html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .gtk2 > div > div,html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .gtk2 details{transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .gtk2 details:hover,html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .gtk2 .row:hover{transform:translateX(4px);box-shadow:0 12px 22px -18px rgba(11,26,39,.55)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .expect figure{transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s cubic-bezier(.22,.61,.36,1)!important;overflow:hidden}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .expect figure img{transition:transform 1s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .expect figure:hover{transform:translateY(-6px)!important;box-shadow:0 24px 36px -24px rgba(11,26,39,.6)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .expect figure:hover img{transform:scale(1.06)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .fac.boxes > div{transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .fac.boxes > div .fimg{overflow:hidden}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .fac.boxes > div img{transition:transform 1s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .fac.boxes > div:hover{transform:translateY(-6px)!important;box-shadow:0 24px 36px -24px rgba(11,26,39,.6)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .fac.boxes > div:hover img{transform:scale(1.06)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .busbar .busfig{overflow:hidden}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .busbar .busfig img{transition:transform 1s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .busbar:hover .busfig img{transform:scale(1.05)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > summary{transition:background .35s,padding-left .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > summary:hover{background:var(--nz-navy2)!important;padding-left:30px!important}
+
+/* Accessibility answers: each one a clear box */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body{background:#fff!important;color:var(--nz-body)!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;padding:24px!important;border:1px solid var(--nz-line)!important;border-top:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body > p{margin:0!important;background:var(--nz-soft)!important;border-top:5px solid var(--nz-teal)!important;padding:20px 22px 18px!important;color:var(--nz-body)!important;font:400 16px/1.6 var(--nz-f)!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s cubic-bezier(.22,.61,.36,1),background .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body > p:nth-child(2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body > p:nth-child(3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body > p:nth-child(4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body > p:nth-child(5){border-top-color:var(--nz-amber)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body > p:last-child:nth-child(odd){grid-column:1/-1}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body > p b{display:block!important;font:700 19px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important;margin-bottom:6px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body > p:hover{transform:translateY(-4px);background:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)!important}
+@media (max-width:700px){html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body{grid-template-columns:1fr!important;padding:14px!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities *{transition:none!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities *:hover{transform:none!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .expect figure:hover img,html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .fac.boxes > div:hover img,html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .food:hover .food-main img,html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .busbar:hover .busfig img{transform:none!important}}
+
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details[open]{display:block!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details[open] > summary{background:var(--nz-navy)!important;color:#fff!important;display:flex!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details[open] > summary:hover{background:var(--nz-navy2)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #photo > .wrap > figure.pic.wide{height:auto!important;overflow:visible!important;transform:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #photo > .wrap > figure.pic.wide img{transform:none!important;translate:none!important;scale:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #photo > .wrap > figure.pic.wide figcaption{position:static!important;margin-top:10px!important;transform:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body{width:auto!important;max-width:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .acc details > .body > p:nth-child(5) b{display:inline!important;font-size:inherit!important}
+/* Photography: the top photo smaller (Jack, 22 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #photo > .wrap > figure.pic.wide{max-width:760px!important;margin-left:0!important;margin-right:auto!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #photo > .wrap > figure.pic.wide img{width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important}
+
+/* Settings calculator result (Jack, 22 Nov 2026): a clean camera viewfinder look. Navy panel, corner focus brackets,
+   the four settings as a camera readout with small icons. Same words and numbers as before. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut{position:relative!important;background:var(--nz-deep)!important;color:#fff!important;border:0!important;border-top:0!important;border-radius:6px!important;padding:34px 38px 30px!important;box-shadow:0 30px 50px -30px rgba(11,26,39,.85)!important;overflow:hidden!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut::after{content:""!important;position:absolute!important;width:34px!important;height:34px!important;border:3px solid var(--nz-teal)!important;pointer-events:none!important;display:block!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut::before{top:14px!important;left:14px!important;border-right:0!important;border-bottom:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut::after{bottom:14px!important;right:14px!important;border-left:0!important;border-top:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut h4{color:#fff!important;font:700 26px/1.2 var(--nz-f)!important;margin:0 0 6px!important;padding-left:8px!important;display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:wrap!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut h4::before{content:""!important;display:inline-block!important;width:10px;height:10px;border-radius:50%;background:var(--nz-red);box-shadow:0 0 0 4px rgba(215,73,73,.25);animation:nzRec 1.6s ease-in-out infinite}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut h4 em{color:#8FE0DC!important;font-style:normal!important}
+@keyframes nzRec{50%{opacity:.35}}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:0!important;margin:22px 0 22px!important;background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:4px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div{background:none!important;border:0!important;border-left:1px solid rgba(255,255,255,.12)!important;border-radius:0!important;padding:20px 22px 18px!important;color:#fff!important;box-shadow:none!important;transition:background .4s ease!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div:first-child{border-left:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div:hover{background:rgba(50,180,175,.12)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout span{display:flex!important;align-items:center!important;gap:8px!important;color:#8FE0DC!important;font:600 15px/1.2 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout span::before{content:"";width:20px;height:20px;flex:none;background:#8FE0DC;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div:nth-child(1){--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22/%3E%3Cpath%20d%3D%22M12%203l3.5%207.5M21%2012l-8%201M16.5%2019.8L12%2013M7.5%2019.8l3.5-7.5M3%2012l8-1M7.5%204.2L12%2011%22/%3E%3C/svg%3E")}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div:nth-child(2){--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223.2%22/%3E%3C/svg%3E")}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div:nth-child(3){--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%226%22%20width%3D%2218%22%20height%3D%2212%22%20rx%3D%222%22/%3E%3Cpath%20d%3D%22M7%2010v4M10.5%2014h1.5a1%201%200%200%200%200-2h-1a1%201%200%200%201%200-2h1.5M16%2010a2%202%200%201%201%200%204%202%202%200%200%201%200-4z%22/%3E%3C/svg%3E")}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div:nth-child(4){--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%2020L20%204%22/%3E%3Cpath%20d%3D%22M5%207h4M7%205v4M15%2017h4%22/%3E%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%2218%22%20height%3D%2218%22%20rx%3D%222%22/%3E%3C/svg%3E")}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout b{display:block!important;color:#fff!important;font:700 clamp(30px,3.4vw,42px)/1.05 var(--nz-f)!important;font-variant-numeric:tabular-nums!important;margin-top:10px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div:nth-child(1) b{color:#FFD36B!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut dl.howto{margin:0!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:0 28px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut dl.howto > div{display:block!important;background:none!important;border:0!important;border-bottom:1px solid rgba(255,255,255,.12)!important;border-radius:0!important;padding:12px 0!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut dl.howto dt{color:#8FE0DC!important;font:700 15px/1.3 var(--nz-f)!important;margin:0 0 3px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut dl.howto dd{color:#E6EDF1!important;font:500 16px/1.45 var(--nz-f)!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut ul.calc-notes{margin:20px 0 0!important;padding:0!important;list-style:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut ul.calc-notes li{background:rgba(215,73,73,.14)!important;border:0!important;border-left:4px solid var(--nz-red)!important;color:#fff!important;padding:14px 18px!important;font:500 15.5px/1.55 var(--nz-f)!important;border-radius:0 4px 4px 0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut p.calc-limits{color:#A9B9C6!important;font:500 14.5px/1.5 var(--nz-f)!important;margin:16px 0 0!important}
+@media (max-width:760px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut{padding:28px 18px 24px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout{grid-template-columns:repeat(2,minmax(0,1fr))!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div:nth-child(3){border-left:0!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut .readout > div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.12)!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut dl.howto{grid-template-columns:1fr!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #calcOut h4::before{animation:none}}
+
+/* What to expect captions on a soft grey (Jack, 22 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .expect figure{background:#E9EEF2!important;display:flex!important;flex-direction:column!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .expect figure figcaption{background:#E9EEF2!important;color:var(--nz-body)!important;padding:16px 18px 18px!important;margin:0!important;flex:1!important;font:400 15px/1.55 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2) #facilities .expect figure figcaption b{color:var(--nz-ink)!important}
+
+/* Parking and arrival guide (Jack, 22 Nov 2026): intro on top, Key places underneath as a row of boxes */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero{display:block!important;grid-template-columns:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero > div:first-child{max-width:820px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts{margin:28px 0 0!important;background:none!important;border:0!important;box-shadow:none!important;padding:0!important;color:var(--nz-body)!important;max-width:none!important;width:100%!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts .xd-kp-h{display:block!important;position:static!important;opacity:1!important;visibility:visible!important;height:auto!important;background:none!important;color:var(--nz-ink)!important;padding:0!important;margin:0 0 18px!important;font:700 clamp(24px,2.6vw,30px)/1.2 var(--nz-f)!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts .xd-kp-h span,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts .xd-kp-h *{color:var(--nz-ink)!important;-webkit-text-fill-color:var(--nz-ink)!important;opacity:1!important;visibility:visible!important;font:inherit!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:16px!important;margin:0!important;padding:0!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:6px!important;background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--rc,var(--nz-teal))!important;padding:20px 18px 18px!important;margin:0!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div:hover{transform:translateY(-5px);background:#fff!important;box-shadow:0 22px 34px -24px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts .xd-ri{width:42px!important;height:42px!important;border-radius:50%!important;background:var(--rc)!important;color:#fff!important;display:grid!important;place-items:center!important;margin:0 0 8px!important;position:static!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts .xd-ri svg{width:22px!important;height:22px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dt{color:var(--nz-body)!important;font:600 15px/1.3 var(--nz-f)!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dd{color:var(--nz-ink)!important;font:700 18px/1.3 var(--nz-f)!important;margin:0!important;word-break:break-word}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div:nth-child(2) dd{font-size:16px!important;word-break:normal!important;overflow-wrap:anywhere!important}
+@media (max-width:1000px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media (max-width:600px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dd{font-size:16px!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div{transition:none!important;transform:none!important}}
+
+/* Pick your show (Jack, 22 Nov 2026): the clean theme. Fact boxes, calendar style show cards,
+   borderless rounded chooser buttons and a clean official link. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .fl-facts{gap:16px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .fl-facts > div{background:var(--nz-soft)!important;color:var(--nz-ink)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;border-radius:0!important;box-shadow:none!important;padding:18px 20px!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .fl-facts > div:nth-child(2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .fl-facts > div:nth-child(3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .fl-facts > div:nth-child(4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .fl-facts > div:hover{transform:translateY(-4px);background:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .fl-facts span{color:var(--nz-body)!important;font:600 15px/1.3 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .fl-facts b{color:var(--nz-ink)!important;font:700 22px/1.2 var(--nz-f)!important;margin-top:4px!important;display:block!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:20px!important}
+@media (max-width:1000px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width:560px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days{grid-template-columns:1fr!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days > div b{min-height:0!important}}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days > div{background:#fff!important;color:var(--nz-body)!important;border:1px solid var(--nz-line)!important;border-top:5px solid var(--nz-teal)!important;border-radius:0!important;padding:0!important;box-shadow:0 18px 28px -26px rgba(11,26,39,.5)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days > div:nth-child(4n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days > div:nth-child(4n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days > div:nth-child(4n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days > div:hover{transform:translateY(-6px);box-shadow:0 28px 40px -24px rgba(11,26,39,.55)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days > div b{display:flex!important;align-items:flex-end!important;min-height:74px!important;background:var(--nz-navy)!important;color:#fff!important;font:700 21px/1.2 var(--nz-f)!important;padding:16px 20px!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days > div span{display:block!important;color:var(--nz-body)!important;font:400 15.5px/1.6 var(--nz-f)!important;padding:16px 20px 20px!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool button:not(#nz9){background:#E4EBF0!important;color:var(--nz-ink)!important;border:0!important;border-radius:0!important;box-shadow:none!important;font:600 16px/1.25 var(--nz-f)!important;padding:13px 16px!important;transition:background .45s cubic-bezier(.22,.61,.36,1),color .45s,transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool button:not(#nz9)::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool button:not(#nz9)::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool button:not(#nz9):hover{background:#fff!important;transform:translateY(-3px);box-shadow:0 0 0 2px var(--nz-navy),0 16px 24px -16px rgba(11,26,39,.55)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool button:not(#nz9).on,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool button:not(#nz9)[aria-pressed="true"]{background:var(--nz-navy)!important;color:#fff!important;transform:none;box-shadow:inset 0 -4px 0 var(--nz-teal),0 12px 20px -14px rgba(11,26,39,.8)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool a.btn,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool .sx-out a{border-radius:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .sp-links a{background:var(--nz-soft)!important;color:var(--nz-ink)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;border-left:0!important;border-radius:0!important;padding:18px 22px!important;box-shadow:none!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .sp-links a b{color:var(--nz-ink)!important;font:700 19px/1.25 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .sp-links a span{color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .sp-links a:hover{transform:translateY(-4px);background:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)!important}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .fl-facts > div,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-days > div,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool button,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .sp-links a{transition:none!important;transform:none!important}}
+
+/* Starting settings (Jack, 22 Nov 2026): a clean camera menu look. One panel, each question a menu row
+   with a small camera style icon, the answers as mode buttons. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form{background:#fff!important;border:1px solid var(--nz-line)!important;border-radius:6px!important;overflow:hidden!important;box-shadow:0 24px 40px -32px rgba(11,26,39,.6)!important;padding:0!important;margin-bottom:24px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form::before{content:"Shooting menu";display:flex;align-items:center;gap:10px;background:var(--nz-deep);color:#8FE0DC;font:700 15px/1 var(--nz-f);padding:14px 22px}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > div.pl-q,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > .pl-q:not(#nz9){background:#fff!important;border:0!important;border-top:0!important;border-bottom:1px solid var(--nz-line)!important;border-radius:0!important;margin:0!important;padding:18px 22px!important;transition:background .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > .pl-q:last-child{border-bottom:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > .pl-q:hover{background:#F7F9FB!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-q fieldset{display:grid!important;grid-template-columns:230px minmax(0,1fr)!important;gap:16px!important;align-items:center!important;border:0!important;margin:0!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-q legend{float:left!important;display:flex!important;align-items:center!important;gap:12px!important;margin:0!important;padding:0!important;font:700 18px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-q legend::before{content:""!important;display:block!important;flex:none;width:38px;height:38px;border-radius:50%;background:var(--nz-navy) no-repeat center/20px;-webkit-mask:none;position:relative}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-q legend::after{content:"";position:absolute;width:20px;height:20px;margin-left:9px;background:#8FE0DC;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-q legend{position:relative!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-q legend::after{left:0;top:50%;transform:translateY(-50%)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-chips{margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-chips button:not(#nz2){border-radius:0!important;padding:11px 16px!important;font-size:15.5px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-chips button:not(#nz2) i,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-chips button:not(#nz2) .dot{display:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-chips button:not(#nz2)[aria-checked="true"],html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-chips button:not(#nz2)[aria-selected="true"],html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-chips button:not(#nz2).on{background:var(--nz-navy)!important;color:#fff!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > div:nth-child(1){--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M2%2013l8-2%204-8h2l-2%208%206-1%202-3h1l-1%205%201%205h-1l-2-3-6-1%202%208h-2l-4-8-8-2z%22/%3E%3C/svg%3E")}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > div:nth-child(2){--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%224%22/%3E%3Cpath%20d%3D%22M12%202v2M12%2020v2M4.9%204.9l1.4%201.4M17.7%2017.7l1.4%201.4M2%2012h2M20%2012h2M4.9%2019.1l1.4-1.4M17.7%206.3l1.4-1.4%22/%3E%3C/svg%3E")}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > div:nth-child(3){--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2018h18%22/%3E%3Cpath%20d%3D%22M6%2018a6%206%200%200%201%2012%200%22/%3E%3Cpath%20d%3D%22M12%206V3M5.6%208.6L3.5%206.5M18.4%208.6l2.1-2.1%22/%3E%3C/svg%3E")}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > div:nth-child(4){--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223.2%22/%3E%3Cpath%20d%3D%22M12%203v5.8M20.6%209.5l-5.6%201.6M17.3%2019.3l-3.4-4.7M6.7%2019.3l3.4-4.7M3.4%209.5l5.6%201.6%22/%3E%3C/svg%3E")}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > div:nth-child(5){--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%222%22%20y%3D%228%22%20width%3D%2213%22%20height%3D%229%22%20rx%3D%221.5%22/%3E%3Cpath%20d%3D%22M15%2010.5h3l3-2v8l-3-2h-3%22/%3E%3Ccircle%20cx%3D%228.5%22%20cy%3D%2212.5%22%20r%3D%222.5%22/%3E%3C/svg%3E")}
+@media (max-width:760px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form .pl-q fieldset{grid-template-columns:1fr!important;gap:12px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photo #phCalc .calc-form > .pl-q:not(#nz9){padding:16px!important}}
+
+/* Pick your show spacing (Jack, 22 Nov 2026): even gaps, square buttons */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) > .wrap > *{margin-top:0!important;margin-bottom:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) > .wrap > * + *{margin-top:36px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) > .wrap > h3.fl-h{margin-top:56px!important;margin-bottom:-14px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool{gap:24px!important;align-items:start!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool .pl-q,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool > div > div{margin-bottom:16px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool .opts,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool .pl-chips,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) :is(#days,#weekend) .wk-tool [role=group]{gap:8px!important}
+
+/* Key places colours (Jack, 22 Nov 2026): navy boxes, brand colours on the top edges, teal icons */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div{background:var(--nz-navy)!important;border-top-color:var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div:nth-child(2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div:nth-child(3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div:nth-child(4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div:nth-child(5){border-top-color:var(--nz-amber)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dl > div:hover{background:var(--nz-navy2)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts .xd-ri{background:rgba(255,255,255,.1)!important;color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dt{color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #travel .gt-hero .gt-facts dd{color:#fff!important}
+
+/* Choose a topic tabs in the Key places colours (Jack, 22 Nov 2026): navy, brand colour top edges */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag:nth-child(1){--c:var(--nz-teal)!important;--bc:var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag:nth-child(2){--c:var(--nz-purple)!important;--bc:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag:nth-child(3){--c:var(--nz-sky)!important;--bc:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag:nth-child(4){--c:var(--nz-red)!important;--bc:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag:nth-child(5){--c:var(--nz-amber)!important;--bc:var(--nz-amber)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag:nth-child(6){--c:var(--nz-teal)!important;--bc:var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag{background:var(--nz-navy)!important;color:#fff!important;border:0!important;border-top:5px solid var(--c)!important;border-bottom:0!important;box-shadow:none!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),background .35s,box-shadow .45s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag *{color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag small,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag .xd-fs,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag span:last-child{color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag .xd-ring{background:rgba(255,255,255,.1)!important;border-color:var(--c)!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag .xd-ring svg,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag .xd-ring svg *{color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag:hover{background:var(--nz-navy2)!important;transform:translateY(-4px)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag[aria-selected="true"]{background:var(--nz-deep)!important;box-shadow:0 0 0 2px var(--c),0 22px 32px -22px rgba(11,26,39,.8)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag[aria-selected="true"] .xd-ring{background:var(--c)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag[aria-selected="true"] .xd-ring svg,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #explore .xd-flags .xd-flag[aria-selected="true"] .xd-ring svg *{color:#fff!important}
+
+/* Photographers' map: clickable spots with a photo card (Jack, 22 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-pin{cursor:pointer;outline:none}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-pin circle{transition:r .3s ease,stroke .3s ease}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-pin:hover circle,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-pin:focus-visible circle{r:17px}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-pin.nz-on circle{r:18px;stroke:#FFC23A;stroke-width:3px}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .pmap-list > li.nz-spot-li{cursor:pointer;transition:background .3s,transform .35s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .pmap-list > li.nz-spot-li:hover{transform:translateX(4px)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .pmap-list > li.nz-on{background:#EEF4F7!important;box-shadow:inset 4px 0 0 var(--nz-navy)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot{display:grid;grid-template-columns:1fr;background:var(--nz-navy);color:#fff;margin-top:16px;border-top:5px solid var(--sc,#32B4AF);overflow:hidden}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot.nz-noph{grid-template-columns:1fr}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot.nz-noph .nz-spot-ph{display:none}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-ph{position:relative;aspect-ratio:16/9;background:var(--nz-deep)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-tx{display:flex;gap:16px;padding:22px 24px;align-items:flex-start}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-n{flex:none;width:40px;height:40px;border-radius:50%;background:var(--sc,#32B4AF);color:#fff;display:grid;place-items:center;font:800 18px/1 var(--nz-f)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-tx h4{text-transform:none!important;margin:0 0 8px;font:700 21px/1.25 var(--nz-f);color:#fff}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-tx p{margin:0;font:400 15.5px/1.6 var(--nz-f);color:#E6EDF1}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-tx p span{color:#FFD36B;font-weight:700}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-k{display:inline-block;margin-top:12px;font:700 14.5px/1.2 var(--nz-f);color:#8FE0DC}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot.nz-in .nz-spot-ph img{animation:nzSpotIn .7s cubic-bezier(.22,.61,.36,1)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot.nz-in .nz-spot-tx{animation:nzSpotTx .6s cubic-bezier(.22,.61,.36,1)}
+@keyframes nzSpotIn{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+@keyframes nzSpotTx{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:760px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot{grid-template-columns:1fr}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-tx{padding:18px}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot *{animation:none!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .nz-spot-pin circle,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .pmap-list > li{transition:none!important;transform:none!important}}
+
+/* Photography buttons (Jack, 22 Nov 2026): clean, no colour. Plain light grey, square with a slight curve,
+   no coloured dots or rings, navy when picked. The same for every button in this section. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .pl-chips button::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .pl-chips button::after,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .other-wx .grid button::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .other-wx .grid button::after{display:none!important;content:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .pl-chips button,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .other-wx .grid button{background:#EEF2F5!important;color:var(--nz-ink)!important;border:0!important;border-top:0!important;border-radius:0!important;box-shadow:none!important;padding:13px 16px!important;font:600 15.5px/1.25 var(--nz-f)!important;text-align:center!important;justify-content:center!important;transition:background .4s ease,color .4s ease,transform .4s cubic-bezier(.22,.61,.36,1),box-shadow .4s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .pl-chips button *,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .other-wx .grid button *{color:inherit!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .pl-chips button:hover,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .other-wx .grid button:hover{background:#fff!important;transform:translateY(-2px)!important;box-shadow:0 0 0 1.5px var(--nz-navy),0 12px 20px -14px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .pl-chips button[aria-checked="true"],html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .pl-chips button[aria-selected="true"],html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .pl-chips button.on,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .other-wx .grid button[aria-pressed="true"],html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo .other-wx .grid button.on{background:var(--nz-navy)!important;color:#fff!important;box-shadow:none!important;transform:none!important}
+
+/* Photographers' map 3D look (Jack, 22 Nov 2026): a gentle tilt that flattens when you hover or tap */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .pmap-fig.nz-3d .mf-pan{perspective:1600px}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .pmap-fig.nz-3d .mf-pan-scroll svg{transform:rotateX(16deg) scale(.97);transform-origin:50% 100%;transition:transform .9s cubic-bezier(.22,.61,.36,1);box-shadow:0 30px 40px -30px rgba(11,26,39,.7)}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .pmap-fig.nz-3d:hover .mf-pan-scroll svg,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .pmap-fig.nz-3d:focus-within .mf-pan-scroll svg{transform:rotateX(0) scale(1)}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3) #photoMap .pmap-fig.nz-3d .mf-pan-scroll svg{transition:none}}
+
+/* Where to watch (Jack, 22 Nov 2026): the Pick your spot cards and their filter bar removed */
+html.nz body main #watch #spotCards,html.nz body main #watch #spotBar{display:none!important}
+
+/* Shooting Duxford opening (Jack, 22 Nov 2026), used for Shooting at Eastbourne: no longer plain. The heading and intro sit on a navy panel
+   beside one of Jack's photos (the Typhoon on this page), the two joined as one block with a coloured top edge and a slow zoom on hover. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap{display:grid!important;grid-template-columns:minmax(0,5fr) minmax(0,7fr)!important;column-gap:0!important;align-items:stretch!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > *{grid-column:1/-1}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > .panel-head{grid-column:1!important;grid-row:1!important;margin:0!important;background:var(--nz-navy)!important;color:#fff!important;padding:44px 40px 40px!important;border-top:5px solid var(--nz-teal)!important;display:flex!important;flex-direction:column!important;justify-content:center!important;max-width:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > .panel-head h2,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > .panel-head h2 *{color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > .panel-head h2 .sky,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > .panel-head h2 .sky *{color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > .panel-head .nz-kick{color:#FF9A9A!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > .panel-head p{color:#E6EDF1!important;max-width:none!important;margin-top:16px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > figure.pic.wide:not(#nz5){grid-column:2!important;grid-row:1!important;max-width:none!important;width:100%!important;margin:0!important;position:relative!important;overflow:hidden!important;border-top:5px solid var(--nz-teal)!important;background:var(--nz-deep)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > figure.pic.wide:not(#nz5) img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;aspect-ratio:auto!important;object-fit:cover!important;transform:none;transition:transform 1.2s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > figure.pic.wide:not(#nz5):hover img{transform:scale(1.04)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > figure.pic.wide:not(#nz5) figcaption{position:absolute!important;left:0;right:0;bottom:0;margin:0!important;padding:40px 22px 16px!important;background:linear-gradient(180deg,rgba(11,26,39,0),rgba(11,26,39,.85))!important;color:#fff!important;font:500 15px/1.5 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > nav.ph-jump{margin-top:28px!important}
+@media (max-width:900px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap{grid-template-columns:1fr!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > .panel-head{grid-column:1!important;grid-row:auto!important;padding:28px 22px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > figure.pic.wide:not(#nz5){grid-column:1!important;grid-row:auto!important;aspect-ratio:16/9;border-top:0!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo > .wrap > figure.pic.wide img{transition:none!important;transform:none!important}}
+
+/* Plan your day (Jack, 22 Nov 2026): a new clean format. The questions sit on top as one white menu panel,
+   each a row with the question on the left and plain square buttons on the right. Your plan sits underneath at
+   full width: a navy title band, then a clean white timeline, then the two tip boxes. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner{display:block!important;grid-template-columns:none!important;background:none!important;padding:0!important;box-shadow:none!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form{position:static!important;top:auto!important;max-height:none!important;overflow:visible!important;background:#fff!important;border:1px solid var(--nz-line)!important;box-shadow:0 24px 40px -32px rgba(11,26,39,.6)!important;padding:0!important;margin:0 0 28px!important;display:block!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form::before{content:"Your day";display:block;background:var(--nz-navy);color:#8FE0DC;font:700 15px/1 var(--nz-f);padding:15px 22px}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form > .pl-q:not(#nz9){background:#fff!important;border:0!important;border-top:0!important;border-bottom:1px solid var(--nz-line)!important;border-radius:0!important;margin:0!important;padding:18px 22px!important;box-shadow:none!important;transition:background .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form > .pl-q:last-child{border-bottom:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form > .pl-q:hover{background:#F7F9FB!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-q fieldset{display:grid!important;grid-template-columns:220px minmax(0,1fr)!important;gap:16px!important;align-items:center!important;border:0!important;margin:0!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-q legend{float:left!important;margin:0!important;padding:0!important;font:700 18px/1.25 var(--nz-f)!important;color:var(--nz-ink)!important;text-transform:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-q legend::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-q legend::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-chips{display:flex!important;flex-wrap:wrap!important;gap:8px!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-chips button{background:#EEF2F5!important;color:var(--nz-ink)!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:12px 16px!important;font:600 15.5px/1.25 var(--nz-f)!important;transition:background .4s ease,color .4s ease,transform .4s cubic-bezier(.22,.61,.36,1),box-shadow .4s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-chips button::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-chips button::after{display:none!important;content:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-chips button:hover{background:#fff!important;transform:translateY(-2px);box-shadow:0 0 0 1.5px var(--nz-navy),0 12px 20px -14px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-chips button[aria-checked="true"]{background:var(--nz-navy)!important;color:#fff!important;box-shadow:none!important;transform:none}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-toggle{grid-column:2;margin:12px 0 0 236px!important;font:500 15.5px/1.4 var(--nz-f)!important;color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result{background:#fff!important;color:var(--nz-body)!important;border:1px solid var(--nz-line)!important;border-top:0!important;padding:0!important;box-shadow:0 24px 40px -32px rgba(11,26,39,.6)!important;position:static!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result > h3{background:var(--nz-navy)!important;color:#fff!important;margin:0!important;padding:26px 28px 6px!important;font:700 clamp(24px,2.6vw,32px)/1.2 var(--nz-f)!important;border-top:5px solid var(--nz-teal)!important;text-transform:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result > h3 em{color:#8FE0DC!important;font-style:normal!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-sum{background:var(--nz-navy)!important;margin:0!important;padding:10px 28px 22px!important;display:flex!important;flex-wrap:wrap!important;gap:8px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-sum span{background:rgba(255,255,255,.1)!important;color:#fff!important;border:0!important;border-radius:0!important;padding:8px 12px!important;font:600 14.5px/1.2 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps{list-style:none!important;margin:0!important;padding:10px 28px 6px!important;background:#fff!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps li{display:grid!important;grid-template-columns:90px minmax(0,1fr)!important;gap:20px!important;background:none!important;border:0!important;border-bottom:1px solid var(--nz-line)!important;border-left:0!important;margin:0!important;padding:18px 0!important;box-shadow:none!important;position:relative}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps li:last-child{border-bottom:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps time{background:none!important;color:var(--nz-ink)!important;font:700 22px/1.2 var(--nz-f)!important;font-variant-numeric:tabular-nums;padding:0!important;border:0!important;display:block!important;text-align:left!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps b{color:var(--nz-ink)!important;font:700 18px/1.3 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps p{color:var(--nz-body)!important;font:400 16px/1.6 var(--nz-f)!important;margin:4px 0 0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps li.key{background:#FDF1F1!important;margin:0 -28px!important;padding:18px 28px!important;box-shadow:inset 5px 0 0 var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps li.key time{color:var(--nz-red-ink)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result > div:not(.pl-sum),html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-tips,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-two{padding-left:28px!important;padding-right:28px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result [class*="pl-box"],html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-bring,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-know{background:var(--nz-soft)!important;color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result [class*="pl-box"] *,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-bring *,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-know *{color:var(--nz-body)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result [class*="pl-box"] h4,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-bring h4,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-know h4{color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result button,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result a.btn{border-radius:0!important}
+@media (max-width:760px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-q fieldset{grid-template-columns:1fr!important;gap:12px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form .pl-toggle{margin-left:0!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-form > .pl-q:not(#nz9){padding:16px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps{padding:6px 18px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps li{grid-template-columns:64px minmax(0,1fr)!important;gap:12px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps li.key{margin:0 -18px!important;padding:16px 18px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result > h3,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-sum{padding-left:18px!important;padding-right:18px!important}}
+
+/* Get creative layout (Jack, 22 Nov 2026): the two photos side by side at the same size, whole photos with
+   no cropping, and the ideas underneath as a row of boxes with coloured top edges. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:auto!important;gap:20px!important;background:none!important;padding:0!important;align-items:start!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > figure.big,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > figure.small{grid-column:auto!important;grid-row:auto!important;margin:0!important;background:var(--nz-navy)!important;overflow:hidden!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > figure .photo-btn{overflow:hidden!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > figure img{transition:transform 1s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > figure:hover img{transform:scale(1.04)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > figure figcaption{background:var(--nz-navy)!important;color:#fff!important;padding:12px 16px!important;font:500 15px/1.45 var(--nz-f)!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips{grid-column:1/-1!important;background:none!important;border:0!important;border-top:0!important;padding:0!important;margin-top:8px!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips h4{font:700 clamp(22px,2.4vw,28px)/1.2 var(--nz-f)!important;color:var(--nz-ink)!important;margin:0 0 16px!important;text-transform:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips ul{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))!important;gap:14px!important;list-style:none!important;padding:0!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips li{background:var(--nz-soft)!important;border-top:5px solid var(--nz-teal)!important;padding:18px 18px 16px!important;margin:0!important;font:400 15.5px/1.6 var(--nz-f)!important;color:var(--nz-body)!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips li::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips li::marker{display:none!important;content:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips li:nth-child(5n+2){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips li:nth-child(5n+3){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips li:nth-child(5n+4){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips li:nth-child(5n+5){border-top-color:var(--nz-amber)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips li:hover{transform:translateY(-4px);background:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)!important}
+@media (max-width:700px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative{grid-template-columns:1fr!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > figure img,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #photo #phCreative .creative > .tips li{transition:none!important;transform:none!important}}
+
+/* Plan your day tip boxes: headings in sentence case, as written (Jack's rule) */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner .pl-cols h4,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner .pl-cols h3{text-transform:none!important}
+
+/* Where to watch, new layout (Jack, 22 Nov 2026):
+   the opening on a navy panel, the photographers' map full width and larger, and underneath it the photo card
+   for the picked spot beside the list of spots. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch > .wrap > .panel-head{background:var(--nz-navy)!important;color:#fff!important;padding:40px 40px 36px!important;border-top:5px solid var(--nz-teal)!important;max-width:none!important;margin-bottom:48px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch > .wrap > .panel-head h2,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch > .wrap > .panel-head h2 *{color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch > .wrap > .panel-head h2 .sky,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch > .wrap > .panel-head h2 .sky *{color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch > .wrap > .panel-head .nz-kick{color:#FF9A9A!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch > .wrap > .panel-head p{color:#E6EDF1!important;max-width:70ch!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap{margin:64px 0 0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-head{display:block!important;margin-bottom:22px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-head .note{max-width:70ch!important;margin-top:12px!important;text-align:left!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:24px!important;align-items:start!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-grid > .pmap-fig{grid-column:1/-1!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-grid > .nz-spot{grid-column:1!important;grid-row:2!important;margin:0!important;position:sticky;top:90px}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-grid > div:not(.nz-spot){grid-column:2!important;grid-row:2!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-list > li{padding-top:12px!important;padding-bottom:12px!important}
+@media (max-width:900px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-grid{grid-template-columns:1fr!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-grid > .nz-spot,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #photoMap .pmap-grid > div:not(.nz-spot){grid-column:1!important;grid-row:auto!important;position:static}}
+
+/* Food and facilities: the same navy header panel as Where to watch (Jack, 22 Nov 2026) */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities > .wrap > .panel-head{background:var(--nz-navy)!important;color:#fff!important;padding:40px 40px 36px!important;border-top:5px solid var(--nz-teal)!important;max-width:none!important;margin-bottom:48px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities > .wrap > .panel-head h2,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities > .wrap > .panel-head h2 *{color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities > .wrap > .panel-head h2 .sky,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities > .wrap > .panel-head h2 .sky *{color:#8FE0DC!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities > .wrap > .panel-head .nz-kick{color:#FF9A9A!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities > .wrap > .panel-head p{color:#E6EDF1!important;max-width:70ch!important}
+
+/* Plan your day, Bring and Good to know (Jack, 22 Nov 2026): the text was white on white. Soft grey boxes with
+   a coloured top edge, navy headings and dark text, on a white background like the rest of the plan. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;padding:8px 28px 4px!important;background:#fff!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols > div{background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;padding:20px 22px 18px!important;opacity:1!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols > div + div{border-top-color:var(--nz-amber)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols h4,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols h3{color:var(--nz-ink)!important;font:700 19px/1.25 var(--nz-f)!important;margin:0 0 10px!important;opacity:1!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols ul{list-style:none!important;margin:0!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols li{color:var(--nz-body)!important;font:400 15.5px/1.55 var(--nz-f)!important;opacity:1!important;transform:none!important;filter:none!important;padding:6px 0 6px 18px!important;position:relative!important;border-bottom:1px solid var(--nz-line)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols li:last-child{border-bottom:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols li::before{content:""!important;position:absolute!important;left:0!important;top:14px!important;width:7px!important;height:7px!important;background:var(--nz-teal)!important;border-radius:50%!important;display:block!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-actions{padding:18px 28px 6px!important;background:#fff!important;display:flex!important;gap:10px!important;flex-wrap:wrap!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-actions .btn{border-radius:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-actions .btn.ghost{background:#EEF2F5!important;color:var(--nz-ink)!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-foot{color:var(--nz-body)!important;opacity:1!important;padding:6px 28px 22px!important;margin:0!important;background:#fff!important;font:400 14.5px/1.5 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps li,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-steps li *{opacity:1!important;filter:none!important}
+@media (max-width:700px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-cols{grid-template-columns:1fr!important;padding:8px 18px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-actions,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #planner > .pl-result .pl-foot{padding-left:18px!important;padding-right:18px!important}}
+
+/* Plan your day, take two (Jack, 22 Nov 2026): the template look. Questions as boxes with coloured top edges,
+   three across. The plan opens with a photo header, and the times sit in navy squares like the sample day. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form::before{display:none!important;content:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;background:none!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0 0 32px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form > .pl-q:not(#nz9){background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;padding:20px 20px 18px!important;margin:0!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form > .pl-q:nth-child(2):not(#nz9){border-top-color:var(--nz-purple)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form > .pl-q:nth-child(3):not(#nz9){border-top-color:var(--nz-sky)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form > .pl-q:nth-child(4):not(#nz9){border-top-color:var(--nz-red)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form > .pl-q:nth-child(5):not(#nz9){border-top-color:var(--nz-amber)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form > .pl-q:first-child{grid-column:1/-1!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form > .pl-q:hover{background:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form .pl-q fieldset{display:block!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form .pl-q legend{display:block!important;float:none!important;margin:0 0 12px!important;font:700 19px/1.25 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form .pl-chips button{background:#fff!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form .pl-chips button[aria-checked="true"]{background:var(--nz-navy)!important;color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form .pl-toggle{margin:12px 0 0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result > h3{position:relative!important;background:linear-gradient(90deg,rgba(11,26,39,.94) 0%,rgba(19,41,60,.82) 55%,rgba(19,41,60,.35) 100%),var(--nz-plimg,none) center/cover no-repeat!important;padding:44px 28px 8px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-sum{background:linear-gradient(90deg,rgba(11,26,39,.94) 0%,rgba(19,41,60,.82) 55%,rgba(19,41,60,.35) 100%)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps{padding:18px 28px 8px!important;display:grid!important;gap:10px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps li{grid-template-columns:96px minmax(0,1fr)!important;gap:0!important;padding:0!important;background:var(--nz-soft)!important;border:0!important;transition:transform .4s cubic-bezier(.22,.61,.36,1),box-shadow .4s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps li:hover{transform:translateX(4px);box-shadow:0 14px 24px -20px rgba(11,26,39,.6)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps time{background:var(--nz-navy)!important;color:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;font:700 21px/1 var(--nz-f)!important;padding:16px 8px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps li > div{padding:16px 20px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps li.key{margin:0!important;padding:0!important;background:#FDF1F1!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps li.key time{background:var(--nz-red)!important;color:#fff!important}
+@media (max-width:900px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-form{grid-template-columns:1fr!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps{padding:14px 18px 6px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps li{grid-template-columns:70px minmax(0,1fr)!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result .pl-steps time{font-size:17px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4):not(#nz5) #planner > .pl-result > h3{padding:32px 18px 8px!important}}
+
+/* keep reading: photo cards with the text over the photo */
+html.nz body section.cg-next{background:var(--nz-soft)!important;padding:90px 0!important}
+html.nz body section.cg-next .wrap{max-width:1188px!important}
+html.nz body section.cg-next h2{font:700 clamp(30px,4.2vw,46px)/1.12 var(--nz-f)!important;color:var(--nz-ink)!important;text-transform:none!important;margin:0 0 40px!important;padding:0!important;background:none!important;position:relative}
+html.nz body section.cg-next h2::before{content:"More in this guide";display:block;position:static!important;font:700 clamp(22px,2.3vw,27px)/1.2 var(--nz-f)!important;color:var(--nz-red-ink)!important;-webkit-text-stroke:0!important;opacity:1!important;transform:none!important;margin-bottom:8px;text-transform:none!important}
+html.nz body section.cg-next h2::after{display:none!important}
+html.nz body section.cg-next .cg-tiles{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:28px!important}
+html.nz body section.cg-next .cg-tiles > button{position:relative!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;min-height:400px!important;padding:0!important;border:0!important;border-radius:0!important;background:var(--nz-navy)!important;color:#fff!important;overflow:hidden!important;text-align:left!important;box-shadow:none!important;cursor:pointer;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s!important}
+html.nz body section.cg-next .cg-tiles > button .ph{position:absolute!important;inset:0!important;height:auto!important;width:auto!important;margin:0!important}
+html.nz body section.cg-next .cg-tiles > button .ph img{width:100%!important;height:100%!important;object-fit:cover!important;transition:transform .8s cubic-bezier(.22,.61,.36,1)!important;-webkit-mask:none!important;mask:none!important;opacity:1!important}
+html.nz body section.cg-next .cg-tiles > button .ph::after{content:""!important;display:block!important;position:absolute!important;inset:0!important;background:linear-gradient(180deg,rgba(19,41,60,.05) 20%,rgba(19,41,60,.82) 62%,rgba(11,26,39,.97))!important}
+html.nz body section.cg-next .cg-tiles > button .tx{position:relative!important;z-index:1!important;background:none!important;padding:28px!important;margin:0!important;height:auto!important;width:auto!important}
+html.nz body section.cg-next .cg-tiles > button .tx b{display:block!important;font:700 23px/1.2 var(--nz-f)!important;color:#fff!important;text-transform:none!important}
+html.nz body section.cg-next .cg-tiles > button .tx small{display:block!important;font:400 15.5px/1.55 var(--nz-f)!important;color:#E6EDF1!important;margin-top:8px!important}
+html.nz body section.cg-next .cg-tiles > button .ix-more{display:inline-block!important;margin-top:16px!important;font:700 16px/1.2 var(--nz-f)!important;color:#8FE0DC!important;text-transform:none!important;width:auto!important;height:auto!important}
+html.nz body section.cg-next .cg-tiles > button:hover{transform:translateY(-6px)!important;box-shadow:0 26px 40px -24px rgba(11,26,39,.7)!important}
+html.nz body section.cg-next .cg-tiles > button:hover .ph img{transform:scale(1.08)!important}
+
+/* useful links: boxes with a coloured top edge */
+html.nz body section.useful{background:#fff!important;padding:90px 0!important;color:var(--nz-body)!important}
+html.nz body section.useful .wrap{max-width:1188px!important}
+html.nz body section.useful h2{font:700 clamp(30px,4.2vw,46px)/1.12 var(--nz-f)!important;color:var(--nz-ink)!important;text-transform:none!important;margin:0 0 36px!important}
+html.nz body section.useful h2::before{content:"Official sources";display:block;font:700 clamp(22px,2.3vw,27px)/1.2 var(--nz-f);color:var(--nz-red-ink);margin-bottom:8px}
+html.nz body section.useful ul{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important;list-style:none!important;margin:0!important;padding:0!important}
+html.nz body section.useful li{margin:0!important;padding:0!important}
+html.nz body section.useful li a{display:block!important;background:var(--nz-soft)!important;border:0!important;border-top:5px solid var(--nz-teal)!important;border-radius:0!important;padding:20px 20px 18px!important;font:700 17px/1.3 var(--nz-f)!important;color:var(--nz-ink)!important;text-decoration:none!important;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .35s,color .2s!important}
+html.nz body section.useful li:nth-child(4n+2) a{border-top-color:var(--nz-purple)!important}
+html.nz body section.useful li:nth-child(4n+3) a{border-top-color:var(--nz-sky)!important}
+html.nz body section.useful li:nth-child(4n+4) a{border-top-color:var(--nz-red)!important}
+html.nz body section.useful li a:hover{transform:translateY(-6px)!important;background:#fff!important;box-shadow:0 22px 34px -22px rgba(11,26,39,.5)!important;color:var(--nz-teal-ink)!important}
+html.nz body footer.small-print{display:none!important}
+
+/* dark footer with link columns */
+.nz-ft{background:var(--nz-deep);color:#fff;padding:76px 0 64px;font-size:15px;line-height:1.6}
+.nz-ft .cols{display:grid;grid-template-columns:1.25fr .9fr .9fr 1.3fr;gap:40px}
+.nz-ft .cols>div{background:none!important;padding:0!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+.nz-ft .nz-logo{margin-bottom:22px;display:inline-flex}
+.nz-ft h3{color:#fff;font:600 22px/1.2 var(--nz-f);margin:0 0 18px;text-transform:none;letter-spacing:0}
+.nz-ft p{color:#D5DEE4;font-size:15px;margin:0}
+.nz-ft .ct{display:grid;gap:12px}
+.nz-ft .ct>span{display:flex;gap:11px;align-items:center}
+.nz-ft .ct svg{width:17px;height:17px;color:var(--nz-teal);flex:none}
+.nz-ft ul{list-style:none;display:grid;gap:13px;margin:0;padding:0}
+.nz-ft li a,.nz-ft li button{display:inline-flex;gap:9px;align-items:center;text-decoration:none;color:#fff;font:400 15px/1.4 var(--nz-f);background:none;border:0;padding:0;cursor:pointer;text-align:left;transition:transform .25s,color .25s}
+.nz-ft li a::before,.nz-ft li button::before{content:"";width:6px;height:6px;border:solid var(--nz-teal);border-width:2px 2px 0 0;transform:rotate(45deg);flex:none;margin-right:3px}
+.nz-ft li a:hover,.nz-ft li button:hover{color:#8FE0DC;transform:translateX(5px)}
+.nz-ft .nz-btn{margin-top:18px}
+.nz-fbar{background:#06121B;color:#C2CED6;font-size:14px;line-height:1.6;padding:22px 0}
+.nz-fbar p{margin:0}
+.nz-fbar p+p{margin-top:6px}
+.nz-fbar a{color:#fff}
+.nz-fbar a:hover{color:#8FE0DC}
+
+/* motion: things rise into place as you scroll */
+.nz-rv{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
+.nz-rv.nz-in{opacity:1;transform:none}
+@keyframes nz-rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes nz-drift{from{transform:translateY(-2%) scale(1.02)}to{transform:translateY(2%) scale(1.06)}}
+.nz-hd-bg{animation:nz-drift 26s ease-in-out infinite alternate}
+.nz-ttl .nz-tags{animation:nz-rise .7s .05s both}
+.nz-ttl h1{animation:nz-rise .8s .15s both}
+.nz-ttl .nz-crumbs{animation:nz-rise .8s .3s both}
+
+@media (max-width:1100px){
+  .nz-nav ul{display:none}
+  .nz-about{grid-template-columns:1fr;gap:44px}
+  .nz-abph{max-width:520px}
+  .nz-ft .cols{grid-template-columns:1fr 1fr}
+  html.nz body section.useful ul{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media (max-width:820px){
+  .nz-band-in{grid-template-columns:1fr;gap:34px;padding-top:60px;padding-bottom:60px}
+  .nz-band-stats{grid-template-columns:1fr 1fr;width:auto}
+  html.nz body .nz-band .grp button{flex:1 1 auto!important}
+  html.nz .nz-feat3 .h1x-cards{grid-template-columns:1fr!important}
+  .nz-ttl{padding:48px 0 40px}
+  .nz-feat3{margin-top:0}
+  html.nz .nz-feat3 .h1x-card{min-height:0!important;padding:20px 20px 18px 84px!important}
+  html.nz .nz-feat3 .h1x-card .h1x-ic{top:20px!important;left:20px!important}
+  html.nz .nz-feat3 .h1x-cards{gap:10px!important}
+  html.nz body section.cg-next .cg-tiles{grid-template-columns:1fr!important}
+  html.nz body section.cg-next .cg-tiles > button{min-height:300px!important}
+  html.nz .nz-notice-slot .cbx{grid-template-columns:1fr!important}
+  .nz-sec{padding:64px 0}
+}
+@media (max-width:640px){
+  .nz-wrap{padding:0 18px}
+  .nz-top .r{display:none}
+  .nz-top{font-size:13px}
+  .nz-logo img{height:48px}
+  .nz-nav{min-height:70px;gap:10px}
+  .nz-nav .nz-btn{padding:13px 16px;font-size:16px}
+  .nz-abph{padding:34px 0 0 34px}
+  .nz-stat{width:150px;padding:20px 10px 18px}
+  .nz-stat b{font-size:60px}.nz-stat svg{width:38px;height:38px}
+  .nz-facts{grid-template-columns:1fr}
+  .nz-btns .nz-btn{flex:1 1 100%}
+  .nz-ft .cols{grid-template-columns:1fr}
+  html.nz body section.useful ul{grid-template-columns:1fr!important}
+  html.nz body .fold-btn .wrap,html.nz body .fold-btn:hover .wrap,html.nz body .fold.open .fold-btn .wrap{padding:18px 18px 17px!important;gap:12px!important}
+}
+@media (prefers-reduced-motion:reduce){
+  .nz-rv{opacity:1!important;transform:none!important;transition:none!important}
+  .nz-hd-bg,.nz-ttl .nz-tags,.nz-ttl h1,.nz-ttl .nz-crumbs{animation:none!important}
+  .nz-btn,.nz-facts>div,.nz-stat,.nz-abph img,.nz-ft li a,.nz-ft li button,.nz-logo img,.nz-top svg{transition:none!important}
+  .nz-band-stats>div,html.nz body .nz-band .grp button{transition:none!important;transform:none!important}
+  .nz-btn:hover,.nz-facts>div:hover,.nz-abph:hover .nz-stat,.nz-ft li a:hover,.nz-ft li button:hover{transform:none!important}
+  html.nz .nz-feat3 .h1x-card,html.nz .nz-feat3 .h1x-card .h1x-ic,html.nz body .fold-btn .wrap,html.nz body .fold-btn:hover .wrap,html.nz body .fold-btn .fold-x i,html.nz body section.cg-next .cg-tiles > button,html.nz body section.cg-next .cg-tiles > button .ph img,html.nz body section.useful li a,html.nz .nz-notice-slot .cbx{transition:none!important;transform:none!important}
+}
+
+/* Eastbourne only: the live page adds the show's name ("Airbourne") beside the Key places heading. In the template
+   look it reads as part of the heading, in plain text, not as a coloured label. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #travel .gt-facts .xd-kp-h span + span{background:none!important;color:var(--nz-body)!important;-webkit-text-fill-color:var(--nz-body)!important;padding:0!important;margin-left:10px!important;font-weight:500!important}
+
+/* Jack, 22 Nov 2026: every section laid out like the Duxford template (see the last block of new-design.js).
+   Where to watch: Eastbourne's spot tabs and spot card in the Duxford "on the map" look. Square tabs on a soft
+   background with a coloured top edge, navy when picked; a white spot card with a coloured top edge beside the map. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch .nz-ww-head{display:block!important;margin:0 0 22px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch .nz-ww-head h3{font:700 clamp(25px,3vw,34px)/1.15 var(--nz-f)!important;color:var(--nz-ink)!important;margin:0!important;text-transform:capitalize!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch .nz-ww-head h3 em{font-style:normal!important;color:var(--nz-teal)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:12px!important;border:0!important;padding:0!important;margin:0 0 18px!important;overflow:visible!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs button[type]{display:flex!important;align-items:center!important;gap:12px!important;min-height:68px!important;margin:0!important;padding:14px 16px 12px!important;background:var(--nz-soft)!important;color:var(--nz-ink)!important;border:0!important;border-top:5px solid var(--c,var(--nz-teal))!important;border-radius:0!important;box-shadow:none!important;outline:0!important;transform:none!important;font:700 17px/1.2 var(--nz-f)!important;text-align:left!important;cursor:pointer;transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s,background .3s,color .3s!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs button[type]::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs button[type]::after{display:none!important;content:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs button[type]:hover{transform:translateY(-4px)!important;background:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.5)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs button[type] .xd-tt-ic{flex:none!important;width:30px!important;height:30px!important;margin:0!important;border:0!important;border-radius:50%!important;background:var(--c,var(--nz-teal))!important;color:#fff!important;box-shadow:none!important;display:grid!important;place-items:center!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs button[type] .xd-tt-ic svg{width:17px!important;height:17px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs button[aria-selected="true"]{background:var(--nz-navy)!important;color:#fff!important;box-shadow:0 20px 30px -22px rgba(11,26,39,.7)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-board{display:grid!important;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)!important;gap:24px!important;align-items:stretch!important;padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-board[hidden]{display:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-info{display:flex!important;flex-direction:column!important;background:#fff!important;border:1px solid var(--nz-line)!important;border-top:5px solid var(--c,var(--nz-teal))!important;box-shadow:0 20px 32px -26px rgba(11,26,39,.5)!important;padding:28px 28px 26px!important;margin:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-info h3{font:700 28px/1.15 var(--nz-f)!important;color:var(--nz-ink)!important;margin:0 0 14px!important;padding:0!important;border:0!important;background:none!important;text-transform:capitalize!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-info h3::before,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-info h3::after{display:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-tag{align-self:flex-start!important;display:inline-block!important;margin:0 0 14px!important;padding:7px 11px 6px!important;background:var(--c,var(--nz-teal))!important;color:#fff!important;border:0!important;border-radius:0!important;font:700 15.5px/1.3 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-info > p:not(.ww-tag){font:400 17px/1.65 var(--nz-f)!important;color:var(--nz-body)!important;margin:0 0 10px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-info > p b{color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-facts{display:block!important;margin:8px 0 0!important;padding:0!important;border:0!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-facts > div{display:grid!important;grid-template-columns:108px minmax(0,1fr)!important;gap:12px!important;margin:0!important;padding:12px 0 11px!important;background:none!important;border:0!important;border-bottom:1px solid var(--nz-line)!important;border-radius:0!important;box-shadow:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-facts span{font:700 16px/1.4 var(--nz-f)!important;color:var(--nz-teal-ink)!important;background:none!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-facts b{font:600 16.5px/1.4 var(--nz-f)!important;color:var(--nz-ink)!important;background:none!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-btns{display:flex!important;flex-wrap:wrap!important;gap:12px!important;margin:auto 0 0!important;padding-top:24px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-btns .btn{display:inline-flex!important;align-items:center!important;min-height:52px!important;padding:0 24px!important;border:0!important;border-radius:0!important;box-shadow:none!important;font:700 17px/1 var(--nz-f)!important;text-decoration:none!important;cursor:pointer;transition:background .3s,color .3s,transform .35s cubic-bezier(.22,.61,.36,1)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-btns a.btn{background:var(--nz-red)!important;color:#fff!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-btns .btn.ghost{background:#E4EBF0!important;color:var(--nz-ink)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-btns .btn:hover{background:var(--nz-navy)!important;color:#fff!important;transform:translateY(-3px)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-map{align-self:stretch!important;margin:0!important;padding:0!important;min-height:420px!important;background:var(--nz-navy)!important;border:1px solid var(--nz-line)!important;border-radius:0!important;outline:0!important;box-shadow:0 20px 32px -26px rgba(11,26,39,.5)!important;overflow:hidden!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-map iframe{display:block!important;width:100%!important;height:100%!important;min-height:420px!important;border:0!important;aspect-ratio:auto!important}
+@media (max-width:900px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-board{grid-template-columns:minmax(0,1fr)!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-map,html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-map iframe{min-height:300px!important}}
+@media (max-width:560px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs{grid-template-columns:minmax(0,1fr)!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-info{padding:20px 18px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-facts > div{grid-template-columns:minmax(0,1fr)!important;gap:2px!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .xd-tt-tabs button[type],html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #watch #wwTabs.nz-ww .ww-btns .btn{transition:none!important;transform:none!important}}
+
+/* Food and facilities: Toilets as the photo band, like Duxford's shuttle band (the page has no band styles of its own).
+   The Food and drink panel uses the template's own .food styles. */
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;gap:0!important;margin:0 0 56px!important;background:#E4EBF0!important;border:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar .busfig{position:relative!important;margin:0!important;overflow:hidden!important;background:var(--nz-navy)!important;min-height:300px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar .busfig img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;display:block!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar .busfig figcaption{position:absolute!important;left:0;right:0;bottom:0;margin:0!important;padding:40px 22px 16px!important;background:linear-gradient(180deg,rgba(11,26,39,0),rgba(11,26,39,.9))!important;color:#fff!important;border:0!important;font:500 15px/1.5 var(--nz-f)!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar .busbar-text{padding:40px 40px 36px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar .busbar-text h3{font:700 clamp(28px,3vw,36px)/1.15 var(--nz-f)!important;color:var(--nz-ink)!important;margin:0 0 14px!important;text-transform:capitalize!important;background:none!important;padding:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar .busbar-text p{font:400 17px/1.65 var(--nz-f)!important;color:var(--nz-body)!important;margin:0 0 12px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-food{margin-bottom:0!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-food .food-main{min-height:420px!important}
+html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-food .food-text h3{text-transform:capitalize!important}
+@media (max-width:900px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar{grid-template-columns:1fr!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar .busfig{min-height:0!important;aspect-ratio:16/10}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar .busbar-text{padding:26px 20px!important}html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-food .food-main{min-height:0!important}}
+@media (max-width:560px){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-food .food-list{grid-template-columns:1fr!important}}
+@media (prefers-reduced-motion:reduce){html.nz body main:not(#nz0):not(#nz1):not(#nz2):not(#nz3):not(#nz4) #facilities .nz-busbar .busfig img{transition:none!important;transform:none!important}}
