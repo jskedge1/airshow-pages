@@ -7,7 +7,8 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 
 | Page | Address for Wix |
 |---|---|
-| Royal International Air Tattoo | https://jskedge1.github.io/airshow-pages/riat.html |
+| Royal International Air Tattoo, now The Big Guide to RIAT home page (Wix page /riat shows camping-layout/riat.html; riat.html is kept the same). Since 22 Nov 2026 both are built by `previews/big-guide-to-riat-src/golive.py`, so edit the build scripts, not these files. The old holding page is in backups/riat-holding-page-2026-11-22/ | https://jskedge1.github.io/airshow-pages/camping-layout/riat.html |
+| The Big Guide to RIAT pages (What we know, Still to come, Already booked?, Camping, Aircraft line-up), live since 22 Nov 2026, no Wix pages of their own yet so their tabs open these addresses | https://jskedge1.github.io/airshow-pages/big-guide-to-riat/ |
 | RAF Cosford Air Show | https://jskedge1.github.io/airshow-pages/raf-cosford.html |
 | Eastbourne Airshow | https://jskedge1.github.io/airshow-pages/eastbourne.html |
 | Duxford Air Shows | https://jskedge1.github.io/airshow-pages/duxford.html |
@@ -672,6 +673,8 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
+
+**Live since 22 Nov 2026 (Jack's go-ahead).** The Big Guide to RIAT replaced the RIAT holding page on the website. To publish a change: run `python3 riat-camping-src/build.py`, then `python3 previews/big-guide-to-riat-src/build.py`, then `python3 previews/big-guide-to-riat-src/golive.py`. The last one writes `big-guide-to-riat/` (every page with full web addresses, no noindex) and copies its home page over `camping-layout/riat.html` (what the Wix page /riat shows) and `riat.html`. Scheduled checks that change RIAT facts should change the build scripts and rerun these three, not edit `camping-layout/riat.html`, or the next build overwrites them. When a tab gets its own Wix page, point its links there in the build. The site home page (`home.html`) has a "The Big Guide To RIAT" section (`id="riat"`) in place of the old "RIAT is moving" box, with the key facts, a days to go count and a tile for each tab.
 
 **Jack's rule (22 Nov 2026): The Big Guide to RIAT home page is the home for all RIAT information.** Everything relevant to RIAT is posted there. Each new RIAT topic becomes a tab in "The Big Guide to RIAT" strip, and each tab opens its own page for visitors. Every new tab and page follows this same format and template design: the top bar, the photo header with the logo and menu, the strip of tabs, sections that open with a coloured label line over a big heading, clean boxes with a coloured top edge, the photo bands, the motion, and the dark footer. To add one: add a line to `PAGES` in `previews/big-guide-to-riat-src/build.py`, write its page builder from the shared parts (`sub_header()`, `strip()`, `page()`, and `camp.sec_head()`, boxes and bands from `riat-camping-src/build.py`), add it to the home page where it fits, and rebuild. The camping pages and the aircraft line-up already sit inside it as tabs. Topics waiting for RIAT to publish details: getting there and parking, trains and buses, where to stay, where to watch, the sun guide, plan your day, accessibility, and food and facilities.
 
