@@ -694,6 +694,12 @@ Preview (private, Jack shares it himself): https://claude.ai/artifact/73VXaNt5BP
 - Kept as on the Midlands page: the parking blocks (Compare driving options and Car parks at Ragley Hall), the train route box in West
   Midlands Railway colours and the train and bus topics, and Chris Murgatroyd's credit on his photos.
 - Added from Duxford's layout, with Midlands' own link: the "Official site" box at the end of Pick your show (midlandsairfestival.com).
+- Getting there (round 2 brief additions, 22 Nov 2026 20:15 and 20:30): Compare driving options and Car parks at Ragley Hall exactly as on
+  the live page; Duxford's dark train route header on the Train to Redditch topic, with the page's own first Saturday train (08:15
+  Birmingham New Street to Redditch, arrives 08:53, West Midlands Railway, 2026 timetable); and the Fares and Save money board with
+  the hidden Ways in board (`fares.html`, from the Wales version). Its only prices are Midlands' 2027 parking (standard free,
+  premium £9.97 a day, disabled free), as the page has no train, bus, coach or taxi fares. The "On the day and getting home" jump
+  button is gone, as this page has no such box.
 - Checked 22 Nov 2026: section ids and order as Duxford except Flightline walk, side by side with Duxford at 1280 and 390, 76 inline
   scripts with 0 syntax errors, only the console errors the live page also has, no sideways scroll at 390, no broken images, and the
   line-up, topic explorer, planner, sun guide, calculator, kit planner, checklists, Quick checker, Kids' corner, Pick your show,

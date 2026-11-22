@@ -204,6 +204,44 @@ def align_to_duxford(html):
                      (",r:['photo','balloons','watch','camping']", ",r:['photo','watch']"),
                      (",r:['balloons','camping','timeline','flights']", ",r:['timeline','flights']")):
         html = swap(html, old, new)
+    # ---- Getting there, added 22 Nov 2026 20:15 and 20:30 (round 2 brief: Jack's comments on the Wales and Clacton previews) ----
+    # Compare driving options (#cdo) and Car parks at Ragley Hall (#cpk) stay exactly as on the live page (untouched here).
+    # 1. The train topic gets Duxford's train route header (trlStyle and its script), as on the Wales page, filled with the
+    #    Midlands page's own train facts: the Train to Redditch topic and the first Saturday train in its train times data.
+    dux = (ROOT / "previews" / "duxford-new-design-src" / "live-source.html").read_text(encoding="utf8")
+    ta = dux.index('<style id="trlStyle">')
+    tz = dux.index("</style>", ta) + len("</style>")
+    sa = dux.index('<script id="trlScript-dux">')
+    sz = dux.index("</script>", sa) + len("</script>")
+    trl = dux[sa:sz]
+    h0, h1 = trl.index("  var H={"), trl.index("  function cur()")
+    for fact in ("id:'rail-red'", '"08:15",\n      "Birmingham New Street to Redditch",\n      "Arrives 08:53, in time for the 09:30 bus"',
+                 '"Every 30 minutes",\n      "West Midlands Railway, about 40 minutes"', "I would suggest Redditch as the most suitable station for the festival. From there, the Diamond 247 bus between Redditch and Evesham stops right by the Ragley Hall main entrance.",
+                 '"title": "Saturday, linking with the 247 bus"', "train-to-midlands"):
+        assert fact in html, fact
+    mid_h = ("  var H={\n"
+             "    'rail-red':hero({to:'Redditch',board:'REDDITCH',dep:'08:15',arr:'08:53',via:'From Birmingham New Street',\n"
+             "      p:'I would suggest Redditch as the most suitable station for the festival. From there, the Diamond 247 bus between Redditch and Evesham stops right by the Ragley Hall main entrance.',\n"
+             "      kd:[['How often','Every 30 minutes'],['Get off at','Redditch',1],['Then','Diamond 247 bus'],['From Birmingham','About 40 minutes'],['Run by','West Midlands Railway']],\n"
+             "      jr:'Birmingham New Street to Redditch, in time for the 09:30 bus. These are Saturday times from the 2026 timetable, so check again nearer the show.',\n"
+             "      from:'Birmingham New Street',at:'Redditch',mid:'West Midlands Railway<br>38 min'})\n"
+             "  };\n")
+    trl = trl[:h0] + mid_h + trl[h1:]
+    trl = trl.replace('<script id="trlScript-dux">', '<script id="trlScript-midlands">', 1)
+    trl = trl.replace("/* Train route header on the Duxford train topics, the same design as the Clacton train topic (9 Nov) */",
+                      "/* Train route header on the train topic, the Duxford design, with the Midlands train facts */", 1)
+    trl = swap(trl, "https://www.ukairshowguide.co.uk/train-to-duxford", "https://www.ukairshowguide.co.uk/train-to-midlands")
+    html = swap(html, '<style id="jx-css-dux">', dux[ta:tz] + "\n" + trl + "\n" + '<style id="jx-css-dux">')
+    # 2. The Fares and Save money board, as on the Clacton round 2 page (fares.html, from the Wales version), with the hidden
+    #    Ways in board its script needs. Midlands' only travel prices are its 2027 parking prices, so there are no More fares tabs.
+    for fact in ('<span class="cdo-cost">&pound;9.97</span>', "Premium and disabled parking are both chosen when you book your tickets. Premium is a price per day. These are the 2027 prices, so I would check them again before you go.",
+                 "Standard parking is free and included with your ticket.", "For 2027, children 12 and under go free."):
+        assert fact in html or fact.replace("&pound;", "£") in html, fact
+    html = swap(html, '\n  <div class="wrap"><section class="cdo reveal" id="cdo"',
+                "\n" + (HERE / "fares.html").read_text(encoding="utf8") + '\n  <div class="wrap"><section class="cdo reveal" id="cdo"')
+    # 3. The jump strip: the "On the day and getting home" button pointed at a .pbx box this page does not have.
+    html = swap(html, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+                "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];")
     left = re.findall(r'data-goto="(balloons|camping|ground)"', html)
     assert not left, left
     return html
