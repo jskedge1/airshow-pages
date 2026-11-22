@@ -666,6 +666,19 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+## Midlands Air Festival page in the new design (preview, 22 Nov 2026)
+
+`previews/midlands-new-design.html` is the Midlands Air Festival feature page in the Duxford new design, built from the Duxford template
+as set out in `previews/NEW-DESIGN-ROLLOUT.md`. Preview (private, Jack shares it himself): https://claude.ai/artifact/73VXaNt5BPKC3uScdHpNyx
+
+- Built by `python3 previews/midlands-new-design-src/build.py` from `camping-layout/midlands.html`. The Duxford only text fixes and photo swaps are taken out; the rest of the build is the template's.
+- `chrome.html` and `new-design.js` carry the Midlands words (Midlands Air Festival, Ragley Hall, "3 days at Ragley Hall in June 2027", all from the page) and the page's own photo keys: `bbmf` (header), `b17` (intro), `formation` (guide band), `spitfire` (Quick checker), `pitts` (line-up), `bbmf` (Plan your day), and all five on the Photography tabs.
+- Every photo on this page is Chris Murgatroyd's, so the live page's own `cm-credit` code labels each one "© Chris Murgatroyd" wherever the new design reuses it. Where a photo has a caption the label sits at the top so it never covers the caption.
+- Section order as Jack chose. This page has no Flightline walk and no photographers' map, so those are skipped. Its own sections, The balloons, Camping at Ragley and The ground show, come after Make a postcard.
+- Midlands only fixes in `new-design.css`: the link in the Overview balloons box and the Help On Show Days link in Food and facilities were unreadable on the new backgrounds, and the two big red sub headings in The balloons and Camping at Ragley now use the template's navy sub heading.
+- Checked 22 Nov 2026: build with no assert errors, 76 inline scripts with 0 syntax errors, all 1,066 text chunks of the live page present, every section opened at 1280 and 390 wide with no sideways scroll and only the console errors the live page also has, and the line-up, topic explorer, planner, sun guide (buttons and aerial view), settings calculator, kit planner, checklists, Quick checker, Kids' corner, Pick your day and help answers all working.
+- To go live: Jack to approve the look, then copy the built file over `camping-layout/midlands.html`, or point the build's `OUT` at it.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
