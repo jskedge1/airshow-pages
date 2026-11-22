@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Big Guide to UK Airshows | Every UK airshow, one easy guide</title>
+<meta name="description" content="Free guide to every major UK airshow: 2027 dates, how to get there by train or car, where to watch, what to pack and what aircraft you could see.">
+<!--
+  v6 (11 Nov 2026): clean layout, inspired by the HTML Codex "Arkitektur" template (item 2338).
+  Build: run  perl build.pl  in this folder. Photos live in https://jskedge1.github.io/airshow-pages/home-img/v2/ (upload that folder with home.html).
+  The full v5 page with the planning tools is kept as home-v5-src.html / home-v5.html.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#13293C;--deep:#0E2131;--teal:#32B4AF;--teal-d:#0E7C78;--red:#D74949;--purple:#6950A1;--mint:#5FE3D6;--soft:#C9D6E0;
+  --blue:#1D63B7;--sky:#00A6E2;--pink:#C2255C;--green:#2BA84A;--forest:#1E3A34;--amber:#F5B942;
+  --light:#F4F7F9;--line:#E2E8ED;--body:#4A5A66;
+  --hf:'Barlow Condensed',Arial Narrow,sans-serif;--bf:'Barlow',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--bf);font-size:16px;line-height:1.65;color:var(--body);background:#fff;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{font-family:var(--hf);color:var(--navy);font-weight:600;line-height:1.08}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.sec{padding:96px 0}
+.sec.light{background:var(--light)}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+/* small spaced label, like the template's gold "ABOUT US" */
+.kicker{display:inline-flex;align-items:center;gap:14px;font-family:var(--bf);font-size:13px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--teal-d);margin-bottom:14px}
+.kicker::before{content:"";width:34px;height:2px;background:currentColor}
+.on-dark .kicker,.kicker.on-dark{color:var(--teal)}
+.title{font-size:clamp(34px,4.4vw,52px);margin-bottom:22px}
+.center{text-align:center}
+.center .kicker::after{content:"";width:34px;height:2px;background:currentColor}
+.head{max-width:860px;margin:0 auto 56px}
+
+/* buttons: square */
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--bf);font-weight:700;font-size:15px;letter-spacing:.5px;padding:15px 30px;background:var(--red);color:#fff;border:2px solid var(--red);transition:.3s;cursor:pointer}
+.btn:hover{background:#b93a3a;border-color:#b93a3a}
+.btn.line{background:transparent;color:var(--navy);border-color:var(--navy)}
+.btn.line:hover{background:var(--navy);color:#fff}
+.btn.white{background:#fff;color:var(--navy);border-color:#fff}
+.btn.white:hover{background:transparent;color:#fff}
+.btn i{font-style:normal}
+
+
+/* ---------- top bar ---------- */
+.topbar{background:var(--deep);color:var(--soft);font-size:13.5px}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:46px;flex-wrap:wrap}
+.topbar b{color:#fff;font-weight:600}
+.topbar .l{display:flex;gap:26px;flex-wrap:wrap}
+.topbar .l span{display:inline-flex;align-items:center;gap:8px}
+.topbar svg{width:15px;height:15px;color:var(--teal)}
+.topbar .r{display:flex}
+.topbar .r a{padding:12px 16px;border-left:1px solid rgba(255,255,255,.1);color:#fff;font-weight:600;transition:.3s}
+.topbar .r a:hover{background:var(--teal);color:var(--deep)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;height:660px;overflow:hidden;background:var(--deep)}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease;transform:scale(1.04)}
+.slide.on{opacity:1;transform:scale(1);transition:opacity 1.2s ease,transform 7s ease-out}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,33,49,.9) 0%,rgba(14,33,49,.62) 45%,rgba(14,33,49,.12) 100%)}
+.hero .wrap{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center}
+.hero-t{max-width:690px}
+.badge{display:inline-block;background:var(--purple);color:#fff;font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 14px;margin-bottom:24px}
+.hero h1{color:#fff;font-size:clamp(46px,7vw,86px);font-weight:700;line-height:.98;margin-bottom:22px}
+.hero h1 span{color:var(--teal);display:block}
+.hero .sub{color:var(--teal);font-weight:700;letter-spacing:3px;text-transform:uppercase;font-size:14px;margin-bottom:14px}
+.hero p{color:#E3EBF1;font-size:18px;max-width:560px;margin-bottom:34px}
+.hero-cta{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.play{display:inline-flex;align-items:center;gap:16px;color:#fff;font-family:var(--hf);font-size:21px;font-weight:600}
+.play span{width:56px;height:56px;border-radius:50%;background:#fff;color:var(--red);display:grid;place-items:center;transition:.3s}
+.play svg{width:22px;height:22px}
+.play:hover span{background:var(--teal);color:#fff}
+.arrows{position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column}
+.arrows button{width:56px;height:56px;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:22px;cursor:pointer;transition:.3s}
+.arrows button:hover{background:var(--teal)}
+.arrows button+button{border-top:1px solid rgba(255,255,255,.15)}
+
+/* ---------- three boxes under the hero ---------- */
+.facts{position:relative;z-index:4;margin-top:-70px}
+.facts .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.fact{background:#fff;box-shadow:0 14px 40px rgba(19,41,60,.12);padding:40px 34px 36px;text-align:center;border-bottom:4px solid transparent;transition:.35s;display:block}
+.fact:hover{border-bottom-color:var(--c,var(--teal));transform:translateY(-6px)}
+.ic{width:66px;height:66px;margin:0 auto 22px;border:1px solid var(--line);display:grid;place-items:center;color:var(--c,var(--teal-d))}
+.ic svg{width:30px;height:30px}
+.fact h3{font-size:26px;margin-bottom:10px}
+.fact p{font-size:15px;margin-bottom:16px}
+.more{font-weight:700;font-size:14px;color:var(--navy);display:inline-flex;align-items:center;gap:8px}
+.more::before{content:"";width:16px;height:2px;background:var(--c,var(--teal));transition:.35s}
+a:hover .more::before,.more:hover::before{width:38px}
+
+/* ---------- about: two photos + frame ---------- */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.pics{position:relative;min-height:520px;z-index:0}
+.pics::before{content:"";position:absolute;width:60%;height:80%;top:10%;left:20%;border:6px solid var(--teal);z-index:-1}
+.pics figure{position:absolute;width:60%;height:80%;overflow:hidden}
+.pics figure img{width:100%;height:100%;object-fit:cover}
+.pics figure.b{left:40%;top:20%}
+.stat{position:absolute;left:0;bottom:0;background:var(--navy);color:#fff;padding:22px 26px;z-index:3;display:flex;align-items:center;gap:16px}
+.stat b{font-family:var(--hf);font-size:64px;line-height:.9;color:var(--mint)}
+.stat span{font-family:var(--hf);font-size:20px;line-height:1.1;letter-spacing:.5px;text-transform:uppercase}
+.about p{margin-bottom:16px}
+.ticks{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin:24px 0 30px}
+.ticks li{display:flex;gap:10px;align-items:flex-start;font-weight:600;color:var(--navy)}
+.ticks li::before{content:"";flex:none;width:18px;height:18px;margin-top:4px;background:var(--teal);clip-path:polygon(14% 52%,0 66%,38% 100%,100% 22%,86% 8%,38% 72%)}
+.sign{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.sign em{font-family:var(--hf);font-style:normal;font-size:22px;color:var(--navy)}
+.sign em small{display:block;font-family:var(--bf);font-size:13px;color:var(--body);letter-spacing:.5px}
+
+/* ---------- guides: light boxes that turn into photos on hover ---------- */
+.guides{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.gi{position:relative;overflow:hidden;z-index:0;display:block;min-height:330px}
+.gi img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.gi .gt{height:100%;background:#fff;padding:42px 36px;transition:.5s;display:flex;flex-direction:column;align-items:flex-start}
+.sec.light .gi .gt{background:#fff}
+.gi:hover .gt{background:rgba(14,33,49,.78)}
+.gi .ic{margin:0 0 24px;background:#fff}
+.gi h3{font-size:27px;margin-bottom:10px;transition:.5s}
+.gi p{font-size:15px;margin-bottom:24px;flex:1;transition:.5s}
+.gi:hover h3,.gi:hover p{color:#fff}
+.gi .go{display:inline-flex;align-items:center;width:44px;height:44px;overflow:hidden;white-space:nowrap;background:var(--light);color:var(--navy);font-weight:700;font-size:14px;transition:.5s}
+.gi .go i{flex:none;width:44px;text-align:center;font-style:normal;font-size:18px}
+.gi:hover .go{width:150px;background:var(--teal);color:#fff}
+
+/* ---------- countdown band ---------- */
+.count{background:var(--navy);color:#fff}
+.count .wrap{display:grid;grid-template-columns:auto 1fr auto auto;align-items:stretch;gap:0;padding:0}
+.count .lab{background:var(--purple);padding:26px 30px;font-family:var(--hf);font-size:22px;font-weight:600;line-height:1.1;display:flex;align-items:center}
+.count .what{padding:22px 30px;display:flex;flex-direction:column;justify-content:center}
+.count .what b{font-family:var(--hf);font-size:26px;font-weight:600;line-height:1.1}
+.count .what small{color:var(--soft);font-size:14px}
+.cd{display:flex;align-items:center;gap:6px;padding:0 26px}
+.cd div{background:var(--deep);min-width:78px;text-align:center;padding:10px 8px}
+.cd b{display:block;font-family:'Share Tech Mono',monospace;font-size:34px;line-height:1;color:var(--mint);font-weight:400}
+.cd span{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--soft)}
+.count .btn{border:0;height:100%;padding:0 32px}
+
+/* ---------- kinds of show: numbered tabs + photo panel ---------- */
+.kinds{display:grid;grid-template-columns:380px 1fr;gap:24px}
+.knav{display:flex;flex-direction:column;gap:10px}
+.knav button{all:unset;cursor:pointer;background:var(--light);padding:24px 28px;display:flex;align-items:center;gap:18px;transition:.4s;border-left:5px solid transparent}
+.sec.light .knav button{background:#fff}
+.knav button b{font-family:var(--hf);font-size:26px;font-weight:600;color:var(--navy);line-height:1.1;transition:.4s}
+.knav button small{display:block;font-size:13.5px;color:var(--body);transition:.4s}
+.knav button .n{font-family:var(--hf);font-size:32px;font-weight:700;color:var(--c);min-width:40px}
+.knav button[aria-selected="true"]{background:var(--c);border-left-color:var(--navy)}
+.knav button[aria-selected="true"] *{color:#fff!important}
+.knav button:focus-visible{outline:3px solid var(--amber)}
+.kpanel{display:grid;grid-template-columns:1.25fr 1fr;min-height:470px;background:#fff;box-shadow:0 14px 40px rgba(19,41,60,.08)}
+.kpic{position:relative;overflow:hidden;background:var(--navy)}
+.kpic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.kbox{padding:36px 34px;border-top:5px solid var(--c)}
+.kbox h3{font-size:32px;margin-bottom:8px}
+.kbox p{font-size:15px;margin-bottom:14px}
+.klist{list-style:none;margin-bottom:6px}
+.klist li{border-top:1px solid var(--line)}
+.klist a{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-weight:600;color:var(--navy);font-size:15px;transition:.3s}
+.klist a span{color:var(--body);font-weight:500;white-space:nowrap}
+.klist a:hover{color:var(--teal-d);padding-left:6px}
+
+/* ---------- 2027 season list ---------- */
+.filters{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:34px}
+.filters button{font-family:var(--bf);font-weight:700;font-size:14px;padding:11px 20px;background:#fff;border:1px solid var(--line);color:var(--navy);cursor:pointer;transition:.3s}
+.filters button:hover{border-color:var(--teal)}
+.filters button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.board{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;grid-auto-flow:column}
+.row{display:grid;grid-template-columns:70px 1fr auto;align-items:center;gap:18px;background:#fff;padding:12px 18px 12px 12px;height:100%;border-left:4px solid var(--c);transition:.35s}
+.row:hover{background:var(--teal);border-left-color:var(--navy)}
+.row:hover *{color:#fff!important;border-color:rgba(255,255,255,.6)!important}
+.date{background:var(--light);text-align:center;padding:8px 0;transition:.35s}
+.row:hover .date{background:rgba(14,33,49,.2)}
+.date b{display:block;font-family:var(--hf);font-size:30px;line-height:1;color:var(--navy)}
+.date span{font-size:12.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal-d)}
+.date.tbc b{font-size:22px;padding:6px 0 2px}
+.row h3{font-size:22px}
+.row h3 small{display:block;font-family:var(--bf);font-size:14px;font-weight:500;color:var(--body);margin-top:3px}
+.row .note{color:var(--purple);font-weight:700}
+.tag{display:block;margin-top:4px;font-family:var(--bf);font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--c)}
+.st{justify-self:start;font-size:12.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 10px;border:1.5px solid}
+.st.c{color:var(--green);border-color:var(--green)}
+.st.e{color:#B7791F;border-color:var(--amber)}
+.st.t{color:#7A8A96;border-color:var(--line)}
+.board-foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:28px;font-size:14px}
+
+/* ---------- hub ---------- */
+.hub{display:grid;grid-template-columns:1.05fr .95fr;background:var(--purple);color:#fff}
+.hub-t{padding:64px 56px}
+.hub-t h2{color:#fff;font-size:clamp(34px,4vw,50px);margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.new{font-family:var(--bf);font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:#fff;color:var(--purple);padding:5px 10px}
+.hub-t>p{color:#ECE7F7;margin-bottom:30px;max-width:520px}
+.feats{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:22px 28px;margin-bottom:36px}
+.feats li{display:flex;gap:14px}
+.feats i{flex:none;width:46px;height:46px;border:1px solid rgba(255,255,255,.35);display:grid;place-items:center}
+.feats svg{width:22px;height:22px}
+.feats b{display:block;font-family:var(--hf);font-size:21px;font-weight:600;line-height:1.1}
+.feats span{font-size:14px;color:#DCD3EF;line-height:1.45}
+.hub-p{position:relative;min-height:420px}
+.hub-p img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* ---------- RIAT update ---------- */
+.update{position:relative;min-height:480px;display:flex;align-items:center;overflow:hidden}
+.update>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.update .box{position:relative;z-index:2;background:#fff;max-width:540px;padding:46px 46px 42px;border-top:6px solid var(--red)}
+.update .box h2{font-size:clamp(32px,3.6vw,44px);margin-bottom:16px}
+.update .box p{margin-bottom:26px}
+.update .kicker{color:var(--red)}
+
+/* ---------- aircraft (team style cards) ---------- */
+.planes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.pl{background:#fff}
+.pl figure{position:relative;overflow:hidden;aspect-ratio:4/3}
+.pl img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.pl:hover img{transform:scale(1.07)}
+.pl figure::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--c)}
+.pl div{padding:18px 20px 20px}
+.pl h3{font-size:23px}
+.pl small{font-size:12.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--c)}
+
+/* ---------- quote band ---------- */
+.band{position:relative;padding:120px 0;background:var(--deep) center 40%/cover no-repeat;text-align:center;color:#fff}
+.band::before{content:"";position:absolute;inset:0;background:rgba(14,33,49,.66)}
+.band .wrap{position:relative;z-index:2;max-width:860px}
+.band q{display:block;font-family:var(--hf);font-size:clamp(30px,4vw,48px);font-weight:600;line-height:1.1;quotes:"\201C" "\201D";margin-bottom:18px}
+.band p{color:var(--soft);margin-bottom:30px}
+
+/* ---------- footer ---------- */
+footer{background:var(--deep);color:var(--soft);font-size:15px}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;padding:76px 24px 56px}
+footer h4{color:#fff;font-size:24px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+footer h4::after{content:"";width:28px;height:2px;background:var(--teal)}
+footer .brand{font-family:var(--hf);font-size:30px;font-weight:700;color:#fff;line-height:1.05;margin-bottom:14px}
+footer .brand span{color:var(--teal)}
+footer ul{list-style:none}
+footer li{margin-bottom:9px}
+footer li a{transition:.3s;display:inline-flex;gap:8px}
+footer li a::before{content:"›";color:var(--teal)}
+footer li a:hover{color:#fff;padding-left:4px}
+.fbot{border-top:1px solid rgba(255,255,255,.08)}
+.fbot .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:20px;padding-bottom:20px;font-size:14px}
+.fbot a{color:#fff}
+
+/* ---------- reveal on scroll ---------- */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+
+/* ---------- smaller screens ---------- */
+@media (max-width:1060px){
+  .kinds{grid-template-columns:1fr}
+  .knav{display:grid;grid-template-columns:1fr 1fr}
+  .board{grid-template-columns:1fr;grid-auto-flow:row;grid-template-rows:none!important}
+  .kpanel{grid-template-columns:1fr}
+  .kpic{min-height:320px}
+  .count .wrap{grid-template-columns:1fr 1fr}
+  .count .lab{grid-column:1/-1;padding:16px 24px}
+  .count .btn{grid-column:1/-1;padding:18px;justify-content:center}
+  .cd{justify-content:flex-end;padding:16px 24px}
+  .fgrid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:900px){
+  .planes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sec{padding:72px 0}
+  .facts .wrap,.guides{grid-template-columns:1fr}
+  .about,.hub{grid-template-columns:1fr}
+  .about{gap:48px}
+  .pics{min-height:420px}
+  .hub-t{padding:48px 28px}
+  .hub-p{min-height:300px;order:-1}
+}
+@media (max-width:640px){
+  .hero{height:600px}
+  .hero::after{background:linear-gradient(180deg,rgba(14,33,49,.55),rgba(14,33,49,.9))}
+  .arrows{top:0;transform:none;flex-direction:row}
+  .arrows button{width:46px;height:46px}
+  .topbar .l span+span{display:none}
+  .facts{margin-top:-40px}
+  .knav{grid-template-columns:1fr}
+  .kbox{padding:26px 22px}
+  .row{grid-template-columns:62px 1fr;gap:14px;padding:12px}
+  .row .st{grid-column:2}
+  .count .wrap{grid-template-columns:1fr}
+  .cd{justify-content:flex-start}
+  .cd div{min-width:64px}
+  .ticks,.feats{grid-template-columns:1fr}
+  .update .box{margin:0 14px;padding:32px 26px}
+  .planes{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .pl h3{font-size:19px}
+  .fgrid{grid-template-columns:1fr}
+}
+/* ===== v7: effects and aviation touches ===== */
+.badge{text-transform:none;letter-spacing:.3px;font-size:14px}
+.tag,.pl small{text-transform:none;letter-spacing:.2px}
+/* flight path under each heading: a dashed track with a jet that flies along it */
+.title::after{content:"";display:block;height:20px;width:0;margin-top:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath transform='rotate(90 12 12)' fill='%2332B4AF' d='M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z'/%3E%3C/svg%3E") right center/20px 20px no-repeat,repeating-linear-gradient(90deg,var(--teal) 0 8px,transparent 8px 14px) left center/calc(100% - 26px) 2px no-repeat;transition:width 1.6s cubic-bezier(.3,.1,.2,1) .3s}
+.center .title::after{margin-left:auto;margin-right:auto}
+.rv.in .title::after,.title.in::after{width:170px}
+/* hero text arrives in turn */
+@keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.hero-t>*{animation:up .9s cubic-bezier(.2,.7,.2,1) both}
+.hero-t>*:nth-child(2){animation-delay:.15s}.hero-t>*:nth-child(3){animation-delay:.3s}.hero-t>*:nth-child(4){animation-delay:.45s}
+/* icons fill with colour on hover */
+.ic{transition:.35s}
+.fact:hover .ic{background:var(--c,var(--teal));border-color:var(--c,var(--teal));color:#fff!important;transform:rotateY(180deg)}
+.fact:hover .ic svg{transform:rotateY(180deg)}
+.gi:hover .ic{background:var(--teal);border-color:var(--teal);color:#fff}
+/* runway strip with a jet taking off */
+.runway{position:relative;height:84px;overflow:hidden;background:#2B3237;border-top:3px solid #fff;border-bottom:3px solid #fff}
+.runway::before{content:"";position:absolute;left:150px;right:150px;top:50%;height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,#fff 0 46px,transparent 46px 86px)}
+.runway::after{content:"";position:absolute;inset:12px 0;background:repeating-linear-gradient(0deg,#fff 0 5px,transparent 5px 10px) left 22px top 0/60px 100% no-repeat,repeating-linear-gradient(0deg,#fff 0 5px,transparent 5px 10px) right 22px top 0/60px 100% no-repeat;opacity:.9}
+.runway .rn{position:absolute;top:50%;transform:translateY(-50%) rotate(90deg);font-family:var(--hf);font-size:30px;font-weight:700;color:#fff;z-index:1}
+.runway .rn.l{left:96px}.runway .rn.r{right:96px;transform:translateY(-50%) rotate(-90deg)}
+.runway .jet{position:absolute;top:50%;left:-80px;width:64px;height:64px;margin-top:-32px;color:#fff;z-index:2;filter:drop-shadow(6px 8px 3px rgba(0,0,0,.45))}
+.runway .jet svg{width:100%;height:100%;transform:rotate(90deg)}
+.runway.in .jet{animation:takeoff 4.5s cubic-bezier(.55,0,.75,.4) .4s both}
+@keyframes takeoff{0%{left:-80px;transform:scale(1)}70%{transform:scale(1.05)}100%{left:calc(100% + 120px);transform:scale(1.7);filter:drop-shadow(30px 34px 6px rgba(0,0,0,.25))}}
+/* departures board countdown */
+.count .lab svg{width:26px;height:26px;margin-right:12px;flex:none}
+.cd b{position:relative;background:#081622;padding:6px 6px 4px;margin-bottom:4px}
+.cd b::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.7)}
+.cd.flip b{animation:flip .7s ease-out both}
+.cd.flip div:nth-child(2) b{animation-delay:.15s}.cd.flip div:nth-child(3) b{animation-delay:.3s}
+@keyframes flip{0%{transform:rotateX(90deg);opacity:.2}60%{transform:rotateX(-20deg);opacity:1}100%{transform:none}}
+/* boarding pass notches on the 2027 dates */
+.date{position:relative;border-right:2px dashed var(--line)}
+.date::before,.date::after{content:"";position:absolute;right:-9px;width:16px;height:16px;border-radius:50%;background:var(--light)}
+.date::before{top:-20px}.date::after{bottom:-20px}
+.row:hover .date{border-right-color:rgba(255,255,255,.6)}
+.row:hover{transform:translateX(6px)}
+/* photos in the kinds of show tabs */
+.knav button{padding:14px 18px 14px 14px;gap:16px}
+.knav .kt{flex:none;width:92px;height:66px;object-fit:cover;transition:.4s}
+.knav button:hover .kt{transform:scale(1.05)}
+.knav button[aria-selected="true"] .kt{outline:3px solid #fff}
+.knav button .n{font-size:24px;min-width:28px}
+.kpic img{animation:kz 7s ease-out both}
+@keyframes kz{from{transform:scale(1.12)}to{transform:scale(1)}}
+.kbox{animation:up .6s ease both}
+/* staggered cards, lift on hover */
+.pl{transition:transform .35s,box-shadow .35s}
+.pl:hover{transform:translateY(-8px);box-shadow:0 18px 40px rgba(19,41,60,.14)}
+.btn{position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .6s}
+.btn:hover::after{left:130%}
+@media (hover:hover) and (min-width:900px){.band{background-attachment:fixed}}
+@media (max-width:640px){.runway .rn{display:none}.runway::before{left:70px;right:70px}.knav .kt{width:72px;height:54px}}
+@media (prefers-reduced-motion:reduce){.hero-t>*,.runway .jet,.cd.flip b,.kpic img,.kbox{animation:none!important}.runway .jet{display:none}.title::after{width:170px}}
+/* ===== v8: items from the live page ===== */
+/* when the shows usually run */
+.months{margin-top:56px;background:#fff;padding:34px 34px 30px}
+.months h3{font-size:28px;margin-bottom:26px}
+.months ol{list-style:none;display:grid;grid-template-columns:repeat(6,1fr);position:relative}
+.months ol::before{content:"";position:absolute;left:0;right:0;top:9px;height:2px;background:repeating-linear-gradient(90deg,var(--teal) 0 8px,transparent 8px 14px)}
+.months li{position:relative;padding:30px 14px 0 0}
+.months li::before{content:"";position:absolute;top:2px;left:0;width:16px;height:16px;background:#fff;border:3px solid var(--teal)}
+.months li.busy::before{background:var(--red);border-color:var(--red)}
+.months b{display:block;font-family:var(--hf);font-size:24px;color:var(--navy);line-height:1.1}
+.months em{display:inline-block;font-style:normal;font-size:12px;font-weight:700;color:#fff;background:var(--red);padding:2px 8px;margin:4px 0}
+.months span{display:block;font-size:14px;line-height:1.45}
+/* hour by hour */
+.day-g{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:start}
+.sched{list-style:none;border-left:2px solid var(--line)}
+.sched li{display:grid;grid-template-columns:96px 1fr;gap:18px;padding:0 0 22px 0;position:relative}
+.sched li::before{content:"";position:absolute;left:-7px;top:8px;width:12px;height:12px;background:var(--teal)}
+.sched li.hot::before{background:var(--red)}
+.sched time{font-family:'Share Tech Mono',monospace;font-size:22px;color:var(--teal-d);padding-left:22px;line-height:1.3}
+.sched li.hot time{color:var(--red)}
+.sched b{font-family:var(--hf);font-size:22px;font-weight:600;color:var(--navy);display:block;line-height:1.2}
+.sched p{font-size:15px;margin-top:2px}
+.tip{background:var(--navy);color:#DCE6EE;position:sticky;top:24px}
+.tip figure{position:relative;aspect-ratio:16/10;overflow:hidden}
+.tip img{width:100%;height:100%;object-fit:cover}
+.tip>div{padding:30px 30px 34px;border-top:5px solid var(--teal)}
+.tip h3{color:#fff;font-size:28px;margin-bottom:10px}
+.tip p{margin-bottom:24px}
+/* boarding pass */
+.pass{display:grid;grid-template-columns:1fr 330px;background:#fff;box-shadow:0 18px 50px rgba(19,41,60,.12)}
+.pass-main{padding:34px 40px 36px}
+.pass-top{display:flex;justify-content:space-between;font-weight:700;color:var(--teal-d);font-size:14px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:22px}
+.route{display:flex;align-items:center;gap:24px;margin-bottom:26px}
+.route small{display:block;font-size:13px;color:var(--body)}
+.route b{font-family:var(--hf);font-size:clamp(28px,3vw,40px);color:var(--navy);line-height:1}
+.route svg{flex:1;max-width:160px;height:30px;color:var(--teal);background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 11px) center/100% 2px no-repeat}
+.perks{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 30px}
+.perks b{display:block;font-family:var(--hf);font-size:20px;color:var(--navy)}
+.perks span{font-size:14px;line-height:1.45}
+.pass-stub{position:relative;background:var(--navy);color:#fff;padding:34px 32px;border-left:3px dashed #fff;display:flex;flex-direction:column;gap:16px}
+.pass-stub::before,.pass-stub::after{content:"";position:absolute;left:-16px;width:28px;height:28px;border-radius:50%;background:var(--light)}
+.pass-stub::before{top:-14px}.pass-stub::after{bottom:-14px}
+.pass-stub dl{display:grid;gap:10px}
+.pass-stub dt{font-size:12.5px;color:var(--soft)}
+.pass-stub dd{font-family:var(--hf);font-size:22px;font-weight:600}
+.pass-stub .fare{font-family:'Share Tech Mono',monospace;font-size:34px;color:var(--mint)}
+.stamp{position:absolute;right:22px;top:30px;border:3px solid var(--red);color:var(--red);font-family:var(--hf);font-weight:700;font-size:26px;padding:2px 12px;transform:rotate(-12deg);background:#fff}
+.pass-stub small{color:var(--soft)}
+.pass-stub small a{color:#fff;text-decoration:underline}
+.barcode{height:44px;background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 4px,#fff 4px 7px,transparent 7px 9px,#fff 9px 10px,transparent 10px 14px)}
+/* organisers */
+.org{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.org>div>p{margin-bottom:14px}
+.steps{list-style:none;counter-reset:s;margin:26px 0 30px;display:grid;gap:14px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:2px 14px;align-items:start}
+.steps li::before{grid-row:span 2}
+.steps b,.steps span{grid-column:2}
+.steps li::before{content:counter(s);width:44px;height:44px;display:grid;place-items:center;background:var(--navy);color:#fff;font-family:var(--hf);font-size:22px;font-weight:700}
+.steps b{font-family:var(--hf);font-size:21px;color:var(--navy);display:block;line-height:1.1}
+.steps span{font-size:14.5px}
+.offer{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.offer li{background:#fff;padding:24px 22px;border-top:4px solid var(--teal);transition:.35s}
+.offer li:nth-child(2){border-color:var(--blue)}.offer li:nth-child(3){border-color:var(--purple)}.offer li:nth-child(4){border-color:var(--red)}.offer li:nth-child(5){border-color:var(--green)}.offer li:nth-child(6){border-color:var(--sky)}
+.offer li:hover{transform:translateY(-6px);box-shadow:0 14px 34px rgba(19,41,60,.1)}
+.offer b{display:block;font-family:var(--hf);font-size:21px;color:var(--navy);margin-bottom:4px}
+.offer span{font-size:14.5px;line-height:1.5}
+@media (max-width:1060px){.months ol{grid-template-columns:repeat(3,1fr);row-gap:24px}.months ol::before{display:none}.pass{grid-template-columns:1fr}.pass-stub{border-left:0;border-top:3px dashed #fff}.pass-stub::before,.pass-stub::after{display:none}}
+@media (max-width:900px){.day-g,.org{grid-template-columns:1fr}.tip{position:static}}
+@media (max-width:640px){.months ol,.perks,.offer{grid-template-columns:1fr}.sched li{grid-template-columns:70px 1fr}.sched time{font-size:18px;padding-left:16px}.pass-main{padding:26px 22px}.route{gap:12px}.route svg{display:none}}
+/* ===== v9: features adapted from the RIAT 2023 site ===== */
+/* news ticker in the top bar */
+.ticker{position:relative;height:46px;overflow:hidden;flex:1;min-width:0}
+.ticker span{position:absolute;inset:0;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform:translateY(100%);opacity:0;transition:transform .6s ease,opacity .6s}
+.ticker span.on{transform:none;opacity:1}
+.ticker span.out{transform:translateY(-100%);opacity:0}
+.ticker em{font-style:normal;font-size:12px;font-weight:800;background:var(--red);color:#fff;padding:2px 8px}
+.ticker em.t{background:var(--teal);color:var(--deep)}.ticker em.p{background:var(--purple)}
+.topbar .r a.sign{background:var(--red);border-left:0;display:inline-flex;gap:8px;align-items:center}
+.topbar .r a.sign svg{width:15px;height:15px;color:#fff}
+/* hero countdown box with a show picker */
+.hero .wrap{flex-direction:row;align-items:center;justify-content:space-between;gap:40px}
+.hcd{width:370px;flex:none;background:rgba(14,33,49,.9);color:#fff;border-top:6px solid var(--purple);animation:up .9s .6s both}
+.hcd-h{background:var(--purple);padding:14px 22px}
+.hcd-h small{display:block;font-size:13px;color:#E4DCF5}
+.hcd select{width:100%;font:600 20px var(--hf);color:#fff;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='white' stroke-width='2.5'/%3E%3C/svg%3E") right center/18px no-repeat;border:0;appearance:none;-webkit-appearance:none;padding:2px 24px 2px 0;cursor:pointer}
+.hcd select option{color:var(--navy);font-family:var(--bf);font-size:15px}
+.hcd .cd{padding:20px 22px 6px;justify-content:space-between;gap:6px}
+.hcd .cd div{flex:1;min-width:0;background:transparent}
+.hcd .cd b{font-size:32px;display:block}
+.hcd-f{padding:8px 22px 22px}
+.hcd-f p{font-size:14px;color:var(--soft);margin-bottom:14px;min-height:2.6em}
+.hcd-f .btn{width:100%;justify-content:center}
+/* highlight photo tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.tile{position:relative;aspect-ratio:3/4;overflow:hidden;display:block;background:var(--navy)}
+.tile img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,33,49,0) 35%,rgba(14,33,49,.92));transition:.5s}
+.tile:hover img{transform:scale(1.08)}
+.tile:hover::after{background:linear-gradient(180deg,rgba(14,33,49,.2) 0%,rgba(14,33,49,.95))}
+.tile .tt{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:24px 22px;border-bottom:6px solid var(--c)}
+.tile .tt small{display:block;font-family:var(--hf);font-size:20px;color:#fff;font-weight:500;line-height:1}
+.tile .tt b{display:block;font-family:var(--hf);font-size:32px;color:#fff;line-height:1.05}
+.tile .tt span{display:block;max-height:0;overflow:hidden;color:#DCE6EE;font-size:14px;transition:max-height .5s,margin .5s}
+.tile:hover .tt span{max-height:80px;margin-top:8px}
+/* tickets and viewing explained */
+.ttabs{display:flex;justify-content:center;gap:0;margin-bottom:30px}
+.ttabs button{font:700 16px var(--bf);padding:14px 30px;background:#fff;border:2px solid var(--navy);color:var(--navy);cursor:pointer}
+.ttabs button+button{border-left:0}
+.ttabs button[aria-selected="true"]{background:var(--navy);color:#fff}
+.tix{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.tk{background:#fff;display:flex;flex-direction:column;border-top:6px solid var(--c);box-shadow:0 10px 30px rgba(19,41,60,.07);transition:.35s;animation:up .5s ease both}
+.tk:nth-child(2){animation-delay:.06s}.tk:nth-child(3){animation-delay:.12s}.tk:nth-child(4){animation-delay:.18s}
+.tk:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(19,41,60,.13)}
+.tk-h{padding:22px 22px 14px}
+.tk-h em{display:inline-block;font-style:normal;font-size:12.5px;font-weight:700;color:#fff;background:var(--c);padding:3px 9px;margin-bottom:10px}
+.tk-h h3{font-size:25px}
+.tk-h p{font-size:14.5px;margin-top:6px}
+.tk ul{list-style:none;padding:0 22px 22px;margin-top:auto;display:grid;gap:7px}
+.tk li{display:flex;gap:9px;font-size:14px;font-weight:600;color:var(--navy);line-height:1.4}
+.tk li::before{content:"";flex:none;width:14px;height:14px;margin-top:3px;background:var(--c);clip-path:polygon(14% 52%,0 66%,38% 100%,100% 22%,86% 8%,38% 72%)}
+.tix-note{text-align:center;font-size:14px;margin-top:22px}
+/* leave the car at home promo */
+.promo{display:grid;grid-template-columns:1fr 1fr;background:var(--teal-d);color:#fff;min-height:400px}
+.promo-p{position:relative;overflow:hidden}
+.promo-p img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.promo-t{padding:56px 56px 52px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.promo-t .badge{background:var(--amber);color:var(--navy);margin-bottom:18px}
+.promo-t h2{color:#fff;font-size:clamp(34px,4vw,50px);margin-bottom:16px}
+.promo-t p{color:#E2F3F2;margin-bottom:14px;max-width:520px}
+.promo-t ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 26px}
+.promo-t li{font-size:14px;font-weight:700;padding:7px 12px;border:1.5px solid rgba(255,255,255,.55)}
+@media (max-width:1060px){.tiles,.tix{grid-template-columns:repeat(2,1fr)}.hcd{width:320px}}
+@media (max-width:900px){
+  .hero{height:auto;padding:64px 0 100px}
+  .hero .wrap{flex-direction:column;align-items:stretch}
+  .hcd{width:100%}
+  .promo{grid-template-columns:1fr}.promo-p{min-height:260px}.promo-t{padding:40px 26px}
+}
+@media (max-width:640px){.tix{grid-template-columns:1fr}.tiles{gap:10px}.tile .tt{padding:16px 14px}.tile .tt b{font-size:24px}.ttabs button{padding:12px 16px;font-size:14px}.ticker{display:none}}
+/* ===== v10 ===== */
+/* navy bands */
+.navy{background:var(--navy);color:#C9D6E0}
+.navy .title{color:#fff}
+.navy .head p{color:#C9D6E0}
+.navy .title::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath transform='rotate(90 12 12)' fill='%23F5B942' d='M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z'/%3E%3C/svg%3E") right center/20px 20px no-repeat,repeating-linear-gradient(90deg,var(--amber) 0 8px,transparent 8px 14px) left center/calc(100% - 26px) 2px no-repeat}
+#guides .gi{border-top:5px solid var(--teal)}
+#guides .gi:nth-child(2){border-top-color:var(--green)}#guides .gi:nth-child(3){border-top-color:var(--amber)}#guides .gi:nth-child(4){border-top-color:var(--pink)}#guides .gi:nth-child(5){border-top-color:var(--blue)}#guides .gi:nth-child(6){border-top-color:var(--red)}
+/* ticket cards with photos */
+.tk-p{position:relative;aspect-ratio:16/10;overflow:hidden;margin:0}
+.tk-p img{width:100%;height:100%;object-fit:cover;transition:transform .7s}
+.tk:hover .tk-p img{transform:scale(1.08)}
+.tk-p::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(14,33,49,.45));}
+.tk{border-top:0;border-bottom:6px solid var(--c)}
+/* new about photos: wipe in */
+.pics figure{clip-path:inset(0 100% 0 0);transition:clip-path 1.3s cubic-bezier(.7,0,.2,1)}
+.pics figure.b{transition-delay:.35s}
+.rv.in .pics figure,.pics.in figure{clip-path:inset(0 0 0 0)}
+/* headings: words rise in */
+.title .w{display:inline-block;opacity:0;transform:translateY(.55em);transition:opacity .6s,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i)*70ms + .1s)}
+.rv.in .title .w,.title.in .w{opacity:1;transform:none}
+/* tilt glare */
+.tile,.gi,.tk,.cal-c,.offer li,.pl{transition:transform .25s ease-out,box-shadow .35s}
+.tk::before,.cal-c::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.35),transparent 55%);z-index:3}
+.tk,.cal-c{position:relative}
+.tk:hover::before,.cal-c:hover::before{opacity:1}
+/* calendar: filters */
+.cal-bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:26px}
+.cal-bar .filters{margin:0;justify-content:flex-start}
+.cal-bar select{font:700 14px var(--bf);padding:11px 36px 11px 14px;border:1px solid var(--line);color:var(--navy);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%2313293C' stroke-width='2.5'/%3E%3C/svg%3E") right 10px center/16px no-repeat;appearance:none;-webkit-appearance:none;cursor:pointer}
+.cal-m{margin-bottom:26px}
+/* the clean Tab layout: header bar + card grid */
+.save-h{display:flex;align-items:center;gap:14px;background:var(--mc);padding:14px 18px;border-bottom:5px solid rgba(0,0,0,.22)}
+.save-h .sh-i{width:42px;height:42px;flex:none;background:#fff;color:var(--mc);display:grid;place-items:center;font-family:var(--hf);font-weight:800;font-size:17px;filter:brightness(.85)}
+.save-h h3{color:#fff;font-weight:800;font-size:clamp(26px,3vw,34px);line-height:1}
+.save-h small{display:block;color:rgba(255,255,255,.88);font-size:15px;margin-top:3px}
+.sv{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.cal-c{background:#fff;border:1px solid #DCE4EA;border-top:5px solid var(--sc);padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;animation:up .5s ease both}
+.cal-c:hover{box-shadow:0 16px 34px -12px rgba(19,41,60,.35)}
+.cal-t{display:flex;gap:12px;align-items:flex-start}
+.cal-d{flex:none;width:52px;background:var(--sc);color:#fff;text-align:center;font-size:12px;font-weight:700;padding:5px 0 6px;line-height:1.1}
+.cal-d b{display:block;font-family:var(--hf);font-size:26px;line-height:1}
+.cal-c h4{font-family:var(--hf);font-size:22px;color:var(--navy);line-height:1.1}
+.cal-c h4 small{display:block;font-family:var(--bf);font-size:13px;color:var(--purple);font-weight:700;margin-top:2px}
+.cal-w{font-size:14px;color:var(--body)}
+.cal-c>p{font-size:15px;color:#33444F;flex:1}
+.cal-tags{display:flex;flex-wrap:wrap;gap:6px}
+.ctag{font-size:12.5px;font-weight:700;background:#F3F6F8;color:#5A6B78;padding:4px 8px}
+.ctag.free{background:#E3F6E7;color:#1C7332}
+.cal-tags .st{padding:3px 8px;font-size:12px}
+.cal-none{background:#fff;padding:30px;text-align:center}
+/* show guide button (saved design) */
+.guide{display:flex;align-items:stretch;text-decoration:none;white-space:nowrap;background:#13293C;color:#fff;box-shadow:0 10px 22px -14px rgba(19,41,60,.7);border-bottom:4px solid #32B4AF;transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s,border-color .25s}
+.guide .g-i{display:grid;place-items:center;width:52px;background:#32B4AF;color:#fff;flex:none}
+.guide .g-i svg{width:24px;height:24px}
+.guide .g-t{display:flex;flex-direction:column;justify-content:center;padding:9px 16px 8px 14px;text-align:left;flex:1}
+.guide .g-t b{font-weight:700;font-size:17px;line-height:1.15;color:#fff}
+.guide .g-t small{font-weight:500;font-size:13px;color:#BFD3E0;white-space:nowrap}
+.guide .g-a{display:grid;place-items:center;padding:0 16px;font-size:20px;border-left:1px solid rgba(255,255,255,.14);transition:transform .25s cubic-bezier(.22,.61,.36,1)}
+.guide:hover{transform:translateY(-2px);border-bottom-color:#1D63B7;box-shadow:0 14px 26px -14px rgba(19,41,60,.8)}
+.guide:hover .g-i{background:#1D63B7}
+.guide:hover .g-a{transform:translateX(3px)}
+/* hour by hour in the transport roundel look */
+.rsteps{list-style:none;padding:0;margin:0}
+.rsteps li{position:relative;display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;padding-bottom:10px}
+.rsteps li:before{content:"";position:absolute;left:17px;top:34px;bottom:-2px;width:4px;background:var(--sc)}
+.rsteps li:last-child:before{display:none}
+.rsteps .sn{width:38px;height:38px;box-sizing:border-box;border-radius:50%;border:3px solid #fff;background:var(--sc);color:#fff;box-shadow:0 0 0 3px var(--sc);display:grid;place-items:center;position:relative;z-index:1;transition:transform .3s}
+.rsteps .sn svg{width:16px;height:16px}
+.rsteps li:hover .sn{transform:scale(1.15)}
+.rsteps .sx{padding:10px 14px 12px;background:linear-gradient(90deg,color-mix(in srgb,var(--sc) 14%,#fff) 0%,color-mix(in srgb,var(--sc) 5%,#fff) 55%,#fff 100%);box-shadow:inset 3px 0 0 var(--sc);transition:background .3s cubic-bezier(.22,.61,.36,1),transform .3s}
+.rsteps li:hover .sx{background:linear-gradient(90deg,color-mix(in srgb,var(--sc) 20%,#fff) 0%,color-mix(in srgb,var(--sc) 8%,#fff) 60%,#fff 100%);transform:translateX(4px)}
+.rsteps .sx span{display:block;font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700;color:var(--sc)}
+.rsteps .sx b{display:block;font-size:17px;line-height:1.3;color:#13293C}
+.rsteps .sx p{margin-top:2px;font-size:15.5px;line-height:1.5;color:#33444F}
+.navy .tip{background:var(--teal-d)}
+@media (max-width:900px){.sv{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.sv{grid-template-columns:1fr}.cal-bar select{width:100%}}
+@media (prefers-reduced-motion:reduce){.pics figure{clip-path:none!important}.cal-c{animation:none}}
+/* start-here box photos */
+.fact{padding-top:0;overflow:hidden}
+.fact-p{margin:0 -34px 0;aspect-ratio:16/9;overflow:hidden;position:relative}
+.fact-p img{width:100%;height:100%;object-fit:cover;transition:transform .7s}
+.fact:hover .fact-p img{transform:scale(1.08)}
+.fact .ic{margin-top:-33px;position:relative;z-index:2;box-shadow:0 0 0 5px #fff}
+/* guide cards: photo shows at the top, then fills the card on hover */
+.gi img{z-index:0;height:190px;transition:height .55s cubic-bezier(.4,0,.2,1),transform .7s}
+.gi:hover img{height:100%}
+.gi .gt{position:relative;z-index:1;margin-top:190px;height:auto;min-height:calc(100% - 190px)}
+.gi .ic{margin-top:-58px;box-shadow:0 0 0 5px #fff}
+.gi:hover .ic{box-shadow:0 0 0 5px rgba(255,255,255,.25)}
+.gi{min-height:460px}
+#guides .gi p{color:var(--body)}
+#guides .gi:hover p{color:#fff}
+/* 2027 calendar: simple departures board */
+.dep{background:var(--deep);color:#fff;border-top:6px solid var(--amber);box-shadow:0 20px 50px -20px rgba(14,33,49,.6)}
+.dep-top{display:flex;align-items:center;gap:12px;padding:16px 22px;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.08)}
+.dep-top svg{width:30px;height:30px;color:var(--amber)}
+.dep-top b{font-family:var(--hf);font-size:30px;letter-spacing:.5px;color:var(--amber)}
+.dep-top span{margin-left:auto;font-size:14px;color:var(--soft)}
+.dep-h,.dep-l a{display:grid;grid-template-columns:130px 78px 1fr 130px 92px;gap:16px;align-items:center;padding:0 22px}
+.dep-h{padding-top:10px;padding-bottom:10px;font-size:12.5px;font-weight:700;color:#7F93A3;border-bottom:1px solid rgba(255,255,255,.08)}
+.dep-l{list-style:none}
+.dep-l li{border-bottom:1px solid rgba(255,255,255,.07);animation:up .45s ease both}
+.dep-l li:nth-child(even){background:rgba(255,255,255,.025)}
+.dep-l a{padding-top:13px;padding-bottom:13px;transition:background .25s}
+.dep-l a:hover{background:rgba(50,180,175,.14)}
+.dd{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--amber);text-transform:uppercase}
+.dc{font-family:'Share Tech Mono',monospace;font-size:16px;color:#fff;background:var(--c);padding:3px 6px;justify-self:start}
+.dn b{display:block;font-family:var(--hf);font-size:21px;font-weight:600;line-height:1.15}
+.dn b i{font-style:normal;font-size:14px;color:var(--mint);font-family:var(--bf);font-weight:600}
+.dn small{font-size:13.5px;color:var(--soft)}
+.ds{font-family:'Share Tech Mono',monospace;font-size:15px}
+.ds.c{color:#6EE38A}.ds.e{color:var(--amber)}.ds.t{color:#7F93A3}
+.ds.c::before{content:"";display:inline-block;width:8px;height:8px;background:#6EE38A;margin-right:7px;animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.2}}
+.dg{font-weight:700;font-size:14px;color:#fff;border:1px solid rgba(255,255,255,.3);padding:6px 10px;text-align:center;transition:.25s}
+.dep-l a:hover .dg{background:var(--teal);border-color:var(--teal);color:var(--deep)}
+.dep-l a:hover .dg i{display:inline-block;transform:translateX(3px)}
+.dep-none{padding:26px 22px;color:var(--soft)}
+@media (max-width:760px){.dep-h{display:none}.dep-l a{grid-template-columns:auto 1fr;gap:4px 12px}.dd{grid-column:1/-1;font-size:15px}.dc{grid-row:2}.dn{grid-row:2}.ds{grid-column:2}.dg{display:none}.dep-top span{display:none}}
+/* navy page background (review comment) */
+body{background:var(--navy)}
+.navy .about p{color:#C9D6E0}
+.navy .ticks li,.navy .sign em{color:#fff}
+.navy .sign em small{color:#C9D6E0}
+.navy .btn.line{color:#fff;border-color:#fff}
+.navy .btn.line:hover{background:#fff;color:var(--navy)}
+.navy .pics::before{border-color:var(--amber)}
+.navy .knav button{background:#1C3850}
+.navy .knav button b{color:#fff}
+.navy .knav button small{color:#C9D6E0}
+.navy .kpanel{box-shadow:none}
+.navy .pl{background:transparent}
+#aircraft .head p{color:#C9D6E0}
+.facts{background:linear-gradient(180deg,transparent 70px,var(--navy) 70px)}
+/* no green plane and dashes under headings (review comment); amber ones stay on navy */
+.title::after{display:none}
+.navy .title::after{display:block}
+/* calendar filter buttons: blue, teal on hover, purple when picked (review comment) */
+#calF button,#calR{background:var(--blue);border:2px solid var(--blue);color:#fff;transition:background .25s,border-color .25s,transform .2s}
+#calR{background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='white' stroke-width='2.5'/%3E%3C/svg%3E") right 10px center/16px no-repeat}
+#calF button:hover,#calR:hover{background-color:var(--teal);border-color:var(--teal);transform:translateY(-2px)}
+#calF button[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);color:#fff}
+#calR option{color:var(--navy);background:#fff}
+/* kinds of show box text in black (review comment) */
+.kbox p,.kbox .klist a span{color:#111}
+/* aircraft card show name as a white tab (review comment) */
+.pl small{display:inline-block;margin-top:8px;font-size:15px;font-weight:700;letter-spacing:.3px;color:#fff;background:rgba(14,33,49,.42);padding:5px 12px;border-left:4px solid #fff;transition:background .25s}
+.pl:hover small{background:var(--navy)}
+/* real plane photo in the hero circle (review comment) */
+.play span{overflow:hidden;border:3px solid #fff;box-shadow:0 0 0 2px var(--red)}
+.play span img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.play:hover span img{transform:scale(1.15)}
+/* aircraft show tabs slide in (review comment) */
+.pl small{opacity:0;transform:translateX(-40px);transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1),background .25s}
+.pl.in small{opacity:1;transform:none;transition-delay:.45s,.45s,0s}
+.pl.in:hover small{transform:translateX(8px);transition-delay:0s}
+@media (prefers-reduced-motion:reduce){.pl small{opacity:1;transform:none}}
+/* organiser offer cards fill with colour on hover (review comment) */
+.offer li{--oc:var(--teal);position:relative;overflow:hidden;z-index:0}
+.offer li:nth-child(2){--oc:var(--blue)}.offer li:nth-child(3){--oc:var(--purple)}.offer li:nth-child(4){--oc:var(--red)}.offer li:nth-child(5){--oc:var(--green)}.offer li:nth-child(6){--oc:var(--sky)}
+.offer li::after{content:"";position:absolute;left:0;right:0;bottom:0;height:0;background:var(--oc);z-index:-1;transition:height .4s cubic-bezier(.4,0,.2,1)}
+.offer li:hover::after{height:100%}
+.offer li b,.offer li span{transition:color .3s}
+.offer li:hover b,.offer li:hover span{color:#fff}
+/* start-here box links as boxes (review comment) */
+.fact .more{border:2px solid var(--c,var(--teal));padding:10px 18px;color:var(--navy);transition:background .3s,color .3s}
+.fact .more::before{display:none}
+.fact .more::after{content:"\2192";transition:transform .3s}
+.fact:hover .more{background:#fff;color:var(--navy);border-color:#fff}
+.fact:hover .more::after{transform:translateX(4px)}
+/* start-here buttons fill with colour on hover; box stays white (review comment) */
+.fact:hover{background:#fff}
+.fact:hover h3{color:var(--navy)}
+.fact:hover p{color:var(--body)}
+.fact:hover .more{background:var(--c,var(--teal));border-color:var(--c,var(--teal));color:#fff}
+.fact:hover .ic{background:var(--c,var(--teal));color:#fff!important}
+/* runway: Typhoon types a message as it passes (review comment) */
+.runway{height:96px}
+.runway .jet{width:78px;height:78px;margin-top:-39px}
+.rw-msg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;font-family:var(--hf);font-weight:700;font-size:clamp(20px,3vw,34px);color:#fff;background:#2B3237;padding:2px 14px;white-space:nowrap;letter-spacing:.5px}
+.rw-msg:empty{display:none}
+.rw-msg.typing::after{content:"";display:inline-block;width:3px;height:.9em;background:var(--amber);margin-left:4px;vertical-align:-2px;animation:blink .8s infinite}
+.rw-msg b{color:var(--amber);font-weight:700}
+@media (max-width:640px){.rw-msg{font-size:17px}}
+/* no plane line under any heading (review comment) */
+.title::after,.navy .title::after{display:none!important}
+/* budget calculators: clean Tab layout cards */
+.bud{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.bud-c{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid #DCE4EA;border-top:5px solid var(--sc);padding:14px 16px 16px;transition:transform .25s,box-shadow .25s}
+.bud-c:hover{transform:translateY(-4px);box-shadow:0 14px 30px -12px rgba(19,41,60,.35)}
+.bud-t{display:flex;align-items:center;gap:10px}
+.bud-t i{width:32px;height:32px;flex:none;display:grid;place-items:center;background:var(--sc);color:#fff}
+.bud-t svg{width:19px;height:19px}
+.bud-t b{font-size:17px;font-weight:700;color:var(--navy)}
+.bud-c p{font-size:15px;color:#33444F;flex:1}
+.bud-a{align-self:flex-start;font-size:13px;font-weight:700;color:#5A6B78;background:#F3F6F8;padding:5px 10px;transition:.25s}
+.bud-a em{font-style:normal;display:inline-block;transition:transform .25s}
+.bud-c:hover .bud-a{background:var(--sc);color:#fff}
+.bud-c:hover .bud-a em{transform:translateX(3px)}
+#budget .save-h .sh-i{font-size:24px}
+@media (max-width:900px){.bud{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.bud{grid-template-columns:1fr}}
+/* budget cards: photo fades in on hover (review comment) */
+.bud-c{position:relative;overflow:hidden;z-index:0}
+.bud-i{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.12);transition:opacity .45s,transform .8s;z-index:-1}
+.bud-c::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,33,49,.55),rgba(14,33,49,.88));opacity:0;transition:opacity .45s;z-index:-1}
+.bud-c:hover .bud-i{opacity:1;transform:scale(1)}
+.bud-c:hover::after{opacity:1}
+.bud-c:hover .bud-t b,.bud-c:hover p{color:#fff}
+</style>
+</head>
+<body id="top">
+
+<!-- top bar -->
+<div class="topbar">
+  <div class="wrap">
+    <div class="ticker" id="ticker" aria-live="off">
+      <span class="on"><em>News</em><b>RIAT</b>&nbsp;moves to MOD Boscombe Down from 2027</span>
+      <span><em class="t">2027</em>Season guides are being updated as dates are confirmed</span>
+      <span><em class="t">Dates</em>Duxford and Old Warden open the season on 8 and 9 May 2027</span>
+      <span><em class="p">New</em>My Airshow Hub is free for members</span>
+    </div>
+    <div class="r"><a data-link="hub" href="#">My Airshow Hub</a><a data-link="forum" href="#">Forum</a><a class="sign" data-link="hub" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="currentColor"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="currentColor"/></svg>Sign in</a></div>
+  </div>
+</div>
+
+<!-- hero -->
+<header class="hero" aria-label="Welcome">
+  <div class="slide on" style="background-image:url(https://jskedge1.github.io/airshow-pages/home-img/v2/hero-arrows-riat23.jpg);background-position:62% 40%"></div>
+  <div class="slide" style="background-image:url(https://jskedge1.github.io/airshow-pages/home-img/v2/hero.jpg);background-position:72% 38%"></div>
+  <div class="slide" style="background-image:url(https://jskedge1.github.io/airshow-pages/home-img/v2/hero-arrows-cosford23.jpg);background-position:70% 40%"></div>
+  <div class="slide" style="background-image:url(https://jskedge1.github.io/airshow-pages/home-img/v2/hero-arrows-riat18.jpg);background-position:65% 45%"></div>
+  <div class="wrap">
+    <div class="hero-t">
+      <span class="badge">Planning for the 2027 season</span>
+      <h1>Every UK Airshow, <span>One Easy Guide</span></h1>
+      <p>Where to go, how to get there and how to get the most from your day, from the big military shows to seaside displays and grass field fly-ins.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#season">Find Your Show <i aria-hidden="true">→</i></a>
+        <a class="play" data-href="/planning-your-first-airshow" href="#"><span aria-hidden="true"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/ac-redarrows.jpg" alt=""></span>Your First Airshow</a>
+      </div>
+    </div>
+    <aside class="hcd" aria-label="Countdown to a show">
+      <div class="hcd-h"><small>Countdown to</small><label for="cdShow" style="position:absolute;left:-9999px">Pick a show</label><select id="cdShow"></select></div>
+      <div class="cd" role="timer" aria-live="off"><div><b id="cdd">0</b><span>Days</span></div><div><b id="cdh">00</b><span>Hrs</span></div><div><b id="cdm">00</b><span>Mins</span></div><div><b id="cds">00</b><span>Secs</span></div></div>
+      <div class="hcd-f"><p id="nextWhen">Dates added as organisers confirm</p><a class="btn" id="nextGo" href="#season">Open The Show Guide <i aria-hidden="true">→</i></a></div>
+    </aside>
+  </div>
+  <div class="arrows"><button type="button" id="prev" aria-label="Previous photo">‹</button><button type="button" id="next" aria-label="Next photo">›</button></div>
+</header>
+
+<!-- three boxes -->
+<section class="facts" aria-label="Start here">
+  <div class="wrap">
+    <a class="fact rv" href="#season" style="--c:var(--teal)">
+      <figure class="fact-p"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/fact-find-show.jpg" alt="Find your show: military, seaside, historic and family airshow photos" loading="lazy"></figure>
+      <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18M8 2v5M16 2v5" stroke="currentColor" stroke-width="1.8"/></svg></div>
+      <h3>Find Your Show</h3>
+      <p>Every featured show for 2027, with dates added as soon as the organisers confirm them.</p>
+      <span class="more">See the season</span>
+    </a>
+    <a class="fact rv" data-link="transport" href="#" style="--c:var(--red)">
+      <figure class="fact-p"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/fact-train.jpg" alt="Airshow visitors with folding chairs on a railway platform" loading="lazy"></figure>
+      <div class="ic" aria-hidden="true" style="color:var(--red)"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="14" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6 11h12M9 21l-2 0 2-4M15 21h2l-2-4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9.5" cy="14" r="1" fill="currentColor"/><circle cx="14.5" cy="14" r="1" fill="currentColor"/></svg></div>
+      <h3>Get There By Train</h3>
+      <p>Trains, buses and coaches to each show, with the stop to get off at and the walk in.</p>
+      <span class="more">Public transport guide</span>
+    </a>
+    <a class="fact rv" data-link="hub" href="#" style="--c:var(--purple)">
+      <figure class="fact-p"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/fact-plan.jpg" alt="Checking plans before travelling to an airshow" loading="lazy"></figure>
+      <div class="ic" aria-hidden="true" style="color:var(--purple)"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 18h4" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 9h2l1-2.5 2 5 1-2.5h1" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+      <h3>Plan Your Day</h3>
+      <p>Save your shows in My Airshow Hub and have everything ready on your phone at the gate.</p>
+      <span class="more">Open My Airshow Hub</span>
+    </a>
+  </div>
+</section>
+
+<!-- about -->
+<section class="sec navy" id="about" aria-labelledby="about-h">
+  <div class="wrap about">
+    <div class="pics rv">
+      <figure><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/about-hurricanes.webp" alt="Two Hawker Hurricanes parked behind visitors in deckchairs" loading="lazy"></figure>
+      <figure class="b"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/about-family.jpg" alt="A family setting out chairs and a blanket at the crowd line fence" loading="lazy"></figure>
+      <div class="stat"><b id="nShows">13</b><span>Featured<br>UK shows</span></div>
+    </div>
+    <div class="rv">
+      <h2 class="title" id="about-h">A Guide Written To Give You The Best Day Out</h2>
+      <p>I wanted to help others have a great day out. I have read so many comments from people whose airshow turned into a horror story, sat in traffic for hours or missing the display they came to see. I kept wondering how I could turn those into &ldquo;best day ever&rdquo; ones, and that is when I had the idea for this guide.</p>
+      <p>A day out on my own needs very different planning to a trip with friends or the family, so I have written every page with that in mind.</p>
+      <ul class="ticks">
+        <li>Parking and ways to arrive</li>
+        <li>Where to watch from</li>
+        <li>The aircraft line up</li>
+        <li>A sun guide for the crowd line</li>
+      </ul>
+      <div class="sign">
+        <a class="btn line" data-href="/planning-your-first-airshow" href="#">Plan Your First Airshow</a>
+        <em>Jack<small>Creator and Managing Editor</small></em>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- highlights photo tiles -->
+<section class="sec" id="highlights" aria-labelledby="hl-h" style="background:#fff">
+  <div class="wrap">
+    <div class="head center rv">
+      <h2 class="title" id="hl-h">Airshow Highlights</h2>
+    </div>
+    <div class="tiles">
+      <a class="tile rv" data-href="/airshow-photography-hub" href="#" style="--c:var(--red)"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/wall-smoke.jpg" alt="Red Arrows trailing smoke at RAF Cosford 2024" loading="lazy"><span class="tt"><small>Air Show</small><b>Photography Hub</b><span>My camera settings, where to stand and the sun guides for every featured show.</span></span></a>
+      <a class="tile rv" href="#tickets" style="--c:var(--amber)"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/wall-chinook.jpg" alt="Chinook display at RAF Cosford 2024" loading="lazy"><span class="tt"><small>Tickets and</small><b>Viewing</b><span>What each ticket gets you, and when an upgrade is worth it.</span></span></a>
+      <a class="tile rv" data-link="transport" href="#" style="--c:var(--teal)"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/wall-helis.jpg" alt="Helicopters on the grass at RAF Cosford 2024" loading="lazy"><span class="tt"><small>Getting</small><b>There</b><span>Trains, buses, coaches and park and ride to every featured show.</span></span></a>
+      <a class="tile rv" href="#day" style="--c:var(--purple)"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/wall-biplane.jpg" alt="Aerobatic display at RAF Cosford 2023" loading="lazy"><span class="tt"><small>Your</small><b>Show Day</b><span>An hour by hour plan, from packing the car to the final flypast.</span></span></a>
+    </div>
+  </div>
+</section>
+
+<!-- budget calculators (from the live page, clean Tab layout) -->
+<section class="sec light" id="budget" aria-labelledby="budget-h">
+  <div class="wrap">
+    <div class="head center rv">
+      <h2 class="title" id="budget-h">Plan Your Airshow Budget</h2>
+      <p>Work out what your airshow trip will cost before you spend a penny. Tick what you need on four lists, set a budget for each, and see what it all adds up to.</p>
+    </div>
+    <div class="save-h rv" style="--mc:var(--navy)"><span class="sh-i">£</span><div><h3>Build Your Kit Calculator</h3><small>Four lists. Your ticks are saved on your device, so you can come back and carry on planning.</small></div></div>
+    <div class="bud">
+      <a class="bud-c rv" data-href="/build-your-kit-calculator?list=photography" href="#" style="--sc:var(--blue)"><img class="bud-i" src="https://jskedge1.github.io/airshow-pages/home-img/v2/bud-photo.jpg" alt="" loading="lazy"><span class="bud-t"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v12H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="13.5" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg></i><b>Photography Kit</b></span><p>Every camera brand, with bodies, lenses and bags, priced new.</p><span class="bud-a">Open this list <em aria-hidden="true">→</em></span></a>
+      <a class="bud-c rv" data-href="/build-your-kit-calculator?list=camping" href="#" style="--sc:var(--green)"><img class="bud-i" src="https://jskedge1.github.io/airshow-pages/home-img/v2/guide-camping.jpg" alt="" loading="lazy"><span class="bud-t"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4L3 20h18z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 12l-3 8h6z" fill="currentColor"/></svg></i><b>Camping Kit</b></span><p>Tent, beds, cooking and washing kit, scaled to your group.</p><span class="bud-a">Open this list <em aria-hidden="true">→</em></span></a>
+      <a class="bud-c rv" data-href="/build-your-kit-calculator?list=food-and-drink" href="#" style="--sc:var(--red)"><img class="bud-i" src="https://jskedge1.github.io/airshow-pages/home-img/v2/bud-food.jpg" alt="" loading="lazy"><span class="bud-t"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M16 3c-2 0-3 3-3 6s1 4 3 4v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></i><b>Food And Drink</b></span><p>Buy at the show or pack your own, per person and per day.</p><span class="bud-a">Open this list <em aria-hidden="true">→</em></span></a>
+      <a class="bud-c rv" data-href="/build-your-kit-calculator?list=tickets-and-travel" href="#" style="--sc:var(--purple)"><img class="bud-i" src="https://jskedge1.github.io/airshow-pages/home-img/v2/tix-early.jpg" alt="" loading="lazy"><span class="bud-t"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2"/></svg></i><b>Tickets And Travel</b></span><p>Tickets, fuel, parking and a room, with the whole trip per person.</p><span class="bud-a">Open this list <em aria-hidden="true">→</em></span></a>
+    </div>
+    <div class="center" style="margin-top:28px"><a class="btn" data-href="/build-your-kit-calculator" href="#">Open The Calculator <i aria-hidden="true">→</i></a></div>
+  </div>
+</section>
+
+<!-- guides -->
+<section class="sec navy" id="guides" aria-labelledby="guides-h">
+  <div class="wrap">
+    <div class="head center rv">
+      <h2 class="title" id="guides-h">Everything You Need Before You Set Off</h2>
+    </div>
+    <div class="guides">
+      <a class="gi rv" href="#season">
+        <img src="https://jskedge1.github.io/airshow-pages/home-img/v2/day-static.jpg" alt="" loading="lazy">
+        <div class="gt">
+          <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.8"/></svg></div>
+          <h3>Detailed Show Pages</h3>
+          <p>Parking, the line up, where to watch and how the light moves across the crowd line. Every featured show has the same pages.</p>
+          <span class="go"><i aria-hidden="true">→</i>Read More</span>
+        </div>
+      </a>
+      <a class="gi rv" href="#kinds">
+        <img src="https://jskedge1.github.io/airshow-pages/home-img/v2/type-family.jpg" alt="" loading="lazy">
+        <div class="gt">
+          <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="1.8"/></svg></div>
+          <h3>Help Choosing A Show</h3>
+          <p>Military, seaside, historic or family. See which kind of show suits who is coming with you.</p>
+          <span class="go"><i aria-hidden="true">→</i>Read More</span>
+        </div>
+      </a>
+      <a class="gi rv" data-href="/first-airshow-what-to-pack" href="#">
+        <img src="https://jskedge1.github.io/airshow-pages/home-img/v2/guide-pack.jpg" alt="" loading="lazy">
+        <div class="gt">
+          <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="14" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V4h6v3M9 14l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></div>
+          <h3>What To Pack</h3>
+          <p>A checklist that changes with who is coming with you, so nothing gets left on the kitchen table.</p>
+          <span class="go"><i aria-hidden="true">→</i>Read More</span>
+        </div>
+      </a>
+      <a class="gi rv" data-href="/airshow-photography-hub" href="#">
+        <img src="https://jskedge1.github.io/airshow-pages/home-img/v2/guide-photo-typhoon.jpg" alt="" loading="lazy">
+        <div class="gt">
+          <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v12H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></div>
+          <h3>Photography</h3>
+          <p>The settings I use for jets and propeller aircraft, and my advice on where to stand.</p>
+          <span class="go"><i aria-hidden="true">→</i>Read More</span>
+        </div>
+      </a>
+      <a class="gi rv" data-href="/uk-airshow-calendar" href="#">
+        <img src="https://jskedge1.github.io/airshow-pages/home-img/v2/guide-map.svg" alt="" loading="lazy">
+        <div class="gt">
+          <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></div>
+          <h3>Calendar And Map</h3>
+          <p>Every UK show date in one place, with a map so you can see how far each one is from home.</p>
+          <span class="go"><i aria-hidden="true">→</i>Read More</span>
+        </div>
+      </a>
+      <a class="gi rv" data-href="/camping-at-airshows" href="#">
+        <img src="https://jskedge1.github.io/airshow-pages/home-img/v2/guide-camping.jpg" alt="" loading="lazy">
+        <div class="gt">
+          <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4L3 20h18z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 12l-3 8h6z" fill="currentColor"/></svg></div>
+          <h3>Camping</h3>
+          <p>Choosing a pitch and packing the car, plus the shows with camping on site.</p>
+          <span class="go"><i aria-hidden="true">→</i>Read More</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="runway rv" role="img" aria-label="Plan your 2027 Air Show Season today"><span class="rw-msg" id="rwMsg" aria-hidden="true"></span><span class="rn l">09</span><span class="jet"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 1 12.8 4 13 7 15.2 8.2 15.2 9 13.1 8.6 13.2 12 21.5 17.5 21.5 18.6 13.4 17.6 13.6 20 15.2 21.4 15.2 22.2 12 21.6 8.8 22.2 8.8 21.4 10.4 20 10.6 17.6 2.5 18.6 2.5 17.5 10.8 12 10.9 8.6 8.8 9 8.8 8.2 11 7 11.2 4Z"/></svg></span><span class="rn r">27</span></div>
+
+
+<!-- kinds of show -->
+<section class="sec" id="kinds" aria-labelledby="kinds-h" style="background:#fff">
+  <div class="wrap">
+    <div class="head center rv">
+      <h2 class="title" id="kinds-h">Four Kinds Of Airshow, One For Every Day Out</h2>
+    </div>
+    <div class="kinds rv">
+      <div class="knav" role="tablist" aria-label="Kinds of show" id="knav"></div>
+      <div class="kpanel" id="kpanel" role="tabpanel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- season -->
+<section class="sec light" id="season" aria-labelledby="season-h">
+  <div class="wrap">
+    <div class="head center rv">
+      <h2 class="title" id="season-h">Every Featured UK Airshow For 2027</h2>
+      <p>Dates are added as soon as the organisers confirm them. Every featured show has its own full guide with parking, the line up and where to watch.</p>
+    </div>
+    <div class="cal-bar rv"><div class="filters" id="calF" role="group" aria-label="Filter shows"></div><label for="calR" style="position:absolute;left:-9999px">Region</label><select id="calR"></select></div>
+    <div id="cal" aria-live="polite"></div>
+    <div class="board-foot">
+      <span><b style="color:var(--green)">Confirmed</b> = date set by the organiser. <b style="color:#B7791F">Expected</b> = from past seasons.</span>
+      <a class="btn line" data-href="/uk-airshow-calendar" href="#">Full Calendar And Map <i aria-hidden="true">→</i></a>
+    </div>
+  </div>
+</section>
+
+<!-- tickets and viewing explained -->
+<section class="sec light" id="tickets" aria-labelledby="tix-h">
+  <div class="wrap">
+    <div class="head center rv">
+      <h2 class="title" id="tix-h">Tickets And Viewing, Explained</h2>
+      <p>The big shows sell more than one kind of ticket. Here is what each one usually gets you, so you can pick the right one for who is coming.</p>
+    </div>
+    <div class="ttabs rv" role="tablist" aria-label="Ticket types">
+      <button role="tab" id="tt-a" aria-controls="tix" aria-selected="true">Day tickets</button>
+      <button role="tab" id="tt-b" aria-controls="tix" aria-selected="false" tabindex="-1">Viewing upgrades</button>
+    </div>
+    <div class="tix" id="tix" role="tabpanel" aria-live="polite"></div>
+    <p class="tix-note">Prices and what is included change every year and at every show. I add the details to each show page once tickets go on sale.</p>
+  </div>
+</section>
+
+<!-- leave the car at home -->
+<section class="sec navy" aria-labelledby="car-h">
+  <div class="wrap">
+    <div class="promo rv">
+      <div class="promo-p"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/promo-shuttle.jpg" alt="Families with rucksacks and a pushchair stepping off an airshow shuttle bus" loading="lazy"></div>
+      <div class="promo-t">
+        <span class="badge">Skip the queues</span>
+        <h2 id="car-h">Leave The Car At Home</h2>
+        <p>The roads in are often the slowest part of a show day. Many of the bigger shows run shuttle buses or park and ride, and the seaside shows are a short walk from the station.</p>
+        <p>My transport guide shows the trains, buses and coaches for every featured show, with the stop to get off at and the walk in.</p>
+        <ul><li>Trains</li><li>Shuttle buses</li><li>Coach trips</li><li>Park and ride</li></ul>
+        <a class="btn white" data-link="transport" href="#">Public Transport Guide <i aria-hidden="true">→</i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- hour by hour (from the live page) -->
+<section class="sec navy" id="day" aria-labelledby="day-h">
+  <div class="wrap">
+    <div class="head center rv">
+      <h2 class="title" id="day-h">Your Day, Hour By Hour</h2>
+      <p>This is how I would plan a typical show day. Times change from show to show, so I would check the timeline on each show page.</p>
+    </div>
+    <div class="day-g">
+      <ol class="rsteps rv">
+        <li style="--sc:var(--teal-d)"><span class="sn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></span><div class="sx"><span>06:00</span><b>Final Checks Before You Leave</b><p>A quick look at the official website and social pages for last minute changes, and the forecast. Pack the car the night before if you can.</p></div></li>
+        <li style="--sc:var(--teal-d)"><span class="sn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></span><div class="sx"><span>07:00</span><b>Arrive Before The Car Parks Open</b><p>I get there an hour or more early. The roads in are the slowest part of the whole day.</p></div></li>
+        <li style="--sc:var(--blue)"><span class="sn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></span><div class="sx"><span>08:00</span><b>Gates Open</b><p>Tickets ready on your phone with the brightness up makes the gate much quicker.</p></div></li>
+        <li style="--sc:var(--blue)"><span class="sn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></span><div class="sx"><span>08:30</span><b>Save Your Spot On The Crowd Line</b><p>Chairs and blanket down first, then relax and enjoy the morning.</p></div></li>
+        <li style="--sc:var(--purple)"><span class="sn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></span><div class="sx"><span>09:00</span><b>Static Aircraft And Pilots</b><p>Lovely while it is still quiet, and the best chance to talk to pilots and ground crew.</p></div></li>
+        <li style="--sc:var(--green)"><span class="sn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></span><div class="sx"><span>11:00</span><b>Stalls, Food And Toilets</b><p>Food queues are longest around lunchtime, so I eat early or late.</p></div></li>
+        <li style="--sc:var(--red)"><span class="sn"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></span><div class="sx"><span>12:00</span><b>Flying Display Begins</b><p>Everything you need out of the bags before the flying starts.</p></div></li>
+        <li style="--sc:var(--red)"><span class="sn"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg></span><div class="sx"><span>15:00</span><b>Headline Acts</b><p>The big names, like the Red Arrows, often fly in the afternoon. Check the timetable on the day.</p></div></li>
+      </ol>
+      <aside class="tip rv">
+        <figure><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/t4.jpg" alt="Eurofighter Typhoon on the flight line" loading="lazy"></figure>
+        <div>
+          <h3>My Arrival Tip</h3>
+          <p>If you would like a front row seat, I would head there first and save your pitch, then have a look around. The toilet queues are busy all day, so I would go when you get the chance. A quiet moment rarely comes.</p>
+          <a class="btn" data-href="/planning-your-first-airshow" href="#">Plan Your First Airshow <i aria-hidden="true">→</i></a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- hub -->
+<section class="sec navy" id="hub" aria-labelledby="hub-h">
+  <div class="wrap">
+    <div class="hub rv">
+      <div class="hub-t">
+        <h2 id="hub-h">My Airshow Hub <span class="new">New</span></h2>
+        <p>I built this airshow planner myself and I hope it helps. Save the shows you are going to, and the Hub gets everything ready for the day on your phone.</p>
+        <ul class="feats">
+          <li><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></i><div><b>My Trips</b><span>Your whole season in one place.</span></div></li>
+          <li><i aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></i><div><b>Show Day</b><span>Live show times on one screen.</span></div></li>
+          <li><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3M3 14h15a3 3 0 1 1-3 3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></i><div><b>Flight Briefing</b><span>Wind, runway and the weather.</span></div></li>
+          <li><i aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 12l6-6" stroke="currentColor" stroke-width="1.8"/></svg></i><div><b>Live Flights</b><span>What is in the air near you.</span></div></li>
+        </ul>
+        <a class="btn white" data-link="hub" href="#">Join My Airshow Hub <i aria-hidden="true">→</i></a>
+      </div>
+      <div class="hub-p"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/hub-ready.jpg" alt="Airshow kit packed and ready by the door the night before" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- become a member: boarding pass (from the live page) -->
+<section class="sec light" id="join" aria-labelledby="join-h">
+  <div class="wrap">
+    <div class="head center rv">
+      <h2 class="title" id="join-h">Become A Member</h2>
+      <p>One free account opens up the members forum and your show checklist, and keeps all the planning tools together.</p>
+    </div>
+    <div class="pass rv">
+      <div class="pass-main">
+        <div class="pass-top"><span>The Big Guide to UK Airshows</span><span>Boarding pass</span></div>
+        <div class="route"><div><small>From</small><b>Your Sofa</b></div><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" transform="rotate(90 12 12)"/></svg><div><small>To</small><b>The Crowd Line</b></div></div>
+        <ul class="perks">
+          <li><b>Members Forum</b><span>A group for every show, to ask questions and share your photos.</span></li>
+          <li><b>My Show Checklist</b><span>Tickets, travel, buses and packing, saved as a PDF.</span></li>
+          <li><b>Planning Tools</b><span>Find My Guide, Shows Near Me, countdowns and a day plan.</span></li>
+          <li><b>Photo Tools</b><span>Sun guides, a settings calculator and a kit planner.</span></li>
+          <li><b>Line Up Updates</b><span>New and Updated tags show what has changed.</span></li>
+          <li><b>Guides For Every Trip</b><span>Camping, packing and first timer advice.</span></li>
+        </ul>
+      </div>
+      <div class="pass-stub">
+        <dl><div><dt>Passenger</dt><dd>You</dd></div><div><dt>Fare</dt><dd class="fare">£0</dd></div><div><dt>Class</dt><dd>Free for everyone</dd></div></dl>
+        <span class="stamp">Free</span>
+        <a class="btn" data-link="hub" href="#">Join For Free <i aria-hidden="true">→</i></a>
+        <small>Already a member? <a data-link="hub" href="#">Log in</a></small>
+        <div class="barcode" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RIAT update -->
+<section class="update" aria-labelledby="riat-h">
+  <img src="https://jskedge1.github.io/airshow-pages/home-img/v2/riat-hornet.jpg" alt="Finnish Air Force F/A-18C Hornet at RIAT 2025" loading="lazy" style="object-position:70% 50%">
+  <div class="wrap" style="width:100%">
+    <div class="box rv">
+      <h2 id="riat-h">RIAT Is Moving To MOD Boscombe Down</h2>
+      <p>From 2027 the Royal International Air Tattoo leaves RAF Fairford for MOD Boscombe Down, near Amesbury in Wiltshire. The travel plan for the new airfield is not out yet, so I would hold off booking trains until it is.</p>
+      <a class="btn" data-link="riat" href="#">RIAT Show Guide <i aria-hidden="true">→</i></a>
+    </div>
+  </div>
+</section>
+
+<!-- aircraft -->
+<section class="sec navy" id="aircraft" aria-labelledby="ac-h">
+  <div class="wrap">
+    <div class="head center rv">
+      <h2 class="title" id="ac-h">Aircraft You Could See</h2>
+      <p>All taken by me from the public crowd line, so you know what to expect before you go.</p>
+    </div>
+    <div class="planes" id="planes"></div>
+  </div>
+</section>
+
+<!-- working with airshow organisers (from the live page) -->
+<section class="sec light" id="organisers" aria-labelledby="org-h">
+  <div class="wrap org">
+    <div class="rv">
+      <h2 class="title" id="org-h">Working With Airshow Organisers</h2>
+      <p>I would love to work with you. The guide sends well prepared visitors to your show, people who know where to park, what time to arrive and what to bring. That should mean calmer gates and happier crowds.</p>
+      <p>What I offer is all free, and I only use your logos, photos and videos with your permission.</p>
+      <ol class="steps">
+        <li><b>Get In Touch</b><span>Send me the name of your show and the best person to speak to.</span></li>
+        <li><b>I Check The Details</b><span>We go through your visitor information so it is all correct.</span></li>
+        <li><b>Your Page Goes Live</b><span>A full planning page in the same style as the rest of the guide.</span></li>
+        <li><b>I Keep It Updated</b><span>New aircraft, timings and travel news through the season.</span></li>
+      </ol>
+      <a class="btn" href="mailto:contactus@ukairshowguide.co.uk?subject=Working%20with%20the%20guide" target="_top">Talk To Me About Your Show <i aria-hidden="true">→</i></a>
+    </div>
+    <ul class="offer rv">
+      <li><b>Free Promotion</b><span>Your show on the guide and across my YouTube, Facebook and Instagram, at no cost.</span></li>
+      <li><b>Accurate Visitor Info</b><span>Parking, transport, accessibility and timings checked against your official site.</span></li>
+      <li><b>Line Up Updates</b><span>Confirmed aircraft added with a clear Updated tag.</span></li>
+      <li><b>Photo And Video Coverage</b><span>Volunteer photographers cover your show, and you keep full use with credit.</span></li>
+      <li><b>Local Businesses</b><span>Visitors pointed to nearby food, campsites and places to stay.</span></li>
+      <li><b>Fewer Repeat Questions</b><span>Visitors who have planned ask your team a lot less on the day.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- quote band -->
+<section class="band" style="background-image:url(https://jskedge1.github.io/airshow-pages/home-img/v2/band-arrows.jpg)" aria-label="About the photos">
+  <div class="wrap rv">
+    <q>We hope this website helps you plan for your airshow, showing you things you may have missed.</q>
+    <p>Fancy becoming part of the team? Contact us today to find out more.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap"><a class="btn" href="mailto:contactus@ukairshowguide.co.uk?subject=Joining%20the%20team" target="_top">Contact Us <i aria-hidden="true">→</i></a><a class="btn white" href="#season">Find Your 2027 Show <i aria-hidden="true">→</i></a></div>
+  </div>
+</section>
+
+<footer id="foot">
+  <div class="wrap fgrid">
+    <div>
+      <div class="brand">The Big Guide to <span>UK Airshows</span></div>
+      <p>A free guide to every major UK airshow, from planning the trip to the final flypast.</p>
+    </div>
+    <div>
+      <h4>Popular Shows</h4>
+      <ul id="fshows"></ul>
+    </div>
+    <div>
+      <h4>Plan Your Day</h4>
+      <ul>
+        <li><a data-href="/planning-your-first-airshow" href="#">Your first airshow</a></li>
+        <li><a data-href="/first-airshow-what-to-pack" href="#">What to pack</a></li>
+        <li><a data-link="transport" href="#">Public transport</a></li>
+        <li><a data-href="/camping-at-airshows" href="#">Camping</a></li>
+        <li><a data-href="/airshow-photography-hub" href="#">Photography</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Join In</h4>
+      <ul>
+        <li><a data-link="hub" href="#">My Airshow Hub</a></li>
+        <li><a data-link="forum" href="#">Community forum</a></li>
+        <li><a data-href="/airshow-news" href="#">Airshow news</a></li>
+        <li><a data-href="/uk-airshow-calendar" href="#">Calendar and map</a></li>
+        <li><a href="#organisers">For show organisers</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fbot"><div class="wrap"><span>&copy; 2026 The Big Guide to UK Airshows. All photos by Jack Skedge Photography.</span><a href="#top">Back to top ↑</a></div></div>
+</footer>
+
+<script>
+var SITE='https://www.ukairshowguide.co.uk';
+var LINKS={
+  transport:SITE+'/airshow-public-transport',
+  planner:'https://jskedge1.github.io/airshow-pages/journey-planner.html',
+  plannerLive:false, /* set to true once journey-planner.html is uploaded */
+  hub:SITE+'/my-airshow-hub',
+  forum:SITE+'/community-forum'
+};
+if(LINKS.plannerLive)LINKS.transport=LINKS.planner;
+/* region: s = South, e = East, m = Midlands, n = North, sw = Scotland & Wales */
+var SHOWS=[
+ {k:'midlands',name:'Midlands Air Festival',place:'Ragley Hall, Alcester',url:'/midlandsairfestival',r:'m',type:'family'},
+ {k:'duxford',name:'Duxford Air Shows',place:'IWM Duxford, Cambridgeshire',url:'/duxfordairshows',r:'e',type:'vintage'},
+ {k:'duxford2',name:'Duxford Summer Air Show',place:'IWM Duxford, Cambridgeshire',url:'/duxfordairshows',r:'e',type:'vintage'},
+ {k:'shuttleworth',name:'Shuttleworth Air Shows',place:'Old Warden, Bedfordshire',url:'/shuttleworthairshows',r:'e',type:'vintage'},
+ {k:'cosford',name:'RAF Cosford Air Show',place:'RAF Cosford, Shropshire',url:'/cosfordairshow',r:'m',type:'military'},
+ {k:'riat',name:'Royal International Air Tattoo',place:'MOD Boscombe Down, Wiltshire',url:'/riat',r:'s',type:'military'},
+ {k:'wales',name:'Wales National Airshow',place:'Swansea Bay',url:'/walesairshow',r:'sw',type:'seaside'},
+ {k:'eastbourne',name:'Eastbourne Airshow',place:'Western Lawns, Eastbourne',url:'/eastbourneairshow',r:'s',type:'seaside'},
+ {k:'clacton',name:'Clacton Air Show',place:'West Greensward, Clacton',url:'/clactonairshow',r:'e',type:'seaside'},
+ {k:'blackpool',name:'Blackpool Air Show',place:'Central Pier, Blackpool',url:'/blackpool-air-show',r:'n',type:'seaside'},
+ {k:'gransden',name:'Little Gransden Air & Car Show',place:'Little Gransden Airfield',url:'/little-gransden-air-and-car-show',r:'e',type:'family'},
+ {k:'headcorn',name:'Headcorn Airshow',place:'Headcorn Aerodrome, Kent',url:'/headcorn-air-show',r:'s',type:'family'},
+ {k:'southport',name:'Southport Air Show',place:'Southport beach and pier',url:'/southport-air-show',r:'n',type:'seaside'},
+ {k:'ayr',name:'International Ayr Show',place:'Low Green, Ayr',url:'/international-ayr-show',r:'sw',type:'seaside'}
+];
+/* 2027 dates, copied from the live season board. c = confirmed, e = expected. Shows not listed are Date TBC. */
+var DATES={duxford2:['2027-06-19','c'],duxford:['2027-05-08','c','Flying Day: VE Day'],shuttleworth:['2027-05-09','c','Season Premiere'],midlands:['2027-06-04','c'],cosford:['2027-06-13','e'],headcorn:['2027-06-26','c'],riat:['2027-07-16','c','New venue'],eastbourne:['2027-08-12','c'],clacton:['2027-08-26','c'],gransden:['2027-08-29','c'],ayr:['2027-09-03','c']};
+var REGIONS=[['all','All shows'],['s','South'],['e','East'],['m','Midlands'],['n','North'],['sw','Scotland & Wales']];
+var RNAME={s:'South',e:'East',m:'Midlands',n:'North',sw:'Scotland & Wales'};
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var ST={c:'Confirmed',e:'Expected',t:'Date TBC'};
+var TYPES=[
+ {k:'military',c:'var(--blue)',t:'Military Airbases',s:'Fast jets and display teams',p:'Fast jets, display teams and huge static parks on working airfields. The biggest days of the season.',img:'https://jskedge1.github.io/airshow-pages/home-img/v2/type-military-riat25.jpg',cap:'F-16 Half Century, Royal Danish Air Force, RIAT 2025'},
+ {k:'seaside',c:'var(--sky)',t:'Seaside Shows',s:'Free to watch from the prom',p:'Free to watch from the beach or the prom, with the flying over the sea. Bring a chair and get there early.',img:'https://jskedge1.github.io/airshow-pages/home-img/v2/type-seaside.jpg',cap:'Red Arrows, RIAT 2019'},
+ {k:'vintage',c:'var(--pink)',t:'Historic And Vintage',s:'Spitfires and warbirds',p:'Spitfires, biplanes and warbirds at the home of historic flying. Smaller crowds and closer to the aircraft.',img:'https://jskedge1.github.io/airshow-pages/home-img/v2/type-historic.jpg',cap:'Spitfire, RAF Cosford 2023'},
+ {k:'family',c:'var(--green)',t:'Family And Grass Roots',s:'Relaxed country shows',p:'Relaxed, friendly shows on country estates and grass airfields, often with cars, food and fun for kids too.',img:'https://jskedge1.github.io/airshow-pages/home-img/v2/type-family.jpg',cap:'Biplanes on the grass, RAF Cosford 2023'}
+];
+var TCOL={};TYPES.forEach(function(t){TCOL[t.k]=t.c});
+var TNAME={military:'Military',seaside:'Seaside',vintage:'Historic',family:'Family'};
+var AC=[
+ ['ac-redarrows','Red Arrows','RAF Cosford 2024','var(--red)'],
+ ['ac-hurricane','Hawker Hurricane','RAF Cosford 2024','var(--green)'],
+ ['ac-f35','F-35B Lightning','RAF Cosford 2023','var(--blue)'],
+ ['ac-chinook','Chinook','RAF Cosford 2023','var(--purple)'],
+ ['ac-typhoon-pull','Eurofighter Typhoon','RIAT 2024','var(--sky)'],
+ ['ac-rafale','Dassault Rafale','RIAT 2018','var(--pink)'],
+ ['wix-b17','B-17 Flying Fortress','Historic warbird','var(--teal-d)'],
+ ['type-historic','Supermarine Spitfire','RAF Cosford 2023','var(--forest)']
+];
+
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function u(s){return SITE+s.url}
+function pd(s){var p=s.split('-');return new Date(+p[0],p[1]-1,+p[2])}
+SHOWS.forEach(function(s){var d=DATES[s.k];s.date=d?d[0]:'';s.st=d?d[1]:'t';s.note=d&&d[2]?d[2]:''});
+SHOWS.sort(function(a,b){return (a.date||'9').localeCompare(b.date||'9')});
+function byK(k){for(var i=0;i<SHOWS.length;i++)if(SHOWS[i].k===k)return SHOWS[i]}
+function nice(s){if(!s.date)return 'Date to be confirmed';var d=pd(s.date);return DAY[d.getDay()]+' '+d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear()}
+var NFEAT=SHOWS.filter(function(s,i,a){return a.findIndex(function(t){return t.url===s.url})===i}).length; /* featured show guides, not dates */
+$('nShows').textContent=NFEAT;
+
+/* links: open on the main site, not inside the embed */
+document.querySelectorAll('[data-link]').forEach(function(a){var k=a.getAttribute('data-link');var s=byK(k);a.href=s?u(s):LINKS[k];a.target='_top'});
+document.querySelectorAll('[data-href]').forEach(function(a){a.href=SITE+a.getAttribute('data-href');a.target='_top'});
+
+/* hero slideshow */
+(function(){
+  var sl=document.querySelectorAll('.slide'),i=0,t;
+  var still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function go(n){sl[i].classList.remove('on');i=(n+sl.length)%sl.length;sl[i].classList.add('on')}
+  function play(){clearInterval(t);if(!still)t=setInterval(function(){go(i+1)},6500)}
+  $('prev').onclick=function(){go(i-1);play()};$('next').onclick=function(){go(i+1);play()};
+  go(0);play();
+})();
+
+/* countdown to a show (pick any show from the list) */
+(function(){
+  var now=new Date(),sel=$('cdShow'),end=null;
+  var up=SHOWS.filter(function(s){return s.date&&pd(s.date)>now});
+  if(!up.length)return;
+  sel.innerHTML=up.map(function(s){return '<option value="'+s.k+'">'+esc(s.name)+'</option>'}).join('');
+  function pick(k){var s=byK(k);end=pd(s.date);end.setHours(9);
+    $('nextWhen').textContent=nice(s)+', '+s.place+(s.note?' · '+s.note:'')+(s.st==='e'?' (expected)':'');
+    $('nextGo').href=u(s);$('nextGo').target='_top';tick();
+    var cd=document.querySelector('.hcd .cd');cd.classList.remove('flip');void cd.offsetWidth;cd.classList.add('flip')}
+  function p2(n){return ('0'+n).slice(-2)}
+  function tick(){var t=Math.max(0,Math.floor((end-new Date())/1000));$('cdd').textContent=Math.floor(t/86400);$('cdh').textContent=p2(Math.floor(t%86400/3600));$('cdm').textContent=p2(Math.floor(t%3600/60));$('cds').textContent=p2(t%60)}
+  sel.onchange=function(){pick(sel.value)};
+  pick(up[0].k);setInterval(tick,1000);
+})();
+
+/* kinds of show tabs */
+(function(){
+  var nav=$('knav'),panel=$('kpanel');
+  nav.innerHTML=TYPES.map(function(t,n){return '<button role="tab" id="kt-'+t.k+'" aria-controls="kpanel" aria-selected="'+(n?'false':'true')+'" tabindex="'+(n?'-1':'0')+'" style="--c:'+t.c+'"><img class="kt" src="'+t.img+'" alt="">'+'<span class="n">0'+(n+1)+'</span><span><b>'+t.t+'</b><small>'+t.s+'</small></span></button>'}).join('');
+  var bs=nav.querySelectorAll('button');
+  function show(n){
+    var t=TYPES[n];
+    bs.forEach(function(b,j){b.setAttribute('aria-selected',j===n?'true':'false');b.tabIndex=j===n?0:-1});
+    panel.setAttribute('aria-labelledby','kt-'+t.k);panel.style.setProperty('--c',t.c);
+    var list=SHOWS.filter(function(s){return s.type===t.k}).map(function(s){return '<li><a href="'+u(s)+'" target="_top">'+esc(s.name)+'<span>'+(s.date?pd(s.date).getDate()+' '+MON[pd(s.date).getMonth()]:'TBC')+'</span></a></li>'}).join('');
+    panel.innerHTML='<div class="kpic"><img src="'+t.img+'" alt="'+esc(t.cap)+'"></div><div class="kbox"><h3>'+t.t+'</h3><p>'+t.p+'</p><ul class="klist">'+list+'</ul></div>';
+  }
+  bs.forEach(function(b,n){b.onclick=function(){show(n)};b.onkeydown=function(e){var d=e.key==='ArrowDown'||e.key==='ArrowRight'?1:e.key==='ArrowUp'||e.key==='ArrowLeft'?-1:0;if(d){e.preventDefault();var m=(n+d+bs.length)%bs.length;show(m);bs[m].focus()}}});
+  show(0);
+})();
+
+/* 2027 calendar: a simple departures board list */
+(function(){
+  var FREE={eastbourne:1,clacton:1,blackpool:1,southport:1,ayr:1,wales:1};
+  var CODE={duxford:'DUX',duxford2:'DUX',shuttleworth:'OWD',midlands:'RAG',cosford:'COS',headcorn:'HDC',riat:'RIAT',eastbourne:'EBN',clacton:'CLT',gransden:'LGR',ayr:'AYR',wales:'SWA',blackpool:'BPL',southport:'SPT'};
+  var F=[['all','All shows'],['free','Free to watch'],['family','Great for families'],['military','Modern military'],['vintage','Historic aircraft']];
+  var f=$('calF'),reg=$('calR'),box=$('cal'),cur='all';
+  f.innerHTML=F.map(function(x){return '<button type="button" data-f="'+x[0]+'" aria-pressed="'+(x[0]==='all')+'">'+x[1]+'</button>'}).join('');
+  reg.innerHTML=REGIONS.map(function(r){return '<option value="'+r[0]+'">'+(r[0]==='all'?'All regions':r[1])+'</option>'}).join('');
+  function ok(s){var r=reg.value;if(r!=='all'&&s.r!==r)return false;if(cur==='free')return !!FREE[s.k];if(cur==='family')return s.type==='family'||s.type==='seaside';if(cur==='all')return true;return s.type===cur}
+  var JET='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2.5 19h19v2h-19zm19.57-9.36c-.21-.8-1.04-1.28-1.84-1.06L14.92 10l-6.9-6.43-1.93.51 4.14 7.17-4.97 1.33-1.97-1.54-1.45.39 2.59 4.49 16.57-4.44c.81-.23 1.28-1.05 1.07-1.85z"/></svg>';
+  function draw(){
+    var list=SHOWS.filter(ok);
+    box.innerHTML='<div class="dep rv in"><div class="dep-top">'+JET+'<b>Departures</b><span>2027 season · UK airshows</span></div>'+
+      '<div class="dep-h" aria-hidden="true"><span>Date</span><span>Code</span><span>Show</span><span>Status</span><span>Guide</span></div>'+
+      (list.length?'<ol class="dep-l">'+list.map(function(s,i){var d=s.date?pd(s.date):null;
+        return '<li style="animation-delay:'+(i*45)+'ms"><a href="'+u(s)+'" target="_top">'+
+          '<span class="dd">'+(d?DAY[d.getDay()]+' '+('0'+d.getDate()).slice(-2)+' '+MON[d.getMonth()]:'TBC')+'</span>'+
+          '<span class="dc" style="--c:'+TCOL[s.type]+'">'+(CODE[s.k]||'')+'</span>'+
+          '<span class="dn"><b>'+esc(s.name)+(s.note?' <i>'+esc(s.note)+'</i>':'')+'</b><small>'+esc(s.place)+(FREE[s.k]?' · Free to watch':'')+'</small></span>'+
+          '<span class="ds '+s.st+'">'+ST[s.st]+'</span>'+
+          '<span class="dg">Guide <i aria-hidden="true">→</i></span></a></li>'}).join('')+'</ol>':'<p class="dep-none">No departures match. Try another filter or region.</p>')+'</div>';
+  }
+  f.onclick=function(e){var b=e.target.closest('button');if(!b)return;cur=b.getAttribute('data-f');f.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});draw()};
+  reg.onchange=draw;
+  draw();
+})();
+
+/* aircraft cards and footer show links */
+$('planes').innerHTML=AC.map(function(a){return '<div class="pl rv" style="--c:'+a[3]+'"><figure><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/'+a[0]+'.jpg" alt="'+a[1]+' at '+a[2]+'" loading="lazy"></figure><div><h3>'+a[1]+'</h3><small>'+a[2]+'</small></div></div>'}).join('');
+$('fshows').innerHTML=['riat','cosford','duxford','eastbourne','shuttleworth'].map(function(k){var s=byK(k);return '<li><a href="'+u(s)+'" target="_top">'+esc(s.name)+'</a></li>'}).join('');
+
+/* v7 effects: stagger cards, count up, flip board, parallax */
+(function(){
+  ['.guides','.planes','.facts .wrap'].forEach(function(sel){var p=document.querySelector(sel);if(p)[].forEach.call(p.children,function(c,i){c.style.transitionDelay=(i%4)*90+'ms'})});
+  var still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!('IntersectionObserver' in window)||still)return;
+  var once=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;once.unobserve(e.target);
+    if(e.target.id==='nShows'){var n=NFEAT,i=0,el=e.target;var t=setInterval(function(){el.textContent=++i;if(i>=n)clearInterval(t)},70)}
+    else e.target.classList.add('flip');
+  })},{threshold:.5});
+  once.observe($('nShows'));once.observe(document.querySelector('.cd'));
+  var img=document.querySelector('.update>img');
+  if(img){img.style.height='125%';img.style.top='-12%';window.addEventListener('scroll',function(){var r=img.parentNode.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;img.style.transform='translateY('+((r.top+r.height/2-innerHeight/2)*-.12)+'px)'},{passive:true})}
+})();
+
+/* v9: news ticker */
+(function(){var s=document.querySelectorAll('#ticker span'),i=0;if(s.length<2||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+  setInterval(function(){var a=s[i];a.classList.remove('on');a.classList.add('out');i=(i+1)%s.length;var b=s[i];b.classList.remove('out');void b.offsetWidth;b.classList.add('on');setTimeout(function(){a.classList.remove('out')},650)},4500)})();
+
+/* v9: tickets and viewing tabs */
+(function(){
+  var T=[
+   [['var(--teal-d)','Most shows','Standard Day Ticket','Gets you into the show for the whole day.',['All the flying display','The static aircraft','Stalls, food and activities']],
+    ['var(--blue)','Big shows','Preview Or Arrivals Day','Some big shows open a quieter day before the main weekend.',['Smaller crowds','Aircraft arriving and practising','Fewer areas may be open']],
+    ['var(--green)','Families','Children\'s Tickets','Many shows let children in free or cheaper with a paying adult.',['Check the age limits','Book them with your own ticket','Some need a free ticket too']],
+    ['var(--purple)','Saving money','Multi Day And Early Bird','Booking early or for more than one day is often cheaper.',['Early bird prices go first','Weekend tickets for two days','Some shows do not sell at the gate']]],
+   [['var(--green)','Families','Family Enclosure','A calmer area kept for families.',['Shaded seating','Private toilets','Space for children to play']],
+    ['var(--teal-d)','Photographers','Crowd Line Garden','A reserved spot right on the crowd line.',['Clear views of the flying','Seating and toilets','Often a bag drop']],
+    ['var(--blue)','Best view','Grandstand Seat','A reserved, raised seat looking over the display.',['Your own numbered seat','A view over the crowd','Food and drink nearby']],
+    ['var(--red)','Special occasions','Premium Hospitality','Food, drink and the best views, all in one package.',['Meals served through the day','A private viewing area','Usually the first to sell out']]]
+  ];
+  var TIMG={"Standard Day Ticket":"tix-standard.webp","Preview Or Arrivals Day":"tix-preview.webp","Children's Tickets":"tix-kids.webp","Multi Day And Early Bird":"tix-early.jpg","Family Enclosure":"tix-family.webp","Crowd Line Garden":"tix-garden.webp","Grandstand Seat":"tix-grand.jpg","Premium Hospitality":"tix-premium.webp"};
+  var bs=document.querySelectorAll('.ttabs button'),box=$('tix');
+  function show(n){bs.forEach(function(b,j){b.setAttribute('aria-selected',j===n);b.tabIndex=j===n?0:-1});box.setAttribute('aria-labelledby',bs[n].id);
+    box.innerHTML=T[n].map(function(c){return '<div class="tk" style="--c:'+c[0]+'"><figure class="tk-p"><img src="https://jskedge1.github.io/airshow-pages/home-img/v2/'+TIMG[c[2]]+'" alt="" loading="lazy"></figure><div class="tk-h"><em>Best for: '+c[1]+'</em><h3>'+c[2]+'</h3><p>'+c[3]+'</p></div><ul>'+c[4].map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div>'}).join('')}
+  bs.forEach(function(b,n){b.onclick=function(){show(n)};b.onkeydown=function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();var m=1-n;show(m);bs[m].focus()}}});
+  show(0);
+})();
+
+/* v10 effects: words rise into headings, 3D tilt on cards */
+(function(){
+  var still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(still)return;
+  document.querySelectorAll('.title').forEach(function(h){
+    var i=0;[].slice.call(h.childNodes).forEach(function(n){
+      if(n.nodeType===3){var frag=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(function(w){if(!w)return;if(/^\s+$/.test(w)){frag.appendChild(document.createTextNode(w));return}var s=document.createElement('span');s.className='w';s.style.setProperty('--i',i++);s.textContent=w;frag.appendChild(s)});h.replaceChild(frag,n)}
+      else if(n.nodeType===1){n.classList.add('w');n.style.setProperty('--i',i++)}
+    });
+  });
+  var fine=window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches;
+  window.tiltBind=function(els){if(!fine)return;[].forEach.call(els,function(el){if(el._t)return;el._t=1;
+    el.addEventListener('mousemove',function(e){var r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.transform='perspective(900px) rotateY('+(x*7)+'deg) rotateX('+(-y*7)+'deg) translateY(-6px)';el.style.setProperty('--gx',(x+.5)*100+'%');el.style.setProperty('--gy',(y+.5)*100+'%')});
+    el.addEventListener('mouseleave',function(){el.style.transform=''})})};
+  tiltBind(document.querySelectorAll('.tile,.gi,.tk,.cal-c,.offer li,.pl'));
+})();
+
+/* runway message types out behind the Typhoon */
+(function(){var rw=document.querySelector(".runway"),m=$("rwMsg");if(!rw||!m)return;var txt="Plan your 2027 Air Show Season today";
+  var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function fin(){m.classList.remove("typing");m.innerHTML="Plan your <b>2027</b> Air Show Season today"}
+  if(still||!("IntersectionObserver" in window)){fin();return}
+  var io=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;io.disconnect();var i=0;m.classList.add("typing");setTimeout(function(){var t=setInterval(function(){i++;m.textContent=txt.slice(0,i);if(i>=txt.length){clearInterval(t);setTimeout(fin,600)}},95)},1300)},{threshold:.6});io.observe(rw)})();
+
+/* fade sections in as they scroll into view */
+(function(){
+  var els=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  els.forEach(function(e){io.observe(e)});
+})();
+</script>
+</body>
+</html>
