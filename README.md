@@ -696,7 +696,7 @@ Southport's own words, facts, photos and data. Built by `python3 previews/southp
   Ways in board (`.nss`) its script needs; styles and script from the Clacton page (its own cost calculator taken out, as it
   holds Clacton prices). Southport's 2026 prices only: entry (adult, under 16s, family, groups), parking (£10 any official car
   park, Blue Badge at the normal rate) and the Merseyrail show weekend returns. No bus, coach or taxi fares on the page, so no
-  tabs for those.
+  tabs for those. The "On the day and getting home" jump button is taken out: Southport has no such box (`.pbx`).
 - Preview artifact: https://claude.ai/artifact/C253g9ig8xAJq1YtnGKKs6 (private).
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)

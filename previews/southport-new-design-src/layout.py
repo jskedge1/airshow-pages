@@ -399,6 +399,10 @@ def fares(t):
              '</div>\n'
              '<ul class="mf-l"><li>I would take a look at the Merseyrail event page nearer the 2027 show to see if the offer returns.</li></ul>\n'
              '</div>\n\n</div>\n</div></div></div>\n')
+    # Southport has no On the day and getting home box (.pbx), so its jump button would do nothing: it goes
+    t = sub1(t, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+             "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];")
+    assert 'class="pbx"' not in t
     block = css + "\n" + ways + board + js + "\n"
     return sub1(t, '<div class="wrap"><section class="cpk reveal" id="cpk"', block + '<div class="wrap"><section class="cpk reveal" id="cpk"')
 
