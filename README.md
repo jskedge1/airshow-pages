@@ -698,7 +698,8 @@ Round 2 (22 Nov 2026, `previews/NEW-DESIGN-ROLLOUT-2.md`): the preview must look
 `build.py` now reads `live-source.html`, writes only `previews/clacton-new-design.html`, and `round2_like_duxford()` takes out
 every part the Duxford page does not have, leaving a comment where each was. Left out (Jack can ask for any back):
 - Sections: The Ground Show, Seafront Information, Keep The Show Free.
-- Getting there: the Fares and Save money board, the On the day and Getting home box, the hidden Ways in picker board.
+- Getting there: the On the day and Getting home box. (The Fares and Save money board is back, at Jack's request on
+  22 Nov 2026, with the hidden Ways in picker board its script needs.)
 - Food and facilities: the Comfort, Family and Camera lists.
 - Duxford's own list of hidden shared parts is used too (More air shows band, journey planner and the rest).
 - Duxford sections with no Clacton facts: Flightline walk, Duxford's story (no Clacton story), Experience flights.

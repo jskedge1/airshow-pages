@@ -140,8 +140,8 @@ def round2_like_duxford(html):
         assert tab, "tab " + sid
         html = html[:tab.start()] + html[tab.end():]
     # Getting there: Duxford has no Ways in picker board, no Fares and Save money board, no On the day and Getting home box
-    html = cut_element(html, '<div class="nss tp-fares" id="tpFares">', "Fares and Save money board (Getting there)")
-    html = cut_element(html, '<div class="nss">', "Ways in picker board (Getting there, hidden on the live page)")
+    # The Fares and Save money board stays: Jack asked for it back (comment on the Clacton preview, 22 Nov 2026, 20:24).
+    # The Ways in picker board stays too (hidden, as on the live page): the Fares board's script needs it.
     html = cut_element(html, '<div class="pbx">', "On the day and Getting home box (Getting there)")
     # Food and facilities: Duxford has no Comfort, Family and Camera lists
     html = cut_element(html, '<div class="pack boxes reveal">', "Comfort, Family and Camera lists (Food and facilities)")
