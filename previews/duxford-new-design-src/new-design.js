@@ -202,3 +202,39 @@
     });
   }, 1500);
 })();
+
+/* Jack, 22 Nov 2026: make the aerial view in the sun guide clickable.
+   Click or tap anywhere on the drawing and the sun moves to the nearest hour on its path,
+   the same as pressing that hour's button below it. The sun guide's own drawing and maths are unchanged. */
+(function(){
+  function setup(){
+    var dots=document.getElementById('planDots'),times=document.getElementById('sgTimes');
+    if(!dots||!times||!dots.children.length){return false;}
+    var svg=dots.ownerSVGElement,cells=times.querySelectorAll('.sg-cell');
+    if(!svg||cells.length!==dots.children.length){return true;}
+    var you={x:390,y:260};
+    svg.classList.add('nz-sg-click');
+    svg.setAttribute('aria-label','Aerial view of the airfield. Click a point on the sun path to see that time.');
+    function nearest(ev){
+      var pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;
+      var m=svg.getScreenCTM();if(!m){return -1;}
+      var p=pt.matrixTransform(m.inverse()),a=Math.atan2(p.x-you.x,you.y-p.y),best=-1,bd=9;
+      [].forEach.call(dots.children,function(c,i){
+        var b=Math.atan2(+c.getAttribute('cx')-you.x,you.y-+c.getAttribute('cy')),d=Math.abs(Math.atan2(Math.sin(a-b),Math.cos(a-b)));
+        if(d<bd){bd=d;best=i;}
+      });
+      return best;
+    }
+    var hl=-1;
+    function mark(i){
+      if(i===hl){return;}
+      if(hl>-1&&dots.children[hl]){dots.children[hl].classList.remove('nz-hot');}
+      hl=i;if(i>-1){dots.children[i].classList.add('nz-hot');}
+    }
+    svg.addEventListener('mousemove',function(ev){mark(nearest(ev));});
+    svg.addEventListener('mouseleave',function(){mark(-1);});
+    svg.addEventListener('click',function(ev){var i=nearest(ev);if(i>-1){cells[i].click();}});
+    return true;
+  }
+  var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
+})();
