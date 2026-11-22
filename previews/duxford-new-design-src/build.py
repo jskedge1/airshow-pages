@@ -135,6 +135,14 @@ def main():
         ("you&rsquo;re seeing it on the airfield where it all began.</p>",
          'you&rsquo;re seeing it on the airfield where it all began.</p><figure class="pic st-pic"><img class="photo" data-k="wildcat_side" alt="A Grumman Wildcat taxiing on the airfield at Duxford"></figure>'),
     ]
+    # Photographers' map (Jack, 22 Nov 2026): a new spot 8 on the crowd line, for taxi shots. Jack will add a photo.
+    fixes += [
+        ('<g transform="translate(150 360)"><circle r="14" fill="#32B4AF" stroke="#fff" stroke-width="2"/><text y="5">4</text></g>',
+         '<g transform="translate(150 360)"><circle r="14" fill="#32B4AF" stroke="#fff" stroke-width="2"/><text y="5">4</text></g>\n              <g transform="translate(212 318)"><circle r="14" fill="#32B4AF" stroke="#fff" stroke-width="2"/><text y="5">8</text></g>'),
+        ('<text transform="translate(262 290) rotate(-30)"', '<text transform="translate(296 271) rotate(-30)"'),
+        ("there&rsquo;s little room for a big lens.</p></div></li>\n          </ol>",
+         "there&rsquo;s little room for a big lens.</p></div></li>\n            <li value=\"8\"><span class=\"n\">8</span><div><b>Crowd line, west of show centre</b><p>Along the crowd line towards the American Air Museum. From here you will be able to capture taxi shots of aircraft.</p></div></li>\n          </ol>"),
+    ]
     for old, new in fixes:
         assert html.count(old) == 1, old
         html = html.replace(old, new, 1)

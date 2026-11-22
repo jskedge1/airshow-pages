@@ -281,7 +281,7 @@
     var spots={};
     [].forEach.call(svg.querySelectorAll('g > g[transform^="translate"]'),function(g){
       var c=g.querySelector('circle[r="14"]'),t=g.querySelector('text');
-      if(c&&t&&/^[1-7]$/.test(t.textContent.trim())){spots[t.textContent.trim()]=g;}
+      if(c&&t&&/^[1-9]$/.test(t.textContent.trim())){spots[t.textContent.trim()]=g;}
     });
     var items={};
     [].forEach.call(map.querySelectorAll('.pmap-list > li'),function(li){var n=li.querySelector('.n');if(n){items[n.textContent.trim()]=li;}});
