@@ -268,3 +268,57 @@
   }
   var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
 })();
+
+/* Jack, 22 Nov 2026: photographers' map. Click a numbered spot on the map, or in the list, to see a card
+   with a photo and that spot's details under the map. Photos are Jack's own; spots without one show text only. */
+(function(){
+  var PIC={1:'wildcat_front',2:'chipmunk',3:'formation',4:'spitfire'};
+  function src(k){var i=document.querySelector('img[data-pic="'+k+'"][src^="data:"],img[data-k="'+k+'"][src^="data:"]');return i?i.getAttribute('src'):'';}
+  function setup(){
+    var map=document.getElementById('photoMap');if(!map){return true;}
+    var svg=map.querySelector('.pmap-fig svg');if(!svg){return true;}
+    if(!src('formation')){return false;}
+    var spots={};
+    [].forEach.call(svg.querySelectorAll('g > g[transform^="translate"]'),function(g){
+      var c=g.querySelector('circle[r="14"]'),t=g.querySelector('text');
+      if(c&&t&&/^[1-7]$/.test(t.textContent.trim())){spots[t.textContent.trim()]=g;}
+    });
+    var items={};
+    [].forEach.call(map.querySelectorAll('.pmap-list > li'),function(li){var n=li.querySelector('.n');if(n){items[n.textContent.trim()]=li;}});
+    if(!Object.keys(spots).length){return true;}
+    var card=document.createElement('div');card.className='nz-spot';card.setAttribute('aria-live','polite');
+    card.innerHTML='<div class="nz-spot-ph"></div><div class="nz-spot-tx"><span class="nz-spot-n"></span><div><h4></h4><p></p><span class="nz-spot-k"></span></div></div>';
+    var fig=map.querySelector('.pmap-fig');fig.appendChild(card);
+    var cur=null;
+    function show(n,scroll){
+      var li=items[n];if(!li){return;}
+      if(cur){if(spots[cur]){spots[cur].classList.remove('nz-on');}if(items[cur]){items[cur].classList.remove('nz-on');}}
+      cur=n;if(spots[n]){spots[n].classList.add('nz-on');}li.classList.add('nz-on');
+      var ph=card.querySelector('.nz-spot-ph'),s=PIC[n]?src(PIC[n]):'';
+      ph.innerHTML='';card.classList.toggle('nz-noph',!s);
+      if(s){var im=document.createElement('img');im.src=s;im.alt='';ph.appendChild(im);}
+      var col=li.classList.contains('warn')?'#D74949':(li.classList.contains('out')?'#6950A1':'#32B4AF');
+      card.style.setProperty('--sc',col);
+      card.querySelector('.nz-spot-n').textContent=n;
+      card.querySelector('h4').textContent=li.querySelector('b').textContent;
+      card.querySelector('p').innerHTML=li.querySelector('p').innerHTML;
+      card.querySelector('.nz-spot-k').textContent=li.classList.contains('warn')?'Outside the fence, take care':(li.classList.contains('out')?'Outside the fence':'Inside the show');
+      card.classList.remove('nz-in');void card.offsetWidth;card.classList.add('nz-in');
+      if(scroll){card.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});}
+    }
+    Object.keys(spots).forEach(function(n){
+      var g=spots[n];g.classList.add('nz-spot-pin');g.setAttribute('tabindex','0');g.setAttribute('role','button');
+      g.setAttribute('aria-label','Spot '+n+', show the photo and details');
+      g.addEventListener('click',function(){show(n,true);});
+      g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();show(n,true);}});
+    });
+    Object.keys(items).forEach(function(n){
+      var li=items[n];li.classList.add('nz-spot-li');li.setAttribute('tabindex','0');
+      li.addEventListener('click',function(e){if(e.target.closest('a')){return;}show(n,true);});
+      li.addEventListener('keydown',function(e){if(e.key==='Enter'){show(n,true);}});
+    });
+    show('1',false);
+    return true;
+  }
+  var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
+})();
