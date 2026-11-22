@@ -666,6 +666,14 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+### Wales National Airshow in the new design (preview, 22 Nov 2026)
+
+`previews/wales-new-design.html` is the Wales National Airshow (Swansea) page in the Duxford new design, built from the Duxford template by `python3 previews/wales-new-design-src/build.py` (brief: `previews/NEW-DESIGN-ROLLOUT.md`). Private preview artifact: "Wales National Airshow, new design preview". Not live; `camping-layout/wales.html` was not changed.
+
+- The Wales page builds its sections with the older add-on (navy section bars). The build swaps in the newer fold add-on that Duxford has (`folds.html`, with the Wales page's own section descriptions), so the new design applies exactly. The old `secOpen` hooks the other Wales scripts use still work.
+- Photos come from the page's own set (`window.PHOTO`). The photographers' map spot cards are text only, because Jack has no photo taken from each Swansea spot yet (add them in `PIC` in `new-design.js`). The Photography opening uses his RAF Typhoon photo beside the heading, as Duxford does.
+- Wales has no Story, Experience flights or Flightline walk sections. Its two extra sections, The ground show and Seafront information, come after the others.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
