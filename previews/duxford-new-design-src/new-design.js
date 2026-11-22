@@ -160,6 +160,21 @@
     new IntersectionObserver(function (en) { bar.classList.toggle('nz-stuck', !en[0].isIntersecting && en[0].boundingClientRect.top < 0); }).observe(sen);
   }
 
+  /* Jack, 22 Nov 2026: the Quick answers open and close slowly. Off for reduced motion. */
+  if (!reduce && Element.prototype.animate) D.addEventListener('click', function (e) {
+    var sm = e.target.closest && e.target.closest('#hpList details > summary'); if (!sm) return;
+    var d = sm.parentElement; e.preventDefault(); if (d.dataset.nzAnim === '1') return;
+    var EASE = 'cubic-bezier(.22,.61,.36,1)', start = d.offsetHeight; d.dataset.nzAnim = '1'; d.style.overflow = 'hidden';
+    function done() { d.style.overflow = ''; d.style.height = ''; delete d.dataset.nzAnim; }
+    if (d.open) {
+      d.animate({ height: [start + 'px', sm.offsetHeight + 'px'] }, { duration: 620, easing: EASE }).onfinish = function () { d.open = false; done(); };
+    } else {
+      d.open = true; var end = d.offsetHeight;
+      d.animate({ height: [start + 'px', end + 'px'] }, { duration: 720, easing: EASE }).onfinish = done;
+      [].forEach.call(d.children, function (c) { if (c !== sm) c.animate({ opacity: [0, 1], transform: ['translateY(-8px)', 'none'] }, { duration: 720, easing: EASE }); });
+    }
+  });
+
   /* motion: things rise into place as you scroll. Off for reduced motion. */
   if (reduce || !('IntersectionObserver' in window)) return;
   var done = [];
