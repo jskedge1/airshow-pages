@@ -666,6 +666,18 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+## Shuttleworth page in the new design (preview, 22 Nov 2026)
+
+`previews/shuttleworth-new-design.html` is the Shuttleworth (Old Warden) feature page in the Duxford new design Jack signed off on 22 Nov 2026, built the way `previews/NEW-DESIGN-ROLLOUT.md` sets out. It is not live; `camping-layout/shuttleworth.html` was not changed. Preview artifact (private): "Shuttleworth Air Shows, new design preview".
+
+- Built by `python3 previews/shuttleworth-new-design-src/build.py`, a copy of the Duxford source with the Duxford only text fixes and photo swaps taken out. The generic parts (fonts, capitals, `NZ_PATH`, framed parts) are unchanged.
+- Words in `chrome.html` and `new-design.js` are Shuttleworth's own: Old Warden Aerodrome, Bedfordshire, seven shows in 2027, and the page's own heading line. The section order is Jack's list; the page has all 20 sections.
+- Photos used by the new parts are Jack's own from the page (invader, hangars, static_line, harvard_static, beech18, vintage_bus, crowd_rain, queue). The `cm_` photos credited to Chris Murgatroyd are left where the live page has them and are not reused.
+- Shuttleworth has no photographers' map, so the Duxford map scripts (spot cards, 3D look) and the spot 4 photo are left out.
+- Added for this page: the Where to watch spot tabs here are built differently (`#wwMaps`), so the Duxford look is set on them in `new-design.css`; the extra "Shuttleworth" tag beside Key places is hidden to match Duxford.
+- Fix on top of the template: in the quick checker on phones the question was squeezed into a 44px column after the number was hidden. `build.py` now lets it span the box. The Duxford preview still has this at phone width.
+- Checks: build asserts pass, 74 inline scripts parse, all 868 text chunks of the live page are present, every section opens at 1280 and 390 with no sideways scroll, console errors only the live page's own (traders fetch CORS, Google Maps on file://), and the line-up, planner, sun guide, calculator, checklists, flightline tour checker, quick checker and What you'll see filters behave as on the live page.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
