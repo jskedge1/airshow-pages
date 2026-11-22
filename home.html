@@ -1456,5 +1456,25 @@ $('fshows').innerHTML=['riat','cosford','duxford','eastbourne','shuttleworth'].m
     requestAnimationFrame(frame);})();
 })();
 </script>
+<script>
+/* jump links: on the live site this page sits inside a shadow root, where the browser cannot find #ids by itself, so scroll to them here (below the fixed site header) */
+(function(){
+  function headerOffset(){var off=0;[document.getElementById('ukag'),document.getElementById('SITE_HEADER')].forEach(function(h){if(!h)return;var p=getComputedStyle(h).position;if(p==='fixed'||p==='sticky'){var b=h.getBoundingClientRect().bottom;if(b>off)off=b}});return off}
+  document.addEventListener('click',function(e){
+    if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+    var path=e.composedPath?e.composedPath():[e.target],a=null;
+    for(var i=0;i<path.length;i++){if(path[i].tagName==='A'){a=path[i];break}}
+    if(!a)return;var href=a.getAttribute('href');
+    if(!href||href.charAt(0)!=='#'||href.length<2)return;
+    var root=a.getRootNode(),id=href.slice(1),t=root.getElementById?root.getElementById(id):null;
+    if(!t&&id!=='top')return;
+    e.preventDefault();
+    var y=(t&&id!=='top')?Math.max(0,t.getBoundingClientRect().top+window.pageYOffset-headerOffset()-12):0;
+    var still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top:y,behavior:still?'auto':'smooth'});
+    if(t&&t.focus){if(!t.hasAttribute('tabindex'))t.setAttribute('tabindex','-1');try{t.focus({preventScroll:true})}catch(x){}}
+  });
+})();
+</script>
 </body>
 </html>
