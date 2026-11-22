@@ -24,7 +24,7 @@ import duxford_layout  # noqa: E402
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
-OUT = ROOT / "previews" / "eastbourne-new-design.html"   # the preview (round 2); the parent session puts pages live
+OUT = ROOT / "camping-layout" / "eastbourne.html"   # the live page
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
@@ -184,6 +184,7 @@ def main():
     html = html[:end] + tail + html[end:]
 
     html = re.sub(r"@@BLOB(\d+)@@", lambda mm: blobs[int(mm.group(1))], html)
+    import sys as _ws_sys; _ws_sys.path.insert(0, str(ROOT / 'previews')); from wixsafe import wix_safe; html = wix_safe(html)   # so the styles also work inside the live site (see previews/wixsafe.py)
     OUT.write_text(html, encoding="utf8")
     print("wrote", OUT.relative_to(ROOT), "%.1f MB" % (len(html.encode("utf8")) / 1e6), "with", len(blobs), "embedded images")
 

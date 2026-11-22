@@ -186,6 +186,13 @@ def apply(html):
          "<span>Airbourne official site</span></a></div>\n  </div>\n\n")
     html = html[:i] + s + html[j:]
 
+    # ---------------------------------------------------------------- Getting there jump strip
+    # The page has no On the day and getting home box (.pbx), so its jump button led nowhere. Dropped (22 Nov 2026),
+    # so the strip reads Ways in, Fares, Questions.
+    html = one(html, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+               "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];", "jump strip")
+    assert 'class="pbx' not in html, "the page now has an On the day box: put its jump button back"
+
     # ---------------------------------------------------------------- Where to stay: the lists sit in one box, as on Duxford
     i, j = section(html, "stay")
     s = html[i:j]
