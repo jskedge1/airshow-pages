@@ -72,3 +72,13 @@ from Wales or Duxford, nothing invented):
    operator). The Wales version is the template: `previews/wales-new-design-src/restructure.py` on
    `claude/wales-new-design` (search `trlScript-wales`); it swaps only the H data and the GO link. Where the show's
    page has no train times, show the stations and legs without times, as Cosford does, and list it.
+
+## Added 22 Nov 2026, 20:30: the Fares and save money board on every page
+
+Jack, in a comment on the Fares board (`#tpFares`) in the Clacton round 2 preview: "add this to each page".
+Every feature page's Getting there gets the Fares and save money board, as on Clacton (branch
+`claude/clacton-new-design`, commit e478a49): placed after Choose a topic, reached by the "Fares" button in the jump
+strip, with the hidden `.nss` Ways in board alongside it (the fares script needs it, or the page errors).
+Fill it with that show's own fares only (Park and Ride, parking, train, bus, coach and taxi prices) from the show's
+page or the official sources it already links. Never invent a price. Where the show has no fares to show, leave the
+board out, remove the dead "Fares" jump button, and list it.
