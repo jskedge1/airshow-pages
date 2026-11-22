@@ -2,7 +2,9 @@
 """Builds previews/gransden-new-design.html: the Little Gransden Air and Car Show feature page in the new design
 (the layout made for the RIAT camping pages, in the site's brand colours).
 
-It does not retype the page. It reads the live page, camping-layout/gransden.html, and
+Round 2 (Jack, 22 Nov 2026): the page is built IN the Duxford template. make_source.py first writes
+live-source.html, the Little Gransden page laid out section by section like Duxford's live-source.html with
+only Little Gransden's own content. This script then reads it and, exactly as for Duxford,
   1. keeps the site font (Barlow) and takes out capitals and wide letter spacing,
   2. adds the new top bar, photo header, intro, section heading and footer (chrome.html),
   3. adds the new look on top of the page's own styles (new-design.css),
@@ -14,13 +16,15 @@ Run:  python3 previews/gransden-new-design-src/build.py
 The live page is never changed. Rebuild after the live page changes to pick the changes up.
 """
 import pathlib
+import sys as _sys
+_sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import re
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
-SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
-OUT = ROOT / "camping-layout" / "gransden.html"   # the live page
+SRC = HERE / "live-source.html"   # written by make_source.py: Little Gransden in the Duxford template
+OUT = ROOT / "previews" / "gransden-new-design.html"   # round 2 preview (the parent session puts it live)
 NZ_PATH = "/airshow-pages/camping-layout/gransden.html"
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
@@ -59,6 +63,10 @@ FRAME_CHECK = (
     'html body .qs li{background:#F3F6F8!important;border:0!important;border-top:5px solid var(--sc,#32B4AF)!important;border-left:0!important;box-shadow:none!important;border-radius:0!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}'
     'html body .qs li:hover{background:#fff!important;transform:translateY(-4px);box-shadow:0 22px 34px -24px rgba(11,26,39,.5)!important}'
     'html body .qs li .sn{display:none!important}'
+    # with the number hidden, the question must span the whole box (on phones it was squeezed into the 44px number
+    # column). The same fix as the Cosford round 2 build; Duxford's own build on main does not have it yet.
+    'html body .qs li .q{grid-column:1/-1!important}'
+    'html body .qs li::before{display:none!important}html body .qs li .q{border-left:0!important;padding-left:20px!important}'
     'html body .qs .q legend{font:700 21px/1.25 "Barlow",sans-serif!important;color:#13293C!important}'
     'html body .qs .q legend span{display:block!important;font:700 15.5px/1.2 "Barlow",sans-serif!important;color:var(--sc,#0E5F5B)!important;margin-bottom:5px!important;text-transform:none!important;letter-spacing:0!important;filter:brightness(.8)}'
     'html body .qs .q legend small{display:block!important;font:400 15.5px/1.45 "Barlow",sans-serif!important;color:#4A5A66!important;margin-top:4px!important}'
@@ -114,6 +122,8 @@ def restyle_text(s):
 
 
 def main():
+    import make_source
+    make_source.main()
     html = SRC.read_text(encoding="utf8")
     blobs = []
 
@@ -124,9 +134,12 @@ def main():
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
     html = restyle_text(html)
 
+    # Jack's Duxford only fixes (overview wording, the story corrections, spot 8 on the photographers' map, the photo
+    # swaps) were for that page only and are not carried over.
+
     # head: fonts, and keep the preview out of search results
     html = html.replace("</head>", FONT_LINK + "\n</head>", 1)
-    html = html.replace('<meta name="viewport"', '<!-- New design. Built by previews/gransden-new-design-src/build.py from live-source.html. Edit the source files, then rebuild. -->\n<meta name="viewport"', 1)
+    html = html.replace('<meta name="viewport"', '<!-- New design. PREVIEW. Built by previews/gransden-new-design-src/build.py from live-source.html (written by make_source.py). Edit the source files, then rebuild. -->\n<meta name="viewport"', 1)
 
     # Some of the page's scripts work out which show they are on from the file name (gransden.html).
     # This preview has a different name, so tell them the live page's path.
@@ -157,8 +170,8 @@ def main():
     if html.rstrip().endswith("</html>"):
         end = html.rstrip().rfind("</html>")
     tail = bottom + '\n<style id="nz-css">\n' + css + '\n</style>\n<script id="nz-js">\n' + js + "\n</script>\n"
-    # Extra photos of Jack's that the live page does not have, kept hidden and used by new-design.js.
-    # None yet for Little Gransden: the img folder is empty, so nothing is added.
+    # Extra photos of Jack's that the live page does not have (Jack, 22 Nov 2026), kept hidden and used by new-design.js.
+    # None for Little Gransden: the img folder is empty.
     extra = ""
     for f in sorted((HERE / "img").glob("*.webp")):
         extra += '<img data-nzpic="%s" alt="" src="data:image/webp;base64,%s">' % (f.stem, base64.b64encode(f.read_bytes()).decode("ascii"))

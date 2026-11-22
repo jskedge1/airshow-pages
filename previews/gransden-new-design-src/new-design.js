@@ -404,10 +404,3 @@
   var n=0;(function t(){if(go()||++n>40){return;}setTimeout(t,250);})();
 })();
 
-/* Overview: on the Duxford page the Latest news sits at the end of the Overview, after the intro, My view,
-   the calendar and Where next. The Gransden page has it at the top, so it moves to the same place here. */
-(function(){
-  function go(){var n=document.getElementById('airshowNews'),ov=document.getElementById('overview');
-    if(!n||!ov){return false;}var p=n.parentElement;if(p&&p.lastElementChild!==n){p.appendChild(n);}return true;}
-  if(!go()){document.addEventListener('DOMContentLoaded',go);}
-})();
