@@ -140,6 +140,11 @@ def round2_like_duxford(html):
         assert tab, "tab " + sid
         html = html[:tab.start()] + html[tab.end():]
     # Getting there: Duxford has no Ways in picker board, no Fares and Save money board, no On the day and Getting home box
+    # The Getting there jump strip: Clacton has no On the day and Getting home box (.pbx), so that button would do
+    # nothing. It is dropped, so the strip reads Ways in, Fares, Questions (as on Duxford, Southport, Wales, Cosford).
+    old = "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];"
+    assert html.count(old) == 1, "JUMPS not found"
+    html = html.replace(old, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];", 1)
     # The Fares and Save money board stays: Jack asked for it back (comment on the Clacton preview, 22 Nov 2026, 20:24).
     # The Ways in picker board stays too (hidden, as on the live page): the Fares board's script needs it.
     html = cut_element(html, '<div class="pbx">', "On the day and Getting home box (Getting there)")
