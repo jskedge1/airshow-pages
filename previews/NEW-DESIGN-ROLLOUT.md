@@ -30,6 +30,18 @@ One session builds one show. This file is the brief for each of those sessions.
    How it compares, Your show's story, Experience flights, Make a postcard. Use the section ids your page has
    (`grep -o 'id="f-[a-z]*"'`, or the folds built at run time); skip any it does not have, keep any extras after.
 6. Build, check, fix until it looks like the Duxford preview section by section.
+6a. Getting there parking blocks (Jack, 22 Nov 2026, on the Clacton preview: "add these to each feature page, in the
+   same place"). Every feature page gets the two parking blocks the Clacton page has, in Getting there, in the same
+   place: after the Key places board, the coming by train banner and the plan note, and before "Choose a topic".
+   - Compare driving options (`section.cdo#cdo`): one price bar per way of parking, cheapest last, a short intro in
+     Jack's voice and a note under it.
+   - Car parks in <place> (`section.cpk#cpk`): a table of car parks and their cost, then up to three boxes (for
+     example the event car park, town car parks, walking in) with opening times, spaces or walking times.
+   Copy the markup, styles and script from `camping-layout/clacton.html` (search `id="cdo"` and `id="cpk"`) and add
+   them in `build.py`, with the headings in the page's heading case (not capitals). Fill them only with your show's
+   own facts, from its page or the show's official site, with the year they are from. Never copy Clacton's figures
+   or make any up. If your show has no parking costs to compare (for example parking included in the ticket), leave
+   that block out and say so in your summary.
 7. Publish as a NEW private artifact titled "<Show name>, new design preview" (`publish_files` with the built HTML as
    `index.html`). Commit and push to your own branch. Add a short note to `README.md` under the Duxford note.
 
