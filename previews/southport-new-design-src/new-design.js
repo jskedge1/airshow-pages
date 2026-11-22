@@ -401,19 +401,3 @@
     if(!p||!s){return false;}p.style.setProperty('--nz-plimg','url("'+s+'")');return true;}
   var n=0;(function t(){if(go()||++n>40){return;}setTimeout(t,250);})();
 })();
-
-/* Photography opening: the navy panel sits beside one of Jack's photos, as on the Duxford page (its P-40).
-   The live Southport page has no photo there, so the Jet Pitts from the page's own photos goes in. Not clickable. */
-(function(){
-  function go(){
-    var w=document.querySelector('#photo > .wrap'),h=w&&w.querySelector(':scope > .panel-head'),s=window.PHOTO&&window.PHOTO.jetpitts;
-    if(!w||!h||!s){return false;}
-    if(w.querySelector(':scope > figure.pic.wide')){return true;}
-    var a=(window.PHOTO_ALT&&window.PHOTO_ALT.jetpitts)||'';
-    var f=document.createElement('figure');f.className='pic wide nz-ph-open';
-    f.innerHTML='<img class="photo" alt="" decoding="async"><figcaption></figcaption>';
-    f.firstChild.src=s;f.firstChild.alt=a;f.lastChild.textContent=a+'.';
-    h.parentNode.insertBefore(f,h.nextSibling);return true;
-  }
-  var n=0;(function t(){if(go()||++n>40){return;}setTimeout(t,250);})();
-})();
