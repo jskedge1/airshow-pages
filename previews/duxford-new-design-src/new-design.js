@@ -400,3 +400,10 @@
   }
   if(!run()){document.addEventListener('DOMContentLoaded',run);}
 })();
+
+/* Plan your day: Jack's photo behind the plan's title band (Jack, 22 Nov 2026) */
+(function(){
+  function go(){var p=document.getElementById('planner');var i=document.querySelector('img[data-pic="formation"][src^="data:"]');
+    if(!p||!i){return false;}p.style.setProperty('--nz-plimg','url("'+i.getAttribute('src')+'")');return true;}
+  var n=0;(function t(){if(go()||++n>40){return;}setTimeout(t,250);})();
+})();
