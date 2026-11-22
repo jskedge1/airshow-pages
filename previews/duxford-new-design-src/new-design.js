@@ -258,7 +258,7 @@
       var label=a.textContent.trim();
       a.textContent='';
       var ph=document.createElement('span');ph.className='nz-jt-ph';ph.setAttribute('aria-hidden','true');
-      if(s){var im=document.createElement('img');im.src=s;im.alt='';im.decoding='async';im.loading='lazy';ph.appendChild(im);}
+      if(s){var im=document.createElement('img');im.src=s;im.alt='';im.decoding='async';ph.appendChild(im);}
       var tx=document.createElement('span');tx.className='nz-jt-tx';
       tx.innerHTML='<b></b><i>Go to section <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i>';
       tx.querySelector('b').textContent=label;

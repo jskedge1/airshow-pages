@@ -103,13 +103,14 @@ def main():
     html = restyle_text(html)
 
     # Jack, 22 Nov 2026: the photo at the top of Photography changed to a head on shot (his Hispano Buchón photo at Duxford).
-    m_new = re.search(r'data-pic="buchon_front"[^>]*?src="(@@BLOB\d+@@)"', html) or re.search(r'src="(@@BLOB\d+@@)"[^>]*?data-pic="buchon_front"', html)
+    # then (later the same morning) smaller, and a different photo: the P-40 Warhawk taxiing out.
+    m_new = re.search(r'data-pic="p40"[^>]*?src="(@@BLOB\d+@@)"', html) or re.search(r'src="(@@BLOB\d+@@)"[^>]*?data-pic="p40"', html)
     m_old = re.search(r'<img[^>]*data-pic="buchon_pan"[^>]*src="(@@BLOB\d+@@)"[^>]*alt="A Hispano Buch[^"]*panned with the background blurred"><figcaption>A slow shutter speed and a smooth pan give a blurred background and a full prop disc.</figcaption>', html)
     assert m_new and m_old, "photo swap: pattern not found"
     seg = m_old.group(0)
-    seg2 = seg.replace(m_old.group(1), m_new.group(1)).replace('data-pic="buchon_pan"', 'data-pic="buchon_front"')
-    seg2 = re.sub(r'alt="A Hispano Buch[^"]*panned with the background blurred"', 'alt="A Hispano Buchón head on, with its propeller turning, on the airfield at Duxford"', seg2)
-    seg2 = seg2.replace('<figcaption>A slow shutter speed and a smooth pan give a blurred background and a full prop disc.</figcaption>', '<figcaption>A Hispano Buchón head on, with its propeller turning, on the airfield at Duxford.</figcaption>')
+    seg2 = seg.replace(m_old.group(1), m_new.group(1)).replace('data-pic="buchon_pan"', 'data-pic="p40" data-dup="1"')
+    seg2 = re.sub(r'alt="A Hispano Buch[^"]*panned with the background blurred"', 'alt="A Curtiss P-40 Warhawk with a shark mouth taxiing out at Duxford"', seg2)
+    seg2 = seg2.replace('<figcaption>A slow shutter speed and a smooth pan give a blurred background and a full prop disc.</figcaption>', '<figcaption>A Curtiss P-40 Warhawk with a shark mouth taxiing out at Duxford.</figcaption>')
     html = html.replace(seg, seg2, 1)
 
     # Jack, 22 Nov 2026: the opening line of the overview did not read right. Name the two big shows plainly.
