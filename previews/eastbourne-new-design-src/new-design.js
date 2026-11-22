@@ -1,0 +1,407 @@
+/* New design for the Eastbourne Airshow page (made from the Duxford template). Fills the new header, intro and footer from the page's own
+   content, so the words only live in one place, and adds the scroll and hover motion. */
+(function () {
+  var D = document;
+  function $(s, r) { return (r || D).querySelector(s); }
+  function $$(s, r) { return [].slice.call((r || D).querySelectorAll(s)); }
+  function txt(el) { return el ? (el.textContent || '').replace(/\s+/g, ' ').trim() : ''; }
+  /* one of the page's own photos by its key: an embedded <img>, or the page's PHOTO store */
+  function pic(k) {
+    var i = $('img[data-pic="' + k + '"]:not([data-dup])[src^="data:"],img[data-k="' + k + '"][src^="data:"]');
+    return i ? i.getAttribute('src') : ((window.PHOTO && window.PHOTO[k]) || '');
+  }
+  function alt(k) { return (window.PHOTO_ALT && window.PHOTO_ALT[k]) || ''; }
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  D.documentElement.classList.add('nz');
+
+  /* open a section of the guide and scroll to it (uses the page's own tab buttons) */
+  function go(id) {
+    var tab = D.getElementById('t-' + id), fold = D.getElementById('f-' + id);
+    if (fold && !fold.classList.contains('open')) {
+      var b = $('.fold-btn', fold); if (b) b.click();
+    } else if (!fold && tab) { tab.click(); return; }
+    if (fold) setTimeout(function () {
+      var y = fold.getBoundingClientRect().top + window.pageYOffset - 70;
+      window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    }, 80);
+  }
+  D.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('[data-nz-go]');
+    if (t) { e.preventDefault(); go(t.getAttribute('data-nz-go')); }
+  });
+
+  /* the three header buttons open their section too (on the live page they only scroll) */
+  D.addEventListener('click', function (e) {
+    var c = e.target.closest && e.target.closest('.nz-feat3 .h1x-card');
+    if (c && c.getAttribute('data-sec') && D.getElementById('f-' + c.getAttribute('data-sec'))) go(c.getAttribute('data-sec'));
+  });
+
+  var NUM = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty', 'Twenty one', 'Twenty two', 'Twenty three', 'Twenty four'];
+  var WORD = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12 };
+
+  function fill() {
+    var hero = D.getElementById('top');
+    if (hero && !hero.hasAttribute('data-nz-done')) {
+      hero.setAttribute('data-nz-done', '1');
+      /* header photo: the page's own header photo */
+      /* title, tag and breadcrumb */
+      var h1 = $('h1', hero);
+      if (h1) D.getElementById('nzTitle').textContent = $$('.cg-word', h1).map(txt).join(' ') || txt(h1);
+      var tag = $('.h1x-tag', hero);
+      if (tag) D.getElementById('nzTags').innerHTML = '<span class="nz-tagp"></span>', $('#nzTags span').textContent = txt(tag);
+      var red = $('.cg-red', hero);
+      if (red) D.getElementById('nzAboutH').textContent = txt(red);
+      var cr = $('.cg-crumb', hero), nc = D.getElementById('nzCrumbs');
+      if (cr && nc) {
+        var parts = [];
+        [].forEach.call(cr.childNodes, function (n) {
+          if (n.nodeType === 1 && n.tagName === 'A') parts.push('<a href="' + n.getAttribute('href') + '" target="_top">' + txt(n) + '</a>');
+          else if (n.nodeType === 3 && n.textContent.trim()) parts.push('<span>' + n.textContent.trim() + '</span>');
+          else if (n.nodeType === 1 && txt(n) !== '/' && txt(n)) parts.push('<span>' + txt(n) + '</span>');
+        });
+        nc.innerHTML = parts.join('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>');
+      }
+      /* intro words */
+      var sub = $('.cg-sub', hero);
+      if (sub) D.getElementById('nzIntro').innerHTML = sub.innerHTML;
+      /* key facts: boxes with a coloured top edge */
+      var facts = $$('.cg-glass > div', hero), fb = D.getElementById('nzFacts');
+      if (facts.length && fb) {
+        fb.innerHTML = facts.map(function (d, i) {
+          var k = txt($('span', d)), v = txt($('b', d));
+          if (k === 'Where') { D.getElementById('nzWhere').textContent = v; D.getElementById('nzFtWhere').textContent = v; }
+          if (k === 'When') { D.getElementById('nzWhen').textContent = v; D.getElementById('nzFtWhen').textContent = v; }
+          return '<div class="c' + (i % 4) + '"><h3>' + k + '</h3><p>' + v + '</p></div>';
+        }).join('');
+      }
+      /* the three big buttons sit on the bottom edge of the header photo */
+      var cards = $('.h1x-cards', hero), slot = D.getElementById('nzFeat3');
+      if (cards && slot) slot.appendChild(cards);
+      /* last checked line */
+      var chk = $('.sx-checked', hero);
+      if (chk) {
+        D.getElementById('nzLast').innerHTML = chk.innerHTML;
+        var m = txt(chk).match(/Last checked\s+([^.]+)\./);
+        if (m) { D.getElementById('nzChecked').textContent = 'Last checked ' + m[1]; D.getElementById('nzCheckedWrap').hidden = false; }
+      }
+    }
+    /* header photo: the page's own header photo (on this page it is filled from the page's photo store) */
+    var bg = $('#top .cg-bg img'), nb = D.getElementById('nzHdBg');
+    if (bg && nb && !nb.getAttribute('src')) { var hs = bg.currentSrc || bg.getAttribute('src') || pic(bg.getAttribute('data-k') || ''); if (hs) nb.src = hs; }
+    /* offset photo beside the intro: one of the page's own photos */
+    var ab = D.getElementById('nzAbImg');
+    if (ab && !ab.getAttribute('src') && pic('spitfire')) { ab.src = pic('spitfire'); ab.alt = alt('spitfire'); }
+    /* Shooting at Eastbourne opens like the Duxford template: the navy intro panel beside one of Jack's photos
+       (the live page has no photo here, so the Typhoon from the page's own photos is added, with its own caption) */
+    var phw = $('#photo > .wrap'), phh = phw && $(':scope > .panel-head', phw);
+    if (phh && !$(':scope > figure.pic.wide', phw) && pic('typhoon')) {
+      var pf = D.createElement('figure'); pf.className = 'pic wide nz-ph-open';
+      pf.innerHTML = '<img alt="" decoding="async"><figcaption></figcaption>';
+      pf.firstChild.src = pic('typhoon'); pf.firstChild.alt = alt('typhoon');
+      pf.lastChild.textContent = alt('typhoon') + '.';
+      phh.parentNode.insertBefore(pf, phh.nextSibling);
+    }
+    /* the tickets notice moves under the intro */
+    var slotN = D.getElementById('nzNoticeSlot'), note = $('body > .notice');
+    if (slotN && note) slotN.appendChild(note);
+    /* a label line above each section's big heading (the section's name, when the heading says something else) */
+    $$('section.fold').forEach(function (f) {
+      var h2 = $('.panel-head h2', f), t = txt($('.fold-t', f));
+      if (!h2 || f.id === 'f-travel' || (h2.previousElementSibling && h2.previousElementSibling.classList.contains('nz-kick'))) return;
+      var k = D.createElement('span'); k.className = 'nz-kick';
+      var same = txt(h2).toLowerCase().replace(/[^a-z]/g, '') === t.toLowerCase().replace(/[^a-z]/g, '');
+      k.textContent = same ? 'Eastbourne Airshow' : t.charAt(0).toUpperCase() + t.slice(1);
+      h2.parentNode.insertBefore(k, h2);
+    });
+    /* the strip of section links reads in sentence case, like the other labels */
+    $$('nav.tabbar .tab').forEach(function (t) {
+      if (t.hasAttribute('data-nz-sc')) return; t.setAttribute('data-nz-sc', '1');
+      [].forEach.call(t.childNodes, function (n) {
+        if (n.nodeType !== 3 || !n.textContent.trim()) return;
+        var words = n.textContent.split(' ');
+        n.textContent = words.map(function (w, i) {
+          if (i === 0 || !w || /^(Eastbourne|Airbourne|RAF)$/.test(w) || words[i - 1] === 'RAF') return w;
+          return w.charAt(0).toLowerCase() + w.slice(1);
+        }).join(' ');
+      });
+    });
+    $$('img[data-nz-logo]').forEach(function (i) { var l = D.getElementById('nzLogo'); if (l && !i.getAttribute('src')) i.src = l.src; });
+    /* the guide band: its photo, numbers, and the page's own open all and close all buttons */
+    var bb = D.getElementById('nzBandBg');
+    if (bb && !bb.getAttribute('src') && pic('b17under')) bb.src = pic('b17under');
+    var fbs = D.getElementById('nzFoldBtns'), grp = $('.fold-bar .grp');
+    if (fbs && grp && !fbs.children.length) { fbs.appendChild(grp); }
+    var nsec = $$('section.fold').length; if (nsec) D.getElementById('nzStatSec').textContent = nsec;
+    D.getElementById('nzStatEv').textContent = D.getElementById('nzStatN').textContent;
+    /* Jack, 22 Nov 2026: one of his aircraft photos across the top of the Quick checker */
+    var mc = D.getElementById('matchcheck');
+    if (mc && !$('.nz-qc-ph', mc)) {
+      if (pic('tracker')) {
+        var fg = D.createElement('figure'); fg.className = 'nz-qc-ph';
+        fg.innerHTML = '<img alt="" decoding="async"><figcaption><span class="nz-kick">Quick checker</span><b>Six quick questions to see if this show suits your group.</b></figcaption>';
+        fg.firstChild.src = pic('tracker'); fg.firstChild.alt = alt('tracker');
+        mc.insertBefore(fg, mc.firstChild);
+      }
+    }
+    /* Jack, 22 Nov 2026: the line-up heading sits on one of his aircraft photos, like the other photo bands */
+    var lb = $('#lineup .lu-band');
+    if (lb && !$('.nz-lu-bg', lb)) {
+      if (pic('b17side')) { var li = D.createElement('img'); li.className = 'nz-lu-bg'; li.alt = ''; li.setAttribute('aria-hidden', 'true'); li.src = pic('b17side'); lb.insertBefore(li, lb.firstChild); }
+    }
+    /* how many sections */
+    var n = $$('section.fold').length;
+    if (n && NUM[n]) D.getElementById('nzCount').textContent = NUM[n];
+    /* small print moves into the dark bar under the footer */
+    var sp = $('footer.small-print .wrap'), ns = D.getElementById('nzSmall');
+    if (sp && ns && !ns.children.length) { while (sp.firstChild) ns.appendChild(sp.firstChild); }
+    var back = $('.ukbt-tab');
+    if (back && back.getAttribute('href')) D.getElementById('nzBack').href = back.getAttribute('href');
+  }
+  fill();
+  D.addEventListener('DOMContentLoaded', fill);
+  window.addEventListener('load', function () { fill(); setTimeout(fill, 600); });
+
+  /* the strip of section links: mark it stuck so it can take a shadow */
+  var bar = $('nav.tabbar');
+  if (bar && 'IntersectionObserver' in window) {
+    var sen = D.createElement('div'); sen.style.cssText = 'height:1px;margin-bottom:-1px'; bar.parentNode.insertBefore(sen, bar);
+    new IntersectionObserver(function (en) { bar.classList.toggle('nz-stuck', !en[0].isIntersecting && en[0].boundingClientRect.top < 0); }).observe(sen);
+  }
+
+  /* Jack, 22 Nov 2026: the Quick answers open and close slowly. Off for reduced motion. */
+  if (!reduce && Element.prototype.animate) D.addEventListener('click', function (e) {
+    var sm = e.target.closest && e.target.closest('#hpList details > summary'); if (!sm) return;
+    var d = sm.parentElement; e.preventDefault(); if (d.dataset.nzAnim === '1') return;
+    var EASE = 'cubic-bezier(.22,.61,.36,1)', start = d.offsetHeight; d.dataset.nzAnim = '1'; d.style.overflow = 'hidden';
+    function done() { d.style.overflow = ''; d.style.height = ''; delete d.dataset.nzAnim; }
+    if (d.open) {
+      d.animate({ height: [start + 'px', sm.offsetHeight + 'px'] }, { duration: 620, easing: EASE }).onfinish = function () { d.open = false; done(); };
+    } else {
+      d.open = true; var end = d.offsetHeight;
+      d.animate({ height: [start + 'px', end + 'px'] }, { duration: 720, easing: EASE }).onfinish = done;
+      [].forEach.call(d.children, function (c) { if (c !== sm) c.animate({ opacity: [0, 1], transform: ['translateY(-8px)', 'none'] }, { duration: 720, easing: EASE }); });
+    }
+  });
+
+  /* motion: things rise into place as you scroll. Off for reduced motion. */
+  if (reduce || !('IntersectionObserver' in window)) return;
+  var done = [];
+  var io = new IntersectionObserver(function (en) {
+    en.forEach(function (x) { if (x.isIntersecting) { show(x.target); io.unobserve(x.target); } });
+  }, { rootMargin: '0px 0px -6% 0px', threshold: .06 });
+  function show(el) { el.classList.add('nz-in'); setTimeout(function () { el.style.transitionDelay = ''; }, 1100); }
+  function arm() {
+    var sel = '.nz-band-tx,.nz-band-stats>div,.nz-sec-head,.nz-about>*,.nz-facts>div,.nz-feat3 .h1x-card,.nz-notice-slot .cbx,.folds>section.fold>.fold-h,.cg-next h2,.cg-next .cg-tiles>button,.useful li,.nz-ft .cols>div';
+    $$(sel).forEach(function (el) {
+      if (done.indexOf(el) > -1) return; done.push(el);
+      var sibs = [].filter.call(el.parentNode.children, function (x) { return x.matches(sel); });
+      var d = Math.min(sibs.indexOf(el), 5) * 90;
+      if (el.matches('.fold-h')) d = 0;
+      el.classList.add('nz-rv'); if (d) el.style.transitionDelay = d + 'ms';
+      io.observe(el);
+    });
+  }
+  arm(); window.addEventListener('load', function () { setTimeout(arm, 700); });
+  /* never leave anything hidden */
+  setInterval(function () {
+    done.forEach(function (el) {
+      if (el.classList.contains('nz-in')) return;
+      var r = el.getBoundingClientRect(); if (r.top < window.innerHeight && r.bottom > 0) show(el);
+    });
+  }, 1500);
+})();
+
+/* Jack, 22 Nov 2026: make the aerial view in the sun guide clickable.
+   Click or tap anywhere on the drawing and the sun moves to the nearest hour on its path,
+   the same as pressing that hour's button below it. The sun guide's own drawing and maths are unchanged. */
+(function(){
+  function setup(){
+    var dots=document.getElementById('planDots'),times=document.getElementById('sgTimes');
+    if(!dots||!times||!dots.children.length){return false;}
+    var svg=dots.ownerSVGElement,cells=times.querySelectorAll('.sg-cell');
+    if(!svg||cells.length!==dots.children.length){return true;}
+    var ray=document.getElementById('planRay'),you={x:ray?+ray.getAttribute('x1'):400,y:ray?+ray.getAttribute('y1'):240};
+    svg.classList.add('nz-sg-click');
+    svg.setAttribute('aria-label','Aerial view of the airfield. Click a point on the sun path to see that time.');
+    function nearest(ev){
+      var pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;
+      var m=svg.getScreenCTM();if(!m){return -1;}
+      var p=pt.matrixTransform(m.inverse()),a=Math.atan2(p.x-you.x,you.y-p.y),best=-1,bd=9;
+      [].forEach.call(dots.children,function(c,i){
+        var b=Math.atan2(+c.getAttribute('cx')-you.x,you.y-+c.getAttribute('cy')),d=Math.abs(Math.atan2(Math.sin(a-b),Math.cos(a-b)));
+        if(d<bd){bd=d;best=i;}
+      });
+      return best;
+    }
+    var hl=-1;
+    function mark(i){
+      if(i===hl){return;}
+      if(hl>-1&&dots.children[hl]){dots.children[hl].classList.remove('nz-hot');}
+      hl=i;if(i>-1){dots.children[i].classList.add('nz-hot');}
+    }
+    svg.addEventListener('mousemove',function(ev){mark(nearest(ev));});
+    svg.addEventListener('mouseleave',function(){mark(-1);});
+    svg.addEventListener('click',function(ev){var i=nearest(ev);if(i>-1){cells[i].click();}});
+    return true;
+  }
+  var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
+})();
+
+/* Jack, 22 Nov 2026: "In this section" in Photography as clean photo tabs (his photos, navy fade, title on the photo). */
+(function(){
+  var PICS={phSun:'beachy',phCreative:'b17under',phCalc:'typhoon',phKit:'wildcat',phPack:'pier',phCheck:'spitfire',phDl:'dakota'};
+  var ORDER=['beachy','b17under','typhoon','wildcat','pier','spitfire','dakota'];
+  function src(k){
+    var i=document.querySelector('img[data-pic="'+k+'"][src^="data:"],img[data-k="'+k+'"][src^="data:"]');
+    return i?i.getAttribute('src'):((window.PHOTO&&window.PHOTO[k])||'');
+  }
+  function setup(){
+    var nav=document.querySelector('#photo nav.ph-jump');if(!nav){return true;}
+    var links=nav.querySelectorAll('a');if(!links.length){return true;}
+    if(!src('beachy')){return false;}
+    nav.classList.add('nz-jtabs');
+    [].forEach.call(links,function(a,n){
+      if(a.querySelector('.nz-jt-ph')){return;}
+      var id=(a.getAttribute('href')||'').replace('#',''),k=PICS[id]||ORDER[n%ORDER.length],s=src(k);
+      var label=a.textContent.trim();
+      a.textContent='';
+      var ph=document.createElement('span');ph.className='nz-jt-ph';ph.setAttribute('aria-hidden','true');
+      if(s){var im=document.createElement('img');im.src=s;im.alt='';im.decoding='async';ph.appendChild(im);}
+      var tx=document.createElement('span');tx.className='nz-jt-tx';
+      tx.innerHTML='<b></b><i>Go to section <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i>';
+      tx.querySelector('b').textContent=label;
+      a.appendChild(ph);a.appendChild(tx);
+    });
+    return true;
+  }
+  var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
+})();
+
+/* Jack, 22 Nov 2026: section order. The sections named here come first, in this order, and the rest keep
+   their order after them. The section tab bar follows the same order. Add a name here to move another. */
+(function(){
+  /* Eastbourne: Pick your day is 'weekend'. It has no flightline walk, story or experience flights; its RAF Village,
+     Seafront information and Keep Airbourne free keep their order after the rest. */
+  var FIRST=['overview','travel','photo','lineup','watch','facilities','weekend','timeline','dayruns','stay','help','matchcheck','whatyousee','kids','scores','compare','postcard'];
+  function run(){
+    var folds=[].slice.call(document.querySelectorAll('section.fold'));
+    if(!folds.length){return false;}
+    var box=folds[0].parentElement,anchor=folds[0];
+    FIRST.forEach(function(id){var f=document.getElementById('f-'+id);if(f&&f.parentElement===box){box.insertBefore(f,anchor);}});
+    folds=[].slice.call(box.querySelectorAll(':scope > section.fold'));
+    FIRST.slice().reverse().forEach(function(id){var f=document.getElementById('f-'+id);if(f){box.insertBefore(f,box.querySelector(':scope > section.fold'));}});
+    [].forEach.call(box.querySelectorAll(':scope > section.fold'),function(f,i){var n=f.querySelector('.st-stop,.fold-n');if(n){n.textContent=String(i+1);}});
+    var t=document.querySelector('#t-overview');
+    if(t){var list=t.parentElement;
+      FIRST.slice().reverse().forEach(function(id){var b=document.getElementById('t-'+id);if(b&&b.parentElement===list){list.insertBefore(b,list.firstElementChild);}});
+    }
+    return true;
+  }
+  if(!run()){document.addEventListener('DOMContentLoaded',run);}
+})();
+
+/* Plan your day: Jack's photo behind the plan's title band (Jack, 22 Nov 2026) */
+(function(){
+  function go(){var p=document.getElementById('planner');var s=window.PHOTO&&window.PHOTO.dakota;
+    if(!p||!s){return false;}p.style.setProperty('--nz-plimg','url("'+s+'")');return true;}
+  var n=0;(function t(){if(go()||++n>40){return;}setTimeout(t,250);})();
+})();
+
+/* Jack, 22 Nov 2026: every section laid out like the Duxford template. Three of Eastbourne's sections are built
+   differently on the live page, so they are rearranged here into the Duxford layout. No words are changed or
+   dropped, and the page's own scripts keep working (they find these parts by id and data attributes).
+   1. Where to watch: the spot tabs and spot card in the Duxford "on the map" look.
+   2. Food and facilities: Food and drink as the big photo panel with boxes, Toilets as the photo band.
+   3. Pick your day: key facts first, then the day cards, then the picker with one box per question. */
+(function(){
+  var D=document;
+  function txt(e){return e?(e.textContent||'').replace(/\s+/g,' ').trim():'';}
+
+  /* 1. Where to watch */
+  var COL=['#32B4AF','#00A6E2','#2BA84A','#D74949','#6950A1'];
+  function watch(){
+    var box=D.getElementById('wwTabs');if(!box){return true;}
+    if(box.getAttribute('data-nz-ww')){return true;}
+    var tabs=box.querySelectorAll('.xd-tt-tabs > button');if(!tabs.length){return false;}
+    box.setAttribute('data-nz-ww','1');box.classList.add('nz-ww');
+    [].forEach.call(tabs,function(t,i){
+      var c=COL[i%COL.length];t.style.setProperty('--c',c);
+      var p=D.getElementById(t.getAttribute('aria-controls'));if(p){p.style.setProperty('--c',c);}
+    });
+    var h=D.createElement('div');h.className='ww-head nz-ww-head';
+    h.innerHTML='<div><h3>Pick your spot, <em>on the map</em></h3></div>';
+    box.parentNode.insertBefore(h,box);
+    return true;
+  }
+
+  /* 2. Food and facilities */
+  function facilities(){
+    var box=D.querySelector('#facilities .fac.boxes');if(!box){return true;}
+    if(box.getAttribute('data-nz-fac')){return true;}
+    var cards={};
+    [].forEach.call(box.children,function(c){
+      var t=txt(c.querySelector('h3')).toLowerCase();
+      if(t.indexOf('food')===0){cards.food=c;}else if(t.indexOf('kids')===0){cards.kids=c;}
+      else if(t.indexOf('toilets')===0){cards.toilets=c;}else if(t.indexOf('the beach')===0){cards.beach=c;}
+    });
+    if(box.children.length!==4||!cards.food||!cards.kids||!cards.toilets||!cards.beach){return true;}
+    var ffig=cards.food.querySelector('figure'),tfig=cards.toilets.querySelector('figure');
+    if(!ffig||!tfig){return true;}
+    box.setAttribute('data-nz-fac','1');
+    /* Food and drink: photo on the left, words and boxes on the right */
+    var food=D.createElement('div');food.className='food nz-food';
+    ffig.className='food-main';food.appendChild(ffig);
+    var ft=D.createElement('div');ft.className='food-text';food.appendChild(ft);
+    while(cards.food.firstChild){ft.appendChild(cards.food.firstChild);}
+    var ul=D.createElement('ul');ul.className='food-list';
+    [cards.kids,cards.beach].forEach(function(c){
+      var li=D.createElement('li');var h=c.querySelector('h3');
+      var b=D.createElement('b');b.textContent=txt(h);li.appendChild(b);h.remove();
+      [].slice.call(c.querySelectorAll('p')).forEach(function(p){li.appendChild(D.createTextNode(' '));while(p.firstChild){li.appendChild(p.firstChild);}p.remove();});
+      ul.appendChild(li);
+    });
+    ft.appendChild(ul);
+    /* Toilets: the photo band, like Duxford's shuttle band */
+    var bar=D.createElement('div');bar.className='busbar nz-busbar';
+    tfig.className='busfig';bar.appendChild(tfig);
+    var bt=D.createElement('div');bt.className='busbar-text';bar.appendChild(bt);
+    while(cards.toilets.firstChild){bt.appendChild(cards.toilets.firstChild);}
+    box.parentNode.insertBefore(food,box);box.parentNode.insertBefore(bar,box);
+    box.remove();
+    return true;
+  }
+
+  /* 3. Pick your day */
+  function pickday(){
+    var sec=D.getElementById('weekend');if(!sec){return true;}
+    var wrap=sec.querySelector(':scope > .wrap');if(!wrap||wrap.getAttribute('data-nz-wk')){return true;}
+    var tool=wrap.querySelector(':scope > .wk-tool'),q=tool&&tool.querySelector(':scope > .wk-q'),days=wrap.querySelector(':scope > .wk-days');
+    var dh=days&&days.previousElementSibling,head=wrap.querySelector(':scope > .panel-head');
+    if(!tool||!q||!days||!dh||!dh.matches('h3.fl-h')||!head){return true;}
+    var glass=D.querySelectorAll('#top .cg-glass > div');if(!glass.length){return false;}
+    wrap.setAttribute('data-nz-wk','1');
+    /* one box per question, as on the Duxford picker */
+    var labels=[].slice.call(q.querySelectorAll(':scope > p.pp-l'));
+    labels.slice(1).forEach(function(l){
+      var nq=D.createElement('div');nq.className='wk-q';var opts=l.nextElementSibling;
+      nq.appendChild(l);if(opts&&opts.classList.contains('pp-opts')){nq.appendChild(opts);}
+      tool.insertBefore(nq,tool.querySelector(':scope > .wk-out'));
+    });
+    /* key facts first: the show's own facts from the top of the page */
+    var ff=D.createElement('div');ff.className='fl-facts nz-wk-facts';
+    [].forEach.call(glass,function(d,i){
+      var x=D.createElement('div');if(i%2){x.className='pu';}
+      var s=D.createElement('span');s.textContent=txt(d.querySelector('span'));
+      var b=D.createElement('b');b.textContent=txt(d.querySelector('b'));
+      x.appendChild(s);x.appendChild(b);ff.appendChild(x);
+    });
+    head.parentNode.insertBefore(ff,head.nextSibling);
+    /* then the day cards, then the picker */
+    ff.parentNode.insertBefore(dh,ff.nextSibling);
+    dh.parentNode.insertBefore(days,dh.nextSibling);
+    days.parentNode.insertBefore(tool,days.nextSibling);
+    return true;
+  }
+
+  var n=0;(function tryIt(){var a=watch(),b=facilities(),c=pickday();if((a&&b&&c)||++n>40){return;}setTimeout(tryIt,250);})();
+})();
