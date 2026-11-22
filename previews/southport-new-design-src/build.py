@@ -17,10 +17,14 @@ import pathlib
 import re
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from layout import duxford_layout  # noqa: E402
+
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
-OUT = ROOT / "camping-layout" / "southport.html"   # the live page
+OUT = ROOT / "previews" / "southport-new-design.html"   # round 2 preview (the parent session puts pages live)
+DX_SRC = ROOT / "previews" / "duxford-new-design-src" / "live-source.html"   # the Duxford template
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
@@ -121,6 +125,8 @@ def main():
         return "@@BLOB%d@@" % (len(blobs) - 1)
 
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
+    # Round 2: Duxford's sections, blocks and markup, filled with Southport's own content (layout.py)
+    html = duxford_layout(html, DX_SRC.read_text(encoding="utf8"))
     html = restyle_text(html)
 
     # The Duxford only text fixes (its overview wording, story corrections, spot 8 on its photographers' map
@@ -132,7 +138,7 @@ def main():
     VP = '<meta name="viewport"'
     assert "<head>" not in html[:html.index(VP)], "page has a <head>: use the Duxford way"
     html = html.replace(VP, FONT_LINK + "\n" + VP, 1)
-    html = html.replace('<meta name="viewport"', '<!-- New design. Built by previews/southport-new-design-src/build.py from live-source.html. Edit the source files, then rebuild. -->\n<meta name="viewport"', 1)
+    html = html.replace('<meta name="viewport"', '<!-- PREVIEW, round 2: the Southport page in the Duxford template. Built by previews/southport-new-design-src/build.py from live-source.html. Not live. -->\n<meta name="robots" content="noindex">\n<meta name="viewport"', 1)
 
     # Some of the page's scripts work out which show they are on from the file name (southport.html).
     # This preview has a different name, so tell them the live page's path.

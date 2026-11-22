@@ -672,13 +672,22 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
-### Southport Air Show in the new design (preview, 22 Nov 2026)
+### Southport Air Show in the Duxford template (round 2 preview, 22 Nov 2026)
 
-`previews/southport-new-design.html` is the Southport feature page in the Duxford layout Jack signed off, built by `python3 previews/southport-new-design-src/build.py` from `camping-layout/southport.html` (not changed, not live). It follows `previews/NEW-DESIGN-ROLLOUT.md`. Differences from the Duxford source:
-- The live Southport page has no `<head>` or `<body>` tag of its own (the only ones sit inside the spotter's card script), so the build puts the font link and `NZ_PATH` just before the viewport line and the new top just before the page header (`#top`). Both are asserted.
-- Photos come from the page's own `window.PHOTO` list (formation, dakota, spitfire, typhoon, invader, jetpitts, stearman): Dakota beside the intro, Invader in the guide band, Typhoon on the Quick checker, Spitfire behind the line-up heading, Stearman behind the plan, and the Jet Pitts beside the Photography opening (Southport has no photo there; Duxford has its P-40).
-- Southport's Where to watch map has older markup (`#wwMaps`, `.ww-board`), so the Duxford map styles are widened to it and mapped across at the end of `new-design.css`.
-- 19 sections: no Flightline walk, Story or Experience flights; The Ground Show and Seafront Information come after Make a postcard. No photographers' map, so that code does nothing here.
+`previews/southport-new-design.html` is the Southport page built in the Duxford template (`previews/NEW-DESIGN-ROLLOUT-2.md`):
+Duxford's sections, in Duxford's order and with Duxford's names, Duxford's blocks and markup inside each section, and only
+Southport's own words, facts, photos and data. Built by `python3 previews/southport-new-design-src/build.py` from
+`previews/southport-new-design-src/live-source.html` (not live; `OUT` points at the preview, the parent session puts pages live).
+- `layout.py` does the round 2 work before the new design goes on. It keeps Southport's working scripts and data, takes out
+  what Duxford has not got, rewrites the parts whose markup differs into Duxford's markup, and brings over the Duxford template
+  parts Southport lacked (Where to watch panels and their styles and tab script, the postcard maker, the overview tiles, a few
+  small template styles), read from `previews/duxford-new-design-src/live-source.html`. Every edit is asserted.
+- `new-design.css` is Duxford's, unchanged. `new-design.js` is Duxford's with Southport's words and photo keys.
+- Left out (old Southport parts Duxford has not got): The Ground Show and Seafront Information sections (with the tide tool and
+  seafront cards), and the packing boxes in Food and facilities.
+- Left out (Duxford blocks with no Southport facts): Flightline walk, the story section, Experience flights, the event calendar in
+  Overview, the arrival steps and the train route card in Getting there, Sun at each show and the photographers' map in
+  Photography, the food outlets list, the on site shuttle and What to expect in Food and facilities.
 - Preview artifact: https://claude.ai/artifact/C253g9ig8xAJq1YtnGKKs6 (private).
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
