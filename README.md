@@ -672,15 +672,30 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
-## Eastbourne page in the new design (preview, 22 Nov 2026)
+## Eastbourne page in the new design, round 2 (preview, 22 Nov 2026)
 
-`previews/eastbourne-new-design.html` is the Eastbourne Airshow feature page in the new design, made from the Duxford template above (see `previews/NEW-DESIGN-ROLLOUT.md`). It is not live and is not on any Wix page. The live page is still `camping-layout/eastbourne.html` and was not changed.
+`previews/eastbourne-new-design.html` is the Eastbourne Airshow feature page built in the Duxford template (round 2,
+see `previews/NEW-DESIGN-ROLLOUT-2.md`): the same sections in the same order as Duxford, the same blocks and markup
+inside each one, and only Eastbourne's own words, facts and photos. It is a preview, not live; the live page
+`camping-layout/eastbourne.html` was not changed.
 
-- Built by `python3 previews/eastbourne-new-design-src/build.py`, a copy of the Duxford build pointed at `camping-layout/eastbourne.html`, with the Duxford only text fixes and photo swaps taken out. Every text chunk and inline script of the live page is carried over.
-- Eastbourne keeps its photos in the page's own `PHOTO` store rather than in `<img>` tags, so `new-design.js` reads them from there. Photos used: the formation (photo header, the page's own), Spitfire (beside the intro), B-17 underside (guide band), Tracker (Quick checker), B-17 side on (line-up heading), Dakota (Plan your day), Typhoon (beside "Shooting at Eastbourne", which has no photo on the live page), and Beachy Head, B-17, Typhoon, Wildcat, pier, Spitfire and Dakota on the Photography photo tabs.
-- Section order as Jack chose for Duxford. Pick your day is `weekend`. Eastbourne has no flightline walk, story or experience flights, and its RAF Village, Seafront information and Keep Airbourne free come after the others.
-- The stat box reads "4 show days in August 2027" (Thursday 12 to Sunday 15 August 2027, from the page). Eastbourne has no photographers' map, so that part of the Duxford script is left out.
-- Jack asked (22 Nov 2026) for every section to be laid out like the Duxford template. Three Eastbourne sections are built differently on the live page, so the last block of `new-design.js` rearranges them at run time, keeping every word and the page's own scripts: Where to watch gets the Duxford "Pick your spot, on the map" tabs and spot card; Food and facilities becomes the Food and drink photo panel (with Kids' activities and The beach as boxes) and a Toilets photo band; Pick your day gets four fact boxes from the top of the page, then the day cards, then the picker with one box per question. Pick your day is `#weekend` on this page, so the build points the template's and the page's `#days` styles at it too. Seafront information is left as it is.
+- Built by `python3 previews/eastbourne-new-design-src/build.py` from `previews/eastbourne-new-design-src/live-source.html`.
+  `duxford_layout.py` makes every change to the page's own HTML (each checked with an assert) and holds the list of
+  what is left out (`LEFT_OUT`, printed by the build). `new-design.css`, `chrome.html` and `new-design.js` are the
+  Duxford template with Eastbourne's words and photo keys; the Eastbourne only styles are in a short block at the end
+  of `new-design.css`. `duxford-base.css` is the Duxford page's own base styles for Where to watch on the map, the
+  Food and drink panel and the photo band (made by `extract_base_css.py`, do not edit by hand).
+- Pick your day uses Duxford's section id (`days`), so Duxford's styles apply. The section keeps the name Pick your day,
+  as Eastbourne is one show over four days, not a choice of shows.
+- Seafront information is kept as an extra section at the end (Jack, 22 Nov 2026), as are the tides in the weather panel.
+- Left out: the RAF Village and Keep Airbourne free sections, Pick your day's Away from the show cards and The seafront
+  after dark panel, the packing lists in Food and facilities, the old Where to watch board and its Plan my day here
+  buttons. Duxford blocks with no Eastbourne facts are left out too: the 2027 calendar, How arrival works, the line-up
+  show picker, Sun at each show, the Photographers' map, the Outside the fence note, What to expect on the day, the four
+  photo boxes under the food panel, Top ten things to take, Search everything nearby, and the Flightline walk,
+  Eastbourne's story and Experience flights sections.
+- The parking blocks (Compare driving options and Car parks in Eastbourne) and the train and bus topics are kept as they
+  are on the live page.
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 

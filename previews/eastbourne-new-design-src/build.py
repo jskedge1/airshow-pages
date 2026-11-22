@@ -18,10 +18,13 @@ import pathlib
 import re
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import duxford_layout  # noqa: E402
+
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
-OUT = ROOT / "camping-layout" / "eastbourne.html"   # the live page
+OUT = ROOT / "previews" / "eastbourne-new-design.html"   # the preview (round 2); the parent session puts pages live
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
@@ -124,16 +127,17 @@ def main():
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
     html = restyle_text(html)
 
-    # Eastbourne's "Pick your day" section is called "weekend", where Duxford's "Pick your show" is "days".
-    # The page's own styles for that tool are written for #days, so point them at both (Jack, 22 Nov 2026:
-    # every section laid out like the Duxford template). Only the style rules change, not the words.
-    n = html.count("body #days ")
-    assert n > 10, "Pick your day styles not found"
-    html = html.replace("body #days ", "body :is(#days,#weekend) ")
-    print("Pick your day styles pointed at #weekend:", n)
+    # Round 2 (Jack, 22 Nov 2026): built in the Duxford template. Same sections, same blocks and markup as Duxford,
+    # only Eastbourne's own content. See duxford_layout.py for every change and the list of what is left out.
+    html = duxford_layout.apply(html)
+    print("left out (not in the Duxford template, or no Eastbourne facts for a Duxford block):")
+    for x in duxford_layout.LEFT_OUT:
+        print("  -", x)
 
     # head: fonts, and keep the preview out of search results
     html = html.replace("</head>", FONT_LINK + "\n</head>", 1)
+    base = (HERE / "duxford-base.css").read_text(encoding="utf8")
+    html = html.replace("</head>", '<style id="nz-dux-base">\n' + base + "</style>\n</head>", 1)
     html = html.replace('<meta name="viewport"', '<!-- New design. Built by previews/eastbourne-new-design-src/build.py from live-source.html. Edit the source files, then rebuild. -->\n<meta name="viewport"', 1)
 
     # Some of the page's scripts work out which show they are on from the file name (eastbourne.html).

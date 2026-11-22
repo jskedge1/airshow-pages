@@ -91,16 +91,6 @@
     /* offset photo beside the intro: one of the page's own photos */
     var ab = D.getElementById('nzAbImg');
     if (ab && !ab.getAttribute('src') && pic('spitfire')) { ab.src = pic('spitfire'); ab.alt = alt('spitfire'); }
-    /* Shooting at Eastbourne opens like the Duxford template: the navy intro panel beside one of Jack's photos
-       (the live page has no photo here, so the Typhoon from the page's own photos is added, with its own caption) */
-    var phw = $('#photo > .wrap'), phh = phw && $(':scope > .panel-head', phw);
-    if (phh && !$(':scope > figure.pic.wide', phw) && pic('typhoon')) {
-      var pf = D.createElement('figure'); pf.className = 'pic wide nz-ph-open';
-      pf.innerHTML = '<img alt="" decoding="async"><figcaption></figcaption>';
-      pf.firstChild.src = pic('typhoon'); pf.firstChild.alt = alt('typhoon');
-      pf.lastChild.textContent = alt('typhoon') + '.';
-      phh.parentNode.insertBefore(pf, phh.nextSibling);
-    }
     /* the tickets notice moves under the intro */
     var slotN = D.getElementById('nzNoticeSlot'), note = $('body > .notice');
     if (slotN && note) slotN.appendChild(note);
@@ -280,9 +270,9 @@
 /* Jack, 22 Nov 2026: section order. The sections named here come first, in this order, and the rest keep
    their order after them. The section tab bar follows the same order. Add a name here to move another. */
 (function(){
-  /* Eastbourne: Pick your day is 'weekend'. It has no flightline walk, story or experience flights; its RAF Village,
-     Seafront information and Keep Airbourne free keep their order after the rest. */
-  var FIRST=['overview','travel','photo','lineup','watch','facilities','weekend','timeline','dayruns','stay','help','matchcheck','whatyousee','kids','scores','compare','postcard'];
+  /* Eastbourne (round 2): Duxford's order. Pick your day sits in Duxford's Pick your show place (id days).
+     There is no flightline walk, story or experience flights here; Seafront information comes last. */
+  var FIRST=['overview','travel','photo','lineup','watch','facilities','days','timeline','dayruns','stay','flightline','help','matchcheck','whatyousee','kids','scores','compare','story','flights','postcard','seafront'];
   function run(){
     var folds=[].slice.call(document.querySelectorAll('section.fold'));
     if(!folds.length){return false;}
@@ -305,103 +295,4 @@
   function go(){var p=document.getElementById('planner');var s=window.PHOTO&&window.PHOTO.dakota;
     if(!p||!s){return false;}p.style.setProperty('--nz-plimg','url("'+s+'")');return true;}
   var n=0;(function t(){if(go()||++n>40){return;}setTimeout(t,250);})();
-})();
-
-/* Jack, 22 Nov 2026: every section laid out like the Duxford template. Three of Eastbourne's sections are built
-   differently on the live page, so they are rearranged here into the Duxford layout. No words are changed or
-   dropped, and the page's own scripts keep working (they find these parts by id and data attributes).
-   1. Where to watch: the spot tabs and spot card in the Duxford "on the map" look.
-   2. Food and facilities: Food and drink as the big photo panel with boxes, Toilets as the photo band.
-   3. Pick your day: key facts first, then the day cards, then the picker with one box per question. */
-(function(){
-  var D=document;
-  function txt(e){return e?(e.textContent||'').replace(/\s+/g,' ').trim():'';}
-
-  /* 1. Where to watch */
-  var COL=['#32B4AF','#00A6E2','#2BA84A','#D74949','#6950A1'];
-  function watch(){
-    var box=D.getElementById('wwTabs');if(!box){return true;}
-    if(box.getAttribute('data-nz-ww')){return true;}
-    var tabs=box.querySelectorAll('.xd-tt-tabs > button');if(!tabs.length){return false;}
-    box.setAttribute('data-nz-ww','1');box.classList.add('nz-ww');
-    [].forEach.call(tabs,function(t,i){
-      var c=COL[i%COL.length];t.style.setProperty('--c',c);
-      var p=D.getElementById(t.getAttribute('aria-controls'));if(p){p.style.setProperty('--c',c);}
-    });
-    var h=D.createElement('div');h.className='ww-head nz-ww-head';
-    h.innerHTML='<div><h3>Pick your spot, <em>on the map</em></h3></div>';
-    box.parentNode.insertBefore(h,box);
-    return true;
-  }
-
-  /* 2. Food and facilities */
-  function facilities(){
-    var box=D.querySelector('#facilities .fac.boxes');if(!box){return true;}
-    if(box.getAttribute('data-nz-fac')){return true;}
-    var cards={};
-    [].forEach.call(box.children,function(c){
-      var t=txt(c.querySelector('h3')).toLowerCase();
-      if(t.indexOf('food')===0){cards.food=c;}else if(t.indexOf('kids')===0){cards.kids=c;}
-      else if(t.indexOf('toilets')===0){cards.toilets=c;}else if(t.indexOf('the beach')===0){cards.beach=c;}
-    });
-    if(box.children.length!==4||!cards.food||!cards.kids||!cards.toilets||!cards.beach){return true;}
-    var ffig=cards.food.querySelector('figure'),tfig=cards.toilets.querySelector('figure');
-    if(!ffig||!tfig){return true;}
-    box.setAttribute('data-nz-fac','1');
-    /* Food and drink: photo on the left, words and boxes on the right */
-    var food=D.createElement('div');food.className='food nz-food';
-    ffig.className='food-main';food.appendChild(ffig);
-    var ft=D.createElement('div');ft.className='food-text';food.appendChild(ft);
-    while(cards.food.firstChild){ft.appendChild(cards.food.firstChild);}
-    var ul=D.createElement('ul');ul.className='food-list';
-    [cards.kids,cards.beach].forEach(function(c){
-      var li=D.createElement('li');var h=c.querySelector('h3');
-      var b=D.createElement('b');b.textContent=txt(h);li.appendChild(b);h.remove();
-      [].slice.call(c.querySelectorAll('p')).forEach(function(p){li.appendChild(D.createTextNode(' '));while(p.firstChild){li.appendChild(p.firstChild);}p.remove();});
-      ul.appendChild(li);
-    });
-    ft.appendChild(ul);
-    /* Toilets: the photo band, like Duxford's shuttle band */
-    var bar=D.createElement('div');bar.className='busbar nz-busbar';
-    tfig.className='busfig';bar.appendChild(tfig);
-    var bt=D.createElement('div');bt.className='busbar-text';bar.appendChild(bt);
-    while(cards.toilets.firstChild){bt.appendChild(cards.toilets.firstChild);}
-    box.parentNode.insertBefore(food,box);box.parentNode.insertBefore(bar,box);
-    box.remove();
-    return true;
-  }
-
-  /* 3. Pick your day */
-  function pickday(){
-    var sec=D.getElementById('weekend');if(!sec){return true;}
-    var wrap=sec.querySelector(':scope > .wrap');if(!wrap||wrap.getAttribute('data-nz-wk')){return true;}
-    var tool=wrap.querySelector(':scope > .wk-tool'),q=tool&&tool.querySelector(':scope > .wk-q'),days=wrap.querySelector(':scope > .wk-days');
-    var dh=days&&days.previousElementSibling,head=wrap.querySelector(':scope > .panel-head');
-    if(!tool||!q||!days||!dh||!dh.matches('h3.fl-h')||!head){return true;}
-    var glass=D.querySelectorAll('#top .cg-glass > div');if(!glass.length){return false;}
-    wrap.setAttribute('data-nz-wk','1');
-    /* one box per question, as on the Duxford picker */
-    var labels=[].slice.call(q.querySelectorAll(':scope > p.pp-l'));
-    labels.slice(1).forEach(function(l){
-      var nq=D.createElement('div');nq.className='wk-q';var opts=l.nextElementSibling;
-      nq.appendChild(l);if(opts&&opts.classList.contains('pp-opts')){nq.appendChild(opts);}
-      tool.insertBefore(nq,tool.querySelector(':scope > .wk-out'));
-    });
-    /* key facts first: the show's own facts from the top of the page */
-    var ff=D.createElement('div');ff.className='fl-facts nz-wk-facts';
-    [].forEach.call(glass,function(d,i){
-      var x=D.createElement('div');if(i%2){x.className='pu';}
-      var s=D.createElement('span');s.textContent=txt(d.querySelector('span'));
-      var b=D.createElement('b');b.textContent=txt(d.querySelector('b'));
-      x.appendChild(s);x.appendChild(b);ff.appendChild(x);
-    });
-    head.parentNode.insertBefore(ff,head.nextSibling);
-    /* then the day cards, then the picker */
-    ff.parentNode.insertBefore(dh,ff.nextSibling);
-    dh.parentNode.insertBefore(days,dh.nextSibling);
-    days.parentNode.insertBefore(tool,days.nextSibling);
-    return true;
-  }
-
-  var n=0;(function tryIt(){var a=watch(),b=facilities(),c=pickday();if((a&&b&&c)||++n>40){return;}setTimeout(tryIt,250);})();
 })();
