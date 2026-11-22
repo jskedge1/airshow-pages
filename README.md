@@ -666,6 +666,17 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+### Blackpool page in the new design (preview, 22 Nov 2026)
+
+`previews/blackpool-new-design.html` is the Blackpool Air Show page in the same layout, built by `python3 previews/blackpool-new-design-src/build.py` from `camping-layout/blackpool.html` (not changed, nor any Duxford file). It follows `previews/NEW-DESIGN-ROLLOUT.md`.
+
+- Copied from the Duxford source with the Duxford only text and photo fixes taken out. The words in the header, intro, stat boxes and footer are Blackpool's own (Blackpool Promenade, August 2027, one of the biggest free air shows in the country, two days of free flying).
+- Photos: every photo on the Blackpool page is by Chris Murgatroyd. His credit code (`cm-credit`, the style block and the script) is carried over exactly; the build keeps the credit style out of the letter spacing change. Each place the new design shows one of his photos (header, intro, guide band, Photography opening and its photo tabs, Quick checker, line-up band, plan title band) gets the same "© Chris Murgatroyd" credit.
+- The page has no photo after the Photography intro, so new-design.js adds the Jet Pitts photo there, captioned with the page's own description, to fill the Duxford two column opening. There is no photographers' map at Blackpool, so the Duxford map code is left out.
+- Section order is Jack's Duxford order. Blackpool has no Flightline walk, Duxford's story or Experience flights. Pick your day takes the place of Pick your show, and The ground show and Seafront information come last.
+- Checks (22 Nov 2026): build with no assert errors, 70 inline scripts with 0 syntax errors, all 1034 visible text chunks and all 144 script and style blocks of the live page present. At 1280 and 390: no sideways scroll, only the console errors the live page also has (weather API rate limit, file:// CORS for traders), and the line-up filter, topic explorer, planner, sun guide (buttons and clicking the drawing), calculator, checklists and Quick checker all work.
+- Known, same as on Duxford: at 390 wide the Quick checker question boxes are squashed into a narrow column. It comes from the shared template, so fix it there for every page.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
