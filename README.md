@@ -85,6 +85,17 @@ collapsible sections, no dashes in copy, images not clickable. No photo credits,
 except where the photographer asks for one: Chris Murgatroyd's photos on the Blackpool page carry a
 "© Chris Murgatroyd" label on every photo (the `cm-credit` code in camping-layout/blackpool.html).
 
+Jack's design names and rules (22 Nov 2026, for every page from now on):
+- **Clean photo tab.** This is Jack's name for the photo cards in "Keep reading" on the Duxford new design preview
+  (`html.nz body section.cg-next .cg-tiles` in previews/duxford-new-design-src/new-design.css). Each card is one of Jack's photos
+  filling a tall card, with a navy fade at the bottom and the text on the photo: a white title, one short line, and a
+  teal "Read more →". On hover the card lifts and the photo zooms in slowly, and both are off for reduced motion. The cards are
+  buttons or links, never the photo itself. Use clean photo tabs on every new page wherever a tab or link goes to
+  another section or another page, where it suits. When Jack asks for "the clean look", include clean photo tabs.
+- No short coloured accent lines under headings, anywhere. Jack says they look AI made.
+- Option buttons (pickers, calculators): no border, slightly rounded corners, soft grey, navy when picked, and a smooth hover
+  (lift, white, thin navy outline).
+
 Every page ends with the `mobile-fit` block (between the `<!-- mobile-fit` comments, just before `</body>`).
 It keeps the page inside the screen down to 320px wide, which is the width Wix gives an HTML box on phones.
 Keep it when copying a template to make a new show page.
