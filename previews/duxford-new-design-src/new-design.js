@@ -134,6 +134,12 @@
         mc.insertBefore(fg, mc.firstChild);
       }
     }
+    /* Jack, 22 Nov 2026: the line-up heading sits on one of his aircraft photos, like the other photo bands */
+    var lb = $('#lineup .lu-band');
+    if (lb && !$('.nz-lu-bg', lb)) {
+      var lp = $('img[data-pic="wildcat_front"]') || $('img[data-pic="buchon_front"]') || $('img[data-pic="formation"]');
+      if (lp && lp.getAttribute('src')) { var li = D.createElement('img'); li.className = 'nz-lu-bg'; li.alt = ''; li.setAttribute('aria-hidden', 'true'); li.src = lp.getAttribute('src'); lb.insertBefore(li, lb.firstChild); }
+    }
     /* how many sections */
     var n = $$('section.fold').length;
     if (n && NUM[n]) D.getElementById('nzCount').textContent = NUM[n];
