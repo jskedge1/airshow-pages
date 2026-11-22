@@ -666,6 +666,28 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+## Clacton Airshow page in the new design (preview, 22 Nov 2026)
+
+`previews/clacton-new-design.html` is the Clacton feature page in the new design, built from the Duxford preview Jack signed off
+(see `previews/NEW-DESIGN-ROLLOUT.md`). It is not live. The live page is still `camping-layout/clacton.html` and was not changed.
+Private preview: https://claude.ai/artifact/4R6Qw3625sdYg17Tv7sHxj
+
+- Built by `python3 previews/clacton-new-design-src/build.py`, a copy of the Duxford build with the Duxford only fixes taken out.
+  Do not edit the built file.
+- Clacton still had the older folding sections add-on (`.panel.sec`, `.sec-toggle`). The new design is made for the newer one
+  (`section.fold`), so the build swaps it for the newer add-on, read from `camping-layout/duxford.html` (not changed), with
+  Clacton's own section descriptions, and keeps `window.secOpen` and `window.secOpenFor` for the scripts that call them. The
+  photography tools no longer fold inside their section, the same as on Duxford.
+- Clacton's photos live in `window.PHOTO` (`data-k`), not `data-pic`, so `new-design.js` reads them from there.
+- Section order as Jack chose. Clacton has no flightline walk, story or experience flights. Its three extras (The ground show,
+  Seafront information, Keep the show free) follow the rest.
+- Clacton only changes: two Getting there headings typed in capitals now in the page's heading case; the place chip beside
+  "Key places" hidden, as on Duxford; one of Jack's photos beside the Photography opening (the live page has none there);
+  the two Pick your day cards share the row; the fact boxes in The ground show and Keep the show free are light boxes with a
+  coloured top edge.
+- Photographers' map: the spot cards are text only, as the page does not say where each photo was taken. To add one, set
+  `PIC` in `new-design.js` (for example `{1:'redarrows'}`), or put a .webp of Jack's in `img/` and use its file name.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.

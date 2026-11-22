@@ -285,8 +285,9 @@
     var map=document.getElementById('photoMap');if(!map){return true;}
     var svg=map.querySelector('.pmap-fig svg');if(!svg){return true;}
     var spots={};
-    [].forEach.call(svg.querySelectorAll('g > g[transform^="translate"]'),function(g){
-      var c=g.querySelector('circle[r="14"]'),t=g.querySelector('text');
+    /* Clacton's spots are circles of r 13 straight under the drawing (Duxford's were r 14, inside a group) */
+    [].forEach.call(svg.querySelectorAll('g[transform^="translate"]'),function(g){
+      var c=g.querySelector(':scope > circle[r="14"],:scope > circle[r="13"]'),t=g.querySelector(':scope > text');
       if(c&&t&&/^[1-9]$/.test(t.textContent.trim())){spots[t.textContent.trim()]=g;}
     });
     var items={};
@@ -308,7 +309,7 @@
       card.querySelector('.nz-spot-n').textContent=n;
       card.querySelector('h4').textContent=li.querySelector('b').textContent;
       card.querySelector('p').innerHTML=li.querySelector('p').innerHTML;
-      card.querySelector('.nz-spot-k').textContent=li.classList.contains('warn')?'Outside the fence, take care':(li.classList.contains('out')?'Outside the fence':'Inside the show');
+      card.querySelector('.nz-spot-k').textContent=li.classList.contains('warn')?'Outside the fence, take care':(li.classList.contains('out')?'Outside the fence':'Along the seafront'); /* Clacton: the page's own heading over its list of spots */
       card.classList.remove('nz-in');void card.offsetWidth;card.classList.add('nz-in');
       if(scroll){card.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});}
     }
@@ -378,7 +379,7 @@
     else{svg.appendChild(tg);}
     /* the runway and the numbered spots lift off the ground */
     [].forEach.call(svg.querySelectorAll('path[stroke="#5A6570"]'),function(p){p.setAttribute('filter','url(#nz3dSoft)');});
-    [].forEach.call(svg.querySelectorAll('.nz-spot-pin, g[transform^="translate"] > circle[r="14"]'),function(c){
+    [].forEach.call(svg.querySelectorAll('.nz-spot-pin'),function(c){
       var p=c.closest('g[transform]');if(p){p.setAttribute('filter','url(#nz3dSh)');}
     });
     map.querySelector('.pmap-fig').classList.add('nz-3d');
@@ -414,5 +415,23 @@
 (function(){
   function go(){var p=document.getElementById('planner');var s=(window.PHOTO||{}).formation;
     if(!p||!s){return false;}p.style.setProperty('--nz-plimg','url("'+s+'")');return true;}
+  var n=0;(function t(){if(go()||++n>40){return;}setTimeout(t,250);})();
+})();
+
+/* Clacton: the Photography opening. On Duxford the live page has a photo beside the heading panel; Clacton's has
+   none, so one of Jack's own photos from the page (window.PHOTO) goes beside it, with the page's own description. */
+(function(){
+  function go(){
+    var w=document.querySelector('#photo > .wrap'),P=window.PHOTO||{},A=window.PHOTO_ALT||{};
+    if(!w){return true;}
+    if(w.querySelector(':scope > figure.pic.wide')){return true;}
+    var k=P.p40?'p40':'spitfire';if(!P[k]){return false;}
+    var head=w.querySelector(':scope > .panel-head');if(!head){return true;}
+    var fg=document.createElement('figure');fg.className='pic wide nz-ph-open';
+    fg.innerHTML='<img class="photo" alt="" decoding="async"><figcaption></figcaption>';
+    fg.firstChild.src=P[k];fg.firstChild.alt=A[k]||'';fg.lastChild.textContent=A[k]||'';
+    head.parentNode.insertBefore(fg,head.nextSibling);
+    return true;
+  }
   var n=0;(function t(){if(go()||++n>40){return;}setTimeout(t,250);})();
 })();
