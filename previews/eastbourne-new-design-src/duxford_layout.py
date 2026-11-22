@@ -195,3 +195,53 @@ def apply(html):
     s = s[:a] + '    <div id="stayGroups">\n' + s[a:b].rstrip("\n") + "\n    </div>\n\n" + s[b:]
     html = html[:i] + s + html[j:]
     return html
+
+
+def transport(html, dux, fares):
+    """Getting there, the three blocks on every page (round 2 brief, 22 Nov 2026, 20:15 and 20:30).
+    Compare driving options (#cdo) and the car parks board (#cpk) are already on the Eastbourne page and stay as they are.
+    Added here: the Fares and Save money board (fares.html, the Clacton board with Eastbourne's own 2026 prices) and
+    Duxford's dark train route header on the train topic, filled with Eastbourne's own train facts."""
+    # ---- Fares and Save money board, with the hidden Ways in board its script needs. The page's own transport script
+    #      moves it after Choose a topic, and its Fares jump button points at it.
+    for fact in ("£5 adult day, £2.50 child, £12 family", "£40 booked ahead, £45 on the day", "£22 booked ahead, £27 on the day",
+                 "adult £5, under 16s £3, or a family ticket for £10", "Concessionary passes weren’t accepted on it.",
+                 "On the day each one cost £5 more, and a booking fee applies when you book ahead.",
+                 "Booking ahead saved £5 per car in 2026, and the price included a souvenir programme and pin badge while stocks lasted.",
+                 "Motorbikes can park free on street at right angles to the kerb.", "it doesn’t cost a penny to watch",
+                 "Stagecoach buses in the Eastbourne Dayrider zone"):
+        assert fact in html, "fares fact: " + fact
+    html = one(html, '\n\n  <div class="wrap"><section class="cdo reveal" id="cdo"',
+               "\n\n" + fares + '\n\n  <div class="wrap"><section class="cdo reveal" id="cdo"', "fares board")
+
+    # ---- Duxford's train route header (trlStyle and its script), as on the Wales page, with Eastbourne's own train facts:
+    #      the Train to Eastbourne topic and the first Saturday train in the page's train times (07:24 from London Victoria).
+    flat = re.sub(r"\s+", " ", html)
+    for fact in ('"07:24",       "London Victoria to Eastbourne",       "Southern, arrives 08:49 (08:51 Thursday and Friday)"',
+                 '"Every 30 min",       "From London Victoria and Brighton",       "About 1 hour 25 minutes from Victoria, 40 minutes from Brighton"',
+                 "{id:'rail',name:'Train to Eastbourne'",
+                 "Eastbourne station is in the town centre. Southern runs direct trains from London Victoria, Gatwick Airport, Lewes and Hastings, and from Brighton, some with a change at Lewes.",
+                 "It’s around 10 to 15 minutes on foot.", "From the National Rail timetable valid 17 May to 12 December 2026.",
+                 "https://www.ukairshowguide.co.uk/train-to-eastbourne"):
+        assert re.sub(r"\s+", " ", fact) in flat, "train fact: " + fact[:60]
+    ta = dux.index('<style id="trlStyle">')
+    tz = dux.index("</style>", ta) + len("</style>")
+    sa = dux.index('<script id="trlScript-dux">')
+    sz = dux.index("</script>", sa) + len("</script>")
+    trl = dux[sa:sz]
+    h0 = trl.index("  var H={")
+    h1 = trl.index("  function cur()")
+    eb_h = ("  var H={\n"
+            "    'rail':hero({to:'Eastbourne',board:'EASTBOURNE',dep:'07:24',arr:'08:49',via:'From London Victoria',\n"
+            "      p:'Eastbourne station is in the town centre. Southern runs direct trains from London Victoria, Gatwick Airport, Lewes and Hastings, and from Brighton, some with a change at Lewes.',\n"
+            "      kd:[['How often','Every 30 minutes from London Victoria and Brighton'],['Get off at','Eastbourne',1],['Then','Walk to the Western Lawns, 10 to 15 min'],['From London','About 1 hour 25 minutes'],['Run by','Southern']],\n"
+            "      jr:'London Victoria to Eastbourne. These are Saturday times from the 2026 timetable, so check again nearer the show.',\n"
+            "      from:'London Victoria',at:'Eastbourne',mid:'Southern<br>1h 25m'})\n"
+            "  };\n")
+    trl = trl[:h0] + eb_h + trl[h1:]
+    trl = trl.replace('<script id="trlScript-dux">', '<script id="trlScript-eastbourne">', 1)
+    trl = trl.replace("/* Train route header on the Duxford train topics, the same design as the Clacton train topic (9 Nov) */",
+                      "/* Train route header on the train topic, the Duxford design, with the Eastbourne train facts */", 1)
+    trl = one(trl, "https://www.ukairshowguide.co.uk/train-to-duxford", "https://www.ukairshowguide.co.uk/train-to-eastbourne", "train link")
+    html = one(html, '<style id="jx-css-dux">', dux[ta:tz] + "\n" + trl + "\n" + '<style id="jx-css-dux">', "train route header")
+    return html

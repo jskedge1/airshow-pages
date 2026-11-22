@@ -133,6 +133,10 @@ def main():
     # Round 2 (Jack, 22 Nov 2026): built in the Duxford template. Same sections, same blocks and markup as Duxford,
     # only Eastbourne's own content. See duxford_layout.py for every change and the list of what is left out.
     html = duxford_layout.apply(html)
+    # Getting there: the Fares board and the train route header (round 2 brief, 22 Nov 2026). The Duxford page is read
+    # with its photos taken out, as only its train header style and script are copied.
+    dux = BLOB.sub("", (ROOT / "previews" / "duxford-new-design-src" / "live-source.html").read_text(encoding="utf8"))
+    html = duxford_layout.transport(html, dux, (HERE / "fares.html").read_text(encoding="utf8"))
     print("left out (not in the Duxford template, or no Eastbourne facts for a Duxford block):")
     for x in duxford_layout.LEFT_OUT:
         print("  -", x)

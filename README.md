@@ -696,6 +696,13 @@ inside each one, and only Eastbourne's own words, facts and photos. It is a prev
   Eastbourne's story and Experience flights sections.
 - The parking blocks (Compare driving options and Car parks in Eastbourne) and the train and bus topics are kept as they
   are on the live page.
+- Getting there has the three blocks Jack asked for on every page (22 Nov 2026): Compare driving options and the car
+  parks board (both already on the page), and Duxford's dark train route header on the train topic, filled with
+  Eastbourne's own train facts (07:24 London Victoria to Eastbourne, Southern, arriving 08:49, 2026 Saturday times).
+- The Fares and Save money board (Jack, 22 Nov 2026, "add this to each page") sits after Choose a topic, with the hidden
+  Ways in board its script needs: `fares.html`, the Clacton board with Eastbourne's own 2026 prices only (Park and Bus,
+  King Edward's Parade, Beachy Head, the Airbourne Flyer bus ticket at past shows). The page has no train, coach or taxi
+  fares, so the More fares tabs are left out. `duxford_layout.transport()` checks every price against the page.
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
