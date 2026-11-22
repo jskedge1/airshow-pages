@@ -101,6 +101,7 @@ def main():
     train_header(p)
     photo(p)
     fares(p)
+    jump_strip(p)
 
     OUT.write_text(p.text(), encoding="utf8")
     print("wrote", OUT.relative_to(ROOT))
@@ -584,6 +585,17 @@ def fares(p):
     p.s = p.s[:j] + "\n" + css + FARES + js + p.s[j:]
     LEFT_OUT.append("Getting there, Fares board: the More fares tabs (train, bus, coach, town parking, taxi), as Cosford's page has no prices for them")
     LEFT_OUT.append("Getting there: the hidden Ways in picker board (Duxford has none; the fares script is pointed at it so the page has no error)")
+
+
+# 14. Getting there jump strip: Cosford has no On the day and getting home box (.pbx), so that button would lead
+#     nowhere. Dropped, as on Duxford, Southport and Wales: Ways in, Fares, Questions.
+def jump_strip(p):
+    p.rep("var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+          "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];")
+    st = style_by_id(p, "tpJump4")
+    assert st.count("grid-template-columns:repeat(4,minmax(0,1fr))}") == 1
+    p.rep(st, st.replace("grid-template-columns:repeat(4,minmax(0,1fr))}", "grid-template-columns:repeat(3,minmax(0,1fr))}"))
+    assert '<div class="pbx"' not in p.s
 
 
 LEFT_OUT = []
