@@ -666,6 +666,16 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+## RAF Cosford Air Show page in the new design (preview, 22 Nov 2026)
+
+`previews/cosford-new-design.html` is the Cosford feature page in the new design, built the same way as the Duxford page Jack signed off on 22 Nov 2026 (see `previews/NEW-DESIGN-ROLLOUT.md`). It is not live. The live page is still `camping-layout/cosford.html` and was not changed. Private preview: https://claude.ai/artifact/3v665Z7q2t7hDExMXf7sWP
+
+- Built by `python3 previews/cosford-new-design-src/build.py` (a copy of the Duxford build with the Duxford only text and photo fixes taken out). Do not edit the built file.
+- Cosford keeps Jack's photos in `window.PHOTO` rather than on `data-pic` images, so `new-design.js` reads them from there (`P(key)`). Photos used: typhoon beside the intro, c17 behind the guide band, rafale behind the line-up heading, anson over the Quick checker, chinook behind Plan your day, p47 beside the Shooting at Cosford panel (the live page has no photo there, Duxford's has the P-40), and spitfire, pitts, jaguar, swordfish, merlin, apache and b17 on the seven Photography tabs (the seventh runs the full width).
+- The intro stat reads 1 day of flying and the guide band 50,000 people on the day, both from the page's own words. The address in the top bar and footer is the page's own (RAF Cosford, Shifnal, TF11 8UP).
+- Section order as Duxford. Cosford has no Pick your show, Flightline walk, story or Experience flights sections; its own Ticket day countdown, RAF Museum Midlands and The ground show come after Make a postcard. Cosford has no photographers' map, so the map spot cards and 3D map do nothing here.
+- To go live: Jack to approve the look, then copy the built file over `camping-layout/cosford.html`, or point the build's `OUT` at it.
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
