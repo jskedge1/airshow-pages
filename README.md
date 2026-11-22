@@ -672,13 +672,15 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
-## Headcorn page in the new design (preview, 22 Nov 2026)
+## Headcorn page in the new design (preview, round 2, 22 Nov 2026)
 
-`previews/headcorn-new-design.html` is the Headcorn feature page in the same new design, built from the Duxford template by `python3 previews/headcorn-new-design-src/build.py` (see `previews/NEW-DESIGN-ROLLOUT.md`). It is not live; `camping-layout/headcorn.html` was not changed.
+`previews/headcorn-new-design.html` is the Headcorn feature page built IN the Duxford template (round 2, `previews/NEW-DESIGN-ROLLOUT-2.md`), by `python3 previews/headcorn-new-design-src/build.py`. It is not live: the build writes only the preview, and `camping-layout/headcorn.html` is not touched.
 
-- The Duxford only text fixes and photo swaps are taken out. The words in the header, intro and footer are Headcorn's own (Headcorn Aerodrome, "Warbirds on a grass airfield in the Kent Weald", 2 show days, 26 and 27 June 2027), and the photos are Headcorn's own keys: Swordfish beside the intro, panned Buchón behind the guide band, head on Buchón behind the line-up heading, Chinook over the Quick checker, formation behind Plan your day.
-- Most of Headcorn's photos are Jack's Wix addresses, not embedded, so the photo lookups in `new-design.js` take either. The claude.ai artifact viewer does not load remote images, so the artifact copy is built with `--artifact <file>`, which embeds those 12 photos; the preview file keeps the Wix addresses, as the live page does.
-- The photographers' map cards show text only: Headcorn has no photos tied to its three spots yet. Add one by key in `PIC` in `new-design.js`.
+- `assemble.py` takes Headcorn's content from `live-source.html` and puts it in Duxford's structure (`previews/duxford-new-design-src/live-source.html`): Duxford's shared styles and scripts and Duxford's last layer of style and script blocks, with Headcorn's own data blocks (calendar, line-up, sun guide, spots, postcard, fold bar lines) kept. Then the same steps as the Duxford build add the new header, look and footer (`chrome.html`, `new-design.css`, `new-design.js`, with Headcorn's words and photo keys).
+- Inside sections: the bus area photo fills its box as on Duxford, and the big Experience flights card sits in Duxford's place. Headcorn's train topics (Headcorn station, Ashford International) get Duxford's train route header, filled only from Headcorn's own timetable data and topic text.
+- Left out, as Duxford doesn't have it: The Ground Show section. Headcorn has no flightline walk, so there is no Flightline walk section either. `assemble.LEFT_OUT` lists what is left out.
+- Kept from Headcorn: the parking blocks and the train and bus topics, as on the current page. "Pick your day" keeps its own name, as Headcorn is one show over two days (Duxford's is "Pick your show").
+- Most of Headcorn's photos are Jack's Wix addresses, so the photo lookups in `new-design.js` take either. The artifact viewer does not load remote images, so the artifact copy is built with `--artifact <file>`, which embeds those photos.
 
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
