@@ -12,6 +12,9 @@ The words come from the live RIAT page, camping-layout/riat.html (checked 15 Nov
 added that is not on that page. The look is the camping pages' design: this script borrows the styles,
 icons and motion from riat-camping-src/build.py, so the two always match.
 
+Jack, 22 Nov 2026: this home page is where all RIAT information goes. Every new RIAT topic is a tab in the strip
+(a line in PAGES) that opens its own page, and every new tab and page follows this same format and template design.
+
 Run:  python3 previews/big-guide-to-riat-src/build.py
 Run riat-camping-src/build.py first if the camping pages have changed.
 
