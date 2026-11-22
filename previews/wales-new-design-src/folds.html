@@ -1,0 +1,235 @@
+<!-- nz: Wales new design preview. The Wales page builds its sections with an older add-on (navy section bars).
+     The new design is made for the newer one that Duxford has, so the build swaps it in here (copied from
+     camping-layout/duxford.html, 16 October 2026 add-on). The section descriptions are the Wales page's own. -->
+<!-- =========================================================
+     COLLAPSIBLE SECTIONS ADD-ON  (16 October 2026)
+     Every section stays on one long page but opens and closes in place.
+     Overview starts open. The tab bar, the floating Sections button, the
+     Start Here "Read" links and every in-page jump open the right section first.
+     Also hides the page scrollbar inside the Wix box.
+     ========================================================= -->
+<style>
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
+
+.fold-bar{background:var(--mist)}
+.fold-bar .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding-top:16px;padding-bottom:16px}
+.fold-bar p{font:500 16px/22px "Barlow",sans-serif;color:var(--navy);margin:0}
+.fold-bar p b{font-weight:700}
+.fold-bar .grp{display:flex;flex-wrap:wrap;gap:8px}
+.fold-bar button{font:600 15px/18px "Barlow",sans-serif;padding:10px 16px;border:2px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease)}
+.fold-bar button:hover{background:var(--navy);color:#fff}
+.fold-bar button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+
+.folds{display:grid;gap:4px;padding:4px 0;background:#fff}
+.fold-h{margin:0!important;font:inherit!important;color:inherit;letter-spacing:0!important;text-transform:none!important}
+.fold-btn{display:block;width:100%;border:0;padding:0;margin:0;text-align:left;cursor:pointer;background:var(--navy);color:#fff;font:inherit;transition:background .3s var(--ease),box-shadow .3s var(--ease)}
+.fold-btn .wrap{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;padding-top:20px;padding-bottom:20px;transition:transform .35s var(--ease)}
+.fold-ic{flex:0 0 auto;width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;transition:background .3s var(--ease)}
+.fold-ic svg{width:22px;height:22px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fold-t{display:block;font:800 clamp(22px,2.6vw,30px)/1.08 "Barlow",sans-serif;text-transform:uppercase;letter-spacing:.01em;color:#fff}
+.fold-d{display:block;font:500 16px/22px "Barlow",sans-serif;color:#C9D6E0;margin-top:5px;text-transform:none}
+.fold-x{display:flex;align-items:center;gap:12px;font:600 15px/18px "Barlow",sans-serif;color:var(--teal);text-transform:none}
+.fold-x i{position:relative;flex:0 0 40px;width:40px;height:40px;background:var(--teal)}
+.fold-x i::before,.fold-x i::after{content:"";position:absolute;left:50%;top:50%;width:16px;height:3px;background:var(--navy);transform:translate(-50%,-50%);transition:transform .35s var(--ease)}
+.fold-x i::after{transform:translate(-50%,-50%) rotate(90deg)}
+.fold.open .fold-x i::after{transform:translate(-50%,-50%) rotate(0deg)}
+.fold-btn:hover{background:var(--navy-2)}
+.fold-btn:hover .wrap{transform:translateX(6px)}
+.fold-btn:focus-visible{outline:3px solid var(--teal);outline-offset:-3px}
+.fold.open .fold-btn{background:var(--navy-deep);box-shadow:inset 6px 0 0 var(--teal)}
+.fold.open .fold-ic{background:var(--teal)}
+.fold-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease)}
+.fold.open .fold-body{grid-template-rows:1fr}
+.fold-in{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s linear .55s}
+.fold.open .fold-in{visibility:visible;transition:none}
+.fold.open.settled .fold-in{overflow:visible}
+.fold .panel{border-top:0!important;padding-top:56px}
+.fold .back-top{display:none!important}
+.fold-end{background:#fff;border-top:4px solid var(--mist)}
+.fold-end .wrap{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding-top:20px;padding-bottom:20px}
+.fold-end button{font:600 15px/20px "Barlow",sans-serif;color:var(--navy);background:var(--mist);border:0;padding:10px 16px;cursor:pointer;transition:background .3s var(--ease),transform .3s var(--ease)}
+.fold-end button:hover{background:var(--teal-wash);transform:translateY(-2px)}
+.fold-end button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.sn-menu button em{font-style:normal;margin-left:auto;font-size:14px;color:var(--teal-ink)}
+.sn-menu button.on em{color:var(--teal)}
+@media (max-width:760px){
+  .fold-btn .wrap{gap:12px;padding-top:16px;padding-bottom:16px}
+  .fold-ic{width:36px;height:36px}
+  .fold-ic svg{width:19px;height:19px}
+  .fold-d{font-size:15px;line-height:20px}
+  .fold-x span{display:none}
+  .fold-x i{flex-basis:34px;width:34px;height:34px}
+  .fold-bar .grp{width:100%}
+  .fold-bar button{flex:1 1 0}
+  .fold-end button{flex:1 1 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .fold-body,.fold-in,.fold-btn,.fold-btn .wrap,.fold-x i::before,.fold-x i::after{transition:none!important}
+  .fold-btn:hover .wrap{transform:none}
+}
+</style>
+<script>
+(function(){
+  var panels=[].slice.call(document.querySelectorAll('main > .panel, .panel'));
+  panels=panels.filter(function(p,i){return panels.indexOf(p)===i && !p.closest('.fold');});
+  if(!panels.length) return;
+  var reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var SPEED=reduce?0:560;
+  /* Wales: the short line under each section name, in the Wales page's own words */
+  var DESC={postcard:'Turn one of my photos into a postcard to share',ground:'Static aircraft, stalls and things to do on the ground',days:'Which day suits you, and what happens on each one',help:'What to do if something goes wrong, and quick answers',kids:'A spotting mission for children, and tips for a family day',seafront:'Pick your pitch, the tides, sea mist, Mumbles and your kit list',overview:'Dates, the evening show and the latest news',matchcheck:'Six questions, a match score and what to read next',scores:'Crowds, food, facilities and value for money, rated',compare:'This show next to three others, and my view',whatyousee:'The flying and ground displays, and how loud they are',dayruns:'From the gates opening to the drive home',lineup:'The 2026 flying display, by operator',travel:'Park and Ride, car parks, trains, buses and road closures',stay:'Hotels and campsites within 25 miles',timeline:'A personal plan, weather, tides and a sample day',watch:'Where to watch, with the photographers’ map',photo:'Sun guide, settings, kit and packing lists',facilities:'Food, toilets, accessibility and lost children'};
+  var P='<svg viewBox="0 0 24 24" aria-hidden="true">';
+  var ICON={
+    story:P+'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/><path d="M9 8h7M9 12h5"/></svg>',
+    flightline:P+'<path d="M21 12l-8-1.5V5.5L11.5 3 10 5.5v5L3 12v2l7-.5v4L8 19v1.5l3.5-.8 3.5.8V19l-2-1.5v-4l7 .5z"/></svg>',
+    flights:P+'<path d="M3 17l6-2 4 4 2-1-2-5 5-2c1.7-.7 2.4-2.2 1.8-3s-2.3-.6-3.9.2l-5 2.4L6 6 4 7l3 5-4 2z"/></svg>',
+    help:P+'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/><path d="M6 6l3.5 3.5M14.5 14.5L18 18M18 6l-3.5 3.5M9.5 14.5L6 18"/></svg>',
+    kids:P+'<path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.8z"/></svg>',
+    postcard:P+'<rect x="3" y="5" width="18" height="14"/><path d="M13 9h5M13 12h5M13 15h3M5 9h5v6H5z"/></svg>',
+    overview:P+'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></svg>',
+    right:P+'<circle cx="9" cy="8" r="3"/><path d="M3.5 19c.8-3 3-4.5 5.5-4.5s4.7 1.5 5.5 4.5M15 11l2 2 4-4"/></svg>',
+    lineup:P+'<path d="M21 12l-8-1.5V5.5L11.5 3 10 5.5v5L3 12v2l7-.5v4L8 19v1.5l3.5-.8 3.5.8V19l-2-1.5v-4l7 .5z"/></svg>',
+    travel:P+'<path d="M12 21s-6.5-6.2-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>',
+    stay:P+'<path d="M3 20V9l9-5 9 5v11M9 20v-6h6v6"/></svg>',
+    timeline:P+'<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>',
+    watch:P+'<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+    photo:P+'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.6"/></svg>',
+    seafront:P+'<path d="M2 12c2.5-2 5-2 7.5 0s5 2 7.5 0 3.5-1.5 5-1"/><path d="M2 17c2.5-2 5-2 7.5 0s5 2 7.5 0 3.5-1.5 5-1"/><circle cx="17" cy="6" r="2.5"/></svg>',
+    ground:P+'<path d="M3 20h18M5 20V10l7-5 7 5v10M9 20v-5h6v5"/></svg>',
+    matchcheck:P+'<circle cx="9" cy="8" r="3"/><path d="M3.5 19c.8-3 3-4.5 5.5-4.5s4.7 1.5 5.5 4.5M15 11l2 2 4-4"/></svg>',
+    facilities:P+'<path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M16 3c-1.7 1-2.5 3-2.5 6s1 3.5 2.5 3.5V21"/></svg>'
+  };
+  function txt(id){
+    var t=document.querySelector('.tab[aria-controls="'+id+'"]');
+    if(!t) return id;
+    var c=t.cloneNode(true); [].slice.call(c.querySelectorAll('span')).forEach(function(s){s.remove();});
+    return c.textContent.trim();
+  }
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+  /* open all / close all strip */
+  var bar=document.createElement('div'); bar.className='fold-bar';
+  bar.innerHTML='<div class="wrap"><p id="foldCount"></p><div class="grp"><button type="button" id="openAll">Open all sections</button><button type="button" id="closeAll">Close all sections</button></div></div>';
+  var list=document.createElement('div'); list.className='folds';
+  panels[0].parentNode.insertBefore(bar,panels[0]);
+  bar.parentNode.insertBefore(list,bar.nextSibling);
+
+  var folds=panels.map(function(p,i){
+    var id=p.id, open=i===0;
+    var f=document.createElement('section');
+    f.className='fold'+(open?' open settled':''); f.id='f-'+id; f.setAttribute('data-panel',id);
+    f.innerHTML='<h2 class="fold-h"><button type="button" class="fold-btn" id="fb-'+id+'" aria-expanded="'+open+'" aria-controls="fbody-'+id+'">'
+      +'<span class="wrap"><span class="fold-ic">'+(ICON[id]||ICON.overview)+'</span>'
+      +'<span><span class="fold-t">'+esc(txt(id))+'</span>'+(DESC[id]?'<span class="fold-d">'+DESC[id]+'</span>':'')+'</span>'
+      +'<span class="fold-x"><span>'+(open?'Close':'Open')+'</span><i aria-hidden="true"></i></span></span></button></h2>'
+      +'<div class="fold-body" id="fbody-'+id+'" role="region" aria-labelledby="fb-'+id+'"><div class="fold-in"></div></div>';
+    var inner=f.querySelector('.fold-in');
+    inner.appendChild(p);
+    var end=document.createElement('div'); end.className='fold-end';
+    end.innerHTML='<div class="wrap"><button type="button" data-fold-top>Back to the sections &uarr;</button><button type="button" data-fold-close>Close this section</button></div>';
+    inner.appendChild(end);
+    if(!open) inner.setAttribute('inert','');
+    list.appendChild(f);
+    return f;
+  });
+  var tabbar=document.querySelector('.tabbar')||list;
+
+  function isOpen(f){return f.classList.contains('open');}
+  function count(){
+    var n=folds.filter(isOpen).length, c=document.getElementById('foldCount');
+    if(c) c.innerHTML='<b>'+n+' of '+folds.length+'</b> sections open. Open the ones you need, or open everything.';
+    [].slice.call(document.querySelectorAll('#snMenu [data-goto]')).forEach(function(b){
+      var f=document.getElementById('f-'+b.getAttribute('data-goto')); if(!f) return;
+      var em=b.querySelector('em'); if(!em){em=document.createElement('em');b.appendChild(em);}
+      em.textContent=isOpen(f)?'Open':'';
+    });
+  }
+  function setFold(f,open){
+    if(!f) return;
+    var b=f.querySelector('.fold-btn'), lbl=f.querySelector('.fold-x span'), inner=f.querySelector('.fold-in');
+    clearTimeout(f._t);
+    f.classList.toggle('open',open); f.classList.remove('settled');
+    b.setAttribute('aria-expanded',open?'true':'false');
+    if(lbl) lbl.textContent=open?'Close':'Open';
+    if(open){ inner.removeAttribute('inert'); f._t=setTimeout(function(){ if(isOpen(f)){ f.classList.add('settled'); window.dispatchEvent(new Event('resize')); } },SPEED); }
+    else inner.setAttribute('inert','');
+    count();
+  }
+  function go(el,offset){
+    if(!el) return;
+    var y=el.getBoundingClientRect().top+window.pageYOffset-(offset||0);
+    window.scrollTo({top:Math.max(0,y),behavior:reduce?'auto':'smooth'});
+  }
+  function foldFor(el){ return el&&el.closest?el.closest('.fold'):null; }
+  function openGo(id,target){
+    var f=document.getElementById('f-'+id)||foldFor(document.getElementById(id));
+    if(!f) return false;
+    var was=isOpen(f); if(!was) setFold(f,true);
+    var t=target&&document.getElementById(target);
+    if(t&&t!==f&&!t.classList.contains('panel')) setTimeout(function(){go(t,16);},was?0:SPEED+40);
+    else go(f,0);
+    return true;
+  }
+  function closeSnMenu(){
+    var m=document.getElementById('snMenu'), b=document.querySelector('.sn-btn');
+    if(m&&!m.hidden){ m.hidden=true; if(b) b.setAttribute('aria-expanded','false'); }
+  }
+
+  /* catch every jump before the older scripts, open the section, then scroll */
+  window.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    var fb=t.closest('.fold-btn');
+    if(fb){ var f=fb.closest('.fold'); setFold(f,!isOpen(f)); return; }
+    if(t.closest('[data-fold-top]')){ e.preventDefault(); e.stopPropagation(); go(tabbar,0); return; }
+    var c=t.closest('[data-fold-close]');
+    if(c){ e.preventDefault(); e.stopPropagation(); var cf=c.closest('.fold'); go(cf,0); setTimeout(function(){setFold(cf,false);},reduce?0:420); return; }
+    var j=t.closest('.tab,[data-goto]');
+    if(j){
+      var id=j.getAttribute('aria-controls')||j.getAttribute('data-goto');
+      if(id&&document.getElementById('f-'+id)){ e.preventDefault(); e.stopPropagation(); closeSnMenu(); openGo(id); }
+      return;
+    }
+    var a=t.closest('a[href^="#"]');
+    if(a){
+      var h=a.getAttribute('href').slice(1); if(!h||h==='top') return;
+      var el=document.getElementById(h), tf=foldFor(el);
+      if(tf&&!isOpen(tf)){ e.preventDefault(); e.stopPropagation(); setFold(tf,true); setTimeout(function(){go(el,16);},SPEED+40); }
+    }
+  },true);
+
+  document.getElementById('openAll').addEventListener('click',function(){folds.forEach(function(f){if(!isOpen(f))setFold(f,true);});});
+  document.getElementById('closeAll').addEventListener('click',function(){go(tabbar,0);folds.forEach(function(f){if(isOpen(f))setFold(f,false);});});
+
+  /* the tab for the section in view stays teal (runs after the older scroll spy) */
+  var tabs=[].slice.call(document.querySelectorAll('.tablist .tab'));
+  function spy(){
+    var mid=window.innerHeight*0.35, best=null;
+    folds.forEach(function(f){var r=f.getBoundingClientRect(); if(r.top<=mid&&r.bottom>mid) best=f.getAttribute('data-panel');});
+    tabs.forEach(function(t){t.classList.toggle('on',t.getAttribute('aria-controls')===best);});
+  }
+  var raf=0;
+  window.addEventListener('scroll',function(){cancelAnimationFrame(raf);raf=requestAnimationFrame(function(){requestAnimationFrame(spy);});},{passive:true});
+  window.addEventListener('resize',spy);
+
+  /* a link to #section opens that section */
+  var hsh=(location.hash||'').slice(1);
+  if(hsh){ var he=document.getElementById(hsh)||document.getElementById('f-'+hsh); var hf=he&&(he.classList.contains('fold')?he:foldFor(he)); if(hf&&!isOpen(hf)){ setFold(hf,true); setTimeout(function(){go(hf,0);},SPEED+60);} }
+  /* the Sections button's invisible strips must not hold the page at its old height */
+  function trim(){
+    var L=null;
+    [].slice.call(document.body.children).forEach(function(d){ if(!L&&d.tagName==='DIV'&&d.getAttribute('aria-hidden')==='true'&&d.firstElementChild&&d.firstElementChild.hasAttribute('data-i')) L=d; });
+    if(!L) return;
+    L.style.display='none'; var H=document.documentElement.scrollHeight; L.style.display='';
+    [].slice.call(L.children).forEach(function(st){ if(parseFloat(st.style.top)>=H) st.remove(); });
+  }
+  var _set=setFold;
+  setFold=function(f,o){ _set(f,o); clearTimeout(trim._t); trim._t=setTimeout(trim,SPEED+80); };
+  /* Wales: the page's other scripts open sections with these names (from its older section bars) */
+  window.secOpenFor=function(el){ var f=foldFor(el)||(el&&el.id&&document.getElementById('f-'+el.id)); if(f&&!isOpen(f)) setFold(f,true); };
+  window.secOpen=function(id){ var el=document.getElementById(id); if(el) window.secOpenFor(el); };
+  window.secCountText=function(){ return folds.filter(isOpen).length+' of '+folds.length+' sections open'; };
+  count(); spy();
+  setTimeout(function(){count();trim();},800);
+  window.addEventListener('load',function(){setTimeout(trim,300);});
+})();
+</script>
