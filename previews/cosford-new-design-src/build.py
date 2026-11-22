@@ -175,6 +175,7 @@ def main():
     html = html[:end] + tail + html[end:]
 
     html = re.sub(r"@@BLOB(\d+)@@", lambda mm: blobs[int(mm.group(1))], html)
+    import sys as _ws_sys; _ws_sys.path.insert(0, str(ROOT / 'previews')); from wixsafe import wix_safe; html = wix_safe(html)   # so the styles also work inside the live site (see previews/wixsafe.py)
     OUT.write_text(html, encoding="utf8")
     print("wrote", OUT.relative_to(ROOT), "%.1f MB" % (len(html.encode("utf8")) / 1e6), "with", len(blobs), "embedded images")
 

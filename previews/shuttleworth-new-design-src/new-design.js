@@ -1,4 +1,4 @@
-/* New design for the Shuttleworth (Old Warden) page, the Duxford layout Jack signed off. Fills the new header, intro and footer from the page's own
+/* New design for the Shuttleworth (Old Warden) page, built in the Duxford template. Fills the new header, intro and footer from the page's own
    content, so the words only live in one place, and adds the scroll and hover motion. */
 (function () {
   var D = document;
@@ -242,8 +242,8 @@
 /* Jack, 22 Nov 2026: "In this section" in Photography as clean photo tabs (his own photos only, not the
    credited cm_ photos from the team photographer; navy fade, title on the photo). */
 (function(){
-  var PICS={phSun:'invader',phShows:'static_line',phCreative:'harvard_static',phCalc:'beech18',phKit:'hangars',phPack:'vintage_bus',phCheck:'crowd_rain',phDl:'queue'};
-  var ORDER=['invader','static_line','harvard_static','beech18','hangars','vintage_bus','crowd_rain','queue'];
+  var PICS={phSun:'invader',phShows:'static_line',photoMap:'crowd_rain',phCreative:'harvard_static',phCalc:'beech18',phKit:'hangars',phPack:'vintage_bus',phCheck:'queue',phDl:'food'};
+  var ORDER=['invader','static_line','crowd_rain','harvard_static','beech18','hangars','vintage_bus','queue','food'];
   function src(k){
     var i=document.querySelector('img[data-pic="'+k+'"][src^="data:"],img[data-k="'+k+'"][src^="data:"]');
     return i?i.getAttribute('src'):'';
@@ -270,8 +270,116 @@
   var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
 })();
 
-/* The Duxford page's photographers' map scripts (spot cards and the 3D look) are left out: they are drawn for
-   the Duxford map, and the Shuttleworth page has no photographers' map. */
+/* Jack, 22 Nov 2026: photographers' map. Click a numbered spot on the map, or in the list, to see a card
+   with a photo and that spot's details under the map. Photos are Jack's own; spots without one show text only. On Old Warden the map is the page's own airfield drawing. */
+(function(){
+  var PIC={1:'invader',2:'hangars',3:'crowd_rain'};
+  function src(k){var i=document.querySelector('img[data-nzpic="'+k+'"],img[data-pic="'+k+'"][src^="data:"],img[data-k="'+k+'"][src^="data:"]');return i?i.getAttribute('src'):'';}
+  function setup(){
+    var map=document.getElementById('photoMap');if(!map){return true;}
+    var svg=map.querySelector('.pmap-fig svg');if(!svg){return true;}
+    if(!src('invader')){return false;}
+    var spots={};
+    [].forEach.call(svg.querySelectorAll('g > g[transform^="translate"]'),function(g){
+      var c=g.querySelector('circle[r="14"]'),t=g.querySelector('text');
+      if(c&&t&&/^[1-9]$/.test(t.textContent.trim())){spots[t.textContent.trim()]=g;}
+    });
+    var items={};
+    [].forEach.call(map.querySelectorAll('.pmap-list > li'),function(li){var n=li.querySelector('.n');if(n){items[n.textContent.trim()]=li;}});
+    if(!Object.keys(spots).length){return true;}
+    var card=document.createElement('div');card.className='nz-spot';card.setAttribute('aria-live','polite');
+    card.innerHTML='<div class="nz-spot-ph"></div><div class="nz-spot-tx"><span class="nz-spot-n"></span><div><h4></h4><p></p><span class="nz-spot-k"></span></div></div>';
+    var fig=map.querySelector('.pmap-fig');fig.parentElement.insertBefore(card,fig.nextSibling);
+    var cur=null;
+    function show(n,scroll){
+      var li=items[n];if(!li){return;}
+      if(cur){if(spots[cur]){spots[cur].classList.remove('nz-on');}if(items[cur]){items[cur].classList.remove('nz-on');}}
+      cur=n;if(spots[n]){spots[n].classList.add('nz-on');}li.classList.add('nz-on');
+      var ph=card.querySelector('.nz-spot-ph'),s=PIC[n]?src(PIC[n]):'';
+      ph.innerHTML='';card.classList.toggle('nz-noph',!s);
+      if(s){var im=document.createElement('img');im.src=s;im.alt='';ph.appendChild(im);}
+      var col=li.classList.contains('warn')?'#D74949':(li.classList.contains('out')?'#6950A1':'#32B4AF');
+      card.style.setProperty('--sc',col);
+      card.querySelector('.nz-spot-n').textContent=n;
+      card.querySelector('h4').textContent=li.querySelector('b').textContent;
+      card.querySelector('p').innerHTML=li.querySelector('p').innerHTML;
+      card.querySelector('.nz-spot-k').textContent=li.classList.contains('warn')?'Outside the fence, take care':(li.classList.contains('out')?'Outside the fence':'Inside the show');
+      card.classList.remove('nz-in');void card.offsetWidth;card.classList.add('nz-in');
+      if(scroll){card.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});}
+    }
+    Object.keys(spots).forEach(function(n){
+      var g=spots[n];g.classList.add('nz-spot-pin');g.setAttribute('tabindex','0');g.setAttribute('role','button');
+      g.setAttribute('aria-label','Spot '+n+', show the photo and details');
+      g.addEventListener('click',function(){show(n,true);});
+      g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();show(n,true);}});
+    });
+    Object.keys(items).forEach(function(n){
+      var li=items[n];li.classList.add('nz-spot-li');li.setAttribute('tabindex','0');
+      li.addEventListener('click',function(e){if(e.target.closest('a')){return;}show(n,true);});
+      li.addEventListener('keydown',function(e){if(e.key==='Enter'){show(n,true);}});
+    });
+    show('1',false);
+    return true;
+  }
+  var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
+})();
+
+/* Jack, 22 Nov 2026: the photographers' map with more of a 3D look. The buildings get raised sides and
+   a roof shade, trees are dotted round the field edges, everything casts a soft shadow, and the map sits
+   at a slight tilt. The map's own content, labels and positions are unchanged. */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function el(n,a){var e=document.createElementNS(NS,n);for(var k in a){e.setAttribute(k,a[k]);}return e;}
+  function setup(){
+    var map=document.getElementById('photoMap');if(!map){return true;}
+    var svg=map.querySelector('.pmap-fig svg');if(!svg||svg.getAttribute('data-nz3d')){return true;}
+    svg.setAttribute('data-nz3d','1');
+    var defs=svg.querySelector('defs')||svg.insertBefore(el('defs',{}),svg.firstChild);
+    var f=el('filter',{id:'nz3dSh',x:'-30%',y:'-30%',width:'160%',height:'160%'});
+    f.appendChild(el('feDropShadow',{dx:'3',dy:'5',stdDeviation:'2.6','flood-color':'#0B1A27','flood-opacity':'.35'}));
+    defs.appendChild(f);
+    var f2=el('filter',{id:'nz3dSoft',x:'-20%',y:'-20%',width:'140%',height:'140%'});
+    f2.appendChild(el('feDropShadow',{dx:'0',dy:'3',stdDeviation:'3','flood-color':'#0B1A27','flood-opacity':'.22'}));
+    defs.appendChild(f2);
+    var g=el('radialGradient',{id:'nz3dTree',cx:'35%',cy:'30%',r:'75%'});
+    g.appendChild(el('stop',{offset:'0','stop-color':'#8DB86A'}));
+    g.appendChild(el('stop',{offset:'.6','stop-color':'#5E8F45'}));
+    g.appendChild(el('stop',{offset:'1','stop-color':'#3F6B30'}));
+    defs.appendChild(g);
+    var lg=el('linearGradient',{id:'nz3dLight',x1:'0',y1:'0',x2:'0',y2:'1'});
+    lg.appendChild(el('stop',{offset:'0','stop-color':'#FFFFFF','stop-opacity':'.18'}));
+    lg.appendChild(el('stop',{offset:'1','stop-color':'#0B1A27','stop-opacity':'.12'}));
+    defs.appendChild(lg);
+
+    /* buildings: a darker raised side under each roof */
+    var bld=[].filter.call(svg.querySelectorAll(':scope > g'),function(x){return x.getAttribute('fill')==='#AEB6BE';})[0];
+    if(bld){
+      var sides=el('g',{fill:'#7D8893'});
+      [].forEach.call(bld.querySelectorAll('rect'),function(r){
+        var s=r.cloneNode();s.removeAttribute('stroke');
+        var t=r.getAttribute('transform')||'';s.setAttribute('transform','translate(4 7) '+t);sides.appendChild(s);
+        var top=r.cloneNode();top.setAttribute('fill','url(#nz3dLight)');top.removeAttribute('stroke');bld.appendChild(top);
+      });
+      bld.parentNode.insertBefore(sides,bld);
+      sides.setAttribute('filter','url(#nz3dSh)');
+    }
+    /* trees round the edges of the airfield, kept clear of the labels and spots */
+    var trees=[]; /* the Duxford map's trees are placed for that drawing, so none on the Old Warden drawing */
+    var tg=el('g',{filter:'url(#nz3dSh)'});
+    trees.forEach(function(p,i){var r=7+(i%3)*2;tg.appendChild(el('circle',{cx:p[0],cy:p[1],r:r,fill:'url(#nz3dTree)'}));});
+    var airfield=[].filter.call(svg.querySelectorAll(':scope > path'),function(x){return (x.getAttribute('fill')||'').indexOf('pmMow')>-1;})[0];
+    if(airfield){airfield.setAttribute('filter','url(#nz3dSoft)');airfield.parentNode.insertBefore(tg,airfield.nextSibling);}
+    else{svg.appendChild(tg);}
+    /* the runway and the numbered spots lift off the ground */
+    [].forEach.call(svg.querySelectorAll('path[stroke="#5A6570"]'),function(p){p.setAttribute('filter','url(#nz3dSoft)');});
+    [].forEach.call(svg.querySelectorAll('.nz-spot-pin, g[transform^="translate"] > circle[r="14"]'),function(c){
+      var p=c.closest('g[transform]');if(p){p.setAttribute('filter','url(#nz3dSh)');}
+    });
+    map.querySelector('.pmap-fig').classList.add('nz-3d');
+    return true;
+  }
+  var n=0;(function tryIt(){if(setup()||++n>40){return;}setTimeout(tryIt,250);})();
+})();
 
 /* Jack, 22 Nov 2026: section order. The sections named here come first, in this order, and the rest keep
    their order after them. The section tab bar follows the same order. Add a name here to move another. */

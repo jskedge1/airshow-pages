@@ -391,8 +391,9 @@
 /* Jack, 22 Nov 2026: section order. The sections named here come first, in this order, and the rest keep
    their order after them. The section tab bar follows the same order. Add a name here to move another. */
 (function(){
-  /* Clacton has no flightline walk, story or experience flights. Its extras (the ground show, seafront information,
-     keep the show free) keep their own order after these. */
+  /* Clacton has no facts for Duxford's flightline walk, story or experience flights, so those are left out.
+     Round 2: Clacton's own extra sections (the ground show, seafront information, keep the show free) are taken out
+     in build.py, so the order is Duxford's. */
   var FIRST=['overview','travel','photo','lineup','watch','facilities','days','timeline','dayruns','stay','help','matchcheck','whatyousee','kids','scores','compare','postcard'];
   function run(){
     var folds=[].slice.call(document.querySelectorAll('section.fold'));

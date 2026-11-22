@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Builds previews/headcorn-new-design.html: the Headcorn feature page in the new design
-(the layout made for the RIAT camping pages, in the site's brand colours).
+"""Builds previews/headcorn-new-design.html: the Headcorn feature page built in the Duxford template
+(round 2, see previews/NEW-DESIGN-ROLLOUT-2.md).
 
-It does not retype the page. It reads the live page, camping-layout/headcorn.html, and
+First, assemble.py puts Headcorn's own content (live-source.html) into the Duxford page's structure
+(previews/duxford-new-design-src/live-source.html): Duxford's sections, blocks, styles and scripts, Headcorn's
+words, facts and photos, and nothing Duxford doesn't have. Then, as for Duxford, it
   1. keeps the site font (Barlow) and takes out capitals and wide letter spacing,
   2. adds the new top bar, photo header, intro, section heading and footer (chrome.html),
   3. adds the new look on top of the page's own styles (new-design.css),
@@ -19,8 +21,10 @@ import re
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
 ROOT = HERE.parent.parent
-SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
+SRC = HERE / "live-source.html"   # Headcorn's page as it was before the new design: the content
+TEMPLATE = ROOT / "previews" / "duxford-new-design-src" / "live-source.html"   # Duxford's: the structure
 OUT = ROOT / "camping-layout" / "headcorn.html"   # the live page
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
@@ -59,6 +63,9 @@ FRAME_CHECK = (
     'html body .qs li{background:#F3F6F8!important;border:0!important;border-top:5px solid var(--sc,#32B4AF)!important;border-left:0!important;box-shadow:none!important;border-radius:0!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}'
     'html body .qs li:hover{background:#fff!important;transform:translateY(-4px);box-shadow:0 22px 34px -24px rgba(11,26,39,.5)!important}'
     'html body .qs li .sn{display:none!important}'
+    # with the number hidden, the question must span the whole box (on phones it was squeezed into the 44px number column)
+    'html body .qs li .q{grid-column:1/-1!important}'
+    'html body .qs li::before{display:none!important}html body .qs li .q{border-left:0!important;padding-left:20px!important}'
     'html body .qs .q legend{font:700 21px/1.25 "Barlow",sans-serif!important;color:#13293C!important}'
     'html body .qs .q legend span{display:block!important;font:700 15.5px/1.2 "Barlow",sans-serif!important;color:var(--sc,#0E5F5B)!important;margin-bottom:5px!important;text-transform:none!important;letter-spacing:0!important;filter:brightness(.8)}'
     'html body .qs .q legend small{display:block!important;font:400 15.5px/1.45 "Barlow",sans-serif!important;color:#4A5A66!important;margin-top:4px!important}'
@@ -114,7 +121,11 @@ def restyle_text(s):
 
 
 def main():
-    html = SRC.read_text(encoding="utf8")
+    import assemble
+    html = assemble.assemble(SRC.read_text(encoding="utf8"), TEMPLATE.read_text(encoding="utf8"))
+    print("left out, as the Duxford page does not have them:")
+    for x in assemble.LEFT_OUT:
+        print("  -", x)
     blobs = []
 
     def keep(m):
@@ -166,6 +177,7 @@ def main():
     html = html[:end] + tail + html[end:]
 
     html = re.sub(r"@@BLOB(\d+)@@", lambda mm: blobs[int(mm.group(1))], html)
+    import sys as _ws_sys; _ws_sys.path.insert(0, str(ROOT / 'previews')); from wixsafe import wix_safe; html = wix_safe(html)   # so the styles also work inside the live site (see previews/wixsafe.py)
     OUT.write_text(html, encoding="utf8")
     print("wrote", OUT.relative_to(ROOT), "%.1f MB" % (len(html.encode("utf8")) / 1e6), "with", len(blobs), "embedded images")
 

@@ -116,6 +116,160 @@ def restyle_text(s):
     return s
 
 
+DUX_SRC = HERE.parent / "duxford-new-design-src" / "live-source.html"   # the Duxford page: the template
+
+
+def one(html, old, new, what):
+    """Replace exactly one copy, or stop the build: a template step must never silently miss."""
+    assert html.count(old) == 1, "%s: found %d times" % (what, html.count(old))
+    return html.replace(old, new, 1)
+
+
+def block(src, start_marker, end_marker, what):
+    i = src.find(start_marker)
+    assert i >= 0, what
+    j = src.find(end_marker, i)
+    assert j > i, what
+    return src[i:j + len(end_marker)]
+
+
+def in_duxford_template(html):
+    """Round 2 (Jack, 22 Nov 2026): the page built IN the Duxford template, not the old Shuttleworth page with
+    the new look on top. The two live pages came from the same template, so most sections already have the same
+    blocks in the same order. These steps change the places where they did not, using Duxford's own markup,
+    styles and scripts (read from the Duxford page) and only Shuttleworth's own words, facts and photos.
+    Left out, because the Duxford page has no such block: the Chris Murgatroyd photo gallery in the line-up
+    (also not Jack's photos), the separate "The airfield layout" block (its drawing and notes now make the map
+    in Where to watch, as on Duxford) and the different style of the "Fancy a Spitfire?" flights card."""
+    dux = restyle_text(BLOB.sub("", DUX_SRC.read_text(encoding="utf8")))
+
+    # 1. Where to watch: Duxford's spot tabs (#wwMap) and map with numbered spots (#photoMap), in place of
+    #    Shuttleworth's own airfield layout block and differently built spot tabs.
+    i = html.find('<section class="layout reveal"')
+    j = html.find('<p class="ww-note">', i)
+    k = html.find("</section>", j)
+    assert 0 < i < j < k, "where to watch blocks"
+    tabs = block(dux, '<section class="ww reveal" id="wwMap"', "</section>", "duxford spot tabs")
+    icon = re.search(r'<span class="xd-tt-ic">(<svg.*?</svg>)</span>', tabs, re.S).group(1)
+    goicon = re.search(r'<a class="ww-go"[^>]*><span class="xd-tt-ic">(<svg.*?</svg>)</span>', tabs, re.S).group(1)
+    pstyle = dux.rfind("<style>", 0, dux.find('id="photoMap"'))
+    pmap_style = dux[pstyle:dux.find("</style>", pstyle) + 8]
+    assert ".pmap-head" in pmap_style, "duxford map styles"
+    watch = (HERE / "watch.html").read_text(encoding="utf8")
+    watch = watch[watch.find("-->") + 3:].strip()
+    watch = watch.replace("@@ICON@@", icon).replace("@@GOICON@@", goicon).replace("@@PMAPSTYLE@@", pmap_style)
+    html = html[:i] + watch + html[k + len("</section>"):]
+    # Duxford's styles and tab script for those spot tabs, in place of the ones for the old ones
+    old_css = block(html, '<style id="ww-maps">', "</style>", "old spot tab styles")
+    html = one(html, old_css, block(dux, '<style id="ww-css">', "</style>", "duxford spot tab styles"), "spot tab styles")
+    m = re.search(r"<script>(?:(?!</script>).)*?pickSpot\(.*?</script>", html, re.S)
+    assert m, "old spot tab script"
+    dm = re.search(r"<script>(?:(?!</script>).)*?querySelectorAll\('\.ww-panel'\).*?</script>", dux, re.S)
+    assert dm, "duxford spot tab script"
+    html = html[:m.start()] + dm.group(0) + html[m.end():]
+    # Photography: the "In this section" strip links to the map, as on Duxford
+    html = one(html, '<a href="#phShows">Sun at each show</a><a href="#phCreative">',
+               '<a href="#phShows">Sun at each show</a><a href="#photoMap">Airfield map</a><a href="#phCreative">', "photo jump link")
+
+    # 2. Aircraft line-up: no photo gallery (Duxford has none, and the photos are credited to someone else)
+    g = html.find('<section class="cmg reveal" id="cmGallery"')
+    if g < 0:
+        g = html.find('id="cmGallery"'); g = html.rfind("<section", 0, g)
+    ge = html.find("</section>", g)
+    assert 0 < g < ge and html[g:ge].count("<section") == 1, "line-up gallery"
+    html = html[:g] + html[ge + len("</section>"):]
+
+    # 3. Photography: the photo at the top is one of Jack's own, with no credit, as on Duxford
+    m = re.search(r'<figure class="pic wide reveal" style="position:relative"><img loading="lazy" decoding="async" class="photo" src="(@@BLOB\d+@@)" alt="The dark blue Miles Hawk Speed Six racer flying low past the trees at Old Warden, panned"><span class="cm-credit">[^<]*</span><figcaption>[^<]*</figcaption></figure>', html)
+    h = re.search(r'<img[^>]*data-pic="harvard_static"[^>]*src="(@@BLOB\d+@@)"', html) or re.search(r'<img[^>]*src="(@@BLOB\d+@@)"[^>]*data-pic="harvard_static"', html)
+    assert m and h, "photography opening photo"
+    html = html[:m.start()] + ('<figure class="pic wide reveal"><img loading="lazy" decoding="async" class="photo" data-pic="harvard_static" data-dup="1" src="%s" alt="A silver Harvard in RAF markings on the grass"><figcaption>A silver Harvard in RAF markings on the grass.</figcaption></figure>' % h.group(1)) + html[m.end():]
+
+    # 4. Food and facilities: the photo beside the band has Duxford's caption style
+    html = one(html, '<figure><img loading="lazy" decoding="async" class="photo" data-pic="bus_bar"',
+               '<figure class="busfig"><img loading="lazy" decoding="async" class="photo" data-pic="bus_bar"', "bus bar photo")
+    m = re.search(r'(<figure class="busfig"><img[^>]*data-pic="bus_bar"[^>]*>)(</figure>)', html)
+    assert m, "bus bar caption"
+    html = html[:m.end(1)] + "<figcaption>The Route 47 Events bar, built into a green and cream double decker bus.</figcaption>" + html[m.end(1):]
+
+    bi = dux.find(".busbar figure.busfig{"); be = dux.find("@media(max-width:600px){.busbar figure.busfig figcaption{", bi)
+    be = dux.find("}}", be) + 2
+    assert 0 < bi < be, "duxford photo caption styles"
+    html = one(html, '<style id="op-colours">', '<style id="busfig-css">' + dux[bi:be] + '</style>\n<style id="op-colours">', "photo caption styles")
+
+    # 5. Section bars: the same short descriptions as Duxford (Duxford's bars for these five have none)
+    html = one(html, "matchcheck:'Six questions, a match score and what to read next',scores:'Crowds, food, facilities and value for money, rated',compare:'This show next to three others, and my view',whatyousee:'The flying and ground displays, and how loud they are',dayruns:'From the gates opening to the drive home',",
+               "right:'Who the show suits, and a quick checker for your group',", "section bar descriptions")
+
+    # 6. Experience flights: every card in Duxford's card styles
+    html = one(html, 'class="xf-card xf-hero xf-alt"', 'class="xf-card xf-hero"', "flights card")
+    #    and, as on Duxford, one wide card in the last row: the Dragon Rapide is a normal card
+    m = re.search(r'<article class="xf-card xf-hero"( data-tags="group">\s*<header><span class="xf-op">Scillonia Airways</span>)', html)
+    assert m and html.count("Scillonia Airways</span>") == 1, "dragon rapide card"
+    html = html[:m.start()] + '<article class="xf-card"' + m.group(1) + html[m.end():]
+
+    # 7. Shuttleworth's story: a photo of Jack's on the last card, as on Duxford
+    html = one(html, "and I always feel that the moment I walk in.</p>",
+               'and I always feel that the moment I walk in.</p><figure class="pic st-pic"><img class="photo" data-k="invader" alt="A silver Douglas A-26 Invader in US Air Force markings banking overhead"></figure>', "story photo")
+
+    # 8. Overview: the Where next boxes as Duxford's tiles (Duxford's own styles and script, Shuttleworth's photos)
+    ge_css = block(dux, '<style id="glass-effect">', "</style>", "duxford tile styles")
+    ge_js = block(dux, '<script id="glass-effect-js">', "</script>", "duxford tile script")
+    ge_js = one(ge_js, "lineup:'buchon_front',travel:'parking1',stay:'wildcat_side'", "lineup:'beech18',travel:'queue',stay:'hangars'", "tile photos")
+    ge_js = one(ge_js, "PICS[k]||'formation'", "PICS[k]||'static_line'", "tile default photo")
+    html = one(html, '<style id="mobile-fit">', ge_css + "\n" + ge_js + '\n<style id="mobile-fit">', "tiles")   # where Duxford has them, before the overview layout script
+
+    # 8b. Getting there: no Fares and save money board (round 2 brief, 20:30). Shuttleworth's only transport prices
+    #     are the shuttle bus (£10 return) and free parking, both already on the car parks board, and the Train to
+    #     Shuttleworth page lists no fares. So the board is left out, and so is its dead "Fares" jump button.
+    html = one(html, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
+               "var JUMPS = [['Ways in', '#explore'], ['Questions', '#travel .acc']];", "jump buttons")
+    #     "On the day and getting home" goes too: it points at a .pbx box that Shuttleworth's page doesn't have.
+
+    # 9. Getting there: the train route header on the train topics, Duxford's design, with Shuttleworth facts.
+    #    Times are from the site's own Train to Shuttleworth page (train-routes/shuttleworth.html): the 07:46
+    #    Thameslink from London St Pancras, at Biggleswade 08:31, Saturday 14 November 2026 timetable.
+    html = one(html, '<style id="op-colours">', block(dux, '<style id="trlStyle">', "</style>", "duxford train header styles") + '\n<style id="op-colours">', "train header styles")
+    trl = block(dux, '<script id="trlScript-dux">', "</script>", "duxford train header script")
+    start = trl.find("  var H={"); end = trl.find("  function cur()")
+    assert 0 < start < end, "train header data"
+    H = """  var H={
+    'rail-shuttle':hero({to:'Biggleswade',board:'BIGGLESWADE',dep:'07:46',arr:'08:31',via:'From London St Pancras',
+      p:'Shuttleworth runs its own shuttle bus between Biggleswade railway station and the showground at every 2027 show. It costs £10 return, and you book it when you buy your show tickets. This might work well for your family if you would rather not drive.',
+      kd:[['Runs on','Every 2027 show'],['How often','Twice an hour on Saturdays'],['Get off at','Biggleswade',1],['Then','Shuttleworth shuttle bus, £10 return'],['From London','About 45 min'],['Run by','Thameslink']],
+      jr:'London St Pancras to Biggleswade, then the shuttle bus. These are Saturday times from the November 2026 timetable, so check again nearer the show.',
+      from:'London St Pancras',at:'Biggleswade',mid:'Thameslink, direct<br>45 min'}),
+    'rail-big':hero({to:'Biggleswade',board:'BIGGLESWADE',dep:'07:46',arr:'08:31',via:'From London St Pancras',
+      p:'This is the nearest station, 3 miles from Shuttleworth. Thameslink runs the trains on the line between London and Peterborough, and Great Northern adds a few peak time trains.',
+      kd:[['Runs on','Every day'],['How often','Twice an hour on Saturdays'],['Get off at','Biggleswade',1],['Then','Taxi, about 10 minutes'],['From London','About 45 min'],['Run by','Thameslink']],
+      jr:'London St Pancras to Biggleswade, direct. These are Saturday times from the November 2026 timetable, so check again nearer the show.',
+      from:'London St Pancras',at:'Biggleswade',mid:'Thameslink, direct<br>45 min'}),
+    'rail-bed':heroNT({to:'Bedford',board:'BEDFORD',via:'Thameslink and East Midlands Railway',
+      p:'Bedford is 9.5 miles from Shuttleworth, about 20 minutes by taxi. It’s served by Thameslink (to London, Gatwick and Brighton) and East Midlands Railway (to London St Pancras and Corby), and I would suggest it if you’re coming from the Midlands.',
+      kd:[['Distance','9.5 miles'],['Get off at','Bedford',1],['Then','Taxi, about 20 minutes'],['Run by','Thameslink, East Midlands Railway']],
+      jr:'You’ll find taxis waiting at the station. It’s a good idea to allow at least 30 minutes to get back to the station after the show, longer at busy times.',
+      from:'Bedford',fromNote:'Thameslink and East Midlands Railway',at:'Shuttleworth',atNote:'Old Warden, 9.5 miles',mid:'Taxi<br>about 20 minutes',
+      go:'<a class="trl-go" href="https://www.nationalrail.co.uk" target="_blank" rel="noopener"><span><b>Check your train on National Rail</b><small>Times to Bedford, and the way home</small></span><i aria-hidden="true">→</i></a>'})
+  };
+"""
+    # Bedford has no train times on the page, so its header shows the stations and legs without times (as Cosford's does)
+    NT = """  function heroNT(o){
+    return '<div class="trl-top"><div class="trl-hero"><div><span class="trl-tag">Train route</span><h3>Trains to <span>'+o.to+'</span></h3><p>'+o.p+'</p></div>'
+      +'<div><div class="trl-board" aria-label="Destination board"><b><span>'+o.board+'</span></b><small>'+o.via+'</small></div>'+kd(o.kd)+'</div></div>'
+      +'<div class="trl-jr"><div class="trl-jr-h"><b>Your journey</b><span>'+o.jr+'</span></div>'
+      +'<div class="trl-line"><div class="trl-stop"><i></i><b>'+o.from+'</b><small>'+o.fromNote+'</small></div><div class="trl-mid">'+o.mid+'</div><div class="trl-stop"><i></i><b>'+o.at+'</b><small>'+o.atNote+'</small></div></div></div>'
+      +(o.go||GO)+'</div>';
+  }
+"""
+    H = NT + H
+    trl = trl[:start] + H + trl[end:]
+    trl = trl.replace('id="trlScript-dux"', 'id="trlScript-shuttleworth"').replace("train-to-duxford", "train-to-shuttleworth")
+    trl = trl.replace("/* Train route header on the Duxford train topics", "/* Train route header on the Shuttleworth train topics, in the Duxford page's design")
+    assert "duxford" not in trl.split("*/", 1)[1].lower() and "Cambridge" not in trl, "train header text"
+    html = one(html, '<style id="op-colours">', trl + '\n<style id="op-colours">', "train header script")
+    return html
+
+
 def main():
     html = SRC.read_text(encoding="utf8")
     blobs = []
@@ -126,6 +280,7 @@ def main():
 
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
     html = restyle_text(html)
+    html = in_duxford_template(html)
 
     # head: fonts, and keep the preview out of search results
     html = html.replace("</head>", FONT_LINK + "\n</head>", 1)
@@ -169,6 +324,7 @@ def main():
     html = html[:end] + tail + html[end:]
 
     html = re.sub(r"@@BLOB(\d+)@@", lambda mm: blobs[int(mm.group(1))], html)
+    import sys as _ws_sys; _ws_sys.path.insert(0, str(ROOT / 'previews')); from wixsafe import wix_safe; html = wix_safe(html)   # so the styles also work inside the live site (see previews/wixsafe.py)
     OUT.write_text(html, encoding="utf8")
     print("wrote", OUT.relative_to(ROOT), "%.1f MB" % (len(html.encode("utf8")) / 1e6), "with", len(blobs), "embedded images")
 
