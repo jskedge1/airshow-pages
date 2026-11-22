@@ -11,6 +11,8 @@ Every section, script and data block of the live page is carried over untouched,
 line-up, topic explorer, planner, train and bus times and the rest keep working.
 
 Run:  python3 previews/blackpool-new-design-src/build.py
+Round 2 (22 Nov 2026, previews/NEW-DESIGN-ROLLOUT-2.md): round2.py first rebuilds the page in the Duxford template
+(Duxford's sections, order and blocks, Blackpool's own content), and the output is the preview only.
 Made from the Duxford build (previews/duxford-new-design-src/), the layout Jack signed off on 22 Nov 2026.
 The Duxford only text and photo fixes are left out. The photos on this page are by Chris Murgatroyd and
 keep his credit (the page's own cm-credit code is carried over unchanged; new-design.js adds the same
@@ -21,10 +23,13 @@ import pathlib
 import re
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import round2   # round 2: Blackpool in the Duxford template (see round2.py)
+
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
-OUT = ROOT / "camping-layout" / "blackpool.html"   # the live page
+OUT = ROOT / "previews" / "blackpool-new-design.html"   # round 2 preview only (the live page is put live by the parent session)
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
@@ -125,6 +130,7 @@ def main():
         return "@@BLOB%d@@" % (len(blobs) - 1)
 
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
+    html = round2.restructure(html)      # round 2: Duxford's sections and blocks, Blackpool's content
     # Chris Murgatroyd's photo credit (the cm-credit style block) is kept exactly as it is on the live page,
     # so it is left out of the font and letter spacing changes.
     CM = re.search(r"<style>\n/\* photographer credit: Chris Murgatroyd[^<]*</style>", html)
