@@ -104,6 +104,13 @@ def assemble(hc, dx):
     assert m2
     hc = hc[:m2.start()] + hero + hc[m2.start():]
 
+    # Jack's comment on the preview (22 Nov 2026), How arrival works: "remove the pic". The entry queue photo goes and
+    # step 2 reads as text like steps 1 and 3. The photo stays in the page, hidden, as other parts of the page use it.
+    m = re.search(r'<figure class="arrive-step arrive-photo">(<img class="photo" data-pic="queue_grass"[^>]*>)<figcaption><span class="arrive-n">2</span><b>The entry queue\.</b> (.*?)</figcaption></figure>', hc)
+    assert m, "entry queue photo"
+    img = m.group(1).replace("<img ", "<img hidden ", 1)
+    hc = hc[:m.start()] + '<div class="arrive-step"><span class="arrive-n">2</span><h3>The entry queue</h3><p>' + m.group(2) + '</p></div><div hidden style="display:none!important">' + img + '</div>' + hc[m.end():]
+
     # 4. left out: The Ground Show (no Flightline walk at Headcorn)
     hc = re.sub(r'\s*<button class="tab" role="tab" id="t-flightline"[^>]*>The Ground Show</button>', "", hc, count=1)
     m = re.search(r'<section class="panel" id="flightline".*?</section>\s*', hc, re.S)
