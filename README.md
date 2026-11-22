@@ -666,6 +666,15 @@ A home page for campsites near MOD Boscombe Down (and those still running around
 - The 20 collapsible sections are kept. Their bars run the full width of the page in navy with a coloured top edge (Jack, 20 Nov 2026). Getting there keeps its transport look for the topic explorer, tidied at the top: white background, the guide heading first, the rail banner below it and more room between the blocks (the small "UK Airshow Guide" strip is hidden there, as the logo is in the page header).
 - To go live: Jack to approve the look, then copy the built file over `camping-layout/duxford.html`, or point the build's `OUT` at it.
 
+### Southport Air Show in the new design (preview, 22 Nov 2026)
+
+`previews/southport-new-design.html` is the Southport feature page in the Duxford layout Jack signed off, built by `python3 previews/southport-new-design-src/build.py` from `camping-layout/southport.html` (not changed, not live). It follows `previews/NEW-DESIGN-ROLLOUT.md`. Differences from the Duxford source:
+- The live Southport page has no `<head>` or `<body>` tag of its own (the only ones sit inside the spotter's card script), so the build puts the font link and `NZ_PATH` just before the viewport line and the new top just before the page header (`#top`). Both are asserted.
+- Photos come from the page's own `window.PHOTO` list (formation, dakota, spitfire, typhoon, invader, jetpitts, stearman): Dakota beside the intro, Invader in the guide band, Typhoon on the Quick checker, Spitfire behind the line-up heading, Stearman behind the plan, and the Jet Pitts beside the Photography opening (Southport has no photo there; Duxford has its P-40).
+- Southport's Where to watch map has older markup (`#wwMaps`, `.ww-board`), so the Duxford map styles are widened to it and mapped across at the end of `new-design.css`.
+- 19 sections: no Flightline walk, Story or Experience flights; The Ground Show and Seafront Information come after Make a postcard. No photographers' map, so that code does nothing here.
+- Preview artifact: https://claude.ai/artifact/C253g9ig8xAJq1YtnGKKs6 (private).
+
 ## The Big Guide to RIAT (preview, 20 Nov 2026)
 
 `previews/big-guide-to-riat/` is a preview of a RIAT section with its own home page and pages inside it, in the camping pages' design. It is not live and has no Wix pages. The live RIAT page (`camping-layout/riat.html`) and the camping pages (`riat-camping/`) were not changed.
