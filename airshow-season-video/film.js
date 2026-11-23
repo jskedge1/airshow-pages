@@ -748,7 +748,7 @@ function sceneOutro(ctx, u, L, IMG) {
   sky(ctx, u); hills(ctx); ground(ctx);
   // three jets draw the logo swoosh: red, navy, teal
   const cols = [C.red, C.navy, C.teal];
-  const path = (q, k) => { const x = lerp(-200, W + 300, q); return [x, 200 + k * 30 - Math.sin(q * Math.PI) * 120 + (q - 0.5) * -60]; };
+  const path = (q, k) => { const x = lerp(-200, W + 300, q); return [x, 150 + k * 30 - Math.sin(q * Math.PI) * 110 + (q - 0.5) * -60]; };
   cols.forEach((col, k) => {
     const q = E.inOutSine(prog(L, -0.6 + k * 0.12, 4.2 + k * 0.12));
     ctx.beginPath(); for (let s = 0; s <= 60; s++) { const p = path((s / 60) * q, k); s ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
@@ -757,7 +757,7 @@ function sceneOutro(ctx, u, L, IMG) {
   });
   // logo lands
   const lk = pop(L, 3, SPRING.bouncy);
-  if (lk > 0 && IMG.logo) { const lw = 860, lh = lw * IMG.logo.height / IMG.logo.width; withT(ctx, W / 2, 400, lk, (1 - lk) * 0.2, () => { ctx.drawImage(IMG.logo, -lw / 2, -lh / 2, lw, lh); }); }
+  if (lk > 0 && IMG.logo) { const lw = 700, lh = lw * IMG.logo.height / IMG.logo.width; withT(ctx, W / 2, 335, lk, (1 - lk) * 0.2, () => { ctx.drawImage(IMG.logo, -lw / 2, -lh / 2, lw, lh); }); }
   const tk = E.outQuint(prog(L, 5, 5.8));
   ctx.save(); ctx.beginPath(); ctx.rect(0, 580, W * tk, 300); ctx.clip();
   text(ctx, 'Have a brilliant airshow season!', W / 2, 680, font(84, 800, DISPLAY), C.navy, 'center');
