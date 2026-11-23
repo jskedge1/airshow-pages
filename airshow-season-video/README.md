@@ -1,6 +1,7 @@
 # How to plan your airshow season: cartoon explainer video
 
 `plan-your-airshow-season.mp4`: 1920x1080, 60 fps, 1 min 58 s, with a soft lo-fi music bed and sound effects.
+`plan-your-airshow-season-tiktok.mp4`: the same film laid out for TikTok, Reels and Shorts (9:16, 1080x1920).
 
 Twelve steps, each a cartoon scene with a text box:
 1. Pick your shows (base or seafront)
