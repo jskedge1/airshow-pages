@@ -19,3 +19,7 @@
 |  8   |  8   |   8    |    8    |   9   |  9  |  8  |
 Sync: 87/88 hits within 20 ms, median 1.9 ms. Mix -14.1 LUFS, -1.2 dBTP.
 Verdict: READY
+
+## Round 4 (feedback: square boxes, real aircraft, copy)
+Square text boxes, badges, ticks, signs and URL bar; Red Arrows Hawk, Typhoon and A400M cut-outs replace the cartoon jets; every bullet fits on one line; 10 kit items in the bag scene.
+Sync: 93/95 hits within 20 ms, median 1.5 ms.
