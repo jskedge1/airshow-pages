@@ -202,16 +202,16 @@ def travel(p):
     p.rep("'<div class=\"xd-kp-h\"><span style=\"background:none;color:inherit;padding:0;font-size:inherit;font-family:inherit\">Key places</span>' + (place ? '<span>' + esc(place) + '</span>' : '') + '</div>'",
           "'<div class=\"xd-kp-h\"><span style=\"background:none;color:inherit;padding:0;font-size:inherit;font-family:inherit\">Key places</span></div>'")
     train_header(p)
-    # Jack, 22 Nov 2026 (rollout brief, 20:15 and 20:30): every page gets Compare driving options (#cdo), the car parks
-    # board (#cpk) and the Fares and save money board (#tpFares), each from the show's own facts. Little Gransden has
-    # one car park on site with no price, and no transport fares on its page, so none of the three fits. The jump strip's
-    # Fares button and its On the day and getting home button point at blocks the page does not have (.pbx is not on
-    # Duxford either), so they go rather than stay as dead buttons.
+    # Jack, 22 Nov 2026 (rollout brief, 20:15): every page gets Compare driving options (#cdo) and the car parks board
+    # (#cpk) from the show's own facts. Little Gransden has one car park on site with no price, so neither fits.
+    # Jack, 22 Nov 2026, 21:43: "add back the fare section on all pages", so the Fares and save money board is in
+    # (fares(), below), as on Duxford: Ways in, Fares, Questions in the jump strip. The On the day and getting home
+    # button pointed at .pbx, which neither Gransden nor Duxford has, so it stays out (Duxford dropped it too).
     p.rep("var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
-          "var JUMPS = [['Ways in', '#explore'], ['Questions', '#travel .acc']];")
+          "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];")
     LEFT_OUT.append("Getting there: Compare driving options (one car park on site, with no price on the page)")
-    LEFT_OUT.append("Getting there: the Fares and save money board and its hidden Ways in board (no train, bus, taxi, coach or parking prices on the page)")
-    LEFT_OUT.append("Getting there: the Fares and the On the day and getting home buttons in the jump strip (both pointed at blocks the page does not have)")
+    LEFT_OUT.append("Getting there: the On the day and getting home button in the jump strip (it pointed at a block the page does not have, as on Duxford)")
+    fares(p)
     LEFT_OUT.append("Getting there: Duxford's parking block (permits, car parks and opening times). Little Gransden's live page has no parking block, and its parking is covered in the topics")
 
 
@@ -286,6 +286,70 @@ def train_header(p):
         assert tid in p.orig, tid
     p.TRL = TRL_JS   # added after trlStyle once that is ported (port_design)
     LEFT_OUT.append("Getting there, train topics: the example departure time on the route board and the leave and arrive times on the journey line (the Little Gransden page has no example train times)")
+
+
+# The Fares and save money board (Jack, 22 Nov 2026, 21:43: "add back the fare section on all pages"), in the same
+# markup and styles as Duxford's (the fares-board-css block is taken from Duxford's live-source.html), with Little
+# Gransden's own prices only, each checked against the page below. The page has no train, bus, coach or taxi prices,
+# so the More fares tabs are left out, as on Duxford and Cosford. It gives no parking charge either: its parking topic
+# says nothing was said about booking or a separate charge, so the tile says "On site" rather than Free or Included.
+FARES = """
+<div class="nss tp-fares" id="tpFares"><div class="nss-in" style="background:#E3F1F8;padding:0"><div class="nss-scr">
+<div class="nss-low">
+<div>
+<div class="nss-hd"><span class="nss-sq"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/></svg></span><div class="nss-bar"><b>Fares</b><span>Every price for getting to and parking at the show, in one place.</span></div></div>
+<div class="nss-fares">
+<a class="nss-pen" href="https://www.ukairshowguide.co.uk/airshow-public-transport" target="_top"><b>Plan my<br>journey</b><small>All transport options</small></a>
+<div>
+<p class="nss-sub">Show tickets <em>2027 prices</em></p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#E0592A"><i>Adult</i><span>Adult, 16 to 64<b>£33</b></span></div>
+<div class="nss-tile" style="--c:#E0592A"><i>Senior</i><span>Senior, 65 and over<b>£27</b></span></div>
+<div class="nss-tile" style="--c:#6950A1"><i>Child</i><span>Child, 5 to 15<b>£23</b></span></div>
+<div class="nss-tile" style="--c:#6950A1"><i>Child</i><span>Under 5s<b>Free</b></span></div>
+<div class="nss-tile" style="--c:#2BA84A"><i>Family</i><span>Family, 2 adults and 2 children<b>£100</b></span></div>
+<div class="nss-tile" style="--c:#C2255C"><i>Carer</i><span>Carer ticket, ID needed<b>£10</b></span></div>
+</div>
+<p class="nss-sub">Getting there and on the day</p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#13293C"><i>Car</i><span>Parking on the airfield<b>On site</b></span></div>
+<div class="nss-tile" style="--c:#44AED6;--i:#13293C"><i>Party</i><span>After Show Party, 2026<b>£20</b></span></div>
+</div>
+<p class="nss-small">A small booking fee is added to each ticket. When I last checked, nothing was said about booking or a separate charge for parking, so I&rsquo;d suggest you check the booking page.</p>
+</div>
+</div>
+</div>
+<div class="nss-disc">
+<div class="nss-hd"><span class="nss-sq" style="background:#6950A1;color:#fff">%</span><div class="nss-bar"><b>Save money</b></div></div>
+<div class="nss-dl">
+<div class="nss-dr"><b>Under 5s <span>| Free</span></b><p>Under 5s go free, so there&rsquo;s no ticket to buy for them.</p></div>
+<div class="nss-dr"><b>Family ticket <span>| £100</span></b><p>A family ticket covers 2 adults and 2 children.</p></div>
+<div class="nss-dr"><b>Carer ticket <span>| £10</span></b><p>A carer ticket is £10, with ID needed on entry.</p></div>
+<div class="nss-dr"><b>Book early</b><p>I would book early, as the booking page says the early bird prices end in August.</p></div>
+</div>
+</div>
+</div>
+</div></div></div>
+"""
+FARES_FACTS = ["an adult ticket (16 to 64) was £33, a senior (65 and over) £27, a child (5 to 15) £23 and a family ticket (2 adults and 2 children) £100, with under 5s free and a small booking fee on each ticket.",
+               "A carer ticket is £10, with ID needed on entry.",
+               "I would book early, as the booking page says the early bird prices end in August.",
+               "Parking is on site at the airfield and clearly signposted from the road. When I last checked, nothing was said about booking or a separate charge, so I’d suggest you check the booking page",
+               "In 2026 a separate evening ticket, £20 a person",
+               "2027 tickets are now on sale"]
+
+
+def fares(p):
+    for t in FARES_FACTS:
+        assert t in p.orig, t
+    dux = DUX.read_text(encoding="utf8")
+    m = re.search(r'<style id="fares-board-css">.*?</style>', dux, re.S)
+    assert m, "Duxford's fares board styles"
+    i = p.s.index('<section class="explore" id="explore"')
+    j = p.s.index("</section>", i) + len("</section>")
+    p.s = p.s[:j] + "\n" + m.group(0) + FARES + p.s[j:]
+    LEFT_OUT.append("Getting there, Fares board: the More fares tabs (train, bus, coach, taxi), as the Little Gransden page has no prices for them")
+    LEFT_OUT.append("Getting there, Fares board: a parking price (the page says nothing was said about a separate charge, so the tile says On site)")
 
 
 # 6. Aircraft line-up: Duxford has no "What flew in 2026" list under the line-up.
