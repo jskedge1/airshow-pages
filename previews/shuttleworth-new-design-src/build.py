@@ -119,6 +119,55 @@ def restyle_text(s):
 DUX_SRC = HERE.parent / "duxford-new-design-src" / "live-source.html"   # the Duxford page: the template
 
 
+# Getting there, Fares and save money board: Shuttleworth's own prices only (see step 8b)
+FARES = """
+<div class="nss tp-fares" id="tpFares"><div class="nss-in" style="background:#E3F1F8;padding:0"><div class="nss-scr">
+<div class="nss-low">
+<div>
+<div class="nss-hd"><span class="nss-sq"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/></svg></span><div class="nss-bar"><b>Fares</b><span>Every price for getting to and parking at the show, in one place.</span></div></div>
+<div class="nss-fares">
+<a class="nss-pen" href="https://www.ukairshowguide.co.uk/airshow-public-transport" target="_top"><b>Plan my<br>journey</b><small>All transport options</small></a>
+<div>
+<p class="nss-sub">Show tickets <em>Under 18s free at most shows</em></p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#E0592A"><i>Adult</i><span>Adult, from<b>&pound;35</b></span></div>
+<div class="nss-tile" style="--c:#6950A1"><i>Child</i><span>Under 18s<b>Free</b></span></div>
+<div class="nss-tile" style="--c:#C2255C"><i>Proms</i><span>Flying Proms, from<b>&pound;62.50</b></span></div>
+<div class="nss-tile" style="--c:#44AED6;--i:#13293C"><i>Child</i><span>Flying Proms, age 4 and over<b>&pound;22</b></span></div>
+</div>
+<p class="nss-sub">Getting there and parking</p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#2BA84A"><i>Car</i><span>Parking, every show<b>Free</b></span></div>
+<div class="nss-tile" style="--c:#13293C"><i>Bus</i><span>Shuttle bus from Biggleswade, return<b>&pound;10</b></span></div>
+</div>
+<p class="nss-sub">At the show</p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#6950A1"><i>Tour</i><span>Flightline tour, per person<b>&pound;17.50</b></span></div>
+<div class="nss-tile" style="--c:#2BA84A"><i>Tent</i><span>Camping, per pitch a night<b>&pound;27.50</b></span></div>
+</div>
+<p class="nss-small">The shuttle bus is &pound;10 return, booked with your show tickets. Parking is free at every 2027 show and you don&rsquo;t need to book it.</p>
+</div>
+</div>
+</div>
+<div class="nss-disc">
+<div class="nss-hd"><span class="nss-sq" style="background:#6950A1;color:#fff">%</span><div class="nss-bar"><b>Save money</b></div></div>
+<div class="nss-dl">
+<div class="nss-dr"><b>Under 18s <span>| Free</span></b><p>Under 18s go free at every show apart from the Flying Proms, where children aged 4 and over pay &pound;22.</p></div>
+<div class="nss-dr"><b>Parking <span>| Free</span></b><p>Parking is free at every 2027 show and you don&rsquo;t need to book it.</p></div>
+<div class="nss-dr"><b>Bring a picnic</b><p>You can bring your own food and drink, but please leave sharp knives and glass bottles at home.</p></div>
+</div>
+</div>
+</div>
+</div></div></div>
+"""
+# every price and line on the board, as the page has it (the build stops if one is not on the page)
+FARES_FACTS = ["From &pound;35, under 18s free at most shows", "Tickets are from £62.50, and children aged 4 and over pay £22.",
+               "Under 18s go free at every show apart from the Flying Proms, where children aged 4 and over pay &pound;22.",
+               "Parking is free at every 2027 show and you don't need to book it", "£10 return, booked with your show tickets",
+               "&pound;17.50 per person", "£27.50 per pitch, per night",
+               "You can bring your own food and drink, but please leave sharp knives and glass bottles at home."]
+
+
 def one(html, old, new, what):
     """Replace exactly one copy, or stop the build: a template step must never silently miss."""
     assert html.count(old) == 1, "%s: found %d times" % (what, html.count(old))
@@ -219,11 +268,19 @@ def in_duxford_template(html):
     ge_js = one(ge_js, "PICS[k]||'formation'", "PICS[k]||'static_line'", "tile default photo")
     html = one(html, '<style id="mobile-fit">', ge_css + "\n" + ge_js + '\n<style id="mobile-fit">', "tiles")   # where Duxford has them, before the overview layout script
 
-    # 8b. Getting there: no Fares and save money board (round 2 brief, 20:30). Shuttleworth's only transport prices
-    #     are the shuttle bus (£10 return) and free parking, both already on the car parks board, and the Train to
-    #     Shuttleworth page lists no fares. So the board is left out, and so is its dead "Fares" jump button.
+    # 8b. Getting there: the Fares and save money board (Jack, 22 Nov 2026, 21:43: "add back the fare section on all
+    #     pages"), in the Clacton board's design as Cosford has it (fares-board.css and .js), straight after Choose a
+    #     topic, with only Shuttleworth's own prices. Every price and line is checked against the page first. The page
+    #     has no train, bus, coach or taxi fares, so the More fares tabs are left out. "On the day and getting home"
+    #     is left off the jump strip: it points at a .pbx box that Shuttleworth's page doesn't have.
+    for fact in FARES_FACTS:
+        assert fact in html, "fares fact not on the page: " + fact
+    e = html.find('<section class="explore" id="explore"')
+    ee = html.find("</section>", e) + len("</section>")
+    assert e > 0 and ee > e, "choose a topic"
+    html = html[:ee] + "\n" + (HERE / "fares-board.css").read_text(encoding="utf8") + FARES + (HERE / "fares-board.js").read_text(encoding="utf8") + html[ee:]
     html = one(html, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];",
-               "var JUMPS = [['Ways in', '#explore'], ['Questions', '#travel .acc']];", "jump buttons")
+               "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];", "jump buttons")
     #     "On the day and getting home" goes too: it points at a .pbx box that Shuttleworth's page doesn't have.
 
     # 9. Getting there: the train route header on the train topics, Duxford's design, with Shuttleworth facts.
