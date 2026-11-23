@@ -705,5 +705,8 @@ using the Duxford page as the template (brief: `previews/NEW-DESIGN-ROLLOUT.md`)
   `html.nz body ...` or `html body ...` then match nothing on the live site, which is why the live pages showed the old
   page header under "Everything you need for the day" and did not match the previews. Every build now runs
   `previews/wixsafe.py` as its last step, which writes those rules in a form that works in both places and is exactly
-  as strong. Keep that step in any new build, and check a page on the live site, not only on its own, before saying
-  it matches. Round 2 (every page built in the Duxford template) is in `previews/NEW-DESIGN-ROLLOUT-2.md`.
+  as strong. The same step also adds a small script guard (STYLE_GUARD): the page's own scripts add some styles to
+  `document.head`, which on the live site is the Wix page's head, outside the guide; the guard moves those styles
+  into the guide's container once the site has made it. Keep that step in any new build, and check a page on the
+  live site, not only on its own, before saying it matches (for example with the site loading the new file in
+  place of the GitHub copy). Round 2 (every page built in the Duxford template) is in `previews/NEW-DESIGN-ROLLOUT-2.md`.
