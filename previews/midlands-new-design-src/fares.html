@@ -1,0 +1,212 @@
+<!-- Fares and Save money board (Jack, 22 Nov 2026: "add this to each page"), the Clacton round 2 board with the Midlands page's own 2027 parking prices (the only travel prices on the page). The hidden Ways in board above it is needed by its script. -->
+<!-- Show day travel screen (next service screen design, 8 Nov 2026) -->
+<style>
+.nss{max-width:1200px;margin:34px auto 8px;padding:0 24px;box-sizing:border-box;font-family:"Barlow",sans-serif;color:#0B0F14}
+.nss *{box-sizing:border-box}
+.nss-in{background:#0B1A27;padding:14px;box-shadow:0 18px 40px rgba(11,15,20,.3)}
+.nss-scr{background:#E3F1F8}
+.nss-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px 24px;padding:14px 22px}
+.nss-brand b{display:block;font-size:26px;line-height:28px;color:#13293C}
+.nss-brand b span{font-weight:400}
+.nss-brand small{display:block;font-size:15px;color:#13293C}
+.nss-days{display:flex;align-items:flex-end;gap:26px}
+.nss-day{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:14px;font-weight:500;color:#13293C}
+.nss-day svg{width:28px;height:28px;transform:rotate(45deg)}
+.nss-clock{display:flex;flex-direction:column;align-items:flex-end;margin-left:8px}
+.nss-clock b{font-size:34px;line-height:34px;color:#13293C;font-variant-numeric:tabular-nums}
+.nss-clock small{font-size:13px;font-weight:500;color:#13293C}
+.nss-band{background:#6950A1;color:#fff;padding:8px 22px;font-weight:600;font-size:30px;line-height:38px}
+.nss-row{all:unset;box-sizing:border-box;display:flex;align-items:stretch;width:100%;min-height:58px;cursor:pointer;background:#0B0F14;color:#fff;border-top:1px solid rgba(255,255,255,.14);transition:background .25s ease}
+.nss-row:hover{background:#1C3850}
+.nss-row:focus-visible{outline:3px solid #32B4AF;outline-offset:-3px}
+.nss-row[aria-selected="true"]{background:#E3F1F8;color:#13293C}
+.nss-n{width:64px;display:flex;align-items:center;justify-content:center;font-size:28px;transition:transform .25s ease}
+.nss-row:hover .nss-n{transform:translateX(4px)}
+.nss-badge{width:150px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;background:var(--c);color:var(--i,#fff)}
+.nss-dest{flex:1;display:flex;align-items:center;padding:0 20px;font-size:26px;min-width:0}
+.nss-note{display:flex;align-items:center;padding:0 16px;font-size:18px;color:#F2B705;text-align:right}
+.nss-row[aria-selected="true"] .nss-note{color:#8A6400}
+.nss-when{font-size:28px!important;width:70px!important}
+.nss-row[aria-selected="true"] .nss-when:after{content:"";}
+.nss-dest{font-size:22px}
+.nss-note{font-size:16px}
+.nss-in.nss-inband{background:transparent;padding:0;box-shadow:0 14px 34px rgba(6,40,61,.25)}
+.tp-fares .nss-low{padding:22px}
+.nss-when{width:160px;flex:none;display:flex;align-items:center;justify-content:flex-end;padding-right:22px;font-size:20px}
+.nss-call{background:#0B1A27;color:#fff;padding:9px 22px;font-size:19px;line-height:27px}
+.nss-call[hidden]{display:none}
+.nss-low{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px;padding:22px}
+.nss-hd{display:flex;align-items:stretch;margin-bottom:16px}
+.nss-sq{width:80px;flex:none;display:flex;align-items:center;justify-content:center;background:#44AED6;color:#13293C;font:800 40px/1 "Barlow",sans-serif}
+.nss-sq svg{width:40px;height:40px}
+.nss-bar{flex:1;display:flex;align-items:center;gap:20px;padding:8px 18px;background:#0B0F14;color:#fff}
+.nss-bar b{font:800 52px/54px "Barlow Condensed","Barlow",sans-serif;text-transform:uppercase}
+.nss-bar span{font-size:14px;line-height:19px;font-weight:600}
+.nss-fares{display:grid;grid-template-columns:190px minmax(0,1fr);gap:18px;align-items:start}
+.nss-pen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;padding-bottom:34px;background:#44AED6;clip-path:polygon(0 0,100% 0,100% 78%,50% 100%,0 78%);text-decoration:none!important;color:#13293C!important;text-align:center;transition:transform .3s cubic-bezier(.2,.7,.2,1),background .3s ease}
+.nss-pen:hover{transform:translateY(-3px);background:#2F9CC6}
+.nss-pen b{font:800 30px/30px "Barlow Condensed","Barlow",sans-serif;text-transform:uppercase}
+.nss-pen small{font-size:13px;font-weight:600;margin-top:6px}
+.nss-sub{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;margin:0 0 10px;color:#13293C}
+.nss-sub em{font-style:normal;background:#44AED6;color:#13293C;font-size:12px;font-weight:700;padding:2px 7px}
+.nss-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.nss-tile{display:flex;align-items:center;gap:12px;background:#D7E4EC;padding:10px 12px;transition:transform .25s ease}
+.nss-tile:hover{transform:translateY(-2px)}
+.nss-tile i{flex:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:12px;background:var(--c);color:var(--i,#fff)}
+.nss-tile span{display:flex;flex-direction:column;font-size:13px;color:#13293C}
+.nss-tile span b{font-size:20px;line-height:24px}
+.nss-tile{background:#EEF2F5;background:color-mix(in srgb,var(--c) 14%,#FFFFFF)!important;border-left:5px solid var(--c);transition:transform .25s ease,background .25s ease}
+.nss-tile:hover{background:color-mix(in srgb,var(--c) 24%,#FFFFFF)!important}
+.nss-small{margin:0;font-size:13px;line-height:18px;color:#3E4A54}
+.nss-disc{background:#fff;display:flex;flex-direction:column}
+.nss-disc .nss-hd{margin:0}
+.nss-disc .nss-bar b{font-size:46px;line-height:50px}
+.nss-dl{padding:16px 18px;display:flex;flex-direction:column;gap:0}
+.nss-dr{padding:12px 0;border-top:1px solid #C6CDD2}
+.nss-dr:first-child{border-top:0;padding-top:0}
+.nss-dr b{display:block;font-size:22px;line-height:28px;color:#0B0F14}
+.nss-dr b span{font-weight:300}
+.nss-dr p{margin:2px 0 0!important;font-size:14px!important;line-height:20px!important;color:#3E4A54!important}
+@media(max-width:900px){.nss-low{grid-template-columns:minmax(0,1fr)}.nss-when{display:none}}
+@media(max-width:640px){.nss{padding:0 16px}.nss-in{padding:8px}.nss-days{gap:14px}.nss-clock b{font-size:26px}.nss-band{font-size:22px;line-height:30px;padding:8px 14px}.nss-n{width:40px;font-size:20px}.nss-badge{width:86px;font-size:16px}.nss-dest{font-size:18px;padding:0 12px}.nss-note{display:none}.nss-call{font-size:16px;line-height:23px;padding:8px 14px}.nss-low{padding:14px}.nss-fares{grid-template-columns:minmax(0,1fr)}.nss-pen{height:140px}.nss-bar b{font-size:38px;line-height:42px}.nss-bar span{display:none}.nss-tiles{grid-template-columns:minmax(0,1fr)}}
+.mf{background:#fff;margin:0 22px 22px}
+.mf-tabs{display:flex;flex-wrap:wrap;background:#0B0F14}
+.mf-tabs button{display:flex;align-items:center;gap:10px;padding:12px 18px;background:none;border:0;border-right:1px solid #22303C;color:#C9D3DA;font:700 15px/1 "Barlow",sans-serif;text-transform:uppercase;letter-spacing:.06em;cursor:pointer}
+.mf-tabs button i{font-style:normal;font-size:11px;letter-spacing:0;padding:4px 6px;background:var(--c);color:var(--t,#fff)}
+.mf-tabs button[aria-selected="true"]{background:#fff;color:#13293C}
+.mf-tabs button{position:relative;transition:background .25s ease,color .25s ease}
+.mf-tabs button:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:#44AED6;transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.mf-tabs button:hover{background:#18222C;color:#fff}
+.mf-tabs button:hover:after,.mf-tabs button[aria-selected="true"]:after{transform:scaleX(1)}
+.mf-tabs button[aria-selected="true"]:hover{background:#fff;color:#13293C}
+.mf-tabs button i{transition:transform .25s ease}
+.mf-tabs button:hover i{transform:translateY(-2px)}
+.mf-tabs button:focus-visible{outline:3px solid #44AED6;outline-offset:-3px}
+.mf-t{transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease}
+.mf-t:hover{border-color:#44AED6;transform:translateY(-3px);box-shadow:0 8px 18px rgba(19,41,60,.10)}
+.mf-st button{transition:background .2s ease}
+.mf-st button:hover{background:#44AED6;color:#13293C}
+@media(prefers-reduced-motion:reduce){.mf-tabs button:after,.mf-t,.mf-tabs button i{transition:none}.mf-t:hover{transform:none}}
+.mf-p{padding:20px 22px}
+.mf-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.mf-t{border:1px solid #D3DCE2;border-top:4px solid #44AED6;padding:12px 14px;display:flex;flex-direction:column}
+.mf-t small{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5A6873}
+.mf-t b{font:800 34px/40px "Barlow Condensed","Barlow",sans-serif;color:#13293C}
+.mf-t b sup{font:600 12px/1 "Barlow",sans-serif;margin-left:4px;vertical-align:top;position:relative;top:8px;text-transform:uppercase}
+.mf-t span{font-size:13px;color:#3E4A54}
+.mf-l{margin:16px 0 0;padding:0;list-style:none}
+.mf-l li{position:relative;padding:0 0 8px 26px;font-size:15px;line-height:22px;color:#13293C}
+.mf-l li:before{content:"";position:absolute;left:2px;top:5px;width:8px;height:8px;border:3px solid #44AED6;border-radius:50%}
+.mf-calc{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.mf-st{display:flex;align-items:center;border:1px solid #D3DCE2}
+.mf-st span{padding:0 14px;font-weight:700;color:#13293C}
+.mf-st button{width:42px;height:42px;border:0;background:#13293C;color:#fff;font-size:22px;cursor:pointer}
+.mf-st b{width:44px;text-align:center;font:800 24px "Barlow Condensed",sans-serif;color:#13293C}
+.mf-bar{display:grid;grid-template-columns:170px minmax(0,1fr) 80px;align-items:center;gap:12px;margin-bottom:8px;font-weight:700;color:#13293C}
+.mf-bar div{height:30px;background:#E3F1F8}
+.mf-bar div i{display:block;height:100%;background:var(--c);transition:width .4s ease}
+.mf-bar b{font:800 24px "Barlow Condensed",sans-serif;text-align:right}
+.mf-bar.best b:after{content:" best";font:700 11px "Barlow",sans-serif;text-transform:uppercase;color:#2BA84A}
+.mf-n{margin:10px 0 0;font-size:13px;color:#3E4A54}
+@media(max-width:900px){.mf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.mf{margin:0 14px 14px}.mf-tabs button{flex:1 1 50%;padding:10px 12px;font-size:13px}.mf-p{padding:14px}.mf-bar{grid-template-columns:110px minmax(0,1fr) 64px;font-size:13px}.mf-t b{font-size:28px;line-height:32px}}
+@media(prefers-reduced-motion:reduce){.nss-row,.nss-n,.nss-pen,.nss-tile{transition:none}.nss-pen:hover,.nss-tile:hover{transform:none}}
+</style>
+<div class="nss">
+<div class="nss-in"><div class="nss-scr">
+<div class="nss-top">
+<div class="nss-brand"><b>Ways in</b><small>Midlands Air Festival, <b style="display:inline;font-size:15px">pick one to see the details</b></small></div>
+<div class="nss-days">
+<div class="nss-day">Friday<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#13293C" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>4 Jun</div>
+<div class="nss-day">Saturday<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#13293C" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>5 Jun</div>
+<div class="nss-day">Sunday<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#13293C" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>6 Jun</div>
+<div class="nss-clock"><b id="nssClock">--:--</b><small>2027 show days</small></div>
+</div>
+</div>
+<div class="nss-band">Choose how you are getting there</div>
+<div class="nss-rows" id="nssRows" role="listbox" aria-label="Ways to get to the show"></div>
+</div></div>
+</div>
+<div class="nss tp-fares" id="tpFares"><div class="nss-in" style="background:#E3F1F8;padding:0"><div class="nss-scr">
+<div class="nss-low">
+<div>
+<div class="nss-hd"><span class="nss-sq"><svg viewBox="0 0 24 24" fill="none" stroke="#13293C" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/></svg></span><div class="nss-bar"><b>Fares</b><span>Every price for getting to and parking at the show, in one place.</span></div></div>
+<div class="nss-fares">
+<a class="nss-pen" href="https://www.ukairshowguide.co.uk/airshow-public-transport" target="_top"><b>Plan my<br>journey</b><small>All transport options</small></a>
+<div>
+<p class="nss-sub">Festival parking</p>
+<div class="nss-tiles">
+<div class="nss-tile" style="--c:#13293C"><i>P</i><span>Standard parking<b>Free</b></span></div>
+<div class="nss-tile" style="--c:#2BA84A"><i>P</i><span>Premium parking, a day<b>£9.97</b></span></div>
+<div class="nss-tile" style="--c:#00A6E2"><i>P</i><span>Disabled parking<b>Free</b></span></div>
+</div>
+<p class="nss-small">Premium and disabled parking are both chosen when you book your tickets. Premium is a price per day. These are the 2027 prices, so I would check them again before you go.</p>
+</div>
+</div>
+</div>
+<div class="nss-disc">
+<div class="nss-hd"><span class="nss-sq" style="background:#6950A1;color:#fff">%</span><div class="nss-bar"><b>Save money</b></div></div>
+<div class="nss-dl">
+<div class="nss-dr"><b>Standard parking <span>| Free</span></b><p>Standard parking is free and included with your ticket.</p></div>
+<div class="nss-dr"><b>Children 12 and under <span>| Free</span></b><p>For 2027, children 12 and under go free.</p></div>
+</div>
+</div>
+</div>
+</div></div>
+</div>
+<script>
+(function(){
+  var root=document.querySelector('.nss'); if(!root) return;
+  var MODE={'Park and Ride':['P+R','#2BA84A','#fff'],'By train':['Train','#D74949','#fff'],'By bus':['Bus','#00A6E2','#13293C'],'By coach':['Coach','#C2255C','#fff'],'By road':['Road','#F2B233','#13293C'],'Access & taxis':['Taxi','#6950A1','#fff']};
+  function tick(){ var d=new Date(),c=root.querySelector('#nssClock'); if(c) c.textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+  tick(); setInterval(tick,20000);
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function build(){
+    var pl=document.getElementById('parkList'), box=root.querySelector('#nssRows');
+    if(!pl||!pl.querySelector('button')) return false;
+    var g=null,n=0,html='';
+    [].forEach.call(pl.children,function(el){
+      if(el.tagName!=='BUTTON'){ g=MODE[el.textContent.trim()]||['Info','#13293C','#fff']; return; }
+      var sm=el.querySelector('small'), sub=sm?sm.textContent:'', name=el.querySelector('span')?el.querySelector('span').firstChild.textContent:el.textContent;
+      n++;
+      html+='<button type="button" class="nss-row" role="option" aria-selected="false" data-id="'+el.dataset.id+'" style="--c:'+g[1]+';--i:'+g[2]+'"><span class="nss-n">'+n+'</span><span class="nss-badge">'+g[0]+'</span><span class="nss-dest">'+esc(name.trim())+'</span><span class="nss-note">'+esc(sub)+'</span><span class="nss-when" aria-hidden="true">&rsaquo;</span></button>';
+    });
+    box.innerHTML=html;
+    mark();
+    return true;
+  }
+  function mark(){
+    var pl=document.getElementById('parkList'), cur=pl&&pl.querySelector('button[aria-pressed="true"]');
+    var id=cur?cur.dataset.id:null;
+    root.querySelectorAll('.nss-row').forEach(function(r){ r.setAttribute('aria-selected',String(r.dataset.id===id)); });
+  }
+  root.addEventListener('click',function(e){
+    var r=e.target.closest('.nss-row'); if(!r) return;
+    var b=document.querySelector('#parkList button[data-id="'+r.dataset.id+'"]'); if(b) b.click();
+    setTimeout(mark,30);
+    var card=document.querySelector('#travel .xd-card');
+    if(card){ setTimeout(function(){ var y=card.getBoundingClientRect().top+pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); },60); }
+  });
+  var tries=0; (function wait(){ if(build()) { var pl=document.getElementById('parkList'); new MutationObserver(mark).observe(pl,{attributes:true,subtree:true,attributeFilter:['aria-pressed']}); return; } if(++tries<80) setTimeout(wait,150); })();
+})();
+(function(){
+  var b=document.getElementById('mfBox'); if(!b) return;
+  b.querySelector('.mf-tabs').addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;
+    b.querySelectorAll('.mf-tabs button').forEach(function(x){x.setAttribute('aria-selected',String(x===t));});
+    b.querySelectorAll('.mf-p').forEach(function(p){p.hidden=p.dataset.p!==t.dataset.p;});});
+  var n={a:2,c:2};
+  function calc(){
+    if(!document.getElementById('mfBars')) return;
+    var a=n.a,c=n.c,ppl=a+c;
+    var pr=a*6+c*5;
+    var full=a*11.3+c*5.65, rc=(a&&c&&a<=4)?(a*11.3*2/3+c*5.65*0.4):full, tr=Math.min(full,rc)+ (a+c?0:0);
+    var dr=Math.max(1,Math.ceil(ppl/5))*10;
+    var rows=[['Park and Ride',pr,'#2BA84A'],['Train',tr,'#D70428'],['Drive and park',dr,'#13293C']];
+    var mx=Math.max.apply(null,rows.map(function(r){return r[1];}))||1, mn=Math.min.apply(null,rows.map(function(r){return r[1];}));
+    document.getElementById('mfA').textContent=a; document.getElementById('mfC').textContent=c;
+    document.getElementById('mfBars').innerHTML=rows.map(function(r){return '<div class="mf-bar'+(r[1]===mn&&ppl?' best':'')+'" style="--c:'+r[2]+'"><span>'+r[0]+'</span><div><i style="width:'+(ppl?r[1]/mx*100:0)+'%"></i></div><b>£'+(Math.round(r[1]*100)/100).toFixed(r[1]%1?2:0)+'</b></div>';}).join('');
+  }
+  b.addEventListener('click',function(e){var t=e.target.closest('.mf-st button');if(!t)return;var k=t.dataset.k;n[k]=Math.max(k==='a'?1:0,Math.min(12,n[k]+ +t.dataset.d));calc();});
+  calc();
+})();
+</script>

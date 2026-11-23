@@ -11,6 +11,8 @@ Every section, script and data block of the live page is carried over untouched,
 line-up, topic explorer, planner, train and bus times and the rest keep working.
 
 Run:  python3 previews/blackpool-new-design-src/build.py
+Round 2 (22 Nov 2026, previews/NEW-DESIGN-ROLLOUT-2.md): round2.py first rebuilds the page in the Duxford template
+(Duxford's sections, order and blocks, Blackpool's own content), and the output is the preview only.
 Made from the Duxford build (previews/duxford-new-design-src/), the layout Jack signed off on 22 Nov 2026.
 The Duxford only text and photo fixes are left out. The photos on this page are by Chris Murgatroyd and
 keep his credit (the page's own cm-credit code is carried over unchanged; new-design.js adds the same
@@ -20,6 +22,9 @@ The live page is never changed. Rebuild after the live page changes to pick the 
 import pathlib
 import re
 import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import round2   # round 2: Blackpool in the Duxford template (see round2.py)
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
@@ -62,6 +67,9 @@ FRAME_CHECK = (
     'html body .qs li{background:#F3F6F8!important;border:0!important;border-top:5px solid var(--sc,#32B4AF)!important;border-left:0!important;box-shadow:none!important;border-radius:0!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}'
     'html body .qs li:hover{background:#fff!important;transform:translateY(-4px);box-shadow:0 22px 34px -24px rgba(11,26,39,.5)!important}'
     'html body .qs li .sn{display:none!important}'
+    # with the number hidden, the question must span the whole box (on phones it was squeezed into the 44px number column)
+    'html body .qs li .q{grid-column:1/-1!important}'
+    'html body .qs li::before{display:none!important}html body .qs li .q{border-left:0!important;padding-left:20px!important}'
     'html body .qs .q legend{font:700 21px/1.25 "Barlow",sans-serif!important;color:#13293C!important}'
     'html body .qs .q legend span{display:block!important;font:700 15.5px/1.2 "Barlow",sans-serif!important;color:var(--sc,#0E5F5B)!important;margin-bottom:5px!important;text-transform:none!important;letter-spacing:0!important;filter:brightness(.8)}'
     'html body .qs .q legend small{display:block!important;font:400 15.5px/1.45 "Barlow",sans-serif!important;color:#4A5A66!important;margin-top:4px!important}'
@@ -125,6 +133,7 @@ def main():
         return "@@BLOB%d@@" % (len(blobs) - 1)
 
     html = BLOB.sub(keep, html)          # keep the embedded photos out of the text edits
+    html = round2.restructure(html)      # round 2: Duxford's sections and blocks, Blackpool's content
     # Chris Murgatroyd's photo credit (the cm-credit style block) is kept exactly as it is on the live page,
     # so it is left out of the font and letter spacing changes.
     CM = re.search(r"<style>\n/\* photographer credit: Chris Murgatroyd[^<]*</style>", html)
@@ -176,6 +185,7 @@ def main():
     html = html[:end] + tail + html[end:]
 
     html = re.sub(r"@@BLOB(\d+)@@", lambda mm: blobs[int(mm.group(1))], html)
+    import sys as _ws_sys; _ws_sys.path.insert(0, str(ROOT / 'previews')); from wixsafe import wix_safe; html = wix_safe(html)   # so the styles also work inside the live site (see previews/wixsafe.py)
     OUT.write_text(html, encoding="utf8")
     print("wrote", OUT.relative_to(ROOT), "%.1f MB" % (len(html.encode("utf8")) / 1e6), "with", len(blobs), "embedded images")
 
