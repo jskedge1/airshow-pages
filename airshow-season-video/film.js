@@ -14,7 +14,14 @@ const C = {
 };
 const DISPLAY = 'Display', UI = 'UI';
 const LW = 6;               // cartoon outline width
-const GY = 905;             // ground line
+const GY = 905;             // ground line (stage)
+// Scenes are drawn on a 1920x1080 stage. 16:9 shows the stage as is; 9:16 crops the art half of
+// the stage into the lower part of the frame and lays the text box out natively above it.
+const SW = 1920, SH = 1080;
+const PORTRAIT = M.FORMAT.portrait;
+const STAGE = { w: SW, h: SH, gy: GY }, PSURF = { w: W, h: H, gy: 1537 };
+let G = STAGE;              // the surface currently being drawn (helpers read it)
+function sfill(ctx, color) { ctx.fillStyle = color; ctx.fillRect(0, 0, G.w, G.h); }
 
 // ---------------------------------------------------------------- timeline (beats)
 const INTRO = 8, STEP = 12, NSTEP = 12, OUTRO = INTRO + STEP * NSTEP; // 152
@@ -195,36 +202,37 @@ function sun(ctx, x, y, r, u, face = true) {
   if (face) { ell(ctx, x - 22, y - 8, 6, 9, C.navy, 0); ell(ctx, x + 22, y - 8, 6, 9, C.navy, 0); ctx.beginPath(); ctx.arc(x, y + 8, 22, 0.2 * Math.PI, 0.8 * Math.PI); ink(ctx, 5); ctx.stroke(); }
 }
 function sky(ctx, u, top = C.sky, tint = null) {
-  fill(ctx, top);
+  sfill(ctx, top);
   // slow drifting background clouds (seeded)
   for (let k = 0; k < 5; k++) {
-    const sp = 6 + hash01(k, 3) * 8, x = ((hash01(k, 5) * (W + 600) + u * sp) % (W + 600)) - 300;
+    const sp = 6 + hash01(k, 3) * 8, x = ((hash01(k, 5) * (G.w + 600) + u * sp) % (G.w + 600)) - 300;
     cloud(ctx, x, 120 + hash01(k, 7) * 300, 0.6 + hash01(k, 11) * 0.5, tint || C.white);
   }
 }
 function ground(ctx, col = C.grass, col2 = C.grass2) {
-  ctx.fillStyle = col; ctx.fillRect(0, GY, W, H - GY);
-  ctx.fillStyle = col2; ctx.fillRect(0, GY, W, 10);
-  ink(ctx); ctx.beginPath(); ctx.moveTo(0, GY); ctx.lineTo(W, GY); ctx.stroke();
+  const gy = G.gy;
+  ctx.fillStyle = col; ctx.fillRect(0, gy, G.w, G.h - gy);
+  ctx.fillStyle = col2; ctx.fillRect(0, gy, G.w, 10);
+  ink(ctx); ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(G.w, gy); ctx.stroke();
 }
 function hills(ctx, col = '#B6DAA6') {
-  ctx.beginPath(); ctx.moveTo(0, GY);
-  for (let x = 0; x <= W; x += 40) ctx.lineTo(x, GY - 90 - Math.sin(x / 260) * 40 - Math.sin(x / 97 + 1) * 14);
-  ctx.lineTo(W, GY); ctx.closePath(); ctx.fillStyle = col; ctx.fill();
+  const gy = G.gy; ctx.beginPath(); ctx.moveTo(0, gy);
+  for (let x = 0; x <= G.w; x += 40) ctx.lineTo(x, gy - 90 - Math.sin(x / 260) * 40 - Math.sin(x / 97 + 1) * 14);
+  ctx.lineTo(G.w, gy); ctx.closePath(); ctx.fillStyle = col; ctx.fill();
 }
 function signText(ctx, str, x, y, size, color = C.white, weight = 800) { text(ctx, str, x, y, font(size, weight, DISPLAY), color, 'center'); }
 
 // ================================================================ text card
 function card(ctx, u, s, i) {
   const S = STEPS[i], side = i % 2 === 0 ? 'R' : 'L';
-  const cw = 880, pad = 50, x0 = side === 'R' ? W - 90 - cw : 90;
+  const cw = PORTRAIT ? 936 : 880, pad = 50, x0 = PORTRAIT ? 72 : side === 'R' ? SW - 90 - cw : 90;
   // measure
   const fTitle = font(Math.min(96, M.fitSize(ctx, S.title, 800, DISPLAY, cw - pad * 2 - 124, 96)), 800, DISPLAY);
   const fQ = font(46, 700, UI), fB = font(44, 600, UI);
   const bl = S.b.map((b) => wrap(ctx, b, fB, cw - pad * 2 - 76));
   const hB = bl.reduce((a, l) => a + l.length * 54 + 28, 0);
   const ch = pad + 96 + 62 + 30 + hB + pad - 28;
-  const y0 = Math.round((GY - 40 - ch) / 2 + 10);
+  const y0 = PORTRAIT ? 250 : Math.round((GY - 40 - ch) / 2 + 10);
   // entrance: slide in from its side with a little rotation, settle
   const k = pop(u, s + 0.25, SPRING.bouncy);
   if (k <= 0) return;
@@ -276,39 +284,49 @@ function card(ctx, u, s, i) {
   ctx.restore();
 }
 // art sits on the side opposite the card
-const artX = (i) => (i % 2 === 0 ? 0 : W - 980);
+const artX = (i) => (i % 2 === 0 ? 0 : SW - 980);
 
 // ================================================================ scenes
 // Each scene paints the full frame for local beat L (0..12+) of its step.
 
+// per-format layout for the intro and end card (they are drawn natively, not cropped)
+const LAY = PORTRAIT ? {
+  jetY: 330, jetS: 0.85, tag: [540, 500], x0: 72,
+  words: [[140, 700], [250, 930], [250, 1160]], ul: 1200, sub: 1270, subW: 940,
+  ppl: [[300, 1600, 0.8], [560, 1610, 0.8], [800, 1620, 0.8]],
+} : {
+  jetY: 150, jetS: 0.95, tag: [1540, 440], x0: 120,
+  words: [[140, 440], [230, 650], [230, 860]], ul: 902, sub: 1020, subW: 1000,
+  ppl: [[1290, GY + 40, 1], [1560, GY + 50, 1], [1760, GY + 60, 1]],
+};
 function sceneIntro(ctx, u) {
   sky(ctx, u);
   hills(ctx); ground(ctx);
   // Red Arrows trio, already mid-pass on frame 0, trailing red / white / blue smoke
   const jp = prog(u, -2.2, 7.5);
-  const P = (q, k) => [lerp(-300, W + 600, q) - k * 70, 150 + k * 46 - Math.sin(q * Math.PI) * 60];
+  const P = (q, k) => [lerp(-300, G.w + 600, q) - k * 70, LAY.jetY + k * 46 - Math.sin(q * Math.PI) * 60];
   const SM = ['#E8202A', '#FFFFFF', '#1D4FB7'];
   [1, 0, 2].forEach((k) => {
     const pts = []; for (let n = 1; n < 110; n++) { const q = jp - n * 0.0035; if (q < 0) break; const p = P(q, k); pts.push([p[0] - 140, p[1] + 14]); }
     if (k === 0) smoke(ctx, pts, '#B9C7D3', 13, 0.3, 0.6);
     smoke(ctx, pts, SM[k], 10, 0.3);
   });
-  [1, 0, 2].forEach((k) => { const p = P(jp, k), p2 = P(jp + 0.01, k); jet(ctx, p[0], p[1], 0.95, Math.atan2(p2[1] - p[1], p2[0] - p[0])); });
+  [1, 0, 2].forEach((k) => { const p = P(jp, k), p2 = P(jp + 0.01, k); jet(ctx, p[0], p[1], LAY.jetS, Math.atan2(p2[1] - p[1], p2[0] - p[0])); });
   // season tag (square corners)
   const tg = pop(u, 3.5, SPRING.bouncy);
-  if (tg > 0) withT(ctx, 1540, 440, tg, (1 - tg) * 0.3, () => {
+  if (tg > 0) withT(ctx, LAY.tag[0], LAY.tag[1], tg, (1 - tg) * 0.3, () => {
     ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(-330 + 10, -50 + 10, 660, 96);
     box(ctx, -330, -50, 660, 96, 0, C.red);
     text(ctx, 'THE 2027 SEASON IS COMING!', 0, 18, font(56, 800, DISPLAY), C.white, 'center');
   });
   // title, left side
-  const x0 = 120, words = [['PLAN YOUR', 0, C.navy, 140, 440], ['AIRSHOW', 1, C.navy, 230, 650], ['SEASON', 2, C.teal, 230, 860]];
+  const x0 = LAY.x0, words = [['PLAN YOUR', 0, C.navy], ['AIRSHOW', 1, C.navy], ['SEASON', 2, C.teal]].map((w, i) => [...w, ...LAY.words[i]]);
   for (const [w, ub, col, size, yb] of words) {
     const f = font(size, 800, DISPLAY), L = layout(ctx, w, f, 2);
     L.glyphs.forEach((g, j) => {
       const k = pop(u, ub - 0.45 + j * 0.04, SPRING.bouncy);
       if (k <= 0) return;
-      ctx.save(); ctx.beginPath(); ctx.rect(0, yb - size, W, size * 1.08); ctx.clip();
+      ctx.save(); ctx.beginPath(); ctx.rect(0, yb - size, G.w, size * 1.08); ctx.clip();
       M.glyph(ctx, g.ch, x0 + g.cx, yb + (1 - k) * size * 0.9, f, col, 1, 1);
       ctx.restore();
     });
@@ -316,21 +334,21 @@ function sceneIntro(ctx, u) {
   // underline swoosh in logo colours
   const sk = E.outCubic(prog(u, 2.8, 3.8));
   [[C.red, 0], [C.navy, 16], [C.teal, 32]].forEach(([col, o]) => {
-    ctx.beginPath(); ctx.moveTo(x0, 902 + o * 0.5);
-    ctx.quadraticCurveTo(x0 + 400, 922 + o, x0 + 820 * sk, 868 + o * 0.6);
+    const uy = LAY.ul; ctx.beginPath(); ctx.moveTo(x0, uy + o * 0.5);
+    ctx.quadraticCurveTo(x0 + 400, uy + 20 + o, x0 + 820 * sk, uy - 34 + o * 0.6);
     ctx.strokeStyle = col; ctx.lineWidth = 10; ctx.lineCap = 'round'; if (sk > 0) ctx.stroke();
   });
   const tk = E.outQuint(prog(u, 4.5, 5.3));
-  ctx.save(); ctx.beginPath(); ctx.rect(x0, 940, 1000 * tk, 120); ctx.clip();
-  text(ctx, '12 steps to a brilliant day out', x0 + 4, 1020, font(58, 700, UI), C.navy);
+  ctx.save(); ctx.beginPath(); ctx.rect(x0, LAY.sub - 80, LAY.subW * tk, 120); ctx.clip();
+  text(ctx, '12 steps to a brilliant day out', x0 + 4, LAY.sub, font(58, 700, UI), C.navy);
   ctx.restore();
   // characters looking up at the jet, pointing
-  const look = clamp((lerp(-300, W + 600, jp) - 1400) / 600, -1, 1);
+  const look = clamp((lerp(-300, G.w + 600, jp) - LAY.ppl[1][0]) / 600, -1, 1);
   const pt = pop(u, 0.5, SPRING.bouncy);
-  person(ctx, 'B', { x: 1290, y: GY + 40, look, lookY: -0.8, aR: [0.3 + 2.2 * pt, 0.1], aL: [-0.2, -0.2], blink: blinkAt(u, 2), mouth: 0.6 * bump(u, 1.5, 1.2) });
-  person(ctx, 'A', { x: 1560, y: GY + 50, look, lookY: -0.8, aL: [-0.3 - 2.4 * pop(u, 1.2), -0.2], aR: [0.2, 0.3], blink: blinkAt(u, 5), mouth: 0.5 });
+  person(ctx, 'B', { x: LAY.ppl[0][0], y: LAY.ppl[0][1], scale: LAY.ppl[0][2], look, lookY: -0.8, aR: [0.3 + 2.2 * pt, 0.1], aL: [-0.2, -0.2], blink: blinkAt(u, 2), mouth: 0.6 * bump(u, 1.5, 1.2) });
+  person(ctx, 'A', { x: LAY.ppl[1][0], y: LAY.ppl[1][1], scale: LAY.ppl[1][2], look, lookY: -0.8, aL: [-0.3 - 2.4 * pop(u, 1.2), -0.2], aR: [0.2, 0.3], blink: blinkAt(u, 5), mouth: 0.5 });
   const hop = Math.max(0, Math.sin(u * Math.PI)) * 40;
-  person(ctx, 'K', { x: 1760, y: GY + 60, hop, look: -0.4, lookY: -0.8, aL: [-2.6, 0], aR: [2.6, 0], squash: -0.04 * Math.sin(u * TAU), mouth: 0.7 });
+  person(ctx, 'K', { x: LAY.ppl[2][0], y: LAY.ppl[2][1], scale: LAY.ppl[2][2], hop, look: -0.4, lookY: -0.8, aL: [-2.6, 0], aR: [2.6, 0], squash: -0.04 * Math.sin(u * TAU), mouth: 0.7 });
 }
 
 // 1. base or seafront
@@ -350,7 +368,7 @@ function scenePick(ctx, u, L) {
     box(ctx, hx + 4, hy - 110, 72, 100, 4, col);
   });
   // base: hangar + tower + fence on the left
-  ctx.fillStyle = C.grass; ctx.fillRect(0, GY, W, H - GY);
+  ctx.fillStyle = C.grass; ctx.fillRect(0, GY, SW, SH - GY);
   ctx.beginPath(); ctx.moveTo(60, GY); ctx.lineTo(60, GY - 170); ctx.quadraticCurveTo(220, GY - 330, 380, GY - 170); ctx.lineTo(380, GY); ctx.closePath(); fs(ctx, C.grey);
   box(ctx, 140, GY - 140, 160, 140, 6, C.grey2);
   for (let k = 1; k < 4; k++) limb(ctx, [[140 + k * 40, GY - 136], [140 + k * 40, GY - 4]], 1, C.navy);
@@ -481,25 +499,25 @@ function sceneTravel(ctx, u, L) {
   sky(ctx, u); hills(ctx); ground(ctx);
   // railway on the hill line, road at the bottom
   const ry = GY - 20;
-  ctx.fillStyle = '#6E7F8D'; ctx.fillRect(0, ry, W, 8);
-  for (let x = 0; x < W; x += 40) { ctx.fillStyle = '#8C5D3A'; ctx.fillRect(x, ry + 6, 22, 10); }
-  ctx.fillStyle = '#5B6B78'; ctx.fillRect(0, GY + 40, W, 120);
-  for (let x = -((L * 80) % 160); x < W; x += 160) { ctx.fillStyle = C.white; ctx.fillRect(x, GY + 96, 80, 8); }
+  ctx.fillStyle = '#6E7F8D'; ctx.fillRect(0, ry, SW, 8);
+  for (let x = 0; x < SW; x += 40) { ctx.fillStyle = '#8C5D3A'; ctx.fillRect(x, ry + 6, 22, 10); }
+  ctx.fillStyle = '#5B6B78'; ctx.fillRect(0, GY + 40, SW, 120);
+  for (let x = -((L * 80) % 160); x < SW; x += 160) { ctx.fillStyle = C.white; ctx.fillRect(x, GY + 96, 80, 8); }
   // parking sign
   box(ctx, 1840, GY - 200, 14, 240, 4, C.grey2);
   box(ctx, 1790, GY - 300, 110, 110, 0, C.blue); signText(ctx, 'P', 1845, GY - 210, 90);
   // vehicles pass in turn
-  const tx = lerp(W + 200, -1100, E.inOutSine(prog(L, 2.5, 8.5)));
+  const tx = lerp(SW + 200, -1100, E.inOutSine(prog(L, 2.5, 8.5)));
   train(ctx, tx, ry);
-  const cxp = lerp(W + 300, -400, E.inOutSine(prog(L, 0.5, 5.5)));
+  const cxp = lerp(SW + 300, -400, E.inOutSine(prog(L, 0.5, 5.5)));
   car(ctx, cxp, GY + 150, C.red);
-  const bxp = lerp(W + 400, -500, E.inOutSine(prog(L, 5, 11.5)));
+  const bxp = lerp(SW + 400, -500, E.inOutSine(prog(L, 5, 11.5)));
   bus(ctx, bxp, GY + 160);
 }
 
 // 5. where to stay
 function sceneStay(ctx, u, L) {
-  fill(ctx, '#C7D5EA');
+  sfill(ctx, '#C7D5EA');
   for (let k = 0; k < 18; k++) { const sx = hash01(k, 21) * 960, sy = 60 + hash01(k, 22) * 360; const tw = 0.5 + 0.5 * Math.sin(u * 2 + k); puff(ctx, sx, sy, 3 + tw * 2, C.white, 0.9); }
   // moon
   circ(ctx, 820, 150, 60, '#FFF4C9', 5); circ(ctx, 846, 136, 50, '#C7D5EA', 0);
@@ -521,7 +539,7 @@ function sceneStay(ctx, u, L) {
   // kid peeks out of the tent
   const kp = pop(L, 5, SPRING.bouncy);
   if (kp > 0) {
-    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, GY + 10); ctx.clip();
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, SW, GY + 10); ctx.clip();
     person(ctx, 'K', { x: 300, y: GY + 10 + (1 - kp) * 200, look: 0.6, aR: [1.8 + 0.6 * Math.sin(L * 5), 0.4], blink: blinkAt(L, 8), mouth: 0.6 });
     ctx.restore();
   }
@@ -600,10 +618,10 @@ function sceneSpot(ctx, u, L) {
   hills(ctx); ground(ctx);
   const ax = artX(7);
   // runway strip behind
-  ctx.fillStyle = '#8D9CA8'; ctx.fillRect(0, GY - 70, W, 46); for (let x = 0; x < W; x += 120) { ctx.fillStyle = C.white; ctx.fillRect(x, GY - 50, 60, 6); }
+  ctx.fillStyle = '#8D9CA8'; ctx.fillRect(0, GY - 70, SW, 46); for (let x = 0; x < SW; x += 120) { ctx.fillStyle = C.white; ctx.fillRect(x, GY - 50, 60, 6); }
   // A400M lumbering across the background
   const aq = prog(L, 1, 13);
-  if (aq > 0 && aq < 1) jet(ctx, lerp(W + 300, -300, aq), 118 - aq * 20, 1.25, 0.03, 'a400', true);
+  if (aq > 0 && aq < 1) jet(ctx, lerp(SW + 300, -300, aq), 118 - aq * 20, 1.25, 0.03, 'a400', true);
   // gates-open clock
   const ck = pop(L, 0.3, SPRING.wobbly);
   withT(ctx, ax + 820, 400, Math.max(0.01, ck), 0, () => {
@@ -620,7 +638,7 @@ function sceneSpot(ctx, u, L) {
   }
   // A sprints in from the right, plants a chair at the front
   const rp = E.outCubic(prog(L, 0.4, 3));
-  const px = lerp(W + 150, ax + 420, rp), running = L < 3;
+  const px = lerp(SW + 150, ax + 420, rp), running = L < 3;
   // chair
   const chk = pop(L, 3, SPRING.bouncy);
   if (chk > 0) withT(ctx, ax + 560, GY + 110, 1, 0, () => { ctx.scale(1, chk); limb(ctx, [[-40, 0], [40, -130]], 8, C.navy); limb(ctx, [[40, 0], [-40, -130]], 8, C.navy); box(ctx, -60, -150, 120, 40, 10, C.teal); });
@@ -635,8 +653,8 @@ function sceneSpot(ctx, u, L) {
 // 9. weather
 function sceneWeather(ctx, u, L) {
   const rain = E.inOutSine(prog(L, 3.8, 5.2));
-  fill(ctx, mixc(C.sky, '#AFC0CF', rain));
-  for (let k = 0; k < 5; k++) { const sp = 6 + hash01(k, 3) * 8, x = ((hash01(k, 5) * (W + 600) + u * sp) % (W + 600)) - 300; cloud(ctx, x, 120 + hash01(k, 7) * 300, 0.6 + hash01(k, 11) * 0.5, mixc(C.white, '#DCE3EA', rain)); }
+  sfill(ctx, mixc(C.sky, '#AFC0CF', rain));
+  for (let k = 0; k < 5; k++) { const sp = 6 + hash01(k, 3) * 8, x = ((hash01(k, 5) * (SW + 600) + u * sp) % (SW + 600)) - 300; cloud(ctx, x, 120 + hash01(k, 7) * 300, 0.6 + hash01(k, 11) * 0.5, mixc(C.white, '#DCE3EA', rain)); }
   sun(ctx, 300, 230 - 0 * rain, 80, u, true);
   hills(ctx); ground(ctx);
   // rain cloud slides over the sun
@@ -691,7 +709,7 @@ function sceneEssentials(ctx, u, L) {
   });
   // kid tries the ear defenders at the end
   const kk = pop(L, 8, SPRING.bouncy);
-  if (kk > 0) person(ctx, 'K', { x: lerp(W + 120, bx + 250, kk), y: GY + 70, earDef: true, look: -0.6, aL: [-2.6, -0.2 + 0.4 * Math.sin(L * 6)], mouth: 0.7, blink: blinkAt(L, 21) });
+  if (kk > 0) person(ctx, 'K', { x: lerp(SW + 120, bx + 250, kk), y: GY + 70, earDef: true, look: -0.6, aL: [-2.6, -0.2 + 0.4 * Math.sin(L * 6)], mouth: 0.7, blink: blinkAt(L, 21) });
 }
 
 // 11. flying times
@@ -724,7 +742,7 @@ function sceneExit(ctx, u, L) {
   sky(ctx, u); hills(ctx); ground(ctx);
   const ax = artX(11);
   // road with queue of cars inching along
-  ctx.fillStyle = '#5B6B78'; ctx.fillRect(0, GY + 10, W, 90);
+  ctx.fillStyle = '#5B6B78'; ctx.fillRect(0, GY + 10, SW, 90);
   const inch = Math.floor(L * 1.5) * 10 + E.inOutCubic((L * 1.5) % 1) * 10;
   ctx.save(); ctx.translate(ax + 0, 0);
   ['#F28C9B', C.gold, C.blue, C.red, '#7FC4E8'].forEach((col, k) => { withT(ctx, 100 + k * 300 - 80 + inch, GY + 100, 0.7, 0, () => car(ctx, 0, 0, col)); });
@@ -756,7 +774,7 @@ function sceneOutro(ctx, u, L, IMG) {
   sky(ctx, u); hills(ctx); ground(ctx);
   // three jets draw the logo swoosh: red, navy, teal
   const cols = ['#E8202A', '#FFFFFF', '#1D4FB7'];
-  const path = (q, k) => { const x = lerp(-200, W + 300, q); return [x, 150 + k * 30 - Math.sin(q * Math.PI) * 110 + (q - 0.5) * -60]; };
+  const path = (q, k) => { const x = lerp(-200, G.w + 300, q); return [x, (PORTRAIT ? 330 : 150) + k * 30 - Math.sin(q * Math.PI) * 110 + (q - 0.5) * -60]; };
   cols.forEach((col, k) => {
     const q = E.inOutSine(prog(L, -0.6 + k * 0.12, 4.2 + k * 0.12));
     ctx.beginPath(); for (let s = 0; s <= 60; s++) { const p = path((s / 60) * q, k); s ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
@@ -765,18 +783,19 @@ function sceneOutro(ctx, u, L, IMG) {
   });
   // logo lands
   const lk = pop(L, 3, SPRING.bouncy);
-  if (lk > 0 && IMG.logo) { const lw = 700, lh = lw * IMG.logo.height / IMG.logo.width; withT(ctx, W / 2, 335, lk, (1 - lk) * 0.2, () => { ctx.drawImage(IMG.logo, -lw / 2, -lh / 2, lw, lh); }); }
+  if (lk > 0 && IMG.logo) { const lw = PORTRAIT ? 780 : 700, lh = lw * IMG.logo.height / IMG.logo.width; withT(ctx, G.w / 2, PORTRAIT ? 640 : 335, lk, (1 - lk) * 0.2, () => { ctx.drawImage(IMG.logo, -lw / 2, -lh / 2, lw, lh); }); }
   const tk = E.outQuint(prog(L, 5, 5.8));
-  ctx.save(); ctx.beginPath(); ctx.rect(0, 580, W * tk, 300); ctx.clip();
-  text(ctx, 'Have a brilliant airshow season!', W / 2, 680, font(84, 800, DISPLAY), C.navy, 'center');
+  ctx.save(); ctx.beginPath(); ctx.rect(0, PORTRAIT ? 880 : 580, G.w * tk, PORTRAIT ? 280 : 300); ctx.clip();
+  if (PORTRAIT) { text(ctx, 'Have a brilliant', G.w / 2, 990, font(104, 800, DISPLAY), C.navy, 'center'); text(ctx, 'airshow season!', G.w / 2, 1100, font(104, 800, DISPLAY), C.navy, 'center'); }
+  else text(ctx, 'Have a brilliant airshow season!', G.w / 2, 680, font(84, 800, DISPLAY), C.navy, 'center');
   ctx.restore();
   const uk = pop(L, 6.2, SPRING.snappy);
-  if (uk > 0) withT(ctx, W / 2, 790, uk, 0, () => { box(ctx, -330, -52, 660, 84, 0, C.teal); text(ctx, 'ukairshowguide.co.uk', 0, 10, font(50, 700, UI), C.white, 'center'); });
+  if (uk > 0) withT(ctx, G.w / 2, PORTRAIT ? 1220 : 790, uk, 0, () => { box(ctx, -330, -52, 660, 84, 0, C.teal); text(ctx, 'ukairshowguide.co.uk', 0, 10, font(50, 700, UI), C.white, 'center'); });
   // friends waving
   const wv = Math.sin(L * 5);
-  person(ctx, 'A', { x: 190, y: GY + 80, aR: [2.5 + wv * 0.3, 0.3], blink: blinkAt(L, 30), mouth: 0.6, look: 0.4 });
-  person(ctx, 'K', { x: 1580, y: GY + 90, hop: Math.max(0, Math.sin(L * Math.PI)) * 30, aL: [-2.6, 0], aR: [2.6, 0], mouth: 0.8, look: 0.3 });
-  person(ctx, 'B', { x: 1790, y: GY + 80, aL: [-2.5 - wv * 0.3, -0.3], blink: blinkAt(L, 31), mouth: 0.6, look: -0.4 });
+  person(ctx, 'A', { x: PORTRAIT ? 230 : 190, y: PORTRAIT ? 1640 : GY + 80, scale: PORTRAIT ? 0.85 : 1, aR: [2.5 + wv * 0.3, 0.3], blink: blinkAt(L, 30), mouth: 0.6, look: 0.4 });
+  person(ctx, 'K', { x: PORTRAIT ? 610 : 1580, y: PORTRAIT ? 1650 : GY + 90, scale: PORTRAIT ? 0.85 : 1, hop: Math.max(0, Math.sin(L * Math.PI)) * 30, aL: [-2.6, 0], aR: [2.6, 0], mouth: 0.8, look: 0.3 });
+  person(ctx, 'B', { x: PORTRAIT ? 840 : 1790, y: PORTRAIT ? 1640 : GY + 80, scale: PORTRAIT ? 0.85 : 1, aL: [-2.5 - wv * 0.3, -0.3], blink: blinkAt(L, 31), mouth: 0.6, look: -0.4 });
 }
 
 const SCENES = [scenePick, sceneBudget, sceneBook, sceneTravel, sceneStay, sceneFood, sceneCamera, sceneSpot, sceneWeather, sceneEssentials, sceneTimes, sceneExit];
@@ -789,6 +808,20 @@ function paint(ctx, n, u, IMG) {
   SCENES[n](ctx, u, u - s);
   card(ctx, u, s, n);
 }
+let STAGE_CV = null;
+function frameAt(ctx, n, u, IMG) {
+  if (!PORTRAIT) { G = STAGE; return paint(ctx, n, u, IMG); }
+  if (n < 0 || n >= NSTEP) { G = PSURF; return paint(ctx, n, u, IMG); }
+  if (!STAGE_CV) { STAGE_CV = document.createElement('canvas'); STAGE_CV.width = SW; STAGE_CV.height = SH; }
+  const sc = STAGE_CV.getContext('2d');
+  G = STAGE; sc.save(); sc.setTransform(1, 0, 0, 1, 0, 0); sc.lineCap = 'round'; SCENES[n](sc, u, u - st(n)); sc.restore();
+  G = PSURF;
+  const ax = artX(n), k = W / 980, dy = PSURF.gy - GY * k;
+  ctx.drawImage(STAGE_CV, ax, 0, 980, 3, 0, 0, W, dy + 2);          // sky above the art: stretch its top rows
+  ctx.drawImage(STAGE_CV, ax, 0, 980, SH, 0, dy, W, SH * k);
+  ctx.drawImage(STAGE_CV, ax, SH - 3, 980, 3, 0, dy + SH * k - 1, W, H);  // ground below
+  card(ctx, u, st(n), n);
+}
 const sceneAt = (u) => (u < INTRO ? -1 : u >= OUTRO ? NSTEP : Math.floor((u - INTRO) / STEP));
 
 // ---------------------------------------------------------------- jet wipe transition
@@ -798,13 +831,14 @@ function wipe(ctx, u, nNext, IMG) {
   const s = nNext >= NSTEP ? OUTRO : st(nNext);
   const p = E.inOutSine(prog(u, s - WIPE_A, s + WIPE_B));
   const edge = lerp(-260, W + 260, p);
-  paint(ctx, nNext - 1, u, IMG);
+  frameAt(ctx, nNext - 1, u, IMG);
   ctx.save();
   ctx.beginPath(); ctx.moveTo(-10, -10);
   for (let y = -10; y <= H + 10; y += 30) ctx.lineTo(edge + Math.sin(y / 90 + u * 4) * 36, y);
   ctx.lineTo(-10, H + 10); ctx.closePath(); ctx.clip();
-  paint(ctx, nNext, u, IMG);
+  frameAt(ctx, nNext, u, IMG);
   ctx.restore();
+  G = PORTRAIT ? PSURF : STAGE;
   // cloud curtain along the edge
   for (let k = 0; k < 14; k++) {
     const y = k * 84, x = edge + Math.sin(y / 90 + u * 4) * 36;
@@ -828,6 +862,6 @@ M.film({
       const s = n >= NSTEP ? OUTRO : st(n);
       if (u >= s - WIPE_A && u < s + WIPE_B) return wipe(ctx, u, n, IMG);
     }
-    paint(ctx, sceneAt(u), u, IMG);
+    frameAt(ctx, sceneAt(u), u, IMG);
   },
 });
