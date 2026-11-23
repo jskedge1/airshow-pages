@@ -37,3 +37,8 @@ The music is synthesized. To use a track instead, replace step 1 with
 `uv run <skill>/scripts/beats.py airshow-season-video --track your-song.mp3`. That measures the
 song's beat and writes a new `beats.json`. The scene timings are in beats, so they follow the new
 tempo. A slower or faster song changes the length of the video.
+
+## Saved as the "cartoon motion design" style
+
+This video is the approved reference for the UK Airshow Guide cartoon motion design. The house
+style, and how to start a new video in it, are in `.claude/skills/cartoon-motion-design/SKILL.md`.
