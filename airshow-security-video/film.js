@@ -33,7 +33,7 @@ const STEPS = [
   { title: 'Join the queue', q: 'Look for the right lane', b: ['Bag and no-bag lanes at big shows', 'Unzip your bag before the table', 'Queues peak at opening time'] },
   { title: 'Get your bag ready', q: 'Pack it in layers', b: ['Top: camera, batteries and meds', 'Middle: food in clear boxes', 'Bottom: coats and jumpers'] },
   { title: "What's in the bag?", q: "Check your show's own list", b: ['Fine: picnics, chairs, cameras', 'Check: alcohol, gazebos, ladders', 'Not allowed: knives, drones, BBQs'] },
-  { title: 'Into the search tent', q: 'X-ray scanner or hand search', b: ['Some big shows use X-ray scanners', 'Or a steward checks by hand', 'Chairs and cool boxes get checked'] },
+  { title: 'Into the search tent', q: 'X-ray scanner or hand search', b: ['Some big shows use X-ray scanners', 'Or a steward checks by hand', 'Chairs and trolleys get checked too'] },
   { title: 'Personal check', q: 'At some gates: arch or hand wand', b: ['More likely at military bases', 'Pockets into your bag first', 'You can ask for a same-sex search'] },
   { title: 'Ticket check', q: 'Once you are through the tents', b: ['Ticket ready on your phone', 'Screenshot it in case of no signal', 'Turn the screen brightness up'] },
   { title: "You're in!", q: 'Head for the crowd line', b: ['Save your front row pitch first', 'Then explore the static park', 'Agree a meet-up point'] },
