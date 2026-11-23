@@ -15,11 +15,9 @@ HERE = pathlib.Path(__file__).resolve().parent
 LEFT_OUT = [
     # old Blackpool sections Duxford does not have
     ("section", "The Ground Show (old Blackpool section, not on Duxford)"),
-    ("section", "Seafront Information (old Blackpool section, not on Duxford): the seafront map, tide chart, beach and sea wall boxes and seafront guide"),
     # old Blackpool blocks Duxford does not have
     ("block", "Food and facilities: the packing list boxes (Comfort, Family, Camera)"),
     ("block", "Pick your day: the four Away from the show cards are kept, but as a second list in Duxford's list style"),
-    ("block", "Help on show days: the closing link \"More in Seafront Information\", as that section has gone"),
     ("block", "Where to stay: the one line descriptions of the Booking.com, Airbnb and Visit Blackpool links (the links are now buttons in Duxford's search block)"),
     # Duxford sections and blocks Blackpool has no facts for
     ("duxford", "Flightline walk (Blackpool has no flightline walk)"),
@@ -73,13 +71,12 @@ def cut(s, start, end_marker, keep_end=False):
 
 def restructure(html):
     # ---- 1. sections: drop the two old Blackpool sections Duxford does not have --------------------------------
-    for pid, label in (("ground", "The Ground Show"), ("seafront", "Seafront Information")):
+    # Seafront Information stays, as an extra section at the end (Jack, 23 Nov 2026: "Can you add that back in")
+    for pid, label in (("ground", "The Ground Show"),):
         a, b = panel(html, pid)
         html = html[:a] + html[b:]
         html = re.sub(r'\s*<button class="tab" role="tab" id="t-%s"[^>]*>[^<]*</button>' % pid, "", html, count=1)
         assert 'id="t-%s"' % pid not in html
-    # the one in-page link that pointed at Seafront Information
-    html = rep(html, ' More in <button type="button" class="inlink" data-goto="seafront">Seafront Information</button>.', "")
 
     # ---- 2. Pick your day becomes the Duxford "Pick your show" section (id days), in Duxford's block order --------
     html = rep(html, '<button class="tab" role="tab" id="t-weekend" aria-controls="weekend" aria-selected="false" tabindex="-1">Pick Your Day</button>',
