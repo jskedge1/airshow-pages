@@ -22,18 +22,18 @@ const st = (i) => INTRO + STEP * i;  // start beat of step i (0-based)
 
 // ---------------------------------------------------------------- copy
 const STEPS = [
-  { title: 'Pick your shows', q: 'On base or on the seafront?', b: ['Base shows: hangars, static aircraft, tickets', 'Seafront shows: free to watch from the prom', 'Mix both for a full season'] },
-  { title: 'Set your budget', q: 'Free, or buying tickets?', b: ['Seafront shows are usually free', 'Base shows: grab early-bird tickets', 'Add parking, food and a programme'] },
+  { title: 'Pick your shows', q: 'On base or on the seafront?', b: ['Base: hangars and static aircraft', 'Seafront: watch from the beach', 'Mix both for a full season'] },
+  { title: 'Set your budget', q: 'Free, or buying tickets?', b: ['Seafront shows are usually free', 'Base shows: book early-bird tickets', 'Add parking, food and a programme'] },
   { title: 'Book early', q: 'Lock in your dates', b: ['Check for clashes between shows', 'Book the time off work', 'Early-bird deals sell out fast'] },
-  { title: 'Getting there', q: 'Car, train or shuttle bus?', b: ['Pre-book your parking', 'Check trains and shuttle buses', 'Allow extra time for queues'] },
-  { title: 'Where to stay', q: 'Staying over for the weekend?', b: ['Camp on site or nearby', 'Book rooms months ahead', 'Two-day show? Plan both days'] },
+  { title: 'Getting there', q: 'Car, train or shuttle bus?', b: ['Pre-book your parking', 'Check trains and shuttle buses', 'Allow extra time for the queues'] },
+  { title: 'Where to stay', q: 'Staying for the weekend?', b: ['Camp on site or nearby', 'Book rooms months ahead', 'Two-day show? Plan both days'] },
   { title: 'Food plan', q: 'Picnic or food stalls?', b: ['Pack a picnic to save money', 'Stalls get long queues at lunch', 'Bring plenty of water'] },
-  { title: 'Camera or just watching?', q: 'Decide what kind of day it is', b: ['Charge batteries, clear your cards', "Check the show's lens rules", 'Watching? Binoculars and a comfy chair'] },
-  { title: 'Pick your spot', q: 'Want the front row?', b: ['Arrive early, when the gates open', 'Sun behind you for better photos', 'Near the toilets and food is a bonus'] },
-  { title: 'Check the weather', q: 'Sun, rain or both?', b: ['Sun cream, hat and sunglasses', 'Pack a waterproof just in case', 'Airfields get windy: bring layers'] },
-  { title: 'Pack the essentials', q: "Don't leave home without", b: ['Ear defenders for little ones', 'Power bank and a bit of cash', 'Show map or app downloaded'] },
+  { title: 'Camera or just watching?', q: 'Decide what kind of day it is', b: ['Charge batteries, clear your cards', "Check the show's lens rules", 'Watching? Binoculars and a chair'] },
+  { title: 'Pick your spot', q: 'Want the front row?', b: ['Arrive early, when the gates open', 'Keep the sun behind you for photos', 'Near toilets and food is a bonus'] },
+  { title: 'Check the weather', q: 'Sun, rain or both?', b: ['Sun cream, hat and sunglasses', 'Pack a waterproof, just in case', 'Airfields get windy: bring layers'] },
+  { title: 'Pack the essentials', q: 'Your airshow bag checklist', b: ['Ear defenders for little ones', 'Power bank and some cash', 'Sun cream, water and snacks', 'Show map or app downloaded'] },
   { title: 'Know the flying times', q: "Don't miss the big displays", b: ['Get the programme or the app', 'Star your must-see displays', 'Times can change: keep checking'] },
-  { title: 'Plan your exit', q: 'Beat the traffic home', b: ['Leave before the finale, or wait it out', 'Know your route home', 'Agree a meet-up point'] },
+  { title: 'Plan your exit', q: 'Beat the traffic home', b: ['Leave early, or wait out the rush', 'Know your route home', 'Agree a meet-up point'] },
 ];
 
 // ---------------------------------------------------------------- hits (picture accents -> sfx)
@@ -42,14 +42,16 @@ const HITS = [
   [0.05, 'PLAN YOUR', 'pop', { pitch: 'F5', gain: 0.25 }],
   [1, 'AIRSHOW', 'pop', { pitch: 'A5', gain: 0.25 }],
   [2, 'SEASON', 'pop', { pitch: 'C6', gain: 0.25 }],
+  [3.5, 'season tag', 'pop', { pitch: 'F5', to: 'C6', gain: 0.2 }],
   [4.5, 'subtitle', 'bell', { pitch: 'F6', gain: 0.18 }],
 ];
 const PITCH = ['F5', 'A5', 'C6'];
+
 for (let i = 0; i < NSTEP; i++) {
   const s = st(i);
   HITS.push([s, `step ${i + 1} wipe`, 'whoosh', { len: 0.9, from: 500, to: 2200, gain: 0.2, pan: i % 2 ? -0.3 : 0.3 }]);
   HITS.push([s + 0.5, `step ${i + 1} card`, 'pop', { pitch: 'C5', to: 'F5', gain: 0.22 }]);
-  for (let j = 0; j < 3; j++) HITS.push([s + 2.5 + j * 2, `step ${i + 1} tick ${j + 1}`, 'blip', { pitch: PITCH[j], gain: 0.16 }]);
+  STEPS[i].b.forEach((_, j) => HITS.push([s + 2.5 + j * 2, `step ${i + 1} tick ${j + 1}`, 'blip', { pitch: PITCH[j % 3], gain: 0.16 }]));
 }
 // scene-specific accents
 HITS.push([st(1) + 1.5, 'coin 1', 'coins', { n: 3, gain: 0.16 }], [st(1) + 3, 'coin 2', 'coins', { n: 3, gain: 0.16 }], [st(1) + 4.5, 'coin 3', 'coins', { n: 3, gain: 0.16 }]);
@@ -59,7 +61,7 @@ HITS.push([st(4) + 1.5, 'tent pops', 'boing', { pitch: 'G4', to: 'D5', gain: 0.2
 for (const d of [2, 2.35, 2.7, 6.5, 6.85]) HITS.push([st(6) + d, 'shutter', 'click', { gain: 0.14 }]);
 HITS.push([st(7) + 3, 'chair down', 'thud', { gain: 0.25 }]);
 HITS.push([st(8) + 6, 'umbrella', 'boing', { pitch: 'E5', to: 'A5', gain: 0.18 }]);
-for (let k = 0; k < 5; k++) HITS.push([st(9) + 1 + k * 0.75, `item ${k + 1}`, 'pop', { pitch: ['F5', 'G5', 'A5', 'C6', 'D6'][k], gain: 0.15 }]);
+for (let k = 0; k < 10; k++) HITS.push([st(9) + 1 + k * 0.55, `item ${k + 1}`, 'pop', { pitch: ['F5', 'G5', 'A5', 'C6', 'D6'][k % 5], gain: 0.12 }]);
 HITS.push([st(10) + 3, 'clock settles', 'bell', { pitch: 'C6', gain: 0.14 }]);
 HITS.push([st(11) + 7, 'flag planted', 'thud', { gain: 0.25 }]);
 HITS.push([OUTRO, 'outro jets', 'whoosh', { len: 1.4, from: 300, to: 1800, gain: 0.25 }]);
@@ -158,31 +160,31 @@ function person(ctx, who, o) {
 const blinkAt = (u, seed) => { const per = 3 + hash01(seed) * 2, ph = ((u + hash01(seed + 9) * per) % per); return ph < 0.12; };
 
 // ---------------------------------------------------------------- props
+// Real aircraft cut-outs from the site: Red Arrows Hawk (body C.red), Typhoon (C.blue), A400M ('a400').
+let AC = {};
 function jet(ctx, x, y, s, rot, body = C.red, flip = false) {
-  withT(ctx, x, y, s, rot, () => {
-    if (flip) ctx.scale(-1, 1);
-    // far wing
-    ctx.beginPath(); ctx.moveTo(10, -6); ctx.lineTo(-40, -52); ctx.lineTo(-62, -52); ctx.lineTo(-30, -4); ctx.closePath(); fs(ctx, mixc(body, '#000000', 0.25));
-    // tail fin
-    ctx.beginPath(); ctx.moveTo(-86, -4); ctx.lineTo(-112, -50); ctx.lineTo(-94, -50); ctx.lineTo(-60, -8); ctx.closePath(); fs(ctx, body);
-    // fuselage
-    ctx.beginPath(); ctx.moveTo(-108, -12); ctx.quadraticCurveTo(-40, -26, 60, -18); ctx.quadraticCurveTo(112, -12, 120, 2); ctx.quadraticCurveTo(108, 14, 60, 16); ctx.lineTo(-104, 10); ctx.closePath(); fs(ctx, body);
-    // stripe
-    ctx.save(); ctx.clip(); ctx.fillStyle = C.white; ctx.fillRect(-120, 0, 260, 6); ctx.restore();
-    // canopy
-    ctx.beginPath(); ctx.ellipse(42, -18, 30, 13, -0.1, Math.PI, TAU); fs(ctx, '#BFE6F2', 5);
-    // near wing
-    ctx.beginPath(); ctx.moveTo(20, 4); ctx.lineTo(-34, 54); ctx.lineTo(-58, 54); ctx.lineTo(-28, 6); ctx.closePath(); fs(ctx, body);
-  });
+  const img = body === C.red ? AC.hawk : body === 'a400' ? AC.a400 : AC.typhoon;
+  if (!img) return;
+  const w = 320 * s, h = w * img.height / img.width;
+  withT(ctx, x, y, 1, rot, () => { if (flip) ctx.scale(-1, 1); ctx.drawImage(img, -w / 2, -h / 2, w, h); });
+}
+// top view, nose along heading (radians, canvas angle)
+function topJet(ctx, img, x, y, w, heading) {
+  if (!img) return; const h = w * img.height / img.width;
+  withT(ctx, x, y, 1, heading + Math.PI / 2, () => ctx.drawImage(img, -w / 2, -h / 2, w, h));
+}
+// Red Arrows smoke: a ribbon of puffs behind a point, coloured
+function smoke(ctx, pts, color, r0 = 10, grow = 1.2, a0 = 0.85) {
+  pts.forEach(([x, y], k) => { ctx.globalAlpha = Math.max(0, a0 * (1 - k / pts.length * 0.8)); ctx.beginPath(); ctx.arc(x, y, r0 + k * grow, 0, TAU); ctx.fillStyle = color; ctx.fill(); });
+  ctx.globalAlpha = 1;
 }
 function mixc(a, b, t) { return M.mix(a, b, t); }
 function puff(ctx, x, y, r, color = C.white, a = 1) { ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(x, y, Math.max(0.1, r), 0, TAU); ctx.fillStyle = color; ctx.fill(); ctx.globalAlpha = 1; }
 function cloud(ctx, x, y, s, color = C.white, outline = false) {
   withT(ctx, x, y, s, 0, () => {
-    ctx.beginPath();
-    ctx.arc(-60, 10, 42, 0, TAU); ctx.arc(-10, -14, 58, 0, TAU); ctx.arc(52, 4, 46, 0, TAU); ctx.arc(10, 22, 44, 0, TAU);
-    ctx.fillStyle = color; ctx.fill();
-    if (outline) { ink(ctx); ctx.stroke(); }
+    const blob = () => { ctx.beginPath(); for (const [cx, cy, r] of [[-60, 10, 42], [-10, -14, 58], [52, 4, 46], [10, 22, 44]]) { ctx.moveTo(cx + r, cy); ctx.arc(cx, cy, r, 0, TAU); } };
+    if (outline) { blob(); ink(ctx, LW * 2); ctx.stroke(); }
+    blob(); ctx.fillStyle = color; ctx.fill();
   });
 }
 function sun(ctx, x, y, r, u, face = true) {
@@ -230,13 +232,14 @@ function card(ctx, u, s, i) {
   ctx.save();
   ctx.translate(x0 + cw / 2 + dx, y0 + ch / 2); ctx.rotate(rot); ctx.translate(-(x0 + cw / 2), -(y0 + ch / 2));
   // hard cartoon shadow + card
-  rrect(ctx, x0 + 12, y0 + 14, cw, ch, 34); ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fill();
-  box(ctx, x0, y0, cw, ch, 34, C.white);
+  ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(x0 + 12, y0 + 14, cw, ch);
+  box(ctx, x0, y0, cw, ch, 0, C.white);
+  ctx.fillStyle = C.teal; ctx.fillRect(x0 + LW / 2, y0 + LW / 2, cw - LW, 12);
   // number badge
   const bk = pop(u, s + 0.6, SPRING.wobbly);
   const bx = x0 + pad + 46, by = y0 + pad + 44;
   withT(ctx, bx, by, Math.max(0.01, bk), (1 - bk) * -0.8, () => {
-    circ(ctx, 0, 0, 48, C.teal);
+    box(ctx, -46, -46, 92, 92, 0, C.navy);
     text(ctx, String(i + 1), 0, 22, font(64, 800, DISPLAY), C.white, 'center');
   });
   // title + question
@@ -255,7 +258,7 @@ function card(ctx, u, s, i) {
     const tk = pop(u, ub, SPRING.bouncy);
     if (tk > 0) {
       withT(ctx, x0 + pad + 24, y - 15, Math.max(0.01, tk), 0, () => {
-        circ(ctx, 0, 0, 25, C.teal, 4);
+        box(ctx, -23, -23, 46, 46, 0, C.teal, 4);
         const ck = E.outCubic(prog(u, ub + 0.1, ub + 0.5));
         ctx.beginPath(); ctx.moveTo(-10, 0); const p1 = [-3, 8], p2 = [11, -8];
         if (ck < 0.4) ctx.lineTo(lerp(-10, p1[0], ck / 0.4), lerp(0, p1[1], ck / 0.4));
@@ -281,26 +284,23 @@ const artX = (i) => (i % 2 === 0 ? 0 : W - 980);
 function sceneIntro(ctx, u) {
   sky(ctx, u);
   hills(ctx); ground(ctx);
-  // jet with banner, already mid-swoop on frame 0
-  const jp = prog(u, -2.2, 7.5), jx = lerp(-200, W + 700, jp), jy = 200 - Math.sin(jp * Math.PI) * 60;
-  const jr = -Math.cos(jp * Math.PI) * 0.12;
-  // smoke trail
-  for (let k = 0; k < 26; k++) {
-    const q = jp - k * 0.012; if (q < 0) break;
-    const tx = lerp(-200, W + 700, q) - 140, ty = 200 - Math.sin(q * Math.PI) * 60 + 6;
-    puff(ctx, tx, ty, 16 + k * 1.6, C.white, 0.9 - k * 0.03);
-  }
-  // banner on a rope behind the jet
-  const bwid = 560, bh = 84, bx = jx - 170 - bwid, by = jy + 30;
-  limb(ctx, [[jx - 100, jy + 6], [bx + bwid, by + bh / 2]], 2, C.navy);
-  ctx.save(); ctx.beginPath();
-  const wave = (x) => Math.sin(x / 70 - u * 5) * 8;
-  ctx.moveTo(bx, by + wave(0)); for (let x = 0; x <= bwid; x += 20) ctx.lineTo(bx + x, by + wave(x));
-  for (let x = bwid; x >= 0; x -= 20) ctx.lineTo(bx + x, by + bh + wave(x));
-  ctx.closePath(); fs(ctx, C.white); ctx.clip();
-  text(ctx, 'THE 2027 SEASON IS COMING!', bx + bwid / 2, by + 60, font(50, 800, DISPLAY), C.red, 'center');
-  ctx.restore();
-  jet(ctx, jx, jy, 1.3, jr);
+  // Red Arrows trio, already mid-pass on frame 0, trailing red / white / blue smoke
+  const jp = prog(u, -2.2, 7.5);
+  const P = (q, k) => [lerp(-300, W + 600, q) - k * 70, 150 + k * 46 - Math.sin(q * Math.PI) * 60];
+  const SM = ['#E8202A', '#FFFFFF', '#1D4FB7'];
+  [1, 0, 2].forEach((k) => {
+    const pts = []; for (let n = 1; n < 110; n++) { const q = jp - n * 0.0035; if (q < 0) break; const p = P(q, k); pts.push([p[0] - 140, p[1] + 14]); }
+    if (k === 0) smoke(ctx, pts, '#B9C7D3', 13, 0.3, 0.6);
+    smoke(ctx, pts, SM[k], 10, 0.3);
+  });
+  [1, 0, 2].forEach((k) => { const p = P(jp, k), p2 = P(jp + 0.01, k); jet(ctx, p[0], p[1], 0.95, Math.atan2(p2[1] - p[1], p2[0] - p[0])); });
+  // season tag (square corners)
+  const tg = pop(u, 3.5, SPRING.bouncy);
+  if (tg > 0) withT(ctx, 1540, 440, tg, (1 - tg) * 0.3, () => {
+    ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(-330 + 10, -50 + 10, 660, 96);
+    box(ctx, -330, -50, 660, 96, 0, C.red);
+    text(ctx, 'THE 2027 SEASON IS COMING!', 0, 18, font(56, 800, DISPLAY), C.white, 'center');
+  });
   // title, left side
   const x0 = 120, words = [['PLAN YOUR', 0, C.navy, 140, 440], ['AIRSHOW', 1, C.navy, 230, 650], ['SEASON', 2, C.teal, 230, 860]];
   for (const [w, ub, col, size, yb] of words) {
@@ -325,7 +325,7 @@ function sceneIntro(ctx, u) {
   text(ctx, '12 steps to a brilliant day out', x0 + 4, 1020, font(58, 700, UI), C.navy);
   ctx.restore();
   // characters looking up at the jet, pointing
-  const look = clamp((jx - 1400) / 600, -1, 1);
+  const look = clamp((lerp(-300, W + 600, jp) - 1400) / 600, -1, 1);
   const pt = pop(u, 0.5, SPRING.bouncy);
   person(ctx, 'B', { x: 1290, y: GY + 40, look, lookY: -0.8, aR: [0.3 + 2.2 * pt, 0.1], aL: [-0.2, -0.2], blink: blinkAt(u, 2), mouth: 0.6 * bump(u, 1.5, 1.2) });
   person(ctx, 'A', { x: 1560, y: GY + 50, look, lookY: -0.8, aL: [-0.3 - 2.4 * pop(u, 1.2), -0.2], aR: [0.2, 0.3], blink: blinkAt(u, 5), mouth: 0.5 });
@@ -370,7 +370,7 @@ function scenePick(ctx, u, L) {
     signText(ctx, 'SEAFRONT', 136, 18, 50);
   });
   // parked jet on the base apron
-  jet(ctx, 250, GY - 30, 0.8, 0, C.blue);
+  jet(ctx, 240, GY - 22, 0.95, 0, C.blue);
   // character choosing: looks left, then right
   const look = kf(L, [[1, 0], [2, -1], [4.5, -1], [5.5, 1], [8, 1], [9, 0]]);
   const pl = bump(L, 3.3, 1.6), pr = bump(L, 6.8, 1.6);
@@ -402,13 +402,13 @@ function sceneBudget(ctx, u, L) {
   // FREE bubble
   const fk = pop(L, 5.5, SPRING.wobbly);
   if (fk > 0) withT(ctx, ax + 230, GY - 470, fk, 0, () => {
-    ell(ctx, 0, 0, 120, 70, C.white); signText(ctx, 'FREE!', 0, 20, 64, C.tealD);
+    ctx.beginPath(); ctx.moveTo(-120, -60); ctx.lineTo(120, -60); ctx.lineTo(120, 50); ctx.lineTo(40, 50); ctx.lineTo(70, 100); ctx.lineTo(-10, 50); ctx.lineTo(-120, 50); ctx.closePath(); fs(ctx, C.white); signText(ctx, 'FREE!', 0, 20, 64, C.tealD);
   });
   // person with ticket
   const tf = pop(L, 7, SPRING.bouncy);
   person(ctx, 'B', { x: ax + 760, y: GY + 60, look: -0.6, aL: [-0.3 - 2.2 * tf, -0.6 * tf], blink: blinkAt(L, 4), mouth: 0.5 * bump(L, 7.5, 1.5),
     holdL: (c) => { if (tf <= 0) return; withT(c, -10, -60 * tf, tf, -0.2 + ring(L - 7) * 0.3, () => {
-      box(c, -100, -50, 200, 100, 12, C.gold); limb(c, [[40, -46], [40, 46]], 1, C.navy);
+      box(c, -100, -50, 200, 100, 0, C.gold); limb(c, [[40, -46], [40, 46]], 1, C.navy);
       text(c, 'TICKET', -30, 14, font(38, 800, DISPLAY), C.navy, 'center'); }); } });
 }
 const ring = M.ring;
@@ -418,8 +418,8 @@ function sceneBook(ctx, u, L) {
   sky(ctx, u); hills(ctx); ground(ctx);
   const cx = 110, cy = 210, cw = 560, chh = 620;
   // wall board
-  box(ctx, cx, cy, cw, chh, 20, C.white);
-  box(ctx, cx, cy, cw, 120, 20, C.red);
+  box(ctx, cx, cy, cw, chh, 0, C.white);
+  box(ctx, cx, cy, cw, 120, 0, C.red);
   ctx.fillStyle = C.red; ctx.fillRect(cx + 3, cy + 80, cw - 6, 40);
   ink(ctx); ctx.beginPath(); ctx.moveTo(cx, cy + 120); ctx.lineTo(cx + cw, cy + 120); ctx.stroke();
   const fp = prog(L, 0.6, 1.4);
@@ -430,7 +430,7 @@ function sceneBook(ctx, u, L) {
   for (let r = 0; r < 5; r++) for (let c = 0; c < 7; c++) {
     const n = r * 7 + c + 1; if (n > 31) continue;
     const x = gx + c * (cell + 4), y = gy + r * (cell + 18);
-    rrect(ctx, x, y, cell, cell + 8, 8); ctx.fillStyle = C.off; ctx.fill();
+    ctx.fillStyle = C.off; ctx.fillRect(x, y, cell, cell + 8);
     text(ctx, String(n), x + 10, y + 34, font(28, 700, UI), C.grey2);
   }
   // page flip (old page lifts away)
@@ -445,7 +445,7 @@ function sceneBook(ctx, u, L) {
     const x = gx + c * (cell + 4) + cell / 2, y = gy + r * (cell + 18) + cell / 2 + 4;
     if (k === 2) return;
     ctx.beginPath(); ctx.ellipse(x, y, 46, 44, -0.3, -1.4, -1.4 + TAU * 1.08 * q); ctx.strokeStyle = C.red; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.stroke();
-    const jk = pop(L, d + 0.6, SPRING.bouncy); if (jk > 0) jet(ctx, x + 6, y - 2, 0.22 * jk, -0.2, C.blue);
+    const jk = pop(L, d + 0.6, SPRING.bouncy); if (jk > 0) jet(ctx, x + 6, y - 2, 0.26 * jk, -0.15, C.red);
   });
   // person with a marker pointing at the dates
   const reach = kf(L, [[1.5, 0], [2.2, 1], [3, 0.7], [3.7, 1], [6.5, 1], [7.2, 1], [9, 0]]);
@@ -487,7 +487,7 @@ function sceneTravel(ctx, u, L) {
   for (let x = -((L * 80) % 160); x < W; x += 160) { ctx.fillStyle = C.white; ctx.fillRect(x, GY + 96, 80, 8); }
   // parking sign
   box(ctx, 1840, GY - 200, 14, 240, 4, C.grey2);
-  box(ctx, 1790, GY - 300, 110, 110, 16, C.blue); signText(ctx, 'P', 1845, GY - 210, 90);
+  box(ctx, 1790, GY - 300, 110, 110, 0, C.blue); signText(ctx, 'P', 1845, GY - 210, 90);
   // vehicles pass in turn
   const tx = lerp(W + 200, -1100, E.inOutSine(prog(L, 2.5, 8.5)));
   train(ctx, tx, ry);
@@ -506,7 +506,7 @@ function sceneStay(ctx, u, L) {
   hills(ctx, '#A9CE98'); ground(ctx);
   // hotel with windows lighting up
   box(ctx, 600, GY - 470, 300, 470, 10, C.blue);
-  box(ctx, 600, GY - 520, 300, 60, 10, C.navy, 0); signText(ctx, 'HOTEL', 750, GY - 474, 46, C.gold);
+  box(ctx, 600, GY - 520, 300, 60, 0, C.navy, 0); signText(ctx, 'HOTEL', 750, GY - 474, 46, C.gold);
   for (let r = 0; r < 5; r++) for (let c = 0; c < 3; c++) {
     const on = prog(L, 2 + (r * 3 + c) * 0.35, 2.2 + (r * 3 + c) * 0.35);
     box(ctx, 630 + c * 92, GY - 430 + r * 84, 62, 56, 6, mixc('#5E7FA8', C.gold, on), 4);
@@ -542,7 +542,7 @@ function sceneFood(ctx, u, L) {
   box(ctx, ax + 470, GY - 290, 300, 140, 10, C.navy);
   ctx.beginPath(); ctx.moveTo(ax + 450, GY - 296); ctx.lineTo(ax + 790, GY - 296); ctx.lineTo(ax + 810, GY - 250); ctx.lineTo(ax + 430, GY - 250); ctx.closePath(); fs(ctx, C.red);
   for (let k = 0; k < 6; k++) { ctx.fillStyle = C.white; ctx.fillRect(ax + 445 + k * 60, GY - 294, 28, 42); }
-  box(ctx, ax + 520, GY - 400, 200, 70, 14, C.gold); signText(ctx, 'FOOD', ax + 620, GY - 346, 56, C.navy);
+  box(ctx, ax + 520, GY - 400, 200, 70, 0, C.gold); signText(ctx, 'FOOD', ax + 620, GY - 346, 56, C.navy);
   circ(ctx, ax + 520, GY - 30, 36, C.navy, 0); circ(ctx, ax + 800, GY - 30, 36, C.navy, 0);
   // steam
   for (let k = 0; k < 4; k++) { const q = ((L * 0.5 + k * 0.25) % 1); puff(ctx, ax + 600 + Math.sin(q * 8 + k) * 20, GY - 410 - q * 160, 20 + q * 20, C.white, 0.8 * (1 - q)); }
@@ -571,8 +571,7 @@ function sceneCamera(ctx, u, L) {
   sky(ctx, u); hills(ctx); ground(ctx);
   // a jet crosses overhead for them to follow
   const jp = prog(L, 1, 9), jx = lerp(-200, 1100, jp), jy = 250 - Math.sin(jp * Math.PI) * 60;
-  for (let k = 0; k < 18; k++) { const q = jp - k * 0.014; if (q <= 0) break; puff(ctx, lerp(-200, 1100, q) - 110, 256 - Math.sin(q * Math.PI) * 60, 12 + k * 1.4, C.white, 0.9 - k * 0.04); }
-  if (jp > 0 && jp < 1) jet(ctx, jx, jy, 0.75, -Math.cos(jp * Math.PI) * 0.1, C.red);
+  if (jp > 0 && jp < 1) jet(ctx, jx, jy, 1.0, -Math.cos(jp * Math.PI) * 0.1, C.blue);
   const aim = Math.atan2(jy - (GY - 360), jx - 300);
   // A: camera to the eye, lens tracking the jet
   person(ctx, 'A', { x: 300, y: GY + 60, look: 0.6, lookY: -0.5, aR: [1.9, 1.0], aL: [-0.5, 2.1], blink: false });
@@ -602,10 +601,13 @@ function sceneSpot(ctx, u, L) {
   const ax = artX(7);
   // runway strip behind
   ctx.fillStyle = '#8D9CA8'; ctx.fillRect(0, GY - 70, W, 46); for (let x = 0; x < W; x += 120) { ctx.fillStyle = C.white; ctx.fillRect(x, GY - 50, 60, 6); }
+  // A400M lumbering across the background
+  const aq = prog(L, 1, 13);
+  if (aq > 0 && aq < 1) jet(ctx, lerp(W + 300, -300, aq), 118 - aq * 20, 1.25, 0.03, 'a400', true);
   // gates-open clock
   const ck = pop(L, 0.3, SPRING.wobbly);
   withT(ctx, ax + 820, 400, Math.max(0.01, ck), 0, () => {
-    circ(ctx, 0, 0, 90, C.white); text(ctx, 'GATES OPEN', 0, 130, font(36, 800, DISPLAY), C.navy, 'center');
+    circ(ctx, 0, 0, 90, C.white); box(ctx, -110, 104, 220, 52, 0, C.navy, 0); text(ctx, 'GATES OPEN', 0, 142, font(38, 800, DISPLAY), C.white, 'center');
     const hr = -Math.PI / 2 + (8 / 12) * TAU, mn = -Math.PI / 2 + prog(L, 0.3, 3) * TAU * 0;
     limb(ctx, [[0, 0], [Math.cos(hr) * 48, Math.sin(hr) * 48]], 6, C.navy); limb(ctx, [[0, 0], [Math.cos(mn) * 70, Math.sin(mn) * 70]], 4, C.navy);
     circ(ctx, 0, 0, 8, C.red, 0);
@@ -661,15 +663,21 @@ function itemEar(c) { limb(c, [[-36, 10], [-30, -36], [30, -36], [36, 10]], 10, 
 function itemBank(c) { box(c, -30, -50, 60, 100, 12, C.navy); c.beginPath(); c.moveTo(6, -30); c.lineTo(-12, 4); c.lineTo(4, 4); c.lineTo(-6, 32); c.lineTo(14, -6); c.lineTo(-2, -6); c.closePath(); c.fillStyle = C.gold; c.fill(); }
 function itemCash(c) { box(c, -60, -32, 120, 64, 8, '#9BD08A'); circ(c, 0, 0, 20, '#7DBA6A', 4); signText(c, '£', 0, 12, 34, C.navy); }
 function itemMap(c) { c.beginPath(); c.moveTo(-60, -40); c.lineTo(-20, -30); c.lineTo(20, -40); c.lineTo(60, -30); c.lineTo(60, 40); c.lineTo(20, 30); c.lineTo(-20, 40); c.lineTo(-60, 30); c.closePath(); fs(c, C.off); circ(c, 8, -4, 12, C.red, 4); limb(c, [[-40, 16], [-10, 0], [8, -4]], 2, C.blue); }
+function itemCream(c) { box(c, -26, -56, 52, 104, 8, '#F38B2A'); box(c, -16, -76, 32, 22, 0, C.navy); signText(c, 'SPF', 0, 8, 26, C.white); }
+function itemWater(c) { box(c, -24, -60, 48, 116, 10, '#9FD3EE'); box(c, -14, -80, 28, 22, 0, C.blue); limb(c, [[-24, -10], [24, -10]], 2, C.blue); }
+function itemHat(c) { ell(c, 0, 20, 86, 20, C.gold); c.beginPath(); c.moveTo(-50, 18); c.lineTo(-38, -36); c.lineTo(38, -36); c.lineTo(50, 18); c.closePath(); fs(c, C.gold); c.fillStyle = C.red; c.fillRect(-44, -2, 88, 12); }
+function itemBinos(c) { box(c, -46, -40, 38, 80, 10, '#2B3237'); box(c, 8, -40, 38, 80, 10, '#2B3237'); box(c, -12, -20, 24, 24, 0, C.grey2, 4); circ(c, -27, 40, 14, '#BFE6F2', 4); circ(c, 27, 40, 14, '#BFE6F2', 4); }
+function itemSnacks(c) { c.beginPath(); c.moveTo(-44, -60); c.lineTo(44, -60); c.lineTo(36, 60); c.lineTo(-36, 60); c.closePath(); fs(c, C.red); circ(c, 0, 0, 22, C.gold, 4); }
 function sceneEssentials(ctx, u, L) {
   sky(ctx, u); hills(ctx); ground(ctx);
   const ax = artX(9), bx = ax + 470, by = GY + 40;
-  const squ = 0.05 * [1, 1.75, 2.5, 3.25, 4].reduce((a, d) => a + wobble(L - d, 3, 6), 0);
+  const ITD = (k) => 1 + k * 0.55;
+  const squ = 0.05 * [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].reduce((a, k) => a + wobble(L - ITD(k), 3, 6), 0);
   // items: arc out of the bag to a landing spot
-  const items = [itemChair, itemEar, itemBank, itemCash, itemMap];
-  const land = [[bx - 340, by - 40], [bx - 200, by - 420], [bx + 40, by - 500], [bx + 260, by - 400], [bx + 360, by - 60]];
+  const items = [itemChair, itemEar, itemBank, itemCash, itemCream, itemWater, itemHat, itemBinos, itemSnacks, itemMap];
+  const land = [[-360, -40], [-330, -330], [-170, -500], [10, -570], [190, -500], [340, -380], [-400, -560], [400, -600], [-250, -180], [410, -90]].map(([x, y]) => [bx + x, by + y]);
   items.forEach((fn, k) => {
-    const d = 1 + k * 0.75, q = prog(L, d, d + 0.9); if (q <= 0) return;
+    const d = ITD(k), q = prog(L, d, d + 0.9); if (q <= 0) return;
     const e = E.outCubic(q), x = lerp(bx, land[k][0], e), y = lerp(by - 160, land[k][1], e) - Math.sin(q * Math.PI) * 160;
     withT(ctx, x, y, 0.6 + 0.6 * Math.min(1, q * 2), (1 - e) * (k % 2 ? 1 : -1) * 1.5 + Math.sin(L * 2 + k) * 0.05, () => fn(ctx));
   });
@@ -683,7 +691,7 @@ function sceneEssentials(ctx, u, L) {
   });
   // kid tries the ear defenders at the end
   const kk = pop(L, 8, SPRING.bouncy);
-  if (kk > 0) person(ctx, 'K', { x: lerp(W + 120, bx + 280, kk), y: GY + 70, earDef: true, look: -0.6, aL: [-2.6, -0.2 + 0.4 * Math.sin(L * 6)], mouth: 0.7, blink: blinkAt(L, 21) });
+  if (kk > 0) person(ctx, 'K', { x: lerp(W + 120, bx + 250, kk), y: GY + 70, earDef: true, look: -0.6, aL: [-2.6, -0.2 + 0.4 * Math.sin(L * 6)], mouth: 0.7, blink: blinkAt(L, 21) });
 }
 
 // 11. flying times
@@ -703,11 +711,11 @@ function sceneTimes(ctx, u, L) {
     circ(ctx, 0, 0, 18, C.red, 4);
   });
   // little jets orbit the clock
-  for (let k = 0; k < 3; k++) { const a = L * 0.9 + (k / 3) * TAU; const jx = cx + Math.cos(a) * (r + 90), jy = cy + Math.sin(a) * (r + 70); if (L > 3.2) jet(ctx, jx, jy, 0.35 * pop(L, 3.2 + k * 0.3), a + Math.PI / 2, [C.red, C.blue, C.teal][k]); }
+  for (let k = 0; k < 3; k++) { const a = L * 0.9 + (k / 3) * TAU; const jx = cx + Math.cos(a) * (r + 90), jy = cy + Math.sin(a) * (r + 70); if (L > 3.2) topJet(ctx, k === 1 ? AC.typhoonTop : AC.hawkTop, jx, jy, 110 * pop(L, 3.2 + k * 0.3), a + Math.PI / 2); }
   // programme with a star
   const st2 = pop(L, 6.5, SPRING.wobbly);
   person(ctx, 'B', { x: 800, y: GY + 60, look: -0.4, aL: [-0.6, -1.4], aR: [0.6, 1.4], blink: blinkAt(L, 23), mouth: 0.4 * bump(L, 7, 1.5),
-    holdL: (c) => { withT(c, 34, -40, 1, 0, () => { box(c, -60, -80, 120, 150, 10, C.off); limb(c, [[-34, -40], [34, -40]], 2, C.grey2); limb(c, [[-34, -10], [34, -10]], 2, C.grey2); limb(c, [[-34, 20], [20, 20]], 2, C.grey2);
+    holdL: (c) => { withT(c, 34, -40, 1, 0, () => { box(c, -60, -80, 120, 150, 0, C.off); limb(c, [[-34, -40], [34, -40]], 2, C.grey2); limb(c, [[-34, -10], [34, -10]], 2, C.grey2); limb(c, [[-34, 20], [20, 20]], 2, C.grey2);
       if (st2 > 0) withT(c, 30, -60, st2, 0, () => { c.beginPath(); for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + (k / 10) * TAU, rr = k % 2 ? 14 : 32; c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } c.closePath(); fs(c, C.gold, 4); }); }); } });
 }
 
@@ -725,7 +733,7 @@ function sceneExit(ctx, u, L) {
   box(ctx, ax + 820, GY - 460, 16, 470, 4, C.grey2);
   const sk = pop(L, 0.5, SPRING.wobbly);
   withT(ctx, ax + 828, GY - 470, Math.max(0.01, sk), 0, () => {
-    box(ctx, -130, -70, 260, 120, 16, '#1F8A4C'); signText(ctx, 'EXIT', -26, 22, 70);
+    box(ctx, -130, -70, 260, 120, 0, '#1F8A4C'); signText(ctx, 'EXIT', -26, 22, 70);
     ctx.beginPath(); ctx.moveTo(60, -24); ctx.lineTo(96, -2); ctx.lineTo(60, 20); ctx.closePath(); ctx.fillStyle = C.white; ctx.fill(); limb(ctx, [[40, -2], [70, -2]], 10, C.white);
   });
   // characters walk toward the meet-up flag
@@ -747,13 +755,13 @@ function sceneExit(ctx, u, L) {
 function sceneOutro(ctx, u, L, IMG) {
   sky(ctx, u); hills(ctx); ground(ctx);
   // three jets draw the logo swoosh: red, navy, teal
-  const cols = [C.red, C.navy, C.teal];
+  const cols = ['#E8202A', '#FFFFFF', '#1D4FB7'];
   const path = (q, k) => { const x = lerp(-200, W + 300, q); return [x, 150 + k * 30 - Math.sin(q * Math.PI) * 110 + (q - 0.5) * -60]; };
   cols.forEach((col, k) => {
     const q = E.inOutSine(prog(L, -0.6 + k * 0.12, 4.2 + k * 0.12));
     ctx.beginPath(); for (let s = 0; s <= 60; s++) { const p = path((s / 60) * q, k); s ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
-    ctx.strokeStyle = col; ctx.lineWidth = 22; ctx.lineCap = 'round'; if (q > 0) ctx.stroke();
-    if (q > 0 && q < 1) { const p = path(q, k), p2 = path(Math.min(1, q + 0.01), k); jet(ctx, p[0] + 60, p[1], 0.7, Math.atan2(p2[1] - p[1], p2[0] - p[0]), k === 1 ? C.blue : col); }
+    ctx.lineCap = 'round'; if (q > 0) { if (k === 1) { ctx.strokeStyle = '#C9D6E0'; ctx.lineWidth = 28; ctx.stroke(); } ctx.strokeStyle = col; ctx.lineWidth = 22; ctx.stroke(); }
+    if (q > 0 && q < 1) { const p = path(q, k), p2 = path(Math.min(1, q + 0.01), k); jet(ctx, p[0] + 120, p[1] - 10, 0.8, Math.atan2(p2[1] - p[1], p2[0] - p[0])); }
   });
   // logo lands
   const lk = pop(L, 3, SPRING.bouncy);
@@ -763,7 +771,7 @@ function sceneOutro(ctx, u, L, IMG) {
   text(ctx, 'Have a brilliant airshow season!', W / 2, 680, font(84, 800, DISPLAY), C.navy, 'center');
   ctx.restore();
   const uk = pop(L, 6.2, SPRING.snappy);
-  if (uk > 0) withT(ctx, W / 2, 790, uk, 0, () => { box(ctx, -330, -52, 660, 84, 42, C.teal); text(ctx, 'ukairshowguide.co.uk', 0, 10, font(50, 700, UI), C.white, 'center'); });
+  if (uk > 0) withT(ctx, W / 2, 790, uk, 0, () => { box(ctx, -330, -52, 660, 84, 0, C.teal); text(ctx, 'ukairshowguide.co.uk', 0, 10, font(50, 700, UI), C.white, 'center'); });
   // friends waving
   const wv = Math.sin(L * 5);
   person(ctx, 'A', { x: 190, y: GY + 80, aR: [2.5 + wv * 0.3, 0.3], blink: blinkAt(L, 30), mouth: 0.6, look: 0.4 });
@@ -804,15 +812,16 @@ function wipe(ctx, u, nNext, IMG) {
     puff(ctx, x + 30, y + 30, 40 + hash01(k, 43) * 24, '#EEF3F7', 1);
   }
   const jy = H * 0.4 + Math.sin(p * TAU) * 60;
-  jet(ctx, edge + 160, jy, 1.15, Math.cos(p * TAU) * 0.12, nNext % 2 ? C.blue : C.red);
+  jet(ctx, edge + 200, jy, 1.25, Math.cos(p * TAU) * 0.08, nNext % 2 ? C.blue : C.red);
 }
 
 M.film({
   fonts: [font(100, 800, DISPLAY), font(100, 700, DISPLAY), font(40, 600, UI), font(40, 700, UI)],
-  images: { logo: 'assets/logo.png' },
+  images: { logo: 'assets/logo.png', hawk: 'assets/aircraft/hawk-side.webp', typhoon: 'assets/aircraft/typhoon-side.webp', a400: 'assets/aircraft/a400m-side.webp', hawkTop: 'assets/aircraft/hawk-top.webp', typhoonTop: 'assets/aircraft/typhoon-top.webp' },
   hits: HITS,
   samples: 8,
   draw(ctx, u, t, IMG) {
+    AC = IMG;
     ctx.lineCap = 'round';
     // in a wipe window?
     for (let n = 0; n <= NSTEP; n++) {
