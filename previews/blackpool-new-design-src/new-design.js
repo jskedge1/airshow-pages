@@ -290,7 +290,7 @@
   /* Jack's order from Duxford. Blackpool has no flightline, story or experience flights sections; its
      "Pick your day" (weekend) takes the place of "Pick your show", and the ground show and seafront
      information come after the rest. */
-  var FIRST=['overview','travel','photo','lineup','watch','facilities','weekend','timeline','dayruns','stay','help','matchcheck','whatyousee','kids','scores','compare','postcard','ground','seafront'];
+  var FIRST=['overview','travel','photo','lineup','watch','facilities','days','timeline','dayruns','stay','flightline','help','matchcheck','whatyousee','kids','scores','compare','story','flights','postcard'];
   function run(){
     var folds=[].slice.call(document.querySelectorAll('section.fold'));
     if(!folds.length){return false;}

@@ -22,6 +22,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 SRC = HERE / "live-source.html"   # the page as it was before the new design (see README)
 OUT = ROOT / "camping-layout" / "clacton.html"   # the live page
+DUX_SRC = ROOT / "previews" / "duxford-new-design-src" / "live-source.html"   # the Duxford template's own source
 
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800'
              '&family=Caveat:wght@600;700&display=swap" rel="stylesheet">')
@@ -59,6 +60,9 @@ FRAME_CHECK = (
     'html body .qs li{background:#F3F6F8!important;border:0!important;border-top:5px solid var(--sc,#32B4AF)!important;border-left:0!important;box-shadow:none!important;border-radius:0!important;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,background .35s!important}'
     'html body .qs li:hover{background:#fff!important;transform:translateY(-4px);box-shadow:0 22px 34px -24px rgba(11,26,39,.5)!important}'
     'html body .qs li .sn{display:none!important}'
+    # with the number hidden, the question must span the whole box (on phones it was squeezed into the 44px number column)
+    'html body .qs li .q{grid-column:1/-1!important}'
+    'html body .qs li::before{display:none!important}html body .qs li .q{border-left:0!important;padding-left:20px!important}'
     'html body .qs .q legend{font:700 21px/1.25 "Barlow",sans-serif!important;color:#13293C!important}'
     'html body .qs .q legend span{display:block!important;font:700 15.5px/1.2 "Barlow",sans-serif!important;color:var(--sc,#0E5F5B)!important;margin-bottom:5px!important;text-transform:none!important;letter-spacing:0!important;filter:brightness(.8)}'
     'html body .qs .q legend small{display:block!important;font:400 15.5px/1.45 "Barlow",sans-serif!important;color:#4A5A66!important;margin-top:4px!important}'
@@ -113,6 +117,76 @@ def restyle_text(s):
     return s
 
 
+def cut_element(html, start, what):
+    """Remove one element, from its start tag to its matching end tag (nested tags of the same name counted)."""
+    i = html.find(start)
+    assert i > -1 and html.count(start) == 1, "not found once: " + what
+    tag = re.match(r"<([a-z0-9-]+)", start).group(1)
+    pat = re.compile(r"<(/?)%s\b[^>]*>" % re.escape(tag))
+    depth = 0
+    for m in pat.finditer(html, i):
+        depth += -1 if m.group(1) else 1
+        if depth == 0:
+            j = m.end()
+            return html[:i] + "<!-- round 2: %s left out, as the Duxford page has no such part -->" % what + html[j:]
+    raise AssertionError("no end tag: " + what)
+
+
+def round2_like_duxford(html):
+    """Round 2 (Jack, 22 Nov 2026, previews/NEW-DESIGN-ROLLOUT-2.md): the page must look like the Duxford page and
+    nothing else. Parts the Duxford page does not have are left out; every one is listed in LEFT_OUT and the README."""
+    # sections the Duxford page does not have, and their tabs
+    for sid, name in [("ground", "The Ground Show section"), ("seafront", "Seafront Information section"),
+                      ("support", "Keep The Show Free section")]:
+        html = cut_element(html, '<section class="panel" id="%s"' % sid, name)
+        tab = re.search(r'\n\s*<button class="tab" role="tab" id="t-%s"[^>]*>[^<]*</button>' % sid, html)
+        assert tab, "tab " + sid
+        html = html[:tab.start()] + html[tab.end():]
+    # Getting there: Duxford has no Ways in picker board, no Fares and Save money board, no On the day and Getting home box
+    # The Getting there jump strip: Clacton has no On the day and Getting home box (.pbx), so that button would do
+    # nothing. It is dropped, so the strip reads Ways in, Fares, Questions (as on Duxford, Southport, Wales, Cosford).
+    old = "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['On the day and getting home', '.pbx'], ['Questions', '#travel .acc']];"
+    assert html.count(old) == 1, "JUMPS not found"
+    html = html.replace(old, "var JUMPS = [['Ways in', '#explore'], ['Fares', '#tpFares'], ['Questions', '#travel .acc']];", 1)
+    # The Fares and Save money board stays: Jack asked for it back (comment on the Clacton preview, 22 Nov 2026, 20:24).
+    # The Ways in picker board stays too (hidden, as on the live page): the Fares board's script needs it.
+    html = cut_element(html, '<div class="pbx">', "On the day and Getting home box (Getting there)")
+    # Food and facilities: Duxford has no Comfort, Family and Camera lists
+    html = cut_element(html, '<div class="pack boxes reveal">', "Comfort, Family and Camera lists (Food and facilities)")
+    # Where to stay: Duxford opens with a "Search everything nearby" box with buttons. Clacton's search links
+    # (Booking.com, Airbnb, Visit Essex) move into that box, in Duxford's markup, with Clacton's own words.
+    i = html.find('<div class="stay-group reveal">\n      <h3>Search for more places to stay</h3>')
+    assert i > -1
+    j = html.index("</div>", i) + len("</div>")
+    html = html[:i] + "<!-- round 2: search links moved to the top, as on Duxford -->" + html[j:]
+    box = ('<div class="stay-search reveal">\n'
+           '      <div><h3>Search everything nearby</h3><p>Hotels, guest houses, apartments and holiday homes in and around Clacton, and places to stay on the Essex Sunshine Coast.</p></div>\n'
+           '      <div class="stay-links">\n'
+           '        <a class="btn" href="https://www.booking.com/city/gb/clacton-on-sea.html" target="_blank" rel="noopener">Booking.com ↗</a>\n'
+           '        <a class="btn ghost-n" href="https://www.airbnb.co.uk/s/Clacton-on-Sea--United-Kingdom/homes" target="_blank" rel="noopener">Airbnb ↗</a>\n'
+           '        <a class="btn ghost-n" href="https://www.visitessex.com" target="_blank" rel="noopener">Visit Essex ↗</a>\n'
+           '      </div>\n    </div>\n    ')
+    k = html.find('<div class="stay-group reveal">\n      <h3>Hotels in Clacton</h3>')
+    assert k > -1
+    html = html[:k] + box + html[k:]
+    # Where to watch, on the map: Duxford's board in Duxford's markup, with Clacton's own spots (see ww_board.py)
+    sys.path.insert(0, str(HERE))
+    from ww_board import ww_like_duxford
+    html = ww_like_duxford(html, DUX_SRC.read_text(encoding="utf8"))
+    # Duxford's own list of shared parts it keeps hidden (the More air shows band, the journey planner, the Up close
+    # band, the news feed button, the top ten list, the old explore heading), taken from its source so they match.
+    dux = DUX_SRC.read_text(encoding="utf8")
+    for key in ("dux-ovj-fix", "xd-head-dux"):
+        m = re.search(r'<(style|script) id="%s">.*?</\1>' % key, dux, re.S)
+        assert m, key
+        block = m.group(0).replace('id="%s"' % key, 'id="%s-clacton"' % key) + "\n"
+        # the page has no closing body tag of its own (the ones in the file sit inside scripts), so add before </html>
+        end = html.rstrip()
+        html = (end[:-len("</html>")] + block + "</html>\n") if end.endswith("</html>") else (html + block)
+    print("round 2: parts left out:", len(re.findall(r"<!-- round 2: [^>]* left out", html)))
+    return html
+
+
 def main():
     html = SRC.read_text(encoding="utf8")
     blobs = []
@@ -136,7 +210,7 @@ def main():
     old_block = html[a:b]
     m_subs = re.search(r"var SUBS=(\{.*?\});\n", old_block)
     assert m_subs, "section descriptions (SUBS) not found"
-    dux = (ROOT / "camping-layout" / "duxford.html").read_text(encoding="utf8")
+    dux = DUX_SRC.read_text(encoding="utf8")
     dh = "<!-- =========================================================\n     COLLAPSIBLE SECTIONS ADD-ON"
     da = dux.find(dh)
     assert da > -1 and dux.count(dh) == 1, "Duxford's folding add-on not found"
@@ -166,6 +240,8 @@ def main():
                      ('<h3 id="cpkTitle">CAR PARKS IN CLACTON</h3>', '<h3 id="cpkTitle">Car Parks in Clacton</h3>')]:
         assert html.count(old) == 1, old
         html = html.replace(old, new, 1)
+
+    html = round2_like_duxford(html)
 
     # head: fonts, and keep the preview out of search results
     html = html.replace("</head>", FONT_LINK + "\n</head>", 1)
@@ -210,6 +286,7 @@ def main():
     html = html[:end] + tail + html[end:]
 
     html = re.sub(r"@@BLOB(\d+)@@", lambda mm: blobs[int(mm.group(1))], html)
+    import sys as _ws_sys; _ws_sys.path.insert(0, str(ROOT / 'previews')); from wixsafe import wix_safe; html = wix_safe(html)   # so the styles also work inside the live site (see previews/wixsafe.py)
     OUT.write_text(html, encoding="utf8")
     print("wrote", OUT.relative_to(ROOT), "%.1f MB" % (len(html.encode("utf8")) / 1e6), "with", len(blobs), "embedded images")
 

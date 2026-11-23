@@ -134,16 +134,6 @@
     if (lb && !$('.nz-lu-bg', lb)) {
       if (P('rafale')) { var li = D.createElement('img'); li.className = 'nz-lu-bg'; li.alt = ''; li.setAttribute('aria-hidden', 'true'); li.src = P('rafale'); lb.insertBefore(li, lb.firstChild); }
     }
-    /* Shooting at Cosford opening: the live page has no photo beside it (Duxford's has the P-40), so one of
-       Jack's photos goes there, the same way, with its own description as the caption */
-    var pw = $('#photo > .wrap'), ph = pw && $(':scope > .panel-head', pw);
-    if (ph && !$(':scope > figure.pic.wide', pw) && P('p47')) {
-      var pf = D.createElement('figure'); pf.className = 'pic wide';
-      pf.innerHTML = '<img class="photo" alt="" decoding="async"><figcaption></figcaption>';
-      pf.firstChild.src = P('p47'); pf.firstChild.alt = (window.PHOTO_ALT && PHOTO_ALT.p47) || '';
-      pf.lastChild.textContent = ((window.PHOTO_ALT && PHOTO_ALT.p47) || '') + '.';
-      ph.parentNode.insertBefore(pf, ph.nextSibling);
-    }
     /* how many sections */
     var n = $$('section.fold').length;
     if (n && NUM[n]) D.getElementById('nzCount').textContent = NUM[n];
