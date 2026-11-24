@@ -224,6 +224,24 @@ button{font-family:var(--bf)}
 .kidsnote{margin:26px auto 0;text-align:center;font-size:15.5px;max-width:70ch}
 .kidsnote b{color:var(--navy)}
 
+/* kids: hover effects, as on the home page cards */
+.kid{position:relative;transition:transform .35s,box-shadow .35s}
+.kid:before{content:"";position:absolute;left:0;right:0;top:-6px;height:6px;background:var(--c);transform-origin:left;transition:height .35s}
+.kid:hover{transform:translateY(-8px);box-shadow:0 22px 44px rgba(19,41,60,.18)}
+.kid:hover:before{height:12px}
+.kid>h3{transition:color .3s}
+.kid:hover>h3{color:var(--c)}
+.file div{transition:background .25s,padding .25s;margin:0 -10px;padding-left:10px;padding-right:10px}
+.file div:hover{background:var(--light);padding-left:16px}
+.promise blockquote{transition:transform .35s}
+.kid:hover .promise blockquote{transform:scale(1.04)}
+.promise .signline span{transition:border-color .3s}
+.kid:hover .promise .signline span{border-color:var(--prepare)}
+.colour #colour{transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
+.kid:hover #colour{transform:scale(1.06) rotate(-3deg)}
+.kid:hover #colour .pip-wing-r{animation:wave 1.1s ease-in-out infinite}
+.kidsnote{transition:color .3s}
+
 /* closing quote */
 .quote{background:var(--deep);color:#fff;padding:96px 0;text-align:center}
 .quote h2{color:#fff;font-size:clamp(30px,4vw,46px);max-width:900px;margin:0 auto;line-height:1.14}
@@ -290,6 +308,8 @@ button{font-family:var(--bf)}
   body.print-colour #kids .wrap>*:not(.kidgrid),body.print-colour .kid:not(.colourbox),body.print-colour .colour button{display:none}
   body.print-colour .kidgrid{display:block;max-width:none}
   body.print-colour .kid{border:0;box-shadow:none}
+  body.print-colour .kid:before{display:none}
+  body.print-colour #colour{transform:none!important}
   body.print-colour .kid>h3{font-size:34px;text-align:center}
   body.print-colour .colour #colour{max-width:150mm}
 }
