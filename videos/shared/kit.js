@@ -245,7 +245,7 @@ export function person(ctx, x, y, s, o = {}) {
     for (const sg of [-1, 1]) { rr(ctx, sg * (headR + 3) - 15, -24, 30, 56, 13, dcol); rr(ctx, sg * (headR + 3) - (sg > 0 ? -9 : 15), -16, 6, 40, 3, 'rgba(0,0,0,0.16)'); }
   }
   ctx.restore();
-  if (o.pip) pipPocket(ctx, bodyW, bTop, bodyH, mood, !!dcol, o.blinkU, o.pipCol);
+  if (o.pip) pipFly(ctx, bodyW, bTop, mood, !!dcol, o.blinkU, o.pipSide ?? -1, o.pipX, o.pipLift || 0);
   // things held (in the right hand unless both)
   if (o.hold) {
     const [hx, hy] = hands[1];
@@ -257,44 +257,61 @@ export function person(ctx, x, y, s, o = {}) {
   ctx.restore();
   ctx.restore();
 }
-// Pip: a small soft toy bird. Reacts the way Charlie feels: fluffs up when it is all too much,
-// gets its own tiny ear defenders, flaps when Charlie is happy. Local units, origin = feet.
+// Pip: a small friendly cartoon plane, Charlie's mascot in See the Sound. Flies beside Charlie's
+// head and reacts the way Charlie feels: shivers and goes spiky when it is all too much, frowns when
+// worried, gets its own tiny ear defenders, closes its eyes when calm, waggles its wings when happy.
+// Side view, nose to the right; origin = the middle of the plane, about 120 units long.
 export function pip(ctx, x, y, s, st = {}) {
-  const fluff = st.fluff || 0, u = st.u || 0, body = '#7EC4E6', belly = '#D8EEF8', ink = '#2A2A33';
-  at(ctx, x, y, s, st.rot || 0, () => {
-    const cy = -24, r = 24;
-    if (fluff > 0.02) burst(ctx, 0, cy, r * (1.05 + 0.45 * fluff), body, { n: 11, jag: fluff, u: u * 3, seed: 9 });
-    const fl = st.flap ? Math.sin(u * TAU * 3) * 0.7 : 0;
-    for (const sg of [-1, 1]) { ctx.save(); ctx.translate(sg * r * 0.78, cy + 2); ctx.rotate(sg * (0.5 + fl + fluff * 0.5)); ctx.beginPath(); ctx.ellipse(0, -8, 9, 17, 0, 0, TAU); ctx.fillStyle = '#5FAED6'; ctx.fill(); ctx.restore(); }
-    circ(ctx, 0, cy, r, body);
-    ctx.beginPath(); ctx.ellipse(0, cy + 9, r * 0.62, r * 0.55, 0, 0, TAU); ctx.fillStyle = belly; ctx.fill();
-    // tuft
-    ctx.beginPath(); ctx.moveTo(-4, cy - r + 2); ctx.quadraticCurveTo(0, cy - r - 14 - fluff * 6, 9, cy - r - 6 - fluff * 4); ctx.quadraticCurveTo(5, cy - r + 1, 4, cy - r + 3); ctx.fillStyle = body; ctx.fill();
-    // beak
-    ctx.beginPath(); ctx.moveTo(-6, cy + 2); ctx.lineTo(6, cy + 2); ctx.lineTo(0, cy + 11); ctx.closePath(); ctx.fillStyle = C.orange; ctx.fill();
-    // eyes
+  const fluff = st.fluff || 0, u = st.u || 0, ink = '#2A2A33';
+  const body = '#7EC4E6', dark = '#4E9BC6', belly = '#E8F5FB';
+  const shiver = fluff > 0.6 ? Math.sin(u * 60) * 2.5 : 0;
+  const waggle = st.flap ? Math.sin(u * TAU * 1.5) * 0.22 : 0;
+  at(ctx, x + shiver, y, s, (st.rot || 0) + waggle, () => {
+    if (fluff > 0.02) burst(ctx, -6, 0, 62 * (0.8 + 0.4 * fluff), 'rgba(240,138,75,0.55)', { n: 12, jag: fluff, u: u * 3, seed: 9 });
+    // tail fin and tailplane
+    ctx.beginPath(); ctx.moveTo(-44, -6); ctx.quadraticCurveTo(-62, -40, -48, -42); ctx.quadraticCurveTo(-36, -40, -26, -10); ctx.closePath(); ctx.fillStyle = dark; ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-46, 4, 16, 6, 0, 0, TAU); ctx.fillStyle = dark; ctx.fill();
+    // chubby body
+    ctx.beginPath(); ctx.moveTo(-54, -2); ctx.quadraticCurveTo(-40, -30, 10, -30); ctx.quadraticCurveTo(52, -30, 54, 0); ctx.quadraticCurveTo(52, 28, 10, 28); ctx.quadraticCurveTo(-40, 26, -54, 4); ctx.closePath(); ctx.fillStyle = body; ctx.fill();
+    ctx.beginPath(); ctx.ellipse(8, 14, 38, 11, 0, 0, TAU); ctx.fillStyle = belly; ctx.fill();
+    // canopy
+    ctx.beginPath(); ctx.ellipse(-8, -28, 18, 11, 0, Math.PI, TAU); ctx.fillStyle = '#C7E6F4'; ctx.fill();
+    // wing (in front of the body)
+    ctx.beginPath(); ctx.ellipse(-4, 12, 30, 9, -0.08, 0, TAU); ctx.fillStyle = dark; ctx.fill();
+    // nose, spinner and propeller
+    circ(ctx, 56, 0, 9, C.red);
+    ctx.save(); ctx.globalAlpha *= 0.28; ctx.beginPath(); ctx.ellipse(62, 0, 5, 30, 0, 0, TAU); ctx.fillStyle = ink; ctx.fill(); ctx.restore();
+    const pa = u * 9; line(ctx, [[62, -Math.cos(pa) * 28], [62, Math.cos(pa) * 28]], 'rgba(34,52,74,0.6)', 5);
+    // face
     ctx.lineCap = 'round';
-    for (const sg of [-1, 1]) {
-      const ex = sg * 9, ey = cy - 6;
-      if (fluff > 0.6) line(ctx, [[ex - sg * 5, ey - 5], [ex + sg * 4, ey], [ex - sg * 5, ey + 5]], ink, 3.2);
-      else if (st.calm || st.blink) { ctx.beginPath(); ctx.arc(ex, ey, 4.5, 0.2, Math.PI - 0.2); ctx.strokeStyle = ink; ctx.lineWidth = 3.2; ctx.stroke(); }
-      else { circ(ctx, ex, ey, 4, ink); circ(ctx, ex + 1.3, ey - 1.4, 1.3, C.white); }
+    for (const ex of [18, 38]) {
+      const ey = -7;
+      if (fluff > 0.6) { const sg = ex < 28 ? 1 : -1; line(ctx, [[ex - sg * 5, ey - 6], [ex + sg * 4, ey], [ex - sg * 5, ey + 6]], ink, 3.4); }
+      else if (st.calm || st.blink) { ctx.beginPath(); ctx.arc(ex, ey, 5, 0.2, Math.PI - 0.2); ctx.strokeStyle = ink; ctx.lineWidth = 3.4; ctx.stroke(); }
+      else { circ(ctx, ex, ey, 6.5, C.white); circ(ctx, ex + 1.5, ey + 0.5, 4, ink); circ(ctx, ex + 2.6, ey - 1, 1.4, C.white); }
+      if (st.worried) line(ctx, [[ex - 6, ey - 13 + (ex < 28 ? 3 : 0)], [ex + 6, ey - 13 + (ex < 28 ? 0 : 3)]], ink, 3);
     }
-    circ(ctx, -15, cy + 4, 4, 'rgba(235,120,110,0.35)'); circ(ctx, 15, cy + 4, 4, 'rgba(235,120,110,0.35)');
+    circ(ctx, 14, 6, 4.5, 'rgba(235,120,110,0.4)'); circ(ctx, 44, 6, 4.5, 'rgba(235,120,110,0.4)');
+    ctx.strokeStyle = ink; ctx.lineWidth = 3.4; ctx.beginPath();
+    if (fluff > 0.6) { ctx.moveTo(22, 12); ctx.quadraticCurveTo(26, 8, 30, 12); ctx.quadraticCurveTo(34, 16, 38, 12); }
+    else if (st.worried) ctx.arc(29, 18, 6, Math.PI + 0.5, TAU - 0.5);
+    else ctx.arc(29, 6, st.flap ? 9 : 7, 0.3, Math.PI - 0.3);
+    ctx.stroke();
+    // tiny ear defenders: a band over the top and a cup on the side
     if (st.defenders) {
-      ctx.beginPath(); ctx.arc(0, cy - 2, r + 4, Math.PI + 0.25, TAU - 0.25); ctx.strokeStyle = DEF; ctx.lineWidth = 5; ctx.stroke();
-      for (const sg of [-1, 1]) rr(ctx, sg * (r + 1) - 6, cy - 9, 12, 18, 0, DEF);
+      ctx.beginPath(); ctx.arc(26, -6, 33, Math.PI + 0.55, TAU - 0.35); ctx.strokeStyle = DEF; ctx.lineWidth = 6; ctx.stroke();
+      rr(ctx, -6, -14, 14, 22, 0, DEF); rr(ctx, 52, -22, 10, 18, 0, DEF);
     }
   });
 }
-// Pip in a square pocket on the front of Charlie's jumper
-function pipPocket(ctx, bodyW, bTop, bodyH, mood, defenders, blinkU = 0, col) {
-  const px = 0, py = bTop + bodyH * 0.7, pw = bodyW * 0.8, ph = bodyH * 0.34;
-  const fluff = mood === 'overwhelm' ? 1 : mood === 'worried' ? 0.45 : 0;
-  const up = mood === 'grin' || mood === 'wow' ? 6 : mood === 'overwhelm' ? -4 : 0;
-  pip(ctx, px, py + 10 - up, 0.95, { fluff, defenders, calm: mood === 'calm', flap: mood === 'grin', u: blinkU, blink: ((blinkU + 1.3) % 4.7) < 0.14 });
-  rr(ctx, px - pw / 2, py, pw, ph, 0, col || '#E2A632');
-  rr(ctx, px - pw / 2, py, pw, 5, 0, 'rgba(0,0,0,0.12)');
+// Pip flying beside Charlie's head (person() local units; side -1 = Charlie's left, 1 = right)
+function pipFly(ctx, bodyW, bTop, mood, defenders, u = 0, side = -1, px, lift = 0) {
+  const fluff = mood === 'overwhelm' ? 1 : 0;
+  const bob = Math.sin(u * 1.6) * 8;
+  pip(ctx, px ?? side * (bodyW * 0.5 + 92), bTop - 128 - lift + bob, 0.95, {
+    fluff, defenders, u, calm: mood === 'calm', worried: mood === 'worried', flap: mood === 'grin' || mood === 'wow',
+    blink: ((u + 1.3) % 4.7) < 0.14, rot: -0.06 + Math.cos(u * 1.6) * 0.04,
+  });
 }
 // the cast: Charlie (autistic, about 8), Dad, Beth (an autistic adult), show staff
 export const KID = { skin: '#F2C9A5', hair: '#7A4F2E', hairStyle: 'tuft', top: '#F2B441', bottom: '#3A5A80', shoe: C.red, stripe: '#FBF6EC' };
@@ -302,7 +319,7 @@ export const DAD = { adult: true, skin: '#EDBE96', hair: '#5A3B26', hairStyle: '
 export const BETH = { adult: true, skin: '#B9805A', hair: '#1F1A1C', hairStyle: 'bun', top: '#6E5AA8', bottom: '#2E3B4E', shoe: '#2B2B33', lanyard: true };
 export const STAFF = { adult: true, skin: '#8E5E3F', hair: '#1D1715', hairStyle: 'short', top: '#F6C453', bottom: '#2E3B4E', shoe: '#2B2B33', stripe: '#C9D4DC' };
 export const DEF = '#2F8F8A';     // Charlie's ear defenders
-// Pip, Charlie's sensory buddy (See the Sound only): K.usePip() switches Pip on for every kid() call.
+// Pip, Charlie's plane mascot (See the Sound only): K.usePip() switches Pip on for every kid() call.
 let PIP_ON = false;
 export const usePip = () => { PIP_ON = true; };
 export const kid = (ctx, x, y, s, o = {}) => person(ctx, x, y, s, { ...KID, pip: PIP_ON, ...o });
@@ -612,7 +629,7 @@ export function factsScene(ctx, u, u0) {
   const ck = pop(r, 1, SPRING.gentle);
   const wv = Math.sin(r * TAU * 0.5) * 0.2;
   beth(ctx, 1790, 1000 + (1 - ck) * 500, 1.35, { mood: 'happy', headphones: '#3A3F4B', blinkU: r, blinkOff: 2, armL: POSE.relaxed, armR: POSE.relaxed });
-  kid(ctx, 1540, 1010 + (1 - ck) * 500, 1.6, { mood: 'happy', defenders: DEF, blinkU: r, armL: POSE.relaxed, armR: r > 16.4 ? [2.5 + wv, -0.25] : POSE.relaxed });
+  kid(ctx, 1540, 1010 + (1 - ck) * 500, 1.6, { mood: 'happy', defenders: DEF, blinkU: r, pipX: 70, pipLift: 50, armL: POSE.relaxed, armR: r > 16.4 ? [2.5 + wv, -0.25] : POSE.relaxed });
   const bk = pop(r, 16.4, SPRING.gentle);
   if (bk > 0) M.text(ctx, 'Thank you for making room for everyone.', 112 - (1 - bk) * 80, 990, F(60, 700), C.teal);
 }

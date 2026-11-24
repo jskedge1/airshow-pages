@@ -2,7 +2,7 @@
 // visibly calms the picture. 140 beats at 80 bpm (105 s). Pure function of time.
 import * as K from '../shared/kit.js';
 const { M, C, F } = K;
-K.usePip();   // Pip, Charlie's sensory buddy, rides in Charlie's pocket all through this film
+K.usePip();   // Pip, Charlie's little plane mascot, flies beside Charlie all through this film
 const { W, H, TAU, clamp, lerp, prog, E, springU, SPRING, kf, hash01 } = M;
 
 const GY = 560, FEET = 750;         // horizon and where feet stand (the caption card sits below)
@@ -82,7 +82,7 @@ function scenePile(ctx, u) {
   const ck = Math.min(springU(u, 0.5, SPRING.gentle), 1 - E.inCubic(prog(u, 4.4, 5)));
   if (ck > 0.01) { ctx.save(); ctx.translate(70, 86 - (1 - ck) * 200); K.pill(ctx, 0, 0, 'A calm video: no sudden sounds, no flashing', { size: 34, bg: C.teal, fg: C.white }); ctx.restore(); }
   const pk = Math.min(K.pop(u, 1.2), 1 - E.inCubic(prog(u, 4.6, 5.1)));
-  if (pk > 0.01) { ctx.save(); ctx.translate(560, 420); ctx.scale(pk, pk); K.pill(ctx, 0, 0, 'Pip, Charlie\u2019s sensory buddy', { align: 'center', size: 36, bg: '#5FAED6', fg: C.white }); ctx.restore(); K.line(ctx, [[640, 448], [lerp(640, 700, pk), lerp(448, 610, pk)]], '#5FAED6', 5); }
+  if (pk > 0.01) { ctx.save(); ctx.translate(470, 250); ctx.scale(pk, pk); K.pill(ctx, 0, 0, 'This is Pip, Charlie\u2019s plane', { align: 'center', size: 38, bg: '#4E9BC6', fg: C.white }); ctx.restore(); }
   K.loudChip(ctx, u, 18, { hold: 2.6 });
   K.caption(ctx, u, 0.2, 5, 'Charlie loves aeroplanes.', { w: 1000, size: 76 });
   K.caption(ctx, u, 5.2, 13.6, 'Charlie is autistic. Every sound arrives at full volume.', { w: 1240 });
@@ -113,7 +113,7 @@ function sceneTurn(ctx, u) {
   K.meter(ctx, 1730, 330, 420, v, { w: 60 });
   const rel = K.ease(u, 22.6, 25.5);
   K.burst(ctx, 1500, 270, lerp(170, 70, rel), M.mix(C.orange, SOFT, rel), { n: 14, jag: 1 - rel * 0.92, u });
-  K.kid(ctx, 1500, 960, 2.0, { mood: rel < 0.35 ? 'overwhelm' : rel < 0.8 ? 'worried' : 'calm', armL: armMix(K.POSE.ears, K.POSE.relaxed, rel), armR: armMix(K.POSE.ears, K.POSE.relaxed, rel), blinkU: u });
+  K.kid(ctx, 1500, 960, 2.0, { pipSide: 1, pipLift: 130, mood: rel < 0.35 ? 'overwhelm' : rel < 0.8 ? 'worried' : 'calm', armL: armMix(K.POSE.ears, K.POSE.relaxed, rel), armR: armMix(K.POSE.ears, K.POSE.relaxed, rel), blinkU: u });
 }
 
 // ---------------------------------------------------------------- 28-38: tip 1, practise at home
@@ -222,7 +222,7 @@ function tip5(ctx, u) {
   K.tent(ctx, 1040, 772, 1.5, C.tealSoft, C.teal, 'Quiet space');
   K.dad(ctx, 700, FEET + 14, 1.15, { mood: 'happy', look: [1, 0], blinkU: u, blinkOff: 2, armL: K.POSE.relaxed, armR: K.POSE.relaxed });
   const wp = K.ease(u, 69.3, 72.4), x = lerp(430, 1040, wp), moving = wp > 0 && wp < 1;
-  K.kid(ctx, x, 766, lerp(1.25, 1.02, wp), { mood: wp < 0.9 ? 'worried' : 'calm', defenders: K.DEF, blinkU: u, walk: walk(u, moving), armL: K.POSE.relaxed, armR: K.POSE.relaxed });
+  K.kid(ctx, x, 766, lerp(1.25, 1.02, wp), { pipLift: lerp(0, 200, wp), mood: wp < 0.9 ? 'worried' : 'calm', defenders: K.DEF, blinkU: u, walk: walk(u, moving), armL: K.POSE.relaxed, armR: K.POSE.relaxed });
   if (inside > 0) K.rings(ctx, 1040, 560, 150 * inside, C.teal, u * 0.6, 2, 6);
   K.beth(ctx, 1470, FEET + 14, 1.15, { mood: 'calm', headphones: '#3A3F4B', hold: 'camera', armL: K.POSE.hold, armR: K.POSE.hold });
   const bk = K.pop(u, 74.5);
