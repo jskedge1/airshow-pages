@@ -12,6 +12,13 @@ cut-outs (no drawn jets), the cloud curtain jet wipe between steps and the logo 
 
 Both are 16:9 (1920x1080) and 9:16 (1080x1920), 60 fps, 84 bpm soft lo-fi bed, no voice-over.
 
+## The original design: `transport-original/`
+The first version of the train film, kept alongside the house style one at your request: rounded cards in the
+site's colours, each train company's colours (Southern green, Circle line yellow, Greater Anglia red), a route map
+that draws itself, moving scenery with a station-by-station strip, a five step Tube change, the Clacton walk map
+and an end card with a screenshot of the Train to Clacton page. 120 bpm, 90 s. Self-contained: `lib/toon.js` is
+its drawing kit; edit `film.js` directly.
+
 ## Build
 `film.js` in each folder is generated. Edit the parts in `_build/`, then run `python3 _build/build.py`:
 - `_build/house.js`: the approved security video's film.js, used as is for the kit, intro, outro, wipe and 9:16 layout
