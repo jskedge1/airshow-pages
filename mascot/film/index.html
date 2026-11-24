@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Meet Pip: the cartoon</title>
+<style>
+@font-face{font-family:Barlow;src:url(fonts/display.ttf);font-weight:800}
+@font-face{font-family:Barlow;src:url(fonts/ui.ttf);font-weight:600}
+html,body{margin:0;background:#111;overflow:hidden;height:100%}
+#stage{position:absolute;left:0;top:0;width:var(--W);height:var(--H);overflow:hidden;font-family:Barlow,sans-serif;font-weight:600;color:#13293C;transform-origin:0 0;background:#F8F4EA}
+.scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:64px;padding:60px 96px;box-sizing:border-box;visibility:hidden}
+.port .scene{flex-direction:column;gap:40px;padding:210px 120px 340px 80px}
+.scene.dark{color:#fff}
+.pipwrap{position:relative;flex:none;width:800px}
+.port .pipwrap{width:700px}
+.disc{position:absolute;left:50%;top:50%;width:104%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:#F8F4EA;display:none}
+.dark .disc{display:block}
+.pipbox{position:relative}
+.pipbox svg{display:block;width:100%;height:auto}
+.copy{flex:1;min-width:0}
+.port .copy{flex:none;width:100%;text-align:center}
+h1{font-weight:800;font-size:190px;line-height:1;margin:0 0 20px;white-space:nowrap}
+.port h1{font-size:190px}
+h2{font-weight:800;font-size:128px;line-height:1.02;margin:0 0 24px}
+.port h2{font-size:104px}
+p{font-size:62px;line-height:1.22;margin:0 0 22px}
+.port p{font-size:60px}
+.small{font-size:42px;opacity:.85}
+.pill{display:inline-block;background:#fff;color:#13293C;border-radius:999px;padding:14px 40px;font-weight:800;font-size:54px;margin-top:14px}
+.chips{display:flex;flex-wrap:wrap;gap:18px;margin:8px 0 26px}
+.port .chips{justify-content:center}
+.chip{background:#fff;color:#13293C;border-radius:999px;padding:12px 34px;font-weight:800;font-size:50px;border:5px solid #13293C}
+.dark .chip{border-color:transparent}
+.c1{background:#23908C;color:#fff}.c2{background:#1F4E8C;color:#fff}.c3{background:#D74949;color:#fff}.c4{background:#FFC23A}
+.letters{display:flex;gap:70px;justify-content:center;margin:10px 0 0}
+.letters div{text-align:center}
+.letters b{display:block;font-weight:800;font-size:440px;line-height:.86}
+.port .letters b{font-size:340px}
+.letters span{display:block;font-weight:800;font-size:76px;margin-top:14px}
+.cards{display:grid;gap:20px}
+.card{background:#fff;border-radius:28px;padding:22px 34px;border-left:16px solid var(--c);text-align:left}
+.card b{display:block;font-weight:800;font-size:58px;line-height:1.1}
+.card span{font-size:44px;opacity:.85}
+.big{font-size:270px;font-weight:800;line-height:.8;margin-right:.08em;vertical-align:-.04em}
+.quote{font-weight:800;font-size:88px;line-height:1.1;margin:0 0 22px}
+.strap{font-weight:800;font-size:86px;margin:6px 0 10px;white-space:nowrap}
+.port .strap{font-size:88px}
+.strap i{font-style:normal}
+.logo{width:640px;display:block;margin:0 0 26px}
+.port .logo{margin:0 auto 26px}
+.url{font-weight:800;font-size:68px}
+.scene#s3{flex-direction:column;gap:20px}
+.scene#s3 .row{display:flex;align-items:center;gap:60px}
+.port .scene#s3 .row{flex-direction:column;gap:20px}
+.scene#s3 .pipwrap{width:460px}.port .scene#s3 .pipwrap{width:440px}
+.scene#s1 .pipwrap{width:820px}.scene#s11 .pipwrap{width:660px}.port .scene#s1 .pipwrap{width:780px}
+.port .letters{gap:50px}
+.sky{position:absolute;inset:0;pointer-events:none}
+.cloud{position:absolute;width:300px;height:90px;border-radius:90px;background:#fff;opacity:.7}
+.cloud:before,.cloud:after{content:"";position:absolute;border-radius:50%;background:#fff}
+.cloud:before{width:130px;height:130px;left:46px;top:-62px}.cloud:after{width:100px;height:100px;left:150px;top:-40px}
+.dark .cloud{opacity:.09}
+.pipwrap,.copy,.scene>h2,.row{position:relative;z-index:1}
+#hud{position:fixed;left:10px;bottom:8px;font:12px monospace;color:#999;z-index:9}
+.render .sky{position:absolute;inset:0;pointer-events:none}
+.cloud{position:absolute;width:300px;height:90px;border-radius:90px;background:#fff;opacity:.7}
+.cloud:before,.cloud:after{content:"";position:absolute;border-radius:50%;background:#fff}
+.cloud:before{width:130px;height:130px;left:46px;top:-62px}.cloud:after{width:100px;height:100px;left:150px;top:-40px}
+.dark .cloud{opacity:.09}
+.pipwrap,.copy,.scene>h2,.row{position:relative;z-index:1}
+#hud{display:none}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="hud">space: play or pause · arrows: step · add ?format=9x16 for the tall version</div>
+<script src="../mascot.js"></script>
+<script src="film.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Meet Pip poster</title>
+<style>
+@font-face{font-family:Barlow;src:url(../film/fonts/display.ttf);font-weight:800}
+@font-face{font-family:Barlow;src:url(../film/fonts/ui.ttf);font-weight:600}
+@page{size:297mm 420mm;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Barlow,sans-serif;font-weight:600;color:#13293C}
+.poster{width:297mm;height:420mm;background:#F8F4EA;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.top{padding:16mm 18mm 0;display:flex;justify-content:space-between;align-items:flex-start}
+.top img{width:86mm}
+.badge{width:44mm}
+.hero{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 18mm}
+.sun{position:absolute;left:50%;top:46%;width:230mm;height:230mm;border-radius:50%;background:#fff;transform:translate(-50%,-50%)}
+.cloud{position:absolute;width:52mm;height:16mm;border-radius:16mm;background:#fff}
+.cloud:before,.cloud:after{content:"";position:absolute;border-radius:50%;background:#fff}
+.cloud:before{width:23mm;height:23mm;left:8mm;top:-11mm}.cloud:after{width:17mm;height:17mm;left:27mm;top:-7mm}
+.heropip{position:relative;width:168mm;margin:-6mm 0 -4mm}
+svg.pip{display:block;width:100%;height:auto}
+h1{position:relative;font-weight:800;font-size:56mm;line-height:.9;margin:0}
+.sub{position:relative;font-size:11.5mm;margin:3mm 0 0}
+.strap{position:relative;font-weight:800;font-size:17mm;margin:3mm 0 0}
+.three{display:grid;grid-template-columns:repeat(3,1fr)}
+.three div{color:#fff;padding:8mm 8mm 9mm;position:relative;min-height:74mm}
+.three b{display:block;font-weight:800;font-size:13mm;line-height:1}
+.three .L{font-size:30mm;line-height:.8;display:block;font-weight:800;margin-bottom:2mm}
+.three p{font-size:5.6mm;line-height:1.25;margin:2.5mm 26mm 0 0}
+.three .mini{display:flex;align-items:center;position:absolute;right:4mm;top:5mm;width:32mm;height:32mm;background:#F8F4EA;border-radius:50%;padding:1.5mm}
+.foot{background:#13293C;color:#fff;display:flex;align-items:center;gap:10mm;padding:9mm 18mm}
+.foot img{width:34mm;border-radius:3mm;display:block}
+.foot b{display:block;font-weight:800;font-size:13.5mm;line-height:1.05}
+.foot span{font-size:7mm;opacity:.9}
+.foot .url{color:#FFC23A;font-weight:800;font-size:10mm;opacity:1;display:block;margin-top:2mm}
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="top"><img src="../../brand/UK-Airshow-Guide-logo-transparent.png" alt="UK Airshow Guide"><div class="badge" id="badge"></div></div>
+  <div class="hero">
+    <div class="sun"></div>
+    <i class="cloud" style="left:10mm;top:26mm"></i><i class="cloud" style="right:6mm;top:118mm;transform:scale(.7)"></i><i class="cloud" style="left:22mm;top:176mm;transform:scale(.55)"></i>
+    <div class="heropip" id="hero"></div>
+    <h1>Meet Pip</h1>
+    <p class="sub">Your airshow guide</p>
+    <div class="strap"><span style="color:#23908C">Plan.</span> <span style="color:#1F4E8C">Inform.</span> <span style="color:#D74949">Prepare.</span></div>
+  </div>
+  <div class="three">
+    <div style="background:#23908C"><span class="mini" data-pip="map" data-pip-title=""></span><span class="L">P</span><b>Plan</b><p>Picking your show, booking tickets and parking, and working out your day.</p></div>
+    <div style="background:#1F4E8C"><span class="mini" data-pip="point" data-pip-title=""></span><span class="L">I</span><b>Inform</b><p>The facts you need: dates, the line-up, getting there and the rules on site.</p></div>
+    <div style="background:#D74949"><span class="mini" data-pip="loud" data-pip-title=""></span><span class="L">P</span><b>Prepare</b><p>What to pack, protecting little ears, the weather and getting home.</p></div>
+  </div>
+  <div class="foot">
+    <img src="qr.svg" alt="QR code for ukairshowguide.co.uk">
+    <div><b>Every UK airshow, one easy guide</b><span>Look out for Pip in our cartoons, kids' spotter missions and checklists.</span><span class="url">ukairshowguide.co.uk</span></div>
+  </div>
+</div>
+<script src="../mascot.js"></script>
+<script>
+document.getElementById('hero').innerHTML = UKAGMascot.svg({ pose: 'hello', title: 'Pip, waving hello' });
+var ring = '<svg viewBox="0 0 300 300" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">' +
+  '<circle cx="150" cy="150" r="146" fill="#1F4E8C"/><circle cx="150" cy="150" r="104" fill="#F8F4EA" stroke="#10202F" stroke-width="4"/>' +
+  '<defs><path id="rt" d="M32 150a118 118 0 0 1 236 0"/><path id="rb" d="M22 150a128 128 0 0 0 256 0"/></defs>' +
+  '<text font-family="Barlow,sans-serif" font-weight="800" font-size="31" fill="#fff" text-anchor="middle"><textPath href="#rt" startOffset="50%">Plan. <tspan fill="#FFC23A">Inform.</tspan> Prepare.</textPath></text>' +
+  '<text font-family="Barlow,sans-serif" font-weight="800" font-size="31" fill="#32B4AF" text-anchor="middle"><textPath href="#rb" startOffset="50%">★ with Pip ★</textPath></text></svg>';
+document.getElementById('badge').innerHTML = '<div style="position:relative;width:100%;aspect-ratio:1">' + ring + '<div style="position:absolute;left:19%;top:17%;width:62%">' + UKAGMascot.svg({ pose: 'rest', title: '' }) + '</div></div>';
+</script>
+</body>
+</html>
