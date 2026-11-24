@@ -1,6 +1,6 @@
 # Calm airshow cartoons
 
-Three cartoon films (about 1 min 45 each, 16:9, no voice-over, every tip on screen) about enjoying an
+Three cartoon films (about 2 min 35 each, 16:9, no voice-over, every tip on screen) about enjoying an
 airshow as an autistic child or adult. Each has a section for other visitors ("If you are standing
 nearby") and a section for show organisers. Finished videos are in `finished/`.
 
@@ -15,6 +15,10 @@ Cast (in `shared/kit.js`): Charlie (autistic, about 8), Dad, Beth (an autistic a
 House rules: square corners on every box; real Red Arrows Hawk, Typhoon, A400M and Mustang cut-outs
 (`shared/aircraft/`), never drawn planes; the current logo on the end card. The films are calm to
 watch: no flashes, no shake, a "loud bit coming" countdown before each loud moment, soft sounds only.
+
+Every scene runs 3 seconds longer than it was first written (`K.stretch` in each film.js), and a short
+awareness section for visitors who are not autistic, "Good to know about autism", sits before the last
+scene of every film (`factsScene` in `shared/kit.js`).
 
 Build, from this folder, with the motion-reel skill: `beats.py <film> --synth --flavor lofi --bpm 80`,
 `render.mjs --film <film> --video-only`, `sfx.mjs <film>`, `mix.mjs <film>`. Music and sound files are
