@@ -1,713 +1,871 @@
-// By train to the Clacton Air Show: Eastbourne -> London Victoria -> (Circle line) -> Liverpool Street -> Clacton-on-Sea -> walk.
-// A 90 s cartoon for The Big Guide to UK Airshows. Pure function of time; beats on the 120 bpm grid (1 beat = 0.5 s).
-// Facts from the site's own data: train-routes-src/eastbourne-cfg.json + clacton-cfg.json + clacton-data.json,
-// journey-planner.js (Victoria to Eastbourne line) and london-links.js (Victoria to Liverpool Street: Circle line).
+// transport: house style cartoon motion design. pure function of time. window.seek(t) paints frame t.
+// Timing is in beats (u) on the measured grid (84 bpm). docs/shotlist.md is the plan.
 import * as M from './lib/motion.js';
-import * as T from './lib/toon.js';
 
-const { W, H, FORMAT, E, prog, clamp, lerp, springU, SPRING, fill, rrect, bump, hash01, noise1 } = M;
-const { C, fd, fu } = T;
-const P = FORMAT.portrait;
-const S = FORMAT.safe;
-const pick = FORMAT.pick;
+const { W, H, E, prog, lerp, clamp, springU, SPRING, wobble, font, layout, text, fill, rrect, hash01, TAU, bump, kf } = M;
 
-const OP = {
-  southern: { c: '#7AB929', d: '#23412E', name: 'Southern' },
-  circle: { c: '#FFD329', d: '#13293C', name: 'Circle line' },
-  district: { c: '#00782A' },
-  ga: { c: '#D2232A', d: '#9E1A20', name: 'Greater Anglia' },
-  walk: { c: C.teal },
+// ---------------------------------------------------------------- palette (UK Airshow Guide)
+const C = {
+  navy: '#13293C', blue: '#1D63B7', teal: '#32B4AF', tealD: '#1A8580', red: '#D7263D',
+  sky: '#DCE6EE', sky2: '#C9D6E0', white: '#FFFFFF', off: '#F3F6F8',
+  grass: '#9BCF86', grass2: '#7DBA6A', sand: '#F1DCAE', sea: '#5AA9CF', sea2: '#3E8DB5',
+  gold: '#F5B942', grey: '#A9B6C1', grey2: '#7F93A3', pink: '#F4A9BC',
+  skin1: '#F3C9A8', skin2: '#D39B72', skin3: '#8F5C3E',
 };
+const DISPLAY = 'Display', UI = 'UI';
+const LW = 6;               // cartoon outline width
+const GY = 905;             // ground line (stage)
+// Scenes are drawn on a 1920x1080 stage. 16:9 shows the stage as is; 9:16 crops the art half of
+// the stage into the lower part of the frame and lays the text box out natively above it.
+const SW = 1920, SH = 1080;
+const PORTRAIT = M.FORMAT.portrait;
+const STAGE = { w: SW, h: SH, gy: GY }, PSURF = { w: W, h: H, gy: 1537 };
+let G = STAGE;              // the surface currently being drawn (helpers read it)
+function sfill(ctx, color) { ctx.fillStyle = color; ctx.fillRect(0, 0, G.w, G.h); }
 
+// ---------------------------------------------------------------- timeline (beats)
+const INTRO = 8, STEP = 12, NSTEP = 9, OUTRO = INTRO + STEP * NSTEP; // 116
+const st = (i) => INTRO + STEP * i;  // start beat of step i (0-based)
+
+// ---------------------------------------------------------------- copy
+// Facts from the site's own data: train-routes-src/eastbourne-cfg.json, clacton-cfg.json, clacton-data.json,
+// journey-planner.js (Victoria to Eastbourne) and london-links.js (Victoria to Liverpool Street, Circle line).
+const STEPS = [
+  { title: 'Plan the trip', q: 'Eastbourne to Clacton by train', b: ['Train to London Victoria', 'Tube to Liverpool Street', 'Train to Clacton, then walk'] },
+  { title: 'Buy your ticket', q: 'Eastbourne to Clacton-on-Sea', b: ['One ticket, routed via London', 'It usually covers the Tube', 'A Railcard saves a third'] },
+  { title: 'Train to London', q: 'Southern, from Eastbourne', b: ['About 1 hour 25 minutes', 'Every 30 minutes (hourly Sundays)', 'Get off at London Victoria'] },
+  { title: 'Follow the signs', q: 'For the Underground', b: ['They start on the platform', 'Then through the ticket gates', 'Use your ticket or contactless'] },
+  { title: 'Circle line', q: 'Eastbound, towards Tower Hill', b: ['Not the District line', '11 stops, about 20 minutes', 'Get off at Liverpool Street'] },
+  { title: 'Liverpool Street', q: 'Follow the National Rail signs', b: ['Find Clacton-on-Sea on the board', 'Allow 45 minutes for the change', 'Grab a drink for the train'] },
+  { title: 'Train to Clacton', q: 'Greater Anglia, direct', b: ['A train every hour', 'About 1 hour 26 minutes', 'Check the summer 2027 times'] },
+  { title: 'Walk to the show', q: '10 to 15 minutes on foot', b: ['Down through the town centre', 'Turn right at the seafront', 'On to the West Greensward'] },
+  { title: 'Going home', q: 'The trains fill up fast', b: ['Busiest straight after the flying', 'Leave a little early', 'Or eat in town and go later'] },
+];
+const INTRO_WORDS = ['EASTBOURNE TO', 'CLACTON', 'BY TRAIN'], INTRO_TAG = 'CHANGING IN LONDON', INTRO_SUB = 'Train, Tube, train and a short walk';
+const OUTRO_LINE = 'Enjoy the Clacton Air Show!', OUTRO_LINES = ['Enjoy the', 'Clacton Air Show!'];
+const URL = 'ukairshowguide.co.uk/train-to-clacton';
+const COL = { southern: '#7AB929', circle: '#FFD329', district: '#00782A', ga: '#D2232A', walk: C.teal };
+
+// ---------------------------------------------------------------- hits (picture accents -> sfx)
 const HITS = [
-  [0, 'title', 'impact'],
-  [1.5, 'pill', 'pop', { pitch: 'A5' }],
-  [3, 'leg 1 draws', 'whoosh', { len: 0.5, from: 600, to: 2000 }],
-  [5, 'tube', 'blip', { pitch: 'E6' }],
-  [6, 'leg 2 draws', 'whoosh', { len: 0.5, from: 600, to: 2400 }],
-  [8.5, 'walk', 'pop', { pitch: 'C6' }],
-  [10, 'chip', 'tick'], [10.5, 'chip', 'tick'], [11, 'chip', 'tick'], [11.5, 'chip', 'tick'],
-  [15.1, 'push', 'whoosh', { len: 0.4 }],
-  [16, 'ticket', 'thud'],
-  [18, 'tip 1', 'bell', { pitch: 'C6' }],
-  [22, 'tip 2', 'bell', { pitch: 'E6' }],
-  [26, 'tip 3', 'bell', { pitch: 'G6' }],
-  [31.1, 'push', 'whoosh', { len: 0.4 }],
-  [32, 'leg 1', 'impact'],
-  [33, 'train arrives', 'whoosh', { len: 1.2, from: 300, to: 900 }],
-  [36.5, 'doors', 'boing', { pitch: 'G5', to: 'C6' }],
-  [38, 'depart', 'riser', { len: 1 }],
-  [40, 'chips', 'tick'], [40.5, 'chips', 'tick'], [41, 'chips', 'tick'],
-  [61.1, 'push', 'whoosh', { len: 0.4 }],
-  [62, 'the change', 'impact'],
-  [64, 'sign', 'pop', { pitch: 'C6' }],
-  [72, 'gates step', 'tok', { pitch: 'D5' }],
-  [75.5, 'gates open', 'click'],
-  [80, 'circle step', 'tok', { pitch: 'E5' }],
-  [82, 'circle sign', 'bell', { pitch: 'E6' }],
-  [84, 'not district', 'thud'],
-  [90, 'ride step', 'tok', { pitch: 'G5' }],
-  [104, 'arrive LST', 'bell', { pitch: 'G6' }],
-  [106, 'board step', 'tok', { pitch: 'A5' }],
-  [108, 'clock', 'tick'],
-  [113.1, 'push', 'whoosh', { len: 0.4 }],
-  [114, 'leg 2', 'impact'],
-  [116, 'depart', 'riser', { len: 1 }],
-  [118, 'chips', 'tick'], [118.5, 'chips', 'tick'], [119, 'chips', 'tick'],
-  [136, 'summer note', 'blip', { pitch: 'A5' }],
-  [145.1, 'push', 'whoosh', { len: 0.4 }],
-  [146, 'last leg', 'impact'],
-  [150, 'step', 'tick'], [154, 'step', 'tick'], [158, 'step', 'tick'],
-  [161, 'arrive', 'bell', { pitch: 'C6' }],
-  [161.5, 'jets', 'whoosh', { len: 1, from: 400, to: 3000 }],
-  [163.1, 'push', 'whoosh', { len: 0.4 }],
-  [164, 'home tip', 'thud'],
-  [173.1, 'push', 'whoosh', { len: 0.4 }],
-  [174, 'end card', 'impact'],
-  [175, 'url', 'bell', { pitch: 'D6' }],
+  [0, 'jet on frame 0', 'whoosh', { len: 1.2, from: 300, to: 1400, gain: 0.22 }],
+  [0.05, 'HOW AIRSHOW', 'pop', { pitch: 'F5', gain: 0.25 }],
+  [1, 'SECURITY', 'pop', { pitch: 'A5', gain: 0.25 }],
+  [2, 'WORKS', 'pop', { pitch: 'C6', gain: 0.25 }],
+  [3.5, 'tag', 'pop', { pitch: 'F5', to: 'C6', gain: 0.2 }],
+  [4.5, 'subtitle', 'bell', { pitch: 'F6', gain: 0.18 }],
 ];
+const PITCH = ['F5', 'A5', 'C6'];
 
-const blinkAt = (u) => { const k = Math.floor(u / 3.1); const c = k * 3.1 + 1 + hash01(k, 5) * 1.4; return bump(u, c, 0.14); };
-
-// Section header bar: coloured block + pill + title. Lands on beat b.
-function header(ctx, u, b, tag, title, bg, fg, tagBg = '#FFFFFF', tagFg = C.navy) {
-  const k = springU(u, b - 0.6, SPRING.snappy);
-  const y = pick({ '16x9': 60, '9x16': 250 }), h = pick({ '16x9': 120, '9x16': 190 });
-  ctx.save(); ctx.translate(0, -(1 - k) * (h + y + 20));
-  ctx.fillStyle = bg; ctx.fillRect(0, y, W, h);
-  const ty = P ? y + 64 : y + h / 2;
-  const pw = T.pill(ctx, tag, S.x, ty, pick({ '16x9': 30, '9x16': 32 }), tagBg, tagFg);
-  if (P) T.lines(ctx, title, S.x, y + 150, fd(58), fg, S.w, 60);
-  else M.text(ctx, title, S.x + pw + 28, ty + 24, fd(68), fg);
-  ctx.restore();
+for (let i = 0; i < NSTEP; i++) {
+  const s = st(i);
+  HITS.push([s, `step ${i + 1} wipe`, 'whoosh', { len: 0.9, from: 500, to: 2200, gain: 0.2, pan: i % 2 ? -0.3 : 0.3 }]);
+  HITS.push([s + 0.5, `step ${i + 1} card`, 'pop', { pitch: 'C5', to: 'F5', gain: 0.22 }]);
+  STEPS[i].b.forEach((_, j) => HITS.push([s + 2.5 + j * 2, `step ${i + 1} tick ${j + 1}`, 'blip', { pitch: PITCH[j % 3], gain: 0.16 }]));
 }
-// Caption card used in the steps. Returns nothing.
-function caption(ctx, u, b, num, title, body, edge, x, y, w, h) {
-  T.card(ctx, x, y, w, h, { edge, r: 20, edgeH: 12 });
-  const tk = E.outCubic(prog(u, b, b + 0.6));
-  ctx.save(); ctx.beginPath(); ctx.rect(x, y + 12, w, h - 12); ctx.clip();
-  ctx.globalAlpha = tk; ctx.translate(0, (1 - tk) * 50);
-  let tx = x + 36;
-  if (num) {
-    T.badge(ctx, x + 36 + 34, y + h / 2, 34, C.navy);
-    M.text(ctx, String(num), x + 70, y + h / 2 + 15, fd(46), '#FFF', 'center');
-    tx = x + 130;
-  }
-  const tw = w - (tx - x) - 30;
-  const tf = fd(pick({ '16x9': 60, '9x16': 54 })), bf = fu(pick({ '16x9': 36, '9x16': 34 }), 600);
-  const nt = T.wrap(ctx, title, tf, tw).length, nb = T.wrap(ctx, body, bf, tw).length;
-  const lh1 = pick({ '16x9': 62, '9x16': 56 }), lh2 = pick({ '16x9': 46, '9x16': 44 });
-  const total = nt * lh1 + nb * lh2 + 8;
-  const top = y + 12 + (h - 12 - total) / 2 + lh1 * 0.78;
-  T.lines(ctx, title, tx, top, tf, C.navy, tw, lh1);
-  T.lines(ctx, body, tx, top + nt * lh1 + 4, bf, C.body, tw, lh2);
-  ctx.restore();
-}
+// scene-specific accents
+for (const d of [2.5, 4.5, 6.5]) HITS.push([st(0) + d - 0.1, 'route draws', 'whoosh', { len: 0.5, from: 600, to: 2000, gain: 0.08 }]);
+HITS.push([st(2) + 0.5, 'train arrives', 'whoosh', { len: 1.4, from: 300, to: 900, gain: 0.14 }], [st(2) + 7.4, 'train leaves', 'whoosh', { len: 1.6, from: 400, to: 1200, gain: 0.14 }]);
+HITS.push([st(3) + 3.6, 'gates open', 'click', { gain: 0.14 }], [st(3) + 6.6, 'tap', 'blip', { pitch: 'E6', gain: 0.14 }]);
+HITS.push([st(4) + 2.6, 'not district', 'thud', { gain: 0.18 }], [st(4) + 5, 'tube arrives', 'whoosh', { len: 1.2, from: 300, to: 1000, gain: 0.14 }]);
+HITS.push([st(5) + 0.6, 'board', 'thud', { gain: 0.16 }]);
+HITS.push([st(6) + 0.3, 'train passes', 'whoosh', { len: 2.4, from: 300, to: 1100, gain: 0.14 }]);
+HITS.push([st(7) + 6.6, 'red arrows', 'whoosh', { len: 1.4, from: 300, to: 1600, gain: 0.18 }]);
+HITS.push([st(8) + 2.6, 'busy', 'thud', { gain: 0.16 }]);
 
-// ---------------------------------------------------------------- T1 map (0-16)
-const MAPPTS = { EBN: [0.47, 0.86], VIC: [0.355, 0.445], LST: [0.405, 0.405], COL: [0.71, 0.24], CLT: [0.79, 0.31], SEA: [0.805, 0.345] };
-const SEA = [[1, 0], [0.86, 0], [0.84, 0.16], [0.83, 0.3], [0.8, 0.38], [0.7, 0.42], [0.6, 0.46], [0.66, 0.5], [0.78, 0.52], [0.86, 0.56],
-  [0.9, 0.64], [0.88, 0.74], [0.76, 0.82], [0.62, 0.86], [0.52, 0.895], [0.36, 0.9], [0.2, 0.92], [0, 0.93], [0, 1], [1, 1]];
-function mapScene(ctx, u) {
-  fill(ctx, C.light);
-  const R = pick({ '16x9': [860, 110, 964, 900], '9x16': [40, 950, 1000, 560] });
-  const [rx, ry, rw, rh] = R;
-  const mp = (k) => [rx + MAPPTS[k][0] * rw, ry + MAPPTS[k][1] * rh];
-  const mk = springU(u, -1.2, SPRING.gentle);
-  ctx.save(); ctx.translate(0, (1 - mk) * 80);
-  ctx.save(); rrect(ctx, rx, ry, rw, rh, 28); ctx.clip();
-  ctx.fillStyle = '#CFE8B8'; ctx.fillRect(rx, ry, rw, rh);
-  ctx.fillStyle = '#9FD3EA'; ctx.beginPath(); SEA.forEach(([x, y], i) => (i ? ctx.lineTo(rx + x * rw, ry + y * rh) : ctx.moveTo(rx + x * rw, ry + y * rh))); ctx.closePath(); ctx.fill();
-  // soft waves
-  ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 4;
-  for (let i = 0; i < 6; i++) { const x = rx + rw * (0.12 + i * 0.15), y = ry + rh * 0.96 + Math.sin(u + i) * 4; ctx.beginPath(); ctx.arc(x, y, 18, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke(); }
-  // London blob
-  const [lx, ly] = mp('VIC');
-  ctx.fillStyle = 'rgba(19,41,60,0.12)'; ctx.beginPath(); ctx.ellipse(lx + rw * 0.03, ly - rh * 0.01, rw * 0.09, rh * 0.06, 0, 0, M.TAU); ctx.fill();
-  ctx.restore();
-  // route, drawn leg by leg
-  const legs = [
-    [['EBN', 'VIC'], OP.southern.c, 2, 4.4, false],
-    [['VIC', 'LST'], OP.circle.c, 4.6, 5.4, false],
-    [['LST', 'COL', 'CLT'], OP.ga.c, 5.6, 8.2, false],
-    [['CLT', 'SEA'], C.teal, 8.4, 9.2, true],
-  ];
+// ================================================================ drawing kit
+function ink(ctx, w = LW) { ctx.strokeStyle = C.navy; ctx.lineWidth = w; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; }
+function fs(ctx, color, w = LW) { ctx.fillStyle = color; ctx.fill(); if (w) { ink(ctx, w); ctx.stroke(); } }
+function circ(ctx, x, y, r, color, w = LW) { ctx.beginPath(); ctx.arc(x, y, Math.max(0.1, r), 0, TAU); fs(ctx, color, w); }
+function ell(ctx, x, y, rx, ry, color, w = LW, rot = 0) { ctx.beginPath(); ctx.ellipse(x, y, Math.max(0.1, rx), Math.max(0.1, ry), rot, 0, TAU); fs(ctx, color, w); }
+function box(ctx, x, y, w, h, r, color, lw = LW) { rrect(ctx, x, y, w, h, r); fs(ctx, color, lw); }
+// thick outlined limb
+function limb(ctx, pts, w, color) {
+  ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (const p of pts.slice(1)) ctx.lineTo(p[0], p[1]);
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  legs.forEach(([pts, col, a, b, dash]) => {
-    const p = E.inOutCubic(prog(u, a, b));
-    if (p <= 0) return;
-    const xy = pts.map(mp);
-    const segL = xy.slice(1).map((q, i) => Math.hypot(q[0] - xy[i][0], q[1] - xy[i][1]));
-    const tot = segL.reduce((s, v) => s + v, 0);
-    let left = tot * p;
-    ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = pick({ '16x9': 16, '9x16': 14 }); if (dash) ctx.setLineDash([4, 22]);
-    ctx.beginPath(); ctx.moveTo(xy[0][0], xy[0][1]);
-    for (let i = 0; i < segL.length && left > 0; i++) {
-      const f = Math.min(1, left / segL[i]);
-      ctx.lineTo(lerp(xy[i][0], xy[i + 1][0], f), lerp(xy[i][1], xy[i + 1][1], f));
-      left -= segL[i];
-    }
-    ctx.stroke(); ctx.restore();
-  });
-  // places
-  const fs = pick({ '16x9': 34, '9x16': 32 });
-  [['EBN', 'Eastbourne', 0.4, 'right'], ['VIC', 'London', 2.2, 'left'], ['CLT', 'Clacton-on-Sea', 7.6, 'left']].forEach(([k, name, b, side]) => {
-    const kk = T.pop(u, b);
-    const [x, y] = mp(k);
-    T.scaled(ctx, kk, x, y, () => {
-      T.badge(ctx, x, y, 16, '#FFF'); ctx.strokeStyle = C.navy; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(x, y, 16, 0, M.TAU); ctx.stroke();
-      T.pill(ctx, name, side === 'right' ? x + 30 : x - 30, y - (k === 'CLT' ? 50 : 0), fs, C.navy, '#FFF', side);
-    });
-  });
-  // the show: a little jet over the sea off Clacton
-  const jk = T.pop(u, 9);
-  if (jk > 0) {
-    const [sx, sy] = mp('SEA');
-    T.scaled(ctx, jk, sx, sy, () => {
-      ctx.fillStyle = C.red; ctx.beginPath(); ctx.arc(sx, sy, 22, 0, M.TAU); ctx.fill();
-      T.jet(ctx, sx + 60 + Math.sin(u * 1.5) * 8, sy + 40, 0.22, -0.3 + Math.sin(u) * 0.1, { stripe: C.red, flame: 0.6 });
-    });
-  }
-  ctx.restore();
-  // title block
-  const tx = S.x + 10, ty = pick({ '16x9': 330, '9x16': 470 });
-  const pk = T.pop(u, 1.5);
-  T.scaled(ctx, pk, tx + 100, ty - 170, () => T.pill(ctx, 'Plan your airshow trip', tx, ty - pick({ '16x9': 190, '9x16': 175 }), pick({ '16x9': 32, '9x16': 34 }), C.purple, '#FFF'));
-  T.heading(ctx, u, -1.1, 'EASTBOURNE', tx, ty, pick({ '16x9': 150, '9x16': 150 }), C.navy);
-  T.heading(ctx, u, -0.8, 'TO CLACTON', tx, ty + pick({ '16x9': 140, '9x16': 140 }), pick({ '16x9': 150, '9x16': 150 }), C.navy, C.red, 1);
-  const lk = E.outCubic(prog(u, 2, 2.8));
-  if (lk > 0) { ctx.save(); ctx.globalAlpha = lk; T.lines(ctx, 'The Clacton Air Show by train, changing in London.', tx, ty + pick({ '16x9': 225, '9x16': 225 }) + (1 - lk) * 20, fu(pick({ '16x9': 40, '9x16': 40 }), 600), C.body, pick({ '16x9': 700, '9x16': 900 }), 52); ctx.restore(); }
-  // legend chips
-  const chips = [['Train', OP.southern.c, '#13210F'], ['Tube', OP.circle.c, C.navy], ['Train', OP.ga.c, '#FFF'], ['Walk', C.teal, '#FFF']];
-  let cx = tx;
-  const cy = ty + pick({ '16x9': 380, '9x16': 320 });
-  chips.forEach(([s, bg, fg], i) => {
-    const k = T.pop(u, 10 + i * 0.5);
-    ctx.font = fu(34, 700); const w = ctx.measureText(s).width + 34 * 1.1;
-    const x0 = cx;
-    T.scaled(ctx, k, x0 + w / 2, cy, () => T.pill(ctx, s, x0, cy, 34, bg, fg));
-    if (i < 3 && k > 0) { ctx.save(); ctx.globalAlpha = clamp(k); T.arrow(ctx, x0 + w + 22, cy, 26, 0, C.navy); ctx.restore(); }
-    cx += w + 44;
-  });
-  const sk = E.outCubic(prog(u, 12.5, 13.3));
-  if (sk > 0 && !P) { ctx.save(); ctx.globalAlpha = sk; T.lines(ctx, 'Around 3 hours 30 on the move, plus your changes.', tx, cy + 90, fu(36, 700), C.navy, 520, 46); ctx.restore(); }
-  if (sk > 0 && P) { ctx.save(); ctx.globalAlpha = sk; T.lines(ctx, 'Around 3 hours 30 on the move, plus your changes.', tx, cy + 80, fu(36, 700), C.navy, 900, 46); ctx.restore(); }
-  // Sam ready to go (landscape)
-  if (!P) {
-    const k = springU(u, 1, SPRING.bouncy);
-    T.person(ctx, 720, 1020 + (1 - k) * 300, 0.62, { face: 1, pack: true, hold: 'ticket', armUp: 0.7, blink: blinkAt(u), mouth: u < 4 ? 'open' : 'smile' });
-  }
+  ctx.strokeStyle = C.navy; ctx.lineWidth = w + LW * 2; ctx.stroke();
+  ctx.strokeStyle = color; ctx.lineWidth = w; ctx.stroke();
 }
+function withT(ctx, x, y, s, rot, fn) { ctx.save(); ctx.translate(x, y); if (rot) ctx.rotate(rot); if (s !== 1) ctx.scale(s, s); fn(); ctx.restore(); }
+function wrap(ctx, str, f, maxW) {
+  ctx.font = f; const words = str.split(' '); const lines = []; let cur = '';
+  for (const w of words) { const t = cur ? cur + ' ' + w : w; if (ctx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; }
+  if (cur) lines.push(cur); return lines;
+}
+const pop = (u, u0, cfg = SPRING.bouncy) => Math.max(0, springU(u, u0, cfg));
 
-// ---------------------------------------------------------------- T2 before you go (16-32)
-const TIPS = [
-  [18, 'Buy one ticket all the way', 'A through ticket via London usually covers the Tube between the stations.', C.teal],
-  [22, 'Check the times for your day', 'Look up your trains, and any weekend Tube closures, before you set off.', C.amber],
-  [26, 'Got a Railcard?', 'It takes a third off most fares. Under 5s travel free.', C.purple],
-];
-function ticket(ctx, x, y, w, h) {
-  ctx.save(); ctx.fillStyle = 'rgba(0,0,0,0.15)'; rrect(ctx, x + 8, y + 12, w, h, 18); ctx.fill(); ctx.restore();
-  rrect(ctx, x, y, w, h, 18); ctx.fillStyle = '#FFF6DE'; ctx.fill();
-  ctx.save(); rrect(ctx, x, y, w, h, 18); ctx.clip(); ctx.fillStyle = C.amber; ctx.fillRect(x, y, w, h * 0.22); ctx.restore();
-  M.text(ctx, 'TRAIN TICKET', x + 34, y + h * 0.15, fd(h * 0.1), C.navy);
-  M.text(ctx, 'FROM', x + 34, y + h * 0.36, fu(h * 0.06, 700), C.body);
-  M.text(ctx, 'EASTBOURNE', x + 34, y + h * 0.48, fd(h * 0.12), C.navy);
-  M.text(ctx, 'TO', x + 34, y + h * 0.62, fu(h * 0.06, 700), C.body);
-  M.text(ctx, 'CLACTON-ON-SEA', x + 34, y + h * 0.74, fd(h * 0.12), C.navy);
-  M.text(ctx, 'ROUTE: VIA LONDON', x + 34, y + h * 0.9, fu(h * 0.065, 700), C.red);
-  ctx.setLineDash([10, 10]); ctx.strokeStyle = C.soft; ctx.lineWidth = 4;
-  ctx.beginPath(); ctx.moveTo(x + w * 0.78, y + h * 0.28); ctx.lineTo(x + w * 0.78, y + h - 20); ctx.stroke(); ctx.setLineDash([]);
-  T.jet(ctx, x + w * 0.89, y + h * 0.6, h / 1300, -1.2, { stripe: C.red, flame: 0 });
-}
-function before(ctx, u) {
-  fill(ctx, C.light);
-  T.heading(ctx, u, 15.4, 'BEFORE YOU GO', S.x, pick({ '16x9': 170, '9x16': 360 }), pick({ '16x9': 130, '9x16': 130 }), C.navy);
-  const k = springU(u, 15.4, SPRING.bouncy);
-  const tw = pick({ '16x9': 640, '9x16': 720 }), th = pick({ '16x9': 400, '9x16': 400 });
-  const tx = pick({ '16x9': S.x, '9x16': (W - 720) / 2 }), ty = pick({ '16x9': 270, '9x16': 430 });
-  ctx.save(); ctx.translate(tx + tw / 2, ty + th / 2); ctx.rotate(-0.04 + (1 - k) * 0.3); ctx.scale(Math.max(0.01, k), Math.max(0.01, k)); ctx.translate(-(tx + tw / 2), -(ty + th / 2));
-  ticket(ctx, tx, ty, tw, th);
-  ctx.restore();
-  if (!P) T.person(ctx, 420, 1010, 0.62, { face: 1, pack: true, hold: 'phone', armUp: 1, blink: blinkAt(u) });
-  TIPS.forEach(([b, title, body, col], i) => {
-    const kk = springU(u, b, SPRING.bouncy);
-    if (kk <= 0.001) return;
-    const x = pick({ '16x9': 820, '9x16': S.x }), w = pick({ '16x9': 1004, '9x16': S.w }), h = pick({ '16x9': 230, '9x16': 210 });
-    const y = pick({ '16x9': 250 + i * 250, '9x16': 870 + i * 225 });
-    ctx.save(); ctx.translate((1 - kk) * 400, 0); ctx.globalAlpha = clamp(kk * 1.5);
-    T.card(ctx, x, y, w, h, { edge: null, r: 18 });
-    ctx.fillStyle = col; rrect(ctx, x, y, 16, h, 8); ctx.fill();
-    T.badge(ctx, x + 76, y + 70, 36, col, (X, Y, R) => T.tick(ctx, X, Y, R));
-    M.text(ctx, title, x + 136, y + 88, fd(pick({ '16x9': 56, '9x16': 52 })), C.navy);
-    T.lines(ctx, body, x + 136, y + 145, fu(pick({ '16x9': 34, '9x16': 32 }), 600), C.body, w - 170, pick({ '16x9': 44, '9x16': 42 }));
-    ctx.restore();
-  });
-}
-
-// ---------------------------------------------------------------- the ride (legs 1 and 2)
-// zones: [fractionStart, kind] where kind = 'sea' | 'country' | 'river' | 'city'
-function zoneAt(f, zones) { let z = zones[0][1]; zones.forEach(([a, k]) => { if (f >= a) z = k; }); return z; }
-function ride(ctx, u, R) {
-  const { a, b, dep, arr, look, zones, stations, op } = R;
-  // distance travelled: smooth start and stop
-  const f = E.inOutSine(prog(u, dep, arr));
-  const DIST = 26000;
-  const d = f * DIST;
-  const top = pick({ '16x9': 180, '9x16': 440 }), railY = pick({ '16x9': 820, '9x16': 1240 });
-  T.sky(ctx, C.skyTop, C.skyLow, top, railY);
-  T.clouds(ctx, u - d / 400, 6, 9, top + 60, top + 260, 6, 0.95);
-  // far layer: downs / skyline by zone
-  const zFar = zoneAt(f, zones);
-  const farY = railY - pick({ '16x9': 170, '9x16': 230 });
-  const cityK = zones.reduce((acc, [st, k], i) => {
-    const en = zones[i + 1] ? zones[i + 1][0] : 1;
-    return k === 'city' ? Math.max(acc, clamp(1 - Math.max(st - f, f - en) / 0.06)) : acc;
-  }, 0);
-  ctx.save(); ctx.globalAlpha = 1 - cityK * 0.9;
-  T.hills(ctx, farY, 50, 1.6, d / 2600, '#A8D98A', 3);
-  ctx.restore();
-  if (cityK > 0) {
-    ctx.save(); ctx.globalAlpha = cityK;
-    for (let i = -2; i < 24; i++) {
-      const wx = Math.floor(d * 0.25 / 120) + i;
-      const x = wx * 120 - d * 0.25;
-      const h = 90 + hash01(wx, 4) * 190;
-      ctx.fillStyle = hash01(wx, 6) > 0.5 ? '#B9C7D3' : '#A3B4C3';
-      ctx.fillRect(x, farY + 60 - h, 104, h + 200);
-      ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      for (let r = 0; r < h / 40 - 1; r++) for (let c = 0; c < 3; c++) ctx.fillRect(x + 14 + c * 30, farY + 80 - h + r * 40, 16, 20);
-    }
-    ctx.restore();
-  }
-  // sea / river strip behind
-  const seaK = zones.reduce((acc, [st, k], i) => {
-    const en = zones[i + 1] ? zones[i + 1][0] : 1;
-    return k === 'sea' || k === 'river' ? Math.max(acc, clamp(1 - Math.max(st - f, f - en) / 0.05)) : acc;
-  }, 0);
-  if (seaK > 0) {
-    ctx.save(); ctx.globalAlpha = seaK; ctx.fillStyle = '#7FC7E3'; ctx.fillRect(0, farY + 10, W, 70);
-    ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 4;
-    for (let i = 0; i < 14; i++) { const x = ((i * 160 - d * 0.4) % (W + 160) + W + 160) % (W + 160) - 80; ctx.beginPath(); ctx.moveTo(x, farY + 40); ctx.lineTo(x + 40, farY + 40); ctx.stroke(); }
-    ctx.restore();
-  }
-  // ground
-  ctx.fillStyle = C.grass; ctx.fillRect(0, farY + 70, W, railY - farY);
-  // near layer: trees / fences / buildings
-  for (let i = -2; i < 14; i++) {
-    const wx = Math.floor(d / 260) + i;
-    const x = wx * 260 - d + 60 * hash01(wx, 2);
-    const z = zoneAt(clamp(wx * 260 / DIST), zones);
-    const y = railY - 40;
-    if (z === 'city') {
-      const h = 140 + hash01(wx, 8) * 120;
-      ctx.fillStyle = ['#C96A4A', '#D9B38C', '#8C9BAA'][Math.floor(hash01(wx, 9) * 3)];
-      ctx.fillRect(x, y - h, 200, h);
-      ctx.fillStyle = 'rgba(255,255,255,0.75)';
-      for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) ctx.fillRect(x + 22 + c * 60, y - h + 24 + r * 50, 34, 30);
-    } else if (z === 'sea' || z === 'river') {
-      ctx.fillStyle = '#E9D8A6'; ctx.fillRect(x, y - 6, 260, 10);
-      if (hash01(wx, 3) > 0.5) { ctx.fillStyle = '#7A5B3A'; ctx.fillRect(x + 80, y - 60, 8, 60); ctx.fillStyle = C.red; ctx.beginPath(); ctx.moveTo(x + 88, y - 60); ctx.lineTo(x + 130, y - 48); ctx.lineTo(x + 88, y - 36); ctx.fill(); }
-    } else {
-      if (hash01(wx, 3) > 0.35) {
-        ctx.fillStyle = '#6B4E35'; ctx.fillRect(x + 40, y - 70, 18, 70);
-        ctx.fillStyle = hash01(wx, 5) > 0.5 ? '#4E9A3A' : '#5FB046';
-        ctx.beginPath(); ctx.arc(x + 49, y - 100, 58, 0, M.TAU); ctx.arc(x + 20, y - 78, 40, 0, M.TAU); ctx.arc(x + 80, y - 76, 42, 0, M.TAU); ctx.fill();
-      } else { ctx.strokeStyle = '#B08A5E'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(x, y - 30); ctx.lineTo(x + 240, y - 30); ctx.stroke(); }
-    }
-  }
-  // Gatwick: a plane climbing out mid-journey (leg 1 only)
-  if (R.plane) {
-    const pp = prog(f, R.plane - 0.08, R.plane + 0.08);
-    if (pp > 0 && pp < 1) T.jet(ctx, lerp(W * 0.1, W * 0.9, pp), lerp(farY - 20, top + 80, pp), 0.45, -0.22, { body: '#FFFFFF', stripe: C.sky, belly: '#E7EDF2', flame: 0 });
-  }
-  // platform at the start and end
-  const platK = 1 - clamp(d / 1800) + clamp((d - (DIST - 1800)) / 1800);
-  ctx.fillStyle = '#9AA6B0'; ctx.fillRect(0, railY + 8, W, H - railY);
-  if (platK > 0) {
-    const off = d < DIST / 2 ? -d : DIST - d;
-    ctx.fillStyle = '#D5DCE2'; ctx.fillRect(off - 200, railY - 60, W + 400, 60 + 4);
-    ctx.fillStyle = C.amber; ctx.fillRect(off - 200, railY - 60, W + 400, 8);
-    // canopy posts + name board
-    ctx.fillStyle = op.d;
-    for (let i = 0; i < 6; i++) ctx.fillRect(off + 100 + i * 360, top + 40, 14, railY - top - 100);
-    ctx.fillRect(off, top + 30, W + 200, 30);
-    const name = d < DIST / 2 ? R.from : R.to;
-    const nbX = off + W * 0.5;
-    ctx.fillStyle = op.c; rrect(ctx, nbX - 280, top + 110, 560, 90, 14); ctx.fill();
-    M.text(ctx, name, nbX, top + 172, fd(54), op.ink || '#FFFFFF', 'center');
-  }
-  T.rails(ctx, railY + 4, '#5A6670', '#7C6A56', d, 1);
-  // Sam on the platform boards the train (leg 1), else rides
-  const tS = pick({ '16x9': 0.62, '9x16': 0.5 }), cars = pick({ '16x9': 3, '9x16': 2 });
-  const frontX = pick({ '16x9': 1580, '9x16': 980 });
-  const arriveK = R.arrive ? E.outCubic(prog(u, R.arrive[0], R.arrive[1])) : 1;
-  const tx = frontX + (1 - arriveK) * 2600;
-  if (R.board) {
-    const [bA, bB] = R.board;
-    const walkP = prog(u, bA, bB);
-    if (walkP < 1) {
-      const sx = lerp(pick({ '16x9': 400, '9x16': 220 }), tx - 444 * tS * 0.2 - 40, E.inOutCubic(walkP)) - d;
-      T.person(ctx, sx, railY - 58, pick({ '16x9': 0.75, '9x16': 0.6 }), { face: 1, pack: true, walk: walkP > 0 ? 1 : 0, phase: u * Math.PI * 1.5, blink: blinkAt(u), wave: walkP <= 0 ? prog(u, a, a + 0.5) : 0, waveT: u * 0.5 });
-    }
-  }
-  T.train(ctx, tx, railY, tS, cars, look, d / 60);
-  // Sam in the window once on board
-  if (!R.board || u >= R.board[1]) {
-    const wx = tx - 430 * tS + 50 * tS + 92 * tS + 32 * tS, wy = railY - 170 * tS + 58 * tS;
-    ctx.save(); rrect(ctx, wx - 32 * tS, wy - 24 * tS, 64 * tS, 48 * tS, 10 * tS); ctx.clip();
-    ctx.fillStyle = C.skin; ctx.beginPath(); ctx.arc(wx, wy + 8 * tS, 20 * tS, 0, M.TAU); ctx.fill();
-    ctx.fillStyle = C.hair; ctx.beginPath(); ctx.arc(wx, wy + 2 * tS, 21 * tS, Math.PI, M.TAU); ctx.fill();
-    ctx.restore();
-  }
-  // progress strip
-  const py = pick({ '16x9': 960, '9x16': 1400 }), px0 = S.x + 20, px1 = W - S.x - 20;
-  ctx.fillStyle = C.navy; rrect(ctx, S.x - 20, py - pick({ '16x9': 70, '9x16': 110 }), S.w + 40, pick({ '16x9': 130, '9x16': 180 }), 22); ctx.fill();
-  ctx.strokeStyle = op.c; ctx.lineWidth = 10; ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.moveTo(px0, py); ctx.lineTo(px1, py); ctx.stroke();
-  const n = stations.length;
-  const pos = f * (n - 1);
-  stations.forEach((s, i) => {
-    const x = lerp(px0, px1, i / (n - 1));
-    const past = pos >= i - 0.02;
-    ctx.fillStyle = past ? op.c : C.navy; ctx.strokeStyle = op.c; ctx.lineWidth = 6;
-    ctx.beginPath(); ctx.arc(x, py, 14, 0, M.TAU); ctx.fill(); ctx.stroke();
-  });
-  const cxp = lerp(px0, px1, f);
-  T.badge(ctx, cxp, py, 22, '#FFF'); T.badge(ctx, cxp, py, 12, op.c);
-  const near = Math.round(pos);
-  const nameK = bump(pos, near, 0.45);
-  const lab = Math.abs(pos - near) < 0.45 ? stations[near] : '';
-  if (lab) {
-    ctx.save(); ctx.globalAlpha = clamp(nameK * 2);
-    const lx = clamp(cxp, px0 + 140, px1 - 140);
-    T.pill(ctx, lab, lx, py - pick({ '16x9': 0, '9x16': 0 }) - pick({ '16x9': 44, '9x16': 62 }), pick({ '16x9': 30, '9x16': 32 }), '#FFF', C.navy, 'center');
-    ctx.restore();
-  }
-  M.text(ctx, stations[0], px0, py + pick({ '16x9': 48, '9x16': 60 }), fu(pick({ '16x9': 26, '9x16': 28 }), 700), C.soft, 'left');
-  M.text(ctx, stations[n - 1], px1, py + pick({ '16x9': 48, '9x16': 60 }), fu(pick({ '16x9': 26, '9x16': 28 }), 700), C.soft, 'right');
-  // fact chips
-  R.chips.forEach((s, i) => {
-    const k = T.pop(u, R.chipAt + i * 0.5);
-    const cy = pick({ '16x9': 240 + i * 70, '9x16': 500 + i * 72 });
-    T.scaled(ctx, k, S.x + 150, cy, () => T.pill(ctx, s, S.x, cy, pick({ '16x9': 34, '9x16': 34 }), i === 0 ? op.c : '#FFFFFF', i === 0 ? (op.ink || '#FFF') : C.navy));
-  });
-  if (R.note) {
-    const k = springU(u, R.note[0], SPRING.snappy);
-    if (k > 0) {
-      ctx.save(); ctx.globalAlpha = clamp(k * 1.3);
-      const cy = pick({ '16x9': 240 + 3 * 70, '9x16': 500 + 3 * 72 });
-      T.pill(ctx, R.note[1], S.x, cy, pick({ '16x9': 34, '9x16': 30 }), C.amber, C.navy);
-      ctx.restore();
-    }
-  }
-}
-const LOOK_SOUTHERN = { body: '#FFFFFF', stripe: OP.southern.c, door: OP.southern.c, roof: '#2E5E12', nose: OP.southern.c, window: '#24323E' };
-const LOOK_GA = { body: '#FFFFFF', stripe: OP.ga.c, door: OP.ga.c, roof: '#8A8C8E', nose: OP.ga.c, window: '#24323E' };
-const LEG1 = {
-  a: 32, b: 62, arrive: [32, 35], board: [35.2, 37.4], dep: 38.2, arr: 58.5, look: LOOK_SOUTHERN, op: { ...OP.southern, ink: '#13210F' },
-  from: 'Eastbourne', to: 'London Victoria', plane: 0.55,
-  zones: [[0, 'sea'], [0.12, 'country'], [0.78, 'city']],
-  stations: ['Eastbourne', 'Lewes', 'Haywards Heath', 'Gatwick Airport', 'East Croydon', 'Clapham Junction', 'London Victoria'],
-  chips: ['Southern', 'About 1 hr 25 min', 'Every 30 min (hourly on Sundays)'], chipAt: 39.5,
+// ---------------------------------------------------------------- cartoon person
+// origin at the feet, facing the viewer. Arm angles: 0 = hanging down, +PI/2 = out to the right, PI = up.
+const PEOPLE = {
+  A: { skin: C.skin1, hair: '#6B4226', style: 'cap', cap: C.red, shirt: C.teal, pants: '#2C4760' },
+  B: { skin: C.skin2, hair: '#23202B', style: 'long', shirt: C.red, pants: '#33465A' },
+  K: { skin: C.skin3, hair: '#2A1A12', style: 'short', shirt: C.gold, pants: C.blue, s: 0.68 },
+  S: { skin: '#E9B98F', hair: '#8A8A8A', style: 'short', shirt: C.navy, pants: '#2C3A47', vest: true },
+  T: { skin: C.skin3, hair: '#1E1E28', style: 'cap', cap: C.navy, shirt: C.navy, pants: '#2C3A47', vest: true },
+  S2: { skin: C.skin2, hair: '#5B3A29', style: 'short', shirt: '#7FC4E8', pants: '#33465A' },
 };
-const LEG2 = {
-  a: 114, b: 146, dep: 115.5, arr: 143, look: LOOK_GA, op: OP.ga,
-  from: 'London Liverpool Street', to: 'Clacton-on-Sea',
-  zones: [[0, 'city'], [0.2, 'country'], [0.7, 'river'], [0.8, 'country'], [0.93, 'sea']],
-  stations: ['Liverpool Street', 'Stratford', 'Shenfield', 'Chelmsford', 'Colchester', 'Thorpe-le-Soken', 'Clacton-on-Sea'],
-  chips: ['Greater Anglia', 'Direct, every hour', 'About 1 hr 26 min'], chipAt: 117.5,
-  note: [134, 'Check the summer 2027 times before you go'],
-};
-function leg1(ctx, u) { ride(ctx, u, LEG1); header(ctx, u, 31.6, 'LEG 1', 'Train to London Victoria', OP.southern.c, '#13210F', '#13210F', '#FFFFFF'); }
-function leg2(ctx, u) { ride(ctx, u, LEG2); header(ctx, u, 113.6, 'LEG 2', 'Liverpool Street to Clacton-on-Sea', OP.ga.c, '#FFFFFF'); }
-
-// ---------------------------------------------------------------- T4 the Tube change (62-114)
-const CHANGE = [
-  [62, 'Follow the signs for the Underground', 'They start on the platform at London Victoria.'],
-  [72, 'Through the ticket gates', 'Use your through ticket, or tap in with contactless.'],
-  [80, 'Circle line, eastbound', 'Not the District line: it doesn\'t go to Liverpool Street.'],
-  [90, '11 stops, about 20 minutes', 'Stay on until Liverpool Street.'],
-  [106, 'Follow the National Rail signs', 'Allow about 45 minutes for the whole change with bags.'],
-];
-const CIRCLE = ['Victoria', 'St James\'s Park', 'Westminster', 'Embankment', 'Temple', 'Blackfriars', 'Mansion House', 'Cannon Street', 'Monument', 'Tower Hill', 'Aldgate', 'Liverpool Street'];
-function changeArt(ctx, u, i, x, y, w, h) {
-  const b = CHANGE[i][0];
-  ctx.save(); rrect(ctx, x, y, w, h, 20); ctx.clip();
-  const floorY = y + h * 0.84;
-  // station interior: tiles + floor
-  ctx.fillStyle = '#EEF2F5'; ctx.fillRect(x, y, w, h);
-  ctx.strokeStyle = '#DCE3E9'; ctx.lineWidth = 2;
-  for (let yy = y; yy < floorY; yy += 40) { ctx.beginPath(); ctx.moveTo(x, yy); ctx.lineTo(x + w, yy); ctx.stroke(); }
-  ctx.fillStyle = '#B9C4CD'; ctx.fillRect(x, floorY, w, h);
-  const sS = pick({ '16x9': 0.8, '9x16': 0.75 });
-  if (i === 0) {
-    // hanging sign: navy board, white text, arrow
-    const k = T.pop(u, b + 2);
-    const sw = Math.min(w * 0.6, 620), sx = x + w * 0.55 - sw / 2, sy = y + 50;
-    ctx.fillStyle = '#5C6873'; ctx.fillRect(sx + 40, y, 8, sy - y); ctx.fillRect(sx + sw - 48, y, 8, sy - y);
-    T.scaled(ctx, k, sx + sw / 2, sy + 60, () => {
-      ctx.fillStyle = C.navy; rrect(ctx, sx, sy, sw, 120, 14); ctx.fill();
-      M.text(ctx, 'Underground', sx + 40, sy + 78, fd(64), '#FFF');
-      T.arrow(ctx, sx + sw - 70, sy + 60, 60, 0, OP.circle.c);
-    });
-    const p = E.inOutSine(prog(u, b + 0.5, b + 9));
-    T.person(ctx, lerp(x + 80, x + w - 120, p), floorY + 10, sS, { face: 1, pack: true, walk: 1, phase: u * Math.PI * 1.4, blink: blinkAt(u) });
+function person(ctx, who, o) {
+  const P = { ...PEOPLE[who], ...o };
+  const s = (P.s ?? 1) * (o.scale ?? 1) * 1.12;
+  const aL = P.aL ?? [-0.18, -0.15], aR = P.aR ?? [0.18, 0.15];
+  const walk = P.walk;                       // phase in radians, or undefined
+  const bob = walk != null ? -Math.abs(Math.sin(walk)) * 10 : 0;
+  const hop = P.hop ?? 0;
+  ctx.save(); ctx.translate(P.x, P.y - hop); ctx.scale(s * (P.flip ? -1 : 1), s * (1 + (P.squash ?? 0))); ctx.rotate(P.lean ?? 0);
+  const hipY = -150 + bob, shY = -272 + bob, hdY = -338 + bob, hr = 58;
+  // legs
+  if (P.sit) {
+    limb(ctx, [[-22, hipY + 10], [-90, hipY + 20], [-96, -40]], 34, P.pants);
+    limb(ctx, [[22, hipY + 10], [-50, hipY + 26], [-56, -40]], 34, P.pants);
+    ell(ctx, -110, -26, 30, 16, C.navy, 0); ell(ctx, -70, -26, 30, 16, C.navy, 0);
+  } else {
+    const la = walk != null ? Math.sin(walk) * 0.42 : (P.legs ?? 0.06);
+    const lb = walk != null ? -Math.sin(walk) * 0.42 : -(P.legs ?? 0.06);
+    const legL = [-24 + Math.sin(la) * 150, hipY + Math.cos(la) * 150 - bob], legR = [24 + Math.sin(lb) * 150, hipY + Math.cos(lb) * 150 - bob];
+    limb(ctx, [[-24, hipY], legL], 36, P.pants); limb(ctx, [[24, hipY], legR], 36, P.pants);
+    ell(ctx, legL[0] - 8, legL[1] + 2, 30, 15, C.navy, 0); ell(ctx, legR[0] + 8, legR[1] + 2, 30, 15, C.navy, 0);
   }
-  if (i === 1) {
-    const gx = x + w * 0.55;
-    const open = E.outBack(prog(u, b + 3.5, b + 4.3));
-    for (let g = -1; g <= 1; g++) {
-      const cx = gx + g * 230;
-      ctx.fillStyle = '#4A5A66'; rrect(ctx, cx - 120, floorY - 150, 40, 150, 8); ctx.fill(); rrect(ctx, cx + 80, floorY - 150, 40, 150, 8); ctx.fill();
-      ctx.fillStyle = g === 0 ? C.green : '#4A5A66'; ctx.fillRect(cx - 112, floorY - 140, 24, 10);
-      ctx.fillStyle = C.red;
-      const pw = 70 * (1 - (g === 0 ? open : 0));
-      if (pw > 2) { rrect(ctx, cx - 80, floorY - 110, pw, 60, 10); ctx.fill(); rrect(ctx, cx + 80 - pw, floorY - 110, pw, 60, 10); ctx.fill(); }
+  // long hair sits behind the body
+  if (P.style === 'long') { rrect(ctx, -hr - 8, hdY - 30, hr * 2 + 16, 128, 40); fs(ctx, P.hair); }
+  // torso
+  box(ctx, -58, shY - 14, 116, hipY - shY + 34, 34, P.shirt);
+  if (P.vest) {
+    ctx.beginPath(); ctx.moveTo(-50, shY - 4); ctx.lineTo(-14, shY - 4); ctx.lineTo(0, shY + 40); ctx.lineTo(14, shY - 4); ctx.lineTo(50, shY - 4); ctx.lineTo(54, hipY + 12); ctx.lineTo(-54, hipY + 12); ctx.closePath(); fs(ctx, '#D9F03A', 4);
+    ctx.fillStyle = '#C9D3DA'; ctx.fillRect(-52, hipY - 46, 104, 12); ctx.fillRect(-52, hipY - 16, 104, 12);
+  }
+  // arms
+  const arm = (side, [a1, a2], hold) => {
+    const sx = side * 52, sy = shY + 18;
+    const ex = sx + Math.sin(a1) * 72, ey = sy + Math.cos(a1) * 72;
+    const hx = ex + Math.sin(a1 + a2) * 66, hy = ey + Math.cos(a1 + a2) * 66;
+    limb(ctx, [[sx, sy], [ex, ey], [hx, hy]], 26, P.shirt);
+    circ(ctx, hx, hy, 15, P.skin, 5);
+    if (hold) { ctx.save(); ctx.translate(hx, hy); hold(ctx, a1 + a2); ctx.restore(); }
+  };
+  arm(-1, aL, P.holdL); arm(1, aR, P.holdR);
+  // head
+  ctx.save(); ctx.translate(0, hdY); ctx.rotate(P.tilt ?? 0);
+  circ(ctx, 0, 0, hr, P.skin);
+  const lx = (P.look ?? 0) * 10, ly = (P.lookY ?? 0) * 8;
+  // hair / cap
+  if (P.style === 'short' || P.style === 'long') {
+    ctx.beginPath(); ctx.arc(0, 0, hr + 3, Math.PI * 1.02, Math.PI * 1.98); ctx.quadraticCurveTo(20, -hr * 0.35, -hr - 2, -6); ctx.closePath(); fs(ctx, P.hair);
+  }
+  if (P.style === 'cap') {
+    ctx.beginPath(); ctx.arc(0, -4, hr + 4, Math.PI, TAU); ctx.closePath(); fs(ctx, P.cap);
+    ctx.beginPath(); ctx.ellipse(28, -8, 52, 13, 0, 0, TAU); fs(ctx, P.cap);
+    ctx.beginPath(); ctx.arc(-hr + 6, 6, 12, 0, TAU); ctx.fillStyle = P.hair; ctx.fill();
+  }
+  // face
+  const blink = P.blink ? 0.12 : 1;
+  ell(ctx, -20 + lx, 6 + ly, 6.5, 9 * blink, C.navy, 0); ell(ctx, 20 + lx, 6 + ly, 6.5, 9 * blink, C.navy, 0);
+  if (P.shades) { ctx.beginPath(); rrect(ctx, -38 + lx, -4, 32, 20, 8); fs(ctx, C.navy, 3); rrect(ctx, 6 + lx, -4, 32, 20, 8); fs(ctx, C.navy, 3); limb(ctx, [[-6 + lx, 4], [6 + lx, 4]], 1, C.navy); }
+  ctx.globalAlpha = 0.35; circ(ctx, -34 + lx, 26, 9, C.red, 0); circ(ctx, 34 + lx, 26, 9, C.red, 0); ctx.globalAlpha = 1;
+  const m = P.mouth ?? 0;
+  if (m > 0.05) { ctx.beginPath(); ctx.ellipse(lx, 30 + ly, 13, 6 + 10 * m, 0, 0, Math.PI); ctx.closePath(); fs(ctx, '#8A2232', 4); }
+  else { ctx.beginPath(); ctx.arc(lx, 22 + ly, 16, 0.2 * Math.PI, 0.8 * Math.PI); ink(ctx, 5); ctx.stroke(); }
+  if (P.earDef) { limb(ctx, [[-hr - 6, 0], [-hr + 4, -hr + 4], [hr - 4, -hr + 4], [hr + 6, 0]], 8, C.red); ell(ctx, -hr - 6, 6, 16, 24, C.red, 5); ell(ctx, hr + 6, 6, 16, 24, C.red, 5); }
+  ctx.restore();
+  ctx.restore();
+}
+// seeded blinking: true for a short moment every few beats
+const blinkAt = (u, seed) => { const per = 3 + hash01(seed) * 2, ph = ((u + hash01(seed + 9) * per) % per); return ph < 0.12; };
+
+// ---------------------------------------------------------------- props
+// Real aircraft cut-outs from the site: Red Arrows Hawk (body C.red), Typhoon (C.blue), A400M ('a400').
+let AC = {};
+function jet(ctx, x, y, s, rot, body = C.red, flip = false) {
+  const img = body === C.red ? AC.hawk : body === 'a400' ? AC.a400 : AC.typhoon;
+  if (!img) return;
+  const w = 320 * s, h = w * img.height / img.width;
+  withT(ctx, x, y, 1, rot, () => { if (flip) ctx.scale(-1, 1); ctx.drawImage(img, -w / 2, -h / 2, w, h); });
+}
+// top view, nose along heading (radians, canvas angle)
+function topJet(ctx, img, x, y, w, heading) {
+  if (!img) return; const h = w * img.height / img.width;
+  withT(ctx, x, y, 1, heading + Math.PI / 2, () => ctx.drawImage(img, -w / 2, -h / 2, w, h));
+}
+// Red Arrows smoke: a ribbon of puffs behind a point, coloured
+function smoke(ctx, pts, color, r0 = 10, grow = 1.2, a0 = 0.85) {
+  pts.forEach(([x, y], k) => { ctx.globalAlpha = Math.max(0, a0 * (1 - k / pts.length * 0.8)); ctx.beginPath(); ctx.arc(x, y, r0 + k * grow, 0, TAU); ctx.fillStyle = color; ctx.fill(); });
+  ctx.globalAlpha = 1;
+}
+function mixc(a, b, t) { return M.mix(a, b, t); }
+function puff(ctx, x, y, r, color = C.white, a = 1) { ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(x, y, Math.max(0.1, r), 0, TAU); ctx.fillStyle = color; ctx.fill(); ctx.globalAlpha = 1; }
+function cloud(ctx, x, y, s, color = C.white, outline = false) {
+  withT(ctx, x, y, s, 0, () => {
+    const blob = () => { ctx.beginPath(); for (const [cx, cy, r] of [[-60, 10, 42], [-10, -14, 58], [52, 4, 46], [10, 22, 44]]) { ctx.moveTo(cx + r, cy); ctx.arc(cx, cy, r, 0, TAU); } };
+    if (outline) { blob(); ink(ctx, LW * 2); ctx.stroke(); }
+    blob(); ctx.fillStyle = color; ctx.fill();
+  });
+}
+function sun(ctx, x, y, r, u, face = true) {
+  withT(ctx, x, y, 1, u * 0.08, () => {
+    for (let k = 0; k < 12; k++) { const a = (k / 12) * TAU; limb(ctx, [[Math.cos(a) * (r + 18), Math.sin(a) * (r + 18)], [Math.cos(a) * (r + 46), Math.sin(a) * (r + 46)]], 10, C.gold); }
+  });
+  circ(ctx, x, y, r, C.gold);
+  if (face) { ell(ctx, x - 22, y - 8, 6, 9, C.navy, 0); ell(ctx, x + 22, y - 8, 6, 9, C.navy, 0); ctx.beginPath(); ctx.arc(x, y + 8, 22, 0.2 * Math.PI, 0.8 * Math.PI); ink(ctx, 5); ctx.stroke(); }
+}
+function sky(ctx, u, top = C.sky, tint = null) {
+  sfill(ctx, top);
+  // slow drifting background clouds (seeded)
+  for (let k = 0; k < 5; k++) {
+    const sp = 6 + hash01(k, 3) * 8, x = ((hash01(k, 5) * (G.w + 600) + u * sp) % (G.w + 600)) - 300;
+    cloud(ctx, x, 120 + hash01(k, 7) * 300, 0.6 + hash01(k, 11) * 0.5, tint || C.white);
+  }
+}
+function ground(ctx, col = C.grass, col2 = C.grass2) {
+  const gy = G.gy;
+  ctx.fillStyle = col; ctx.fillRect(0, gy, G.w, G.h - gy);
+  ctx.fillStyle = col2; ctx.fillRect(0, gy, G.w, 10);
+  ink(ctx); ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(G.w, gy); ctx.stroke();
+}
+function hills(ctx, col = '#B6DAA6') {
+  const gy = G.gy; ctx.beginPath(); ctx.moveTo(0, gy);
+  for (let x = 0; x <= G.w; x += 40) ctx.lineTo(x, gy - 90 - Math.sin(x / 260) * 40 - Math.sin(x / 97 + 1) * 14);
+  ctx.lineTo(G.w, gy); ctx.closePath(); ctx.fillStyle = col; ctx.fill();
+}
+function signText(ctx, str, x, y, size, color = C.white, weight = 800) { text(ctx, str, x, y, font(size, weight, DISPLAY), color, 'center'); }
+
+// ================================================================ text card
+function card(ctx, u, s, i) {
+  const S = STEPS[i], side = i % 2 === 0 ? 'R' : 'L';
+  const cw = PORTRAIT ? 936 : 880, pad = 50, x0 = PORTRAIT ? 72 : side === 'R' ? SW - 90 - cw : 90;
+  // measure
+  const fTitle = font(Math.min(96, M.fitSize(ctx, S.title, 800, DISPLAY, cw - pad * 2 - 124, 96)), 800, DISPLAY);
+  const fQ = font(46, 700, UI), fB = font(44, 600, UI);
+  const bl = S.b.map((b) => wrap(ctx, b, fB, cw - pad * 2 - 76));
+  const hB = bl.reduce((a, l) => a + l.length * 54 + 28, 0);
+  const ch = pad + 96 + 62 + 30 + hB + pad - 28;
+  const y0 = PORTRAIT ? 250 : Math.round((GY - 40 - ch) / 2 + 10);
+  // entrance: slide in from its side with a little rotation, settle
+  const k = pop(u, s + 0.25, SPRING.bouncy);
+  if (k <= 0) return;
+  const dx = (1 - k) * (side === 'R' ? 900 : -900), rot = (1 - k) * (side === 'R' ? 0.12 : -0.12);
+  ctx.save();
+  ctx.translate(x0 + cw / 2 + dx, y0 + ch / 2); ctx.rotate(rot); ctx.translate(-(x0 + cw / 2), -(y0 + ch / 2));
+  // hard cartoon shadow + card
+  ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(x0 + 12, y0 + 14, cw, ch);
+  box(ctx, x0, y0, cw, ch, 0, C.white);
+  ctx.fillStyle = C.teal; ctx.fillRect(x0 + LW / 2, y0 + LW / 2, cw - LW, 12);
+  // number badge
+  const bk = pop(u, s + 0.6, SPRING.wobbly);
+  const bx = x0 + pad + 46, by = y0 + pad + 44;
+  withT(ctx, bx, by, Math.max(0.01, bk), (1 - bk) * -0.8, () => {
+    box(ctx, -46, -46, 92, 92, 0, C.navy);
+    text(ctx, String(i + 1), 0, 22, font(64, 800, DISPLAY), C.white, 'center');
+  });
+  // title + question
+  text(ctx, S.title, x0 + pad + 118, y0 + pad + 74, fTitle, C.navy);
+  const qk = E.outQuint(prog(u, s + 1, s + 1.8));
+  ctx.save(); ctx.beginPath(); ctx.rect(x0, y0, pad + (cw - pad) * qk, ch); ctx.clip();
+  text(ctx, S.q, x0 + pad, y0 + pad + 96 + 50, fQ, C.tealD);
+  ctx.restore();
+  // divider draws across
+  const dk = E.outCubic(prog(u, s + 1.2, s + 2.2));
+  ink(ctx, 4); ctx.strokeStyle = C.sky2; ctx.beginPath(); ctx.moveTo(x0 + pad, y0 + pad + 96 + 78); ctx.lineTo(x0 + pad + (cw - pad * 2) * dk, y0 + pad + 96 + 78); ctx.stroke();
+  // bullets
+  let y = y0 + pad + 96 + 62 + 30 + 36;
+  bl.forEach((lines, j) => {
+    const ub = s + 2.5 + j * 2;
+    const tk = pop(u, ub, SPRING.bouncy);
+    if (tk > 0) {
+      withT(ctx, x0 + pad + 24, y - 15, Math.max(0.01, tk), 0, () => {
+        box(ctx, -23, -23, 46, 46, 0, C.teal, 4);
+        const ck = E.outCubic(prog(u, ub + 0.1, ub + 0.5));
+        ctx.beginPath(); ctx.moveTo(-10, 0); const p1 = [-3, 8], p2 = [11, -8];
+        if (ck < 0.4) ctx.lineTo(lerp(-10, p1[0], ck / 0.4), lerp(0, p1[1], ck / 0.4));
+        else { ctx.lineTo(p1[0], p1[1]); ctx.lineTo(lerp(p1[0], p2[0], (ck - 0.4) / 0.6), lerp(p1[1], p2[1], (ck - 0.4) / 0.6)); }
+        ctx.strokeStyle = C.white; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
+      });
+      const rk = E.outQuint(prog(u, ub + 0.05, ub + 0.75));
+      const yo = (1 - pop(u, ub, SPRING.snappy)) * 22;
+      ctx.save(); ctx.beginPath(); ctx.rect(x0 + pad + 54, y - 60, (cw - pad - 54) * rk, lines.length * 54 + 40); ctx.clip();
+      lines.forEach((ln, li) => text(ctx, ln, x0 + pad + 70, y + li * 54 + yo, fB, C.navy));
+      ctx.restore();
     }
-    const p = E.inOutCubic(prog(u, b + 0.5, b + 3.3)), p2 = E.inOutCubic(prog(u, b + 4.2, b + 7));
-    const sx = lerp(x + 100, gx - 170, p) + p2 * (w * 0.6);
-    const walking = (p > 0 && p < 1) || (p2 > 0 && p2 < 1);
-    T.person(ctx, sx, floorY + 10, sS, { face: 1, pack: true, walk: walking ? 1 : 0, phase: u * Math.PI * 1.4, hold: 'ticket', armUp: p >= 1 && p2 <= 0 ? 0.8 : 0, blink: blinkAt(u) });
-    const bk = bump(u, b + 3.6, 0.6);
-    if (bk > 0) { ctx.save(); ctx.globalAlpha = bk; T.badge(ctx, gx - 100, floorY - 200, 34, C.green, (X, Y, R) => T.tick(ctx, X, Y, R)); ctx.restore(); }
-  }
-  if (i === 2) {
-    // platform signs: Circle (yes) and District (no)
-    const k1 = springU(u, b + 2, SPRING.bouncy), k2 = springU(u, b + 4, SPRING.bouncy);
-    const sw = Math.min(w - 80, pick({ '16x9': 900, '9x16': 820 })), sx = x + (w - sw) / 2;
-    T.scaled(ctx, k1, sx + sw / 2, y + 120, () => {
-      ctx.fillStyle = '#FFFFFF'; rrect(ctx, sx, y + 50, sw, 150, 14); ctx.fill();
-      ctx.fillStyle = OP.circle.c; ctx.fillRect(sx, y + 50, 40, 150);
-      M.text(ctx, 'Circle line', sx + 70, y + 125, fd(70), C.navy);
-      M.text(ctx, 'Eastbound to Tower Hill and Aldgate', sx + 70, y + 175, fu(32, 700), C.body);
-      T.badge(ctx, sx + sw - 70, y + 125, 44, C.green, (X, Y, R) => T.tick(ctx, X, Y, R));
-    });
-    T.scaled(ctx, k2, sx + sw / 2, y + 290, () => {
-      ctx.save(); ctx.globalAlpha = 0.9;
-      ctx.fillStyle = '#FFFFFF'; rrect(ctx, sx + 60, y + 230, sw - 120, 110, 14); ctx.fill();
-      ctx.fillStyle = OP.district.c; ctx.fillRect(sx + 60, y + 230, 30, 110);
-      M.text(ctx, 'District line', sx + 115, y + 302, fd(52), C.body);
-      T.badge(ctx, sx + sw - 120, y + 285, 36, C.red, (X, Y, R) => T.cross(ctx, X, Y, R));
+    y += lines.length * 54 + 28;
+  });
+  ctx.restore();
+}
+// art sits on the side opposite the card
+const artX = (i) => (i % 2 === 0 ? 0 : SW - 980);
+
+// ================================================================ scenes
+// Each scene paints the full frame for local beat L (0..12+) of its step.
+
+// per-format layout for the intro and end card (they are drawn natively, not cropped)
+const LAY = PORTRAIT ? {
+  jetY: 330, jetS: 0.85, tag: [540, 500], x0: 72,
+  words: [[140, 700], [250, 930], [250, 1160]], ul: 1200, sub: 1270, subW: 940,
+  ppl: [[300, 1600, 0.8], [560, 1610, 0.8], [800, 1620, 0.8]],
+} : {
+  jetY: 150, jetS: 0.95, tag: [1540, 440], x0: 120,
+  words: [[140, 440], [230, 650], [230, 860]], ul: 902, sub: 1020, subW: 1000,
+  ppl: [[1290, GY + 40, 1], [1560, GY + 50, 1], [1760, GY + 60, 1]],
+};
+function sceneIntro(ctx, u) {
+  sky(ctx, u);
+  hills(ctx); ground(ctx);
+  // Red Arrows trio, already mid-pass on frame 0, trailing red / white / blue smoke
+  const jp = prog(u, -2.2, 7.5);
+  const P = (q, k) => [lerp(-300, G.w + 600, q) - k * 70, LAY.jetY + k * 46 - Math.sin(q * Math.PI) * 60];
+  const SM = ['#E8202A', '#FFFFFF', '#1D4FB7'];
+  [1, 0, 2].forEach((k) => {
+    const pts = []; for (let n = 1; n < 110; n++) { const q = jp - n * 0.0035; if (q < 0) break; const p = P(q, k); pts.push([p[0] - 140, p[1] + 14]); }
+    if (k === 0) smoke(ctx, pts, '#B9C7D3', 13, 0.3, 0.6);
+    smoke(ctx, pts, SM[k], 10, 0.3);
+  });
+  [1, 0, 2].forEach((k) => { const p = P(jp, k), p2 = P(jp + 0.01, k); jet(ctx, p[0], p[1], LAY.jetS, Math.atan2(p2[1] - p[1], p2[0] - p[0])); });
+  // season tag (square corners)
+  const tg = pop(u, 3.5, SPRING.bouncy);
+  if (tg > 0) withT(ctx, LAY.tag[0], LAY.tag[1], tg, (1 - tg) * 0.3, () => {
+    ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(-330 + 10, -50 + 10, 660, 96);
+    box(ctx, -330, -50, 660, 96, 0, C.red);
+    text(ctx, INTRO_TAG, 0, 18, font(56, 800, DISPLAY), C.white, 'center');
+  });
+  // title, left side
+  const x0 = LAY.x0, words = [[INTRO_WORDS[0], 0, C.navy], [INTRO_WORDS[1], 1, C.navy], [INTRO_WORDS[2], 2, C.teal]].map((w, i) => [...w, ...LAY.words[i]]);
+  for (const [w, ub, col, size, yb] of words) {
+    const f = font(size, 800, DISPLAY), L = layout(ctx, w, f, 2);
+    L.glyphs.forEach((g, j) => {
+      const k = pop(u, ub - 0.45 + j * 0.04, SPRING.bouncy);
+      if (k <= 0) return;
+      ctx.save(); ctx.beginPath(); ctx.rect(0, yb - size, G.w, size * 1.08); ctx.clip();
+      M.glyph(ctx, g.ch, x0 + g.cx, yb + (1 - k) * size * 0.9, f, col, 1, 1);
       ctx.restore();
     });
-    T.person(ctx, x + w * 0.12, floorY + 10, sS * 0.85, { face: 1, pack: true, armUp: prog(u, b + 2.4, b + 3), blink: blinkAt(u) });
   }
-  if (i === 3) {
-    // schematic: yellow line, station ticks, the train dot hops stop by stop
-    ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x, y, w, h);
-    const n = CIRCLE.length;
-    const hop = (u - (b + 0.5)) / ((106 - 1.2 - (b + 0.5)) / (n - 1));
-    const at = clamp(hop, 0, n - 1);
-    const kInt = Math.floor(at), frac = at - kInt;
-    const pos = kInt + E.inOutCubic(clamp(frac * 1.6));
-    const gap = pick({ '16x9': 260, '9x16': 230 });
-    const ly = y + h * 0.58;
-    const camX = x + w * 0.42 - pos * gap;
-    ctx.strokeStyle = OP.circle.c; ctx.lineWidth = 26; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(camX - 200, ly); ctx.lineTo(camX + (n - 1) * gap + 200, ly); ctx.stroke();
-    CIRCLE.forEach((s, j) => {
-      const sx = camX + j * gap;
-      if (sx < x - 300 || sx > x + w + 300) return;
-      const end = j === 0 || j === n - 1;
-      ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = C.navy; ctx.lineWidth = 8;
-      ctx.beginPath(); ctx.arc(sx, ly, end ? 26 : 16, 0, M.TAU); ctx.fill(); ctx.stroke();
-      ctx.save(); ctx.translate(sx, ly + 56); ctx.rotate(0.45);
-      M.text(ctx, s, 0, 0, fu(j === n - 1 ? 40 : 32, 700), j === n - 1 ? C.navy : C.body, 'left');
+  // underline swoosh in logo colours
+  const sk = E.outCubic(prog(u, 2.8, 3.8));
+  [[C.red, 0], [C.navy, 16], [C.teal, 32]].forEach(([col, o]) => {
+    const uy = LAY.ul; ctx.beginPath(); ctx.moveTo(x0, uy + o * 0.5);
+    ctx.quadraticCurveTo(x0 + 400, uy + 20 + o, x0 + 820 * sk, uy - 34 + o * 0.6);
+    ctx.strokeStyle = col; ctx.lineWidth = 10; ctx.lineCap = 'round'; if (sk > 0) ctx.stroke();
+  });
+  const tk = E.outQuint(prog(u, 4.5, 5.3));
+  ctx.save(); ctx.beginPath(); ctx.rect(x0, LAY.sub - 80, LAY.subW * tk, 120); ctx.clip();
+  text(ctx, INTRO_SUB, x0 + 4, LAY.sub, font(58, 700, UI), C.navy);
+  ctx.restore();
+  // characters looking up at the jet, pointing
+  const look = clamp((lerp(-300, G.w + 600, jp) - LAY.ppl[1][0]) / 600, -1, 1);
+  const pt = pop(u, 0.5, SPRING.bouncy);
+  person(ctx, 'B', { x: LAY.ppl[0][0], y: LAY.ppl[0][1], scale: LAY.ppl[0][2], look, lookY: -0.8, aR: [0.3 + 2.2 * pt, 0.1], aL: [-0.2, -0.2], blink: blinkAt(u, 2), mouth: 0.6 * bump(u, 1.5, 1.2) });
+  person(ctx, 'A', { x: LAY.ppl[1][0], y: LAY.ppl[1][1], scale: LAY.ppl[1][2], look, lookY: -0.8, aL: [-0.3 - 2.4 * pop(u, 1.2), -0.2], aR: [0.2, 0.3], blink: blinkAt(u, 5), mouth: 0.5 });
+  const hop = Math.max(0, Math.sin(u * Math.PI)) * 40;
+  person(ctx, 'K', { x: LAY.ppl[2][0], y: LAY.ppl[2][1], scale: LAY.ppl[2][2], hop, look: -0.4, lookY: -0.8, aL: [-2.6, 0], aR: [2.6, 0], squash: -0.04 * Math.sin(u * TAU), mouth: 0.7 });
+}
+
+function itemChair(c) { limb(c, [[-40, 40], [40, -40]], 8, C.navy); limb(c, [[40, 40], [-40, -40]], 8, C.navy); box(c, -54, -56, 108, 34, 8, C.teal); }
+function itemEar(c) { limb(c, [[-36, 10], [-30, -36], [30, -36], [36, 10]], 10, C.red); ell(c, -38, 16, 18, 28, C.red); ell(c, 38, 16, 18, 28, C.red); }
+function itemBank(c) { box(c, -30, -50, 60, 100, 12, C.navy); c.beginPath(); c.moveTo(6, -30); c.lineTo(-12, 4); c.lineTo(4, 4); c.lineTo(-6, 32); c.lineTo(14, -6); c.lineTo(-2, -6); c.closePath(); c.fillStyle = C.gold; c.fill(); }
+function itemCash(c) { box(c, -60, -32, 120, 64, 8, '#9BD08A'); circ(c, 0, 0, 20, '#7DBA6A', 4); signText(c, '£', 0, 12, 34, C.navy); }
+function itemMap(c) { c.beginPath(); c.moveTo(-60, -40); c.lineTo(-20, -30); c.lineTo(20, -40); c.lineTo(60, -30); c.lineTo(60, 40); c.lineTo(20, 30); c.lineTo(-20, 40); c.lineTo(-60, 30); c.closePath(); fs(c, C.off); circ(c, 8, -4, 12, C.red, 4); limb(c, [[-40, 16], [-10, 0], [8, -4]], 2, C.blue); }
+function itemCream(c) { box(c, -26, -56, 52, 104, 8, '#F38B2A'); box(c, -16, -76, 32, 22, 0, C.navy); signText(c, 'SPF', 0, 8, 26, C.white); }
+function itemWater(c) { box(c, -24, -60, 48, 116, 10, '#9FD3EE'); box(c, -14, -80, 28, 22, 0, C.blue); limb(c, [[-24, -10], [24, -10]], 2, C.blue); }
+function itemHat(c) { ell(c, 0, 20, 86, 20, C.gold); c.beginPath(); c.moveTo(-50, 18); c.lineTo(-38, -36); c.lineTo(38, -36); c.lineTo(50, 18); c.closePath(); fs(c, C.gold); c.fillStyle = C.red; c.fillRect(-44, -2, 88, 12); }
+function itemBinos(c) { box(c, -46, -40, 38, 80, 10, '#2B3237'); box(c, 8, -40, 38, 80, 10, '#2B3237'); box(c, -12, -20, 24, 24, 0, C.grey2, 4); circ(c, -27, 40, 14, '#BFE6F2', 4); circ(c, 27, 40, 14, '#BFE6F2', 4); }
+function itemSnacks(c) { c.beginPath(); c.moveTo(-44, -60); c.lineTo(44, -60); c.lineTo(36, 60); c.lineTo(-36, 60); c.closePath(); fs(c, C.red); circ(c, 0, 0, 22, C.gold, 4); }
+
+// ================================================================ security scenes
+// Each scene paints the full stage for local beat L (0..12+) of its step; art sits at artX(i).
+const VEST = '#D9F03A';
+function qr(ctx, x, y, size, seed = 7) {
+  const n = 11, c = size / n;
+  ctx.fillStyle = C.white; ctx.fillRect(x - c, y - c, size + 2 * c, size + 2 * c);
+  ctx.fillStyle = C.navy;
+  for (let r = 0; r < n; r++) for (let q = 0; q < n; q++) {
+    const finder = (r < 3 && q < 3) || (r < 3 && q > n - 4) || (r > n - 4 && q < 3);
+    if (finder ? !((r % (n - 3) === 1 || r === n - 2) && (q % (n - 3) === 1 || q === n - 2)) : hash01(r * 31 + q, seed) > 0.5) ctx.fillRect(x + q * c, y + r * c, c, c);
+  }
+}
+function label(ctx, str, x, y, size, bg, fg = C.white, k = 1) {
+  if (k <= 0) return;
+  const f = font(size, 800, DISPLAY); ctx.font = f; const w = ctx.measureText(str).width + size * 0.9, h = size * 1.35;
+  withT(ctx, x, y, k, (1 - k) * 0.25, () => {
+    ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(-w / 2 + 8, -h / 2 + 8, w, h);
+    box(ctx, -w / 2, -h / 2, w, h, 0, bg, 5); text(ctx, str, 0, size * 0.36, f, fg, 'center');
+  });
+}
+function tickSq(ctx, x, y, s, good = true) {
+  withT(ctx, x, y, s, 0, () => {
+    box(ctx, -30, -30, 60, 60, 0, good ? '#2E9E5B' : C.red, 5);
+    ctx.strokeStyle = C.white; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath();
+    if (good) { ctx.moveTo(-14, 0); ctx.lineTo(-4, 11); ctx.lineTo(15, -12); } else { ctx.moveTo(-12, -12); ctx.lineTo(12, 12); ctx.moveTo(12, -12); ctx.lineTo(-12, 12); }
+    ctx.stroke();
+  });
+}
+function tent(ctx, x0, x1, top, open = null) {
+  // a white marquee with straight panels; open = [a, b] leaves a doorway between x a..b
+  const y0 = GY, eave = top + 120;
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, eave); ctx.lineTo((x0 + x1) / 2, top); ctx.lineTo(x1, eave); ctx.lineTo(x1, y0); ctx.closePath(); fs(ctx, C.white);
+  for (let x = x0 + 80; x < x1 - 20; x += 80) limb(ctx, [[x, eave + 4], [x, y0 - 4]], 1, '#C9D6E0');
+  limb(ctx, [[x0 + 4, eave], [x1 - 4, eave]], 2, C.grey);
+  if (open) { ctx.fillStyle = '#E9EEF2'; ctx.fillRect(open[0], eave + 40, open[1] - open[0], y0 - eave - 40); ink(ctx); ctx.strokeRect(open[0], eave + 40, open[1] - open[0], y0 - eave - 40); }
+}
+function stanchion(ctx, x, y) { box(ctx, x - 7, y - 110, 14, 110, 0, C.navy, 3); ell(ctx, x, y, 26, 8, C.navy, 0); circ(ctx, x, y - 112, 10, C.grey2, 3); }
+function belt(ctx, x0, x1, y) { ctx.beginPath(); ctx.moveTo(x0, y - 96); ctx.lineTo(x1, y - 96); ctx.strokeStyle = C.navy; ctx.lineWidth = 16; ctx.stroke(); ctx.strokeStyle = C.red; ctx.lineWidth = 10; ctx.stroke(); }
+function rucksack(ctx, x, y, s = 1, col = C.blue) {
+  withT(ctx, x, y, s, 0, () => { box(ctx, -60, -120, 120, 120, 24, col); box(ctx, -40, -66, 80, 46, 8, C.teal, 4); box(ctx, -20, -136, 40, 22, 10, C.navy, 4); });
+}
+// small item icons, about 100 px, origin at centre
+const ICON = {
+  sandwich: (c) => { c.beginPath(); c.moveTo(-46, 30); c.lineTo(46, 30); c.lineTo(0, -40); c.closePath(); fs(c, '#F4D9A0'); c.fillStyle = C.grass2; c.fillRect(-30, 12, 60, 8); },
+  chair: (c) => { c.save(); c.scale(0.8, 0.8); itemChair(c); c.restore(); },
+  camera: (c) => { box(c, -50, -30, 100, 64, 10, '#2B3237'); circ(c, 4, 2, 22, '#4A5A66', 5); circ(c, 4, 2, 10, '#9FD3EE', 0); box(c, -38, -44, 30, 16, 4, '#2B3237', 4); },
+  wine: (c) => { box(c, -16, -20, 32, 74, 8, '#6B1F3A'); box(c, -8, -56, 16, 40, 3, '#6B1F3A'); box(c, -14, 4, 28, 26, 0, C.off, 3); },
+  bbq: (c) => { box(c, -50, -16, 100, 34, 0, '#B8C2CA'); for (let k = -36; k <= 36; k += 12) limb(c, [[k, -16], [k, 18]], 1, '#5B6B78'); limb(c, [[-40, 18], [-46, 44]], 3, C.navy); limb(c, [[40, 18], [46, 44]], 3, C.navy); },
+  gazebo: (c) => { c.beginPath(); c.moveTo(-56, -6); c.lineTo(0, -46); c.lineTo(56, -6); c.closePath(); fs(c, C.teal); limb(c, [[-48, -6], [-48, 44]], 3, C.navy); limb(c, [[48, -6], [48, 44]], 3, C.navy); },
+  knife: (c) => { c.save(); c.rotate(-0.5); box(c, -50, -10, 46, 20, 6, C.red); c.beginPath(); c.moveTo(-4, -9); c.lineTo(56, -3); c.lineTo(52, 6); c.lineTo(-4, 9); c.closePath(); fs(c, '#C9D3DA'); c.restore(); },
+  drone: (c) => { box(c, -24, -12, 48, 24, 6, '#2B3237'); for (const [x, y] of [[-44, -24], [44, -24], [-44, 22], [44, 22]]) { limb(c, [[0, 0], [x, y]], 4, '#2B3237'); ell(c, x, y, 22, 6, '#9AA9B5', 3); } },
+  rocket: (c) => { c.save(); c.rotate(0.35); box(c, -12, -30, 24, 60, 0, C.red); c.beginPath(); c.moveTo(-12, -30); c.lineTo(0, -54); c.lineTo(12, -30); c.closePath(); fs(c, C.gold); limb(c, [[0, 30], [0, 58]], 2, '#8C5D3A'); c.restore(); },
+  ladder: (c) => { limb(c, [[-26, 50], [-14, -50]], 5, '#B8C2CA'); limb(c, [[26, 50], [14, -50]], 5, '#B8C2CA'); for (let y = -30; y <= 40; y += 22) limb(c, [[-22 + (40 - y) * 0.0, y], [22, y]], 4, '#B8C2CA'); },
+  meds: (c) => { box(c, -34, -24, 68, 48, 0, C.white); c.fillStyle = C.red; c.fillRect(-6, -16, 12, 32); c.fillRect(-16, -6, 32, 12); },
+  bank: (c) => { c.save(); c.scale(0.7, 0.7); itemBank(c); c.restore(); },
+  water: (c) => { c.save(); c.scale(0.7, 0.7); itemWater(c); c.restore(); },
+  box: (c) => { box(c, -50, -30, 100, 60, 6, 'rgba(191,230,242,0.9)'); ICON.sandwich2(c); },
+  sandwich2: (c) => { c.save(); c.scale(0.55, 0.55); c.beginPath(); c.moveTo(-46, 30); c.lineTo(46, 30); c.lineTo(0, -40); c.closePath(); fs(c, '#F4D9A0', 5); c.restore(); },
+  jumper: (c) => { box(c, -56, -22, 112, 44, 6, C.red); limb(c, [[-56, 0], [56, 0]], 1, '#9E1C2D'); },
+  coat: (c) => { box(c, -56, -18, 112, 36, 6, C.teal); },
+  keys: (c) => { circ(c, -14, 0, 14, C.gold, 4); limb(c, [[0, 0], [30, 0], [30, 10]], 4, C.gold); },
+  phone: (c) => { box(c, -18, -32, 36, 64, 6, '#2B3237', 4); },
+  coins: (c) => { circ(c, -10, 4, 14, C.gold, 4); circ(c, 10, -4, 14, C.gold, 4); },
+};
+function icon(ctx, name, x, y, s = 1, rot = 0) { withT(ctx, x, y, s, rot, () => ICON[name](ctx)); }
+
+// ---------------------------------------------------------------- extra props (house style: navy outlines, square corners)
+const LIVERY = {
+  southern: { body: C.white, stripe: '#7AB929', door: '#7AB929', nose: '#7AB929' },
+  ga: { body: C.white, stripe: '#D2232A', door: '#D2232A', nose: '#D2232A' },
+  tube: { body: C.white, stripe: C.blue, door: C.red, nose: C.red, tube: true },
+};
+// side-view train; front at x, wheels on y; cars to the left (or right when flip)
+function trainH(ctx, x, y, s, cars, lk, spin = 0, flip = false) {
+  withT(ctx, x, y, s, 0, () => {
+    if (flip) ctx.scale(-1, 1);
+    for (let c = cars - 1; c >= 0; c--) {
+      const x1 = -c * 436, x0 = x1 - 420, lead = c === 0;
+      const body = () => {
+        ctx.beginPath();
+        if (lk.tube) { rrect(ctx, x0, -196, 420, 168, 46); return; }
+        ctx.moveTo(x0, -28); ctx.lineTo(x0, -206);
+        if (lead) { ctx.lineTo(x1 - 80, -206); ctx.lineTo(x1 + 14, -116); ctx.lineTo(x1 + 14, -28); }
+        else { ctx.lineTo(x1, -206); ctx.lineTo(x1, -28); }
+        ctx.closePath();
+      };
+      body(); ctx.fillStyle = lk.body; ctx.fill();
+      ctx.save(); body(); ctx.clip();
+      ctx.fillStyle = lk.stripe; ctx.fillRect(x0 - 10, -84, 460, 24);
+      if (lead && lk.nose) { ctx.fillStyle = lk.nose; ctx.fillRect(x1 - 40, -120, 80, 92); }
+      ctx.fillStyle = C.navy; ctx.fillRect(x0 - 10, -206, 460, 12);
       ctx.restore();
-    });
-    // the tube train above the line
-    const tx = x + w * 0.42 + 190;
-    T.train(ctx, tx, ly - 34, 0.42, 2, { body: '#FFFFFF', stripe: '#1D63B7', door: C.red, roof: '#5C6873', tube: true }, u * 2);
-    // stop counter
-    const stops = Math.min(11, Math.round(pos));
-    T.pill(ctx, stops ? `Stop ${stops} of 11` : 'Leaving Victoria', x + 30, y + 60, 34, C.navy, '#FFF');
-    if (pos >= n - 1.05) { const k = T.pop(u, 104); T.scaled(ctx, k, x + w - 200, y + 60, () => T.pill(ctx, 'Off here!', x + w - 30, y + 60, 34, C.green, '#FFF', 'right')); }
-  }
-  if (i === 4) {
-    // departure board
-    const bw = Math.min(w - 80, pick({ '16x9': 900, '9x16': 820 })), bx = x + (w - bw) / 2, by = y + 50;
-    const k = springU(u, b + 0.6, SPRING.bouncy);
-    T.scaled(ctx, k, bx + bw / 2, by + 140, () => {
-      ctx.fillStyle = '#111'; rrect(ctx, bx, by, bw, 270, 16); ctx.fill();
-      ctx.fillStyle = '#2B2B2B'; ctx.fillRect(bx + 20, by + 20, bw - 40, 4);
-      const amber = '#FFB400';
-      M.text(ctx, 'Departures', bx + 30, by + 70, fd(44), amber);
-      M.text(ctx, 'Clacton-on-Sea', bx + 30, by + 150, fd(66), amber);
-      M.text(ctx, 'Hourly', bx + bw - 30, by + 150, fd(66), amber, 'right');
-      M.text(ctx, 'Calling at Stratford, Shenfield, Chelmsford, Colchester...', bx + 30, by + 220, fu(30, 600), '#E6A500');
-    });
-    const ck = T.pop(u, b + 2);
-    T.scaled(ctx, ck, x + w * 0.16, floorY - 60, () => clockLabel(ctx, x + w * 0.16, floorY - 60, 64, u));
-    T.person(ctx, x + w * 0.82, floorY + 10, sS * 0.85, { face: -1, pack: true, armUp: 0.7, blink: blinkAt(u), mouth: 'open' });
-  }
-  ctx.restore();
-}
-function clockLabel(ctx, x, y, r, u) {
-  T.clock(ctx, x, y, r, (u * 12) % 60, C.navy);
-  T.pill(ctx, '45 min', x, y + r + 40, 32, C.navy, '#FFF', 'center');
-}
-function change(ctx, u) {
-  fill(ctx, C.light);
-  const cur = CHANGE.reduce((a, s, i) => (u >= s[0] - (i ? 0.4 : 0) ? i : a), 0);
-  const st = CHANGE[cur];
-  const ax = S.x, ay = pick({ '16x9': 210, '9x16': 470 }), aw = S.w, ah = pick({ '16x9': 520, '9x16': 620 });
-  changeArt(ctx, u, cur, ax, ay, aw, ah);
-  // step dots
-  const dk = pick({ '16x9': [W - S.x - 5 * 54, 760], '9x16': [S.x, 1125] });
-  for (let i = 0; i < 5; i++) { T.badge(ctx, dk[0] + i * 54 + 18, dk[1] + 18, 16, i <= cur ? C.navy : C.soft); }
-  const cy = pick({ '16x9': 800, '9x16': 1170 }), ch = pick({ '16x9': 215, '9x16': 300 });
-  caption(ctx, u, st[0] - (cur ? 0.4 : -0.4), cur + 1, st[1], st[2], OP.circle.c, S.x, cy, S.w, ch);
-  header(ctx, u, 61.6, 'THE CHANGE', 'Tube from Victoria to Liverpool Street', OP.circle.c, C.navy, C.navy, '#FFFFFF');
-}
-
-// ---------------------------------------------------------------- T6 the walk (146-164)
-const WALK = [
-  [148, 'Out of Clacton-on-Sea station'],
-  [151.5, 'Down through the town centre'],
-  [155, 'At the seafront, turn right'],
-  [158.5, 'The West Greensward: you\'re there!'],
-];
-function walk(ctx, u) {
-  fill(ctx, C.light);
-  const R = pick({ '16x9': [860, 210, 964, 800], '9x16': [72, 470, 936, 640] });
-  const [rx, ry, rw, rh] = R;
-  ctx.save(); rrect(ctx, rx, ry, rw, rh, 26); ctx.clip();
-  ctx.fillStyle = '#E4EADF'; ctx.fillRect(rx, ry, rw, rh);
-  // town blocks
-  for (let gx = 0; gx < 8; gx++) for (let gy = 0; gy < 5; gy++) {
-    const bx = rx + 20 + gx * rw / 8, by = ry + 20 + gy * rh * 0.62 / 5;
-    if (Math.abs(gx - 4.4) < 0.9) continue;
-    ctx.fillStyle = hash01(gx * 7 + gy, 3) > 0.5 ? '#D3DCCB' : '#C9D3C0';
-    rrect(ctx, bx, by, rw / 8 - 24, rh * 0.62 / 5 - 22, 8); ctx.fill();
-  }
-  // green + beach + sea
-  ctx.fillStyle = '#9ED67F'; ctx.fillRect(rx, ry + rh * 0.66, rw, rh * 0.1);
-  ctx.fillStyle = '#EED9A4'; ctx.fillRect(rx, ry + rh * 0.76, rw, rh * 0.06);
-  ctx.fillStyle = '#8FCBE6'; ctx.fillRect(rx, ry + rh * 0.82, rw, rh);
-  ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 4;
-  for (let i = 0; i < 8; i++) { const x = rx + ((i * 140 + u * 10) % rw), yy = ry + rh * 0.9; ctx.beginPath(); ctx.moveTo(x, yy); ctx.lineTo(x + 40, yy); ctx.stroke(); }
-  // pier on the right (the pier is east of the Greensward)
-  ctx.fillStyle = '#B08A5E'; ctx.fillRect(rx + rw * 0.78, ry + rh * 0.7, rw * 0.04, rh * 0.3);
-  M.text(ctx, 'Pier', rx + rw * 0.84, ry + rh * 0.95, fu(28, 700), C.navy);
-  // labels
-  M.text(ctx, 'Town centre', rx + rw * 0.2, ry + rh * 0.36, fu(30, 700), C.body, 'center');
-  ctx.fillStyle = C.navy; rrect(ctx, rx + rw * 0.06, ry + rh * 0.67, rw * 0.36, rh * 0.08, 10); ctx.fill();
-  M.text(ctx, 'West Greensward', rx + rw * 0.24, ry + rh * 0.725, fd(38), '#FFF', 'center');
-  // station
-  const st = [rx + rw * 0.56, ry + rh * 0.06];
-  ctx.fillStyle = OP.ga.c; rrect(ctx, st[0] - 80, st[1] - 10, 160, 60, 10); ctx.fill();
-  M.text(ctx, 'Station', st[0], st[1] + 32, fd(34), '#FFF', 'center');
-  // route path
-  const path = [[0.56, 0.12], [0.56, 0.4], [0.58, 0.64], [0.56, 0.72], [0.36, 0.72], [0.24, 0.7]].map(([a, b]) => [rx + a * rw, ry + b * rh]);
-  const lens = path.slice(1).map((q, i) => Math.hypot(q[0] - path[i][0], q[1] - path[i][1]));
-  const tot = lens.reduce((s, v) => s + v, 0);
-  const p = E.inOutSine(prog(u, 147, 159));
-  const at = (q) => { let left = tot * q; for (let i = 0; i < lens.length; i++) { if (left <= lens[i]) { const f = left / lens[i]; return [lerp(path[i][0], path[i + 1][0], f), lerp(path[i][1], path[i + 1][1], f)]; } left -= lens[i]; } return path[path.length - 1]; };
-  ctx.save(); ctx.strokeStyle = C.teal; ctx.lineWidth = 12; ctx.setLineDash([2, 22]); ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.moveTo(path[0][0], path[0][1]);
-  for (let q = 0; q <= p; q += 0.01) { const [a, b] = at(q); ctx.lineTo(a, b); }
-  ctx.stroke(); ctx.restore();
-  // crowd + display over the sea once there
-  const arrive = prog(u, 158.5, 160);
-  if (arrive > 0) {
-    for (let i = 0; i < 26; i++) { ctx.fillStyle = [C.red, C.teal, C.amber, C.purple][i % 4]; ctx.beginPath(); ctx.arc(rx + rw * (0.08 + (i % 13) * 0.026), ry + rh * (0.765 + Math.floor(i / 13) * 0.018), 7, 0, M.TAU); ctx.fill(); }
-  }
-  const jp = prog(u, 160.5, 166);
-  if (jp > 0 && jp < 1) {
-    [[0, C.red], [1, '#FFFFFF'], [2, '#1D63B7']].forEach(([k, col]) => {
-      const pos = (t) => { const q = prog(t, 160.5, 166); return [lerp(rx + rw + 100, rx - 200, q) + k * 60, ry + rh * 0.88 - Math.sin(q * Math.PI) * rh * 0.06 + k * 26]; };
-      T.trail(ctx, pos, u, 2, 14, col, 24, 0.8);
-      const [x, y] = pos(u);
-      T.jet(ctx, x, y, 0.2, Math.PI, { stripe: col === '#FFFFFF' ? C.navy : col, flame: 0.5 });
-    });
-  }
-  // the walker pin
-  const [mx, my] = at(p);
-  ctx.save(); ctx.translate(mx, my - 8 - Math.abs(Math.sin(u * Math.PI)) * 6 * (p < 1 ? 1 : 0));
-  ctx.fillStyle = C.teal; ctx.beginPath(); ctx.arc(0, -44, 30, 0, M.TAU); ctx.moveTo(-18, -24); ctx.lineTo(0, 0); ctx.lineTo(18, -24); ctx.fill();
-  ctx.fillStyle = C.skin; ctx.beginPath(); ctx.arc(0, -44, 20, 0, M.TAU); ctx.fill();
-  ctx.fillStyle = C.hair; ctx.beginPath(); ctx.arc(0, -48, 20, Math.PI, M.TAU); ctx.fill();
-  ctx.restore();
-  ctx.restore();
-  // step list
-  const lx = S.x, ly = pick({ '16x9': 280, '9x16': 1160 }), lh = pick({ '16x9': 150, '9x16': 82 });
-  WALK.forEach(([b, s], i) => {
-    const k = springU(u, b - 0.4, SPRING.bouncy);
-    if (k <= 0.001) return;
-    const done = u >= (WALK[i + 1] ? WALK[i + 1][0] - 0.4 : 160);
-    ctx.save(); ctx.globalAlpha = clamp(k * 1.5); ctx.translate((1 - k) * -200, 0);
-    T.badge(ctx, lx + 34, ly + i * lh, 30, done || i === 3 && u > 159 ? C.green : C.teal, (X, Y, R) => (done || (i === 3 && u > 159) ? T.tick(ctx, X, Y, R) : M.text(ctx, String(i + 1), X, Y + 13, fd(38), '#FFF', 'center')));
-    T.lines(ctx, s, lx + 86, ly + i * lh + 14, fd(pick({ '16x9': 52, '9x16': 46 })), C.navy, pick({ '16x9': 640, '9x16': 840 }), 54);
-    ctx.restore();
-  });
-  header(ctx, u, 145.6, 'LAST LEG', 'Walk to the seafront: 10 to 15 minutes', C.teal, '#FFFFFF', C.navy, '#FFFFFF');
-}
-
-// ---------------------------------------------------------------- T7 going home (164-174)
-function home(ctx, u) {
-  const g = ctx.createLinearGradient(0, 0, 0, H);
-  g.addColorStop(0, '#F7B267'); g.addColorStop(0.6, '#F4845F'); g.addColorStop(1, '#6950A1');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  ctx.fillStyle = 'rgba(255,240,200,0.9)'; ctx.beginPath(); ctx.arc(W * 0.78, H * pick({ '16x9': 0.62, '9x16': 0.62 }), pick({ '16x9': 130, '9x16': 120 }), 0, M.TAU); ctx.fill();
-  T.hills(ctx, H * 0.78, 20, 2, 0.5, '#3C2E5C', 2);
-  ctx.fillStyle = '#2E2448'; ctx.fillRect(0, H * 0.8, W, H);
-  // a busy train going by, people in every window
-  const tx = lerp(-200, W + 1700, prog(u, 163.5, 174));
-  T.train(ctx, tx, H * 0.8, pick({ '16x9': 0.6, '9x16': 0.5 }), 4, { ...LOOK_GA, window: '#FFE9B0' }, u * 2);
-  const k = springU(u, 163.7, SPRING.bouncy);
-  const cx = S.x, cy = pick({ '16x9': 150, '9x16': 330 }), cw = pick({ '16x9': 1100, '9x16': S.w }), chh = pick({ '16x9': 430, '9x16': 560 });
-  T.scaled(ctx, k, cx + cw / 2, cy + chh / 2, () => {
-    T.card(ctx, cx, cy, cw, chh, { edge: C.purple, r: 22, edgeH: 14 });
-    M.text(ctx, 'GOING HOME?', cx + 44, cy + 130, fd(pick({ '16x9': 100, '9x16': 100 })), C.navy);
-    T.lines(ctx, 'Trains are very busy straight after the flying. Leave a little early, or stay in town for something to eat and catch a later train.', cx + 44, cy + 210, fu(pick({ '16x9': 42, '9x16': 42 }), 600), C.body, cw - 88, pick({ '16x9': 56, '9x16': 56 }));
+      body(); ink(ctx); ctx.stroke();
+      for (let i = 0; i < (lead && !lk.tube ? 3 : 4); i++) box(ctx, x0 + 70 + i * 82, -176, 56, 50, 0, '#BFE6F2', 4);
+      if (lead && !lk.tube) { ctx.beginPath(); ctx.moveTo(x1 - 76, -186); ctx.lineTo(x1 - 6, -126); ctx.lineTo(x1 - 76, -126); ctx.closePath(); fs(ctx, '#BFE6F2', 4); }
+      [x0 + 18, x1 - 56 - (lead && !lk.tube ? 60 : 0)].forEach((dx) => { box(ctx, dx, -184, 40, 148, 0, lk.door, 4); ctx.fillStyle = '#BFE6F2'; ctx.fillRect(dx + 8, -170, 24, 44); });
+      [x0 + 70, x0 + 130, x1 - 130, x1 - 70].forEach((wx) => { circ(ctx, wx, -18, 22, '#2B3237', 4); withT(ctx, wx, -18, 1, spin, () => { limb(ctx, [[-12, 0], [12, 0]], 2, C.grey); }); });
+    }
   });
 }
-
-// ---------------------------------------------------------------- T8 end card (174-180)
-function end(ctx, u, IMG) {
-  fill(ctx, C.navy);
-  const pos = (t) => { const p = (t - 173.4) / 4; return [lerp(-300, W + 400, p), pick({ '16x9': 140, '9x16': 300 }) - Math.sin(p * Math.PI) * 40]; };
-  T.trail(ctx, pos, u, 2.2, 22, C.red, 30, 0.6);
-  const [jx, jy] = pos(u);
-  T.jet(ctx, jx, jy, 0.55, -0.05, { body: '#E7EDF2', stripe: C.red, belly: '#FFF', flame: 0.7 });
-  const lx = S.x + 10, ly = pick({ '16x9': 430, '9x16': 560 });
-  T.heading(ctx, u, 173.8, 'PLAN YOUR', lx, ly, pick({ '16x9': 160, '9x16': 150 }), '#FFF');
-  T.heading(ctx, u, 174.1, 'TRIP', lx, ly + pick({ '16x9': 150, '9x16': 140 }), pick({ '16x9': 160, '9x16': 150 }), '#FF8C92');
-  const k = E.outCubic(prog(u, 174.8, 175.6));
-  if (k > 0) {
-    ctx.save(); ctx.globalAlpha = k; ctx.translate(0, (1 - k) * 30);
-    const y = ly + pick({ '16x9': 250, '9x16': 235 });
-    M.text(ctx, 'ukairshowguide.co.uk/train-to-clacton', lx, y, fu(pick({ '16x9': 40, '9x16': 42 }), 700), C.mint);
-    T.lines(ctx, 'Every train, every change and the walk, step by step.', lx, y + 64, fu(34, 600), C.soft, pick({ '16x9': 720, '9x16': 930 }), 44);
-    M.text(ctx, 'THE BIG GUIDE TO UK AIRSHOWS', lx, pick({ '16x9': 960, '9x16': 1620 }), fd(44), '#FFF');
+function rails(ctx, y, x0 = -100, x1 = 2100, off = 0) {
+  for (let x = x0 - ((off % 60) + 60) % 60; x < x1; x += 60) { ctx.fillStyle = '#8C6E54'; ctx.fillRect(x, y + 2, 34, 12); }
+  ctx.fillStyle = '#5B6B78'; ctx.fillRect(x0, y - 4, x1 - x0, 8);
+}
+// station platform: grey floor with a yellow line; sky above stays
+function platform(ctx, edgeY = GY - 10) {
+  ctx.fillStyle = '#C9D3DA'; ctx.fillRect(-1000, edgeY, 4000, G.h);
+  ctx.fillStyle = C.gold; ctx.fillRect(-1000, edgeY + 8, 4000, 10);
+  ink(ctx); ctx.beginPath(); ctx.moveTo(-1000, edgeY); ctx.lineTo(3000, edgeY); ctx.stroke();
+}
+// indoor tiles (stations, concourses)
+function tiles(ctx, col = '#EEF2F5') {
+  sfill(ctx, col);
+  ctx.strokeStyle = '#DCE3E9'; ctx.lineWidth = 3;
+  for (let y = 0; y < G.h; y += 60) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(G.w, y); ctx.stroke(); }
+  ctx.fillStyle = '#C9D3DA'; ctx.fillRect(0, G.gy, G.w, G.h); ink(ctx); ctx.beginPath(); ctx.moveTo(0, G.gy); ctx.lineTo(G.w, G.gy); ctx.stroke();
+}
+// a straight-edged sign: bg box with an optional coloured bar on the left
+function sign(ctx, str, x, y, size, bg, fg, bar = null, k = 1, sub = null) {
+  if (k <= 0) return;
+  const f = font(size, 800, DISPLAY); ctx.font = f;
+  let w = ctx.measureText(str).width + size * 1.1 + (bar ? 40 : 0);
+  const fs2 = font(size * 0.45, 700, UI);
+  if (sub) { ctx.font = fs2; w = Math.max(w, ctx.measureText(sub).width + size * 1.1 + (bar ? 40 : 0)); }
+  const h = size * (sub ? 1.9 : 1.4);
+  withT(ctx, x, y, k, (1 - k) * 0.2, () => {
+    ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(-w / 2 + 10, -h / 2 + 10, w, h);
+    box(ctx, -w / 2, -h / 2, w, h, 0, bg, 5);
+    if (bar) { ctx.fillStyle = bar; ctx.fillRect(-w / 2 + 3, -h / 2 + 3, 34, h - 6); }
+    const tx = -w / 2 + size * 0.55 + (bar ? 40 : 0);
+    text(ctx, str, tx, sub ? -h / 2 + size * 1.05 : size * 0.36, f, fg);
+    if (sub) text(ctx, sub, tx, h / 2 - size * 0.3, fs2, fg === C.white ? C.white : C.tealD);
+  });
+}
+function arrowR(ctx, x, y, s, col = C.white) {
+  withT(ctx, x, y, s, 0, () => { ctx.beginPath(); ctx.moveTo(-30, -10); ctx.lineTo(4, -10); ctx.lineTo(4, -26); ctx.lineTo(32, 0); ctx.lineTo(4, 26); ctx.lineTo(4, 10); ctx.lineTo(-30, 10); ctx.closePath(); ctx.fillStyle = col; ctx.fill(); });
+}
+function wallClock(ctx, x, y, r, mins) {
+  circ(ctx, x, y, r, C.white);
+  for (let k = 0; k < 12; k++) { const a = k / 12 * TAU; limb(ctx, [[x + Math.cos(a) * r * 0.78, y + Math.sin(a) * r * 0.78], [x + Math.cos(a) * r * 0.86, y + Math.sin(a) * r * 0.86]], 1, C.navy); }
+  const a = mins / 60 * TAU - Math.PI / 2, b = mins / 720 * TAU - Math.PI / 2;
+  limb(ctx, [[x, y], [x + Math.cos(a) * r * 0.7, y + Math.sin(a) * r * 0.7]], 4, C.navy);
+  limb(ctx, [[x, y], [x + Math.cos(b) * r * 0.45, y + Math.sin(b) * r * 0.45]], 6, C.navy);
+  circ(ctx, x, y, 8, C.red, 0);
+}
+function bubbleSq(ctx, x, y, w, h, bg, str, k, tailLeft = true, fg = C.white) {
+  if (k <= 0) return;
+  withT(ctx, x + w / 2, y + h / 2, k, (1 - k) * (tailLeft ? -0.2 : 0.2), () => {
+    ctx.beginPath(); const tx = tailLeft ? -w / 2 + 40 : w / 2 - 40;
+    ctx.moveTo(-w / 2, -h / 2); ctx.lineTo(w / 2, -h / 2); ctx.lineTo(w / 2, h / 2); ctx.lineTo(tx + (tailLeft ? 50 : 0), h / 2); ctx.lineTo(tx, h / 2 + 40); ctx.lineTo(tx - (tailLeft ? 0 : 50), h / 2); ctx.lineTo(-w / 2, h / 2); ctx.closePath();
+    ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.save(); ctx.translate(10, 10); ctx.fill(); ctx.restore();
+    fs(ctx, bg);
+    text(ctx, str, 0, 18, font(50, 800, DISPLAY), fg, 'center');
+  });
+}
+function envelope(ctx, x, y, s, rot = 0) {
+  withT(ctx, x, y, s, rot, () => { box(ctx, -70, -46, 140, 92, 0, C.white); limb(ctx, [[-66, -42], [0, 10], [66, -42]], 1, C.navy); });
+}
+function phoneH(ctx, x, y, s, scr = '#BFE6F2') {
+  withT(ctx, x, y, s, 0, () => { box(ctx, -40, -72, 80, 144, 10, '#2B3237'); ctx.fillStyle = scr; ctx.fillRect(-30, -58, 60, 112); });
+}
+// a photo print with a real aircraft cut-out in it
+function print(ctx, x, y, w, h, rot, body, caption) {
+  withT(ctx, x, y, 1, rot, () => {
+    ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(-w / 2 + 12, -h / 2 + 14, w, h);
+    box(ctx, -w / 2, -h / 2, w, h, 0, C.white);
+    const iw = w - 40, ih = h - (caption ? 110 : 40);
+    ctx.save(); ctx.beginPath(); ctx.rect(-iw / 2, -h / 2 + 20, iw, ih); ctx.clip();
+    ctx.fillStyle = '#9FD3EE'; ctx.fillRect(-iw / 2, -h / 2 + 20, iw, ih);
+    cloud(ctx, -iw * 0.25, -h / 2 + 20 + ih * 0.3, iw / 900); cloud(ctx, iw * 0.3, -h / 2 + 20 + ih * 0.7, iw / 1200);
+    jet(ctx, 0, -h / 2 + 20 + ih * 0.5, iw / 420, -0.08, body);
     ctx.restore();
-  }
-  const bk = springU(u, 174.3, SPRING.gentle);
-  const bw = pick({ '16x9': 900, '9x16': 640 }), bh = pick({ '16x9': 570, '9x16': 640 });
-  const bx = pick({ '16x9': 900, '9x16': (W - 640) / 2 }), by = pick({ '16x9': 250, '9x16': 900 });
-  ctx.save(); ctx.translate(0, (1 - bk) * (H - by));
-  T.browser(ctx, P ? IMG.trainM : IMG.train, bx, by, bw, bh, { fy: P ? 0.1 : 0.2, zoom: 1 + 0.03 * prog(u, 174, 180) });
-  ctx.restore();
+    ink(ctx, 4); ctx.strokeRect(-iw / 2, -h / 2 + 20, iw, ih);
+    if (caption) text(ctx, caption, -iw / 2, h / 2 - 34, font(Math.round(w / 17), 700, UI), C.navy);
+  });
+}
+// Red Arrows trio across a span, with smoke; q = 0..1 progress
+function redArrows(ctx, q, x0, x1, y, s = 0.7, dir = 1) {
+  if (q <= 0 || q >= 1) return;
+  const P = (qq, k) => [lerp(x0, x1, qq) - dir * k * 70 * s / 0.7, y + k * 40 * s / 0.7 - Math.sin(qq * Math.PI) * 40];
+  const SM = ['#E8202A', '#FFFFFF', '#1D4FB7'];
+  [1, 0, 2].forEach((k) => { const pts = []; for (let n = 1; n < 70; n++) { const qq = q - n * 0.005; if (qq < 0) break; const p = P(qq, k); pts.push([p[0] - dir * 120 * s / 0.7, p[1] + 12]); } if (k === 0) smoke(ctx, pts, '#B9C7D3', 12, 0.25, 0.6); smoke(ctx, pts, SM[k], 9, 0.25); });
+  [1, 0, 2].forEach((k) => { const p = P(q, k); jet(ctx, p[0], p[1], s, 0, C.red, dir < 0); });
 }
 
-const SCENES = (IMG) => [
-  { a: -10, b: 16, draw: mapScene },
-  { a: 16, b: 32, draw: before, push: 'left' },
-  { a: 32, b: 62, draw: leg1, push: 'left' },
-  { a: 62, b: 114, draw: change, push: 'up' },
-  { a: 114, b: 146, draw: leg2, push: 'down' },
-  { a: 146, b: 164, draw: walk, push: 'left' },
-  { a: 164, b: 174, draw: home, push: 'left' },
-  { a: 174, b: 999, draw: (c, u) => end(c, u, IMG), push: 'up' },
-];
-let SC = null;
+// ================================================================ scenes
+// 1. plan the trip: the route map
+const MP = { EBN: [0.47, 0.86], VIC: [0.35, 0.44], LST: [0.41, 0.4], COL: [0.71, 0.25], CLT: [0.79, 0.31], SEA: [0.81, 0.35] };
+const SEAPOLY = [[1, 0], [0.86, 0], [0.84, 0.16], [0.83, 0.3], [0.8, 0.38], [0.7, 0.42], [0.6, 0.46], [0.66, 0.5], [0.78, 0.52], [0.86, 0.56],
+  [0.9, 0.64], [0.88, 0.74], [0.76, 0.82], [0.62, 0.86], [0.52, 0.895], [0.36, 0.9], [0.2, 0.92], [0, 0.93], [0, 1], [1, 1]];
+function scenePlan(ctx, u, L) {
+  sky(ctx, u); hills(ctx); ground(ctx);
+  const ax = artX(0); ctx.save(); ctx.translate(ax, 0);
+  const bx = 70, by = 130, bw = 700, bh = 720;
+  const bk = pop(L, 0.3, SPRING.bouncy);
+  withT(ctx, bx + bw / 2, by + bh / 2, bk, (1 - bk) * -0.1, () => {
+    ctx.translate(-(bx + bw / 2), -(by + bh / 2));
+    ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(bx + 12, by + 14, bw, bh);
+    box(ctx, bx, by, bw, bh, 0, '#CFE8B8');
+    ctx.save(); ctx.beginPath(); ctx.rect(bx, by, bw, bh); ctx.clip();
+    ctx.beginPath(); SEAPOLY.forEach(([x, y], i) => (i ? ctx.lineTo(bx + x * bw, by + y * bh) : ctx.moveTo(bx + x * bw, by + y * bh))); ctx.closePath(); ctx.fillStyle = '#9FD3EE'; ctx.fill();
+    ctx.restore(); ink(ctx); ctx.strokeRect(bx, by, bw, bh);
+    const mp = (k) => [bx + MP[k][0] * bw, by + MP[k][1] * bh];
+    const legs = [[['EBN', 'VIC'], COL.southern, 2.0, 3.2, 0], [['VIC', 'LST'], COL.circle, 4.0, 4.8, 0], [['LST', 'COL', 'CLT'], COL.ga, 6.0, 7.4, 0], [['CLT', 'SEA'], COL.walk, 7.4, 8.0, 1]];
+    legs.forEach(([pts, col, a, b, dash]) => {
+      const p = E.inOutCubic(prog(L, a, b)); if (p <= 0) return;
+      const xy = pts.map(mp); const seg = xy.slice(1).map((q, i) => Math.hypot(q[0] - xy[i][0], q[1] - xy[i][1])); let left = seg.reduce((s, v) => s + v, 0) * p;
+      ctx.beginPath(); ctx.moveTo(xy[0][0], xy[0][1]);
+      for (let i = 0; i < seg.length && left > 0; i++) { const f = Math.min(1, left / seg[i]); ctx.lineTo(lerp(xy[i][0], xy[i + 1][0], f), lerp(xy[i][1], xy[i + 1][1], f)); left -= seg[i]; }
+      ctx.lineCap = 'round'; ctx.strokeStyle = C.navy; ctx.lineWidth = 26; if (!dash) ctx.stroke();
+      ctx.strokeStyle = col; ctx.lineWidth = 16; if (dash) ctx.setLineDash([4, 24]); ctx.stroke(); ctx.setLineDash([]);
+    });
+    [['EBN', 'EASTBOURNE', 0.8, 0, 70], ['VIC', 'LONDON', 2.6, -40, -60], ['CLT', 'CLACTON', 6.8, -40, -70]].forEach(([k, nm, b, dx, dy]) => {
+      const q = pop(L, b); if (q <= 0) return; const [x, y] = mp(k);
+      withT(ctx, x, y, q, 0, () => box(ctx, -16, -16, 32, 32, 0, C.white, 5));
+      label(ctx, nm, x + dx, y + dy, 40, C.navy, C.white, q);
+    });
+  });
+  person(ctx, 'A', { x: 870, y: GY + 70, scale: 0.85, look: -0.6, aL: [-1.9, -0.3], blink: blinkAt(L, 3), holdR: (c) => rucksack(c, 0, 50, 0.4) });
+  ctx.restore();
+}
+// 2. buy your ticket
+function sceneTicket(ctx, u, L) {
+  sky(ctx, u); hills(ctx); ground(ctx);
+  const ax = artX(1); ctx.save(); ctx.translate(ax, 0);
+  const tk = pop(L, 0.4, SPRING.bouncy);
+  withT(ctx, 440, 380, tk, -0.05 + (1 - tk) * 0.3, () => {
+    ctx.fillStyle = 'rgba(19,41,60,0.22)'; ctx.fillRect(-340 + 12, -200 + 14, 680, 400);
+    box(ctx, -340, -200, 680, 400, 0, '#FFF6DE');
+    ctx.fillStyle = C.gold; ctx.fillRect(-337, -197, 674, 72); text(ctx, 'TRAIN TICKET', -310, -144, font(46, 800, DISPLAY), C.navy);
+    text(ctx, 'FROM', -310, -70, font(28, 700, UI), C.grey2); text(ctx, 'EASTBOURNE', -310, -20, font(62, 800, DISPLAY), C.navy);
+    text(ctx, 'TO', -310, 46, font(28, 700, UI), C.grey2); text(ctx, 'CLACTON-ON-SEA', -310, 96, font(62, 800, DISPLAY), C.navy);
+    text(ctx, 'ROUTE: VIA LONDON', -310, 160, font(32, 800, DISPLAY), C.red);
+    ink(ctx, 4); ctx.setLineDash([12, 12]); ctx.beginPath(); ctx.moveTo(190, -110); ctx.lineTo(190, 180); ctx.stroke(); ctx.setLineDash([]);
+    jet(ctx, 265, 40, 0.5, -1.3, C.red);
+  });
+  label(ctx, 'TUBE ACROSS LONDON', 440, 680, 44, C.navy, C.white, pop(L, 4.5));
+  const rk = pop(L, 6.5, SPRING.bouncy);
+  if (rk > 0) withT(ctx, 230, 800, rk, 0.06, () => { box(ctx, -150, -60, 300, 120, 0, C.teal); text(ctx, 'RAILCARD', 0, -6, font(44, 800, DISPLAY), C.white, 'center'); text(ctx, 'A THIRD OFF', 0, 40, font(30, 800, DISPLAY), C.navy, 'center'); });
+  person(ctx, 'B', { x: 820, y: GY + 70, scale: 0.9, look: -0.6, aL: [-1.4, -0.6], blink: blinkAt(L, 5), mouth: 0.3 * bump(L, 4.5, 1.5), holdL: (c) => phoneH(c, 0, -20, 0.55) });
+  ctx.restore();
+}
+// 3. Southern train to Victoria
+function sceneSouthern(ctx, u, L) {
+  sky(ctx, u); hills(ctx);
+  const ax = artX(2); ctx.save(); ctx.translate(ax, 0);
+  // canopy
+  for (const x of [80, 480, 880]) box(ctx, x - 9, 130, 18, GY - 140, 0, '#2E5E12', 0);
+  box(ctx, -40, 100, 1060, 46, 0, '#2E5E12');
+  sign(ctx, 'EASTBOURNE', 480, 220, 60, C.white, C.navy, COL.southern, 1);
+  rails(ctx, GY - 22, -100, 1100);
+  // arrives (decelerating), waits, leaves
+  const arr = E.outCubic(prog(L, 0.3, 3)), dep = E.inCubic(prog(L, 7.4, 11));
+  const tx = lerp(-80, 900, arr) + dep * 1900;
+  trainH(ctx, tx, GY - 22, 0.95, 2, LIVERY.southern, (1 - arr + dep) * 20);
+  platform(ctx, GY + 30);
+  // A walks to the door and steps on
+  const wp = prog(L, 3.4, 5.4);
+  if (L < 5.6) person(ctx, 'A', { x: lerp(60, 520, E.inOutSine(wp)), y: GY + 110 - (L > 5.2 ? (L - 5.2) * 150 : 0), scale: 0.85, walk: wp > 0 && wp < 1 ? L * 7 : undefined, look: 0.6, blink: blinkAt(L, 7), holdR: (c) => rucksack(c, 0, 50, 0.4), aL: [-Math.sin(L * 7) * 0.4 * (wp > 0 && wp < 1 ? 1 : 0), -0.3] });
+  label(ctx, 'SOUTHERN', 220, 360, 48, COL.southern, '#13210F', pop(L, 2.5) * (1 - prog(L, 10.5, 11)));
+  label(ctx, '1 HR 25 MIN', 480, 360, 48, C.navy, C.white, pop(L, 4.5) * (1 - prog(L, 10.5, 11)));
+  label(ctx, 'TO LONDON VICTORIA', 520, 460, 48, C.white, C.navy, pop(L, 6.5) * (1 - prog(L, 10.5, 11)));
+  ctx.restore();
+}
+// 4. follow the signs: Underground, gates
+function sceneGates(ctx, u, L) {
+  tiles(ctx);
+  const ax = artX(3); ctx.save(); ctx.translate(ax, 0);
+  // hanging sign
+  limb(ctx, [[260, 0], [260, 250]], 2, C.grey2); limb(ctx, [[700, 0], [700, 250]], 2, C.grey2);
+  const sk = pop(L, 0.4, SPRING.bouncy);
+  withT(ctx, 480, 310, sk, 0, () => { box(ctx, -300, -64, 600, 128, 0, C.navy); text(ctx, 'UNDERGROUND', -260, 24, font(66, 800, DISPLAY), C.white); arrowR(ctx, 230, 0, 1.4, COL.circle); });
+  // gates
+  const open = E.outBack(prog(L, 3.6, 4.2), 1.4) * (1 - prog(L, 6.8, 7.2)) + E.outBack(prog(L, 7.2, 7.8)) * (1 - prog(L, 10, 10.5));
+  for (let g = 0; g < 3; g++) {
+    const gx = 400 + g * 220;
+    box(ctx, gx - 110, GY - 170, 44, 170, 0, '#5B6B78'); box(ctx, gx + 66, GY - 170, 44, 170, 0, '#5B6B78');
+    ctx.fillStyle = g === 1 ? '#2EC26A' : C.grey; ctx.fillRect(gx - 102, GY - 160, 28, 10);
+    const pw = 62 * (1 - (g === 1 ? clamp(open) : 0));
+    if (pw > 2) { box(ctx, gx - 66, GY - 120, pw, 56, 0, C.red, 4); box(ctx, gx + 66 - pw, GY - 120, pw, 56, 0, C.red, 4); }
+  }
+  // A walks up, through; B follows and taps a card
+  const a1 = prog(L, 0.8, 3.2), a2 = prog(L, 4, 6.6);
+  const axp = lerp(-60, 520, E.inOutSine(a1)) + E.inOutSine(a2) * 600;
+  const aw = (a1 > 0 && a1 < 1) || (a2 > 0 && a2 < 1);
+  person(ctx, 'A', { x: axp, y: GY + 80, scale: 0.85, walk: aw ? L * 7 : undefined, look: 0.6, blink: blinkAt(L, 9), aR: a1 >= 1 && a2 <= 0 ? [1.5, 0.3] : [0.2, 0.2], holdR: a1 >= 1 && a2 <= 0 ? (c) => { box(c, -30, -20, 60, 40, 0, '#FFF6DE', 4); } : undefined, holdL: (c) => rucksack(c, 0, 50, 0.4) });
+  const b1 = prog(L, 5, 7), b2 = prog(L, 7.6, 10);
+  const bxp = lerp(-160, 520, E.inOutSine(b1)) + E.inOutSine(b2) * 600;
+  const bw = (b1 > 0 && b1 < 1) || (b2 > 0 && b2 < 1);
+  if (L > 5) person(ctx, 'B', { x: bxp, y: GY + 90, scale: 0.85, walk: bw ? L * 7 : undefined, look: 0.6, blink: blinkAt(L, 10), aR: b1 >= 1 && b2 <= 0 ? [1.5, 0.3] : [0.2, 0.2], holdR: b1 >= 1 && b2 <= 0 ? (c) => { box(c, -30, -20, 60, 40, 0, C.blue, 4); } : undefined });
+  label(ctx, 'TICKET OR CONTACTLESS', 480, 500, 44, C.teal, C.white, pop(L, 6.6) * (1 - prog(L, 11, 11.5)));
+  ctx.restore();
+}
+// 5. Circle line, not the District line
+function sceneCircle(ctx, u, L) {
+  tiles(ctx, '#F1EFE6');
+  const ax = artX(4); ctx.save(); ctx.translate(ax, 0);
+  // tunnel mouth
+  ctx.fillStyle = '#2B3237'; ctx.fillRect(-100, 480, 1200, GY - 480);
+  sign(ctx, 'CIRCLE LINE', 380, 250, 70, C.white, C.navy, COL.circle, pop(L, 0.5), 'EASTBOUND TO TOWER HILL');
+  tickSq(ctx, 800, 250, pop(L, 1.2, SPRING.wobbly) * 1.2, true);
+  ctx.save(); ctx.globalAlpha = 0.95; sign(ctx, 'DISTRICT LINE', 380, 400, 50, C.white, C.grey2, COL.district, pop(L, 2.5)); ctx.restore();
+  tickSq(ctx, 720, 400, pop(L, 2.7, SPRING.wobbly), false);
+  rails(ctx, GY - 22, -100, 1100);
+  const arr = E.outCubic(prog(L, 4.6, 6.6)), dep = E.inCubic(prog(L, 9, 11.5));
+  trainH(ctx, lerp(-60, 1000, arr) + dep * 1900, GY - 22, 0.9, 2, LIVERY.tube, (1 - arr + dep) * 20);
+  platform(ctx, GY + 30);
+  person(ctx, 'A', { x: 180, y: GY + 110, scale: 0.85, look: 0.4, lookY: -0.5, aR: [2.2 * pop(L, 1), 0.2], blink: blinkAt(L, 12), holdL: (c) => rucksack(c, 0, 50, 0.4), mouth: 0.4 * bump(L, 1.5, 1) });
+  label(ctx, '11 STOPS', 620, 560, 50, C.navy, C.white, pop(L, 4.5) * (1 - prog(L, 8.6, 9)));
+  label(ctx, 'OFF AT LIVERPOOL STREET', 560, 560, 44, C.red, C.white, pop(L, 9) * 1);
+  ctx.restore();
+}
+// 6. Liverpool Street: the departure board
+function sceneLST(ctx, u, L) {
+  tiles(ctx);
+  const ax = artX(5); ctx.save(); ctx.translate(ax, 0);
+  const bk = pop(L, 0.4, SPRING.bouncy);
+  withT(ctx, 480, 370, bk, 0, () => {
+    box(ctx, -400, -170, 800, 340, 0, '#111518');
+    const amber = '#FFB400';
+    text(ctx, 'DEPARTURES', -360, -100, font(40, 800, DISPLAY), '#C98F00');
+    const rk = E.outQuint(prog(L, 2.4, 3.2));
+    ctx.save(); ctx.beginPath(); ctx.rect(-380, -70, 760 * rk, 220); ctx.clip();
+    text(ctx, '10:18', -360, -6, font(66, 800, DISPLAY), amber); text(ctx, 'CLACTON-ON-SEA', -190, -6, font(66, 800, DISPLAY), amber);
+    text(ctx, 'Stratford, Shenfield, Chelmsford, Colchester', -360, 54, font(32, 600, UI), '#E6A500');
+    text(ctx, 'On time', -360, 120, font(36, 700, UI), '#7CD67C');
+    ctx.restore();
+  });
+  const ck = pop(L, 4.5, SPRING.bouncy);
+  if (ck > 0) withT(ctx, 180, 680, ck, 0, () => wallClock(ctx, 0, 0, 80, (L * 3) % 60 + 20));
+  label(ctx, '45 MIN', 180, 805, 50, C.navy, C.white, pop(L, 4.8));
+  const wp = prog(L, 6.4, 11);
+  person(ctx, 'A', { x: lerp(400, 1100, E.inOutSine(wp)), y: GY + 80, scale: 0.85, walk: wp > 0 && wp < 1 ? L * 7 : undefined, look: 0.6, blink: blinkAt(L, 14), aR: [1.1, 0.8], holdR: (c) => { box(c, -18, -40, 36, 50, 4, C.white, 4); c.fillStyle = C.red; c.fillRect(-15, -20, 30, 12); }, holdL: (c) => rucksack(c, 0, 50, 0.4) });
+  person(ctx, 'B', { x: lerp(560, 1260, E.inOutSine(wp)), y: GY + 90, scale: 0.85, walk: wp > 0 && wp < 1 ? L * 7 + 1 : undefined, look: 0.6, blink: blinkAt(L, 15), mouth: 0.4 * bump(L, 7, 1) });
+  ctx.restore();
+}
+// 7. Greater Anglia to Clacton, through Essex
+function sceneGA(ctx, u, L) {
+  sky(ctx, u);
+  const ax = artX(6); ctx.save(); ctx.translate(ax, 0);
+  ctx.fillStyle = C.sea; ctx.fillRect(-100, GY - 200, 1200, 90);
+  for (let k = 0; k < 8; k++) { const wx = ((k * 150 + L * 40) % 1100) - 60; limb(ctx, [[wx, GY - 160], [wx + 40, GY - 160]], 2, '#8CC8E6'); }
+  ctx.fillStyle = '#B6DAA6'; ctx.fillRect(-100, GY - 110, 1200, 120);
+  for (let k = 0; k < 7; k++) { const tx = ((k * 190 - L * 60) % 1330 + 1330) % 1330 - 160; box(ctx, tx - 8, GY - 150, 16, 50, 0, '#8C6E54', 3); circ(ctx, tx, GY - 170, 44, C.grass2); }
+  ground(ctx);
+  rails(ctx, GY + 60, -100, 1100);
+  const p = prog(L, 0.2, 11.6);
+  trainH(ctx, lerp(-150, 2300, p), GY + 60, 0.85, 3, LIVERY.ga, L * 3);
+  label(ctx, 'GREATER ANGLIA', 480, 300, 52, COL.ga, C.white, pop(L, 0.8));
+  label(ctx, 'EVERY HOUR', 300, 410, 48, C.white, C.navy, pop(L, 2.5));
+  label(ctx, '1 HR 26 MIN', 660, 410, 48, C.navy, C.white, pop(L, 4.5));
+  label(ctx, 'CHECK 2027 TIMES', 480, 520, 48, C.gold, C.navy, pop(L, 6.5));
+  ctx.restore();
+}
+// 8. walk to the seafront and the West Greensward
+function sceneWalk(ctx, u, L) {
+  sky(ctx, u);
+  const ax = artX(7); ctx.save(); ctx.translate(ax, 0);
+  ctx.fillStyle = C.sea; ctx.fillRect(-100, GY - 260, 1200, 200);
+  for (let k = 0; k < 9; k++) { const wx = ((k * 130 + L * 30) % 1100) - 60; ctx.beginPath(); ctx.arc(wx, GY - 200 + (k % 2) * 60, 14, Math.PI, TAU); ink(ctx, 4); ctx.strokeStyle = C.white; ctx.stroke(); }
+  ctx.fillStyle = C.sand; ctx.fillRect(-100, GY - 60, 1200, 60);
+  // the pier, off to the east (left of frame when facing the sea we turn right, so the pier is behind us)
+  ground(ctx);
+  // crowd line along the Greensward once there
+  if (L > 6.4) for (let k = 0; k < 9; k++) { const bx = 560 + k * 52; box(ctx, bx - 6, GY - 10, 12, 60, 0, k % 2 ? C.red : C.white, 3); }
+  redArrows(ctx, prog(L, 6.6, 12), -260, 1200, 230, 0.6);
+  // fingerpost
+  box(ctx, 470, 300, 18, GY - 300, 0, '#7A5B3A');
+  const fp = [['TOWN CENTRE', 360, 2.4, -1], ['SEAFRONT', 450, 4.4, 1], ['WEST GREENSWARD', 540, 6.4, 1]];
+  fp.forEach(([nm, y, b, dir]) => {
+    const q = pop(L, b, SPRING.bouncy); if (q <= 0) return;
+    ctx.font = font(40, 800, DISPLAY); const w = ctx.measureText(nm).width + 80;
+    withT(ctx, 479, y, 1, (1 - q) * dir * 0.6, () => {
+      ctx.beginPath(); if (dir > 0) { ctx.moveTo(0, -32); ctx.lineTo(w, -32); ctx.lineTo(w + 34, 0); ctx.lineTo(w, 32); ctx.lineTo(0, 32); } else { ctx.moveTo(0, -32); ctx.lineTo(-w, -32); ctx.lineTo(-w - 34, 0); ctx.lineTo(-w, 32); ctx.lineTo(0, 32); }
+      ctx.closePath(); fs(ctx, dir > 0 ? C.teal : C.navy, 5);
+      text(ctx, nm, dir > 0 ? 24 : -w + 18, 14, font(40, 800, DISPLAY), C.white);
+    });
+  });
+  const wp = prog(L, 0.8, 6);
+  ['K', 'B', 'A'].forEach((w, k) => person(ctx, w, { x: lerp(-180 - k * 140, 520 + k * 140, E.inOutSine(wp)) + (L > 6 ? 0 : 0), y: GY + 110, scale: 0.8, walk: wp > 0 && wp < 1 ? L * 7 + k : undefined,
+    look: wp < 1 ? 0.6 : -0.3, lookY: L > 6.6 ? -0.7 : 0, aL: L > 7 ? [-2.4 + Math.sin(L * 5 + k) * 0.3, 0] : [-0.2, -0.2], mouth: L > 7 ? 0.6 : 0.2, blink: blinkAt(L, 20 + k) }));
+  ctx.restore();
+}
+// 9. going home: a busy platform at sunset
+function sceneHome(ctx, u, L) {
+  sky(ctx, u, '#F6C9A0', '#FBE3CE');
+  const ax = artX(8); ctx.save(); ctx.translate(ax, 0);
+  sun(ctx, 820, 260, 70, u, false);
+  for (const x of [80, 480, 880]) box(ctx, x - 9, 130, 18, GY - 140, 0, '#9E1A20', 0);
+  box(ctx, -40, 100, 1060, 46, 0, '#9E1A20');
+  sign(ctx, 'CLACTON-ON-SEA', 480, 220, 56, C.white, C.navy, COL.ga, 1);
+  rails(ctx, GY - 22, -100, 1100);
+  trainH(ctx, 960, GY - 22, 0.95, 2, LIVERY.ga, 0);
+  // faces at every window: a full train
+  for (let c = 0; c < 2; c++) for (let i = 0; i < (c === 0 ? 3 : 4); i++) { const wx = 960 + (-c * 436 - 420 + 70 + i * 82 + 28) * 0.95, wy = GY - 22 - 150 * 0.95; circ(ctx, wx, wy + 6, 15, [C.skin1, C.skin2, C.skin3][(c + i) % 3], 3); }
+  platform(ctx, GY + 30);
+  const Q = [['S2', 80], ['B', 230], ['A', 380], ['K', 500], ['S', 640]];
+  Q.forEach(([w, x], k) => person(ctx, w, { x, y: GY + 110, scale: 0.72, look: 0.6, blink: blinkAt(L, 30 + k), mouth: 0.15 }));
+  label(ctx, 'BUSY!', 300, 380, 60, C.red, C.white, pop(L, 2.5));
+  const ck = pop(L, 4.5);
+  if (ck > 0) withT(ctx, 640, 400, ck, 0, () => { wallClock(ctx, 0, 0, 70, 40); });
+  label(ctx, 'LEAVE EARLY', 640, 520, 44, C.navy, C.white, pop(L, 4.7));
+  label(ctx, 'OR EAT IN TOWN', 340, 520, 44, C.teal, C.white, pop(L, 6.5));
+  ctx.restore();
+}
+const SCENES = [scenePlan, sceneTicket, sceneSouthern, sceneGates, sceneCircle, sceneLST, sceneGA, sceneWalk, sceneHome];
+
+// outro
+function sceneOutro(ctx, u, L, IMG) {
+  sky(ctx, u); hills(ctx); ground(ctx);
+  // three jets draw the logo swoosh: red, navy, teal
+  const cols = ['#E8202A', '#FFFFFF', '#1D4FB7'];
+  const path = (q, k) => { const x = lerp(-200, G.w + 300, q); return [x, (PORTRAIT ? 330 : 150) + k * 30 - Math.sin(q * Math.PI) * 110 + (q - 0.5) * -60]; };
+  cols.forEach((col, k) => {
+    const q = E.inOutSine(prog(L, -0.6 + k * 0.12, 4.2 + k * 0.12));
+    ctx.beginPath(); for (let s = 0; s <= 60; s++) { const p = path((s / 60) * q, k); s ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+    ctx.lineCap = 'round'; if (q > 0) { if (k === 1) { ctx.strokeStyle = '#C9D6E0'; ctx.lineWidth = 28; ctx.stroke(); } ctx.strokeStyle = col; ctx.lineWidth = 22; ctx.stroke(); }
+    if (q > 0 && q < 1) { const p = path(q, k), p2 = path(Math.min(1, q + 0.01), k); jet(ctx, p[0] + 120, p[1] - 10, 0.8, Math.atan2(p2[1] - p[1], p2[0] - p[0])); }
+  });
+  // logo lands
+  const lk = pop(L, 3, SPRING.bouncy);
+  if (lk > 0 && IMG.logo) { const lw = PORTRAIT ? 780 : 700, lh = lw * IMG.logo.height / IMG.logo.width; withT(ctx, G.w / 2, PORTRAIT ? 640 : 335, lk, (1 - lk) * 0.2, () => { ctx.drawImage(IMG.logo, -lw / 2, -lh / 2, lw, lh); }); }
+  const tk = E.outQuint(prog(L, 5, 5.8));
+  ctx.save(); ctx.beginPath(); ctx.rect(0, PORTRAIT ? 880 : 580, G.w * tk, PORTRAIT ? 280 : 300); ctx.clip();
+  if (PORTRAIT) { text(ctx, OUTRO_LINES[0], G.w / 2, 990, font(104, 800, DISPLAY), C.navy, 'center'); text(ctx, OUTRO_LINES[1], G.w / 2, 1100, font(104, 800, DISPLAY), C.navy, 'center'); }
+  else text(ctx, OUTRO_LINE, G.w / 2, 680, font(84, 800, DISPLAY), C.navy, 'center');
+  ctx.restore();
+  const uk = pop(L, 6.2, SPRING.snappy);
+  if (uk > 0) withT(ctx, G.w / 2, PORTRAIT ? 1220 : 790, uk, 0, () => { ctx.font = font(50, 700, UI); const uw = ctx.measureText(URL).width + 90; box(ctx, -uw / 2, -52, uw, 84, 0, C.teal); text(ctx, URL, 0, 10, font(50, 700, UI), C.white, 'center'); });
+  // friends waving
+  const wv = Math.sin(L * 5);
+  person(ctx, 'A', { x: PORTRAIT ? 230 : 190, y: PORTRAIT ? 1640 : GY + 80, scale: PORTRAIT ? 0.85 : 1, aR: [2.5 + wv * 0.3, 0.3], blink: blinkAt(L, 30), mouth: 0.6, look: 0.4 });
+  person(ctx, 'K', { x: PORTRAIT ? 610 : 1580, y: PORTRAIT ? 1650 : GY + 90, scale: PORTRAIT ? 0.85 : 1, hop: Math.max(0, Math.sin(L * Math.PI)) * 30, aL: [-2.6, 0], aR: [2.6, 0], mouth: 0.8, look: 0.3 });
+  person(ctx, 'B', { x: PORTRAIT ? 840 : 1790, y: PORTRAIT ? 1640 : GY + 80, scale: PORTRAIT ? 0.85 : 1, aL: [-2.5 - wv * 0.3, -0.3], blink: blinkAt(L, 31), mouth: 0.6, look: -0.4 });
+}
+
+
+// paint scene n (−1 = intro, 0..11 steps, 12 = outro) at beat u
+function paint(ctx, n, u, IMG) {
+  if (n < 0) return sceneIntro(ctx, u);
+  if (n >= NSTEP) return sceneOutro(ctx, u, u - OUTRO, IMG);
+  const s = st(n);
+  SCENES[n](ctx, u, u - s);
+  card(ctx, u, s, n);
+}
+let STAGE_CV = null;
+function frameAt(ctx, n, u, IMG) {
+  if (!PORTRAIT) { G = STAGE; return paint(ctx, n, u, IMG); }
+  if (n < 0 || n >= NSTEP) { G = PSURF; return paint(ctx, n, u, IMG); }
+  if (!STAGE_CV) { STAGE_CV = document.createElement('canvas'); STAGE_CV.width = SW; STAGE_CV.height = SH; }
+  const sc = STAGE_CV.getContext('2d');
+  G = STAGE; sc.save(); sc.setTransform(1, 0, 0, 1, 0, 0); sc.lineCap = 'round'; SCENES[n](sc, u, u - st(n)); sc.restore();
+  G = PSURF;
+  const ax = artX(n), k = W / 980, dy = PSURF.gy - GY * k;
+  ctx.drawImage(STAGE_CV, ax, 0, 980, 3, 0, 0, W, dy + 2);          // sky above the art: stretch its top rows
+  ctx.drawImage(STAGE_CV, ax, 0, 980, SH, 0, dy, W, SH * k);
+  ctx.drawImage(STAGE_CV, ax, SH - 3, 980, 3, 0, dy + SH * k - 1, W, H);  // ground below
+  card(ctx, u, st(n), n);
+}
+const sceneAt = (u) => (u < INTRO ? -1 : u >= OUTRO ? NSTEP : Math.floor((u - INTRO) / STEP));
+
+// ---------------------------------------------------------------- jet wipe transition
+// A jet flies left to right towing a cloud curtain: the next scene is behind it, the old one ahead.
+const WIPE_A = 0.9, WIPE_B = 0.9;
+function wipe(ctx, u, nNext, IMG) {
+  const s = nNext >= NSTEP ? OUTRO : st(nNext);
+  const p = E.inOutSine(prog(u, s - WIPE_A, s + WIPE_B));
+  const edge = lerp(-260, W + 260, p);
+  frameAt(ctx, nNext - 1, u, IMG);
+  ctx.save();
+  ctx.beginPath(); ctx.moveTo(-10, -10);
+  for (let y = -10; y <= H + 10; y += 30) ctx.lineTo(edge + Math.sin(y / 90 + u * 4) * 36, y);
+  ctx.lineTo(-10, H + 10); ctx.closePath(); ctx.clip();
+  frameAt(ctx, nNext, u, IMG);
+  ctx.restore();
+  G = PORTRAIT ? PSURF : STAGE;
+  // cloud curtain along the edge
+  for (let k = 0; k < 14; k++) {
+    const y = k * 84, x = edge + Math.sin(y / 90 + u * 4) * 36;
+    puff(ctx, x, y, 70 + hash01(k, 41) * 40, C.white, 1);
+    puff(ctx, x + 30, y + 30, 40 + hash01(k, 43) * 24, '#EEF3F7', 1);
+  }
+  const jy = H * 0.4 + Math.sin(p * TAU) * 60;
+  jet(ctx, edge + 200, jy, 1.25, Math.cos(p * TAU) * 0.08, nNext % 2 ? C.blue : C.red);
+}
+
 M.film({
-  fonts: [fd(100), fu(40, 700), fu(40, 600)],
-  images: { train: 'assets/shots/train_desktop.png', trainM: 'assets/shots/train_mobile.png' },
+  fonts: [font(100, 800, DISPLAY), font(100, 700, DISPLAY), font(40, 600, UI), font(40, 700, UI)],
+  images: { logo: 'assets/logo.png', hawk: 'assets/aircraft/hawk-side.webp', typhoon: 'assets/aircraft/typhoon-side.webp', a400: 'assets/aircraft/a400m-side.webp', hawkTop: 'assets/aircraft/hawk-top.webp', typhoonTop: 'assets/aircraft/typhoon-top.webp' },
   hits: HITS,
-  samples: 6,
+  samples: 8,
   draw(ctx, u, t, IMG) {
-    if (!SC) SC = SCENES(IMG);
-    T.sequence(ctx, u, SC, 0.9);
+    AC = IMG;
+    ctx.lineCap = 'round';
+    // in a wipe window?
+    for (let n = 0; n <= NSTEP; n++) {
+      const s = n >= NSTEP ? OUTRO : st(n);
+      if (u >= s - WIPE_A && u < s + WIPE_B) return wipe(ctx, u, n, IMG);
+    }
+    frameAt(ctx, sceneAt(u), u, IMG);
   },
 });
