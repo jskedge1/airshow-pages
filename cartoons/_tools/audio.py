@@ -1,7 +1,7 @@
 """Stand-in for the motion-reel sound steps (music bed, sound effects, mix), synthesized with numpy only.
   python3 _tools/audio.py <film>          writes <film>/audio/music.wav, sfx.wav, mix.wav from beats.json + out/<film>/hits.json
   python3 _tools/audio.py <film> --mux    also muxes mix.wav on to out/<film>/<film>-<format>-video.mp4 -> out/<film>/<film>-<format>.mp4
-The bed is calm and has no drums: a slow pad, a soft bass and a sparse felt piano in D major, with a little reverb.
+The bed is one soft piano playing slow broken major chords (C, F, C, G), nothing else.
 Cues (impact, pop, whoosh, tick, bell) are soft, tuned to the music and thinned out; there are no noise swooshes."""
 import json, sys, wave, pathlib, subprocess
 import numpy as np
@@ -25,8 +25,7 @@ def lowpass(x, k):
     y = np.empty_like(x); a = 0.0
     c = np.cumsum(np.concatenate([np.zeros(k), x])); return (c[k:] - c[:-k]) / k
 
-# ---- music: a calm, warm bed in D major. No drums: a slow pad, a soft bass and a sparse felt-piano line that
-# never repeats exactly (seeded), so it sits behind the pictures instead of looping on top of them.
+# ---- music: calm and simple.
 def stereo(n): return np.zeros((n, 2))
 def addst(buf, t, x, g=1.0, pan=0.0):
     i = int(t * SR)
@@ -67,51 +66,37 @@ def pluck(f, secs=1.8, seed=1):   # a soft plucked string (Karplus-Strong)
 def strings(f, secs):   # a slow, soft bowed note
     n = int(secs * SR); tn = np.arange(n) / SR; v = sum(np.sin(2 * np.pi * f * k * tn * (1 + 0.002 * np.sin(2 * np.pi * 5 * tn))) / k ** 1.6 for k in (1, 2, 3, 4))
     return v * np.minimum(1, tn / 0.9) * np.minimum(1, np.maximum(0, (secs - tn) / 1.2))
-music = stereo(N); keys = stereo(N)
-# two bars (4 s) a chord, an eight chord cycle
-CH = [['D3', 'F#3', 'A3', 'E4'], ['B2', 'D3', 'F#3', 'A3'], ['G2', 'B2', 'D3', 'F#3'], ['A2', 'C#3', 'E3', 'A3'],
-      ['F#2', 'A2', 'D3', 'F#3'], ['G2', 'B2', 'D3', 'G3'], ['E2', 'G2', 'B2', 'E3'], ['A2', 'C#3', 'E3', 'G3']]
-PENT = ['D', 'E', 'F#', 'A', 'B']
+# One soft piano, nothing else: no pad, no bass, no strings, no drums. Four second bars, major chords only
+# (C, F, C, G), a low note then a slow broken chord. The shape of the broken chord changes a little from scene
+# to scene so the film does not sound identical throughout, but it is always the same quiet instrument.
+music = stereo(N)
+PENT = ['C', 'D', 'E', 'G', 'A']
+CH = [['C', 'E', 'G'], ['F', 'A', 'C'], ['C', 'E', 'G'], ['G', 'B', 'D'], ['C', 'E', 'G'], ['F', 'A', 'C'], ['G', 'B', 'D'], ['C', 'E', 'G']]
+ROOT_OCT = {'C': 3, 'F': 3, 'G': 3}
+SHAPES = {   # (beat in the bar, chord tone, octave); a bar is eight beats
+    'title':   [(0, 0, 4), (4, 2, 4)],
+    'piano':   [(0, 0, 4), (2, 2, 4), (4, 1, 4), (6, 2, 4)],
+    'marimba': [(0, 0, 4), (2, 1, 4), (3, 2, 4), (5, 1, 4), (6, 0, 5)],
+    'strings': [(0, 2, 4), (2, 0, 5), (4, 1, 4), (6, 2, 4)],
+    'guitar':  [(0, 0, 4), (1, 1, 4), (2, 2, 4), (4, 0, 5), (6, 2, 4)],
+    'finale':  [(0, 0, 4), (2, 2, 4), (4, 0, 5)],
+}
 span = 8 * per; steps = int(dur / span) + 1
 for b in range(steps):
-    t0 = off + b * span; ch = CH[b % 8]; n = int(span * SR * 1.6); t = np.arange(n) / SR
-    env_pad = np.minimum(1, t / 1.6) * np.minimum(1, np.maximum(0, (span * 1.6 - t) / 2.2))
-    for k, nm in enumerate(ch):
-        f = hz(nm)
-        for det, pan in ((-0.0025, -0.6), (0.0025, 0.6)):
-            v = (np.sin(2 * np.pi * f * (1 + det) * t) + 0.3 * np.sin(2 * np.pi * 2 * f * (1 + det) * t + 0.3 * np.sin(2 * np.pi * 0.2 * t))) * env_pad
-            addst(music, t0, v, 0.03 if k else 0.036, pan)
-    nb = int(span * SR); tb = np.arange(nb) / SR   # one long, soft bass note
-    addst(music, t0, np.sin(2 * np.pi * hz(ch[0]) / (2 if hz(ch[0]) > 110 else 1) * tb) * np.minimum(1, tb / 0.08) * np.exp(-tb / 2.4), 0.11)
-    sc = scene(t0 + 0.1); r2 = np.random.default_rng(100 + b); tones = [x[:-1] for x in ch]
-    def note(nm, octv): return hz(nm + str(octv))
-    if sc == 'title':                       # a rising plucked figure
-        for k in range(8): addst(keys, t0 + k * per, pluck(note(tones[k % 4], 4 + k // 4), 1.8, b * 9 + k), 0.05, -0.5 + k / 7)
-    if sc in ('piano', 'finale'):           # sparse felt piano, different every time
-        for sl in sorted(r2.choice([0, 2, 3, 5, 6], size=3 + (b % 2), replace=False)):
-            pool = tones[1:] + [PENT[int(r2.integers(0, 5))]]
-            addst(keys, t0 + sl * per + float(r2.uniform(0, 0.02)), felt(note(pool[int(r2.integers(0, len(pool)))], 4 + int(r2.integers(0, 2)))), 0.065 * float(r2.uniform(0.7, 1.0)), float(r2.uniform(-0.5, 0.5)))
-    if sc == 'marimba':                     # a light, bouncing marimba pattern on the half beats
-        for q, e in enumerate([0, 3, 6, 8, 11, 14]):
-            addst(keys, t0 + e * per / 2, marimba(note(tones[(q + b) % 4], 4 if q % 3 else 5)), 0.05 * (1.0 if q % 2 == 0 else 0.7), 0.5 * (-1) ** q)
-        addst(keys, t0 + 4 * per, felt(note(tones[2], 4)), 0.035)
-    if sc in ('strings', 'finale'):         # warm strings, a pizzicato bass and three glockenspiel notes
-        for k, nm in enumerate(tones[1:]): addst(music, t0, strings(note(nm, 4), span * 1.25), 0.011, (-0.6, 0, 0.6)[k])
-    if sc == 'strings':
-        for k in (0, 2, 4, 6): addst(keys, t0 + k * per, pluck(hz(ch[0]) * (1.5 if k == 4 else 1), 0.9, b * 7 + k), 0.09)
-    if sc in ('strings', 'finale'):
-        for sl in sorted(r2.choice([1, 3, 5, 7], size=3, replace=False)):
-            addst(keys, t0 + sl * per, glock(note(tones[int(r2.integers(1, 4))], 5)), 0.022, float(r2.uniform(-0.6, 0.6)))
-    if sc == 'guitar':                      # a flowing finger picked guitar
-        order = [0, 1, 2, 3, 2, 1, 2, 3, 0, 2, 1, 3, 2, 1, 3, 2]
-        for e, k in enumerate(order): addst(keys, t0 + e * per / 2, pluck(note(tones[k], 3 if k == 0 else 4), 1.6, b * 31 + e), 0.06 * (1.0 if e % 4 == 0 else 0.6), 0.35 * (-1) ** e)
-music = reverb(music + keys, 2.4, 0.32)
-fade = np.clip((dur - np.arange(N) / SR) / 3.5, 0, 1) * np.clip(np.arange(N) / SR / 1.5, 0, 1); music *= fade[:, None]
+    t0 = off + b * span; ch = CH[b % 8]; sc = scene(t0 + 0.1); r2 = np.random.default_rng(100 + b)
+    if t0 > dur - 3: break
+    addst(music, t0, felt(hz(ch[0] + str(ROOT_OCT[ch[0]])), 3.2), 0.085, -0.15)          # the low note
+    for bt, tone, octv in SHAPES[sc]:
+        if bt == 0: continue
+        nm = ch[tone]; o2 = octv + (1 if NOTE[nm] < NOTE[ch[0]] else 0)                  # keep the chord rising, not jumping down
+        addst(music, t0 + bt * per + float(r2.uniform(0, 0.015)), felt(hz(nm + str(o2)), 2.6), 0.06 * float(r2.uniform(0.8, 1.0)), 0.25 * (-1) ** bt)
+music = reverb(music, 1.6, 0.16)
+fade = np.clip((dur - np.arange(N) / SR) / 3.5, 0, 1); music *= fade[:, None]
 
 # ---- sound effects: soft, tuned to the music, and far fewer of them. No noise swooshes: a drawn line is a
 # quiet two note kalimba figure, a camera move is a low, breathy swell you barely notice.
 sfx = stereo(N)
-def tuned(name, octave=None):   # nearest note of D major pentatonic
+def tuned(name, octave=None):   # nearest note of C major pentatonic
     semis = [NOTE[x] for x in PENT]; n0 = NOTE[name[:-1]]; best = min(semis, key=lambda q: min((q - n0) % 12, (n0 - q) % 12))
     return hz(PENT[semis.index(best)] + str(octave if octave is not None else min(5, int(name[-1]))))
 def kalimba(f, secs=0.9):
@@ -127,7 +112,7 @@ for idx, h in enumerate(hits):
     voice = {'title': kalimba, 'piano': kalimba, 'marimba': marimba, 'strings': glock, 'guitar': lambda f, secs=0.8: pluck(f, 1.0, idx), 'finale': glock}[scene(t)]   # each scene has its own little voice
     if kind == 'impact':
         n = int(0.6 * SR); tt = np.arange(n) / SR
-        addst(sfx, t, np.sin(2 * np.pi * (62 * tt + 30 * 0.08 * (1 - np.exp(-tt / 0.08)))) * np.minimum(1, tt / 0.01) * np.exp(-tt / 0.2), 0.16)
+        addst(sfx, t, np.sin(2 * np.pi * (62 * tt + 30 * 0.08 * (1 - np.exp(-tt / 0.08)))) * np.minimum(1, tt / 0.01) * np.exp(-tt / 0.2), 0.05)
     elif kind == 'pop':
         addst(sfx, t, voice(tuned(o.get('pitch', 'A4'), 4), 0.7), 0.045, pan)
     elif kind == 'tick':
@@ -140,15 +125,15 @@ for idx, h in enumerate(hits):
         L = float(o.get('len', 0.6))
         if L >= 0.8:   # camera move: a low breath
             n = int(1.4 * SR); tt = np.arange(n) / SR
-            nz = rng.standard_normal(n); addst(sfx, t - 0.5, (lowpass(nz, 40) - lowpass(nz, 160)) * np.sin(np.pi * tt / 1.4) ** 2, 0.1)
+            nz = rng.standard_normal(n); addst(sfx, t - 0.5, (lowpass(nz, 40) - lowpass(nz, 160)) * np.sin(np.pi * tt / 1.4) ** 2, 0.04)
         else:          # a line being drawn: two soft notes going up
-            f = tuned(['D4', 'E4', 'A4', 'B4', 'F#4'][idx % 5], 4)
+            f = tuned(['C4', 'E4', 'G4', 'A4', 'D4'][idx % 5], 4)
             addst(sfx, t, voice(f, 0.6), 0.032, pan); addst(sfx, t + 0.16, voice(f * 1.5, 0.7), 0.028, -pan)
 sfx = reverb(sfx, 1.6, 0.22, seed=9)
 
 def write(name, x):
     (F / 'audio').mkdir(exist_ok=True)
-    x = np.tanh(x * 1.6) / 1.0; pcm = (np.clip(x, -1, 1) * 30000).astype('<i2')
+    x = np.tanh(x * 3.4); pcm = (np.clip(x, -1, 1) * 30000).astype('<i2')
     with wave.open(str(F / 'audio' / name), 'wb') as w: w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes(pcm.tobytes())
 n = int(dur * SR)
 write('music.wav', music[:n]); write('sfx.wav', sfx[:n]); write('mix.wav', (music + sfx)[:n])
