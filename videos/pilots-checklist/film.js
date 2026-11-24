@@ -530,12 +530,14 @@ function scenePayoff(ctx, u) {
 // ---------------------------------------------------------------- the cut
 const SCENES = [[0, sceneHook], [8, sceneTitle, 'circle'], [14, item1], [26, item2], [38, item3], [50, item4], [62, item5], [74, item6], [86, sceneNearby], [106, (ctx, u) => sceneCrew(ctx, u - 20)], [124, (ctx, u) => scenePayoff(ctx, u - 20)]];
 const PUSH = 0.9;
+const ST = K.stretch([0, 8, 14, 26, 38, 50, 62, 74, 86, 106, 124, 132.9], 4);
 M.film({
   fonts: K.FONTS,
   images: { logo: '../shared/logo.png' },
-  hits: HITS,
+  hits: (HITS).map((h) => [ST.out(h[0]), ...h.slice(1)]),
   samples: 6,
-  draw(ctx, u, t, IMG) {
+  draw(ctx, U, t, IMG) {
+    const u = ST.src(U);   // every scene runs 4 beats (3 s) longer than it was written
     let i = 0; while (i + 1 < SCENES.length && u >= SCENES[i + 1][0] - PUSH) i++;
     const [a, fn, kind] = SCENES[i];
     if (i > 0 && u < a) {            // arriving: a page push, both shots on screen

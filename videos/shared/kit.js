@@ -517,4 +517,24 @@ export function endCard(ctx, u, u0, IMG, o = {}) {
   kid(ctx, 1380, 990 + (1 - ck) * 500, 1.75, { mood: 'happy', defenders: DEF, blinkU: u, blinkOff: 2, armR: [2.5 + wv, -0.25], armL: POSE.relaxed });
   ctx.restore();
 }
+// Gives every scene more time on screen. cuts = the beats where scenes start and end; each scene
+// gets `extra` beats longer, with its first and last beat left at full speed so the transitions
+// keep their pace. src(U) turns a beat of the finished film into the beat the scenes were written
+// to; out(u) goes the other way (for the sound hits). total = how many beats were added.
+export function stretch(cuts, extra = 4) {
+  const seg = [];   // [srcStart, srcEnd, outStart, outEnd]
+  let o = 0;
+  for (let i = 0; i + 1 < cuts.length; i++) {
+    const a = cuts[i], b = cuts[i + 1], e = Math.min(1, (b - a) / 4);
+    seg.push([a, a + e, a + o, a + e + o]);
+    seg.push([a + e, b - e, a + e + o, b - e + o + extra]); o += extra;
+    seg.push([b - e, b, b - e + o, b + o]);
+  }
+  const map = (x, i0, i1) => {
+    if (x <= seg[0][i0]) return x;
+    for (const s of seg) if (x <= s[i0 + 1]) return s[i1] + (x - s[i0]) * (s[i1 + 1] - s[i1]) / (s[i0 + 1] - s[i0]);
+    const l = seg[seg.length - 1]; return l[i1 + 1] + (x - l[i0 + 1]);
+  };
+  return { src: (U) => map(U, 2, 0), out: (u) => map(u, 0, 2), total: o };
+}
 export { M };

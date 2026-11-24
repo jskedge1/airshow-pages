@@ -336,12 +336,14 @@ function scenePayoff(ctx, u) {
 // ---------------------------------------------------------------- the cut
 const SCENES = [[0, scenePile], [22, sceneTurn, 'circle'], [28, tip1], [38, tip2], [48, tip3], [58, tip4], [68, tip5], [78, tip6], [88, sceneNearby], [108, (ctx, u) => sceneShows(ctx, u - 20)], [124, (ctx, u) => scenePayoff(ctx, u - 20)]];
 const PUSH = 0.9;
+const ST = K.stretch([0, 22, 28, 38, 48, 58, 68, 78, 88, 108, 124, 132.9], 4);
 M.film({
   fonts: K.FONTS,
   images: { logo: '../shared/logo.png' },
-  hits: HITS.map((h) => (h[0] >= 88 ? [h[0] + 20, ...h.slice(1)] : h)).concat(NEARBY_HITS).sort((a, b) => a[0] - b[0]),
+  hits: (HITS.map((h) => (h[0] >= 88 ? [h[0] + 20, ...h.slice(1)] : h)).concat(NEARBY_HITS).sort((a, b) => a[0] - b[0])).map((h) => [ST.out(h[0]), ...h.slice(1)]),
   samples: 6,
-  draw(ctx, u, t, IMG) {
+  draw(ctx, U, t, IMG) {
+    const u = ST.src(U);   // every scene runs 4 beats (3 s) longer than it was written
     let i = 0; while (i + 1 < SCENES.length && u >= SCENES[i + 1][0] - PUSH) i++;
     const [a, fn, kind] = SCENES[i];
     if (i > 0 && u < a) {            // arriving: a page push, both shots on screen

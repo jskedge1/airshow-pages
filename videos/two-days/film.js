@@ -502,12 +502,14 @@ function scenePayoff(ctx, u) {
 }
 
 // ---------------------------------------------------------------- the cut
+const ST = K.stretch([0, 14, 26, 38, 50, 62, 74, 86, 106, 124, 132.9], 4);
 M.film({
   fonts: K.FONTS,
   images: { logo: '../shared/logo.png' },
-  hits: HITS,
+  hits: (HITS).map((h) => [ST.out(h[0]), ...h.slice(1)]),
   samples: 6,
-  draw(ctx, u, t, IMG) {
+  draw(ctx, U, t, IMG) {
+    const u = ST.src(U);   // every scene runs 4 beats (3 s) longer than it was written
     if (u < PAY - PUSH) sceneSplit(ctx, u);
     else if (u < PAY) {              // a page push, both shots on screen
       const p = E.inOutCubic(prog(u, PAY - PUSH, PAY));
