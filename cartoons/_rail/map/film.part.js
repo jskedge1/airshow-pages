@@ -6,7 +6,8 @@ Object.assign(OPS, {
   c2c: { c: '#B7007C', ink: '#FFFFFF' }, chiltern: { c: '#0099C4', ink: '#FFFFFF' }, swr: { c: '#24398C', ink: '#FFFFFF' },
   se: { c: '#0B8FCF', ink: '#FFFFFF' }, xc: { c: '#660F21', ink: '#FFFFFF', line: '#8E1B33' }, tfw: { c: '#C8102E', ink: '#FFFFFF' },
   mersey: { c: '#FFD600', ink: '#13293C' }, scotrail: { c: '#1E467D', ink: '#FFFFFF' }, tpe: { c: '#1C4C9C', ink: '#FFFFFF' },
-  victoria: { c: '#0098D4', ink: '#FFFFFF' }, taxi: { c: '#13293C', ink: '#FFFFFF' }, bus: { c: '#F5B942', ink: '#13293C' },
+  victoria: { c: '#0098D4', ink: '#FFFFFF' }, 'tube-northern': { c: '#000000', ink: '#FFFFFF' }, bakerloo: { c: '#B36305', ink: '#FFFFFF' },
+  elizabeth: { c: '#6950A1', ink: '#FFFFFF' }, 'hammersmith-city': { c: '#F3A9BB', ink: '#13293C' }, metropolitan: { c: '#9B0056', ink: '#FFFFFF' }, taxi: { c: '#13293C', ink: '#FFFFFF' }, bus: { c: '#F5B942', ink: '#13293C' },
 });
 const OPN = { 'Greater Anglia': 'ga', 'c2c': 'c2c', 'LNER': 'lner', 'Avanti West Coast': 'avanti', 'GWR': 'gwr', 'CrossCountry': 'xc',
   'TransPennine Express': 'tpe', 'Northern': 'northern', 'East Midlands Railway': 'emr', 'Thameslink': 'thameslink', 'Great Northern': 'gn',
@@ -15,7 +16,8 @@ const OPN = { 'Greater Anglia': 'ga', 'c2c': 'c2c', 'LNER': 'lner', 'Avanti West
 const lineCol = (k) => OPS[k].line || OPS[k].c;
 const LL = (c) => { if (!DATA.STA[c]) throw new Error('no station ' + c); return [DATA.STA[c][1], DATA.STA[c][2]]; };
 const NAME = (c) => DATA.STA[c][0];
-const SHORT = (c) => NAME(c).replace(/^London /, '');
+const SHORT = (c) => (c === 'LBG' ? NAME(c) : NAME(c).replace(/^London /, ''));
+const tk = (k) => (k === 'northern' ? 'tube-northern' : k);   // the Tube's Northern line, not the train company
 // the stations from `a` to `b` along a line the site lists (operator, line name)
 function seg(op, name, a, b) {
   const L = DATA.LINES.find((l) => l[0] === op && l[1] === name); if (!L) throw new Error('no line ' + op + ' / ' + name);
@@ -26,7 +28,7 @@ function seg(op, name, a, b) {
 const whole = (op, name) => { const L = DATA.LINES.find((l) => l[0] === op && l[1] === name); if (!L) throw new Error('no line ' + name); return seg(op, name, L[2][0], L[2][L[2].length - 1]); };
 
 // ---------------------------------------------------------------- layout
-const [RX, RY, RW, RH] = pick({ '16x9': [800, 60, 1024, 960], '9x16': [40, 430, 1000, 620] });
+const [RX, RY, RW, RH] = pick({ '16x9': [800, 60, 1024, 960], '9x16': [40, 430, 1000, 560] });
 const COLX = S.x, COLW = pick({ '16x9': 664, '9x16': 858 });
 const LFS = pick({ '16x9': 30, '9x16': 30 });
 
@@ -117,7 +119,8 @@ const NET = [
   { t: ['CHX', 'LBG'], title: 'Charing Cross and London Bridge', ops: ['Southeastern', 'Thameslink'], main: 'South Eastern main line', to: 'Sevenoaks, Tonbridge, Headcorn, Ashford, Hastings',
     lines: [['Southeastern', 'Charing Cross to Ashford via Headcorn'], ['Southeastern', 'Charing Cross to Hastings']], lab: ['HGS', 'HCN'] },
 ];
-const NET_A = 14, NET_L = 37, NET_STEP = 6, EX_A = NET_L + NET.length * NET_STEP + 1;   // 98
+const NET_A = 14, NET_L = 37, NET_STEP = 5, EX_A = NET_L + NET.length * NET_STEP + 1;
+const EX_END = EX_A + 15 + 14 + 6 * 4.5 + 3 + 20;   // 98
 HEADS.push({ a: NET_A, tag: '1  THE NETWORK', title: 'Eleven London stations' });
 camTo(NET_A + 2.5, V_LON, 3.5);
 hit(NET_A - 1, 'zoom', 'whoosh', { len: 0.8, from: 400, to: 1800 });
@@ -146,13 +149,23 @@ NET.forEach((n, i) => {
 });
 
 // ---------------------------------------------------------------- 2. the worked example
+const TNAME = { victoria: 'Victoria line', circle: 'Circle line', 'hammersmith-city': 'Hammersmith & City', metropolitan: 'Metropolitan line', northern: 'Northern line', bakerloo: 'Bakerloo line', elizabeth: 'Elizabeth line' };
+const TB = [
+  { k: 'victoria', title: 'Victoria line', pairs: [['VIC', 'EUS'], ['VIC', 'KGX']] },
+  { k: 'circle', title: 'Circle line', pairs: [['VIC', 'PAD'], ['VIC', 'LST'], ['PAD', 'KGX'], ['LST', 'KGX']] },
+  { k: 'northern', title: 'Northern line', pairs: [['WAT', 'EUS'], ['LBG', 'EUS'], ['LBG', 'KGX']] },
+  { k: 'bakerloo', title: 'Bakerloo line', pairs: [['PAD', 'MYB'], ['WAT', 'MYB'], ['WAT', 'PAD']] },
+  { k: 'elizabeth', title: 'Elizabeth line', pairs: [['PAD', 'LST']] },
+  { k: 'walk', title: 'Or a short walk', walks: [['KGX', 'STP'], ['KGX', 'EUS'], ['LST', 'FST'], ['WAT', 'CHX']] },
+];
+const TB_STEP = 4.5;
 HEADS.push({ a: EX_A, tag: '2  A WORKED EXAMPLE', title: 'Eastbourne to any show' });
 const V_SE = fitBox([-0.45, 50.72, 1.3, 51.9], 0.12);
 camTo(EX_A + 2.5, V_SE, 3);
 hit(EX_A, 'section', 'impact');
 {
   const s1 = seg('Southern', 'Victoria to Eastbourne', 'EBN', 'VIC');
-  const a1 = EX_A + 2.5, a2 = EX_A + 15, a3 = EX_A + 34, end = EX_A + 54;
+  const a1 = EX_A + 2.5, a2 = EX_A + 15, aT = a2 + 14, a3 = aT + TB.length * TB_STEP + 3, end = EX_END;
   LINES.push({ pts: s1.pts, op: 'southern', a: a1 + 0.5, b: a1 + 5, off: end, calls: true });
   hit(a1 + 0.5, 'train', 'whoosh', { len: 1.2, from: 400, to: 1200 });
   DOTS.push({ at: LL('EBN'), a: a1, off: end, r: 14 }, { at: LL('VIC'), a: a1 + 5, off: end, r: 14 });
@@ -166,19 +179,45 @@ hit(EX_A, 'section', 'impact');
     const st = DATA.VIC[key]; if (!st || st.length !== 1) throw new Error('expected one Tube step to ' + key);
     return { c, line: TUBE[st[0].lines[0]], m: st[0].m, tn: st[0].to };
   });
-  const g = { a: a2 - 1, off: a3 - 2.6, v: V_LON, items: [{ text: 'Victoria', at: LL('VIC'), a: a2 - 1 }], avoid: [] };
+  const g = { a: a2 - 1, off: aT - 0.7, v: V_LON, items: [{ text: 'Victoria', at: LL('VIC'), a: a2 - 1 }], avoid: [] };
   TERMINI.forEach((c) => DOTS.push({ at: LL(c), a: a2 - 1.5, off: a3 - 2.6, r: c === 'VIC' ? 15 : 9 }));
   links.forEach((l, i) => {
     const a = a2 + 1 + i * 3;
-    LINES.push({ pts: [LL('VIC'), LL(l.c)], op: l.line[0], a, b: a + 1.6, off: l.c === 'LST' ? end : a3 - 2, casing: true });
-    DOTS.push({ at: LL(l.c), a: a + 1.4, off: l.c === 'LST' ? end : a3 - 2.6, r: 15 });
+    LINES.push({ pts: [LL('VIC'), LL(l.c)], op: l.line[0], a, b: a + 1.6, off: aT - 0.5, casing: true });
+    DOTS.push({ at: LL(l.c), a: a + 1.4, off: aT - 0.7, r: 15 });
     g.items.push({ text: (l.c === 'KGX' ? 'Kings Cross St Pancras' : SHORT(l.c)) + ', ' + l.m + ' min', at: LL(l.c), a: a + 1.4 });
     g.avoid.push(...dense([LL('VIC'), LL(l.c)]));
     hit(a, 'tube', 'whoosh', { len: 0.5, from: 700, to: 1600 + i * 200 }); hit(a + 1.4, 'tube stop', 'pop', { pitch: ['E5', 'G5', 'A5', 'C6'][i] });
   });
   GROUPS.push(g);
-  CARDS.push({ a: a2 - 2, b: a3 - 2, edge: OPS.victoria.c, title: '2. Cross London by Tube', chips: [['Victoria line', 'victoria'], ['Circle line', 'circle']],
+  CARDS.push({ a: a2 - 2, b: aT - 0.2, edge: OPS.victoria.c, title: '2. Cross London by Tube', chips: [['Victoria line', 'victoria'], ['Circle line', 'circle']],
     rows: links.map((l) => [(l.c === 'KGX' ? 'KINGS CROSS ST PANCRAS' : SHORT(l.c).toUpperCase()), l.line[1] + ', ' + l.m + ' minutes']) });
+  // every other Tube link between the main stations, line by line (london-links.js), and the planner's short walks
+  HEADS.push({ a: aT, tag: '2  A WORKED EXAMPLE', title: 'Tube links between stations' });
+  const tn = (c) => (c === 'KGX' ? 'Kings Cross St Pancras' : SHORT(c));
+  GROUPS.push({ a: aT - 0.4, off: a3 - 2.6, v: V_LON, avoid: [], items: TERMINI.map((c, i) => ({ text: SHORT(c), at: LL(c), a: aT - 0.4 + i * 0.05 })) });
+  TERMINI.forEach((c) => DOTS.push({ at: LL(c), a: aT - 0.4, off: a3 - 2.6, r: 13 }));
+  TB.forEach((t, j) => {
+    const a = aT + j * TB_STEP, rows = [], chips = [];
+    (t.pairs || []).forEach(([x, y], i) => {
+      const st = DATA.TUBE[x + '-' + y]; if (!st || st.length !== 1 || !st[0].lines.includes(t.k)) throw new Error('no single ' + t.k + ' step from ' + x + ' to ' + y);
+      st[0].lines.forEach((l) => { if (!chips.some((q) => q[1] === tk(l))) chips.push([TNAME[l], tk(l)]); });
+      rows.push([(st[0].from + ' to ' + st[0].to).toUpperCase(), st[0].m + ' minutes' + (st[0].br ? ', ' + st[0].br + ' branch' : '')]);
+      LINES.push({ pts: [LL(x), LL(y)], op: tk(t.k), a: a + 0.3 + i * 0.5, b: a + 1.6 + i * 0.5, off: a + TB_STEP - 0.3, casing: true });
+      hit(a + 0.3 + i * 0.5, 'tube', 'whoosh', { len: 0.4, from: 700, to: 1500 + i * 200 });
+    });
+    (t.walks || []).forEach(([x, y], i) => {
+      const w = DATA.WALKS.find((q) => q.a === x && q.b === y); if (!w) throw new Error('no walk ' + x + ' to ' + y);
+      rows.push([(SHORT(x) + ' to ' + SHORT(y)).toUpperCase(), 'About ' + w.m + ' minutes on foot']);
+      LINES.push({ pts: [LL(x), LL(y)], op: 'walk', a: a + 0.3 + i * 0.5, b: a + 1.4 + i * 0.5, off: a + TB_STEP - 0.3, dash: true });
+      hit(a + 0.5 + i * 0.5, 'walk', 'tick');
+    });
+    if (t.walks) chips.push(['On foot', 'walk']);
+    CARDS.push({ a, b: a + TB_STEP, edge: OPS[tk(t.k)].c, title: t.title, chips, rows, one: true });
+    hit(a, 'card', 'pop', { pitch: ['C5', 'D5', 'E5', 'G5', 'A5', 'C6'][j] });
+  });
+  HEADS.push({ a: a3 - 2, tag: '2  A WORKED EXAMPLE', title: 'Eastbourne to any show' });
+  LINES.push({ pts: [LL('VIC'), LL('LST')], op: 'circle', a: a3 - 2, b: a3 - 0.5, off: end, casing: true });
   // and out again: Liverpool Street to Clacton-on-Sea
   camTo(a3, V_SE, 3);
   hit(a3 - 2.5, 'zoom out', 'whoosh', { len: 0.8, from: 1800, to: 400 });
@@ -199,24 +238,24 @@ hit(EX_A, 'section', 'impact');
 // legs: [operator, line name, from, to] as the site's planner lists them; then: the last leg from SHOWS and the train pages.
 const EXTRA_STA = { PGN: ['Paignton', -3.5646, 50.4347] };   // not in the site data: see the README for the source
 const SH = [
-  { k: 'clacton', from: 'LST', legs: [['Greater Anglia', 'Liverpool Street to Clacton-on-Sea', 'LST', 'CLT']], then: 'Walk, 10 to 15 minutes', how: 'walk', jet: 'hawk' },
-  { k: 'stowmaries', name: 'Stow Maries Air Show', at: [0.632, 51.669], from: 'LST', legs: [['Greater Anglia', 'Liverpool Street to Southend Victoria', 'LST', 'WIC'], ['Greater Anglia', 'Wickford to Southminster', 'WIC', 'SWF']], then: 'Taxi, about 10 minutes', how: 'taxi', jet: 'typhoon', tag: 'NEW TO THE GUIDE' },
-  { k: 'duxford', from: 'KGX', legs: [['Great Northern', 'Kings Cross to Cambridge', 'KGX', 'CBG']], then: 'Free shuttle bus, about 30 min', how: 'shuttle', jet: 'typhoon' },
-  { k: 'gransden', from: 'STP', legs: [['Thameslink', 'Horsham to Peterborough', 'STP', 'SNO']], then: 'Taxi, 15 to 20 minutes', how: 'taxi', jet: 'hawk' },
-  { k: 'shuttleworth', from: 'STP', legs: [['Thameslink', 'Horsham to Peterborough', 'STP', 'BIW']], then: 'Show shuttle bus, £10 return', how: 'shuttle', jet: 'a400' },
-  { k: 'eastbourne', from: 'VIC', legs: [['Southern', 'Victoria to Eastbourne', 'VIC', 'EBN']], then: 'Walk, 10 to 15 minutes', how: 'walk', jet: 'hawk' },
-  { k: 'headcorn', from: 'CHX', legs: [['Southeastern', 'Charing Cross to Ashford via Headcorn', 'CHX', 'HCN']], then: 'About a mile and a half: taxi or walk', how: 'taxi', jet: 'typhoon' },
-  { k: 'riat', name: 'RIAT 2027, Boscombe Down', from: 'WAT', legs: [['South Western Railway', 'Waterloo to Exeter', 'WAT', 'SAL']], getOff: 'Salisbury, for now', then: 'Shuttles still to be announced', how: 'shuttle', jet: 'a400' },
-  { k: 'riviera', name: 'English Riviera Airshow', at: [-3.5595, 50.4365], from: 'PAD', legs: [['GWR', 'Paddington to Penzance', 'PAD', 'NTA'], ['GWR', null, 'NTA', 'PGN']], change: 'Newton Abbot on some trains', then: 'Walk, about 6 minutes', how: 'walk', jet: 'hawk', tag: 'NEW TO THE GUIDE' },
-  { k: 'wales', from: 'PAD', legs: [['GWR', 'Paddington to Swansea', 'PAD', 'SWA']], then: 'Walk 20 to 25 min, or a local bus', how: 'walk', jet: 'typhoon' },
-  { k: 'cosford', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Birmingham and Wolverhampton', 'EUS', 'BHM'], ['West Midlands Railway', 'Birmingham to Shrewsbury via Cosford', 'BHM', 'COS']], then: 'Walk, about 300 metres', how: 'walk', jet: 'a400' },
-  { k: 'midlands', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Birmingham and Wolverhampton', 'EUS', 'BHM'], ['West Midlands Railway', 'Cross City line to Redditch', 'BHM', 'RDC']], then: 'Diamond 247 bus. None on Sundays', how: 'bus', jet: 'hawk' },
-  { k: 'southport', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'WGN'], ['Northern', 'Manchester to Southport', 'WGW', 'SOP']], change: 'Wigan, a short walk between stations', then: 'Walk, 10 to 15 minutes', how: 'walk', jet: 'typhoon' },
-  { k: 'blackpool', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'PRE'], ['Northern', 'Manchester to Blackpool North', 'PRE', 'BPN']], then: 'Walk, about 15 min to the Tower', how: 'walk', jet: 'hawk' },
-  { k: 'ayr', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'GLC'], ['ScotRail', 'Glasgow Central to Ayr', 'GLC', 'AYR']], then: 'Walk, 15 to 20 minutes', how: 'walk', jet: 'typhoon' },
+  { k: 'clacton', from: 'LST', legs: [['Greater Anglia', 'Liverpool Street to Clacton-on-Sea', 'LST', 'CLT']], then: 'Walk, 10 to 15 minutes', how: 'walk', jet: 'hawk', bus: ['BUS FROM COLCHESTER', 'Central Connect 74, 74B and 76'], mode: 'Walk' },
+  { k: 'stowmaries', name: 'Stow Maries Air Show', at: [0.632, 51.669], from: 'LST', legs: [['Greater Anglia', 'Liverpool Street to Southend Victoria', 'LST', 'WIC'], ['Greater Anglia', 'Wickford to Southminster', 'WIC', 'SWF']], then: 'Taxi, about 10 minutes', how: 'taxi', jet: 'typhoon', tag: 'NEW TO THE GUIDE', mode: 'Taxi' },
+  { k: 'duxford', from: 'KGX', legs: [['Great Northern', 'Kings Cross to Cambridge', 'KGX', 'CBG']], then: 'Free shuttle bus, about 30 min', how: 'shuttle', jet: 'typhoon', bus: ['OR BUS 132', 'Sundays and bank holidays only'], mode: 'Free shuttle' },
+  { k: 'gransden', from: 'STP', legs: [['Thameslink', 'Horsham to Peterborough', 'STP', 'SNO']], then: 'Taxi, 15 to 20 minutes', how: 'taxi', jet: 'hawk', bus: ['BUS', 'Whippet 18, but not on Sundays'], mode: 'Taxi' },
+  { k: 'shuttleworth', from: 'STP', legs: [['Thameslink', 'Horsham to Peterborough', 'STP', 'BIW']], then: 'Show shuttle bus, £10 return', how: 'shuttle', jet: 'a400', bus: ['BOOK THE SHUTTLE', 'With your show tickets'], mode: 'Shuttle bus' },
+  { k: 'eastbourne', from: 'VIC', legs: [['Southern', 'Victoria to Eastbourne', 'VIC', 'EBN']], then: 'Walk, 10 to 15 minutes', how: 'walk', jet: 'hawk', bus: ['OR BUS', 'Route 3 from stop R1'], mode: 'Walk' },
+  { k: 'headcorn', from: 'CHX', legs: [['Southeastern', 'Charing Cross to Ashford via Headcorn', 'CHX', 'HCN']], then: 'Taxi or walk, about 1.5 miles', how: 'taxi', jet: 'typhoon', mode: 'Taxi or walk' },
+  { k: 'riat', name: 'RIAT 2027, Boscombe Down', from: 'WAT', legs: [['South Western Railway', 'Waterloo to Exeter', 'WAT', 'SAL']], getOff: 'Salisbury, for now', then: 'Shuttles still to be announced', how: 'shuttle', jet: 'a400', mode: 'To be announced' },
+  { k: 'riviera', name: 'English Riviera Airshow', at: [-3.5595, 50.4365], from: 'PAD', legs: [['GWR', 'Paddington to Penzance', 'PAD', 'NTA'], ['GWR', null, 'NTA', 'PGN']], change: 'Newton Abbot on some trains', then: 'Walk, about 6 minutes', how: 'walk', jet: 'hawk', tag: 'NEW TO THE GUIDE', mode: 'Walk' },
+  { k: 'wales', from: 'PAD', legs: [['GWR', 'Paddington to Swansea', 'PAD', 'SWA']], then: 'Walk, 20 to 25 minutes', how: 'walk', jet: 'typhoon', bus: ['OR BUS', '3A, 2, 2A or 1 along the seafront'], mode: 'Walk or bus' },
+  { k: 'cosford', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Birmingham and Wolverhampton', 'EUS', 'BHM'], ['West Midlands Railway', 'Birmingham to Shrewsbury via Cosford', 'BHM', 'COS']], then: 'Walk, about 300 metres', how: 'walk', jet: 'a400', bus: ['BUS', 'None on Sundays. Take the train'], mode: 'Walk' },
+  { k: 'midlands', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Birmingham and Wolverhampton', 'EUS', 'BHM'], ['West Midlands Railway', 'Cross City line to Redditch', 'BHM', 'RDC']], then: 'Diamond 247 bus to Ragley Hall', how: 'bus', jet: 'hawk', bus: ['SUNDAY', 'No 247 bus, so book a taxi'], mode: 'Bus 247' },
+  { k: 'southport', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'WGN'], ['Northern', 'Manchester to Southport', 'WGW', 'SOP']], change: 'Wigan (walk between stations)', then: 'Walk, 10 to 15 minutes', how: 'walk', jet: 'typhoon', bus: ['BUS FROM LIVERPOOL', 'Arriva 47 and 300'], mode: 'Walk' },
+  { k: 'blackpool', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'PRE'], ['Northern', 'Manchester to Blackpool North', 'PRE', 'BPN']], then: 'Walk, about 15 min to the Tower', how: 'walk', jet: 'hawk', bus: ['OR TRAM', 'North Pier or Manchester Square'], mode: 'Walk' },
+  { k: 'ayr', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'GLC'], ['ScotRail', 'Glasgow Central to Ayr', 'GLC', 'AYR']], then: 'Walk, 15 to 20 minutes', how: 'walk', jet: 'typhoon', bus: ['BUS FROM GLASGOW', 'Stagecoach X77'], mode: 'Walk' },
 ];
 Object.entries(EXTRA_STA).forEach(([c, v]) => { DATA.STA[c] = v; });
-const SH_A = EX_A + 54, SH_STEP = 9, XC_A = SH_A + SH.length * SH_STEP;
+const SH_A = EX_END, SH_STEP = 9, XC_A = SH_A + SH.length * SH_STEP;
 HEADS.push({ a: SH_A, tag: '3  EVERY SHOW', title: 'From London to the gate' });
 hit(SH_A, 'section', 'impact');
 SH.forEach((s, i) => {
@@ -246,12 +285,13 @@ SH.forEach((s, i) => {
   const lab = { text: s.name, xy: (v) => pinXY(v, s.st, s.at), a: a + 5, kind: 'show' };
   PINS.push({ st: s.st, at: s.at, a: a + 4.3, off: 9999, labOff: off - 0.4, jet: s.jet, how: s.how, v: vEnd, lab });
   gE.items.push(lab);
+  gE.items.push({ text: s.mode, xy: (v) => { const q = proj(v)(s.st), r = pinXY(v, s.st, s.at); return [(q[0] + r[0]) / 2, (q[1] + r[1]) / 2]; }, a: a + 5.3, kind: 'mode' });
   hit(a + 3.3, 'station', 'pop', { pitch: 'G5' }); hit(a + 4.9, 'show', 'bell', { pitch: ['C6', 'D6', 'E6', 'G6'][i % 4] });
   GROUPS.push(gR, gE);
   const ops = [...new Set(legs.map((l) => l.opName))];
   const change = s.change || (legs.length > 1 ? NAME(legs[0].codes[legs[0].codes.length - 1]) : 'No change');
   CARDS.push({ a: a + 0.2, b: off, edge: lineCol(legs[legs.length - 1].op), title: s.name, chips: ops, tag: s.tag,
-    rows: [['FROM LONDON', SHORT(s.from)], ['CHANGE', change], ['GET OFF', s.getOff || NAME(dest)], ['THEN', s.then]] });
+    rows: [['FROM LONDON', SHORT(s.from)], ['CHANGE', change], ['GET OFF', s.getOff || NAME(dest)], ['THEN', s.then], ...(s.bus ? [s.bus] : [])] });
   ALLSHOWS.push(s);
 });
 
@@ -273,7 +313,7 @@ const XC = [
     lines: [['Transport for Wales', 'Manchester to South Wales'], ['GWR', 'Cardiff to Portsmouth'], ['Transport for Wales', 'Holyhead to Cardiff']],
     rows: [['MANCHESTER, CREWE, SHREWSBURY', 'Direct to Cardiff and Swansea'], ['CARDIFF AND BRISTOL', 'Direct to Salisbury, nearest to RIAT']] },
 ];
-const XC_STEP = 10, END_A = XC_A + 2 + XC.length * XC_STEP;
+const XC_STEP = 9, END_A = XC_A + 2 + XC.length * XC_STEP;
 XC.forEach((x, i) => {
   const a = XC_A + 2 + i * XC_STEP, off = a + XC_STEP;
   x.lines.forEach((l, j) => { const s = l.length > 2 ? seg(...l) : whole(...l); LINES.push({ pts: s.pts, op: s.op, a: a + 0.4 + j * 0.5, b: a + 3.6 + j * 0.5, dim: off - 0.3, xc: true }); });
@@ -294,8 +334,10 @@ function placeGroup(ctx, g) {
   const avoid = g.avoid.map(pj);
   g.items.forEach((it, i) => {
     ctx.font = fu(LFS, 700);
-    const w = ctx.measureText(it.text).width + LFS * 1.1, h = LFS * 1.7, [x, y] = anchors[i], gap = it.kind === 'show' ? 30 : 24;
-    const cands = [[x + gap, y - h / 2], [x - gap - w, y - h / 2], [x - w / 2, y - gap - h], [x - w / 2, y + gap], [x + gap, y - gap - h], [x - gap - w, y - gap - h], [x + gap, y + gap], [x - gap - w, y + gap]];
+    const fs = it.kind === 'mode' ? LFS - 4 : LFS; it.fs = fs; ctx.font = fu(fs, 700);
+    const w = ctx.measureText(it.text).width + fs * 1.1, h = fs * 1.7, [x, y] = anchors[i], gap = it.kind === 'show' ? 30 : it.kind === 'mode' ? 12 : 24;
+    const cands = [[x + gap, y - h / 2], [x - gap - w, y - h / 2], [x - w / 2, y - gap - h], [x - w / 2, y + gap], [x + gap, y - gap - h], [x - gap - w, y - gap - h], [x + gap, y + gap], [x - gap - w, y + gap],
+      [x + gap, y - gap - 2 * h], [x - gap - w, y - gap - 2 * h], [x + gap, y + gap + h], [x - gap - w, y + gap + h], [x - w / 2, y - gap - 2.2 * h], [x - w / 2, y + gap + 1.2 * h], [x + 3 * gap, y - h / 2], [x - 3 * gap - w, y - h / 2]];
     let best = null;
     cands.forEach((c, ci) => {
       const r = [c[0], c[1], w, h]; let cost = ci * 3;
@@ -337,13 +379,13 @@ function drawMap(ctx, u, IMG) {
     const g = l.dim != null ? prog(u, l.dim, l.dim + 0.6) : 0;
     ctx.save(); ctx.globalAlpha = al * lerp(1, l.net ? 0.3 : 0.4, g);
     const tip = strokeTo(ctx, xy, p), w = lerp(l.net || l.xc ? WM * 0.75 : WM, 5, g);
-    if (g < 1) { ctx.strokeStyle = C.navy; ctx.lineWidth = w + 8 * (1 - g); ctx.stroke(); }
-    ctx.strokeStyle = lineCol(l.op); ctx.lineWidth = w; ctx.stroke();
+    if (g < 1 && !l.dash) { ctx.strokeStyle = C.navy; ctx.lineWidth = w + 8 * (1 - g); ctx.stroke(); }
+    if (l.dash) { ctx.setLineDash([3, 20]); ctx.strokeStyle = C.navy; ctx.lineWidth = 9; ctx.stroke(); ctx.setLineDash([]); } else { ctx.strokeStyle = lineCol(l.op); ctx.lineWidth = w; ctx.stroke(); }
     if (l.calls && g < 0.5) l.pts.forEach((q, i) => {   // every calling point the site lists
       if (!i || i === l.pts.length - 1) return; const f = i / (l.pts.length - 1); if (p < f) return; const [x, y] = xy[i];
       ctx.fillStyle = '#FFF'; ctx.fillRect(x - 4.5, y - 4.5, 9, 9);
     });
-    if (p > 0 && p < 1) { ctx.fillStyle = '#FFF'; ctx.fillRect(tip[0] - 11, tip[1] - 11, 22, 22); ctx.strokeStyle = C.navy; ctx.lineWidth = 5; ctx.strokeRect(tip[0] - 11, tip[1] - 11, 22, 22); }
+    if (p > 0 && p < 1 && !l.dash) { ctx.fillStyle = '#FFF'; ctx.fillRect(tip[0] - 11, tip[1] - 11, 22, 22); ctx.strokeStyle = C.navy; ctx.lineWidth = 5; ctx.strokeRect(tip[0] - 11, tip[1] - 11, 22, 22); }
     ctx.restore();
   });
   // show pins: the last leg (dashed), the red square and a real aircraft
@@ -381,7 +423,7 @@ function drawMap(ctx, u, IMG) {
       const k = T.pop(u, it.a, SPRING.snappy); if (k <= 0) return;
       const [x, y] = it.xy ? it.xy(v) : pj(it.at), bx = x + it.p.ox, by = y + it.p.oy;
       ctx.save(); ctx.globalAlpha = fadeOut(u, g.off);
-      T.scaled(ctx, Math.min(k, 1.06), x, y, () => { ctx.fillStyle = '#FFF'; ctx.fillRect(bx - 4, by - 4, it.p.w + 8, it.p.h + 8); T.pill(ctx, it.text, bx, by + it.p.h / 2, LFS, it.kind === 'show' ? C.red : C.navy, '#FFF'); });
+      T.scaled(ctx, Math.min(k, 1.06), x, y, () => { ctx.fillStyle = '#FFF'; ctx.fillRect(bx - 4, by - 4, it.p.w + 8, it.p.h + 8); T.pill(ctx, it.text, bx, by + it.p.h / 2, it.fs, it.kind === 'show' ? C.red : it.kind === 'mode' ? C.amber : C.navy, it.kind === 'mode' ? C.navy : '#FFF'); });
       ctx.restore();
     });
   });
@@ -415,17 +457,17 @@ function chipRow(ctx, chips, x, y, maxW, size, measure = null) {
 function drawCard(ctx, u, c) {
   const k = E.outCubic(prog(u, c.a, c.a + 0.6)), out = 1 - prog(u, c.b - 0.4, c.b); if (k <= 0 || out <= 0) return;
   const x = COLX, w = COLW, pad = 30, tw = w - pad * 2;
-  const tS = pick({ '16x9': 62, '9x16': 58 }), lS = pick({ '16x9': 26, '9x16': 26 }), vS = pick({ '16x9': 38, '9x16': 34 }), cS = pick({ '16x9': 28, '9x16': 27 });
-  const two = P && c.rows.length > 2, colW = two ? (tw - 24) / 2 : tw;
+  const tS = pick({ '16x9': 62, '9x16': 58 }), lS = pick({ '16x9': 26, '9x16': 26 }), vS = pick({ '16x9': c.rows.length >= 5 ? 36 : 38, '9x16': 34 }), cS = pick({ '16x9': 28, '9x16': 27 });
+  const two = P && c.rows.length > 2 && !c.one, colW = two ? (tw - 24) / 2 : tw, big = c.rows.length >= 5;
   // measure
   let ts = tS; ctx.font = fd(ts); if (P) while (ctx.measureText(c.title).width > tw && ts > 40) { ts -= 2; ctx.font = fd(ts); }
   const tl = T.wrap(ctx, c.title, fd(ts), tw), tlh = ts * 1.02;
-  const rows = c.rows.map(([l, val]) => ({ l, lines: T.wrap(ctx, val, fu(vS, 600), colW) }));
-  const rh = (r) => lS + 10 + r.lines.length * vS * 1.2 + 16;
+  const rows = c.rows.map(([l, val], i) => ({ l, lines: T.wrap(ctx, val, fu(vS, 600), two && i === c.rows.length - 1 && i % 2 === 0 ? tw : colW) }));
+  const rh = (r) => lS + 10 + r.lines.length * vS * 1.2 + (big ? 11 : 16);
   let rowsH = 0; if (two) for (let i = 0; i < rows.length; i += 2) rowsH += Math.max(rh(rows[i]), rows[i + 1] ? rh(rows[i + 1]) : 0); else rows.forEach((r) => { rowsH += rh(r); });
   const chipH = c.chips ? chipRow(null, c.chips, 0, 0, tw, cS, ctx) + cS * 0.85 + 18 : 0, tagH = c.tag ? 44 : 0;
   const h = 12 + 22 + tagH + tl.length * tlh + 10 + chipH + rowsH + 8;
-  const y = pick({ '16x9': 330, '9x16': 1070 });
+  const y = pick({ '16x9': big ? 262 : 330, '9x16': 1010 });
   ctx.save(); ctx.globalAlpha = k * out; ctx.translate(0, (1 - k) * 40);
   T.card(ctx, x, y, w, h, { edge: c.edge, edgeH: 12 }); ctx.strokeStyle = C.navy; ctx.lineWidth = 4; ctx.strokeRect(x, y, w, h);
   let cy = y + 12 + 22;
@@ -445,7 +487,7 @@ function drawWords(ctx, u) {
     if (P) T.heading(ctx, u, -1.1, 'AIRSHOWS BY TRAIN', COLX, 410, 96, C.navy, C.red, 1);
     else { T.heading(ctx, u, -1.1, 'AIRSHOWS', COLX, 310, 150, C.navy); T.heading(ctx, u, -0.8, 'BY TRAIN', COLX, 450, 150, C.red); }
     const lk = E.outCubic(prog(u, 2, 2.8));
-    if (lk > 0) { ctx.globalAlpha = o * lk; const y = pick({ '16x9': 540, '9x16': 1130 });
+    if (lk > 0) { ctx.globalAlpha = o * lk; const y = pick({ '16x9': 540, '9x16': 1070 });
       T.lines(ctx, 'The map of every line, every change and the last leg to the show.', COLX, y, fu(pick({ '16x9': 42, '9x16': 44 }), 600), C.body, COLW, pick({ '16x9': 54, '9x16': 56 }));
       const ck = T.pop(u, 4); T.scaled(ctx, ck, COLX + 100, y + 170, () => { const w1 = T.pill(ctx, ALLSHOWS.length + ' airshows', COLX, y + 170, 36, C.red, '#FFF'); T.pill(ctx, '11 London stations', COLX + w1 + 14, y + 170, 36, C.navy, '#FFF'); });
     }
