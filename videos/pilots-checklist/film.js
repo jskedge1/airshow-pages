@@ -375,14 +375,14 @@ function item4(ctx, u) {
   const calm = K.ease(u, 56.2, 57.4);
   if (calm > 0) K.rings(ctx, 1370, 600, 170 * calm, C.teal, u * 0.6, 2, 6);
   const gp = K.ease(u, 52.2, 56.2);
-  K.route(ctx, [[330, 800], [560, 818], [800, 806], [960, 792]], gp, C.teal, 9);
+  K.route(ctx, [[330, 778], [540, 792], [760, 784], [900, 772]], gp, C.teal, 9);
   const x = lerp(330, 1000, wp);
   K.dad(ctx, x - 200, FEET + 10, 1.16, { mood: 'happy', look: [1, 0], blinkU: u, blinkOff: 2, walk: walk(u + 0.4, moving), armL: K.POSE.relaxed, armR: K.POSE.relaxed, bob: moving ? Math.abs(Math.sin(u * TAU * 1.5 + 1)) * -5 : 0 });
   captain(ctx, x, FEET + 6, 1.42, { mood: wp < 0.15 ? 'worried' : wp < 0.95 ? 'neutral' : u > 58 ? 'happy' : 'calm', defenders: K.DEF, blinkU: u, walk: walk(u, moving), armL: K.POSE.relaxed, armR: K.POSE.relaxed, bob: moving ? Math.abs(Math.sin(u * TAU * 1.5)) * -6 : 0 });
   // Beth has her own base here
   K.beth(ctx, 1770, FEET + 14, 1.14, { mood: u > 57.6 ? 'happy' : 'calm', headphones: '#3A3F4B', hold: 'camera', armL: K.POSE.hold, armR: K.POSE.hold, blinkU: u, blinkOff: 3 });
   pillPop(ctx, u, 57.6, 1640, 180, 'Beth is autistic too', { size: 40, bg: '#6E5AA8', fg: C.white });
-  pillPop(ctx, u, 58.6, 1600, 262, 'Quiet spaces are for adults as well', { size: 34, bg: C.paper, fg: C.ink });
+  pillPop(ctx, u, 58.6, 1545, 262, 'Quiet spaces are for adults as well', { size: 34, bg: C.paper, fg: C.ink });
   K.caption(ctx, u, 50.3, 61.5, 'Holding pattern: a quiet place to circle back to.', { num: 4, sub: 'No quiet space? Use the car, or a rug at the edge.', size: 60, w: 1560 });
 }
 
@@ -419,7 +419,7 @@ function item6(ctx, u) {
   rr(ctx, 1694, 430, 12, 250, 6, C.greyDark); rr(ctx, 1582, 400, 236, 92, 18, C.sun); M.text(ctx, 'Way out', 1700, 464, F(48, 800), C.white, 'center');
   K.car(ctx, 1700, 744, 0.62, C.blue);
   const rp = K.ease(u, 76.2, 78.6);
-  K.route(ctx, [[700, 800], [960, 818], [1220, 806], [1470, 784]], rp, C.teal, 10);
+  K.route(ctx, [[700, 778], [940, 792], [1200, 786], [1450, 772]], rp, C.teal, 10);
   const wp = K.ease(u, 78, 83), moving = wp > 0 && wp < 1;
   const pt = springU(u, 75.2, SPRING.gentle) * (1 - K.ease(u, 77.4, 78.2));
   const x = lerp(520, 1260, wp);
@@ -459,12 +459,12 @@ function sceneNearby(ctx, u) {
   // the five points, one at a time
   const pk = K.pop(u, 87.2, SPRING.gentle);
   ctx.save(); ctx.translate((1 - pk) * 1100, 0);
-  ctx.save(); ctx.globalAlpha = 0.14; rr(ctx, 868, 284, 1000, 590, 0, '#000'); ctx.restore();
-  rr(ctx, 860, 270, 1000, 590, 0, C.paper);
+  ctx.save(); ctx.globalAlpha = 0.14; rr(ctx, 868, 284, 1000, 566, 0, '#000'); ctx.restore();
+  rr(ctx, 860, 270, 1000, 566, 0, C.paper);
   NEARBY.forEach((str, i) => {
-    const a = 88 + i * 2.5, k = K.pop(u, a), y = 330 + i * 114;
+    const a = 88 + i * 2.5, k = K.pop(u, a), y = 328 + i * 110;
     if (k <= 0) return;
-    if (i) rr(ctx, 896, y - 57, 928, 3, 0, '#E3DAC6');
+    if (i) rr(ctx, 896, y - 55, 928, 3, 0, '#E3DAC6');
     K.circ(ctx, 928, y, 32 * Math.min(1.1, k), C.teal); K.tick(ctx, 928, y, 0.8, prog(u, a + 0.1, a + 0.6), C.white, 10);
     const f = F(52, 700), lines = K.wrap(ctx, str, f, 850);
     lines.forEach((l, j) => M.text(ctx, l, 984 + (1 - Math.min(1, k)) * 50, y + 18 - (lines.length - 1) * 27 + j * 54, f, C.ink));
@@ -493,7 +493,9 @@ function sceneCrew(ctx, u) {
   M.text(ctx, 'Every captain needs a ground crew', 110 - (1 - tk) * 120, 226, F(88, 800), C.paper);
   // one of the crew, waving from behind the tiles
   const sk = K.pop(u, 86.8, SPRING.gentle), wv = Math.sin(u * TAU * 0.75) * 0.22;
+  ctx.save(); ctx.beginPath(); ctx.rect(1500, 0, 420, 300); ctx.clip();
   K.staff(ctx, 1740, 596 + (1 - sk) * 300, 1.12, { mood: 'happy', blinkU: u, lanyard: true, armL: K.POSE.relaxed, armR: [2.5 + wv, -0.25] });
+  ctx.restore();
   TILES.forEach(([label, kind], i) => {
     const a = 88 + i * 2, k = K.pop(u, a, SPRING.bouncy);
     if (k <= 0) return;
@@ -512,9 +514,9 @@ function sceneCrew(ctx, u) {
 function scenePayoff(ctx, u) {
   showground(ctx, u);
   K.crowd(ctx, 20, 380, 735, 5, 0.9, 9, 1, u);
-  const px = lerp(-350, 2300, prog(u, 104.2, 113.5)), py = 240 + Math.sin(u * 0.7) * 16;
-  K.rings(ctx, px - 60, py, 150, C.teal, u, 3, 11);
-  K.propPlane(ctx, px, py, 0.9, -0.05 + Math.cos(u * 0.7) * 0.03, u);
+  const px = lerp(-350, 2300, prog(u, 104.2, 113.5)), py = 232 + Math.sin(u * 0.7) * 12;
+  K.rings(ctx, px - 50, py, 125, C.teal, u, 3, 10);
+  K.propPlane(ctx, px, py, 0.7, -0.05 + Math.cos(u * 0.7) * 0.03, u);
   K.beth(ctx, 1400, FEET + 12, 1.18, { mood: 'happy', headphones: '#3A3F4B', hold: 'camera', armL: [1.7, 1.2], armR: [1.7, 1.2], look: [0, -1], tilt: -0.06 });
   K.dad(ctx, 920, FEET + 8, 1.2, { mood: 'happy', look: [0, -1], blinkU: u, blinkOff: 2, armL: K.POSE.relaxed, armR: K.POSE.relaxed, tilt: -0.04 });
   const on = u > 106.5;

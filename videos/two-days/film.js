@@ -31,6 +31,11 @@ const HITS = [
   [JET_L + 0.9, 'the jet', 'whoosh', { len: 3.0, from: 140, to: 400, gain: 0.14, peak: 0.5 }],
   ...MO.map((a, i) => [a + (i === 0 ? 8 : 7.6), `tip ${i + 1}`, 'tok', { pitch: ['D4', 'E4', 'F#4', 'D4', 'E4', 'F#4'][i], gain: 0.22 }]),
   [72.2, 'beth', 'blip', { pitch: 'A4', gain: 0.1 }],
+  [NB, 'clock back to 14:30', 'tick', { gain: 0.16 }], [NB + 0.3, 'people nearby', 'tok', { pitch: 'D4', gain: 0.22 }],
+  [NB + 3, 'drain: stares', 'pop', { pitch: 'B3', gain: 0.14 }], [NB + 5.2, 'space', 'bell', { pitch: 'D5', gain: 0.09 }],
+  ...[0, 1, 2, 3, 4].map((i) => [NB + 4.4 + i * 2.6, `nearby point ${i + 1}`, 'tok', { pitch: ['E4', 'F#4', 'A4', 'F#4', 'A4'][i], gain: 0.18 }]),
+  [NB + 12.9, 'can I help', 'blip', { pitch: 'A4', gain: 0.1 }], [NB + 16.2, 'defenders on', 'pop', { pitch: 'C5', to: 'F4', gain: 0.14 }],
+  [NB + 17.4, 'kindness', 'bell', { pitch: 'A5', gain: 0.1 }],
   [T3 + 0.2, 'third day', 'tok', { pitch: 'D4', gain: 0.24 }],
   ...[0, 1, 2, 3, 4, 5].map((i) => [T3 + 2.5 + i * 2, `tile ${i + 1}`, 'tok', { pitch: ['D4', 'E4', 'F#4', 'A4', 'B4', 'D5'][i], gain: 0.16 }]),
   [T3 + 15, 'small changes', 'bell', { pitch: 'A5', gain: 0.1 }],
@@ -286,8 +291,60 @@ function m6(ctx, u, plan) {
   }
 }
 
+// ---------------------------------------------------------------- 86-106: the people nearby
+// The hard moment again, on both sides. This time the only difference is the people around them.
+const BY = [
+  { adult: true, skin: '#E6B892', hair: '#8A6A48', hairStyle: 'bob', top: '#8C7FA8', bottom: '#4A5568', shoe: '#2B2B33' },
+  { adult: true, skin: '#C99672', hair: '#2B2622', hairStyle: 'short', top: '#5F8F9E', bottom: '#3E4756', shoe: '#2B2B33' },
+];
+function phone(ctx, x, y) { K.rr(ctx, x - 20, y - 36, 40, 72, 0, C.ink); K.rr(ctx, x - 15, y - 30, 30, 54, 0, C.greyDark); K.circ(ctx, x, y - 18, 6, C.ink); }
+function nb(ctx, u, plan) {
+  const a = NB;
+  bg(ctx, u, plan);
+  K.crowd(ctx, 0, 950, 636, 10, 0.84, 4, 1, u);
+  if (!plan) {      // staring, comments, phones out
+    const cl = K.ease(u, a + 0.4, a + 2.6);
+    [[250, 318, 'Tut!'], [700, 296, 'Look!']].forEach(([x, y, w], i) => {
+      const k = K.ease(u, a + 1.6 + i * 0.7, a + 2.6 + i * 0.7, E.outCubic);
+      if (k > 0) { K.burst(ctx, x, y, 84 * k, C.greyDark, { n: 9, u, seed: 5 + i, squash: 0.72 }); if (k > 0.6) M.text(ctx, w, x, y + 14, F(40 * k, 800), C.paper, 'center'); }
+    });
+    const ax = lerp(60, 170, cl), bx = lerp(900, 780, cl);
+    K.person(ctx, ax, FEET + 6, 1.0, { ...BY[0], mood: 'neutral', look: [1, 0.7], blinkU: u, blinkOff: 3, armL: K.POSE.hip, armR: armMix(K.POSE.relaxed, [1.35, 0.1], cl) });
+    K.person(ctx, bx, FEET + 6, 1.0, { ...BY[1], flip: true, mood: 'neutral', look: [1, 0.7], blinkU: u, blinkOff: 1, armL: K.POSE.relaxed, armR: armMix(K.POSE.relaxed, [1.9, 0.9], cl) });
+    if (cl > 0.85) phone(ctx, bx - 125, FEET + 6 - 372);
+    K.dad(ctx, 570, 712, 1.0, { sit: 1, mood: 'worried', look: [-1, 0.4], blinkU: u, blinkOff: 2, tilt: -0.06, armL: [1.25, 0.25], armR: K.POSE.relaxed });
+    K.kid(ctx, 415, 710, 1.08, { sit: 1, mood: 'overwhelm', tilt: 0.1, lean: 0.06, armL: K.POSE.ears, armR: K.POSE.ears });
+    tag(ctx, u, a + 1.4, a + 19, 480, 222, 'Staring, comments, phones out');
+  } else {          // space, patience, a kind word
+    const back = K.ease(u, a + 4.4, a + 6), near = K.ease(u, a + 12.3, a + 13.5), calm = K.ease(u, a + 15.2, a + 16.8);
+    const zk = K.pop(u, a + 5.2, SPRING.gentle);
+    if (zk > 0) { ctx.save(); ctx.globalAlpha = 0.55 * Math.min(1, zk); ctx.beginPath(); ctx.ellipse(495, 722, 300 * zk, 52 * zk, 0, 0, TAU); ctx.fillStyle = C.tealSoft; ctx.fill(); ctx.restore(); }
+    const ax = lerp(170, 70, back), bx = lerp(780, 890, back) - near * 150;
+    const mvA = back > 0 && back < 1, mvB = mvA || (near > 0 && near < 1);
+    const smile = u > a + 9.8;
+    K.person(ctx, ax, FEET + 6, 1.0, { ...BY[0], mood: smile ? 'happy' : 'calm', look: [1, 0.5], blinkU: u, blinkOff: 3, walk: step(u, mvA), bob: hopBob(u, mvA), armL: K.POSE.relaxed, armR: smile && u < a + 12 ? [2.4 + Math.sin(u * TAU * 0.75) * 0.18, -0.2] : K.POSE.relaxed });
+    K.person(ctx, bx, FEET + 6, 1.0, { ...BY[1], flip: true, mood: near > 0.5 ? 'happy' : 'calm', look: [1, 0.4], blinkU: u, blinkOff: 1, walk: step(u, mvB), bob: hopBob(u, mvB), armL: K.POSE.relaxed, armR: K.POSE.relaxed });
+    K.dad(ctx, 570, 712, 1.0, { sit: 1, mood: near > 0.9 ? 'happy' : 'worried', look: near > 0.5 ? [1, -0.6] : [-1, 0.4], blinkU: u, blinkOff: 2, tilt: -0.06, armL: [1.25, 0.25], armR: K.POSE.relaxed });
+    const on = u > a + 16.2, hy = 710 - 153 * 1.08;
+    K.kid(ctx, 415, 710, 1.08, { sit: 1, mood: calm > 0.7 ? 'calm' : u > a + 6 ? 'worried' : 'overwhelm', defenders: on ? K.DEF : null, tilt: 0.1 * (1 - calm) + Math.sin(u * TAU * 0.5) * 0.05 * calm, lean: 0.06 * (1 - calm), armL: armMix(K.POSE.ears, K.POSE.hug, calm), armR: armMix(K.POSE.ears, K.POSE.hug, calm) });
+    if (!on && u > a + 14.8) { const dk = K.ease(u, a + 14.8, a + 16.2); K.defendersIcon(ctx, lerp(545, 415, dk), lerp(505, hy, dk) - Math.sin(dk * Math.PI) * 70, lerp(0.7, 1.02, dk), K.DEF, lerp(0.4, 0, dk)); }
+    tag(ctx, u, a + 12.9, a + 15.6, 730, 300, 'Can I help?', { bg: BY[1].top, fg: C.white });
+    tag(ctx, u, a + 5.4, a + 19, 480, 222, 'Space, patience, a kind word', { bg: C.teal, fg: C.white });
+  }
+}
+function kickCard(ctx, u, a, b, kick, str) {
+  if (u < a - 0.1 || u > b) return;
+  const k = springU(u, a, SPRING.gentle), out = E.inCubic(prog(u, b - 0.5, b));
+  const w = 1500, h = 212, x = (W - w) / 2, y = H - 70 - h + (1 - k) * (h + 140) + out * (h + 140);
+  ctx.save(); ctx.globalAlpha *= 0.16; K.rr(ctx, x + 6, y + 12, w, h, 0, '#000'); ctx.restore();
+  K.rr(ctx, x, y, w, h, 0, C.paper);
+  M.text(ctx, kick, x + 48, y + 70, F(38, 800), C.teal, 'left', 2.5);
+  M.text(ctx, str, x + 46, y + 158, F(70, 700), C.ink);
+}
+const POINTS = ['It is overload, not bad behaviour', 'Give space. Please do not stare or film', 'Skip the advice. A kind smile helps', 'Ask the grown-up: can I help?', 'Flapping, rocking and ear defenders are all fine'];
+
 // ---------------------------------------------------------------- the split screen
-const HALF = [[0, hook], [MO[0], m1], [MO[1], m2], [MO[2], m3], [MO[3], m4], [MO[4], m5], [MO[5], m6]];
+const HALF = [[0, hook], [MO[0], m1], [MO[1], m2], [MO[2], m3], [MO[3], m4], [MO[4], m5], [MO[5], m6], [NB, nb]];
 const PUSH = 0.9;
 // how much a half is veiled while the other half is the one to watch (0..1)
 function veil(u, plan) {
@@ -298,11 +355,13 @@ function veil(u, plan) {
     const w = plan === first ? K.ease(u, a + 3.9, a + 4.5) * (1 - K.ease(u, end - 0.6, end)) : K.ease(u, a - 0.7, a - 0.1) * (1 - K.ease(u, a + 3.7, a + 4.3));
     v = Math.max(v, w);
   });
-  return v;
+  // the people nearby: left plays, then the right answers and carries the five points
+  const n = plan ? K.ease(u, NB - 0.7, NB - 0.1) * (1 - K.ease(u, NB + 3.8, NB + 4.4)) : 0.8 * K.ease(u, NB + 4, NB + 4.6) * (1 - K.ease(u, T3 - 1.6, T3 - 1));
+  return Math.max(v, n);
 }
 const BATT = [
-  [[0, 1], [20, 0.8], [29, 0.62], [41.2, 0.38], [53, 0.24], [64.5, 0.08], [77, 0.02]],
-  [[0, 1], [17, 0.97], [30.5, 0.93], [45, 0.86], [56, 0.94], [66.4, 0.72], [69.6, 0.9], [79.4, 0.82]],
+  [[0, 1], [20, 0.8], [29, 0.62], [41.2, 0.38], [53, 0.24], [64.5, 0.08], [77, 0.02], [NB - 0.3, 0.1], [NB + 3, 0.02]],
+  [[0, 1], [17, 0.97], [30.5, 0.93], [45, 0.86], [56, 0.94], [66.4, 0.72], [69.6, 0.9], [79.4, 0.82], [NB - 0.3, 0.1], [NB + 5.4, 0.16], [NB + 9.8, 0.22], [NB + 13.4, 0.3], [NB + 16.4, 0.4]],
 ];
 const battV = (u, plan) => M.springKeys(u, BATT[plan], SPRING.gentle);
 function batteryCard(ctx, x, y, v, k, pulse = 0) {
@@ -331,9 +390,10 @@ function halfHeader(ctx, u, plan, shift) {
   ctx.save(); ctx.translate(plan ? HW + shift : -shift, 0); ctx.beginPath(); ctx.rect(0, 0, HW, H); ctx.clip();
   // the divider belongs to both halves, so it parts with them
   ctx.fillStyle = C.paper; ctx.fillRect(plan ? 0 : HW - 6, 0, 6, H);
-  const lk = springU(u, plan ? 8.5 : 8, SPRING.gentle);
+  const swap = u > NB - 0.4;
+  const lk = swap ? springU(u, NB + (plan ? 0.5 : 0.1), SPRING.gentle) : springU(u, plan ? 8.5 : 8, SPRING.gentle) * (1 - K.ease(u, NB - 1, NB - 0.4));
   if (lk > 0) {
-    const str = plan ? 'With a plan' : 'Without a plan';
+    const str = swap ? (plan ? 'People are kind' : 'People stare') : plan ? 'With a plan' : 'Without a plan';
     ctx.font = F(40, 700); const w = ctx.measureText(str).width + 56;
     ctx.save(); ctx.translate(0, -(1 - lk) * 160); K.pill(ctx, plan ? HW - 28 - w : 28, 62, str, { size: 40, bg: plan ? C.teal : C.greyDark, fg: C.white }); ctx.restore();
   }
@@ -342,7 +402,7 @@ function halfHeader(ctx, u, plan, shift) {
   batteryCard(ctx, plan ? 246 : 400, 26, battV(u, plan), K.pop(u, plan ? 10.5 : 10), pulse);
   ctx.restore();
 }
-const CLOCK = [[9.4, '08:45'], [14, '09:00'], [16.3, '09:30'], [16.7, '10:00'], [17.1, '10:30'], [17.5, '11:00'], [26, '11:30'], [38, '12:00'], [50, '13:00'], [62, '14:30'], [74, '16:00']];
+const CLOCK = [[9.4, '08:45'], [14, '09:00'], [16.3, '09:30'], [16.7, '10:00'], [17.1, '10:30'], [17.5, '11:00'], [26, '11:30'], [38, '12:00'], [50, '13:00'], [62, '14:30'], [74, '16:00'], [NB, '14:30']];
 function clock(ctx, u) {
   const k = Math.min(K.pop(u, 9.4), 1 - E.inCubic(prog(u, T3 - 1.3, T3 - 0.8)));
   if (k <= 0.01) return;
@@ -379,10 +439,13 @@ function sceneSplit(ctx, u) {
   if (ck > 0.01) { ctx.save(); ctx.translate(60, 76 - (1 - ck) * 200); K.pill(ctx, 0, 0, 'A calm video: no sudden sounds, no flashing', { size: 36, bg: C.teal, fg: C.white }); ctx.restore(); }
   K.caption(ctx, u, 0.2, 7.7, 'Same family. Same airshow. Two very different days.', { w: 1010, size: 70 });
   K.caption(ctx, u, 8.3, 13.5, 'Charlie is autistic. Noise and crowds use up energy fast.', { w: 1120, size: 66 });
+  kickCard(ctx, u, NB + 0.3, NB + 4.3, 'IF YOU ARE STANDING NEARBY', 'The people around you change the day too');
+  POINTS.forEach((str, i) => K.caption(ctx, u, NB + 4.4 + i * 2.6, NB + 7 + i * 2.6, str, { w: i === 4 ? 1640 : 1400, size: 68 }));
+  K.caption(ctx, u, NB + 17.4, T3 - 0.7, 'Kindness costs nothing.', { w: 980, size: 84, dark: true });
   TIPS.forEach(([str, sub], i) => { const a = MO[i] + (i === 0 ? 8 : 7.6); K.caption(ctx, u, a, MO[i] + 11.3, str, { num: i + 1, sub, w: 1560 }); });
 }
 
-// ---------------------------------------------------------------- 86-104: the third day
+// ---------------------------------------------------------------- 106-124: the third day
 const TILES = [
   ['A signposted quiet space', 'tent'], ['A warning before the loud bits', 'chip'], ['A sensory map and photo guide online', 'map'],
   ['Ear defenders to borrow or buy', 'def'], ['Staff who know the Sunflower lanyard', 'sun'], ['A quieter first hour', 'clock'],
@@ -414,7 +477,7 @@ function sceneShows(ctx, u) {
   if (bk > 0) M.text(ctx, 'Small changes. A bigger welcome.', 112 - (1 - bk) * 80, 990, F(62, 700), C.tealSoft);
 }
 
-// ---------------------------------------------------------------- 104-113: one day, full width
+// ---------------------------------------------------------------- 124-133: one day, full width
 function scenePayoff(ctx, u) {
   const gy = 560, feet = 750;
   K.sky(ctx); K.clouds(ctx, u, 190, 5); K.horizon(ctx, gy); K.ground(ctx, gy); K.fence(ctx, gy + 54);
