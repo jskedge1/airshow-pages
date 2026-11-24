@@ -82,3 +82,12 @@ NODE_PATH=$(npm root -g) node _tools/render.mjs --film train-map --format 16x9  
 python3 _tools/audio.py train-map --mux                                              # music, sound effects, final MP4s
 ```
 The finished videos are `out/train-map/train-map-16x9.mp4` and `out/train-map/train-map-9x16.mp4`.
+
+## Music: cinematic score
+Every film uses a cinematic airshow score (24 Nov 2026, replacing the lo-fi and house beds): strings that swell,
+a driving string ostinato, low brass, timpani that build, soft cymbal swells into each section and a big
+resolve under the end card. `_build/cinematic.py` writes it on the film's existing beat grid, so the
+picture and its sound effects don't move: run it, then `mix.mjs <film>` (no re-render needed).
+  MOTION_REEL_SKILL=<skill> uv run _build/cinematic.py <film> --tonic D --end <end card beat> --sections <beats> [--soft]
+House style films: --end 116 --sections 8,20,32,44,56,68,80,92,104. Calm visit uses --soft. Train films: the
+scene start beats from their route file, --end = the end scene's beat.
