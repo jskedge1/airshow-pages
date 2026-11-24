@@ -1,10 +1,12 @@
 """Makes music.wav for the Meet Pip cartoon: a light, friendly tune at 120 beats a minute, plus
 small sound effects timed to hits.json (written by render.js). Everything is synthesised here,
 so there is no licence to worry about.  python3 mascot/film/music.py"""
-import json, os, wave
+import json, os, sys, wave
 import numpy as np
 
-SR, DUR, BEAT = 44100, 66.0, 0.5
+FILM = sys.argv[1] if len(sys.argv) > 1 else 'promo'
+SR, DUR, BEAT = 44100, (16.0 if FILM == 'teaser' else 66.0), 0.5
+BARS = int(DUR / 2)
 N = int(SR * DUR)
 L = np.zeros(N); R = np.zeros(N)
 rng = np.random.default_rng(7)
@@ -62,12 +64,13 @@ MEL2 = [(0, 84, .5), (.5, 79, .5), (1, 76, 1), (2, 79, 2),
     (8, 81, .5), (8.5, 76, .5), (9, 72, 1), (10, 76, 2),
     (12, 77, 1), (13, 79, 1), (14, 84, 2)]
 def level(bar):   # which parts play in each bar: (drums, melody, overall)
+    if FILM == 'teaser': return (0, 0, .8) if bar < 2 else (1, 1, 1)
     if bar < 3: return (0, 0, .8)            # hook: plucks only
-    if 6 <= bar < 8: return (.6, 0, .9)      # "what does PIP stand for": space for the letter drops
-    if 18 <= bar < 21: return (1, 0, .9)     # who is Pip for
-    if 27 <= bar < 30: return (.4, 0, .75)   # the ear defender promise: softer
+    if 6 <= bar < 8: return (.6, 0, .9)      # "PIP stands for": space for the letter drops
+    if 17 <= bar < 20: return (1, 0, .9)     # who is Pip for
+    if 24 <= bar < 27: return (.4, 0, .75)   # the calm visit scene: softer
     return (1, 1, 1)
-for bar in range(32):
+for bar in range(BARS - 1):
     t0 = bar * 4 * BEAT; root, tones = CH[bar % 4]; dr, mel, lv = level(bar)
     for e in range(8):
         n = tones[ARP[e]] + (12 if e in (2, 6) else 0)
@@ -84,8 +87,8 @@ for bar in range(32):
             if ph <= b < ph + 4: add(whistle(n, ln*BEAT*.92), t0 + (b - ph)*BEAT, .11)
 # last bar: one held C chord
 for n, g in ((36, .4), (48, .3), (60, .22), (64, .2), (67, .2), (72, .2), (84, .12)):
-    add(pluck(n, 2.0) if n > 50 else bass(n, 1.9), 64.0, g)
-add(kick(), 64.0, .5)
+    add(pluck(n, 2.0) if n > 50 else bass(n, 1.9), DUR - 2, g)
+add(kick(), DUR - 2, .5)
 
 # ---- sound effects on the picture's own timings
 def whoosh():
@@ -106,7 +109,7 @@ def fly():   # a little propeller buzz that passes by
     saw = 2*((np.cumsum(f)/SR) % 1) - 1
     return lp(saw, 12) * np.sin(np.pi*t/d)**1.5 * (1 + .3*np.sin(2*np.pi*22*t))
 FX = {'whoosh': (whoosh, .16), 'pop': (pop, .16), 'tick': (tick, .07), 'thud': (thud, .5), 'boing': (boing, .22), 'fly': (fly, .16)}
-for t, kind in json.load(open(os.path.join(here, 'hits.json'))):
+for t, kind in json.load(open(os.path.join(here, 'hits-' + FILM + '.json'))):
     f, g = FX[kind]
     add(f(), max(0, t - (.25 if kind == 'whoosh' else 0)), g)
 
@@ -114,7 +117,7 @@ mix = np.stack([L, R], 1)
 fade = np.minimum(1, (DUR - np.arange(N)/SR) / 1.2)[:, None]
 mix = np.tanh(mix * 1.1) * fade
 mix = mix / np.abs(mix).max() * .89
-with wave.open(os.path.join(here, 'music.wav'), 'wb') as w:
+with wave.open(os.path.join(here, 'music-' + FILM + '.wav'), 'wb') as w:
     w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
     w.writeframes((mix * 32767).astype('<i2').tobytes())
 print('music.wav written, peak', round(float(np.abs(mix).max()), 3), 'rms', round(float(np.sqrt((mix**2).mean())), 3))
