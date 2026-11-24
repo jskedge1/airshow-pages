@@ -5,7 +5,7 @@ import json, os, sys, wave
 import numpy as np
 
 FILM = sys.argv[1] if len(sys.argv) > 1 else 'promo'
-SR, DUR, BEAT = 44100, {'teaser': 16.0, 'studio': 8.0}.get(FILM, 66.0), 0.5
+SR, DUR, BEAT = 44100, {'teaser': 16.0, 'studio': 8.0, 'mystery': 16.0}.get(FILM, 66.0), 0.5
 BARS = int(DUR / 2)
 N = int(SR * DUR)
 L = np.zeros(N); R = np.zeros(N)
@@ -71,7 +71,19 @@ def level(bar):   # which parts play in each bar: (drums, melody, overall)
     if 17 <= bar < 20: return (1, 0, .9)     # who is Pip for
     if 24 <= bar < 27: return (.4, 0, .75)   # the calm visit scene: softer
     return (1, 1, 1)
-for bar in range(BARS - 1):
+# the mystery teaser: a quiet minor-key build with a heartbeat, opening out into the main tune for the end card
+CHM = [(45, [57, 60, 64]), (41, [57, 60, 65]), (48, [55, 60, 64]), (43, [55, 59, 62])]
+MYST_END = 6
+for bar in range(MYST_END if FILM == 'mystery' else 0):
+    t0 = bar * 4 * BEAT; root, tones = CHM[bar % 4]
+    for e in range(8):
+        add(pluck(tones[ARP[e]] - (12 if e % 4 == 0 else 0), 1.2), t0 + e*.25, (.10 + .015*bar), pan=.35 if e % 2 else -.35)
+    add(bass(root - 12, 1.8), t0, .30)
+    if bar >= 1:
+        for b in (0, 2): add(kick(), t0 + b*BEAT, .42); add(kick(), t0 + b*BEAT + .22, .25)
+    if bar >= 4:
+        for e in range(8): add(shaker(), t0 + e*.25, .08*(1.4 if e % 2 else .7), pan=-.2)
+for bar in range(MYST_END if FILM == 'mystery' else 0, BARS - 1):
     t0 = bar * 4 * BEAT; root, tones = CH[bar % 4]; dr, mel, lv = level(bar)
     for e in range(8):
         n = tones[ARP[e]] + (12 if e in (2, 6) else 0)
