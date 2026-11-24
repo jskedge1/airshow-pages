@@ -43,7 +43,7 @@ const STEPS = [
 const INTRO_WORDS = ['THE NIGHT BEFORE', 'YOUR', 'AIRSHOW'], INTRO_TAG = 'MY EVENING CHECKLIST', INTRO_SUB = 'So the morning is calm';
 const OUTRO_LINE = 'Bag by the door, then bed!', OUTRO_LINES = ['Bag by the door,', 'then bed!'];
 // the full path is too wide for the 9:16 URL bar, so the vertical cut shows the home address
-const URL = PORTRAIT ? 'ukairshowguide.co.uk' : 'ukairshowguide.co.uk/night-before-an-airshow';
+const URL = 'ukairshowguide.co.uk/night-before-an-airshow';
 
 // ---------------------------------------------------------------- hits (picture accents -> sfx)
 const HITS = [
@@ -636,11 +636,12 @@ function sceneTravel(ctx, u, L) {
     limb(ctx, [[-260, -200], [-60, -20], [150, -60]], 6, C.white);
     text(ctx, 'AIRFIELD', 120, -170, font(34, 800, DISPLAY), C.navy);
     box(ctx, 120, -160, 120, 70, 0, '#B6C4CE', 4);
+    box(ctx, 60, -40, 54, 54, 0, C.blue, 4); text(ctx, 'P', 87, 0, font(40, 800, DISPLAY), C.white, 'center');
   });
   label(ctx, 'TRAVEL PAGE', 420, 720, 44, C.navy, C.white, pop(L, 2.5));
   // pin on the car park gate, not the airfield
   const pk = prog(L, 4.3, 4.6);
-  if (pk > 0) { const py = lerp(150, 360, E.outBounce(pk)); withT(ctx, 550, py, 1, 0, () => { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-20, -40); ctx.arc(0, -50, 24, Math.PI * 0.8, Math.PI * 2.2); ctx.closePath(); fs(ctx, C.red); circ(ctx, 0, -50, 9, C.white, 0); }); }
+  if (pk > 0) { const py = lerp(150, 378, E.outBounce(pk)); withT(ctx, 487, py, 1, 0, () => { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-20, -40); ctx.arc(0, -50, 24, Math.PI * 0.8, Math.PI * 2.2); ctx.closePath(); fs(ctx, C.red); circ(ctx, 0, -50, 9, C.white, 0); }); }
   label(ctx, 'CAR PARK GATE', 590, 815, 42, C.red, C.white, pop(L, 4.8));
   // fuel pump
   const fk = pop(L, 6.5, SPRING.bouncy);
