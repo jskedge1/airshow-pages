@@ -20,7 +20,7 @@ for film in sys.argv[1:] or ['volunteer', 'transport']:
            '\n'.join(house[i_outro:i_list]), '\n'.join(house[i_list + 1:])]
     js = '\n'.join(out)
     js = js.replace("box(ctx, -330, -52, 660, 84, 0, C.teal); text(ctx, 'ukairshowguide.co.uk', 0, 10, font(50, 700, UI), C.white, 'center');",
-                    "ctx.font = font(50, 700, UI); const uw = ctx.measureText(URL).width + 90; box(ctx, -uw / 2, -52, uw, 84, 0, C.teal); text(ctx, URL, 0, 10, font(50, 700, UI), C.white, 'center');")
+                    "let us = 50; ctx.font = font(us, 700, UI); while (ctx.measureText(URL).width + 90 > G.w - 80 && us > 28) { us -= 2; ctx.font = font(us, 700, UI); } const uw = ctx.measureText(URL).width + 90; box(ctx, -uw / 2, -52, uw, 84, 0, C.teal); text(ctx, URL, 0, 10 - (50 - us) * 0.35, font(us, 700, UI), C.white, 'center');")
     assert 'const uw' in js
     js = js.replace("const LAW_ROWS", "// const LAW_ROWS")
     (B.parent / film / 'film.js').write_text(js)
