@@ -18,7 +18,7 @@ const HITS = [
   [4.4, 'caption 2', 'tok', { pitch: 'B4', gain: 0.2 }],
   [5, "Charlie's plan", 'pop', { pitch: 'D5', to: 'G4', gain: 0.14 }],
   [8, 'title', 'tok', { pitch: 'G4', gain: 0.25 }],
-  ...[0, 1, 2, 3, 4, 5].map((i) => [9.5 + i * 0.4, `row ${i + 1}`, 'blip', { pitch: ['G5', 'A5', 'B5', 'D6', 'E6', 'G6'][i], gain: 0.1 }]),
+  ...[0, 1, 2, 3, 4, 5].map((i) => [9.2 + i * 0.45, `row ${i + 1}`, 'blip', { pitch: ['G5', 'A5', 'B5', 'D6', 'E6', 'G6'][i], gain: 0.1 }]),
   [14.3, 'item 1', 'tok', { pitch: 'G4', gain: 0.22 }], [17.6, 'next video', 'tick', { gain: 0.14 }], [20.6, 'show map', 'tick', { gain: 0.14 }],
   [22.2, 'photo 1', 'pop', { pitch: 'B4', gain: 0.14 }], [23.2, 'photo 2', 'pop', { pitch: 'D5', gain: 0.14 }],
   [26.3, 'item 2', 'tok', { pitch: 'A4', gain: 0.22 }], [28.5, 'defenders on', 'pop', { pitch: 'D5', to: 'G4', gain: 0.18 }],
@@ -36,7 +36,7 @@ const HITS = [
   [106, 'ground crew', 'tok', { pitch: 'G4', gain: 0.25 }],
   ...[0, 1, 2, 3, 4, 5].map((i) => [108 + i * 2, `tile ${i + 1}`, 'tok', { pitch: ['G4', 'A4', 'B4', 'D5', 'E5', 'G5'][i], gain: 0.16 }]),
   [120.5, 'bigger welcome', 'blip', { pitch: 'D5', gain: 0.1 }],
-  [124, 'spitfire', 'tok', { pitch: 'G4', gain: 0.22 }], [126.5, 'happy flapping', 'bell', { pitch: 'G5', gain: 0.1 }],
+  [124, 'mustang', 'tok', { pitch: 'G4', gain: 0.22 }], [126.5, 'happy flapping', 'bell', { pitch: 'G5', gain: 0.1 }],
   [134, 'end card', 'bell', { pitch: 'D6', gain: 0.12 }],
 ];
 
@@ -176,23 +176,23 @@ function sceneHook(ctx, u) {
 function sceneTitle(ctx, u) {
   M.fill(ctx, C.paper);
   const f = F(132, 800);
-  [['The', 8.0, 112, 262], ["Captain's", 8.25, 0, 262], ['Checklist', 8.6, 112, 408]].forEach(([w, a, x, y], i) => {
+  [['The', 7.55, 112, 262], ["Captain's", 7.8, 0, 262], ['Checklist', 8.15, 112, 408]].forEach(([w, a, x, y], i) => {
     ctx.font = f; if (i === 1) x = 112 + ctx.measureText('The').width + 38;
     const k = K.pop(u, a, SPRING.bouncy);
     if (k > 0) { ctx.save(); ctx.beginPath(); ctx.rect(0, y - 150, W, 180); ctx.clip(); M.text(ctx, w, x, y + (1 - k) * 190, f, i === 2 ? C.teal : C.ink); ctx.restore(); }
   });
-  const sk = K.pop(u, 9.2, SPRING.gentle);
+  const sk = K.pop(u, 8.8, SPRING.gentle);
   if (sk > 0) M.text(ctx, 'Six checks for a calm airshow day', 116 - (1 - sk) * 60, 520, F(58, 700), C.ink);
   const lk = K.pop(u, 11.4, SPRING.gentle);
   if (lk > 0) M.text(ctx, 'for families, and for autistic adults', 116 - (1 - lk) * 60, 596, F(46, 500), C.greyDark);
   // the big clipboard
-  const ck = K.pop(u, 8.1, SPRING.gentle);
+  const ck = K.pop(u, 7.3, SPRING.gentle);
   ctx.save(); ctx.translate(1450, 550 + (1 - ck) * 700); ctx.rotate(0.025 - (1 - ck) * 0.1);
   ctx.save(); ctx.globalAlpha = 0.14; rr(ctx, -352, -458, 720, 950, 40, '#000'); ctx.restore();
   rr(ctx, -360, -470, 720, 950, 40, C.wood); rr(ctx, -326, -420, 652, 866, 16, C.white);
   rr(ctx, -120, -500, 240, 84, 22, C.greyDark); rr(ctx, -70, -486, 140, 30, 12, '#8494A6');
   ITEMS.forEach((label, i) => {
-    const k = K.pop(u, 9.5 + i * 0.4), y = -330 + i * 134;
+    const k = K.pop(u, 9.2 + i * 0.45), y = -330 + i * 134;
     if (k <= 0) return;
     ctx.save(); ctx.translate(-250, y); ctx.scale(k, k); rr(ctx, -40, -40, 80, 80, 18, C.teal); rr(ctx, -31, -31, 62, 62, 12, C.white); M.text(ctx, String(i + 1), 0, 16, F(46, 800), C.greyDark, 'center'); ctx.restore();
     M.text(ctx, label, -180 + (1 - Math.min(1, k)) * 60, y + 19, F(56, 700), C.ink);
@@ -222,7 +222,7 @@ function item1(ctx, u) {
   const tk = K.pop(u, 14.1, SPRING.gentle);
   const sx = M.springKeys(u, [[14, 0], [17.6, 1], [20.6, 2]], SPRING.gentle);
   K.tablet(ctx, 1140, 400 + (1 - tk) * 60, 1.25, 0.015, () => {
-    // screen 0: the Spitfire video
+    // screen 0: the Mustang video
     ctx.save(); ctx.translate((0 - sx) * 480, 0);
     ctx.fillStyle = C.grass; ctx.fillRect(-240, 90, 480, 60); K.cloud(ctx, -120, -70, 0.45); K.cloud(ctx, 150, -20, 0.35);
     const px = ((u * 110 + 200) % 760) - 380; K.rings(ctx, px - 20, -10, 80, C.teal, u, 2, 6); K.propPlane(ctx, px, -10, 0.5, -0.05, u);
@@ -245,7 +245,7 @@ function item1(ctx, u) {
     ctx.restore();
   });
   // what is on the screen
-  const lab = u < 17.6 ? 'Video: the Spitfire' : u < 20.6 ? 'Video: the fast jet' : 'The show map';
+  const lab = u < 17.6 ? 'Video: the Mustang' : u < 20.6 ? 'Video: the fast jet' : 'The show map';
   const la = u < 17.6 ? 14.6 : u < 20.6 ? 17.6 : 20.6;
   popAt(ctx, 1140, 122, K.pop(u, la), () => K.pill(ctx, 0, 0, lab, { align: 'center', size: 38 }));
   // photos of the site
@@ -275,7 +275,7 @@ function item2(ctx, u) {
   // items leave the shelf one at a time; they dip behind the bag as they drop in
   KIT.forEach(([label, draw], i) => {
     const x0 = 560 + i * 207, y0 = 232, a = st(i), d = i === 0 ? 1.2 : 0.95, p = K.ease(u, a, a + d, E.inOutCubic);
-    const k = K.pop(u, 26.2 + i * 0.12, SPRING.gentle);
+    const k = K.pop(u, 25.0 + i * 0.12, SPRING.gentle);
     M.text(ctx, label, x0, 380, F(40, 700), p >= 1 ? C.teal : C.ink, 'center');
     if (p >= 1) { K.circ(ctx, x0, y0, 44 * K.pop(u, a + d), C.tealSoft); K.tick(ctx, x0, y0, 1.1, prog(u, a + d, a + d + 0.4), C.teal, 11); }
     if (p > 0 && p < 1) lookX = (lerp(x0, PX, p) - KX) / 600;
@@ -309,7 +309,7 @@ function item3(ctx, u) {
   M.fill(ctx, '#DCEBD2');
   ctx.fillStyle = '#C9CFD3'; ctx.fillRect(bx, by + 14, bw, 52);
   for (let i = 0; i < 12; i++) rr(ctx, bx + 50 + i * 104, by + 37, 54, 7, 3, C.white);
-  const tx = bx + 120 + ((u - 38) * 26) % 1000; K.propPlane(ctx, tx, by + 40, 0.2, 0, u);
+  const tx = bx + 120 + ((u - 38) * 26) % 1000; K.topPlane(ctx, 'hawk-top', tx, by + 40, 46, Math.PI / 2);
   // path from the gate
   K.line(ctx, [[1250, 720], [1250, 648], [1080, 615], [900, 570], [790, 470], [752, 372]], '#EFE6D0', 34);
   // the crowd: busy in the middle, thin at the ends
@@ -365,7 +365,7 @@ function item4(ctx, u) {
   const a = lap * TAU, px = 720 + Math.sin(a) * 310, py = 275 - Math.cos(a) * 112;
   const dir = Math.cos(a), far = (1 - Math.cos(a)) / 2;     // top of the oval = far side, flying right
   pillPop(ctx, u, 51.6, 720, 275, 'Pilots circle while they wait', { size: 36, bg: C.paper, fg: C.ink });
-  ctx.save(); ctx.translate(px, py); ctx.scale((dir >= 0 ? 1 : -1) * Math.max(0.18, Math.abs(dir)), 1); K.propPlane(ctx, 0, 0, lerp(0.42, 0.52, far), 0, u); ctx.restore();
+  ctx.save(); ctx.translate(px, py); ctx.scale((dir >= 0 ? 1 : -1) * Math.max(0.18, Math.abs(dir)), 1); K.propPlane(ctx, 0, 0, lerp(0.56, 0.7, far), 0, u); ctx.restore();
   // the busy end of the show, left behind
   const wp = K.ease(u, 52.6, 56.4), moving = wp > 0 && wp < 1;
   K.pebbles(ctx, -30, 400, 330, 250, 34, u, [C.grey, C.lilac, C.blue], { amt: lerp(1, 0.35, wp), size: lerp(20, 12, wp) });
@@ -515,8 +515,8 @@ function scenePayoff(ctx, u) {
   showground(ctx, u);
   K.crowd(ctx, 20, 380, 735, 5, 0.9, 9, 1, u);
   const px = lerp(-350, 2300, prog(u, 104.2, 113.5)), py = 232 + Math.sin(u * 0.7) * 12;
-  K.rings(ctx, px - 50, py, 125, C.teal, u, 3, 10);
-  K.propPlane(ctx, px, py, 0.7, -0.05 + Math.cos(u * 0.7) * 0.03, u);
+  K.rings(ctx, px - 50, py, 135, C.teal, u, 3, 10);
+  K.propPlane(ctx, px, py, 0.82, -0.05 + Math.cos(u * 0.7) * 0.03, u);
   K.beth(ctx, 1400, FEET + 12, 1.18, { mood: 'happy', headphones: '#3A3F4B', hold: 'camera', armL: [1.7, 1.2], armR: [1.7, 1.2], look: [0, -1], tilt: -0.06 });
   K.dad(ctx, 920, FEET + 8, 1.2, { mood: 'happy', look: [0, -1], blinkU: u, blinkOff: 2, armL: K.POSE.relaxed, armR: K.POSE.relaxed, tilt: -0.04 });
   const on = u > 106.5;

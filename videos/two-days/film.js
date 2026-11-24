@@ -32,12 +32,12 @@ const HITS = [
   ...MO.map((a, i) => [a + (i === 0 ? 8 : 7.6), `tip ${i + 1}`, 'tok', { pitch: ['D4', 'E4', 'F#4', 'D4', 'E4', 'F#4'][i], gain: 0.22 }]),
   [72.2, 'beth', 'blip', { pitch: 'A4', gain: 0.1 }],
   [NB, 'clock back to 14:30', 'tick', { gain: 0.16 }], [NB + 0.3, 'people nearby', 'tok', { pitch: 'D4', gain: 0.22 }],
-  [NB + 3, 'drain: stares', 'pop', { pitch: 'B3', gain: 0.14 }], [NB + 5.2, 'space', 'bell', { pitch: 'D5', gain: 0.09 }],
-  ...[0, 1, 2, 3, 4].map((i) => [NB + 4.4 + i * 2.6, `nearby point ${i + 1}`, 'tok', { pitch: ['E4', 'F#4', 'A4', 'F#4', 'A4'][i], gain: 0.18 }]),
-  [NB + 12.9, 'can I help', 'blip', { pitch: 'A4', gain: 0.1 }], [NB + 16.2, 'defenders on', 'pop', { pitch: 'C5', to: 'F4', gain: 0.14 }],
+  [NB + 2.6, 'drain: stares', 'pop', { pitch: 'B3', gain: 0.14 }], [NB + 4.4, 'space', 'bell', { pitch: 'D5', gain: 0.09 }],
+  ...[0, 1, 2, 3, 4].map((i) => [NB + 3.4 + i * 2.8, `nearby point ${i + 1}`, 'tok', { pitch: ['E4', 'F#4', 'A4', 'F#4', 'A4'][i], gain: 0.18 }]),
+  [NB + 12.5, 'can I help', 'blip', { pitch: 'A4', gain: 0.1 }], [NB + 16, 'defenders on', 'pop', { pitch: 'C5', to: 'F4', gain: 0.14 }],
   [NB + 17.4, 'kindness', 'bell', { pitch: 'A5', gain: 0.1 }],
-  [T3 + 0.2, 'third day', 'tok', { pitch: 'D4', gain: 0.24 }],
-  ...[0, 1, 2, 3, 4, 5].map((i) => [T3 + 2.5 + i * 2, `tile ${i + 1}`, 'tok', { pitch: ['D4', 'E4', 'F#4', 'A4', 'B4', 'D5'][i], gain: 0.16 }]),
+  [T3 + 0.6, 'third day', 'tok', { pitch: 'D4', gain: 0.24 }],
+  ...[0, 1, 2, 3, 4, 5].map((i) => [T3 + 1.8 + i * 2, `tile ${i + 1}`, 'tok', { pitch: ['D4', 'E4', 'F#4', 'A4', 'B4', 'D5'][i], gain: 0.16 }]),
   [T3 + 15, 'small changes', 'bell', { pitch: 'A5', gain: 0.1 }],
   [PAY, 'payoff', 'tok', { pitch: 'D4', gain: 0.22 }], [PAY + 2.2, 'battery full', 'bell', { pitch: 'D5', gain: 0.1 }],
   [PAY + 10, 'end card', 'bell', { pitch: 'A5', gain: 0.12 }],
@@ -50,7 +50,7 @@ const hopBob = (u, on, ph = 0) => (on ? Math.abs(Math.sin(u * TAU * 1.5 + ph)) *
 function walkTo(u, a, b, x0, x1) { const p = K.ease(u, a, b); return { x: lerp(x0, x1, p), mv: p > 0 && p < 1, p }; }
 
 // how grey the no-plan half is (it starts identical, then drains of colour)
-const greyAt = (u) => K.ease(u, 6.5, 9.5);
+const greyAt = (u) => K.ease(u, 4.6, 8.6);
 function bg(ctx, u, plan, o = {}) {
   const g = plan ? 0 : greyAt(u);
   K.sky(ctx, M.mix(C.skyTop, '#D6DDE1', g), M.mix(C.skyLow, '#EBE9E4', g));
@@ -64,7 +64,7 @@ function tag(ctx, u, a, b, x, y, str, o = {}) {
   if (u < a || u > b) return;
   const k = Math.min(K.pop(u, a), 1 - E.inCubic(prog(u, b - 0.4, b)));
   if (k <= 0.01) return;
-  const size = o.size || 40;
+  const size = o.size || 46;
   ctx.font = F(size, 700); const w = ctx.measureText(str).width + 56;
   const cx = o.align === 'left' ? x + w / 2 : o.align === 'right' ? x - w / 2 : x;
   ctx.save(); ctx.translate(cx, y); ctx.scale(k, k); K.pill(ctx, 0, 0, str, { align: 'center', size, bg: o.bg || C.ink, fg: o.fg || C.paper }); ctx.restore();
@@ -124,8 +124,8 @@ function m1(ctx, u, plan) {
   const a = MO[0];
   bg(ctx, u, plan);
   if (plan) {       // 09:00, the gates have just opened: room to walk
-    gate(ctx, 190, 706, 1);
-    const wk = walkTo(u, a + 0.3, a + 3.4, 190, 500), wd = walkTo(u, a + 0.3, a + 3.6, 40, 680);
+    gate(ctx, 240, 706, 1);
+    const wk = walkTo(u, a + 0.3, a + 3.4, 240, 520), wd = walkTo(u, a + 0.3, a + 3.6, 90, 690);
     const zk = K.pop(u, a + 2.2, SPRING.gentle);
     if (zk > 0) { ctx.save(); ctx.globalAlpha = 0.5 * Math.min(1, zk); ctx.beginPath(); ctx.ellipse(590, 716, 300 * zk, 50 * zk, 0, 0, TAU); ctx.fillStyle = C.tealSoft; ctx.fill(); ctx.restore(); }
     K.staff(ctx, 860, FEET + 4, 1.0, { mood: 'happy', blinkU: u, blinkOff: 3, look: [-1, 0], armL: K.POSE.relaxed, armR: u < a + 4 ? [2.5 + Math.sin(u * TAU * 0.75) * 0.22, -0.25] : K.POSE.relaxed });
@@ -134,15 +134,15 @@ function m1(ctx, u, plan) {
     K.kid(ctx, wk.x, FEET + (flp ? Math.abs(Math.sin(u * TAU * 1.5)) * -10 : 0), 1.25, { mood: flp ? 'grin' : 'happy', blinkU: u, walk: step(u + 0.3, wk.mv), bob: hopBob(u, wk.mv, 1), ...(flp ? K.flap(u, 3) : { armL: K.POSE.relaxed, armR: K.POSE.relaxed }) });
     tag(ctx, u, a + 2, a + 11.4, 500, 222, 'Gates open: lots of room', { bg: C.teal, fg: C.white });
   } else {          // the queue builds while the clock runs on to 11:00
-    gate(ctx, 800, 706, 1);
+    gate(ctx, 745, 706, 1);
     const q = K.ease(u, a + 0.6, a + 4);
-    K.pebbles(ctx, 250, 255, 640, 190, 34, u, CHAT, { amt: q, size: 16 });
-    for (let i = 0; i < 6; i++) gather(ctx, u, a + 0.5 + i * 0.42, 708 - i * 62 - 20, 676, 0.84, i + 3);
+    K.pebbles(ctx, 200, 275, 640, 170, 34, u, CHAT, { amt: q, size: 16 });
+    for (let i = 0; i < 6; i++) gather(ctx, u, a + 0.5 + i * 0.42, 650 - i * 58 - 20, 676, 0.84, i + 3);
     const wd = walkTo(u, a + 4.3, a + 6.2, -140, 250), wk = walkTo(u, a + 4.3, a + 6, -260, 110);
     K.dad(ctx, wd.x, FEET + 6, 1.1, { mood: u > a + 6.6 ? 'worried' : 'neutral', look: [1, 0], blinkU: u, blinkOff: 2, walk: step(u, wd.mv), bob: hopBob(u, wd.mv), armL: K.POSE.relaxed, armR: K.POSE.relaxed });
-    for (let i = 0; i < 6; i++) gather(ctx, u, a + 0.7 + i * 0.42, 720 - i * 62, 712, 0.9, i + 11);
+    for (let i = 0; i < 6; i++) gather(ctx, u, a + 0.7 + i * 0.42, 662 - i * 58, 712, 0.9, i + 11);
     K.kid(ctx, wk.x, FEET + 4, 1.25, { mood: u > a + 6.4 ? 'worried' : 'neutral', look: [1, -0.3], blinkU: u, walk: step(u + 0.3, wk.mv), bob: hopBob(u, wk.mv, 1), armL: K.POSE.relaxed, armR: K.POSE.relaxed });
-    tag(ctx, u, a + 4.8, a + 11.4, 480, 222, 'Two hours later: a long, noisy queue');
+    tag(ctx, u, a + 4.8, a + 11.4, 480, 222, 'Two hours later: a long queue');
   }
 }
 
@@ -195,13 +195,13 @@ function m3(ctx, u, plan) {
     tag(ctx, u, a + 2.8, a + 11.4, 40, 222, 'No warning: a big surprise', { align: 'left' });
   } else {          // Dad checked the programme: defenders on, the same jet is a soft shape
     const jx = lerp(-340, 1320, prog(u, a + 4.9, a + 8.6));
-    const br = kf(u, [[a + 5, 0], [a + 6.3, 165], [a + 8.2, 165], [a + 9.2, 0]]);
-    if (br > 0) K.burst(ctx, clamp(jx - 110, 330, 640), 318, br, SOFT, { n: 14, jag: 0.08, u });
-    K.jet(ctx, jx, 300, 0.74, -0.04, { burn: true, u });
+    const br = kf(u, [[a + 5, 0], [a + 6.3, 150], [a + 8.2, 150], [a + 9.2, 0]]);
+    if (br > 0) K.burst(ctx, clamp(jx - 110, 190, 330), 372, br, SOFT, { n: 14, jag: 0.08, u });
+    K.jet(ctx, jx, 352, 0.74, -0.04, { burn: true, u });
     const pt = springU(u, a + 4.4, SPRING.gentle) * (1 - K.ease(u, a + 7.4, a + 8.2));
-    K.dad(ctx, 600, FEET + 6, 1.1, { mood: 'happy', look: [clamp((jx - 600) / 400, -1, 1), -1], blinkU: u, blinkOff: 2, armL: armMix(K.POSE.relaxed, [2.3, 0.3], pt), armR: K.POSE.hold, hold: 'checklist', ticks: u < a + 4.4 ? 2 : 3 });
+    K.dad(ctx, 770, FEET + 6, 1.1, { mood: 'happy', look: [clamp((jx - 770) / 400, -1, 1), -1], blinkU: u, blinkOff: 2, armL: armMix(K.POSE.relaxed, [2.3, 0.3], pt), armR: K.POSE.hold, hold: 'checklist', ticks: u < a + 4.4 ? 2 : 3 });
     const up = u > a + 6.4 && u < a + 9.6;
-    K.kid(ctx, 410, FEET + 4 + (up ? Math.abs(Math.sin(u * TAU * 1.5)) * -8 : 0), 1.25, { mood: u < a + 5.6 ? 'happy' : u < a + 6.4 ? 'wow' : 'grin', defenders: K.DEF, look: [clamp((jx - 410) / 400, -1, 1), -1], blinkU: u, ...(up ? K.flap(u, 3) : { armL: K.POSE.relaxed, armR: K.POSE.relaxed }) });
+    K.kid(ctx, 590, FEET + 4 + (up ? Math.abs(Math.sin(u * TAU * 1.5)) * -8 : 0), 1.25, { mood: u < a + 5.6 ? 'happy' : u < a + 6.4 ? 'wow' : 'grin', defenders: K.DEF, look: [clamp((jx - 590) / 400, -1, 1), -1], blinkU: u, ...(up ? K.flap(u, 3) : { armL: K.POSE.relaxed, armR: K.POSE.relaxed }) });
     tag(ctx, u, a + 4.5, a + 11.4, 924, 222, 'Dad checked the programme', { align: 'right', bg: C.teal, fg: C.white });
   }
 }
@@ -220,7 +220,7 @@ function m4(ctx, u, plan) {
     const ears = springU(u, a + 2.4, SPRING.gentle);
     K.dad(ctx, 345, FEET + 6, 1.1, { mood: u > a + 2.8 ? 'worried' : 'neutral', look: u > a + 2.8 ? [-1, 0.6] : [1, 0], blinkU: u, blinkOff: 2, armL: K.POSE.relaxed, armR: K.POSE.relaxed });
     K.kid(ctx, 222, FEET + 4, 1.2 * (1 - 0.05 * ears), { mood: u > a + 2 ? 'worried' : 'neutral', blinkU: u, tilt: 0.05 * ears, armL: armMix(K.POSE.relaxed, K.POSE.ears, ears), armR: armMix(K.POSE.relaxed, K.POSE.ears, ears) });
-    tag(ctx, u, a + 1.2, a + 11.4, 480, 222, 'A long queue, beside a generator');
+    tag(ctx, u, a + 1.2, a + 11.4, 480, 222, 'A long queue by a generator');
   } else {          // a picnic on a rug, back from the crowd
     K.fence(ctx, GY + 30, 0, HW);
     K.crowd(ctx, 30, 930, 560, 15, 0.34, 5, 1, u);
@@ -277,7 +277,7 @@ function m6(ctx, u, plan) {
     K.dad(ctx, 545 + dr * 0.5, FEET + 6, 1.1, { mood: 'worried', look: [-1, 0.6], blinkU: u, blinkOff: 2, tilt: 0.05, walk: sl * 0.5, armL: K.POSE.relaxed, armR: K.POSE.relaxed });
     K.kid(ctx, 400 + dr * 0.5, FEET + 4, 1.15, { mood: 'overwhelm', blinkU: u, tilt: 0.12, lean: 0.05, walk: -sl * 0.5, armL: K.POSE.ears, armR: K.POSE.ears });
     K.crowdPerson(ctx, 150 + dr, 760, 1.15, 5); K.crowdPerson(ctx, 800 + dr, 764, 1.15, 8);
-    tag(ctx, u, a + 1.2, a + 11.4, 480, 222, 'Stayed to the end. Stuck in the crowd');
+    tag(ctx, u, a + 1.2, a + 11.4, 480, 222, 'Stayed late. Stuck in the crowd');
   } else {          // a little early, by the route they planned, still on a high
     K.car(ctx, 770, 708, 0.8, C.blue);
     const rp = K.ease(u, a + 4.2, a + 5.6);
@@ -304,11 +304,11 @@ function nb(ctx, u, plan) {
   K.crowd(ctx, 0, 950, 636, 10, 0.84, 4, 1, u);
   if (!plan) {      // staring, comments, phones out
     const cl = K.ease(u, a + 0.4, a + 2.6);
-    [[250, 318, 'Tut!'], [700, 296, 'Look!']].forEach(([x, y, w], i) => {
+    [[345, 348, 'Tut!'], [565, 346, 'Look!']].forEach(([x, y, w], i) => {
       const k = K.ease(u, a + 1.6 + i * 0.7, a + 2.6 + i * 0.7, E.outCubic);
       if (k > 0) { K.burst(ctx, x, y, 84 * k, C.greyDark, { n: 9, u, seed: 5 + i, squash: 0.72 }); if (k > 0.6) M.text(ctx, w, x, y + 14, F(40 * k, 800), C.paper, 'center'); }
     });
-    const ax = lerp(60, 170, cl), bx = lerp(900, 780, cl);
+    const ax = lerp(60, 170, cl), bx = lerp(920, 815, cl);
     K.person(ctx, ax, FEET + 6, 1.0, { ...BY[0], mood: 'neutral', look: [1, 0.7], blinkU: u, blinkOff: 3, armL: K.POSE.hip, armR: armMix(K.POSE.relaxed, [1.35, 0.1], cl) });
     K.person(ctx, bx, FEET + 6, 1.0, { ...BY[1], flip: true, mood: 'neutral', look: [1, 0.7], blinkU: u, blinkOff: 1, armL: K.POSE.relaxed, armR: armMix(K.POSE.relaxed, [1.9, 0.9], cl) });
     if (cl > 0.85) phone(ctx, bx - 125, FEET + 6 - 372);
@@ -316,20 +316,20 @@ function nb(ctx, u, plan) {
     K.kid(ctx, 415, 710, 1.08, { sit: 1, mood: 'overwhelm', tilt: 0.1, lean: 0.06, armL: K.POSE.ears, armR: K.POSE.ears });
     tag(ctx, u, a + 1.4, a + 19, 480, 222, 'Staring, comments, phones out');
   } else {          // space, patience, a kind word
-    const back = K.ease(u, a + 4.4, a + 6), near = K.ease(u, a + 12.3, a + 13.5), calm = K.ease(u, a + 15.2, a + 16.8);
-    const zk = K.pop(u, a + 5.2, SPRING.gentle);
+    const back = K.ease(u, a + 3.6, a + 5.2), near = K.ease(u, a + 11.8, a + 13), calm = K.ease(u, a + 15, a + 16.6);
+    const zk = K.pop(u, a + 4.4, SPRING.gentle);
     if (zk > 0) { ctx.save(); ctx.globalAlpha = 0.55 * Math.min(1, zk); ctx.beginPath(); ctx.ellipse(495, 722, 300 * zk, 52 * zk, 0, 0, TAU); ctx.fillStyle = C.tealSoft; ctx.fill(); ctx.restore(); }
-    const ax = lerp(170, 70, back), bx = lerp(780, 890, back) - near * 150;
+    const ax = lerp(170, 70, back), bx = lerp(815, 895, back) - near * 150;
     const mvA = back > 0 && back < 1, mvB = mvA || (near > 0 && near < 1);
-    const smile = u > a + 9.8;
-    K.person(ctx, ax, FEET + 6, 1.0, { ...BY[0], mood: smile ? 'happy' : 'calm', look: [1, 0.5], blinkU: u, blinkOff: 3, walk: step(u, mvA), bob: hopBob(u, mvA), armL: K.POSE.relaxed, armR: smile && u < a + 12 ? [2.4 + Math.sin(u * TAU * 0.75) * 0.18, -0.2] : K.POSE.relaxed });
+    const smile = u > a + 9;
+    K.person(ctx, ax, FEET + 6, 1.0, { ...BY[0], mood: smile ? 'happy' : 'calm', look: [1, 0.5], blinkU: u, blinkOff: 3, walk: step(u, mvA), bob: hopBob(u, mvA), armL: K.POSE.relaxed, armR: smile && u < a + 11.4 ? [2.4 + Math.sin(u * TAU * 0.75) * 0.18, -0.2] : K.POSE.relaxed });
     K.person(ctx, bx, FEET + 6, 1.0, { ...BY[1], flip: true, mood: near > 0.5 ? 'happy' : 'calm', look: [1, 0.4], blinkU: u, blinkOff: 1, walk: step(u, mvB), bob: hopBob(u, mvB), armL: K.POSE.relaxed, armR: K.POSE.relaxed });
     K.dad(ctx, 570, 712, 1.0, { sit: 1, mood: near > 0.9 ? 'happy' : 'worried', look: near > 0.5 ? [1, -0.6] : [-1, 0.4], blinkU: u, blinkOff: 2, tilt: -0.06, armL: [1.25, 0.25], armR: K.POSE.relaxed });
-    const on = u > a + 16.2, hy = 710 - 153 * 1.08;
-    K.kid(ctx, 415, 710, 1.08, { sit: 1, mood: calm > 0.7 ? 'calm' : u > a + 6 ? 'worried' : 'overwhelm', defenders: on ? K.DEF : null, tilt: 0.1 * (1 - calm) + Math.sin(u * TAU * 0.5) * 0.05 * calm, lean: 0.06 * (1 - calm), armL: armMix(K.POSE.ears, K.POSE.hug, calm), armR: armMix(K.POSE.ears, K.POSE.hug, calm) });
-    if (!on && u > a + 14.8) { const dk = K.ease(u, a + 14.8, a + 16.2); K.defendersIcon(ctx, lerp(545, 415, dk), lerp(505, hy, dk) - Math.sin(dk * Math.PI) * 70, lerp(0.7, 1.02, dk), K.DEF, lerp(0.4, 0, dk)); }
-    tag(ctx, u, a + 12.9, a + 15.6, 730, 300, 'Can I help?', { bg: BY[1].top, fg: C.white });
-    tag(ctx, u, a + 5.4, a + 19, 480, 222, 'Space, patience, a kind word', { bg: C.teal, fg: C.white });
+    const on = u > a + 16, hy = 710 - 153 * 1.08;
+    K.kid(ctx, 415, 710, 1.08, { sit: 1, mood: calm > 0.7 ? 'calm' : u > a + 6 ? 'worried' : 'overwhelm', defenders: on ? K.DEF : null, tilt: 0.1 * (1 - calm) + Math.sin(u * TAU * 0.5) * 0.05 * calm, lean: 0.06 * (1 - calm), armL: armMix(K.POSE.ears, K.POSE.hold, calm), armR: armMix(K.POSE.ears, K.POSE.hold, calm) });
+    if (!on && u > a + 14.6) { const dk = K.ease(u, a + 14.6, a + 16); K.defendersIcon(ctx, lerp(545, 415, dk), lerp(505, hy, dk) - Math.sin(dk * Math.PI) * 70, lerp(0.7, 1.02, dk), K.DEF, lerp(0.4, 0, dk)); }
+    tag(ctx, u, a + 12.5, a + 15.2, 730, 300, 'Can I help?', { bg: BY[1].top, fg: C.white });
+    tag(ctx, u, a + 4.6, a + 19, 480, 222, 'Space, patience, a kind word', { bg: C.teal, fg: C.white });
   }
 }
 function kickCard(ctx, u, a, b, kick, str) {
@@ -356,12 +356,12 @@ function veil(u, plan) {
     v = Math.max(v, w);
   });
   // the people nearby: left plays, then the right answers and carries the five points
-  const n = plan ? K.ease(u, NB - 0.7, NB - 0.1) * (1 - K.ease(u, NB + 3.8, NB + 4.4)) : 0.8 * K.ease(u, NB + 4, NB + 4.6) * (1 - K.ease(u, T3 - 1.6, T3 - 1));
+  const n = plan ? K.ease(u, NB - 0.7, NB - 0.1) * (1 - K.ease(u, NB + 3, NB + 3.6)) : 0.8 * K.ease(u, NB + 3.3, NB + 3.9) * (1 - K.ease(u, T3 - 1.6, T3 - 1));
   return Math.max(v, n);
 }
 const BATT = [
-  [[0, 1], [20, 0.8], [29, 0.62], [41.2, 0.38], [53, 0.24], [64.5, 0.08], [77, 0.02], [NB - 0.3, 0.1], [NB + 3, 0.02]],
-  [[0, 1], [17, 0.97], [30.5, 0.93], [45, 0.86], [56, 0.94], [66.4, 0.72], [69.6, 0.9], [79.4, 0.82], [NB - 0.3, 0.1], [NB + 5.4, 0.16], [NB + 9.8, 0.22], [NB + 13.4, 0.3], [NB + 16.4, 0.4]],
+  [[0, 1], [20, 0.8], [29, 0.62], [41.2, 0.38], [53, 0.24], [64.5, 0.08], [77, 0.02], [NB - 0.3, 0.1], [NB + 2.6, 0.02]],
+  [[0, 1], [17, 0.97], [30.5, 0.93], [45, 0.86], [56, 0.94], [66.4, 0.72], [69.6, 0.9], [79.4, 0.82], [NB - 0.3, 0.1], [NB + 4.6, 0.16], [NB + 9.2, 0.22], [NB + 13, 0.3], [NB + 16.2, 0.4]],
 ];
 const battV = (u, plan) => M.springKeys(u, BATT[plan], SPRING.gentle);
 function batteryCard(ctx, x, y, v, k, pulse = 0) {
@@ -370,7 +370,7 @@ function batteryCard(ctx, x, y, v, k, pulse = 0) {
   ctx.save(); ctx.globalAlpha *= 0.14; K.rr(ctx, x - 12, y - 4, 344, 148, 0, '#000'); ctx.restore();
   K.rr(ctx, x - 18, y - 12, 344, 148, 0, C.paper);
   K.battery(ctx, x, y, 290, 76, v);
-  M.text(ctx, "Charlie's energy", x + 152, y + 119, F(36, 700), C.ink, 'center');
+  M.text(ctx, "Charlie's energy", x + 152, y + 119, F(40, 700), C.ink, 'center');
   ctx.restore();
 }
 function halfScene(ctx, u, plan, shift) {
@@ -383,7 +383,7 @@ function halfScene(ctx, u, plan, shift) {
   const g = plan ? 0 : greyAt(u);
   if (g > 0) { ctx.save(); ctx.globalCompositeOperation = 'saturation'; ctx.globalAlpha = 0.42 * g; ctx.fillStyle = '#808080'; ctx.fillRect(0, 0, HW, H); ctx.restore(); }
   const v = veil(u, plan);
-  if (v > 0) { ctx.save(); ctx.globalAlpha = 0.5 * v; ctx.fillStyle = C.paper; ctx.fillRect(0, 0, HW, H); ctx.restore(); }
+  if (v > 0) { ctx.save(); ctx.globalAlpha = 0.42 * v; ctx.fillStyle = C.paper; ctx.fillRect(0, 0, HW, H); ctx.restore(); }
   ctx.restore();
 }
 function halfHeader(ctx, u, plan, shift) {
@@ -418,6 +418,7 @@ function clock(ctx, u) {
   M.text(ctx, CLOCK[i][1], 0, 22 + (1 - roll) * 90, f, C.paper, 'center', 1);
   ctx.restore(); ctx.restore();
 }
+const NAMES = ['Arriving', 'Choosing a spot', 'The fast jet', 'Lunch', 'Too much', 'Going home'];
 const TIPS = [
   ['Arrive when the gates open', 'The first hour is the calmest.'],
   ['Sit at the end of the crowd line', 'Fewer people, and away from the loudspeakers.'],
@@ -436,12 +437,13 @@ function sceneSplit(ctx, u) {
   clock(ctx, u);
   // a promise to the viewer, right at the start
   const ck = Math.min(springU(u, 0.5, SPRING.gentle), 1 - E.inCubic(prog(u, 4.4, 5)));
-  if (ck > 0.01) { ctx.save(); ctx.translate(60, 76 - (1 - ck) * 200); K.pill(ctx, 0, 0, 'A calm video: no sudden sounds, no flashing', { size: 36, bg: C.teal, fg: C.white }); ctx.restore(); }
+  if (ck > 0.01) { ctx.save(); ctx.translate(60, 76 - (1 - ck) * 200); K.pill(ctx, 0, 0, 'A calm video: no sudden sounds, no flashing', { size: 40, bg: C.teal, fg: C.white }); ctx.restore(); }
   K.caption(ctx, u, 0.2, 7.7, 'Same family. Same airshow. Two very different days.', { w: 1010, size: 70 });
   K.caption(ctx, u, 8.3, 13.5, 'Charlie is autistic. Noise and crowds use up energy fast.', { w: 1120, size: 66 });
-  kickCard(ctx, u, NB + 0.3, NB + 4.3, 'IF YOU ARE STANDING NEARBY', 'The people around you change the day too');
-  POINTS.forEach((str, i) => K.caption(ctx, u, NB + 4.4 + i * 2.6, NB + 7 + i * 2.6, str, { w: i === 4 ? 1640 : 1400, size: 68 }));
-  K.caption(ctx, u, NB + 17.4, T3 - 0.7, 'Kindness costs nothing.', { w: 980, size: 84, dark: true });
+  kickCard(ctx, u, NB + 0.3, NB + 3.3, 'IF YOU ARE STANDING NEARBY', 'The people around you change the day too');
+  POINTS.forEach((str, i) => K.caption(ctx, u, NB + 3.4 + i * 2.8, NB + 6.2 + i * 2.8, str, { w: i === 4 ? 1640 : 1400, size: 68 }));
+  K.caption(ctx, u, NB + 17.4, T3 - 0.7, 'Kindness costs nothing.', { w: 1120, size: 84, dark: true });
+  NAMES.forEach((str, i) => K.caption(ctx, u, MO[i] + 0.15, MO[i] + (i === 0 ? 8 : 7.6), str, { num: i + 1, w: 300 + str.length * 38, size: 70 }));
   TIPS.forEach(([str, sub], i) => { const a = MO[i] + (i === 0 ? 8 : 7.6); K.caption(ctx, u, a, MO[i] + 11.3, str, { num: i + 1, sub, w: 1560 }); });
 }
 
@@ -460,18 +462,22 @@ function tileIcon(ctx, kind, u) {
 }
 function sceneShows(ctx, u) {
   M.fill(ctx, C.night);
-  const tk = K.pop(u, T3 + 0.2, SPRING.gentle);
-  M.text(ctx, 'FOR SHOW ORGANISERS', 112 - (1 - tk) * 80, 92, F(36, 800), C.yellow, 'left', 3);
-  M.text(ctx, 'A third day: when the airshow plans too', 110 - (1 - tk) * 120, 186, F(86, 800), C.paper);
+  const tk = K.pop(u, T3 + 0.6, SPRING.gentle);
+  if (tk > 0) {
+    ctx.save(); ctx.globalAlpha = Math.min(1, tk * 2.5);
+    M.text(ctx, 'FOR SHOW ORGANISERS', 112 - (1 - tk) * 80, 92, F(36, 800), C.yellow, 'left', 3);
+    M.text(ctx, 'A third day: when the airshow plans too', 110 - (1 - tk) * 120, 186, F(86, 800), C.paper);
+    ctx.restore();
+  }
   TILES.forEach(([label, kind], i) => {
-    const a = T3 + 2.5 + i * 2, k = K.pop(u, a, SPRING.bouncy);
+    const a = T3 + 1.8 + i * 2, k = K.pop(u, a, SPRING.bouncy);
     if (k <= 0) return;
     const col = i % 3, row = Math.floor(i / 3), w = 540, h = 290, x = 110 + col * 580, y = 250 + row * 320 + (1 - k) * 120;
     K.rr(ctx, x, y, w, h, 0, C.paper);
-    K.rr(ctx, x + 26, y + h / 2 - 90, 180, 180, 0, '#EFE7D6');
-    ctx.save(); ctx.translate(x + 116, y + h / 2); const s = 0.85 + 0.15 * Math.min(1.1, k); ctx.scale(s, s); tileIcon(ctx, kind, u); ctx.restore();
-    const f = F(46, 700), lines = K.wrap(ctx, label, f, w - 250);
-    lines.forEach((l, j) => M.text(ctx, l, x + 232, y + h / 2 + 16 - (lines.length - 1) * 27 + j * 54, f, C.ink));
+    K.rr(ctx, x + 22, y + h / 2 - 80, 160, 160, 0, '#EFE7D6');
+    ctx.save(); ctx.translate(x + 102, y + h / 2); const s = 0.72 + 0.14 * Math.min(1.1, k); ctx.scale(s, s); tileIcon(ctx, kind, u); ctx.restore();
+    const f = F(50, 700), lines = K.wrap(ctx, label, f, w - 226);
+    lines.forEach((l, j) => M.text(ctx, l, x + 204, y + h / 2 + 17 - (lines.length - 1) * 29 + j * 58, f, C.ink));
   });
   const bk = K.pop(u, T3 + 15, SPRING.gentle);
   if (bk > 0) M.text(ctx, 'Small changes. A bigger welcome.', 112 - (1 - bk) * 80, 990, F(62, 700), C.tealSoft);
@@ -482,9 +488,9 @@ function scenePayoff(ctx, u) {
   const gy = 560, feet = 750;
   K.sky(ctx); K.clouds(ctx, u, 190, 5); K.horizon(ctx, gy); K.ground(ctx, gy); K.fence(ctx, gy + 54);
   K.crowd(ctx, 1560, 1900, 735, 5, 0.9, 9, 1, u);
-  const px = lerp(-350, 2300, prog(u, PAY - 0.4, PAY + 9.5)), py = 345 + Math.sin(u * 0.7) * 18;
-  K.rings(ctx, px - 60, py, 210, C.teal, u, 3, 12);
-  K.propPlane(ctx, px, py, 0.9, -0.05 + Math.cos(u * 0.7) * 0.03, u);
+  const px = lerp(420, 2250, prog(u, PAY - 0.4, PAY + 9.5)), py = 180 + Math.sin(u * 0.7) * 12;
+  K.rings(ctx, px - 40, py, 180, C.teal, u, 3, 11);
+  K.propPlane(ctx, px, py, 0.8, -0.05 + Math.cos(u * 0.7) * 0.03, u);
   const look = [clamp((px - 900) / 500, -1, 1), -1];
   K.beth(ctx, 1290, feet + 12, 1.18, { mood: 'happy', headphones: '#3A3F4B', hold: 'camera', armL: [1.7, 1.2], armR: [1.7, 1.2], look, tilt: -0.06 });
   K.dad(ctx, 900, feet + 8, 1.2, { mood: 'happy', look, blinkU: u, blinkOff: 2, armL: K.POSE.relaxed, armR: K.POSE.relaxed, tilt: -0.04 });
