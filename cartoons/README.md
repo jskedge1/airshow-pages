@@ -49,12 +49,12 @@ times are the November 2026 timetable, so the film says to check the summer 2027
 
 ## The airshow train map: `train-map/`
 One film in the `_rail` design that shows the whole rail picture on a moving map of Great Britain (the `GB` outline now
-includes Scotland). About 2 min 55, 120 bpm, 16:9 and 9:16.
+includes Scotland). About 3 min, 120 bpm, 16:9 and 9:16.
 
 | Part | What it shows |
 |------|---------------|
 | 1 The network | The eleven London stations, then the main lines out of each one in the train company's colour |
-| 2 A worked example | Eastbourne to London Victoria (Southern), the Tube links from Victoria, then Liverpool Street to Clacton-on-Sea |
+| 2 A worked example | Eastbourne to London Victoria (Southern), the Tube links from Victoria, every other Tube link between the main stations line by line (and the short walks), then Liverpool Street to Clacton-on-Sea |
 | 3 Every show | 15 shows: the line from London, the change, the station, and the last leg (walk, shuttle, bus or taxi) with a real aircraft cut-out |
 | 4 Skip London | CrossCountry north to south, the west side, east to west, and Wales and the West |
 | End card | The logo and ukairshowguide.co.uk/airshow-public-transport |
@@ -72,11 +72,21 @@ Two shows are not in the site data yet, so their facts come from the organisers 
   (GWR and Torbay Council 2026 guidance). Paignton is not in `journey-planner.js`, so its position is set by hand in
   `EXTRA_STA` and the Newton Abbot to Paignton branch is drawn as a straight GWR line.
 
+Buses, trams and shuttles on the show cards come from `public-transport.html` (the Getting there topics). Everything was
+checked against operator and council pages on 24 Nov 2026, and three things differ from the site data on purpose:
+- Tube times: `london-links.js` is shorter than TfL's timetable data for Victoria to Paddington (12, TfL 18), Victoria to
+  Liverpool Street (18, TfL 22), Paddington to Marylebone (2, TfL 3), Waterloo to Marylebone (9, TfL 11), Waterloo to
+  Paddington (12, TfL 14), London Bridge to Euston (11, TfL 12) and to Kings Cross St Pancras (9, TfL 10). The film shows
+  TfL's (the `TFL` table in `film.part.js`); `london-links.js` itself is unchanged.
+- Ayr: the site says a 15 to 20 minute walk; South Ayrshire Council says 0.6 miles, about 10 minutes. The film says
+  "about 0.6 miles".
+- Blackpool: the train page says change at Preston; the planner also lists a direct Euston to Blackpool North line.
+
 Build and render (the motion-reel skill was not installed in that session, so `_tools/` holds small stand-ins):
 ```
 node _rail/map/gen-data.mjs            # only after journey-planner.js or london-links.js change
 python3 _rail/build_map.py             # writes train-map/film.js and copies lib, fonts and assets
-python3 _tools/beats.py train-map 120 175.5
+python3 _tools/beats.py train-map 120 181
 NODE_PATH=$(npm root -g) node _tools/shots.mjs train-map 9x16 every:3.5 --sheet 5    # contact sheets
 NODE_PATH=$(npm root -g) node _tools/render.mjs --film train-map --format 16x9       # and 9x16
 python3 _tools/audio.py train-map --mux                                              # music, sound effects, final MP4s

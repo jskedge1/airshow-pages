@@ -196,6 +196,10 @@ const TB = [
   { k: 'walk', title: 'Or a short walk', walks: [['KGX', 'STP'], ['KGX', 'EUS'], ['LST', 'FST'], ['WAT', 'CHX']] },
 ];
 const TB_STEP = 4.5;
+// Tube run times checked against TfL's timetable data on 24 Nov 2026. Where london-links.js gives a shorter time
+// than TfL, the film shows TfL's (london-links.js has 12, 18, 2, 9, 12, 11 and 9 for these).
+const TFL = { 'VIC-PAD': 18, 'VIC-LST': 22, 'PAD-MYB': 3, 'WAT-MYB': 11, 'WAT-PAD': 14, 'LBG-EUS': 12, 'LBG-KGX': 10 };
+const tmin = (x, y, m) => TFL[x + '-' + y] ?? m;
 HEADS.push({ a: EX_A, tag: '2  A WORKED EXAMPLE', title: 'Eastbourne to any show' });
 const V_SE = fitBox([-0.45, 50.72, 1.3, 51.9], 0.12);
 camTo(EX_A + 2.5, V_SE, 3);
@@ -214,7 +218,7 @@ hit(EX_A, 'section', 'impact');
   const TUBE = { victoria: ['victoria', 'Victoria line'], circle: ['circle', 'Circle line'] };
   const links = [['EUS', 'London Euston'], ['KGX', 'London Kings Cross'], ['PAD', 'London Paddington'], ['LST', 'London Liverpool Street']].map(([c, key]) => {
     const st = DATA.VIC[key]; if (!st || st.length !== 1) throw new Error('expected one Tube step to ' + key);
-    return { c, line: TUBE[st[0].lines[0]], m: st[0].m, tn: st[0].to };
+    return { c, line: TUBE[st[0].lines[0]], m: tmin('VIC', c, st[0].m), tn: st[0].to };
   });
   const g = { a: a2 - 1, off: aT - 0.7, v: V_LON, items: [{ text: 'Victoria', at: LL('VIC'), a: a2 - 1 }], avoid: [] };
   TERMINI.forEach((c) => DOTS.push({ at: LL(c), a: a2 - 1.5, off: a3 - 2.6, r: c === 'VIC' ? 15 : 9 }));
@@ -228,7 +232,7 @@ hit(EX_A, 'section', 'impact');
   });
   GROUPS.push(g);
   CARDS.push({ a: a2 - 2, b: aT - 0.2, edge: OPS.victoria.c, title: '2. Cross London by Tube', chips: [['Victoria line', 'victoria'], ['Circle line', 'circle']],
-    rows: links.map((l) => [(l.c === 'KGX' ? 'KINGS CROSS ST PANCRAS' : SHORT(l.c).toUpperCase()), l.line[1] + ', ' + l.m + ' minutes']) });
+    rows: links.map((l) => [(l.c === 'KGX' ? 'KINGS CROSS ST PANCRAS' : SHORT(l.c).toUpperCase()), l.line[1] + ', about ' + l.m + ' min']) });
   // every other Tube link between the main stations, line by line (london-links.js), and the planner's short walks
   HEADS.push({ a: aT, tag: '2  A WORKED EXAMPLE', title: 'Tube links between stations' });
   const tn = (c) => (c === 'KGX' ? 'Kings Cross St Pancras' : SHORT(c));
@@ -239,7 +243,7 @@ hit(EX_A, 'section', 'impact');
     (t.pairs || []).forEach(([x, y], i) => {
       const st = DATA.TUBE[x + '-' + y]; if (!st || st.length !== 1 || !st[0].lines.includes(t.k)) throw new Error('no single ' + t.k + ' step from ' + x + ' to ' + y);
       st[0].lines.forEach((l) => { if (!chips.some((q) => q[1] === tk(l))) chips.push([TNAME[l], tk(l)]); });
-      rows.push([(st[0].from + ' to ' + st[0].to).toUpperCase(), st[0].m + ' minutes' + (st[0].br ? ', ' + st[0].br + ' branch' : '')]);
+      rows.push([(st[0].from + ' to ' + st[0].to).toUpperCase(), 'About ' + tmin(x, y, st[0].m) + ' minutes' + (st[0].br ? ', ' + st[0].br + ' branch' : '')]);
       LINES.push({ pts: [LL(x), LL(y)], op: tk(t.k), a: a + 0.3 + i * 0.5, b: a + 1.6 + i * 0.5, off: a + TB_STEP - 0.3, casing: true });
       hit(a + 0.3 + i * 0.5, 'tube', 'whoosh', { len: 0.4, from: 700, to: 1500 + i * 200 });
     });
@@ -288,8 +292,8 @@ const SH = [
   { k: 'cosford', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Birmingham and Wolverhampton', 'EUS', 'BHM'], ['West Midlands Railway', 'Birmingham to Shrewsbury via Cosford', 'BHM', 'COS']], then: 'Walk, about 300 metres', how: 'walk', jet: 'a400', bus: ['BUS', 'None on Sundays. Take the train'], mode: 'Walk' },
   { k: 'midlands', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Birmingham and Wolverhampton', 'EUS', 'BHM'], ['West Midlands Railway', 'Cross City line to Redditch', 'BHM', 'RDC']], then: 'Diamond 247 bus to Ragley Hall', how: 'bus', jet: 'hawk', bus: ['SUNDAY', 'No 247 bus, so book a taxi'], mode: 'Bus 247' },
   { k: 'southport', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'WGN'], ['Northern', 'Manchester to Southport', 'WGW', 'SOP']], change: 'Wigan (walk between stations)', then: 'Walk, 10 to 15 minutes', how: 'walk', jet: 'typhoon', bus: ['BUS FROM LIVERPOOL', 'Arriva 47 and 300'], mode: 'Walk' },
-  { k: 'blackpool', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'PRE'], ['Northern', 'Manchester to Blackpool North', 'PRE', 'BPN']], then: 'Walk, about 15 min to the Tower', how: 'walk', jet: 'hawk', bus: ['OR TRAM', 'North Pier or Manchester Square'], mode: 'Walk' },
-  { k: 'ayr', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'GLC'], ['ScotRail', 'Glasgow Central to Ayr', 'GLC', 'AYR']], then: 'Walk, 15 to 20 minutes', how: 'walk', jet: 'typhoon', bus: ['BUS FROM GLASGOW', 'Stagecoach X77'], mode: 'Walk' },
+  { k: 'blackpool', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'PRE'], ['Northern', 'Manchester to Blackpool North', 'PRE', 'BPN']], then: 'Walk, about 15 min to the Tower', how: 'walk', jet: 'hawk', bus: ['TRAM STOPS OPEN', 'North Pier and Manchester Square'], mode: 'Walk' },
+  { k: 'ayr', from: 'EUS', legs: [['Avanti West Coast', 'Euston to Glasgow', 'EUS', 'GLC'], ['ScotRail', 'Glasgow Central to Ayr', 'GLC', 'AYR']], then: 'Walk, about 0.6 miles', how: 'walk', jet: 'typhoon', bus: ['BUS FROM GLASGOW', 'Stagecoach X77'], mode: 'Walk' },
 ];
 Object.entries(EXTRA_STA).forEach(([c, v]) => { DATA.STA[c] = v; });
 const SH_A = EX_END, SH_STEP = 9, XC_A = SH_A + SH.length * SH_STEP;
