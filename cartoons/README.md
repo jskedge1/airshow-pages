@@ -59,6 +59,10 @@ includes Scotland). About 3 min, 120 bpm, 16:9 and 9:16.
 | 4 Skip London | CrossCountry north to south, the west side, east to west, and Wales and the West |
 | End card | The logo and ukairshowguide.co.uk/airshow-public-transport |
 
+The look: a real coastline (`_rail/map/coast.gen.js`, made by `gen-coast.mjs` from Natural Earth 1:10m, public domain),
+a sea with drifting waves, a navy section bar with four progress squares, sky and clouds, white lights running along
+each finished route, a pulse on each show pin, and a train in the current company's colours crossing the bottom.
+
 Sources: `_rail/map/gen-data.mjs` reads `journey-planner.js` (STA, LINES, SHOWS) and `london-links.js` and writes
 `_rail/map/data.gen.js`. `_rail/map/film.part.js` holds the scenes; every leg is named by operator and line, and the build
 stops if a station is not on the line named, so nothing on the map is invented. The last legs and times come from
@@ -85,6 +89,7 @@ checked against operator and council pages on 24 Nov 2026, and three things diff
 Build and render (the motion-reel skill was not installed in that session, so `_tools/` holds small stand-ins):
 ```
 node _rail/map/gen-data.mjs            # only after journey-planner.js or london-links.js change
+# gen-coast.mjs only needs running again to change the coastline detail (see the top of that file)
 python3 _rail/build_map.py             # writes train-map/film.js and copies lib, fonts and assets
 python3 _tools/beats.py train-map 120 181
 NODE_PATH=$(npm root -g) node _tools/shots.mjs train-map 9x16 every:3.5 --sheet 5    # contact sheets

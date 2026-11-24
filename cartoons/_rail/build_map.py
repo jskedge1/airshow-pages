@@ -9,6 +9,6 @@ shutil.copy(B / 'toon.js', d / 'lib' / 'toon.js'); shutil.copy(src / 'lib' / 'mo
 for w in (src / 'fonts').glob('*.woff2'): shutil.copy(w, d / 'fonts' / w.name)
 for a in (ROOT / 'volunteer' / 'assets' / 'aircraft').glob('*'): shutil.copy(a, d / 'assets' / 'aircraft' / a.name)
 shutil.copy(ROOT / 'volunteer' / 'assets' / 'logo.png', d / 'assets' / 'logo.png')
-head = (B / 'head.part.js').read_text().replace('routes/<film>.js + ride.part.js + body.part.js', 'map/data.gen.js + map/film.part.js (build_map.py)')
-(d / 'film.js').write_text('\n'.join([head, (B / 'map' / 'data.gen.js').read_text(), (B / 'map' / 'film.part.js').read_text()]))
+head = (B / 'head.part.js').read_text().replace('routes/<film>.js + ride.part.js + body.part.js', 'map/data.gen.js + map/coast.gen.js + map/film.part.js (build_map.py)')
+(d / 'film.js').write_text('\n'.join([head, (B / 'map' / 'data.gen.js').read_text(), (B / 'map' / 'coast.gen.js').read_text(), (B / 'map' / 'film.part.js').read_text()]))
 print('built train-map')

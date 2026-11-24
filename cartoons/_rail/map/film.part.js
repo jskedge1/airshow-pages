@@ -28,28 +28,14 @@ function seg(op, name, a, b) {
 const whole = (op, name) => { const L = DATA.LINES.find((l) => l[0] === op && l[1] === name); if (!L) throw new Error('no line ' + name); return seg(op, name, L[2][0], L[2][L[2].length - 1]); };
 
 // ---------------------------------------------------------------- layout
-const [RX, RY, RW, RH] = pick({ '16x9': [800, 60, 1024, 960], '9x16': [40, 430, 1000, 560] });
+const [RX, RY, RW, RH] = pick({ '16x9': [800, 60, 1024, 890], '9x16': [40, 430, 1000, 560] });
 const COLX = S.x, COLW = pick({ '16x9': 664, '9x16': 858 });
 const LFS = pick({ '16x9': 30, '9x16': 30 });
 
 // ---------------------------------------------------------------- land
-// A simplified outline of Great Britain (lon, lat), clockwise from Kent.
-const GB = [[1.33, 51.13], [0.97, 50.92], [0.58, 50.85], [0.33, 50.74], [0.2, 50.74], [-0.14, 50.82], [-0.79, 50.73], [-1.09, 50.78], [-1.4, 50.82], [-1.88, 50.71],
-  [-2.45, 50.58], [-2.94, 50.72], [-3.4, 50.62], [-3.5, 50.42], [-3.64, 50.22], [-4.14, 50.36], [-5.2, 49.96], [-5.71, 50.07], [-5.48, 50.21], [-5.08, 50.42],
-  [-4.53, 51.02], [-3.47, 51.21], [-2.98, 51.35], [-2.7, 51.5], [-2.45, 51.7], [-2.67, 51.64], [-2.98, 51.55], [-3.17, 51.46], [-3.27, 51.39],
-  [-3.7, 51.48], [-3.9, 51.6], [-4.0, 51.56], [-4.3, 51.56], [-4.16, 51.68], [-4.7, 51.67], [-5.3, 51.88], [-4.98, 52.0], [-4.66, 52.12],
-  [-4.08, 52.41], [-4.05, 52.72], [-4.41, 52.89], [-4.79, 52.78], [-4.62, 52.94], [-4.3, 53.12], [-4.63, 53.3], [-4.34, 53.42], [-3.83, 53.33],
-  [-3.49, 53.32], [-3.1, 53.25], [-3.12, 53.4], [-3.02, 53.45], [-3.08, 53.62], [-2.98, 53.72], [-3.07, 53.8], [-3.05, 53.93], [-2.87, 54.07],
-  [-3.23, 54.11], [-3.64, 54.49], [-3.55, 54.66], [-3.1, 54.95], [-3.6, 54.98], [-4.86, 54.64], [-5.15, 54.86], [-5.0, 55.0], [-4.99, 55.14],
-  [-4.86, 55.24], [-4.66, 55.44], [-4.68, 55.62], [-4.87, 55.68], [-4.9, 55.94], [-4.6, 55.93], [-4.88, 56.0], [-5.2, 55.9], [-5.35, 55.75],
-  [-5.5, 55.35], [-5.78, 55.3], [-5.7, 55.6], [-5.6, 56.0], [-5.5, 56.4], [-6.2, 56.7], [-5.8, 57.0], [-5.7, 57.3], [-5.8, 57.6], [-5.6, 57.9],
-  [-5.3, 58.2], [-5.0, 58.62], [-4.0, 58.56], [-3.37, 58.67], [-3.02, 58.64], [-3.1, 58.3], [-3.8, 57.95], [-4.2, 57.87], [-4.0, 57.7], [-4.25, 57.5],
-  [-3.6, 57.65], [-3.3, 57.72], [-2.1, 57.7], [-1.78, 57.5], [-2.07, 57.14], [-2.2, 56.96], [-2.45, 56.7], [-2.72, 56.5], [-2.95, 56.46],
-  [-2.8, 56.43], [-2.6, 56.28], [-3.0, 56.18], [-3.4, 56.02], [-3.2, 55.98], [-2.5, 56.0], [-2.15, 55.9], [-2.0, 55.77],
-  [-1.6, 55.6], [-1.43, 55.0], [-1.2, 54.69], [-0.61, 54.49], [-0.38, 54.28], [-0.08, 54.12], [-0.19, 54.08], [0.11, 53.58], [-0.33, 53.72],
-  [-0.07, 53.57], [0.34, 53.14], [-0.02, 52.97], [0.4, 52.78], [0.49, 52.94], [1.3, 52.93], [1.73, 52.6], [1.75, 52.47], [1.68, 52.32],
-  [1.35, 51.96], [1.29, 51.88], [1.2, 51.79], [1.0, 51.76], [0.95, 51.62], [0.75, 51.52], [0.36, 51.47], [0.6, 51.45], [0.76, 51.44],
-  [1.02, 51.36], [1.38, 51.39], [1.45, 51.37], [1.42, 51.33], [1.4, 51.22]];
+// The coastline is COAST (coast.gen.js, Natural Earth). uk = Great Britain, Northern Ireland and the islands; far = neighbours.
+const BOXES = { uk: COAST.uk.map((r) => [Math.min(...r.map((q) => q[0])), Math.min(...r.map((q) => q[1])), Math.max(...r.map((q) => q[0])), Math.max(...r.map((q) => q[1]))]), far: null };
+BOXES.far = COAST.far.map((r) => [Math.min(...r.map((q) => q[0])), Math.min(...r.map((q) => q[1])), Math.max(...r.map((q) => q[0])), Math.max(...r.map((q) => q[1]))]);
 const THAMES = [[-0.215, 51.487], [-0.175, 51.483], [-0.145, 51.485], [-0.125, 51.487], [-0.12, 51.5], [-0.115, 51.508], [-0.095, 51.509], [-0.075, 51.506], [-0.055, 51.503], [-0.03, 51.506]];
 
 // ---------------------------------------------------------------- camera
@@ -124,7 +110,7 @@ const EX_END = EX_A + 15 + 14 + 6 * 4.5 + 3 + 20;   // 98
 HEADS.push({ a: NET_A, tag: '1  THE NETWORK', title: 'Eleven London stations' });
 camTo(NET_A + 2.5, V_LON, 3.5);
 hit(NET_A - 1, 'zoom', 'whoosh', { len: 0.8, from: 400, to: 1800 });
-CARDS.push({ a: NET_A + 1.5, b: NET_L - 0.5, edge: C.teal, title: 'Which station do you need?', rows: [['LONDON HAS', 'Eleven main stations'], ['EACH ONE', 'Serves its own part of the country'], ['SO FIRST', 'Find the one for your show']] });
+CARDS.push({ a: NET_A + 1.5, b: NET_L - 0.5, op: 'avanti', edge: C.teal, title: 'Which station do you need?', rows: [['LONDON HAS', 'Eleven main stations'], ['EACH ONE', 'Serves its own part of the country'], ['SO FIRST', 'Find the one for your show']] });
 {
   const g = { a: NET_A, off: NET_L - 2.5, v: V_LON, items: [], avoid: [] };
   TERMINI.forEach((c, i) => {
@@ -144,7 +130,7 @@ NET.forEach((n, i) => {
   n.t.forEach((c) => DOTS.push({ at: LL(c), a, off: a + NET_STEP, r: 12 }));
   GROUPS.push({ a, off: a + NET_STEP - 0.4, v: V_MAIN, items: n.lab.map((c, j) => ({ text: SHORT(c), at: LL(c), a: a + 2.6 + j * 0.3 })), avoid: [] });
   n.lab.forEach((c) => DOTS.push({ at: LL(c), a: a + 2.6, off: a + NET_STEP - 0.4, r: 9 }));
-  CARDS.push({ a: a, b: a + NET_STEP, edge: lineCol(OPN[n.ops[0]]), title: n.title, chips: n.ops, rows: [['MAIN LINE', n.main], ['GOES TO', n.to]] });
+  CARDS.push({ a: a, b: a + NET_STEP, op: OPN[n.ops[0]], edge: lineCol(OPN[n.ops[0]]), title: n.title, chips: n.ops, rows: [['MAIN LINE', n.main], ['GOES TO', n.to]] });
   hit(a + 0.3, 'line', 'whoosh', { len: 0.6, from: 500, to: 1400 + i * 120 }); hit(a, 'card', 'tick');
 });
 
@@ -174,7 +160,7 @@ hit(EX_A, 'section', 'impact');
   hit(a1 + 0.5, 'train', 'whoosh', { len: 1.2, from: 400, to: 1200 });
   DOTS.push({ at: LL('EBN'), a: a1, off: end, r: 14 }, { at: LL('VIC'), a: a1 + 5, off: end, r: 14 });
   GROUPS.push({ a: a1, off: a2 - 2.6, v: V_SE, items: [{ text: 'Eastbourne', at: LL('EBN'), a: a1 }, { text: 'London Victoria', at: LL('VIC'), a: a1 + 5 }], avoid: dense(s1.pts) });
-  CARDS.push({ a: EX_A + 1.5, b: a2 - 2, edge: lineCol('southern'), title: '1. Train to London', chips: ['Southern'], rows: [['FROM', 'Eastbourne'], ['TO', 'London Victoria'], ['HOW LONG', 'About 1 hour 25 minutes'], ['HOW OFTEN', 'Every 30 min, hourly on Sundays']] });
+  CARDS.push({ a: EX_A + 1.5, b: a2 - 2, op: 'southern', edge: lineCol('southern'), title: '1. Train to London', chips: ['Southern'], rows: [['FROM', 'Eastbourne'], ['TO', 'London Victoria'], ['HOW LONG', 'About 1 hour 25 minutes'], ['HOW OFTEN', 'Every 30 min, hourly on Sundays']] });
   // across London: the Tube links from Victoria, as london-links.js gives them
   camTo(a2, V_LON, 3);
   hit(a2 - 2.5, 'zoom', 'whoosh', { len: 0.8, from: 400, to: 1800 });
@@ -235,7 +221,7 @@ hit(EX_A, 'section', 'impact');
     { text: 'Eastbourne', at: LL('EBN'), a: a3 - 0.5 }, { text: 'London', at: LL('VIC'), a: a3 - 0.5 }, { text: 'Clacton-on-Sea', at: LL('CLT'), a: a3 + 6 },
     { text: 'Clacton Air Show', xy: (v) => pinXY(v, LL('CLT'), show.at), a: a3 + 7.4, kind: 'show' }] });
   hit(a3 + 7.2, 'show', 'bell', { pitch: 'C6' });
-  CARDS.push({ a: a3 - 2, b: end, edge: lineCol('ga'), title: '3. Train out to the show', chips: ['Greater Anglia'], rows: [['FROM', 'London Liverpool Street'], ['GET OFF', 'Clacton-on-Sea, no change'], ['HOW LONG', 'About 1 hour 26 minutes'], ['THEN', 'Walk, 10 to 15 minutes']] });
+  CARDS.push({ a: a3 - 2, b: end, op: 'ga', edge: lineCol('ga'), title: '3. Train out to the show', chips: ['Greater Anglia'], rows: [['FROM', 'London Liverpool Street'], ['GET OFF', 'Clacton-on-Sea, no change'], ['HOW LONG', 'About 1 hour 26 minutes'], ['THEN', 'Walk, 10 to 15 minutes']] });
 }
 
 // ---------------------------------------------------------------- 3. every show
@@ -294,7 +280,7 @@ SH.forEach((s, i) => {
   GROUPS.push(gR, gE);
   const ops = [...new Set(legs.map((l) => l.opName))];
   const change = s.change || (legs.length > 1 ? NAME(legs[0].codes[legs[0].codes.length - 1]) : 'No change');
-  CARDS.push({ a: a + 0.2, b: off, edge: lineCol(legs[legs.length - 1].op), title: s.name, chips: ops, tag: s.tag,
+  CARDS.push({ a: a + 0.2, b: off, op: legs[legs.length - 1].op, edge: lineCol(legs[legs.length - 1].op), title: s.name, chips: ops, tag: s.tag,
     rows: [['FROM LONDON', SHORT(s.from)], ['CHANGE', change], ['GET OFF', s.getOff || NAME(dest)], ['THEN', s.then], ...(s.bus ? [s.bus] : [])] });
   ALLSHOWS.push(s);
 });
@@ -323,7 +309,7 @@ XC.forEach((x, i) => {
   x.lines.forEach((l, j) => { const s = l.length > 2 ? seg(...l) : whole(...l); LINES.push({ pts: s.pts, op: s.op, a: a + 0.4 + j * 0.5, b: a + 3.6 + j * 0.5, dim: off - 0.3, xc: true }); });
   GROUPS.push({ a, off: off - 0.4, v: V_MAIN, items: x.lab.map((c, j) => ({ text: SHORT(c).replace(/ (New Street|Piccadilly|Temple Meads|Central|Waverley|Lime Street)$/, ''), at: LL(c), a: a + 1 + j * 0.5 })), avoid: [] });
   x.lab.forEach((c, j) => { DOTS.push({ at: LL(c), a: a + 1 + j * 0.5, off: off - 0.4, r: 10 }); hit(a + 1 + j * 0.5, 'hub', 'pop', { pitch: ['C5', 'E5', 'G5', 'A5', 'C6', 'E6'][j] }); });
-  CARDS.push({ a, b: off, edge: lineCol(OPN[x.ops[0]]), title: x.title, chips: x.ops, rows: x.rows });
+  CARDS.push({ a, b: off, op: OPN[x.ops[0]], edge: lineCol(OPN[x.ops[0]]), title: x.title, chips: x.ops, rows: x.rows });
   hit(a + 0.4, 'lines', 'whoosh', { len: 1, from: 400, to: 1500 });
 });
 hit(END_A - 0.9, 'push', 'whoosh', { len: 0.4 }); hit(END_A, 'end', 'impact'); hit(END_A + 0.6, 'logo', 'bell', { pitch: 'F6' }); hit(END_A + 2.4, 'url', 'pop', { pitch: 'C6' });
@@ -344,7 +330,7 @@ function placeGroup(ctx, g) {
       [x + gap, y - gap - 2 * h], [x - gap - w, y - gap - 2 * h], [x + gap, y + gap + h], [x - gap - w, y + gap + h], [x - w / 2, y - gap - 2.2 * h], [x - w / 2, y + gap + 1.2 * h], [x + 3 * gap, y - h / 2], [x - 3 * gap - w, y - h / 2]];
     let best = null;
     cands.forEach((c, ci) => {
-      const r = [c[0], c[1], w, h]; let cost = ci * 3;
+      const r = [c[0], c[1], w, h]; let cost = ci * 3 + (ci >= 8 ? 150 : 0);
       placed.forEach((p) => { if (rectHit(r, p, 8)) cost += 2000; });
       anchors.forEach((q, j) => { if (j !== i && rectHit(r, [q[0] - 22, q[1] - 22, 44, 44])) cost += 900; });
       avoid.forEach((q) => { if (rectHit(r, [q[0] - 9, q[1] - 9, 18, 18])) cost += 40; });
@@ -365,12 +351,27 @@ const fadeOut = (u, off) => (off == null ? 1 : 1 - prog(u, off, off + 0.5));
 function drawMap(ctx, u, IMG) {
   const v = camAt(u), pj = proj(v);
   GROUPS.forEach((g) => placeGroup(ctx, g));
+  // frame shadow, sea, neighbours, then the land with a pale shore and a soft drop shadow
+  ctx.fillStyle = 'rgba(14,33,49,0.18)'; ctx.fillRect(RX + 10, RY + 12, RW, RH);
   ctx.save(); ctx.beginPath(); ctx.rect(RX, RY, RW, RH); ctx.clip();
-  ctx.fillStyle = '#9FD3EA'; ctx.fillRect(RX, RY, RW, RH);
-  ctx.fillStyle = '#CFE8B8'; ctx.beginPath(); GB.forEach((p, i) => { const [x, y] = pj(p); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = 'rgba(19,41,60,0.25)'; ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.stroke();
+  const sg = ctx.createLinearGradient(0, RY, 0, RY + RH); sg.addColorStop(0, '#A9DBF0'); sg.addColorStop(1, '#8CCAE6');
+  ctx.fillStyle = sg; ctx.fillRect(RX, RY, RW, RH);
+  ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 3; ctx.lineCap = 'round';   // little waves, drifting
+  for (let gy = 0; gy < RH / 70 + 1; gy++) for (let gx = -1; gx < RW / 150 + 1; gx++) {
+    const wx = RX + gx * 150 + (gy % 2) * 75 + ((u * 3) % 150), wy = RY + 30 + gy * 70 + Math.sin(u * 0.6 + gx + gy) * 3;
+    ctx.beginPath(); ctx.moveTo(wx, wy); ctx.quadraticCurveTo(wx + 11, wy - 8, wx + 22, wy); ctx.quadraticCurveTo(wx + 33, wy + 8, wx + 44, wy); ctx.stroke();
+  }
+  const lo0 = v.cx - RW / 2 / (KX * v.s), lo1 = v.cx + RW / 2 / (KX * v.s), la0 = v.cy - RH / 2 / v.s, la1 = v.cy + RH / 2 / v.s;
+  const land = (key) => { ctx.beginPath(); COAST[key].forEach((r, n) => { const b = BOXES[key][n]; if (b[2] < lo0 || b[0] > lo1 || b[3] < la0 || b[1] > la1) return;
+    r.forEach((q, i) => { const [x, y] = pj(q); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); }); };
+  ctx.lineJoin = 'round';
+  land('far'); ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 8; ctx.stroke(); ctx.fillStyle = '#DCE6D3'; ctx.fill();
+  ctx.save(); ctx.translate(0, 9); land('uk'); ctx.fillStyle = 'rgba(19,41,60,0.16)'; ctx.fill(); ctx.restore();
+  land('uk'); ctx.strokeStyle = '#F3F8E6'; ctx.lineWidth = 12; ctx.stroke();
+  const lg = ctx.createLinearGradient(0, RY, 0, RY + RH); lg.addColorStop(0, '#D6ECBF'); lg.addColorStop(1, '#C4E2AC');
+  ctx.fillStyle = lg; ctx.fill(); ctx.strokeStyle = '#86BE7A'; ctx.lineWidth = 2.5; ctx.stroke();
   const zl = prog(v.s, 2500, 7000);   // the Thames, once we are close to London
-  if (zl > 0) { ctx.globalAlpha = zl; ctx.strokeStyle = '#9FD3EA'; ctx.lineWidth = 34; ctx.lineCap = 'round'; ctx.beginPath(); THAMES.forEach((p, i) => { const [x, y] = pj(p); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); ctx.globalAlpha = 1; }
+  if (zl > 0) { ctx.globalAlpha = zl; ctx.strokeStyle = '#9BD2EA'; ctx.lineWidth = 34; ctx.lineCap = 'round'; ctx.beginPath(); THAMES.forEach((p, i) => { const [x, y] = pj(p); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); ctx.globalAlpha = 1; }
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   const WM = pick({ '16x9': 12, '9x16': 11 });
   // ghosts first, then live lines
@@ -389,6 +390,12 @@ function drawMap(ctx, u, IMG) {
       if (!i || i === l.pts.length - 1) return; const f = i / (l.pts.length - 1); if (p < f) return; const [x, y] = xy[i];
       ctx.fillStyle = '#FFF'; ctx.fillRect(x - 4.5, y - 4.5, 9, 9);
     });
+    if (l.calls && p >= 1 && g <= 0) {   // little white lights run along a finished route, towards the show
+      const SL = xy.slice(1).map((q, i) => Math.hypot(q[0] - xy[i][0], q[1] - xy[i][1])), tot = SL.reduce((a, b) => a + b, 0), n = Math.max(1, Math.round(tot / 240));
+      for (let k = 0; k < n; k++) { let d = (((u - l.b) * 0.22 + k / n) % 1) * tot, i = 0; while (i < SL.length - 1 && d > SL[i]) { d -= SL[i]; i++; }
+        const f = SL[i] ? d / SL[i] : 0, x = lerp(xy[i][0], xy[i + 1][0], f), y = lerp(xy[i][1], xy[i + 1][1], f);
+        ctx.fillStyle = '#FFF'; ctx.fillRect(x - 5, y - 5, 10, 10); }
+    }
     if (p > 0 && p < 1 && !l.dash) { ctx.fillStyle = '#FFF'; ctx.fillRect(tip[0] - 11, tip[1] - 11, 22, 22); ctx.strokeStyle = C.navy; ctx.lineWidth = 5; ctx.strokeRect(tip[0] - 11, tip[1] - 11, 22, 22); }
     ctx.restore();
   });
@@ -403,10 +410,14 @@ function drawMap(ctx, u, IMG) {
     ctx.save(); ctx.globalAlpha = al;
     if (settle < 1) { ctx.save(); ctx.globalAlpha = al * (1 - settle); ctx.strokeStyle = C.navy; ctx.lineWidth = 7; ctx.setLineDash([2, 16]); ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(lerp(sx, x, lp), lerp(sy, y, lp)); ctx.stroke(); ctx.restore(); }
     const r = lerp(18, 9, settle);
+    if (live && k > 0.9) { const ph = ((u - p.a) % 2) / 2; ctx.save(); ctx.globalAlpha = al * (1 - ph) * 0.7; ctx.strokeStyle = C.red; ctx.lineWidth = 5; const rr = 20 + ph * 34; ctx.strokeRect(x - rr, y - rr, 2 * rr, 2 * rr); ctx.restore(); }
     T.scaled(ctx, k, x, y, () => { ctx.fillStyle = C.red; ctx.fillRect(x - r, y - r, 2 * r, 2 * r); ctx.strokeStyle = C.navy; ctx.lineWidth = lerp(5, 4, settle); ctx.strokeRect(x - r, y - r, 2 * r, 2 * r); });
     if (live && p.jet) { const jk = T.pop(u, p.a + 1.1) * (1 - settle), lp2 = p.lab && p.lab.p, lcx = lp2 ? lp2.ox + lp2.w / 2 : 100, lcy = lp2 ? lp2.oy + lp2.h / 2 : 0;
       const side = Math.abs(lcx) > 40 ? -Math.sign(lcx) : (x > RX + RW * 0.6 ? -1 : 1), jy = lcy < -30 ? 74 : -74;
-      T.scaled(ctx, jk, x, y, () => T.jet(ctx, x + side * 110 + Math.sin(u * 1.5) * 8, y + jy + Math.cos(u * 1.1) * 5, 0.46, side > 0 ? -0.18 + Math.sin(u) * 0.06 : Math.PI + 0.18, { kind: p.jet })); }
+      const jx = x + side * 110 + Math.sin(u * 1.5) * 8, jyy = y + jy + Math.cos(u * 1.1) * 5;
+      if (jk > 0.5) { ctx.save(); ctx.lineCap = 'round'; for (let n = 0; n < 3; n++) { ctx.globalAlpha = al * (1 - settle) * (0.75 - n * 0.2); ctx.strokeStyle = '#FFF'; ctx.lineWidth = 9 - n * 2.5;
+        ctx.beginPath(); ctx.moveTo(jx - side * (70 + n * 46), jyy + side * (n * 9) * 0.2 + 4 + n * 3); ctx.lineTo(jx - side * (112 + n * 46), jyy + 6 + n * 4.5); ctx.stroke(); } ctx.restore(); }
+      T.scaled(ctx, jk, x, y, () => T.jet(ctx, jx, jyy, 0.5, side > 0 ? -0.18 + Math.sin(u) * 0.06 : Math.PI + 0.18, { kind: p.jet })); }
     ctx.restore();
   });
   // station squares
@@ -440,7 +451,7 @@ function drawMap(ctx, u, IMG) {
     T.redArrows(ctx, prog(u, 5, 12), RX - 300, RX + RW + 400, RY + RH * 0.3, 0.5);
   }
   ctx.restore();
-  ctx.strokeStyle = C.navy; ctx.lineWidth = 5; ctx.strokeRect(RX, RY, RW, RH);
+  ctx.strokeStyle = C.navy; ctx.lineWidth = 6; ctx.strokeRect(RX, RY, RW, RH);
 }
 [...ALLSHOWS.keys()].forEach((i) => hit(2 + i * 0.55, 'pin', 'tick'));
 hit(5, 'red arrows', 'whoosh', { len: 2.5, from: 300, to: 2400 });
@@ -471,17 +482,26 @@ function drawCard(ctx, u, c) {
   let rowsH = 0; if (two) for (let i = 0; i < rows.length; i += 2) rowsH += Math.max(rh(rows[i]), rows[i + 1] ? rh(rows[i + 1]) : 0); else rows.forEach((r) => { rowsH += rh(r); });
   const chipH = c.chips ? chipRow(null, c.chips, 0, 0, tw, cS, ctx) + cS * 0.85 + 18 : 0, tagH = c.tag ? 44 : 0;
   const h = 12 + 22 + tagH + tl.length * tlh + 10 + chipH + rowsH + 8;
-  const y = pick({ '16x9': big ? 262 : 330, '9x16': 1010 });
+  let hh = null; HEADS.forEach((x) => { if (c.a >= x.a - 0.6) hh = x; });
+  const y = pick({ '16x9': hh ? headBox(ctx, hh).y + headBox(ctx, hh).h + 26 : 330, '9x16': 1012 });
   ctx.save(); ctx.globalAlpha = k * out; ctx.translate(0, (1 - k) * 40);
   T.card(ctx, x, y, w, h, { edge: c.edge, edgeH: 12 }); ctx.strokeStyle = C.navy; ctx.lineWidth = 4; ctx.strokeRect(x, y, w, h);
   let cy = y + 12 + 22;
   if (c.tag) { T.pill(ctx, c.tag, x + pad, cy + 14, 22, C.amber, C.navy); cy += tagH; }
   ctx.font = fd(ts); ctx.fillStyle = C.navy; ctx.textAlign = 'left'; tl.forEach((s, i) => ctx.fillText(s, x + pad, cy + ts * 0.82 + i * tlh)); cy += tl.length * tlh + 10;
   if (c.chips) { chipRow(ctx, c.chips, x + pad, cy + cS * 0.85, tw, cS); cy += chipH; }
-  const drawRow = (r, rx, ry) => { ctx.font = fu(lS, 700); ctx.fillStyle = C.tealText; ctx.fillText(r.l, rx, ry + lS); ctx.font = fu(vS, 600); ctx.fillStyle = C.navy; r.lines.forEach((s, i) => ctx.fillText(s, rx, ry + lS + 10 + vS * 0.95 + i * vS * 1.2)); };
+  const drawRow = (r, rx, ry) => { ctx.fillStyle = c.edge; ctx.fillRect(rx, ry + lS - 17, 14, 14); ctx.font = fu(lS, 700); ctx.fillStyle = C.tealText; ctx.textAlign = 'left'; ctx.fillText(r.l, rx + 24, ry + lS); ctx.font = fu(vS, 600); ctx.fillStyle = C.navy; r.lines.forEach((s, i) => ctx.fillText(s, rx, ry + lS + 10 + vS * 0.95 + i * vS * 1.2)); };
   if (two) for (let i = 0; i < rows.length; i += 2) { drawRow(rows[i], x + pad, cy); if (rows[i + 1]) drawRow(rows[i + 1], x + pad + colW + 24, cy); cy += Math.max(rh(rows[i]), rows[i + 1] ? rh(rows[i + 1]) : 0); }
   else rows.forEach((r) => { drawRow(r, x + pad, cy); cy += rh(r); });
   ctx.restore();
+}
+// where the section bar sits; its height follows the title (one or two lines)
+function headBox(ctx, h) {
+  const ts = pick({ '16x9': 62, '9x16': 60 }), pad = pick({ '16x9': 28, '9x16': 72 });
+  const x = pick({ '16x9': COLX, '9x16': 0 }), w = pick({ '16x9': COLW, '9x16': W }), y = pick({ '16x9': 60, '9x16': 236 });
+  const n = P ? 1 : T.wrap(ctx, h.title, fd(ts), w - 2 * pad).length;
+  const py = y + pick({ '16x9': 46, '9x16': 44 }), ty = py + pick({ '16x9': 84, '9x16': 92 });
+  return { x, y, w, pad, ts, py, ty, h: ty + (n - 1) * ts * 1.04 + 34 - y };
 }
 function drawWords(ctx, u) {
   // the title block, then the section headers
@@ -499,19 +519,43 @@ function drawWords(ctx, u) {
   }
   let h = null; HEADS.forEach((x) => { if (u >= x.a - 0.6) h = x; });
   if (h) {
+    // the section bar: a navy block with the part number, the title and four progress squares
     const nx = HEADS[HEADS.indexOf(h) + 1], o = nx ? 1 - prog(u, nx.a - 1, nx.a - 0.6) : 1;
-    const k = springU(u, h.a - 0.6, SPRING.snappy);
-    ctx.save(); ctx.globalAlpha = clamp(k) * o; ctx.translate((1 - k) * -80, 0);
-    const py = pick({ '16x9': 110, '9x16': 285 });
-    T.pill(ctx, h.tag, COLX, py, pick({ '16x9': 30, '9x16': 30 }), C.purple, '#FFF');
-    const ts = pick({ '16x9': 70, '9x16': 62 });
-    T.lines(ctx, h.title, COLX, py + pick({ '16x9': 104, '9x16': 96 }), fd(ts), C.navy, COLW, ts * 1.04);
+    const k = springU(u, h.a - 0.6, SPRING.snappy), bk = E.outCubic(prog(u, NET_A - 0.6, NET_A + 0.4));
+    const hb = headBox(ctx, h);
+    const cur = HEADS.filter((x) => x.a - 0.6 <= u).pop(), part = Number(cur.tag[0]);
+    ctx.save(); ctx.globalAlpha = bk;
+    ctx.fillStyle = 'rgba(14,33,49,0.18)'; ctx.fillRect(hb.x + 8, hb.y + 10, hb.w, hb.h);
+    ctx.fillStyle = C.navy; ctx.fillRect(hb.x, hb.y, hb.w, hb.h); ctx.fillStyle = C.teal; ctx.fillRect(hb.x, hb.y + hb.h - 8, hb.w, 8);
+    const sq = 34, sx0 = hb.x + hb.w - hb.pad - 4 * (sq + 10) + 10;
+    for (let n = 1; n <= 4; n++) { const x = sx0 + (n - 1) * (sq + 10), y = hb.py - sq / 2;
+      if (n < part) { ctx.fillStyle = C.teal; ctx.fillRect(x, y, sq, sq); T.tick(ctx, x + sq / 2, y + sq / 2, sq / 2); }
+      else if (n === part) { ctx.fillStyle = C.amber; ctx.fillRect(x, y, sq, sq); M.text(ctx, String(n), x + sq / 2, y + sq / 2 + 9, fu(26, 700), C.navy, 'center'); }
+      else { ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 3; ctx.strokeRect(x + 1.5, y + 1.5, sq - 3, sq - 3); M.text(ctx, String(n), x + sq / 2, y + sq / 2 + 9, fu(24, 700), 'rgba(255,255,255,0.7)', 'center'); } }
+    ctx.restore();
+    ctx.save(); ctx.globalAlpha = clamp(k) * o; ctx.beginPath(); ctx.rect(hb.x, hb.y, hb.w, hb.h); ctx.clip(); ctx.translate((1 - k) * -80, 0);
+    T.pill(ctx, h.tag.slice(3), hb.x + hb.pad, hb.py, 28, '#FFFFFF', C.navy);
+    T.lines(ctx, h.title, hb.x + hb.pad, hb.ty, fd(hb.ts), '#FFFFFF', hb.w - 2 * hb.pad, hb.ts * 1.04);
     ctx.restore();
   }
   CARDS.forEach((c) => { if (u >= c.a && u < c.b) drawCard(ctx, u, c); });
-  if (!P && u > NET_A) { const note = 'Times are a guide. Check the summer 2027 timetable.'; M.text(ctx, note, COLX, 1012, fu(26, 600), C.body); }
+  if (!P && u > NET_A) { const note = 'Times are a guide. Check the summer 2027 timetable.'; M.text(ctx, note, RX + RW, 1000, fu(26, 600), C.body, 'right'); }
 }
-function mapFilm(ctx, u, IMG) { fill(ctx, C.light); drawMap(ctx, u, IMG); drawWords(ctx, u); }
+const lookOf = (k) => OPS[k].look || { body: '#FFFFFF', stripe: OPS[k].c, door: OPS[k].c, roof: '#8A8C8E', nose: OPS[k].c, window: '#24323E' };
+// sky and clouds behind everything, and a train in the current company's colours running along the bottom
+function backdrop(ctx, u) {
+  const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#D3EEF9'); g.addColorStop(pick({ '16x9': 0.5, '9x16': 0.3 }), C.light); g.addColorStop(1, C.light);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  T.clouds(ctx, u, pick({ '16x9': 4, '9x16': 4 }), 11, pick({ '16x9': 20, '9x16': 50 }), pick({ '16x9': 60, '9x16': 190 }), 5, 0.85, pick({ '16x9': 0.35, '9x16': 0.6 }), pick({ '16x9': 0.6, '9x16': 1 }));
+  const ry = pick({ '16x9': 1060, '9x16': 1800 }), ts = pick({ '16x9': 0.26, '9x16': 0.5 });
+  ctx.fillStyle = C.grass; ctx.fillRect(0, ry + 6, W, H - ry); ctx.fillStyle = C.grassDark; ctx.fillRect(0, ry + 6, W, 5);
+  T.rails(ctx, ry + 4, '#5A6670', '#7C6A56', 0, pick({ '16x9': 0.5, '9x16': 0.8 }));
+  if (u < NET_A) return;
+  let c = null; CARDS.forEach((x) => { if (u >= x.a && u < x.b && x.op) c = x; });
+  // one train per card, in that company's colours, crossing while the card is up
+  if (c) { const ph = prog(u, c.a, c.b), len = 3 * 444 * ts; T.train(ctx, lerp(-40, W + len + 40, ph), ry, ts, 3, lookOf(c.op), u); }
+}
+function mapFilm(ctx, u, IMG) { backdrop(ctx, u); drawMap(ctx, u, IMG); drawWords(ctx, u); }
 
 // ---------------------------------------------------------------- end card
 const ENDC = { line: 'Find your train to every show', url: 'ukairshowguide.co.uk/airshow-public-transport', note: 'Times are a guide. Check the summer 2027 timetable before you travel.' };
