@@ -30,8 +30,7 @@ html,body{margin:0;background:#111;overflow:hidden;height:100%}
 .chip{display:inline-block;background:#fff;color:#13293C;font-weight:800;font-size:56px;padding:12px 56px;clip-path:polygon(22px 0,100% 0,calc(100% - 22px) 100%,0 100%)}
 .logo{position:absolute;left:50%;width:640px;transform:translateX(-50%);background:#F8F4EA;padding:26px 40px;clip-path:polygon(26px 0,100% 0,calc(100% - 26px) 100%,0 100%);opacity:0}
 .logo img{display:block;width:100%}
-.logo2{position:absolute;left:60px;width:960px;height:160px}
-.logo2 img{position:absolute;left:0;top:0;width:100%;display:block}
+.badge{position:absolute;opacity:0}
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
 </style>
 </head>
@@ -94,27 +93,36 @@ html,body{margin:0;background:#111;overflow:hidden;height:100%}
   shot(10, 12, L8, function (t) { var s = L8.querySelector('#s3'); s.innerHTML = M.svg({ pose: 'fly', ground: false, title: '' }); var p = ease(t / 1.9); place(s, 760, 200, 210, W + 500 - p * (W + 1000), 900 - Math.sin(p * Math.PI) * 160); s.style.transform = 'scaleX(-1) rotate(-8deg)'; pop(L8.querySelector('.t'), t - .6, 'up'); });
 
   // 9. end card: follow us to find out (12 to 16 s)
-  var L9 = layer('', text('big', 'Follow us to find out.', 330) +
+  var L9 = layer('', '<svg class="trails" viewBox="0 0 1080 1920" style="position:absolute;inset:0;width:1080px;height:1920px"></svg>' + text('big', 'Follow us to find out.', 330) +
     '<div class="t" style="top:670px"><div class="chips" style="flex-direction:row;justify-content:center;flex-wrap:wrap"><span class="chip">Instagram</span><span class="chip">Facebook</span><span class="chip">YouTube</span></div></div>' +
-    '<div style="position:absolute;left:0;right:0;top:870px;height:440px;overflow:hidden"><div class="pip sil" id="s4"></div><div class="q" style="left:700px;top:20px;font-size:300px">?</div></div>' +
-    '<div class="logo2" style="top:1320px"><img class="l2s" src="logo2-swoosh.png" alt=""><img class="l2w" src="logo2-words.png" alt=""><img class="l2j" src="logo2-jet.png" alt=""></div>');
+    '<div style="position:absolute;left:0;right:0;top:860px;height:230px;overflow:hidden"><div class="pip sil" id="s4"></div><div class="q" style="left:720px;top:0;font-size:220px">?</div></div>' +
+    '<div class="badge" style="left:180px;top:1010px;width:720px"><img src="logo-swoosh-badge.png" alt="" style="display:block;width:100%"></div>');
   shot(12, DUR, L9, function (t) {
     var e = L9.querySelectorAll('.t'); pop(e[0], t - .3, 'up');
     [].slice.call(L9.querySelectorAll('.chip')).forEach(function (c, i) { var d = t - (1 + i * .35), k = spring(d); c.style.opacity = d <= 0 ? 0 : Math.min(1, d / .12); c.style.transform = 'translateX(' + ((1 - k) * 160).toFixed(1) + 'px)'; });
     e[1].style.opacity = 1;
-    // the logo: the red jet flies in from the left drawing its white and teal swoosh trail behind it, then the words land
-    var u = 960 / 1200, fp = ease((t - 1.9) / .9), dx = -1250 * (1 - fp), dy = 40 * (1 - fp);
-    var jet = L9.querySelector('.l2j'), trail = L9.querySelector('.l2s'), words = L9.querySelector('.l2w');
-    jet.style.opacity = t < 1.9 ? 0 : 1;
-    jet.style.transform = 'translate(' + (dx * u).toFixed(1) + 'px,' + (dy * u).toFixed(1) + 'px) rotate(' + (-6 * (1 - fp)).toFixed(2) + 'deg)';
-    var tail = Math.max(0, 940 + dx);
-    trail.style.opacity = t < 1.9 ? 0 : 1;
-    trail.style.clipPath = 'inset(0 ' + ((1200 - tail) / 12).toFixed(2) + '% 0 0)';
-    var dw = t - 2.8, kw = spring(dw, 300, 14);
-    words.style.opacity = dw <= 0 ? 0 : Math.min(1, dw / .1); words.style.transform = 'translateY(' + ((1 - kw) * -40).toFixed(1) + 'px) scale(' + (.85 + .15 * kw).toFixed(4) + ')'; words.style.transformOrigin = '40% 50%';
+    // as in the motion videos: three jets draw the logo's red, white and blue swooshes across the sky, then the logo lands
+    var svg = L9.querySelector('.trails'), cols = ['#E8202A', '#FFFFFF', '#1D4FB7'], out = '';
+    var path = function (qq, k) { var x = -200 + qq * (W + 500); return [x, 1010 + k * 30 - Math.sin(qq * Math.PI) * 110 + (qq - .5) * -60]; };
+    cols.forEach(function (col, k) {
+      var qq = Math.max(0, Math.min(1, (t - (1.5 + k * .12)) / 1.3)); qq = qq < .5 ? 2 * qq * qq : 1 - Math.pow(-2 * qq + 2, 2) / 2;
+      if (qq <= 0) return;
+      var pts = []; for (var i = 0; i <= 60; i++) { var pp = path(i / 60 * qq, k); pts.push(pp[0].toFixed(1) + ',' + pp[1].toFixed(1)); }
+      if (k === 1) out += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#C9D6E0" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>';
+      out += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + col + '" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>';
+      if (qq < 1) {
+        var h = path(qq, k), h2 = path(Math.min(1, qq + .01), k), ang = Math.atan2(h2[1] - h[1], h2[0] - h[0]) * 180 / Math.PI;
+        out += '<g transform="translate(' + (h[0] + 14).toFixed(1) + ' ' + h[1].toFixed(1) + ') rotate(' + ang.toFixed(1) + ') scale(.8)">' +
+          '<polygon points="60,0 20,-9 -40,-9 -55,-26 -62,-26 -56,-6 -60,0 -56,6 -62,26 -55,26 -40,9 20,9" fill="#FFFFFF" stroke="#13293C" stroke-width="4" stroke-linejoin="round"/>' +
+          '<polygon points="10,-8 -18,-44 -30,-44 -16,-8 -16,8 -30,44 -18,44 10,8" fill="#FFFFFF" stroke="#13293C" stroke-width="4" stroke-linejoin="round"/></g>';
+      }
+    });
+    svg.innerHTML = out;
+    var bd = L9.querySelector('.badge'), dl = t - 2.6, lk = spring(dl, 260, 13);
+    bd.style.opacity = dl <= 0 ? 0 : 1; bd.style.transform = 'scale(' + Math.max(0, lk).toFixed(4) + ') rotate(' + ((1 - lk) * 12).toFixed(2) + 'deg)';
     // the silhouette peeks up from the bottom edge, and a question mark pops beside it
     var s = L9.querySelector('#s4'); s.innerHTML = M.svg({ pose: 'rest', ground: false, look: [6, -6], title: '' });
-    var k = spring(t - 3.1, 150, 11); place(s, 600, 200, 110, W / 2, 440 + 60 - k * 300);
+    var k = spring(t - 3.1, 150, 11); place(s, 520, 200, 110, W / 2, 230 + 40 - k * 200);
     var qq = L9.querySelector('.q'), dq = t - 3.6; qq.style.opacity = dq <= 0 ? 0 : 1; qq.style.transform = 'rotate(10deg) scale(' + (.5 + .5 * spring(dq, 260, 12)).toFixed(4) + ')';
   });
 
@@ -132,7 +140,7 @@ html,body{margin:0;background:#111;overflow:hidden;height:100%}
     var f = 0; CUTS.forEach(function (c) { var d = t - c; if (d >= 0 && d < .18) f = Math.max(f, .35 * (1 - d / .18)); });
     flash.style.opacity = f.toFixed(3);
   };
-  window.HITS = [[0.3, 'fly'], [0.7, 'pop'], [2, 'whoosh'], [3, 'whoosh'], [4.1, 'thud'], [6, 'whoosh'], [6.6, 'tick'], [7, 'whoosh'], [8.1, 'thud'], [10, 'fly'], [10.6, 'pop'], [12, 'whoosh'], [13, 'tick'], [13.35, 'tick'], [13.7, 'tick'], [13.9, 'fly'], [14.8, 'thud'], [15.1, 'boing'], [15.6, 'pop']];
+  window.HITS = [[0.3, 'fly'], [0.7, 'pop'], [2, 'whoosh'], [3, 'whoosh'], [4.1, 'thud'], [6, 'whoosh'], [6.6, 'tick'], [7, 'whoosh'], [8.1, 'thud'], [10, 'fly'], [10.6, 'pop'], [12, 'whoosh'], [13, 'tick'], [13.35, 'tick'], [13.7, 'tick'], [13.5, 'fly'], [14.6, 'thud'], [15.1, 'boing'], [15.6, 'pop']];
   window.FILM = { w: W, h: H, fps: FPS, duration: DUR, name: 'mystery' };
   document.fonts.ready.then(function () {
     Promise.all([].slice.call(document.images).map(function (im) { return im.decode().catch(function () {}); })).then(function () {
