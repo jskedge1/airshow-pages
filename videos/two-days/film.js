@@ -502,14 +502,17 @@ function scenePayoff(ctx, u) {
 }
 
 // ---------------------------------------------------------------- the cut
-const ST = K.stretch([0, 14, 26, 38, 50, 62, 74, 86, 106, 124, 132.9], 4);
+const ST = K.stretch([0, 14, 26, 38, 50, 62, 74, 86, 106, 124, 144, 152.9], 4);
 M.film({
   fonts: K.FONTS,
   images: { logo: '../shared/logo.png' },
-  hits: (HITS).map((h) => [ST.out(h[0]), ...h.slice(1)]),
+  hits: K.hitsWithFacts(HITS, 124).map((h) => [ST.out(h[0]), ...h.slice(1)]),
   samples: 6,
-  draw(ctx, U, t, IMG) {
-    const u = ST.src(U);   // every scene runs 4 beats (3 s) longer than it was written
+  // every scene runs 4 beats (3 s) longer than it was written, and the awareness section sits before the last scene
+  draw(ctx, U, t, IMG) { K.drawWithFacts(ctx, ST.src(U), IMG, base, 124); },
+});
+// the film as it was written, before the stretch and the awareness section
+function base(ctx, u, IMG) {
     if (u < PAY - PUSH) sceneSplit(ctx, u);
     else if (u < PAY) {              // a page push, both shots on screen
       const p = E.inOutCubic(prog(u, PAY - PUSH, PAY));
@@ -517,5 +520,4 @@ M.film({
       ctx.save(); ctx.translate((1 - p) * W, 0); ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip(); scenePayoff(ctx, u); ctx.restore();
     } else scenePayoff(ctx, u);
     K.endCard(ctx, u, PAY + 8.9, IMG, { cx: 650, cy: 500 });
-  },
-});
+}

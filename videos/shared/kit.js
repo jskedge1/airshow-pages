@@ -537,4 +537,56 @@ export function stretch(cuts, extra = 4) {
   };
   return { src: (U) => map(U, 2, 0), out: (u) => map(u, 0, 2), total: o };
 }
+// ---------------------------------------------------------------- good to know about autism
+// A short, polite awareness section for visitors who are not autistic. 20 beats, starting at u0.
+// It sits before the last scene of every film (see drawWithFacts).
+const FACTS = [
+  ['1 in 100', 'More than 1 in 100 people in the UK are autistic'],
+  ['For life', 'Autism is lifelong. It is a different way of experiencing the world, not an illness'],
+  ['All different', 'Every autistic person is different. If you are not sure, just ask'],
+  ['Not always seen', 'You often cannot tell by looking. Many autistic people are adults'],
+];
+export const FACTS_LEN = 20;
+export function factsScene(ctx, u, u0) {
+  const r = u - u0;
+  M.fill(ctx, C.paper);
+  const tk = pop(r, 0, SPRING.gentle);
+  M.text(ctx, 'FOR EVERYONE AT THE SHOW', 112 - (1 - tk) * 80, 96, F(34, 800), C.teal, 'left', 3);
+  M.text(ctx, 'Good to know about autism', 110 - (1 - tk) * 120, 196, F(96, 800), C.ink);
+  FACTS.forEach(([big, str], i) => {
+    const a = 2 + i * 3.6, k = pop(r, a, SPRING.gentle);
+    if (k <= 0) return;
+    const col = i % 2, row = Math.floor(i / 2), w = 640, h = 290, x = 110 + col * 670, y = 260 + row * 320 + (1 - k) * 90;
+    ctx.save(); ctx.globalAlpha *= Math.min(1, k * 1.4);
+    rr(ctx, x + 8, y + 10, w, h, 0, 'rgba(34,52,74,0.14)');
+    rr(ctx, x, y, w, h, 0, C.white);
+    rr(ctx, x, y, w, 78, 0, i % 2 ? C.ink : C.teal);
+    M.text(ctx, big, x + 30, y + 56, F(52, 800), C.white);
+    const f = F(44, 600), lines = wrap(ctx, str, f, w - 60);
+    lines.forEach((l, j) => M.text(ctx, l, x + 30, y + 136 + j * 54, f, C.ink));
+    ctx.restore();
+  });
+  const ck = pop(r, 1, SPRING.gentle);
+  const wv = Math.sin(r * TAU * 0.5) * 0.2;
+  beth(ctx, 1790, 1000 + (1 - ck) * 500, 1.35, { mood: 'happy', headphones: '#3A3F4B', blinkU: r, blinkOff: 2, armL: POSE.relaxed, armR: POSE.relaxed });
+  kid(ctx, 1540, 1010 + (1 - ck) * 500, 1.6, { mood: 'happy', defenders: DEF, blinkU: r, armL: POSE.relaxed, armR: r > 16.4 ? [2.5 + wv, -0.25] : POSE.relaxed });
+  const bk = pop(r, 16.4, SPRING.gentle);
+  if (bk > 0) M.text(ctx, 'Thank you for making room for everyone.', 112 - (1 - bk) * 80, 990, F(60, 700), C.teal);
+}
+export const factsHits = (u0) => [[u0, 'good to know', 'tok', { pitch: 'F4', gain: 0.22 }], ...FACTS.map((f, i) => [u0 + 2 + i * 3.6, `fact ${i + 1}`, 'tok', { pitch: ['A4', 'C5', 'D5', 'F5'][i], gain: 0.15 }]), [u0 + 16.4, 'thank you', 'bell', { pitch: 'C6', gain: 0.1 }]];
+// Fits the section into a finished film at beat `at`: everything the film drew from `at` onwards
+// now happens FACTS_LEN beats later. base(ctx, u, IMG) is the film as it was written.
+export function drawWithFacts(ctx, u, IMG, base, at) {
+  const P = 0.9, end = at + FACTS_LEN;
+  const push = (fa, fb, p) => {
+    ctx.save(); ctx.translate(-p * W, 0); ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip(); fa(); ctx.restore();
+    ctx.save(); ctx.translate((1 - p) * W, 0); ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip(); fb(); ctx.restore();
+  };
+  if (u < at - P) base(ctx, u, IMG);
+  else if (u < at) push(() => base(ctx, at - P - 0.001, IMG), () => factsScene(ctx, u, at), E.inOutCubic(prog(u, at - P, at)));
+  else if (u < end - P) factsScene(ctx, u, at);
+  else if (u < end) push(() => factsScene(ctx, u, at), () => base(ctx, at, IMG), E.inOutCubic(prog(u, end - P, end)));
+  else base(ctx, u - FACTS_LEN, IMG);
+}
+export const hitsWithFacts = (hits, at) => hits.map((h) => (h[0] >= at ? [h[0] + FACTS_LEN, ...h.slice(1)] : h)).concat(factsHits(at)).sort((a, b) => a[0] - b[0]);
 export { M };

@@ -530,14 +530,17 @@ function scenePayoff(ctx, u) {
 // ---------------------------------------------------------------- the cut
 const SCENES = [[0, sceneHook], [8, sceneTitle, 'circle'], [14, item1], [26, item2], [38, item3], [50, item4], [62, item5], [74, item6], [86, sceneNearby], [106, (ctx, u) => sceneCrew(ctx, u - 20)], [124, (ctx, u) => scenePayoff(ctx, u - 20)]];
 const PUSH = 0.9;
-const ST = K.stretch([0, 8, 14, 26, 38, 50, 62, 74, 86, 106, 124, 132.9], 4);
+const ST = K.stretch([0, 8, 14, 26, 38, 50, 62, 74, 86, 106, 124, 144, 152.9], 4);
 M.film({
   fonts: K.FONTS,
   images: { logo: '../shared/logo.png' },
-  hits: (HITS).map((h) => [ST.out(h[0]), ...h.slice(1)]),
+  hits: K.hitsWithFacts(HITS, 124).map((h) => [ST.out(h[0]), ...h.slice(1)]),
   samples: 6,
-  draw(ctx, U, t, IMG) {
-    const u = ST.src(U);   // every scene runs 4 beats (3 s) longer than it was written
+  // every scene runs 4 beats (3 s) longer than it was written, and the awareness section sits before the last scene
+  draw(ctx, U, t, IMG) { K.drawWithFacts(ctx, ST.src(U), IMG, base, 124); },
+});
+// the film as it was written, before the stretch and the awareness section
+function base(ctx, u, IMG) {
     let i = 0; while (i + 1 < SCENES.length && u >= SCENES[i + 1][0] - PUSH) i++;
     const [a, fn, kind] = SCENES[i];
     if (i > 0 && u < a) {            // arriving: a page push, both shots on screen
@@ -552,5 +555,4 @@ M.film({
     } else fn(ctx, u);
     strip(ctx, u);
     K.endCard(ctx, u, 132.9, IMG, { cx: 650, cy: 500 });
-  },
-});
+}
