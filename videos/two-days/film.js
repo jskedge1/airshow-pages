@@ -30,7 +30,7 @@ const HITS = [
   [36, 'loud warning', 'tok', { pitch: 'A3', gain: 0.22 }],
   [JET_L + 0.9, 'the jet', 'whoosh', { len: 3.0, from: 140, to: 400, gain: 0.14, peak: 0.5 }],
   ...MO.map((a, i) => [a + (i === 0 ? 8 : 7.6), `tip ${i + 1}`, 'tok', { pitch: ['D4', 'E4', 'F#4', 'D4', 'E4', 'F#4'][i], gain: 0.22 }]),
-  [72.2, 'beth', 'blip', { pitch: 'A4', gain: 0.1 }],
+  [70.2, 'beth', 'blip', { pitch: 'A4', gain: 0.1 }],
   [NB, 'clock back to 14:30', 'tick', { gain: 0.16 }], [NB + 0.3, 'people nearby', 'tok', { pitch: 'D4', gain: 0.22 }],
   [NB + 2.6, 'drain: stares', 'pop', { pitch: 'B3', gain: 0.14 }], [NB + 4.4, 'space', 'bell', { pitch: 'D5', gain: 0.09 }],
   ...[0, 1, 2, 3, 4].map((i) => [NB + 3.4 + i * 2.8, `nearby point ${i + 1}`, 'tok', { pitch: ['E4', 'F#4', 'A4', 'F#4', 'A4'][i], gain: 0.18 }]),

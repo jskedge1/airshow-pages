@@ -57,3 +57,30 @@ Worst three:
 
 Checks failed: none.
 Verdict: ANOTHER ROUND (round 3 needed by rule)
+
+## Round 3 (on the final sheets and the mixed film)
+| hook | read | motion | variety | brand | sync | min |
+|  8   |  8   |   8    |    8    |   9   |  9   |  8  |
+
+Evidence: hook, beat 0: split already on screen, Charlie hopping on both sides, Mustang and rings crossing
+the divider, caption at 0.3, calm-video promise at 0.5. Read, phone_p1/p2: all captions, title cards, tags,
+header labels, the clock and the five "nearby" points read at phone size. Motion: springs on every pop,
+page pushes inside each half, clock digits roll, the jet shape swells over 1.2 s (strip_jet), no shake or
+flash anywhere. Variety: gate, crowd line, jet, lunch, quiet tent, car, then the bystander replay, the navy
+organiser panel and the full-width payoff. Brand: kit palette, Barlow only, kit aircraft cut-outs only,
+square corners. Sync: sync.py 52 of 57 hits within 20 ms of an onset, median 1.7 ms; master -14.1 LUFS,
+-1.2 dBTP.
+
+Worst three (none blocking, left as known weaknesses):
+1. [beats 14-86] The veil over the waiting half makes about half the frame pale for much of the middle
+   of the film. It directs the eye, but the sheet looks washed. Could be lowered from 0.42 to about 0.3.
+2. [beats 0-4.6] Both halves are identical at the start by design; the only hint of "two days" before
+   beat 4.6 is the caption. A viewer with captions hidden by a player UI gets the idea late.
+3. [beats 108-121] The organiser tiles are the same six-tile pop as the sister film; tile text is 50 px,
+   readable but the smallest body text in the film.
+
+Checks failed: none. Longest gap without a new event is about 1.9 s (beats 121-123.1, the organiser
+panel holding before the push to the payoff).
+Verdict: READY
+
+Post-round note: the 'beth' blip was listed at beat 72.2 but her label pops at 70.2; hit moved, sfx and mix re-run (picture unchanged).
