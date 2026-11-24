@@ -2,6 +2,7 @@
 // visibly calms the picture. 140 beats at 80 bpm (105 s). Pure function of time.
 import * as K from '../shared/kit.js';
 const { M, C, F } = K;
+K.usePip();   // Pip, Charlie's sensory buddy, rides in Charlie's pocket all through this film
 const { W, H, TAU, clamp, lerp, prog, E, springU, SPRING, kf, hash01 } = M;
 
 const GY = 560, FEET = 750;         // horizon and where feet stand (the caption card sits below)
@@ -10,6 +11,7 @@ const SOFT = '#F7CDAE';             // a loud sound once it has been turned down
 // Soft, low sounds only: this film is meant to be calm to watch.
 const HITS = [
   [0.3, 'caption 1', 'tok', { pitch: 'F4', gain: 0.2 }],
+  [1.2, 'meet Pip', 'blip', { pitch: 'C6', gain: 0.1 }],
   [5.2, 'sounds appear', 'tok', { pitch: 'A4', gain: 0.2 }],
   [6, 'crowd label', 'blip', { pitch: 'C5', gain: 0.1 }], [8, 'speaker label', 'blip', { pitch: 'D5', gain: 0.1 }], [10, 'hum label', 'blip', { pitch: 'E5', gain: 0.1 }],
   [14, 'loud warning', 'tok', { pitch: 'C4', gain: 0.22 }],
@@ -79,6 +81,8 @@ function scenePile(ctx, u) {
   // a promise to the viewer, right at the start
   const ck = Math.min(springU(u, 0.5, SPRING.gentle), 1 - E.inCubic(prog(u, 4.4, 5)));
   if (ck > 0.01) { ctx.save(); ctx.translate(70, 86 - (1 - ck) * 200); K.pill(ctx, 0, 0, 'A calm video: no sudden sounds, no flashing', { size: 34, bg: C.teal, fg: C.white }); ctx.restore(); }
+  const pk = Math.min(K.pop(u, 1.2), 1 - E.inCubic(prog(u, 4.6, 5.1)));
+  if (pk > 0.01) { ctx.save(); ctx.translate(560, 420); ctx.scale(pk, pk); K.pill(ctx, 0, 0, 'Pip, Charlie\u2019s sensory buddy', { align: 'center', size: 36, bg: '#5FAED6', fg: C.white }); ctx.restore(); K.line(ctx, [[640, 448], [lerp(640, 700, pk), lerp(448, 610, pk)]], '#5FAED6', 5); }
   K.loudChip(ctx, u, 18, { hold: 2.6 });
   K.caption(ctx, u, 0.2, 5, 'Charlie loves aeroplanes.', { w: 1000, size: 76 });
   K.caption(ctx, u, 5.2, 13.6, 'Charlie is autistic. Every sound arrives at full volume.', { w: 1240 });

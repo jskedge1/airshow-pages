@@ -10,7 +10,7 @@ nearby") and a section for show organisers. Finished videos are in `finished/`.
 | The Captain's Checklist | `pilots-checklist/` | Charlie plans the day like a display pilot plans a flight |
 | Two Days, Same Airshow | `two-days/` | Split screen: the same family with and without a plan, with an energy battery |
 
-Cast (in `shared/kit.js`): Charlie (autistic, about 8), Dad, Beth (an autistic adult), show staff.
+Cast (in `shared/kit.js`): Charlie (autistic, about 8), Dad, Beth (an autistic adult), show staff. In See the Sound, Pip, a soft toy bird and Charlie's sensory buddy, rides in a pocket on Charlie's jumper and reacts the way Charlie feels (`K.usePip()`).
 
 House rules: square corners on every box; real Red Arrows Hawk, Typhoon, A400M and Mustang cut-outs
 (`shared/aircraft/`), never drawn planes; the current logo on the end card. The films are calm to
