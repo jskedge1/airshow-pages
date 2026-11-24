@@ -5,7 +5,7 @@ import json, os, sys, wave
 import numpy as np
 
 FILM = sys.argv[1] if len(sys.argv) > 1 else 'promo'
-SR, DUR, BEAT = 44100, (16.0 if FILM == 'teaser' else 66.0), 0.5
+SR, DUR, BEAT = 44100, {'teaser': 16.0, 'studio': 8.0}.get(FILM, 66.0), 0.5
 BARS = int(DUR / 2)
 N = int(SR * DUR)
 L = np.zeros(N); R = np.zeros(N)
@@ -65,6 +65,7 @@ MEL2 = [(0, 84, .5), (.5, 79, .5), (1, 76, 1), (2, 79, 2),
     (12, 77, 1), (13, 79, 1), (14, 84, 2)]
 def level(bar):   # which parts play in each bar: (drums, melody, overall)
     if FILM == 'teaser': return (0, 0, .8) if bar < 2 else (1, 1, 1)
+    if FILM == 'studio': return (0, 0, .8) if bar < 1 else (1, 1, 1)
     if bar < 3: return (0, 0, .8)            # hook: plucks only
     if 6 <= bar < 8: return (.6, 0, .9)      # "PIP stands for": space for the letter drops
     if 17 <= bar < 20: return (1, 0, .9)     # who is Pip for

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Pip Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: friendly, plain, made for Jack, not for a designer.
+   IDEA: a little print shop counter: pick Pip, type your words, take the poster or video away.
+   PICTURE: the live poster or video itself, large, beside the controls.
+   COLOUR and TYPE: the site's navy, teal, red and cream; Barlow. No curved edges anywhere (Jack's rule).
+   LAYOUT: controls in one calm column on the left, the preview on the right; stacked on a phone. */
+@font-face{font-family:PipDisplay;src:url(assets/display.ttf) format('truetype');font-weight:800}
+@font-face{font-family:PipUI;src:url(assets/ui.ttf) format('truetype');font-weight:600}
+:root{color-scheme:light;--navy:#13293C;--teal:#32B4AF;--tealdk:#23908C;--red:#D74949;--cream:#F8F4EA;--line:#D8E3EC;--muted:#4a5d6e;--yellow:#FFC23A}
+*{box-sizing:border-box;min-width:0;border-radius:0}
+body{margin:0;background:#fff;color:var(--navy);font:16px/1.5 Barlow,system-ui,sans-serif;overflow-x:clip}
+header{background:var(--navy);color:#fff;padding:18px max(4vw,16px);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header .pip{width:64px;flex:none}
+header h1{margin:0;font-size:30px;line-height:1.05;font-weight:800}
+header p{margin:2px 0 0;color:#cfe0ec}
+.steps{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.steps span{background:#fff;color:var(--navy);font-weight:700;padding:6px 16px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.steps b{color:var(--tealdk)}
+main{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:28px;padding:24px max(4vw,16px) 40px;align-items:start}
+.panel{display:grid;gap:18px}
+fieldset{border:0;margin:0;padding:0}
+legend,label.l{display:block;font-weight:800;font-size:17px;margin:0 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{font:600 15px Barlow,sans-serif;background:#EEF2F5;color:var(--navy);border:2px solid transparent;padding:9px 14px;min-height:44px;cursor:pointer}
+.opt:hover{background:#E1E8EE}
+.opt[aria-pressed=true]{background:var(--navy);color:#fff}
+.poses{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.poses .opt{padding:4px;display:grid;justify-items:center;font-size:12px;line-height:1.1}
+.poses svg{width:100%;height:auto;display:block}
+.sw{width:44px;height:44px;border:3px solid #fff;outline:2px solid var(--line);cursor:pointer;padding:0}
+.sw[aria-pressed=true]{outline:3px solid var(--navy)}
+input[type=text],textarea{width:100%;font:16px Barlow,sans-serif;border:2px solid var(--line);padding:10px 12px;color:var(--navy);background:#fff}
+input[type=text]:focus,textarea:focus,.opt:focus-visible,.sw:focus-visible,.go:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+textarea{resize:vertical;min-height:92px}
+.hint{color:var(--muted);font-size:14px;margin:4px 0 0}
+.check{display:flex;gap:10px;align-items:center;font-weight:600;min-height:44px}
+.check input{width:22px;height:22px;accent-color:var(--navy)}
+.stage{position:sticky;top:16px;display:grid;gap:14px}
+.frame{background:#E9EEF2;display:grid;place-items:center;padding:18px;min-height:340px}
+canvas{display:block;max-width:100%;max-height:72vh;width:auto;height:auto;box-shadow:10px 10px 0 rgba(19,41,60,.18);background:#fff}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.go{font:800 17px Barlow,sans-serif;border:0;padding:13px 24px;min-height:48px;cursor:pointer;background:var(--navy);color:#fff;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.go.teal{background:var(--tealdk)}.go.red{background:var(--red)}
+.go:disabled{opacity:.45;cursor:not-allowed}
+#status{font-weight:600;color:var(--muted);min-height:24px}
+.rules{background:var(--cream);padding:14px 16px;font-size:15px}
+.rules b{display:block}
+.rules ul{margin:6px 0 0;padding-left:18px}
+@media (max-width:860px){main{grid-template-columns:1fr}.stage{position:static;order:-1}.steps{margin-left:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <span id="hpip"></span>
+  <div><h1>Pip Studio</h1><p>Make a Pip poster or a short Pip video in a minute.</p></div>
+  <div class="steps"><span><b>1</b> Pick a starter</span><span><b>2</b> Change the words</span><span><b>3</b> Save it</span></div>
+</header>
+<main>
+  <div class="panel">
+    <fieldset><legend>1. Start from</legend><div class="opts" id="starters"></div></fieldset>
+    <fieldset><legend>What are you making?</legend><div class="opts" id="formats"></div></fieldset>
+    <fieldset><legend>Pip's pose</legend><div class="poses" id="poses"></div></fieldset>
+    <fieldset><legend>Background colour</legend><div class="opts" id="colours"></div></fieldset>
+    <div><label class="l" for="headline">2. Big words</label><input type="text" id="headline" maxlength="60"></div>
+    <div><label class="l" for="sub">Second line</label><input type="text" id="sub" maxlength="90"><p class="hint">Leave empty if you don't need it.</p></div>
+    <div><label class="l" for="ticks">Tick list</label><textarea id="ticks" rows="3"></textarea><p class="hint">Up to three lines. Each line gets a tick box.</p></div>
+    <div><label class="l" for="label">Label</label><input type="text" id="label" maxlength="40"><p class="hint">For example Plan it with Pip, Pip explains or Pack it, Pip!</p></div>
+    <label class="check"><input type="checkbox" id="sound" checked> Music in the video</label>
+    <div class="rules"><b>Before you post</b><ul><li>Every date, time and price must match your site. Pip never says a fact you haven't written.</li><li>One Pip per picture.</li><li>Your logo and web address go on the end of every video automatically.</li></ul></div>
+  </div>
+  <div class="stage">
+    <div class="frame"><canvas id="cv" width="1080" height="1080" aria-label="Preview of your Pip poster or video"></canvas></div>
+    <div class="bar">
+      <button class="go teal" id="play" type="button">Play the video</button>
+      <button class="go" id="savePic" type="button">3. Save picture</button>
+      <button class="go red" id="saveVid" type="button">Save video</button>
+    </div>
+    <div id="status" role="status"></div>
+  </div>
+</main>
+<script src="assets/mascot.js"></script>
+<script src="studio.js"></script>
+</body>
+</html>
