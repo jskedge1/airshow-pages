@@ -30,6 +30,7 @@ html,body{margin:0;background:#111;overflow:hidden;height:100%}
 .chip{display:inline-block;background:#fff;color:#13293C;font-weight:800;font-size:56px;padding:12px 56px;clip-path:polygon(22px 0,100% 0,calc(100% - 22px) 100%,0 100%)}
 .logo{position:absolute;left:50%;width:640px;transform:translateX(-50%);background:#F8F4EA;padding:26px 40px;clip-path:polygon(26px 0,100% 0,calc(100% - 26px) 100%,0 100%);opacity:0}
 .logo img{display:block;width:100%}
+.logo{will-change:transform}
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
 </style>
 </head>
@@ -95,16 +96,21 @@ html,body{margin:0;background:#111;overflow:hidden;height:100%}
   var L9 = layer('', text('big', 'Follow us to find out.', 330) +
     '<div class="t" style="top:670px"><div class="chips" style="flex-direction:row;justify-content:center;flex-wrap:wrap"><span class="chip">Instagram</span><span class="chip">Facebook</span><span class="chip">YouTube</span></div></div>' +
     '<div style="position:absolute;left:0;right:0;top:870px;height:440px;overflow:hidden"><div class="pip sil" id="s4"></div><div class="q" style="left:700px;top:20px;font-size:300px">?</div></div>' +
-    '<div class="logo" style="top:1270px"><img src="../../brand/UK-Airshow-Guide-logo-transparent.png" alt=""></div>');
+    '<div class="logo" style="top:1270px"><div style="position:relative"><img class="lw" src="logo-words.png" alt=""><img class="ls" src="logo-swoosh.png" alt="" style="position:absolute;left:0;top:0;width:100%"></div></div>');
   shot(12, DUR, L9, function (t) {
     var e = L9.querySelectorAll('.t'); pop(e[0], t - .3, 'up');
     [].slice.call(L9.querySelectorAll('.chip')).forEach(function (c, i) { var d = t - (1 + i * .35), k = spring(d); c.style.opacity = d <= 0 ? 0 : Math.min(1, d / .12); c.style.transform = 'translateX(' + ((1 - k) * 160).toFixed(1) + 'px)'; });
     e[1].style.opacity = 1;
-    var lg = L9.querySelector('.logo'), dl = t - 2.2; lg.style.opacity = dl <= 0 ? 0 : Math.min(1, dl / .15); lg.style.transform = 'translateX(-50%) translateY(' + ((1 - spring(dl)) * 50).toFixed(1) + 'px)';
+    // the logo: its cream panel slides up, the red and teal swooshes sweep in left to right like a flypast trail, then the words land
+    var lg = L9.querySelector('.logo'), dl = t - 1.8; lg.style.opacity = dl <= 0 ? 0 : Math.min(1, dl / .15); lg.style.transform = 'translateX(-50%) translateY(' + ((1 - spring(dl)) * 50).toFixed(1) + 'px)';
+    var sw = L9.querySelector('.ls'), p = ease((t - 2.0) / .8), edge = (p * 125).toFixed(2);
+    sw.style.clipPath = 'polygon(0 0,' + edge + '% 0,' + (edge - 25) + '% 100%,0 100%)';
+    var wd = L9.querySelector('.lw'), dw = t - 2.8, kw = spring(dw, 300, 14);
+    wd.style.opacity = dw <= 0 ? 0 : Math.min(1, dw / .1); wd.style.transform = 'scale(' + (.82 + .18 * kw).toFixed(4) + ')'; wd.style.transformOrigin = '50% 60%';
     // the silhouette peeks up from the bottom edge, and a question mark pops beside it
     var s = L9.querySelector('#s4'); s.innerHTML = M.svg({ pose: 'rest', ground: false, look: [6, -6], title: '' });
-    var k = spring(t - 2.4, 150, 11); place(s, 600, 200, 110, W / 2, 440 + 60 - k * 300);
-    var qq = L9.querySelector('.q'), dq = t - 3; qq.style.opacity = dq <= 0 ? 0 : 1; qq.style.transform = 'rotate(10deg) scale(' + (.5 + .5 * spring(dq, 260, 12)).toFixed(4) + ')';
+    var k = spring(t - 3.1, 150, 11); place(s, 600, 200, 110, W / 2, 440 + 60 - k * 300);
+    var qq = L9.querySelector('.q'), dq = t - 3.6; qq.style.opacity = dq <= 0 ? 0 : 1; qq.style.transform = 'rotate(10deg) scale(' + (.5 + .5 * spring(dq, 260, 12)).toFixed(4) + ')';
   });
 
   var flash = document.createElement('div'); flash.className = 'flash'; stage.appendChild(flash);
@@ -121,7 +127,7 @@ html,body{margin:0;background:#111;overflow:hidden;height:100%}
     var f = 0; CUTS.forEach(function (c) { var d = t - c; if (d >= 0 && d < .18) f = Math.max(f, .35 * (1 - d / .18)); });
     flash.style.opacity = f.toFixed(3);
   };
-  window.HITS = [[0.3, 'fly'], [0.7, 'pop'], [2, 'whoosh'], [3, 'whoosh'], [4.1, 'thud'], [6, 'whoosh'], [6.6, 'tick'], [7, 'whoosh'], [8.1, 'thud'], [10, 'fly'], [10.6, 'pop'], [12, 'whoosh'], [13, 'tick'], [13.35, 'tick'], [13.7, 'tick'], [14.2, 'pop'], [14.4, 'boing'], [15, 'pop']];
+  window.HITS = [[0.3, 'fly'], [0.7, 'pop'], [2, 'whoosh'], [3, 'whoosh'], [4.1, 'thud'], [6, 'whoosh'], [6.6, 'tick'], [7, 'whoosh'], [8.1, 'thud'], [10, 'fly'], [10.6, 'pop'], [12, 'whoosh'], [13, 'tick'], [13.35, 'tick'], [13.7, 'tick'], [14.4, 'whoosh'], [14.8, 'thud'], [15.1, 'boing'], [15.6, 'pop']];
   window.FILM = { w: W, h: H, fps: FPS, duration: DUR, name: 'mystery' };
   document.fonts.ready.then(function () {
     Promise.all([].slice.call(document.images).map(function (im) { return im.decode().catch(function () {}); })).then(function () {
