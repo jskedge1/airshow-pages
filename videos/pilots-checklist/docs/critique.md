@@ -23,3 +23,18 @@ Worst three:
 3. [50-62, 74-86] Dotted ground routes were hidden under the caption card and Beth's second pill ran off the right edge -> routes raised to y 772-792, pill recentred at x 1545. Nearby panel shortened so "Kindness costs nothing." no longer overlaps it; staff clipped so legs do not show between tiles.
 Client changes folded in this round: square corners everywhere, real aircraft cut-outs (label now "Video: the Mustang", top-view Hawk on the map runway), new 20-beat section.
 Checks failed: downbeat frame at 8 (fixed). Verdict: ANOTHER ROUND
+
+## Round 3
+(final contact and phone sheets, both pages; stills at 1.5, 6, 19.6, 33, 41.5, 53.2, 61.5, 84, 96 s)
+| hook | read | motion | variety | brand | sync | min |
+|  8   |  8   |   8    |    8    |   9   |  8   |  8  |
+
+Evidence: hook = frame 0 already has Charlie in the CAPTAIN box, a Hawk mid-loop on the poster and the first caption up. Read = every caption, pill and tile reads on phone_p1/p2; smallest type is 34 px (map pills, polaroid labels, strip numbers). Motion = springs on every entrance, arcs on the kit items, page pushes with both shots on screen (strip_push), jet shape swells over 1.2 beats (strip_jet). Variety = home, shelf, top-down map, showground x3, list panel, dark card, payoff. Brand = kit palette, Barlow only, square corners, client aircraft cut-outs and logo. Sync = every HIT sits on the beat grid with a soft sound; sync.py was not run (see below).
+
+Worst three remaining (not fixed, judged minor):
+1. [74-77] Item 6 opens with 3 beats where only the caption and a pointing arm change -> slightly slow -> could bring the route draw forward to 75.
+2. [38-50] The loudspeaker zigzags sit on top of the crowd dots and look busy at phone size -> could halve the zig amplitude.
+3. [106-124] The staff member is only a head and a waving arm behind the tiles -> reads, but a full figure would be warmer; needs a tile layout change.
+
+Checks: no banned defaults except the progress strip, which is a top-left "corner label" on purpose (the brief asks for it: predictability). Longest gap without a new event: beats 101.5-106 (3.4 s, "Kindness costs nothing." holding). No cut opens blank. End card holds 5 s. One accent (teal), with the Sunflower green and signal red where they carry meaning.
+Verdict: READY
