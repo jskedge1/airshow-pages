@@ -49,14 +49,14 @@ times are the November 2026 timetable, so the film says to check the summer 2027
 
 ## The airshow train map: `train-map/`
 One film in the `_rail` design that shows the whole rail picture on a moving map of Great Britain (the `GB` outline now
-includes Scotland). About 3 min, 120 bpm, 16:9 and 9:16.
+includes Scotland). About 3 min 10, 120 bpm grid, 16:9 and 9:16.
 
 | Part | What it shows |
 |------|---------------|
 | 1 The network | The eleven London stations, then the main lines out of each one in the train company's colour |
 | 2 A worked example | Eastbourne to London Victoria (Southern), the Tube links from Victoria, every other Tube link between the main stations line by line (and the short walks), then Liverpool Street to Clacton-on-Sea |
 | 3 Every show | 15 shows: the line from London, the change, the station, and the last leg (walk, shuttle, bus or taxi) with a real aircraft cut-out |
-| 4 Skip London | CrossCountry north to south, the west side, east to west, and Wales and the West |
+| 4 Skip London | From the other big cities to their local shows, as the site planner routes them: Glasgow and Edinburgh (Ayr), Newcastle, Leeds, Manchester and Liverpool (Blackpool, Southport, Ayr), Birmingham (Cosford, Midlands), Bristol and Cardiff (Swansea, Salisbury) |
 | End card | The logo and ukairshowguide.co.uk/airshow-public-transport |
 
 The look: a real coastline (`_rail/map/coast.gen.js`, made by `gen-coast.mjs` from Natural Earth 1:10m, public domain),
@@ -86,12 +86,16 @@ checked against operator and council pages on 24 Nov 2026, and three things diff
   "about 0.6 miles".
 - Blackpool: the train page says change at Preston; the planner also lists a direct Euston to Blackpool North line.
 
+Sound (`_tools/audio.py`): a calm bed with no drums (slow pad, soft bass, sparse felt piano in D major) and soft cues
+tuned to it. There are no noise swooshes: a drawn line is a quiet two note figure and a camera move is a low breath.
+Liverpool to Blackpool uses the site's direct Northern line; the planner would change at Wigan on to Avanti.
+
 Build and render (the motion-reel skill was not installed in that session, so `_tools/` holds small stand-ins):
 ```
 node _rail/map/gen-data.mjs            # only after journey-planner.js or london-links.js change
 # gen-coast.mjs only needs running again to change the coastline detail (see the top of that file)
 python3 _rail/build_map.py             # writes train-map/film.js and copies lib, fonts and assets
-python3 _tools/beats.py train-map 120 181
+python3 _tools/beats.py train-map 120 190.5
 NODE_PATH=$(npm root -g) node _tools/shots.mjs train-map 9x16 every:3.5 --sheet 5    # contact sheets
 NODE_PATH=$(npm root -g) node _tools/render.mjs --film train-map --format 16x9       # and 9x16
 python3 _tools/audio.py train-map --mux                                              # music, sound effects, final MP4s
