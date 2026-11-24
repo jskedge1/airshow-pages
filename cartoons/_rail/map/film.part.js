@@ -23,7 +23,7 @@ function seg(op, name, a, b) {
   const L = DATA.LINES.find((l) => l[0] === op && l[1] === name); if (!L) throw new Error('no line ' + op + ' / ' + name);
   const i = L[2].indexOf(a), j = L[2].indexOf(b); if (i < 0 || j < 0) throw new Error(a + ' or ' + b + ' is not on ' + name);
   const codes = i <= j ? L[2].slice(i, j + 1) : L[2].slice(j, i + 1).reverse();
-  return { op: OPN[op], opName: op, codes, pts: codes.map(LL) };
+  return { op: OPN[op], opName: op, codes, pts: codes.map(LL), mins: Math.abs(L[3][j] - L[3][i]) };
 }
 const whole = (op, name) => { const L = DATA.LINES.find((l) => l[0] === op && l[1] === name); if (!L) throw new Error('no line ' + name); return seg(op, name, L[2][0], L[2][L[2].length - 1]); };
 
@@ -285,32 +285,46 @@ SH.forEach((s, i) => {
   ALLSHOWS.push(s);
 });
 
-// ---------------------------------------------------------------- 4. skip London
-HEADS.push({ a: XC_A, tag: '4  SKIP LONDON', title: 'North to south, east to west' });
-camTo(XC_A + 1.5, V_MAIN, 2.5);
+// ---------------------------------------------------------------- 4. skip London: the other big cities
+// Each city goes to its local shows. Routes are the site planner's own (DATA.HUBR), except where `legs` names the
+// site's direct line instead (the planner prefers a change on to the few Avanti trains to Blackpool North).
+HEADS.push({ a: XC_A, tag: '4  SKIP LONDON', title: 'From the other big cities' });
 hit(XC_A, 'section', 'impact'); hit(XC_A - 1, 'zoom out', 'whoosh', { len: 0.8, from: 1800, to: 400 });
+const SHOWN = { ayr: 'Ayr', blackpool: 'Blackpool', southport: 'Southport', cosford: 'Cosford', midlands: 'Midlands Air Festival', riat: 'Salisbury, for RIAT', wales: 'Swansea' };
 const XC = [
-  { title: 'North to south', ops: ['CrossCountry', 'West Midlands Railway'], lab: ['EDB', 'NCL', 'LDS', 'BHM', 'BRI', 'PLY'],
-    lines: [['CrossCountry', 'North East to South West'], ['CrossCountry', 'Manchester to Birmingham'], ['CrossCountry', 'Birmingham to Bournemouth'], ['West Midlands Railway', 'Birmingham to Shrewsbury via Cosford', 'BHM', 'COS'], ['West Midlands Railway', 'Cross City line to Redditch', 'BHM', 'RDC']],
-    rows: [['CROSSCOUNTRY', 'Edinburgh, Newcastle, Leeds, Birmingham, Bristol, Plymouth'], ['CHANGE AT BIRMINGHAM', 'For Cosford and Redditch']] },
-  { title: 'Up the west side', ops: ['Avanti West Coast', 'Northern', 'Merseyrail', 'ScotRail'], lab: ['BHM', 'LVC', 'MAN', 'PRE', 'GLC'],
-    lines: [['Avanti West Coast', 'Birmingham to Glasgow'], ['Northern', 'Manchester to Blackpool North'], ['Northern', 'Manchester to Southport'], ['Merseyrail', 'Northern line to Southport'], ['ScotRail', 'Glasgow Central to Ayr']],
-    rows: [['PRESTON', 'Change for Blackpool North'], ['MANCHESTER OR LIVERPOOL', 'Direct trains to Southport'], ['GLASGOW CENTRAL', 'Change for Ayr']] },
-  { title: 'East to west', ops: ['TransPennine Express', 'East Midlands Railway', 'CrossCountry'], lab: ['NCL', 'YRK', 'LIV', 'NRW', 'PBO', 'CBG'],
-    lines: [['TransPennine Express', 'Newcastle to Liverpool'], ['East Midlands Railway', 'Norwich to Liverpool'], ['CrossCountry', 'Birmingham to Stansted Airport']],
-    rows: [['NEWCASTLE, YORK, LEEDS', 'Across to Manchester and Liverpool'], ['PETERBOROUGH', 'Change for St Neots and Biggleswade'], ['CAMBRIDGE', 'The Duxford shuttle bus']] },
-  { title: 'Wales and the West', ops: ['Transport for Wales', 'GWR'], lab: ['MAN', 'SHR', 'CDF', 'SWA', 'BRI', 'SAL'],
-    lines: [['Transport for Wales', 'Manchester to South Wales'], ['GWR', 'Cardiff to Portsmouth'], ['Transport for Wales', 'Holyhead to Cardiff']],
-    rows: [['MANCHESTER, CREWE, SHREWSBURY', 'Direct to Cardiff and Swansea'], ['CARDIFF AND BRISTOL', 'Direct to Salisbury, nearest to RIAT']] },
+  { title: 'From Glasgow and Edinburgh', hubs: [['Glasgow', ['ayr']], ['Edinburgh', ['ayr']]] },
+  { title: 'From Newcastle', hubs: [['Newcastle', ['blackpool', 'ayr']]] },
+  { title: 'From Leeds', hubs: [['Leeds', ['blackpool', 'southport']]] },
+  { title: 'From Manchester', hubs: [['Manchester', ['blackpool', 'southport']]] },
+  { title: 'From Liverpool', hubs: [['Liverpool', ['southport', 'blackpool']]], legs: { 'Liverpool-blackpool': [['Northern', 'Liverpool to Blackpool North', 'LIV', 'BPN']] } },
+  { title: 'From Birmingham', hubs: [['Birmingham', ['cosford', 'midlands']]] },
+  { title: 'From Bristol and Cardiff', hubs: [['Bristol', ['wales', 'riat']], ['Cardiff', ['wales', 'riat']]] },
 ];
-const XC_STEP = 9, END_A = XC_A + 2 + XC.length * XC_STEP;
+const hm = (m) => { m = Math.round(m / 5) * 5; const h = Math.floor(m / 60), r = m % 60; return h ? h + (h === 1 ? ' hour' : ' hours') + (r ? ' ' + r + ' min' : '') : r + ' min'; };   // as the site rounds
+const XC_STEP = 8, END_A = XC_A + 1 + XC.length * XC_STEP;
 XC.forEach((x, i) => {
-  const a = XC_A + 2 + i * XC_STEP, off = a + XC_STEP;
-  x.lines.forEach((l, j) => { const s = l.length > 2 ? seg(...l) : whole(...l); LINES.push({ pts: s.pts, op: s.op, a: a + 0.4 + j * 0.5, b: a + 3.6 + j * 0.5, dim: off - 0.3, xc: true }); });
-  GROUPS.push({ a, off: off - 0.4, v: V_MAIN, items: x.lab.map((c, j) => ({ text: SHORT(c).replace(/ (New Street|Piccadilly|Temple Meads|Central|Waverley|Lime Street)$/, ''), at: LL(c), a: a + 1 + j * 0.5 })), avoid: [] });
-  x.lab.forEach((c, j) => { DOTS.push({ at: LL(c), a: a + 1 + j * 0.5, off: off - 0.4, r: 10 }); hit(a + 1 + j * 0.5, 'hub', 'pop', { pitch: ['C5', 'E5', 'G5', 'A5', 'C6', 'E6'][j] }); });
-  CARDS.push({ a, b: off, op: OPN[x.ops[0]], edge: lineCol(OPN[x.ops[0]]), title: x.title, chips: x.ops, rows: x.rows });
-  hit(a + 0.4, 'lines', 'whoosh', { len: 1, from: 400, to: 1500 });
+  const a = XC_A + 1 + i * XC_STEP, off = a + XC_STEP, rows = [], ops = [], all = [], labs = new Map(), multi = x.hubs.length > 1;
+  let n = 0;
+  x.hubs.forEach(([hub, shows]) => shows.forEach((sh) => {
+    const R = DATA.HUBR[hub][sh]; if (!R) throw new Error('no planner route ' + hub + ' to ' + sh);
+    const ov = x.legs && x.legs[hub + '-' + sh];
+    const legs = ov ? ov.map((l) => ({ ...seg(...l), from: l[2], to: l[3] })) : R.legs.map((l) => (l.op === 'Walk' ? { walk: true, pts: [LL(l.from), LL(l.to)], from: l.from, to: l.to, mins: l.mins } : { ...seg(l.op, l.line, l.from, l.to), from: l.from, to: l.to }));
+    const trains = legs.filter((l) => !l.walk), mins = legs.reduce((t, l) => t + l.mins, 0) + (ov ? 0 : Math.max(0, trains.length - 1) * 0);
+    const total = ov ? mins : R.mins;
+    let t0 = a + 0.6 + n * 0.5; const d = 2.6 / legs.length;
+    legs.forEach((l) => { LINES.push(l.walk ? { pts: l.pts, op: 'walk', a: t0, b: t0 + d, off: off - 0.3, dash: true } : { pts: l.pts, op: l.op, a: t0, b: t0 + d, dim: off - 0.3, calls: true }); t0 += d; all.push(...l.pts);
+      if (!l.walk && !ops.includes(l.opName)) ops.push(l.opName); });
+    const changes = trains.slice(0, -1).map((l) => SHORT(l.to).replace(/ (New Street|Piccadilly|Temple Meads|Central|Waverley|Lime Street|Queen Street|Parkway)$/, (m) => (m === ' Parkway' ? m : '')));
+    labs.set(legs[0].from, a + 0.4); trains.slice(0, -1).forEach((l) => labs.set(l.to, a + 1.8)); labs.set(trains[trains.length - 1].to, a + 3.2);
+    rows.push([(multi ? hub + ' to ' : 'To ') .toUpperCase() + SHOWN[sh].toUpperCase(), (changes.length ? 'Change at ' + changes.join(' and ') : 'Direct') + ', about ' + hm(total)]);
+    n++;
+  }));
+  camTo(a + 0.9, fitBox(boxAround(all, 1.1), 0.16), 1.8);
+  const cut = (c) => SHORT(c).replace(/ (New Street|Piccadilly|Temple Meads|Central|Waverley|Lime Street)$/, '');
+  GROUPS.push({ a, off: off - 0.4, v: fitBox(boxAround(all, 1.1), 0.16), avoid: dense(all), items: [...labs].map(([c, at]) => ({ text: cut(c), at: LL(c), a: at })) });
+  [...labs].forEach(([c, at]) => DOTS.push({ at: LL(c), a: at, off: off - 0.4, r: 12 }));
+  CARDS.push({ a: a + 0.2, b: off, op: OPN[ops[0]], edge: lineCol(OPN[ops[0]]), title: x.title, chips: ops, rows, one: true });
+  hit(a + 0.6, 'routes', 'whoosh', { len: 0.5, from: 500, to: 1500 }); hit(a + 3.2, 'arrive', 'bell', { pitch: ['C6', 'D6', 'E6', 'G6'][i % 4] }); hit(a, 'card', 'pop', { pitch: 'G5' });
 });
 hit(END_A - 0.9, 'push', 'whoosh', { len: 0.4 }); hit(END_A, 'end', 'impact'); hit(END_A + 0.6, 'logo', 'bell', { pitch: 'F6' }); hit(END_A + 2.4, 'url', 'pop', { pitch: 'C6' });
 
