@@ -64,7 +64,7 @@
   }
   const cache = {};
   const getPose = (p) => cache[p] || (cache[p] = poseFrames(p));
-  let A = { logo: null, pose: null, hello: null, fly: null };
+  let A = { logo: null, badge: null, pose: null, hello: null, fly: null };
 
   // ---------------------------------------------------------------- text helpers
   const FD = 'PipDisplay, Barlow, sans-serif', FU = 'PipUI, Barlow, sans-serif';
@@ -252,17 +252,19 @@
     ctx.fillStyle = '#F8F4EA'; ctx.fillRect(0, 0, W, H);
     streaks(t, { dark: false }, W, H);
     const wide = S.format === 'wide';
-    const ps = wide ? 600 : S.format === 'tall' ? 600 : 400;
-    const px = wide ? 160 : (W - ps) / 2, py = wide ? (H - ps) / 2 : S.format === 'tall' ? 330 : 90;
+    const ps = wide ? 600 : S.format === 'tall' ? 600 : 360;
+    const px = wide ? 160 : (W - ps) / 2, py = wide ? (H - ps) / 2 : S.format === 'tall' ? 300 : 60;
     drawPip(A.hello, t, px, py, ps, 0);
     const cx = wide ? 860 : 80, cw = wide ? 960 : W - 160, align = wide ? 'left' : 'center', tx = wide ? cx : W / 2;
-    let y = wide ? 300 : py + ps + 40;
+    let y = wide ? 250 : py + ps + 20;
     const r1 = arrive(t, 5.9);
-    if (r1 && A.logo) {
-      const lw = wide ? 700 : 680, lh = lw * A.logo.height / A.logo.width, lx = wide ? cx : (W - lw) / 2;
-      ctx.save(); ctx.globalAlpha = r1.a; ctx.drawImage(A.logo, lx, y + (1 - r1.k) * 40, lw, lh); ctx.restore();
-      y += lh + 40;
-    } else y += (wide ? 700 : 680) * .33 + 40;
+    // the video end logo: the swoosh badge from the TikTok videos, landing with a bounce (see CLAUDE.md)
+    const lw = wide ? 620 : S.format === 'square' ? 500 : 640, lh = A.badge ? lw * A.badge.height / A.badge.width : lw * .5;
+    if (r1 && A.badge) {
+      const lx = wide ? cx : (W - lw) / 2, k = spring(t - 5.9, 260, 13);
+      ctx.save(); ctx.translate(lx + lw / 2, y + lh / 2); ctx.scale(k, k); ctx.rotate((1 - k) * 12 * Math.PI / 180); ctx.drawImage(A.badge, -lw / 2, -lh / 2, lw, lh); ctx.restore();
+    }
+    y += lh + 30;
     const r2 = arrive(t, 6.4);
     if (r2) {
       ctx.save(); ctx.globalAlpha = r2.a; ctx.font = '800 ' + (wide ? 86 : 78) + 'px ' + FD; ctx.textBaseline = 'alphabetic';
@@ -410,8 +412,8 @@
     $('saveVid').addEventListener('click', saveVideo);
     fillInputs();
     await Promise.all([document.fonts.load('800 40px PipDisplay'), document.fonts.load('600 40px PipUI')]).catch(() => {});
-    const [logo, hello, fly, pose] = await Promise.all([loadImg('assets/logo.png'), getPose('hello'), pipImg({ pose: 'fly', spin: true }), getPose(S.pose)]);
-    A = { logo, hello, fly, pose };
+    const [logo, badge, hello, fly, pose] = await Promise.all([loadImg('assets/logo.png'), loadImg('assets/logo-badge.png'), getPose('hello'), pipImg({ pose: 'fly', spin: true }), getPose(S.pose)]);
+    A = { logo, badge, hello, fly, pose };
     syncPressed(); drawStill();
     window.READY = true;
   }

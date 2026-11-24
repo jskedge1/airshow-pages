@@ -21,7 +21,7 @@
   }
   var FILMNAME = q.get('film') === 'teaser' ? 'teaser' : 'promo';
   var PIPBOX = '<div class="pipwrap"><div class="panel"></div><div class="pipbox"></div></div>';
-  var LOGO = '../../brand/UK-Airshow-Guide-logo-transparent.png';
+  var LOGO = '../../brand/uk-airshow-guide-swoosh-badge.png'; // the video end logo (see CLAUDE.md)
   var strap = '<i style="color:#23908C">Plan.</i> <i style="color:#1F4E8C">Inform.</i> <i style="color:#D74949">Prepare.</i>';
   var wave = function (lt) { return -46 + 13 * Math.sin(lt * TAU * 2); };
   // a square tick box, drawn with straight lines only
