@@ -15,3 +15,8 @@ Hook 8, readability 8, motion 8, variety 8, brand 8, sound 9.
 Worst three: the circle wipe into "It does not have to." opened on an almost empty card; nothing else above the bar.
 Fixed: the words now arrive during the wipe.
 Remaining: the title card (beats 22-28) is sparse on the left third; the wide shot in tip 3 makes Charlie small.
+
+## Round 4 (client changes)
+Square corners on every box, the site's own aircraft drawings, and a new section for other visitors (beats 88-108); film now 105 s.
+Worst three: the new list panel overlapped the second bystander; "Kindness costs nothing." wrapped; top-down aircraft were too large.
+Fixed: cast moved left, wider caption, aircraft scaled down.

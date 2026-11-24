@@ -1,5 +1,5 @@
 // See the Sound: an airshow drawn the way Charlie hears it. Every noise is a shape; every tip
-// visibly calms the picture. 120 beats at 80 bpm (90 s). Pure function of time.
+// visibly calms the picture. 140 beats at 80 bpm (105 s). Pure function of time.
 import * as K from '../shared/kit.js';
 const { M, C, F } = K;
 const { W, H, TAU, clamp, lerp, prog, E, springU, SPRING, kf, hash01 } = M;
@@ -27,6 +27,8 @@ const HITS = [
   [104, 'spitfire', 'tok', { pitch: 'F4', gain: 0.22 }], [106.5, 'happy flapping', 'bell', { pitch: 'F5', gain: 0.1 }],
   [114, 'end card', 'bell', { pitch: 'C6', gain: 0.12 }],
 ];
+
+const NEARBY_HITS = [[88, 'nearby', 'tok', { pitch: 'F4', gain: 0.22 }], ...[0, 1, 2, 3, 4].map((i) => [90 + i * 3, `nearby ${i + 1}`, 'tick', { gain: 0.14 }]), [99, 'can I help', 'blip', { pitch: 'C5', gain: 0.1 }], [104, 'kindness', 'bell', { pitch: 'F5', gain: 0.1 }]];
 
 function showground(ctx, u, o = {}) {
   K.sky(ctx); K.clouds(ctx, u, 150, 5); K.horizon(ctx, GY); K.ground(ctx, GY);
@@ -56,8 +58,8 @@ function scenePile(ctx, u) {
   const jx = lerp(-500, 2500, prog(u, 16.8, 21.8));
   const br = kf(u, [[17, 0], [18, 300], [20, 540], [22, 560]], E.outCubic);
   if (br > 0) { ctx.save(); ctx.globalAlpha = 0.93; K.burst(ctx, clamp(jx - 120, 500, 1300), 230, br, C.orange, { n: 16, u: u * 2, seed: 3 }); ctx.restore(); }
-  K.jet(ctx, jx, 205, 0.95, -0.05, { burn: true, u });
-  const hp = prog(u, -1.2, 6.5); if (hp < 1) { const hx = lerp(-200, 2300, hp), hy = 200 + Math.sin(u * 0.8) * 20; K.rings(ctx, hx - 60, hy, 170, C.teal, u, 3, 10); K.propPlane(ctx, hx, hy, 0.8, -0.05, u); }
+  K.jet(ctx, jx, 215, 0.7, -0.05, { burn: true, u });
+  const hp = prog(u, -1.2, 6.5); if (hp < 1) { const hx = lerp(-200, 2300, hp), hy = 200 + Math.sin(u * 0.8) * 20; K.rings(ctx, hx - 60, hy, 170, C.teal, u, 3, 10); K.propPlane(ctx, hx, hy, 0.62, -0.05, u); }
   // Charlie and Dad
   const ears = springU(u, 17.7, SPRING.snappy);
   const mood = u < 8 ? 'happy' : u < 13.5 ? 'neutral' : u < 17.7 ? 'worried' : 'overwhelm';
@@ -73,7 +75,7 @@ function scenePile(ctx, u) {
   lab('Fast jet', 960, 110, 18.4, C.red);
   // how loud it feels
   const mk = K.pop(u, 5.4, SPRING.gentle);
-  if (mk > 0) { ctx.save(); ctx.translate(-(1 - mk) * 300, 0); K.meter(ctx, 110, 330, 300, kf(u, [[5, 0.12], [7, 0.3], [11, 0.5], [16, 0.62], [19, 1]]), { w: 50 }); K.rr(ctx, 178, 404, 176, 104, 20, C.paper); M.text(ctx, 'How loud', 196, 448, F(34, 700), C.ink); M.text(ctx, 'it feels', 196, 490, F(34, 700), C.ink); ctx.restore(); }
+  if (mk > 0) { ctx.save(); ctx.translate(-(1 - mk) * 300, 0); K.meter(ctx, 110, 330, 300, kf(u, [[5, 0.12], [7, 0.3], [11, 0.5], [16, 0.62], [19, 1]]), { w: 50 }); K.rr(ctx, 178, 404, 176, 104, 0, C.paper); M.text(ctx, 'How loud', 196, 448, F(34, 700), C.ink); M.text(ctx, 'it feels', 196, 490, F(34, 700), C.ink); ctx.restore(); }
   // a promise to the viewer, right at the start
   const ck = Math.min(springU(u, 0.5, SPRING.gentle), 1 - E.inCubic(prog(u, 4.4, 5)));
   if (ck > 0.01) { ctx.save(); ctx.translate(70, 86 - (1 - ck) * 200); K.pill(ctx, 0, 0, 'A calm video: no sudden sounds, no flashing', { size: 34, bg: C.teal, fg: C.white }); ctx.restore(); }
@@ -98,7 +100,7 @@ function sceneTurn(ctx, u) {
   if (sk > 0) M.text(ctx, 'Six things that turn it down', 136 - (1 - sk) * 60, 470, F(72, 700), C.ink);
   for (let i = 0; i < 6; i++) {
     const k = K.pop(u, 24 + i * 0.5);
-    if (k > 0) { K.circ(ctx, 186 + i * 150, 640, 54 * k, i % 2 ? C.tealSoft : C.teal); M.text(ctx, String(i + 1), 186 + i * 150, 640 + 22 * k, F(62 * k, 800), i % 2 ? C.ink : C.white, 'center'); }
+    if (k > 0) { K.rr(ctx, 186 + i * 150 - 54 * k, 640 - 54 * k, 108 * k, 108 * k, 0, i % 2 ? C.tealSoft : C.teal); M.text(ctx, String(i + 1), 186 + i * 150, 640 + 22 * k, F(62 * k, 800), i % 2 ? C.ink : C.white, 'center'); }
   }
   const lk = K.pop(u, 26, SPRING.gentle);
   if (lk > 0) M.text(ctx, 'for families, and for autistic adults', 136 - (1 - lk) * 60, 800, F(48, 500), C.greyDark);
@@ -123,11 +125,11 @@ function tip1(ctx, u) {
     ctx.fillStyle = C.grass; ctx.fillRect(-240, 90, 480, 60);
     const jx = ((u * 150) % 760) - 380;
     K.burst(ctx, jx - 60, -20, 30 + vol * 110, C.orange, { n: 12, u });
-    K.jet(ctx, jx, -24, 0.42, -0.04, { burn: true, u });
+    K.jet(ctx, jx, -24, 0.34, -0.04, { burn: true, u });
   });
   // volume slider
   const sx = 960, sw = 540, sy = 690;
-  K.rr(ctx, sx, sy - 9, sw, 18, 9, '#D7CCB6'); K.rr(ctx, sx, sy - 9, sw * vol, 18, 9, C.teal); K.circ(ctx, sx + sw * vol, sy, 30, C.teal); K.circ(ctx, sx + sw * vol, sy, 12, C.white);
+  K.rr(ctx, sx, sy - 9, sw, 18, 0, '#D7CCB6'); K.rr(ctx, sx, sy - 9, sw * vol, 18, 0, C.teal); K.circ(ctx, sx + sw * vol, sy, 30, C.teal); K.circ(ctx, sx + sw * vol, sy, 12, C.white);
   M.text(ctx, 'Volume', sx - 150, sy + 13, F(36, 700), C.ink);
   K.caption(ctx, u, 28.3, 37.5, 'Watch and listen at home first', { num: 1, sub: 'Start quiet. Turn it up a little each time, so there are no surprises.' });
 }
@@ -138,7 +140,7 @@ function tip2(ctx, u) {
   const on = springU(u, 41.3, SPRING.snappy), soft = K.ease(u, 41.3, 42.6, E.outCubic);
   const jx = lerp(1050, 1640, prog(u, 37, 48));
   K.burst(ctx, jx - 140, 215, lerp(330, 150, soft), M.mix(C.orange, SOFT, soft), { n: 16, jag: 1 - soft * 0.93, u: u * (2 - soft), seed: 3 });
-  K.jet(ctx, jx, 200, 0.8, -0.04, { burn: true, u });
+  K.jet(ctx, jx, 205, 0.6, -0.04, { burn: true, u });
   K.meter(ctx, 110, 280, 300, lerp(0.95, 0.3, soft), { w: 50 });
   K.dad(ctx, 1010, FEET + 8, 1.2, { mood: 'happy', look: [-1, 0.5], blinkU: u, blinkOff: 1, armL: on > 0.5 ? K.POSE.relaxed : K.POSE.reach, armR: u > 43.5 ? [2.3, 0.4] : K.POSE.relaxed });
   const s = 1.6, hy = FEET - s * 207;
@@ -179,12 +181,12 @@ function tip4(ctx, u) {
   const ck = K.pop(u, 58.1, SPRING.gentle);
   ctx.save(); ctx.translate(0, (1 - ck) * -60);
   const cx = 120, cy = 70, cw = 800, chh = 640;
-  ctx.save(); ctx.globalAlpha = 0.14; K.rr(ctx, cx + 8, cy + 14, cw, chh, 36, '#000'); ctx.restore();
-  K.rr(ctx, cx, cy, cw, chh, 36, C.paper);
+  ctx.save(); ctx.globalAlpha = 0.14; K.rr(ctx, cx + 8, cy + 14, cw, chh, 0, '#000'); ctx.restore();
+  K.rr(ctx, cx, cy, cw, chh, 0, C.paper);
   M.text(ctx, 'Flying programme', cx + 48, cy + 92, F(62, 800), C.ink);
   const rows = [['12:00', 'Vintage trainers', 0], ['12:30', 'Spitfire', 0], ['13:00', 'Fast jet', 1], ['13:30', 'Wing walkers', 0]];
   const hi = M.springKeys(u, [[58, 0], [61, 1], [62.5, 2]], SPRING.snappy);
-  K.rr(ctx, cx + 24, cy + 132 + hi * 122, cw - 48, 108, 24, hi > 1.5 ? '#FBE3D1' : C.tealSoft);
+  K.rr(ctx, cx + 24, cy + 132 + hi * 122, cw - 48, 108, 0, hi > 1.5 ? '#FBE3D1' : C.tealSoft);
   rows.forEach(([t, n, loud], i) => {
     const y = cy + 204 + i * 122;
     M.text(ctx, t, cx + 52, y, F(50, 700), C.greyDark); M.text(ctx, n, cx + 232, y, F(54, 700), C.ink);
@@ -228,7 +230,7 @@ function tip5(ctx, u) {
 function tip6(ctx, u) {
   showground(ctx, u, { fence: false });
   // the exit and the car
-  K.rr(ctx, 1672, 430, 12, 250, 6, C.greyDark); K.rr(ctx, 1560, 400, 236, 92, 18, C.sun); M.text(ctx, 'Way out', 1678, 464, F(48, 800), C.white, 'center');
+  K.rr(ctx, 1672, 430, 12, 250, 0, C.greyDark); K.rr(ctx, 1560, 400, 236, 92, 0, C.sun); M.text(ctx, 'Way out', 1678, 464, F(48, 800), C.white, 'center');
   K.car(ctx, 1690, 742, 0.6, C.blue);
   const rp = K.ease(u, 82.4, 84.6);
   K.route(ctx, [[1100, 790], [1260, 812], [1420, 800], [1560, 772]], rp, C.teal, 10);
@@ -242,15 +244,55 @@ function tip6(ctx, u) {
   K.caption(ctx, u, 78.3, 87.5, 'Agree a signal, and a way out', { num: 6, sub: 'Leaving early is not failing. It is the plan working.' });
 }
 
-// ---------------------------------------------------------------- 88-104: what airshows can do
+// ---------------------------------------------------------------- 88-108: if you are standing nearby
+const NEARBY = ['It is overload, not bad behaviour', 'Give space. Please do not stare or film', 'Skip the advice. A kind smile helps', 'Ask the grown-up: "Can I help?"', 'Flapping, rocking and ear defenders are all fine'];
+const BY1 = { adult: true, skin: '#F3D5BA', hair: '#B9B2A8', hairStyle: 'bob', top: '#7FA5C9', bottom: '#4A4A58', shoe: '#2B2B33' };
+const BY2 = { adult: true, skin: '#C99672', hair: '#2B2622', hairStyle: 'short', top: '#9BB58E', bottom: '#3D4A63', shoe: '#2B2B33', cap: '#5E6E80' };
+function sceneNearby(ctx, u) {
+  showground(ctx, u, { fence: false });
+  const back = K.ease(u, 93, 94.6), better = K.ease(u, 99.5, 103.5);
+  // the space people leave
+  if (back > 0) { ctx.save(); ctx.globalAlpha = 0.5 * back; ctx.beginPath(); ctx.ellipse(360, 760, 330 * back, 60 * back, 0, 0, TAU); ctx.fillStyle = C.tealSoft; ctx.fill(); ctx.restore(); }
+  // what Charlie is hearing: it eases as people give room
+  K.pebbles(ctx, 60, 250, 520, 200, 34, u, [C.grey, C.lilac, C.blue], { amt: lerp(1, 0.2, Math.max(back * 0.6, better)), size: lerp(22, 13, better) });
+  K.burst(ctx, 280, 290, lerp(120, 50, better), M.mix(C.orange, SOFT, better), { n: 13, jag: 1 - better * 0.92, u });
+  // two people nearby: staring and filming at first, then stepping back
+  const bx = lerp(0, 60, back);
+  K.person(ctx, 830 + bx, FEET + 14, 1.12, { ...BY2, mood: back > 0.5 ? 'happy' : 'neutral', look: back > 0.5 ? [1, -0.6] : [-1, 0.4], blinkU: u, blinkOff: 3, armL: K.POSE.relaxed, armR: back > 0.5 ? K.POSE.relaxed : [1.6, 1.1], hold: back > 0.5 ? null : 'camera', flip: false });
+  const ask = K.pop(u, 99);
+  K.person(ctx, 670 + bx * 0.6, FEET + 10, 1.12, { ...BY1, mood: back > 0.5 ? 'happy' : 'worried', look: [-1, 0.3], blinkU: u, blinkOff: 1, armL: ask > 0 ? [2.3, 0.3] : K.POSE.relaxed, armR: K.POSE.relaxed });
+  if (ask > 0 && u < 104) { ctx.save(); ctx.translate(680, 240); ctx.scale(ask, ask); K.pill(ctx, 0, 0, 'Can I help?', { align: 'center', size: 44, bg: C.paper, fg: C.ink }); ctx.restore(); }
+  // Charlie and Dad
+  K.dad(ctx, 450, FEET + 10, 1.18, { mood: better > 0.6 ? 'happy' : 'worried', look: [-1, 0.6], lean: -0.06, blinkU: u, blinkOff: 2, armL: K.POSE.reach, armR: ask > 0 && u < 103 ? [2.2, 0.4] : K.POSE.relaxed });
+  const up = better;
+  K.kid(ctx, 280, FEET, 1.3 * (0.93 + 0.07 * up), { mood: better < 0.3 ? 'overwhelm' : better < 0.8 ? 'worried' : 'calm', defenders: K.DEF, blinkU: u, tilt: -0.06 * (1 - up), armL: armMix(K.POSE.ears, K.POSE.relaxed, up), armR: armMix(K.POSE.ears, K.POSE.relaxed, up) });
+  // the list
+  const px = 1030, pw = 830, pk = K.pop(u, 88.2, SPRING.gentle);
+  ctx.save(); ctx.translate((1 - pk) * 900, 0);
+  K.rr(ctx, px, 50, pw, 700, 0, C.paper);
+  K.rr(ctx, px, 50, pw, 84, 0, C.ink);
+  M.text(ctx, 'IF YOU ARE STANDING NEARBY', px + 36, 106, F(36, 800), C.yellow, 'left', 2);
+  NEARBY.forEach((str, i) => {
+    const a = 90 + i * 3, k = K.pop(u, a, SPRING.snappy);
+    if (k <= 0) return;
+    const y = 150 + i * 120, f = F(46, 700), lines = K.wrap(ctx, str, f, pw - 150);
+    K.rr(ctx, px + 36, y + 22, 56 * Math.min(1, k), 56, 0, C.teal); K.tick(ctx, px + 64, y + 50, 0.9, prog(u, a + 0.15, a + 0.7), C.white, 9);
+    lines.forEach((l, j) => M.text(ctx, l, px + 118 + (1 - Math.min(1, k)) * 60, y + (lines.length > 1 ? 44 : 68) + j * 52, f, C.ink));
+  });
+  ctx.restore();
+  K.caption(ctx, u, 88.4, 103.6, 'Someone near you is having a hard time?', { w: 1500, size: 64 });
+  K.caption(ctx, u, 104, 107.4, 'Kindness costs nothing.', { w: 1150, size: 84 });
+}
+
+// ---------------------------------------------------------------- 108-124 (drawn as 88-104): what airshows can do
 const TILES = [
   ['A signposted quiet space', 'tent'], ['A warning before the loud bits', 'chip'], ['A sensory map and photo guide online', 'map'],
   ['Ear defenders to borrow or buy', 'def'], ['Staff who know the Sunflower lanyard', 'sun'], ['A quieter first hour', 'clock'],
 ];
 function tileIcon(ctx, kind, u) {
   if (kind === 'tent') K.tent(ctx, 0, 56, 0.34, C.tealSoft, C.teal);
-  if (kind === 'chip') { K.rr(ctx, -66, -30, 132, 60, 30, C.ink); for (let i = 0; i < 3; i++) K.circ(ctx, -34 + i * 34, 0, 11, ((u * 1.2) % 3) >= i ? C.orange : '#4B5E76'); }
-  if (kind === 'map') { K.rr(ctx, -62, -50, 124, 100, 14, C.tealSoft); K.line(ctx, [[-62, 10], [-10, -8], [20, 20], [62, -6]], C.white, 8); K.pin(ctx, 18, 14, 0.62, C.red); }
+  if (kind === 'chip') { K.rr(ctx, -66, -30, 132, 60, 0, C.ink); for (let i = 0; i < 3; i++) K.circ(ctx, -34 + i * 34, 0, 11, ((u * 1.2) % 3) >= i ? C.orange : '#4B5E76'); }
+  if (kind === 'map') { K.rr(ctx, -62, -50, 124, 100, 0, C.tealSoft); K.line(ctx, [[-62, 10], [-10, -8], [20, 20], [62, -6]], C.white, 8); K.pin(ctx, 18, 14, 0.62, C.red); }
   if (kind === 'def') K.defendersIcon(ctx, 0, 4, 0.82);
   if (kind === 'sun') K.sunflower(ctx, 0, 0, 1.05, u * 0.15);
   if (kind === 'clock') { K.circ(ctx, 0, 0, 58, C.teal); K.circ(ctx, 0, 0, 46, C.white); K.line(ctx, [[0, 0], [0, -30]], C.ink, 8); K.line(ctx, [[0, 0], [22, 10]], C.ink, 8); }
@@ -264,8 +306,8 @@ function sceneShows(ctx, u) {
     const a = 90 + i * 2, k = K.pop(u, a, SPRING.bouncy);
     if (k <= 0) return;
     const col = i % 3, row = Math.floor(i / 3), w = 540, h = 290, x = 110 + col * 580, y = 250 + row * 320 + (1 - k) * 120;
-    K.rr(ctx, x, y, w, h, 34, C.paper);
-    K.circ(ctx, x + 116, y + h / 2, 92, '#EFE7D6');
+    K.rr(ctx, x, y, w, h, 0, C.paper);
+    K.rr(ctx, x + 28, y + 28, 176, h - 56, 0, '#EFE7D6');
     ctx.save(); ctx.translate(x + 116, y + h / 2); const s = 0.85 + 0.15 * Math.min(1.1, k); ctx.scale(s, s); tileIcon(ctx, kind, u); ctx.restore();
     const f = F(46, 700), lines = K.wrap(ctx, label, f, w - 250);
     lines.forEach((l, j) => M.text(ctx, l, x + 232, y + h / 2 + 16 - (lines.length - 1) * 27 + j * 54, f, C.ink));
@@ -274,13 +316,13 @@ function sceneShows(ctx, u) {
   if (bk > 0) M.text(ctx, 'Small changes. A bigger welcome.', 112 - (1 - bk) * 80, 990, F(60, 700), C.tealSoft);
 }
 
-// ---------------------------------------------------------------- 104-114: same sky
+// ---------------------------------------------------------------- 124-134 (drawn as 104-114): same sky
 function scenePayoff(ctx, u) {
   showground(ctx, u);
   K.crowd(ctx, 20, 380, 735, 5, 0.9, 9, 1, u);
   const px = lerp(-350, 2300, prog(u, 104.2, 113.5)), py = 215 + Math.sin(u * 0.7) * 26;
   K.rings(ctx, px - 60, py, 210, C.teal, u, 3, 12);
-  K.propPlane(ctx, px, py, 0.9, -0.05 + Math.cos(u * 0.7) * 0.03, u);
+  K.propPlane(ctx, px, py, 0.7, -0.05 + Math.cos(u * 0.7) * 0.03, u);
   K.beth(ctx, 1380, FEET + 12, 1.18, { mood: 'happy', headphones: '#3A3F4B', hold: 'camera', armL: [1.7, 1.2], armR: [1.7, 1.2], look: [0, -1], tilt: -0.06 });
   K.dad(ctx, 880, FEET + 8, 1.2, { mood: 'happy', look: [0, -1], blinkU: u, blinkOff: 2, armL: K.POSE.relaxed, armR: K.POSE.relaxed, tilt: -0.04 });
   const fl = u > 106.5 ? K.flap(u, 3) : { armL: K.POSE.relaxed, armR: K.POSE.relaxed };
@@ -292,12 +334,12 @@ function scenePayoff(ctx, u) {
 }
 
 // ---------------------------------------------------------------- the cut
-const SCENES = [[0, scenePile], [22, sceneTurn, 'circle'], [28, tip1], [38, tip2], [48, tip3], [58, tip4], [68, tip5], [78, tip6], [88, sceneShows], [104, scenePayoff]];
+const SCENES = [[0, scenePile], [22, sceneTurn, 'circle'], [28, tip1], [38, tip2], [48, tip3], [58, tip4], [68, tip5], [78, tip6], [88, sceneNearby], [108, (ctx, u) => sceneShows(ctx, u - 20)], [124, (ctx, u) => scenePayoff(ctx, u - 20)]];
 const PUSH = 0.9;
 M.film({
   fonts: K.FONTS,
   images: { logo: '../shared/logo.png' },
-  hits: HITS,
+  hits: HITS.map((h) => (h[0] >= 88 ? [h[0] + 20, ...h.slice(1)] : h)).concat(NEARBY_HITS).sort((a, b) => a[0] - b[0]),
   samples: 6,
   draw(ctx, u, t, IMG) {
     let i = 0; while (i + 1 < SCENES.length && u >= SCENES[i + 1][0] - PUSH) i++;
@@ -312,6 +354,6 @@ M.film({
         ctx.save(); ctx.translate((1 - p) * W, 0); ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip(); fn(ctx, u); ctx.restore();
       }
     } else fn(ctx, u);
-    K.endCard(ctx, u, 112.9, IMG, { cx: 650, cy: 500 });
+    K.endCard(ctx, u - 20, 112.9, IMG, { cx: 650, cy: 500 });
   },
 });
