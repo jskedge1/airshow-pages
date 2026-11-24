@@ -53,7 +53,7 @@ export function heading(ctx, u, u0, str, x, y, size, color, color2 = null, split
 }
 
 // A rounded card with a coloured top edge (the site's box style).
-export function card(ctx, x, y, w, h, { fill = C.white, edge = C.teal, r = 18, shadow = true, edgeH = 10 } = {}) {
+export function card(ctx, x, y, w, h, { fill = C.white, edge = C.teal, r = 0, shadow = true, edgeH = 10 } = {}) {
   if (shadow) { ctx.save(); ctx.fillStyle = 'rgba(14,33,49,0.16)'; rrect(ctx, x + 6, y + 10, w, h, r); ctx.fill(); ctx.restore(); }
   ctx.save(); rrect(ctx, x, y, w, h, r); ctx.fillStyle = fill; ctx.fill(); ctx.clip();
   if (edge) { ctx.fillStyle = edge; ctx.fillRect(x, y, w, edgeH); }
@@ -64,7 +64,7 @@ export function pill(ctx, str, x, y, size, bg, fg, align = 'left') {
   const f = fu(size, 700); ctx.font = f;
   const w = ctx.measureText(str).width + size * 1.1, h = size * 1.7;
   const x0 = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
-  rrect(ctx, x0, y - h / 2, w, h, h / 2); ctx.fillStyle = bg; ctx.fill();
+  ctx.fillStyle = bg; ctx.fillRect(x0, y - h / 2, w, h);
   ctx.fillStyle = fg; ctx.textAlign = 'left'; ctx.fillText(str, x0 + size * 0.55, y + size * 0.36);
   return w;
 }
@@ -223,36 +223,36 @@ export function person(ctx, x, y, s, p = {}) {
 
 // ------------------------------------------------------------------ aircraft
 // A display jet in side view, nose at +x. (x,y) = centre, s scale (~320 px long), rot radians.
-export function jet(ctx, x, y, s, rot = 0, { body = C.navy, stripe = C.red, belly = '#DCE6EE', flame = 0.5 } = {}) {
-  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
-  ctx.lineJoin = 'round';
-  // far wing
-  ctx.fillStyle = '#0B1D2B';
-  ctx.beginPath(); ctx.moveTo(10, -4); ctx.lineTo(-70, -48); ctx.lineTo(-96, -48); ctx.lineTo(-60, -4); ctx.closePath(); ctx.fill();
-  // exhaust flame
-  if (flame > 0) {
-    ctx.fillStyle = 'rgba(245,185,66,0.9)';
-    ctx.beginPath(); ctx.moveTo(-150, -8); ctx.lineTo(-150 - 40 * flame, 0); ctx.lineTo(-150, 8); ctx.closePath(); ctx.fill();
-  }
-  // fuselage
-  ctx.fillStyle = body;
-  ctx.beginPath();
-  ctx.moveTo(165, 4); ctx.quadraticCurveTo(120, -22, 60, -22); ctx.lineTo(-120, -20); ctx.lineTo(-152, -12);
-  ctx.lineTo(-152, 12); ctx.lineTo(-110, 18); ctx.lineTo(60, 18); ctx.quadraticCurveTo(130, 18, 165, 4); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = belly; ctx.beginPath(); ctx.moveTo(160, 6); ctx.quadraticCurveTo(120, 16, 60, 16); ctx.lineTo(-110, 16); ctx.lineTo(-104, 8); ctx.lineTo(150, 6); ctx.fill();
-  // stripe
-  ctx.fillStyle = stripe; ctx.beginPath(); ctx.moveTo(110, -8); ctx.lineTo(-130, -6); ctx.lineTo(-130, 2); ctx.lineTo(110, 0); ctx.closePath(); ctx.fill();
-  // canopy
-  ctx.fillStyle = '#7FD4F0'; ctx.beginPath(); ctx.moveTo(110, -16); ctx.quadraticCurveTo(80, -46, 30, -24); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.beginPath(); ctx.moveTo(92, -24); ctx.quadraticCurveTo(76, -36, 56, -28); ctx.lineTo(64, -25); ctx.quadraticCurveTo(78, -30, 88, -22); ctx.fill();
-  // tail fin
-  ctx.fillStyle = body; ctx.beginPath(); ctx.moveTo(-88, -20); ctx.lineTo(-138, -86); ctx.lineTo(-156, -86); ctx.lineTo(-146, -14); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = stripe; ctx.beginPath(); ctx.moveTo(-136, -82); ctx.lineTo(-156, -84); ctx.lineTo(-153, -64); ctx.lineTo(-124, -64); ctx.closePath(); ctx.fill();
-  // near wing
-  ctx.fillStyle = '#1D3B53';
-  ctx.beginPath(); ctx.moveTo(30, 4); ctx.lineTo(-60, 54); ctx.lineTo(-92, 54); ctx.lineTo(-70, 6); ctx.closePath(); ctx.fill();
-  ctx.restore();
+// Real aircraft cut-outs from the site (set by the film): Red Arrows Hawk, Typhoon, A400M.
+let AC = {};
+export function setAircraft(imgs) { AC = imgs || {}; }
+// (x,y) = centre, s scale (~320 px long at s=1), rot radians. kind: 'hawk' | 'typhoon' | 'a400';
+// without kind a red stripe means a Hawk, a white body an A400M, anything else a Typhoon.
+export function jet(ctx, x, y, s, rot = 0, { stripe = C.red, body = null, kind = null } = {}) {
+  const k = kind || (body === '#FFFFFF' ? 'a400' : (stripe === C.red || stripe === '#E8202A') ? 'hawk' : 'typhoon');
+  const img = AC[k]; if (!img) return;
+  let r = rot, flip = false;
+  if (Math.cos(rot) < 0) { flip = true; r = rot - Math.PI; }
+  const w = 320 * s * (k === 'a400' ? 1.5 : 1), h = w * img.height / img.width;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(r); if (flip) ctx.scale(-1, 1); ctx.drawImage(img, -w / 2, -h / 2, w, h); ctx.restore();
 }
+// Red Arrows trio with red, white and blue smoke. q 0..1 along x0 -> x1 at height y.
+export function redArrows(ctx, q, x0, x1, y, s = 0.6) {
+  if (q <= 0 || q >= 1) return;
+  const dir = x1 > x0 ? 1 : -1;
+  const P = (qq, k) => [lerp(x0, x1, qq) - dir * k * 70 * s / 0.6, y + k * 40 * s / 0.6 - Math.sin(qq * Math.PI) * 40];
+  const SM = ['#E8202A', '#FFFFFF', '#1D4FB7'];
+  ctx.save();
+  [1, 0, 2].forEach((k) => {
+    for (let n = 70; n >= 1; n--) { const qq = q - n * 0.005; if (qq < 0) continue; const p = P(qq, k);
+      ctx.globalAlpha = 0.85 * (1 - n / 70 * 0.8); ctx.fillStyle = k === 0 ? '#C9D6E0' : SM[k]; ctx.beginPath(); ctx.arc(p[0] - dir * 110 * s / 0.6, p[1] + 10, 9 + n * 0.25 + (k === 0 ? 2 : 0), 0, TAU); ctx.fill();
+      if (k === 0) { ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(p[0] - dir * 110 * s / 0.6, p[1] + 10, 8 + n * 0.25, 0, TAU); ctx.fill(); } }
+  });
+  ctx.restore();
+  [1, 0, 2].forEach((k) => { const p = P(q, k); jet(ctx, p[0], p[1], s, dir > 0 ? 0 : Math.PI, { kind: 'hawk' }); });
+}
+// A square badge (step numbers, ticks)
+export function sq(ctx, x, y, r, color) { ctx.fillStyle = color; ctx.fillRect(x - r, y - r, 2 * r, 2 * r); }
 // Contrail behind a path: pos(t) -> [x, y]; draws from t-len to t.
 export function trail(ctx, pos, t, len, width, color = '#FFFFFF', steps = 40, alpha = 0.85) {
   ctx.save(); ctx.lineCap = 'round';
@@ -347,7 +347,7 @@ export function arrow(ctx, x, y, r, dir = 0, color = '#FFFFFF') {
   ctx.beginPath(); ctx.moveTo(-r * 0.55, 0); ctx.lineTo(r * 0.5, 0); ctx.moveTo(r * 0.1, -r * 0.42); ctx.lineTo(r * 0.55, 0); ctx.lineTo(r * 0.1, r * 0.42); ctx.stroke(); ctx.restore();
 }
 export function badge(ctx, x, y, r, bg, draw) {
-  ctx.fillStyle = bg; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill();
+  ctx.fillStyle = bg; ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
   draw && draw(x, y, r);
 }
 export function clock(ctx, x, y, r, mins = 0, color = C.navy, face = '#FFFFFF') {

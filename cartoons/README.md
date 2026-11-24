@@ -12,12 +12,24 @@ cut-outs (no drawn jets), the cloud curtain jet wipe between steps and the logo 
 
 Both are 16:9 (1920x1080) and 9:16 (1080x1920), 60 fps, 84 bpm soft lo-fi bed, no voice-over.
 
-## The original design: `transport-original/`
-The first version of the train film, kept alongside the house style one at your request: rounded cards in the
-site's colours, each train company's colours (Southern green, Circle line yellow, Greater Anglia red), a route map
-that draws itself, moving scenery with a station-by-station strip, a five step Tube change, the Clacton walk map
-and an end card with a screenshot of the Train to Clacton page. 120 bpm, 90 s. Self-contained: `lib/toon.js` is
-its drawing kit; edit `film.js` directly.
+## Train trip films in the original design: `_rail/`
+Clacton (`transport-original/`), Cosford, Duxford, Blackpool and Wales. Rounded cards in the site's colours were made
+square, the drawn jets were swapped for the real Red Arrows, Typhoon and A400M cut-outs, and the end card is the logo,
+a sign-off line and the web address. Each film is one route file in `_rail/routes/<film>.js` (map points in
+longitude and latitude, the legs with each train company's colours, the change steps, the walk map and the tips);
+`python3 _rail/build.py [film]` writes `<film>/film.js` from `head.part.js` + the route + `ride.part.js` + `body.part.js`.
+120 bpm, 90 s, 16:9 and 9:16.
+
+| Film | From | Change | Get off | Then |
+|------|------|--------|---------|------|
+| `transport-original` | Eastbourne (Southern) | Circle line, Victoria to Liverpool Street | Clacton-on-Sea (Greater Anglia) | Walk to the West Greensward, 10 to 15 min |
+| `cosford` | London Euston (Avanti) | Birmingham New Street, onto the hourly West Midlands Railway train | Cosford | Walk about 300 m |
+| `duxford` | London Kings Cross (Great Northern, about 50 min) | none | Cambridge | Free Air Show shuttle, Station Place stand 5, about 30 min |
+| `blackpool` | London Euston (Avanti) | Preston, about 20 min, onto Northern | Blackpool North | Walk down Talbot Road and the promenade to the Tower, about 15 min |
+| `wales` | London Paddington (GWR, direct, about 2 hr 45) | none | Swansea | Walk through the city centre to the seafront, 20 to 25 min |
+
+Times come from the stand in timetables in `train-routes-src/` (November 2026), so each film says to check the
+summer 2027 times. The Duxford end card points at /duxfordairshows because /train-to-duxford isn't live yet.
 
 ## Build
 `film.js` in each folder is generated. Edit the parts in `_build/`, then run `python3 _build/build.py`:
