@@ -5,7 +5,7 @@ Idea: the airshow is drawn the way Charlie hears it. Each noise is a shape, and 
 
 | # | beats | shot | on screen | sound |
 |---|-------|------|-----------|-------|
-| 1 | 0-5 | Charlie loves aeroplanes | Spitfire already crossing with soft rings, Charlie waving, "calm video" promise | soft tok |
+| 1 | 0-5 | Charlie loves aeroplanes | Mustang already crossing with soft rings, Charlie waving, "calm video" promise | soft tok |
 | 2 | 5-14 | Every sound at full volume | crowd chatter pebbles, loudspeaker zigzags, generator hum arrive with labels; "how loud it feels" meter climbs | blips |
 | 3 | 14-22 | It can feel like this | "Loud bit coming" countdown, then the fast jet swells into one huge spiky shape; Charlie covers ears | quiet low whoosh |
 | 4 | 22-28 | It does not have to | circle opens from Charlie to a calm card; meter comes down; six numbered dots | toks |
@@ -17,9 +17,9 @@ Idea: the airshow is drawn the way Charlie hears it. Each noise is a shape, and 
 | 10 | 78-88 | Tip 6: signal and way out | card flips green to red, dotted route to the car | tick, pop |
 | 11 | 88-108 | If you are standing nearby | two visitors stop staring and filming, step back, one asks "Can I help?"; five points tick on | ticks, bell |
 | 12 | 108-124 | Airshows can turn it down too | six tiles for organisers | toks |
-| 13 | 124-133 | Same sky, room for everyone | Spitfire, Charlie flapping happily, Dad, Beth | bell |
+| 13 | 124-133 | Same sky, room for everyone | Mustang, Charlie flapping happily, Dad, Beth | bell |
 | 14 | 133-140 | End card | logo, "A calm airshow visit", ukairshowguide.co.uk | bell |
 
 Transitions: page pushes between tips (both shots on screen), circle wipes into shot 4 and the end card.
 Sensory rules: no flashes, no shake, a countdown before every loud moment, soft sounds only.
-House rules: square corners on every box and label; aircraft are the site's own drawings (shared/forum-planes.js).
+House rules: square corners on every box and label; aircraft are the real cut-outs used in the other UK Airshow Guide cartoons (shared/aircraft/).

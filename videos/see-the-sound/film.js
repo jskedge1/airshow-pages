@@ -24,7 +24,7 @@ const HITS = [
   [78, 'tip 6', 'tok', { pitch: 'A4', gain: 0.22 }], [81, 'card flips', 'tick', { gain: 0.16 }], [84.6, 'exit pin', 'pop', { pitch: 'F4', gain: 0.16 }],
   [88, 'airshows too', 'tok', { pitch: 'F4', gain: 0.25 }],
   ...[0, 1, 2, 3, 4, 5].map((i) => [90 + i * 2, `tile ${i + 1}`, 'tok', { pitch: ['F4', 'G4', 'A4', 'C5', 'D5', 'F5'][i], gain: 0.16 }]),
-  [104, 'spitfire', 'tok', { pitch: 'F4', gain: 0.22 }], [106.5, 'happy flapping', 'bell', { pitch: 'F5', gain: 0.1 }],
+  [104, 'mustang', 'tok', { pitch: 'F4', gain: 0.22 }], [106.5, 'happy flapping', 'bell', { pitch: 'F5', gain: 0.1 }],
   [114, 'end card', 'bell', { pitch: 'C6', gain: 0.12 }],
 ];
 
@@ -58,8 +58,8 @@ function scenePile(ctx, u) {
   const jx = lerp(-500, 2500, prog(u, 16.8, 21.8));
   const br = kf(u, [[17, 0], [18, 300], [20, 540], [22, 560]], E.outCubic);
   if (br > 0) { ctx.save(); ctx.globalAlpha = 0.93; K.burst(ctx, clamp(jx - 120, 500, 1300), 230, br, C.orange, { n: 16, u: u * 2, seed: 3 }); ctx.restore(); }
-  K.jet(ctx, jx, 215, 0.7, -0.05, { burn: true, u });
-  const hp = prog(u, -1.2, 6.5); if (hp < 1) { const hx = lerp(-200, 2300, hp), hy = 200 + Math.sin(u * 0.8) * 20; K.rings(ctx, hx - 60, hy, 170, C.teal, u, 3, 10); K.propPlane(ctx, hx, hy, 0.62, -0.05, u); }
+  K.jet(ctx, jx, 205, 0.95, -0.05, { burn: true, u });
+  const hp = prog(u, -1.2, 6.5); if (hp < 1) { const hx = lerp(-200, 2300, hp), hy = 200 + Math.sin(u * 0.8) * 20; K.rings(ctx, hx - 60, hy, 170, C.teal, u, 3, 10); K.propPlane(ctx, hx, hy, 0.8, -0.05, u); }
   // Charlie and Dad
   const ears = springU(u, 17.7, SPRING.snappy);
   const mood = u < 8 ? 'happy' : u < 13.5 ? 'neutral' : u < 17.7 ? 'worried' : 'overwhelm';
@@ -125,7 +125,7 @@ function tip1(ctx, u) {
     ctx.fillStyle = C.grass; ctx.fillRect(-240, 90, 480, 60);
     const jx = ((u * 150) % 760) - 380;
     K.burst(ctx, jx - 60, -20, 30 + vol * 110, C.orange, { n: 12, u });
-    K.jet(ctx, jx, -24, 0.34, -0.04, { burn: true, u });
+    K.jet(ctx, jx, -24, 0.42, -0.04, { burn: true, u });
   });
   // volume slider
   const sx = 960, sw = 540, sy = 690;
@@ -140,7 +140,7 @@ function tip2(ctx, u) {
   const on = springU(u, 41.3, SPRING.snappy), soft = K.ease(u, 41.3, 42.6, E.outCubic);
   const jx = lerp(1050, 1640, prog(u, 37, 48));
   K.burst(ctx, jx - 140, 215, lerp(330, 150, soft), M.mix(C.orange, SOFT, soft), { n: 16, jag: 1 - soft * 0.93, u: u * (2 - soft), seed: 3 });
-  K.jet(ctx, jx, 205, 0.6, -0.04, { burn: true, u });
+  K.jet(ctx, jx, 200, 0.8, -0.04, { burn: true, u });
   K.meter(ctx, 110, 280, 300, lerp(0.95, 0.3, soft), { w: 50 });
   K.dad(ctx, 1010, FEET + 8, 1.2, { mood: 'happy', look: [-1, 0.5], blinkU: u, blinkOff: 1, armL: on > 0.5 ? K.POSE.relaxed : K.POSE.reach, armR: u > 43.5 ? [2.3, 0.4] : K.POSE.relaxed });
   const s = 1.6, hy = FEET - s * 207;
@@ -184,7 +184,7 @@ function tip4(ctx, u) {
   ctx.save(); ctx.globalAlpha = 0.14; K.rr(ctx, cx + 8, cy + 14, cw, chh, 0, '#000'); ctx.restore();
   K.rr(ctx, cx, cy, cw, chh, 0, C.paper);
   M.text(ctx, 'Flying programme', cx + 48, cy + 92, F(62, 800), C.ink);
-  const rows = [['12:00', 'Vintage trainers', 0], ['12:30', 'Spitfire', 0], ['13:00', 'Fast jet', 1], ['13:30', 'Wing walkers', 0]];
+  const rows = [['12:00', 'Vintage trainers', 0], ['12:30', 'Mustang', 0], ['13:00', 'Fast jet', 1], ['13:30', 'Wing walkers', 0]];
   const hi = M.springKeys(u, [[58, 0], [61, 1], [62.5, 2]], SPRING.snappy);
   K.rr(ctx, cx + 24, cy + 132 + hi * 122, cw - 48, 108, 0, hi > 1.5 ? '#FBE3D1' : C.tealSoft);
   rows.forEach(([t, n, loud], i) => {
@@ -322,7 +322,7 @@ function scenePayoff(ctx, u) {
   K.crowd(ctx, 20, 380, 735, 5, 0.9, 9, 1, u);
   const px = lerp(-350, 2300, prog(u, 104.2, 113.5)), py = 215 + Math.sin(u * 0.7) * 26;
   K.rings(ctx, px - 60, py, 210, C.teal, u, 3, 12);
-  K.propPlane(ctx, px, py, 0.7, -0.05 + Math.cos(u * 0.7) * 0.03, u);
+  K.propPlane(ctx, px, py, 0.9, -0.05 + Math.cos(u * 0.7) * 0.03, u);
   K.beth(ctx, 1380, FEET + 12, 1.18, { mood: 'happy', headphones: '#3A3F4B', hold: 'camera', armL: [1.7, 1.2], armR: [1.7, 1.2], look: [0, -1], tilt: -0.06 });
   K.dad(ctx, 880, FEET + 8, 1.2, { mood: 'happy', look: [0, -1], blinkU: u, blinkOff: 2, armL: K.POSE.relaxed, armR: K.POSE.relaxed, tilt: -0.04 });
   const fl = u > 106.5 ? K.flap(u, 3) : { armL: K.POSE.relaxed, armR: K.POSE.relaxed };
@@ -330,7 +330,7 @@ function scenePayoff(ctx, u) {
   K.kid(ctx, 650, FEET + hop, 1.5, { mood: u > 106.5 ? 'grin' : 'happy', defenders: K.DEF, look: [0.3, -1], blinkU: u, ...fl });
   const lk = K.pop(u, 107.4);
   if (lk > 0) { ctx.save(); ctx.translate(360, 330); ctx.scale(lk, lk); K.pill(ctx, 0, 0, 'Happy flapping welcome', { align: 'center', size: 36, bg: C.paper, fg: C.ink }); ctx.restore(); }
-  K.caption(ctx, u, 105.2, 113.2, 'Same sky. Room for everyone.', { w: 1100, size: 80 });
+  K.caption(ctx, u, 105.2, 113.2, 'Same sky. Room for everyone.', { w: 1300, size: 80 });
 }
 
 // ---------------------------------------------------------------- the cut

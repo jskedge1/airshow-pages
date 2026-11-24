@@ -287,38 +287,46 @@ export function crowd(ctx, x0, x1, y, n, s = 1, seed = 1, alpha = 1, sway = 0) {
 }
 
 // ---------------------------------------------------------------- aircraft
-// The site's own flat aircraft drawings (forum-planes.js, a copy of the one the forum uses), seen
-// from above with the nose to the right, as if banking past the crowd. Loaded once as images.
+// Real cut-outs, never drawn planes (house rule, same files as the other UK Airshow Guide cartoons):
+// Red Arrows Hawk, Typhoon, A400M and a Mustang, side on with the nose to the right.
 const PLANE = {};
-{
-  const src = await (await fetch(new URL('./forum-planes.js', import.meta.url))).text();
-  (0, eval)(src);
-  await Promise.all(['typhoon', 'hawk', 'spitfire'].map(async (k) => {
-    const svg = window.ForumPlanes.svg(k).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" ');
-    const im = new Image(); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-    await im.decode(); PLANE[k] = im;
-  }));
-}
-const plane = (ctx, k, size) => ctx.drawImage(PLANE[k], -size / 2, -size * 0.44, size, size * 0.88);
+await Promise.all(['typhoon-side', 'hawk-side', 'a400m-side', 'mustang-side', 'hawk-top', 'typhoon-top'].map(async (k) => {
+  const im = new Image(); im.src = new URL(`./aircraft/${k}.webp`, import.meta.url).href;
+  await im.decode(); PLANE[k] = im;
+}));
+const plane = (ctx, k, w) => { const im = PLANE[k], h = w * im.height / im.width; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(im, -w / 2, -h / 2, w, h); };
+// the fast jet: a Typhoon
 export function jet(ctx, x, y, s, rot = 0, o = {}) {
   at(ctx, x, y, s, rot, () => {
     if (o.burn) {
       const f = 0.85 + 0.15 * Math.sin((o.u || 0) * 40);
-      for (const dy of [-9, 9]) {
-        ctx.beginPath(); ctx.moveTo(-196, dy - 8); ctx.quadraticCurveTo(-260 * f, dy, -310 * f, dy); ctx.quadraticCurveTo(-260 * f, dy + 2, -196, dy + 8); ctx.fillStyle = C.orange; ctx.fill();
-        ctx.beginPath(); ctx.moveTo(-196, dy - 4); ctx.quadraticCurveTo(-230, dy, -252 * f, dy); ctx.quadraticCurveTo(-230, dy + 1, -196, dy + 4); ctx.fillStyle = C.yellow; ctx.fill();
-      }
+      ctx.beginPath(); ctx.moveTo(-178, 4); ctx.quadraticCurveTo(-250 * f, 12, -310 * f, 12); ctx.quadraticCurveTo(-250 * f, 14, -178, 22); ctx.fillStyle = C.orange; ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-178, 8); ctx.quadraticCurveTo(-220, 12, -250 * f, 13); ctx.quadraticCurveTo(-220, 14, -178, 18); ctx.fillStyle = C.yellow; ctx.fill();
     }
-    plane(ctx, 'typhoon', 460);
+    plane(ctx, 'typhoon-side', 440);
   });
 }
+// a Red Arrows Hawk, with a smoke trail if a colour is given (red '#D7263D', white, blue '#1D63B7')
 export function redJet(ctx, x, y, s, rot = 0, smoke = null, len = 300) {
-  if (smoke) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); const g = ctx.createLinearGradient(-len * s, 0, 0, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, smoke); ctx.fillStyle = g; ctx.fillRect(-len * s - 80 * s, -7 * s, len * s, 14 * s); ctx.restore(); }
-  at(ctx, x, y, s, rot, () => plane(ctx, 'hawk', 190));
+  if (smoke) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    const white = /^#f{3,6}$/i.test(smoke) || smoke === 'white';
+    for (const [col, h] of white ? [['#9FB0BF', 18], ['#FFFFFF', 12]] : [[smoke, 14]]) {
+      const g = ctx.createLinearGradient(-len * s - 90 * s, 0, -90 * s, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.5, col); g.addColorStop(1, col);
+      ctx.fillStyle = g; ctx.fillRect(-len * s - 90 * s, -h * s / 2 + 6 * s, len * s, h * s);
+    }
+    ctx.restore();
+  }
+  at(ctx, x, y, s, rot, () => plane(ctx, 'hawk-side', 210));
 }
+// the gentle vintage aircraft: a Mustang
 export function propPlane(ctx, x, y, s, rot = 0, u = 0, o = {}) {
-  at(ctx, x, y, s, rot, () => plane(ctx, 'spitfire', 400));
+  at(ctx, x, y, s, rot, () => plane(ctx, 'mustang-side', 400));
 }
+// the big transport: an A400M
+export function a400(ctx, x, y, s, rot = 0) { at(ctx, x, y, s, rot, () => plane(ctx, 'a400m-side', 520)); }
+// seen from above (nose up in the file): kind 'hawk-top' or 'typhoon-top', heading in radians (0 = up)
+export function topPlane(ctx, kind, x, y, w, heading = 0) { at(ctx, x, y, 1, heading, () => { const im = PLANE[kind]; ctx.drawImage(im, -w / 2, -w * im.height / im.width / 2, w, w * im.height / im.width); }); }
 
 // ---------------------------------------------------------------- sound shapes
 // Loud, sharp sound: a spiky burst. jag 0..1 = how sharp (0 = soft round blob).
@@ -495,7 +503,7 @@ export function endCard(ctx, u, u0, IMG, o = {}) {
   ctx.save(); ctx.beginPath(); ctx.arc(o.cx ?? W / 2, o.cy ?? H * 0.6, k * 1400, 0, TAU); ctx.clip();
   M.fill(ctx, C.paper);
   const lk = pop(u, u0 + 0.6, SPRING.gentle);
-  if (IMG.logo) { const lw = 760, lh = lw * IMG.logo.height / IMG.logo.width; ctx.drawImage(IMG.logo, 130, 210 - (1 - lk) * 60, lw, lh); }
+  if (IMG.logo) { const lw = 640, lh = lw * IMG.logo.height / IMG.logo.width; ctx.drawImage(IMG.logo, 120, 150 - (1 - lk) * 60, lw, lh); }
   const tk = pop(u, u0 + 1.2, SPRING.gentle);
   M.text(ctx, o.line1 || 'A calm airshow visit', 150 - (1 - tk) * 80, 600, F(104, 800), C.ink);
   const sk = pop(u, u0 + 1.8, SPRING.gentle);
