@@ -2,12 +2,12 @@
 //   node mascot/film/render.js 16x9 promo     (wide, for YouTube)
 //   node mascot/film/render.js 9x16 promo     (tall, for Shorts, Reels and stories)
 //   node mascot/film/render.js 9x16 teaser    (the 16 second teaser; 16x9 works too)
-//   node mascot/film/render.js 9x16 mystery   (the 'Who is Pip?' pre-launch teaser, tall only: mystery.html)
+//   node mascot/film/render.js 9x16 mystery   (the 'Who is Pip?' pre-launch teaser, mystery.html; 16x9 for landscape)
 // Needs the music first: node mascot/film/render.js 16x9 promo hits, then python3 mascot/film/music.py promo
 const fs = require('fs'), path = require('path'), { spawn, execFileSync } = require('child_process');
 const { chromium } = require('playwright');
 const fmt = process.argv[2] || '16x9', filmName = ['teaser', 'mystery'].includes(process.argv[3]) ? process.argv[3] : 'promo', dir = __dirname;
-const name = filmName === 'mystery' ? 'who-is-pip-teaser-tall' : (filmName === 'teaser' ? 'pip-airshow-season-teaser-' : 'meet-pip-') + (fmt === '9x16' ? 'tall' : 'wide');
+const name = filmName === 'mystery' ? 'who-is-pip-teaser-' + (fmt === '9x16' ? 'tall' : 'wide') : (filmName === 'teaser' ? 'pip-airshow-season-teaser-' : 'meet-pip-') + (fmt === '9x16' ? 'tall' : 'wide');
 (async () => {
   const [w, h] = fmt === '9x16' ? [1080, 1920] : [1920, 1080];
   const b = await chromium.launch();
