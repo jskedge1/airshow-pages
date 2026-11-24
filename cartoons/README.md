@@ -46,3 +46,39 @@ hourly on Sundays), `london-links.js` (Victoria to Liverpool Street on the Circl
 `clacton-data.json` (Greater Anglia direct every hour at about 1 hr 26 min, the 10:18 from Liverpool Street, the
 10 to 15 minute walk through the town centre to the seafront, then right for the West Greensward). The Clacton
 times are the November 2026 timetable, so the film says to check the summer 2027 times.
+
+## The airshow train map: `train-map/`
+One film in the `_rail` design that shows the whole rail picture on a moving map of Great Britain (the `GB` outline now
+includes Scotland). About 2 min 55, 120 bpm, 16:9 and 9:16.
+
+| Part | What it shows |
+|------|---------------|
+| 1 The network | The eleven London stations, then the main lines out of each one in the train company's colour |
+| 2 A worked example | Eastbourne to London Victoria (Southern), the Tube links from Victoria, then Liverpool Street to Clacton-on-Sea |
+| 3 Every show | 15 shows: the line from London, the change, the station, and the last leg (walk, shuttle, bus or taxi) with a real aircraft cut-out |
+| 4 Skip London | CrossCountry north to south, the west side, east to west, and Wales and the West |
+| End card | The logo and ukairshowguide.co.uk/airshow-public-transport |
+
+Sources: `_rail/map/gen-data.mjs` reads `journey-planner.js` (STA, LINES, SHOWS) and `london-links.js` and writes
+`_rail/map/data.gen.js`. `_rail/map/film.part.js` holds the scenes; every leg is named by operator and line, and the build
+stops if a station is not on the line named, so nothing on the map is invented. The last legs and times come from
+`SHOWS` and the `train-routes-src/<show>-cfg.json` facts (November 2026 timetables, so the film says to check the
+summer 2027 times).
+
+Two shows are not in the site data yet, so their facts come from the organisers (checked 24 Nov 2026):
+- Stow Maries Air Show, Sunday 15 August 2027 (stowmaries.org.uk/event-bookings). South Woodham Ferrers station, then a
+  taxi, "10 minutes (3.5 miles)" (stowmaries.org.uk/directions-rail). Both stations are in `journey-planner.js`.
+- English Riviera Airshow, Paignton, 4 to 6 June 2027 (englishriviera.co.uk). Paignton station, about a six minute walk
+  (GWR and Torbay Council 2026 guidance). Paignton is not in `journey-planner.js`, so its position is set by hand in
+  `EXTRA_STA` and the Newton Abbot to Paignton branch is drawn as a straight GWR line.
+
+Build and render (the motion-reel skill was not installed in that session, so `_tools/` holds small stand-ins):
+```
+node _rail/map/gen-data.mjs            # only after journey-planner.js or london-links.js change
+python3 _rail/build_map.py             # writes train-map/film.js and copies lib, fonts and assets
+python3 _tools/beats.py train-map 120 175.5
+NODE_PATH=$(npm root -g) node _tools/shots.mjs train-map 9x16 every:3.5 --sheet 5    # contact sheets
+NODE_PATH=$(npm root -g) node _tools/render.mjs --film train-map --format 16x9       # and 9x16
+python3 _tools/audio.py train-map --mux                                              # music, sound effects, final MP4s
+```
+The finished videos are `out/train-map/train-map-16x9.mp4` and `out/train-map/train-map-9x16.mp4`.
