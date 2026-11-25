@@ -1,7 +1,7 @@
 // Meet Pip: Pip introduces themselves in speech bubbles: who I am, who I'm for, how I can help, and where you'll
 // see me. Same look as "Plan it with Pip" (version 2): the calm cartoon kit from "The Captain's Checklist"
 // (videos/ on claude/quirky-fermi-uygguc), square corners, Charlie and Dad, the swoosh badge end card.
-// Wording from the Pip brand book (mascot/brand.html). 96 beats at 80 bpm (72 s), 16x9. Pure function of time.
+// Wording from the Pip brand book (mascot/brand.html). 132 beats at 80 bpm (99 s), 16x9. Pure function of time.
 import * as K from './shared/kit.js';
 const { M, C, F } = K;
 const { W, H, TAU, clamp, lerp, prog, E, springU, SPRING, hash01 } = M;
@@ -10,20 +10,20 @@ const GY = 560, FEET = 750;
 const WALL = '#EFE6D6', FLOOR = '#E3D6C0';
 const PLAN = '#23908C', INFORM = '#1F4E8C', PREPARE = '#D74949';
 const ITEMS = ['Who I am', "Who I'm for", 'How I help', "Where you'll see me"];
-const S0 = 8, STEP = 16;
+const S0 = 11, STEP = 24;                          // each part is 18 s: time to read every bubble
 const at0 = (i) => S0 + i * STEP;
 const TICKS = ITEMS.map((_, i) => at0(i) + STEP - 1.4);
-const PAY = at0(4), END = PAY + 8;                 // 72, 80
+const PAY = at0(4), END = PAY + 11;                // 107, 118
 
 const HITS = [
   [0.3, 'caption', 'tok', { pitch: 'G4', gain: 0.2 }], [2.0, 'Pip lands', 'pop', { pitch: 'D5', to: 'G4', gain: 0.14 }],
   ...ITEMS.map((_, i) => [at0(i) + 0.3, `part ${i + 1}`, 'tok', { pitch: ['G4', 'A4', 'B4', 'D5'][i], gain: 0.22 }]),
   ...TICKS.map((b, i) => [b, `tick ${i + 1}`, 'bell', { pitch: ['G5', 'A5', 'B5', 'D6'][i], gain: 0.09 }]),
-  ...[0, 1, 2].map((i) => [at0(0) + 6 + i * 0.9, `letter ${i + 1}`, 'pop', { pitch: ['G4', 'B4', 'D5'][i], gain: 0.16 }]),
-  ...[0, 1, 2].map((i) => [at0(1) + 2.4 + i * 3.6, `who ${i + 1}`, 'blip', { pitch: ['G5', 'A5', 'B5'][i], gain: 0.1 }]),
-  ...[0, 1, 2].map((i) => [at0(2) + 1.6 + i * 4.4, `help ${i + 1}`, 'pop', { pitch: ['G4', 'B4', 'D5'][i], gain: 0.15 }]),
-  ...[0, 1, 2, 3].map((i) => [at0(3) + 1.6 + i * 3.3, `where ${i + 1}`, 'blip', { pitch: ['G5', 'A5', 'B5', 'D6'][i], gain: 0.1 }]),
-  [PAY + 1.2, 'airshow season', 'bell', { pitch: 'G5', gain: 0.1 }],
+  ...[0, 1, 2].map((i) => [at0(0) + 9 + i * 1.35, `letter ${i + 1}`, 'pop', { pitch: ['G4', 'B4', 'D5'][i], gain: 0.16 }]),
+  ...[0, 1, 2].map((i) => [at0(1) + 3.6 + i * 5.4, `who ${i + 1}`, 'blip', { pitch: ['G5', 'A5', 'B5'][i], gain: 0.1 }]),
+  ...[0, 1, 2].map((i) => [at0(2) + 1.2 + i * 7.2, `help ${i + 1}`, 'pop', { pitch: ['G4', 'B4', 'D5'][i], gain: 0.15 }]),
+  ...[0, 1, 2, 3].map((i) => [at0(3) + 2.4 + i * 4.95, `where ${i + 1}`, 'blip', { pitch: ['G5', 'A5', 'B5', 'D6'][i], gain: 0.1 }]),
+  [PAY + 1.8, 'airshow season', 'bell', { pitch: 'G5', gain: 0.1 }],
   [END, 'end card', 'bell', { pitch: 'D6', gain: 0.12 }], [END + 2.4, 'Pip waves', 'pop', { pitch: 'D5', gain: 0.12 }],
 ];
 
@@ -68,7 +68,7 @@ function say(ctx, u, a, b, str, x, y, tx, ty, o = {}) {
   if (u < a || u > b) return;
   const k = K.pop(u, a, SPRING.bouncy), out = E.inCubic(prog(u, b - 0.35, b));
   const sc = Math.max(0.01, k * (1 - out));
-  const size = o.size || 46, f = F(size, 700), w = o.w || 560, pad = 30;
+  const size = o.size || 52, f = F(size, 700), w = o.w || 560, pad = 30;
   const lines = K.wrap(ctx, str, f, w - pad * 2);
   const h = pad * 2 + 30 + lines.length * size * 1.18;
   const cx = clamp(tx, x + 60, x + w - 60);
@@ -128,26 +128,28 @@ function sceneHook(ctx, u) {
   const fl = prog(u, -0.4, 2.0);
   if (fl < 1) { const q = E.outCubic(fl); pipFly(ctx, lerp(-260, 760, q), lerp(200, 520, q) - Math.sin(q * Math.PI) * 160, 380, (1 - q) * 0.3); }
   else pip(ctx, 'hello', 760, FEET + 20, 380, u, { squash: Math.exp(-6 * (u - 2)) * Math.cos((u - 2) * 9) * 0.12 });
-  say(ctx, u, 2.3, 7.7, "Hello! I'm Pip. Let me tell you all about me.", 980, 170, 830, 400, { w: 640, size: 52 });
-  K.caption(ctx, u, -0.9, 7.6, 'Meet Pip.', { w: 700, size: 80 });
+  say(ctx, u, 2.3, 10.6, "Hello! I'm Pip. Let me tell you all about me.", 980, 170, 830, 400, { w: 660, size: 56 });
+  K.caption(ctx, u, -0.9, 10.5, 'Meet Pip.', { w: 700, size: 80 });
 }
 
 // ---------------------------------------------------------------- 1: who I am
 function part1(ctx, u) {
   const a = at0(0);
-  M.fill(ctx, C.paper);
-  pip(ctx, u < a + 5.6 ? 'point' : 'cheer', 360, 900, 420, u);
-  say(ctx, u, a + 0.9, a + 5.4, "I'm a little round propeller plane.", 600, 160, 470, 470, { w: 600, size: 50 });
-  say(ctx, u, a + 5.6, a + 10.4, 'My name stands for three things...', 600, 160, 470, 470, { w: 600, size: 50 });
-  say(ctx, u, a + 10.6, a + 15.3, "...everything The Big Guide to UK Airshows helps you do!", 600, 160, 470, 470, { w: 600, size: 50 });
+  K.sky(ctx); K.clouds(ctx, u, 150, 5); K.horizon(ctx, GY); K.ground(ctx, GY);
+  const bk = K.pop(u, a + 8.4, SPRING.gentle);
+  popAt(ctx, 1490, 470, bk, () => { ctx.save(); ctx.globalAlpha *= 0.14; rr(ctx, -330 + 10, -250 + 14, 660, 470, 0, '#000'); ctx.restore(); rr(ctx, -330, -250, 660, 470, 0, C.white); });
+  pip(ctx, u < a + 8.4 ? 'point' : 'cheer', 360, 900, 420, u);
+  say(ctx, u, a + 1.35, a + 8.1, "I'm a little round propeller plane.", 600, 160, 470, 470, { w: 600, size: 50 });
+  say(ctx, u, a + 8.4, a + 15.6, 'My name stands for three things...', 600, 160, 470, 470, { w: 600, size: 50 });
+  say(ctx, u, a + 15.9, a + 22.95, "...everything The Big Guide to UK Airshows helps you do!", 600, 160, 470, 470, { w: 600, size: 50 });
   // the three letters
   [['P', 'Plan', PLAN], ['I', 'Inform', INFORM], ['P', 'Prepare', PREPARE]].forEach(([L, word, col], i) => {
-    const k = K.pop(u, a + 6 + i * 0.9, SPRING.bouncy), x = 1290 + i * 200;
+    const k = K.pop(u, a + 9 + i * 1.35, SPRING.bouncy), x = 1290 + i * 200;
     popAt(ctx, x, 420, k, () => { rr(ctx, -82, -110, 164, 200, 0, col); M.text(ctx, L, 0, 50, F(170, 800), C.white, 'center'); });
-    const wk = K.pop(u, a + 8 + i * 0.5, SPRING.gentle);
+    const wk = K.pop(u, a + 12.6 + i * 0.6, SPRING.gentle);
     if (wk > 0) M.text(ctx, word, x, 600 + (1 - wk) * 30, F(50, 800), col, 'center');
   });
-  K.caption(ctx, u, a + 0.3, a + STEP - 0.5, "Who I am: Pip, the UK Airshow Guide's mascot.", { num: 1, sub: 'PIP stands for Plan. Inform. Prepare.', x: 760, w: 1100 });
+  K.caption(ctx, u, a + 0.45, a + STEP - 0.5, "Who I am: Pip, the UK Airshow Guide's mascot.", { num: 1, sub: 'PIP stands for Plan. Inform. Prepare.', x: 760, w: 1100 });
 }
 
 // ---------------------------------------------------------------- 2: who I'm for
@@ -156,42 +158,60 @@ function part2(ctx, u) {
   showground(ctx, u);
   const W3 = 380, Y = 180, Hh = 470;
   const people = [
-    ['Families', PLAN, a + 2.4, (x, y, w, h) => { K.dad(ctx, x + w / 2 + 70, y + h + 40, 0.95, { mood: 'happy', blinkU: u, armL: K.POSE.relaxed, armR: K.POSE.relaxed }); charlie(ctx, x + w / 2 - 70, y + h + 40, 1.05, { mood: 'grin', blinkU: u, blinkOff: 1, armR: [2.5 + Math.sin(u * 4) * 0.2, -0.25], armL: K.POSE.relaxed }); }],
-    ['First timers', INFORM, a + 6, (x, y, w, h) => { K.beth(ctx, x + w / 2, y + h + 40, 1.0, { lanyard: false, mood: 'wow', blinkU: u, look: [0.4, -0.8], armL: K.POSE.relaxed, armR: [1.5, 0.1] }); }],
-    ['Airshow fans', PREPARE, a + 9.6, (x, y, w, h) => { fan(ctx, x + w / 2, y + h + 40, 1.0, { mood: 'happy', blinkU: u, look: [0, -0.8], hold: 'camera', armL: [1.7, 1.2], armR: [1.7, 1.2] }); }],
+    ['Families', PLAN, a + 3.6, (x, y, w, h) => { K.dad(ctx, x + w / 2 + 70, y + h + 40, 0.95, { mood: 'happy', blinkU: u, armL: K.POSE.relaxed, armR: K.POSE.relaxed }); charlie(ctx, x + w / 2 - 70, y + h + 40, 1.05, { mood: 'grin', blinkU: u, blinkOff: 1, armR: [2.5 + Math.sin(u * 4) * 0.2, -0.25], armL: K.POSE.relaxed }); }],
+    ['First timers', INFORM, a + 9, (x, y, w, h) => { K.beth(ctx, x + w / 2, y + h + 40, 1.0, { lanyard: false, mood: 'wow', blinkU: u, look: [0.4, -0.8], armL: K.POSE.relaxed, armR: [1.5, 0.1] }); }],
+    ['Airshow fans', PREPARE, a + 14.4, (x, y, w, h) => { fan(ctx, x + w / 2, y + h + 40, 1.0, { mood: 'happy', blinkU: u, look: [0, -0.8], hold: 'camera', armL: [1.7, 1.2], armR: [1.7, 1.2] }); }],
   ];
   people.forEach(([t, col, b, draw], i) => {
     const x = 70 + i * (W3 + 30);
     card(ctx, x, Y, W3, Hh, K.pop(u, b, SPRING.bouncy), col, t, (cx, cy, cw, ch) => { ctx.save(); ctx.beginPath(); ctx.rect(cx, cy, cw, ch); ctx.clip(); ctx.fillStyle = C.skyTop; ctx.fillRect(cx, cy, cw, ch); ctx.fillStyle = C.grass; ctx.fillRect(cx, cy + ch - 70, cw, 70); draw(cx, cy, cw, ch - 70); ctx.restore(); });
   });
   pip(ctx, 'point', 1700, FEET, 300, u);
-  say(ctx, u, a + 0.9, a + 5.8, "I'm for everyone going to an airshow.", 1360, 130, 1680, 430, { w: 520 });
-  say(ctx, u, a + 6, a + 9.4, 'Your very first airshow? I can help.', 1360, 130, 1680, 430, { w: 520 });
-  say(ctx, u, a + 9.6, a + 15.3, 'And I love a fan with a big camera!', 1360, 130, 1680, 430, { w: 520 });
-  K.caption(ctx, u, a + 0.3, a + STEP - 0.5, "Who I'm for: families, first timers and fans.", { num: 2, sub: 'Little ones love spotting me. Grown-ups get the plan.' });
+  say(ctx, u, a + 1.35, a + 8.7, "I'm for everyone going to an airshow.", 1360, 130, 1680, 430, { w: 520 });
+  say(ctx, u, a + 9, a + 14.1, 'Your very first airshow? I can help.', 1360, 130, 1680, 430, { w: 520 });
+  say(ctx, u, a + 14.4, a + 22.95, 'And I love a fan with a big camera!', 1360, 130, 1680, 430, { w: 520 });
+  K.caption(ctx, u, a + 0.45, a + STEP - 0.5, "Who I'm for: families, first timers and fans.", { num: 2, sub: 'Little ones love spotting me. Grown-ups get the plan.' });
 }
 
 // ---------------------------------------------------------------- 3: how I help
 function part3(ctx, u) {
   const a = at0(2);
-  room(ctx, '#E4EDE6', 800);
+  K.sky(ctx); K.clouds(ctx, u, 150, 5); K.horizon(ctx, GY); K.ground(ctx, GY); K.fence(ctx, GY + 54);
   const cols = [
-    ['Plan', PLAN, a + 1.6, 'map', ['Pick your show', 'Tickets and parking', 'Work out your day']],
-    ['Inform', INFORM, a + 6, 'point', ['The dates and line-up', 'How to get there', 'The rules on site']],
-    ['Prepare', PREPARE, a + 10.4, 'sun', ['What to pack', 'Little ears protected', 'The weather and home']],
+    ['Plan', PLAN, a + 1.2, 'map', ['Pick your show', 'Book tickets and parking', 'Work out your day']],
+    ['Inform', INFORM, a + 8.4, 'point', ['The dates and the line-up', 'How to get there', 'The rules on site']],
+    ['Prepare', PREPARE, a + 15.6, 'sun', ['What to pack', 'Little ears protected', 'The weather and getting home']],
   ];
+  // three tabs, so you can see all three at once
+  cols.forEach(([t, col, b], i) => {
+    const k = K.pop(u, b, SPRING.gentle), on = u >= b && (i === 2 || u < cols[i + 1][2]);
+    if (k <= 0) return;
+    const x = 140 + i * 300, y = 150;
+    rr(ctx, x, y, 280, 70, 0, on ? col : C.white); M.text(ctx, t, x + 140, y + 48, F(40, 800), on ? C.white : col, 'center');
+  });
+  // the current card, big; it slides in from the right and the last one slides off to the left
   cols.forEach(([t, col, b, pose, lines], i) => {
-    const x = 60 + i * 455, k = K.pop(u, b, SPRING.bouncy);
-    card(ctx, x, 140, 440, 420, k, col, t, (cx, cy, cw, ch) => {
-      lines.forEach((l, j) => { const tk = prog(u, b + 0.8 + j * 0.6, b + 1.2 + j * 0.6); rr(ctx, cx + 30, cy + 40 + j * 96, 44, 44, 0, col); if (tk > 0) K.tick(ctx, cx + 52, cy + 62 + j * 96, 0.75, tk, C.white, 8); M.text(ctx, l, cx + 92, cy + 76 + j * 96, F(33, 700), C.ink); });
+    const next = i < 2 ? cols[i + 1][2] : 1e9;
+    const kin = E.outCubic(prog(u, b, b + 0.7)), kout = E.inCubic(prog(u, next - 0.5, next + 0.2));
+    if (kin <= 0 || kout >= 1) return;
+    const x = 140 + (1 - kin) * 1200 - kout * 1400, y = 250, w = 880, h = 470;
+    ctx.save(); ctx.globalAlpha *= 0.14; rr(ctx, x + 10, y + 14, w, h, 0, '#000'); ctx.restore();
+    rr(ctx, x, y, w, h, 0, C.white); rr(ctx, x, y, w, 16, 0, col);
+    M.text(ctx, t, x + 50, y + 100, F(76, 800), col);
+    lines.forEach((l, j) => {
+      const lb = b + 1.4 + j * 1.6, tk = prog(u, lb, lb + 0.5), lk = K.pop(u, lb, SPRING.gentle);
+      if (lk <= 0) return;
+      const yy = y + 170 + j * 96;
+      rr(ctx, x + 50, yy, 60, 60, 0, col); if (tk > 0) K.tick(ctx, x + 80, yy + 30, 1.0, tk, C.white, 10);
+      M.text(ctx, l, x + 140 - (1 - Math.min(1, lk)) * 40, yy + 46, F(52, 700), C.ink);
     });
   });
-  const cur = u < a + 6 ? 'map' : u < a + 10.4 ? 'point' : 'sun';
-  pip(ctx, cur, 1650, 800, 320, u);
-  say(ctx, u, a + 1.2, a + 5.8, 'I help you plan: pick, book and work out your day.', 1440, 140, 1640, 470, { w: 440, size: 40 });
-  say(ctx, u, a + 6, a + 10.2, 'I keep you informed with the facts you need.', 1440, 140, 1640, 470, { w: 440, size: 40 });
-  say(ctx, u, a + 10.4, a + 15.3, 'And I help you prepare, right down to the sun cream!', 1440, 140, 1640, 470, { w: 440, size: 40 });
-  K.caption(ctx, u, a + 0.3, a + STEP - 0.5, 'How I help: Plan. Inform. Prepare.', { num: 3, sub: 'Every tip and every fact comes straight from the guide.' });
+  const cur = u < cols[1][2] ? 'map' : u < cols[2][2] ? 'point' : 'sun';
+  pip(ctx, cur, 1640, FEET + 20, 340, u);
+  say(ctx, u, a + 1.6, a + 8.1, 'I help you plan your day.', 1300, 140, 1620, 430, { w: 560 });
+  say(ctx, u, a + 8.8, a + 15.3, 'I keep you informed with the facts you need.', 1300, 140, 1620, 430, { w: 560 });
+  say(ctx, u, a + 16, a + 22.95, 'And I help you prepare, right down to the sun cream!', 1300, 140, 1620, 430, { w: 560 });
+  K.caption(ctx, u, a + 0.45, a + STEP - 0.75, 'How I help', { num: 3, sub: 'Plan. Inform. Prepare. Every tip comes straight from the guide.', x: 140, w: 1100 });
 }
 
 // ---------------------------------------------------------------- 4: where you'll see me
@@ -201,46 +221,46 @@ function part4(ctx, u) {
   const a = at0(3);
   room(ctx, WALL, 800);
   // social media, most of all: a phone with a post of Pip and some hearts
-  const pk = K.pop(u, a + 1.6, SPRING.bouncy);
+  const pk = K.pop(u, a + 2.4, SPRING.bouncy);
   phone(ctx, 230, 420, pk, -0.05, () => {
     rr(ctx, -96, -170, 192, 40, 0, '#E1E6EB'); K.circ(ctx, -70, -150, 12, C.teal); rr(ctx, -50, -156, 90, 12, 0, C.greyDark);
     rr(ctx, -96, -126, 192, 192, 0, '#FFC23A'); pipMini(ctx, 'cheer', 0, 50, 140, u);
-    for (let i = 0; i < 3; i++) { const hk = K.pop(u, a + 2.6 + i * 0.5); if (hk > 0) M.text(ctx, '♥', -60 + i * 40, 120 - hk * 20, F(40, 800), C.red, 'center'); }
+    for (let i = 0; i < 3; i++) { const hk = K.pop(u, a + 3.9 + i * 0.5); if (hk > 0) M.text(ctx, '♥', -60 + i * 40, 120 - hk * 20, F(40, 800), C.red, 'center'); }
   });
   // videos like this one
-  const vk = K.pop(u, a + 4.9, SPRING.bouncy);
+  const vk = K.pop(u, a + 7.35, SPRING.bouncy);
   popAt(ctx, 640, 420, vk, () => { rr(ctx, -200, -130, 400, 260, 0, C.ink); rr(ctx, -186, -116, 372, 210, 0, C.skyTop); pipMini(ctx, 'fly', 0, 60, 150, u); ctx.beginPath(); ctx.moveTo(-20, 110); ctx.lineTo(24, 130); ctx.lineTo(-20, 150); ctx.closePath(); ctx.fillStyle = C.white; ctx.fill(); }, 0.03);
   // posters
-  const ok = K.pop(u, a + 8.2, SPRING.bouncy);
+  const ok = K.pop(u, a + 12.3, SPRING.bouncy);
   popAt(ctx, 1040, 440, ok, () => { rr(ctx, -150, -210, 300, 420, 0, C.paper); rr(ctx, -150, -210, 300, 420, 0, C.paper); ctx.strokeStyle = C.ink; ctx.lineWidth = 6; ctx.strokeRect(-150, -210, 300, 420); M.text(ctx, 'See Pip?', 0, -140, F(46, 800), C.ink, 'center'); pipMini(ctx, 'hello', 0, 120, 200, u); rr(ctx, -150, 150, 300, 60, 0, C.ink); }, -0.04);
   // a few spots on the website
-  const wk = K.pop(u, a + 11.5, SPRING.bouncy);
+  const wk = K.pop(u, a + 17.25, SPRING.bouncy);
   popAt(ctx, 1405, 520, wk, () => { rr(ctx, -200, -150, 400, 300, 0, C.white); rr(ctx, -200, -150, 400, 46, 0, '#C9D2DA'); for (let i = 0; i < 3; i++) K.circ(ctx, -176 + i * 22, -127, 7, C.greyDark); rr(ctx, -170, -80, 220, 18, 0, '#E1E6EB'); rr(ctx, -170, -50, 180, 18, 0, '#E1E6EB'); rr(ctx, -170, -20, 200, 18, 0, '#E1E6EB'); pipMini(ctx, 'tip', 120, 120, 130, u); }, 0.03);
-  pillPop(ctx, u, a + 2, 230, 690, 'Mostly social media', { bg: C.red });
-  pillPop(ctx, u, a + 5.2, 640, 620, 'Videos like this one', { bg: PLAN });
-  pillPop(ctx, u, a + 8.5, 1040, 690, 'Posters', { bg: INFORM });
-  pillPop(ctx, u, a + 11.8, 1400, 700, 'A few spots on the website', { bg: C.ink });
+  pillPop(ctx, u, a + 3, 230, 690, 'Mostly social media', { bg: C.red, size: 40 });
+  pillPop(ctx, u, a + 7.8, 640, 620, 'Videos like this one', { bg: PLAN });
+  pillPop(ctx, u, a + 12.75, 1040, 690, 'Posters', { bg: INFORM });
+  pillPop(ctx, u, a + 17.7, 1400, 700, 'A few spots on the website', { bg: C.ink });
   pip(ctx, 'photo', 1790, 800, 220, u);
-  say(ctx, u, a + 1.2, a + 4.6, "You'll see me mostly on social media.", 1340, 110, 1790, 560, { w: 540, size: 40 });
-  say(ctx, u, a + 4.8, a + 8, 'In videos, just like this one!', 1340, 110, 1790, 560, { w: 540, size: 40 });
-  say(ctx, u, a + 8.2, a + 11.3, 'On posters at airshow time...', 1340, 110, 1790, 560, { w: 540, size: 40 });
-  say(ctx, u, a + 11.5, a + 15.3, '...and in a few spots on the website.', 1340, 110, 1790, 560, { w: 540, size: 40 });
-  K.caption(ctx, u, a + 0.3, a + STEP - 0.5, "Where you'll see me", { num: 4, sub: 'Mostly on social media. Also in videos, on posters and a few spots on the website.' });
+  say(ctx, u, a + 1.8, a + 6.9, "You'll see me mostly on social media.", 1300, 110, 1790, 560, { w: 580, size: 48 });
+  say(ctx, u, a + 7.2, a + 12, 'In videos, just like this one!', 1300, 110, 1790, 560, { w: 580, size: 48 });
+  say(ctx, u, a + 12.3, a + 16.95, 'On posters at airshow time...', 1300, 110, 1790, 560, { w: 580, size: 48 });
+  say(ctx, u, a + 17.25, a + 22.95, '...and in a few spots on the website.', 1300, 110, 1790, 560, { w: 580, size: 48 });
+  K.caption(ctx, u, a + 0.45, a + STEP - 0.5, "Where you'll see me", { num: 4, sub: 'Mostly on social media. Also in videos, on posters and a few spots on the website.' });
 }
 
 // ---------------------------------------------------------------- payoff
 function scenePayoff(ctx, u) {
   showground(ctx, u);
   K.crowd(ctx, 20, 380, 735, 5, 0.9, 9, 1, u);
-  const px = lerp(-350, 2300, prog(u, PAY - 1.8, PAY + 7.5)), py = 232 + Math.sin(u * 0.7) * 12;
+  const px = lerp(-350, 2300, prog(u, PAY - 1.8, PAY + 11.25)), py = 232 + Math.sin(u * 0.7) * 12;
   K.rings(ctx, px - 50, py, 135, C.teal, u, 3, 10);
   K.propPlane(ctx, px, py, 0.82, -0.05 + Math.cos(u * 0.7) * 0.03, u);
   K.dad(ctx, 1100, FEET + 8, 1.2, { mood: 'happy', look: [0.6, -0.6], blinkU: u, blinkOff: 2, armL: K.POSE.relaxed, armR: K.POSE.relaxed });
-  const on = u > PAY + 1.2;
+  const on = u > PAY + 1.8;
   charlie(ctx, 840, FEET + (on ? Math.abs(Math.sin(u * TAU * 1.5)) * -14 : 0), 1.55, { mood: on ? 'grin' : 'wow', look: [1, -0.3], blinkU: u, armL: on ? K.POSE.up : K.POSE.relaxed, armR: on ? K.POSE.up : [1.5, 0.1] });
   pip(ctx, on ? 'cheer' : 'hello', 1460, FEET + 10, 300, u);
-  say(ctx, u, PAY + 0.8, PAY + 7.6, 'See Pip? It must be airshow season!', 1250, 140, 1450, 440, { w: 600, size: 52 });
-  K.caption(ctx, u, PAY + 1.2, PAY + 7.8, 'When your child spots Pip, the fun is about to start.', { w: 1100, size: 60 });
+  say(ctx, u, PAY + 1.2, PAY + 11.4, 'See Pip? It must be airshow season!', 1250, 140, 1450, 440, { w: 600, size: 52 });
+  K.caption(ctx, u, PAY + 1.8, PAY + 11.7, 'When your child spots Pip, the fun is about to start.', { w: 1100, size: 60 });
 }
 
 // ---------------------------------------------------------------- end card: the swoosh badge logo (the video end logo)
