@@ -28,6 +28,15 @@ body{margin:0;background:#666;font-family:Barlow,sans-serif;color:#fff}
 </style>
 </head>
 <body>
+<!-- 0. the announcement: something new is coming (Jack's own words) -->
+<div class="sq" id="h0"><div class="beam" style="left:28%;transform:rotate(-16deg)"></div><div class="beam" style="left:76%;transform:rotate(14deg)"></div><div class="pip sil" id="h0p"></div>
+  <div class="t small" style="top:150px">The Big Guide to UK Airshows</div>
+  <div class="t big" style="top:230px;font-size:104px">We&rsquo;ve been working on <span class="y">something new.</span></div>
+  <div class="t small" style="top:770px">To find out more, stay tuned for more teasers.</div></div>
+<div class="sq" id="h0t" style="height:1920px"><div class="beam" style="left:24%;transform:rotate(-14deg)"></div><div class="beam" style="left:78%;transform:rotate(12deg)"></div><div class="pip sil" id="h0tp"></div>
+  <div class="t small" style="top:330px">The Big Guide to UK Airshows</div>
+  <div class="t big" style="top:420px;font-size:116px">We&rsquo;ve been working on <span class="y">something new.</span></div>
+  <div class="t small" style="top:1360px;font-size:54px">To find out more, stay tuned for more teasers.</div></div>
 <!-- 1. a wing tip edging into the frame -->
 <div class="sq" id="h1"><div class="beam" style="left:30%;transform:rotate(-18deg)"></div><div class="pip dim" id="h1p"></div><div class="vig"></div>
   <div class="t big" style="top:120px">Something&rsquo;s coming.</div><div class="tag">The Big Guide to UK Airshows</div></div>
@@ -65,7 +74,10 @@ body{margin:0;background:#666;font-family:Barlow,sans-serif;color:#fff}
   var M = UKAGMascot;
   function place(id, o, w, fx, fy, cx, cy) { var el = document.getElementById(id); el.innerHTML = M.svg(Object.assign({ title: '' }, o)); el.style.width = w + 'px'; el.style.left = (cx - fx * w / 400) + 'px'; el.style.top = (cy - (fy - 20) * w / 400) + 'px'; }
   // stars
-  document.querySelectorAll('.sq').forEach(function (sq, n) { var s = ''; for (var i = 0; i < 34; i++) { var a = ((i + n * 13) * 7919) % 1000 / 1000, b = ((i + n * 7) * 104729) % 1000 / 1000; s += '<i class="star" style="left:' + (a * 1060).toFixed(0) + 'px;top:' + (b * 700).toFixed(0) + 'px;transform:scale(' + (i % 3 ? .6 : 1) + ')"></i>'; } sq.insertAdjacentHTML('afterbegin', s); });
+  document.querySelectorAll('.sq').forEach(function (sq, n) { var s = ''; for (var i = 0; i < 34; i++) { var a = ((i + n * 13) * 7919) % 1000 / 1000, b = ((i + n * 7) * 104729) % 1000 / 1000; s += '<i class="star" style="left:' + (a * 1060).toFixed(0) + 'px;top:' + (b * sq.offsetHeight * 0.62).toFixed(0) + 'px;transform:scale(' + (i % 3 ? .6 : 1) + ')"></i>'; } sq.insertAdjacentHTML('afterbegin', s); });
+  // just the tip of a tail fin peeking up from the bottom edge: nobody can tell what it is yet
+  place('h0p', { pose: 'rest', ground: false }, 900, 200, 60, 860, 1080 - 110);
+  place('h0tp', { pose: 'rest', ground: false }, 1000, 200, 60, 540, 1920 - 130);
   place('h1p', { pose: 'rest', prop: -10 }, 4200, 372, 238, 860, 700);          // only the wing tip shows, edging in from the right
   place('h2p', { pose: 'loading', look: [0, -6] }, 6000, 200, 232, 540, 700);           // spinning disc and red nose, very close
   place('h4p', { pose: 'rest', ground: false }, 620, 200, 210, 540, 720);

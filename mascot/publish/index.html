@@ -88,6 +88,9 @@ h2 + p{margin:0 0 12px;color:var(--muted);max-width:70ch}
     { stage: 'Whispers', date: 'Thu 10 Dec', where: ['Instagram', 'Facebook'], media: ['04-whisper-jaguar.jpg'],
       caption: 'Someone has borrowed my ear defenders. Small. Round. Very keen on airshows.',
       note: 'Pip is peeking up in the bottom left corner. Say nothing about it.' },
+    { stage: 'Glimpses', date: 'Sat 12 Dec', where: ['Instagram', 'Facebook', 'Instagram story', 'TikTok'], media: ['pip-hint-0-something-new.png', 'pip-hint-0-something-new-story.png'],
+      caption: 'We\u2019ve been working on something new. \u{1F440}\nTo find out more, stay tuned for more teasers.',
+      note: 'The first announcement. <b>Square</b> picture for the feed, <b>tall</b> picture for stories. Only the tip of Pip\u2019s tail shows at the bottom. Don\u2019t say what it is.' },
     { stage: 'Glimpses', date: 'Mon 14 Dec', where: ['Instagram', 'Facebook', 'Instagram story'], media: ['pip-hint-1-something-is-coming.png'],
       caption: 'Something’s coming.', note: 'No name yet. Let people guess in the comments.' },
     { stage: 'Glimpses', date: 'Thu 17 Dec', where: ['Instagram', 'Facebook', 'Instagram story'], media: ['pip-hint-2-can-you-hear-it.png'],
@@ -138,7 +141,7 @@ h2 + p{margin:0 0 12px;color:var(--muted);max-width:70ch}
       if (p.stage !== last) { last = p.stage; html += '<h2 id="' + slug(p.stage) + '" style="color:' + COL[p.stage] + '">' + esc(p.stage) + '</h2>'; }
       const media = p.media.map((f) => {
         const vid = f.endsWith('.mp4');
-        const label = vid ? (f.includes('-tall') ? 'Tall video' : 'Wide video') : 'Picture';
+        const label = vid ? (f.includes('-tall') ? 'Tall video' : 'Wide video') : (f.includes('-story') ? 'Tall picture (story)' : 'Picture');
         const el = vid ? '<video src="media/' + f + '" poster="media/' + f.replace('.mp4', '-cover.jpg') + '" controls preload="none" playsinline></video>' : '<img src="media/' + f + '" alt="" loading="lazy">';
         return '<div class="m">' + el + '<div class="bar"><span>' + label + '</span><button class="btn small teal" type="button" data-save="' + f + '">Save</button></div></div>';
       }).join('');
