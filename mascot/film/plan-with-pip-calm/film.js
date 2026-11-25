@@ -1,6 +1,6 @@
-// Plan it with Pip, in the calm style of "The Captain's Checklist" (videos/ on claude/quirky-fermi-uygguc, whose
-// shared kit this uses): soft colours, cream caption cards, a six-box progress strip, Charlie and Dad, gentle sounds,
-// a warning before the one loud bit. Pip, the site's mascot, is the guide. 118 beats at 80 bpm (88.5 s), 16x9.
+// Plan it with Pip, in the look of "The Captain's Checklist" (videos/ on claude/quirky-fermi-uygguc, whose shared
+// kit this uses): soft colours, cream caption cards, a six-box progress strip, Charlie and Dad. Pip, the site's
+// mascot, plans the day and talks the family through it in speech bubbles. 118 beats at 80 bpm (88.5 s), 16x9.
 // Every planning tip comes from plan-your-2027-airshow.html. Pure function of time: window.seek(t) paints frame t.
 import * as K from './shared/kit.js';
 const { M, C, F } = K;
@@ -28,7 +28,7 @@ const HITS = [
   [at0(2) + 7.6, 'arrived', 'pop', { pitch: 'G4', gain: 0.16 }],
   ...[0, 1, 2, 3, 4].map((i) => [at0(3) + 3.4 + i * 1.15, `packed ${i + 1}`, 'blip', { pitch: ['G5', 'A5', 'B5', 'D6', 'E6'][i], gain: 0.1 }]),
   [at0(4) + 3, 'forecast', 'tick', { gain: 0.14 }], [at0(4) + 6, 'tickets', 'tick', { gain: 0.14 }], [at0(4) + 8.6, 'bag down', 'pop', { pitch: 'G4', gain: 0.16 }],
-  [at0(5) + 4, 'loud warning', 'tok', { pitch: 'D4', gain: 0.2 }], [at0(5) + 8, 'the jet', 'whoosh', { len: 3.2, from: 140, to: 380, gain: 0.12, peak: 0.5 }],
+  [at0(5) + 8, 'the jet', 'whoosh', { len: 3.2, from: 140, to: 380, gain: 0.12, peak: 0.5 }],
   [PAY, 'mustang', 'tok', { pitch: 'G4', gain: 0.22 }], [PAY + 2.4, 'happy', 'bell', { pitch: 'G5', gain: 0.1 }],
   [END, 'end card', 'bell', { pitch: 'D6', gain: 0.12 }], [END + 2.4, 'Pip waves', 'pop', { pitch: 'D5', gain: 0.12 }],
 ];
@@ -68,6 +68,24 @@ function pip(ctx, pose, x, y, size, u, o = {}) {
   ctx.restore();
 }
 function pipFly(ctx, x, y, w, rot) { const im = IMGS.pip_fly; if (!im) return; ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.drawImage(im, -w / 2, -w / 2, w, w); ctx.restore(); }
+
+// Pip's speech bubble: a square box with a straight tail. (x, y) = top left; (tx, ty) = the tip of the tail, by Pip.
+function say(ctx, u, a, b, str, x, y, tx, ty, o = {}) {
+  if (u < a || u > b) return;
+  const k = K.pop(u, a, SPRING.bouncy), out = E.inCubic(prog(u, b - 0.35, b));
+  const sc = Math.max(0.01, k * (1 - out));
+  const size = o.size || 46, f = F(size, 700), w = o.w || 560, pad = 30;
+  const lines = K.wrap(ctx, str, f, w - pad * 2);
+  const h = pad * 2 + 30 + lines.length * size * 1.18;
+  const cx = clamp(tx, x + 60, x + w - 60);
+  ctx.save(); ctx.translate(tx, ty); ctx.scale(sc, sc); ctx.translate(-tx, -ty);
+  ctx.save(); ctx.globalAlpha *= 0.14; rr(ctx, x + 6, y + 10, w, h, 0, '#000'); ctx.restore();
+  ctx.beginPath(); ctx.moveTo(cx - 34, y + h - 2); ctx.lineTo(tx, ty); ctx.lineTo(cx + 34, y + h - 2); ctx.closePath(); ctx.fillStyle = C.white; ctx.fill();
+  rr(ctx, x, y, w, h, 0, C.white); rr(ctx, x, y, w, 10, 0, '#23908C');
+  M.text(ctx, 'Pip', x + pad, y + pad + 22, F(30, 800), '#23908C');
+  lines.forEach((l, i) => M.text(ctx, l, x + pad, y + pad + 30 + (i + 0.85) * size * 1.18, f, C.ink));
+  ctx.restore();
+}
 
 // The progress strip: six boxes, always in the same place, so you always know how much is left.
 function strip(ctx, u) {
@@ -111,11 +129,11 @@ function sceneHook(ctx, u) {
   // Pip flies in through the room and lands on the floor beside the sofa
   const fl = prog(u, -0.4, 2.0);
   if (fl < 1) { const q = E.outCubic(fl); pipFly(ctx, lerp(-200, 1320, q), lerp(260, 640, q) - Math.sin(q * Math.PI) * 160, 300, (1 - q) * 0.3); }
-  else pip(ctx, u < 5 ? 'hello' : 'point', 1320, 800, 250, u, { squash: Math.exp(-6 * (u - 2)) * Math.cos((u - 2) * 9) * 0.12 });
-  const ck = Math.min(springU(u, -0.3, SPRING.gentle), 1 - E.inCubic(prog(u, 4.2, 4.8)));
-  if (ck > 0.01) { ctx.save(); ctx.translate(70, 86 - (1 - ck) * 200); K.pill(ctx, 0, 0, 'A calm video: no sudden sounds, no flashing', { size: 34, bg: C.teal, fg: C.white }); ctx.restore(); }
+  else pip(ctx, u < 5 ? 'hello' : 'point', 1380, 800, 300, u, { squash: Math.exp(-6 * (u - 2)) * Math.cos((u - 2) * 9) * 0.12 });
+  say(ctx, u, 2.4, 5.4, "Hello! I'm Pip.", 1180, 150, 1380, 470);
+  say(ctx, u, 5.6, 8.7, "Let's plan your airshow day together!", 1180, 150, 1380, 470);
   K.caption(ctx, u, -0.9, 4.4, 'A new airshow season is on its way.', { w: 1260, size: 72 });
-  K.caption(ctx, u, 4.5, 8.7, 'Meet Pip. Pip helps Charlie and Dad plan it.', { w: 1240 });
+  K.caption(ctx, u, 4.5, 8.7, 'Meet Pip, your airshow planner.', { w: 1240 });
 }
 
 // ---------------------------------------------------------------- 9-16: the title and the list
@@ -148,7 +166,8 @@ function sceneTitle(ctx, u) {
   });
   ctx.restore();
   const pk = K.pop(u, 9.6, SPRING.gentle);
-  if (pk > 0) pip(ctx, u < 12.8 ? 'cheer' : 'tip', 380, 1010 + (1 - pk) * 400, 300, u);
+  if (pk > 0) pip(ctx, u < 12.8 ? 'cheer' : 'tip', 360, 1020 + (1 - pk) * 400, 320, u);
+  say(ctx, u, 11.2, 15.4, 'Six steps. Let me show you!', 560, 660, 470, 820, { w: 520 });
 }
 
 // ---------------------------------------------------------------- 1: pick your shows
@@ -173,11 +192,12 @@ function item1(ctx, u) {
   pillPop(ctx, u, a + 5.2, bx + 40 + 2 * 356 + 162, by + 104, 'Main show', { bg: C.red });
   pillPop(ctx, u, a + 6.6, bx + 40 + 1 * 356 + 162, by + 314, 'Backup', { bg: C.teal });
   // a reminder on the phone: when the tickets go on sale
-  const rk = K.pop(u, a + 9, SPRING.gentle);
-  if (rk > 0) { ctx.save(); ctx.translate(60 - (1 - rk) * 600, 190); rr(ctx, 0, 0, 560, 132, 0, C.white); rr(ctx, 0, 0, 14, 132, 0, C.yellow); M.text(ctx, 'Reminder', 40, 56, F(34, 800), C.teal); M.text(ctx, 'Tickets go on sale', 40, 106, F(44, 700), C.ink); ctx.restore(); }
   const pt = springU(u, a + 4.6, SPRING.gentle);
-  charlie(ctx, 250, FEET, 1.5, { mood: u > a + 5.2 ? 'grin' : 'happy', blinkU: u, look: [1, -0.5], armL: K.POSE.relaxed, armR: armMix(K.POSE.relaxed, [1.75, 0.1], pt) });
-  pip(ctx, u < a + 9 ? 'point' : 'tip', 520, FEET, 210, u);
+  charlie(ctx, 220, FEET, 1.4, { mood: u > a + 5.2 ? 'grin' : 'happy', blinkU: u, look: [1, -0.5], armL: K.POSE.relaxed, armR: armMix(K.POSE.relaxed, [1.75, 0.1], pt) });
+  pip(ctx, u < a + 9 ? 'point' : 'tip', 520, FEET, 270, u);
+  say(ctx, u, a + 1.2, a + 4.8, "First, let's pick a main show.", 60, 160, 500, 470);
+  say(ctx, u, a + 5, a + 8.6, '...and a backup, just in case!', 60, 160, 500, 470);
+  say(ctx, u, a + 8.8, a + 13.3, 'Pop the ticket sale dates in your calendar.', 60, 160, 500, 470);
   K.caption(ctx, u, a + 0.3, a + STEP - 0.5, 'Pick your shows: a main show and a backup.', { num: 1, sub: 'Put the dates the tickets go on sale in your calendar.' });
 }
 
@@ -197,7 +217,6 @@ function item2(ctx, u) {
       rr(ctx, -60, -64 + i * 64, 270, 36, 0, '#E1E6EB'); if (k > 0) rr(ctx, -60, -64 + i * 64, 270 * v / 0.45 * k, 36, 0, col);
     });
   });
-  pillPop(ctx, u, a + 2.2, 1180, 140, 'Add up the whole day first', { size: 36 });
   // an early bird ticket, and somewhere to sleep
   const ek = K.pop(u, a + 7, SPRING.bouncy);
   popAt(ctx, 1700, 520, ek, () => {
@@ -206,7 +225,10 @@ function item2(ctx, u) {
   }, -0.06);
   const bk = K.pop(u, a + 9.4, SPRING.gentle);
   popAt(ctx, 1700, 300, bk, () => { rr(ctx, -150, -100, 300, 220, 0, C.white); K.tent(ctx, 0, 70, 0.5, C.tealSoft, C.teal); M.text(ctx, 'Book the bed early', 0, 106, F(30, 700), C.ink, 'center'); }, 0.04);
-  pip(ctx, u < a + 7 ? 'rest' : 'cheer', 160, 800, 200, u, { seed: 1 });
+  pip(ctx, u < a + 7 ? 'point' : 'cheer', 150, 800, 260, u, { seed: 1 });
+  say(ctx, u, a + 1.2, a + 6.6, "Let's add up the whole day: tickets, travel and food.", 60, 160, 170, 520, { w: 600 });
+  say(ctx, u, a + 6.8, a + 9.6, 'Early bird tickets save the most!', 60, 160, 170, 520, { w: 600 });
+  say(ctx, u, a + 9.8, a + 13.3, 'Staying over? Book the bed early.', 60, 160, 170, 520, { w: 600 });
   K.caption(ctx, u, a + 0.3, a + STEP - 0.5, 'Budget and book: work out the whole day cost.', { num: 2, sub: 'Early bird tickets save the most. Book the bed before the ticket rush.' });
 }
 
@@ -242,8 +264,11 @@ function item3(ctx, u) {
   pillPop(ctx, u, a + 8.6, 1705, 230, 'The show', { size: 38, bg: C.ink });
   ctx.restore();
   const pt = springU(u, a + 2.2, SPRING.gentle);
-  charlie(ctx, 230, FEET, 1.5, { mood: u > a + 7.8 ? 'grin' : 'happy', blinkU: u, look: [1, -0.4], armL: K.POSE.relaxed, armR: armMix(K.POSE.relaxed, [1.75, 0.1], pt) });
-  pip(ctx, 'map', 470, FEET, 200, u);
+  charlie(ctx, 200, FEET, 1.4, { mood: u > a + 7.8 ? 'grin' : 'happy', blinkU: u, look: [1, -0.4], armL: K.POSE.relaxed, armR: armMix(K.POSE.relaxed, [1.75, 0.1], pt) });
+  pip(ctx, 'map', 470, FEET, 260, u);
+  say(ctx, u, a + 1.2, a + 4.6, 'How are we getting there?', 40, 160, 450, 480, { w: 560 });
+  say(ctx, u, a + 4.8, a + 9.4, 'The train and shuttle can beat the car queue.', 40, 160, 450, 480, { w: 560 });
+  say(ctx, u, a + 9.6, a + 13.3, 'Driving? Pre-book your parking.', 40, 160, 450, 480, { w: 560 });
   K.caption(ctx, u, a + 0.3, a + STEP - 0.5, 'Plan the journey: choose how you travel first.', { num: 3, sub: 'Train and shuttle can beat the car queue. Driving? Pre-book your parking.', size: 60, x: 440, w: 1400 });
 }
 
@@ -253,30 +278,32 @@ const KIT = [
   ['Sunglasses', (ctx) => K.sunglasses(ctx, 0, 0, 1.25)],
   ['Water', (ctx) => K.bottle(ctx, 0, 20, 0.86)],
   ['Snacks', (ctx) => K.snack(ctx, 0, 6, 1.0)],
-  ['Teddy', (ctx) => K.teddy(ctx, 0, 36, 0.92)],
 ];
 function item4(ctx, u) {
   const a = at0(3); room(ctx, '#E4EDE6', 756);
-  const PX = 1300;
-  rr(ctx, 520, 306, 1240, 16, 0, '#C8B595'); rr(ctx, 520, 322, 1240, 8, 0, 'rgba(0,0,0,0.08)');
+  const PX = 1150;
+  rr(ctx, 420, 306, 900, 16, 0, '#C8B595'); rr(ctx, 420, 322, 900, 8, 0, 'rgba(0,0,0,0.08)');
   const st = (i) => a + 2.4 + i * 1.15;
   KIT.forEach(([label, draw], i) => {
-    const x0 = 640 + i * 250, y0 = 232, b = st(i), d = 0.95, p = K.ease(u, b, b + d, E.inOutCubic);
+    const x0 = 520 + i * 230, y0 = 232, b = st(i), d = 0.95, p = K.ease(u, b, b + d, E.inOutCubic);
     const k = K.pop(u, a + 0.4 + i * 0.12, SPRING.gentle);
-    M.text(ctx, label, x0, 380, F(38, 700), p >= 1 ? C.teal : C.ink, 'center');
+    M.text(ctx, label, x0, 380, F(34, 700), p >= 1 ? C.teal : C.ink, 'center');
     if (p >= 1) { K.circ(ctx, x0, y0, 44 * K.pop(u, b + d), C.tealSoft); K.tick(ctx, x0, y0, 1.1, prog(u, b + d, b + d + 0.4), C.teal, 11); }
     if (p >= 1 || k <= 0) return;
     const x = lerp(x0, PX, p), y = lerp(y0, 500, p) - Math.sin(p * Math.PI) * 130;
     ctx.save(); ctx.translate(x, y); ctx.scale(lerp(1, 0.6, p) * Math.min(1, k * 1.2), lerp(1, 0.6, p) * Math.min(1, k * 1.2)); draw(ctx); ctx.restore();
   });
-  let sq = 0; for (let i = 0; i < 5; i++) sq += M.bump(u, st(i) + 1.0, 0.35);
+  let sq = 0; for (let i = 0; i < 4; i++) sq += M.bump(u, st(i) + 1.0, 0.35);
   ctx.save(); ctx.translate(PX, 756); ctx.scale(1 + 0.04 * sq, 1 - 0.05 * sq); K.backpack(ctx, 0, 0, 1.3, C.red); ctx.restore();
   const bt = K.pop(u, a + 9.6);
   if (bt > 0) { K.circ(ctx, PX, 560, 62 * bt, C.white); K.tick(ctx, PX, 560, 1.6, prog(u, a + 9.6, a + 10.1), C.teal, 12); }
-  pillPop(ctx, u, a + 1.2, 260, 200, 'Your packing list', { size: 38, bg: C.teal });
+  pillPop(ctx, u, a + 1.2, 250, 230, 'Your packing list', { size: 38, bg: C.teal });
   const n = KIT.filter((_, i) => u >= st(i) + 1).length;
-  charlie(ctx, 250, FEET, 1.5, { mood: u > a + 9.6 ? 'grin' : 'happy', defenders: u > st(0) + 0.9 ? K.DEF : null, blinkU: u, look: [1, -0.3], hold: 'checklist', ticks: Math.min(4, Math.floor(n * 4 / 5 + 0.01)), armL: K.POSE.relaxed, armR: [0.8, 1.4] });
-  pip(ctx, 'sun', 1650, FEET, 210, u);
+  charlie(ctx, 250, FEET, 1.4, { mood: u > a + 9.6 ? 'grin' : 'happy', blinkU: u, look: [1, -0.3], hold: 'checklist', ticks: n, armL: K.POSE.relaxed, armR: [0.8, 1.4] });
+  pip(ctx, 'sun', 1640, FEET, 270, u);
+  say(ctx, u, a + 1.2, a + 4.6, 'Ear defenders go in first!', 1330, 150, 1620, 470, { w: 540 });
+  say(ctx, u, a + 4.8, a + 9.4, 'Then sunglasses, water and snacks.', 1330, 150, 1620, 470, { w: 540 });
+  say(ctx, u, a + 9.6, a + 13.3, 'Anything missing? Buy it in good time.', 1330, 150, 1620, 470, { w: 540 });
   K.caption(ctx, u, a + 0.3, a + STEP - 0.5, 'Pack the kit: ear defenders first.', { num: 4, sub: 'Make a packing list, and buy anything missing in good time.' });
 }
 
@@ -291,8 +318,8 @@ function item5(ctx, u) {
   // the front door, where the bag will wait
   rr(ctx, 1480, 260, 300, 540, 0, '#C96B6B'); rr(ctx, 1500, 280, 260, 520, 0, '#D98080'); K.circ(ctx, 1720, 560, 12, C.yellow);
   const bk = K.pop(u, a + 8.6, SPRING.bouncy);
-  if (bk > 0) { ctx.save(); ctx.translate(1420, 800); ctx.scale(Math.min(1.08, bk), Math.min(1.08, bk)); K.backpack(ctx, 0, 0, 1.1, C.red); ctx.restore(); }
-  pillPop(ctx, u, a + 8.9, 1420, 470, 'Bag by the door', { size: 36, bg: C.teal });
+  if (bk > 0) { ctx.save(); ctx.translate(1560, 800); ctx.scale(Math.min(1.08, bk), Math.min(1.08, bk)); K.backpack(ctx, 0, 0, 1.1, C.red); ctx.restore(); }
+  pillPop(ctx, u, a + 8.9, 1630, 700, 'Bag by the door', { size: 36, bg: C.teal });
   // the tablet: the forecast, then the tickets saved
   const tk = K.pop(u, a + 0.2, SPRING.gentle);
   const sx = M.springKeys(u, [[a, 0], [a + 6, 1]], SPRING.gentle);
@@ -312,7 +339,10 @@ function item5(ctx, u) {
   pillPop(ctx, u, a + 3, 960, 150, 'Check before bed', { size: 36 });
   K.dad(ctx, 700, FEET + 50, 1.2, { mood: 'calm', blinkU: u, blinkOff: 2, look: [1, -0.3], armL: K.POSE.relaxed, armR: K.POSE.relaxed });
   charlie(ctx, 460, FEET + 50, 1.4, { mood: 'calm', blinkU: u, look: [1, -0.3], armL: K.POSE.relaxed, armR: u > a + 8.6 ? [1.4, 0.2] : K.POSE.relaxed });
-  pip(ctx, 'rest', 1230, 800, 180, u, { seed: 2 });
+  pip(ctx, u < a + 8.6 ? 'point' : 'cheer', 1290, 800, 240, u, { seed: 2 });
+  say(ctx, u, a + 1.2, a + 5.6, 'Forecast and show news: checked.', 1250, 250, 1300, 560, { w: 600 });
+  say(ctx, u, a + 5.8, a + 8.4, 'Tickets saved on the phone.', 1250, 250, 1300, 560, { w: 600 });
+  say(ctx, u, a + 8.6, a + 13.3, "Bag by the door. We're ready!", 1250, 250, 1300, 560, { w: 600 });
   K.caption(ctx, u, a + 0.3, a + STEP - 0.5, 'Final checks, the night before.', { num: 5, sub: 'Check the forecast and the show news, save the tickets, and leave the bag by the door.' });
 }
 
@@ -324,7 +354,6 @@ function item6(ctx, u) {
   // a Typhoon passes once, after a warning
   const jp = prog(u, a + 7.4, a + 10.4);
   if (jp > 0 && jp < 1) { K.burst(ctx, lerp(-400, 2300, jp) - 140, 230, 70, '#F7CDAE', { n: 12, jag: 0.08, u }); K.jet(ctx, lerp(-400, 2300, jp), 230, 0.6, -0.04, { burn: true, u }); }
-  K.loudChip(ctx, u, a + 8);
   // arrive early
   const ak = K.pop(u, a + 1.2, SPRING.gentle);
   if (ak > 0) {
@@ -336,11 +365,14 @@ function item6(ctx, u) {
     ctx.restore();
   }
   pillPop(ctx, u, a + 3.4, 880, 470, 'Our spot', { size: 38, bg: C.teal });
-  pillPop(ctx, u, a + 10.6, 1500, 380, 'Plan the way home', { size: 36 });
+  pillPop(ctx, u, a + 10.6, 1060, 400, 'Plan the way home', { size: 36 });
   const ears = u > a + 5;
   K.dad(ctx, 640, FEET, 1.2, { mood: 'happy', blinkU: u, blinkOff: 2, look: [1, -0.6], armL: K.POSE.relaxed, armR: K.POSE.relaxed });
-  charlie(ctx, 400, FEET, 1.5, { mood: jp > 0.2 && jp < 0.8 ? 'wow' : 'happy', defenders: K.DEF, blinkU: u, look: [1, -0.7], armL: K.POSE.relaxed, armR: K.POSE.relaxed });
-  pip(ctx, ears ? 'loud' : 'rest', 170, FEET, 200, u, { seed: 3 });
+  charlie(ctx, 400, FEET, 1.5, { mood: jp > 0.2 && jp < 0.8 ? 'wow' : 'happy', defenders: ears ? K.DEF : null, blinkU: u, look: [1, -0.7], armL: K.POSE.relaxed, armR: K.POSE.relaxed });
+  pip(ctx, ears ? 'loud' : 'point', 1720, FEET, 260, u, { seed: 3 });
+  say(ctx, u, a + 1.2, a + 4.8, "We're here early. Let's find our spot!", 1290, 120, 1700, 480, { w: 580 });
+  say(ctx, u, a + 5, a + 9.2, 'Ear defenders on. Here comes a fast jet!', 1290, 120, 1700, 480, { w: 580 });
+  say(ctx, u, a + 9.4, a + 13.3, 'Now, when shall we head home?', 1290, 120, 1700, 480, { w: 580 });
   K.caption(ctx, u, a + 0.3, a + STEP - 0.5, 'Show day: arrive early, and find your spot.', { num: 6, sub: 'Then plan when you will leave for home.' });
 }
 
@@ -353,10 +385,11 @@ function scenePayoff(ctx, u) {
   K.propPlane(ctx, px, py, 0.82, -0.05 + Math.cos(u * 0.7) * 0.03, u);
   K.dad(ctx, 1100, FEET + 8, 1.2, { mood: 'happy', look: [0, -1], blinkU: u, blinkOff: 2, armL: K.POSE.relaxed, armR: K.POSE.relaxed, tilt: -0.04 });
   const on = u > PAY + 2.4;
-  const fl = on ? K.flap(u, 3) : { armL: K.POSE.relaxed, armR: K.POSE.relaxed };
+  const fl = on ? { armL: K.POSE.up, armR: K.POSE.up } : { armL: K.POSE.relaxed, armR: K.POSE.relaxed };
   const hop = on ? Math.abs(Math.sin(u * TAU * 1.5)) * -14 : 0;
-  charlie(ctx, 840, FEET + hop, 1.55, { mood: on ? 'grin' : 'happy', defenders: K.DEF, look: [0.3, -1], blinkU: u, ...fl });
-  pip(ctx, on ? 'cheer' : 'hello', 1400, FEET + 10, 220, u);
+  charlie(ctx, 840, FEET + hop, 1.55, { mood: on ? 'grin' : 'happy', look: [0.3, -1], blinkU: u, ...fl });
+  pip(ctx, on ? 'cheer' : 'hello', 1460, FEET + 10, 270, u);
+  say(ctx, u, PAY + 0.8, PAY + 7.6, 'We planned it together. Have a brilliant day!', 1270, 150, 1450, 470, { w: 580 });
   K.caption(ctx, u, PAY + 1.2, PAY + 7.8, 'Planned with Pip. Ready for a great day.', { w: 1200, size: 76 });
 }
 
@@ -387,7 +420,7 @@ function endCard(ctx, u, IMG) {
   if (pk > 0) { ctx.save(); ctx.translate(150, 900); ctx.scale(pk, pk); K.pill(ctx, 0, 0, 'ukairshowguide.co.uk', { size: 50, bg: C.teal, fg: C.white }); ctx.restore(); }
   const ck = K.pop(u, END + 1.0, SPRING.gentle), wv = Math.sin(u * TAU * 0.75) * 0.25;
   K.dad(ctx, 1640, 980 + (1 - ck) * 500, 1.5, { mood: 'happy', blinkU: u, armL: K.POSE.relaxed, armR: K.POSE.relaxed });
-  charlie(ctx, 1380, 990 + (1 - ck) * 500, 1.75, { mood: 'happy', defenders: K.DEF, blinkU: u, blinkOff: 2, armR: [2.5 + wv, -0.25], armL: K.POSE.relaxed });
+  charlie(ctx, 1380, 990 + (1 - ck) * 500, 1.75, { mood: 'happy', blinkU: u, blinkOff: 2, armR: [2.5 + wv, -0.25], armL: K.POSE.relaxed });
   const pq = K.pop(u, END + 2.4, SPRING.bouncy);
   if (pq > 0) pip(ctx, 'hello', 1080, 990, 280 * Math.min(1, pq), u);
   ctx.restore();
