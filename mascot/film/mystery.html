@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Who is Pip? The mystery teaser</title>
+<style>
+/* The pre-launch teaser: Pip is only ever glimpsed in the dark (a propeller, a wing tip, a pair of eyes,
+   a silhouette caught by a searchlight), never shown in full. Square edges only, as Jack asked. */
+@font-face{font-family:Barlow;src:url(fonts/display.ttf);font-weight:800}
+@font-face{font-family:Barlow;src:url(fonts/ui.ttf);font-weight:600}
+html,body{margin:0;background:#111;overflow:hidden;height:100%}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:#0B1A27;font-family:Barlow,sans-serif;color:#fff;transform-origin:0 0}
+.layer{position:absolute;inset:0;visibility:hidden;overflow:hidden}
+.sky{background:linear-gradient(180deg,#07121C 0%,#0E2131 55%,#13293C 100%)}
+.star{position:absolute;width:8px;height:8px;background:#fff}
+.beam{position:absolute;left:50%;bottom:-40px;width:520px;height:2600px;margin-left:-260px;transform-origin:50% 100%;
+  clip-path:polygon(44% 100%,56% 100%,100% 0,0 0);background:linear-gradient(0deg,rgba(255,244,200,.0) 0%,rgba(255,244,200,.22) 30%,rgba(255,244,200,.05) 100%)}
+.pip{position:absolute}
+.pip svg{display:block;width:100%;height:auto}
+.sil svg{filter:brightness(0) drop-shadow(10px -8px 0 rgba(50,180,175,.85))}
+.dim svg{filter:brightness(.55) saturate(.9)}
+.vig{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(7,18,28,.95) 0%,rgba(7,18,28,0) 26%,rgba(7,18,28,0) 74%,rgba(7,18,28,.95) 100%),linear-gradient(180deg,rgba(7,18,28,.95) 0%,rgba(7,18,28,0) 28%,rgba(7,18,28,0) 72%,rgba(7,18,28,.95) 100%)}
+.t{position:absolute;left:80px;right:80px;text-align:center;font-weight:800;line-height:1.02;opacity:0}
+.big{font-size:150px}
+.mid{font-size:104px}
+.small{font-size:58px;font-weight:600;line-height:1.25}
+.y{color:#FFC23A}
+.q{position:absolute;font-weight:800;color:#FFC23A;font-size:420px;line-height:1;opacity:0}
+.chips{display:flex;flex-direction:column;align-items:center;gap:18px}
+.chip{display:inline-block;background:#fff;color:#13293C;font-weight:800;font-size:56px;padding:12px 56px;clip-path:polygon(22px 0,100% 0,calc(100% - 22px) 100%,0 100%)}
+.logo{position:absolute;left:50%;width:640px;transform:translateX(-50%);background:#F8F4EA;padding:26px 40px;clip-path:polygon(26px 0,100% 0,calc(100% - 26px) 100%,0 100%);opacity:0}
+.logo img{display:block;width:100%}
+.badge{position:absolute;opacity:0}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="../mascot.js"></script>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search), RENDER = q.get('render') === '1';
+  var WIDE = q.get('format') === '16x9';                       // ?format=16x9 for the landscape version
+  var W = WIDE ? 1920 : 1080, H = WIDE ? 1080 : 1920, FPS = 30, DUR = 16, TAU = Math.PI * 2, M = UKAGMascot;
+  var V = function (tall, wide) { return WIDE ? wide : tall; };
+  var stage = document.getElementById('stage');
+  stage.style.width = W + 'px'; stage.style.height = H + 'px';
+  var clamp = function (x) { return Math.max(0, Math.min(1, x)); };
+  var ease = function (t) { t = clamp(t); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  function spring(t, k, c) { if (t <= 0) return 0; k = k || 260; c = c || 16; var w0 = Math.sqrt(k), z = c / (2 * w0), wd = w0 * Math.sqrt(1 - z * z); return 1 - Math.exp(-z * w0 * t) * (Math.cos(wd * t) + (z * w0 / wd) * Math.sin(wd * t)); }
+
+  // Pip's drawing is 400 x 350 units (viewBox 0 20 400 350). A box w px wide maps x to x*w/400, y to (y-20)*w/400.
+  function place(el, w, fx, fy, cx, cy) { el.style.width = w + 'px'; el.style.left = (cx - fx * w / 400) + 'px'; el.style.top = (cy - (fy - 20) * w / 400) + 'px'; }
+  function layer(cls, html) { var d = document.createElement('div'); d.className = 'layer ' + (cls || ''); d.innerHTML = html || ''; stage.appendChild(d); return d; }
+  var stars = ''; for (var i = 0; i < 46; i++) { var a = (i * 7919) % 1000 / 1000, b = (i * 104729) % 1000 / 1000; stars += '<i class="star" data-i="' + i + '" style="left:' + (a * (W - 20)).toFixed(0) + 'px;top:' + (b * H * V(.68, .6)).toFixed(0) + 'px"></i>'; }
+  var sky = layer('sky', stars + '<div class="beam" id="b1"></div><div class="beam" id="b2"></div>');
+  sky.style.visibility = 'visible';
+  var starEls = [].slice.call(sky.querySelectorAll('.star'));
+
+  // the shots, each a layer with its own start and end time (seconds)
+  var S = [];
+  function shot(t0, t1, el, fn) { S.push({ t0: t0, t1: t1, el: el, fn: fn }); }
+  var text = function (cls, html, top, extra) { return '<div class="t ' + cls + '" style="top:' + top + 'px;' + (extra || '') + '">' + html + '</div>'; };
+  // in the landscape version the words sit in the left half and Pip in the right half
+  var LEFT = 'left:110px;right:auto;width:860px;text-align:left';
+  function pop(el, d, from) { if (d <= 0) { el.style.opacity = 0; return; } var k = spring(d); el.style.opacity = Math.min(1, d / .12); el.style.transform = from === 'up' ? 'translateY(' + ((1 - k) * 60).toFixed(1) + 'px)' : 'scale(' + (.6 + .4 * k).toFixed(4) + ')'; }
+
+  // 1. "We're launching something new." (0 to 2 s), with Pip's propeller heard far off
+  var L1 = layer('', text('small', 'The Big Guide to UK Airshows', V(640, 300)) + text('big', 'We’re launching something new.', V(760, 400)));
+  shot(0, 2, L1, function (t) { var e = L1.querySelectorAll('.t'); pop(e[0], t - .3, 'up'); pop(e[1], t - .7, 'up'); });
+
+  // 2. glimpse: the spinning propeller and red nose, very close (2 to 3 s)
+  var L2 = layer('', '<div class="pip dim" id="g1"></div><div class="vig"></div>');
+  shot(2, 3, L2, function (t) { var g = L2.querySelector('#g1'); g.innerHTML = M.svg({ pose: 'loading', title: '' }); place(g, 6200 + t * 500, 200, 232, W / 2, H / 2); });
+
+  // 3. glimpse: a teal wing tip (3 to 4 s)
+  var L3 = layer('', '<div class="pip dim" id="g2"></div><div class="vig"></div>');
+  shot(3, 4, L3, function (t) { var g = L3.querySelector('#g2'); g.innerHTML = M.svg({ pose: 'rest', prop: -10, title: '' }); place(g, 3200 + t * 260, 372, 238, W / 2 - 60 + t * 120, H / 2); });
+
+  // 4. "Who is Pip?" with Pip's silhouette caught in a searchlight (4 to 6 s)
+  var L4 = layer('', text('big', 'Who is <span class="y">Pip?</span>', V(330, 400), V('', LEFT)) + '<div class="pip sil" id="s1"></div>');
+  shot(4, 6, L4, function (t) { pop(L4.querySelector('.t'), t - .1); var s = L4.querySelector('#s1'); s.innerHTML = M.svg({ pose: 'rest', ground: false, title: '' }); var k = spring(t - .2, 120, 18); place(s, V(820, 700), 200, 210, V(W / 2, 1420), V(1180, 560) + (1 - k) * 700); });
+
+  // 5. glimpse: two eyes in the dark, then a blink (6 to 7 s)
+  var L5 = layer('', '<div class="pip dim" id="g3"></div><div class="vig"></div>');
+  shot(6, 7, L5, function (t) { var g = L5.querySelector('#g3'); g.innerHTML = M.svg({ pose: 'rest', eyes: (t > .55 && t < .7) ? 'happy' : 'open', look: [t > .35 ? 6 : -6, -2], title: '' }); place(g, 4600, 200, 184, W / 2, H / 2); });
+
+  // 6. glimpse: yellow ear defenders (7 to 8 s)
+  var L6 = layer('', '<div class="pip dim" id="g4"></div><div class="vig"></div>');
+  shot(7, 8, L6, function (t) { var g = L6.querySelector('#g4'); g.innerHTML = M.svg({ pose: 'loud', title: '' }); place(g, 3000 - t * 200, 104, 196, W / 2 + 40 - t * 80, H / 2); });
+
+  // 7. "What is Pip?" with a different silhouette, wings up (8 to 10 s)
+  var L7 = layer('', text('big', 'What is <span class="y">Pip?</span>', V(330, 400), V('', LEFT)) + '<div class="pip sil" id="s2"></div>');
+  shot(8, 10, L7, function (t) { pop(L7.querySelector('.t'), t - .1); var s = L7.querySelector('#s2'); s.innerHTML = M.svg({ pose: 'cheer', ground: false, title: '' }); var k = spring(t - .2, 200, 12); place(s, V(880, 720), 200, 210, V(W / 2, 1420), V(1200, 640)); s.style.transform = 'scale(' + (.7 + .3 * k).toFixed(4) + ')'; s.style.transformOrigin = '50% 100%'; });
+
+  // 8. a silhouette flies across the searchlights: "Coming soon" (10 to 12 s)
+  var L8 = layer('', '<div class="pip sil" id="s3"></div>' + text('big', 'Coming soon', V(1180, 760)));
+  shot(10, 12, L8, function (t) { var s = L8.querySelector('#s3'); s.innerHTML = M.svg({ pose: 'fly', ground: false, title: '' }); var p = ease(t / 1.9); place(s, V(760, 620), 200, 210, W + 500 - p * (W + 1000), V(900, 420) - Math.sin(p * Math.PI) * 160); s.style.transform = 'scaleX(-1) rotate(-8deg)'; pop(L8.querySelector('.t'), t - .6, 'up'); });
+
+  // 9. end card: follow us to find out (12 to 16 s)
+  var L9 = layer('', '<svg class="trails" viewBox="0 0 ' + W + ' ' + H + '" style="position:absolute;inset:0;width:' + W + 'px;height:' + H + 'px"></svg>' + text('big', 'Follow us to find out.', V(330, 330), V('', LEFT)) +
+    '<div class="t" style="top:' + V(670, 690) + 'px;' + V('', LEFT) + '"><div class="chips" style="flex-direction:row;justify-content:' + V('center', 'flex-start') + ';flex-wrap:wrap"><span class="chip">Instagram</span><span class="chip">Facebook</span><span class="chip">YouTube</span></div></div>' +
+    '<div class="peek" style="position:absolute;left:' + V(0, 1040) + 'px;width:' + V(1080, 800) + 'px;top:' + V(860, 230) + 'px;height:230px;overflow:hidden"><div class="pip sil" id="s4"></div><div class="q" style="left:' + V(720, 600) + 'px;top:0;font-size:220px">?</div></div>' +
+    '<div class="badge" style="left:' + V(180, 1060) + 'px;top:' + V(1010, 400) + 'px;width:' + V(720, 760) + 'px"><img src="logo-swoosh-badge.png" alt="" style="display:block;width:100%"></div>');
+  shot(12, DUR, L9, function (t) {
+    var e = L9.querySelectorAll('.t'); pop(e[0], t - .3, 'up');
+    [].slice.call(L9.querySelectorAll('.chip')).forEach(function (c, i) { var d = t - (1 + i * .35), k = spring(d); c.style.opacity = d <= 0 ? 0 : Math.min(1, d / .12); c.style.transform = 'translateX(' + ((1 - k) * 160).toFixed(1) + 'px)'; });
+    e[1].style.opacity = 1;
+    // as in the motion videos: three jets draw the logo's red, white and blue swooshes across the sky, then the logo lands
+    var svg = L9.querySelector('.trails'), cols = ['#E8202A', '#FFFFFF', '#1D4FB7'], out = '';
+    var path = function (qq, k) { var x = -200 + qq * (W + 500); return [x, V(1010, 200) + k * 30 - Math.sin(qq * Math.PI) * 110 + (qq - .5) * -60]; };
+    cols.forEach(function (col, k) {
+      var qq = Math.max(0, Math.min(1, (t - (1.5 + k * .12)) / 1.3)); qq = qq < .5 ? 2 * qq * qq : 1 - Math.pow(-2 * qq + 2, 2) / 2;
+      if (qq <= 0) return;
+      var pts = []; for (var i = 0; i <= 60; i++) { var pp = path(i / 60 * qq, k); pts.push(pp[0].toFixed(1) + ',' + pp[1].toFixed(1)); }
+      if (k === 1) out += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#C9D6E0" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>';
+      out += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + col + '" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>';
+      if (qq < 1) {
+        var h = path(qq, k), h2 = path(Math.min(1, qq + .01), k), ang = Math.atan2(h2[1] - h[1], h2[0] - h[0]) * 180 / Math.PI;
+        out += '<g transform="translate(' + (h[0] + 14).toFixed(1) + ' ' + h[1].toFixed(1) + ') rotate(' + ang.toFixed(1) + ') scale(.8)">' +
+          '<polygon points="60,0 20,-9 -40,-9 -55,-26 -62,-26 -56,-6 -60,0 -56,6 -62,26 -55,26 -40,9 20,9" fill="#FFFFFF" stroke="#13293C" stroke-width="4" stroke-linejoin="round"/>' +
+          '<polygon points="10,-8 -18,-44 -30,-44 -16,-8 -16,8 -30,44 -18,44 10,8" fill="#FFFFFF" stroke="#13293C" stroke-width="4" stroke-linejoin="round"/></g>';
+      }
+    });
+    svg.innerHTML = out;
+    var bd = L9.querySelector('.badge'), dl = t - 2.6, lk = spring(dl, 260, 13);
+    bd.style.opacity = dl <= 0 ? 0 : 1; bd.style.transform = 'scale(' + Math.max(0, lk).toFixed(4) + ') rotate(' + ((1 - lk) * 12).toFixed(2) + 'deg)';
+    // the silhouette peeks up from the bottom edge, and a question mark pops beside it
+    var s = L9.querySelector('#s4'); s.innerHTML = M.svg({ pose: 'rest', ground: false, look: [6, -6], title: '' });
+    var k = spring(t - 3.1, 150, 11); place(s, 520, 200, 110, V(W / 2, 400), 230 + 40 - k * 200);
+    var qq = L9.querySelector('.q'), dq = t - 3.6; qq.style.opacity = dq <= 0 ? 0 : 1; qq.style.transform = 'rotate(10deg) scale(' + (.5 + .5 * spring(dq, 260, 12)).toFixed(4) + ')';
+  });
+
+  var flash = document.createElement('div'); flash.className = 'flash'; stage.appendChild(flash);
+  var CUTS = [2, 3, 4, 6, 7, 8, 10, 12];
+
+  window.seek = function (t) {
+    // searchlights sweep and the stars twinkle all the way through
+    var b1 = document.getElementById('b1'), b2 = document.getElementById('b2');
+    b1.style.transform = 'translateX(' + V(-260, -560) + 'px) rotate(' + (-24 + 20 * Math.sin(t * .9)).toFixed(2) + 'deg)';
+    b2.style.transform = 'translateX(' + V(300, 600) + 'px) rotate(' + (22 + 18 * Math.sin(t * .7 + 2)).toFixed(2) + 'deg)';
+    starEls.forEach(function (s, i) { s.style.opacity = (.25 + .75 * Math.abs(Math.sin(t * (.6 + (i % 5) * .2) + i))).toFixed(2); s.style.transform = 'scale(' + (i % 3 ? .6 : 1) + ')'; });
+    S.forEach(function (s) { var on = t >= s.t0 && t < s.t1; s.el.style.visibility = on ? 'visible' : 'hidden'; if (on) s.fn(t - s.t0); });
+    // a quick white flash on every cut, like a camera
+    var f = 0; CUTS.forEach(function (c) { var d = t - c; if (d >= 0 && d < .18) f = Math.max(f, .35 * (1 - d / .18)); });
+    flash.style.opacity = f.toFixed(3);
+  };
+  window.HITS = [[0.3, 'fly'], [0.7, 'pop'], [2, 'whoosh'], [3, 'whoosh'], [4.1, 'thud'], [6, 'whoosh'], [6.6, 'tick'], [7, 'whoosh'], [8.1, 'thud'], [10, 'fly'], [10.6, 'pop'], [12, 'whoosh'], [13, 'tick'], [13.35, 'tick'], [13.7, 'tick'], [13.5, 'fly'], [14.6, 'thud'], [15.1, 'boing'], [15.6, 'pop']];
+  window.FILM = { w: W, h: H, fps: FPS, duration: DUR, name: 'mystery' };
+  document.fonts.ready.then(function () {
+    Promise.all([].slice.call(document.images).map(function (im) { return im.decode().catch(function () {}); })).then(function () {
+      seek(0); window.READY = true;
+      if (RENDER) return;
+      var fit = function () { stage.style.transform = 'scale(' + Math.min(innerWidth / W, innerHeight / H) + ')'; }; fit(); addEventListener('resize', fit);
+      var t0 = performance.now(); (function loop(now) { seek(((now - t0) / 1000) % DUR); requestAnimationFrame(loop); })(t0);
+    });
+  });
+})();
+</script>
+</body>
+</html>

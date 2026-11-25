@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Pip launch: posting pack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a clear running order for Jack: what to post, on which day, where, and the words to paste.
+   IDEA: a printed posting schedule, one numbered slip per post.
+   PICTURE: the post itself (picture or video), large, beside its caption.
+   COLOUR and TYPE: the site's navy, teal, red and yellow; Barlow. Square corners only (Jack's rule).
+   LAYOUT: a stage list at the top, then one card per post in date order; stacked on a phone. */
+:root{color-scheme:light;--navy:#13293C;--teal:#32B4AF;--tealdk:#23908C;--blue:#1F4E8C;--red:#D74949;--yellow:#FFC23A;--cream:#F8F4EA;--line:#D8E3EC;--muted:#4a5d6e;--purple:#6950A1}
+*{box-sizing:border-box;min-width:0;border-radius:0}
+body{margin:0;background:#fff;color:var(--navy);font:17px/1.5 Barlow,system-ui,sans-serif;overflow-x:clip}
+header{background:var(--navy);color:#fff;padding:28px max(4vw,16px) 24px}
+header h1{margin:0;font-size:clamp(30px,4.4vw,48px);line-height:1.05;font-weight:800}
+header p{margin:8px 0 0;color:#cfe0ec;max-width:66ch}
+.how{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+.how div{background:#1C3850;padding:12px 14px}
+.how b{display:block;color:var(--yellow);font-size:15px}
+.stages{display:flex;flex-wrap:wrap;gap:6px;padding:14px max(4vw,16px);background:var(--cream);position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+.stages a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:7px 14px;clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.stages .prog{margin-left:auto;font-weight:700;color:var(--muted);align-self:center}
+main{padding:10px max(4vw,16px) 50px;max-width:1240px;margin:0 auto}
+h2{font-size:30px;line-height:1.1;margin:34px 0 4px;font-weight:800;scroll-margin-top:70px}
+h2 + p{margin:0 0 12px;color:var(--muted);max-width:70ch}
+.post{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:22px;border:1px solid var(--line);border-left:10px solid var(--c);padding:18px;margin:14px 0;background:#fff}
+.post.done{opacity:.55}
+.when{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:10px}
+.num{background:var(--navy);color:#fff;font-weight:800;padding:2px 12px;font-size:18px}
+.date{font-weight:800;font-size:22px}
+.where{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.where span{background:#EEF2F5;font-weight:700;font-size:14px;padding:3px 10px}
+.media{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.media.one{grid-template-columns:minmax(0,1fr)}
+.media .m img{aspect-ratio:1;object-fit:cover}
+.media .m video{max-height:420px}
+.m{border:1px solid var(--line);background:#F4F6F8;display:grid;grid-template-rows:auto auto}
+.m img,.m video{width:100%;display:block;background:#000}
+.m .bar{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 8px;font-size:13px;font-weight:600;color:var(--muted)}
+.btn{font:700 15px Barlow,sans-serif;border:0;cursor:pointer;min-height:40px;padding:8px 14px;background:var(--navy);color:#fff;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)}
+.btn.teal{background:var(--tealdk)}
+.btn.small{min-height:34px;padding:5px 12px;font-size:14px}
+.btn:focus-visible,.tick input:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.cap{background:var(--cream);padding:14px 16px;white-space:pre-wrap;font-weight:600;margin:0 0 8px}
+.note{color:var(--muted);font-size:15px;margin:8px 0 0}
+.note b{color:var(--navy)}
+.tick{display:flex;align-items:center;gap:10px;font-weight:700;margin-top:12px;min-height:44px}
+.tick input{width:24px;height:24px;accent-color:var(--tealdk)}
+.rules{background:var(--cream);padding:18px 20px;margin-top:34px}
+.rules ul{margin:6px 0 0;padding-left:20px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--navy);color:#fff;font-weight:700;padding:10px 18px;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast.on{opacity:1}
+@media (max-width:820px){.post{grid-template-columns:1fr}.how{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Pip launch: your posting pack</h1>
+  <p>Everything for Pip's release, in the order it goes out. Each post has its picture or video, the words to paste, and where to post it. Nothing here has been posted.</p>
+  <div class="how">
+    <div><b>1. Find today's post</b>Posts are numbered and dated. Dates are a suggestion; keep the order.</div>
+    <div><b>2. Save the picture or video</b>Press Save under each one.</div>
+    <div><b>3. Copy the caption</b>Press Copy caption and paste it into the post.</div>
+    <div><b>4. Tick it off</b>Tick "Posted" so you know where you are. It's remembered on this device.</div>
+  </div>
+</header>
+<nav class="stages" id="stages" aria-label="Stages"></nav>
+<main id="main"></main>
+<div id="toast" role="status"></div>
+<script>
+{
+  const POSTS = [
+    { stage: 'Whispers', date: 'Mon 30 Nov', where: ['Instagram', 'Facebook'], media: ['01-whisper-tornado.jpg'],
+      caption: 'Plan early. Inform yourself. Prepare well.\nThe 2027 airshow season is on its way.',
+      note: 'Pip is hiding in this photo (bottom right). <b>Say nothing about it.</b> The first letters of the caption spell P, I, P.' },
+    { stage: 'Whispers', date: 'Thu 3 Dec', where: ['Instagram', 'Facebook'], media: ['02-whisper-apache.jpg'],
+      caption: 'Did anyone else just hear a little propeller?',
+      note: 'Pip’s wing tip pokes in from the right edge. Say nothing about it.' },
+    { stage: 'Whispers', date: 'Mon 7 Dec', where: ['Instagram', 'Facebook'], media: ['03-whisper-c17.jpg'],
+      caption: 'Grey skies today. Who else is already looking forward to summer 2027?',
+      note: 'A tiny Pip is flying in the sky, top right. Say nothing about it.' },
+    { stage: 'Whispers', date: 'Thu 10 Dec', where: ['Instagram', 'Facebook'], media: ['04-whisper-jaguar.jpg'],
+      caption: 'Someone has borrowed my ear defenders. Small. Round. Very keen on airshows.',
+      note: 'Pip is peeking up in the bottom left corner. Say nothing about it.' },
+    { stage: 'Glimpses', date: 'Sat 12 Dec', where: ['Instagram', 'Facebook', 'Instagram story', 'TikTok'], media: ['pip-hint-0-something-new.png', 'pip-hint-0-something-new-story.png'],
+      caption: 'We\u2019ve been working on something new. \u{1F440}\nTo find out more, stay tuned for more teasers.',
+      note: 'The first announcement. <b>Square</b> picture for the feed, <b>tall</b> picture for stories. Only the tip of Pip\u2019s tail shows at the bottom. Don\u2019t say what it is.' },
+    { stage: 'Glimpses', date: 'Mon 14 Dec', where: ['Instagram', 'Facebook', 'Instagram story'], media: ['pip-hint-1-something-is-coming.png'],
+      caption: 'Something’s coming.', note: 'No name yet. Let people guess in the comments.' },
+    { stage: 'Glimpses', date: 'Thu 17 Dec', where: ['Instagram', 'Facebook', 'Instagram story'], media: ['pip-hint-2-can-you-hear-it.png'],
+      caption: 'Can you hear it?', note: 'Still no name.' },
+    { stage: 'Questions', date: 'Mon 21 Dec', where: ['Instagram', 'Facebook'], media: ['pip-hint-3-what-could-pip-stand-for.png'],
+      caption: 'P. I. P.\nWhat could it stand for? Wrong answers very welcome \u{1F447}',
+      note: 'Don’t confirm any guess until reveal day. A "getting warmer" reply keeps people coming back.' },
+    { stage: 'Questions', date: 'Wed 23 Dec', where: ['Instagram Reels', 'TikTok', 'YouTube Shorts', 'Facebook', 'YouTube'], media: ['who-is-pip-teaser-tall.mp4', 'who-is-pip-teaser-wide.mp4'],
+      caption: 'We’re launching something new.\nWho is Pip? What is Pip?\nFollow us to find out.',
+      note: '<b>Tall</b> video for Reels, TikTok and Shorts. <b>Wide</b> video for YouTube and Facebook.' },
+    { stage: 'Questions', date: 'Sat 26 Dec', where: ['Instagram', 'Facebook'], media: ['pip-hint-4-who-is-pip.png'],
+      caption: 'Who is Pip? Not long now.', note: '' },
+    { stage: 'Countdown', date: 'Tue 29 Dec', where: ['Instagram', 'Facebook', 'Instagram story'], media: ['pip-hint-5-countdown-3.png'],
+      caption: '3 days.', note: 'Post it as a story too.' },
+    { stage: 'Countdown', date: 'Wed 30 Dec', where: ['Instagram', 'Facebook', 'Instagram story'], media: ['pip-hint-6-countdown-2.png'],
+      caption: '2 days. Get your ear defenders ready.', note: 'Post it as a story too.' },
+    { stage: 'Countdown', date: 'Thu 31 Dec', where: ['Instagram', 'Facebook', 'Instagram story'], media: ['pip-hint-7-countdown-1.png'],
+      caption: 'Tomorrow.', note: 'Post it as a story too.' },
+    { stage: 'Reveal', date: 'Fri 1 Jan, morning', where: ['Instagram (swipe post)', 'Facebook (album)'], media: ['pip-reveal-1-meet-pip.png', 'pip-reveal-2-plan.png', 'pip-reveal-3-inform.png', 'pip-reveal-4-prepare.png'],
+      caption: 'Say hello to Pip! \u{1F44B}\nPip is the new face of the UK Airshow Guide, and PIP stands for Plan, Inform, Prepare. That’s what this guide is all about.\nThank you for all your guesses! Swipe to meet Pip properly ✈️',
+      note: 'Post the four pictures together, in this order. Pin it to the top of your Instagram. Then reply to the best guesses on the "What could it stand for?" post.' },
+    { stage: 'Reveal', date: 'Fri 1 Jan, late morning', where: ['YouTube', 'Facebook', 'Instagram Reels', 'TikTok'], media: ['meet-pip-who-i-am-wide.mp4', 'meet-pip-cartoon-tall.mp4'],
+      caption: 'Meet Pip! Here’s who I am, who I’m for, how I can help, and where you’ll see me.\nPlan. Inform. Prepare. ✈️',
+      note: '<b>Wide</b> video (Pip explains, 99 s) for YouTube and Facebook; pin it on YouTube. <b>Tall</b> cartoon for Reels and TikTok.' },
+    { stage: 'Reveal', date: 'Fri 1 Jan, evening', where: ['Instagram Reels', 'TikTok', 'YouTube Shorts', 'Facebook'], media: ['pip-airshow-season-teaser-tall.mp4', 'pip-airshow-season-teaser-wide.mp4', 'pip-airshow-season.png'],
+      caption: 'See Pip? It must be airshow season. ✈️',
+      note: 'Tall video for Reels, TikTok and Shorts; wide video for Facebook. The square picture works as a story or a feed post.' },
+    { stage: 'Did you spot Pip?', date: 'Sun 3 Jan', where: ['Instagram (swipe post)', 'Facebook (album)'], media: ['00-did-you-spot-pip-cover.jpg', '01-spotted-tornado.jpg', '02-spotted-apache.jpg', '03-spotted-c17.jpg', '04-spotted-jaguar.jpg'],
+      caption: 'Did you spot Pip? \u{1F440}\nPip has been hiding in our posts for a month. Swipe to see where.\nWell done if you found them all!',
+      note: 'Post the five pictures together, cover first. Thank anyone who spotted Pip early by their username only, never a child’s name.' },
+    { stage: 'After the launch', date: 'Wed 6 Jan', where: ['YouTube', 'Facebook'], media: ['plan-it-with-pip-wide.mp4'],
+      caption: 'Plan it with Pip: six steps to a brilliant airshow day, from picking your shows to show day.\nPlan. Inform. Prepare.',
+      note: 'The planning video, with Pip’s speech bubbles. A tall version can be made for Reels and TikTok.' },
+    { stage: 'After the launch', date: 'Any time', where: ['Facebook', 'Instagram', 'Print'], media: ['meet-pip-poster.png'],
+      caption: 'See Pip? It must be airshow season.\nFind Pip on Instagram, Facebook and YouTube.',
+      note: 'The poster. The A3 print file is in the folder you were sent (meet-pip-poster-A3.pdf).' },
+  ];
+  const COL = { 'Whispers': '#5E6E80', 'Glimpses': '#1F4E8C', 'Questions': '#6950A1', 'Countdown': '#D74949', 'Reveal': '#23908C', 'Did you spot Pip?': '#C9961A', 'After the launch': '#13293C' };
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  let done = {}; try { done = JSON.parse(localStorage.getItem('pip-pack') || '{}'); } catch (e) {}
+  const stages = [...new Set(POSTS.map((p) => p.stage))];
+  function render() {
+    const n = POSTS.filter((_, i) => done[i]).length;
+    document.getElementById('stages').innerHTML = stages.map((s) => '<a href="#' + slug(s) + '" style="background:' + COL[s] + '">' + esc(s) + '</a>').join('') + '<span class="prog">' + n + ' of ' + POSTS.length + ' posted</span>';
+    let html = '', last = '';
+    POSTS.forEach((p, i) => {
+      if (p.stage !== last) { last = p.stage; html += '<h2 id="' + slug(p.stage) + '" style="color:' + COL[p.stage] + '">' + esc(p.stage) + '</h2>'; }
+      const media = p.media.map((f) => {
+        const vid = f.endsWith('.mp4');
+        const label = vid ? (f.includes('-tall') ? 'Tall video' : 'Wide video') : (f.includes('-story') ? 'Tall picture (story)' : 'Picture');
+        const el = vid ? '<video src="media/' + f + '" poster="media/' + f.replace('.mp4', '-cover.jpg') + '" controls preload="none" playsinline></video>' : '<img src="media/' + f + '" alt="" loading="lazy">';
+        return '<div class="m">' + el + '<div class="bar"><span>' + label + '</span><button class="btn small teal" type="button" data-save="' + f + '">Save</button></div></div>';
+      }).join('');
+      html += '<article class="post' + (done[i] ? ' done' : '') + '" style="--c:' + COL[p.stage] + '"><div><div class="when"><span class="num">' + (i + 1) + '</span><span class="date">' + esc(p.date) + '</span></div>' +
+        '<div class="media' + (p.media.length === 1 ? ' one' : '') + '">' + media + '</div></div>' +
+        '<div><b>Post on</b><div class="where">' + p.where.map((w) => '<span>' + esc(w) + '</span>').join('') + '</div>' +
+        '<b>Caption</b><p class="cap" id="cap' + i + '">' + esc(p.caption) + '</p><button class="btn" type="button" data-copy="' + i + '">Copy caption</button>' +
+        (p.note ? '<p class="note">' + p.note + '</p>' : '') +
+        '<label class="tick"><input type="checkbox" data-done="' + i + '"' + (done[i] ? ' checked' : '') + '> Posted</label></div></article>';
+    });
+    html += '<div class="rules"><b>Keep it right</b><ul><li>Hints are for fun: no fake news, and no "big announcement" about any show.</li><li>Don’t promise a prize unless you have decided on one and written the rules.</li><li>Never ask for or post photos of children. Thank people by username only.</li><li>Check a hashtag before using it; #WhoIsPip may already be used by someone else.</li></ul></div>';
+    document.getElementById('main').innerHTML = html;
+  }
+  const toast = (t) => { const el = document.getElementById('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('on'), 1800); };
+  let downloads = null;
+  if (window.claude && typeof window.claude.use === 'function') window.claude.use('downloads').then((d) => { downloads = d; }).catch(() => {});
+  document.addEventListener('click', async (e) => {
+    const c = e.target.closest('[data-copy]'), s = e.target.closest('[data-save]');
+    if (c) {
+      const txt = POSTS[+c.dataset.copy].caption;
+      try { await navigator.clipboard.writeText(txt); toast('Caption copied'); }
+      catch (err) { const r = document.createRange(); r.selectNodeContents(document.getElementById('cap' + c.dataset.copy)); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast('Caption selected: copy it now'); }
+    }
+    if (s) {
+      const f = s.dataset.save;
+      try {
+        const blob = await (await fetch('media/' + f)).blob();
+        if (downloads) { await downloads.save({ filename: f, data: blob }); toast('Saved ' + f); }
+        else { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = f; document.body.appendChild(a); a.click(); a.remove(); toast('Saved ' + f); }
+      } catch (err) { toast(err && err.code === 'declined' ? 'Not saved' : 'Could not save here'); }
+    }
+  });
+  document.addEventListener('change', (e) => {
+    const d = e.target.closest('[data-done]'); if (!d) return;
+    done[d.dataset.done] = d.checked; try { localStorage.setItem('pip-pack', JSON.stringify(done)); } catch (err) {}
+    render();
+  });
+  render();
+}
+</script>
+</body>
+</html>
