@@ -160,7 +160,7 @@ function part2(ctx, u) {
   const people = [
     ['Families', PLAN, a + 3.6, (x, y, w, h) => { K.dad(ctx, x + w / 2 + 70, y + h + 40, 0.95, { mood: 'happy', blinkU: u, armL: K.POSE.relaxed, armR: K.POSE.relaxed }); charlie(ctx, x + w / 2 - 70, y + h + 40, 1.05, { mood: 'grin', blinkU: u, blinkOff: 1, armR: [2.5 + Math.sin(u * 4) * 0.2, -0.25], armL: K.POSE.relaxed }); }],
     ['First timers', INFORM, a + 9, (x, y, w, h) => { K.beth(ctx, x + w / 2, y + h + 40, 1.0, { lanyard: false, mood: 'wow', blinkU: u, look: [0.4, -0.8], armL: K.POSE.relaxed, armR: [1.5, 0.1] }); }],
-    ['Airshow fans', PREPARE, a + 14.4, (x, y, w, h) => { fan(ctx, x + w / 2, y + h + 40, 1.0, { mood: 'happy', blinkU: u, look: [0, -0.8], hold: 'camera', armL: [1.7, 1.2], armR: [1.7, 1.2] }); }],
+    ['Airshow fans', PREPARE, a + 14.4, (x, y, w, h) => { fan(ctx, x + w / 2, y + h + 130, 1.0, { mood: 'happy', blinkU: u, look: [0, -0.8], hold: 'camera', armL: [2.05, 2.15], armR: [2.05, 2.15] }); }],
   ];
   people.forEach(([t, col, b, draw], i) => {
     const x = 70 + i * (W3 + 30);
@@ -287,7 +287,7 @@ function endCard(ctx, u, IMG) {
   const sk = K.pop(u, END + 3, SPRING.gentle);
   if (sk > 0) { ctx.font = F(56, 800); let x = 154 - (1 - sk) * 80; [['Plan. ', '#23908C'], ['Inform. ', '#1F4E8C'], ['Prepare.', '#D74949']].forEach(([w, c]) => { M.text(ctx, w, x, 800, F(56, 800), c); x += ctx.measureText(w).width; }); }
   const pk = K.pop(u, END + 3.6, SPRING.bouncy);
-  if (pk > 0) { ctx.save(); ctx.translate(150, 900); ctx.scale(pk, pk); K.pill(ctx, 0, 0, 'ukairshowguide.co.uk', { size: 50, bg: C.teal, fg: C.white }); ctx.restore(); }
+  if (pk > 0) M.text(ctx, 'ukairshowguide.co.uk', 154 - (1 - pk) * 80, 900, F(60, 800), '#13293C');   // the web address: navy, no box (Jack)
   const ck = K.pop(u, END + 1.0, SPRING.gentle), wv = Math.sin(u * TAU * 0.75) * 0.25;
   K.dad(ctx, 1640, 980 + (1 - ck) * 500, 1.5, { mood: 'happy', blinkU: u, armL: K.POSE.relaxed, armR: K.POSE.relaxed });
   charlie(ctx, 1380, 990 + (1 - ck) * 500, 1.75, { mood: 'happy', blinkU: u, blinkOff: 2, armR: [2.5 + wv, -0.25], armL: K.POSE.relaxed });

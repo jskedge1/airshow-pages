@@ -250,7 +250,7 @@ export function person(ctx, x, y, s, o = {}) {
   if (o.hold) {
     const [hx, hy] = hands[1];
     if (o.hold === 'card') { at(ctx, hx + 6, hy - 40, 1, 0.08, () => { rr(ctx, -38, -52, 76, 104, 0, C.white); rr(ctx, -30, -44, 60, 88, 0, o.cardCol || C.teal); }); circ(ctx, hx, hy, aw * 0.56, skin); }
-    if (o.hold === 'camera') { const mx = (hands[0][0] + hx) / 2, myy = (hands[0][1] + hy) / 2; rr(ctx, mx - 42, myy - 30, 84, 56, 0, C.ink); circ(ctx, mx, myy, 20, C.greyDark); circ(ctx, mx, myy, 10, C.skyTop); rr(ctx, mx - 30, myy - 40, 26, 14, 0, C.ink); }
+    if (o.hold === 'camera') { const mx = (hands[0][0] + hx) / 2, myy = (hands[0][1] + hy) / 2; rr(ctx, mx - 42, myy - 30, 84, 56, 0, C.ink); circ(ctx, mx, myy, 20, C.greyDark); circ(ctx, mx, myy, 10, C.skyTop); rr(ctx, mx - 30, myy - 40, 26, 14, 0, C.ink); for (const [qx, qy] of hands) circ(ctx, qx, qy, aw * 0.56, skin); }   // hands grip the camera's sides
     if (o.hold === 'tablet') { const mx = (hands[0][0] + hx) / 2, myy = (hands[0][1] + hy) / 2; rr(ctx, mx - 70, myy - 50, 140, 96, 0, C.ink); rr(ctx, mx - 60, myy - 40, 120, 76, 0, C.skyTop); }
     if (o.hold === 'checklist') { at(ctx, hx + 4, hy - 34, 1, 0.1, () => { rr(ctx, -40, -56, 80, 112, 0, C.wood); rr(ctx, -32, -44, 64, 94, 0, C.white); rr(ctx, -14, -62, 28, 16, 0, C.greyDark); for (let i = 0; i < 4; i++) rr(ctx, -22, -32 + i * 20, 44, 7, 0, i < (o.ticks ?? 4) ? C.teal : '#D9DEE3'); }); circ(ctx, hx, hy, aw * 0.56, skin); }
   }

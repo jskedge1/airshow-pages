@@ -417,7 +417,7 @@ function endCard(ctx, u, IMG) {
   const sk = K.pop(u, END + 3, SPRING.gentle);
   if (sk > 0) { ctx.font = F(56, 800); let x = 154 - (1 - sk) * 80; [['Plan. ', '#23908C'], ['Inform. ', '#1F4E8C'], ['Prepare.', '#D74949']].forEach(([w, c]) => { M.text(ctx, w, x, 800, F(56, 800), c); x += ctx.measureText(w).width; }); }
   const pk = K.pop(u, END + 3.6, SPRING.bouncy);
-  if (pk > 0) { ctx.save(); ctx.translate(150, 900); ctx.scale(pk, pk); K.pill(ctx, 0, 0, 'ukairshowguide.co.uk', { size: 50, bg: C.teal, fg: C.white }); ctx.restore(); }
+  if (pk > 0) M.text(ctx, 'ukairshowguide.co.uk', 154 - (1 - pk) * 80, 900, F(60, 800), '#13293C');   // the web address: navy, no box (Jack)
   const ck = K.pop(u, END + 1.0, SPRING.gentle), wv = Math.sin(u * TAU * 0.75) * 0.25;
   K.dad(ctx, 1640, 980 + (1 - ck) * 500, 1.5, { mood: 'happy', blinkU: u, armL: K.POSE.relaxed, armR: K.POSE.relaxed });
   charlie(ctx, 1380, 990 + (1 - ck) * 500, 1.75, { mood: 'happy', blinkU: u, blinkOff: 2, armR: [2.5 + wv, -0.25], armL: K.POSE.relaxed });

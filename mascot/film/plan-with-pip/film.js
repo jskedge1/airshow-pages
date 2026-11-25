@@ -799,7 +799,7 @@ function sceneOutro(ctx, u, L, IMG) {
   else text(ctx, OUTRO_LINE, G.w / 2, 680, font(84, 800, DISPLAY), C.navy, 'center');
   ctx.restore();
   const uk = pop(L, 6.2, SPRING.snappy);
-  if (uk > 0) withT(ctx, G.w / 2, PORTRAIT ? 1220 : 790, uk, 0, () => { let us = 50; ctx.font = font(us, 700, UI); while (ctx.measureText(URL).width + 90 > G.w - 80 && us > 28) { us -= 2; ctx.font = font(us, 700, UI); } const uw = ctx.measureText(URL).width + 90; box(ctx, -uw / 2, -52, uw, 84, 0, C.teal); text(ctx, URL, 0, 10 - (50 - us) * 0.35, font(us, 700, UI), C.white, 'center'); });
+  if (uk > 0) withT(ctx, G.w / 2, PORTRAIT ? 1220 : 790, uk, 0, () => { let us = 50; ctx.font = font(us, 700, UI); while (ctx.measureText(URL).width + 90 > G.w - 80 && us > 28) { us -= 2; ctx.font = font(us, 700, UI); } text(ctx, URL, 0, 10 - (50 - us) * 0.35, font(us + 8, 800, DISPLAY), C.navy, 'center'); });   // the web address: navy, no box (Jack)
   // Pip waves goodbye in the middle of the family
   const pq = pop(L, 3.6, SPRING.bouncy);
   if (pq > 0) pip(ctx, 'hello', PORTRAIT ? 420 : 1380, PORTRAIT ? 1660 : GY + 70, (PORTRAIT ? 300 : 260) * Math.min(1, pq), L);
