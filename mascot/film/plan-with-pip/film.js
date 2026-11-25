@@ -1,5 +1,6 @@
-// Plan it with Pip: the house style cartoon (made from cartoons/calm-visit on claude/airshow-train-map, the same
-// family, square text cards, Red Arrows, cloud wipes and swoosh badge end card) with Pip as the family's guide.
+// Plan it with Pip, in the style of the 'Plan your airshow season' TikTok video (airshow-season-video on
+// claude/amazing-davinci-lvpjwe, whose drawing kit this shares): the same family, square text cards, Red Arrows,
+// cloud wipes and the swoosh badge end card, with Pip as the family's guide.
 // Pure function of time: window.seek(t) paints frame t. Timing is in beats (u) on the measured grid (84 bpm).
 // Every line of copy comes from plan-your-2027-airshow.html (How To Plan Your 2027 Airshow).
 import * as M from './lib/motion.js';

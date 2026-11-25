@@ -5,7 +5,7 @@
 const fs = require('fs'), path = require('path'), { spawn, execFileSync } = require('child_process');
 const { chromium } = require('playwright');
 const fmt = process.argv[2] || '16x9', dir = __dirname, FPS = 30;
-const name = 'plan-it-with-pip-' + (fmt === '9x16' ? 'tall' : 'wide');
+const name = 'plan-it-with-pip-season-style-' + (fmt === '9x16' ? 'tall' : 'wide');
 (async () => {
   const [w, h] = fmt === '9x16' ? [1080, 1920] : [1920, 1080];
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: w, height: h } });
