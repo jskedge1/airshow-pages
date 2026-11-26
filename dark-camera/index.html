@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dark Cam">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Dark Cam</title>
+<style>
+  html, body {
+    margin: 0; height: 100%; background: #000; color: #666;
+    font: 15px/1.4 -apple-system, system-ui, sans-serif;
+    overflow: hidden; overscroll-behavior: none;
+    -webkit-user-select: none; user-select: none;
+    -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+  }
+  /* The camera feed stays live but is never shown. */
+  #feed { position: fixed; left: 0; top: 0; width: 2px; height: 2px; opacity: 0; pointer-events: none; }
+  #pad { position: fixed; inset: 0; background: #000; cursor: none; touch-action: none; }
+  #pip {
+    position: fixed; top: calc(env(safe-area-inset-top) + 10px); right: 12px;
+    width: 4px; height: 4px; border-radius: 50%; background: #1c1c1c; opacity: 0;
+    pointer-events: none;
+  }
+  #pip.on { opacity: 1; }
+
+  #intro, #menu { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; }
+  #intro { align-items: center; justify-content: center; text-align: center; padding: 24px; gap: 14px; }
+  #intro h1 { margin: 0; font-size: 20px; color: #999; font-weight: 600; }
+  #intro p { margin: 0; max-width: 320px; color: #555; }
+  #intro small { color: #444; max-width: 320px; }
+  button {
+    font: inherit; color: #bbb; background: #161616; border: 1px solid #2a2a2a;
+    border-radius: 10px; padding: 10px 16px; cursor: pointer;
+  }
+  button:active { background: #222; }
+  #start { padding: 14px 28px; font-size: 17px; }
+  #err { color: #a55; max-width: 320px; }
+
+  #menu { padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+  #menu header { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; align-items: center; border-bottom: 1px solid #1a1a1a; }
+  #menu header .count { margin-right: auto; color: #777; }
+  #grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 3px; padding: 3px; align-content: start; }
+  #grid img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #111; }
+  #grid .empty { grid-column: 1 / -1; text-align: center; color: #555; padding: 40px 12px; }
+  #menu footer { padding: 10px 12px; color: #555; font-size: 13px; border-top: 1px solid #1a1a1a; }
+  #menu footer label { display: flex; gap: 8px; align-items: center; margin: 4px 0; }
+
+  #viewer { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; touch-action: auto; }
+  #viewer img { flex: 1; min-height: 0; object-fit: contain; width: 100%; }
+  #viewer .bar { display: flex; gap: 8px; padding: 12px; justify-content: center; padding-bottom: calc(env(safe-area-inset-bottom) + 12px); }
+  #install { margin-top: 10px; padding-top: 14px; border-top: 1px solid #1a1a1a; max-width: 320px; }
+  #install p { color: #777; margin: 0 0 10px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<video id="feed" playsinline muted autoplay></video>
+<div id="pad"></div>
+<div id="pip"></div>
+
+<div id="intro">
+  <h1>Dark Cam</h1>
+  <p>The screen goes fully black but the camera stays on.</p>
+  <p><b style="color:#888">Tap</b> anywhere to take a photo.<br>
+     <b style="color:#888">Press and hold</b> for about a second to see your photos and settings.</p>
+  <button id="start">Start</button>
+  <div id="err" hidden></div>
+  <small>Turn your screen brightness right down first. Photos stay on this phone only.</small>
+  <div id="install" hidden>
+    <p id="installText"></p>
+    <button id="installBtn" hidden>Install app</button>
+  </div>
+</div>
+
+<div id="menu" hidden>
+  <header>
+    <span class="count" id="count">0 photos</span>
+    <button id="flip">Switch camera</button>
+    <button id="saveAll">Save all</button>
+    <button id="clear">Delete all</button>
+    <button id="back">Back to dark</button>
+  </header>
+  <div id="grid"></div>
+  <footer>
+    <label><input type="checkbox" id="optVibrate" checked> Buzz when a photo is taken (Android)</label>
+    <label><input type="checkbox" id="optPip" checked> Tiny dim dot in the corner when a photo is taken</label>
+    <label><input type="checkbox" id="optBurst"> Burst: each tap takes 3 photos</label>
+  </footer>
+</div>
+
+<div id="viewer" hidden>
+  <img id="big" alt="">
+  <div class="bar">
+    <button id="vSave">Save</button>
+    <button id="vDel">Delete</button>
+    <button id="vClose">Close</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const feed = $('feed'), pad = $('pad'), pip = $('pip');
+  const intro = $('intro'), menu = $('menu'), viewer = $('viewer');
+
+  // ---------- settings ----------
+  const opts = JSON.parse(localStorage.getItem('darkcam-opts') || '{}');
+  const settings = { vibrate: opts.vibrate ?? true, pip: opts.pip ?? true, burst: opts.burst ?? false, facing: opts.facing || 'environment' };
+  const saveOpts = () => localStorage.setItem('darkcam-opts', JSON.stringify(settings));
+  $('optVibrate').checked = settings.vibrate;
+  $('optPip').checked = settings.pip;
+  $('optBurst').checked = settings.burst;
+  $('optVibrate').onchange = e => { settings.vibrate = e.target.checked; saveOpts(); };
+  $('optPip').onchange = e => { settings.pip = e.target.checked; saveOpts(); };
+  $('optBurst').onchange = e => { settings.burst = e.target.checked; saveOpts(); };
+
+  // ---------- storage (IndexedDB) ----------
+  let dbp;
+  const db = () => dbp ||= new Promise((res, rej) => {
+    const r = indexedDB.open('darkcam', 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('photos', { keyPath: 'id', autoIncrement: true });
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+  const tx = async (mode, fn) => {
+    const d = await db();
+    return new Promise((res, rej) => {
+      const t = d.transaction('photos', mode);
+      const out = fn(t.objectStore('photos'));
+      t.oncomplete = () => res(out && out.result);
+      t.onerror = () => rej(t.error);
+    });
+  };
+  const addPhoto = blob => tx('readwrite', s => s.add({ blob, time: Date.now() }));
+  const allPhotos = () => tx('readonly', s => s.getAll());
+  const delPhoto = id => tx('readwrite', s => s.delete(id));
+  const clearPhotos = () => tx('readwrite', s => s.clear());
+
+  // ---------- camera ----------
+  let stream = null, imageCapture = null;
+
+  async function openCamera() {
+    stopCamera();
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: { facingMode: { ideal: settings.facing }, width: { ideal: 4096 }, height: { ideal: 4096 } }
+    });
+    feed.srcObject = stream;
+    await feed.play().catch(() => {});
+    const track = stream.getVideoTracks()[0];
+    imageCapture = ('ImageCapture' in window) ? new ImageCapture(track) : null;
+  }
+
+  function stopCamera() {
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    stream = null; imageCapture = null;
+  }
+
+  async function grabFrame() {
+    // Full-resolution still where the browser supports it (Chrome on Android), silent.
+    if (imageCapture) {
+      try { return await imageCapture.takePhoto(); } catch (_) { /* fall back to a video frame */ }
+    }
+    const w = feed.videoWidth, h = feed.videoHeight;
+    if (!w || !h) throw new Error('Camera not ready');
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    c.getContext('2d').drawImage(feed, 0, 0, w, h);
+    return new Promise(res => c.toBlob(res, 'image/jpeg', 0.92));
+  }
+
+  let busy = false;
+  async function shoot() {
+    if (busy || !stream) return;
+    busy = true;
+    try {
+      const n = settings.burst ? 3 : 1;
+      for (let i = 0; i < n; i++) {
+        const blob = await grabFrame();
+        if (blob) await addPhoto(blob);
+        if (i < n - 1) await new Promise(r => setTimeout(r, 250));
+      }
+      confirmShot();
+    } catch (e) {
+      if (settings.vibrate && navigator.vibrate) navigator.vibrate([40, 60, 40, 60, 40]);
+    } finally {
+      busy = false;
+    }
+  }
+
+  function confirmShot() {
+    if (settings.vibrate && navigator.vibrate) navigator.vibrate(25);
+    if (settings.pip) {
+      pip.classList.add('on');
+      setTimeout(() => pip.classList.remove('on'), 180);
+    }
+  }
+
+  // ---------- keep screen awake / fullscreen ----------
+  let wakeLock = null;
+  async function keepAwake() {
+    try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (_) {}
+  }
+  function goFullscreen() {
+    const el = document.documentElement;
+    const fn = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (fn && !document.fullscreenElement) fn.call(el, { navigationUI: 'hide' })?.catch?.(() => {});
+  }
+
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState === 'visible' && intro.hidden) {
+      await keepAwake();
+      if (!stream || stream.getVideoTracks()[0]?.readyState !== 'live') openCamera().catch(() => {});
+    }
+  });
+
+  // ---------- gestures on the black pad ----------
+  // Tap = photo. Hold ~0.9s = menu. Movement cancels (so a pocket brush or scroll won't fire).
+  let downAt = 0, holdTimer = null, startX = 0, startY = 0, moved = false, held = false;
+  pad.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    downAt = Date.now(); startX = e.clientX; startY = e.clientY; moved = false; held = false;
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => { held = true; if (navigator.vibrate) navigator.vibrate(10); openMenu(); }, 900);
+  });
+  pad.addEventListener('pointermove', e => {
+    if (Math.hypot(e.clientX - startX, e.clientY - startY) > 20) { moved = true; clearTimeout(holdTimer); }
+  });
+  pad.addEventListener('pointerup', e => {
+    e.preventDefault();
+    clearTimeout(holdTimer);
+    if (!held && !moved && Date.now() - downAt < 600) shoot();
+  });
+  pad.addEventListener('pointercancel', () => clearTimeout(holdTimer));
+  pad.addEventListener('contextmenu', e => e.preventDefault());
+  // Keyboard / Bluetooth remote shutters usually send Enter, Space or Volume keys.
+  document.addEventListener('keydown', e => {
+    if (!menu.hidden || !viewer.hidden || !intro.hidden) return;
+    if ([' ', 'Enter', 'AudioVolumeUp', 'AudioVolumeDown', 'VolumeUp', 'VolumeDown'].includes(e.key)) { e.preventDefault(); shoot(); }
+  });
+
+  // ---------- start ----------
+  $('start').onclick = async () => {
+    $('err').hidden = true;
+    if (!navigator.mediaDevices?.getUserMedia) {
+      $('err').textContent = 'This browser cannot open the camera. Try Safari on iPhone or Chrome on Android.';
+      $('err').hidden = false; return;
+    }
+    try {
+      goFullscreen();
+      await openCamera();
+      await keepAwake();
+      intro.hidden = true;
+    } catch (e) {
+      $('err').textContent = 'Could not open the camera: ' + (e.message || e.name) + '. Allow camera access and try again.';
+      $('err').hidden = false;
+    }
+  };
+
+  // ---------- menu / gallery ----------
+  let urls = [], photos = [], current = null;
+
+  async function openMenu() {
+    menu.hidden = false;
+    await renderGrid();
+  }
+  function closeMenu() {
+    menu.hidden = true;
+    goFullscreen();
+  }
+
+  async function renderGrid() {
+    urls.forEach(URL.revokeObjectURL); urls = [];
+    photos = (await allPhotos()).reverse();
+    $('count').textContent = photos.length + (photos.length === 1 ? ' photo' : ' photos');
+    const grid = $('grid');
+    grid.innerHTML = '';
+    if (!photos.length) {
+      grid.innerHTML = '<div class="empty">No photos yet. Go back to dark and tap the screen.</div>';
+      return;
+    }
+    for (const p of photos) {
+      const u = URL.createObjectURL(p.blob); urls.push(u);
+      const img = document.createElement('img');
+      img.src = u; img.loading = 'lazy';
+      img.onclick = () => openViewer(p, u);
+      grid.appendChild(img);
+    }
+  }
+
+  function fileName(p) {
+    const d = new Date(p.time), z = n => String(n).padStart(2, '0');
+    return `IMG_${d.getFullYear()}${z(d.getMonth() + 1)}${z(d.getDate())}_${z(d.getHours())}${z(d.getMinutes())}${z(d.getSeconds())}_${p.id}.jpg`;
+  }
+
+  // Share sheet first (on iPhone this offers "Save Image" to Photos), download as a fallback.
+  async function savePhotos(list) {
+    const files = list.map(p => new File([p.blob], fileName(p), { type: p.blob.type || 'image/jpeg' }));
+    if (navigator.canShare && navigator.canShare({ files })) {
+      try { await navigator.share({ files }); return; } catch (e) { if (e.name === 'AbortError') return; }
+    }
+    for (const f of files) {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(f); a.download = f.name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+      await new Promise(r => setTimeout(r, 300));
+    }
+  }
+
+  function openViewer(p, u) {
+    current = p;
+    $('big').src = u;
+    viewer.hidden = false;
+  }
+
+  $('vClose').onclick = () => { viewer.hidden = true; current = null; };
+  $('vSave').onclick = () => current && savePhotos([current]);
+  $('vDel').onclick = async () => {
+    if (!current) return;
+    await delPhoto(current.id);
+    viewer.hidden = true; current = null;
+    renderGrid();
+  };
+  $('saveAll').onclick = () => photos.length && savePhotos(photos);
+  $('clear').onclick = async () => {
+    if (!photos.length || !confirm(`Delete all ${photos.length} photos from this app?`)) return;
+    await clearPhotos();
+    renderGrid();
+  };
+  $('flip').onclick = async () => {
+    settings.facing = settings.facing === 'environment' ? 'user' : 'environment';
+    saveOpts();
+    try { await openCamera(); $('flip').textContent = settings.facing === 'user' ? 'Switch camera (front)' : 'Switch camera (back)'; }
+    catch (_) { alert('Could not switch camera.'); }
+  };
+  $('flip').textContent = settings.facing === 'user' ? 'Switch camera (front)' : 'Switch camera (back)';
+  $('back').onclick = closeMenu;
+
+  // ---------- install as a Home Screen app ----------
+  const standalone = matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches || navigator.standalone;
+  if (!standalone) {
+    const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    $('installText').innerHTML = ios
+      ? 'To use this as an app: tap <b>Share</b> &#x2191; in Safari, then <b>Add to Home Screen</b>. Open it from the new icon.'
+      : 'To use this as an app: open the browser menu &#8942; and tap <b>Install app</b> or <b>Add to Home screen</b>.';
+    $('install').hidden = false;
+  }
+  let deferredPrompt = null;
+  addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); deferredPrompt = e;
+    $('installBtn').hidden = false;
+  });
+  $('installBtn').onclick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice.catch(() => {});
+    deferredPrompt = null; $('installBtn').hidden = true;
+  };
+  addEventListener('appinstalled', () => { $('install').hidden = true; });
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+})();
+</script>
+</body>
+</html>
