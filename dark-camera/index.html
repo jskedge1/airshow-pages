@@ -55,6 +55,8 @@
   #viewer { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; touch-action: auto; }
   #viewer img { flex: 1; min-height: 0; object-fit: contain; width: 100%; }
   #viewer .bar { display: flex; gap: 8px; padding: 12px; justify-content: center; padding-bottom: calc(env(safe-area-inset-bottom) + 12px); }
+  #install { margin-top: 10px; padding-top: 14px; border-top: 1px solid #1a1a1a; max-width: 320px; }
+  #install p { color: #777; margin: 0 0 10px; }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -71,6 +73,10 @@
   <button id="start">Start</button>
   <div id="err" hidden></div>
   <small>Turn your screen brightness right down first. Photos stay on this phone only.</small>
+  <div id="install" hidden>
+    <p id="installText"></p>
+    <button id="installBtn" hidden>Install app</button>
+  </div>
 </div>
 
 <div id="menu" hidden>
@@ -337,6 +343,30 @@
   };
   $('flip').textContent = settings.facing === 'user' ? 'Switch camera (front)' : 'Switch camera (back)';
   $('back').onclick = closeMenu;
+
+  // ---------- install as a Home Screen app ----------
+  const standalone = matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches || navigator.standalone;
+  if (!standalone) {
+    const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    $('installText').innerHTML = ios
+      ? 'To use this as an app: tap <b>Share</b> &#x2191; in Safari, then <b>Add to Home Screen</b>. Open it from the new icon.'
+      : 'To use this as an app: open the browser menu &#8942; and tap <b>Install app</b> or <b>Add to Home screen</b>.';
+    $('install').hidden = false;
+  }
+  let deferredPrompt = null;
+  addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); deferredPrompt = e;
+    $('installBtn').hidden = false;
+  });
+  $('installBtn').onclick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice.catch(() => {});
+    deferredPrompt = null; $('installBtn').hidden = true;
+  };
+  addEventListener('appinstalled', () => { $('install').hidden = true; });
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
 </script>
 </body>
