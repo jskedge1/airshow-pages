@@ -15,20 +15,20 @@ all filled in, and almost all of the "missing ID" warnings are fine (the IDs are
 ## A. Fix now (clear mistakes, no decision needed)
 
 ### Planning guides
-- [ ] **Planning hub is out of date.** `visitor-planning-guides.html` says "13 guides" and doesn't link the 7 guides added on 3 Nov
+- [x] **Planning hub is out of date.** `visitor-planning-guides.html` says "13 guides" and doesn't link the 7 guides added on 3 Nov
       (Night Before, Getting Home, Rainy Day Plan, Calm Visit, Spotter Cards, Aircraft A to Z, Airshows On A Budget).
       It also says getting home is "covered inside the getting there and public transport guides", but Getting Home is its own guide now.
 - [ ] **Footer site map** (`footer.html`) is missing the same 7 guides.
-- [ ] **Site search** can't find 12 guides: add them to `PAGES` in `tools-search.py`, then run it.
-- [ ] **What you can bring contradicts itself.** `airshow-security` says glass and BBQs are "check first"; what-to-pack, safety and food-and-drink say banned.
+- [x] **Site search** can't find 12 guides: add them to `PAGES` in `tools-search.py`, then run it.
+- [x] **What you can bring contradicts itself.** `airshow-security` says glass and BBQs are "check first"; what-to-pack, safety and food-and-drink say banned.
       Safety lists drones under "depends on the show" *and* "banned at every show". Make `airshow-security` the one page for gate rules; the others give one line and a link.
-- [ ] **Kit calculator** intro says "Two lists" but there are four.
-- [ ] **Food and drink** says "a lesson I learnt the hard way this year".
-- [ ] **Dead ends:** photography hub, camping hub, camera guides and Show Day don't link on to the planning guides.
+- [x] **Kit calculator** intro says "Two lists" but there are four.
+- [x] **Food and drink** says "a lesson I learnt the hard way this year".
+- [x] **Dead ends:** photography hub, camping hub, camera guides and Show Day don't link on to the planning guides.
 
 ### Show pages (edit `previews/<show>-new-design-src/live-source.html`, then run that folder's `build.py`)
-- [ ] **All 12 show pages:** "Where a time or price says 2026, it's from last year's show". It's still 2026, so this should say "from the 2026 show".
-- [ ] **All 12 show pages:** "How it compares" footnote says "this year's dates", which should say "2027 dates". The same footnote is worded differently from page to page.
+- [x] **All 12 show pages:** "Where a time or price says 2026, it's from last year's show". It's still 2026, so this should say "from the 2026 show".
+- [x] **All 12 show pages:** "How it compares" footnote says "this year's dates", which should say "2027 dates". The same footnote is worded differently from page to page.
 - [ ] **11 show pages:** the traders block is in the source twice, and there are two different stats-panel style blocks (the red one never shows). Delete the second traders pair and the unused red block.
 - [ ] **All 12 show pages** carry a hidden copy of Cosford's "Is RAF Cosford right for you?" text (on Duxford it says "Cosford station has no step free access"). Visitors can't see it, but it's another show's text inside every page. Strip it out.
 - [ ] **Clacton** key details still list "Twilight: Thursday evening" and **Wales** lists "Evening: Afterburn, Saturday", although both pages later say 2027 isn't confirmed.
@@ -54,7 +54,15 @@ all filled in, and almost all of the "missing ID" warnings are fine (the IDs are
 
 ---
 
-## B. Needs an answer from you (facts only you can confirm)
+## B. Needs an answer from you (answered 27 Nov 2026, all done)
+
+Answers: Wales 24 and 25 July 2027 confirmed; Cosford 13 June not confirmed and the show is now the Royal Air Force Air Show;
+Duxford Americans Flying Day Fri 30 July confirmed and Flying Day tickets on sale; Southport off the free list (ticketed);
+Headcorn added to the news page and comparison table; Instagram is @ukairshowguide; Dark Cam taken off the site.
+**Still to do in Wix:** make the same Wales, Southport and Cosford changes in the "Featured Air Shows" CMS collection
+(Find your Air Show reads it first); raise any fixed-height boxes on the planning guides (each is 160 to 300 px taller with the new previous/next bar).
+
+Original questions:
 
 1. **Wales 2027:** the show page and a news story say Sat 24 and Sun 25 July 2027 is confirmed. The calendar still has it as "still to announce", the news page says "2027 date TBC" and Find your Air Show has no date. Is 24 and 25 July right?
 2. **Cosford 2027:** the Cosford page says "Sunday 13 June 2027, to be confirmed" and that tickets aren't on sale. The calendar and Find your Air Show show 13 June as confirmed (under the new name "Royal Air Force Air Show"). Which is right, and should the Cosford page use the new name?
@@ -70,7 +78,7 @@ all filled in, and almost all of the "missing ID" warnings are fine (the IDs are
 
 **Off-topic or too much for the page**
 - The photography hub's "Camera and equipment" guide is about 5,700 words, with gimbal models and prices for YouTube and TikTok filming, and repeats the kit calculator's price lists. It's a lot for a page pitched at beginners. Cut it to the essentials.
-- Old photography pages are still online, with nothing linking to them: `airshow-photography-hub.html` (old hub), `new-to-aviation-photography.html`, `photography-equipment.html`, `nikon-d500.html`. Move them to `backups/`.
+- [x] **Done:** moved to backups/old-photography-pages-2026-11-27/. Old photography pages were still online, with nothing linking to them: `airshow-photography-hub.html` (old hub), `new-to-aviation-photography.html`, `photography-equipment.html`, `nikon-d500.html`. Move them to `backups/`.
 - RIAT home "Where it all started" is about the website's own history rather than visiting RIAT. Shorten it or move it to the bottom.
 - My Airshow Hub's cockpit wording ("PILOT LOGIN AIRCREW ID", "EJECT Log Out", "AWAITING INPUT", "ENGAGE →") could confuse a family on their first visit. Keep the look and use plain words for the buttons.
 - Themed extras like the home page's "Pre Flight Checks" splash, the lone "27" footer badge and the YouTube "Departures Board" add clutter.
@@ -81,7 +89,7 @@ all filled in, and almost all of the "missing ID" warnings are fine (the IDs are
 - Getting home, weather, "checks before you travel" and cost calculators are each covered on several pages with slightly different advice. Give each topic one main page; the rest link to it.
 
 **Organisation**
-- The guides use three different reading orders ("Stop 07 of 13", a 4-stop "start here" page and the README order), and some guides have no previous or next links. Suggested single path:
+- [x] **Done 27 Nov 2026** (see README "Planning guides reading order"). The guides used three different reading orders ("Stop 07 of 13", a 4-stop "start here" page and the README order), and some guides have no previous or next links. Suggested single path:
   1. **Start here:** Planning your first airshow
   2. **Plan:** which show → calendar → budget → where to stay → getting there → what to pack → night before
   3. **On the day:** security → where to watch → on the day → safety → food → getting home

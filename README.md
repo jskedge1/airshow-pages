@@ -62,7 +62,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Planning guide 7, What to pack (Wix page /first-airshow-what-to-pack) | https://jskedge1.github.io/airshow-pages/first-airshow-what-to-pack.html |
 | Planning guide 8, Where to stay (Wix page /first-airshow-accommodation) | https://jskedge1.github.io/airshow-pages/first-airshow-accommodation.html |
 | Food and Drink at Airshows (Wix page /foodanddrinkatairshows) | https://jskedge1.github.io/airshow-pages/food-and-drink.html |
-| Visitor Planning Guides (Wix page /visitorplanningguides). Transport design since 3 Nov 2026: the hub for all 13 planning guides, with a route planner by who is travelling, the planning line (guide boxes grouped by stage, which collapse on phones), the show day departure board and checklist. Built with the same source as Planning your first airshow, which became the first timer guide (ticket, four stops, check before you travel) on the same day | https://jskedge1.github.io/airshow-pages/visitor-planning-guides.html |
+| Visitor Planning Guides (Wix page /visitorplanningguides). Transport design since 3 Nov 2026: the hub for the planning guides in one reading order (see "Planning guides reading order" below), with a route planner by who is travelling, the planning line (guide boxes grouped by stage, which collapse on phones), the show day departure board and checklist. Built with the same source as Planning your first airshow, which became the first timer guide (ticket, four stops, check before you travel) on the same day | https://jskedge1.github.io/airshow-pages/visitor-planning-guides.html |
 | Photography Equipment (Wix page /photography-equipment) | Moved to backups/old-photography-pages-2026-11-27/ on 27 Nov 2026 (not linked from anywhere; the hub frames camera-guides.html) |
 | Advertise With Us, the one hub for businesses (30 Oct 2026): trader plans ladder, founding places, trader sign up form, advert packages for businesses near the shows, enquiry form (Wix page /advertise-with-us; shown by the header element, so it grows with the page; page code velo/page-code/advertise-with-us.js answers the trader sign up form through #airshowAuto) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
 | Landing page (Wix page /coming-soon-03) | https://jskedge1.github.io/airshow-pages/landing.html |
@@ -438,6 +438,17 @@ One ladder, used on Advertise With Us and in the Trader Hub. Each trader plan fr
 
 Advert packages for businesses off the airfield: Guide Listing £49 (was Business Listing), Featured Partner £129, Regional Partner £249, Main Website Partner from £699. Every advert is labelled as an advert.
 The backend (velo/backend/traders.web.js) only takes the plans free, founding, flypast and headliner from the sign up form; Display Team and Finale come through the enquiry form.
+
+## Planning guides reading order (27 Nov 2026)
+
+One reading path, shown on the hub's planning line and on every guide's stop label and previous/next bar:
+
+- Start here: 01 Planning your first airshow
+- Plan: 02 Which show, 03 UK airshow calendar, 04 Airshows on a budget, 05 Where to stay, 06 Getting there, 07 Public transport, 08 What to pack, 09 The night before
+- On the day: 10 Security, 11 Where to watch, 12 On the day, 13 Safety, 14 Food and drink, 15 Getting home
+- Extras (labelled "Extra guide", not numbered): Weather, Rainy day plan, Calm visit, Spotter cards, Aircraft A to Z, Questions and answers, then the Photography and Camping hubs
+
+Every guide carries the same bar: `<div class="np-path">` with the `.nextprev` previous/next blocks and a "See all planning guides" line, styled by `<style id="np-path">` in the page head (the same block on every page). Getting home's next is the first extra; each extra links to the next one. The bar is pasted into each page, and into `qa-src/template.html` and `public-transport-src/template.html` so rebuilds keep it. If the order changes, update the bars, the `Stop NN of 15` labels at the top of the guides that have one, and the planning line on visitor-planning-guides.html (cards and the `DATA.G`/`DATA.S` route planner data). The Photography hub, Camping hub, 3D camera guides and Show Day Live end with a "Plan Your Visit" block of links instead.
 
 ## Questions and answers page (30 Oct 2026)
 

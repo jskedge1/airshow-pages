@@ -28,7 +28,7 @@ SITE = 'About the guide'
 PAGES = [
     # path, file, group, title, line, extra words
     ('/riat', 'camping-layout/riat.html', SHOWS, 'Royal International Air Tattoo', None, 'RIAT Boscombe Down Wiltshire Salisbury Amesbury Fairford tattoo July military'),
-    ('/cosfordairshow', 'camping-layout/cosford.html', SHOWS, 'RAF Cosford Air Show', None, 'Cosford Shropshire RAF Museum June'),
+    ('/cosfordairshow', 'camping-layout/cosford.html', SHOWS, 'Royal Air Force Air Show', None, 'Cosford Shropshire RAF Museum June'),
     ('/midlandsairfestival', 'camping-layout/midlands.html', SHOWS, 'Midlands Air Festival', None, 'Ragley Warwickshire balloons Alcester'),
     ('/eastbourneairshow', 'camping-layout/eastbourne.html', SHOWS, 'Eastbourne Airshow', None, 'Airbourne Eastbourne Sussex seafront beach free'),
     ('/clactonairshow', 'camping-layout/clacton.html', SHOWS, 'Clacton Air Show', None, 'Clacton Essex seafront beach free Tendring'),
