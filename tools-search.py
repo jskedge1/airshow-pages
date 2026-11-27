@@ -45,6 +45,7 @@ PAGES = [
     ('/uk-airshow-calendar', 'uk-airshow-calendar.html', TOOLS, 'UK Airshow Calendar 2027', 'Every UK airshow date for the 2027 season.', 'calendar dates 2027 season when'),
     ('/airshow-map', 'airshow-map.html', TOOLS, 'UK Airshow Map', 'Find the shows near you on a map.', 'map near me nearby location'),
     ('/airshow-news', 'airshow-news.html', TOOLS, 'Airshow News', 'The latest updates from the shows, checked every day.', 'news updates latest announcements'),
+    ('/show-day-live', 'show-day.html', TOOLS, 'Show Day Live', None, 'show day live running order timings today flying display times'),
 
     ('/visitorplanningguides', 'visitor-planning-guides.html', PLAN, 'Visitor Planning Guides', 'All my planning guides in one place.', 'planning guides advice'),
     ('/planning-your-first-airshow', 'planning-your-first-airshow.html', PLAN, 'Planning Your First Airshow', 'Start here if you have never been to an airshow before.', 'first time beginner new start'),
@@ -56,6 +57,17 @@ PAGES = [
     ('/airshow-questions', 'questions-and-answers.html', PLAN, 'Airshow Questions And Answers', 'Straight answers to the questions people ask most, sorted by topic.', 'questions answers faq q&a ask help'),
     ('/build-your-kit-calculator', 'kit-calculator.html', PLAN, 'Build Your Kit Calculator', 'Add up your photography kit, camping kit, food, tickets and travel, with a budget for each.', 'budget cost calculator kit price money how much spend tickets fuel camera lens tent'),
     ('/foodanddrinkatairshows', 'food-and-drink.html', PLAN, 'Food And Drink At Airshows', 'What to eat, what it costs and whether to take a picnic.', 'food drink picnic eat'),
+    ('/first-airshow-weather', 'first-airshow-weather.html', PLAN, 'Weather And Will It Fly?', None, 'weather rain wind cloud cancelled will it fly forecast'),
+    ('/first-airshow-on-the-day', 'first-airshow-on-the-day.html', PLAN, 'On The Day At An Airshow', None, 'on the day arrive gates timings toilets leaving'),
+    ('/first-airshow-safety', 'first-airshow-safety.html', PLAN, 'Staying Safe At An Airshow', None, 'safety lost child first aid sun ear defenders drones'),
+    ('/night-before-an-airshow', 'night-before.html', PLAN, 'The Night Before An Airshow', None, 'night before tick list checklist evening'),
+    ('/getting-home-from-an-airshow', 'getting-home.html', PLAN, 'Getting Home From An Airshow', None, 'getting home leaving traffic queues car park exit last train'),
+    ('/airshow-rainy-day-plan', 'rainy-day-plan.html', PLAN, 'Rainy Day Plan', None, 'rain rainy wet weather waterproof cancelled'),
+    ('/calm-airshow-visit', 'calm-visit.html', PLAN, 'A Calm Airshow Visit', None, 'calm quiet noise crowds autism sensory anxiety quiet area'),
+    ('/aircraft-spotter-cards', 'spotter-cards.html', PLAN, 'Aircraft Spotter Cards', None, 'spotter cards children kids printable print'),
+    ('/airshow-aircraft-a-to-z', 'aircraft-a-to-z.html', PLAN, 'Airshow Aircraft A To Z', None, 'aircraft a to z planes jets types list'),
+    ('/airshows-on-a-budget', 'airshows-on-a-budget.html', PLAN, 'Airshows On A Budget', None, 'budget cheap free shows cost money save tickets'),
+    ('/plan-your-2027-airshow', 'plan-your-2027-airshow.html', PLAN, 'Plan Your 2027 Airshow', None, '2027 plan season next year'),
 
     ('/airshow-photography-hub', 'photography-hub.html', PHOTO, 'Airshow Photography Hub', 'Camera settings, kit and photo tools for airshows.', 'photography camera settings lens shutter speed kit'),
 
