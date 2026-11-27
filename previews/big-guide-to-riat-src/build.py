@@ -105,7 +105,7 @@ ADVICE = ("If you’re travelling a long way, hotels round Salisbury and Amesbur
 
 LOOP = [("RIAT Boscombe Down FAQs", "Questions about the move, answered by RIAT", "https://www.airtattoo.com/faqs/boscombe-down/", "ask"),
         ("Our Facebook page", "Guide updates as they happen", "https://www.facebook.com/share/19Ywfe4EcE/", "share"),
-        ("@theukairshowguide", "Planning cards and photos on Instagram", "https://www.instagram.com/theukairshowguide/", "link")]
+        ("@ukairshowguide", "Planning cards and photos on Instagram", "https://www.instagram.com/ukairshowguide/", "link")]
 
 USEFUL = [("Royal International Air Tattoo", RIAT), ("RIAT27 tickets", "https://www.airtattoo.com/tickets"),
           ("The move announcement", "https://www.airtattoo.com/news/riat-to-relocate-to-mod-boscombe-down-for-riat27-and-beyond/"),
