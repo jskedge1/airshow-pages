@@ -324,10 +324,10 @@ h1,h2,h3,h4,p,li,dd,dt,a,button{overflow-wrap:break-word}
     <aside class="keybox" aria-labelledby="kdTitle">
       <div class="keybox-top"><span class="ic-round" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 16h4"/></svg></span><h2 id="kdTitle">Key details</h2></div>
       <dl>
-        <div><dt>Shows covered</dt><dd id="kdShows">12</dd></div>
+        <div><dt>Shows covered</dt><dd id="kdShows">13</dd></div>
         <div><dt>Stories in the last 30 days</dt><dd id="kdRecent">0</dd></div>
         <div class="hot"><dt>Last checked</dt><dd id="kdChecked">Today</dd></div>
-        <div><dt>Facebook feeds</dt><dd id="kdFb">12 shows</dd></div>
+        <div><dt>Facebook feeds</dt><dd id="kdFb">11 shows</dd></div>
         <div><dt>Sources</dt><dd>Official only</dd></div>
       </dl>
       <div class="bar" aria-hidden="true"><i id="kdBar"></i></div>
@@ -451,10 +451,10 @@ h1,h2,h3,h4,p,li,dd,dt,a,button{overflow-wrap:break-word}
  {
   "slug": "cosford",
   "linksKey": "raf-cosford",
-  "name": "The Royal Air Force Air Show (Cosford)",
+  "name": "Royal Air Force Air Show",
   "short": "RAF Cosford",
   "where": "RAF Cosford, Shropshire",
-  "dates": "Sun 13 June 2027 (expected)",
+  "dates": "June 2027, date to be confirmed",
   "officialUrl": "https://www.cosfordairshow.co.uk/",
   "newsUrl": "https://cosfordairshow.co.uk/cosford-airshow-blog/",
   "facebookUrl": ""
@@ -498,7 +498,7 @@ h1,h2,h3,h4,p,li,dd,dt,a,button{overflow-wrap:break-word}
   "name": "Wales National Airshow",
   "short": "Wales",
   "where": "Swansea Bay",
-  "dates": "2027 date TBC",
+  "dates": "Sat 24 to Sun 25 July 2027",
   "officialUrl": "https://www.walesnationalairshow.com/",
   "newsUrl": "https://www.walesnationalairshow.com/news/",
   "facebookUrl": "https://www.facebook.com/WalesAirshow"
@@ -524,6 +524,17 @@ h1,h2,h3,h4,p,li,dd,dt,a,button{overflow-wrap:break-word}
   "officialUrl": "https://www.shuttleworth.org/air-shows",
   "newsUrl": "https://www.shuttleworth.org/about/about-shuttleworth/news",
   "facebookUrl": "https://www.facebook.com/Shuttleworthtrust"
+ },
+ {
+  "slug": "headcorn",
+  "linksKey": "headcorn",
+  "name": "Headcorn Airshow",
+  "short": "Headcorn",
+  "where": "Headcorn Aerodrome, Kent",
+  "dates": "Sat 26 to Sun 27 June 2027",
+  "officialUrl": "https://headcornairshow.com/",
+  "newsUrl": "",
+  "facebookUrl": "https://www.facebook.com/headcornairshow"
  },
  {
   "slug": "little-gransden",
@@ -799,8 +810,9 @@ h1,h2,h3,h4,p,li,dd,dt,a,button{overflow-wrap:break-word}
   /* ===== Facebook feeds ===== */
   var fbAllowed = store("asg-fb-ok")==="1", fbShow=null;
   function picker(){
-    $("picker").innerHTML=SHOWS.map(function(s){
-      return '<button type="button" class="pick" data-fb="'+esc(s.slug)+'" aria-pressed="false"'+(s.facebookUrl?'':' disabled')+'><span><b>'+esc(s.name)+'</b><small>'+esc(s.facebookUrl?(s.fbNote||s.where||"Official Facebook page"):"Facebook page not linked yet")+'</small></span><i aria-hidden="true">&rarr;</i></button>';
+    /* shows with an empty facebookUrl are left out of the picker */
+    $("picker").innerHTML=SHOWS.filter(function(s){return s.facebookUrl;}).map(function(s){
+      return '<button type="button" class="pick" data-fb="'+esc(s.slug)+'" aria-pressed="false"><span><b>'+esc(s.name)+'</b><small>'+esc(s.fbNote||s.where||"Official Facebook page")+'</small></span><i aria-hidden="true">&rarr;</i></button>';
     }).join("");
   }
   function frameFor(s){
