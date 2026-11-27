@@ -1,0 +1,93 @@
+name: Site check
+# Runs tools-sitecheck.py on every push to main (the scheduled tasks push there unattended) and on pull requests.
+# A failure on main opens a GitHub issue labelled "site-check" (or comments on the open one); the next
+# clean run on main closes it. The Daily digest task reads open site-check issues and lists them for Jack.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Find the commit to compare with
+        id: base
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT" = "pull_request" ]; then BASE="$PR_BASE"; else BASE="$BEFORE"; fi
+          case "$BASE" in ""|0000000000000000000000000000000000000000) BASE="";; esac
+          if [ -n "$BASE" ] && git fetch --no-tags --depth=1 origin "$BASE" 2>/dev/null && git cat-file -e "$BASE^{commit}"; then
+            echo "sha=$BASE" >> "$GITHUB_OUTPUT"
+          else
+            echo "No earlier commit to compare with, so the dash check is skipped this run."
+          fi
+      - name: Check the pages
+        id: check
+        env:
+          BASE: ${{ steps.base.outputs.sha }}
+        run: |
+          ARGS="--report sitecheck-report.md"
+          if [ -n "$BASE" ]; then ARGS="$ARGS --base $BASE"; fi
+          python3 tools-sitecheck.py $ARGS
+      - name: Add the report to the run summary
+        if: always()
+        run: |
+          if [ -f sitecheck-report.md ]; then cat sitecheck-report.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Open or update the site-check issue
+        if: failure() && github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.existsSync('sitecheck-report.md')
+              ? fs.readFileSync('sitecheck-report.md', 'utf8').slice(0, 60000)
+              : 'The check did not finish. Open the run for details.';
+            const c = context.payload.head_commit || {};
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              `The site check found problems after commit ${context.sha.slice(0, 7)}` +
+                (c.message ? ` ("${c.message.split('\n')[0]}")` : '') + '.',
+              '',
+              `Run: ${run}`,
+              '',
+              report,
+            ].join('\n');
+            try {
+              await github.rest.issues.createLabel({ ...context.repo, name: 'site-check', color: 'D74949',
+                description: 'Problems found by the Site check workflow' });
+            } catch (e) { /* already there */ }
+            const open = await github.rest.issues.listForRepo({ ...context.repo, state: 'open', labels: 'site-check' });
+            if (open.data.length) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: open.data[0].number, body });
+            } else {
+              await github.rest.issues.create({ ...context.repo, title: 'Site check: problems on the live pages',
+                labels: ['site-check'], body });
+            }
+      - name: Close the site-check issue when all clear
+        if: success() && github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const open = await github.rest.issues.listForRepo({ ...context.repo, state: 'open', labels: 'site-check' });
+            for (const i of open.data) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: i.number,
+                body: `All clear again after commit ${context.sha.slice(0, 7)}.` });
+              await github.rest.issues.update({ ...context.repo, issue_number: i.number, state: 'closed',
+                state_reason: 'completed' });
+            }
