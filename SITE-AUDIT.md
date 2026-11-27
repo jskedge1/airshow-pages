@@ -56,10 +56,10 @@ all filled in, and almost all of the "missing ID" warnings are fine (the IDs are
 
 ## B. Needs an answer from you (answered 27 Nov 2026, all done)
 
-Answers: Wales 24 and 25 July 2027 confirmed; Cosford 13 June not confirmed and the show is now the Royal Air Force Air Show;
+Answers: Wales 24 and 25 July 2027 confirmed; Cosford is now the Royal Air Force Air Show, and 13 June 2027 was confirmed on the official site later the same day (tickets £50, under 16s free);
 Duxford Americans Flying Day Fri 30 July confirmed and Flying Day tickets on sale; Southport off the free list (ticketed);
 Headcorn added to the news page and comparison table; Instagram is @ukairshowguide; Dark Cam taken off the site.
-**Still to do in Wix:** make the same Wales, Southport and Cosford changes in the "Featured Air Shows" CMS collection
+**Still to do in Wix:** make the same Wales, Southport and Cosford (new name, Sun 13 June 2027) changes in the "Featured Air Shows" CMS collection
 (Find your Air Show reads it first); raise any fixed-height boxes on the planning guides (each is 160 to 300 px taller with the new previous/next bar).
 
 Original questions:
