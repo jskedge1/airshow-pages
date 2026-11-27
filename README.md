@@ -710,3 +710,6 @@ using the Duxford page as the template (brief: `previews/NEW-DESIGN-ROLLOUT.md`)
   into the guide's container once the site has made it. Keep that step in any new build, and check a page on the
   live site, not only on its own, before saying it matches (for example with the site loading the new file in
   place of the GitHub copy). Round 2 (every page built in the Duxford template) is in `previews/NEW-DESIGN-ROLLOUT-2.md`.
+
+## Cosford 2027 date and tickets (27 Nov 2026)
+The official site confirmed Sunday 13 June 2027, tickets on sale from Friday 27 November 2026, adult £50, under 16s free. Changed in `previews/cosford-new-design-src/old-page.html` and `make_source.py` (the content sources; `live-source.html` is rewritten by every build), then rebuilt. The `dates-tbc` block was removed so the header countdown shows. Gate times, flying times, parking prices and the line-up are still the 2026 ones. The tickets, getting here, accessibility and FAQ pages of the official site were not read in this update, so check them at the next visitor facts check.

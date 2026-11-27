@@ -538,7 +538,7 @@ FARES = """
 <div>
 <p class="nss-sub">Show ticket <em>Parking included</em></p>
 <div class="nss-tiles">
-<div class="nss-tile" style="--c:#E0592A"><i>Adult</i><span>Adult, 2026<b>£44</b></span></div>
+<div class="nss-tile" style="--c:#E0592A"><i>Adult</i><span>Adult, 2027<b>£50</b></span></div>
 <div class="nss-tile" style="--c:#6950A1"><i>Child</i><span>Under 16s<b>Free</b></span></div>
 <div class="nss-tile" style="--c:#2BA84A"><i>Car</i><span>Airfield parking<b>Included</b></span></div>
 <div class="nss-tile" style="--c:#44AED6;--i:#13293C"><i>Prog</i><span>Programme<b>£10</b></span></div>
@@ -566,7 +566,7 @@ FARES = """
 </div>
 </div></div></div>
 """
-FARES_FACTS = ["&pound;44 in 2026, advance only", "Under 16s go free with a paying adult, but you do need to say how many children are coming when you book.",
+FARES_FACTS = ["&pound;50 in 2027, advance only", "Under 16s go free with a paying adult, but you do need to say how many children are coming when you book.",
                "Parking on the airfield is included in the admission price.", "The souvenir programme was &pound;10 in 2026",
                "£25 a car and £35 a camper van", "£5 to walk in and £30 for a car or van",
                "These aren't official viewing areas, so you won't get the static park or the commentary.",
