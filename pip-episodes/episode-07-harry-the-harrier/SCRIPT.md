@@ -1,6 +1,6 @@
 # Pip, Episode 7: Harry the Harrier
 
-Running time 7:33. 16x9. Times are where each line appears.
+Running time 8:29. 16x9. Times are where each line appears.
 
 ## 0:00 Title
 
@@ -92,6 +92,7 @@ Running time 7:33. 16x9. Times are where each line appears.
 - **Spot it** (4:19): the Spitfire has oval wings and a slim body; the Hurricane has straighter wings and a hump behind the pilot. Print the spotter cards.
 - **Duxford through time** (4:45): 1918 opens as an RAF airfield. 1938 the RAF's first Spitfires arrive, with No. 19 Squadron. 1940 the Battle of Britain, when more Hurricanes flew than Spitfires. 1969 the Harrier joins the RAF. Today IWM Duxford, a museum and home to air shows.
 - **The Battle of Britain Memorial Flight** (5:18): an RAF flight at RAF Coningsby, Lincolnshire. It flies Spitfires, Hurricanes and a Lancaster, and has done since 1957, to remember those who served.
+- **Crosswinds** (new scene, after the memorial flight): a view of Duxford from above shows runway 06/24 and the grass strip. Wind along the runway is good. Wind across it is a crosswind, and a Spitfire drifts sideways. The card shows the memorial flight's crosswind limits: early Spitfires (Mk II and Mk V) 10 knots across; later Spitfires, Hurricanes and the Lancaster 15 knots; no flying at all in winds over 25 knots; a big airliner about 35 knots, for comparison. 15 knots is about 17 mph, enough to sway small branches.
 - **The pilots' briefing** (5:49): weather, the display line, timings, safety. The Flying Display Director is in charge.
 - **Pip's tips for your Duxford day** (6:16): ear defenders, because a hovering Harrier is one of the loudest sounds at a show; water and a hat for the queue; layers and a waterproof; if you're lost, stand still and find a steward.
 - A "Loud bit" warning appears before each loud moment.
@@ -100,4 +101,5 @@ Running time 7:33. 16x9. Times are where each line appears.
 
 - The Duxford planning notes come from the guide's own Duxford page (`duxford.html`).
 - Aircraft history: the Hurricane first flew in November 1935 and the Spitfire in March 1936. Sydney Camm designed the Hurricane and led Hawker's work on the P.1127, which became the Harrier. R.J. Mitchell designed the Spitfire. No. 19 Squadron at Duxford received the RAF's first Spitfire in August 1938. The BBMF was formed in 1957 and is based at RAF Coningsby. The Spanish Navy's Harriers are based at Rota, and it has operated Harriers since 1976. Its Harriers go to sea on the Juan Carlos I (L61), which has a ski jump.
+- Crosswind limits: the memorial flight figures (10 knots for the "baby" Spitfires P7350 and AB910, 15 knots for the later Spitfires, Hurricanes and Lancaster, and a 25-knot overall wind limit) come from an answer by Clive Rowley on the Memorial Flight Club forum, 13 August 2016 (https://www.memorialflightclub.com/forum/cross-winds). They may have changed since. Duxford's hard and grass runways are both 06/24 (IWM's Duxford Airfield information for pilots, August 2026). The airliner figure is a rough comparison: the A320's demonstrated crosswind is 38 knots. The Beaufort scale puts 11 to 16 knots at "moderate breeze, small branches move".
 - Harry flying to Duxford is part of the story. It is not a real booking, so the film never says Harry is on a real 2027 line-up.

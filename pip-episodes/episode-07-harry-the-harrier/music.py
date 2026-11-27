@@ -169,10 +169,17 @@ def radio(t0, o):
     add(SFX, sq, t0 - .2, .12, .3)
     bp = tt(.07); add(SFX, np.sin(2 * np.pi * 1150 * bp) * np.minimum(1, (0.07 - bp) / .01), t0 - .04, .07, .3)
 
+def wind(t0, o):
+    """gusts of wind under the crosswind scene, soft"""
+    d = o['len']; n = int(d * SR); t = np.arange(n) / SR
+    g = shaped_noise(n, 150, 1800, tilt=-3) * (0.55 + 0.45 * np.sin(2 * np.pi * .23 * t) ** 2)
+    add(SFX, g * np.minimum(1, t / 2) * np.minimum(1, (d - t) / 2), t0, .07, np.sin(2 * np.pi * .05 * t) * .5)
+
 for t0, kind, o in CUES:
     if kind == 'jet': jet(t0, o)
     elif kind == 'merlin': merlin(t0, o)
     elif kind == 'cheer': cheer(t0, o)
+    elif kind == 'wind': wind(t0, o)
     elif kind == 'radio': radio(t0, o)
     elif kind == 'tok': add(MUS, tok(79), t0, o.get('gain', .12) * .9, .1)
     elif kind == 'pop': add(MUS, tok(74), t0, o.get('gain', .14), 0)

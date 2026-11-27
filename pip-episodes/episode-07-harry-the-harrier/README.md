@@ -3,7 +3,7 @@
 This episode follows Episode 6, where Major Tower invited Pip and the team to Duxford and promised a surprise
 guest from another country. The guest is **Harry the Harrier**, a jump jet from the Spanish Navy (Armada Española).
 
-The film is `final/pip-episode-07-harry-the-harrier.mp4`: 16x9, 1920x1080, 30 fps, about 7 minutes 34 seconds.
+The film is `final/pip-episode-07-harry-the-harrier.mp4`: 16x9, 1920x1080, 30 fps, about 8 minutes 29 seconds.
 `SCRIPT.md` has every line with its time, the on-screen notes and where the facts come from.
 
 ## How it's made

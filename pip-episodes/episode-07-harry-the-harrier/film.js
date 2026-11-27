@@ -4,7 +4,7 @@
 // over Duxford, meets the Spitfire and the Hurricane, learns about the memorial flights, sits in on the pilots'
 // briefing and flies the display. Planning notes come from the Duxford page of the guide (duxford.html).
 // Same calm cartoon kit and Pip drawings as "Meet Pip" (mascot/film on claude/pip-brand-campaign), square corners.
-// 16x9, about 7 minutes 50 seconds. A pure function of time: every frame is drawn from t alone.
+// 16x9, about 8 minutes 15 seconds. A pure function of time: every frame is drawn from t alone.
 import * as K from './shared/kit.js';
 const { M, C, F } = K;
 const { W, H, TAU, clamp, lerp, prog, E, SPRING, hash01 } = M;
@@ -39,7 +39,7 @@ const SCRIPT = [
     ['a1', 'pip', 'Good morning, Duxford! Look, a Hurricane on a pole at the main gate!'],
     ['a2', 'charlie', 'Pip! We booked our tickets online. There are no tickets on the gate!'],
     ['a3', 'pip', "Here's how we planned today."],
-    ['_', 9.5],
+    ['_', 8.0],
     ['a4', 'pip', 'Front row spot saved. Now for our surprise guest!'],
   ] },
   { id: 'radio', lead: 0.8, tail: 1.0, lines: [
@@ -98,7 +98,17 @@ const SCRIPT = [
     ['f2', 'hurri', 'To remember. The Battle of Britain Memorial Flight flies us, so no one forgets.'],
     ['_', 6.5],
     ['f3', 'harry', 'Flying to remember. That is very special.'],
-    ['_', 4.0],
+    ['_', 3.5],
+  ] },
+  { id: 'wind', lead: 0.8, tail: 0.6, lines: [
+    ['c1', 'pip', "The windsock is blowing sideways! What's a crosswind, Harry?"],
+    ['c2', 'harry', 'Wind blowing across the runway, from the side.'],
+    ['c3', 'spit', 'Crosswinds are tricky for me. My wheels are close together, so a gust can swing me round.'],
+    ['c5', 'hurri', 'Our pilots measure the crosswind in knots. Too much, and we stay on the ground.'],
+    ['_', 6.0],
+    ['c6', 'pip', "Duxford's runways point east and west, so a north or south wind blows right across!"],
+    ['c7', 'harry', 'When I hover, I just turn into the wind. ¡Fácil!'],
+    ['c8', 'pip', "On windy days, check the show's news. Some warbirds may not fly."],
   ] },
   { id: 'brief', lead: 0.8, tail: 0.4, lines: [
     ['p1', 'harry', 'Even pilots plan! Every morning, the display pilots go to a briefing.'],
@@ -106,7 +116,7 @@ const SCRIPT = [
     ['p2', 'pip', "That's why we stand behind the crowd line."],
     ['p3', 'harry', "And if the weather says no, we don't fly. Safety first!"],
     ['p4', 'pip', "Now let's plan YOUR day!"],
-    ['_', 7.5],
+    ['_', 7.0],
   ] },
   { id: 'display', lead: 0, tail: 0.2, lines: [
     ['_', 36.5],
@@ -845,6 +855,66 @@ function sMemorial(ctx, t) {
   cap(ctx, t, L.f3.b + 0.2, S.b - 0.3, 'When a memorial flight flies over, take a quiet moment to look up.', { w: 1400, size: 54, y: H - 40 });
 }
 
+// ---------------------------------------------------------------- 9b: crosswinds
+// Duxford's runways are 06/24 (pointing 060 and 240 degrees). Limits: BBMF, as given by Clive Rowley on the
+// Memorial Flight Club forum (2016): baby Spitfires (Mk IIa, Mk Vb) 10 kt across; later Spitfires, Hurricanes and
+// the Lancaster 15 kt; no BBMF flying in winds over 25 kt.
+function sWind(ctx, t) {
+  const S = SC.wind, L = S.L;
+  M.fill(ctx, C.paper);
+  // left: Duxford from above
+  const x = 60, y = 40, w = 780, h = 560;
+  const pk0 = pk(t, S.a + 0.2, SPRING.gentle);
+  if (pk0 > 0) {
+    ctx.save(); ctx.translate(x + w / 2, y + h / 2); ctx.scale(pk0, pk0); ctx.translate(-x - w / 2, -y - h / 2);
+    shadowBox(ctx, x, y, w, h, '#A9CFA3');
+    ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+    for (let i = 0; i < 18; i++) { ctx.beginPath(); ctx.ellipse(x + hash01(i, 3) * w, y + hash01(i, 4) * h, 40, 5, 0, 0, TAU); ctx.fillStyle = '#9CC596'; ctx.fill(); }
+    const cx = x + w / 2, cy = y + h / 2 + 20, ang = -Math.PI / 6;           // runway 06/24: 60 degrees from north
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(ang);
+    rr(ctx, -360, 52, 720, 50, '#8DBB8C'); M.text(ctx, 'GRASS', 0, 87, F(26, 800), 'rgba(255,255,255,0.8)', 'center', 4);
+    rr(ctx, -360, -40, 720, 76, '#7D8792');
+    for (let i = 0; i < 9; i++) rr(ctx, -250 + i * 60, -4, 32, 6, C.white);
+    M.text(ctx, '06', -320, 16, F(40, 800), C.white, 'center'); M.text(ctx, '24', 320, 16, F(40, 800), C.white, 'center');
+    // a Spitfire on the runway: pushed sideways by the crosswind
+    const drift = t > L.c3.a + 2 ? Math.sin(prog(t, L.c3.a + 2, L.c3.b) * Math.PI) : 0;
+    ctx.save(); ctx.translate(-60 + (t > L.c3.a ? prog(t, L.c3.a, L.c5.b) * 120 : 0), drift * 34); ctx.rotate(drift * 0.35);
+    topFighter(ctx, 0, 0, 0.34, true); ctx.restore();
+    ctx.restore();
+    // north arrow
+    M.text(ctx, 'N', x + w - 50, y + 166, F(40, 800), INK, 'center'); ctx.beginPath(); ctx.moveTo(x + w - 50, y + 84); ctx.lineTo(x + w - 64, y + 124); ctx.lineTo(x + w - 36, y + 124); ctx.closePath(); ctx.fillStyle = INK; ctx.fill();
+    // the wind: first along the runway, then from the north, straight across
+    const across = ez(t, L.c2.a + 2.5, L.c2.a + 4.0);
+    const wa = lerp(Math.PI - Math.PI / 6, Math.PI / 2, across);             // direction the wind blows towards
+    const dx = Math.cos(wa), dy = Math.sin(wa);
+    for (let i = 0; i < 7; i++) {
+      const q = (t * 0.6 + i / 7) % 1, off = (i - 3) * 70;
+      const sx = cx - dx * 300 + -dy * off + dx * 600 * q, sy = cy - 40 - dy * 300 + dx * off + dy * 600 * q;
+      K.line(ctx, [[sx, sy], [sx + dx * 70, sy + dy * 70]], `rgba(255,255,255,${(Math.sin(q * Math.PI) * 0.9).toFixed(3)})`, 6);
+    }
+    ctx.restore();
+    const lab = across < 0.5 ? ['Wind along the runway: good', TEAL] : ['Wind across the runway: a crosswind', RED];
+    if (t > S.a + 0.8) K.pill(ctx, x + 24, y + h - 44, lab[0], { bg: lab[1], size: 34 });
+    rr(ctx, x, y, w, 64, NAVY); M.text(ctx, 'Duxford from above: runway 06/24', x + 26, y + 44, F(34, 800), C.white);
+    ctx.restore();
+  }
+  // right: the limits
+  tickCard(ctx, t, 900, 40, 960, 'Crosswind limits: memorial flight', NAVY, [
+    ['Early Spitfires: 10 knots across', 'The Mk II and Mk V have a small fin and rudder'],
+    ['Later Spitfires, Hurricanes, Lancaster: 15', 'Knots of wind blowing across the runway'],
+    ['No flying at all over 25 knots', 'However the wind is blowing'],
+    ['A big airliner: about 35 knots', 'Heavier, with wheels set wide apart'],
+  ], L.c5.b - 0.2, 1.6, { rowH: 106, size: 38 });
+  if (t > L.c5.b + 5) pillPop(ctx, t, L.c5.b + 5, 1380, 650, '15 knots is about 17 mph: enough to sway small branches', { bg: BLUE, size: 30 });
+  // the friends along the bottom
+  warbird(ctx, 980, 950, 0.8, { kind: 'spit', t, rot: -0.1, mood: speaking(t, S, 'spit') ? 'happy' : 'calm', look: [-0.6, -0.3], flip: true });
+  warbird(ctx, 1340, 950, 0.8, { kind: 'hurri', t, rot: -0.1, mood: speaking(t, S, 'hurri') ? 'happy' : 'calm', look: [-0.6, -0.3], flip: true });
+  harry(ctx, 1720, 975 - HARRY_FEET * 0.7 + 40, 0.7, { t, gear: 1, flip: true, mood: t > L.c7.a ? 'happy-eyes' : 'happy', look: [0.6, -0.3] });
+  windsock(ctx, 640, 1060, 1.0, t);
+  pip(ctx, t > L.c8.a ? 'tip' : t > L.c6.a ? 'map' : 'point', 260, 1060, 220, t);
+  talk(ctx, t, S, { pip: [380, 640, 330, 860, 760, 42], harry: [1060, 700, 1700, 860, 720, 42], spit: [560, 640, 960, 880, 760, 42], hurri: [800, 640, 1320, 860, 760, 42] });
+}
+
 // ---------------------------------------------------------------- 10: the pilots' briefing, and your plan
 function sBrief(ctx, t) {
   const S = SC.brief, L = S.L;
@@ -970,7 +1040,7 @@ const CUES = [];
 const cue = (t, kind, o = {}) => CUES.push([t, kind, o]);
 // music sections
 [['title', 'bright'], ['recap', 'memory'], ['arrive', 'bright'], ['radio', 'bright'], ['hover', 'tense'], ['meet', 'spain'], ['how', 'light'],
- ['warbirds', 'warm'], ['spot', 'light'], ['history', 'warm'], ['memorial', 'still'], ['brief', 'light'], ['display', 'bright'], ['bye', 'spain'], ['end', 'end']]
+ ['warbirds', 'warm'], ['spot', 'light'], ['history', 'warm'], ['memorial', 'still'], ['wind', 'light'], ['brief', 'light'], ['display', 'bright'], ['bye', 'spain'], ['end', 'end']]
   .forEach(([id, mood]) => cue(SC[id].a, 'section', { mood }));
 for (const S of ORDER) for (const L of Object.values(S.L)) if (L.who !== 'cap') cue(L.a, L.who === 'tower' ? 'radio' : 'tok', { gain: 0.12 });
 {
@@ -983,11 +1053,12 @@ for (const S of ORDER) for (const L of Object.values(S.L)) if (L.who !== 'cap') 
   cue(SC.bye.a, 'jet', { len: 9, far: true });
   const F0 = SC.memorial.L.f2.a + 0.5; cue(F0, 'merlin', { len: 14, pass: F0 + 7, far: true });
   cue(SC.end.a + 1.2, 'bell', { gain: 0.12 });
+  cue(SC.wind.a + 0.5, 'wind', { len: SC.wind.b - SC.wind.a - 0.5 });
   cue(SC.title.a + 3.6, 'pop', { gain: 0.14 });
 }
 
 // ---------------------------------------------------------------- the cut
-const SCENES = [sTitle, sRecap, sArrive, sRadio, sHover, sMeet, sHow, sWarbirds, sSpot, sHistory, sMemorial, sBrief, sDisplay, sBye];
+const SCENES = [sTitle, sRecap, sArrive, sRadio, sHover, sMeet, sHow, sWarbirds, sSpot, sHistory, sMemorial, sWind, sBrief, sDisplay, sBye];
 const PUSH = 0.7;   // a sideways push between scenes, like the other Pip films
 window.SCRIPT_TIMES = ORDER.map((S) => ({ id: S.id, a: +S.a.toFixed(2), b: +S.b.toFixed(2), lines: Object.fromEntries(Object.entries(S.L).map(([k, L]) => [k, [+L.a.toFixed(2), +L.b.toFixed(2), L.text]])) }));
 M.film({
