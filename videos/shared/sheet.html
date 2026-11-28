@@ -1,0 +1,35 @@
+<!doctype html><meta charset="utf-8">
+<style>
+@font-face{font-family:Barlow;src:url(fonts/barlow-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Barlow;src:url(fonts/barlow-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Barlow;src:url(fonts/barlow-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Barlow;src:url(fonts/barlow-latin-800-normal.woff2);font-weight:800}
+body{margin:0}</style>
+<canvas id="film" width="1920" height="1080"></canvas>
+<script type="module">
+import * as K from './kit.js';
+const {M,C,F}=K;
+await Promise.all(K.FONTS.map(f=>document.fonts.load(f)));
+const c=document.getElementById('film'),ctx=c.getContext('2d');
+M.fill(ctx,C.paper);
+M.text(ctx,'The cast',70,90,F(64,800),C.ink);
+const y=560;
+const lab=(t,x,yy=y+50)=>M.text(ctx,t,x,yy,F(28,600),C.greyDark,'center');
+K.kid(ctx,160,y,1.25,{mood:'happy'});lab('Charlie',160);
+K.kid(ctx,370,y,1.25,{mood:'worried',look:[1,-1]});lab('worried',370);
+K.kid(ctx,580,y,1.25,{mood:'overwhelm',armL:K.POSE.ears,armR:K.POSE.ears});lab('too much',580);
+K.kid(ctx,790,y,1.25,{mood:'calm',defenders:K.DEF});lab('ear defenders on',790);
+K.kid(ctx,1010,y,1.25,{mood:'grin',defenders:K.DEF,...K.flap(0.03)});lab('happy flapping',1010);
+K.kid(ctx,1230,y,1.25,{mood:'neutral',hold:'card',cardCol:C.red,armR:[1.7,0.9]});lab('"I need a break" card',1230);
+K.dad(ctx,1450,y,1.15,{mood:'happy'});lab('Dad',1450);
+K.beth(ctx,1640,y,1.15,{mood:'calm',headphones:'#3A3F4B',hold:'camera',armL:K.POSE.hold,armR:K.POSE.hold});lab('Beth',1640);
+K.staff(ctx,1820,y,1.15,{mood:'happy',lanyard:false});lab('Show staff',1820);
+// aircraft + shapes
+K.jet(ctx,300,760,0.9,-0.08,{burn:true});K.propPlane(ctx,820,770,0.9,-0.05,0.3);K.redJet(ctx,1300,740,1.2,-0.1,'#fff');K.a400(ctx,1650,770,0.6,0);
+K.burst(ctx,300,950,90,C.orange,{n:13});lab('fast jet = spiky',300,1060);
+K.burst(ctx,560,950,80,C.orange,{n:13,jag:0.1});lab('same jet, ear defenders on',560,1060);
+K.zig(ctx,720,950,200,34,C.yellow);lab('loudspeaker',820,1060);
+K.pebbles(ctx,980,900,200,100,26,0,[C.grey,C.lilac,C.blue]);lab('crowd chatter',1080,1060);
+K.rings(ctx,1330,950,90,C.teal,0.4);lab('vintage growl',1330,1060);
+K.defendersIcon(ctx,1520,960,0.8);K.sunflower(ctx,1660,950,0.9);K.signalCard(ctx,1800,950,0.45,0.05,0);
+</script>
