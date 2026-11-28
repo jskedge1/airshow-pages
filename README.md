@@ -18,12 +18,12 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | International Ayr Show | https://jskedge1.github.io/airshow-pages/ayr.html |
 | Little Gransden Air & Car Show | https://jskedge1.github.io/airshow-pages/little-gransden.html |
 | Airshow Photography Hub (live on Wix since 19 Oct, photos in photography-hub-img/) | https://jskedge1.github.io/airshow-pages/photography-hub.html |
-| Airshow Photography Hub (previous version) | https://jskedge1.github.io/airshow-pages/airshow-photography-hub.html |
+| Airshow Photography Hub (previous version) | Moved to backups/old-photography-pages-2026-11-27/ on 27 Nov 2026 (not linked from anywhere; the hub frames camera-guides.html) |
 | Camping at Airshows hub (live on Wix since 19 Oct, photos in camping-hub-img/) | https://jskedge1.github.io/airshow-pages/camping-hub.html |
 | RIAT camping home page: campsite tabs, cards, show maps for Boscombe Down and Fairford, and the "List your campsite" section (no Wix page yet, planned /riat-camping; built by riat-camping-src/build.py) | https://jskedge1.github.io/airshow-pages/riat-camping/index.html |
 | RIAT campsite pages, one per campsite (sample.html shows owners what a listing looks like) | https://jskedge1.github.io/airshow-pages/riat-camping/<slug>.html |
 | Show pages, camping style layout (live on Wix since 19 Oct) | https://jskedge1.github.io/airshow-pages/camping-layout/<show>.html |
-| New to Aviation Photography | https://jskedge1.github.io/airshow-pages/new-to-aviation-photography.html |
+| New to Aviation Photography | Moved to backups/old-photography-pages-2026-11-27/ on 27 Nov 2026 (not linked from anywhere; the hub frames camera-guides.html) |
 | Airshow News | https://jskedge1.github.io/airshow-pages/airshow-news.html |
 | UK Airshow Map (Find your Air Show page) | https://jskedge1.github.io/airshow-pages/airshow-map.html |
 | Find your Air Show (top HTML embed on /air-shows-guides, by website address since 30 Oct; photos in find-img/) | https://jskedge1.github.io/airshow-pages/find-your-airshow.html |
@@ -52,7 +52,7 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Train to RIAT (Wix page /train-to-riat, hidden from the menu). Since 5 Nov 2026 a short retired notice: RIAT moves from RAF Fairford to MOD Boscombe Down from 2027, so the Swindon, Cheltenham and Kemble plans, bus 76 and bus 77 pages now say so and link to /riat. The old Fairford pages and their train-routes-src files are in backups/riat-fairford-routes-2026-11-05/. Build new route pages once the Boscombe Down travel plan is out | https://jskedge1.github.io/airshow-pages/train-routes/riat.html |
 | Airshow Questions and Answers (planning guide, Wix page /airshow-questions, added 30 Oct 2026; built from qa-src/) | https://jskedge1.github.io/airshow-pages/questions-and-answers.html |
 | Airshow Security and Bag Searches (planning guide, Wix page /airshow-security, photos in security-img/) | https://jskedge1.github.io/airshow-pages/airshow-security.html |
-| Nikon D500 3D Camera Guide (shown inside the Airshow Photography Hub since 30 Oct 2026: the full width "Nikon D500 3D camera guide" tile opens it in a frame on the hub's own page, `d500View()` in photography-hub.html; the page sends its height and its Back to the hub clicks to the hub with postMessage. No Wix page of its own, so links.js keeps it live:false). 3D camera built with three.js from jsDelivr, every control clickable with airshow settings, set up checklist and settings by aircraft | https://jskedge1.github.io/airshow-pages/nikon-d500.html |
+| Nikon D500 3D Camera Guide (shown inside the Airshow Photography Hub since 30 Oct 2026: the full width "Nikon D500 3D camera guide" tile opens it in a frame on the hub's own page, `d500View()` in photography-hub.html; the page sends its height and its Back to the hub clicks to the hub with postMessage. No Wix page of its own, so links.js keeps it live:false). 3D camera built with three.js from jsDelivr, every control clickable with airshow settings, set up checklist and settings by aircraft | Moved to backups/old-photography-pages-2026-11-27/ on 27 Nov 2026 (not linked from anywhere; the hub frames camera-guides.html) |
 | 3D camera guides (19 Nov 2026): one page with a camera picker for eleven bodies (Canon 90D, R7, R5 Mark II; Nikon D500, D7500, Z6III, Z8; Sony A6700; Fujifilm X-H2S; OM System OM-1 Mark II; Panasonic G9 II). Plain unbranded 3D bodies built from each camera's size, every control placed where it sits on the real camera, with airshow advice, a ten step set up tour per camera and settings by aircraft. Opens inside the Airshow Photography Hub from the full width tile (replacing the D500 only guide there); #camera-id or ?camera=id picks a camera. Source data and engine in this repo's history; built as one file | https://jskedge1.github.io/airshow-pages/camera-guides.html |
 | Planning guide 1, Which airshow suits you? (Wix page /first-airshow-which-show) | https://jskedge1.github.io/airshow-pages/first-airshow-which-show.html |
 | Planning guide 2, Getting there (Wix page /first-airshow-getting-there) | https://jskedge1.github.io/airshow-pages/first-airshow-getting-there.html |
@@ -62,8 +62,8 @@ Since 30 Oct 2026 no page holds pasted code any more (only the old Template Page
 | Planning guide 7, What to pack (Wix page /first-airshow-what-to-pack) | https://jskedge1.github.io/airshow-pages/first-airshow-what-to-pack.html |
 | Planning guide 8, Where to stay (Wix page /first-airshow-accommodation) | https://jskedge1.github.io/airshow-pages/first-airshow-accommodation.html |
 | Food and Drink at Airshows (Wix page /foodanddrinkatairshows) | https://jskedge1.github.io/airshow-pages/food-and-drink.html |
-| Visitor Planning Guides (Wix page /visitorplanningguides). Transport design since 3 Nov 2026: the hub for all 13 planning guides, with a route planner by who is travelling, the planning line (guide boxes grouped by stage, which collapse on phones), the show day departure board and checklist. Built with the same source as Planning your first airshow, which became the first timer guide (ticket, four stops, check before you travel) on the same day | https://jskedge1.github.io/airshow-pages/visitor-planning-guides.html |
-| Photography Equipment (Wix page /photography-equipment) | https://jskedge1.github.io/airshow-pages/photography-equipment.html |
+| Visitor Planning Guides (Wix page /visitorplanningguides). Transport design since 3 Nov 2026: the hub for the planning guides in one reading order (see "Planning guides reading order" below), with a route planner by who is travelling, the planning line (guide boxes grouped by stage, which collapse on phones), the show day departure board and checklist. Built with the same source as Planning your first airshow, which became the first timer guide (ticket, four stops, check before you travel) on the same day | https://jskedge1.github.io/airshow-pages/visitor-planning-guides.html |
+| Photography Equipment (Wix page /photography-equipment) | Moved to backups/old-photography-pages-2026-11-27/ on 27 Nov 2026 (not linked from anywhere; the hub frames camera-guides.html) |
 | Advertise With Us, the one hub for businesses (30 Oct 2026): trader plans ladder, founding places, trader sign up form, advert packages for businesses near the shows, enquiry form (Wix page /advertise-with-us; shown by the header element, so it grows with the page; page code velo/page-code/advertise-with-us.js answers the trader sign up form through #airshowAuto) | https://jskedge1.github.io/airshow-pages/advertise-with-us.html |
 | Landing page (Wix page /coming-soon-03) | https://jskedge1.github.io/airshow-pages/landing.html |
 | Groups page header (Wix page /groups, above the Wix Groups list) | https://jskedge1.github.io/airshow-pages/groups-header.html |
@@ -438,6 +438,17 @@ One ladder, used on Advertise With Us and in the Trader Hub. Each trader plan fr
 
 Advert packages for businesses off the airfield: Guide Listing £49 (was Business Listing), Featured Partner £129, Regional Partner £249, Main Website Partner from £699. Every advert is labelled as an advert.
 The backend (velo/backend/traders.web.js) only takes the plans free, founding, flypast and headliner from the sign up form; Display Team and Finale come through the enquiry form.
+
+## Planning guides reading order (27 Nov 2026)
+
+One reading path, shown on the hub's planning line and on every guide's stop label and previous/next bar:
+
+- Start here: 01 Planning your first airshow
+- Plan: 02 Which show, 03 UK airshow calendar, 04 Airshows on a budget, 05 Where to stay, 06 Getting there, 07 Public transport, 08 What to pack, 09 The night before
+- On the day: 10 Security, 11 Where to watch, 12 On the day, 13 Safety, 14 Food and drink, 15 Getting home
+- Extras (labelled "Extra guide", not numbered): Weather, Rainy day plan, Calm visit, Spotter cards, Aircraft A to Z, Questions and answers, then the Photography and Camping hubs
+
+Every guide carries the same bar: `<div class="np-path">` with the `.nextprev` previous/next blocks and a "See all planning guides" line, styled by `<style id="np-path">` in the page head (the same block on every page). Getting home's next is the first extra; each extra links to the next one. The bar is pasted into each page, and into `qa-src/template.html` and `public-transport-src/template.html` so rebuilds keep it. If the order changes, update the bars, the `Stop NN of 15` labels at the top of the guides that have one, and the planning line on visitor-planning-guides.html (cards and the `DATA.G`/`DATA.S` route planner data). The Photography hub, Camping hub, 3D camera guides and Show Day Live end with a "Plan Your Visit" block of links instead.
 
 ## Questions and answers page (30 Oct 2026)
 

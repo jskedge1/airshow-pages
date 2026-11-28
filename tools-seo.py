@@ -68,7 +68,7 @@ SHOW = {'ayr':'/international-ayr-show','blackpool':'/blackpool-air-show','clact
 MAP = {f'camping-layout/{k}.html': v for k, v in SHOW.items()}
 MAP.update({'riat.html':'/riat','raf-cosford.html':'/cosfordairshow','eastbourne.html':'/eastbourneairshow','duxford.html':'/duxfordairshows','shuttleworth.html':'/shuttleworthairshows',
  'blackpool.html':'/blackpool-air-show','southport.html':'/southport-air-show','ayr.html':'/international-ayr-show','little-gransden.html':'/little-gransden-air-and-car-show',
- 'photography-hub.html':'/airshow-photography-hub','airshow-photography-hub.html':'/airshow-photography-hub','camping-hub.html':'/camping-at-airshows',
+ 'photography-hub.html':'/airshow-photography-hub','camping-hub.html':'/camping-at-airshows',
  'airshow-news.html':'/airshow-news','airshow-map.html':'/airshow-map','find-your-airshow.html':'/air-shows-guides','youtube.html':'/youtube',
  'forum.html':'/community-forum','forum-clean.html':'/community-forum','forum-hud.html':'/community-forum','show-day.html':'/show-day-live',
  'traders/directory.html':'/airshow-traders','traders/trader-hub.html':'/trader-hub','policies.html':'/policies','train-routes/clacton.html':'/train-to-clacton','train-routes/eastbourne.html':'/train-to-eastbourne','train-routes/cosford.html':'/train-to-cosford','train-routes/wales.html':'/train-to-swansea','train-routes/southport.html':'/train-to-southport','train-routes/gransden.html':'/train-to-little-gransden','train-routes/midlands.html':'/train-to-midlands','train-routes/duxford.html':'/train-to-duxford','train-routes/blackpool.html':'/train-to-blackpool','train-routes/riat.html':'/train-to-riat',

@@ -117,7 +117,6 @@ PAGES = {
     'camping-hub.html': COMMON + HUBS + TAB_COMMON,
     'photography-hub.html': COMMON + HUBS + TAB_COMMON,
     'my-airshow-hub.html': COMMON,
-    'new-to-aviation-photography.html': COMMON,
 }
 for f in sorted((ROOT / 'camping-layout').glob('*.html')):
     PAGES['camping-layout/' + f.name] = COMMON + SHOW

@@ -97,7 +97,7 @@
       if (!h2 || f.id === 'f-travel' || (h2.previousElementSibling && h2.previousElementSibling.classList.contains('nz-kick'))) return;
       var k = D.createElement('span'); k.className = 'nz-kick';
       var same = txt(h2).toLowerCase().replace(/[^a-z]/g, '') === t.toLowerCase().replace(/[^a-z]/g, '');
-      k.textContent = same ? 'RAF Cosford Air Show' : t.charAt(0).toUpperCase() + t.slice(1);
+      k.textContent = same ? 'Royal Air Force Air Show' : t.charAt(0).toUpperCase() + t.slice(1);
       h2.parentNode.insertBefore(k, h2);
     });
     /* the strip of section links reads in sentence case, like the other labels */
